@@ -1,0 +1,66 @@
+/* chang64 board — four channels, so no two states can collide.
+   Each state may only draw in its own physical layer of the square. */
+
+/* z-order inside one square, bottom to top
+   1  square fill      --bone | --board
+   2  wash             history + verdict            (one at a time; latest wins)
+   3  glow             check ONLY
+   4  centre mark      legality (dot / ring)        under the piece
+   5  piece            the SVG
+   6  inset edge       intent (selected / hint / focus)
+   7  coordinate       mono 500 9px, corner, coloured as the opposite square  */
+
+.sq            { position: relative; border-radius: 0; }
+.sq--light     { background: var(--bone); }
+.sq--dark      { background: var(--board); }
+.board         { border-radius: 2px; overflow: hidden; }
+
+/* --- channel 1: wash --------------------------------------------------- */
+.sq--last::before,
+.sq--selected::before,
+.sq--correct::before,
+.sq--wrong::before { content:""; position:absolute; inset:0; }
+.sq--last::before     { background: rgba(224,169,63,.42); }
+.sq--selected::before { background: rgba(224,169,63,.62); }
+.sq--correct::before  { background: rgba(95,191,146,.50); }
+.sq--wrong::before    { background: rgba(217,88,74,.50); }
+
+/* --- channel 2: inset edge --------------------------------------------- */
+.sq--selected { box-shadow: inset 0 0 0 3px var(--brass); }
+.sq--hint,
+.sq--engine   { box-shadow: inset 0 0 0 2px var(--brass); animation: c64pulse 1.6s ease-in-out infinite; }
+.sq:focus-visible { outline: 2px dashed var(--chalk); outline-offset: -3px; }
+/* focus is CHALK, never brass — it must survive sitting on a brass square */
+
+/* --- channel 3: centre mark (under the piece) -------------------------- */
+.sq--move::after    { content:""; position:absolute; left:37%; top:37%; width:26%; height:26%;
+                      border-radius:999px; background: rgba(21,32,28,.30); }
+.sq--capture::after { content:""; position:absolute; inset:0; border-radius:999px;
+                      box-shadow: inset 0 0 0 11% rgba(21,32,28,.32); }
+/* neutral ink, not brass: legality is not a state the player chose */
+
+/* --- channel 4: glow — check only, permanently reserved ---------------- */
+.sq--check { background-image: radial-gradient(circle at 50% 50%,
+               rgba(217,88,74,.95) 0%, rgba(217,88,74,.55) 45%, rgba(217,88,74,0) 78%); }
+
+/* --- motion ------------------------------------------------------------ */
+@keyframes c64pulse { 0%,100% { opacity:1 } 50% { opacity:.25 } }
+@keyframes c64shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)}
+                      40%{transform:translateX(4px)} 60%{transform:translateX(-3px)}
+                      80%{transform:translateX(3px)} }
+.board--wrong { animation: c64shake .42s ease-in-out 1; }
+.piece        { transition: transform 130ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  /* stills: hint/engine = static 2px brass at 70% opacity;
+             wrong answer = wash only, held 600ms longer          */
+  .sq--hint, .sq--engine { box-shadow: inset 0 0 0 2px rgba(224,169,63,.7); }
+}
+
+/* --- never colour alone ------------------------------------------------
+   check    -> glow + the word "Check" in the status line + SR announcement
+   correct  -> jade wash + a check glyph in the status line
+   wrong    -> brick wash + shake + a cross glyph
+   best     -> jade + the label "best";  blunder -> brick + "??" in the scoresheet
+------------------------------------------------------------------------ */

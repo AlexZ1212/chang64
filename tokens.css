@@ -1,0 +1,61 @@
+/* chang64 — twelve tokens. Dark is the app; light is the 1300 static content pages. */
+
+:root {
+  --ink:    #101413;  /* page ground                    */
+  --slate:  #191F1D;  /* panels, cards, scoresheet      */
+  --raise:  #232B28;  /* buttons, inputs, chips at rest */
+  --chalk:  #ECEAE3;  /* primary text    14.7:1 on ink  */
+  --sage:   #97A49D;  /* secondary text   7.2:1 on ink  */
+  --bone:   #EDE4D2;  /* light square                   */
+  --board:  #4B6B63;  /* dark square      4.7:1 vs bone */
+  --brass:  #E0A93B;  /* accent           8.8:1 both ways */
+  --jade:   #5FBF92;  /* win, correct, best move  8.2:1 */
+  --brick:  #D9584A;  /* loss, error, check       4.8:1 */
+  --rule:   rgba(236,234,227,.12);
+  --r:      8px;
+}
+
+/* Light theme for /openings, /rules, /glossary, /endgames, /puzzles, /traps.
+   Same names, same roles, only the values move. Board colours are IDENTICAL in
+   both themes so a diagram on a content page and a live board are one object. */
+.doc {
+  --ink:    #EDE4D2;
+  --slate:  #F5F0E5;
+  --raise:  #E3DAC7;
+  --chalk:  #15201C;
+  --sage:   #5A6862;
+  --bone:   #EDE4D2;
+  --board:  #4B6B63;
+  --brass:  #7E5409;  /* darkened: 5.4:1 on bone */
+  --jade:   #1E7A4C;
+  --brick:  #A3382A;
+  --rule:   rgba(21,32,28,.14);
+  --r:      8px;
+}
+
+/* Spacing — only these seven values */
+/* 4  8  12  16  24  32  48 */
+
+/* Radii */
+/* var(--r)            chips, buttons, inputs        = 8px  */
+/* calc(var(--r)*1.5)  cards, panels                 = 12px */
+/* 2px                 board squares, scoresheet cells      */
+/* 999px               pills only (avatars, lives)          */
+
+/* Elevation — two levels; e2 is ONLY the promotion picker and the result card */
+:root {
+  --e1: 0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,234,227,.04);
+  --e2: 0 12px 32px rgba(0,0,0,.55);
+}
+
+/* Type */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
+
+/* h1     Source Serif 4  600  34px mobile / 44px >=900  lh 1.1   ls -.015em */
+/* h2     Source Serif 4  600  22px mobile / 26px        lh 1.22  ls -.01em  */
+/* body   Archivo         400  16px  lh 1.55  max 66ch              */
+/* small  Archivo         400  13px  lh 1.45  --sage                */
+/* label  Archivo         600  13px  ls .08em  uppercase            */
+/* data   JetBrains Mono  500  14px  ls .02em  tabular-nums         */
+/* clock  JetBrains Mono  600  28px  tabular-nums                   */
+/* drill  JetBrains Mono  700  52px mobile / 72px                   */

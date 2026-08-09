@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /engine/
+
+Sitemap: https://chang64.com/sitemap.xml

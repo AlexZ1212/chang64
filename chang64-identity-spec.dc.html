@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#101413; color:#ECEAE3; font-family:Archivo,system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  * { box-sizing:border-box; }
+  a { color:#E0A93B; text-decoration:none; border-bottom:1px solid rgba(224,169,63,.35); }
+  a:hover { color:#EFC777; }
+  pre { margin:0; }
+  @keyframes c64pulse { 0%,100% { opacity:1 } 50% { opacity:.25 } }
+  @keyframes c64shake { 0%,100% { transform:translateX(0) } 20% { transform:translateX(-4px) } 40% { transform:translateX(4px) } 60% { transform:translateX(-3px) } 80% { transform:translateX(3px) } }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important } }
+</style>
+</helmet>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><symbol id="p-king-l" viewBox="0 0 45 45" fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z"></path><path d="M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z"></path><path d="M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-queen-l" viewBox="0 0 45 45" fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 6.6l3.2 9.2 4-6.4.8 7.2 5.3-3.7-3.3 11.9H12.5L9.2 12.9l5.3 3.7.8-7.2 4 6.4z"></path><path d="M9.2 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM15.3 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM22.5 3.6a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM29.7 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM35.8 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4z"></path><path d="M12.5 24.8h20l-1.4 2.2c-.6 1.4-.5 2.3-.7 3H14.6c-.2-.7-.1-1.6-.7-3z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-rook-l" viewBox="0 0 45 45" fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z"></path><path d="M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-bishop-l" viewBox="0 0 45 45" fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 3.4a2.2 2.2 0 0 1 1.3 4c2 1.2 3.7 2.8 4.9 4.6L20.4 19.4 21.9 21 30.2 13.6C31.4 16 30.4 22.4 27.3 24.8H17.7c-2.3-1.6-3.6-3.8-3.6-6.6 0-4 2.7-8.2 7.1-10.8A2.2 2.2 0 0 1 22.5 3.4z"></path><path d="M17.7 24.8h9.6l1.4 1.8c-.6 1.6.4 2.6 1.7 3.4H14.6c1.3-.8 2.3-1.8 1.7-3.4z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-knight-l" viewBox="0 0 45 45" fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M29.4 30C30.6 22 30.4 15 27.2 10.2L28.2 4.6 23.6 7.4C18.4 8.2 13.2 11.6 10.8 16.6 9.6 18.6 10.2 20 12.2 20.4L16.2 21C15 23 13.2 24 12.2 25.8 11.4 27.4 11.8 29 15.2 30Z"></path><path d="M26.8 10.6c2.6 3.4 3.6 7.8 3.2 13.8l-2.4-1.8c.3-4.8-.5-8.4-2.4-10.6z"></path><path d="M19.2 9.75a1.05 1.05 0 1 0 0 2.1 1.05 1.05 0 1 0 0-2.1z"></path><path d="M11.6 17.75a.65.65 0 1 0 0 1.3.65.65 0 1 0 0-1.3z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-pawn-l" viewBox="0 0 45 45" fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z"></path><path d="M20.3 16.2h4.4l2 1.8H18.3z"></path><path d="M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-king-d" viewBox="0 0 45 45" fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z"></path><path d="M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z"></path><path d="M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-queen-d" viewBox="0 0 45 45" fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 6.6l3.2 9.2 4-6.4.8 7.2 5.3-3.7-3.3 11.9H12.5L9.2 12.9l5.3 3.7.8-7.2 4 6.4z"></path><path d="M9.2 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM15.3 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM22.5 3.6a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM29.7 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM35.8 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4z"></path><path d="M12.5 24.8h20l-1.4 2.2c-.6 1.4-.5 2.3-.7 3H14.6c-.2-.7-.1-1.6-.7-3z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-rook-d" viewBox="0 0 45 45" fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z"></path><path d="M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-bishop-d" viewBox="0 0 45 45" fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 3.4a2.2 2.2 0 0 1 1.3 4c2 1.2 3.7 2.8 4.9 4.6L20.4 19.4 21.9 21 30.2 13.6C31.4 16 30.4 22.4 27.3 24.8H17.7c-2.3-1.6-3.6-3.8-3.6-6.6 0-4 2.7-8.2 7.1-10.8A2.2 2.2 0 0 1 22.5 3.4z"></path><path d="M17.7 24.8h9.6l1.4 1.8c-.6 1.6.4 2.6 1.7 3.4H14.6c1.3-.8 2.3-1.8 1.7-3.4z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-knight-d" viewBox="0 0 45 45" fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M29.4 30C30.6 22 30.4 15 27.2 10.2L28.2 4.6 23.6 7.4C18.4 8.2 13.2 11.6 10.8 16.6 9.6 18.6 10.2 20 12.2 20.4L16.2 21C15 23 13.2 24 12.2 25.8 11.4 27.4 11.8 29 15.2 30Z"></path><path d="M26.8 10.6c2.6 3.4 3.6 7.8 3.2 13.8l-2.4-1.8c.3-4.8-.5-8.4-2.4-10.6z"></path><path d="M19.2 9.75a1.05 1.05 0 1 0 0 2.1 1.05 1.05 0 1 0 0-2.1z"></path><path d="M11.6 17.75a.65.65 0 1 0 0 1.3.65.65 0 1 0 0-1.3z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol><symbol id="p-pawn-d" viewBox="0 0 45 45" fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z"></path><path d="M20.3 16.2h4.4l2 1.8H18.3z"></path><path d="M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z"></path><path d="M14.6 30h15.8l1.2 2.6H13.4z"></path><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"></path></symbol></defs>
+</svg>
+
+<div style="max-width:1180px;margin:0 auto;padding:56px 24px 120px">
+
+  <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;padding-bottom:28px;border-bottom:1px solid rgba(236,234,227,.12)">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#97A49D">Visual identity &amp; design system</div>
+      <h1 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:48px;line-height:1.08;letter-spacing:-.015em;margin:12px 0 0">The elephant, on the sixty&#8209;four squares</h1>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#97A49D;line-height:1.9;text-align:right">
+      chang64.com<br>direction &mdash; v1<br>2026
+    </div>
+  </div>
+
+  <!-- 01 DIRECTION -->
+  <section style="padding:56px 0 0">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">01 &nbsp;/&nbsp; The direction</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px">
+      <div>
+        <p style="font-family:'Source Serif 4',Georgia,serif;font-size:23px;line-height:1.5;margin:0 0 20px;text-wrap:pretty">Keep the club. Throw out the clubhouse. Felt, brass fittings and boxwood are set dressing &mdash; they say <em>old</em> where you wanted to say <em>serious</em>. The thing that actually reads as a real chess club is not the furniture, it is the <strong>discipline</strong>: notation kept properly, the engine put away during play, nothing decorative on the board.</p>
+        <p style="font-size:16px;line-height:1.6;color:#97A49D;margin:0 0 16px;text-wrap:pretty">So the ground moves from green felt to <strong style="color:#ECEAE3;font-weight:500">ink</strong> &mdash; a near&#8209;black with just enough green in it to remember where it came from. The board stops being a picture of a tournament board and becomes the highest&#8209;contrast object on the screen: warm bone against a cool slate&#8209;teal, separated by lightness rather than by hue, so it survives colour blindness by construction. Brass stays, because one warm accent against a cold field is the whole colour idea and it already works. Mono for data stays. The scoresheet stays &mdash; ruled rows are not nostalgia, they are how the game is recorded.</p>
+        <p style="font-size:16px;line-height:1.6;color:#97A49D;margin:0;text-wrap:pretty">One font changes, not three. Fraunces has a wobble in it that reads &ldquo;craft brand&rdquo;; Source Serif is flatter, calmer and holds up at 14px on a content page, which is where 1300 of your pages live.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:8px">Is &ldquo;chess club&rdquo; right, or is it nostalgia?</div>
+          <div style="font-size:15px;line-height:1.55;color:#ECEAE3">Right register, wrong century. Aim at a club that was <em>refurbished</em> &mdash; good light, hard surfaces, the trophies still on the wall. Nothing distressed, no wood grain, no leather. Restraint is the club signal; ornament is the giveaway.</div>
+        </div>
+        <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:8px">Elephant &mdash; gift or distraction?</div>
+          <div style="font-size:15px;line-height:1.55;color:#ECEAE3">A gift, on one condition: it appears <strong>once</strong>. In the mark, and nowhere else &mdash; the bishop only borrows the angle of its trunk for the mitre cut. Never in the UI, never on the board, never as a mascot. Used once it explains the name; used twice it becomes a theme.</div>
+        </div>
+        <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:8px">Is dark right?</div>
+          <div style="font-size:15px;line-height:1.55;color:#ECEAE3">Dark for the app, light for the library. The board is where people look and it is lit either way; evening play wants a dark surround. But a 900&#8209;word page on back&#8209;rank mates arriving cold from Google should be black on bone. Two themes, split by <em>job</em>, not by a toggle. Same twelve tokens, one alternate set.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 TOKENS -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">02 &nbsp;/&nbsp; Tokens</div>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:28px;line-height:1.2;margin:0 0 28px">Twelve, replacing twelve</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:32px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#101413"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--ink &nbsp;#101413</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Page ground. Near-black, green cast.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#191F1D"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--slate &nbsp;#191F1D</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Panels, cards, scoresheet.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#232B28"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--raise &nbsp;#232B28</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Buttons, inputs, chips at rest.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#ECEAE3"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--chalk &nbsp;#ECEAE3</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Primary text. 14.7:1 on ink.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#97A49D"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--sage &nbsp;#97A49D</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Secondary text. 7.2:1 on ink.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#E0A93B"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--brass &nbsp;#E0A93B</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Accent. 8.8:1 on ink, 8.8:1 for ink&nbsp;on&nbsp;brass.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#EDE4D2"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--bone &nbsp;#EDE4D2</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Light square. Also the light-theme ground.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#4B6B63"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--board &nbsp;#4B6B63</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Dark square. 4.7:1 against bone.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#5FBF92"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--jade &nbsp;#5FBF92</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Win, correct, best move. 8.2:1.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#D9584A"></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--brick &nbsp;#D9584A</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Loss, error, blunder, check. 4.8:1.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#101413;display:flex;align-items:center;justify-content:center"><div style="width:80%;height:1px;background:rgba(236,234,227,.12)"></div></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--rule &nbsp;12% chalk</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Every hairline, every divider.</div></div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden">
+        <div style="height:64px;background:#101413;display:flex;align-items:center;justify-content:center"><div style="width:56px;height:34px;border:1px solid #E0A93B;border-radius:8px"></div></div>
+        <div style="padding:12px 14px"><div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#ECEAE3">--r &nbsp;8px</div><div style="font-size:12.5px;color:#97A49D;margin-top:4px">Down from 10. Squarer reads sharper.</div></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:22px 24px;overflow:auto">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:14px">Paste-ready &mdash; dark (the app)</div>
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.85;color:#ECEAE3;white-space:pre;">:root {
+  --ink:    #101413;  /* page ground        */
+  --slate:  #191F1D;  /* panels, cards      */
+  --raise:  #232B28;  /* buttons, inputs    */
+  --chalk:  #ECEAE3;  /* primary text       */
+  --sage:   #97A49D;  /* secondary text     */
+  --bone:   #EDE4D2;  /* light square       */
+  --board:  #4B6B63;  /* dark square        */
+  --brass:  #E0A93B;  /* accent, active     */
+  --jade:   #5FBF92;  /* win, correct, best */
+  --brick:  #D9584A;  /* loss, error, check */
+  --rule:   rgba(236,234,227,.12);
+  --r:      8px;
+}</pre>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:22px 24px;overflow:auto">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:14px">Paste-ready &mdash; light (the 1300 content pages)</div>
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.85;color:#ECEAE3;white-space:pre;">.doc {
+  --ink:    #EDE4D2;
+  --slate:  #F5F0E5;
+  --raise:  #E3DAC7;
+  --chalk:  #15201C;
+  --sage:   #5A6862;
+  --bone:   #EDE4D2;
+  --board:  #4B6B63;
+  --brass:  #7E5409;  /* darkened: 5.4:1 on bone */
+  --jade:   #1E7A4C;
+  --brick:  #A3382A;
+  --rule:   rgba(21,32,28,.14);
+  --r:      8px;
+}</pre>
+        <div style="font-size:13px;line-height:1.55;color:#97A49D;margin-top:14px">Same names, same roles &mdash; only the values move. Board colours are identical in both themes, so a diagram cut from a content page and a live board are the same object. It <strong style="color:#ECEAE3;font-weight:500">complements</strong> dark, it does not replace it: dark for /play, /puzzles, /train; light for everything static.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:14px">Space, radii, elevation</div>
+        <div style="display:flex;gap:6px;align-items:flex-end;margin-bottom:14px">
+          <div style="width:4px;height:4px;background:#E0A93B"></div><div style="width:8px;height:8px;background:#E0A93B"></div><div style="width:12px;height:12px;background:#E0A93B"></div><div style="width:16px;height:16px;background:#E0A93B"></div><div style="width:24px;height:24px;background:#E0A93B"></div><div style="width:32px;height:32px;background:#E0A93B"></div><div style="width:48px;height:48px;background:#E0A93B"></div>
+        </div>
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:#ECEAE3;white-space:pre;">4 8 12 16 24 32 48   /* only these */
+
+--r: 8px             chips, buttons, inputs
+calc(var(--r)*1.5)   cards, panels  = 12px
+2px                  board squares, cells
+999px                pills only (avatars, lives)
+
+--e1: 0 1px 2px rgba(0,0,0,.5),
+      inset 0 1px 0 rgba(236,234,227,.04);
+--e2: 0 12px 32px rgba(0,0,0,.55);   /* modals */</pre>
+        <div style="font-size:13px;line-height:1.55;color:#97A49D;margin-top:12px">Two levels, and e2 is only ever the promotion picker and the result card. Everything else separates with <span style="font-family:'JetBrains Mono',monospace">--rule</span> and a background step.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:14px">Contrast, checked</div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:14px;line-height:1.5">
+          <div style="color:#97A49D">chalk on ink</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">14.7:1</div>
+          <div style="color:#97A49D">sage on ink &mdash; secondary body</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">7.2:1</div>
+          <div style="color:#97A49D">brass on ink &mdash; small text</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">8.8:1</div>
+          <div style="color:#97A49D">ink on brass &mdash; button label</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">8.8:1</div>
+          <div style="color:#97A49D">brick on ink</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">4.8:1</div>
+          <div style="color:#97A49D">jade on ink</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">8.2:1</div>
+          <div style="color:#97A49D">bone vs board &mdash; squares</div><div style="font-family:'JetBrains Mono',monospace;color:#5FBF92">4.7:1</div>
+        </div>
+        <div style="font-size:13px;line-height:1.55;color:#97A49D;margin-top:16px;padding-top:16px;border-top:1px solid rgba(236,234,227,.12)">The two square colours are <strong style="color:#ECEAE3;font-weight:500">48 points apart in L*</strong> and sit on opposite sides of the warm/cool axis. Under deuteranopia and protanopia simulation they stay four-and-a-half to one, because the difference was never carried by hue. That is why the dark square went teal rather than green.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 TYPE -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">03 &nbsp;/&nbsp; Type</div>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:28px;line-height:1.2;margin:0 0 8px">Source Serif 4 &middot; Archivo &middot; JetBrains Mono</h2>
+    <p style="font-size:16px;line-height:1.6;color:#97A49D;margin:0 0 32px;max-width:640px;text-wrap:pretty">Two of the three you already have. All three are on Google Fonts; total weight of the subset below is under 90&nbsp;KB. Load only 600 of the serif, 400/500/600 of Archivo, 500/700 of the mono.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:18px">Display &mdash; Source Serif 4</div>
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:44px;line-height:1.1;letter-spacing:-.015em;margin-bottom:6px">Back-rank mate</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D;margin-bottom:22px">h1 &nbsp;600 &nbsp;34/38px mobile &rarr; 44px &ge;900 &nbsp;lh 1.1 &nbsp;ls -.015em</div>
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:26px;line-height:1.22;margin-bottom:6px">Rook and king versus king</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D">h2 &nbsp;600 &nbsp;22px mobile &rarr; 26px &nbsp;lh 1.22 &nbsp;ls -.01em</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:18px">Interface &mdash; Archivo</div>
+        <div style="font-size:16px;line-height:1.55;margin-bottom:6px">A rook on the seventh rank is worth a pawn, and often more. Cut the king off along the file before you push.</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D;margin-bottom:20px">body &nbsp;400 &nbsp;16px &nbsp;lh 1.55 &nbsp;max 66ch</div>
+        <div style="font-size:13px;line-height:1.45;color:#97A49D;margin-bottom:6px">Engine depth 22 &middot; verified 2026&#8209;03&#8209;11</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D;margin-bottom:20px">small &nbsp;400 &nbsp;13px &nbsp;lh 1.45 &nbsp;--sage</div>
+        <div style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Time control</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D">label &nbsp;600 &nbsp;13px &nbsp;ls .08em &nbsp;uppercase</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:18px">Data &mdash; JetBrains Mono</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:30px;letter-spacing:.01em;font-variant-numeric:tabular-nums;margin-bottom:6px">04:58.3</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D;margin-bottom:20px">clock &nbsp;600 &nbsp;28px &nbsp;tabular-nums</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;margin-bottom:6px">17. Rxd7 &nbsp;Qb6+ &nbsp;18. Kh1</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D;margin-bottom:20px">data &nbsp;500 &nbsp;14px &nbsp;ls .02em &nbsp;tabular-nums</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:52px;line-height:1;letter-spacing:.02em;color:#E0A93B;margin-bottom:6px">f6</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#97A49D">drill HUD &nbsp;700 &nbsp;52px mobile &rarr; 72px</div>
+      </div>
+    </div>
+    <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 24px;margin-top:20px;font-size:14.5px;line-height:1.6;color:#97A49D;text-wrap:pretty">
+      <strong style="color:#ECEAE3;font-weight:500">The French rule.</strong> Every button, chip and segment is sized by padding, never by width, and every label gets <span style="font-family:'JetBrains Mono',monospace;font-size:13px">min-height:44px</span> with the text allowed to wrap to two lines at <span style="font-family:'JetBrains Mono',monospace;font-size:13px">line-height:1.15</span>. Segmented controls use <span style="font-family:'JetBrains Mono',monospace;font-size:13px">grid-template-columns:repeat(N,1fr)</span> so EN and FR occupy the same footprint. Test string: &ldquo;Abandonner la partie&rdquo; (20) against &ldquo;Resign&rdquo; (6).
+    </div>
+  </section>
+
+  <!-- 04 PIECES -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">04 &nbsp;/&nbsp; The pieces</div>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:28px;line-height:1.2;margin:0 0 8px">Turned, not drawn</h2>
+    <p style="font-size:16px;line-height:1.6;color:#97A49D;margin:0 0 32px;max-width:680px;text-wrap:pretty">Six silhouettes with the profile of a lathe-turned set &mdash; concave waists, ball finials, a collar ring &mdash; carried entirely by the outline, so there is no shading to lose and no fine detail to blur at 40px. Every piece stands on the same two turned elements &mdash; a collar ring and a stepped foot &mdash; and they are deliberately small: the base takes a fifth of the height, so the mass sits up where the identifying happens. Nothing floats: the pawn&rsquo;s ball sits on a turned neck under its own ring, and the bishop&rsquo;s finial is part of the mitre rather than a dot resting on it. Ranked by silhouette weight: pawn (round), rook (square), bishop (ovoid), knight (angular), queen (spiked), king (broad + cross). No two share a family.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:20px">
+      <div style="background:#EDE4D2;border-radius:12px;padding:18px">
+        <div style="display:grid;grid-template-columns:repeat(6,1fr)">
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-king-l"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-queen-l"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-rook-l"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-bishop-l"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-knight-l"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-pawn-l"></use></g></svg>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A6862;letter-spacing:.1em;text-transform:uppercase;margin-top:8px">Light &mdash; fill #F7F4EC / stroke #15201C</div>
+      </div>
+      <div style="background:#4B6B63;border-radius:12px;padding:18px">
+        <div style="display:grid;grid-template-columns:repeat(6,1fr)">
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-king-d"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-queen-d"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-rook-d"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-bishop-d"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-knight-d"></use></g></svg>
+          <svg viewBox="0 0 45 45" style="width:100%;display:block"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-pawn-d"></use></g></svg>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#D8D2C4;letter-spacing:.1em;text-transform:uppercase;margin-top:8px">Dark &mdash; fill #15201C / stroke #D8D2C4</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start">
+      <div>
+        <div style="border-radius:4px;overflow:hidden;border:1px solid rgba(236,234,227,.12)">
+          <svg viewBox="0 0 360 360" style="width:100%;display:block;background:#EDE4D2">
+            <g fill="#4B6B63">
+              <rect x="45" y="0" width="45" height="45"></rect><rect x="135" y="0" width="45" height="45"></rect><rect x="225" y="0" width="45" height="45"></rect><rect x="315" y="0" width="45" height="45"></rect>
+              <rect x="0" y="45" width="45" height="45"></rect><rect x="90" y="45" width="45" height="45"></rect><rect x="180" y="45" width="45" height="45"></rect><rect x="270" y="45" width="45" height="45"></rect>
+              <rect x="45" y="90" width="45" height="45"></rect><rect x="135" y="90" width="45" height="45"></rect><rect x="225" y="90" width="45" height="45"></rect><rect x="315" y="90" width="45" height="45"></rect>
+              <rect x="0" y="135" width="45" height="45"></rect><rect x="90" y="135" width="45" height="45"></rect><rect x="180" y="135" width="45" height="45"></rect><rect x="270" y="135" width="45" height="45"></rect>
+              <rect x="45" y="180" width="45" height="45"></rect><rect x="135" y="180" width="45" height="45"></rect><rect x="225" y="180" width="45" height="45"></rect><rect x="315" y="180" width="45" height="45"></rect>
+              <rect x="0" y="225" width="45" height="45"></rect><rect x="90" y="225" width="45" height="45"></rect><rect x="180" y="225" width="45" height="45"></rect><rect x="270" y="225" width="45" height="45"></rect>
+              <rect x="45" y="270" width="45" height="45"></rect><rect x="135" y="270" width="45" height="45"></rect><rect x="225" y="270" width="45" height="45"></rect><rect x="315" y="270" width="45" height="45"></rect>
+              <rect x="0" y="315" width="45" height="45"></rect><rect x="90" y="315" width="45" height="45"></rect><rect x="180" y="315" width="45" height="45"></rect><rect x="270" y="315" width="45" height="45"></rect>
+            </g>
+            <g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+              <use href="#p-rook-d" x="0" y="0" width="45" height="45"></use><use href="#p-knight-d" x="45" y="0" width="45" height="45"></use><use href="#p-bishop-d" x="90" y="0" width="45" height="45"></use><use href="#p-queen-d" x="135" y="0" width="45" height="45"></use><use href="#p-king-d" x="180" y="0" width="45" height="45"></use><use href="#p-bishop-d" x="225" y="0" width="45" height="45"></use><use href="#p-knight-d" x="270" y="0" width="45" height="45"></use><use href="#p-rook-d" x="315" y="0" width="45" height="45"></use>
+              <use href="#p-pawn-d" x="0" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="45" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="90" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="135" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="180" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="225" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="270" y="45" width="45" height="45"></use><use href="#p-pawn-d" x="315" y="45" width="45" height="45"></use>
+            </g>
+            <g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+              <use href="#p-pawn-l" x="0" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="45" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="90" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="135" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="180" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="225" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="270" y="270" width="45" height="45"></use><use href="#p-pawn-l" x="315" y="270" width="45" height="45"></use>
+              <use href="#p-rook-l" x="0" y="315" width="45" height="45"></use><use href="#p-knight-l" x="45" y="315" width="45" height="45"></use><use href="#p-bishop-l" x="90" y="315" width="45" height="45"></use><use href="#p-queen-l" x="135" y="315" width="45" height="45"></use><use href="#p-king-l" x="180" y="315" width="45" height="45"></use><use href="#p-bishop-l" x="225" y="315" width="45" height="45"></use><use href="#p-knight-l" x="270" y="315" width="45" height="45"></use><use href="#p-rook-l" x="315" y="315" width="45" height="45"></use>
+            </g>
+          </svg>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#97A49D;letter-spacing:.1em;text-transform:uppercase;margin-top:10px">Full set in position</div>
+      </div>
+
+      <div>
+        <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px;margin-bottom:16px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:14px">Thumbnail test &mdash; rendered at 26px</div>
+          <div style="display:flex;gap:2px;background:#EDE4D2;padding:0;width:max-content;border-radius:2px;overflow:hidden">
+            <svg viewBox="0 0 45 45" width="26" height="26" style="display:block;background:#EDE4D2"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-king-l"></use></g></svg>
+            <svg viewBox="0 0 45 45" width="26" height="26" style="display:block;background:#4B6B63"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-queen-l"></use></g></svg>
+            <svg viewBox="0 0 45 45" width="26" height="26" style="display:block;background:#EDE4D2"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-rook-l"></use></g></svg>
+            <svg viewBox="0 0 45 45" width="26" height="26" style="display:block;background:#4B6B63"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-bishop-d"></use></g></svg>
+            <svg viewBox="0 0 45 45" width="26" height="26" style="display:block;background:#EDE4D2"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-knight-d"></use></g></svg>
+            <svg viewBox="0 0 45 45" width="26" height="26" style="display:block;background:#4B6B63"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-pawn-d"></use></g></svg>
+          </div>
+          <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px;text-wrap:pretty">Bishop and knight separate on <em>construction</em>: the bishop is curves, vertical and symmetrical; the knight is the only asymmetric silhouette in the set, and it carries an S on its left edge — nose out, throat scooped in, chest out again. That lean, and the three interior marks it alone carries, are what keep the pair apart at 26px.</div>
+        </div>
+        <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#E0A93B;margin-bottom:12px">The elephant, once</div>
+          <div style="display:flex;gap:20px;align-items:center">
+            <svg viewBox="0 0 45 45" width="96" height="96" style="display:block;background:#EDE4D2;border-radius:4px;flex:none"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-bishop-l"></use></g></svg>
+            <div style="font-size:13.5px;line-height:1.55;color:#97A49D;text-wrap:pretty">The bishop's cut is a real cut: it breaks the mitre's outline on the upper right and ends flat, the way a slit sawn into boxwood ends. It is set at the same angle as the trunk in the mark, and that is as far as the reference should go here &mdash; the elephant belongs to the mark, and a piece that has to survive 40px is the wrong place to hide a second one.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:22px 24px;margin-top:20px;overflow:auto">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:14px">Paths &mdash; 45&times;45 viewBox, baseline y=37, no CSS dependency</div>
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#ECEAE3;white-space:pre;">/* shared by all six, always the last two paths */
+COLLAR = "M14.6 30h15.8l1.2 2.6H13.4z"
+FOOT   = "M12 32.6h21l1.4 2v2.4H10.6v-2.4z"
+
+KING = [
+ "M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z",
+ "M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z",
+ "M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z",
+ COLLAR, FOOT ]
+
+QUEEN = [
+ "M22.5 6.6l3.2 9.2 4-6.4.8 7.2 5.3-3.7-3.3 11.9H12.5L9.2 12.9l5.3 3.7.8-7.2 4 6.4z",
+ "M9.2 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM15.3 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM22.5 3.6a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM29.7 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM35.8 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4z",  /* five ball finials — one path, five subpaths */
+ "M12.5 24.8h20l-1.4 2.2c-.6 1.4-.5 2.3-.7 3H14.6c-.2-.7-.1-1.6-.7-3z",
+ COLLAR, FOOT ]
+
+ROOK = [
+ "M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z",
+ "M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z",
+ COLLAR, FOOT ]
+
+BISHOP = [
+ "M22.5 3.4a2.2 2.2 0 0 1 1.3 4c2 1.2 3.7 2.8 4.9 4.6L20.4 19.4 21.9 21 30.2 13.6C31.4 16 30.4 22.4 27.3 24.8H17.7c-2.3-1.6-3.6-3.8-3.6-6.6 0-4 2.7-8.2 7.1-10.8A2.2 2.2 0 0 1 22.5 3.4z",  /* the mitre cut is open — it breaks the outline */
+ "M17.7 24.8h9.6l1.4 1.8c-.6 1.6.4 2.6 1.7 3.4H14.6c1.3-.8 2.3-1.8 1.7-3.4z",
+ COLLAR, FOOT ]
+
+KNIGHT = [
+ "M29.4 30C30.6 22 30.4 15 27.2 10.2L28.2 4.6 23.6 7.4C18.4 8.2 13.2 11.6 10.8 16.6 9.6 18.6 10.2 20 12.2 20.4L16.2 21C15 23 13.2 24 12.2 25.8 11.4 27.4 11.8 29 15.2 30Z",
+ "M26.8 10.6c2.6 3.4 3.6 7.8 3.2 13.8l-2.4-1.8c.3-4.8-.5-8.4-2.4-10.6z",  /* mane */
+ "M19.2 9.75a1.05 1.05 0 1 0 0 2.1 1.05 1.05 0 1 0 0-2.1z",  /* eye */
+ "M11.6 17.75a.65.65 0 1 0 0 1.3.65.65 0 1 0 0-1.3z",  /* nostril */
+ COLLAR, FOOT ]
+
+PAWN = [
+ "M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z",
+ "M20.3 16.2h4.4l2 1.8H18.3z",  /* ring under the ball */
+ "M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z",
+ COLLAR, FOOT ]
+
+/* light: fill #F7F4EC  stroke #15201C
+   dark:  fill #15201C  stroke #D8D2C4
+   stroke-width 1, not 1.5 — 1.5 is more than half the
+   collar height and turns every seam into a bar; 1 keeps the
+   outline a hairline and lets the silhouette do the work
+   render the 45 viewBox at 100% of the square, not 86% */</pre>
+    </div>
+  </section>
+
+  <!-- 05 BOARD -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">05 &nbsp;/&nbsp; The board and its states</div>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:28px;line-height:1.2;margin:0 0 8px">Four channels, so nothing collides</h2>
+    <p style="font-size:16px;line-height:1.6;color:#97A49D;margin:0 0 12px;max-width:720px;text-wrap:pretty">Ten states that stack is a layering problem, not a colour problem. Give each state a <strong style="color:#ECEAE3;font-weight:500">channel</strong> &mdash; a physical layer of the square it is allowed to use &mdash; and two states can never fight, because they are not drawing in the same place. Within a channel, one state wins; across channels, they simply coexist.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:32px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-left:2px solid #E0A93B;border-radius:8px;padding:16px 18px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#E0A93B;margin-bottom:6px">Channel 1 &mdash; wash</div>
+        <div style="font-size:13.5px;line-height:1.5;color:#97A49D">Flat tint over the whole square. <strong style="color:#ECEAE3;font-weight:500">History and verdict only</strong>: last move, puzzle correct, puzzle wrong. Never more than one; latest wins.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-left:2px solid #E0A93B;border-radius:8px;padding:16px 18px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#E0A93B;margin-bottom:6px">Channel 2 &mdash; inset edge</div>
+        <div style="font-size:13.5px;line-height:1.5;color:#97A49D">A border drawn inside the square. <strong style="color:#ECEAE3;font-weight:500">Intent</strong>: selected (3px solid), hint and engine suggestion (2px pulsing), keyboard focus (2px dashed, inset 3px).</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-left:2px solid #E0A93B;border-radius:8px;padding:16px 18px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#E0A93B;margin-bottom:6px">Channel 3 &mdash; centre mark</div>
+        <div style="font-size:13.5px;line-height:1.5;color:#97A49D">A shape at the square's centre, under the piece. <strong style="color:#ECEAE3;font-weight:500">Legality</strong>: dot for a quiet move, ring for a capture. Nothing else may use the centre.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-left:2px solid #D9584A;border-radius:8px;padding:16px 18px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#D9584A;margin-bottom:6px">Channel 4 &mdash; glow</div>
+        <div style="font-size:13.5px;line-height:1.5;color:#97A49D">A radial bleed from the square centre outward. <strong style="color:#ECEAE3;font-weight:500">Check only.</strong> Reserved permanently, so a king in check is never ambiguous no matter what else is on that square.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:16px">
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div><div style="background:#4B6B63"></div><div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">default</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">bone / board, 2px corner on the outer board only</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2;position:relative"><div style="position:absolute;inset:0;background:rgba(224,169,63,.42)"></div></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:0;background:rgba(224,169,63,.42)"></div><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-knight-l"></use></g></svg></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">last move</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">wash &mdash; brass 42%, both squares</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:0;background:rgba(224,169,63,.62);box-shadow:inset 0 0 0 3px #E0A93B"></div><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-knight-l"></use></g></svg></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">selected</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">wash 62% + inset 3px solid brass</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2;position:relative;display:flex;align-items:center;justify-content:center"><div style="width:26%;height:26%;border-radius:999px;background:rgba(21,32,28,.30)"></div></div>
+          <div style="background:#4B6B63;position:relative;display:flex;align-items:center;justify-content:center"><div style="width:26%;height:26%;border-radius:999px;background:rgba(21,32,28,.34)"></div></div>
+          <div style="background:#4B6B63;position:relative;display:flex;align-items:center;justify-content:center"><div style="width:26%;height:26%;border-radius:999px;background:rgba(21,32,28,.34)"></div></div>
+          <div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">legal move</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">centre mark &mdash; dot 26%, ink 30%. Neutral, not brass: legality is not a state you chose.</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div>
+          <div style="background:#4B6B63;position:relative"><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-pawn-d"></use></g></svg><div style="position:absolute;inset:0;border-radius:999px;box-shadow:inset 0 0 0 5px rgba(21,32,28,.32)"></div></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">legal capture</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">centre mark &mdash; ring, 11% inset, same ink</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(217,88,74,.95) 0%, rgba(217,88,74,.55) 45%, rgba(217,88,74,0) 78%)"></div><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-king-l"></use></g></svg></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">king in check</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">glow &mdash; brick radial, under the piece. Paired with the word &ldquo;Check&rdquo; in the status line.</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2;position:relative"><div style="position:absolute;inset:0;background:rgba(95,191,146,.5)"></div></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:0;background:rgba(95,191,146,.5)"></div><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-queen-l"></use></g></svg></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">puzzle &mdash; correct</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">wash &mdash; jade 50%, 240ms fade in, holds</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1;animation:c64shake .42s ease-in-out 1">
+          <div style="background:#EDE4D2;position:relative"><div style="position:absolute;inset:0;background:rgba(217,88,74,.5)"></div></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:0;background:rgba(217,88,74,.5)"></div><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-queen-l"></use></g></svg></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">puzzle &mdash; wrong</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">wash brick 50% + 420ms shake, &plusmn;4px. Reduced motion: wash only, held 600ms longer.</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:0;box-shadow:inset 0 0 0 2px #E0A93B;animation:c64pulse 1.6s ease-in-out infinite"></div><svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-bishop-l"></use></g></svg></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">hint / engine move</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">inset edge &mdash; 2px brass, 1.6s pulse. Reduced motion: static 2px at 70%.</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div>
+          <div style="background:#4B6B63;position:relative"><div style="position:absolute;inset:3px;border:2px dashed #ECEAE3"></div></div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">keyboard focus</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">inset edge &mdash; 2px dashed chalk, offset in 3px. Chalk, never brass: focus must survive a brass square.</div>
+      </div>
+
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-radius:2px;overflow:hidden;aspect-ratio:1">
+          <div style="background:#EDE4D2"></div>
+          <div style="background:#4B6B63;position:relative">
+            <div style="position:absolute;inset:0;background:rgba(224,169,63,.62)"></div>
+            <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(217,88,74,.95) 0%, rgba(217,88,74,.5) 45%, rgba(217,88,74,0) 78%)"></div>
+            <svg viewBox="0 0 45 45" style="position:absolute;inset:0;width:100%"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><use href="#p-king-l"></use></g></svg>
+            <div style="position:absolute;inset:0;box-shadow:inset 0 0 0 3px #E0A93B"></div>
+          </div>
+          <div style="background:#4B6B63"></div><div style="background:#EDE4D2"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#ECEAE3;margin-top:8px">all three at once</div>
+        <div style="font-size:12.5px;color:#97A49D;line-height:1.45;margin-top:2px">selected + last move + check. Wash, glow and edge occupy different layers, so it still parses.</div>
+      </div>
+    </div>
+
+    <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:22px 24px;margin-top:24px;overflow:auto">
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#ECEAE3;white-space:pre;">/* z-order inside one square, bottom to top */
+1  square fill        --bone | --board
+2  wash               brass .42 last · brass .62 selected · jade .50 · brick .50
+3  glow (check)       radial-gradient(circle, brick .95, brick .55 45%, transparent 78%)
+4  centre mark        dot 26% ink .30  ·  ring inset 11% ink .32
+5  piece              the SVG
+6  inset edge         3px solid brass · 2px brass pulse · 2px dashed chalk inset 3px
+7  coordinate         mono 500, 9px, corner, colour = the opposite square colour
+
+/* never colour alone */
+check   → glow + "Check" in the status line + the king square announced to SR
+correct → jade wash + ✓ glyph in the status line
+wrong   → brick wash + shake + ✗ glyph
+best    → jade + label "best"; blunder → brick + "??" in the scoresheet</pre>
+    </div>
+  </section>
+
+  <!-- 06 LOGO -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">06 &nbsp;/&nbsp; The logo</div>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:28px;line-height:1.2;margin:0 0 8px">A head, a trunk, and a number that behaves like a number</h2>
+    <p style="font-size:16px;line-height:1.6;color:#97A49D;margin:0 0 28px;max-width:720px;text-wrap:pretty"><strong style="color:#ECEAE3;font-weight:500">The line for the About page:</strong> <em style="color:#ECEAE3">Chang is Thai for elephant &mdash; the piece that became the bishop, still called elephant across half the world. The mark is that animal, front on, on the sixty-four squares.</em></p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:20px">
+      <div style="background:#101413;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:44px 32px;display:flex;align-items:center;justify-content:center;gap:16px">
+        <svg viewBox="0 0 64 64" width="58" height="58" style="display:block;flex:none">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="#191F1D"></rect>
+          <g fill="#E0A93B">
+            <path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"></path>
+            <path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"></path>
+            <path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"></path>
+            <path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"></path>
+            <path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"></path>
+            <path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"></path>
+          </g>
+        </svg>
+        <div style="display:flex;align-items:baseline;gap:1px">
+          <span style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:44px;letter-spacing:-.02em;color:#ECEAE3">chang</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:34px;letter-spacing:-.01em;color:#E0A93B">64</span>
+        </div>
+      </div>
+      <div style="background:#EDE4D2;border:1px solid rgba(21,32,28,.14);border-radius:12px;padding:44px 32px;display:flex;align-items:center;justify-content:center;gap:16px">
+        <svg viewBox="0 0 64 64" width="58" height="58" style="display:block;flex:none">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="#15201C"></rect>
+          <g fill="#EDE4D2">
+            <path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"></path>
+            <path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"></path>
+            <path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"></path>
+            <path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"></path>
+            <path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"></path>
+            <path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"></path>
+          </g>
+        </svg>
+        <div style="display:flex;align-items:baseline;gap:1px">
+          <span style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:44px;letter-spacing:-.02em;color:#15201C">chang</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:34px;letter-spacing:-.01em;color:#7E5409">64</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:18px">Mark &mdash; 96 / 48 / 32 / 16</div>
+        <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
+          <svg viewBox="0 0 64 64" width="96" height="96" style="display:block"><rect width="64" height="64" rx="14" fill="#191F1D"></rect><g fill="#E0A93B"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"></path><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"></path><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"></path><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"></path><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"></path><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"></path></g></svg>
+          <svg viewBox="0 0 64 64" width="48" height="48" style="display:block"><rect width="64" height="64" rx="14" fill="#191F1D"></rect><g fill="#E0A93B"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"></path><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"></path><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"></path><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"></path><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"></path><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"></path></g></svg>
+          <svg viewBox="0 0 64 64" width="32" height="32" style="display:block"><rect width="64" height="64" rx="14" fill="#191F1D"></rect><g fill="#E0A93B"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"></path><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"></path><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"></path><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"></path><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"></path><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"></path></g></svg>
+          <svg viewBox="0 0 64 64" width="16" height="16" style="display:block"><rect width="64" height="64" rx="14" fill="#191F1D"></rect><g fill="#E0A93B"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"></path><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"></path><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"></path><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"></path><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"></path><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"></path></g></svg>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:18px;text-wrap:pretty">Front-on, so the silhouette is symmetrical and survives the 16px favicon: two ear masses, a head, a trunk that curls right, two tusks. At 16px the tusks and the curl merge into a single dark stem &mdash; which is exactly the ancient <em>alfil</em> shape. It degrades into a chess piece.</div>
+      </div>
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:18px">Wordmark spec</div>
+        <div style="font-size:14.5px;line-height:1.6;color:#97A49D;margin-bottom:16px;text-wrap:pretty">Keep the mono/serif split &mdash; it is the best idea in the current identity. One correction: the current pairing lets &ldquo;64&rdquo; float. Set the mono at <strong style="color:#ECEAE3;font-weight:500">0.77&times;</strong> the serif size and align on the <em>baseline</em>, not the cap height, so the digits sit level with the x&#8209;height of &ldquo;chang&rdquo; and read as an appended quantity rather than a syllable.</div>
+<pre style="font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#ECEAE3;white-space:pre;overflow:auto;">chang    Source Serif 4   600   44px   ls -.9    #ECEAE3
+64       JetBrains Mono   700   34px   ls -.3    #E0A93B
+
+size ratio      mono = 0.77 &times; serif
+alignment       shared baseline, y = 46 in a 260&times;64 box
+gap             1px optical &mdash; the digits touch the "g" shoulder
+light ground    chang #15201C   ·   64 #7E5409
+mono-colour     64 drops to 55% opacity of chang
+clear space     0.5 &times; cap height on all four sides
+min width       96px &mdash; below that, mark only</pre>
+        <div style="font-size:13px;line-height:1.55;color:#97A49D;margin-top:14px">Shipped as live type because the site already loads both faces &mdash; the wordmark then costs zero bytes and stays translatable. Say the word and I will send outlined paths for the print/OG version.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 COMPONENTS -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">07 &nbsp;/&nbsp; The states that carry the product</div>
+    <h2 style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:28px;line-height:1.2;margin:0 0 28px">Six components where the design either works or doesn't</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px">
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:16px">Locked during play &mdash; a rule, not a bug</div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#101413;border:1px solid rgba(236,234,227,.12);border-radius:8px">
+          <div style="min-height:44px;display:flex;align-items:center;padding:0 16px;border-radius:8px;background:#232B28;color:#97A49D;font-size:14px;font-weight:600;border:1px dashed rgba(236,234,227,.22);flex:none">Analysis</div>
+          <div style="font-size:13px;line-height:1.45;color:#97A49D">Available when the game ends. <span style="color:#ECEAE3">No engine help during play</span> &mdash; house rule.</div>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px;text-wrap:pretty">The dashed border is the whole trick: a solid disabled button reads as broken, a dashed one reads as <em>not yet</em>. No padlock icon &mdash; padlocks say paywall. The sentence beside it is part of the component, never a tooltip; on mobile it wraps underneath.</div>
+      </div>
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:16px">Resign &mdash; rest, armed (5s), reverting</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <div style="min-height:44px;display:flex;align-items:center;padding:0 18px;border-radius:8px;background:transparent;border:1px solid rgba(217,88,74,.5);color:#D9584A;font-size:14px;font-weight:600">Resign</div>
+          <div style="min-height:44px;display:flex;align-items:center;gap:10px;padding:0 18px;border-radius:8px;background:#D9584A;color:#101413;font-size:14px;font-weight:700;position:relative;overflow:hidden">
+            <span>Confirm resign</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.7">3s</span>
+            <span style="position:absolute;left:0;bottom:0;height:2px;width:58%;background:#101413;opacity:.45"></span>
+          </div>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px;text-wrap:pretty">Outline at rest, filled when armed &mdash; the fill is the confirmation affordance, and it is the only filled brick surface anywhere in the product. The countdown is a hairline draining along the bottom edge plus a mono digit, so the timeout is not conveyed by motion alone.</div>
+      </div>
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:16px">Segmented &amp; chips</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;background:#101413;border:1px solid rgba(236,234,227,.12);border-radius:8px;margin-bottom:12px">
+          <div style="min-height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#E0A93B;color:#101413;font-size:13.5px;font-weight:600;text-align:center;line-height:1.15">Blancs</div>
+          <div style="min-height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#97A49D;font-size:13.5px;font-weight:500;text-align:center;line-height:1.15">Noirs</div>
+          <div style="min-height:40px;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#97A49D;font-size:13.5px;font-weight:500;text-align:center;line-height:1.15">Al&eacute;atoire</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid #E0A93B;background:rgba(224,169,63,.14);color:#E0A93B;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500">3+2</div>
+          <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid rgba(236,234,227,.12);background:#232B28;color:#97A49D;font-family:'JetBrains Mono',monospace;font-size:13px">5+0</div>
+          <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid rgba(236,234,227,.12);background:#232B28;color:#97A49D;font-family:'JetBrains Mono',monospace;font-size:13px">10+0</div>
+          <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;border:1px solid rgba(236,234,227,.12);background:#232B28;color:#97A49D;font-family:'JetBrains Mono',monospace;font-size:13px">15+10</div>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px">Selected segment is a filled brass slab with ink text; selected chip is a brass outline with a 14% tint. Two different treatments because one is &ldquo;which of these&rdquo; and the other is &ldquo;these are on&rdquo;. Shown in French, at 1fr columns, wrapping to two lines without changing height.</div>
+      </div>
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:16px">Scoresheet</div>
+        <div style="border:1px solid rgba(236,234,227,.12);border-radius:8px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:13.5px">
+          <div style="display:grid;grid-template-columns:34px 1fr 1fr;border-bottom:1px solid rgba(236,234,227,.12)"><div style="padding:7px 10px;color:#97A49D;border-right:1px solid rgba(236,234,227,.12)">14</div><div style="padding:7px 10px;border-right:1px solid rgba(236,234,227,.12)">Nf3</div><div style="padding:7px 10px">Bg4</div></div>
+          <div style="display:grid;grid-template-columns:34px 1fr 1fr;border-bottom:1px solid rgba(236,234,227,.12)"><div style="padding:7px 10px;color:#97A49D;border-right:1px solid rgba(236,234,227,.12)">15</div><div style="padding:7px 10px;border-right:1px solid rgba(236,234,227,.12)">h3 <span style="color:#E0A93B">?!</span></div><div style="padding:7px 10px">Bh5</div></div>
+          <div style="display:grid;grid-template-columns:34px 1fr 1fr;border-bottom:1px solid rgba(236,234,227,.12);background:rgba(224,169,63,.16);box-shadow:inset 2px 0 0 #E0A93B"><div style="padding:7px 10px;color:#E0A93B;border-right:1px solid rgba(236,234,227,.12)">16</div><div style="padding:7px 10px;border-right:1px solid rgba(236,234,227,.12);color:#ECEAE3">g4 <span style="color:#D9584A">??</span></div><div style="padding:7px 10px;color:#ECEAE3">Nxg4</div></div>
+          <div style="display:grid;grid-template-columns:34px 1fr 1fr"><div style="padding:7px 10px;color:#97A49D;border-right:1px solid rgba(236,234,227,.12)">17</div><div style="padding:7px 10px;border-right:1px solid rgba(236,234,227,.12)">hxg4</div><div style="padding:7px 10px">Bxg4</div></div>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px">Real ruled cells, 34px number gutter, tabular figures. The viewed move is a brass tint <em>plus</em> a 2px left rail &mdash; position as well as colour. Annotations carry their own colour and their own glyph: <span style="font-family:'JetBrains Mono',monospace;color:#E0A93B">?!</span> inaccuracy, <span style="font-family:'JetBrains Mono',monospace;color:#D9584A">?</span> mistake, <span style="font-family:'JetBrains Mono',monospace;color:#D9584A">??</span> blunder.</div>
+      </div>
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:16px">Coordinate drill &mdash; the sticky strip</div>
+        <div style="background:#101413;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:52px;line-height:1;letter-spacing:.02em;color:#E0A93B">f6</div>
+          <div style="display:flex;gap:20px">
+            <div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600">18</div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#97A49D">sec</div></div>
+            <div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:#5FBF92">12</div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#97A49D">right</div></div>
+            <div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:#D9584A">2</div><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#97A49D">missed</div></div>
+          </div>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px">Sticky, 76px tall, with the ink background and a hairline bottom so it separates from the board as it scrolls under. The square to find is the largest type anywhere in the product &mdash; deliberately, because at arm's length on a phone it must be readable without focusing.</div>
+      </div>
+
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;padding:22px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97A49D;margin-bottom:16px">Result &mdash; over a dimmed board</div>
+        <div style="position:relative;border-radius:8px;overflow:hidden;background:#4B6B63">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);opacity:.9">
+            <div style="aspect-ratio:1;background:#EDE4D2"></div><div style="aspect-ratio:1;background:#4B6B63"></div><div style="aspect-ratio:1;background:#EDE4D2"></div><div style="aspect-ratio:1;background:#4B6B63"></div>
+            <div style="aspect-ratio:1;background:#4B6B63"></div><div style="aspect-ratio:1;background:#EDE4D2"></div><div style="aspect-ratio:1;background:#4B6B63"></div><div style="aspect-ratio:1;background:#EDE4D2"></div>
+            <div style="aspect-ratio:1;background:#EDE4D2"></div><div style="aspect-ratio:1;background:#4B6B63"></div><div style="aspect-ratio:1;background:#EDE4D2"></div><div style="aspect-ratio:1;background:#4B6B63"></div>
+          </div>
+          <div style="position:absolute;inset:0;background:rgba(16,20,19,.74);display:flex;align-items:center;justify-content:center;padding:14px">
+            <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-left:3px solid #5FBF92;border-radius:8px;box-shadow:0 12px 32px rgba(0,0,0,.55);padding:16px 18px;width:100%;max-width:280px">
+              <div style="font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:26px;line-height:1.15">You won</div>
+              <div style="font-size:13px;color:#97A49D;margin-top:4px;margin-bottom:14px">Checkmate in 34 moves &middot; level 6</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;background:#E0A93B;color:#101413;font-size:13.5px;font-weight:600">New game</div>
+                <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;background:#232B28;color:#ECEAE3;font-size:13.5px;font-weight:500">Review</div>
+                <div style="min-height:40px;display:flex;align-items:center;padding:0 14px;border-radius:8px;color:#97A49D;font-size:13.5px">Dismiss</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:13.5px;line-height:1.55;color:#97A49D;margin-top:14px">Left rail jade / brick / sage. The board dims to 74% ink rather than blurring, so the final position stays legible behind the card &mdash; people want to see the mate. <em>Review</em> is the second action, not the first, but it is the one that unlocks the panel.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 UNASKED -->
+  <section style="padding:64px 0 0;margin-top:56px;border-top:1px solid rgba(236,234,227,.12)">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#E0A93B;margin-bottom:20px">08 &nbsp;/&nbsp; Things you did not ask about</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:8px">The threshold screen is a scoresheet header</div>
+        <div style="font-size:14px;line-height:1.55;color:#97A49D">Play-before-start should look like the top of a blank scoresheet: date, colour, time control, opponent, all filled in, ruled, with the empty move grid below and the frozen position beside it. It stops reading as a broken game the moment it reads as a form waiting to be filled.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:8px">Ship an OG image generator, not an OG image</div>
+        <div style="font-size:14px;line-height:1.55;color:#97A49D">You already render pieces server-side onto 1300 pages. Render the same board into a 1200&times;630 card per page &mdash; position, title, mark. That is 1300 distinct search previews for roughly the cost of one template, and it is the single highest-leverage design asset you have.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:8px">Coordinates on, permanently</div>
+        <div style="font-size:14px;line-height:1.55;color:#97A49D">Not a setting. Mono 500 at 9px in the square corner, coloured as the opposite square. Your audience is people learning to see the board &mdash; and the coordinate drill is a mode you already built. Making them optional undercuts your own feature.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:8px">Cut the stats strip from five to three</div>
+        <div style="font-size:14px;line-height:1.55;color:#97A49D">Level, solved, best streak, puzzle rating, day streak &mdash; three of those are streaks and it starts to feel like an app that wants you back. Keep level, puzzle rating and solved. Day streak is the single most esports-app element on the site.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:8px">The eval bar is bone and ink, never brass</div>
+        <div style="font-size:14px;line-height:1.55;color:#97A49D">It is the board's colours turned on their side &mdash; white's share in bone, black's in the piece ink. Brass means &ldquo;you did this&rdquo;; the evaluation is not something you did. Keep the accent scarce or it stops meaning anything.</div>
+      </div>
+      <div style="background:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:8px;padding:20px 22px">
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:8px">One motion rule</div>
+        <div style="font-size:14px;line-height:1.55;color:#97A49D">Pieces move in 130ms ease-out; everything else in the interface is 0ms or 160ms opacity. No slides, no scales, no springs. A chess site where the UI moves more than the pieces has its priorities wrong &mdash; and it makes the reduced-motion fallback nearly free.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}"></script>
+</body>
+</html>

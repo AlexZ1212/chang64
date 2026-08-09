@@ -80,6 +80,14 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
     linear-gradient(45deg,var(--chalk) 25%,transparent 25%,transparent 75%,var(--chalk) 75%);
   background-size:70px 70px;background-position:0 0,35px 35px;transform:rotate(12deg);pointer-events:none
 }
+.promise{
+  position:relative;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.06em;color:var(--brass);margin-bottom:14px
+}
+.brand{align-items:center}
+.names{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
+@media(max-width:620px){.tagline{display:none}}
 .hero h2{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,7vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:12px;position:relative}
 .hero p{color:var(--sage);font-size:clamp(14px,2.6vw,16.5px);max-width:46ch;margin-bottom:24px;position:relative}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative}
@@ -415,7 +423,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
   <header>
     <button class="brand" id="brand" aria-label="chang64 home">
       <span class="glyph" id="brandmark"></span>
-      <h1>chang<span class="sixtyfour">64</span></h1>
+      <span class="names">
+        <h1>chang<span class="sixtyfour">64</span></h1>
+        <span class="tagline">The elephant on 64 squares</span>
+      </span>
     </button>
     <div class="seg langswitch" id="langSwitch">
       <button data-lang="en" aria-pressed="true">EN</button>
@@ -435,6 +446,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
   <div id="pane-home">
     <section class="hero">
       <h2>Play chess.<br>Solve tactics.<br>Get better.</h2>
+      <p class="promise">No account. No ads. No noise. Just chess.</p>
       <p>Bullet to daily time controls against a built-in engine, 489 puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
       <div class="tc-block">
         <div class="eyebrow">Time control</div>
@@ -601,7 +613,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
           <div class="btnrow" style="margin-top:8px">
             <button class="btn" id="btnStockfish">Enable Stockfish</button>
           </div>
-          <p class="note" id="sfStatus">The built-in engine reviews your game instantly. Stockfish is stronger but downloads about 7 MB the first time.</p>
+          <p class="note" id="sfStatus">The built-in engine is instant. Stockfish is stronger, and downloads about 7 MB the first time.</p>
           <div id="analysisOut" class="hide">
             <div class="accrow">
               <div class="stat"><b id="accScore">—</b><span>Accuracy</span></div>
@@ -812,6 +824,26 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
 
 <script>
 /* ==========================================================
+   chang64 - a free chess website
+   Copyright (C) 2026 AlexZ1212
+   https://github.com/AlexZ1212/chang64
+
+   This program is free software: you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the Free
+   Software Foundation, either version 3 of the License, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+   more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program. If not, see <https://www.gnu.org/licenses/>.
+   A copy is served at https://chang64.com/LICENSE
+   ========================================================== */
+
+/* ==========================================================
    0. INTERNATIONALISATION
    ========================================================== */
 const FR={
@@ -923,8 +955,8 @@ const FR={
 "White to play and win material.":"Les Blancs jouent et gagnent du matériel.",
 "Black to play and win material.":"Les Noirs jouent et gagnent du matériel.",
 "Your move. {hint}":"À toi. {hint}",
-"Not that one. Look at the enemy king and its escape squares.":"Pas celui-là. Regarde le roi adverse et ses cases de fuite.",
-"Still not it. Try a hint, or reveal the solution.":"Toujours pas. Demande un indice, ou affiche la solution.",
+"Not quite. Look at the enemy king and its escape squares.":"Pas tout à fait. Regarde le roi adverse et ses cases de fuite.",
+"Still not it. A hint or the solution can help.":"Toujours pas. Un indice ou la solution peuvent aider.",
 "{san} — checkmate.":"{san} : échec et mat.","{san} — material won. Nicely spotted.":"{san} : matériel gagné, bien vu.",
 "{san}. The defence replies…":"{san}. La défense répond…",
 "Correct. Now mate in {n} move.":"Bonne réponse. Maintenant mate en {n} coup.",
@@ -1046,6 +1078,12 @@ const FR={
 "Sixty-four is the rest of the name: the squares. chang64 is the elephant on the sixty-four squares, a piece that crossed a thousand years and half the world, on a board that never changed.":
  "Soixante-quatre, c'est le reste du nom : les cases. chang64, c'est l'éléphant sur les soixante-quatre cases, une pièce qui a traversé mille ans et la moitié du monde, sur un échiquier qui n'a pas bougé.",
 
+/* --- accroche et signature --- */
+"No account. No ads. No noise. Just chess.":"Sans compte. Sans publicité. Sans bruit. Juste les échecs.",
+"The elephant on 64 squares":"L'éléphant sur 64 cases",
+"Tip: “Suggest a move” shows what the engine would play in the position you are looking at.":
+ "Astuce : « Suggérer un coup » montre ce que le moteur jouerait dans la position que tu regardes.",
+
 /* --- divers --- */
 "Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier",
 "chang64 home":"Accueil chang64","First move":"Premier coup","Previous move":"Coup précédent",
@@ -1062,7 +1100,7 @@ const FR={
 "Played":"Joué","Engine preferred":"Le moteur préférait","The engine agrees: best move.":"Le moteur est d'accord : meilleur coup.",
 "Blunder":"Gaffe","Mistake":"Erreur","Inaccuracy":"Imprécision","{n} pawns lost.":"{n} pion(s) perdu(s).",
 "Review, move suggestions and the evaluation bar unlock once the game is over. No engine help while you play.":"L'analyse, les suggestions de coup et la barre d'avantage se débloquent à la fin de la partie. Aucune aide du moteur pendant le jeu.",
-"The engine can go through the game move by move and flag what went wrong.":"Le moteur peut reprendre la partie coup par coup et signaler ce qui a dérapé.",
+"Review your game move by move. The engine flags what went wrong.":"Reprends ta partie coup par coup. Le moteur signale ce qui a dérapé.",
 "Resign":"Abandonner","Confirm resignation":"Confirmer l'abandon","Resign this game":"Abandonner la partie",
 "You resigned. The computer wins.":"Tu abandonnes. L'ordinateur gagne.","You resign":"Tu abandonnes",
 "You resigned this game.":"Tu as abandonné cette partie.","Your friend resigned. You win.":"Ton ami a abandonné. Tu gagnes.",
@@ -1866,6 +1904,7 @@ function resignGame(){
 }
 function hintGame(){
   if(busy)return;
+  if(!prog.usedHint){prog.usedHint=true;saveProg();}
   if(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame)return;
   busy=true;$("btnHint").disabled=true;
   $("status").className="status";$("status").textContent=t("Analysing…");
@@ -1985,8 +2024,8 @@ function tryPuzzleMove(m){
     setTimeout(()=>boardEl.classList.remove("shake"),340);
     const st=$("exStatus");st.className="status lose";
     st.textContent=puzzleTries===1
-      ? t("Not that one. Look at the enemy king and its escape squares.")
-      : t("Still not it. Try a hint, or reveal the solution.");
+      ? t("Not quite. Look at the enemy king and its escape squares.")
+      : t("Still not it. A hint or the solution can help.");
     registerWrong();
     if(typeof onPuzzleWrong==="function")onPuzzleWrong();
     setTimeout(()=>{marks={};render();},700);
@@ -2988,6 +3027,7 @@ const LEVEL_RATING=[800,1050,1300,1600,1900];
 function ensureProgFields(){
   if(typeof prog.showEval!=="boolean")prog.showEval=false;
   if(typeof prog.theme!=="string")prog.theme="";
+  if(typeof prog.usedHint!=="boolean")prog.usedHint=false;
   if(typeof prog.rating!=="number")prog.rating=800;
   if(typeof prog.days!=="number")prog.days=0;
   if(typeof prog.rushBest!=="number")prog.rushBest=0;
@@ -3141,9 +3181,21 @@ function renderLegal(){
       "l'éditeur a choisi de ne pas rendre publics son nom et son adresse. Ces informations sont détenues par l'hébergeur, qui les communiquera à l'autorité judiciaire sur requête.</p>"+
       "<h4>Hébergement</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
       "<h4>Nom de domaine</h4><p>Enregistré auprès de <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
-      "<h4>Propriété intellectuelle</h4><p>Le moteur d'échecs, la banque d'exercices et l'interface de chang64 ont été conçus pour ce site. "+
-      "Les noms d'ouvertures proviennent du projet lichess-org/chess-openings, publié sous licence libre. "+
-      "Le moteur d'analyse Stockfish, proposé en option, est distribué sous licence GNU GPL v3 ; sa licence accompagne le fichier.</p>"+
+      "<h4>Licence du code</h4><p>Le code source de chang64 est publié sous licence "+
+      "<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\" rel=\"license noopener\" target=\"_blank\">GNU General Public License version 3</a> "+
+      "ou ultérieure. Il peut être étudié, modifié et redistribué dans les conditions de cette licence, depuis "+
+      "<a href=\"https://github.com/AlexZ1212/chang64\" rel=\"noopener\" target=\"_blank\">le dépôt public du projet</a>. "+
+      "Le texte de la licence est également servi à l'adresse <a href=\"/LICENSE\">/LICENSE</a>.</p>"+
+      "<h4>Propriété intellectuelle</h4><p>La licence ci-dessus couvre le programme. Elle ne couvre pas le contenu éditorial : "+
+      "les textes des pages d'ouvertures, de règles, de finales et de pièges, la collection d'exercices en tant qu'ensemble constitué, "+
+      "ainsi que l'identité visuelle du site. Ces éléments restent protégés par le droit d'auteur et leur reproduction nécessite une autorisation. "+
+      "Le détail figure dans le fichier <a href=\"/COPYING.CONTENT\">COPYING.CONTENT</a>.</p>"+
+      "<p>Les noms d'ouvertures proviennent du projet lichess-org/chess-openings, publié sous licence libre.</p>"+
+      "<h4>Stockfish</h4><p>L'analyse renforcée utilise <a href=\"https://stockfishchess.org\" rel=\"noopener\" target=\"_blank\">Stockfish</a>, "+
+      "moteur d'échecs libre développé par les contributeurs du projet Stockfish et distribué sous licence GNU GPL v3. "+
+      "Son code source est disponible sur <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
+      "et le texte de sa licence accompagne le moteur. C'est parce que chang64 distribue Stockfish que son propre code est publié sous la même licence. "+
+      "Stockfish est optionnel : il n'est chargé qu'après activation explicite depuis le panneau d'analyse.</p>"+
       "<h4>Contenus tiers</h4><p>La section Vidéos intègre des lecteurs YouTube. Ces vidéos appartiennent à leurs chaînes respectives ; "+
       "chang64 n'a aucun lien avec elles et rien ne se charge avant que tu appuies sur lecture.</p>"+
       "<h4>Signalement</h4><p>Toute demande relative au contenu du site peut être adressée à "+PUBLISHER.email+".</p>"
@@ -3153,9 +3205,21 @@ function renderLegal(){
       "the publisher has chosen not to make their name and address public. That information is held by the host and will be disclosed to the judicial authority on request.</p>"+
       "<h4>Hosting</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
       "<h4>Domain name</h4><p>Registered through <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
-      "<h4>Intellectual property</h4><p>The chess engine, the puzzle set and the interface of chang64 were built for this site. "+
-      "Opening names come from the lichess-org/chess-openings project, published under a free licence. "+
-      "The optional Stockfish analysis engine is distributed under the GNU GPL v3; its licence ships alongside the file.</p>"+
+      "<h4>Code licence</h4><p>The source code of chang64 is released under the "+
+      "<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\" rel=\"license noopener\" target=\"_blank\">GNU General Public License version 3</a> "+
+      "or later. You are free to study, modify and redistribute it under the terms of that licence, from "+
+      "<a href=\"https://github.com/AlexZ1212/chang64\" rel=\"noopener\" target=\"_blank\">the project's public repository</a>. "+
+      "The licence text is also served at <a href=\"/LICENSE\">/LICENSE</a>.</p>"+
+      "<h4>Intellectual property</h4><p>The licence above covers the program. It does not cover the editorial content: "+
+      "the written pages on openings, rules, endgames and traps, the puzzle collection as a curated set, "+
+      "and the site's visual identity. Those remain protected by copyright and may not be reproduced without permission. "+
+      "The exact scope is set out in <a href=\"/COPYING.CONTENT\">COPYING.CONTENT</a>.</p>"+
+      "<p>Opening names come from the lichess-org/chess-openings project, published under a free licence.</p>"+
+      "<h4>Stockfish</h4><p>Deeper analysis is powered by <a href=\"https://stockfishchess.org\" rel=\"noopener\" target=\"_blank\">Stockfish</a>, "+
+      "a free and open source chess engine developed by the Stockfish contributors and distributed under the GNU GPL v3. "+
+      "Its source code is available at <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
+      "and its licence text ships alongside the engine. It is because chang64 distributes Stockfish that its own code is released under the same licence. "+
+      "Stockfish is optional: it is only loaded once you enable it from the analysis panel.</p>"+
       "<h4>Third-party content</h4><p>The Watch section embeds YouTube players. Those videos belong to their respective channels; "+
       "chang64 has no affiliation with them and nothing is loaded until you press play.</p>"+
       "<h4>Reporting</h4><p>Any request concerning the content of this site can be sent to "+PUBLISHER.email+".</p>";
@@ -3211,7 +3275,7 @@ function applyEvalPref(){
   if(bh&&mode==="play")bh.disabled=!unlocked;
   const note=$("reviewLock");
   if(note)note.textContent=unlocked||analysis
-    ? t("The engine can go through the game move by move and flag what went wrong.")
+    ? t("Review your game move by move. The engine flags what went wrong.")+(prog.usedHint?"":" "+t("Tip: “Suggest a move” shows what the engine would play in the position you are looking at."))
     : t("Review, move suggestions and the evaluation bar unlock once the game is over. No engine help while you play.");
 }
 

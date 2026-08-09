@@ -1,5 +1,18 @@
-/* chang64 offline cache */
-const CACHE="chang64-v1";
+/* chang64 offline cache
+ *
+ * chang64 - a free chess website
+ * Copyright (C) 2026 AlexZ1212
+ * https://github.com/AlexZ1212/chang64
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version. See https://chang64.com/LICENSE
+ *
+ * IMPORTANT: bump CACHE on every deployment, otherwise returning visitors keep
+ * being served the previous version from their own cache, indefinitely.
+ */
+const CACHE="chang64-v2";
 const CORE=["/","/index.html","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));

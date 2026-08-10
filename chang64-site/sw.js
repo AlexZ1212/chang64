@@ -9,10 +9,10 @@
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version. See https://chang64.com/LICENSE
  *
- * IMPORTANT: bump CACHE on every deployment, otherwise returning visitors keep
- * being served the previous version from their own cache, indefinitely.
+ * La version du cache est calculee a la construction : chaque build invalide
+ * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-v2";
+const CACHE="chang64-202608101435";
 const CORE=["/","/index.html","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));

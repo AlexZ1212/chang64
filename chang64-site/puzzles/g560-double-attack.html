@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Double attack #g560: White to play and win material | chang64</title>
+<meta name="description" content="A double attack tactics puzzle: white to play and win material. Engine-verified position, very hard difficulty. Solution hidden until you ask for it.">
+<link rel="canonical" href="https://chang64.com/puzzles/g560-double-attack.html">
+<link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/g560-double-attack.html">
+<link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/g560-attaque-double.html">
+<link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/g560-double-attack.html">
+<meta property="og:title" content="Double attack #g560: White to play and win material | chang64">
+<meta property="og:description" content="A double attack tactics puzzle: white to play and win material. Engine-verified position, very hard difficulty. Solution hidden until you ask for it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chang64.com/puzzles/g560-double-attack.html">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://chang64.com/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
+--bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
+--rule:rgba(21,32,28,.14);--r:8px}
+body{background:var(--ink);color:var(--chalk);
+font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}
+.wrap{max-width:880px;margin:0 auto}
+a{color:var(--brass)}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
+padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk)}
+.brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
+nav a{font-size:13px;margin-left:14px;text-decoration:none;color:var(--sage)}
+nav a:hover{color:var(--brass)}
+h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
+h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}
+p{margin-bottom:12px;max-width:66ch}
+.lede{font-size:17px;color:var(--sage);margin-bottom:24px}
+.cols{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.diagram{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.anim svg{display:block;width:100%;height:auto;border-radius:6px}
+/* l'attribut hidden sur un <g> SVG depend de la feuille du navigateur :
+   on l'impose explicitement plutot que d'en dependre */
+.anim g[data-ply][hidden]{display:none}
+.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
+.animctl button{background:var(--slate);color:var(--bone);border:1px solid var(--rule);border-radius:6px;
+  width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
+.animctl button:hover{border-color:var(--brass)}
+.animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.animply{font-size:12px;color:#93A99A;font-variant-numeric:tabular-nums}
+.diagram svg{width:100%;height:auto;display:block;border-radius:2px}
+.moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
+border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+.eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);
+border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px}
+th{text-align:left;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);padding:8px;border-bottom:1px solid var(--rule)}
+td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk);white-space:nowrap}
+.cta{display:inline-block;background:var(--brass);color:#FFF;font-weight:600;font-size:14px;text-decoration:none;
+padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}
+.cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);
+border:1px solid var(--rule);border-radius:12px}
+.toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;
+color:var(--chalk);background:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 12px}
+.toc a:hover{border-color:var(--brass);color:var(--brass)}
+.toc a b{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--sage);font-size:12px}
+h2{scroll-margin-top:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tile{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:14px;text-decoration:none;display:block}
+.tile:hover{border-color:var(--brass)}
+.tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
+.tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Quiz","name":"Double attack #g560: White to play and win material | chang64","inLanguage":"en","about":{"@type":"Thing","name":"Double attack"}}</script>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="brand" href="/">chang<span>64</span></a>
+  <nav>
+    <a href="/">Play</a>
+    <a href="/openings/">Openings</a>
+    <a href="/puzzles/">Puzzles</a>
+    <a href="/learn/">Learn</a>
+    <a href="/fr/exercices/g560-attaque-double.html" hreflang="fr" rel="alternate">Français</a>
+  </nav>
+</header>
+<h1>White to play and win material</h1>
+<p class="lede">A double attack tactics puzzle: white to play and win material. Engine-verified position, very hard difficulty. Solution hidden until you ask for it.</p>
+<div class="cols"><div class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-label="Chess position"><rect x="0" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><defs><symbol id="pbr" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z"/><path d="M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbn" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M29.4 30C30.6 22 30.4 15 27.2 10.2L28.2 4.6 23.6 7.4C18.4 8.2 13.2 11.6 10.8 16.6 9.6 18.6 10.2 20 12.2 20.4L16.2 21C15 23 13.2 24 12.2 25.8 11.4 27.4 11.8 29 15.2 30Z"/><path d="M26.8 10.6c2.6 3.4 3.6 7.8 3.2 13.8l-2.4-1.8c.3-4.8-.5-8.4-2.4-10.6z"/><path d="M19.2 9.75a1.05 1.05 0 1 0 0 2.1 1.05 1.05 0 1 0 0-2.1z"/><path d="M11.6 17.75a.65.65 0 1 0 0 1.3.65.65 0 1 0 0-1.3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbb" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 3.4a2.2 2.2 0 0 1 1.3 4c2 1.2 3.7 2.8 4.9 4.6L20.4 19.4 21.9 21 30.2 13.6C31.4 16 30.4 22.4 27.3 24.8H17.7c-2.3-1.6-3.6-3.8-3.6-6.6 0-4 2.7-8.2 7.1-10.8A2.2 2.2 0 0 1 22.5 3.4z"/><path d="M17.7 24.8h9.6l1.4 1.8c-.6 1.6.4 2.6 1.7 3.4H14.6c1.3-.8 2.3-1.8 1.7-3.4z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbk" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z"/><path d="M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z"/><path d="M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbp" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z"/><path d="M20.3 16.2h4.4l2 1.8H18.3z"/><path d="M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwp" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z"/><path d="M20.3 16.2h4.4l2 1.8H18.3z"/><path d="M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwk" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z"/><path d="M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z"/><path d="M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwb" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 3.4a2.2 2.2 0 0 1 1.3 4c2 1.2 3.7 2.8 4.9 4.6L20.4 19.4 21.9 21 30.2 13.6C31.4 16 30.4 22.4 27.3 24.8H17.7c-2.3-1.6-3.6-3.8-3.6-6.6 0-4 2.7-8.2 7.1-10.8A2.2 2.2 0 0 1 22.5 3.4z"/><path d="M17.7 24.8h9.6l1.4 1.8c-.6 1.6.4 2.6 1.7 3.4H14.6c1.3-.8 2.3-1.8 1.7-3.4z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwr" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z"/><path d="M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwn" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M29.4 30C30.6 22 30.4 15 27.2 10.2L28.2 4.6 23.6 7.4C18.4 8.2 13.2 11.6 10.8 16.6 9.6 18.6 10.2 20 12.2 20.4L16.2 21C15 23 13.2 24 12.2 25.8 11.4 27.4 11.8 29 15.2 30Z"/><path d="M26.8 10.6c2.6 3.4 3.6 7.8 3.2 13.8l-2.4-1.8c.3-4.8-.5-8.4-2.4-10.6z"/><path d="M19.2 9.75a1.05 1.05 0 1 0 0 2.1 1.05 1.05 0 1 0 0-2.1z"/><path d="M11.6 17.75a.65.65 0 1 0 0 1.3.65.65 0 1 0 0-1.3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwq" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 6.6l3.2 9.2 4-6.4.8 7.2 5.3-3.7-3.3 11.9H12.5L9.2 12.9l5.3 3.7.8-7.2 4 6.4z"/><path d="M9.2 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM15.3 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM22.5 3.6a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM29.7 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM35.8 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4z"/><path d="M12.5 24.8h20l-1.4 2.2c-.6 1.4-.5 2.3-.7 3H14.6c-.2-.7-.1-1.6-.7-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol></defs><use href="#pbr" x="0.0" y="0.0" width="37.5" height="37.5"/><use href="#pbn" x="37.5" y="0.0" width="37.5" height="37.5"/><use href="#pbb" x="75.0" y="0.0" width="37.5" height="37.5"/><use href="#pbk" x="150.0" y="0.0" width="37.5" height="37.5"/><use href="#pbb" x="187.5" y="0.0" width="37.5" height="37.5"/><use href="#pbr" x="262.5" y="0.0" width="37.5" height="37.5"/><use href="#pbp" x="0.0" y="37.5" width="37.5" height="37.5"/><use href="#pbp" x="187.5" y="37.5" width="37.5" height="37.5"/><use href="#pbp" x="225.0" y="37.5" width="37.5" height="37.5"/><use href="#pbn" x="225.0" y="75.0" width="37.5" height="37.5"/><use href="#pbp" x="37.5" y="112.5" width="37.5" height="37.5"/><use href="#pbp" x="150.0" y="112.5" width="37.5" height="37.5"/><use href="#pbp" x="262.5" y="112.5" width="37.5" height="37.5"/><use href="#pwp" x="0.0" y="150.0" width="37.5" height="37.5"/><use href="#pbp" x="37.5" y="150.0" width="37.5" height="37.5"/><use href="#pwp" x="225.0" y="150.0" width="37.5" height="37.5"/><use href="#pwp" x="187.5" y="187.5" width="37.5" height="37.5"/><use href="#pwp" x="75.0" y="225.0" width="37.5" height="37.5"/><use href="#pwk" x="150.0" y="225.0" width="37.5" height="37.5"/><use href="#pwb" x="225.0" y="225.0" width="37.5" height="37.5"/><use href="#pwp" x="262.5" y="225.0" width="37.5" height="37.5"/><use href="#pwr" x="0.0" y="262.5" width="37.5" height="37.5"/><use href="#pwn" x="37.5" y="262.5" width="37.5" height="37.5"/><use href="#pwb" x="75.0" y="262.5" width="37.5" height="37.5"/><use href="#pwq" x="112.5" y="262.5" width="37.5" height="37.5"/><use href="#pwr" x="225.0" y="262.5" width="37.5" height="37.5"/></svg><p style="font-size:12px;color:#93A99A;margin:8px 0 0">White to move</p></div>
+<div>
+  <p><span class="eco">Double attack</span> <span class="eco">Very hard</span></p>
+  <p>This position comes from the chang64 puzzle set. Every puzzle is proved by the engine: for a mate, every defence was checked; for a material win, the margin over the second-best move was measured.</p>
+  <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">Show the solution</summary>
+    <div class="moves" style="margin-top:10px">Qd5</div></details>
+  <a class="cta" href="/#puzzle=g560">Solve it on the board</a>
+  <a class="cta ghost" href="/puzzles/">Back to the index</a>
+</div></div>
+<footer>chang64 — free chess, no account required. Opening data from the lichess-org/chess-openings project.</footer>
+</div>
+<script>
+/* Pilote l'echiquier anime des pages d'ouverture.
+   Sans ce script, la position finale reste affichee et les commandes sont
+   masquees : la page fonctionne exactement comme avant. */
+(function(){
+  var box=document.querySelector(".anim"); if(!box)return;
+  var plies=[]; try{plies=JSON.parse(box.getAttribute("data-plies"))||[];}catch(e){}
+  var groups=box.querySelectorAll("svg > g[data-ply]");
+  if(groups.length<2)return;
+  var ctl=box.querySelector(".animctl"), lab=box.querySelector(".animply");
+  var btn={}; if(ctl){ctl.hidden=false;
+    ctl.querySelectorAll("button").forEach(function(b){btn[b.dataset.act]=b;});}
+  var i=groups.length-1, timer=null;
+  function show(n){
+    i=Math.max(0,Math.min(groups.length-1,n));
+    /* .hidden est une propriete de HTMLElement, pas de SVGElement : sur un
+       <g> il faut passer par l'attribut, sinon rien ne se passe. */
+    for(var k=0;k<groups.length;k++){
+      if(k===i)groups[k].removeAttribute("hidden");
+      else groups[k].setAttribute("hidden","");
+    }
+    if(lab)lab.textContent=plies[i]||"";
+    if(btn.prev)btn.prev.disabled=(i===0);
+    if(btn.next)btn.next.disabled=(i===groups.length-1);
+  }
+  function stop(){if(timer){clearInterval(timer);timer=null;}
+    if(btn.play)btn.play.innerHTML="&#9654;";}
+  function playFrom(n){
+    stop(); show(n);
+    if(btn.play)btn.play.innerHTML="&#10073;&#10073;";
+    timer=setInterval(function(){
+      if(i>=groups.length-1){stop();return;}
+      show(i+1);
+    },850);
+  }
+  if(btn.prev)btn.prev.onclick=function(){stop();show(i-1);};
+  if(btn.next)btn.next.onclick=function(){stop();show(i+1);};
+  if(btn.play)btn.play.onclick=function(){
+    if(timer)stop(); else playFrom(i>=groups.length-1?0:i);
+  };
+  /* Une personne qui a demande moins d'animation garde la position finale
+     et pilote elle-meme. Les autres voient la ligne se jouer une fois. */
+  var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(calm){show(groups.length-1);return;}
+  show(0);
+  var started=false;
+  function go(){if(started)return;started=true;playFrom(0);}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){go();io.disconnect();}});
+    },{threshold:.35});
+    io.observe(box);
+  }else go();
+})();
+</script>
+</body>
+</html>

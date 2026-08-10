@@ -14,12 +14,12 @@ the board. The elephant was the piece that, over centuries, became the modern bi
 
 - A chess engine written from scratch, validated against standard perft tests
 - Four bot difficulty levels with bullet, blitz, rapid, classical and daily time controls
-- 489 engine-verified tactics puzzles, with adaptive difficulty, theme filter and Puzzle Rush
+- 777 engine-verified tactics puzzles, with adaptive difficulty, theme filter and Chang Sprint
 - Game review with an evaluation graph and a verdict on every move
 - PGN import and export, opening detection, game history stored in the browser
 - Endgame trainer and coordinate drill
 - Friend games over a shared link, with no server involved
-- 1,353 static content pages in English and French
+- Static content pages in English and French: openings, endgames, traps, rules, glossary
 - Progressive Web App: installable, works offline
 - Optional Stockfish 18 integration for stronger analysis
 

@@ -42,6 +42,16 @@ p{margin-bottom:12px;max-width:66ch}
 .cols{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
 @media(max-width:700px){.cols{grid-template-columns:1fr}}
 .diagram{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.anim svg{display:block;width:100%;height:auto;border-radius:6px}
+/* l'attribut hidden sur un <g> SVG depend de la feuille du navigateur :
+   on l'impose explicitement plutot que d'en dependre */
+.anim g[data-ply][hidden]{display:none}
+.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
+.animctl button{background:var(--slate);color:var(--bone);border:1px solid var(--rule);border-radius:6px;
+  width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
+.animctl button:hover{border-color:var(--brass)}
+.animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.animply{font-size:12px;color:#93A99A;font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
@@ -84,5 +94,60 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 <h1>Pion passé</h1><p class="lede">Un pion qui n'a plus aucun pion adverse devant lui, ni sur sa colonne ni sur les deux voisines. Seules les pièces peuvent l'arrêter, ce qui fait des pions passés les arbitres des finales.</p><div class="cols"><div><p>Un pion qui n'a plus aucun pion adverse devant lui, ni sur sa colonne ni sur les deux voisines. Seules les pièces peuvent l'arrêter, ce qui fait des pions passés les arbitres des finales.</p><a class="cta" href="/">Jouer une partie</a></div></div>
 <footer>chang64 — échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings.</footer>
 </div>
+<script>
+/* Pilote l'echiquier anime des pages d'ouverture.
+   Sans ce script, la position finale reste affichee et les commandes sont
+   masquees : la page fonctionne exactement comme avant. */
+(function(){
+  var box=document.querySelector(".anim"); if(!box)return;
+  var plies=[]; try{plies=JSON.parse(box.getAttribute("data-plies"))||[];}catch(e){}
+  var groups=box.querySelectorAll("svg > g[data-ply]");
+  if(groups.length<2)return;
+  var ctl=box.querySelector(".animctl"), lab=box.querySelector(".animply");
+  var btn={}; if(ctl){ctl.hidden=false;
+    ctl.querySelectorAll("button").forEach(function(b){btn[b.dataset.act]=b;});}
+  var i=groups.length-1, timer=null;
+  function show(n){
+    i=Math.max(0,Math.min(groups.length-1,n));
+    /* .hidden est une propriete de HTMLElement, pas de SVGElement : sur un
+       <g> il faut passer par l'attribut, sinon rien ne se passe. */
+    for(var k=0;k<groups.length;k++){
+      if(k===i)groups[k].removeAttribute("hidden");
+      else groups[k].setAttribute("hidden","");
+    }
+    if(lab)lab.textContent=plies[i]||"";
+    if(btn.prev)btn.prev.disabled=(i===0);
+    if(btn.next)btn.next.disabled=(i===groups.length-1);
+  }
+  function stop(){if(timer){clearInterval(timer);timer=null;}
+    if(btn.play)btn.play.innerHTML="&#9654;";}
+  function playFrom(n){
+    stop(); show(n);
+    if(btn.play)btn.play.innerHTML="&#10073;&#10073;";
+    timer=setInterval(function(){
+      if(i>=groups.length-1){stop();return;}
+      show(i+1);
+    },850);
+  }
+  if(btn.prev)btn.prev.onclick=function(){stop();show(i-1);};
+  if(btn.next)btn.next.onclick=function(){stop();show(i+1);};
+  if(btn.play)btn.play.onclick=function(){
+    if(timer)stop(); else playFrom(i>=groups.length-1?0:i);
+  };
+  /* Une personne qui a demande moins d'animation garde la position finale
+     et pilote elle-meme. Les autres voient la ligne se jouer une fois. */
+  var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(calm){show(groups.length-1);return;}
+  show(0);
+  var started=false;
+  function go(){if(started)return;started=true;playFrom(0);}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){go();io.disconnect();}});
+    },{threshold:.35});
+    io.observe(box);
+  }else go();
+})();
+</script>
 </body>
 </html>

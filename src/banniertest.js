@@ -1,0 +1,44 @@
+const fs=require("fs");const {JSDOM}=require("jsdom");
+const html=fs.readFileSync("./site/index.html","utf8");
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
+(async()=>{
+  const errors=[];
+  const dom=new JSDOM(html.replace('items:[[1,0],[1,1],[2,1]]','items:[[0.06,0],[1,1],[2,1]]'),
+    {runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/"});
+  const w=dom.window; w.addEventListener("error",e=>errors.push(e.message));
+  const $=id=>w.document.getElementById(id);
+  const click=el=>el.dispatchEvent(new w.MouseEvent("click",{bubbles:true}));
+  await wait(700);
+  const startGame=async(ms)=>{ if(/Start game|Lancer la partie/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} };
+  const restart=async(ms)=>{ click($("btnNew")); await wait(300); await startGame(ms); };
+  click($("tab-play")); await wait(600);
+  await startGame();
+  T("banner hidden during play", $("resultBanner").className.includes("hide"));
+  const board=$("board"), banner=$("resultBanner");
+  T("banner overlays the board", banner.parentNode===board.parentNode && banner.parentNode.className==="board-frame", banner.parentNode.className);
+  // provoquer une chute de drapeau
+  click($("tcCats2").children[0]); await wait(200);
+  click($("tcChips2").children[0]); await wait(200);
+  await restart(5000);
+  console.log("       debug clock:",$("clockBottomTime").textContent,"| status:",$("status").textContent,"| banner class:",$("resultBanner").className);
+  T("banner appears on flag fall", !$("resultBanner").className.includes("hide"));
+  T("title is short and clear", /^(You win|You lose|Draw)$/.test($("resultTitle").textContent), $("resultTitle").textContent);
+  T("subtitle carries the detail", /on time|material/.test($("resultSub").textContent), $("resultSub").textContent);
+  T("colour matches outcome", /result (win|lose|draw)/.test($("resultBanner").className), $("resultBanner").className);
+  T("new game button offered", $("resultNew").textContent==="New game");
+  click($("resultNew")); await wait(700);
+  await startGame();
+  T("banner clears on new game", $("resultBanner").className.includes("hide"));
+  click($("tab-puzzles")); await wait(600);
+  T("banner stays hidden in puzzles", $("resultBanner").className.includes("hide"));
+  click($("tab-play")); await wait(500);
+  await startGame();
+  click($("tcCats2").children[0]); await wait(150); click($("tcChips2").children[0]); await wait(150);
+  await restart(5000);
+  T("banner returns on the next flag", !$("resultBanner").className.includes("hide"));
+  click($("resultClose")); await wait(200);
+  T("dismiss hides it", $("resultBanner").className.includes("hide"));
+  console.log("JS errors:", errors.join(" | ")||"none");
+  process.exit(0);
+})();

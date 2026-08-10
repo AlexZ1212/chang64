@@ -25,6 +25,10 @@
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
+/openings-book.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=604800
+
 /LICENSE
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=86400

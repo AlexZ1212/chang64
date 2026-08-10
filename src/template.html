@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#101413">
+<title>chang64 — play chess, solve tactics</title>
+<meta name="description" content="Play chess against the computer at bullet, blitz, rapid or classical time controls, solve __NP__ verified tactics puzzles, and challenge a friend with a link. No account needed.">
+<meta property="og:title" content="chang64 — play chess, solve tactics">
+<meta property="og:description" content="Bullet, blitz, rapid and daily chess. __NP__ verified puzzles with adaptive difficulty. Challenge a friend with a link.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chang64.com/">
+<meta property="og:image" content="https://chang64.com/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#101413;
+  --slate:#191F1D;
+  --raise:#232B28;
+  --chalk:#ECEAE3;
+  --sage:#97A49D;
+  --bone:#EDE4D2;
+  --board:#4B6B63;
+  --brass:#E0A93B;
+  --jade:#5FBF92;
+  --brick:#D9584A;
+  --rule:rgba(236,234,227,.12);
+  --r:8px;
+  --e1:0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,234,227,.04);
+  --e2:0 12px 32px rgba(0,0,0,.55);
+}
+/* Themes d'echiquier. Seules les deux couleurs de cases changent : le reste
+   de l'interface garde les jetons d'origine. Le theme est pose en attribut
+   sur <html>, ce qui evite de reconstruire l'echiquier au changement. */html[data-board="olive"]  { --bone:#EDE4D2; --board:#4B6B63; }
+html[data-board="walnut"] { --bone:#E8D3B0; --board:#9A6B45; }
+html[data-board="slate"]  { --bone:#D8DEE4; --board:#5A6B80; }
+html[data-board="ink"]    { --bone:#C9C6BE; --board:#3A3D41; }
+html[data-board="moss"]   { --bone:#E4E7D2; --board:#6B7F4B; }
+
+/* Preferences : aperçu du damier et puces de choix */
+hr.rule{border:0;border-top:1px solid var(--rule);margin:20px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.themepreview{display:grid;grid-template-columns:repeat(8,1fr);width:150px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.themepreview i{display:block;aspect-ratio:1/1}
+.themepreview i.l{background-color:var(--bone)}
+.themepreview i.d{background-color:var(--board)}
+/* Zone d'annonces : lue par les lecteurs d'ecran, invisible a l'ecran.
+   Surtout pas display:none, qui la retirerait de l'arbre d'accessibilite. */
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+*{box-sizing:border-box;margin:0;padding:0}
+svg{max-width:100%;max-height:100%}
+html{-webkit-text-size-adjust:100%;background-color:#101413;background-color:var(--ink);color-scheme:dark;min-height:100%}
+body{
+  background-color:#101413;
+  background-color:var(--ink);
+  background-image:radial-gradient(1100px 620px at 18% -12%, #17201D 0%, transparent 62%);
+  background-repeat:no-repeat;
+  color:var(--chalk);
+  font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
+  font-size:16px;line-height:1.55;min-height:100vh;padding:18px 14px 44px;
+}
+.wrap{max-width:1080px;margin:0 auto}
+
+/* ---------- header ---------- */
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit}
+.brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:6px}
+.brand .glyph{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none}
+.brand .glyph svg{width:100%;height:100%;display:block}
+.brand h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1}
+.brand h1 .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
+.tabs{display:flex;gap:3px;background-color:var(--slate);padding:4px;border-radius:999px;border:1px solid var(--rule)}
+.tabs button{
+  font:inherit;font-size:13px;font-weight:500;color:var(--sage);background:none;border:0;
+  padding:8px 15px;border-radius:999px;cursor:pointer;transition:background .18s,color .18s;white-space:nowrap
+}
+.tabs button[aria-selected="true"]{background-color:var(--brass);color:#1b1508;font-weight:600}
+.tabs button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+@media(max-width:520px){.tabs button{padding:8px 11px;font-size:12.5px}}
+
+/* ---------- home ---------- */
+.hero{
+  background-image:linear-gradient(155deg,#26382f 0%,var(--slate) 62%);
+  border:1px solid var(--rule);border-radius:16px;padding:clamp(24px,5vw,44px);margin-bottom:16px;
+  position:relative;overflow:hidden
+}
+.hero::after{
+  content:"";position:absolute;right:-60px;top:-40px;width:280px;height:280px;opacity:.07;
+  background-image:
+    linear-gradient(45deg,var(--chalk) 25%,transparent 25%,transparent 75%,var(--chalk) 75%),
+    linear-gradient(45deg,var(--chalk) 25%,transparent 25%,transparent 75%,var(--chalk) 75%);
+  background-size:70px 70px;background-position:0 0,35px 35px;transform:rotate(12deg);pointer-events:none
+}
+.promise{
+  position:relative;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.06em;color:var(--brass);margin-bottom:14px
+}
+.brand{align-items:center}
+.names{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
+@media(max-width:620px){.tagline{display:none}}
+.hero h2{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,7vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:12px;position:relative}
+.hero p{color:var(--sage);font-size:clamp(14px,2.6vw,16.5px);max-width:46ch;margin-bottom:24px;position:relative}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative}
+.hero .cta .btn{font-size:14.5px;padding:12px 22px}
+
+.tc-block{margin-bottom:22px;position:relative}
+.tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:9px;border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto}
+.tc-cats button{
+  flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 10px;
+  border-radius:6px;cursor:pointer;white-space:nowrap
+}
+.tc-cats button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
+.tc-cats button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.tc-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font:inherit;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;
+  background-color:var(--ink);border:1px solid var(--rule);color:var(--chalk);
+  padding:9px 14px;border-radius:8px;cursor:pointer;transition:border-color .16s,background .16s
+}
+.chip:hover{background-color:var(--raise)}
+.chip[aria-pressed="true"]{border-color:var(--brass);background:rgba(217,168,63,.14);color:var(--brass)}
+.chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.tc-note{font-size:12px;color:var(--sage);margin-top:10px}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+@media(max-width:760px){.cards{grid-template-columns:1fr}}
+.card{
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:20px;
+  text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .18s,transform .12s
+}
+.card:hover{border-color:rgba(217,168,63,.42);transform:translateY(-2px)}
+.card:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.card .ico{display:block;width:40px;height:40px;margin-bottom:12px;flex:none}
+.card .ico svg{width:40px;height:40px;display:block}
+.card h3{font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;margin-bottom:6px}
+.card p{color:var(--sage);font-size:13px;line-height:1.5}
+.card .go{color:var(--brass);font-size:12.5px;font-weight:600;margin-top:12px;display:block}
+
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
+.strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
+.strip .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1.2}
+.strip .stat span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
+
+/* ---------- layout ---------- */
+.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:22px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+.board-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+
+/* ---------- clocks ---------- */
+.board-frame{position:relative}
+.result{
+  position:absolute;inset:10px;z-index:20;display:flex;align-items:center;justify-content:center;
+  background:rgba(10,16,14,.62);border-radius:5px;animation:fadein .22s ease-out;padding:12px
+}
+@keyframes fadein{from{opacity:0}}
+.result-card{
+  background-color:var(--slate);border:1px solid var(--rule);border-left:4px solid var(--brass);
+  border-radius:calc(var(--r)*1.5);padding:18px 20px;text-align:center;max-width:320px;width:100%;
+  box-shadow:var(--e2);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)
+}
+@keyframes pop{from{opacity:0;transform:scale(.9)}}
+.result b{display:block;font-family:'Source Serif 4',Georgia,serif;font-size:23px;font-weight:600;line-height:1.15;margin-bottom:4px}
+.result span{display:block;font-size:12.5px;color:var(--sage);margin-bottom:14px}
+.result-actions{display:flex;gap:8px;justify-content:center}
+.result-actions .btn{flex:1;padding:9px 12px;font-size:13px}
+.result.win .result-card{border-left-color:var(--jade)}
+.result.lose .result-card{border-left-color:var(--brick)}
+.result.draw .result-card{border-left-color:var(--sage)}
+#resultClose{margin-top:10px}
+.coordhud{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  background-color:var(--slate);border:1px solid var(--rule);border-left:4px solid var(--brass);
+  border-radius:var(--r);padding:12px 16px;position:sticky;top:8px;z-index:15
+}
+.chud-target{display:flex;align-items:baseline;gap:10px;min-width:0}
+.chud-label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+.chud-target b{font-family:'JetBrains Mono',monospace;font-size:clamp(52px,13vw,72px);font-weight:700;color:var(--brass);line-height:1}
+.chud-meta{display:flex;gap:16px;flex:none}
+.chud-meta span{text-align:center}
+.chud-meta b{display:block;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600}
+.chud-meta i{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage);font-style:normal}
+.coordhud.low b#chudTime{color:var(--brick)}
+.clock{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px
+}
+.clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:8px}
+.clock .who i{width:12px;height:12px;border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118}
+.clock .who i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
+.clock time{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.clock.active{border-color:var(--brass);background:rgba(217,168,63,.09)}
+.clock.active time{color:var(--brass)}
+.clock.low time{color:var(--brick)}
+.clock.flagged{border-color:var(--brick)}
+
+/* ---------- board ---------- */
+.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34)}
+.board{
+  display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));
+  aspect-ratio:1/1;width:100%;border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
+}
+.sq:focus-visible{outline:2px dashed var(--chalk);outline-offset:-3px;z-index:6}
+.sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.sq.l{background-color:var(--bone)}
+.sq.d{background-color:var(--board)}
+.sq .co{position:absolute;font-size:9px;font-weight:500;font-family:'JetBrains Mono',monospace;pointer-events:none;z-index:7}
+.sq .co.f{right:3px;bottom:1px}
+.sq .co.r{left:3px;top:1px}
+.sq.l .co{color:var(--board)}.sq.d .co{color:var(--bone)}
+.sq.last::before{content:"";position:absolute;inset:0;background:rgba(224,169,63,.42);pointer-events:none}
+.sq.sel::before{content:"";position:absolute;inset:0;background:rgba(224,169,63,.62);pointer-events:none}
+.sq.good::before{content:"";position:absolute;inset:0;background:rgba(95,191,146,.50);pointer-events:none}
+.sq.bad::before{content:"";position:absolute;inset:0;background:rgba(217,88,74,.50);pointer-events:none}
+.sq.sel{box-shadow:inset 0 0 0 3px var(--brass)}
+.sq.hint{box-shadow:inset 0 0 0 2px var(--brass);animation:pulse 1.6s ease-in-out infinite}
+.sq.check{background-image:radial-gradient(circle at 50% 50%,rgba(217,88,74,.95) 0%,rgba(217,88,74,.55) 45%,rgba(217,88,74,0) 78%)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.dot{position:absolute;left:37%;top:37%;width:26%;height:26%;border-radius:999px;background:rgba(21,32,28,.30);pointer-events:none;z-index:2}
+.ring{position:absolute;inset:0;border-radius:999px;box-shadow:inset 0 0 0 11% rgba(21,32,28,.32);pointer-events:none;z-index:2}
+.piece{width:100%;height:100%;display:block;pointer-events:none;position:relative;z-index:5}
+.piece svg{display:block;width:100%;height:100%}
+.board.shake{animation:shake .42s ease-in-out 1}
+/* Entree en fondu au debut d'une partie. Les pieces apparaissent en
+   cascade depuis les rangees blanches, ce qui dure moins d'une seconde.
+   Retire des la fin pour ne pas rejouer a chaque rendu. */
+.board.dealt .piece{animation:dealIn .38s ease-out both}
+@keyframes dealIn{from{opacity:0;transform:translateY(-6px) scale(.9)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.board.dealt .piece{animation:none}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+
+/* ---------- eval ---------- */
+.board-wrap{display:flex;gap:8px;align-items:stretch}
+.board-frame{flex:1;min-width:0}
+.evalv{width:14px;flex:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.evalv b{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--sage);
+  writing-mode:vertical-rl;transform:rotate(180deg);line-height:1}
+.evaltrack{flex:1;width:100%;background:#0B0F0E;border:1px solid var(--rule);border-radius:999px;
+  overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.evaltrack i{display:block;width:100%;background-color:var(--bone);height:50%;transition:height .45s cubic-bezier(.4,0,.2,1)}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- panels ---------- */
+.panel{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;box-shadow:var(--e1)}
+.panel + .panel{margin-top:14px}
+.panel h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.22;margin-bottom:3px}
+.panel .sub{color:var(--sage);font-size:12.5px;margin-bottom:14px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
+.field{margin-bottom:14px}
+.seg{display:flex;gap:3px;background-color:var(--ink);padding:3px;border-radius:8px;border:1px solid var(--rule)}
+.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform .08s}
+.btn:hover{background:#33483e}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.btn.danger{border-color:rgba(196,87,63,.5);color:#E4907C}
+.btn.danger:hover{background:rgba(196,87,63,.16)}
+.btn.danger.armed{background-color:var(--brick);border-color:var(--brick);color:#1b1508}
+.btn.primary{background-color:var(--brass);border-color:var(--brass);color:#1b1508}
+.btn.primary:hover{background:#e6b954}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btnrow .btn{flex:1;min-width:104px}
+
+/* ---------- scoresheet ---------- */
+.sheet{background:#F4EEDC;border-radius:6px;overflow:hidden;color:#2A2A22}
+.sheet-head{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;background:#E2D9C0;color:#605844;padding:5px 0}
+.sheet-head span{text-align:center}
+.sheet-body{max-height:212px;overflow-y:auto}
+.sheet-row{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:13px;border-bottom:1px solid #DCD2B8}
+.sheet-row:last-child{border-bottom:0}
+.sheet-row span{padding:4px 6px;text-align:center;border-radius:2px}
+.sheet-row .n{color:#8A8069;font-size:11px;background:#EAE2CB;display:flex;align-items:center;justify-content:center}
+.sheet-row .cur{background:#F7E4B0;font-weight:600}
+.sheet-empty{padding:22px 12px;text-align:center;color:#8A8069;font-size:12.5px;font-family:'Archivo',sans-serif}
+
+/* ---------- status ---------- */
+.status{border-left:3px solid var(--brass);padding:9px 12px;background-color:var(--ink);border-radius:0 8px 8px 0;font-size:13.5px;min-height:42px;display:flex;align-items:center}
+.status.win{border-color:var(--jade)}
+.status.lose{border-color:var(--brick)}
+
+/* ---------- puzzles ---------- */
+.quest{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;line-height:1.35;margin-bottom:4px}
+.theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(217,168,63,.4);padding:2px 8px;border-radius:999px;margin-bottom:10px}
+.tabs{overflow-x:auto;max-width:100%}
+.langswitch{flex:none;padding:3px}
+.langswitch button{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;flex:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 6px;text-align:center}
+.stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:600;line-height:1.2}
+.stat span{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage)}
+.ladder{display:flex;gap:4px;margin-bottom:6px}
+.ladder i{flex:1;height:5px;border-radius:999px;background-color:var(--raise)}
+.ladder i.on{background-color:var(--brass)}
+.lvlrow{display:flex;justify-content:space-between;font-size:12px;color:var(--sage);margin-bottom:14px}
+.lvlrow b{color:var(--chalk)}
+
+/* ---------- share ---------- */
+.select{
+  width:100%;font:inherit;font-size:13.5px;color:var(--chalk);background-color:var(--ink);
+  border:1px solid var(--rule);border-radius:var(--r);padding:10px 11px;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--sage) 50%),linear-gradient(135deg,var(--sage) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat
+}
+.select:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.linkbox{width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--chalk);background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 10px;margin-bottom:10px}
+.linkbox:focus{outline:2px solid var(--brass);outline-offset:1px}
+.shareRow{display:flex;gap:8px;flex-wrap:wrap}
+.shareRow button{flex:1;min-width:88px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:8px;padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
+.shareRow button:hover{background:#33483e}
+.shareRow button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.shareRow button.wa{border-color:rgba(37,211,102,.45)}
+.shareRow button.msg{border-color:rgba(0,132,255,.45)}
+.shareRow button.fb{border-color:rgba(66,103,178,.5)}
+.shareRow button.native{background-color:var(--brass);border-color:var(--brass);color:#1b1508}
+.note{font-size:11.5px;color:var(--sage);margin-top:9px;line-height:1.45}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;background:rgba(10,16,14,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.on{display:flex}
+.modal .box{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);box-shadow:var(--e2);padding:20px;text-align:center;max-width:320px;width:100%}
+.modal h3{font-family:'Source Serif 4',Georgia,serif;font-size:18px;margin-bottom:12px}
+.promos{display:flex;gap:8px;justify-content:center}
+.promos button svg{width:44px;height:44px;display:block}
+.promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:8px;width:60px;height:60px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.promos button:hover{background:#fff2d4}
+.promos button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+.origin{position:relative;overflow:hidden}
+.origin-mark{
+  position:absolute;right:-3%;top:0;width:min(44%,300px);aspect-ratio:1;opacity:.14;
+  transform:translateY(-60%);pointer-events:none;z-index:0;line-height:0
+}
+.origin-mark svg{width:100%;height:auto;display:block}
+@media(max-width:620px){.origin-mark{right:-14%;width:74%;transform:translateY(-52%);opacity:.11}}
+.origin-text{position:relative;z-index:1;min-width:0}
+.origin-text h2{margin-bottom:10px}
+.origin-text p{color:var(--sage);font-size:14.5px;margin-bottom:10px;max-width:58ch}
+.origin-text p:last-child{margin-bottom:0}
+.explore{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:620px){.explore{grid-template-columns:repeat(2,1fr)}}
+.explore a{
+  display:block;text-decoration:none;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;
+  padding:11px 12px;color:var(--chalk);font-size:13px;font-weight:600;transition:border-color .16s
+}
+.explore a:hover{border-color:rgba(217,168,63,.45)}
+.explore a span{display:block;color:var(--sage);font-size:11.5px;font-weight:400;margin-top:2px}
+.explore a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.history{display:flex;flex-direction:column;gap:6px}
+.history-item{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;cursor:pointer;
+  background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:9px 11px;color:var(--chalk)
+}
+.history-item:hover{border-color:rgba(224,169,63,.45)}
+.history-item:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.history-item .res{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;flex:none;width:22px;text-align:center;
+  border-radius:3px;padding:2px 0
+}
+.history-item .res.win{background-color:var(--jade);color:#101413}
+.history-item .res.loss{background-color:var(--brick);color:#101413}
+.history-item .res.draw{background-color:var(--sage);color:#101413}
+.history-item .meta{min-width:0;flex:1}
+.history-item .meta b{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history-item .meta span{display:block;font-size:11.5px;color:var(--sage)}
+.history-empty{color:var(--sage);font-size:13px}
+.plyinfo{
+  margin-top:10px;background-color:var(--ink);border:1px solid var(--rule);border-left:3px solid var(--brass);
+  border-radius:0 8px 8px 0;padding:10px 12px;font-size:13px;line-height:1.5
+}
+.plyinfo b{font-family:'JetBrains Mono',monospace}
+.plyinfo .played{color:var(--chalk)}
+.plyinfo .better{color:var(--brass)}
+.plyinfo .verdict{display:block;font-size:11.5px;color:var(--sage);margin-top:3px}
+.plyinfo.blunder{border-left-color:var(--brick)}
+.plyinfo.mistake{border-left-color:#C4762A}
+.plyinfo.inacc{border-left-color:#8A7A2A}
+.plyinfo.best{border-left-color:var(--jade)}
+.opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(217,168,63,.35)}
+.opening a:hover{border-bottom-color:var(--brass)}
+.opening{font-size:12.5px;color:var(--brass);margin-top:2px;min-height:18px}
+.navrow{display:flex;gap:6px}
+.navbtn{flex:1;font-family:'JetBrains Mono',monospace;font-size:13px;padding:8px 4px;min-width:0}
+.accrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.graph{background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:6px;overflow:hidden}
+.graph svg{display:block;width:100%;height:96px}
+.progressbar{height:6px;border-radius:999px;background-color:var(--ink);border:1px solid var(--rule);overflow:hidden;margin-top:12px}
+.progressbar i{display:block;height:100%;width:0;background-color:var(--brass);transition:width .2s}
+.sheet-row span.tag-blunder{color:#B23A22;font-weight:600}
+.sheet-row span.tag-mistake{color:#C4762A;font-weight:600}
+.sheet-row span.tag-inacc{color:#8A7A2A}
+.sheet-row span.view{background:#F7E4B0;font-weight:600}
+.sheet-row span[data-ply]{cursor:pointer}
+.rushbar{display:flex;gap:8px;margin-bottom:12px}
+.rushitem{flex:1;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 4px;text-align:center}
+.rushitem b{display:block;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600}
+.rushitem span{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage)}
+.ytwrap{position:relative;padding-top:56.25%;border-radius:8px;overflow:hidden;background:#000;margin-bottom:12px}
+.ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.channels{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:620px){.channels{grid-template-columns:1fr}}
+.chan{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:16px}
+.chan h3{font-family:'Source Serif 4',Georgia,serif;font-size:16px;font-weight:600;margin-bottom:4px}
+.chan p{color:var(--sage);font-size:12.5px;margin-bottom:10px}
+.prose{font-size:13.5px;line-height:1.7;color:var(--chalk)}
+.prose h4{font-family:'Source Serif 4',Georgia,serif;font-size:15px;margin:16px 0 4px}
+.prose p{margin-bottom:8px;color:var(--sage)}
+.prose strong{color:var(--chalk)}
+.linkbtn{background:none;border:0;color:var(--sage);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:2px}
+.linkbtn:hover{color:var(--brass)}
+.linkbtn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+textarea.select{
+  width:100%;font:inherit;font-size:13.5px;color:var(--chalk);background-color:var(--ink);
+  border:1px solid var(--rule);border-radius:var(--r);padding:10px 11px;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--sage) 50%),linear-gradient(135deg,var(--sage) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat
+}
+.select:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.linkbox{resize:vertical;font-size:11px;line-height:1.4}
+footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;letter-spacing:.04em;line-height:1.7}
+.hide{display:none!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+.sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
+"applicationCategory":"GameApplication","operatingSystem":"Any modern browser",
+"description":"Play chess against a built-in engine at bullet, blitz, rapid and classical time controls, solve __NP__ engine-verified tactics puzzles, review your games move by move and challenge friends over a link. No account required.",
+"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},
+"featureList":["Chess engine opponent","Bullet, blitz, rapid, classical and daily time controls","__NP__ verified tactics puzzles","Chang Sprint","Game review with evaluation graph","Opening names","PGN export and import","Play a friend by link"]}
+</script>
+</head>
+<body>
+<!-- Zone d'annonces pour lecteurs d'ecran. Vide et silencieuse par defaut :
+     rien n'y est ecrit tant que l'utilisateur n'a pas active les annonces
+     dans les preferences. aria-live="polite" attend une pause dans la
+     lecture plutot que d'interrompre. -->
+<div id="srAnnounce" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+<div class="wrap">
+  <header>
+    <button class="brand" id="brand" aria-label="chang64 home">
+      <span class="glyph" id="brandmark"></span>
+      <span class="names">
+        <h1>chang<span class="sixtyfour">64</span></h1>
+        <span class="tagline">The elephant on 64 squares</span>
+      </span>
+    </button>
+    <div class="seg langswitch" id="langSwitch">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="fr" aria-pressed="false">FR</button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-home" aria-selected="true">Home</button>
+      <button role="tab" id="tab-play" aria-selected="false">Play</button>
+      <button role="tab" id="tab-puzzles" aria-selected="false">Puzzles</button>
+      <button role="tab" id="tab-train" aria-selected="false">Train</button>
+      <button role="tab" id="tab-friend" aria-selected="false">Friends</button>
+      <button role="tab" id="tab-watch" aria-selected="false">Watch</button>
+    </div>
+  </header>
+
+  <!-- ================= HOME ================= -->
+  <div id="pane-home">
+    <section class="hero">
+      <h2>Play chess.<br>Solve tactics.<br>Get better.</h2>
+      <p class="promise">No account. No ads. No noise. Just chess.</p>
+      <p>Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
+      <div class="tc-block">
+        <div class="eyebrow">Time control</div>
+        <div class="tc-cats" id="tcCats"></div>
+        <div class="tc-chips" id="tcChips"></div>
+        <p class="tc-note" id="tcNote"></p>
+      </div>
+
+      <div class="cta">
+        <button class="btn primary" id="heroPlay">Play now</button>
+        <button class="btn" id="heroPuzzle">Puzzle of the day</button>
+        <button class="btn hide" id="btnInstall">Install the app</button>
+      </div>
+    </section>
+
+    <div class="cards">
+      <button class="card" id="cardPlay">
+        <span class="ico" id="icoPlay"></span>
+        <h3>Play the computer</h3>
+        <p>Four strengths, from a forgiving beginner to an engine that punishes loose moves. Legal moves shown, move hints on request.</p>
+        <span class="go">Start a game &rarr;</span>
+      </button>
+      <button class="card" id="cardPuzzles">
+        <span class="ico" id="icoPuzzles"></span>
+        <h3>Tactics trainer</h3>
+        <p><span id="hCount">__NP__</span> puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.</p>
+        <span class="go">Solve a puzzle &rarr;</span>
+      </button>
+      <button class="card" id="cardFriend">
+        <span class="ico" id="icoFriend"></span>
+        <h3>Play a friend</h3>
+        <p>Every move produces a link. Send it on WhatsApp or Messenger, your friend replies with theirs. Nothing to install.</p>
+        <span class="go">Challenge a friend &rarr;</span>
+      </button>
+    </div>
+
+    <div class="panel origin" style="margin-bottom:16px">
+      <span class="origin-mark" id="originMark" aria-hidden="true"></span>
+      <div class="origin-text">
+        <h2>The elephant on the board</h2>
+        <p>Chang (ช้าง) is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.</p>
+        <p>The elephant travelled west and changed its name at every border: gaja in Sanskrit, al-fil in Arabic, alfil in Spanish, and at last the bishop in English and the fou in French. It never left Russian, where the same piece is still slon, elephant, nor Chinese chess, where it is written 象. Thailand kept a game of its own, makruk, played there to this day.</p>
+        <p>Sixty-four is the rest of the name: the squares. chang64 is the elephant on the sixty-four squares, a piece that crossed a thousand years and half the world, on a board that never changed.</p>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px">
+      <div class="eyebrow" id="exploreTitle">Explore</div>
+      <p class="note" id="exploreNote" style="margin-top:0;margin-bottom:12px"></p>
+      <div class="explore" id="exploreLinks"></div>
+    </div>
+
+    <div class="strip">
+      <div class="stat"><b id="hLevel">1</b><span>Puzzle level</span></div>
+      <div class="stat"><b id="hSolved">0</b><span>Solved</span></div>
+      <div class="stat"><b id="hBest">0</b><span>Best streak</span></div>
+      <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
+      <div class="stat"><b id="hStreak">0</b><span>Day streak</span></div>
+    </div>
+  </div>
+
+  <!-- ================= BOARD + PANELS ================= -->
+  <div class="layout hide" id="appLayout">
+    <div class="board-side">
+      <div class="coordhud hide" id="coordHud">
+        <div class="chud-target">
+          <span class="chud-label" id="chudLabel">Find</span>
+          <b id="chudSquare">—</b>
+        </div>
+        <div class="chud-meta">
+          <span><b id="chudTime">30.0</b><i id="chudTimeLabel">Seconds</i></span>
+          <span><b id="chudScore">0</b><i id="chudScoreLabel">Correct</i></span>
+          <span><b id="chudMiss">0</b><i id="chudMissLabel">Missed</i></span>
+        </div>
+      </div>
+      <div class="clock hide" id="clockTop">
+        <span class="who"><i id="clockTopSwatch"></i><span id="clockTopName">Computer</span></span>
+        <time id="clockTopTime">10:00</time>
+      </div>
+      <div class="board-wrap">
+        <div class="evalv hide" id="evalwrap">
+          <b id="evalnum">0.0</b>
+          <div class="evaltrack"><i id="evalfill"></i></div>
+          <span id="evaltxt" class="visually-hidden">Even position</span>
+        </div>
+        <div class="board-frame">
+        <div class="board" id="board"></div>
+        <div class="result hide" id="resultBanner" role="status" aria-live="polite">
+          <div class="result-card">
+            <b id="resultTitle"></b>
+            <span id="resultSub"></span>
+            <div class="result-actions">
+              <button class="btn primary" id="resultNew">New game</button>
+              <button class="btn" id="resultAnalyse">Review</button>
+            </div>
+            <button class="linkbtn" id="resultClose">Dismiss</button>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="navrow hide" id="navRow">
+        <button class="btn navbtn" id="navStart" aria-label="First move">&#124;&lt;</button>
+        <button class="btn navbtn" id="navPrev" aria-label="Previous move">&lt;</button>
+        <button class="btn navbtn" id="navNext" aria-label="Next move">&gt;</button>
+        <button class="btn navbtn" id="navEnd" aria-label="Last move">&gt;&#124;</button>
+      </div>
+      <div class="plyinfo hide" id="plyInfo"></div>
+      <div class="clock hide" id="clockBottom">
+        <span class="who"><i id="clockBottomSwatch"></i><span id="clockBottomName">You</span></span>
+        <time id="clockBottomTime">10:00</time>
+      </div>
+    </div>
+
+    <div>
+      <!-- ---------- PLAY ---------- -->
+      <div id="pane-play" class="hide">
+        <div class="panel">
+          <h2>Your game</h2>
+          <p class="sub" id="turnline">White to move.</p>
+          <p class="opening" id="opening"></p>
+          <div class="status" id="status">Pick a colour and a strength, then play.</div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Settings</div>
+          <div class="field"><div class="seg" id="segColor">
+            <button data-v="w" aria-pressed="true">Play White</button>
+            <button data-v="b" aria-pressed="false">Play Black</button>
+          </div></div>
+          <div class="field"><div class="seg" id="segLevel">
+            <button data-v="1" aria-pressed="false">Beginner</button>
+            <button data-v="2" aria-pressed="true">Casual</button>
+            <button data-v="3" aria-pressed="false">Solid</button>
+            <button data-v="4" aria-pressed="false">Tough</button>
+          </div></div>
+          <div class="field">
+            <div class="eyebrow">Time control</div>
+            <div class="tc-cats" id="tcCats2"></div>
+            <div class="tc-chips" id="tcChips2"></div>
+          </div>
+          <div class="btnrow">
+            <button class="btn primary" id="btnNew">New game</button>
+            <button class="btn" id="btnUndo">Take back</button>
+            <button class="btn" id="btnHint">Suggest a move</button>
+          </div>
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn danger" id="btnResign">Resign</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Scoresheet</div>
+          <div class="sheet">
+            <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
+            <div class="sheet-body" id="sheet"><div class="sheet-empty">No moves yet</div></div>
+          </div>
+          <p class="note" id="navNote">Use the arrow keys to step through the game.</p>
+        </div>
+
+        <div class="panel">
+          <div class="eyebrow">Review</div>
+          <p class="note" id="reviewLock" style="margin-top:0;margin-bottom:10px"></p>
+          <div class="btnrow">
+            <button class="btn primary" id="btnAnalyse">Analyse this game</button>
+          </div>
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="btnStockfish">Enable Stockfish</button>
+          </div>
+          <p class="note" id="sfStatus">The built-in engine is instant. Stockfish is stronger, and downloads about 7 MB the first time.</p>
+          <div id="analysisOut" class="hide">
+            <div class="accrow">
+              <div class="stat"><b id="accScore">—</b><span>Accuracy</span></div>
+              <div class="stat"><b id="accBlunders">0</b><span>Blunders</span></div>
+              <div class="stat"><b id="accMistakes">0</b><span>Mistakes</span></div>
+            </div>
+            <div class="graph" id="evalGraph"></div>
+            <p class="note" id="analysisNote"></p>
+          </div>
+          <div class="progressbar hide" id="anaProgress"><i></i></div>
+        </div>
+
+        <div class="panel">
+          <div class="eyebrow" id="historyTitle">Your games</div>
+          <p class="note" id="historyNote" style="margin-top:0;margin-bottom:10px"></p>
+          <div class="history" id="historyList"></div>
+          <div class="btnrow hide" id="historyActions" style="margin-top:10px">
+            <button class="btn" id="btnHistoryClear">Clear history</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="eyebrow">PGN</div>
+          <div class="btnrow">
+            <button class="btn" id="btnPgnCopy">Copy PGN</button>
+            <button class="btn" id="btnPgnDownload">Download</button>
+          </div>
+          <div style="margin-top:10px">
+            <textarea class="linkbox" id="pgnIn" rows="3" placeholder="Paste a PGN here to load and review it" aria-label="PGN to import"></textarea>
+            <div class="btnrow"><button class="btn" id="btnPgnLoad">Load PGN</button></div>
+            <p class="note" id="pgnMsg"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- PUZZLES ---------- -->
+      <div id="pane-puzzles" class="hide">
+        <div class="panel">
+          <!-- L'enonce passe avant les statistiques : c'est lui qui dit quoi
+               faire, alors que les compteurs ne sont qu'un contexte. Les
+               laisser en tete obligeait a lire six chiffres avant d'arriver a
+               la consigne, et la repoussait sous la ligne de flottaison sur
+               telephone. Le chronometre de Chang Sprint reste en haut, parce
+               qu'il est aussi urgent que l'enonce pendant une session. -->
+          <div class="rushbar hide" id="rushBar">
+            <span class="rushitem"><b id="rushTime">3:00</b><span>Left</span></span>
+            <span class="rushitem"><b id="rushScore">0</b><span>Score</span></span>
+            <span class="rushitem"><b id="rushStrikes">✗✗✗</b><span>Strikes</span></span>
+          </div>
+          <span class="theme" id="exTheme">Back-rank mate</span>
+          <p class="quest" id="exQuest">Loading…</p>
+          <div class="status" id="exStatus">Find the winning move.</div>
+
+          <hr class="rule">
+
+          <div class="ladder" id="ladder"></div>
+          <div class="lvlrow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> 5</span><span id="lvlName">First mates</span></div>
+          <div class="stats">
+            <div class="stat"><b id="stSolved">0</b><span>Solved</span></div>
+            <div class="stat"><b id="stStreak">0</b><span>Streak</span></div>
+            <div class="stat"><b id="stBest">0</b><span>Best</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><b id="stRating">800</b><span>Rating</span></div>
+            <div class="stat"><b id="stDays">0</b><span>Day streak</span></div>
+            <div class="stat"><b id="stRush">0</b><span>Sprint best</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="field">
+            <div class="eyebrow" id="themeTitle">Theme</div>
+            <select class="select" id="themeFilter" aria-label="Filter puzzles by theme"></select>
+          </div>
+          <div class="btnrow">
+            <button class="btn primary" id="btnNext">Next puzzle</button>
+            <button class="btn" id="btnHintEx">Hint</button>
+            <button class="btn" id="btnSolve">Show solution</button>
+          </div>
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="btnDaily">Puzzle of the day</button>
+            <button class="btn" id="btnRush">Chang Sprint</button>
+            <button class="btn" id="btnRetry">Restart puzzle</button>
+          </div>
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="btnReset">Reset my progress</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Continue on another device</div>
+          <p class="note" style="margin-top:0;margin-bottom:10px">Your progress is stored on this device. To pick it up elsewhere, copy this code and paste it there.</p>
+          <div class="btnrow" style="margin-bottom:10px">
+            <button class="btn primary" id="btnCodeGen">Show my code</button>
+            <button class="btn" id="btnCodeCopy">Copy</button>
+          </div>
+          <input class="linkbox" id="codeOut" readonly aria-label="Your transfer code">
+          <div style="margin-top:14px">
+            <input class="linkbox" id="codeIn" placeholder="Paste a transfer code here" aria-label="Transfer code to restore">
+            <div class="btnrow"><button class="btn" id="btnCodeLoad">Restore progress</button></div>
+            <p class="note" id="codeMsg"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- TRAIN ---------- -->
+      <div id="pane-train" class="hide">
+        <div class="panel">
+          <h2 id="egName">Queen vs King</h2>
+          <p class="sub" id="egBrief"></p>
+          <div class="status" id="egStatus">Pick an endgame below.</div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Endgame</div>
+          <div class="tc-chips" id="egChips"></div>
+          <div class="stats" style="margin-top:14px">
+            <div class="stat"><b id="egMoves">0</b><span>Moves used</span></div>
+            <div class="stat"><b id="egBudget">12</b><span>Target</span></div>
+            <div class="stat"><b id="egBest">—</b><span>Your best</span></div>
+          </div>
+          <div class="btnrow"><button class="btn primary" id="btnEgNew">New position</button></div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Coordinates</div>
+          <p class="note" style="margin-top:0;margin-bottom:10px">Thirty seconds to click as many named squares as you can. Knowing the board by name makes everything else faster.</p>
+          <div class="field"><div class="seg" id="coordSide">
+            <button data-v="w" aria-pressed="true">White's view</button>
+            <button data-v="b" aria-pressed="false">Black's view</button>
+          </div></div>
+          <div class="btnrow"><button class="btn primary" id="btnCoord">Start 30 seconds</button></div>
+          <p class="note">Personal best: <b id="coordBest">0</b></p>
+        </div>
+      </div>
+
+      <!-- ---------- FRIENDS ---------- -->
+      <div id="pane-friend" class="hide">
+        <div class="panel">
+          <h2>Play a friend</h2>
+          <p class="sub" id="amiSub">Each move produces a link. Send it, your friend plays, they send theirs back.</p>
+          <div class="status" id="amiStatus">Start a game.</div>
+        </div>
+        <div class="panel" id="amiLinkPanel">
+          <div class="eyebrow">Link to send</div>
+          <input class="linkbox" id="amiLink" readonly aria-label="Game link">
+          <div class="shareRow" id="amiShare"></div>
+          <p class="note" id="amiNote"></p>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">New game</div>
+          <div class="field"><div class="seg" id="segAmiColor">
+            <button data-v="w" aria-pressed="true">Play White</button>
+            <button data-v="b" aria-pressed="false">Play Black</button>
+          </div></div>
+          <div class="field">
+            <div class="eyebrow">Pace</div>
+            <div class="tc-chips" id="dailyChips"></div>
+          </div>
+          <div class="btnrow">
+            <button class="btn primary" id="btnAmiNew">Create game</button>
+            <button class="btn" id="btnAmiUndo">Undo my move</button>
+          </div>
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn danger" id="btnAmiResign">Resign this game</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Invite to chang64</div>
+          <div class="shareRow" id="siteShare"></div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Scoresheet</div>
+          <div class="sheet">
+            <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
+            <div class="sheet-body" id="amiSheet"><div class="sheet-empty">No moves yet</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= WATCH ================= -->
+  <div id="pane-watch" class="hide">
+    <div class="panel">
+      <h2>Chess on YouTube</h2>
+      <p class="sub">Nothing loads until you press play, so YouTube sets no cookies before you ask it to.</p>
+      <div id="ytPlayer" class="ytwrap hide"></div>
+      <p class="note" id="ytNote">Pick a channel below. “Live” opens the current stream if the channel is broadcasting, “Latest” plays their most recent uploads.</p>
+    </div>
+    <div class="channels" id="channels"></div>
+  </div>
+
+  <!-- ================= LEGAL ================= -->
+  <div id="pane-legal" class="hide">
+    <div class="panel">
+      <h2>Legal notice</h2>
+      <p class="sub">Publisher and hosting details.</p>
+      <div class="prose" id="legalBody"></div>
+    </div>
+    <div class="panel">
+      <h2>Privacy</h2>
+      <div class="prose" id="privacyBody"></div>
+    </div>
+  </div>
+
+  <div id="pane-prefs" class="hide">
+    <div class="panel">
+      <h2 id="prefsTitle">Preferences</h2>
+      <p class="sub" id="prefsSub">Kept on this device. Nothing is sent anywhere.</p>
+
+      <div class="field">
+        <div class="eyebrow" id="prefsBoardLabel">Board colours</div>
+        <div class="chips" id="boardThemes" role="radiogroup" aria-labelledby="prefsBoardLabel"></div>
+        <div class="themepreview" id="themePreview" aria-hidden="true"></div>
+      </div>
+
+      <hr class="rule">
+
+      <h3 id="accessibilite" tabindex="-1" style="margin:18px 0 4px">Accessibility</h3>
+      <p class="sub" id="prefsA11yIntro" style="margin-top:0"></p>
+
+      <div class="field">
+        <div class="eyebrow" id="prefsA11yLabel">Screen reader announcements</div>
+        <p class="note" id="prefsA11yNote" style="margin-top:0;margin-bottom:8px"></p>
+        <div class="seg" id="segAnnounce" role="radiogroup" aria-labelledby="prefsA11yLabel">
+          <button data-v="off" aria-pressed="true">Off</button>
+          <button data-v="moves" aria-pressed="false">Moves</button>
+          <button data-v="full" aria-pressed="false">Moves and status</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="eyebrow" id="prefsKbdLabel">Keyboard</div>
+        <div class="prose" id="kbdHelp"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    chang64 &middot; no account, no tracking &middot; progress saved on this device<br>
+    <button class="linkbtn" id="footLegal">Legal notice</button> &middot;
+    <button class="linkbtn" id="footPrivacy">Privacy</button> &middot;
+    <button class="linkbtn" id="footPrefs">Preferences</button> &middot;
+    <button class="linkbtn" id="footAccess">Accessibility</button> &middot;
+    <button class="linkbtn" id="footHome">Home</button>
+  </footer>
+</div>
+
+<div class="modal" id="promoModal">
+  <div class="box">
+    <h3>Choose a promotion piece</h3>
+    <div class="promos" id="promoBtns"></div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   chang64 - a free chess website
+   Copyright (C) 2026 AlexZ1212
+   https://github.com/AlexZ1212/chang64
+
+   This program is free software: you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the Free
+   Software Foundation, either version 3 of the License, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+   more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program. If not, see <https://www.gnu.org/licenses/>.
+   A copy is served at https://chang64.com/LICENSE
+   ========================================================== */
+/*__I18N__*/
+
+/*__ENGINE__*/
+
+/*__PIECES__*/
+
+/*__UI__*/
+
+/*__UI2__*/
+
+/*__UI3__*/
+</script>
+</body>
+</html>

@@ -10,8 +10,17 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
   const $=id=>w.document.getElementById(id);
   const click=el=>el.dispatchEvent(new w.MouseEvent("click",{bubbles:true}));
   await wait(700);
-  const startGame=async(ms)=>{ if(/Start game|Lancer la partie/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} };
-  const restart=async(ms)=>{ click($("btnNew")); await wait(300); await startGame(ms); };
+  /* Depuis l'ajout de l'overlay de preparation, une partie chronometree
+     attend le feu vert du joueur avant que la pendule ne parte. Les tests
+     doivent donc appuyer sur "Commencer", comme un vrai joueur. */
+  const pressReady=async()=>{
+    const b=$("readyBanner");
+    if(b&&!b.classList.contains("hide")){click($("readyStart"));await wait(250);}
+  };
+  const startGame=async(ms)=>{ if(/Start game|Lancer la partie/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} await pressReady(); };
+  /* L'attente doit venir APRES le feu vert : la pendule ne demarre plus
+     au lancement de la partie mais au clic sur "Commencer". */
+  const restart=async(ms)=>{ click($("btnNew")); await wait(300); await startGame(); await pressReady(); await wait(ms||700); };
   click($("tab-play")); await wait(600);
   await startGame();
   T("banner hidden during play", $("resultBanner").className.includes("hide"));

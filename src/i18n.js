@@ -60,14 +60,14 @@ const FR={
 
 /* --- navigation dans la partie --- */
 "Review":"Analyse","Analyse this game":"Analyser cette partie","Analysing with Stockfish…":"Analyse avec Stockfish…",
-"Enable Stockfish":"Activer Stockfish","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
+"Stockfish for review":"Stockfish pour l'analyse","Stockfish is only used to review a finished game, never to help you play.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues.","Enable Stockfish":"Activer Stockfish","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
 "The built-in engine reviews your game instantly. Stockfish is stronger but downloads about 7 MB the first time.":
  "Le moteur intégré analyse ta partie instantanément. Stockfish est plus fort mais télécharge environ 7 Mo la première fois.",
 "Stockfish is ready. Game review will now use it instead of the built-in engine.":
  "Stockfish est prêt. L'analyse de partie l'utilisera désormais à la place du moteur intégré.",
 "Stockfish could not start ({why}). The built-in engine stays in use.":
  "Stockfish n'a pas pu démarrer ({why}). Le moteur intégré reste en service.",
-"The built-in engine is instant. Stockfish is stronger, and downloads about 7 MB the first time.":"Le moteur intégré répond instantanément. Stockfish est plus fort, mais il télécharge environ 7 Mo à la première utilisation.",
+"Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues. Il est plus fort que le moteur intégré, et télécharge environ 7 Mo à la première utilisation.",
 "Stockfish is already running.":"Stockfish tourne déjà.",
 "Fetching the engine, this can take a moment on a first visit.":"Téléchargement du moteur, cela peut prendre un moment à la première visite.",
 "Stockfish stopped responding, falling back to the built-in engine.":"Stockfish ne répond plus, retour au moteur intégré.",
@@ -261,17 +261,31 @@ const FR={
 "You resigned. The computer wins.":"Tu abandonnes. L'ordinateur gagne.","You resign":"Tu abandonnes",
 "You resigned this game.":"Tu as abandonné cette partie.","Your friend resigned. You win.":"Ton ami a abandonné. Tu gagnes.",
 "I resign, well played.":"J'abandonne, bien joué.",
-"Legal notice":"Mentions légales","Privacy":"Confidentialité","Publisher and hosting details.":"Éditeur et hébergeur.",
+"Your progress will show up here.":"Ta progression s'affichera ici.",
+"Solve your first puzzle →":"Résous ton premier exercice →",
+"Ready when you are":"Quand tu veux","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press start when you are ready.":"Appuie sur Commencer quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
+"Legal notice":"Mentions légales","Privacy":"Confidentialité","Preferences":"Préférences","Accessibility":"Accessibilité","Publisher and hosting details.":"Éditeur et hébergeur.",
 "chang64 · no account, no tracking · progress saved on this device":
  "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",
 "Use your browser menu: Add to home screen":"Passe par le menu du navigateur : Ajouter à l'écran d'accueil"
 };
 
 let LANG=(navigator.language||"en").toLowerCase().indexOf("fr")===0?"fr":"en";
+/* Un mot court ne doit pas rester seul en fin de ligne : "Exercice du /
+   jour" ou "Suggerer un / coup" se lisent mal dans un bouton etroit. On lie
+   donc l'article au mot suivant par une espace insecable, une fois pour
+   toutes plutot que dans chaque libelle. Regle typographique francaise
+   courante, sans effet quand le texte tient sur une ligne. */
+const MOTS_LIES=/(^|\s)(du|de|des|le|la|les|un|une|au|aux|en|et|ma|mon|ta|ton|sur|par|a|à|d'|l')(\s)(?=\S)/gi;
+function lier(x){
+  return String(x).replace(MOTS_LIES, function(_, av, mot, ap){
+    return av + mot + (mot.endsWith("'") ? "" : "\u00a0");
+  });
+}
 function t(s,v){
   let out=(LANG==="fr"&&FR[s])||s;
   if(v)for(const k in v)out=out.split("{"+k+"}").join(v[k]);
-  return out;
+  return LANG==="fr" ? lier(out) : out;
 }
 /* textes statiques du document : relevés une fois, retraduits à la demande */
 let i18nText=[],i18nAttr=[];
@@ -299,6 +313,9 @@ function applyI18n(){
     r.node.nodeValue=next;r.current=next;
   }
   for(const r of i18nAttr)r.el.setAttribute(r.attr,t(r.en));
+  /* Les libelles statiques anglais laisses tels quels passent aussi par la
+     regle quand on est en francais, sinon seuls les textes traduits en
+     beneficieraient. */
   const box=document.getElementById("langSwitch");
   if(box)for(const b of box.children)b.setAttribute("aria-pressed",b.dataset.lang===LANG);
 }

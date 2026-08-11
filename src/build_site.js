@@ -55,7 +55,7 @@ for (const f of ["COPYING.CONTENT", "README.md"]) {
   fs.writeFileSync(OUT + "/" + f, txt);
 }
 fs.writeFileSync(OUT + "/engine/README.txt",
-`Stockfish 18 (lite, single-threaded) — https://stockfishchess.org
+`Stockfish 18 (lite, single-threaded) : https://stockfishchess.org
 Licensed under the GNU General Public License v3, see LICENSE-GPLv3.txt.
 Loaded only when the visitor presses "Enable Stockfish".
 `);
@@ -449,9 +449,16 @@ font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-hei
 a{color:var(--brass)}
 header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
 padding-bottom:14px;border-bottom:1px solid var(--rule)}
-.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk)}
+.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk);display:inline-flex;align-items:center;gap:9px}
+.brandmark{color:var(--brass);flex:none}
+.brandname{display:inline-block}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
-nav a{font-size:13px;margin-left:14px;text-decoration:none;color:var(--sage)}
+/* Le menu depassait la largeur d'un telephone : quatre entrees plus le
+   selecteur de langue reclament environ 458 px pour 362 disponibles. Les
+   marges a gauche empechaient un retour a la ligne propre. On passe en
+   disposition souple, qui replie naturellement au lieu de deborder. */
+header nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}
+nav a{font-size:13px;text-decoration:none;color:var(--sage)}
 nav a:hover{color:var(--brass)}
 h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
 h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}
@@ -465,11 +472,19 @@ p{margin-bottom:12px;max-width:66ch}
    on l'impose explicitement plutot que d'en dependre */
 .anim g[data-ply][hidden]{display:none}
 .animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
-.animctl button{background:var(--slate);color:var(--bone);border:1px solid var(--rule);border-radius:6px;
+/* Ces commandes avaient herite des jetons du theme sombre de l'application,
+   posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
+   symboles etaient beiges sur blanc casse, soit un contraste de 1,11:1 pour
+   un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
+   ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
+   visuellement les commandes au diagramme qu'elles pilotent. */
+.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
   width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
-.animctl button:hover{border-color:var(--brass)}
+.animctl button:hover{background:var(--board);color:var(--slate)}
+.animctl button:disabled{opacity:.38;cursor:default}
+.animctl button:disabled:hover{background:var(--slate);color:var(--board)}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-.animply{font-size:12px;color:#93A99A;font-variant-numeric:tabular-nums}
+.animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
@@ -494,7 +509,63 @@ h2{scroll-margin-top:16px}
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}`;
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}
+.filtre{margin-bottom:18px}
+.filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
+  padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
+  background:var(--slate);color:var(--chalk)}
+.filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
+.filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
+.footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
+.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
+.footnav a:hover{text-decoration:underline}
+.footnav [aria-current="page"]{color:var(--sage);font-weight:600}
+.footnote{margin:0}`;
+
+/* La marque a l'elephant n'apparaissait que dans l'application : les pages
+   d'ouvertures et de contenu n'affichaient que le texte "chang64". Rien ne
+   justifiait cette difference, l'entete est le meme reperage d'un bout a
+   l'autre du site. Fonction declaree (donc hoistee) pour ne pas dependre de
+   l'ordre des constantes plus bas dans le fichier. */
+let _mark = null;
+function brandMark() {
+  if (_mark === null) {
+    const paths = (fs.readFileSync(path.join(__dirname, "ds/mark-on-dark.svg"), "utf8")
+      .match(/<path d="[^"]+"/g) || []).map(m => m.slice(9, -1));
+    _mark = `<svg class="brandmark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true" focusable="false">` +
+      `<g fill="currentColor">${paths.map(d => `<path d="${d}"/>`).join("")}</g></svg>`;
+  }
+  return _mark;
+}
+
+/* Liens vers toutes les sections, dans la langue de la page. La page en cours
+   est signalee et non cliquable : un lien vers soi-meme n'apporte rien. */
+const SECTIONS = {
+  en: [
+    ["/openings/", "Openings"], ["/puzzles/", "Puzzles"], ["/learn/", "Rules"],
+    ["/endgames/", "Endgames"], ["/traps/", "Opening traps"], ["/glossary/", "Glossary"]
+  ],
+  fr: [
+    ["/fr/ouvertures/", "Ouvertures"], ["/fr/exercices/", "Exercices"], ["/fr/apprendre/", "Apprendre"],
+    ["/fr/finales/", "Finales"], ["/fr/pieges/", "Pièges d'ouverture"], ["/fr/lexique/", "Lexique"]
+  ]
+};
+/* Retire accents, ponctuation et majuscules : la recherche doit trouver
+   "Defense sicilienne" quand on tape "defense sicilien", et "1.e4 c5" quand
+   on tape "e4c5". */
+function sansAccent(t) {
+  return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function sectionLinks(lang, canonical) {
+  const ici = String(canonical || "").replace(SITE, "");
+  return SECTIONS[lang === "fr" ? "fr" : "en"].map(([href, nom]) =>
+    ici === href
+      ? `<span aria-current="page">${nom}</span>`
+      : `<a href="${href}">${nom}</a>`
+  ).join("");
+}
 
 function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage) {
   lang = lang || "en";
@@ -527,7 +598,7 @@ ${jsonld ? '<script type="application/ld+json">' + JSON.stringify(jsonld) + "</s
 <body>
 <div class="wrap">
 <header>
-  <a class="brand" href="/">chang<span>64</span></a>
+  <a class="brand" href="/">${brandMark()}<span class="brandname">chang<span>64</span></span></a>
   <nav>
     <a href="/">${d.nav[0]}</a>
     <a href="${d.index}">${d.nav[1]}</a>
@@ -537,9 +608,90 @@ ${jsonld ? '<script type="application/ld+json">' + JSON.stringify(jsonld) + "</s
   </nav>
 </header>
 ${body}
-<footer>${d.foot}</footer>
+<footer>
+  <!-- Toutes les sections du site. Le menu du haut n'en porte que quatre,
+       faute de place sur telephone : Finales, Lexique et Pieges n'etaient
+       donc atteignables depuis aucune page de contenu, ni pour le visiteur
+       ni pour les moteurs de recherche. Le pied de page est le seul endroit
+       ou la place ne manque pas. -->
+  <nav class="footnav" aria-label="${lang === "fr" ? "Sections du site" : "Site sections"}">
+    ${sectionLinks(lang, canonical)}
+  </nav>
+  <p class="footnote">${d.foot}</p>
+</footer>
 </div>
 <script>
+${!/id="grille"/.test(body) ? "" : `
+/* Filtrage de la liste des ouvertures.
+   Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page
+   se comporte comme avant. On compare sur une cle sans accents ni
+   ponctuation, ce qui permet de trouver "Defense sicilienne" en tapant
+   "defense sicilien", et "1.e4 c5" en tapant "e4c5". */
+(function(){
+  var bloc=document.getElementById("filtreBloc");
+  var champ=document.getElementById("filtre");
+  var grille=document.getElementById("grille");
+  if(!bloc||!champ||!grille)return;
+  var tuiles=[].slice.call(grille.querySelectorAll("[data-cle]"));
+  if(tuiles.length<20)return;          /* inutile sur une liste courte */
+  bloc.classList.remove("hide");
+  var etat=document.getElementById("filtreEtat");
+  var fr=document.documentElement.lang==="fr";
+  var total=tuiles.length;
+
+  function normalise(t){
+    return String(t).normalize?String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .toLowerCase().replace(/[^a-z0-9]+/g," ").trim()
+      :String(t).toLowerCase();
+  }
+  function filtrer(){
+    var q=normalise(champ.value);
+    if(!q){
+      for(var i=0;i<total;i++)tuiles[i].hidden=false;
+      var tousBlocs=grille.querySelectorAll("[data-theme]");
+      for(var b=0;b<tousBlocs.length;b++)tousBlocs[b].hidden=false;
+      var toc0=grille.querySelector(".toc");
+      if(toc0)toc0.hidden=false;
+      etat.textContent="";
+      return;
+    }
+    /* Chaque mot tape doit se retrouver, dans n'importe quel ordre :
+       "sicilienne e4" fonctionne comme "e4 sicilienne". */
+    var mots=q.split(" ").filter(Boolean);
+    var vus=0;
+    for(var i=0;i<total;i++){
+      var cle=tuiles[i].getAttribute("data-cle")||"";
+      var ok=true;
+      for(var k=0;k<mots.length;k++){if(cle.indexOf(mots[k])<0){ok=false;break;}}
+      tuiles[i].hidden=!ok;
+      if(ok)vus++;
+    }
+    /* Les exercices sont groupes par theme : un titre de section dont plus
+       aucune tuile ne correspond doit disparaitre aussi, sinon la page se
+       remplit d'intitules suivis de vide. Le sommaire des themes est masque
+       pendant une recherche, il ne mene plus nulle part. */
+    var blocs=grille.querySelectorAll("[data-theme]");
+    for(var b=0;b<blocs.length;b++){
+      var reste=blocs[b].querySelectorAll("[data-cle]:not([hidden])").length;
+      blocs[b].hidden=(reste===0);
+    }
+    var toc=grille.querySelector(".toc");
+    if(toc)toc.hidden=true;
+    etat.textContent = vus===0
+      ? (fr?"Aucun résultat.":"No match.")
+      : (fr?vus+" sur "+total:vus+" of "+total);
+  }
+  champ.addEventListener("input",filtrer);
+  /* Echap vide le champ, geste attendu sur un champ de recherche. */
+  champ.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&champ.value){champ.value="";filtrer();}
+  });
+})();
+`}
+/* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
+   repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
+   servent. */
+
 /* Pilote l'echiquier anime des pages d'ouverture.
    Sans ce script, la position finale reste affichee et les commandes sont
    masquees : la page fonctionne exactement comme avant. */
@@ -615,7 +767,7 @@ const L = {
         idxH1: "Chess openings",
         idxLede: (a, b) => `Every named opening family, with its moves, its variations and a board you can play from. ${a} families, ${b} named lines.`,
         idxDesc: (a, b) => `A complete index of ${a} chess opening families and ${b} named lines, each with its moves, ECO code and a playable board.`,
-        foot: "chang64 — free chess, no account required. Opening data from the lichess-org/chess-openings project." },
+        foot: "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project." },
   fr: { dir: "fr/ouvertures", index: "/fr/ouvertures/", label: "Français",
         nav: ["Jouer", "Ouvertures", "Exercices"], all: "Toutes les ouvertures", play: "Jouer cette ouverture",
         namedLines: "Variantes répertoriées", variation: "Variante", movesHead: "Coups",
@@ -625,7 +777,7 @@ const L = {
         idxH1: "Ouvertures d'échecs",
         idxLede: (a, b) => `Toutes les familles d'ouvertures, avec leurs coups, leurs variantes et un échiquier pour les jouer. ${a} familles, ${b} lignes répertoriées.`,
         idxDesc: (a, b) => `Index complet de ${a} familles d'ouvertures d'échecs et ${b} variantes répertoriées, chacune avec ses coups, son code ECO et un échiquier jouable.`,
-        foot: "chang64 — échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings." }
+        foot: "chang64 : échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings." }
 };
 function urlFor(lang, p) { return `${SITE}/${L[lang].dir}/${lang === "fr" ? p.slugFr : p.slugEn}.html`; }
 function altLinks(p) {
@@ -650,9 +802,16 @@ for (const lang of ["en", "fr"]) {
     const rows = p.variations.map(v =>
       `<tr><td>${esc(v.variation ? (lang === "fr" ? varFr(v.variation) : v.variation) : (lang === "fr" ? "Ligne principale" : "Main line"))}</td><td class="mono">${esc(numbered(v.moves))}</td><td class="mono">${v.eco}</td></tr>`).join("");
     const other = lang === "fr" ? "en" : "fr";
+    /* desc sert la balise meta et le referencement : elle contient la note
+       d'ouverture, laquelle est aussi affichee dans le corps. La reprendre
+       en chapo faisait relire la meme phrase deux fois de suite. Le chapo
+       annonce donc ce que contient la page, la note reste a sa place. */
+    const chapo = lang === "fr"
+      ? `${numbered(p.main.moves)} · ${p.ecos.join(", ")} · ${p.count} ligne${p.count > 1 ? "s" : ""} répertoriée${p.count > 1 ? "s" : ""}, avec un échiquier pour les jouer.`
+      : `${numbered(p.main.moves)} · ${p.ecos.join(", ")} · ${p.count} named line${p.count > 1 ? "s" : ""}, with a board to play them from.`;
     const body = `
 <h1>${esc(name)}</h1>
-<p class="lede">${esc(desc)}</p>
+<p class="lede">${esc(chapo)}</p>
 <div class="cols">
   <div class="diagram">${animBoard(p.main.moves, 300, {
       start: lang === "fr" ? "Position de départ" : "Starting position",
@@ -684,9 +843,9 @@ ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.cou
       about: { "@type": "Thing", name: name },
       isPartOf: { "@type": "WebSite", name: "chang64", url: SITE } };
     let title = lang === "fr"
-      ? `${name} \u2014 coups, variantes et codes ECO | chang64`
-      : `${name} \u2014 moves, variations and ECO codes | chang64`;
-    if (title.length > 70) title = `${name} \u2014 ${lang === "fr" ? "coups et variantes" : "moves and variations"} | chang64`;
+      ? `${name} : coups, variantes et codes ECO | chang64`
+      : `${name} : moves, variations and ECO codes | chang64`;
+    if (title.length > 70) title = `${name} : ${lang === "fr" ? "coups et variantes" : "moves and variations"} | chang64`;
     if (title.length > 70) title = `${name} | chang64`;
     const ogName = "op-" + p.slugEn;
     if (lang === "en") queueOg(ogName, p.family, numbered(p.main.moves) + "  \u00b7  ECO " + ecoRange, p.fen);
@@ -696,8 +855,30 @@ ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.cou
   const idxBody = `
 <h1>${d.idxH1}</h1>
 <p class="lede">${esc(d.idxLede(pages.length, lines.length))}</p>
-<div class="grid">
-${pages.map(p => `<a class="tile" href="${d.index}${lang === "fr" ? p.slugFr : p.slugEn}.html"><b>${esc(lang === "fr" ? p.nameFr : p.family)}</b><span>${esc(numbered(p.main.moves))}</span></a>`).join("\n")}
+<!-- Champ de recherche. Masque par defaut et revele par le script : sans
+     JavaScript la page reste exactement ce qu'elle etait, et personne ne se
+     retrouve devant un champ inerte. Cent quarante et une entrees sur une
+     seule page ne se parcourent pas a l'oeil. -->
+<div class="filtre hide" id="filtreBloc">
+  <input type="search" id="filtre" autocomplete="off"
+         placeholder="${lang === "fr" ? "Chercher : nom, coups ou code ECO" : "Search: name, moves or ECO code"}"
+         aria-label="${lang === "fr" ? "Filtrer les ouvertures" : "Filter openings"}"
+         aria-controls="grille">
+  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite"></p>
+</div>
+<div class="grid" id="grille">
+${pages.map(p => {
+  /* data-cle porte tout ce sur quoi on peut chercher : le nom dans les deux
+     langues, les coups et les codes ECO. Sans accents ni ponctuation, pour
+     que "defense" trouve "Défense" et "e4c5" trouve "1.e4 c5". */
+  const cle = sansAccent([
+    lang === "fr" ? p.nameFr : p.family,
+    lang === "fr" ? p.family : p.nameFr,
+    numbered(p.main.moves),
+    p.ecos.join(" ")
+  ].join(" "));
+  return `<a class="tile" data-cle="${esc(cle)}" href="${d.index}${lang === "fr" ? p.slugFr : p.slugEn}.html"><b>${esc(lang === "fr" ? p.nameFr : p.family)}</b><span>${esc(numbered(p.main.moves))} · ${esc(p.ecos.join(" "))}</span></a>`;
+}).join("\n")}
 </div>`;
   const idxAlt = `<link rel="alternate" hreflang="en" href="${SITE}/openings/">\n<link rel="alternate" hreflang="fr" href="${SITE}/fr/ouvertures/">\n<link rel="alternate" hreflang="x-default" href="${SITE}/openings/">`;
   fs.writeFileSync(`${OUT}/${d.dir}/index.html`,
@@ -709,7 +890,7 @@ ${pages.map(p => `<a class="tile" href="${d.index}${lang === "fr" ? p.slugFr : p
 
 /* ---------- 4. manifest, service worker, robots, sitemap ---------- */
 fs.writeFileSync(OUT + "/manifest.webmanifest", JSON.stringify({
-  name: "chang64 — chess and tactics", short_name: "chang64",
+  name: "chang64 : chess and tactics", short_name: "chang64",
   description: "Play chess, solve verified tactics puzzles and train endgames. No account required.",
   start_url: "/", scope: "/", display: "standalone",
   background_color: "#101413", theme_color: "#101413", orientation: "any",
@@ -893,7 +1074,7 @@ fs.writeFileSync(OUT + "/robots.txt", `User-agent: *\nAllow: /\nDisallow: /engin
 
 const today = new Date().toISOString().slice(0, 10);
 const extraUrls = require("./content.js")({
-  fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L
+  fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent
 });
 console.log("Pages de contenu   :", extraUrls.length);
 try {

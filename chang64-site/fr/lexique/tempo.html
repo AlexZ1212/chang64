@@ -31,9 +31,16 @@ font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-hei
 a{color:var(--brass)}
 header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
 padding-bottom:14px;border-bottom:1px solid var(--rule)}
-.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk)}
+.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk);display:inline-flex;align-items:center;gap:9px}
+.brandmark{color:var(--brass);flex:none}
+.brandname{display:inline-block}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
-nav a{font-size:13px;margin-left:14px;text-decoration:none;color:var(--sage)}
+/* Le menu depassait la largeur d'un telephone : quatre entrees plus le
+   selecteur de langue reclament environ 458 px pour 362 disponibles. Les
+   marges a gauche empechaient un retour a la ligne propre. On passe en
+   disposition souple, qui replie naturellement au lieu de deborder. */
+header nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}
+nav a{font-size:13px;text-decoration:none;color:var(--sage)}
 nav a:hover{color:var(--brass)}
 h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
 h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}
@@ -47,11 +54,19 @@ p{margin-bottom:12px;max-width:66ch}
    on l'impose explicitement plutot que d'en dependre */
 .anim g[data-ply][hidden]{display:none}
 .animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
-.animctl button{background:var(--slate);color:var(--bone);border:1px solid var(--rule);border-radius:6px;
+/* Ces commandes avaient herite des jetons du theme sombre de l'application,
+   posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
+   symboles etaient beiges sur blanc casse, soit un contraste de 1,11:1 pour
+   un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
+   ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
+   visuellement les commandes au diagramme qu'elles pilotent. */
+.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
   width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
-.animctl button:hover{border-color:var(--brass)}
+.animctl button:hover{background:var(--board);color:var(--slate)}
+.animctl button:disabled{opacity:.38;cursor:default}
+.animctl button:disabled:hover{background:var(--slate);color:var(--board)}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-.animply{font-size:12px;color:#93A99A;font-variant-numeric:tabular-nums}
+.animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
@@ -76,13 +91,24 @@ h2{scroll-margin-top:16px}
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}</style>
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}
+.filtre{margin-bottom:18px}
+.filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
+  padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
+  background:var(--slate);color:var(--chalk)}
+.filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
+.filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
+.footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
+.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
+.footnav a:hover{text-decoration:underline}
+.footnav [aria-current="page"]{color:var(--sage);font-weight:600}
+.footnote{margin:0}</style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"DefinedTerm","name":"Tempo","description":"Un coup considéré comme une unité de temps. Attaquer une pièce qui doit répondre fait gagner un tempo ; bouger deux fois la même pièce sans raison en fait perdre un.","inLanguage":"fr"}</script>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <a class="brand" href="/">chang<span>64</span></a>
+  <a class="brand" href="/"><svg class="brandmark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"/><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"/><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"/><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"/><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"/><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"/></g></svg><span class="brandname">chang<span>64</span></span></a>
   <nav>
     <a href="/">Jouer</a>
     <a href="/fr/ouvertures/">Ouvertures</a>
@@ -93,15 +119,29 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 </header>
 <h1>Tempo</h1><p class="lede">Un coup considéré comme une unité de temps. Attaquer une pièce qui doit répondre fait gagner un tempo ; bouger deux fois la même pièce sans raison en fait perdre un.</p><div class="cols">
   <div class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-label="Chess position"><rect x="0" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><defs><symbol id="pbb" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 3.4a2.2 2.2 0 0 1 1.3 4c2 1.2 3.7 2.8 4.9 4.6L20.4 19.4 21.9 21 30.2 13.6C31.4 16 30.4 22.4 27.3 24.8H17.7c-2.3-1.6-3.6-3.8-3.6-6.6 0-4 2.7-8.2 7.1-10.8A2.2 2.2 0 0 1 22.5 3.4z"/><path d="M17.7 24.8h9.6l1.4 1.8c-.6 1.6.4 2.6 1.7 3.4H14.6c1.3-.8 2.3-1.8 1.7-3.4z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbq" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 6.6l3.2 9.2 4-6.4.8 7.2 5.3-3.7-3.3 11.9H12.5L9.2 12.9l5.3 3.7.8-7.2 4 6.4z"/><path d="M9.2 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM15.3 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM22.5 3.6a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM29.7 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM35.8 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4z"/><path d="M12.5 24.8h20l-1.4 2.2c-.6 1.4-.5 2.3-.7 3H14.6c-.2-.7-.1-1.6-.7-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbk" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z"/><path d="M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z"/><path d="M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbr" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z"/><path d="M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwp" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z"/><path d="M20.3 16.2h4.4l2 1.8H18.3z"/><path d="M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pbp" viewBox="0 0 45 45"><g fill="#15201C" stroke="#D8D2C4" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 7a4.2 4.2 0 0 1 1.9 7.9l.3 1.3h-4.4l.3-1.3A4.2 4.2 0 0 1 22.5 7z"/><path d="M20.3 16.2h4.4l2 1.8H18.3z"/><path d="M19.5 18h6c-.5 5 1.4 8.6 4.9 12H14.6c3.5-3.4 5.4-7 4.9-12z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwq" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M22.5 6.6l3.2 9.2 4-6.4.8 7.2 5.3-3.7-3.3 11.9H12.5L9.2 12.9l5.3 3.7.8-7.2 4 6.4z"/><path d="M9.2 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM15.3 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM22.5 3.6a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM29.7 6.5a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4zM35.8 9.9a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 1 0 0-3.4z"/><path d="M12.5 24.8h20l-1.4 2.2c-.6 1.4-.5 2.3-.7 3H14.6c-.2-.7-.1-1.6-.7-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwr" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M11.6 8.4h4.8v3h3.4v-3h5.4v3h3.4v-3h4.8v7l-2.6 2.2H14.2l-2.6-2.2z"/><path d="M14.2 17.6h16.6l-1.6 6.4c-.4 2.6.8 4.4 1.2 6H14.6c.4-1.6 1.6-3.4 1.2-6z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol><symbol id="pwk" viewBox="0 0 45 45"><g fill="#F7F4EC" stroke="#15201C" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M21.2 2.2h2.6v3.2h3.2v2.8h-3.2v3.6h-2.6V8.2H18V5.4h3.2z"/><path d="M22.5 11.8c-5.6 0-9.6 3.4-9.6 7.6 0 2.4 1.2 4.4 2.8 6h13.6c1.6-1.6 2.8-3.6 2.8-6 0-4.2-4-7.6-9.6-7.6z"/><path d="M15.7 25.4h13.6l.8 1.6c-.4 1.2-.1 2.1.3 3H14.6c.4-.9.7-1.8.3-3z"/><path d="M14.6 30h15.8l1.2 2.6H13.4z"/><path d="M12 32.6h21l1.4 2v2.4H10.6v-2.4z"/></g></symbol></defs><use href="#pbb" x="75.0" y="0.0" width="37.5" height="37.5"/><use href="#pbq" x="112.5" y="0.0" width="37.5" height="37.5"/><use href="#pbk" x="150.0" y="0.0" width="37.5" height="37.5"/><use href="#pbr" x="262.5" y="0.0" width="37.5" height="37.5"/><use href="#pwp" x="37.5" y="37.5" width="37.5" height="37.5"/><use href="#pbp" x="225.0" y="37.5" width="37.5" height="37.5"/><use href="#pbp" x="262.5" y="37.5" width="37.5" height="37.5"/><use href="#pbr" x="0.0" y="75.0" width="37.5" height="37.5"/><use href="#pbp" x="0.0" y="112.5" width="37.5" height="37.5"/><use href="#pbp" x="187.5" y="112.5" width="37.5" height="37.5"/><use href="#pwp" x="75.0" y="150.0" width="37.5" height="37.5"/><use href="#pbp" x="112.5" y="150.0" width="37.5" height="37.5"/><use href="#pwq" x="37.5" y="187.5" width="37.5" height="37.5"/><use href="#pwp" x="225.0" y="187.5" width="37.5" height="37.5"/><use href="#pwp" x="0.0" y="225.0" width="37.5" height="37.5"/><use href="#pwp" x="37.5" y="225.0" width="37.5" height="37.5"/><use href="#pbp" x="150.0" y="225.0" width="37.5" height="37.5"/><use href="#pwp" x="187.5" y="225.0" width="37.5" height="37.5"/><use href="#pwp" x="262.5" y="225.0" width="37.5" height="37.5"/><use href="#pwr" x="0.0" y="262.5" width="37.5" height="37.5"/><use href="#pwk" x="150.0" y="262.5" width="37.5" height="37.5"/><use href="#pwr" x="262.5" y="262.5" width="37.5" height="37.5"/></svg><p style="font-size:12px;color:#93A99A;margin:8px 0 0">Exemple : Coup gagnant</p></div>
-  <div><p>Un coup considéré comme une unité de temps. Attaquer une pièce qui doit répondre fait gagner un tempo ; bouger deux fois la même pièce sans raison en fait perdre un.</p>
-    <p>Le diagramme vient de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée.</p>
+  <div><p>Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée.</p>
     <a class="cta" href="/#puzzle=p84">Résoudre cet exercice</a>
     <a class="cta ghost" href="/fr/exercices/84-coup-gagnant.html">Voir la fiche</a>
     <a class="cta ghost" href="/fr/lexique/">Retour à l'index</a>
   </div></div>
-<footer>chang64 — échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings.</footer>
+<footer>
+  <!-- Toutes les sections du site. Le menu du haut n'en porte que quatre,
+       faute de place sur telephone : Finales, Lexique et Pieges n'etaient
+       donc atteignables depuis aucune page de contenu, ni pour le visiteur
+       ni pour les moteurs de recherche. Le pied de page est le seul endroit
+       ou la place ne manque pas. -->
+  <nav class="footnav" aria-label="Sections du site">
+    <a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Exercices</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a>
+  </nav>
+  <p class="footnote">chang64 : échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings.</p>
+</footer>
 </div>
 <script>
+
+/* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
+   repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
+   servent. */
+
 /* Pilote l'echiquier anime des pages d'ouverture.
    Sans ce script, la position finale reste affichee et les commandes sont
    masquees : la page fonctionne exactement comme avant. */

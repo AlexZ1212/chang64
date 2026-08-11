@@ -12,12 +12,37 @@ function boot(lang){
   const errors=[];
   const dom=new JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/"});
   const w=dom.window; w.addEventListener("error",e=>errors.push(e.message));
-  const $=id=>w.document.getElementById(id);
+  /* Les libelles francais portent des espaces insecables : une regle
+     typographique lie les articles au mot suivant pour qu'ils ne restent pas
+     seuls en fin de ligne dans un bouton. Le test compare du texte, pas de la
+     mise en page : on neutralise ce caractere a la lecture. */
+  const nb=t=>String(t==null?"":t).replace(/\u00a0/g," ");
+  const $=id=>{
+    const e=w.document.getElementById(id);
+    if(!e||e.__nbsp)return e;
+    e.__nbsp=1;
+    const proto=Object.getPrototypeOf(e);
+    let desc=null,p=proto;
+    while(p&&!desc){desc=Object.getOwnPropertyDescriptor(p,"textContent");p=Object.getPrototypeOf(p);}
+    if(desc)Object.defineProperty(e,"textContent",{
+      get(){return nb(desc.get.call(this));},
+      set(v){desc.set.call(this,v);},configurable:true});
+    return e;
+  };
   const click=el=>el.dispatchEvent(new w.MouseEvent("click",{bubbles:true}));
   const cells=()=>$("board").children;
   await wait(700);
-  const startGame=async(ms)=>{ if(/Start game|Lancer la partie/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} };
-  const restart=async(ms)=>{ click($("btnNew")); await wait(300); await startGame(ms); };
+  /* Depuis l'ajout de l'overlay de preparation, une partie chronometree
+     attend le feu vert du joueur avant que la pendule ne parte. Les tests
+     doivent donc appuyer sur "Commencer", comme un vrai joueur. */
+  const pressReady=async()=>{
+    const b=$("readyBanner");
+    if(b&&!b.classList.contains("hide")){click($("readyStart"));await wait(250);}
+  };
+  const startGame=async(ms)=>{ if(/Start game|Lancer la partie/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} await pressReady(); };
+  /* L'attente doit venir APRES le feu vert : la pendule ne demarre plus
+     au lancement de la partie mais au clic sur "Commencer". */
+  const restart=async(ms)=>{ click($("btnNew")); await wait(300); await startGame(); await pressReady(); await wait(ms||700); };
   console.log("ENGLISH BY DEFAULT");
   T("html lang", w.document.documentElement.lang==="en", w.document.documentElement.lang);
   T("hero in english", /Play chess/.test($("pane-home").textContent));
@@ -37,7 +62,7 @@ function boot(lang){
   await startGame();
   T("turn line", $("turnline").textContent==="Trait aux Blancs.", $("turnline").textContent);
   T("new game status", /Nouvelle partie/.test($("status").textContent), $("status").textContent);
-  T("settings translated", $("segColor").children[0].textContent==="Jouer les Blancs", $("segColor").children[0].textContent);
+  T("settings translated", nb($("segColor").children[0].textContent)==="Jouer les Blancs", $("segColor").children[0].textContent);
   /* Vocabulaire consacre en francais : Classique et non "Longue",
      Correspondance et non "Par jour", pour rester coherent avec le texte
      d'accueil qui parle de jeu par correspondance. */

@@ -157,7 +157,14 @@ function clockSetup(){
   clockHist=[{w:clock.w,b:clock.b}];
   renderClocks();
 }
+/* Tant que la partie n'est pas lancee depuis l'overlay de preparation, la
+   pendule ne doit pas s'ecouler et l'ordinateur ne doit pas jouer. */
+let awaitingStart=false;
+/* Pose par le bandeau de fin : on vient de choisir, inutile de redemander. */
+let skipReady=false;
+let readyStatus="";
 function clockDrain(){
+  if(awaitingStart)return;
   if(!clock.enabled||clock.active===null||isFlagged())return;
   const now=Date.now(),d=now-clock.last;
   clock.last=now;
@@ -179,6 +186,14 @@ function fmtTime(ms){
   if(ms<20000)return m+":"+(s<10?"0":"")+s.toFixed(1);
   return m+":"+String(Math.floor(s)).padStart(2,"0");
 }
+/* "Chang" designe l'adversaire, pas le site : chang64 reste le nom du site,
+   et le distinguer evite de croire qu'on joue contre la plateforme. */
+function botLabel(){
+  const seg=document.getElementById("segLevel");
+  let force="";
+  if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
+  return force?"Chang \u00b7 "+force:"Chang";
+}
 function renderClocks(){
   const show=clock.enabled&&mode==="play"&&gameStarted;
   $("clockTop").classList.toggle("hide",!show);
@@ -188,7 +203,11 @@ function renderClocks(){
   const snap=(typeof reviewPly!=="undefined"&&reviewPly!==null&&typeof clockHist!=="undefined"&&clockHist[reviewPly])
     ? clockHist[reviewPly] : clock;
   const val=c=>c===W?snap.w:snap.b;
-  $("clockTopName").textContent=t("Computer");
+  /* L'adversaire s'appelait "Ordinateur", ce qui ne dit rien. On le nomme,
+     et on rappelle sa force : battre "Chang · Coriace" veut dire quelque
+     chose, et on sait en permanence contre quoi on joue. Le libelle de force
+     est lu sur le selecteur, deja traduit, plutot que maintenu en double. */
+  $("clockTopName").textContent=botLabel();
   $("clockBottomName").textContent=t("You");
   $("clockTopSwatch").className=topColor===B?"dark":"";
   $("clockBottomSwatch").className=botColor===B?"dark":"";
@@ -343,6 +362,37 @@ function refreshGame(){
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
   $("btnUndo").disabled=!gameStarted||game.history.length<2||busy||isFlagged()||resigned!==null;
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
+
+  /* Pendant une partie en cours, seul "Abandonner" reste actif.
+     Deux raisons distinctes :
+     - changer de couleur relancait immediatement une nouvelle partie et
+       faisait disparaitre celle en cours sans prevenir ;
+     - un bouton Stockfish cliquable pendant qu'on joue laisse croire qu'il
+       peut servir a trouver le meilleur coup. Il ne le peut pas, la
+       suggestion utilise le moteur integre et reste bloquee tant que la
+       partie n'est pas finie, mais aux echecs le soupcon de triche suffit a
+       poser probleme : mieux vaut lever toute ambiguite. */
+  const enCours=gameStarted&&!over;
+  const geler=el=>{const e=$(el);if(e)e.disabled=enCours;};
+  geler("btnNew");
+  /* Stockfish : ne pas contrarier son propre etat. Pendant le telechargement
+     il se desactive lui-meme, et on ne doit surtout pas le rallumer. */
+  {
+    const sfBtn=$("btnStockfish");
+    if(sfBtn){
+      const enChargement=typeof sf!=="undefined"&&sf&&!sf.ready&&sf.worker;
+      if(enCours)sfBtn.disabled=true;
+      else if(!enChargement)sfBtn.disabled=false;
+    }
+  }
+  for(const seg of ["segColor","segLevel"]){
+    const g=$(seg);
+    if(g)for(const b of g.children)b.disabled=enCours;
+  }
+  for(const seg of ["tcCats2","tcChips2"]){
+    const g=$(seg);
+    if(g)for(const b of g.children)b.disabled=enCours;
+  }
 }
 let resultInfo=null,resigned=null;
 function gameOver(){
@@ -398,7 +448,13 @@ function playUser(m){
 }
 function botMove(){
   if(isFlagged()){busy=false;refreshGame();return;}
-  const conf={1:{d:1,t:120},2:{d:2,t:280},3:{d:3,t:700},4:{d:4,t:1500}}[botLevel];
+  /* Profondeurs relevees apres optimisation du moteur. Auparavant, le niveau
+     4 demandait 3,7 s pour atteindre la profondeur 4 mais n'en avait que 1,5 :
+     il etait coupe en cours de route et jouait en realite comme le niveau 3.
+     Le moteur atteint desormais la profondeur 4,8 en moyenne dans ce meme
+     budget, ce qui rend le palier 5 accessible et l'echelle enfin croissante.
+     Mesure : profondeur 5 bat profondeur 4 par 5,5 a 2,5. */
+  const conf={1:{d:1,t:120},2:{d:2,t:280},3:{d:3,t:700},4:{d:5,t:2000}}[botLevel];
   let budget=conf.t;
   if(clock.enabled){
     const left=(myColor===W?clock.b:clock.w);
@@ -470,6 +526,21 @@ function newGame(){
   mainGame=null;
   refreshGame();
   if(typeof focusBoard==="function")focusBoard();
+  /* Overlay de preparation, uniquement sur les parties chronometrees : sans
+     pendule rien ne presse, donc rien a proteger. skipReady est pose quand on
+     relance depuis le bandeau de fin, ou le choix vient d'etre fait. */
+  const chrono=cat!=="none"&&cat!=="daily";
+  if(chrono&&!skipReady&&typeof showReady==="function"){
+    awaitingStart=true;
+    /* On memorise le message d'origine ("Nouvelle partie, 10+0 Rapide...")
+       pour le restituer au demarrage : il porte la cadence, que l'overlay
+       remplace temporairement par son invite. */
+    readyStatus=s.textContent;
+    showReady(tcTxt);
+    return;                      /* l'ordinateur attend, lui aussi */
+  }
+  awaitingStart=false;
+  skipReady=false;
   if(myColor===B){busy=true;$("status").textContent=t("The computer is thinking…");setTimeout(botMove,220);}
 }
 let resignTimer=null;
@@ -524,9 +595,24 @@ function undoGame(){
   game.undoMove();game.undoMove();
   sanList.splice(-2);
   if(clock.enabled){
+    /* clockHist enregistre l'etat APRES chaque coup, et la partie commence
+       avec une seule entree. Retirer les deux dernieres ramenait donc au
+       temps de depart des la premiere annulation : la pendule remontait,
+       offrant du temps gratuit a chaque clic sur Reprendre.
+       On ne restitue donc pas le temps consomme : annuler un coup rend la
+       position, pas les secondes deja ecoulees. Seul l'increment eventuel
+       ajoute par les deux coups annules est repris. */
     clockHist.splice(-2);
-    const last=clockHist[clockHist.length-1]||clockHist[0];
-    clock.w=last.w;clock.b=last.b;clock.active=game.turn;clock.last=Date.now();
+    clockDrain();                      /* decompter le temps ecoule d'abord */
+    if(clock.inc){
+      if(game.turn===W)clock.w=Math.max(0,clock.w-clock.inc);
+      else clock.b=Math.max(0,clock.b-clock.inc);
+      const autre=game.turn^1;
+      if(autre===W)clock.w=Math.max(0,clock.w-clock.inc);
+      else clock.b=Math.max(0,clock.b-clock.inc);
+    }
+    clock.active=game.turn;clock.last=Date.now();
+    clockHist.push({w:clock.w,b:clock.b});
   }
   lastMove=game.history.length?game.history[game.history.length-1].m:null;
   selected=-1;marks={};
@@ -693,6 +779,10 @@ function renderProgress(){
   $("hLevel").textContent=prog.level;
   $("hSolved").textContent=prog.solved;
   $("hBest").textContent=prog.best;
+  /* renderExtraStats decide d'afficher la bande ou l'invitation : il faut
+     la rappeler ici, sinon l'invitation resterait affichee apres le premier
+     exercice resolu. Declaree dans ui2.js, concatene apres. */
+  if(typeof renderExtraStats==="function")renderExtraStats();
 }
 function hintPuzzle(){
   if(puzzleDone)return;
@@ -1058,19 +1148,19 @@ function setMode(m,opts){
 }
 
 /* ---------- listeners ---------- */
-$("brand").onclick=()=>setMode("home");
-$("tab-home").onclick=()=>setMode("home");
-$("tab-play").onclick=()=>setMode("play");
-$("tab-puzzles").onclick=()=>setMode("puzzles");
-$("tab-friend").onclick=()=>setMode("friend");
+$("brand").onclick=()=>{setMode("home");goTop();};
+$("tab-home").onclick=()=>{setMode("home");goTop();};
+$("tab-play").onclick=()=>{setMode("play");goTop();};
+$("tab-puzzles").onclick=()=>{setMode("puzzles");goTop();};
+$("tab-friend").onclick=()=>{setMode("friend");goTop();};
 $("heroPlay").onclick=()=>{
   if(tcCat==="daily")setMode("friend");
   else setMode("play",{fresh:true});
 };
-$("heroPuzzle").onclick=()=>setMode("puzzles",{daily:true});
-$("cardPlay").onclick=()=>setMode("play",{fresh:true});
-$("cardPuzzles").onclick=()=>setMode("puzzles");
-$("cardFriend").onclick=()=>setMode("friend");
+$("heroPuzzle").onclick=()=>{setMode("puzzles",{daily:true});goTop();};
+$("cardPlay").onclick=()=>{setMode("play",{fresh:true});goTop();};
+$("cardPuzzles").onclick=()=>{setMode("puzzles");goTop();};
+$("cardFriend").onclick=()=>{setMode("friend");goTop();};
 $("segColor").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
@@ -1081,6 +1171,9 @@ $("segLevel").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
   botLevel=+b.dataset.v;
+  /* Le nom affiche au-dessus de la pendule porte la force : il doit suivre
+     le changement, sinon il annoncerait l'ancien niveau. */
+  if(typeof renderClocks==="function")renderClocks();
 });
 $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
 $("btnUndo").onclick=undoGame;

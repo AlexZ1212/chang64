@@ -31,9 +31,16 @@ font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-hei
 a{color:var(--brass)}
 header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
 padding-bottom:14px;border-bottom:1px solid var(--rule)}
-.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk)}
+.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk);display:inline-flex;align-items:center;gap:9px}
+.brandmark{color:var(--brass);flex:none}
+.brandname{display:inline-block}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
-nav a{font-size:13px;margin-left:14px;text-decoration:none;color:var(--sage)}
+/* Le menu depassait la largeur d'un telephone : quatre entrees plus le
+   selecteur de langue reclament environ 458 px pour 362 disponibles. Les
+   marges a gauche empechaient un retour a la ligne propre. On passe en
+   disposition souple, qui replie naturellement au lieu de deborder. */
+header nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}
+nav a{font-size:13px;text-decoration:none;color:var(--sage)}
 nav a:hover{color:var(--brass)}
 h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
 h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}
@@ -47,11 +54,19 @@ p{margin-bottom:12px;max-width:66ch}
    on l'impose explicitement plutot que d'en dependre */
 .anim g[data-ply][hidden]{display:none}
 .animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
-.animctl button{background:var(--slate);color:var(--bone);border:1px solid var(--rule);border-radius:6px;
+/* Ces commandes avaient herite des jetons du theme sombre de l'application,
+   posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
+   symboles etaient beiges sur blanc casse, soit un contraste de 1,11:1 pour
+   un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
+   ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
+   visuellement les commandes au diagramme qu'elles pilotent. */
+.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
   width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
-.animctl button:hover{border-color:var(--brass)}
+.animctl button:hover{background:var(--board);color:var(--slate)}
+.animctl button:disabled{opacity:.38;cursor:default}
+.animctl button:disabled:hover{background:var(--slate);color:var(--board)}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-.animply{font-size:12px;color:#93A99A;font-variant-numeric:tabular-nums}
+.animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
@@ -76,13 +91,24 @@ h2{scroll-margin-top:16px}
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}</style>
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}
+.filtre{margin-bottom:18px}
+.filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
+  padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
+  background:var(--slate);color:var(--chalk)}
+.filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
+.filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
+.footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
+.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
+.footnav a:hover{text-decoration:underline}
+.footnav [aria-current="page"]{color:var(--sage);font-weight:600}
+.footnote{margin:0}</style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Ouvertures d'échecs","url":"https://chang64.com/fr/ouvertures/","inLanguage":"fr"}</script>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <a class="brand" href="/">chang<span>64</span></a>
+  <a class="brand" href="/"><svg class="brandmark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"/><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"/><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"/><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"/><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"/><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"/></g></svg><span class="brandname">chang<span>64</span></span></a>
   <nav>
     <a href="/">Jouer</a>
     <a href="/fr/ouvertures/">Ouvertures</a>
@@ -94,152 +120,244 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 
 <h1>Ouvertures d'échecs</h1>
 <p class="lede">Toutes les familles d'ouvertures, avec leurs coups, leurs variantes et un échiquier pour les jouer. 141 familles, 1758 lignes répertoriées.</p>
-<div class="grid">
-<a class="tile" href="/fr/ouvertures/defense-sicilienne.html"><b>Défense sicilienne</b><span>1.e4 c5</span></a>
-<a class="tile" href="/fr/ouvertures/partie-anglaise.html"><b>Partie anglaise</b><span>1.c4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-francaise.html"><b>Défense française</b><span>1.e4 e6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-caro-kann.html"><b>Défense Caro-Kann</b><span>1.e4 c6</span></a>
-<a class="tile" href="/fr/ouvertures/partie-du-pion-dame.html"><b>Partie du pion dame</b><span>1.d4</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-du-roi-accepte.html"><b>Gambit du roi accepté</b><span>1.e4 e5 2.f4 exf4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-indienne.html"><b>Défense indienne</b><span>1.d4 Nf6</span></a>
-<a class="tile" href="/fr/ouvertures/partie-espagnole.html"><b>Partie espagnole</b><span>1.e4 e5 2.Nf3 Nc6 3.Bb5</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-dame-refuse.html"><b>Gambit dame refusé</b><span>1.d4 d5 2.c4 c5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-hollandaise.html"><b>Défense hollandaise</b><span>1.d4 f5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-zukertort.html"><b>Ouverture Zukertort</b><span>1.Nf3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-nimzowitsch.html"><b>Défense Nimzowitsch</b><span>1.e4 Nc6</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-du-roi-refuse.html"><b>Gambit du roi refusé</b><span>1.e4 e5 2.f4 Bc5</span></a>
-<a class="tile" href="/fr/ouvertures/partie-du-pion-roi.html"><b>Partie du pion roi</b><span>1.e4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-alekhine.html"><b>Défense Alekhine</b><span>1.e4 Nf6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-du-fou.html"><b>Ouverture du fou</b><span>1.e4 e5 2.Bc4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-van-geet.html"><b>Ouverture Van Geet</b><span>1.Nc3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-moderne.html"><b>Défense moderne</b><span>1.e4 g6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-scandinave.html"><b>Défense scandinave</b><span>1.e4 d5</span></a>
-<a class="tile" href="/fr/ouvertures/partie-italienne.html"><b>Partie italienne</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-dame-accepte.html"><b>Gambit dame accepté</b><span>1.d4 d5 2.c4 dxc4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-bird.html"><b>Ouverture Bird</b><span>1.f4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-reti.html"><b>Ouverture Réti</b><span>1.Nf3 d5 2.c4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-benoni.html"><b>Défense Benoni</b><span>1.d4 c5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-philidor.html"><b>Défense Philidor</b><span>1.e4 e5 2.Nf3 d6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-polonaise.html"><b>Ouverture polonaise</b><span>1.b4</span></a>
-<a class="tile" href="/fr/ouvertures/partie-viennoise.html"><b>Partie viennoise</b><span>1.e4 e5 2.Nc3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-russe.html"><b>Défense russe</b><span>1.e4 e5 2.Nf3 Nf6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-slave.html"><b>Défense slave</b><span>1.d4 d5 2.c4 c6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-grob.html"><b>Ouverture Grob</b><span>1.g4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-nimzo-indienne.html"><b>Défense nimzo-indienne</b><span>1.d4 Nf6 2.c4 e6 3.Nc3 Bb4</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-nimzo-larsen.html"><b>Attaque Nimzo-Larsen</b><span>1.b3</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-hongroise.html"><b>Ouverture hongroise</b><span>1.g3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-blackmar-diemer.html"><b>Gambit Blackmar-Diemer</b><span>1.d4 d5 2.e4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-pterodactyle.html"><b>Défense ptérodactyle</b><span>1.d4 g6 2.c4 Bg7 3.Nc3 c5 4.e3</span></a>
-<a class="tile" href="/fr/ouvertures/partie-ecossaise.html"><b>Partie écossaise</b><span>1.e4 e5 2.Nf3 Nc6 3.d4</span></a>
-<a class="tile" href="/fr/ouvertures/partie-du-centre.html"><b>Partie du centre</b><span>1.e4 e5 2.d4</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-est-indienne.html"><b>Attaque est-indienne</b><span>1.Nf3 d5 2.g3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-letton.html"><b>Gambit letton</b><span>1.e4 e5 2.Nf3 f5</span></a>
-<a class="tile" href="/fr/ouvertures/partie-des-quatre-cavaliers.html"><b>Partie des quatre cavaliers</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6</span></a>
-<a class="tile" href="/fr/ouvertures/ancienne-defense-indienne.html"><b>Ancienne défense indienne</b><span>1.d4 d6 2.c4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-ponziani.html"><b>Ouverture Ponziani</b><span>1.e4 e5 2.Nf3 Nc6 3.c3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-grunfeld.html"><b>Défense Grünfeld</b><span>1.d4 Nf6 2.c4 g6 3.Nc3 d5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-pirc.html"><b>Défense Pirc</b><span>1.e4 d6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-du-rat.html"><b>Défense du rat</b><span>1.e4 d6 2.f4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-bogo-indienne.html"><b>Défense Bogo-indienne</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 Bb4</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-englund.html"><b>Gambit Englund</b><span>1.d4 e5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-kadas.html"><b>Ouverture Kádas</b><span>1.h4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-ouest-indienne.html"><b>Défense ouest-indienne</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 b6</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-blackmar-diemer-refuse.html"><b>Gambit Blackmar-Diemer refusé</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 c5</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-trompowsky.html"><b>Attaque Trompowsky</b><span>1.d4 Nf6 2.Bg5</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-englund-refuse.html"><b>Gambit Englund refusé</b><span>1.d4 e5 2.d5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-est-indienne.html"><b>Défense est-indienne</b><span>1.d4 Nf6 2.c4 g6 3.g3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-owen.html"><b>Défense Owen</b><span>1.e4 b6</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-richter-veresov.html"><b>Attaque Richter-Veresov</b><span>1.d4 Nf6 2.Nc3 d5 3.Bg5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-ware.html"><b>Ouverture Ware</b><span>1.a4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-barnes.html"><b>Ouverture Barnes</b><span>1.f3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-benko-refuse.html"><b>Gambit Benko refusé</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.Bg5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-borg.html"><b>Défense Borg</b><span>1.d4 g5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-catalane.html"><b>Ouverture catalane</b><span>1.d4 Nf6 2.c4 e6 3.g3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-du-lion.html"><b>Défense du Lion</b><span>1.e4 d6 2.d4 Nf6 3.f3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-semi-slave.html"><b>Défense semi-slave</b><span>1.d4 d5 2.c4 e6 3.Nc3 c6</span></a>
-<a class="tile" href="/fr/ouvertures/partie-des-trois-cavaliers.html"><b>Partie des trois cavaliers</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-torre.html"><b>Attaque Torre</b><span>1.d4 Nf6 2.Nf3 e6 3.Bg5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-vant-kruijs.html"><b>Ouverture Van't Kruijs</b><span>1.e3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-viennois-avec-la-defense-max-lange.html"><b>Gambit viennois, avec la défense Max Lange</b><span>1.e4 e5 2.Nc3 Nc6 3.f4</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-de-lelephant.html"><b>Gambit de l'éléphant</b><span>1.e4 e5 2.Nf3 d5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-anglaise.html"><b>Défense anglaise</b><span>1.d4 b6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-mieses.html"><b>Ouverture Mieses</b><span>1.d3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-mikenas.html"><b>Défense Mikenas</b><span>1.d4 Nc6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-du-cavalier-roi.html"><b>Ouverture du cavalier roi</b><span>1.e4 e5 2.Nf3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-letton-accepte.html"><b>Gambit letton accepté</b><span>1.e4 e5 2.Nf3 f5 3.exf5</span></a>
-<a class="tile" href="/fr/ouvertures/systeme-de-londres.html"><b>Système de Londres</b><span>1.d4 Nf6 2.Nf3 g6 3.Bf4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-neo-grunfeld.html"><b>Défense néo-Grünfeld</b><span>1.d4 Nf6 2.c4 g6 3.f3 d5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-portugaise.html"><b>Ouverture portugaise</b><span>1.e4 e5 2.Bb5</span></a>
-<a class="tile" href="/fr/ouvertures/systeme-rapport-jobava.html"><b>Système Rapport-Jobava</b><span>1.d4 d5 2.Nc3 Nf6 3.Bf4</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-du-sodium.html"><b>Attaque du sodium</b><span>1.Na3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-saint-georges.html"><b>Défense Saint-Georges</b><span>1.e4 a6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-amar.html"><b>Ouverture Amar</b><span>1.Nh3</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-de-lamazone.html"><b>Attaque de l'amazone</b><span>1.d4 d5 2.Qd3</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-anderssen.html"><b>Ouverture Anderssen</b><span>1.a3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-benko.html"><b>Gambit Benko</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-carr.html"><b>Défense Carr</b><span>1.e4 h6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-clemenz.html"><b>Ouverture Clemenz</b><span>1.h3</span></a>
-<a class="tile" href="/fr/ouvertures/systeme-colle.html"><b>Système Colle</b><span>1.Nf3 c5 2.e3 g6 3.d4 Bg7 4.dxc5 Qa5</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-danois-accepte.html"><b>Gambit danois accepté</b><span>1.e4 e5 2.d4 exd4 3.c3 dxc3</span></a>
-<a class="tile" href="/fr/ouvertures/orang-outan-anglais.html"><b>Orang-outan anglais</b><span>1.c4 Nf6 2.b4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-goldsmith.html"><b>Défense Goldsmith</b><span>1.e4 h5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-hippopotame.html"><b>Défense hippopotame</b><span>1.e4 Nh6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-horwitz.html"><b>Défense Horwitz</b><span>1.d4 e6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-kangourou.html"><b>Défense kangourou</b><span>1.d4 e6 2.c4 Bb4</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-est-indienne-avec-e6.html"><b>Attaque est-indienne, avec e6</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 e6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-du-pion-roi.html"><b>Ouverture du pion roi</b><span>1.e4 e5 2.b3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-mexicaine.html"><b>Défense mexicaine</b><span>1.d4 Nf6 2.c4 Nc6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-polonaise.html"><b>Défense polonaise</b><span>1.d4 b5</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-polonaise-avec-d5.html"><b>Ouverture polonaise, avec d5</b><span>1.b4 d5</span></a>
-<a class="tile" href="/fr/ouvertures/slave-indienne.html"><b>Slave indienne</b><span>1.d4 Nf6 2.c4 c6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-tarrasch.html"><b>Défense Tarrasch</b><span>1.d4 d5 2.c4 e6 3.Nc3 c5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-ware.html"><b>Défense Ware</b><span>1.e4 a5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-zukertort.html"><b>Défense Zukertort</b><span>1.Nf3 Nh6 2.d4 g6</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-damsterdam.html"><b>Attaque d'Amsterdam</b><span>1.e3 e5 2.c4 d6 3.Nc3 Nc6 4.b3 Nf6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-australienne.html"><b>Défense australienne</b><span>1.d4 Na6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-barnes.html"><b>Défense Barnes</b><span>1.e4 f6</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-basque.html"><b>Ouverture basque</b><span>1.d4 Nf6 2.b3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-benko-accepte.html"><b>Gambit Benko accepté</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.cxb5 a6</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-blackmar-diemer-accepte.html"><b>Gambit Blackmar-Diemer accepté</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 exf3</span></a>
-<a class="tile" href="/fr/ouvertures/contre-gambit-blumenfeld.html"><b>Contre-gambit Blumenfeld</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 c5 4.d5 b5</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-bongcloud.html"><b>Attaque Bongcloud</b><span>1.e4 e5 2.Ke2</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-canard.html"><b>Ouverture Canard</b><span>1.d4 Nf6 2.f4</span></a>
-<a class="tile" href="/fr/ouvertures/partie-du-centre-acceptee.html"><b>Partie du centre acceptée</b><span>1.e4 e5 2.d4 exd4</span></a>
-<a class="tile" href="/fr/ouvertures/formation-creepy-crawly.html"><b>Formation Creepy Crawly</b><span>1.h3 d5 2.a3 e5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-tcheque.html"><b>Défense tchèque</b><span>1.e4 d6 2.d4 Nf6 3.Nc3 c6</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-danois.html"><b>Gambit danois</b><span>1.e4 e5 2.d4 exd4 3.c3</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-danois-refuse.html"><b>Gambit danois refusé</b><span>1.e4 e5 2.d4 exd4 3.c3 d5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-dory.html"><b>Défense Döry</b><span>1.d4 Nf6 2.Nf3 Ne4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-de-dresde.html"><b>Ouverture de Dresde</b><span>1.e4 e5 2.Nf3 Nc6 3.c4 Nf6 4.Nxe5</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-duras.html"><b>Gambit Duras</b><span>1.e4 f5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-indienne-orientale.html"><b>Défense indienne orientale</b><span>1.d4 Nf6 2.Nf3 g6</span></a>
-<a class="tile" href="/fr/ouvertures/defense-fried-fox.html"><b>Défense Fried Fox</b><span>1.e4 f6 2.d4 Kf7</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-globale.html"><b>Ouverture globale</b><span>1.h3 e5 2.a3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-gunderam.html"><b>Défense Gunderam</b><span>1.e4 e5 2.Nf3 Qe7</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-irlandais.html"><b>Gambit irlandais</b><span>1.e4 e5 2.Nf3 Nc6 3.Nxe5</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-du-roi.html"><b>Gambit du roi</b><span>1.e4 e5 2.f4</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-est-indienne-avec-bf5.html"><b>Attaque est-indienne, avec Bf5</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 c6 4.O-O Bf5</span></a>
-<a class="tile" href="/fr/ouvertures/speciale-de-simultanee-lasker.html"><b>Spéciale de simultanée Lasker</b><span>1.g3 h5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-lemming.html"><b>Défense Lemming</b><span>1.e4 Na6</span></a>
-<a class="tile" href="/fr/ouvertures/systeme-de-marienbad.html"><b>Système de Marienbad</b><span>1.d4 Nf6 2.Nf3 b6 3.g3 Bb7 4.Bg2 c5</span></a>
-<a class="tile" href="/fr/ouvertures/defense-montevideo.html"><b>Défense Montevideo</b><span>1.d4 Nc6 2.d5 Nb8</span></a>
-<a class="tile" href="/fr/ouvertures/attaque-paleface.html"><b>Attaque Paleface</b><span>1.d4 Nf6 2.f3</span></a>
-<a class="tile" href="/fr/ouvertures/pseudo-defense-ouest-indienne.html"><b>Pseudo-défense ouest-indienne</b><span>1.d4 Nf6 2.Nf3 b6</span></a>
-<a class="tile" href="/fr/ouvertures/gambit-dame.html"><b>Gambit dame</b><span>1.d4 d5 2.c4</span></a>
-<a class="tile" href="/fr/ouvertures/ouest-indienne-acceleree.html"><b>Ouest-indienne accélérée</b><span>1.d4 Nf6 2.c4 b6</span></a>
-<a class="tile" href="/fr/ouvertures/pion-dame-attaque-mengarini.html"><b>Pion dame, attaque Mengarini</b><span>1.d4 Nf6 2.c4 g6 3.Qc2</span></a>
-<a class="tile" href="/fr/ouvertures/systeme-rapport-jobava-avec-e6.html"><b>Système Rapport-Jobava, avec e6</b><span>1.d4 d5 2.Nc3 e6 3.Bf4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-robatsch.html"><b>Défense Robatsch</b><span>1.d4 d6 2.Nf3 g6 3.c4 Bg7 4.e4 Bg4</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-de-saragosse.html"><b>Ouverture de Saragosse</b><span>1.c3</span></a>
-<a class="tile" href="/fr/ouvertures/ouverture-de-valence.html"><b>Ouverture de Valence</b><span>1.d3 e5 2.Nd2</span></a>
-<a class="tile" href="/fr/ouvertures/defense-du-vautour.html"><b>Défense du vautour</b><span>1.d4 Nf6 2.c4 c5 3.d5 Ne4</span></a>
-<a class="tile" href="/fr/ouvertures/defense-wade.html"><b>Défense Wade</b><span>1.d4 d6 2.Nf3 Bg4</span></a>
-<a class="tile" href="/fr/ouvertures/systeme-yusupov-rubinstein.html"><b>Système Yusupov-Rubinstein</b><span>1.d4 Nf6 2.Nf3 e6 3.e3</span></a>
-<a class="tile" href="/fr/ouvertures/defense-zairoise.html"><b>Défense zaïroise</b><span>1.d4 Nc6 2.d5 Nb8 3.e4 Nf6 4.e5 Ng8</span></a>
+<!-- Champ de recherche. Masque par defaut et revele par le script : sans
+     JavaScript la page reste exactement ce qu'elle etait, et personne ne se
+     retrouve devant un champ inerte. Cent quarante et une entrees sur une
+     seule page ne se parcourent pas a l'oeil. -->
+<div class="filtre hide" id="filtreBloc">
+  <input type="search" id="filtre" autocomplete="off"
+         placeholder="Chercher : nom, coups ou code ECO"
+         aria-label="Filtrer les ouvertures"
+         aria-controls="grille">
+  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite"></p>
 </div>
-<footer>chang64 — échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings.</footer>
+<div class="grid" id="grille">
+<a class="tile" data-cle="defense sicilienne sicilian defense 1 e4 c5 b20 b21 b22 b23 b24 b27 b28 b29 b30 b31 b32 b33 b40 b41 b44 b50 b51 b52 b53 b54" href="/fr/ouvertures/defense-sicilienne.html"><b>Défense sicilienne</b><span>1.e4 c5 · B20 B21 B22 B23 B24 B27 B28 B29 B30 B31 B32 B33 B40 B41 B44 B50 B51 B52 B53 B54</span></a>
+<a class="tile" data-cle="partie anglaise english opening 1 c4 a10 a11 a13 a15 a16 a17 a18 a19 a20 a21 a22 a23 a24 a25 a27 a28 a29 a30 a31 a32 a34 a35 a36 c20" href="/fr/ouvertures/partie-anglaise.html"><b>Partie anglaise</b><span>1.c4 · A10 A11 A13 A15 A16 A17 A18 A19 A20 A21 A22 A23 A24 A25 A27 A28 A29 A30 A31 A32 A34 A35 A36 C20</span></a>
+<a class="tile" data-cle="defense francaise french defense 1 e4 e6 c00 c01 c02 c03 c04 c05 c07 c08 c10 c11 c12 c13 c15 c16 c17" href="/fr/ouvertures/defense-francaise.html"><b>Défense française</b><span>1.e4 e6 · C00 C01 C02 C03 C04 C05 C07 C08 C10 C11 C12 C13 C15 C16 C17</span></a>
+<a class="tile" data-cle="defense caro kann caro kann defense 1 e4 c6 b10 b11 b12 b13 b15 b16 b17 b18" href="/fr/ouvertures/defense-caro-kann.html"><b>Défense Caro-Kann</b><span>1.e4 c6 · B10 B11 B12 B13 B15 B16 B17 B18</span></a>
+<a class="tile" data-cle="partie du pion dame queen s pawn game 1 d4 a40 a41 a43 a45 a46 a48 a80 d00 d02 d03 d04 d05" href="/fr/ouvertures/partie-du-pion-dame.html"><b>Partie du pion dame</b><span>1.d4 · A40 A41 A43 A45 A46 A48 A80 D00 D02 D03 D04 D05</span></a>
+<a class="tile" data-cle="gambit du roi accepte king s gambit accepted 1 e4 e5 2 f4 exf4 c33 c34 c35 c36 c37 c38 c39" href="/fr/ouvertures/gambit-du-roi-accepte.html"><b>Gambit du roi accepté</b><span>1.e4 e5 2.f4 exf4 · C33 C34 C35 C36 C37 C38 C39</span></a>
+<a class="tile" data-cle="defense indienne indian defense 1 d4 nf6 a43 a45 a46 a47 a48 a49 a50 a51 a52 e00 e10 e60" href="/fr/ouvertures/defense-indienne.html"><b>Défense indienne</b><span>1.d4 Nf6 · A43 A45 A46 A47 A48 A49 A50 A51 A52 E00 E10 E60</span></a>
+<a class="tile" data-cle="partie espagnole ruy lopez 1 e4 e5 2 nf3 nc6 3 bb5 c60 c61 c62 c63 c64 c65 c66 c67 c68 c70 c71" href="/fr/ouvertures/partie-espagnole.html"><b>Partie espagnole</b><span>1.e4 e5 2.Nf3 Nc6 3.Bb5 · C60 C61 C62 C63 C64 C65 C66 C67 C68 C70 C71</span></a>
+<a class="tile" data-cle="gambit dame refuse queen s gambit declined 1 d4 d5 2 c4 c5 d02 d06 d07 d08 d30 d31 d32 d35 d37 d38 d40 d50 d51 d53" href="/fr/ouvertures/gambit-dame-refuse.html"><b>Gambit dame refusé</b><span>1.d4 d5 2.c4 c5 · D02 D06 D07 D08 D30 D31 D32 D35 D37 D38 D40 D50 D51 D53</span></a>
+<a class="tile" data-cle="defense hollandaise dutch defense 1 d4 f5 a80 a81 a82 a83 a84 a85 a86 a90 a91" href="/fr/ouvertures/defense-hollandaise.html"><b>Défense hollandaise</b><span>1.d4 f5 · A80 A81 A82 A83 A84 A85 A86 A90 A91</span></a>
+<a class="tile" data-cle="ouverture zukertort zukertort opening 1 nf3 a04 a05 a06 a08 a41" href="/fr/ouvertures/ouverture-zukertort.html"><b>Ouverture Zukertort</b><span>1.Nf3 · A04 A05 A06 A08 A41</span></a>
+<a class="tile" data-cle="defense nimzowitsch nimzowitsch defense 1 e4 nc6 b00" href="/fr/ouvertures/defense-nimzowitsch.html"><b>Défense Nimzowitsch</b><span>1.e4 Nc6 · B00</span></a>
+<a class="tile" data-cle="gambit du roi refuse king s gambit declined 1 e4 e5 2 f4 bc5 c30 c31" href="/fr/ouvertures/gambit-du-roi-refuse.html"><b>Gambit du roi refusé</b><span>1.e4 e5 2.f4 Bc5 · C30 C31</span></a>
+<a class="tile" data-cle="partie du pion roi king s pawn game 1 e4 b00 b07 c20 c40 c44" href="/fr/ouvertures/partie-du-pion-roi.html"><b>Partie du pion roi</b><span>1.e4 · B00 B07 C20 C40 C44</span></a>
+<a class="tile" data-cle="defense alekhine alekhine defense 1 e4 nf6 b02 b03 b04 b05" href="/fr/ouvertures/defense-alekhine.html"><b>Défense Alekhine</b><span>1.e4 Nf6 · B02 B03 B04 B05</span></a>
+<a class="tile" data-cle="ouverture du fou bishop s opening 1 e4 e5 2 bc4 c23 c24 c26 c27 c43" href="/fr/ouvertures/ouverture-du-fou.html"><b>Ouverture du fou</b><span>1.e4 e5 2.Bc4 · C23 C24 C26 C27 C43</span></a>
+<a class="tile" data-cle="ouverture van geet van geet opening 1 nc3 a00 b00 b01 c31" href="/fr/ouvertures/ouverture-van-geet.html"><b>Ouverture Van Geet</b><span>1.Nc3 · A00 B00 B01 C31</span></a>
+<a class="tile" data-cle="defense moderne modern defense 1 e4 g6 a04 a40 a41 a42 b06 b07 b27" href="/fr/ouvertures/defense-moderne.html"><b>Défense moderne</b><span>1.e4 g6 · A04 A40 A41 A42 B06 B07 B27</span></a>
+<a class="tile" data-cle="defense scandinave scandinavian defense 1 e4 d5 b01" href="/fr/ouvertures/defense-scandinave.html"><b>Défense scandinave</b><span>1.e4 d5 · B01</span></a>
+<a class="tile" data-cle="partie italienne italian game 1 e4 e5 2 nf3 nc6 3 bc4 c50 c51 c53 c54 c55 c56 c57" href="/fr/ouvertures/partie-italienne.html"><b>Partie italienne</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 · C50 C51 C53 C54 C55 C56 C57</span></a>
+<a class="tile" data-cle="gambit dame accepte queen s gambit accepted 1 d4 d5 2 c4 dxc4 d20 d21 d22 d23 d24 d25 d26" href="/fr/ouvertures/gambit-dame-accepte.html"><b>Gambit dame accepté</b><span>1.d4 d5 2.c4 dxc4 · D20 D21 D22 D23 D24 D25 D26</span></a>
+<a class="tile" data-cle="ouverture bird bird opening 1 f4 a02 a03 b21" href="/fr/ouvertures/ouverture-bird.html"><b>Ouverture Bird</b><span>1.f4 · A02 A03 B21</span></a>
+<a class="tile" data-cle="ouverture reti reti opening 1 nf3 d5 2 c4 a09 a11 a12" href="/fr/ouvertures/ouverture-reti.html"><b>Ouverture Réti</b><span>1.Nf3 d5 2.c4 · A09 A11 A12</span></a>
+<a class="tile" data-cle="defense benoni benoni defense 1 d4 c5 a43 a44 a56 a60" href="/fr/ouvertures/defense-benoni.html"><b>Défense Benoni</b><span>1.d4 c5 · A43 A44 A56 A60</span></a>
+<a class="tile" data-cle="defense philidor philidor defense 1 e4 e5 2 nf3 d6 c41" href="/fr/ouvertures/defense-philidor.html"><b>Défense Philidor</b><span>1.e4 e5 2.Nf3 d6 · C41</span></a>
+<a class="tile" data-cle="ouverture polonaise polish opening 1 b4 a00 a05" href="/fr/ouvertures/ouverture-polonaise.html"><b>Ouverture polonaise</b><span>1.b4 · A00 A05</span></a>
+<a class="tile" data-cle="partie viennoise vienna game 1 e4 e5 2 nc3 c25 c26 c27 c28 c29" href="/fr/ouvertures/partie-viennoise.html"><b>Partie viennoise</b><span>1.e4 e5 2.Nc3 · C25 C26 C27 C28 C29</span></a>
+<a class="tile" data-cle="defense russe petrov s defense 1 e4 e5 2 nf3 nf6 c42 c43" href="/fr/ouvertures/defense-russe.html"><b>Défense russe</b><span>1.e4 e5 2.Nf3 Nf6 · C42 C43</span></a>
+<a class="tile" data-cle="defense slave slav defense 1 d4 d5 2 c4 c6 d10 d11 d12 d13 d15" href="/fr/ouvertures/defense-slave.html"><b>Défense slave</b><span>1.d4 d5 2.c4 c6 · D10 D11 D12 D13 D15</span></a>
+<a class="tile" data-cle="ouverture grob grob opening 1 g4 a00" href="/fr/ouvertures/ouverture-grob.html"><b>Ouverture Grob</b><span>1.g4 · A00</span></a>
+<a class="tile" data-cle="defense nimzo indienne nimzo indian defense 1 d4 nf6 2 c4 e6 3 nc3 bb4 e20 e21 e22 e24 e30 e32 e33 e34 e38 e40 e41 e43 e46" href="/fr/ouvertures/defense-nimzo-indienne.html"><b>Défense nimzo-indienne</b><span>1.d4 Nf6 2.c4 e6 3.Nc3 Bb4 · E20 E21 E22 E24 E30 E32 E33 E34 E38 E40 E41 E43 E46</span></a>
+<a class="tile" data-cle="attaque nimzo larsen nimzo larsen attack 1 b3 a01 a06" href="/fr/ouvertures/attaque-nimzo-larsen.html"><b>Attaque Nimzo-Larsen</b><span>1.b3 · A01 A06</span></a>
+<a class="tile" data-cle="ouverture hongroise hungarian opening 1 g3 a00 a07" href="/fr/ouvertures/ouverture-hongroise.html"><b>Ouverture hongroise</b><span>1.g3 · A00 A07</span></a>
+<a class="tile" data-cle="gambit blackmar diemer blackmar diemer gambit 1 d4 d5 2 e4 d00" href="/fr/ouvertures/gambit-blackmar-diemer.html"><b>Gambit Blackmar-Diemer</b><span>1.d4 d5 2.e4 · D00</span></a>
+<a class="tile" data-cle="defense pterodactyle pterodactyl defense 1 d4 g6 2 c4 bg7 3 nc3 c5 4 e3 a40 b06 b27" href="/fr/ouvertures/defense-pterodactyle.html"><b>Défense ptérodactyle</b><span>1.d4 g6 2.c4 Bg7 3.Nc3 c5 4.e3 · A40 B06 B27</span></a>
+<a class="tile" data-cle="partie ecossaise scotch game 1 e4 e5 2 nf3 nc6 3 d4 c44 c45" href="/fr/ouvertures/partie-ecossaise.html"><b>Partie écossaise</b><span>1.e4 e5 2.Nf3 Nc6 3.d4 · C44 C45</span></a>
+<a class="tile" data-cle="partie du centre center game 1 e4 e5 2 d4 c20 c21 c22" href="/fr/ouvertures/partie-du-centre.html"><b>Partie du centre</b><span>1.e4 e5 2.d4 · C20 C21 C22</span></a>
+<a class="tile" data-cle="attaque est indienne king s indian attack 1 nf3 d5 2 g3 a05 a07 a08" href="/fr/ouvertures/attaque-est-indienne.html"><b>Attaque est-indienne</b><span>1.Nf3 d5 2.g3 · A05 A07 A08</span></a>
+<a class="tile" data-cle="gambit letton latvian gambit 1 e4 e5 2 nf3 f5 c40 c44" href="/fr/ouvertures/gambit-letton.html"><b>Gambit letton</b><span>1.e4 e5 2.Nf3 f5 · C40 C44</span></a>
+<a class="tile" data-cle="partie des quatre cavaliers four knights game 1 e4 e5 2 nf3 nc6 3 nc3 nf6 c47 c48 c49 c50" href="/fr/ouvertures/partie-des-quatre-cavaliers.html"><b>Partie des quatre cavaliers</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 · C47 C48 C49 C50</span></a>
+<a class="tile" data-cle="ancienne defense indienne old indian defense 1 d4 d6 2 c4 a41 a53 a54" href="/fr/ouvertures/ancienne-defense-indienne.html"><b>Ancienne défense indienne</b><span>1.d4 d6 2.c4 · A41 A53 A54</span></a>
+<a class="tile" data-cle="ouverture ponziani ponziani opening 1 e4 e5 2 nf3 nc6 3 c3 c44" href="/fr/ouvertures/ouverture-ponziani.html"><b>Ouverture Ponziani</b><span>1.e4 e5 2.Nf3 Nc6 3.c3 · C44</span></a>
+<a class="tile" data-cle="defense grunfeld grunfeld defense 1 d4 nf6 2 c4 g6 3 nc3 d5 d80 d81 d82 d85 d90 e60" href="/fr/ouvertures/defense-grunfeld.html"><b>Défense Grünfeld</b><span>1.d4 Nf6 2.c4 g6 3.Nc3 d5 · D80 D81 D82 D85 D90 E60</span></a>
+<a class="tile" data-cle="defense pirc pirc defense 1 e4 d6 b00 b07 b08 b09" href="/fr/ouvertures/defense-pirc.html"><b>Défense Pirc</b><span>1.e4 d6 · B00 B07 B08 B09</span></a>
+<a class="tile" data-cle="defense du rat rat defense 1 e4 d6 2 f4 a41 a82 b00 b06 c00" href="/fr/ouvertures/defense-du-rat.html"><b>Défense du rat</b><span>1.e4 d6 2.f4 · A41 A82 B00 B06 C00</span></a>
+<a class="tile" data-cle="defense bogo indienne bogo indian defense 1 d4 nf6 2 c4 e6 3 nf3 bb4 e11" href="/fr/ouvertures/defense-bogo-indienne.html"><b>Défense Bogo-indienne</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 Bb4 · E11</span></a>
+<a class="tile" data-cle="gambit englund englund gambit 1 d4 e5 a40" href="/fr/ouvertures/gambit-englund.html"><b>Gambit Englund</b><span>1.d4 e5 · A40</span></a>
+<a class="tile" data-cle="ouverture kadas kadas opening 1 h4 a00" href="/fr/ouvertures/ouverture-kadas.html"><b>Ouverture Kádas</b><span>1.h4 · A00</span></a>
+<a class="tile" data-cle="defense ouest indienne queen s indian defense 1 d4 nf6 2 c4 e6 3 nf3 b6 e12 e14 e15" href="/fr/ouvertures/defense-ouest-indienne.html"><b>Défense ouest-indienne</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 b6 · E12 E14 E15</span></a>
+<a class="tile" data-cle="gambit blackmar diemer refuse blackmar diemer gambit declined 1 d4 d5 2 e4 dxe4 3 nc3 nf6 4 f3 c5 d00" href="/fr/ouvertures/gambit-blackmar-diemer-refuse.html"><b>Gambit Blackmar-Diemer refusé</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 c5 · D00</span></a>
+<a class="tile" data-cle="attaque trompowsky trompowsky attack 1 d4 nf6 2 bg5 a45" href="/fr/ouvertures/attaque-trompowsky.html"><b>Attaque Trompowsky</b><span>1.d4 Nf6 2.Bg5 · A45</span></a>
+<a class="tile" data-cle="gambit englund refuse englund gambit declined 1 d4 e5 2 d5 a40" href="/fr/ouvertures/gambit-englund-refuse.html"><b>Gambit Englund refusé</b><span>1.d4 e5 2.d5 · A40</span></a>
+<a class="tile" data-cle="defense est indienne king s indian defense 1 d4 nf6 2 c4 g6 3 g3 e60 e61 e70" href="/fr/ouvertures/defense-est-indienne.html"><b>Défense est-indienne</b><span>1.d4 Nf6 2.c4 g6 3.g3 · E60 E61 E70</span></a>
+<a class="tile" data-cle="defense owen owen defense 1 e4 b6 b00" href="/fr/ouvertures/defense-owen.html"><b>Défense Owen</b><span>1.e4 b6 · B00</span></a>
+<a class="tile" data-cle="attaque richter veresov richter veresov attack 1 d4 nf6 2 nc3 d5 3 bg5 d01" href="/fr/ouvertures/attaque-richter-veresov.html"><b>Attaque Richter-Veresov</b><span>1.d4 Nf6 2.Nc3 d5 3.Bg5 · D01</span></a>
+<a class="tile" data-cle="ouverture ware ware opening 1 a4 a00" href="/fr/ouvertures/ouverture-ware.html"><b>Ouverture Ware</b><span>1.a4 · A00</span></a>
+<a class="tile" data-cle="ouverture barnes barnes opening 1 f3 a00 c20" href="/fr/ouvertures/ouverture-barnes.html"><b>Ouverture Barnes</b><span>1.f3 · A00 C20</span></a>
+<a class="tile" data-cle="gambit benko refuse benko gambit declined 1 d4 nf6 2 c4 c5 3 d5 b5 4 bg5 a57" href="/fr/ouvertures/gambit-benko-refuse.html"><b>Gambit Benko refusé</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.Bg5 · A57</span></a>
+<a class="tile" data-cle="defense borg borg defense 1 d4 g5 a40 b00" href="/fr/ouvertures/defense-borg.html"><b>Défense Borg</b><span>1.d4 g5 · A40 B00</span></a>
+<a class="tile" data-cle="ouverture catalane catalan opening 1 d4 nf6 2 c4 e6 3 g3 e00 e01 e02" href="/fr/ouvertures/ouverture-catalane.html"><b>Ouverture catalane</b><span>1.d4 Nf6 2.c4 e6 3.g3 · E00 E01 E02</span></a>
+<a class="tile" data-cle="defense du lion lion defense 1 e4 d6 2 d4 nf6 3 f3 b00 b07" href="/fr/ouvertures/defense-du-lion.html"><b>Défense du Lion</b><span>1.e4 d6 2.d4 Nf6 3.f3 · B00 B07</span></a>
+<a class="tile" data-cle="defense semi slave semi slav defense 1 d4 d5 2 c4 e6 3 nc3 c6 d31 d43" href="/fr/ouvertures/defense-semi-slave.html"><b>Défense semi-slave</b><span>1.d4 d5 2.c4 e6 3.Nc3 c6 · D31 D43</span></a>
+<a class="tile" data-cle="partie des trois cavaliers three knights opening 1 e4 e5 2 nf3 nc6 3 nc3 c46" href="/fr/ouvertures/partie-des-trois-cavaliers.html"><b>Partie des trois cavaliers</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 · C46</span></a>
+<a class="tile" data-cle="attaque torre torre attack 1 d4 nf6 2 nf3 e6 3 bg5 a46 a48" href="/fr/ouvertures/attaque-torre.html"><b>Attaque Torre</b><span>1.d4 Nf6 2.Nf3 e6 3.Bg5 · A46 A48</span></a>
+<a class="tile" data-cle="ouverture van t kruijs van t kruijs opening 1 e3 a00" href="/fr/ouvertures/ouverture-vant-kruijs.html"><b>Ouverture Van't Kruijs</b><span>1.e3 · A00</span></a>
+<a class="tile" data-cle="gambit viennois avec la defense max lange vienna gambit with max lange defense 1 e4 e5 2 nc3 nc6 3 f4 c25" href="/fr/ouvertures/gambit-viennois-avec-la-defense-max-lange.html"><b>Gambit viennois, avec la défense Max Lange</b><span>1.e4 e5 2.Nc3 Nc6 3.f4 · C25</span></a>
+<a class="tile" data-cle="gambit de l elephant elephant gambit 1 e4 e5 2 nf3 d5 c40" href="/fr/ouvertures/gambit-de-lelephant.html"><b>Gambit de l'éléphant</b><span>1.e4 e5 2.Nf3 d5 · C40</span></a>
+<a class="tile" data-cle="defense anglaise english defense 1 d4 b6 a40" href="/fr/ouvertures/defense-anglaise.html"><b>Défense anglaise</b><span>1.d4 b6 · A40</span></a>
+<a class="tile" data-cle="ouverture mieses mieses opening 1 d3 a00" href="/fr/ouvertures/ouverture-mieses.html"><b>Ouverture Mieses</b><span>1.d3 · A00</span></a>
+<a class="tile" data-cle="defense mikenas mikenas defense 1 d4 nc6 a40" href="/fr/ouvertures/defense-mikenas.html"><b>Défense Mikenas</b><span>1.d4 Nc6 · A40</span></a>
+<a class="tile" data-cle="ouverture du cavalier roi king s knight opening 1 e4 e5 2 nf3 c40 c44" href="/fr/ouvertures/ouverture-du-cavalier-roi.html"><b>Ouverture du cavalier roi</b><span>1.e4 e5 2.Nf3 · C40 C44</span></a>
+<a class="tile" data-cle="gambit letton accepte latvian gambit accepted 1 e4 e5 2 nf3 f5 3 exf5 c40" href="/fr/ouvertures/gambit-letton-accepte.html"><b>Gambit letton accepté</b><span>1.e4 e5 2.Nf3 f5 3.exf5 · C40</span></a>
+<a class="tile" data-cle="systeme de londres london system 1 d4 nf6 2 nf3 g6 3 bf4 a48" href="/fr/ouvertures/systeme-de-londres.html"><b>Système de Londres</b><span>1.d4 Nf6 2.Nf3 g6 3.Bf4 · A48</span></a>
+<a class="tile" data-cle="defense neo grunfeld neo grunfeld defense 1 d4 nf6 2 c4 g6 3 f3 d5 d70" href="/fr/ouvertures/defense-neo-grunfeld.html"><b>Défense néo-Grünfeld</b><span>1.d4 Nf6 2.c4 g6 3.f3 d5 · D70</span></a>
+<a class="tile" data-cle="ouverture portugaise portuguese opening 1 e4 e5 2 bb5 c20" href="/fr/ouvertures/ouverture-portugaise.html"><b>Ouverture portugaise</b><span>1.e4 e5 2.Bb5 · C20</span></a>
+<a class="tile" data-cle="systeme rapport jobava rapport jobava system 1 d4 d5 2 nc3 nf6 3 bf4 d01" href="/fr/ouvertures/systeme-rapport-jobava.html"><b>Système Rapport-Jobava</b><span>1.d4 d5 2.Nc3 Nf6 3.Bf4 · D01</span></a>
+<a class="tile" data-cle="attaque du sodium sodium attack 1 na3 a00" href="/fr/ouvertures/attaque-du-sodium.html"><b>Attaque du sodium</b><span>1.Na3 · A00</span></a>
+<a class="tile" data-cle="defense saint georges st george defense 1 e4 a6 b00" href="/fr/ouvertures/defense-saint-georges.html"><b>Défense Saint-Georges</b><span>1.e4 a6 · B00</span></a>
+<a class="tile" data-cle="ouverture amar amar opening 1 nh3 a00" href="/fr/ouvertures/ouverture-amar.html"><b>Ouverture Amar</b><span>1.Nh3 · A00</span></a>
+<a class="tile" data-cle="attaque de l amazone amazon attack 1 d4 d5 2 qd3 a45 d00" href="/fr/ouvertures/attaque-de-lamazone.html"><b>Attaque de l'amazone</b><span>1.d4 d5 2.Qd3 · A45 D00</span></a>
+<a class="tile" data-cle="ouverture anderssen anderssen s opening 1 a3 a00" href="/fr/ouvertures/ouverture-anderssen.html"><b>Ouverture Anderssen</b><span>1.a3 · A00</span></a>
+<a class="tile" data-cle="gambit benko benko gambit 1 d4 nf6 2 c4 c5 3 d5 b5 a57" href="/fr/ouvertures/gambit-benko.html"><b>Gambit Benko</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 · A57</span></a>
+<a class="tile" data-cle="defense carr carr defense 1 e4 h6 b00" href="/fr/ouvertures/defense-carr.html"><b>Défense Carr</b><span>1.e4 h6 · B00</span></a>
+<a class="tile" data-cle="ouverture clemenz clemenz opening 1 h3 a00" href="/fr/ouvertures/ouverture-clemenz.html"><b>Ouverture Clemenz</b><span>1.h3 · A00</span></a>
+<a class="tile" data-cle="systeme colle colle system 1 nf3 c5 2 e3 g6 3 d4 bg7 4 dxc5 qa5 a04 a40" href="/fr/ouvertures/systeme-colle.html"><b>Système Colle</b><span>1.Nf3 c5 2.e3 g6 3.d4 Bg7 4.dxc5 Qa5 · A04 A40</span></a>
+<a class="tile" data-cle="gambit danois accepte danish gambit accepted 1 e4 e5 2 d4 exd4 3 c3 dxc3 c21" href="/fr/ouvertures/gambit-danois-accepte.html"><b>Gambit danois accepté</b><span>1.e4 e5 2.d4 exd4 3.c3 dxc3 · C21</span></a>
+<a class="tile" data-cle="orang outan anglais english orangutan 1 c4 nf6 2 b4 a15" href="/fr/ouvertures/orang-outan-anglais.html"><b>Orang-outan anglais</b><span>1.c4 Nf6 2.b4 · A15</span></a>
+<a class="tile" data-cle="defense goldsmith goldsmith defense 1 e4 h5 b00" href="/fr/ouvertures/defense-goldsmith.html"><b>Défense Goldsmith</b><span>1.e4 h5 · B00</span></a>
+<a class="tile" data-cle="defense hippopotame hippopotamus defense 1 e4 nh6 b00" href="/fr/ouvertures/defense-hippopotame.html"><b>Défense hippopotame</b><span>1.e4 Nh6 · B00</span></a>
+<a class="tile" data-cle="defense horwitz horwitz defense 1 d4 e6 a40" href="/fr/ouvertures/defense-horwitz.html"><b>Défense Horwitz</b><span>1.d4 e6 · A40</span></a>
+<a class="tile" data-cle="defense kangourou kangaroo defense 1 d4 e6 2 c4 bb4 a40" href="/fr/ouvertures/defense-kangourou.html"><b>Défense kangourou</b><span>1.d4 e6 2.c4 Bb4 · A40</span></a>
+<a class="tile" data-cle="attaque est indienne avec e6 king s indian attack with e6 1 nf3 nf6 2 g3 d5 3 bg2 e6 a07" href="/fr/ouvertures/attaque-est-indienne-avec-e6.html"><b>Attaque est-indienne, avec e6</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 e6 · A07</span></a>
+<a class="tile" data-cle="ouverture du pion roi king s pawn opening 1 e4 e5 2 b3 c20" href="/fr/ouvertures/ouverture-du-pion-roi.html"><b>Ouverture du pion roi</b><span>1.e4 e5 2.b3 · C20</span></a>
+<a class="tile" data-cle="defense mexicaine mexican defense 1 d4 nf6 2 c4 nc6 a50" href="/fr/ouvertures/defense-mexicaine.html"><b>Défense mexicaine</b><span>1.d4 Nf6 2.c4 Nc6 · A50</span></a>
+<a class="tile" data-cle="defense polonaise polish defense 1 d4 b5 a40" href="/fr/ouvertures/defense-polonaise.html"><b>Défense polonaise</b><span>1.d4 b5 · A40</span></a>
+<a class="tile" data-cle="ouverture polonaise avec d5 polish opening with d5 1 b4 d5 a00" href="/fr/ouvertures/ouverture-polonaise-avec-d5.html"><b>Ouverture polonaise, avec d5</b><span>1.b4 d5 · A00</span></a>
+<a class="tile" data-cle="slave indienne slav indian 1 d4 nf6 2 c4 c6 a40 a50" href="/fr/ouvertures/slave-indienne.html"><b>Slave indienne</b><span>1.d4 Nf6 2.c4 c6 · A40 A50</span></a>
+<a class="tile" data-cle="defense tarrasch tarrasch defense 1 d4 d5 2 c4 e6 3 nc3 c5 d32" href="/fr/ouvertures/defense-tarrasch.html"><b>Défense Tarrasch</b><span>1.d4 d5 2.c4 e6 3.Nc3 c5 · D32</span></a>
+<a class="tile" data-cle="defense ware ware defense 1 e4 a5 b00" href="/fr/ouvertures/defense-ware.html"><b>Défense Ware</b><span>1.e4 a5 · B00</span></a>
+<a class="tile" data-cle="defense zukertort zukertort defense 1 nf3 nh6 2 d4 g6 a04" href="/fr/ouvertures/defense-zukertort.html"><b>Défense Zukertort</b><span>1.Nf3 Nh6 2.d4 g6 · A04</span></a>
+<a class="tile" data-cle="attaque d amsterdam amsterdam attack 1 e3 e5 2 c4 d6 3 nc3 nc6 4 b3 nf6 a00" href="/fr/ouvertures/attaque-damsterdam.html"><b>Attaque d'Amsterdam</b><span>1.e3 e5 2.c4 d6 3.Nc3 Nc6 4.b3 Nf6 · A00</span></a>
+<a class="tile" data-cle="defense australienne australian defense 1 d4 na6 a40" href="/fr/ouvertures/defense-australienne.html"><b>Défense australienne</b><span>1.d4 Na6 · A40</span></a>
+<a class="tile" data-cle="defense barnes barnes defense 1 e4 f6 b00" href="/fr/ouvertures/defense-barnes.html"><b>Défense Barnes</b><span>1.e4 f6 · B00</span></a>
+<a class="tile" data-cle="ouverture basque basque opening 1 d4 nf6 2 b3 a45" href="/fr/ouvertures/ouverture-basque.html"><b>Ouverture basque</b><span>1.d4 Nf6 2.b3 · A45</span></a>
+<a class="tile" data-cle="gambit benko accepte benko gambit accepted 1 d4 nf6 2 c4 c5 3 d5 b5 4 cxb5 a6 a57" href="/fr/ouvertures/gambit-benko-accepte.html"><b>Gambit Benko accepté</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.cxb5 a6 · A57</span></a>
+<a class="tile" data-cle="gambit blackmar diemer accepte blackmar diemer gambit accepted 1 d4 d5 2 e4 dxe4 3 nc3 nf6 4 f3 exf3 d00" href="/fr/ouvertures/gambit-blackmar-diemer-accepte.html"><b>Gambit Blackmar-Diemer accepté</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 exf3 · D00</span></a>
+<a class="tile" data-cle="contre gambit blumenfeld blumenfeld countergambit 1 d4 nf6 2 c4 e6 3 nf3 c5 4 d5 b5 e10" href="/fr/ouvertures/contre-gambit-blumenfeld.html"><b>Contre-gambit Blumenfeld</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 c5 4.d5 b5 · E10</span></a>
+<a class="tile" data-cle="attaque bongcloud bongcloud attack 1 e4 e5 2 ke2 c20" href="/fr/ouvertures/attaque-bongcloud.html"><b>Attaque Bongcloud</b><span>1.e4 e5 2.Ke2 · C20</span></a>
+<a class="tile" data-cle="ouverture canard canard opening 1 d4 nf6 2 f4 a45" href="/fr/ouvertures/ouverture-canard.html"><b>Ouverture Canard</b><span>1.d4 Nf6 2.f4 · A45</span></a>
+<a class="tile" data-cle="partie du centre acceptee center game accepted 1 e4 e5 2 d4 exd4 c21" href="/fr/ouvertures/partie-du-centre-acceptee.html"><b>Partie du centre acceptée</b><span>1.e4 e5 2.d4 exd4 · C21</span></a>
+<a class="tile" data-cle="formation creepy crawly creepy crawly formation 1 h3 d5 2 a3 e5 a00" href="/fr/ouvertures/formation-creepy-crawly.html"><b>Formation Creepy Crawly</b><span>1.h3 d5 2.a3 e5 · A00</span></a>
+<a class="tile" data-cle="defense tcheque czech defense 1 e4 d6 2 d4 nf6 3 nc3 c6 b07" href="/fr/ouvertures/defense-tcheque.html"><b>Défense tchèque</b><span>1.e4 d6 2.d4 Nf6 3.Nc3 c6 · B07</span></a>
+<a class="tile" data-cle="gambit danois danish gambit 1 e4 e5 2 d4 exd4 3 c3 c21" href="/fr/ouvertures/gambit-danois.html"><b>Gambit danois</b><span>1.e4 e5 2.d4 exd4 3.c3 · C21</span></a>
+<a class="tile" data-cle="gambit danois refuse danish gambit declined 1 e4 e5 2 d4 exd4 3 c3 d5 c21" href="/fr/ouvertures/gambit-danois-refuse.html"><b>Gambit danois refusé</b><span>1.e4 e5 2.d4 exd4 3.c3 d5 · C21</span></a>
+<a class="tile" data-cle="defense dory dory defense 1 d4 nf6 2 nf3 ne4 a46" href="/fr/ouvertures/defense-dory.html"><b>Défense Döry</b><span>1.d4 Nf6 2.Nf3 Ne4 · A46</span></a>
+<a class="tile" data-cle="ouverture de dresde dresden opening 1 e4 e5 2 nf3 nc6 3 c4 nf6 4 nxe5 c44" href="/fr/ouvertures/ouverture-de-dresde.html"><b>Ouverture de Dresde</b><span>1.e4 e5 2.Nf3 Nc6 3.c4 Nf6 4.Nxe5 · C44</span></a>
+<a class="tile" data-cle="gambit duras duras gambit 1 e4 f5 b00" href="/fr/ouvertures/gambit-duras.html"><b>Gambit Duras</b><span>1.e4 f5 · B00</span></a>
+<a class="tile" data-cle="defense indienne orientale east indian defense 1 d4 nf6 2 nf3 g6 a48" href="/fr/ouvertures/defense-indienne-orientale.html"><b>Défense indienne orientale</b><span>1.d4 Nf6 2.Nf3 g6 · A48</span></a>
+<a class="tile" data-cle="defense fried fox fried fox defense 1 e4 f6 2 d4 kf7 b00" href="/fr/ouvertures/defense-fried-fox.html"><b>Défense Fried Fox</b><span>1.e4 f6 2.d4 Kf7 · B00</span></a>
+<a class="tile" data-cle="ouverture globale global opening 1 h3 e5 2 a3 a00" href="/fr/ouvertures/ouverture-globale.html"><b>Ouverture globale</b><span>1.h3 e5 2.a3 · A00</span></a>
+<a class="tile" data-cle="defense gunderam gunderam defense 1 e4 e5 2 nf3 qe7 c40" href="/fr/ouvertures/defense-gunderam.html"><b>Défense Gunderam</b><span>1.e4 e5 2.Nf3 Qe7 · C40</span></a>
+<a class="tile" data-cle="gambit irlandais irish gambit 1 e4 e5 2 nf3 nc6 3 nxe5 c44" href="/fr/ouvertures/gambit-irlandais.html"><b>Gambit irlandais</b><span>1.e4 e5 2.Nf3 Nc6 3.Nxe5 · C44</span></a>
+<a class="tile" data-cle="gambit du roi king s gambit 1 e4 e5 2 f4 c30" href="/fr/ouvertures/gambit-du-roi.html"><b>Gambit du roi</b><span>1.e4 e5 2.f4 · C30</span></a>
+<a class="tile" data-cle="attaque est indienne avec bf5 king s indian attack with bf5 1 nf3 nf6 2 g3 d5 3 bg2 c6 4 o o bf5 a07" href="/fr/ouvertures/attaque-est-indienne-avec-bf5.html"><b>Attaque est-indienne, avec Bf5</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 c6 4.O-O Bf5 · A07</span></a>
+<a class="tile" data-cle="speciale de simultanee lasker lasker simul special 1 g3 h5 a00" href="/fr/ouvertures/speciale-de-simultanee-lasker.html"><b>Spéciale de simultanée Lasker</b><span>1.g3 h5 · A00</span></a>
+<a class="tile" data-cle="defense lemming lemming defense 1 e4 na6 b00" href="/fr/ouvertures/defense-lemming.html"><b>Défense Lemming</b><span>1.e4 Na6 · B00</span></a>
+<a class="tile" data-cle="systeme de marienbad marienbad system 1 d4 nf6 2 nf3 b6 3 g3 bb7 4 bg2 c5 a47" href="/fr/ouvertures/systeme-de-marienbad.html"><b>Système de Marienbad</b><span>1.d4 Nf6 2.Nf3 b6 3.g3 Bb7 4.Bg2 c5 · A47</span></a>
+<a class="tile" data-cle="defense montevideo montevideo defense 1 d4 nc6 2 d5 nb8 a40" href="/fr/ouvertures/defense-montevideo.html"><b>Défense Montevideo</b><span>1.d4 Nc6 2.d5 Nb8 · A40</span></a>
+<a class="tile" data-cle="attaque paleface paleface attack 1 d4 nf6 2 f3 a45" href="/fr/ouvertures/attaque-paleface.html"><b>Attaque Paleface</b><span>1.d4 Nf6 2.f3 · A45</span></a>
+<a class="tile" data-cle="pseudo defense ouest indienne pseudo queen s indian defense 1 d4 nf6 2 nf3 b6 a47" href="/fr/ouvertures/pseudo-defense-ouest-indienne.html"><b>Pseudo-défense ouest-indienne</b><span>1.d4 Nf6 2.Nf3 b6 · A47</span></a>
+<a class="tile" data-cle="gambit dame queen s gambit 1 d4 d5 2 c4 d06" href="/fr/ouvertures/gambit-dame.html"><b>Gambit dame</b><span>1.d4 d5 2.c4 · D06</span></a>
+<a class="tile" data-cle="ouest indienne acceleree queen s indian accelerated 1 d4 nf6 2 c4 b6 a50" href="/fr/ouvertures/ouest-indienne-acceleree.html"><b>Ouest-indienne accélérée</b><span>1.d4 Nf6 2.c4 b6 · A50</span></a>
+<a class="tile" data-cle="pion dame attaque mengarini queen s pawn mengarini attack 1 d4 nf6 2 c4 g6 3 qc2 e60" href="/fr/ouvertures/pion-dame-attaque-mengarini.html"><b>Pion dame, attaque Mengarini</b><span>1.d4 Nf6 2.c4 g6 3.Qc2 · E60</span></a>
+<a class="tile" data-cle="systeme rapport jobava avec e6 rapport jobava system with e6 1 d4 d5 2 nc3 e6 3 bf4 d01" href="/fr/ouvertures/systeme-rapport-jobava-avec-e6.html"><b>Système Rapport-Jobava, avec e6</b><span>1.d4 d5 2.Nc3 e6 3.Bf4 · D01</span></a>
+<a class="tile" data-cle="defense robatsch robatsch defense 1 d4 d6 2 nf3 g6 3 c4 bg7 4 e4 bg4 a41" href="/fr/ouvertures/defense-robatsch.html"><b>Défense Robatsch</b><span>1.d4 d6 2.Nf3 g6 3.c4 Bg7 4.e4 Bg4 · A41</span></a>
+<a class="tile" data-cle="ouverture de saragosse saragossa opening 1 c3 a00" href="/fr/ouvertures/ouverture-de-saragosse.html"><b>Ouverture de Saragosse</b><span>1.c3 · A00</span></a>
+<a class="tile" data-cle="ouverture de valence valencia opening 1 d3 e5 2 nd2 a00" href="/fr/ouvertures/ouverture-de-valence.html"><b>Ouverture de Valence</b><span>1.d3 e5 2.Nd2 · A00</span></a>
+<a class="tile" data-cle="defense du vautour vulture defense 1 d4 nf6 2 c4 c5 3 d5 ne4 a56" href="/fr/ouvertures/defense-du-vautour.html"><b>Défense du vautour</b><span>1.d4 Nf6 2.c4 c5 3.d5 Ne4 · A56</span></a>
+<a class="tile" data-cle="defense wade wade defense 1 d4 d6 2 nf3 bg4 a41" href="/fr/ouvertures/defense-wade.html"><b>Défense Wade</b><span>1.d4 d6 2.Nf3 Bg4 · A41</span></a>
+<a class="tile" data-cle="systeme yusupov rubinstein yusupov rubinstein system 1 d4 nf6 2 nf3 e6 3 e3 a46" href="/fr/ouvertures/systeme-yusupov-rubinstein.html"><b>Système Yusupov-Rubinstein</b><span>1.d4 Nf6 2.Nf3 e6 3.e3 · A46</span></a>
+<a class="tile" data-cle="defense zairoise zaire defense 1 d4 nc6 2 d5 nb8 3 e4 nf6 4 e5 ng8 a40" href="/fr/ouvertures/defense-zairoise.html"><b>Défense zaïroise</b><span>1.d4 Nc6 2.d5 Nb8 3.e4 Nf6 4.e5 Ng8 · A40</span></a>
+</div>
+<footer>
+  <!-- Toutes les sections du site. Le menu du haut n'en porte que quatre,
+       faute de place sur telephone : Finales, Lexique et Pieges n'etaient
+       donc atteignables depuis aucune page de contenu, ni pour le visiteur
+       ni pour les moteurs de recherche. Le pied de page est le seul endroit
+       ou la place ne manque pas. -->
+  <nav class="footnav" aria-label="Sections du site">
+    <span aria-current="page">Ouvertures</span><a href="/fr/exercices/">Exercices</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a>
+  </nav>
+  <p class="footnote">chang64 : échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings.</p>
+</footer>
 </div>
 <script>
+
+/* Filtrage de la liste des ouvertures.
+   Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page
+   se comporte comme avant. On compare sur une cle sans accents ni
+   ponctuation, ce qui permet de trouver "Defense sicilienne" en tapant
+   "defense sicilien", et "1.e4 c5" en tapant "e4c5". */
+(function(){
+  var bloc=document.getElementById("filtreBloc");
+  var champ=document.getElementById("filtre");
+  var grille=document.getElementById("grille");
+  if(!bloc||!champ||!grille)return;
+  var tuiles=[].slice.call(grille.querySelectorAll("[data-cle]"));
+  if(tuiles.length<20)return;          /* inutile sur une liste courte */
+  bloc.classList.remove("hide");
+  var etat=document.getElementById("filtreEtat");
+  var fr=document.documentElement.lang==="fr";
+  var total=tuiles.length;
+
+  function normalise(t){
+    return String(t).normalize?String(t).normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .toLowerCase().replace(/[^a-z0-9]+/g," ").trim()
+      :String(t).toLowerCase();
+  }
+  function filtrer(){
+    var q=normalise(champ.value);
+    if(!q){
+      for(var i=0;i<total;i++)tuiles[i].hidden=false;
+      var tousBlocs=grille.querySelectorAll("[data-theme]");
+      for(var b=0;b<tousBlocs.length;b++)tousBlocs[b].hidden=false;
+      var toc0=grille.querySelector(".toc");
+      if(toc0)toc0.hidden=false;
+      etat.textContent="";
+      return;
+    }
+    /* Chaque mot tape doit se retrouver, dans n'importe quel ordre :
+       "sicilienne e4" fonctionne comme "e4 sicilienne". */
+    var mots=q.split(" ").filter(Boolean);
+    var vus=0;
+    for(var i=0;i<total;i++){
+      var cle=tuiles[i].getAttribute("data-cle")||"";
+      var ok=true;
+      for(var k=0;k<mots.length;k++){if(cle.indexOf(mots[k])<0){ok=false;break;}}
+      tuiles[i].hidden=!ok;
+      if(ok)vus++;
+    }
+    /* Les exercices sont groupes par theme : un titre de section dont plus
+       aucune tuile ne correspond doit disparaitre aussi, sinon la page se
+       remplit d'intitules suivis de vide. Le sommaire des themes est masque
+       pendant une recherche, il ne mene plus nulle part. */
+    var blocs=grille.querySelectorAll("[data-theme]");
+    for(var b=0;b<blocs.length;b++){
+      var reste=blocs[b].querySelectorAll("[data-cle]:not([hidden])").length;
+      blocs[b].hidden=(reste===0);
+    }
+    var toc=grille.querySelector(".toc");
+    if(toc)toc.hidden=true;
+    etat.textContent = vus===0
+      ? (fr?"Aucun résultat.":"No match.")
+      : (fr?vus+" sur "+total:vus+" of "+total);
+  }
+  champ.addEventListener("input",filtrer);
+  /* Echap vide le champ, geste attendu sur un champ de recherche. */
+  champ.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&champ.value){champ.value="";filtrer();}
+  });
+})();
+
+/* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
+   repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
+   servent. */
+
 /* Pilote l'echiquier anime des pages d'ouverture.
    Sans ce script, la position finale reste affichee et les commandes sont
    masquees : la page fonctionne exactement comme avant. */

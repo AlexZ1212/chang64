@@ -1,6 +1,6 @@
 /* Génération des pages de contenu bilingues */
 module.exports = function (H) {
-  const { fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L } = H;
+  const { fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent } = H;
   const urls = [];
   const mk = d => fs.mkdirSync(OUT + "/" + d, { recursive: true });
 
@@ -276,12 +276,11 @@ module.exports = function (H) {
       const alt = `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/${lang === "en" ? sFr : sEn}.html`;
       const pz = sample ? `
   ${diagram(sample.fen, (lang === "fr" ? "Exemple : " : "Example: ") + themeOf(sample.theme, lang))}
-  <div><p>${esc(def)}</p>
-    <p>${lang === "fr" ? "Le diagramme vient de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée." : "The diagram comes from the chang64 puzzle set. Every position there is proved by the engine before it is offered."}</p>
+  <div><p>${lang === "fr" ? "Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée." : "The diagram shows an example, taken from the chang64 puzzle set. Every position there is proved by the engine before it is offered."}</p>
     <a class="cta" href="/#puzzle=${sample.id}">${lang === "fr" ? "Résoudre cet exercice" : "Solve this puzzle"}</a>
     <a class="cta ghost" href="/${DIRS.puzzles[lang]}/${puzzleSlug(sample, lang)}.html">${lang === "fr" ? "Voir la fiche" : "See the page"}</a>
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
-  </div>` : `<div><p>${esc(def)}</p><a class="cta" href="/">${u.play}</a></div>`;
+  </div>` : `<div><a class="cta" href="/">${u.play}</a></div>`;
       const body = `<h1>${esc(title)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
       page(lang, dir, sl + ".html", `${title} \u2014 ${lang === "fr" ? "définition et exemple" : "chess term explained"} | chang64`,
         def.slice(0, 280), body,
@@ -415,8 +414,15 @@ module.exports = function (H) {
     for (const tr of validTraps) {
       const canonical = `${SITE}/${dir}/${tr.slug[lang]}.html`;
       const alt = `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/${tr.slug[lang === "en" ? "fr" : "en"]}.html`;
+      /* La description sert la balise meta et le referencement. Elle ne doit
+         pas etre reprise en chapo : c'etait les 280 premiers caracteres du
+         texte affiche juste en dessous, donc le lecteur lisait deux fois le
+         meme debut. */
       const desc = tr.body[lang].slice(0, 280);
-      const body = `<h1>${esc(tr.title[lang])}</h1><p class="lede">${esc(desc)}</p>
+      const chapo = lang === "fr"
+        ? `Le piège en ${tr.line.san.length} demi-coups, rejoué par le moteur, avec la position finale et l'explication.`
+        : `The trap in ${tr.line.san.length} half-moves, replayed by the engine, with the final position and the explanation.`;
+      const body = `<h1>${esc(tr.title[lang])}</h1><p class="lede">${esc(chapo)}</p>
 <div class="cols">${diagram(tr.line.fen, (lang === "fr" ? "Position finale après " : "Final position after ") + numberLine(tr.line.san))}
 <div><div class="moves">${esc(numberLine(tr.line.san))}${tr.line.mate ? "" : ""}</div>
 <p>${esc(tr.body[lang])}</p>
@@ -487,11 +493,29 @@ module.exports = function (H) {
     const anchor = th => "t-" + slug(themeOf(th, "en"));
     const toc = `<nav class="toc" aria-label="${lang === "fr" ? "Thèmes" : "Themes"}">` +
       ordered.map(th => `<a href="#${anchor(th)}">${esc(themeOf(th, lang))} <b>${groups[th].length}</b></a>`).join("") + `</nav>`;
-    const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p>` + toc +
+    /* Champ masque par defaut, revele par le script : sans JavaScript la page
+       reste ce qu'elle etait. 777 exercices repartis en themes ne se
+       parcourent pas a l'oeil. */
+    const filtre = `<div class="filtre hide" id="filtreBloc">
+  <input type="search" id="filtre" autocomplete="off"
+         placeholder="${lang === "fr" ? "Chercher : thème, niveau ou numéro" : "Search: theme, level or number"}"
+         aria-label="${lang === "fr" ? "Filtrer les exercices" : "Filter puzzles"}" aria-controls="grille">
+  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite"></p>
+</div>`;
+    const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p>` + filtre + `<div id="grille">` + toc +
       ordered.map(th =>
-        `<h2 id="${anchor(th)}">${esc(themeOf(th, lang))} <span style="color:#93A99A;font-size:13px">(${groups[th].length})</span></h2><div class="grid">` +
-        groups[th].map(p => `<a class="tile" href="/${dir}/${puzzleSlug(p, lang)}.html"><b>${esc(themeOf(p.theme, lang))} #${p.id.replace("p", "")}</b><span>${esc(UI[lang].levels[p.level - 1])}</span></a>`).join("") +
-        `</div>`).join("\n");
+        `<section class="theme-bloc" data-theme><h2 id="${anchor(th)}">${esc(themeOf(th, lang))} <span style="color:#93A99A;font-size:13px">(${groups[th].length})</span></h2><div class="grid">` +
+        groups[th].map(p => {
+          /* Cle de recherche : theme dans les deux langues, niveau, numero.
+             Sans accents ni ponctuation, pour que "clouage" trouve
+             "Clouage" et "mat en un" trouve "Mat en un coup". */
+          const cle = sansAccent([
+            themeOf(p.theme, lang), themeOf(p.theme, lang === "fr" ? "en" : "fr"),
+            UI[lang].levels[p.level - 1], "#" + p.id.replace("p", "")
+          ].join(" "));
+          return `<a class="tile" data-cle="${esc(cle)}" href="/${dir}/${puzzleSlug(p, lang)}.html"><b>${esc(themeOf(p.theme, lang))} #${p.id.replace("p", "")}</b><span>${esc(UI[lang].levels[p.level - 1])}</span></a>`;
+        }).join("") +
+        `</div></section>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);

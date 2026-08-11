@@ -66,7 +66,29 @@ body{
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
   font-size:16px;line-height:1.55;min-height:100vh;padding:18px 14px 44px;
 }
-.wrap{max-width:1080px;margin:0 auto}
+.wrap{max-width:1080px;margin:0 auto;min-width:0}
+
+/* ---------- garde-fou contre le debordement horizontal ----------
+   Un element flexible ou de grille a min-width:auto par defaut : il refuse
+   de devenir plus etroit que son contenu, et impose donc sa largeur a tous
+   ses parents jusqu'a la page entiere. C'est ce qui faisait deborder toute
+   la page en francais, ou les libelles sont plus longs qu'en anglais.
+   Trente-huit conteneurs etaient concernes : plutot que de les traiter un a
+   un, la regle est posee globalement. Elle rend aussi operants les
+   overflow-x:auto poses ici et la, qui ne se declenchaient jamais. */
+/* La regle vise les conteneurs, pas les boutons : appliquee a tout, elle
+   laissait les onglets devenir plus etroits que leur libelle, et le texte
+   debordait de la pastille jaune au lieu de tenir dedans. Un bouton doit
+   garder la largeur de son contenu ; c'est son parent qui doit ceder. */
+.wrap *:not(button):not(input):not(select):not(textarea):not(a){min-width:0}
+/* Les conteneurs a defilement horizontal doivent pouvoir se retrecir. */
+.tabs,.tc-cats{flex:1 1 100%;min-width:0}
+/* Rien ne doit depasser la largeur de la page, quelle qu'en soit la cause. */
+.wrap img,.wrap svg,.wrap table,.wrap pre{max-width:100%}
+/* Filet de securite : aucun element ne doit pouvoir elargir la page et
+   rendre le contenu inatteignable a droite. Si un debordement reapparait,
+   il sera confine plutot que de decaler tout l'affichage. */
+html{overflow-x:hidden}
 
 /* ---------- header ---------- */
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
@@ -145,6 +167,22 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .card .go{color:var(--brass);font-size:12.5px;font-weight:600;margin-top:12px;display:block}
 
 .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.startline{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);
+  padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:8px;font-size:13.5px;color:var(--sage)}
+.startline .linkbtn{font-size:13.5px}
+/* Sur telephone, l'objectif est que "Exercice suivant" reste atteignable
+   sans defiler apres chaque exercice. On resserre donc ce qui separe
+   l'echiquier du bouton : marges du panneau, puce de theme et hauteur
+   minimale du statut. Rien n'est retire, seulement compacte. */
+@media(max-width:520px){
+  #pane-puzzles .panel{padding:12px}
+  #pane-puzzles .theme{margin-bottom:6px}
+  #pane-puzzles .quest{font-size:16px;margin-bottom:2px}
+  #pane-puzzles .status{min-height:0;padding:7px 10px}
+  #pane-puzzles .btnrow{margin-top:8px!important}
+  #pane-puzzles hr.rule{margin-top:14px}
+}
 @media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
 .strip .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1.2}
@@ -159,7 +197,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .board-frame{position:relative}
 .result{
   position:absolute;inset:10px;z-index:20;display:flex;align-items:center;justify-content:center;
-  background:rgba(10,16,14,.62);border-radius:5px;animation:fadein .22s ease-out;padding:12px
+  /* L'overlay couvre exactement l'echiquier (inset = marge du cadre) : son
+     rayon doit donc etre celui de l'echiquier, pas un autre, sinon les coins
+     laissent voir les cases dessous. */
+  background:rgba(10,16,14,.62);border-radius:2px;animation:fadein .22s ease-out;padding:12px
 }
 @keyframes fadein{from{opacity:0}}
 .result-card{
@@ -172,6 +213,13 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .result span{display:block;font-size:12.5px;color:var(--sage);margin-bottom:14px}
 .result-actions{display:flex;gap:8px;justify-content:center}
 .result-actions .btn{flex:1;padding:9px 12px;font-size:13px}
+/* Sur telephone, "Changer les réglages" se coupait en plein milieu d'un mot.
+   Les deux boutons passent l'un sous l'autre plutot que de se partager une
+   ligne trop etroite. */
+@media(max-width:430px){
+  .result-actions{flex-direction:column}
+  .result-actions .btn{width:100%;padding:11px 12px}
+}
 .result.win .result-card{border-left-color:var(--jade)}
 .result.lose .result-card{border-left-color:var(--brick)}
 .result.draw .result-card{border-left-color:var(--sage)}
@@ -191,8 +239,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .coordhud.low b#chudTime{color:var(--brick)}
 .clock{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;
+  max-width:100%;box-sizing:border-box;min-width:0
 }
+.clock .who{min-width:0}
+.clock .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:8px}
 .clock .who i{width:12px;height:12px;border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118}
 .clock .who i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
@@ -203,10 +254,16 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .clock.flagged{border-color:var(--brick)}
 
 /* ---------- board ---------- */
-.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34)}
+/* Garde-fou : sur telephone, l'echiquier debordait a droite et la colonne h
+   se retrouvait hors ecran. Aucune largeur du code ne l'expliquait, mais un
+   plafond explicite garantit que le cadre et la grille ne peuvent jamais
+   depasser la place disponible, quelle que soit la cause. box-sizing evite
+   que la marge interieure ne s'ajoute a la largeur. */
+.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34);max-width:100%;box-sizing:border-box}
 .board{
   display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));
-  aspect-ratio:1/1;width:100%;border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
+  aspect-ratio:1/1;width:100%;max-width:100%;box-sizing:border-box;
+  border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
 }
 .sq:focus-visible{outline:2px dashed var(--chalk);outline-offset:-3px;z-index:6}
 .sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
@@ -256,12 +313,27 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
 .field{margin-bottom:14px}
 .seg{display:flex;gap:3px;background-color:var(--ink);padding:3px;border-radius:8px;border:1px solid var(--rule)}
-.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:6px;cursor:pointer;white-space:nowrap;min-width:0}
+/* Les segments partagent la largeur a parts egales sans pouvoir passer a la
+   ligne. Sur un ecran etroit, un libelle long comme "Tranquille" reclame plus
+   de place que sa case et deborde. On reduit le corps et on autorise la
+   cesure plutot que de laisser le texte sortir de son cadre. */
+@media(max-width:430px){
+  .seg button{font-size:11.5px;padding:8px 2px;white-space:normal;line-height:1.2}
+}
 .seg button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform .08s}
 .btn:hover{background:#33483e}
 .btn:active{transform:translateY(1px)}
+/* Un bouton verrouille pendant une partie doit se voir comme tel : aucune
+   reaction au survol ni au clic, et un affaiblissement net. Sans cela, il
+   changeait de couleur au toucher et semblait fonctionner. */
+.btn:disabled,.seg button:disabled,.tc-cats button:disabled,.tc-chips button:disabled{
+  opacity:.38;cursor:default;pointer-events:none
+}
+.btn:disabled:hover,.btn:disabled:active{background-color:var(--raise);transform:none}
+.seg button:disabled[aria-pressed="true"],.tc-cats button:disabled[aria-pressed="true"]{opacity:.5}
 .btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .btn.danger{border-color:rgba(196,87,63,.5);color:#E4907C}
 .btn.danger:hover{background:rgba(196,87,63,.16)}
@@ -271,6 +343,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .btnrow .btn{flex:1;min-width:104px}
+/* Les boutons se partagent la ligne a parts egales, soit environ 105 px sur
+   un telephone. Un mot long et insecable comme "Recommencer" depassait alors
+   des deux cotes de sa case : rien n'autorisait la cesure. On la permet, et
+   on laisse la case s'adapter au mot le plus long qu'elle doit contenir. */
+/* Pas de cesure ni de coupure en plein mot : "Exercice sui-vant" est pire
+   que deux lignes propres. On laisse les mots entiers et on reduit le corps
+   sur ecran etroit pour qu'ils tiennent. */
+.btn{overflow-wrap:normal;word-break:normal;hyphens:none}
+@media(max-width:430px){
+  .btnrow .btn{min-width:96px;padding:10px 8px;font-size:12.5px}
+}
 
 /* ---------- scoresheet ---------- */
 .sheet{background:#F4EEDC;border-radius:6px;overflow:hidden;color:#2A2A22}
@@ -292,7 +375,23 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 /* ---------- puzzles ---------- */
 .quest{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;line-height:1.35;margin-bottom:4px}
 .theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(217,168,63,.4);padding:2px 8px;border-radius:999px;margin-bottom:10px}
-.tabs{overflow-x:auto;max-width:100%}
+/* min-width:0 est indispensable, pas cosmetique. Les boutons sont en
+   white-space:nowrap, donc la largeur minimale de la rangee vaut la somme de
+   leurs textes. Comme .tabs est un element flexible de l'entete, son
+   min-width:auto par defaut imposait cette largeur a toute la page, et en CSS
+   min-width l'emporte sur max-width : le max-width:100% ci-dessous ne servait
+   a rien et l'overflow-x ne se declenchait jamais.
+   En anglais la rangee depassait de 11 px, en francais de 119 : d'ou un
+   echiquier et des pendules coupes a droite dans une seule des deux langues. */
+/* min-width:0 ne suffisait pas : en tant qu'element flexible, la rangee
+   gardait la largeur de son contenu et elargissait toute la page. flex-basis
+   a 100 % la force a prendre la ligne entiere et rien de plus, ce qui rend
+   enfin son defilement interne operant. */
+.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+/* L'entete elle-meme ne doit pas pouvoir etre elargie par un de ses enfants. */
+header{min-width:0}
+header>*{min-width:0}
 .langswitch{flex:none;padding:3px}
 .langswitch button{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;flex:none}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
@@ -528,12 +627,21 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
       <div class="explore" id="exploreLinks"></div>
     </div>
 
-    <div class="strip">
+    <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
+         n'afficherait que des zeros, ce qu'un premier visiteur lit comme
+         "le site est vide" alors qu'il s'agit de sa propre progression.
+         On lui propose donc de commencer, et la bande apparait des qu'il
+         a quelque chose a y voir. -->
+    <div class="strip" id="homeStrip">
       <div class="stat"><b id="hLevel">1</b><span>Puzzle level</span></div>
       <div class="stat"><b id="hSolved">0</b><span>Solved</span></div>
       <div class="stat"><b id="hBest">0</b><span>Best streak</span></div>
       <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
       <div class="stat"><b id="hStreak">0</b><span>Day streak</span></div>
+    </div>
+    <div class="startline hide" id="homeStart">
+      <span id="homeStartText">Your progress will show up here.</span>
+      <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>
     </div>
   </div>
 
@@ -563,6 +671,21 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
         </div>
         <div class="board-frame">
         <div class="board" id="board"></div>
+        <!-- Overlay de preparation. Sur une partie chronometree, la pendule
+             demarrait en meme temps que la partie : quelqu'un qui arrivait
+             depuis l'accueil perdait de precieuses secondes a comprendre ou
+             il etait, ce qui compte en bullet. On lui montre d'abord contre
+             quoi il joue, et rien ne demarre avant qu'il le decide. -->
+        <div class="result hide" id="readyBanner" role="dialog" aria-modal="false" aria-labelledby="readyTitle">
+          <div class="result-card">
+            <b id="readyTitle">Ready?</b>
+            <span id="readySub"></span>
+            <div class="result-actions">
+              <button class="btn primary" id="readyStart">Start</button>
+              <button class="btn" id="readySettings">Change settings</button>
+            </div>
+          </div>
+        </div>
         <div class="result hide" id="resultBanner" role="status" aria-live="polite">
           <div class="result-card">
             <b id="resultTitle"></b>
@@ -640,9 +763,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <button class="btn primary" id="btnAnalyse">Analyse this game</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
-            <button class="btn" id="btnStockfish">Enable Stockfish</button>
+            <button class="btn" id="btnStockfish">Stockfish for review</button>
           </div>
-          <p class="note" id="sfStatus">The built-in engine is instant. Stockfish is stronger, and downloads about 7 MB the first time.</p>
+          <p class="note" id="sfStatus">Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.</p>
           <div id="analysisOut" class="hide">
             <div class="accrow">
               <div class="stat"><b id="accScore">—</b><span>Accuracy</span></div>
@@ -696,6 +819,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
           <p class="quest" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
 
+          <!-- Les trois actions du geste courant sont ici, sous l'enonce :
+               elles servent a chaque exercice, alors que le filtre par theme
+               et la reinitialisation ne servent qu'occasionnellement. Les
+               laisser toutes ensemble plus bas obligeait a faire defiler
+               apres chaque exercice sur telephone. -->
+          <div class="btnrow" style="margin-top:12px">
+            <button class="btn primary" id="btnNext">Next puzzle</button>
+            <button class="btn" id="btnHintEx">Hint</button>
+            <button class="btn" id="btnSolve">Show solution</button>
+          </div>
+
           <hr class="rule">
 
           <div class="ladder" id="ladder"></div>
@@ -717,11 +851,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <select class="select" id="themeFilter" aria-label="Filter puzzles by theme"></select>
           </div>
           <div class="btnrow">
-            <button class="btn primary" id="btnNext">Next puzzle</button>
-            <button class="btn" id="btnHintEx">Hint</button>
-            <button class="btn" id="btnSolve">Show solution</button>
-          </div>
-          <div class="btnrow" style="margin-top:8px">
             <button class="btn" id="btnDaily">Puzzle of the day</button>
             <button class="btn" id="btnRush">Chang Sprint</button>
             <button class="btn" id="btnRetry">Restart puzzle</button>
@@ -834,13 +963,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
 
   <!-- ================= LEGAL ================= -->
   <div id="pane-legal" class="hide">
+    <!-- Les deux sections vivent dans le meme panneau : sans ancre, cliquer
+         sur "Confidentialite" amenait en haut, donc sur les mentions
+         legales. Chaque titre est donc une cible de defilement, focalisable
+         par programme pour que les lecteurs d'ecran suivent aussi. -->
     <div class="panel">
-      <h2>Legal notice</h2>
+      <h2 id="legalTitle" tabindex="-1">Legal notice</h2>
       <p class="sub">Publisher and hosting details.</p>
       <div class="prose" id="legalBody"></div>
     </div>
     <div class="panel">
-      <h2>Privacy</h2>
+      <h2 id="privacyTitle" tabindex="-1">Privacy</h2>
       <div class="prose" id="privacyBody"></div>
     </div>
   </div>

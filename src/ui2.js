@@ -216,7 +216,13 @@ function afterGameRender(over){
   applyEvalPref();
   renderResult(!!over);
 }
-$("resultNew").onclick=()=>{resultDismissed=false;if(mode==="friend")newAmiGame();else newGame();};
+$("resultNew").onclick=()=>{
+  resultDismissed=false;
+  /* On relance depuis le bandeau de fin : le choix vient d'etre fait, on ne
+     represente pas l'overlay de preparation. */
+  if(mode==="friend")newAmiGame();
+  else {skipReady=true;newGame();}
+};
 $("resultClose").onclick=()=>{resultDismissed=true;$("resultBanner").className="result hide";};
 $("resultAnalyse").onclick=()=>{
   resultDismissed=true;
@@ -341,8 +347,11 @@ function buildPgn(){
   else if(g.isDraw())result="1/2-1/2";
   const {cat,item}=tcCurrent();
   const tc=cat==="none"||cat==="daily"?"-":(item[0]*60)+"+"+item[1];
-  const white=myColor===W?"You":"chang64 engine";
-  const black=myColor===W?"chang64 engine":"You";
+  /* Meme nom que celui affiche a l'ecran, avec la force : une partie
+     exportee doit dire contre quoi elle a ete jouee. */
+  const bot=(typeof botLabel==="function")?botLabel():"Chang";
+  const white=myColor===W?"You":bot;
+  const black=myColor===W?bot:"You";
   let body="",line="";
   for(let i=0;i<sanList.length;i++){
     const tok=(i%2===0?(i/2+1)+". ":"")+sanList[i]+" ";
@@ -549,6 +558,13 @@ function renderExtraStats(){
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
   set("stRating",prog.rating);set("stDays",prog.days);set("stRush",prog.rushBest);
   set("hRating",prog.rating);set("hStreak",prog.days);
+  /* Rien de resolu : la bande n'afficherait que des zeros, ce qu'un premier
+     visiteur lit comme "le site est vide" plutot que comme sa propre
+     progression encore vierge. On lui propose de commencer a la place. */
+  const vierge=!prog.solved;
+  const strip=$("homeStrip"), start=$("homeStart");
+  if(strip)strip.classList.toggle("hide",vierge);
+  if(start)start.classList.toggle("hide",!vierge);
 }
 
 /* --- Chang Sprint : le mode chronometre. Anciennement "Puzzle Rush",
@@ -671,7 +687,7 @@ function renderLegal(){
   $("legalBody").innerHTML= fr
     ? "<h4>Éditeur</h4><p><strong>"+PUBLISHER.name+"</strong><br>Directeur de la publication : "+PUBLISHER.name+
       "<br>Contact : "+PUBLISHER.email+"</p>"+
-      "<p>chang64 est édité par un particulier, à titre non professionnel. Conformément à l'article 6, III, 2 de la loi pour la confiance dans l'économie numérique, "+
+      "<p>chang64 est édité par un particulier, à titre non professionnel. Conformément à l'article 1-1, II de la loi pour la confiance dans l'économie numérique, "+
       "l'éditeur a choisi de ne pas rendre publics son nom et son adresse. Ces informations sont détenues par l'hébergeur, qui les communiquera à l'autorité judiciaire sur requête.</p>"+
       "<h4>Hébergement</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
       "<h4>Nom de domaine</h4><p>Enregistré auprès de <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
@@ -695,7 +711,7 @@ function renderLegal(){
       "<h4>Signalement</h4><p>Toute demande relative au contenu du site peut être adressée à "+PUBLISHER.email+".</p>"
     : "<h4>Publisher</h4><p><strong>"+PUBLISHER.name+"</strong><br>Publication director: "+PUBLISHER.name+
       "<br>Contact: "+PUBLISHER.email+"</p>"+
-      "<p>chang64 is published by a private individual, on a non-professional basis. Under article 6, III, 2 of the French Digital Economy Act, "+
+      "<p>chang64 is published by a private individual, on a non-professional basis. Under article 1-1, II of the French Digital Economy Act, "+
       "the publisher has chosen not to make their name and address public. That information is held by the host and will be disclosed to the judicial authority on request.</p>"+
       "<h4>Hosting</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
       "<h4>Domain name</h4><p>Registered through <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
@@ -802,10 +818,12 @@ setMode=function(m,opts){
   renderExtraStats();applyEvalPref();
   if(m==="play"){renderOpening();renderSheetPlay();}
 };
-$("tab-watch").onclick=()=>setMode("watch");
-$("footLegal").onclick=()=>setMode("legal");
-$("footPrivacy").onclick=()=>setMode("legal");
-$("footHome").onclick=()=>setMode("home");
+$("tab-watch").onclick=()=>{setMode("watch");goTop();};
+/* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
+   amenait sur les mentions legales. On amene chacun a sa propre section. */
+$("footLegal").onclick=()=>{setMode("legal");goToSection("legalTitle");};
+$("footPrivacy").onclick=()=>{setMode("legal");goToSection("privacyTitle");};
+$("footHome").onclick=()=>{setMode("home");goTop();};   /* meme mecanique que les onglets */
 
 /* keep the UCI move list in step with the played game */
 const basePlayUser=playUser,baseBotMove=botMove,baseUndoGame=undoGame;
@@ -829,3 +847,68 @@ $("btnHint").onclick=()=>hintGame();
 ensureProgFields();
 renderExtraStats();
 applyEvalPref();
+
+/* ==========================================================
+   OVERLAY DE PREPARATION
+   ==========================================================
+   Sur une partie chronometree, la pendule partait en meme temps que la
+   partie. Quelqu'un qui arrivait depuis l'accueil par "Jouer maintenant"
+   decouvrait l'echiquier alors que son temps s'ecoulait deja, ce qui coute
+   cher en bullet. L'overlay montre d'abord la cadence, la force et la
+   couleur, et rien ne demarre avant qu'il le decide.
+
+   Il n'apparait que sur les cadences chronometrees : sans pendule ou en
+   correspondance, il n'y a rien a proteger et ce serait un clic de trop.
+   ========================================================== */
+function showReady(tcTxt){
+  const b=$("readyBanner"); if(!b)return;
+  /* Le libelle de force est lu directement sur le selecteur : il est deja
+     traduit par applyI18n, inutile de maintenir une seconde liste qui
+     divergerait. */
+  let force="";
+  const seg=$("segLevel");
+  if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
+  $("readyTitle").textContent=t("Ready when you are");
+  $("readySub").textContent=
+    tcTxt+(force?" \u00b7 "+force:"")+" \u00b7 "+
+    (myColor===W?t("You play White."):t("You play Black."));
+  $("readyStart").textContent=t("Start the game");
+  $("readySettings").textContent=t("Change settings");
+  b.classList.remove("hide");
+  const s=$("status"); if(s)s.textContent=t("Press start when you are ready.");
+  try{$("readyStart").focus();}catch(e){}
+}
+function hideReady(){
+  const b=$("readyBanner"); if(b)b.classList.add("hide");
+}
+function startReadyGame(){
+  hideReady();
+  awaitingStart=false;
+  /* La pendule a ete armee au moment du newGame : sans cette remise a
+     l'heure, tout le temps passe sur l'overlay serait decompte d'un coup. */
+  if(clock&&clock.enabled)clock.last=Date.now();
+  const s=$("status");
+  if(s)s.textContent=myColor===B?t("The computer is thinking…"):(readyStatus||t("Your move."));
+  if(myColor===B){busy=true;setTimeout(botMove,220);}
+  /* refreshGame est ce qui verrouille les reglages pendant une partie. Sans
+     cet appel, une partie lancee depuis l'overlay laissait couleur, force et
+     cadence modifiables, alors qu'une partie relancee apres un abandon les
+     verrouillait correctement : newGame, lui, passe par refreshGame. */
+  refreshGame();
+  if(typeof focusBoard==="function")focusBoard();
+}
+if($("readyStart"))$("readyStart").onclick=startReadyGame;
+if($("readySettings"))$("readySettings").onclick=()=>{
+  /* La partie n'a pas commence : on l'annule pour de bon, sinon le
+     verrouillage en cours de partie garde les reglages desactives et le
+     bouton menait a des reglages intouchables. */
+  hideReady();
+  awaitingStart=false;
+  gameStarted=false;
+  if(typeof setupGame==="function")setupGame();
+  refreshGame();
+  const p=$("gameSettings")||$("segLevel");
+  if(p){try{p.scrollIntoView({behavior:"smooth",block:"center"});}catch(e){p.scrollIntoView();}}
+  const s=$("status");
+  if(s)s.textContent=t("Pick a colour and a strength, then play.");
+};

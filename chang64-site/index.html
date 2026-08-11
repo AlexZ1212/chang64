@@ -66,7 +66,29 @@ body{
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
   font-size:16px;line-height:1.55;min-height:100vh;padding:18px 14px 44px;
 }
-.wrap{max-width:1080px;margin:0 auto}
+.wrap{max-width:1080px;margin:0 auto;min-width:0}
+
+/* ---------- garde-fou contre le debordement horizontal ----------
+   Un element flexible ou de grille a min-width:auto par defaut : il refuse
+   de devenir plus etroit que son contenu, et impose donc sa largeur a tous
+   ses parents jusqu'a la page entiere. C'est ce qui faisait deborder toute
+   la page en francais, ou les libelles sont plus longs qu'en anglais.
+   Trente-huit conteneurs etaient concernes : plutot que de les traiter un a
+   un, la regle est posee globalement. Elle rend aussi operants les
+   overflow-x:auto poses ici et la, qui ne se declenchaient jamais. */
+/* La regle vise les conteneurs, pas les boutons : appliquee a tout, elle
+   laissait les onglets devenir plus etroits que leur libelle, et le texte
+   debordait de la pastille jaune au lieu de tenir dedans. Un bouton doit
+   garder la largeur de son contenu ; c'est son parent qui doit ceder. */
+.wrap *:not(button):not(input):not(select):not(textarea):not(a){min-width:0}
+/* Les conteneurs a defilement horizontal doivent pouvoir se retrecir. */
+.tabs,.tc-cats{flex:1 1 100%;min-width:0}
+/* Rien ne doit depasser la largeur de la page, quelle qu'en soit la cause. */
+.wrap img,.wrap svg,.wrap table,.wrap pre{max-width:100%}
+/* Filet de securite : aucun element ne doit pouvoir elargir la page et
+   rendre le contenu inatteignable a droite. Si un debordement reapparait,
+   il sera confine plutot que de decaler tout l'affichage. */
+html{overflow-x:hidden}
 
 /* ---------- header ---------- */
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
@@ -145,6 +167,22 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .card .go{color:var(--brass);font-size:12.5px;font-weight:600;margin-top:12px;display:block}
 
 .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.startline{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);
+  padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:8px;font-size:13.5px;color:var(--sage)}
+.startline .linkbtn{font-size:13.5px}
+/* Sur telephone, l'objectif est que "Exercice suivant" reste atteignable
+   sans defiler apres chaque exercice. On resserre donc ce qui separe
+   l'echiquier du bouton : marges du panneau, puce de theme et hauteur
+   minimale du statut. Rien n'est retire, seulement compacte. */
+@media(max-width:520px){
+  #pane-puzzles .panel{padding:12px}
+  #pane-puzzles .theme{margin-bottom:6px}
+  #pane-puzzles .quest{font-size:16px;margin-bottom:2px}
+  #pane-puzzles .status{min-height:0;padding:7px 10px}
+  #pane-puzzles .btnrow{margin-top:8px!important}
+  #pane-puzzles hr.rule{margin-top:14px}
+}
 @media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
 .strip .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1.2}
@@ -159,7 +197,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .board-frame{position:relative}
 .result{
   position:absolute;inset:10px;z-index:20;display:flex;align-items:center;justify-content:center;
-  background:rgba(10,16,14,.62);border-radius:5px;animation:fadein .22s ease-out;padding:12px
+  /* L'overlay couvre exactement l'echiquier (inset = marge du cadre) : son
+     rayon doit donc etre celui de l'echiquier, pas un autre, sinon les coins
+     laissent voir les cases dessous. */
+  background:rgba(10,16,14,.62);border-radius:2px;animation:fadein .22s ease-out;padding:12px
 }
 @keyframes fadein{from{opacity:0}}
 .result-card{
@@ -172,6 +213,13 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .result span{display:block;font-size:12.5px;color:var(--sage);margin-bottom:14px}
 .result-actions{display:flex;gap:8px;justify-content:center}
 .result-actions .btn{flex:1;padding:9px 12px;font-size:13px}
+/* Sur telephone, "Changer les réglages" se coupait en plein milieu d'un mot.
+   Les deux boutons passent l'un sous l'autre plutot que de se partager une
+   ligne trop etroite. */
+@media(max-width:430px){
+  .result-actions{flex-direction:column}
+  .result-actions .btn{width:100%;padding:11px 12px}
+}
 .result.win .result-card{border-left-color:var(--jade)}
 .result.lose .result-card{border-left-color:var(--brick)}
 .result.draw .result-card{border-left-color:var(--sage)}
@@ -191,8 +239,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .coordhud.low b#chudTime{color:var(--brick)}
 .clock{
   display:flex;align-items:center;justify-content:space-between;gap:12px;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;
+  max-width:100%;box-sizing:border-box;min-width:0
 }
+.clock .who{min-width:0}
+.clock .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:8px}
 .clock .who i{width:12px;height:12px;border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118}
 .clock .who i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
@@ -203,10 +254,16 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .clock.flagged{border-color:var(--brick)}
 
 /* ---------- board ---------- */
-.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34)}
+/* Garde-fou : sur telephone, l'echiquier debordait a droite et la colonne h
+   se retrouvait hors ecran. Aucune largeur du code ne l'expliquait, mais un
+   plafond explicite garantit que le cadre et la grille ne peuvent jamais
+   depasser la place disponible, quelle que soit la cause. box-sizing evite
+   que la marge interieure ne s'ajoute a la largeur. */
+.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34);max-width:100%;box-sizing:border-box}
 .board{
   display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));
-  aspect-ratio:1/1;width:100%;border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
+  aspect-ratio:1/1;width:100%;max-width:100%;box-sizing:border-box;
+  border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
 }
 .sq:focus-visible{outline:2px dashed var(--chalk);outline-offset:-3px;z-index:6}
 .sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
@@ -256,12 +313,27 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
 .field{margin-bottom:14px}
 .seg{display:flex;gap:3px;background-color:var(--ink);padding:3px;border-radius:8px;border:1px solid var(--rule)}
-.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:6px;cursor:pointer;white-space:nowrap;min-width:0}
+/* Les segments partagent la largeur a parts egales sans pouvoir passer a la
+   ligne. Sur un ecran etroit, un libelle long comme "Tranquille" reclame plus
+   de place que sa case et deborde. On reduit le corps et on autorise la
+   cesure plutot que de laisser le texte sortir de son cadre. */
+@media(max-width:430px){
+  .seg button{font-size:11.5px;padding:8px 2px;white-space:normal;line-height:1.2}
+}
 .seg button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform .08s}
 .btn:hover{background:#33483e}
 .btn:active{transform:translateY(1px)}
+/* Un bouton verrouille pendant une partie doit se voir comme tel : aucune
+   reaction au survol ni au clic, et un affaiblissement net. Sans cela, il
+   changeait de couleur au toucher et semblait fonctionner. */
+.btn:disabled,.seg button:disabled,.tc-cats button:disabled,.tc-chips button:disabled{
+  opacity:.38;cursor:default;pointer-events:none
+}
+.btn:disabled:hover,.btn:disabled:active{background-color:var(--raise);transform:none}
+.seg button:disabled[aria-pressed="true"],.tc-cats button:disabled[aria-pressed="true"]{opacity:.5}
 .btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .btn.danger{border-color:rgba(196,87,63,.5);color:#E4907C}
 .btn.danger:hover{background:rgba(196,87,63,.16)}
@@ -271,6 +343,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .btnrow .btn{flex:1;min-width:104px}
+/* Les boutons se partagent la ligne a parts egales, soit environ 105 px sur
+   un telephone. Un mot long et insecable comme "Recommencer" depassait alors
+   des deux cotes de sa case : rien n'autorisait la cesure. On la permet, et
+   on laisse la case s'adapter au mot le plus long qu'elle doit contenir. */
+/* Pas de cesure ni de coupure en plein mot : "Exercice sui-vant" est pire
+   que deux lignes propres. On laisse les mots entiers et on reduit le corps
+   sur ecran etroit pour qu'ils tiennent. */
+.btn{overflow-wrap:normal;word-break:normal;hyphens:none}
+@media(max-width:430px){
+  .btnrow .btn{min-width:96px;padding:10px 8px;font-size:12.5px}
+}
 
 /* ---------- scoresheet ---------- */
 .sheet{background:#F4EEDC;border-radius:6px;overflow:hidden;color:#2A2A22}
@@ -292,7 +375,23 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 /* ---------- puzzles ---------- */
 .quest{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;line-height:1.35;margin-bottom:4px}
 .theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(217,168,63,.4);padding:2px 8px;border-radius:999px;margin-bottom:10px}
-.tabs{overflow-x:auto;max-width:100%}
+/* min-width:0 est indispensable, pas cosmetique. Les boutons sont en
+   white-space:nowrap, donc la largeur minimale de la rangee vaut la somme de
+   leurs textes. Comme .tabs est un element flexible de l'entete, son
+   min-width:auto par defaut imposait cette largeur a toute la page, et en CSS
+   min-width l'emporte sur max-width : le max-width:100% ci-dessous ne servait
+   a rien et l'overflow-x ne se declenchait jamais.
+   En anglais la rangee depassait de 11 px, en francais de 119 : d'ou un
+   echiquier et des pendules coupes a droite dans une seule des deux langues. */
+/* min-width:0 ne suffisait pas : en tant qu'element flexible, la rangee
+   gardait la largeur de son contenu et elargissait toute la page. flex-basis
+   a 100 % la force a prendre la ligne entiere et rien de plus, ce qui rend
+   enfin son defilement interne operant. */
+.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+/* L'entete elle-meme ne doit pas pouvoir etre elargie par un de ses enfants. */
+header{min-width:0}
+header>*{min-width:0}
 .langswitch{flex:none;padding:3px}
 .langswitch button{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;flex:none}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
@@ -528,12 +627,21 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
       <div class="explore" id="exploreLinks"></div>
     </div>
 
-    <div class="strip">
+    <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
+         n'afficherait que des zeros, ce qu'un premier visiteur lit comme
+         "le site est vide" alors qu'il s'agit de sa propre progression.
+         On lui propose donc de commencer, et la bande apparait des qu'il
+         a quelque chose a y voir. -->
+    <div class="strip" id="homeStrip">
       <div class="stat"><b id="hLevel">1</b><span>Puzzle level</span></div>
       <div class="stat"><b id="hSolved">0</b><span>Solved</span></div>
       <div class="stat"><b id="hBest">0</b><span>Best streak</span></div>
       <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
       <div class="stat"><b id="hStreak">0</b><span>Day streak</span></div>
+    </div>
+    <div class="startline hide" id="homeStart">
+      <span id="homeStartText">Your progress will show up here.</span>
+      <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>
     </div>
   </div>
 
@@ -563,6 +671,21 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
         </div>
         <div class="board-frame">
         <div class="board" id="board"></div>
+        <!-- Overlay de preparation. Sur une partie chronometree, la pendule
+             demarrait en meme temps que la partie : quelqu'un qui arrivait
+             depuis l'accueil perdait de precieuses secondes a comprendre ou
+             il etait, ce qui compte en bullet. On lui montre d'abord contre
+             quoi il joue, et rien ne demarre avant qu'il le decide. -->
+        <div class="result hide" id="readyBanner" role="dialog" aria-modal="false" aria-labelledby="readyTitle">
+          <div class="result-card">
+            <b id="readyTitle">Ready?</b>
+            <span id="readySub"></span>
+            <div class="result-actions">
+              <button class="btn primary" id="readyStart">Start</button>
+              <button class="btn" id="readySettings">Change settings</button>
+            </div>
+          </div>
+        </div>
         <div class="result hide" id="resultBanner" role="status" aria-live="polite">
           <div class="result-card">
             <b id="resultTitle"></b>
@@ -640,9 +763,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <button class="btn primary" id="btnAnalyse">Analyse this game</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
-            <button class="btn" id="btnStockfish">Enable Stockfish</button>
+            <button class="btn" id="btnStockfish">Stockfish for review</button>
           </div>
-          <p class="note" id="sfStatus">The built-in engine is instant. Stockfish is stronger, and downloads about 7 MB the first time.</p>
+          <p class="note" id="sfStatus">Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.</p>
           <div id="analysisOut" class="hide">
             <div class="accrow">
               <div class="stat"><b id="accScore">—</b><span>Accuracy</span></div>
@@ -696,6 +819,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
           <p class="quest" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
 
+          <!-- Les trois actions du geste courant sont ici, sous l'enonce :
+               elles servent a chaque exercice, alors que le filtre par theme
+               et la reinitialisation ne servent qu'occasionnellement. Les
+               laisser toutes ensemble plus bas obligeait a faire defiler
+               apres chaque exercice sur telephone. -->
+          <div class="btnrow" style="margin-top:12px">
+            <button class="btn primary" id="btnNext">Next puzzle</button>
+            <button class="btn" id="btnHintEx">Hint</button>
+            <button class="btn" id="btnSolve">Show solution</button>
+          </div>
+
           <hr class="rule">
 
           <div class="ladder" id="ladder"></div>
@@ -717,11 +851,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <select class="select" id="themeFilter" aria-label="Filter puzzles by theme"></select>
           </div>
           <div class="btnrow">
-            <button class="btn primary" id="btnNext">Next puzzle</button>
-            <button class="btn" id="btnHintEx">Hint</button>
-            <button class="btn" id="btnSolve">Show solution</button>
-          </div>
-          <div class="btnrow" style="margin-top:8px">
             <button class="btn" id="btnDaily">Puzzle of the day</button>
             <button class="btn" id="btnRush">Chang Sprint</button>
             <button class="btn" id="btnRetry">Restart puzzle</button>
@@ -834,13 +963,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
 
   <!-- ================= LEGAL ================= -->
   <div id="pane-legal" class="hide">
+    <!-- Les deux sections vivent dans le meme panneau : sans ancre, cliquer
+         sur "Confidentialite" amenait en haut, donc sur les mentions
+         legales. Chaque titre est donc une cible de defilement, focalisable
+         par programme pour que les lecteurs d'ecran suivent aussi. -->
     <div class="panel">
-      <h2>Legal notice</h2>
+      <h2 id="legalTitle" tabindex="-1">Legal notice</h2>
       <p class="sub">Publisher and hosting details.</p>
       <div class="prose" id="legalBody"></div>
     </div>
     <div class="panel">
-      <h2>Privacy</h2>
+      <h2 id="privacyTitle" tabindex="-1">Privacy</h2>
       <div class="prose" id="privacyBody"></div>
     </div>
   </div>
@@ -977,14 +1110,14 @@ const FR={
 
 /* --- navigation dans la partie --- */
 "Review":"Analyse","Analyse this game":"Analyser cette partie","Analysing with Stockfish…":"Analyse avec Stockfish…",
-"Enable Stockfish":"Activer Stockfish","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
+"Stockfish for review":"Stockfish pour l'analyse","Stockfish is only used to review a finished game, never to help you play.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues.","Enable Stockfish":"Activer Stockfish","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
 "The built-in engine reviews your game instantly. Stockfish is stronger but downloads about 7 MB the first time.":
  "Le moteur intégré analyse ta partie instantanément. Stockfish est plus fort mais télécharge environ 7 Mo la première fois.",
 "Stockfish is ready. Game review will now use it instead of the built-in engine.":
  "Stockfish est prêt. L'analyse de partie l'utilisera désormais à la place du moteur intégré.",
 "Stockfish could not start ({why}). The built-in engine stays in use.":
  "Stockfish n'a pas pu démarrer ({why}). Le moteur intégré reste en service.",
-"The built-in engine is instant. Stockfish is stronger, and downloads about 7 MB the first time.":"Le moteur intégré répond instantanément. Stockfish est plus fort, mais il télécharge environ 7 Mo à la première utilisation.",
+"Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues. Il est plus fort que le moteur intégré, et télécharge environ 7 Mo à la première utilisation.",
 "Stockfish is already running.":"Stockfish tourne déjà.",
 "Fetching the engine, this can take a moment on a first visit.":"Téléchargement du moteur, cela peut prendre un moment à la première visite.",
 "Stockfish stopped responding, falling back to the built-in engine.":"Stockfish ne répond plus, retour au moteur intégré.",
@@ -1178,17 +1311,31 @@ const FR={
 "You resigned. The computer wins.":"Tu abandonnes. L'ordinateur gagne.","You resign":"Tu abandonnes",
 "You resigned this game.":"Tu as abandonné cette partie.","Your friend resigned. You win.":"Ton ami a abandonné. Tu gagnes.",
 "I resign, well played.":"J'abandonne, bien joué.",
-"Legal notice":"Mentions légales","Privacy":"Confidentialité","Publisher and hosting details.":"Éditeur et hébergeur.",
+"Your progress will show up here.":"Ta progression s'affichera ici.",
+"Solve your first puzzle →":"Résous ton premier exercice →",
+"Ready when you are":"Quand tu veux","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press start when you are ready.":"Appuie sur Commencer quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
+"Legal notice":"Mentions légales","Privacy":"Confidentialité","Preferences":"Préférences","Accessibility":"Accessibilité","Publisher and hosting details.":"Éditeur et hébergeur.",
 "chang64 · no account, no tracking · progress saved on this device":
  "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",
 "Use your browser menu: Add to home screen":"Passe par le menu du navigateur : Ajouter à l'écran d'accueil"
 };
 
 let LANG=(navigator.language||"en").toLowerCase().indexOf("fr")===0?"fr":"en";
+/* Un mot court ne doit pas rester seul en fin de ligne : "Exercice du /
+   jour" ou "Suggerer un / coup" se lisent mal dans un bouton etroit. On lie
+   donc l'article au mot suivant par une espace insecable, une fois pour
+   toutes plutot que dans chaque libelle. Regle typographique francaise
+   courante, sans effet quand le texte tient sur une ligne. */
+const MOTS_LIES=/(^|\s)(du|de|des|le|la|les|un|une|au|aux|en|et|ma|mon|ta|ton|sur|par|a|à|d'|l')(\s)(?=\S)/gi;
+function lier(x){
+  return String(x).replace(MOTS_LIES, function(_, av, mot, ap){
+    return av + mot + (mot.endsWith("'") ? "" : "\u00a0");
+  });
+}
 function t(s,v){
   let out=(LANG==="fr"&&FR[s])||s;
   if(v)for(const k in v)out=out.split("{"+k+"}").join(v[k]);
-  return out;
+  return LANG==="fr" ? lier(out) : out;
 }
 /* textes statiques du document : relevés une fois, retraduits à la demande */
 let i18nText=[],i18nAttr=[];
@@ -1216,6 +1363,9 @@ function applyI18n(){
     r.node.nodeValue=next;r.current=next;
   }
   for(const r of i18nAttr)r.el.setAttribute(r.attr,t(r.en));
+  /* Les libelles statiques anglais laisses tels quels passent aussi par la
+     regle quand on est en francais, sinon seuls les textes traduits en
+     beneficieraient. */
   const box=document.getElementById("langSwitch");
   if(box)for(const b of box.children)b.setAttribute("aria-pressed",b.dataset.lang===LANG);
 }
@@ -1720,7 +1870,14 @@ function clockSetup(){
   clockHist=[{w:clock.w,b:clock.b}];
   renderClocks();
 }
+/* Tant que la partie n'est pas lancee depuis l'overlay de preparation, la
+   pendule ne doit pas s'ecouler et l'ordinateur ne doit pas jouer. */
+let awaitingStart=false;
+/* Pose par le bandeau de fin : on vient de choisir, inutile de redemander. */
+let skipReady=false;
+let readyStatus="";
 function clockDrain(){
+  if(awaitingStart)return;
   if(!clock.enabled||clock.active===null||isFlagged())return;
   const now=Date.now(),d=now-clock.last;
   clock.last=now;
@@ -1742,6 +1899,14 @@ function fmtTime(ms){
   if(ms<20000)return m+":"+(s<10?"0":"")+s.toFixed(1);
   return m+":"+String(Math.floor(s)).padStart(2,"0");
 }
+/* "Chang" designe l'adversaire, pas le site : chang64 reste le nom du site,
+   et le distinguer evite de croire qu'on joue contre la plateforme. */
+function botLabel(){
+  const seg=document.getElementById("segLevel");
+  let force="";
+  if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
+  return force?"Chang \u00b7 "+force:"Chang";
+}
 function renderClocks(){
   const show=clock.enabled&&mode==="play"&&gameStarted;
   $("clockTop").classList.toggle("hide",!show);
@@ -1751,7 +1916,11 @@ function renderClocks(){
   const snap=(typeof reviewPly!=="undefined"&&reviewPly!==null&&typeof clockHist!=="undefined"&&clockHist[reviewPly])
     ? clockHist[reviewPly] : clock;
   const val=c=>c===W?snap.w:snap.b;
-  $("clockTopName").textContent=t("Computer");
+  /* L'adversaire s'appelait "Ordinateur", ce qui ne dit rien. On le nomme,
+     et on rappelle sa force : battre "Chang · Coriace" veut dire quelque
+     chose, et on sait en permanence contre quoi on joue. Le libelle de force
+     est lu sur le selecteur, deja traduit, plutot que maintenu en double. */
+  $("clockTopName").textContent=botLabel();
   $("clockBottomName").textContent=t("You");
   $("clockTopSwatch").className=topColor===B?"dark":"";
   $("clockBottomSwatch").className=botColor===B?"dark":"";
@@ -1906,6 +2075,37 @@ function refreshGame(){
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
   $("btnUndo").disabled=!gameStarted||game.history.length<2||busy||isFlagged()||resigned!==null;
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
+
+  /* Pendant une partie en cours, seul "Abandonner" reste actif.
+     Deux raisons distinctes :
+     - changer de couleur relancait immediatement une nouvelle partie et
+       faisait disparaitre celle en cours sans prevenir ;
+     - un bouton Stockfish cliquable pendant qu'on joue laisse croire qu'il
+       peut servir a trouver le meilleur coup. Il ne le peut pas, la
+       suggestion utilise le moteur integre et reste bloquee tant que la
+       partie n'est pas finie, mais aux echecs le soupcon de triche suffit a
+       poser probleme : mieux vaut lever toute ambiguite. */
+  const enCours=gameStarted&&!over;
+  const geler=el=>{const e=$(el);if(e)e.disabled=enCours;};
+  geler("btnNew");
+  /* Stockfish : ne pas contrarier son propre etat. Pendant le telechargement
+     il se desactive lui-meme, et on ne doit surtout pas le rallumer. */
+  {
+    const sfBtn=$("btnStockfish");
+    if(sfBtn){
+      const enChargement=typeof sf!=="undefined"&&sf&&!sf.ready&&sf.worker;
+      if(enCours)sfBtn.disabled=true;
+      else if(!enChargement)sfBtn.disabled=false;
+    }
+  }
+  for(const seg of ["segColor","segLevel"]){
+    const g=$(seg);
+    if(g)for(const b of g.children)b.disabled=enCours;
+  }
+  for(const seg of ["tcCats2","tcChips2"]){
+    const g=$(seg);
+    if(g)for(const b of g.children)b.disabled=enCours;
+  }
 }
 let resultInfo=null,resigned=null;
 function gameOver(){
@@ -1961,7 +2161,13 @@ function playUser(m){
 }
 function botMove(){
   if(isFlagged()){busy=false;refreshGame();return;}
-  const conf={1:{d:1,t:120},2:{d:2,t:280},3:{d:3,t:700},4:{d:4,t:1500}}[botLevel];
+  /* Profondeurs relevees apres optimisation du moteur. Auparavant, le niveau
+     4 demandait 3,7 s pour atteindre la profondeur 4 mais n'en avait que 1,5 :
+     il etait coupe en cours de route et jouait en realite comme le niveau 3.
+     Le moteur atteint desormais la profondeur 4,8 en moyenne dans ce meme
+     budget, ce qui rend le palier 5 accessible et l'echelle enfin croissante.
+     Mesure : profondeur 5 bat profondeur 4 par 5,5 a 2,5. */
+  const conf={1:{d:1,t:120},2:{d:2,t:280},3:{d:3,t:700},4:{d:5,t:2000}}[botLevel];
   let budget=conf.t;
   if(clock.enabled){
     const left=(myColor===W?clock.b:clock.w);
@@ -2033,6 +2239,21 @@ function newGame(){
   mainGame=null;
   refreshGame();
   if(typeof focusBoard==="function")focusBoard();
+  /* Overlay de preparation, uniquement sur les parties chronometrees : sans
+     pendule rien ne presse, donc rien a proteger. skipReady est pose quand on
+     relance depuis le bandeau de fin, ou le choix vient d'etre fait. */
+  const chrono=cat!=="none"&&cat!=="daily";
+  if(chrono&&!skipReady&&typeof showReady==="function"){
+    awaitingStart=true;
+    /* On memorise le message d'origine ("Nouvelle partie, 10+0 Rapide...")
+       pour le restituer au demarrage : il porte la cadence, que l'overlay
+       remplace temporairement par son invite. */
+    readyStatus=s.textContent;
+    showReady(tcTxt);
+    return;                      /* l'ordinateur attend, lui aussi */
+  }
+  awaitingStart=false;
+  skipReady=false;
   if(myColor===B){busy=true;$("status").textContent=t("The computer is thinking…");setTimeout(botMove,220);}
 }
 let resignTimer=null;
@@ -2087,9 +2308,24 @@ function undoGame(){
   game.undoMove();game.undoMove();
   sanList.splice(-2);
   if(clock.enabled){
+    /* clockHist enregistre l'etat APRES chaque coup, et la partie commence
+       avec une seule entree. Retirer les deux dernieres ramenait donc au
+       temps de depart des la premiere annulation : la pendule remontait,
+       offrant du temps gratuit a chaque clic sur Reprendre.
+       On ne restitue donc pas le temps consomme : annuler un coup rend la
+       position, pas les secondes deja ecoulees. Seul l'increment eventuel
+       ajoute par les deux coups annules est repris. */
     clockHist.splice(-2);
-    const last=clockHist[clockHist.length-1]||clockHist[0];
-    clock.w=last.w;clock.b=last.b;clock.active=game.turn;clock.last=Date.now();
+    clockDrain();                      /* decompter le temps ecoule d'abord */
+    if(clock.inc){
+      if(game.turn===W)clock.w=Math.max(0,clock.w-clock.inc);
+      else clock.b=Math.max(0,clock.b-clock.inc);
+      const autre=game.turn^1;
+      if(autre===W)clock.w=Math.max(0,clock.w-clock.inc);
+      else clock.b=Math.max(0,clock.b-clock.inc);
+    }
+    clock.active=game.turn;clock.last=Date.now();
+    clockHist.push({w:clock.w,b:clock.b});
   }
   lastMove=game.history.length?game.history[game.history.length-1].m:null;
   selected=-1;marks={};
@@ -2256,6 +2492,10 @@ function renderProgress(){
   $("hLevel").textContent=prog.level;
   $("hSolved").textContent=prog.solved;
   $("hBest").textContent=prog.best;
+  /* renderExtraStats decide d'afficher la bande ou l'invitation : il faut
+     la rappeler ici, sinon l'invitation resterait affichee apres le premier
+     exercice resolu. Declaree dans ui2.js, concatene apres. */
+  if(typeof renderExtraStats==="function")renderExtraStats();
 }
 function hintPuzzle(){
   if(puzzleDone)return;
@@ -2621,19 +2861,19 @@ function setMode(m,opts){
 }
 
 /* ---------- listeners ---------- */
-$("brand").onclick=()=>setMode("home");
-$("tab-home").onclick=()=>setMode("home");
-$("tab-play").onclick=()=>setMode("play");
-$("tab-puzzles").onclick=()=>setMode("puzzles");
-$("tab-friend").onclick=()=>setMode("friend");
+$("brand").onclick=()=>{setMode("home");goTop();};
+$("tab-home").onclick=()=>{setMode("home");goTop();};
+$("tab-play").onclick=()=>{setMode("play");goTop();};
+$("tab-puzzles").onclick=()=>{setMode("puzzles");goTop();};
+$("tab-friend").onclick=()=>{setMode("friend");goTop();};
 $("heroPlay").onclick=()=>{
   if(tcCat==="daily")setMode("friend");
   else setMode("play",{fresh:true});
 };
-$("heroPuzzle").onclick=()=>setMode("puzzles",{daily:true});
-$("cardPlay").onclick=()=>setMode("play",{fresh:true});
-$("cardPuzzles").onclick=()=>setMode("puzzles");
-$("cardFriend").onclick=()=>setMode("friend");
+$("heroPuzzle").onclick=()=>{setMode("puzzles",{daily:true});goTop();};
+$("cardPlay").onclick=()=>{setMode("play",{fresh:true});goTop();};
+$("cardPuzzles").onclick=()=>{setMode("puzzles");goTop();};
+$("cardFriend").onclick=()=>{setMode("friend");goTop();};
 $("segColor").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
@@ -2644,6 +2884,9 @@ $("segLevel").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
   botLevel=+b.dataset.v;
+  /* Le nom affiche au-dessus de la pendule porte la force : il doit suivre
+     le changement, sinon il annoncerait l'ancien niveau. */
+  if(typeof renderClocks==="function")renderClocks();
 });
 $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
 $("btnUndo").onclick=undoGame;
@@ -2929,7 +3172,13 @@ function afterGameRender(over){
   applyEvalPref();
   renderResult(!!over);
 }
-$("resultNew").onclick=()=>{resultDismissed=false;if(mode==="friend")newAmiGame();else newGame();};
+$("resultNew").onclick=()=>{
+  resultDismissed=false;
+  /* On relance depuis le bandeau de fin : le choix vient d'etre fait, on ne
+     represente pas l'overlay de preparation. */
+  if(mode==="friend")newAmiGame();
+  else {skipReady=true;newGame();}
+};
 $("resultClose").onclick=()=>{resultDismissed=true;$("resultBanner").className="result hide";};
 $("resultAnalyse").onclick=()=>{
   resultDismissed=true;
@@ -3054,8 +3303,11 @@ function buildPgn(){
   else if(g.isDraw())result="1/2-1/2";
   const {cat,item}=tcCurrent();
   const tc=cat==="none"||cat==="daily"?"-":(item[0]*60)+"+"+item[1];
-  const white=myColor===W?"You":"chang64 engine";
-  const black=myColor===W?"chang64 engine":"You";
+  /* Meme nom que celui affiche a l'ecran, avec la force : une partie
+     exportee doit dire contre quoi elle a ete jouee. */
+  const bot=(typeof botLabel==="function")?botLabel():"Chang";
+  const white=myColor===W?"You":bot;
+  const black=myColor===W?bot:"You";
   let body="",line="";
   for(let i=0;i<sanList.length;i++){
     const tok=(i%2===0?(i/2+1)+". ":"")+sanList[i]+" ";
@@ -3262,6 +3514,13 @@ function renderExtraStats(){
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
   set("stRating",prog.rating);set("stDays",prog.days);set("stRush",prog.rushBest);
   set("hRating",prog.rating);set("hStreak",prog.days);
+  /* Rien de resolu : la bande n'afficherait que des zeros, ce qu'un premier
+     visiteur lit comme "le site est vide" plutot que comme sa propre
+     progression encore vierge. On lui propose de commencer a la place. */
+  const vierge=!prog.solved;
+  const strip=$("homeStrip"), start=$("homeStart");
+  if(strip)strip.classList.toggle("hide",vierge);
+  if(start)start.classList.toggle("hide",!vierge);
 }
 
 /* --- Chang Sprint : le mode chronometre. Anciennement "Puzzle Rush",
@@ -3384,7 +3643,7 @@ function renderLegal(){
   $("legalBody").innerHTML= fr
     ? "<h4>Éditeur</h4><p><strong>"+PUBLISHER.name+"</strong><br>Directeur de la publication : "+PUBLISHER.name+
       "<br>Contact : "+PUBLISHER.email+"</p>"+
-      "<p>chang64 est édité par un particulier, à titre non professionnel. Conformément à l'article 6, III, 2 de la loi pour la confiance dans l'économie numérique, "+
+      "<p>chang64 est édité par un particulier, à titre non professionnel. Conformément à l'article 1-1, II de la loi pour la confiance dans l'économie numérique, "+
       "l'éditeur a choisi de ne pas rendre publics son nom et son adresse. Ces informations sont détenues par l'hébergeur, qui les communiquera à l'autorité judiciaire sur requête.</p>"+
       "<h4>Hébergement</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
       "<h4>Nom de domaine</h4><p>Enregistré auprès de <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
@@ -3408,7 +3667,7 @@ function renderLegal(){
       "<h4>Signalement</h4><p>Toute demande relative au contenu du site peut être adressée à "+PUBLISHER.email+".</p>"
     : "<h4>Publisher</h4><p><strong>"+PUBLISHER.name+"</strong><br>Publication director: "+PUBLISHER.name+
       "<br>Contact: "+PUBLISHER.email+"</p>"+
-      "<p>chang64 is published by a private individual, on a non-professional basis. Under article 6, III, 2 of the French Digital Economy Act, "+
+      "<p>chang64 is published by a private individual, on a non-professional basis. Under article 1-1, II of the French Digital Economy Act, "+
       "the publisher has chosen not to make their name and address public. That information is held by the host and will be disclosed to the judicial authority on request.</p>"+
       "<h4>Hosting</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
       "<h4>Domain name</h4><p>Registered through <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
@@ -3515,10 +3774,12 @@ setMode=function(m,opts){
   renderExtraStats();applyEvalPref();
   if(m==="play"){renderOpening();renderSheetPlay();}
 };
-$("tab-watch").onclick=()=>setMode("watch");
-$("footLegal").onclick=()=>setMode("legal");
-$("footPrivacy").onclick=()=>setMode("legal");
-$("footHome").onclick=()=>setMode("home");
+$("tab-watch").onclick=()=>{setMode("watch");goTop();};
+/* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
+   amenait sur les mentions legales. On amene chacun a sa propre section. */
+$("footLegal").onclick=()=>{setMode("legal");goToSection("legalTitle");};
+$("footPrivacy").onclick=()=>{setMode("legal");goToSection("privacyTitle");};
+$("footHome").onclick=()=>{setMode("home");goTop();};   /* meme mecanique que les onglets */
 
 /* keep the UCI move list in step with the played game */
 const basePlayUser=playUser,baseBotMove=botMove,baseUndoGame=undoGame;
@@ -3543,6 +3804,71 @@ ensureProgFields();
 renderExtraStats();
 applyEvalPref();
 
+/* ==========================================================
+   OVERLAY DE PREPARATION
+   ==========================================================
+   Sur une partie chronometree, la pendule partait en meme temps que la
+   partie. Quelqu'un qui arrivait depuis l'accueil par "Jouer maintenant"
+   decouvrait l'echiquier alors que son temps s'ecoulait deja, ce qui coute
+   cher en bullet. L'overlay montre d'abord la cadence, la force et la
+   couleur, et rien ne demarre avant qu'il le decide.
+
+   Il n'apparait que sur les cadences chronometrees : sans pendule ou en
+   correspondance, il n'y a rien a proteger et ce serait un clic de trop.
+   ========================================================== */
+function showReady(tcTxt){
+  const b=$("readyBanner"); if(!b)return;
+  /* Le libelle de force est lu directement sur le selecteur : il est deja
+     traduit par applyI18n, inutile de maintenir une seconde liste qui
+     divergerait. */
+  let force="";
+  const seg=$("segLevel");
+  if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
+  $("readyTitle").textContent=t("Ready when you are");
+  $("readySub").textContent=
+    tcTxt+(force?" \u00b7 "+force:"")+" \u00b7 "+
+    (myColor===W?t("You play White."):t("You play Black."));
+  $("readyStart").textContent=t("Start the game");
+  $("readySettings").textContent=t("Change settings");
+  b.classList.remove("hide");
+  const s=$("status"); if(s)s.textContent=t("Press start when you are ready.");
+  try{$("readyStart").focus();}catch(e){}
+}
+function hideReady(){
+  const b=$("readyBanner"); if(b)b.classList.add("hide");
+}
+function startReadyGame(){
+  hideReady();
+  awaitingStart=false;
+  /* La pendule a ete armee au moment du newGame : sans cette remise a
+     l'heure, tout le temps passe sur l'overlay serait decompte d'un coup. */
+  if(clock&&clock.enabled)clock.last=Date.now();
+  const s=$("status");
+  if(s)s.textContent=myColor===B?t("The computer is thinking…"):(readyStatus||t("Your move."));
+  if(myColor===B){busy=true;setTimeout(botMove,220);}
+  /* refreshGame est ce qui verrouille les reglages pendant une partie. Sans
+     cet appel, une partie lancee depuis l'overlay laissait couleur, force et
+     cadence modifiables, alors qu'une partie relancee apres un abandon les
+     verrouillait correctement : newGame, lui, passe par refreshGame. */
+  refreshGame();
+  if(typeof focusBoard==="function")focusBoard();
+}
+if($("readyStart"))$("readyStart").onclick=startReadyGame;
+if($("readySettings"))$("readySettings").onclick=()=>{
+  /* La partie n'a pas commence : on l'annule pour de bon, sinon le
+     verrouillage en cours de partie garde les reglages desactives et le
+     bouton menait a des reglages intouchables. */
+  hideReady();
+  awaitingStart=false;
+  gameStarted=false;
+  if(typeof setupGame==="function")setupGame();
+  refreshGame();
+  const p=$("gameSettings")||$("segLevel");
+  if(p){try{p.scrollIntoView({behavior:"smooth",block:"center"});}catch(e){p.scrollIntoView();}}
+  const s=$("status");
+  if(s)s.textContent=t("Pick a colour and a strength, then play.");
+};
+
 
 /* --- ramener l'échiquier sous les yeux quand l'action part d'un bouton situé plus bas --- */
 function focusBoard(){
@@ -3558,6 +3884,31 @@ function focusBoard(){
     const smooth=!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     el.scrollIntoView(smooth?{behavior:"smooth",block:"start"}:{block:"start"});
   }catch(e){}
+}
+
+/* --- amener une section sous les yeux, et lui donner le focus ---
+   Plusieurs boutons ouvrent un panneau qui contient plusieurs sections :
+   sans cela, on arrivait systematiquement en haut, donc au mauvais endroit.
+   Le focus compte autant que le defilement : un lecteur d'ecran continue
+   sinon a lire depuis le debut du document. */
+/* Revenir en haut de la nouvelle vue. Sans cela, cliquer sur un onglet
+   depuis le bas de la page laissait a la meme hauteur, donc au milieu d'un
+   contenu sans rapport. Volontairement limite aux clics de navigation : le
+   declencher dans setMode ferait sauter la page a chaque rafraichissement
+   interne, par exemple un changement de langue. */
+function goTop(){
+  const calme=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try{window.scrollTo(calme?{top:0}:{top:0,behavior:"smooth"});}
+  catch(e){try{window.scrollTo(0,0);}catch(e2){}}
+}
+function goToSection(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  try{el.focus({preventScroll:true});}catch(e){try{el.focus();}catch(e2){}}
+  if(typeof el.scrollIntoView!=="function")return;
+  const calme=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try{el.scrollIntoView(calme?{block:"start"}:{behavior:"smooth",block:"start"});}
+  catch(e){el.scrollIntoView();}
 }
 
 /* ==========================================================
@@ -3878,7 +4229,7 @@ function sfEnable(){
   let settled=false;
   const fail=why=>{
     if(settled)return;settled=true;
-    btn.disabled=false;btn.textContent=t("Enable Stockfish");
+    btn.disabled=false;btn.textContent=t("Stockfish for review");
     sf.worker=null;sf.ready=false;
     sfStatus(t("Stockfish could not start ({why}). The built-in engine stays in use.",{why:t(why)}));
   };
@@ -4009,6 +4360,20 @@ $("langSwitch").addEventListener("click",e=>{
   /* le panneau de preferences est construit en JS : il ne passe pas par
      applyI18n et doit donc etre redessine a la bascule de langue */
   if(typeof renderPrefs==="function"&&mode==="prefs")renderPrefs();
+  /* Le nom de l'adversaire porte la force ("Chang · Coriace"), composee en
+     JavaScript : elle ne passe pas par applyI18n et resterait en anglais
+     apres un changement de langue. */
+  if(typeof renderClocks==="function")renderClocks();
+  /* L'overlay de preparation est compose en JavaScript : il ne passe pas par
+     applyI18n et restait dans l'ancienne langue s'il etait affiche au moment
+     de la bascule. */
+  const rb=$("readyBanner");
+  if(rb&&!rb.classList.contains("hide")&&typeof showReady==="function"){
+    try{
+      const {cat,item}=tcCurrent();
+      showReady(cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1)));
+    }catch(e){}
+  }
 });
 
 /* ==========================================================
@@ -4314,21 +4679,14 @@ function renderPrefs(){
       : "<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>";
   }
 }
-if($("footPrefs"))$("footPrefs").onclick=()=>setMode("prefs");
+if($("homeStartBtn"))$("homeStartBtn").onclick=()=>setMode("puzzles");
+if($("footPrefs"))$("footPrefs").onclick=()=>{setMode("prefs");goTop();};
 /* Lien dedie : "Preferences" est trop generique pour qui cherche des reglages
    d'accessibilite. Le second lien mene au meme panneau mais amene directement
    a la section, et lui donne le focus pour les lecteurs d'ecran. */
 if($("footAccess"))$("footAccess").onclick=()=>{
   setMode("prefs");
-  const h=$("accessibilite");
-  if(!h)return;
-  /* Le focus d'abord : c'est lui qui compte pour un lecteur d'ecran, et il
-     amene deja l'element a l'ecran. Le defilement doux n'est qu'un confort,
-     donc il vient apres et ne doit jamais empecher le focus. */
-  h.focus();
-  if(typeof h.scrollIntoView==="function"){
-    try{h.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){}
-  }
+  goToSection("accessibilite");   /* meme mecanique que les autres sections */
 };
 loadPrefs();
 

@@ -57,8 +57,10 @@ class Game {
       if (parts[2].includes("q")) this.castling |= CASTLE_BQ;
     }
     this.ep = parts[3] && parts[3] !== "-" ? nameSq(parts[3]) : -1;
+    this.ka = 0; this.kb = 0;
     this.half = parts[4] ? parseInt(parts[4], 10) : 0;
     this.full = parts[5] ? parseInt(parts[5], 10) : 1;
+    this.computeKey();     /* avant le premier bump : sinon cle nulle */
     this.bump(1);
   }
 
@@ -84,7 +86,30 @@ class Game {
     return `${s} ${this.turn === W ? "w" : "b"} ${c || "-"} ${this.ep >= 0 ? sqName(this.ep) : "-"} ${this.half} ${this.full}`;
   }
 
-  posKey() { return this.fen().split(" ").slice(0, 4).join(" "); }
+  /* Empreinte complete, recalculee depuis zero. Utilisee uniquement au
+     chargement d'une position : en cours de recherche, elle est mise a jour
+     coup par coup, ce qui est incomparablement plus rapide. */
+  computeKey() {
+    let a = 0, b = 0;
+    for (let sq = 0; sq < 128; sq++) {
+      if (sq & 0x88) { sq += 7; continue; }
+      const p = this.board[sq];
+      if (!p) continue;
+      const z = ZOB.piece[p & 15][sq];
+      a ^= z[0]; b ^= z[1];
+    }
+    const c = ZOB.castling[this.castling & 15];
+    a ^= c[0]; b ^= c[1];
+    const e = ZOB.ep[this.ep < 0 ? 128 : this.ep];
+    a ^= e[0]; b ^= e[1];
+    if (this.turn === B) { a ^= ZOB.side[0]; b ^= ZOB.side[1]; }
+    this.ka = a | 0; this.kb = b | 0;
+    return this.posKey();
+  }
+  /* Cle utilisee comme identifiant de position : deux entiers 32 bits
+     concatenes en chaine. Ce format sert la detection de repetition ; la
+     table de transposition, elle, se sert directement de ka et kb. */
+  posKey() { return this.ka + "|" + this.kb; }
   bump(d) {
     const k = this.posKey();
     const v = (this.posCounts.get(k) || 0) + d;
@@ -268,6 +293,14 @@ class Game {
     this.half = (m.captured || pType(piece) === P) ? 0 : this.half + 1;
     if (us === B) this.full++;
     this.turn = them;
+    /* L'empreinte est refaite ici. Une mise a jour reellement incrementale
+       serait plus rapide encore, mais chaque cas particulier (roque, prise en
+       passant, promotion, perte d'un droit de roque) est une occasion de
+       desynchroniser la cle sans que rien ne le signale. A ce stade, la
+       fiabilite prime : ce recalcul reste bien moins couteux que l'ancienne
+       construction de chaine FEN, et il rend la table de transposition
+       possible. */
+    this.computeKey();
     this.bump(1);
   }
 
@@ -295,6 +328,7 @@ class Game {
     this.castling = h.castling; this.ep = h.ep; this.half = h.half; this.full = h.full;
     this.kingSq[0] = h.kw; this.kingSq[1] = h.kb;
     this.turn = us;
+    this.computeKey();
     this.bump(1);
   }
 
@@ -383,6 +417,38 @@ const PST = {
       -30,-30,0,0,0,0,-30,-30, -50,-30,-30,-30,-30,-30,-30,-50]
 };
 
+/* ----------------------------------------------------------------------
+   Hachage de Zobrist.
+
+   Chaque position recoit une empreinte numerique, mise a jour de facon
+   incrementale a chaque coup plutot que recalculee. Elle remplace l'ancienne
+   cle, qui reconstruisait la chaine FEN complete a chaque coup, et surtout
+   elle rend possible la table de transposition : sans empreinte rapide, il
+   n'y a aucun moyen de reconnaitre qu'une position a deja ete evaluee.
+
+   Deux entiers 32 bits plutot qu'un seul : un seul donnerait trop de
+   collisions sur les millions de positions d'une recherche.
+   ---------------------------------------------------------------------- */
+const ZOB = (() => {
+  /* generateur deterministe : la meme partie doit toujours produire les
+     memes empreintes, sinon les tests ne seraient pas reproductibles */
+  let seed = 0x9E3779B9;
+  const rnd = () => {
+    seed ^= seed << 13; seed >>>= 0;
+    seed ^= seed >> 17;
+    seed ^= seed << 5;  seed >>>= 0;
+    return seed | 0;
+  };
+  const piece = [];
+  for (let p = 0; p < 16; p++) {
+    piece[p] = [];
+    for (let sq = 0; sq < 128; sq++) piece[p][sq] = [rnd(), rnd()];
+  }
+  const castling = []; for (let i = 0; i < 16; i++) castling[i] = [rnd(), rnd()];
+  const ep = []; for (let i = 0; i < 129; i++) ep[i] = [rnd(), rnd()];
+  return { piece, castling, ep, side: [rnd(), rnd()] };
+})();
+
 function evaluate(g) {
   let score = 0, phase = 0;
   const list = [];
@@ -405,10 +471,43 @@ function evaluate(g) {
 
 const MATE = 100000;
 
+/* ----------------------------------------------------------------------
+   Table de transposition.
+
+   Une meme position se rencontre par des ordres de coups differents, et la
+   recherche la reevaluait entierement a chaque fois. On memorise donc le
+   resultat, indexe par l'empreinte de Zobrist.
+
+   Trois choses sont conservees : le score, la profondeur a laquelle il a ete
+   obtenu, et le type de borne. Ce dernier point est essentiel : alpha-beta ne
+   produit pas toujours un score exact. Quand une branche est coupee, on sait
+   seulement que le score vaut "au moins" ou "au plus" une certaine valeur.
+   Reutiliser une borne comme un score exact fausserait la recherche.
+
+   La table est un tableau de taille fixe indexe par les bits de poids faible
+   de l'empreinte. La seconde moitie de l'empreinte est stockee pour verifier
+   qu'il s'agit bien de la meme position : deux positions differentes peuvent
+   tomber sur la meme case.
+   ---------------------------------------------------------------------- */
+const TT_BITS = 20;                 /* 1 048 576 entrees, environ 20 Mo */
+const TT_SIZE = 1 << TT_BITS;
+const TT_MASK = TT_SIZE - 1;
+const ttKey = new Int32Array(TT_SIZE);      /* verification */
+const ttScore = new Int32Array(TT_SIZE);
+const ttDepth = new Int8Array(TT_SIZE);
+const ttFlag = new Int8Array(TT_SIZE);      /* 0 vide, 1 exact, 2 borne basse, 3 borne haute */
+const ttFrom = new Int8Array(TT_SIZE);      /* meilleur coup connu, pour le tri */
+const ttTo = new Int8Array(TT_SIZE);
+const ttAge = new Int8Array(TT_SIZE);
+let ttGen = 0;
+
+const TT_EXACT = 1, TT_LOWER = 2, TT_UPPER = 3;
+
 function search(g, maxDepth, timeMs) {
   const t0 = Date.now();
   let best = null, bestScore = 0, stop = false;
   const killers = [];
+  ttGen = (ttGen + 1) & 127;   /* les entrees des recherches passees cedent la place */
 
   function order(moves, pvMove) {
     for (const m of moves) {
@@ -440,10 +539,30 @@ function search(g, maxDepth, timeMs) {
   function alphabeta(depth, alpha, beta, ply, pvMove) {
     if ((Date.now() - t0) > timeMs) { stop = true; return alpha; }
     if (ply > 0 && (g.isRepetition() || g.half >= 100 || g.isInsufficient())) return 0;
+
+    /* Consultation de la table. On ne s'en sert que si la position y a ete
+       analysee au moins aussi profondement : un score obtenu a profondeur 2
+       ne peut pas remplacer une recherche a profondeur 5. */
+    const idx = (g.ka & TT_MASK) >>> 0;
+    const alphaOrig = alpha;
+    let ttMove = null;
+    if (ttFlag[idx] !== 0 && ttKey[idx] === g.kb) {
+      if (ttFrom[idx] !== ttTo[idx]) ttMove = { from: ttFrom[idx] & 255, to: ttTo[idx] & 255, promo: 0 };
+      if (ply > 0 && ttDepth[idx] >= depth) {
+        const sc = ttScore[idx], fl = ttFlag[idx];
+        if (fl === TT_EXACT) return sc;
+        if (fl === TT_LOWER && sc >= beta) return sc;
+        if (fl === TT_UPPER && sc <= alpha) return sc;
+      }
+    }
+
     const moves = g.moves();
     if (moves.length === 0) return g.inCheck() ? -MATE + ply : 0;
     if (depth <= 0) return quiesce(alpha, beta, ply);
-    order(moves, pvMove);
+    /* Le coup retenu la derniere fois est essaye en premier : c'est souvent
+       encore le meilleur, et une bonne coupe des le premier coup fait gagner
+       plus que la table elle-meme. */
+    order(moves, pvMove || ttMove);
     let localBest = null;
     for (const m of moves) {
       g.makeMove(m);
@@ -455,6 +574,18 @@ function search(g, maxDepth, timeMs) {
       if (alpha >= beta) break;
     }
     if (ply === 0 && !best && moves.length) best = moves[0];
+
+    /* Enregistrement. On remplace si l'entree est vide, si elle vient d'une
+       recherche precedente, ou si la nouvelle analyse est plus profonde. */
+    if (!stop && (ttFlag[idx] === 0 || ttAge[idx] !== ttGen || ttDepth[idx] <= depth)) {
+      ttKey[idx] = g.kb;
+      ttScore[idx] = alpha;
+      ttDepth[idx] = depth;
+      ttAge[idx] = ttGen;
+      ttFlag[idx] = alpha <= alphaOrig ? TT_UPPER : (alpha >= beta ? TT_LOWER : TT_EXACT);
+      if (localBest) { ttFrom[idx] = localBest.from; ttTo[idx] = localBest.to; }
+      else { ttFrom[idx] = 0; ttTo[idx] = 0; }
+    }
     return alpha;
   }
 

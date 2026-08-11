@@ -92,7 +92,10 @@ setTimeout(async () => {
 
   /* Un texte est suspect s'il contient des mots anglais courants sans aucune
      marque du francais : accent, article ou mot de liaison. */
-  const EN = /\b(the|and|your|you|with|from|this|that|move|moves|game|games|puzzle|puzzles|best|score|level|start|stop|next|back|play|white|black|check|mate|board|piece|pieces|time|left|new|open|close|show|hide|help|about|settings|search|loading|error|save|share|copy|link|friend|day|days|streak|rating|theme|themes|hint|solution|win|lose|draw|engine|stronger|downloads)\b/i;
+  /* "Preferences" et "Accessibility" manquaient a cette liste, et les deux
+     libelles sont restes en anglais dans le pied de page sans que rien ne le
+     signale. Toute chaine visible doit pouvoir etre attrapee ici. */
+  const EN = /\b(the|and|your|you|with|from|this|that|move|moves|game|games|puzzle|puzzles|best|score|level|start|stop|next|back|play|white|black|check|mate|board|piece|pieces|time|left|new|open|close|show|hide|help|about|settings|search|loading|error|save|share|copy|link|friend|day|days|streak|rating|theme|themes|hint|solution|win|lose|draw|engine|stronger|downloads|preferences|accessibility|privacy|legal|notice|home|install|app)\b/i;
   const FR = /[àâçéèêëîïôùûüœ]|\b(le|la|les|un|une|de|des|du|et|tu|ton|ta|tes|coup|coups|partie|parties|exercice|exercices|niveau|blanc|noir|pion|dame|tour|fou|roi|cavalier|jouer|jouent|est|sont|pour|avec|sur|dans|sans|ami)\b/i;
   const suspects = [...vus].filter(t => EN.test(t) && !FR.test(t));
   T("aucun texte reste en anglais", suspects.length === 0, suspects.slice(0, 4).join(" | "));
@@ -118,6 +121,36 @@ setTimeout(async () => {
   T("le second selecteur est aligne", cats("tcCats2").includes("Classique"), cats("tcCats2").join(" | "));
   const accueil = [...vus].find(t => /correspondance/i.test(t));
   T("le texte d'accueil emploie le meme mot", !!accueil, accueil ? accueil.slice(0, 70) : "introuvable");
+
+  console.log("\n--- Pied de page entierement traduit ---");
+  /* Ces libelles sont poses par la table de traduction, pas par renderPrefs :
+     les traduire seulement a l'ouverture du panneau laissait le pied de page
+     en anglais. */
+  const pied = [...d.querySelectorAll("footer .linkbtn")].map(b => b.textContent.trim());
+  T("aucun libelle anglais dans le pied de page",
+    !pied.some(t => /^(Preferences|Accessibility|Privacy|Legal notice|Home)$/.test(t)), pied.join(" | "));
+  T("Accessibilite traduit", pied.includes("Accessibilité"), pied.join(" | "));
+  T("Preferences traduit", pied.includes("Préférences"), pied.join(" | "));
+
+  console.log("\n--- Reference LCEN a jour ---");
+  /* Depuis la loi SREN (21 mai 2024), l'obligation d'identification de
+     l'editeur n'est plus a l'article 6 mais a l'article 1-1, II de la LCEN.
+     Beaucoup de generateurs de mentions legales n'ont jamais ete mis a jour :
+     ne pas refaire la meme erreur ici. Controle bilingue : la collecte
+     precedente n'a visite que le francais, donc on repasse explicitement
+     en anglais pour verifier ce texte-la aussi. */
+  const legalFr = [...vus].find(t => /confiance dans l.économie numérique/i.test(t));
+  T("reference francaise a l'article 1-1, II", legalFr && /article 1-1, II/.test(legalFr), legalFr);
+
+  const en = [...d.getElementById("langSwitch").children].find(b => b.dataset.lang === "en");
+  en.click();
+  await attendre(400);
+  d.getElementById("footLegal").click();
+  await attendre(400);
+  const legalEn = d.getElementById("legalBody").textContent;
+  T("reference anglaise a l'article 1-1, II", /article 1-1, II/.test(legalEn), legalEn.slice(0, 140));
+  T("ancien article 6 absent en anglais", !/article 6, III/.test(legalEn));
+  T("ancien article 6 absent partout (francais)", ![...vus].some(t => /article 6, III/.test(t)));
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

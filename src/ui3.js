@@ -14,6 +14,31 @@ function focusBoard(){
   }catch(e){}
 }
 
+/* --- amener une section sous les yeux, et lui donner le focus ---
+   Plusieurs boutons ouvrent un panneau qui contient plusieurs sections :
+   sans cela, on arrivait systematiquement en haut, donc au mauvais endroit.
+   Le focus compte autant que le defilement : un lecteur d'ecran continue
+   sinon a lire depuis le debut du document. */
+/* Revenir en haut de la nouvelle vue. Sans cela, cliquer sur un onglet
+   depuis le bas de la page laissait a la meme hauteur, donc au milieu d'un
+   contenu sans rapport. Volontairement limite aux clics de navigation : le
+   declencher dans setMode ferait sauter la page a chaque rafraichissement
+   interne, par exemple un changement de langue. */
+function goTop(){
+  const calme=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try{window.scrollTo(calme?{top:0}:{top:0,behavior:"smooth"});}
+  catch(e){try{window.scrollTo(0,0);}catch(e2){}}
+}
+function goToSection(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  try{el.focus({preventScroll:true});}catch(e){try{el.focus();}catch(e2){}}
+  if(typeof el.scrollIntoView!=="function")return;
+  const calme=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try{el.scrollIntoView(calme?{block:"start"}:{behavior:"smooth",block:"start"});}
+  catch(e){el.scrollIntoView();}
+}
+
 /* ==========================================================
    14. ENDGAME TRAINER
    ========================================================== */
@@ -332,7 +357,7 @@ function sfEnable(){
   let settled=false;
   const fail=why=>{
     if(settled)return;settled=true;
-    btn.disabled=false;btn.textContent=t("Enable Stockfish");
+    btn.disabled=false;btn.textContent=t("Stockfish for review");
     sf.worker=null;sf.ready=false;
     sfStatus(t("Stockfish could not start ({why}). The built-in engine stays in use.",{why:t(why)}));
   };
@@ -463,6 +488,20 @@ $("langSwitch").addEventListener("click",e=>{
   /* le panneau de preferences est construit en JS : il ne passe pas par
      applyI18n et doit donc etre redessine a la bascule de langue */
   if(typeof renderPrefs==="function"&&mode==="prefs")renderPrefs();
+  /* Le nom de l'adversaire porte la force ("Chang · Coriace"), composee en
+     JavaScript : elle ne passe pas par applyI18n et resterait en anglais
+     apres un changement de langue. */
+  if(typeof renderClocks==="function")renderClocks();
+  /* L'overlay de preparation est compose en JavaScript : il ne passe pas par
+     applyI18n et restait dans l'ancienne langue s'il etait affiche au moment
+     de la bascule. */
+  const rb=$("readyBanner");
+  if(rb&&!rb.classList.contains("hide")&&typeof showReady==="function"){
+    try{
+      const {cat,item}=tcCurrent();
+      showReady(cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1)));
+    }catch(e){}
+  }
 });
 
 /* ==========================================================
@@ -768,20 +807,13 @@ function renderPrefs(){
       : "<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>";
   }
 }
-if($("footPrefs"))$("footPrefs").onclick=()=>setMode("prefs");
+if($("homeStartBtn"))$("homeStartBtn").onclick=()=>setMode("puzzles");
+if($("footPrefs"))$("footPrefs").onclick=()=>{setMode("prefs");goTop();};
 /* Lien dedie : "Preferences" est trop generique pour qui cherche des reglages
    d'accessibilite. Le second lien mene au meme panneau mais amene directement
    a la section, et lui donne le focus pour les lecteurs d'ecran. */
 if($("footAccess"))$("footAccess").onclick=()=>{
   setMode("prefs");
-  const h=$("accessibilite");
-  if(!h)return;
-  /* Le focus d'abord : c'est lui qui compte pour un lecteur d'ecran, et il
-     amene deja l'element a l'ecran. Le defilement doux n'est qu'un confort,
-     donc il vient apres et ne doit jamais empecher le focus. */
-  h.focus();
-  if(typeof h.scrollIntoView==="function"){
-    try{h.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){}
-  }
+  goToSection("accessibilite");   /* meme mecanique que les autres sections */
 };
 loadPrefs();

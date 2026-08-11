@@ -102,6 +102,14 @@ n'est donc pas une régression. À diagnostiquer.
 `site/`, sans quoi le livre d'ouvertures chargé à la demande ne peut pas
 arriver et la détection échoue sur un faux négatif.
 
+## Référence légale LCEN
+Les mentions légales citent l'**article 1-1, II** de la LCEN, pas l'article 6.
+Depuis la loi SREN (21 mai 2024), l'obligation d'identification de l'éditeur
+non professionnel a été déplacée. Beaucoup de générateurs de mentions légales
+n'ont jamais été mis à jour ; ne pas refaire l'erreur si ce texte est retouché.
+`tests/check_traductions.js` vérifie les deux langues en basculant réellement
+l'interface, pas seulement en cherchant la chaîne dans le code source.
+
 ## Notation
 Le site utilise partout la notation internationale (Nc3, Bb4, Qd2, Rae1, Kg1),
 y compris dans les textes français. La leçon française sur la notation
@@ -169,6 +177,53 @@ clouage, enfilade, mat du couloir, mat étouffé.
 Production par lots : `node gen_puzzles.js <total> <fichier> <secondes>`
 accumule dans le même fichier sans jamais produire de doublon.
 
+## Moteur : optimisations et impasse
+
+**Hachage de Zobrist** (`ZOB`, `computeKey`). L'ancienne clé de position
+reconstruisait une chaîne FEN complète à chaque coup, deux fois même (une pour
+l'historique, une pour le compteur de répétitions), et s'en servait comme clé
+dans une table de hachage. C'était le principal coût de la recherche.
+Ne jamais revenir à une clé textuelle.
+
+**Table de transposition** (`TT_SIZE` et suivants). Elle mémorise les positions
+déjà évaluées. Attention au type de borne (`TT_EXACT`, `TT_LOWER`, `TT_UPPER`) :
+alpha-bêta ne produit pas toujours un score exact, et réutiliser une borne comme
+un score fausserait la recherche.
+
+Effet cumulé, mesuré sur les mêmes positions :
+
+| Profondeur | Origine | Maintenant |
+|---|---|---|
+| 3 | 852 ms | 186 ms |
+| 4 | 3 743 ms | 600 ms |
+| 5 | ~31 000 ms | 2 403 ms |
+
+À chaque étape, vérifié que le moteur choisit exactement les mêmes coups
+qu'avant (20 à 25 positions) et que le perft passe.
+
+**Niveaux du bot.** Coriace est passé en profondeur 5 avec 2 s de budget.
+Avant optimisation il était réglé sur profondeur 4 avec 1,5 s, alors qu'il lui
+en fallait 3,7 : il était coupé en cours de route et jouait comme le niveau 3,
+ce qui explique qu'il ne le battait pas. Mesure après correction : profondeur 5
+bat profondeur 4 par 5,5 à 2,5.
+
+**Calibrage Elo** (`elo_calibrate.js`, tournoi par lots). Ancrage conventionnel
+sur un joueur aléatoire à 400. Estimation régularisée : sans cela, un joueur
+qui ne perd jamais fait diverger le calcul vers l'infini (une première version
+annonçait 4325 Elo pour une recherche à profondeur 3).
+
+**Évaluation enrichie : tentée, mesurée, abandonnée.** Mobilité, pions passés
+et isolés, paire de fous, abri du roi. Résultat sur 20 parties : 9,5/20, soit
+-17 Elo, intervalle de confiance de -185 à +142. Aucun gain démontrable.
+Cause probable : coefficients posés à l'estime. Une évaluation ne vaut que par
+l'équilibre entre ses termes, et cet équilibre se règle par des milliers de
+parties automatiques, pas au jugé. Ne pas refaire cette tentative sans moyen
+de calibrer les coefficients.
+
+Piège méthodologique rencontré : après 8 parties, la version enrichie menait
+5-3, ce qui aurait donné +89 Elo. C'était du bruit. Ne jamais conclure sur un
+échantillon aussi petit.
+
 ## Perft
 `node perft.js [profondeur]` valide le générateur de coups sur six positions
 de référence publiées (dont Kiwipete). À lancer avant et après toute
@@ -219,6 +274,49 @@ l'entraînement aux coordonnées, qui les masque volontairement.
 Plusieurs tests codaient en dur le nombre de pages et d'URL du sitemap, ce qui
 les condamnait à échouer à chaque ajout de contenu. Ils vérifient désormais la
 propriété qui compte : que le sitemap couvre toutes les pages publiées.
+
+## À vérifier après le prochain déploiement
+Deux points que je n'ai pas pu trancher sans moteur de rendu (les tests
+simulent le DOM mais ne calculent pas les dimensions) :
+
+1. **Débordement horizontal sur mobile.** Une capture de la version en ligne
+   montrait l'échiquier et la pendule coupés à droite, colonne h hors écran.
+   Aucune largeur du code ne l'explique. Des plafonds explicites ont été posés
+   (`max-width:100%` et `box-sizing:border-box` sur `.board-frame`, `.board`
+   et `.clock`), mais c'est un traitement du symptôme, pas de la cause.
+   À retester ; si ça persiste, demander une capture en paysage ou sur une
+   autre largeur pour cerner le seuil.
+
+2. **"Exercice suivant" atteignable sans défiler.** Les trois actions
+   fréquentes ont été remontées sous l'énoncé et les marges compactées sous
+   520 px, soit environ 220 px gagnés. Mon estimation dit qu'il pourrait
+   manquer une trentaine de pixels sur un écran de 390 x 844, mais l'écart est
+   dans la marge d'erreur du calcul. Si le défilement persiste, la piste
+   suivante est de plafonner légèrement la hauteur de l'échiquier sur
+   téléphone (à ne faire que si nécessaire : cela réduit la surface de jeu).
+
+## Recherche sur les pages d'index
+Les index des ouvertures (141 entrées) et des exercices (777) portent un champ
+de filtrage. Il cherche sur le nom dans les deux langues, les coups, le code
+ECO, le thème, le niveau et le numéro, sans tenir compte des accents.
+
+Deux règles à ne pas casser :
+1. Le champ est masqué par défaut et révélé par le script. Sans JavaScript la
+   page reste ce qu'elle était : personne ne voit un champ inerte.
+2. Le script n'est émis que sur les pages qui portent `id="grille"`. Émis
+   partout, il ajoutait 3 Mo de code inutile sur 1 929 pages pour 4 qui s'en
+   servent.
+
+Sur les exercices, groupés par thème, le filtrage masque aussi les sections
+devenues vides et le sommaire, sinon la page se remplit de titres suivis de
+rien.
+
+## Chapô et description : deux textes distincts
+La balise meta description sert le référencement, le chapô sert le lecteur.
+Les confondre a produit des doublons sur 334 pages : lexique (définition
+affichée deux fois), pièges (chapô = 280 premiers caractères du corps),
+ouvertures (chapô = note reprise dans le corps). `tests/check_textes_dupliques.js`
+contrôle les 1 901 pages.
 
 ## Reste à faire
 - Enregistrements Zimbra (MX, SRV, SPF, DKIM) chez OVH.

@@ -36,10 +36,10 @@ const BOOK = [
 
 const PLAYERS = {
   rnd: { name: "aleatoire", pick: g => { const l = g.moves(); return l[(Math.random() * l.length) | 0]; } },
-  L1:  { name: "Niveau 1", d: 1, t: 100,  rnd: 0.35 },
-  L2:  { name: "Niveau 2", d: 2, t: 200,  rnd: 0.15 },
-  L3:  { name: "Niveau 3", d: 3, t: 400,  rnd: 0 },
-  L4:  { name: "Niveau 4", d: 4, t: 600, rnd: 0 }
+  L1:  { name: "Niveau 1", d: 1, t: 120,  rnd: 0.35 },
+  L2:  { name: "Niveau 2", d: 2, t: 280,  rnd: 0.15 },
+  L3:  { name: "Niveau 3", d: 3, t: 700,  rnd: 0 },
+  L4:  { name: "Niveau 4", d: 4, t: 1500, rnd: 0 }
 };
 
 function move(p, g) {
@@ -73,24 +73,48 @@ function playGame(pw, pb, opening) {
   return 0.5;
 }
 
-/* Elo par maximum de vraisemblance, descente de gradient simple. */
+/* Elo par maximum de vraisemblance, avec regularisation.
+
+   Sans elle, le resultat n'a aucun sens : quand un joueur ne perd jamais,
+   la vraisemblance n'a pas de maximum fini et l'estimation part vers
+   l'infini. C'est exactement ce qui arrive ici, ou chaque niveau bat le
+   precedent sur toutes les parties. Une premiere version annoncait 4325 Elo
+   pour une recherche a profondeur 3, ce qui depasserait tout ce qui existe.
+
+   On ajoute donc a chaque joueur deux parties fictives, une gagnee et une
+   perdue, contre un adversaire moyen. Cela suffit a rendre l'estimation
+   finie, au prix d'un leger tassement des ecarts : les valeurs obtenues sont
+   des minorants, pas des mesures exactes. */
 function fitElo(games, ids) {
   const R = {}; ids.forEach(i => R[i] = 1500);
-  const exp = (a, b) => 1 / (1 + Math.pow(10, (R[b] - R[a]) / 400));
-  for (let it = 0; it < 20000; it++) {
+  const MOYEN = 1500, PRIOR = 1;
+  const att = (ra, rb) => 1 / (1 + Math.pow(10, (rb - ra) / 400));
+  for (let it = 0; it < 30000; it++) {
     const grad = {}; ids.forEach(i => grad[i] = 0);
     for (const { a, b, s } of games) {
-      const e = exp(a, b);
+      const e = att(R[a], R[b]);
       grad[a] += (s - e); grad[b] -= (s - e);
     }
-    for (const i of ids) R[i] += 0.6 * grad[i] / games.length * 400;
+    /* parties fictives : une victoire et une defaite contre un joueur moyen */
+    for (const i of ids) {
+      grad[i] += PRIOR * (1 - att(R[i], MOYEN));
+      grad[i] += PRIOR * (0 - att(R[i], MOYEN));
+    }
+    for (const i of ids) R[i] += 0.35 * grad[i] / (games.length + 2 * PRIOR) * 400;
   }
   return R;
 }
 
+/* Production par lots : le tournoi est relance plusieurs fois et accumule ses
+   parties dans un fichier. Chaque lot est borne en temps pour tenir dans une
+   execution, et repart de la ou le precedent s'est arrete. */
+const STORE = "/tmp/elo_games.json";
+const BUDGET = (+process.argv[3] || 240) * 1000;
+
 (async () => {
   const ids = Object.keys(PLAYERS);
-  const games = [];
+  const games = require("fs").existsSync(STORE)
+    ? JSON.parse(require("fs").readFileSync(STORE, "utf8")) : [];
   const score = {}, played = {};
   ids.forEach(i => { score[i] = 0; played[i] = 0; });
 
@@ -98,22 +122,36 @@ function fitElo(games, ids) {
   let n = 0, total = 0;
   for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) total += ROUNDS * 2;
 
+  /* Chaque appariement porte une cle stable : on saute ceux deja joues. */
+  const t0 = Date.now();
+  let joues = 0;
+  outer:
   for (let i = 0; i < ids.length; i++) {
     for (let j = i + 1; j < ids.length; j++) {
       for (let r = 0; r < ROUNDS; r++) {
         const op = BOOK[(r * 3 + i + j) % BOOK.length];
         for (const [w, b] of [[ids[i], ids[j]], [ids[j], ids[i]]]) {
+          const cle = w + ">" + b + "#" + r;
+          if (games.some(g => g.cle === cle)) continue;
+          if (Date.now() - t0 > BUDGET) break outer;
           const s = playGame(PLAYERS[w], PLAYERS[b], op);
-          games.push({ a: w, b: b, s });
-          score[w] += s; score[b] += 1 - s;
-          played[w]++; played[b]++;
-          n++;
-          if (n % 10 === 0) process.stderr.write(`\r  ${n}/${total} parties`);
+          games.push({ a: w, b: b, s, cle });
+          joues++;
+          process.stderr.write(`\r  ${games.length}/${total} parties (${joues} ce lot)`);
         }
       }
     }
   }
-  process.stderr.write(`\r  ${n}/${total} parties\n`);
+  require("fs").writeFileSync(STORE, JSON.stringify(games));
+  process.stderr.write(`\r  ${games.length}/${total} parties (${joues} ce lot)\n`);
+
+  /* Le classement se recalcule sur l'ensemble des parties accumulees. */
+  for (const g of games) {
+    score[g.a] += g.s; score[g.b] += 1 - g.s;
+    played[g.a]++; played[g.b]++;
+  }
+  n = games.length;
+  if (n < total) { console.log("\nLot termine. Relancer pour continuer : " + n + "/" + total); }
 
   const R = fitElo(games, ids);
   const shift = RANDOM_ANCHOR - R.rnd;

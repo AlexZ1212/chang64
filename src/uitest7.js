@@ -63,7 +63,14 @@ const H = w => {
   console.log("PGN IMPORT + OPENINGS");
   a.click(a.$("tab-play")); await wait(500);
   a.$("pgnIn").value = '[Event "x"]\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 *';
-  a.click(a.$("btnPgnLoad")); await wait(800);   /* + chargement du livre */
+  /* Le livre d'ouvertures est charge a la demande : attendre une duree fixe
+     echouait sous charge sans qu'aucun defaut n'existe. On attend que le
+     libelle soit renseigne, jusqu'a un plafond raisonnable. */
+  a.click(a.$("btnPgnLoad")); await wait(300);
+  {
+    const jusqua = Date.now() + 5000;
+    while (!(a.$("opening").textContent || "").trim() && Date.now() < jusqua) await wait(120);
+  }
   T("pgn loaded", /Loaded 12 half-moves/.test(a.$("pgnMsg").textContent), a.$("pgnMsg").textContent);
   T("opening detected", /Sicilian/.test(a.$("opening").textContent), a.$("opening").textContent);
   T("scoresheet filled", a.$("sheet").querySelectorAll(".sheet-row").length === 6);
@@ -108,8 +115,19 @@ const H = w => {
 
   console.log("\nPLAYING KEEPS REVIEW IN STEP");
   a.click(a.$("btnNew")); await wait(600);
+  /* Partie chronometree : l'overlay de preparation attend le feu vert, sans
+     quoi les clics sur l'echiquier ne jouent aucun coup. */
+  {
+    const rb = a.$("readyBanner");
+    if (rb && !rb.className.includes("hide")) { a.click(a.$("readyStart")); await wait(300); }
+  }
   T("analysis cleared on new game", a.$("analysisOut").className.includes("hide"));
   await a.play("e2", "e4");
+  /* Le libelle depend du livre d'ouvertures, charge a la demande. */
+  {
+    const jusqua = Date.now() + 5000;
+    while (!(a.$("opening").textContent || "").trim() && Date.now() < jusqua) await wait(120);
+  }
   T("opening shown while playing", a.$("opening").textContent.length > 0, a.$("opening").textContent);
   a.click(a.$("navPrev")); await wait(250);
   const beforeCount = a.$("sheet").querySelectorAll("[data-ply]").length;

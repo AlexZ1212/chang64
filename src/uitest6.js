@@ -66,13 +66,24 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   a.click(a.$("heroPlay"));
   await wait(600);
   T("play pane open", !a.$("pane-play").className.includes("hide"));
+  /* Overlay de preparation : sur une cadence chronometree, la pendule attend
+     desormais le feu vert du joueur. Le test doit appuyer sur "Commencer"
+     avant de verifier que le temps s'ecoule. */
+  T("ready overlay shown on a timed game", !a.$("readyBanner").className.includes("hide"));
+  a.click(a.$("readyStart"));
+  await wait(300);
   T("clocks visible", !a.$("clockTop").className.includes("hide") && !a.$("clockBottom").className.includes("hide"));
   T("clock starts near 3:00", /^2:5[6-9]$|^3:00$/.test(a.$("clockBottomTime").textContent), a.$("clockBottomTime").textContent);
   T("white clock running", a.$("clockBottom").className.includes("active"));
   T("status mentions blitz", /3\+2/.test(a.$("status").textContent), a.$("status").textContent);
 
+  /* Attente conditionnelle plutot qu'un delai fixe : sous forte charge, un
+     setInterval peut ne pas se declencher dans les temps et le test echouait
+     alors sans qu'aucun defaut n'existe. On attend que la pendule bouge,
+     jusqu'a un plafond raisonnable. */
   const before = a.$("clockBottomTime").textContent;
-  await wait(1200);
+  const jusqua = Date.now() + 4000;
+  while (a.$("clockBottomTime").textContent === before && Date.now() < jusqua) await wait(120);
   T("time is ticking down", a.$("clockBottomTime").textContent !== before, before + " -> " + a.$("clockBottomTime").textContent);
 
   await a.play("e2", "e4");
@@ -171,6 +182,9 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   c.click(c.$("heroPlay"));
   await wait(600);
   T("very short control loaded", c.$("clockBottomTime").textContent.startsWith("0:0"), c.$("clockBottomTime").textContent);
+  /* La pendule ne part qu'au feu vert : sans ce clic, on attendrait 4,5 s
+     devant un overlay et le drapeau ne tomberait jamais. */
+  c.click(c.$("readyStart"));
   await wait(4500);
   const st = c.$("status").textContent;
   T("flag falls and ends the game", /on time|not enough material/.test(st), st);

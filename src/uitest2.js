@@ -107,6 +107,19 @@ function currentPuzzle() {
   }
   console.log(`\nIdentifiés ${identified} | résolus ${solved} | échecs ${failed}`);
   console.log("Compteurs affichés — résolus:", $("stSolved").textContent, "série:", $("stStreak").textContent, "record:", $("stBest").textContent, "niveau:", $("lvlNum").textContent);
+  /* La bande de statistiques de l'accueil ne doit apparaitre qu'une fois
+     une progression reelle acquise : avant, elle n'afficherait que des zeros,
+     qu'un premier visiteur lit comme "le site est vide". */
+  click($("tab-home")); await wait(400);
+  const strip = $("homeStrip"), start = $("homeStart");
+  const vus = solved > 0;
+  console.log("Bande d'accueil après", solved, "exercices résolus :",
+    strip && !strip.classList.contains("hide") ? "affichée" : "masquée",
+    vus ? "(attendu : affichée)" : "(attendu : masquée)",
+    strip && (!strip.classList.contains("hide")) === vus ? "OK" : "ECHEC");
+  console.log("Invitation :",
+    start && start.classList.contains("hide") ? "masquée" : "affichée",
+    start && start.classList.contains("hide") === vus ? "OK" : "ECHEC");
   console.log("Erreurs JS :", errors.length ? errors.join(" | ") : "aucune");
   process.exit(0);
 })();

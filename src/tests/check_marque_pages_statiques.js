@@ -15,7 +15,7 @@ const h=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
 console.log("\n--- La marque est presente ---");
 T("elephant dans l'entete", /<svg class="brandmark"/.test(h));
 T("il contient des formes", (h.match(/<svg class="brandmark"[\s\S]*?<\/svg>/)||[""])[0].includes("<path"));
-T("le nom reste affiche", /chang<span>64<\/span>/.test(h));
+T("le nom reste affiche", /chang<span class="sixtyfour">64<\/span>/.test(h));
 T("le tout reste un lien vers l'accueil", /<a class="brand" href="\/">/.test(h));
 
 console.log("\n--- Accessibilite ---");
@@ -53,6 +53,33 @@ T(vus2+" autres pages de contenu, toutes marquees", sans2.length===0, sans2.slic
 console.log("\n--- Cout maitrise ---");
 const taille=(h.match(/<svg class="brandmark"[\s\S]*?<\/svg>/)||[""])[0].length;
 T("moins de 1 Ko par page : "+taille+" octets", taille<1024, taille+" octets");
+
+console.log("\n--- Le logo reprend exactement celui de l'application ---");
+/* Memes tailles, memes proportions, meme position relative. Seules les
+   couleurs changent pour le fond clair : elephant et 64 en laiton, nom et
+   baseline en gris fonce. */
+{
+  const jd=require("jsdom");
+  const w=f=>new jd.JSDOM(fs.readFileSync(f,"utf8"),{pretendToBeVisual:true,virtualConsole:new jd.VirtualConsole()}).window;
+  const app=w(S+"/index.html"), pg=w(S+"/fr/ouvertures/index.html");
+  const st=(win,sel)=>{const e=win.document.querySelector(sel);return e?win.getComputedStyle(e):null;};
+  for(const [nom,sa,sb,prop] of [
+    ["taille du glyphe",".brand .glyph",".brandmark","width"],
+    ["taille du nom",".brand h1",".brand .bname","fontSize"],
+    ["graisse du nom",".brand h1",".brand .bname","fontWeight"],
+    ["police du nom",".brand h1",".brand .bname","fontFamily"],
+    ["taille du 64",".brand h1 .sixtyfour",".brand .sixtyfour","fontSize"],
+    ["taille de la baseline",".tagline",".brand .tagline","fontSize"],
+    ["ecart entre logo et nom",".brand",".brand","gap"]
+  ]){
+    const a=st(app,sa),b=st(pg,sb);
+    T(nom+" identique", a&&b&&a[prop]===b[prop], a&&b ? a[prop]+" vs "+b[prop] : "selecteur introuvable");
+  }
+  T("baseline presente sur les pages claires", !!pg.document.querySelector(".brand .tagline"));
+  T("nom en gris fonce", (st(pg,".brand .bname")||{}).color==="var(--chalk)");
+  T("64 en laiton", (st(pg,".brand .sixtyfour")||{}).color==="var(--brass)");
+  T("elephant en laiton", (st(pg,".brandmark")||{}).color==="var(--brass)");
+}
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
 process.exit(ko?1:0);

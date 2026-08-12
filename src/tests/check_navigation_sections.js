@@ -1,3 +1,8 @@
+/* Les six sections vivaient dans le pied de page. Elles sont desormais dans
+   l'entete, en un seul menu : deux menus divergents sur la meme page (quatre
+   entrees en haut, six en bas) donnaient l'impression d'un site incoherent.
+   Le pied de page est revenu a son role classique, les liens legaux.
+*/
 /* Verification automatique de chang64.
    Lancement : node tests/check_navigation_sections.js
 
@@ -18,7 +23,7 @@ const attendu={
 for(const [lang,liste] of Object.entries(attendu)){
   const p=lang==="fr"?"/fr/ouvertures/defense-sicilienne.html":"/openings/sicilian-defense.html";
   const h=fs.readFileSync(S+p,"utf8");
-  const nav=(h.match(/<nav class="footnav"[\s\S]*?<\/nav>/)||[""])[0];
+  const nav=(h.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
   const manquants=liste.filter(u=>!nav.includes('href="'+u+'"')&&!nav.includes('aria-current'));
   T(lang+" : les 6 sections presentes", manquants.length===0, manquants.join(", "));
 }
@@ -31,7 +36,7 @@ T("aucun lien mort", casses.length===0, casses.join(", "));
 
 console.log("\n--- La page en cours n'est pas un lien vers elle-meme ---");
 const idxOp=fs.readFileSync(S+"/openings/index.html","utf8");
-const navOp=(idxOp.match(/<nav class="footnav"[\s\S]*?<\/nav>/)||[""])[0];
+const navOp=(idxOp.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
 T("Openings signale comme page courante", /aria-current="page"[^>]*>Openings|<span aria-current="page">Openings/.test(navOp), navOp.slice(0,150));
 T("et n'est plus cliquable", !navOp.includes('href="/openings/"'));
 
@@ -42,7 +47,7 @@ let sans=[],vus=0;
   else if(f.endsWith(".html")&&f!=="404.html"){
     vus++;
     const c=fs.readFileSync(q,"utf8");
-    if(c.includes("<footer>")&&!c.includes('class="footnav"'))sans.push(q.replace(S,""));
+    if(c.includes("<footer>")&&!c.includes('class="sitenav"'))sans.push(q.replace(S,""));
   }}})(S+"/openings");
 T(vus+" pages d'ouvertures, toutes avec le pied de page", sans.length===0, sans.slice(0,3).join(", "));
 
@@ -54,7 +59,7 @@ T("plus de marge a gauche sur les liens", !/nav a\{[^}]*margin-left/.test(h));
 T("entete non elargissable", /header nav\{[^}]*min-width:0/.test(h));
 
 console.log("\n--- Cout maitrise ---");
-const nav=(h.match(/<nav class="footnav"[\s\S]*?<\/nav>/)||[""])[0];
+const nav=(h.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
 T("moins de 700 octets par page : "+nav.length, nav.length<700, nav.length+" octets");
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

@@ -67,6 +67,11 @@ body{
   font-size:16px;line-height:1.55;min-height:100vh;padding:18px 14px 44px;
 }
 .wrap{max-width:1080px;margin:0 auto;min-width:0}
+/* La regle [hidden]{display:none} vient de la feuille par defaut du
+   navigateur : elle est plus faible que n'importe quel selecteur de classe.
+   Un element avec display explicite reste donc visible malgre l'attribut,
+   sans que rien ne le signale. Cinquante classes du site sont dans ce cas. */
+[hidden]{display:none!important}
 
 /* ---------- garde-fou contre le debordement horizontal ----------
    Un element flexible ou de grille a min-width:auto par defaut : il refuse
@@ -738,10 +743,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <div class="tc-cats" id="tcCats2"></div>
             <div class="tc-chips" id="tcChips2"></div>
           </div>
+          <!-- "Reprendre" annulait le coup joue et celui du moteur : une aide
+               au jeu qui permet d'essayer un coup, de voir la reponse, puis de
+               revenir en arriere. Retire : aucune assistance en cours de
+               partie. "Suggerer un coup" a rejoint le panneau Revue, ou il
+               appartient : il ne sert qu'une fois la partie finie. -->
           <div class="btnrow">
             <button class="btn primary" id="btnNew">New game</button>
-            <button class="btn" id="btnUndo">Take back</button>
-            <button class="btn" id="btnHint">Suggest a move</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
             <button class="btn danger" id="btnResign">Resign</button>
@@ -763,6 +771,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <button class="btn primary" id="btnAnalyse">Analyse this game</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="btnHint">Show the best move</button>
             <button class="btn" id="btnStockfish">Stockfish for review</button>
           </div>
           <p class="note" id="sfStatus">Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.</p>
@@ -1075,7 +1084,7 @@ const FR={
 "Play White":"Jouer les Blancs","Play Black":"Jouer les Noirs",
 "Beginner":"Débutant","Casual":"Tranquille","Solid":"Sérieux","Tough":"Coriace",
 "New game":"Nouvelle partie","Start game":"Lancer la partie","Not started yet.":"Partie non commencée.",
-"Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Take back":"Reprendre","Suggest a move":"Suggérer un coup",
+"Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Take back":"Reprendre","Show the best move":"Voir le meilleur coup","Suggest a move":"Suggérer un coup",
 "Scoresheet":"Feuille de partie","White":"Blancs","Black":"Noirs","No moves yet":"Aucun coup joué",
 "Use the arrow keys to step through the game.":"Utilise les flèches du clavier pour parcourir la partie.",
 "Pick a colour and a strength, then play.":"Choisis ta couleur et la force du moteur, puis joue.",
@@ -2073,8 +2082,12 @@ function refreshGame(){
   if(typeof afterGameRender==="function")afterGameRender(over);
   $("btnNew").textContent=gameStarted?t("New game"):t("Start game");
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
-  $("btnUndo").disabled=!gameStarted||game.history.length<2||busy||isFlagged()||resigned!==null;
+  /* btnUndo a ete retire de l'interface : aucune annulation de coup en cours
+     de partie. Le garde reste tolerant a son absence pour ne pas dependre du
+     gabarit. */
+  { const bu=$("btnUndo"); if(bu)bu.disabled=true; }
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
+  /* (le verrouillage en cours de partie, plus bas, a le dernier mot) */
 
   /* Pendant une partie en cours, seul "Abandonner" reste actif.
      Deux raisons distinctes :
@@ -2088,6 +2101,11 @@ function refreshGame(){
   const enCours=gameStarted&&!over;
   const geler=el=>{const e=$(el);if(e)e.disabled=enCours;};
   geler("btnNew");
+  /* "Voir le meilleur coup" appartient a la revue d'apres-partie. Il etait
+     deja sans effet pendant une partie, mais il apparaissait actif parmi les
+     commandes de jeu, ce qui laissait croire qu'il pouvait aider a jouer. Il
+     est desormais explicitement grise, comme le reste. */
+  geler("btnHint");
   /* Stockfish : ne pas contrarier son propre etat. Pendant le telechargement
      il se desactive lui-meme, et on ne doit surtout pas le rallumer. */
   {
@@ -2151,12 +2169,17 @@ function playUser(m){
   sanList.push(game.san(m));
   game.makeMove(m);lastMove=m;selected=-1;marks={};
   clockAfterMove(myColor);
+  /* busy doit etre pose AVANT refreshGame, sinon le bouton Reprendre est
+     rallume puis eteint dans la meme foulee, et reste actif pendant que le
+     moteur calcule. Cliquer a ce moment-la annulerait un coup sur une
+     position que le moteur est en train d'analyser. */
+  const suite=!isFlagged()&&legalCache.length&&!game.isDraw();
+  if(suite)busy=true;
   refreshGame();
-  if(isFlagged())return;
-  if(!legalCache.length||game.isDraw())return;
+  if(!suite)return;
   $("status").className="status";
   $("status").textContent=t("The computer is thinking…");
-  busy=true;$("btnHint").disabled=true;$("btnUndo").disabled=true;
+  $("btnHint").disabled=true;
   setTimeout(botMove,60);
 }
 function botMove(){
@@ -2889,7 +2912,7 @@ $("segLevel").addEventListener("click",e=>{
   if(typeof renderClocks==="function")renderClocks();
 });
 $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
-$("btnUndo").onclick=undoGame;
+/* plus de bouton Reprendre : la fonction reste pour l'historique du code */
 $("btnHint").onclick=hintGame;
 $("btnNext").onclick=nextPuzzle;
 $("themeFilter").addEventListener("change",e=>{
@@ -3777,6 +3800,20 @@ setMode=function(m,opts){
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
+/* Les pages de contenu renvoient vers /#legal et /#privacy : ces panneaux
+   sont ouverts par bouton, pas par URL, donc sans ce relais les liens du pied
+   de page des pages claires ne meneraient nulle part. */
+(function(){
+  const versFragment=()=>{
+    const f=(location.hash||"").replace("#","");
+    if(f==="legal"){setMode("legal");goToSection("legalTitle");}
+    else if(f==="privacy"){setMode("legal");goToSection("privacyTitle");}
+    else if(f==="prefs"){setMode("prefs");}
+    else if(f==="accessibilite"){setMode("prefs");goToSection("accessibilite");}
+  };
+  window.addEventListener("hashchange",versFragment);
+  setTimeout(versFragment,60);
+})();
 $("footLegal").onclick=()=>{setMode("legal");goToSection("legalTitle");};
 $("footPrivacy").onclick=()=>{setMode("legal");goToSection("privacyTitle");};
 $("footHome").onclick=()=>{setMode("home");goTop();};   /* meme mecanique que les onglets */
@@ -3797,7 +3834,7 @@ undoGame=function(){
   baseUndoGame();
   if(game.history.length<before){gameUci.splice(-2);analysis=null;}
 };
-$("btnUndo").onclick=()=>undoGame();
+if($("btnUndo"))$("btnUndo").onclick=()=>undoGame();   /* bouton retire */
 $("btnHint").onclick=()=>hintGame();
 
 ensureProgFields();

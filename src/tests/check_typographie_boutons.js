@@ -40,7 +40,9 @@ setTimeout(async()=>{
     T(id+" : article lie", t.includes(att+NB), JSON.stringify(t));
   }
   d.getElementById("tab-play").click(); await wait(400);
-  T("btnHint : article lie", lire("btnHint").includes("un"+NB), JSON.stringify(lire("btnHint")));
+  /* Le bouton s'appelle desormais "Voir le meilleur coup" : c'est "le" qui
+     doit etre lie, plus "un". */
+  T("btnHint : article lie", lire("btnHint").includes("le"+NB), JSON.stringify(lire("btnHint")));
 
   console.log("\n--- L'espace insecable ne casse rien ---");
   T("le texte reste lisible", !/\u00a0\u00a0/.test(lire("btnDaily")), JSON.stringify(lire("btnDaily")));

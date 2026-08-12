@@ -25,7 +25,7 @@ const FR={
 "Play White":"Jouer les Blancs","Play Black":"Jouer les Noirs",
 "Beginner":"Débutant","Casual":"Tranquille","Solid":"Sérieux","Tough":"Coriace",
 "New game":"Nouvelle partie","Start game":"Lancer la partie","Not started yet.":"Partie non commencée.",
-"Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Take back":"Reprendre","Suggest a move":"Suggérer un coup",
+"Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Take back":"Reprendre","Show the best move":"Voir le meilleur coup","Suggest a move":"Suggérer un coup",
 "Scoresheet":"Feuille de partie","White":"Blancs","Black":"Noirs","No moves yet":"Aucun coup joué",
 "Use the arrow keys to step through the game.":"Utilise les flèches du clavier pour parcourir la partie.",
 "Pick a colour and a strength, then play.":"Choisis ta couleur et la force du moteur, puis joue.",

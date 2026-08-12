@@ -14,6 +14,49 @@ const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  F
 const fr=fs.readFileSync(S+"/fr/ouvertures/defense-sicilienne.html","utf8");
 const en=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
 
+console.log("\n--- Meme pied de page que l'application, meme ordre ---");
+{
+  const app=fs.readFileSync(S+"/index.html","utf8");
+  const fa=(app.match(/<footer>([\s\S]*?)<\/footer>/)||[])[1]||"";
+  const liste=t=>[...t.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim())
+    .filter(x=>x&&x!=="&middot;"&&x.length>2);
+  const enPage=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
+  const fp=(enPage.match(/<nav class="footnav"[^>]*>([\s\S]*?)<\/nav>/)||[])[1]||"";
+  const a=liste(fa), b=liste(fp);
+  T("meme contenu et meme ordre", JSON.stringify(a)===JSON.stringify(b),
+    a.join(" | ")+"   VS   "+b.join(" | "));
+}
+
+console.log("\n--- Un seul menu, dans l'entete ---");
+/* Les six sections etaient repetees en haut et en bas, avec des contenus
+   differents : quatre entrees en haut, six en bas. Deux menus divergents sur
+   la meme page donnent l'impression d'un site incoherent. Ils sont unifies
+   dans l'entete, et le pied de page revient a son role classique, le legal.
+   "Jouer" a ete retire : le logo ramene deja a l'accueil. */
+{
+  const nav=(fr.match(/<nav class="sitenav">([\s\S]*?)<\/nav>/)||[])[1]||"";
+  const items=[...nav.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim()).filter(Boolean);
+  T("six sections dans l'entete", items.length===6, items.join(", "));
+  T("'Jouer' retire du menu", !items.includes("Jouer"), items.join(", "));
+  const pied=(fr.match(/<nav class="footnav"[^>]*>([\s\S]*?)<\/nav>/)||[])[1]||"";
+  const pitems=[...pied.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim()).filter(Boolean);
+  T("le pied de page ne repete plus les sections", !pitems.includes("Finales"), pitems.join(", "));
+  T("le pied de page porte le legal", pitems.some(x=>/gales|notice/i.test(x)), pitems.join(", "));
+}
+
+console.log("\n--- Bascule de langue en pastille, comme dans l'application ---");
+{
+  const sw=(fr.match(/<div class="langsw"[^>]*>([\s\S]*?)<\/div>/)||[])[1]||"";
+  T("pastille presente", sw.length>0);
+  T("les deux langues visibles", /though|>EN</.test(sw) && />FR</.test(sw));
+  T("la langue courante est marquee", /aria-current="true"[^>]*>FR</.test(sw)||/>FR<\/a>/.test(sw));
+  const swEn=(en.match(/<div class="langsw"[^>]*>([\s\S]*?)<\/div>/)||[])[1]||"";
+  const lienFr=(swEn.match(/href="([^"]+)"[^>]*hreflang="fr"/)||[])[1];
+  T("depuis l'anglais, FR mene a la page francaise", /^\/fr\//.test(lienFr||""), lienFr);
+  const lienEn=(sw.match(/href="([^"]+)"[^>]*hreflang="en"/)||[])[1];
+  T("depuis le francais, EN mene a la page anglaise", !/^\/fr\//.test(lienEn||""), lienEn);
+}
+
 console.log("\n--- Toutes les sections sont atteignables ---");
 for(const [href,nom] of [["/fr/ouvertures/","Ouvertures"],["/fr/exercices/","Exercices"],
   ["/fr/apprendre/","Apprendre"],["/fr/finales/","Finales"],["/fr/pieges/","Pièges"],["/fr/lexique/","Lexique"]])
@@ -24,7 +67,13 @@ for(const href of ["/openings/","/puzzles/","/learn/","/endgames/","/traps/","/g
 console.log("\n--- Les cibles existent vraiment ---");
 const cibles=[...fr.matchAll(/<nav class="footnav"[\s\S]*?<\/nav>/g)][0][0];
 const liens=[...cibles.matchAll(/href="([^"]+)"/g)].map(m=>m[1]);
-const morts=liens.filter(h=>!fs.existsSync(S+h+"index.html")&&!fs.existsSync(S+h));
+/* Les liens legaux pointent vers des fragments (/#legal, /#privacy) : ces
+   panneaux sont ouverts par l'application au chargement, pas par des pages
+   distinctes. On verifie donc la page cible, sans le fragment. */
+const morts=liens.filter(h=>{
+  const p=h.split("#")[0]||"/";
+  return !fs.existsSync(S+p+"index.html")&&!fs.existsSync(S+p);
+});
 T(liens.length+" liens verifies, aucun mort", morts.length===0, morts.join(", "));
 
 console.log("\n--- La page courante n'est pas un lien vers elle-meme ---");

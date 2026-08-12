@@ -31,9 +31,17 @@ font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-hei
 a{color:var(--brass)}
 header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
 padding-bottom:14px;border-bottom:1px solid var(--rule)}
-.brand{font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;text-decoration:none;color:var(--chalk);display:inline-flex;align-items:center;gap:9px}
-.brandmark{color:var(--brass);flex:none}
-.brandname{display:inline-block}
+/* Meme logo que l'application : memes tailles, memes proportions, meme
+   position relative des elements. Seules les couleurs changent, pour un fond
+   clair : l'elephant et le 64 en laiton, "chang" et la baseline en gris
+   fonce. */
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--chalk)}
+.brandmark{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}
+.brand .names{display:flex;flex-direction:column;gap:2px}
+.brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}
+.brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
+.brand .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
+@media(max-width:620px){.brand .tagline{display:none}}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
 /* Le menu depassait la largeur d'un telephone : quatre entrees plus le
    selecteur de langue reclament environ 458 px pour 362 disponibles. Les
@@ -53,6 +61,13 @@ p{margin-bottom:12px;max-width:66ch}
 /* l'attribut hidden sur un <g> SVG depend de la feuille du navigateur :
    on l'impose explicitement plutot que d'en dependre */
 .anim g[data-ply][hidden]{display:none}
+/* Le filtrage masque les tuiles avec l'attribut hidden. Or la regle
+   [hidden]{display:none} vient de la feuille par defaut du navigateur : elle
+   est plus faible que n'importe quel selecteur de classe, et .tile{display:
+   block} l'emportait. Les tuiles restaient donc visibles alors que l'attribut
+   etait bien pose, et la recherche semblait ne rien faire.
+   Meme piege que sur les groupes SVG de l'echiquier anime. */
+[hidden],.tile[hidden],[data-theme][hidden],.toc[hidden]{display:none!important}
 .animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
 /* Ces commandes avaient herite des jetons du theme sombre de l'application,
    posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
@@ -98,6 +113,23 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   background:var(--slate);color:var(--chalk)}
 .filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 .filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
+/* Menu principal : une seule rangee, qui defile sur ecran etroit plutot que
+   d'elargir la page. Meme mecanique que les onglets de l'application. */
+.sitenav{display:flex;gap:8px 18px;overflow-x:auto;min-width:0;flex:1 1 auto;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.sitenav::-webkit-scrollbar{display:none}
+.sitenav a,.sitenav span{white-space:nowrap;text-decoration:none;color:var(--sage);font-size:14.5px}
+.sitenav a:hover{color:var(--brass)}
+.sitenav [aria-current="page"]{color:var(--chalk);font-weight:600}
+/* Bascule de langue : meme forme que dans l'application, une pastille qui
+   montre les deux langues et celle qui est active. Ici ce sont deux liens,
+   chaque langue etant une page distincte. */
+.langsw{display:flex;gap:2px;background:var(--slate);border:1px solid var(--rule);
+  border-radius:999px;padding:3px;flex:none}
+.langsw a{font-size:12.5px;font-weight:600;letter-spacing:.04em;text-decoration:none;
+  color:var(--sage);padding:5px 11px;border-radius:999px;line-height:1}
+.langsw a[aria-current="true"]{background:var(--raise);color:var(--chalk)}
+.langsw a:hover{color:var(--chalk)}
 .footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
 .footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
 .footnav a:hover{text-decoration:underline}
@@ -108,14 +140,16 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 <body>
 <div class="wrap">
 <header>
-  <a class="brand" href="/"><svg class="brandmark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"/><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"/><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"/><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"/><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"/><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"/></g></svg><span class="brandname">chang<span>64</span></span></a>
-  <nav>
-    <a href="/">Jouer</a>
-    <a href="/fr/ouvertures/">Ouvertures</a>
-    <a href="/fr/exercices/">Exercices</a>
-    <a href="/fr/apprendre/">Apprendre</a>
-    <a href="/puzzles/5-mate-in-one.html" hreflang="en" rel="alternate">English</a>
-  </nav>
+  <a class="brand" href="/"><svg class="brandmark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"/><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"/><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"/><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"/><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"/><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"/></g></svg><span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">L'éléphant sur 64 cases</span></span></a>
+  <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
+       le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
+       place du contenu. Sur ecran etroit la rangee defile horizontalement,
+       comme les onglets de l'application. -->
+  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Exercices</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a></nav>
+  <div class="langsw" role="group" aria-label="Langue">
+    <a href="/puzzles/5-mate-in-one.html" hreflang="en" rel="alternate">EN</a>
+    <a href="/fr/exercices/5-mat-en-un-coup.html" hreflang="fr" rel="alternate" aria-current="true">FR</a>
+  </div>
 </header>
 <h1>Blancs jouent et matent en 1 coup</h1>
 <p class="lede">Exercice de tactique mat en un coup : blancs jouent et matent en 1 coup. Position vérifiée par le moteur, difficulté très facile. Solution masquée, à jouer sur l'échiquier.</p>
@@ -129,13 +163,15 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   <a class="cta ghost" href="/fr/exercices/">Retour à l'index</a>
 </div></div>
 <footer>
-  <!-- Toutes les sections du site. Le menu du haut n'en porte que quatre,
-       faute de place sur telephone : Finales, Lexique et Pieges n'etaient
-       donc atteignables depuis aucune page de contenu, ni pour le visiteur
-       ni pour les moteurs de recherche. Le pied de page est le seul endroit
-       ou la place ne manque pas. -->
-  <nav class="footnav" aria-label="Sections du site">
-    <a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Exercices</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a>
+  <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
+       repeter en bas etait un doublon. Le pied de page garde son role
+       classique, les liens legaux. -->
+  <nav class="footnav" aria-label="Informations légales">
+    <a href="/#legal">Mentions légales</a>
+    <a href="/#privacy">Confidentialité</a>
+    <a href="/#prefs">Préférences</a>
+    <a href="/#accessibilite">Accessibilité</a>
+    <a href="/">Accueil</a>
   </nav>
   <p class="footnote">chang64 : échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings.</p>
 </footer>

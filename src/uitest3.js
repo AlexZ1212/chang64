@@ -101,12 +101,9 @@ function cellFor(s) {
   const rows = $("sheet").querySelectorAll(".sheet-row").length;
   console.log("Lignes sur la feuille de partie :", rows);
 
-  // reprise de coup
-  const avant = $("sheet").querySelectorAll(".sheet-row").length;
-  click($("btnUndo"));
-  await wait(300);
-  const apres = $("sheet").querySelectorAll(".sheet-row").length;
-  console.log("Reprendre :", apres <= avant ? "OK (" + avant + " -> " + apres + ")" : "ECHEC");
+  /* Le bouton Reprendre a ete retire : aucune annulation de coup en cours de
+     partie, c'est une aide au jeu. On verifie donc son absence. */
+  console.log("Reprendre :", $("btnUndo") ? "ECHEC (le bouton devrait avoir disparu)" : "OK (retire)");
 
   // jouer en noirs
   click($("segColor").children[1]);

@@ -360,8 +360,12 @@ function refreshGame(){
   if(typeof afterGameRender==="function")afterGameRender(over);
   $("btnNew").textContent=gameStarted?t("New game"):t("Start game");
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
-  $("btnUndo").disabled=!gameStarted||game.history.length<2||busy||isFlagged()||resigned!==null;
+  /* btnUndo a ete retire de l'interface : aucune annulation de coup en cours
+     de partie. Le garde reste tolerant a son absence pour ne pas dependre du
+     gabarit. */
+  { const bu=$("btnUndo"); if(bu)bu.disabled=true; }
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
+  /* (le verrouillage en cours de partie, plus bas, a le dernier mot) */
 
   /* Pendant une partie en cours, seul "Abandonner" reste actif.
      Deux raisons distinctes :
@@ -375,6 +379,11 @@ function refreshGame(){
   const enCours=gameStarted&&!over;
   const geler=el=>{const e=$(el);if(e)e.disabled=enCours;};
   geler("btnNew");
+  /* "Voir le meilleur coup" appartient a la revue d'apres-partie. Il etait
+     deja sans effet pendant une partie, mais il apparaissait actif parmi les
+     commandes de jeu, ce qui laissait croire qu'il pouvait aider a jouer. Il
+     est desormais explicitement grise, comme le reste. */
+  geler("btnHint");
   /* Stockfish : ne pas contrarier son propre etat. Pendant le telechargement
      il se desactive lui-meme, et on ne doit surtout pas le rallumer. */
   {
@@ -438,12 +447,17 @@ function playUser(m){
   sanList.push(game.san(m));
   game.makeMove(m);lastMove=m;selected=-1;marks={};
   clockAfterMove(myColor);
+  /* busy doit etre pose AVANT refreshGame, sinon le bouton Reprendre est
+     rallume puis eteint dans la meme foulee, et reste actif pendant que le
+     moteur calcule. Cliquer a ce moment-la annulerait un coup sur une
+     position que le moteur est en train d'analyser. */
+  const suite=!isFlagged()&&legalCache.length&&!game.isDraw();
+  if(suite)busy=true;
   refreshGame();
-  if(isFlagged())return;
-  if(!legalCache.length||game.isDraw())return;
+  if(!suite)return;
   $("status").className="status";
   $("status").textContent=t("The computer is thinking…");
-  busy=true;$("btnHint").disabled=true;$("btnUndo").disabled=true;
+  $("btnHint").disabled=true;
   setTimeout(botMove,60);
 }
 function botMove(){
@@ -1176,7 +1190,7 @@ $("segLevel").addEventListener("click",e=>{
   if(typeof renderClocks==="function")renderClocks();
 });
 $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
-$("btnUndo").onclick=undoGame;
+/* plus de bouton Reprendre : la fonction reste pour l'historique du code */
 $("btnHint").onclick=hintGame;
 $("btnNext").onclick=nextPuzzle;
 $("themeFilter").addEventListener("change",e=>{

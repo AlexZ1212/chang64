@@ -67,6 +67,11 @@ body{
   font-size:16px;line-height:1.55;min-height:100vh;padding:18px 14px 44px;
 }
 .wrap{max-width:1080px;margin:0 auto;min-width:0}
+/* La regle [hidden]{display:none} vient de la feuille par defaut du
+   navigateur : elle est plus faible que n'importe quel selecteur de classe.
+   Un element avec display explicite reste donc visible malgre l'attribut,
+   sans que rien ne le signale. Cinquante classes du site sont dans ce cas. */
+[hidden]{display:none!important}
 
 /* ---------- garde-fou contre le debordement horizontal ----------
    Un element flexible ou de grille a min-width:auto par defaut : il refuse
@@ -738,10 +743,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <div class="tc-cats" id="tcCats2"></div>
             <div class="tc-chips" id="tcChips2"></div>
           </div>
+          <!-- "Reprendre" annulait le coup joue et celui du moteur : une aide
+               au jeu qui permet d'essayer un coup, de voir la reponse, puis de
+               revenir en arriere. Retire : aucune assistance en cours de
+               partie. "Suggerer un coup" a rejoint le panneau Revue, ou il
+               appartient : il ne sert qu'une fois la partie finie. -->
           <div class="btnrow">
             <button class="btn primary" id="btnNew">New game</button>
-            <button class="btn" id="btnUndo">Take back</button>
-            <button class="btn" id="btnHint">Suggest a move</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
             <button class="btn danger" id="btnResign">Resign</button>
@@ -763,6 +771,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:11.5px;lett
             <button class="btn primary" id="btnAnalyse">Analyse this game</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="btnHint">Show the best move</button>
             <button class="btn" id="btnStockfish">Stockfish for review</button>
           </div>
           <p class="note" id="sfStatus">Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.</p>

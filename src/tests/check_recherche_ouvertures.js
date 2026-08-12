@@ -29,7 +29,11 @@ const w=dom.window,d=w.document;
 setTimeout(()=>{
   const champ=d.getElementById("filtre");
   T("champ revele", !d.getElementById("filtreBloc").classList.contains("hide"));
-  const vis=()=>[...d.querySelectorAll("[data-cle]")].filter(t=>!t.hidden);
+  /* On mesure le style REELLEMENT calcule, pas l'attribut. Une tuile peut
+     porter hidden et rester visible : la regle [hidden]{display:none} vient
+     de la feuille par defaut du navigateur, donc .tile{display:block}
+     l'emportait et la recherche semblait ne rien faire. */
+  const vis=()=>[...d.querySelectorAll("[data-cle]")].filter(t=>w.getComputedStyle(t).display!=="none");
   const saisir=v=>{champ.value=v;champ.dispatchEvent(new w.Event("input",{bubbles:true}));};
 
   console.log("\n--- Recherche par nom ---");

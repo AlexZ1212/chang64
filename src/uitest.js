@@ -71,7 +71,7 @@ function squareIndexOf(sqName) {
 
   // --- reprise de coup ---
   const before = $("sheet").textContent.length;
-  click($("btnUndo"));
+  click($("btnUndo"));   /* bouton retire : click() tolere l'absence */
   await wait(300);
   console.log("Reprendre :", $("sheet").textContent.length < before ? "OK" : "sans effet");
 

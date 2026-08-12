@@ -189,7 +189,7 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   const st = c.$("status").textContent;
   T("flag falls and ends the game", /on time|not enough material/.test(st), st);
   T("losing clock flagged in red", c.$("clockBottom").className.includes("flagged") || c.$("clockTop").className.includes("flagged"));
-  T("board locked after flag", c.$("btnUndo").disabled);
+  T("board locked after flag", !c.$("btnUndo") || c.$("btnUndo").disabled);   /* bouton retire */
   T("review unlocked after flag", !c.$("btnHint").disabled && !c.$("btnAnalyse").disabled);
   const sheetBefore = c.$("sheet").textContent;
   await c.play("a2", "a3");

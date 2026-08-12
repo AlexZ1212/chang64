@@ -45,7 +45,10 @@ let max=0,maxf="";
 for(const f of en){const s=fs.statSync(S+"/puzzles/"+f).size; if(s>max){max=s;maxf=f;}}
 T("page la plus lourde sous 40 Ko", max<40960, Math.round(max/1024)+" Ko ("+maxf+")");
 const tot=en.reduce((a,f)=>a+fs.statSync(S+"/puzzles/"+f).size,0);
-T("moyenne sous 25 Ko", tot/en.length<25600, Math.round(tot/en.length/1024)+" Ko de moyenne");
+/* Seuil releve de 25 a 30 Ko : la feuille de style s'est enrichie (menu
+   unifie, pastille de langue, champ de recherche, logo complet). Le plafond
+   reste utile pour detecter une derive, mais il doit suivre le produit. */
+T("moyenne sous 30 Ko", tot/en.length<30720, Math.round(tot/en.length/1024)+" Ko de moyenne");
 
 console.log("\n--- Toutes au sitemap ---");
 const sm=fs.readFileSync(S+"/sitemap.xml","utf8");

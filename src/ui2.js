@@ -821,6 +821,20 @@ setMode=function(m,opts){
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
+/* Les pages de contenu renvoient vers /#legal et /#privacy : ces panneaux
+   sont ouverts par bouton, pas par URL, donc sans ce relais les liens du pied
+   de page des pages claires ne meneraient nulle part. */
+(function(){
+  const versFragment=()=>{
+    const f=(location.hash||"").replace("#","");
+    if(f==="legal"){setMode("legal");goToSection("legalTitle");}
+    else if(f==="privacy"){setMode("legal");goToSection("privacyTitle");}
+    else if(f==="prefs"){setMode("prefs");}
+    else if(f==="accessibilite"){setMode("prefs");goToSection("accessibilite");}
+  };
+  window.addEventListener("hashchange",versFragment);
+  setTimeout(versFragment,60);
+})();
 $("footLegal").onclick=()=>{setMode("legal");goToSection("legalTitle");};
 $("footPrivacy").onclick=()=>{setMode("legal");goToSection("privacyTitle");};
 $("footHome").onclick=()=>{setMode("home");goTop();};   /* meme mecanique que les onglets */
@@ -841,7 +855,7 @@ undoGame=function(){
   baseUndoGame();
   if(game.history.length<before){gameUci.splice(-2);analysis=null;}
 };
-$("btnUndo").onclick=()=>undoGame();
+if($("btnUndo"))$("btnUndo").onclick=()=>undoGame();   /* bouton retire */
 $("btnHint").onclick=()=>hintGame();
 
 ensureProgFields();

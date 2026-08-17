@@ -22,7 +22,18 @@ setTimeout(async()=>{
   T("le theme precede les compteurs", pos("exTheme")<pos("stSolved"), "theme "+pos("exTheme")+" vs stats "+pos("stSolved"));
   T("l'enonce precede les compteurs", pos("exQuest")<pos("stSolved"));
   T("le statut precede les compteurs", pos("exStatus")<pos("stSolved"));
-  T("le chronometre Sprint reste tout en haut", pos("rushBar")<pos("exTheme"));
+  /* Le chronometre du sprint a quitte le panneau : il est desormais au-dessus
+     de l'echiquier, comme celui des coordonnees, pour rester sous les yeux
+     pendant qu'on joue plutot qu'en dessous ou il fallait le chercher. */
+  /* pos() ne parcourt que le panneau : le bandeau et l'echiquier n'y sont
+     plus, il faut donc comparer sur le document entier. */
+  const posDoc=id=>{const e=d.getElementById(id);let n=0,wk=d.createTreeWalker(d.body,1);
+    while(wk.nextNode()){n++; if(wk.currentNode===e)return n;} return 1e9;};
+  T("le chronometre Sprint est au-dessus de l'echiquier",
+    posDoc("rushBar")<posDoc("board"),
+    "rushBar "+posDoc("rushBar")+" vs echiquier "+posDoc("board"));
+  T("et hors du panneau de l'exercice",
+    !d.getElementById("exPanel").contains(d.getElementById("rushBar")));
   T("la barre de niveau est passee apres", pos("ladder")>pos("exStatus"));
   T("les deux rangees de compteurs sont apres", pos("stRating")>pos("exStatus"));
 

@@ -44,6 +44,46 @@ setTimeout(async()=>{
   T("Preferences traduit aussi", (d.getElementById("footPrefs").textContent||"").trim()==="Préférences",
      d.getElementById("footPrefs").textContent);
 
-  console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
+  console.log("\n--- Reperes de structure pour les lecteurs d'ecran ---");
+/* Un lecteur d'ecran permet de sauter directement au contenu si la page
+   declare ses reperes. Sans <main>, il faut parcourir toute la navigation a
+   chaque page. Le lien d'evitement rend ce saut possible au clavier. */
+T("landmark principal present", /<main[\s>]/.test(html));
+T("landmark principal ferme", /<\/main>/.test(html));
+T("navigation identifiee", /<nav[\s>]/.test(html));
+T("navigation nommee", /<nav[^>]*aria-label=/.test(html));
+T("lien d'evitement present", /class="skiplink"/.test(html));
+T("il pointe vers le contenu", /href="#contenu"/.test(html) && /id="contenu"/.test(html));
+T("invisible tant qu'il n'a pas le focus", /\.skiplink\{[^}]*left:-9999px/.test(html));
+T("visible au focus", /\.skiplink:focus\{[^}]*left:0/.test(html));
+
+console.log("\n--- Les textes a lire font au moins 12px ---");
+/* WAVE signale tout texte sous 12px. La regle est pertinente pour ce qui se
+   lit (notes, pied de page, descriptions de sections, verdicts d'analyse) et
+   ne l'est pas pour les reperes tres courts poses dans un espace contraint :
+   coordonnees de l'echiquier, numeros de coups, libelles sous un grand
+   chiffre. Les agrandir degraderait l'echiquier sans rien apporter. */
+{
+  const css=(html.match(/<style>([\s\S]*?)<\/style>/)||[])[1]||"";
+  /* On cherche la regle par son texte exact plutot que par une expression
+     construite : plus simple et plus sur. */
+  const taille=cle=>{
+    const i=css.indexOf(cle);
+    if(i<0)return null;
+    const m=css.slice(i,i+300).match(/font-size:\s*([\d.]+)px/);
+    return m?parseFloat(m[1]):null;
+  };
+  for(const [sel,nom] of [
+    [".note{","notes explicatives"],
+    ["footer{margin-top:30px","pied de page"],
+    [".explore a span{","descriptions de sections"],
+    [".plyinfo .verdict{","verdicts d'analyse"]
+  ]){
+    const t=taille(sel);
+    T(nom+" : "+t+"px", t!==null&&t>=12, String(t));
+  }
+}
+
+console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);
 },1500);

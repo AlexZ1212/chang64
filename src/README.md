@@ -276,6 +276,33 @@ les condamnait à échouer à chaque ajout de contenu. Ils vérifient désormais
 propriété qui compte : que le sitemap couvre toutes les pages publiées.
 
 ## À vérifier après le prochain déploiement
+
+### PageSpeed Insights, à relancer en priorité
+Le chargement des polices a été rendu non bloquant (preload puis promotion en
+feuille de style). Avant cette modification, PageSpeed donnait :
+
+| | Bureau | Mobile |
+|---|---|---|
+| Performances | 98 | 85 |
+| First Contentful Paint | 0,9 s | 3,3 s |
+| Cumulative Layout Shift | 0,001 | 0,009 |
+
+Relancer https://pagespeed.web.dev sur chang64.com, en mobile ET en bureau, et
+comparer **deux** chiffres :
+
+1. **Performances** doit monter sur mobile. Lighthouse estimait 1 480 ms
+   récupérables sur le blocage du rendu.
+2. **Cumulative Layout Shift** ne doit pas se dégrader nettement. Le texte
+   s'affiche désormais d'abord en police système puis bascule, ce qui peut
+   décaler la mise en page.
+
+Si le CLS se dégrade franchement (au-delà de 0,1), revenir en arrière : le gain
+de vitesse ne vaudrait pas la perte de stabilité. La version précédente du bloc
+est dans l'historique Git, cherchez `rel="stylesheet"` sur fonts.googleapis.
+
+Deux remarques de ces audits sont déjà traitées et n'ont pas à être reprises :
+le repère principal manquant (landmarks `<main>` et `<nav>` posés) et la
+meta description trop longue (ramenée de 174 à 133 caractères).
 Deux points que je n'ai pas pu trancher sans moteur de rendu (les tests
 simulent le DOM mais ne calculent pas les dimensions) :
 

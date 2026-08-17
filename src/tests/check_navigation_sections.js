@@ -53,10 +53,15 @@ T(vus+" pages d'ouvertures, toutes avec le pied de page", sans.length===0, sans.
 
 console.log("\n--- Le menu du haut ne deborde plus ---");
 const h=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
-T("menu en disposition souple", /header nav\{[^}]*display:flex/.test(h));
-T("retour a la ligne autorise", /header nav\{[^}]*flex-wrap:wrap/.test(h));
+/* Le menu ne passe plus a la ligne : il defile horizontalement, comme les
+   onglets de l'application. La regle generique "header nav" l'en empechait,
+   son flex-wrap annulant le defilement ; elle exclut donc desormais le menu
+   principal. */
+T("menu en disposition souple", /\.sitenav\{[^}]*display:flex/.test(h));
+T("defilement horizontal plutot que retour a la ligne", /\.sitenav\{[^}]*overflow-x:auto/.test(h));
+T("regle generique neutralisee sur le menu", /header nav:not\(\.sitenav\)/.test(h));
 T("plus de marge a gauche sur les liens", !/nav a\{[^}]*margin-left/.test(h));
-T("entete non elargissable", /header nav\{[^}]*min-width:0/.test(h));
+T("entete non elargissable", /\.sitenav\{[^}]*min-width:0/.test(h));
 
 console.log("\n--- Cout maitrise ---");
 const nav=(h.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];

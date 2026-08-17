@@ -89,10 +89,15 @@ function squareIndexOf(sqName) {
   console.log("Erreurs cumulées :", errors.length ? errors.join(" | ") : "aucune");
 
   // --- indice puis solution ---
+  /* L'aide n'agit que sur l'onglet Exercices, avec un exercice charge. */
+  click($("tab-puzzles"));
+  await wait(700);
   click($("btnHintEx"));
   await wait(500);
   console.log("Indice :", $("exStatus").textContent, "| cases:", board().querySelectorAll(".hint").length);
-  click($("btnSolve"));
+  /* Le bouton d'aide a fusionne : un premier clic donne l'indice, un second
+     la solution. btnSolve n'existe plus. */
+  click($("btnHintEx"));
   await wait(500);
   console.log("Solution :", $("exStatus").textContent);
 

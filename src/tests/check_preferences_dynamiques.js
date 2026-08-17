@@ -80,6 +80,21 @@ setTimeout(async()=>{
      d.getElementById("prefsTitle").textContent);
   T("noms de themes traduits", [...d.getElementById("boardThemes").children].some(c=>c.textContent==="Noyer"));
 
-  console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
+  console.log("\n--- Animation des deplacements ---");
+/* La piece glisse de sa case de depart vers son arrivee. render() recree
+   tout le HTML a chaque appel, donc l'element d'origine n'existe plus : on
+   anime la nouvelle piece en la faisant partir de l'ancienne position.
+   Le decalage se calcule en cases et non en pixels, pour ne pas dependre
+   d'une mise en page deja calculee. Activee par defaut, desactivable, et
+   respecte le reglage systeme "moins d'animations". */
+T("reglage present dans les preferences", /id="segAnim"/.test(html));
+T("fonction d'animation", /function animateMove/.test(html));
+T("respecte prefers-reduced-motion", /prefersReducedMotion\(\)/.test(html));
+T("calcul en cases, pas en pixels", /dCol\*100/.test(html));
+T("sauvegarde du reglage", /anim:animOn/.test(html));
+T("activee par defaut", /let animOn=true/.test(html));
+T("une valeur absente ne la desactive pas", /typeof d\.anim==="boolean"/.test(html));
+
+console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);
 },1500);

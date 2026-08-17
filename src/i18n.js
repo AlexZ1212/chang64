@@ -3,14 +3,12 @@
    ========================================================== */
 const FR={
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
 "Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
  "Du bullet au jeu par correspondance contre un moteur intégré, __NP__ exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",
 "Play now":"Jouer maintenant","Puzzle of the day":"Exercice du jour","Install the app":"Installer l'application",
 "Time control":"Cadence","Play the computer":"Jouer contre l'ordinateur",
-"Four strengths, from a forgiving beginner to an engine that punishes loose moves. Legal moves shown, move hints on request.":
- "Quatre niveaux, du débutant indulgent au moteur qui sanctionne le moindre relâchement. Coups légaux affichés, suggestions à la demande.",
 "Start a game →":"Commencer une partie →","Tactics trainer":"Entraînement tactique",
 "puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.":
  "exercices, chacun démontré par le moteur. La difficulté monte après trois réussites et redescend quand tu trébuches.",
@@ -22,10 +20,10 @@ const FR={
 
 /* --- partie --- */
 "Computer":"Ordinateur","You":"Toi","Your game":"Ta partie","Settings":"Réglages",
-"Play White":"Jouer les Blancs","Play Black":"Jouer les Noirs",
+"Piece animation":"Animation des pièces","Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"Les pièces glissent vers leur case quand un coup est joué. Désactive si tu préfères un échiquier instantané.","Sprint over":"Sprint terminé","New personal best":"Nouveau record","Time's up":"Temps écoulé","Play again":"Rejouer","Close":"Fermer","Score: {score}. Your best yet.":"Score : {score}. Ton meilleur à ce jour.","Score: {score}. Your best is {best}.":"Score : {score}. Ton record est {best}.","Random":"Au hasard","Four strengths, from a forgiving beginner to an engine that punishes loose moves. Legal moves shown, no assistance while you play.":"Quatre niveaux, du débutant indulgent au moteur qui punit les coups approximatifs. Les coups légaux sont affichés, aucune aide pendant que tu joues.","Play White":"Jouer les Blancs","Play Black":"Jouer les Noirs",
 "Beginner":"Débutant","Casual":"Tranquille","Solid":"Sérieux","Tough":"Coriace",
 "New game":"Nouvelle partie","Start game":"Lancer la partie","Not started yet.":"Partie non commencée.",
-"Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Take back":"Reprendre","Show the best move":"Voir le meilleur coup","Suggest a move":"Suggérer un coup",
+"Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Show the best move":"Voir le meilleur coup","Suggest a move":"Suggérer un coup",
 "Scoresheet":"Feuille de partie","White":"Blancs","Black":"Noirs","No moves yet":"Aucun coup joué",
 "Use the arrow keys to step through the game.":"Utilise les flèches du clavier pour parcourir la partie.",
 "Pick a colour and a strength, then play.":"Choisis ta couleur et la force du moteur, puis joue.",
@@ -60,7 +58,7 @@ const FR={
 
 /* --- navigation dans la partie --- */
 "Review":"Analyse","Analyse this game":"Analyser cette partie","Analysing with Stockfish…":"Analyse avec Stockfish…",
-"Stockfish for review":"Stockfish pour l'analyse","Stockfish is only used to review a finished game, never to help you play.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues.","Enable Stockfish":"Activer Stockfish","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
+"Stockfish for review":"Stockfish pour l'analyse","Stockfish is only used to review a finished game, never to help you play.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues.","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
 "The built-in engine reviews your game instantly. Stockfish is stronger but downloads about 7 MB the first time.":
  "Le moteur intégré analyse ta partie instantanément. Stockfish est plus fort mais télécharge environ 7 Mo la première fois.",
 "Stockfish is ready. Game review will now use it instead of the built-in engine.":
@@ -124,7 +122,6 @@ const FR={
 
 /* --- rush --- */
 "Chang Sprint":"Chang Sprint","Stop Rush":"Arrêter","Left":"Restant","Score":"Score","Strikes":"Vies",
-"Rush: solve as many as you can. Three misses and it stops.":"Rush : enchaîne le plus d'exercices possible. Trois échecs et c'est fini.",
 "Time is up.":"Temps écoulé.","Three misses.":"Trois échecs.","Stopped.":"Arrêté.","You cleared every puzzle.":"Tu as épuisé tous les exercices.",
 "{why} Score: {score} — a new personal best.":"{why} Score : {score}, nouveau record personnel.",
 "{why} Score: {score} (best: {best}).":"{why} Score : {score} (record : {best}).",
@@ -153,7 +150,7 @@ const FR={
 "The hard one. Mate only happens in a corner your bishop controls.":
  "La difficile. Le mat n'arrive que dans un coin contrôlé par ton fou.",
 "Promote the pawn, then mate. Opposition decides it.":"Promeus le pion, puis mate. L'opposition décide de tout.",
-"Endgame":"Finale","Moves used":"Coups joués","Target":"Objectif","Your best":"Ton record","New position":"Nouvelle position",
+"Endgames":"Finales","Five you should know":"Les cinq à connaître","Endgame":"Finale","Moves used":"Coups joués","Target":"Objectif","Your best":"Ton record","New position":"Nouvelle position",
 "Pick an endgame below.":"Choisis une finale ci-dessous.",
 "Pick an endgame, or run the coordinate drill below.":"Choisis une finale, ou lance le drill de coordonnées ci-dessous.",
 "Could not build a position, try again.":"Impossible de construire une position, réessaie.",
@@ -254,7 +251,7 @@ const FR={
 "Replaying a saved game. Step through it or run the review.":"Relecture d'une partie enregistrée. Parcours-la ou lance l'analyse.",
 "Explore":"Explorer","Every page below is built from the same engine that runs the board.":"Chaque page ci-dessous est construite par le moteur qui fait tourner l'échiquier.",
 "Played":"Joué","Engine preferred":"Le moteur préférait","The engine agrees: best move.":"Le moteur est d'accord : meilleur coup.",
-"Blunder":"Gaffe","Mistake":"Erreur","Inaccuracy":"Imprécision","{n} pawns lost.":"{n} pion(s) perdu(s).",
+"Blunder":"Gaffe","Mistake":"Erreur","Inaccuracy":"Imprécision","{n} advantage lost.":"{n} d'avantage perdu.",
 "Review, move suggestions and the evaluation bar unlock once the game is over. No engine help while you play.":"L'analyse, les suggestions de coup et la barre d'avantage se débloquent à la fin de la partie. Aucune aide du moteur pendant le jeu.",
 "Review your game move by move. The engine flags what went wrong.":"Reprends ta partie coup par coup. Le moteur signale ce qui a dérapé.",
 "Resign":"Abandonner","Confirm resignation":"Confirmer l'abandon","Resign this game":"Abandonner la partie",
@@ -263,7 +260,7 @@ const FR={
 "I resign, well played.":"J'abandonne, bien joué.",
 "Your progress will show up here.":"Ta progression s'affichera ici.",
 "Solve your first puzzle →":"Résous ton premier exercice →",
-"Ready when you are":"Quand tu veux","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press start when you are ready.":"Appuie sur Commencer quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
+"Ready when you are":"Quand tu veux","Start":"Commencer","Three minutes · three misses and it stops":"Trois minutes · trois erreurs et ça s'arrête","Thirty seconds · click the square that is named":"Trente secondes · clique la case nommée","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press start when you are ready.":"Appuie sur Commencer quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
 "Legal notice":"Mentions légales","Privacy":"Confidentialité","Preferences":"Préférences","Accessibility":"Accessibilité","Publisher and hosting details.":"Éditeur et hébergeur.",
 "chang64 · no account, no tracking · progress saved on this device":
  "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",

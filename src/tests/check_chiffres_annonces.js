@@ -93,7 +93,12 @@ T("une page par exercice", pzEn === NP, pzEn + " pages pour " + NP + " exercices
 
 console.log("\n--- Rien n'est fige dans les sources ---");
 for (const f of ["template.html", "i18n.js", "ui2.js", "build_site.js"]) {
-  const s = fs.readFileSync(path.join(SRC, f), "utf8");
+  /* On retire les commentaires : un exemple cite dans une explication
+     ("141 familles, 1758 variantes") n'est pas une quantite figee dans le
+     produit, et le signaler ferait echouer le test pour rien. */
+  const s = fs.readFileSync(path.join(SRC, f), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/<!--[\s\S]*?-->/g, "");
   T(f + " sans quantite ecrite en dur",
     !/\b(489|1758)\s*(puzzles|exercices|positions|verified|named lines|variantes)/.test(s) &&
     !/\b141 (families|familles)/.test(s));

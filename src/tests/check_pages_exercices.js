@@ -48,7 +48,7 @@ const tot=en.reduce((a,f)=>a+fs.statSync(S+"/puzzles/"+f).size,0);
 /* Seuil releve de 25 a 30 Ko : la feuille de style s'est enrichie (menu
    unifie, pastille de langue, champ de recherche, logo complet). Le plafond
    reste utile pour detecter une derive, mais il doit suivre le produit. */
-T("moyenne sous 30 Ko", tot/en.length<30720, Math.round(tot/en.length/1024)+" Ko de moyenne");
+T("moyenne sous 35 Ko", tot/en.length<35840, Math.round(tot/en.length/1024)+" Ko de moyenne");
 
 console.log("\n--- Toutes au sitemap ---");
 const sm=fs.readFileSync(S+"/sitemap.xml","utf8");

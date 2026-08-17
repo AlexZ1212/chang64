@@ -64,6 +64,27 @@ setTimeout(async()=>{
   T("Preferences remonte en haut", tops>avant, "appels : "+(tops-avant));
   T("et ouvre le panneau", !d.getElementById("pane-prefs").classList.contains("hide"));
 
+  console.log("\n--- Tous les changements de vue remontent en haut ---");
+  /* Arriver au milieu d'une nouvelle vue est desorientant : on croit que rien
+     ne s'est passe. Deux boutons avaient ete oublies, "Jouer maintenant" et
+     l'onglet Defis. Le controle porte sur tous les boutons qui appellent
+     setMode, pour qu'un futur oubli soit signale. */
+  for(const [id,nom] of [
+    ["heroPlay","Jouer maintenant"],["heroPuzzle","Exercice du jour"],
+    ["cardPlay","carte Jouer"],["cardPuzzles","carte Exercices"],
+    ["cardFriend","carte Entre amis"],["tab-train","onglet Defis"],
+    ["tab-watch","onglet Videos"]
+  ]){
+    d.getElementById("tab-home").click(); await wait(250);
+    const avant=tops;
+    const e=d.getElementById(id);
+    if(!e){T(nom+" present", false); continue;}
+    e.click(); await wait(400);
+    T(nom+" remonte en haut", tops>avant, "appels : "+(tops-avant));
+    const rb=d.getElementById("readyBanner");
+    if(rb&&!rb.classList.contains("hide")){d.getElementById("readyStart").click(); await wait(200);}
+  }
+
   console.log("\n--- Les ancres existent et sont focalisables ---");
   for(const id of ["legalTitle","privacyTitle","accessibilite"]){
     const e=d.getElementById(id);

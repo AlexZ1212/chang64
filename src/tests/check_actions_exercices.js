@@ -22,7 +22,9 @@ setTimeout(async()=>{
   T("Exercice suivant avant les compteurs", pos("btnNext")<pos("stSolved"),
      "btnNext "+pos("btnNext")+" vs stats "+pos("stSolved"));
   T("Indice avant les compteurs", pos("btnHintEx")<pos("stSolved"));
-  T("Voir la solution avant les compteurs", pos("btnSolve")<pos("stSolved"));
+  /* btnSolve a fusionne avec btnHintEx : le meme bouton donne l'indice puis
+     la solution. */
+  T("le bouton d'aide avant les compteurs", pos("btnHintEx")<pos("stSolved"));
   T("juste apres l'enonce", pos("btnNext")>pos("exStatus"));
 
   console.log("\n--- Les reglages occasionnels restent en bas ---");
@@ -32,7 +34,7 @@ setTimeout(async()=>{
   T("Reinitialiser tout en bas", pos("btnReset")>pos("themeFilter"));
 
   console.log("\n--- Aucun doublon, les boutons fonctionnent ---");
-  for(const id of ["btnNext","btnHintEx","btnSolve","btnDaily","btnRush","btnRetry","btnReset"])
+  for(const id of ["btnNext","btnHintEx","btnDaily","btnRush","btnRetry","btnReset"])
     T(id+" unique dans le document", d.querySelectorAll("#"+id).length===1,
        d.querySelectorAll("#"+id).length+" occurrences");
 

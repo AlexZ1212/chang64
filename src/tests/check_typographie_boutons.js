@@ -35,10 +35,15 @@ setTimeout(async()=>{
   await wait(500);
   d.getElementById("tab-puzzles").click(); await wait(400);
   const lire=id=>{const e=d.getElementById(id);return e?e.textContent:"";};
-  for(const [id,att] of [["btnDaily","du"],["btnSolve","la"],["btnReset","ma"]]){
+  for(const [id,att] of [["btnDaily","du"],["btnDaily","du"],["btnReset","ma"]]){
     const t=lire(id);
     T(id+" : article lie", t.includes(att+NB), JSON.stringify(t));
   }
+  /* Le bouton d'aide affiche "Indice" au depart : c'est apres un premier clic
+     qu'il devient "Voir la solution" et porte un article a lier. */
+  d.getElementById("btnHintEx").click(); await wait(400);
+  T("btnHintEx apres un clic : article lie", lire("btnHintEx").includes("la"+NB),
+     JSON.stringify(lire("btnHintEx")));
   d.getElementById("tab-play").click(); await wait(400);
   /* Le bouton s'appelle desormais "Voir le meilleur coup" : c'est "le" qui
      doit etre lie, plus "un". */

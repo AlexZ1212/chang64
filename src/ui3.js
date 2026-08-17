@@ -234,6 +234,15 @@ function stopCoord(){
   if(eg&&eg.g){game=eg.g;legalCache=game.moves();selected=-1;marks={};}
   render();
   $("btnCoord").textContent=t("Start 30 seconds");
+  if(typeof showFin==="function"){
+    const record=s>=(prog.coordBest||0)&&s>0;
+    showFin(
+      record?t("New personal best"):t("Time's up"),
+      record?t("Score: {score}. Your best yet.",{score:s})
+            :t("Score: {score}. Your best is {best}.",{score:s,best:prog.coordBest||0}),
+      t("Play again"),
+      ()=>startCoord());
+  }
   saveProg();
   $("coordBest").textContent=prog.coordBest;
   const st=$("egStatus");st.className="status win";
@@ -275,7 +284,15 @@ function renderEgChips(){
 }
 $("btnEgNew").onclick=()=>{if(coord)stopCoord();startEndgame(eg?eg.scen.id:"kq");
   const st=$("egStatus");st.className="status";st.textContent=t("New position. White to move.");};
-$("btnCoord").onclick=()=>{if(coord)stopCoord();else startCoord();};
+$("btnCoord").onclick=()=>{
+  if(coord){stopCoord();return;}
+  /* Trente secondes seulement : perdre les deux premieres a comprendre ou on
+     est, ca compte. Meme overlay que les parties chronometrees. */
+  if(typeof showReadyFor==="function")
+    showReadyFor(t("Thirty seconds · click the square that is named"),
+      ()=>startCoord(), t("Start"));
+  else startCoord();
+};
 $("coordSide").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
@@ -467,7 +484,9 @@ function refreshCurrentMode(){
   if(typeof disarmResign==="function"&&resigned===null)disarmResign();
   const ar=$("btnAmiResign");
   if(ar&&!ar.classList.contains("armed"))ar.textContent=t("Resign this game");
-  if(mode==="puzzles"&&puzzle)loadPuzzle();
+  /* Les finales vivent desormais dans l'onglet Exercices : leur rendu doit
+     suivre ce mode-la, pas "train" qui ne contient plus qu'elles nommement. */
+  if(mode==="puzzles"&&puzzle){loadPuzzle();renderEgChips();renderEndgame();}
   else if(mode==="train"){renderEgChips();renderEndgame();}
   else if(mode==="friend")showAmi();
   else if(mode==="play"){refreshGame();}
@@ -540,7 +559,7 @@ setMode=function(m,opts){
   const tt=$("tab-train");if(tt)tt.setAttribute("aria-selected","false");
   prevSetMode(m,opts);
 };
-$("tab-train").onclick=()=>setMode("train");
+$("tab-train").onclick=()=>{setMode("train");goTop();};
 
 /* clics du plateau : router vers l'entraînement, et ignorer le clic issu d'un glisser */
 const baseOnSquare=onSquare;
@@ -593,12 +612,15 @@ async function loadPrefs(){
       const d=JSON.parse(r.value);
       if(BOARD_THEMES.some(x=>x.id===d.board))prefBoard=d.board;
       if(["off","moves","full"].includes(d.announce))prefAnnounce=d.announce;
+      /* Animation activee par defaut : seule une valeur explicitement fausse
+         la desactive, pour qu'une preference absente ne la coupe pas. */
+      if(typeof d.anim==="boolean")animOn=d.anim;
     }
   }catch(e){}
   applyBoardTheme();
 }
 async function savePrefs(){
-  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce}));}catch(e){}
+  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn}));}catch(e){}
 }
 function applyBoardTheme(){
   document.documentElement.setAttribute("data-board",prefBoard);
@@ -778,6 +800,23 @@ function renderPrefs(){
       const i=document.createElement("i");
       i.className=((r+f)%2===0)?"l":"d";
       prev.appendChild(i);
+    }
+  }
+  const segA=$("segAnim");
+  if(segA){
+    const lab=fr?{on:"Activée",off:"Désactivée"}:{on:"On",off:"Off"};
+    segA.innerHTML="";
+    for(const v of ["on","off"]){
+      const b=document.createElement("button");
+      b.type="button";
+      b.setAttribute("data-v",v);
+      b.setAttribute("role","radio");
+      const actif=(v==="on")===animOn;
+      b.setAttribute("aria-checked",String(actif));
+      b.setAttribute("aria-pressed",String(actif));
+      b.textContent=lab[v];
+      b.onclick=()=>{animOn=(v==="on");savePrefs();renderPrefs();};
+      segA.appendChild(b);
     }
   }
   const seg=$("segAnnounce");

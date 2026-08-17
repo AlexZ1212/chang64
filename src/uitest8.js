@@ -37,7 +37,10 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
      chudTime, chudSquare, chudScore. Le test visait une interface disparue et
      plantait avant d'avoir rien verifie. */
   console.log("\nCOORDINATE TRAINER");
-  click($("btnCoord")); await wait(500);
+  /* Un overlay attend le feu vert avant de lancer les trente secondes :
+     perdre les deux premieres a comprendre ou on est, ca compte. */
+  click($("btnCoord")); await wait(400);
+  if(!$("readyBanner").classList.contains("hide")){click($("readyStart")); await wait(400);}
   T("timer started", parseFloat($("chudTime").textContent)<30 && parseFloat($("chudTime").textContent)>28, $("chudTime").textContent);
   T("board emptied", pieceCount()===0, pieceCount()+" pieces");
   T("a square is asked for", /^[a-h][1-8]$/.test($("chudSquare").textContent), $("chudSquare").textContent);

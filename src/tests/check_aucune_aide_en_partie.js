@@ -34,6 +34,15 @@ setTimeout(async () => {
   T("aucun libelle 'Take back'", !/>Take back</.test(html));
   T("aucun libelle 'Reprendre' sur un bouton", !/id="btnUndo"/.test(html));
 
+  console.log("\n--- Le discours du site correspond au produit ---");
+  /* La carte d'accueil promettait "move hints on request" : les suggestions
+     ont ete retirees du jeu, la promesse ne tenait plus. Les coups legaux,
+     eux, sont toujours affiches quand on selectionne une piece. */
+  T("plus de promesse de suggestions", !/move hints on request/.test(html));
+  T("plus de promesse en francais", !/suggestions à la demande/.test(html));
+  T("l'absence d'aide est annoncee", /no assistance while you play/.test(html));
+  T("les coups legaux restent annonces", /Legal moves shown/.test(html));
+
   console.log("\n--- Les outils d'analyse sont dans le panneau Revue ---");
   const posHint = html.indexOf('id="btnHint"');
   const posRevue = html.indexOf('id="btnAnalyse"');

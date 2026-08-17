@@ -52,7 +52,7 @@ module.exports = function (H) {
     urls.push({ loc: canonical, pri: "0.6", alt: altUrl, lang });
   }
   function diagram(fen, caption) {
-    return `<div class="diagram">${boardSvg(fen, 300)}${caption ? `<p style="font-size:12px;color:#93A99A;margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
+    return `<div class="diagram">${boardSvg(fen, 300)}${caption ? `<p style="font-size:12px;color:var(--sage);margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
   }
   function sanLine(moves) {
     const g = new Game();
@@ -504,7 +504,7 @@ module.exports = function (H) {
 </div>`;
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p>` + filtre + `<div id="grille">` + toc +
       ordered.map(th =>
-        `<section class="theme-bloc" data-theme><h2 id="${anchor(th)}">${esc(themeOf(th, lang))} <span style="color:#93A99A;font-size:13px">(${groups[th].length})</span></h2><div class="grid">` +
+        `<section class="theme-bloc" data-theme><h2 id="${anchor(th)}">${esc(themeOf(th, lang))} <span style="color:var(--sage);font-size:13px">(${groups[th].length})</span></h2><div class="grid">` +
         groups[th].map(p => {
           /* Cle de recherche : theme dans les deux langues, niveau, numero.
              Sans accents ni ponctuation, pour que "clouage" trouve

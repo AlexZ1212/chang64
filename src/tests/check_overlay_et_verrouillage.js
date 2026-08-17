@@ -74,6 +74,25 @@ setTimeout(async()=>{
   T("reglages verrouilles en partie", seg("segLevel").every(b=>b.disabled));
   T("Abandonner reste actif", !d.getElementById("btnResign").disabled);
 
+  console.log("\n--- Les pendules ne suivent pas hors de l'onglet Jouer ---");
+  /* renderClocks exige mode==="play", mais rien ne l'appelait au changement
+     d'onglet : les pendules restaient affichees au-dessus de l'echiquier des
+     exercices. */
+  d.getElementById("tab-play").click(); await wait(300);
+  if(d.getElementById("btnNew") && !d.getElementById("btnNew").disabled){
+    d.getElementById("btnNew").click(); await wait(450);
+    const rb3=d.getElementById("readyBanner");
+    if(rb3 && !rb3.classList.contains("hide")){d.getElementById("readyStart").click(); await wait(400);}
+  }
+  const visibles=()=>!d.getElementById("clockTop").classList.contains("hide");
+  T("visibles pendant une partie", visibles());
+  for(const [id,nom] of [["tab-puzzles","Exercices"],["tab-train","Defis"],["tab-home","Accueil"]]){
+    d.getElementById(id).click(); await wait(400);
+    T("masquees dans "+nom, !visibles());
+  }
+  d.getElementById("tab-play").click(); await wait(450);
+  T("de retour dans Jouer", visibles());
+
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);
 },1500);

@@ -63,8 +63,17 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   T("3+2 selected", a.$("tcChips").children[1].getAttribute("aria-pressed") === "true");
 
   console.log("\nPLAY + CLOCKS");
-  a.click(a.$("heroPlay"));
+  /* heroPlay tire desormais la couleur au sort : l'accueil ne propose pas de
+     choix, donc imposer les Blancs y serait arbitraire. Ce test verifie le
+     message d'ouverture et l'increment, qui supposent qu'on joue les Blancs.
+     On passe donc par l'onglet Jouer, ou le choix est explicite. */
+  a.click(a.$("tab-play"));
+  await wait(400);
+  a.click([...a.$("segColor").children].find(b=>b.dataset.v==="w"));
+  await wait(300);
+  a.click(a.$("btnNew"));
   await wait(600);
+  if(a.$("readyBanner").className.includes("hide")){a.click(a.$("btnNew")); await wait(500);}
   T("play pane open", !a.$("pane-play").className.includes("hide"));
   /* Overlay de preparation : sur une cadence chronometree, la pendule attend
      desormais le feu vert du joueur. Le test doit appuyer sur "Commencer"

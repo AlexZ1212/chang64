@@ -128,7 +128,7 @@ function renderPlyInfo(){
     const bestSan=mv?g.san(mv):a.best;
     if(isBest)html+=' <span class="verdict">'+t("The engine agrees: best move.")+'</span>';
     else html+=' <span class="better">'+t("Engine preferred")+' <b>'+bestSan+'</b></span>'+
-      '<span class="verdict">'+t(VERDICT[a.tag])+" \u00b7 "+t("{n} pawns lost.",{n:(a.loss/100).toFixed(1)})+'</span>';
+      '<span class="verdict">'+t(VERDICT[a.tag])+" \u00b7 "+t("{n} advantage lost.",{n:fmtNum(a.loss/100)})+'</span>';
   }
   box.innerHTML=html;
 }
@@ -217,13 +217,36 @@ function afterGameRender(over){
   renderResult(!!over);
 }
 $("resultNew").onclick=()=>{
+  if(finAction){const f=finAction;finAction=null;$("resultBanner").className="result hide";f();return;}
   resultDismissed=false;
   /* On relance depuis le bandeau de fin : le choix vient d'etre fait, on ne
      represente pas l'overlay de preparation. */
   if(mode==="friend")newAmiGame();
   else {skipReady=true;newGame();}
 };
-$("resultClose").onclick=()=>{resultDismissed=true;$("resultBanner").className="result hide";};
+$("resultClose").onclick=()=>{
+  resultDismissed=true;
+  $("resultBanner").className="result hide";
+  finAction=null;
+};
+/* Bandeau de fin generique, reutilise pour Chang Sprint et les coordonnees.
+   Le message ne vivait que dans la barre de statut, facile a manquer, et le
+   bloc repartait aussitot dans l'onglet Exercices : on se retrouvait ailleurs
+   sans comprendre ce qui venait de se passer. */
+let finAction=null;
+function showFin(titre,sousTitre,libelleRejouer,action){
+  const b=$("resultBanner"); if(!b)return;
+  finAction=action||null;
+  $("resultTitle").textContent=titre;
+  $("resultSub").textContent=sousTitre;
+  $("resultNew").textContent=libelleRejouer;
+  /* "Revoir la partie" n'a pas de sens pour une epreuve. */
+  const an=$("resultAnalyse"); if(an)an.classList.toggle("hide",!!action);
+  $("resultClose").textContent=t("Close");
+  b.className="result win";
+  resultDismissed=false;
+  try{$("resultNew").focus();}catch(e){}
+}
 $("resultAnalyse").onclick=()=>{
   resultDismissed=true;
   $("resultBanner").className="result hide";
@@ -558,6 +581,7 @@ function renderExtraStats(){
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
   set("stRating",prog.rating);set("stDays",prog.days);set("stRush",prog.rushBest);
   set("hRating",prog.rating);set("hStreak",prog.days);
+  set("rushBestTrain",prog.rushBest);   /* meme record, affiche dans Defis */
   /* Rien de resolu : la bande n'afficherait que des zeros, ce qu'un premier
      visiteur lit comme "le site est vide" plutot que comme sa propre
      progression encore vierge. On lui propose de commencer a la place. */
@@ -576,8 +600,18 @@ let rush=null;
 function rushRender(){
   if(!rush)return;
   const left=Math.max(0,rush.endsAt-Date.now());
-  const m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);
-  $("rushTime").textContent=m+":"+String(s).padStart(2,"0");
+  /* Dixiemes de seconde dans les dix dernieres : sur trois minutes, les
+     afficher tout du long distrairait de l'echiquier (1800 changements),
+     mais a la fin ils signalent l'urgence, comme sur les coordonnees. */
+  const el=$("rushTime");
+  if(left<10000){
+    el.textContent=(left/1000).toFixed(1);
+    el.classList.add("urgent");
+  } else {
+    const m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);
+    el.textContent=m+":"+String(s).padStart(2,"0");
+    el.classList.remove("urgent");
+  }
   $("rushScore").textContent=rush.score;
   $("rushStrikes").textContent="\u2717".repeat(3-rush.strikes)||"—";
   if(left<=0)rushEnd(t("Time is up."));
@@ -589,9 +623,11 @@ function startRush(){
   for(const arr of byLevel)arr.sort(()=>Math.random()-0.5);
   rush.queue=[].concat(...byLevel);
   $("rushBar").classList.remove("hide");
+  document.body.classList.add("rush-on");
   $("btnRush").textContent=t("Stop Rush");
   rushNext();
-  rush.timer=setInterval(rushRender,250);
+  /* 100 ms : sans cela, les dixiemes sauteraient de 3 en 3. */
+  rush.timer=setInterval(rushRender,100);
   rushRender();
 }
 function rushNext(){
@@ -600,7 +636,11 @@ function rushNext(){
   puzzle=rush.queue.shift();puzzle.daily=false;
   loadPuzzle();
   $("exStatus").className="status";
-  $("exStatus").textContent=t("Rush: solve as many as you can. Three misses and it stops.");
+  /* La regle est deja dite deux fois, dans la description du bloc et dans
+     l'overlay de lancement : la repeter ici a chaque exercice n'apprend rien.
+     Le statut sert donc a ce qu'il fait le reste du temps, indiquer quoi
+     chercher. */
+  $("exStatus").textContent=t("Find the winning move.");
 }
 function rushEnd(why){
   if(!rush)return;
@@ -610,8 +650,25 @@ function rushEnd(why){
   if(best)prog.rushBest=score;
   rush=null;
   $("rushBar").classList.add("hide");
+  document.body.classList.remove("rush-on");
   $("btnRush").textContent=t("Chang Sprint");
+  /* Le bloc de l'exercice retourne dans l'onglet Exercices : sans cela il
+     resterait coince dans Defis, et l'onglet Exercices serait vide. */
+  if(typeof rushRestore==="function")rushRestore();
   saveProg();renderExtraStats();
+  /* Bandeau de fin : le score, le record eventuel, et de quoi relancer ou
+     clore sans chercher. */
+  showFin(
+    best?t("New personal best"):t("Sprint over"),
+    best?t("Score: {score}. Your best yet.",{score:score})
+        :t("Score: {score}. Your best is {best}.",{score:score,best:prog.rushBest}),
+    t("Play again"),
+    ()=>{
+      const p=$("exPanel"), slot=$("rushSlot");
+      if(p&&slot&&!slot.contains(p))slot.appendChild(p);
+      if(typeof setMode==="function")setMode("train");
+      startRush();
+    });
   const st=$("exStatus");st.className="status "+(best?"win":"");
   st.textContent=best?t("{why} Score: {score} — a new personal best.",{why:why,score:score}):t("{why} Score: {score} (best: {best}).",{why:why,score:score,best:prog.rushBest});
   puzzleDone=true;
@@ -818,6 +875,38 @@ setMode=function(m,opts){
   renderExtraStats();applyEvalPref();
   if(m==="play"){renderOpening();renderSheetPlay();}
 };
+/* Chang Sprint se joue sur l'echiquier des exercices : on y bascule puis on
+   lance le mode, plutot que de dupliquer la logique dans l'onglet Defis. */
+/* Le sprint se joue desormais sans quitter Defis : on y deplace le bloc de
+   l'exercice, l'echiquier etant deja partage entre les onglets. */
+if($("btnGoRush"))$("btnGoRush").onclick=()=>{
+  const p=$("exPanel"), slot=$("rushSlot");
+  if(p&&slot&&!slot.contains(p))slot.appendChild(p);
+  if(typeof goTop==="function")goTop();
+  /* Trois minutes chronometrees et une erreur suffit a tout arreter : on
+     annonce la regle et on attend le feu vert, comme pour une partie. */
+  showReadyFor(t("Three minutes · three misses and it stops"),
+    ()=>{if(typeof startRush==="function")startRush();},
+    t("Start"));
+};
+/* Remise en place a la fin du sprint. */
+function rushRestore(){
+  const p=$("exPanel"), pane=$("pane-puzzles");
+  if(!p||!pane||pane.contains(p))return;
+  pane.insertBefore(p,pane.firstElementChild);
+}
+/* Le code de reprise n'etait genere qu'au clic sur "Copier" : dans un bloc
+   replie, on ouvre pour le lire, pas pour le copier a l'aveugle. On le
+   remplit donc a l'ouverture. */
+(function(){
+  const blocs=document.querySelectorAll("details.repliable");
+  for(const b of blocs){
+    if(!b.querySelector("#codeOut"))continue;
+    b.addEventListener("toggle",()=>{
+      if(b.open&&typeof showCode==="function"&&!$("codeOut").value)showCode();
+    });
+  }
+})();
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
@@ -855,7 +944,6 @@ undoGame=function(){
   baseUndoGame();
   if(game.history.length<before){gameUci.splice(-2);analysis=null;}
 };
-if($("btnUndo"))$("btnUndo").onclick=()=>undoGame();   /* bouton retire */
 $("btnHint").onclick=()=>hintGame();
 
 ensureProgFields();
@@ -874,7 +962,35 @@ applyEvalPref();
    Il n'apparait que sur les cadences chronometrees : sans pendule ou en
    correspondance, il n'y a rien a proteger et ce serait un clic de trop.
    ========================================================== */
+/* Le francais ecrit 2,8 et non 2.8. Sans cela, le verdict d'analyse melange
+   deux conventions dans la meme phrase. */
+function fmtNum(x){
+  const s=Number(x).toFixed(1);
+  return (typeof LANG!=="undefined"&&LANG==="fr")?s.replace(".",","):s;
+}
+/* Overlay generique : sert aux parties chronometrees, a Chang Sprint et aux
+   coordonnees. Les trois partagent le meme besoin, rien ne doit demarrer
+   avant que le joueur soit pret, donc autant reutiliser le meme motif plutot
+   que d'en inventer un second.
+   sousTitre : ce qui est annonce, action : ce que fait le bouton principal,
+   libelle : son texte. Sans action, on retombe sur le comportement d'origine,
+   celui des parties. */
+let readyAction=null;
+function showReadyFor(sousTitre,action,libelle){
+  const b=$("readyBanner"); if(!b)return;
+  readyAction=action||null;
+  $("readyTitle").textContent=t("Ready when you are");
+  $("readySub").textContent=sousTitre;
+  $("readyStart").textContent=libelle||t("Start");
+  /* "Changer les reglages" n'a pas de sens ici : les epreuves n'en ont pas. */
+  const st=$("readySettings");
+  if(st)st.classList.toggle("hide",!!action);
+  b.classList.remove("hide");
+  try{$("readyStart").focus();}catch(e){}
+}
 function showReady(tcTxt){
+  readyAction=null;
+  const st=$("readySettings"); if(st)st.classList.remove("hide");
   const b=$("readyBanner"); if(!b)return;
   /* Le libelle de force est lu directement sur le selecteur : il est deja
      traduit par applyI18n, inutile de maintenir une seconde liste qui
@@ -911,7 +1027,10 @@ function startReadyGame(){
   refreshGame();
   if(typeof focusBoard==="function")focusBoard();
 }
-if($("readyStart"))$("readyStart").onclick=startReadyGame;
+if($("readyStart"))$("readyStart").onclick=()=>{
+  if(readyAction){const f=readyAction;readyAction=null;hideReady();f();return;}
+  startReadyGame();
+};
 if($("readySettings"))$("readySettings").onclick=()=>{
   /* La partie n'a pas commence : on l'annule pour de bon, sinon le
      verrouillage en cours de partie garde les reglages desactives et le

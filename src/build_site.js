@@ -78,6 +78,32 @@ for (const l of lines) {
 }
 const slug = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+/* Rendu d'une piece du set officiel. Les formes viennent des SVG de l'auteur
+   et sont reprises telles quelles : ni geometrie, ni proportions, ni
+   epaisseurs de contour ne changent. Les formes marquees "fixe" (l'oeil et
+   le naseau du cavalier) n'ont pas de fill dans le source et s'affichent en
+   noir : les recolorer les ferait disparaitre dans une piece noire. */
+const PIECE_FILL = { w: "#eceae3", b: "#232b28" };
+const PIECE_STROKE = "#101413";
+function pieceShapes(type, white) {
+  const remplissage = white ? PIECE_FILL.w : PIECE_FILL.b;
+  return (PIECE_SHAPES[type] || []).map(f => {
+    const a = [];
+    if (f.t === "circle") a.push(`cx="${f.cx}" cy="${f.cy}" r="${f.r}"`);
+    else a.push(`d="${f.d}"`);
+    if (!f.fixe) {
+      a.push(`fill="${remplissage}"`, `stroke="${f.st || PIECE_STROKE}"`,
+             'stroke-linecap="round" stroke-linejoin="round"');
+    } else {
+      /* Oeil et naseau du cavalier : remplissage a la couleur du contour,
+         sans contour propre. */
+      a.push(`fill="${PIECE_STROKE}"`);
+    }
+    if (f.sw) a.push(`stroke-width="${f.sw}"`);
+    return `<${f.t} ${a.join(" ")}/>`;
+  }).join("");
+}
+
 const PIECE_SHAPES = (() => {
   const j = JSON.parse(fs.readFileSync(path.join(__dirname, "ds/pieces.json"), "utf8"));
   return { p: j.pawn, n: j.knight, b: j.bishop, r: j.rook, q: j.queen, k: j.king };
@@ -99,10 +125,8 @@ function boardSvg(fen, size) {
   let defs = "";
   for (const ch of need) {
     const white = ch === ch.toUpperCase();
-    const paths = PIECE_SHAPES[ch.toLowerCase()].map(d => `<path d="${d}"/>`).join("");
     defs += `<symbol id="p${white ? "w" : "b"}${ch.toLowerCase()}" viewBox="0 0 45 45">` +
-      `<g fill="${white ? "#F7F4EC" : "#15201C"}" stroke="${white ? "#15201C" : "#D8D2C4"}"` +
-      ` stroke-width="1" stroke-linejoin="round" stroke-linecap="round">${paths}</g></symbol>`;
+      pieceShapes(ch.toLowerCase(), white) + `</symbol>`;
   }
   svg += `<defs>${defs}</defs>`;
   rows.forEach((row, r) => {
@@ -150,11 +174,9 @@ function fensAlong(moveStr) {
 function pieceDefs() {
   let d = "";
   for (const t of ["p", "n", "b", "r", "q", "k"]) {
-    const paths = PIECE_SHAPES[t].map(p => `<path d="${p}"/>`).join("");
     for (const white of [true, false]) {
       d += `<symbol id="${white ? "w" : "b"}${t}" viewBox="0 0 45 45">` +
-        `<g fill="${white ? "#F7F4EC" : "#15201C"}" stroke="${white ? "#15201C" : "#D8D2C4"}"` +
-        ` stroke-width="1" stroke-linejoin="round" stroke-linecap="round">${paths}</g></symbol>`;
+        pieceShapes(t, white) + `</symbol>`;
     }
   }
   return `<defs>${d}</defs>`;
@@ -465,7 +487,11 @@ padding-bottom:14px;border-bottom:1px solid var(--rule)}
    selecteur de langue reclament environ 458 px pour 362 disponibles. Les
    marges a gauche empechaient un retour a la ligne propre. On passe en
    disposition souple, qui replie naturellement au lieu de deborder. */
-header nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}
+/* Cette regle generique s'appliquait aussi a .sitenav et son flex-wrap:wrap
+   annulait le defilement horizontal : la rangee passait a la ligne au lieu de
+   defiler. Elle est desormais limitee aux nav qui ne sont pas le menu
+   principal. */
+header nav:not(.sitenav){display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}
 nav a{font-size:13px;text-decoration:none;color:var(--sage)}
 nav a:hover{color:var(--brass)}
 h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
@@ -531,23 +557,38 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   background:var(--slate);color:var(--chalk)}
 .filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 .filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
-/* Menu principal : une seule rangee, qui defile sur ecran etroit plutot que
-   d'elargir la page. Meme mecanique que les onglets de l'application. */
-.sitenav{display:flex;gap:8px 18px;overflow-x:auto;min-width:0;flex:1 1 auto;
+/* Menu principal : meme forme que les onglets de l'application, une pastille
+   arrondie posee sur un fond legerement contraste, la section courante
+   surlignee en laiton. Seules les couleurs changent, prises dans les jetons
+   du theme clair. Sur ecran etroit la rangee defile plutot que d'elargir la
+   page. */
+.sitenav{display:flex;gap:3px;background-color:var(--slate);padding:4px;
+  border-radius:999px;border:1px solid var(--rule);
+  overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .sitenav::-webkit-scrollbar{display:none}
-.sitenav a,.sitenav span{white-space:nowrap;text-decoration:none;color:var(--sage);font-size:14.5px}
-.sitenav a:hover{color:var(--brass)}
-.sitenav [aria-current="page"]{color:var(--chalk);font-weight:600}
-/* Bascule de langue : meme forme que dans l'application, une pastille qui
-   montre les deux langues et celle qui est active. Ici ce sont deux liens,
-   chaque langue etant une page distincte. */
-.langsw{display:flex;gap:2px;background:var(--slate);border:1px solid var(--rule);
-  border-radius:999px;padding:3px;flex:none}
-.langsw a{font-size:12.5px;font-weight:600;letter-spacing:.04em;text-decoration:none;
-  color:var(--sage);padding:5px 11px;border-radius:999px;line-height:1}
-.langsw a[aria-current="true"]{background:var(--raise);color:var(--chalk)}
+.sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);
+  text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;
+  transition:background .18s,color .18s}
+.sitenav a:hover{color:var(--chalk)}
+.sitenav [aria-current="page"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}
+@media(max-width:520px){.sitenav a,.sitenav span{padding:8px 11px;font-size:12.5px}}
+/* Bascule de langue : meme pastille que dans l'application, avec le meme
+   rayon et le meme fond. Ici ce sont deux liens, chaque langue etant une page
+   distincte. */
+.langsw{display:flex;gap:3px;background-color:var(--ink);padding:3px;
+  border-radius:8px;border:1px solid var(--rule);flex:none}
+/* Reprise exacte de .langswitch button dans l'application : JetBrains Mono
+   en 600, corps 11.5px, marges 7px 10px, flex:none. Ce n'est pas la police du
+   corps de texte, c'est celle du "64" de la marque : le selecteur de langue
+   appartient a la meme famille visuelle. */
+.langsw a{flex:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  font-weight:600;text-align:center;text-decoration:none;color:var(--sage);
+  padding:7px 10px;border-radius:6px;white-space:nowrap;
+  transition:background .18s,color .18s}
+.langsw a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .langsw a:hover{color:var(--chalk)}
+
 .footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
 .footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
 .footnav a:hover{text-decoration:underline}
@@ -614,6 +655,11 @@ function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogIma
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">
+<!-- Les icones existaient mais n'etaient declarees nulle part hors du
+     manifeste : invisibles dans l'onglet du navigateur et dans les resultats
+     de recherche. -->
+<link rel="icon" href="/icon-192.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.svg">
 ${alts || ""}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
@@ -638,7 +684,6 @@ ${jsonld ? '<script type="application/ld+json">' + JSON.stringify(jsonld) + "</s
        le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
        place du contenu. Sur ecran etroit la rangee defile horizontalement,
        comme les onglets de l'application. -->
-  <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
   ${otherUrl ? (() => {
     /* Chaque langue est une page distincte : la pastille pointe vers la page
        courante pour la langue active, et vers son equivalent pour l'autre. */
@@ -651,6 +696,7 @@ ${jsonld ? '<script type="application/ld+json">' + JSON.stringify(jsonld) + "</s
     <a href="${urlFr}" hreflang="fr" rel="alternate"${lang === "fr" ? ' aria-current="true"' : ""}>FR</a>
   </div>`;
   })() : ""}
+  <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
 </header>
 ${body}
 <footer>
@@ -658,11 +704,11 @@ ${body}
        repeter en bas etait un doublon. Le pied de page garde son role
        classique, les liens legaux. -->
   <nav class="footnav" aria-label="${lang === "fr" ? "Informations légales" : "Legal information"}">
+    <a href="/">${lang === "fr" ? "Accueil" : "Home"}</a>
     <a href="/#legal">${lang === "fr" ? "Mentions légales" : "Legal notice"}</a>
     <a href="/#privacy">${lang === "fr" ? "Confidentialité" : "Privacy"}</a>
     <a href="/#prefs">${lang === "fr" ? "Préférences" : "Preferences"}</a>
     <a href="/#accessibilite">${lang === "fr" ? "Accessibilité" : "Accessibility"}</a>
-    <a href="/">${lang === "fr" ? "Accueil" : "Home"}</a>
   </nav>
   <p class="footnote">${d.foot}</p>
 </footer>
@@ -845,7 +891,7 @@ for (const lang of ["en", "fr"]) {
       : `The ${name} begins ${numbered(p.main.moves)} (ECO ${ecoRange}). This page lists its ${p.count} named variation${p.count > 1 ? "s" : ""} with their moves and ECO codes, on a board you can play from against the engine.`;
     const desc = (note ? note + (lang === "fr" ? ` La ${name} couvre les codes ECO ${ecoRange}.` : ` The ${name} covers ECO ${ecoRange}.`) : fallback).replace(/\s+/g, " ").trim().slice(0, 300);
     const alsoKnown = (lang === "fr" && p.nameFr !== p.family)
-      ? `<p style="font-size:13px;color:#93A99A">Nom anglais couramment utilisé : <strong>${esc(p.family)}</strong>.</p>` : "";
+      ? `<p style="font-size:13px;color:var(--sage)">Nom anglais couramment utilisé : <strong>${esc(p.family)}</strong>.</p>` : "";
     const rows = p.variations.map(v =>
       `<tr><td>${esc(v.variation ? (lang === "fr" ? varFr(v.variation) : v.variation) : (lang === "fr" ? "Ligne principale" : "Main line"))}</td><td class="mono">${esc(numbered(v.moves))}</td><td class="mono">${v.eco}</td></tr>`).join("");
     const other = lang === "fr" ? "en" : "fr";
@@ -868,7 +914,7 @@ for (const lang of ["en", "fr"]) {
       play:  lang === "fr" ? "Rejouer la ligne" : "Replay the line",
       next:  lang === "fr" ? "Coup suivant" : "Next move"
     }) || boardSvg(p.fen, 300)}
-    <p style="font-size:12px;color:#93A99A;margin:8px 0 0">${d.posAfter} ${esc(numbered(p.main.moves))}</p>
+    <p style="font-size:12px;color:var(--sage);margin:8px 0 0">${d.posAfter} ${esc(numbered(p.main.moves))}</p>
   </div>
   <div>
     <div class="moves">${esc(numbered(p.main.moves))}</div>
@@ -1041,6 +1087,8 @@ function queueOg(name, title, subtitle, fen) {
 /* ---------- Cloudflare Pages : en-têtes, redirections, page 404 ---------- */
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()
@@ -1093,7 +1141,7 @@ const oldFrRedirects = pages
   .join("\n");
 console.log("Redirections FR    :", oldFrRedirects ? oldFrRedirects.split("\n").length : 0);
 
-fs.writeFileSync(OUT + "/_redirects", `/fr            /fr/ouvertures/       302
+fs.writeFileSync(OUT + "/_redirects", `/fr            /fr/ouvertures/       301
 /openings      /openings/            301
 /puzzles       /puzzles/             301
 /learn         /learn/               301

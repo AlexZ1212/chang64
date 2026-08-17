@@ -12,7 +12,7 @@
  * La version du cache est calculee a la construction : chaque build invalide
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-202608120450";
+const CACHE="chang64-202608162113";
 const CORE=["/","/index.html","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));

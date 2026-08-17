@@ -50,12 +50,31 @@ const boardEl=$("board");
 let mode="home";
 let game=new Game();
 let flipped=false;
+/* Animation des deplacements : activee par defaut, desactivable dans les
+   preferences. Le reglage est relu au demarrage depuis le stockage local. */
+let animOn=true;
+/* Dernier coup anime : evite de rejouer l'animation a chaque rendu, car
+   render() est appele aussi pour une simple selection de piece. Declare ici
+   et non pres de render, qui s'execute avant. */
+let lastAnimated=null;
+/* Une animation est-elle en cours ? Sert a la reprendre si un rendu survient
+   avant sa fin, ce qui arrive des qu'on selectionne une piece. */
+let animEnCours=false,animTimer=null;
+/* Etat du bouton d'aide des exercices : faux = "Indice", vrai = "Voir la
+   solution". Declare ici et non pres de hintPuzzle : loadPuzzle le remet a
+   faux et s'execute avant, ce qui provoquerait une erreur de zone morte. */
+let hintShown=false;
 let selected=-1;
 let legalCache=[];
 let lastMove=null;
 let marks={};
 let busy=false;
 let myColor=W;
+/* colorMode retient le choix du joueur ("w", "b" ou "r"), myColor la couleur
+   reellement jouee. En mode aleatoire les deux divergent : le tirage est
+   refait a chaque nouvelle partie, et le selecteur doit alors montrer la
+   couleur obtenue tout en gardant le mode en memoire. */
+let colorMode="w";
 let botLevel=2;
 let pendingPromo=null;
 let sanList=[];
@@ -300,10 +319,68 @@ function render(){
     if(r===7)html+='<span class="co f">'+"abcdefgh"[fOf(sq)]+'</span>';
     if(f===0)html+='<span class="co r">'+(8-rOf(sq))+'</span>';
     if(p){const cc=pC(p)===W?"w":"b";
-      html+='<span class="piece" data-p="'+cc+SYM[pT(p)]+'">'+pieceSVG(SYM[pT(p)],cc)+'</span>';}
+      /* data-sq permet de retrouver la piece apres un rendu : render()
+         reconstruit tout le HTML, donc l'element d'origine n'existe plus et
+         on ne peut pas l'animer directement. On anime la nouvelle piece en la
+         faisant partir de l'ancienne case. */
+      html+='<span class="piece" data-sq="'+sq+'" data-p="'+cc+SYM[pT(p)]+'">'+pieceSVG(SYM[pT(p)],cc)+'</span>';}
     if(targets.has(sq))html+=p?'<span class="ring"></span>':'<span class="dot"></span>';
     c.innerHTML=html;
   }
+  /* Anime le dernier coup joue, quel que soit le mode : partie, exercice,
+     finale ou revue. On compare au coup precedemment anime pour ne pas
+     rejouer l'animation a chaque rendu (survol, selection, redimensionnement). */
+  const mv=reviewGame?reviewLast:lastMove;
+  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);}
+  else if(!mv)lastAnimated=null;
+  else if(mv&&animEnCours)animateMove(mv,true);   /* rendu pendant l'animation */
+}
+/* Glissement de la piece jouee, de sa case de depart vers son arrivee.
+   render() ayant recree le HTML, on positionne la nouvelle piece a l'endroit
+   de l'ancienne puis on la laisse revenir a zero : le navigateur anime la
+   transition. Purement visuel, aucun effet sur la partie. */
+/* reprise=true quand render() a eu lieu PENDANT une animation : selectionner
+   une piece declenche un rendu, qui recree le HTML et effaçait l'animation en
+   plein vol. On la reprend alors la ou elle en etait au lieu de la perdre. */
+function animateMove(mv,reprise){
+  if(!mv||prefersReducedMotion()||!animOn)return;
+  if(reprise&&!animEnCours)return;
+  const dep=cellOf(mv.from), arr=cellOf(mv.to);
+  if(!dep||!arr)return;
+  const piece=arr.querySelector(".piece");
+  if(!piece)return;
+  /* On calcule le decalage en cases plutot qu'en pixels : la taille d'une
+     case varie avec l'ecran, mais le rapport reste le meme. Utiliser
+     offsetLeft directement fonctionne aussi, mais depend d'une mise en page
+     deja calculee, ce qui n'est pas garanti au premier rendu. */
+  const idx=el=>[...boardEl.children].indexOf(el);
+  const iD=idx(dep), iA=idx(arr);
+  if(iD<0||iA<0)return;
+  const colD=iD%8, ligD=(iD/8)|0, colA=iA%8, ligA=(iA/8)|0;
+  const dCol=colD-colA, dLig=ligD-ligA;
+  if(!dCol&&!dLig)return;
+  const dx=dCol*100, dy=dLig*100;   /* en pourcentage de la case */
+  piece.style.transition="none";
+  piece.style.transform="translate("+dx+"%,"+dy+"%)";
+  piece.style.zIndex="6";
+  /* deux images plus tard, pour que le navigateur prenne en compte la
+     position de depart avant d'animer */
+  animEnCours=true;
+  clearTimeout(animTimer);
+  animTimer=setTimeout(()=>{animEnCours=false;},200);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    piece.style.transition="transform .18s cubic-bezier(.22,.61,.36,1)";
+    piece.style.transform="translate(0,0)";
+  }));
+}
+/* Retrouve la case d'un carre : on inverse idxToSq, qui tient compte de
+   l'orientation de l'echiquier. */
+function cellOf(sq){
+  for(let i=0;i<64;i++)if(idxToSq(i)===sq)return boardEl.children[i];
+  return null;
+}
+function prefersReducedMotion(){
+  try{return window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){return false;}
 }
 function updateEval(){
   const g=viewGame();
@@ -311,7 +388,11 @@ function updateEval(){
   if(typeof evalFromAnalysis==="function")cp=evalFromAnalysis();
   const raw=cp!==null?cp:evaluate(g)*(g.turn===W?1:-1);
   const pawns=Math.max(-10,Math.min(10,raw/100));
+  /* La hauteur represente toujours la part des Blancs. C'est l'orientation
+     de la barre qui suit celle de l'echiquier, pas la valeur. */
   $("evalfill").style.height=(50+pawns*4.4).toFixed(1)+"%";
+  { const tr=document.querySelector(".evaltrack");
+    if(tr)tr.classList.toggle("flipped",!!flipped); }
   $("evalnum").textContent=(pawns>0?"+":"")+pawns.toFixed(1);
   const el=$("evaltxt");
   const side=pawns>0?"White":"Black";
@@ -360,10 +441,6 @@ function refreshGame(){
   if(typeof afterGameRender==="function")afterGameRender(over);
   $("btnNew").textContent=gameStarted?t("New game"):t("Start game");
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
-  /* btnUndo a ete retire de l'interface : aucune annulation de coup en cours
-     de partie. Le garde reste tolerant a son absence pour ne pas dependre du
-     gabarit. */
-  { const bu=$("btnUndo"); if(bu)bu.disabled=true; }
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
   /* (le verrouillage en cours de partie, plus bas, a le dernier mot) */
 
@@ -377,6 +454,10 @@ function refreshGame(){
        partie n'est pas finie, mais aux echecs le soupcon de triche suffit a
        poser probleme : mieux vaut lever toute ambiguite. */
   const enCours=gameStarted&&!over;
+  /* En mode aleatoire, le selecteur montre la couleur tiree pendant la
+     partie et le mode choisi en dehors : son etat depend donc du deroulement
+     et doit etre rafraichi ici. */
+  if(typeof syncColorSeg==="function")syncColorSeg();
   const geler=el=>{const e=$(el);if(e)e.disabled=enCours;};
   geler("btnNew");
   /* "Voir le meilleur coup" appartient a la revue d'apres-partie. Il etait
@@ -516,6 +597,11 @@ function setupGame(){
   s.textContent=t("Choose your colour, the engine's strength and a time control, then start.");
 }
 function newGame(){
+  /* Le tirage est refait a chaque partie : choisir "Au hasard" une fois doit
+     donner une couleur differente d'une partie a l'autre, pas une couleur
+     fixee au moment du clic. Avant gameStarted, pour que syncColorSeg voie
+     le bon etat. */
+  if(colorMode==="r")myColor=Math.random()<0.5?W:B;
   gameStarted=true;
   if(typeof gameSaved!=="undefined")gameSaved=false;
   resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
@@ -676,6 +762,9 @@ function loadPuzzle(){
   selected=-1;marks={};lastMove=null;busy=false;
   puzzleN=puzzle.type==="mate"?puzzle.n:0;
   puzzleTries=0;puzzleDone=false;
+  /* Le bouton d'aide repart sur "Indice" a chaque exercice. */
+  hintShown=false;
+  if(typeof syncHintBtn==="function")syncHintBtn();
   legalCache=game.moves();
   const side=game.turn===W?"White":"Black";
   $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day · "):"")+t(puzzle.theme);
@@ -798,13 +887,21 @@ function renderProgress(){
      exercice resolu. Declaree dans ui2.js, concatene apres. */
   if(typeof renderExtraStats==="function")renderExtraStats();
 }
+function syncHintBtn(){
+  const b=$("btnHintEx"); if(!b)return;
+  b.textContent=hintShown?t("Show solution"):t("Hint");
+}
 function hintPuzzle(){
   if(puzzleDone)return;
+  /* second clic : on donne la reponse complete */
+  if(hintShown){solvePuzzle();return;}
   const mv=currentSolutions()[0]; if(!mv)return;
   marks={};marks[mv.from]="hint";render();
   const st=$("exStatus");st.className="status";
   st.textContent=t("The piece to move is highlighted.");
   if(puzzleTries===0)puzzleTries=1;
+  hintShown=true;
+  syncHintBtn();
 }
 function solvePuzzle(){
   if(puzzleDone)return;
@@ -1147,6 +1244,10 @@ function setMode(m,opts){
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");
   $("evalwrap").classList.toggle("hide",m!=="play");
+  /* Les pendules ne concernent que l'onglet Jouer. renderClocks le sait deja,
+     mais rien ne l'appelait au changement d'onglet : elles restaient donc
+     affichees au-dessus de l'echiquier des exercices. */
+  if(typeof renderClocks==="function")renderClocks();
   if(m==="home"){renderProgress();syncTC();return;}
   if(m==="play"){
     if(opts.fresh)newGame();
@@ -1154,8 +1255,15 @@ function setMode(m,opts){
     else setupGame();
     syncTC();
   } else if(m==="puzzles"){
+    /* Si un sprint tournait dans Defis, le bloc de l'exercice y est encore :
+       on le ramene avant d'afficher l'onglet, sinon il serait vide. */
+    if(typeof rushRestore==="function")rushRestore();
     renderProgress();
     if(opts.daily)dailyPuzzle(); else nextPuzzle();
+    /* Les finales sont dans cet onglet depuis la reorganisation : sans cet
+       appel, la liste des cinq positions restait vide. Elles vivaient
+       auparavant dans l'onglet "train", qui les preparait de son cote. */
+    if(typeof renderEgChips==="function")renderEgChips();
   } else {
     renderDailyChips();rebuildAmi();showAmi();
   }
@@ -1167,20 +1275,48 @@ $("tab-home").onclick=()=>{setMode("home");goTop();};
 $("tab-play").onclick=()=>{setMode("play");goTop();};
 $("tab-puzzles").onclick=()=>{setMode("puzzles");goTop();};
 $("tab-friend").onclick=()=>{setMode("friend");goTop();};
+/* L'accueil ne propose pas de choix de couleur : la tirer au sort est donc
+   plus juste que d'imposer les Blancs. Le reglage de l'onglet Jouer n'est pas
+   ecrase, il n'y a simplement rien a respecter ici. */
+function tirerCouleur(){
+  myColor=Math.random()<0.5?W:B;
+  if(typeof syncColorSeg==="function")syncColorSeg();
+}
 $("heroPlay").onclick=()=>{
-  if(tcCat==="daily")setMode("friend");
-  else setMode("play",{fresh:true});
+  if(tcCat==="daily"){setMode("friend");goTop();return;}
+  tirerCouleur();
+  setMode("play",{fresh:true});
+  goTop();
 };
 $("heroPuzzle").onclick=()=>{setMode("puzzles",{daily:true});goTop();};
-$("cardPlay").onclick=()=>{setMode("play",{fresh:true});goTop();};
+$("cardPlay").onclick=()=>{tirerCouleur();setMode("play",{fresh:true});goTop();};
 $("cardPuzzles").onclick=()=>{setMode("puzzles");goTop();};
 $("cardFriend").onclick=()=>{setMode("friend");goTop();};
 $("segColor").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
-  for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
-  myColor=b.dataset.v==="w"?W:B;
+  colorMode=b.dataset.v;
+  if(colorMode==="r")myColor=Math.random()<0.5?W:B;
+  else myColor=colorMode==="w"?W:B;
+  syncColorSeg();
   if(gameStarted)newGame(); else setupGame();
 });
+/* Pendant une partie en mode aleatoire, on met en avant la couleur tiree
+   plutot que le bouton "Au hasard" : sinon le joueur ne saurait pas de quel
+   cote il joue sans regarder l'echiquier. Hors partie, c'est le mode choisi
+   qui reste en avant. */
+function syncColorSeg(){
+  const seg=$("segColor"); if(!seg)return;
+  /* "over" n'existe pas dans ce fichier : c'est gameFinished() qui dit si la
+     partie est terminee. L'utiliser levait une erreur qui interrompait
+     newGame avant l'affichage de l'overlay de preparation. */
+  const finie=(typeof gameFinished==="function")?gameFinished():false;
+  const enCours=gameStarted&&!finie;
+  const montre=(colorMode==="r"&&enCours)?(myColor===W?"w":"b"):colorMode;
+  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===montre);
+  /* le bouton "Au hasard" reste signale comme le mode actif */
+  const rnd=seg.querySelector('[data-v="r"]');
+  if(rnd)rnd.classList.toggle("mode-actif",colorMode==="r");
+}
 $("segLevel").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
@@ -1200,7 +1336,7 @@ $("themeFilter").addEventListener("change",e=>{
 });
 $("btnDaily").onclick=dailyPuzzle;
 $("btnHintEx").onclick=hintPuzzle;
-$("btnSolve").onclick=solvePuzzle;
+/* btnSolve a fusionne avec btnHintEx : plus de bouton dedie. */
 $("btnRetry").onclick=loadPuzzle;
 $("btnCodeGen").onclick=showCode;
 $("btnCodeCopy").onclick=()=>{if(!$("codeOut").value)showCode();copyText($("codeOut").value);$("codeMsg").textContent=t("Code copied.");};
@@ -1234,7 +1370,22 @@ window.addEventListener("hashchange",()=>{
 });
 
 /* ---------- start ---------- */
-const icoBrass=t=>'<svg viewBox="0 0 45 45" aria-hidden="true"><g fill="#E0A93B" stroke="#101413" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">'+PIECES[t].map(d=>'<path d="'+d+'"/>').join("")+'</g></svg>';
+/* Icones des cartes d'accueil : memes pieces que sur l'echiquier, mais en
+   laiton, la couleur d'illustration du site. L'oeil et le naseau du cavalier
+   gardent leur remplissage noir d'origine, sans quoi ils disparaitraient. */
+const icoBrass=t=>{
+  let s='<svg viewBox="0 0 45 45" aria-hidden="true">';
+  for(const f of PIECES[t]||[]){
+    const a=[];
+    if(f.t==="circle")a.push('cx="'+f.cx+'" cy="'+f.cy+'" r="'+f.r+'"');
+    else a.push('d="'+f.d+'"');
+    if(!f.fixe)a.push('fill="#E0A93B" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"');
+    else a.push('fill="#101413"');   /* oeil et naseau : plein, sans contour */
+    if(f.sw)a.push('stroke-width="'+f.sw+'"');
+    s+='<'+f.t+' '+a.join(' ')+'/>';
+  }
+  return s+'</svg>';
+};
 $("brandmark").innerHTML=markSVG("#E0A93B");
 $("originMark").innerHTML=markSVG("#E0A93B");
 $("icoPlay").innerHTML=icoBrass("n");

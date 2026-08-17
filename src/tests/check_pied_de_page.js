@@ -27,6 +27,59 @@ console.log("\n--- Meme pied de page que l'application, meme ordre ---");
     a.join(" | ")+"   VS   "+b.join(" | "));
 }
 
+console.log("\n--- Meme forme que les composants de l'application ---");
+/* Les pages claires reprennent la pastille arrondie des onglets et du
+   selecteur de langue. Seules les couleurs changent, prises dans les jetons
+   du theme clair. Le texte sur le laiton doit etre clair et non fonce : le
+   laiton du theme clair (#7E5409) est bien plus sombre que celui du theme
+   sombre, et un texte fonce n'y donnerait que 2,7:1. */
+{
+  const css=(fr.match(/<style>([\s\S]*?)<\/style>/)||[])[1]||"";
+  T("menu en pastille arrondie", /\.sitenav\{[^}]*border-radius:999px/.test(css));
+  T("menu sur fond contraste", /\.sitenav\{[^}]*background-color:var\(--slate\)/.test(css));
+  T("section courante surlignee en laiton", /\.sitenav \[aria-current="page"\]\{[^}]*background-color:var\(--brass\)/.test(css));
+  T("texte clair sur le laiton", /\.sitenav \[aria-current="page"\]\{[^}]*color:#FDF8EC/.test(css));
+  T("langue en pastille, meme rayon que l'application", /\.langsw\{[^}]*border-radius:8px/.test(css));
+  T("langue active surlignee", /\.langsw a\[aria-current="true"\]\{[^}]*background-color:var\(--raise\)/.test(css));
+  /* la meme forme dans l'application, pour verifier qu'elles ne divergent pas */
+  const app=fs.readFileSync(S+"/index.html","utf8");
+  const cssApp=(app.match(/<style>([\s\S]*?)<\/style>/)||[])[1]||"";
+  /* Le defilement horizontal exige flex:1 1 100% : avec "auto", la rangee
+     reste sur la ligne du logo et s'etire au lieu de defiler. Et la regle
+     generique "header nav" ne doit pas s'appliquer au menu, son flex-wrap
+     annulerait le defilement. */
+  T("menu en defilement horizontal", /\.sitenav\{[^}]*overflow-x:auto/.test(css));
+  T("menu sur sa propre ligne", /\.sitenav\{[^}]*flex:1 1 100%/.test(css));
+  T("regle generique neutralisee sur le menu", /header nav:not\(\.sitenav\)/.test(css));
+  /* La langue vient juste apres le logo, comme dans l'application : l'entete
+     est en space-between, donc elle se place a l'oppose. */
+  const ordre=(fr.match(/<header>([\s\S]*?)<\/header>/)||[])[1]||"";
+  const pLogo=ordre.indexOf('class="brand"'), pLang=ordre.indexOf('class="langsw"'), pNav=ordre.indexOf('class="sitenav"');
+  T("langue a l'oppose du logo", pLogo<pLang && pLang<pNav, "logo "+pLogo+" langue "+pLang+" menu "+pNav);
+  /* Le selecteur de langue reprend exactement .langswitch button : JetBrains
+     Mono en 600, corps 11.5px, marges 7px 10px. Ce n'est pas la police du
+     corps de texte mais celle du "64" de la marque. Comparaison sur les
+     styles calcules, pas sur le code. */
+  {
+    const jd=require("jsdom");
+    const win=f=>new jd.JSDOM(fs.readFileSync(f,"utf8"),{pretendToBeVisual:true,virtualConsole:new jd.VirtualConsole()}).window;
+    const wa=win(S+"/index.html"), wb=win(S+"/fr/ouvertures/index.html");
+    const sa=wa.getComputedStyle(wa.document.querySelector(".langswitch button"));
+    const sb=wb.getComputedStyle(wb.document.querySelector(".langsw a"));
+    for(const k of ["fontSize","fontFamily","fontWeight","paddingTop","paddingLeft","borderRadius","lineHeight"])
+      T("langue, "+k+" identique", String(sa[k])===String(sb[k]), sa[k]+" vs "+sb[k]);
+    const ca=wa.getComputedStyle(wa.document.querySelector(".langswitch"));
+    const cb=wb.getComputedStyle(wb.document.querySelector(".langsw"));
+    for(const k of ["padding","borderRadius","gap"])
+      T("pastille, "+k+" identique", String(ca[k])===String(cb[k]), ca[k]+" vs "+cb[k]);
+    const oa=[...wa.document.querySelectorAll(".langswitch button")].map(b=>b.textContent.trim()).join("|");
+    const ob=[...wb.document.querySelectorAll(".langsw a")].map(b=>b.textContent.trim()).join("|");
+    T("meme ordre des langues", oa===ob, oa+" vs "+ob);
+  }
+  T("l'application a bien la meme forme d'onglets", /\.tabs\{[^}]*border-radius:999px/.test(cssApp));
+  T("et le meme rayon de selecteur", /\.seg\{[^}]*border-radius:8px/.test(cssApp));
+}
+
 console.log("\n--- Un seul menu, dans l'entete ---");
 /* Les six sections etaient repetees en haut et en bas, avec des contenus
    differents : quatre entrees en haut, six en bas. Deux menus divergents sur

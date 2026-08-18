@@ -636,11 +636,18 @@ function sansAccent(t) {
 
 function sectionLinks(lang, canonical) {
   const ici = String(canonical || "").replace(SITE, "");
-  return SECTIONS[lang === "fr" ? "fr" : "en"].map(([href, nom]) =>
-    ici === href
-      ? `<span aria-current="page">${nom}</span>`
-      : `<a href="${href}">${nom}</a>`
-  ).join("");
+  /* La comparaison etait exacte : une page de detail comme
+     /fr/finales/dame-contre-roi.html ne correspondait pas a /fr/finales/, et
+     le menu ne signalait plus dans quelle section on se trouvait. On teste
+     donc l'appartenance a la section, pas l'egalite.
+     Le lien reste cliquable sur une page de detail : il ramene a l'index, ce
+     qui est utile. Seul l'index lui-meme devient un simple texte, puisqu'il
+     pointerait sur la page courante. */
+  return SECTIONS[lang === "fr" ? "fr" : "en"].map(([href, nom]) => {
+    if (ici === href) return `<span aria-current="page">${nom}</span>`;
+    if (ici.startsWith(href)) return `<a href="${href}" aria-current="page">${nom}</a>`;
+    return `<a href="${href}">${nom}</a>`;
+  }).join("");
 }
 
 function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage) {

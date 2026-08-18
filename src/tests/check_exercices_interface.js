@@ -152,7 +152,11 @@ setTimeout(async()=>{
     return false;
   };
   T("chronometre visible", !d.getElementById("rushBar").classList.contains("hide"));
-  T("enonce visible", !cache("exQuest"));
+  /* L'enonce est desormais masque aussi : dans un defi, annoncer "Mat en un
+     coup" revient a donner la reponse. Seul le statut reste, pour les retours
+     immediats. */
+  T("enonce masque", cache("exQuest"));
+  T("statut visible", !cache("exStatus"));
   T("'Exercice suivant' masque", cache("btnNext"));
   T("'Indice' masque", cache("btnHintEx"));
   T("progression par niveau masquee", cache("ladder"));
@@ -165,6 +169,155 @@ setTimeout(async()=>{
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,600));
   T("tout revient apres le sprint", !cache("btnNext") && !cache("stSolved"));
+
+  console.log("\n--- Le sprint enchaine bien les exercices ---");
+  /* Le sprint lance depuis Defis tourne avec mode==="train". Or ui3.js
+     redefinit onSquare et envoie tous les clics de ce mode vers
+     handleTrainClick, qui gere les finales et les coordonnees : le coup etait
+     joue sur l'echiquier mais jamais reconnu comme solution, et l'exercice ne
+     passait jamais au suivant. */
+  d.getElementById("tab-train").click();
+  await new Promise(r=>setTimeout(r,400));
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,400));
+  d.getElementById("readyStart").click();
+  await new Promise(r=>setTimeout(r,600));
+  {
+    const cells=[...d.querySelectorAll(".sq")];
+    /* Certains exercices sont des mats en plusieurs coups : un seul coup ne
+       les resout pas. On joue donc la solution jusqu'a ce que l'exercice
+       change, sans quoi le test reussit ou echoue selon le tirage. */
+    const jouerSolution=async()=>{
+      const depart=w.eval("puzzle.id");
+      for(let essai=0;essai<10;essai++){
+        /* Attendre que le moteur ait fini de repondre : cliquer pendant que
+           busy est vrai fait ignorer le clic, et l'exercice semble bloque. */
+        for(let g=0;g<20&&w.eval("busy");g++)await new Promise(x=>setTimeout(x,80));
+        const r=w.eval('(function(){var m=currentSolutions()[0];if(!m)return "null";'+
+          'var idx=function(sq){for(var i=0;i<64;i++)if(idxToSq(i)===sq)return i;return -1;};'+
+          'return JSON.stringify({a:idx(m.from),b:idx(m.to)});})()');
+        if(r==="null")break;
+        const i=JSON.parse(r);
+        cells[i.a].click(); await new Promise(x=>setTimeout(x,160));
+        cells[i.b].click(); await new Promise(x=>setTimeout(x,1200));
+        if(w.eval("puzzle.id")!==depart)break;
+      }
+    };
+    const premier=w.eval("puzzle.id");
+    await jouerSolution();
+    T("l'exercice change apres une bonne reponse", w.eval("puzzle.id")!==premier,
+      premier+" -> "+w.eval("puzzle.id"));
+    T("le score monte", d.getElementById("rushScore").textContent!=="0",
+      d.getElementById("rushScore").textContent);
+    /* On ne verifie pas un second point : certains exercices sont des mats en
+       plusieurs coups, et la reponse de l'adversaire rend la duree variable.
+       Ce qui compte est que le sprint continue d'accepter les coups, c'est
+       exactement ce qui etait casse quand les clics partaient vers le
+       gestionnaire des finales. */
+    const avant=w.eval("game.history.length");
+    await jouerSolution();
+    T("le sprint continue d'accepter les coups",
+      w.eval("game.history.length")!==avant || Number(d.getElementById("rushScore").textContent)>=2);
+    T("et il est toujours en cours", !!w.eval("rush"));
+  }
+  d.getElementById("btnRush").click();
+  await new Promise(r=>setTimeout(r,500));
+  {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
+  await new Promise(r=>setTimeout(r,300));
+
+  console.log("\n--- Chang Sprint est un defi, pas un entrainement ---");
+  /* Quatre corrections : le thème et l'enonce revelaient la reponse ("Mat en
+     un coup"), la progression par niveau s'incrementait et annoncait "Tu
+     passes au niveau 2" au milieu du defi, le bouton ne permettait pas
+     d'abandonner, et la file etait ordonnee par niveau donc composee a 97%
+     de mats en un coup au debut. */
+  d.getElementById("tab-train").click();
+  await new Promise(r=>setTimeout(r,400));
+  {
+    const niv=w.eval("prog.level"), res=w.eval("prog.solved");
+    const bt=d.getElementById("btnGoRush");
+    bt.click(); await new Promise(r=>setTimeout(r,400));
+    d.getElementById("readyStart").click(); await new Promise(r=>setTimeout(r,600));
+
+    const masque=id=>{let e=d.getElementById(id);
+      while(e&&e!==d.body){if(w.getComputedStyle(e).display==="none")return true;e=e.parentElement;}return false;};
+    T("le theme est masque", masque("exTheme"));
+    T("l'enonce est masque", masque("exQuest"));
+    T("le bouton devient un abandon", /Give up|Abandonner/i.test(bt.textContent), bt.textContent);
+    T("avec les codes d'alerte", bt.classList.contains("danger"));
+    /* Place au-dessus de l'echiquier, le bouton sortait de l'ecran des qu'on
+       regardait le plateau : on ne trouvait plus comment arreter. Il descend
+       donc sous l'echiquier pendant le sprint. */
+    {
+      const slot=d.getElementById("rushSlot");
+      const rangee=bt.closest(".btnrow");
+      const oSlot=parseInt(w.getComputedStyle(slot).order||"0",10);
+      const oBtn=parseInt(w.getComputedStyle(rangee).order||"0",10);
+      T("le bouton passe sous l'echiquier", oBtn>oSlot, "echiquier "+oSlot+", bouton "+oBtn);
+      const desc=[...bt.closest(".panel").children].filter(x=>x.tagName==="P");
+      T("la description se masque", desc.every(x=>w.getComputedStyle(x).display==="none"));
+    }
+
+    /* variete : la file alterne les themes au lieu de grouper par niveau */
+    const themes=w.eval("new Set(rush.queue.slice(0,20).map(function(p){return p.theme;})).size");
+    T("au moins 5 themes dans les 20 premiers", themes>=5, themes+" themes");
+
+    /* resoudre trois exercices ne doit pas toucher la progression */
+    const cells=[...d.querySelectorAll(".sq")];
+    for(let k=0;k<3;k++){
+      const r=w.eval('(function(){var m=currentSolutions()[0];if(!m)return "null";'+
+        'var idx=function(sq){for(var i=0;i<64;i++)if(idxToSq(i)===sq)return i;return -1;};'+
+        'return JSON.stringify({a:idx(m.from),b:idx(m.to)});})()');
+      if(r==="null")break;
+      const i=JSON.parse(r);
+      cells[i.a].click(); await new Promise(x=>setTimeout(x,160));
+      cells[i.b].click(); await new Promise(x=>setTimeout(x,1200));
+    }
+    T("le niveau ne bouge pas", w.eval("prog.level")===niv, niv+" -> "+w.eval("prog.level"));
+    T("le compteur de resolus non plus", w.eval("prog.solved")===res, res+" -> "+w.eval("prog.solved"));
+    T("aucun message de passage de niveau",
+      !/niveau|level/i.test(d.getElementById("exStatus").textContent),
+      d.getElementById("exStatus").textContent.slice(0,40));
+
+    /* l'abandon demande confirmation, comme pour une partie */
+    bt.click(); await new Promise(r=>setTimeout(r,300));
+    T("premier clic : demande confirmation", bt.classList.contains("armed"));
+    T("le sprint tourne encore", !!w.eval("rush"));
+    bt.click(); await new Promise(r=>setTimeout(r,600));
+    T("second clic : le sprint s'arrete", !w.eval("(typeof rush!=='undefined'&&rush)?true:false"));
+    {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
+    await new Promise(r=>setTimeout(r,300));
+  }
+
+  console.log("\n--- Une seule epreuve a la fois ---");
+  /* Passer d'une epreuve a l'autre laissait la premiere tourner : son
+     chronometre continuait de decompter en arriere-plan et son bandeau
+     restait affiche au-dessus de celui de la nouvelle. */
+  d.getElementById("tab-train").click();
+  await new Promise(r=>setTimeout(r,400));
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,400));
+  d.getElementById("readyStart").click();
+  await new Promise(r=>setTimeout(r,500));
+  d.getElementById("btnCoord").click();
+  await new Promise(r=>setTimeout(r,600));
+  T("le sprint est arrete", !w.eval("(typeof rush!=='undefined'&&rush)?true:false"));
+  T("son bandeau disparait", d.getElementById("rushBar").classList.contains("hide"));
+  T("pas de bandeau de fin superpose", d.getElementById("resultBanner").classList.contains("hide"));
+  T("l'overlay des coordonnees s'affiche", !d.getElementById("readyBanner").classList.contains("hide"));
+  d.getElementById("readyStart").click();
+  await new Promise(r=>setTimeout(r,500));
+  /* et dans l'autre sens */
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,600));
+  T("les coordonnees sont arretees", !w.eval("(typeof coord!=='undefined'&&coord)?true:false"));
+  T("leur bandeau disparait", d.getElementById("coordHud").classList.contains("hide"));
+  d.getElementById("readyStart").click();
+  await new Promise(r=>setTimeout(r,500));
+  d.getElementById("btnRush").click();
+  await new Promise(r=>setTimeout(r,500));
+  {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
+  await new Promise(r=>setTimeout(r,300));
 
   console.log("\n--- Bandeau de fin d'epreuve ---");
   /* La fin ne vivait que dans la barre de statut, facile a manquer, et le

@@ -7,10 +7,16 @@
 
    Le tirage est refait a CHAQUE nouvelle partie, pas une fois au clic.
 
-   Pendant une partie, le selecteur est verrouille. En mode aleatoire il met
-   donc en avant la couleur tiree plutot que le bouton "Au hasard", sinon le
-   joueur ne saurait pas de quel cote il joue sans regarder l'echiquier. Un
-   lisere signale que le mode aleatoire reste actif.
+   Pendant une partie, le selecteur est verrouille et continue d'afficher le
+   REGLAGE choisi, dans les trois cas. J'avais d'abord montre la couleur
+   tiree, en pensant qu'on ne saurait pas de quel cote on joue : c'est faux,
+   l'overlay l'annonce, l'echiquier est retourne, l'adversaire est nomme et la
+   pendule indique qui est qui.
+
+   Les trois boutons se ressemblent en tout point : un lisere sur "Au hasard"
+   attirait l'oeil vers un controle verrouille et pale. Le mode se lit dans le
+   comportement, pas dans une marque : "Au hasard" redevient selectionne des
+   que la partie est finie.
 
    Piege rencontre : syncColorSeg utilisait la variable "over", qui n'existe
    pas dans ui.js (c'est gameFinished() qui donne l'information). L'erreur
@@ -52,7 +58,7 @@ setTimeout(async () => {
   console.log("\n--- Le mode aleatoire est signale ---");
   seg().find(b => b.dataset.v === "r").click(); await wait(300);
   T("hors partie, Au hasard est en avant", enAvant().v === "r", enAvant().v);
-  T("lisere sur le bouton", seg().find(b => b.dataset.v === "r").classList.contains("mode-actif"));
+  T("aucun traitement particulier", !seg().find(b => b.dataset.v === "r").classList.contains("mode-actif"));
 
   console.log("\n--- La couleur est tiree a chaque partie ---");
   const tirages = [];
@@ -72,19 +78,37 @@ setTimeout(async () => {
   const sub = d.getElementById("readySub").textContent;
   const tire = /Black|Noirs/.test(sub) ? "b" : "w";
   T("overlay renseigne", sub.length > 10, sub);
-  T("le selecteur montre la couleur tiree", enAvant().v === tire, "overlay " + tire + ", selecteur " + enAvant().v);
+  /* Le selecteur montre le REGLAGE, pas la couleur tiree : celle-ci est deja
+     annoncee par l'overlay, l'echiquier retourne, le nom de l'adversaire et
+     la pendule. Afficher autre chose que le reglage rendait le selecteur
+     incoherent avec Blancs et Noirs, qui restent affiches tels quels. */
+  T("le selecteur montre le mode choisi", enAvant().v === "r", enAvant().v);
+  T("l'overlay annonce la couleur tiree", tire === "w" || tire === "b", tire);
 
   console.log("\n--- Pendant la partie ---");
   d.getElementById("readyStart").click(); await wait(300);
   T("selecteur verrouille", seg().every(b => b.disabled));
-  T("la couleur tiree reste en avant", enAvant().v === tire, enAvant().v);
-  T("le mode aleatoire reste signale", seg().find(b => b.dataset.v === "r").classList.contains("mode-actif"));
+  T("le mode reste affiche pendant la partie", enAvant().v === "r", enAvant().v);
+  T("aucun lisere pendant la partie", !seg().find(b => b.dataset.v === "r").classList.contains("mode-actif"));
+  /* Controle sur le style calcule et non sur la classe : une regle CSS
+     pourrait reintroduire un contour sans passer par elle. */
+  {
+    const contours = seg().filter(b => (w.getComputedStyle(b).boxShadow || "").includes("inset"));
+    T("aucun contour sur un bouton verrouille", contours.length === 0,
+      contours.map(b => b.dataset.v).join(", "));
+    const styles = seg().map(b => {
+      const st = w.getComputedStyle(b);
+      return st.boxShadow + "|" + st.borderStyle;
+    });
+    T("les trois ont le meme traitement de bordure",
+      new Set(styles).size === 1, styles.join("  vs  "));
+  }
 
   console.log("\n--- Retour a un choix fixe ---");
   await abandonner();
   seg().find(b => b.dataset.v === "w").click(); await wait(300);
   T("Blancs en avant", enAvant().v === "w", enAvant().v);
-  T("lisere retire", !seg().find(b => b.dataset.v === "r").classList.contains("mode-actif"));
+  T("les trois boutons se ressemblent", seg().every(b => !b.classList.contains("mode-actif")));
   await lancer();
   T("l'overlay annonce bien les Blancs", /White|Blancs/.test(d.getElementById("readySub").textContent),
     d.getElementById("readySub").textContent);
@@ -121,6 +145,16 @@ setTimeout(async () => {
     await wait(180);
   }
   T("la couleur varie sur 8 lancements", new Set(tir).size>1, tir.join(""));
+  /* Le reglage lui-meme passe en "au hasard" : sinon le selecteur afficherait
+     "Blancs" alors que la couleur a ete tiree, et la partie suivante
+     repartirait en Blancs fixes sans qu'on l'ait demande. */
+  d.getElementById("tab-home").click(); await wait(250);
+  d.getElementById("heroPlay").click(); await wait(500);
+  d.getElementById("readyStart").click(); await wait(400);
+  T("le selecteur affiche 'Au hasard'", enAvant().v==="r", enAvant().v);
+  await abandonner();
+  {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
+  await wait(220);
 
   console.log("\n--- Mais le choix explicite reste respecte ---");
   d.getElementById("tab-play").click(); await wait(350);
@@ -133,6 +167,22 @@ setTimeout(async () => {
   await abandonner();
   {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
   await wait(200);
+
+  console.log("\n--- Les trois modes se comportent pareil en partie ---");
+  /* C'est le vrai principe : quel que soit le reglage, il reste selectionne
+     et grise pendant la partie. Verifie sur les trois plutot qu'un seul. */
+  for(const [v,nom] of [["w","Blancs"],["b","Noirs"],["r","Au hasard"]]){
+    d.getElementById("tab-play").click(); await wait(320);
+    seg().find(b=>b.dataset.v===v).click(); await wait(280);
+    await lancer();
+    d.getElementById("readyStart").click(); await wait(420);
+    T(nom+" : reste selectionne en partie", enAvant().v===v, enAvant().v);
+    T(nom+" : selecteur verrouille", seg().every(b=>b.disabled));
+    await abandonner();
+    const b=d.getElementById("resultBanner");
+    if(!b.classList.contains("hide"))d.getElementById("resultClose").click();
+    await wait(220);
+  }
 
   console.log("\n--- En francais ---");
   [...d.getElementById("langSwitch").children].find(b => b.dataset.lang === "fr").click();

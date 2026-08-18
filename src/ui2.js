@@ -619,9 +619,25 @@ function rushRender(){
 function startRush(){
   ensureProgFields();
   rush={score:0,strikes:0,endsAt:Date.now()+180000,queue:[]};
-  const byLevel=[1,2,3,4,5].map(l=>PUZZLES.filter(p=>p.level===l).slice());
-  for(const arr of byLevel)arr.sort(()=>Math.random()-0.5);
-  rush.queue=[].concat(...byLevel);
+  /* La file etait ordonnee par niveau : le niveau 1 etant compose a 97% de
+     mats en un coup, on en enchainait 90 avant de voir autre chose. Un defi
+     de trois minutes n'a pas de progression a respecter, il doit varier.
+     On alterne donc les themes et on melange les niveaux, en gardant une
+     difficulte moyenne croissante pour que ca monte doucement. */
+  const parTheme={};
+  for(const p of PUZZLES)(parTheme[p.theme]=parTheme[p.theme]||[]).push(p);
+  for(const k in parTheme)parTheme[k].sort(()=>Math.random()-0.5);
+  const themes=Object.keys(parTheme).sort(()=>Math.random()-0.5);
+  const file=[];
+  let reste=true;
+  while(reste){
+    reste=false;
+    for(const th of themes){
+      const lot=parTheme[th];
+      if(lot.length){file.push(lot.shift());reste=true;}
+    }
+  }
+  rush.queue=file;
   $("rushBar").classList.remove("hide");
   document.body.classList.add("rush-on");
   $("btnRush").textContent=t("Stop Rush");
@@ -655,6 +671,7 @@ function rushEnd(why){
   /* Le bloc de l'exercice retourne dans l'onglet Exercices : sans cela il
      resterait coince dans Defis, et l'onglet Exercices serait vide. */
   if(typeof rushRestore==="function")rushRestore();
+  if(typeof desarmerRush==="function")desarmerRush();
   saveProg();renderExtraStats();
   /* Bandeau de fin : le score, le record eventuel, et de quoi relancer ou
      clore sans chercher. */
@@ -674,19 +691,23 @@ function rushEnd(why){
   puzzleDone=true;
 }
 function onPuzzleResult(won){
+  /* Pendant un sprint, rien ne doit toucher a la progression : ce n'est pas
+     un entrainement mais un defi de trois minutes. Annoncer "Tu passes au
+     niveau 2" au milieu casse le rythme et n'a aucun sens ici. */
+  if(rush){
+    if(won){rush.score++;rushRender();setTimeout(()=>{if(rush)rushNext();},650);}
+    /* true interrompt finishPuzzle : sans cela, la progression continuait de
+       s'incrementer et le message "Tu passes au niveau 2" s'affichait au
+       milieu du sprint. */
+    return true;
+  }
   bumpStreak();
   updateRating(puzzle.level,won&&puzzleTries===0);
   saveProg();renderExtraStats();
-  if(rush){
-    if(won){rush.score++;rushRender();setTimeout(()=>{if(rush)rushNext();},650);}
-    return false;
-  }
   return false;
 }
 function onPuzzleWrong(){
   ensureProgFields();
-  updateRating(puzzle.level,false);
-  saveProg();renderExtraStats();
   if(rush){
     rush.strikes++;rushRender();
     if(rush.strikes>=3){rushEnd(t("Three misses."));return;}
@@ -879,14 +900,47 @@ setMode=function(m,opts){
    lance le mode, plutot que de dupliquer la logique dans l'onglet Defis. */
 /* Le sprint se joue desormais sans quitter Defis : on y deplace le bloc de
    l'exercice, l'echiquier etant deja partage entre les onglets. */
+/* Pendant un sprint, le bouton devient un abandon, avec les memes codes que
+   "Abandonner la partie" : couleur d'alerte et confirmation en deux temps,
+   pour ne pas perdre trois minutes sur un clic malheureux. */
+let rushArmTimer=null;
+function desarmerRush(){
+  const b=$("btnGoRush"); if(!b)return;
+  b.classList.remove("armed");
+  b.textContent=(typeof rush!=="undefined"&&rush)?t("Give up the Sprint"):t("Start Chang Sprint");
+  b.classList.toggle("danger",!!(typeof rush!=="undefined"&&rush));
+  b.classList.toggle("primary",!(typeof rush!=="undefined"&&rush));
+  if(rushArmTimer){clearTimeout(rushArmTimer);rushArmTimer=null;}
+}
 if($("btnGoRush"))$("btnGoRush").onclick=()=>{
+  /* sprint en cours : le bouton abandonne, apres confirmation */
+  if(typeof rush!=="undefined"&&rush){
+    const b=$("btnGoRush");
+    if(!b.classList.contains("armed")){
+      b.classList.add("armed");
+      b.textContent=t("Confirm give up");
+      rushArmTimer=setTimeout(desarmerRush,5000);
+      return;
+    }
+    desarmerRush();
+    rushEnd(t("Given up."));
+    return;
+  }
+  /* Le bouton descend sous l'echiquier pendant le sprint : place au-dessus,
+     il sortait de l'ecran des qu'on regardait le plateau, et on ne trouvait
+     plus comment abandonner. */
+  /* Symetrique : on arrete les coordonnees avant de lancer un sprint. */
+  if(typeof coord!=="undefined"&&coord&&typeof stopCoord==="function")stopCoord();
   const p=$("exPanel"), slot=$("rushSlot");
   if(p&&slot&&!slot.contains(p))slot.appendChild(p);
   if(typeof goTop==="function")goTop();
   /* Trois minutes chronometrees et une erreur suffit a tout arreter : on
      annonce la regle et on attend le feu vert, comme pour une partie. */
   showReadyFor(t("Three minutes · three misses and it stops"),
-    ()=>{if(typeof startRush==="function")startRush();},
+    ()=>{
+      if(typeof startRush==="function")startRush();
+      if(typeof desarmerRush==="function")desarmerRush();   /* passe en abandon */
+    },
     t("Start"));
 };
 /* Remise en place a la fin du sprint. */
@@ -978,6 +1032,11 @@ function fmtNum(x){
 let readyAction=null;
 function showReadyFor(sousTitre,action,libelle){
   const b=$("readyBanner"); if(!b)return;
+  /* On enchaine sur une nouvelle epreuve : le bandeau de fin de la
+     precedente n'a plus lieu d'etre, et deux panneaux superposes seraient
+     illisibles. */
+  const fin=$("resultBanner");
+  if(fin&&!fin.classList.contains("hide")){fin.className="result hide";finAction=null;}
   readyAction=action||null;
   $("readyTitle").textContent=t("Ready when you are");
   $("readySub").textContent=sousTitre;

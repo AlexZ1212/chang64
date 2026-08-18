@@ -280,17 +280,64 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .chud-meta b{display:block;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600}
 .chud-meta i{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage);font-style:normal}
 .coordhud.low b#chudTime{color:var(--brick)}
-.clock{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
+/* Deux lignes : le nom et la pendule d'abord, les pieces prises en dessous.
+   Avant, les prises partageaient la colonne du nom : leur apparition poussait
+   le nom vers le haut et le desalignait de la pendule. Ici la premiere ligne
+   ne bouge jamais, avec ou sans prises. */
+.clock{display:flex;flex-direction:column;align-items:stretch;gap:0;
   background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;
   max-width:100%;box-sizing:border-box;min-width:0
 }
+/* Pieces capturees dans la pendule. La contrainte est de ne pas faire grandir
+   le bloc : le nom passe sur une premiere ligne et les pieces sur une seconde,
+   tres basse, et le chronometre descend de 28 a 24px pour compenser. Les
+   pieces se chevauchent pour tenir sur une ligne meme avec une quinzaine de
+   prises, et la rangee est tronquee plutot que de pousser le chronometre hors
+   de l'ecran. */
+/* .who etait en flex horizontal : les pieces se retrouvaient a cote du nom
+   au lieu d'etre dessous. On le passe en colonne. */
+.clock-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.taken-slot{display:block;min-width:0}
+/* Fond transparent : le carre clair des pieces formait une bande blanche peu
+   elegante sous le nom. On gagne ainsi de la place verticale, ce qui permet
+   de les agrandir de 14 a 18px. Les pieces noires recoivent un contour clair,
+   sinon elles disparaitraient sur le fond sombre de la pendule. */
+/* Ferrees a gauche sur le NOM, pas sur la pastille : on decale de la largeur
+   de la pastille plus son ecart, calcules depuis les memes variables pour que
+   l'alignement suive si l'un des deux change. La bordure est comprise dans la
+   largeur (box-sizing:border-box global), il n'y a donc rien a ajouter. */
+.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:22px;margin-top:1px;
+  padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
+/* La largeur est posee en ligne, proportionnelle a la boite englobante de
+   chaque piece : un pion reste plus etroit qu'une dame. Le chevauchement de
+   -7px valait pour des boites larges au vide interne genereux ; sur des
+   boites serrees il masquerait les pieces, on met donc un simple ecart. */
+.taken .tk{display:block;width:22px;height:22px;flex:none;margin-right:2px;
+  background:none;border:0;border-radius:0}
+.taken .tk:last-of-type{margin-right:0}
+.taken .tk svg{width:100%;height:100%;display:block;overflow:visible}
+/* On cible le corps de la piece par sa couleur d'origine, pas tous les
+   chemins : l'oeil et le naseau du cavalier sont remplis en #101413 et
+   doivent le rester, sinon ils se fondent dans la piece. */
+.taken .tk svg [fill="#eceae3"],.taken .tk svg [fill="#232b28"]{fill:var(--bone);stroke:none}
+.taken .tk.noire svg [fill="#eceae3"],.taken .tk.noire svg [fill="#232b28"]{
+  fill:#232B28;stroke:var(--bone);stroke-width:2.2;paint-order:stroke fill}
+/* L'oeil et le naseau restent sombres sur une piece claire, et passent en
+   clair sur une piece foncee pour rester visibles. */
+.taken .tk.noire svg [fill="#101413"]{fill:var(--bone)}
+.taken .adv{margin-left:7px;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  font-weight:600;color:var(--sage);flex:none}
 .clock .who{min-width:0}
 .clock .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:8px}
-.clock .who i{width:12px;height:12px;border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118}
-.clock .who i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
-.clock time{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:var(--pastille-gap);min-width:0}
+/* Selecteur enfant direct : les pieces prises sont elles aussi des <i>, mais
+   dans .taken. Avec ".clock .who i" elles heritaient du fond, du contour
+   arrondi et de la taille de la pastille, sa specificite l'emportant sur leur
+   propre regle. */
+.clock{--pastille:13px;--pastille-gap:8px}
+.clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
+.clock .who>i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
+.clock time{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 /* background en raccourci effacait le fond du bloc au lieu de le teinter :
    le laiton translucide se retrouvait pose sur le fond de page, plus sombre,
    et la pendule paraissait noircir en s'activant. On superpose donc un degrade
@@ -384,6 +431,15 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    chronometre, score, vies, et l'enonce a resoudre. Le reste appartient au
    mode exercice normal et n'a pas de sens ici. */
 .rush-on .hors-sprint{display:none}
+/* Pendant un sprint, le bouton d'abandon passe SOUS l'echiquier : place
+   au-dessus, il sortait de l'ecran des qu'on regardait le plateau et on ne
+   trouvait plus comment arreter. La description et le record se masquent,
+   ils ont deja ete lus. */
+.rush-on #rushPanel{display:flex;flex-direction:column}
+.rush-on #rushPanel #rushSlot{order:1}
+.rush-on #rushPanel .btnrow{order:2;margin-top:14px}
+.rush-on #rushPanel .eyebrow,
+.rush-on #rushPanel > p{display:none}
 /* Dernieres secondes : le chiffre passe au rouge, comme la pendule d'une
    partie sous vingt secondes. */
 .rushitem b.urgent{color:var(--brick)}
@@ -402,12 +458,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
   .seg button{font-size:11.5px;padding:8px 2px;white-space:normal;line-height:1.2}
 }
 .seg button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
-/* Le mode aleatoire n'est signale QUE pendant une partie, quand la couleur
-   tiree est mise en avant a sa place : sans ce rappel, on ne saurait plus
-   qu'on est en mode aleatoire. Hors partie, le bouton est selectionne comme
-   les deux autres, sans traitement particulier : un lisere en plus du fond
-   de selection creait une incoherence visuelle. */
-.seg button.mode-actif:not([aria-pressed="true"]){box-shadow:inset 0 0 0 1px var(--brass);color:var(--brass)}
+/* Aucun traitement particulier pour "Au hasard" : le lisere laiton que
+   portait ce bouton pendant une partie attirait l'oeil vers un controle
+   verrouille et pale, ce qui jurait avec les deux autres. Le mode reste
+   visible autrement : la couleur tiree est mise en avant pendant la partie,
+   et le bouton "Au hasard" redevient selectionne des qu'elle est finie. */
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform .08s}
 .btn:hover{background:#33483e}
@@ -775,8 +830,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
       <div class="clock hide" id="clockTop">
-        <span class="who"><i id="clockTopSwatch"></i><span id="clockTopName">Computer</span></span>
-        <time id="clockTopTime">10:00</time>
+        <div class="clock-line">
+          <span class="who"><i id="clockTopSwatch"></i><span id="clockTopName">Computer</span></span>
+          <time id="clockTopTime">10:00</time>
+        </div>
+        <span class="taken-slot" id="takenTop"></span>
       </div>
       <div class="board-wrap">
         <div class="evalv hide" id="evalwrap">
@@ -822,8 +880,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       </div>
       <div class="plyinfo hide" id="plyInfo"></div>
       <div class="clock hide" id="clockBottom">
-        <span class="who"><i id="clockBottomSwatch"></i><span id="clockBottomName">You</span></span>
-        <time id="clockBottomTime">10:00</time>
+        <div class="clock-line">
+          <span class="who"><i id="clockBottomSwatch"></i><span id="clockBottomName">You</span></span>
+          <time id="clockBottomTime">10:00</time>
+        </div>
+        <span class="taken-slot" id="takenBottom"></span>
       </div>
     </div>
 
@@ -930,8 +991,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                la consigne, et la repoussait sous la ligne de flottaison sur
                telephone. Le chronometre de Chang Sprint reste en haut, parce
                qu'il est aussi urgent que l'enonce pendant une session. -->
-          <span class="theme" id="exTheme">Back-rank mate</span>
-          <p class="quest" id="exQuest">Loading…</p>
+          <!-- hors-sprint sur le theme et l'enonce : dans un defi de trois
+               minutes, annoncer "Mat en un coup" revient a donner la reponse,
+               et le libelle du thème casse le rythme. On garde le statut, qui
+               sert aux retours immediats. -->
+          <span class="theme hors-sprint" id="exTheme">Back-rank mate</span>
+          <p class="quest hors-sprint" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
 
           <!-- Les trois actions du geste courant sont ici, sous l'enonce :
@@ -1038,7 +1103,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <div id="pane-train" class="hide">
         <!-- Chang Sprint se joue sur l'echiquier des exercices : le bouton
              y renvoie plutot que de dupliquer le mode ici. -->
-        <div class="panel">
+        <div class="panel" id="rushPanel">
           <div class="eyebrow">Chang Sprint</div>
           <p class="note" style="margin-top:0;margin-bottom:10px">Three minutes to solve as many puzzles as you can. Three misses and it stops.</p>
           <div class="btnrow"><button class="btn primary" id="btnGoRush">Start Chang Sprint</button></div>

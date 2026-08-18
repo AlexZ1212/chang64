@@ -67,5 +67,48 @@ console.log("\n--- Cout maitrise ---");
 const nav=(h.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
 T("moins de 700 octets par page : "+nav.length, nav.length<700, nav.length+" octets");
 
+console.log("\n--- Le menu signale la section sur les pages de detail ---");
+/* La comparaison etait exacte : /fr/finales/dame-contre-roi.html ne
+   correspondait pas a /fr/finales/, donc le menu ne marquait rien et on
+   perdait le repere des qu'on ouvrait une fiche. Teste dans les six sections
+   et dans les deux langues. */
+{
+  const fsx=require("fs");
+  let ko2=[], vus=0;
+  for(const dir of ["/fr/finales","/fr/ouvertures","/fr/exercices","/fr/lexique",
+                    "/fr/pieges","/fr/apprendre","/endgames","/openings","/glossary"]){
+    if(!fsx.existsSync(S+dir))continue;
+    const pages=fsx.readdirSync(S+dir).filter(f=>f.endsWith(".html")&&f!=="index.html");
+    if(!pages.length)continue;
+    vus++;
+    const h=fsx.readFileSync(S+dir+"/"+pages[0],"utf8");
+    const nav=(h.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
+    if(!/aria-current="page"/.test(nav))ko2.push(dir);
+  }
+  T(vus+" sections, toutes marquees sur les pages de detail", ko2.length===0, ko2.join(", "));
+
+  /* une seule entree marquee : deux reperes simultanes seraient trompeurs */
+  let multi=[];
+  const walk=(p)=>{for(const f of fsx.readdirSync(p)){
+    const q=p+"/"+f;
+    if(fsx.statSync(q).isDirectory())walk(q);
+    else if(f.endsWith(".html")){
+      const nav=(fsx.readFileSync(q,"utf8").match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
+      if((nav.match(/aria-current="page"/g)||[]).length>1)multi.push(q.replace(S,""));
+    }}};
+  walk(S);
+  T("aucune page ne marque deux entrees", multi.length===0, multi.slice(0,3).join(", "));
+
+  /* le lien reste cliquable sur une fiche : il ramene a l'index */
+  const fiche=fsx.readFileSync(S+"/fr/finales/"+
+    fsx.readdirSync(S+"/fr/finales").find(f=>f.endsWith(".html")&&f!=="index.html"),"utf8");
+  const nav=(fiche.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
+  T("sur une fiche, le lien reste cliquable",
+    /<a href="\/fr\/finales\/" aria-current="page"/.test(nav));
+  const idx=fsx.readFileSync(S+"/fr/finales/index.html","utf8");
+  const navIdx=(idx.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
+  T("sur l'index, c'est un simple texte", /<span aria-current="page">/.test(navIdx));
+}
+
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
 process.exit(ko?1:0);

@@ -286,6 +286,11 @@ $("btnEgNew").onclick=()=>{if(coord)stopCoord();startEndgame(eg?eg.scen.id:"kq")
   const st=$("egStatus");st.className="status";st.textContent=t("New position. White to move.");};
 $("btnCoord").onclick=()=>{
   if(coord){stopCoord();return;}
+  /* Une seule epreuve a la fois : sans cela, un sprint en cours continuait de
+     tourner en arriere-plan, son chronometre decomptait et son bandeau restait
+     affiche au-dessus de celui des coordonnees. */
+  if(typeof rush!=="undefined"&&rush&&typeof rushEnd==="function")
+    rushEnd(t("Stopped."));
   /* Trente secondes seulement : perdre les deux premieres a comprendre ou on
      est, ca compte. Meme overlay que les parties chronometrees. */
   if(typeof showReadyFor==="function")
@@ -565,7 +570,11 @@ $("tab-train").onclick=()=>{setMode("train");goTop();};
 const baseOnSquare=onSquare;
 onSquare=function(e){
   if(suppressClick)return;
-  if(mode==="train"){
+  /* Un Chang Sprint lance depuis Defis tourne avec mode==="train" : sans ce
+     garde, les clics partaient vers handleTrainClick, qui gere les finales et
+     les coordonnees, et l'exercice ne passait jamais au suivant. Le sprint
+     prime donc sur l'onglet courant. */
+  if(mode==="train"&&!(typeof rush!=="undefined"&&rush)){
     const i=Array.prototype.indexOf.call(boardEl.children,e.currentTarget);
     handleTrainClick(idxToSq(i));
     return;

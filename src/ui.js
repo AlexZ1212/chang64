@@ -213,6 +213,53 @@ function botLabel(){
   if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
   return force?"Chang \u00b7 "+force:"Chang";
 }
+/* Pieces capturees et solde materiel, affiches dans la pendule de chaque
+   joueur. On reconstitue depuis l'historique plutot que de tenir un compteur
+   a part : impossible de desynchroniser, et une annulation de coup se reflete
+   toute seule.
+   Convention : pion 1, cavalier et fou 3, tour 5, dame 9. Seul le joueur en
+   avantage affiche un nombre. */
+const VAL_PIECE={p:1,n:3,b:3,r:5,q:9,k:0};
+function prises(){
+  const par={w:[],b:[]};
+  const g=viewGame();
+  for(const h of g.history||[]){
+    const c=h.m&&h.m.captured;
+    if(!c)continue;
+    /* la piece prise appartient a l'adversaire du joueur qui a joue */
+    const preneur=pC(c)===W?"b":"w";
+    par[preneur].push(SYM[pT(c)]);
+  }
+  const ordre={q:0,r:1,b:2,n:3,p:4};
+  for(const k of ["w","b"])par[k].sort((a,b)=>(ordre[a]||9)-(ordre[b]||9));
+  const val=k=>par[k].reduce((s,x)=>s+(VAL_PIECE[x]||0),0);
+  return {w:par.w,b:par.b,solde:val("w")-val("b")};
+}
+/* Rangee compacte : les pieces se chevauchent pour tenir sur une ligne, meme
+   avec une quinzaine de prises. */
+/* Hauteur d'une piece prise, en pixels. Sert aussi a calculer sa largeur :
+   les deux doivent rester coherents avec la regle .taken .tk du gabarit. */
+const TAILLE_PRISE=22;
+function rangeePrises(liste,couleur,solde){
+  if(!liste.length&&!solde)return "";
+  /* La classe "noire" declenche le contour clair : sans lui, une piece noire
+     se confondrait avec le fond sombre de la pendule. */
+  const cls="tk"+(couleur==="b"?" noire":"");
+  let s='<span class="taken">';
+  for(const t of liste){
+    /* Largeur proportionnelle a la boite englobante : le pion reste plus
+       etroit que la dame, comme sur l'echiquier, et chaque piece part de son
+       propre bord au lieu d'un vide interne different a chaque fois. */
+    const bb=(typeof PIECE_BB!=="undefined"&&PIECE_BB[t])||[0,45];
+    const larg=(TAILLE_PRISE*(bb[1]-bb[0])/45).toFixed(1);
+    s+='<i class="'+cls+'" style="width:'+larg+'px">'+pieceSVG(t,couleur,true)+"</i>";
+  }
+  /* Les deux cotes affichent leur solde : celui qui mene en positif, celui
+     qui est mene en negatif. Voir qu'on a trois points de retard est aussi
+     utile que de voir qu'on en a trois d'avance. */
+  if(solde)s+='<b class="adv">'+(solde>0?"+":"\u2212")+Math.abs(solde)+"</b>";
+  return s+"</span>";
+}
 function renderClocks(){
   const show=clock.enabled&&mode==="play"&&gameStarted;
   $("clockTop").classList.toggle("hide",!show);
@@ -239,6 +286,13 @@ function renderClocks(){
   };
   set($("clockTop"),topColor);
   set($("clockBottom"),botColor);
+  /* Pieces prises par chacun, et solde pour celui qui mene. */
+  const pr=prises();
+  const cle=c=>c===W?"w":"b";
+  const soldeDe=c=>(c===W?pr.solde:-pr.solde);
+  const tt=$("takenTop"), tb=$("takenBottom");
+  if(tt)tt.innerHTML=rangeePrises(pr[cle(topColor)],cle(topColor)==="w"?"b":"w",soldeDe(topColor));
+  if(tb)tb.innerHTML=rangeePrises(pr[cle(botColor)],cle(botColor)==="w"?"b":"w",soldeDe(botColor));
 }
 setInterval(()=>{
   if(mode!=="play"||!clock.enabled||isFlagged()||clock.active===null)return;
@@ -405,6 +459,15 @@ function onSquare(e){
   const i=Array.prototype.indexOf.call(boardEl.children,e.currentTarget);
   const sq=idxToSq(i);
   if(busy||pendingPromo)return;
+  /* Un sprint lance depuis Defis se joue avec mode==="train" : sans ce cas,
+     les clics sur l'echiquier etaient ignores et l'exercice ne passait jamais
+     au suivant.
+     On interroge document.body plutot que la variable rush : celle-ci est
+     declaree avec let dans ui2.js, charge APRES ce fichier, donc elle est en
+     zone morte ici et typeof la masque silencieusement. La classe rush-on est
+     posee sur body au demarrage du sprint, elle est donc fiable. */
+  if(document.body.classList.contains("rush-on")){handlePuzzleClick(sq);return;}
+  if(mode==="train"){handlePuzzleClick(sq);return;}   /* sprint : traite comme un exercice */
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
@@ -1279,6 +1342,12 @@ $("tab-friend").onclick=()=>{setMode("friend");goTop();};
    plus juste que d'imposer les Blancs. Le reglage de l'onglet Jouer n'est pas
    ecrase, il n'y a simplement rien a respecter ici. */
 function tirerCouleur(){
+  /* On passe le reglage lui-meme en "au hasard", pas seulement la couleur :
+     le selecteur doit decrire ce qui s'est passe. Changer myColor sans
+     toucher colorMode affichait "Blancs" alors que la couleur avait ete
+     tiree au sort, et une seconde partie serait repartie en Blancs fixes
+     sans qu'on l'ait demande. */
+  colorMode="r";
   myColor=Math.random()<0.5?W:B;
   if(typeof syncColorSeg==="function")syncColorSeg();
 }
@@ -1304,18 +1373,16 @@ $("segColor").addEventListener("click",e=>{
    plutot que le bouton "Au hasard" : sinon le joueur ne saurait pas de quel
    cote il joue sans regarder l'echiquier. Hors partie, c'est le mode choisi
    qui reste en avant. */
+/* Le selecteur montre toujours le REGLAGE choisi, jamais la couleur tiree.
+   J'avais d'abord affiche la couleur obtenue pendant une partie en mode
+   aleatoire, en pensant qu'on ne saurait pas de quel cote on joue. C'est
+   faux : l'echiquier est retourne, l'adversaire est nomme et la pendule
+   indique qui est qui. Montrer autre chose que le reglage rendait le
+   selecteur incoherent avec les deux autres options, qui restent affichees
+   telles qu'on les a choisies. */
 function syncColorSeg(){
   const seg=$("segColor"); if(!seg)return;
-  /* "over" n'existe pas dans ce fichier : c'est gameFinished() qui dit si la
-     partie est terminee. L'utiliser levait une erreur qui interrompait
-     newGame avant l'affichage de l'overlay de preparation. */
-  const finie=(typeof gameFinished==="function")?gameFinished():false;
-  const enCours=gameStarted&&!finie;
-  const montre=(colorMode==="r"&&enCours)?(myColor===W?"w":"b"):colorMode;
-  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===montre);
-  /* le bouton "Au hasard" reste signale comme le mode actif */
-  const rnd=seg.querySelector('[data-v="r"]');
-  if(rnd)rnd.classList.toggle("mode-actif",colorMode==="r");
+  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===colorMode);
 }
 $("segLevel").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;

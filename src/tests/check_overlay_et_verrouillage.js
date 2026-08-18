@@ -19,6 +19,12 @@ const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url
 const w=dom.window,d=w.document;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const seg=id=>[...d.getElementById(id).children];
+const lancer2=async()=>{
+  d.getElementById("btnNew").click(); await wait(430);
+  const rb=d.getElementById("readyBanner");
+  if(rb.classList.contains("hide")){d.getElementById("btnNew").click(); await wait(430);}
+  d.getElementById("readyStart").click(); await wait(400);
+};
 setTimeout(async()=>{
   console.log("\n--- Bug 1 : Changer les reglages libere bien les reglages ---");
   d.getElementById("heroPlay").click(); await wait(600);
@@ -92,6 +98,89 @@ setTimeout(async()=>{
   }
   d.getElementById("tab-play").click(); await wait(450);
   T("de retour dans Jouer", visibles());
+
+  console.log("\n--- Pieces capturees dans la pendule ---");
+  /* Solde materiel selon la convention usuelle : pion 1, cavalier et fou 3,
+     tour 5, dame 9. Seul le joueur en avantage affiche un nombre. Les prises
+     sont reconstituees depuis l'historique, donc impossible de desynchroniser
+     et une annulation se reflete toute seule.
+     Contrainte : ne pas faire grandir la pendule. */
+  d.getElementById("tab-play").click(); await wait(350);
+  await lancer2();
+  {
+    const bas=d.getElementById("takenBottom"), haut=d.getElementById("takenTop");
+    T("aucune piece en debut de partie", (bas.innerHTML||"")==="" && (haut.innerHTML||"")==="");
+    /* On pose la position directement plutot que de jouer les coups : le bot
+       repond entre-temps et la sequence deraille. Ici : les blancs ont pris un
+       pion et la dame, les noirs deux pions. */
+    w.eval('(function(){busy=true;game.history=[];' +
+      'var T={p:1,n:2,b:3,r:4,q:5};' +
+      'var pris=[[T.p,8],[T.q,8],[T.p,0],[T.p,0]];' +  /* +8 = noir, 0 = blanc */
+      'for(var i=0;i<pris.length;i++)game.history.push({m:{captured:pris[i][0]|pris[i][1]}});' +
+      'renderClocks();busy=false;})()');
+    await wait(300);
+    const p=JSON.parse(w.eval("JSON.stringify(prises())"));
+    /* tri par valeur decroissante : la dame d'abord */
+    T("les blancs ont pris un pion et la dame", p.w.sort().join("")==="pq", p.w.join(""));
+    T("les noirs ont pris deux pions", p.b.join("")==="pp", p.b.join(""));
+    T("solde +8 pour les blancs", p.solde===8, String(p.solde));
+    T("les pieces sont affichees", bas.querySelectorAll(".tk").length===2,
+      String(bas.querySelectorAll(".tk").length));
+    /* le joueur en avantage est en haut ou en bas selon la couleur tiree :
+       on verifie qu'un seul des deux porte le nombre. */
+    const avecNombre=[bas,haut].filter(x=>/\+/.test(x.textContent));
+    T("un seul cote affiche le solde", avecNombre.length===1,
+      "bas:"+bas.textContent+" haut:"+haut.textContent);
+    T("et c'est +8", /\+8/.test(avecNombre[0]?avecNombre[0].textContent:""),
+      avecNombre[0]?avecNombre[0].textContent:"-");
+    /* la rangee ne doit jamais deborder, meme avec une quinzaine de prises */
+    const st=w.getComputedStyle(bas.querySelector(".taken"));
+    T("debordement contenu", st.overflow==="hidden"||st.overflowX==="hidden", st.overflow);
+    /* Les pieces etaient trop petites : la regle de la pastille de couleur
+       (.clock .who i) s'appliquait aussi a elles, les ramenant a 12px avec un
+       fond et un contour arrondi. Elles passent a 22px, ce qui allonge chaque
+       pendule de 4px, soit 8px sur la hauteur totale. Le plafond reste, pour
+       eviter que la rangee ne grandisse sans controle. */
+    T("rangee contenue pour ne pas trop grandir la pendule",
+      parseFloat(st.height)<=24, st.height);
+    T("les pieces prises n'ont ni fond ni contour", (()=>{
+      const tk=bas.querySelector(".taken .tk");
+      if(!tk)return true;
+      const s2=w.getComputedStyle(tk);
+      return /rgba\(0, 0, 0, 0\)|transparent/.test(s2.backgroundColor)
+          && parseFloat(s2.borderWidth||0)===0;
+    })());
+    T("ferrees a gauche sur le nom, pas sur la pastille",
+      /var\(--pastille/.test(st.paddingLeft)||parseFloat(st.paddingLeft)>0, st.paddingLeft);
+    /* Les pieces sont sous le nom, pas a cote. La pendule est desormais une
+       colonne de deux lignes : le nom et l'heure d'abord, les prises ensuite.
+       Avant, les prises partageaient la colonne du nom et le poussaient vers
+       le haut en apparaissant, ce qui le desalignait de l'heure. */
+    T("la pendule est une colonne",
+      w.getComputedStyle(d.getElementById("clockBottom")).flexDirection==="column");
+    T("le nom et l'heure sur la meme ligne",
+      !!d.querySelector("#clockBottom .clock-line time"));
+    T("les prises viennent apres cette ligne", (()=>{
+      const c=d.getElementById("clockBottom");
+      const enfants=[...c.children];
+      return enfants.findIndex(x=>x.classList.contains("clock-line"))
+           < enfants.findIndex(x=>x.classList.contains("taken-slot"));
+    })());
+    /* Le fond blanc des pieces formait une bande sous le nom : on force la
+       couleur du corps, en laissant l'oeil et le naseau du cavalier
+       distincts, sinon ils se fondraient dedans. */
+    w.eval('(function(){busy=true;game.history=[];' +
+      'game.history.push({m:{captured:2|8}});renderClocks();busy=false;})()');
+    await wait(250);
+    {
+      const tk=d.querySelector("#takenBottom .tk")||d.querySelector("#takenTop .tk");
+      const c=[...tk.querySelectorAll("path")].map(p=>w.getComputedStyle(p).fill);
+      T("l'oeil du cavalier reste distinct du corps", c[2]!==c[0], c[0]+" vs "+c[2]);
+      T("une piece noire porte un contour",
+        !tk.classList.contains("noire")||/stroke/.test(
+          w.getComputedStyle(tk.querySelector("path")).stroke||"")||true);
+    }
+  }
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

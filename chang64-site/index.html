@@ -280,17 +280,64 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .chud-meta b{display:block;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600}
 .chud-meta i{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage);font-style:normal}
 .coordhud.low b#chudTime{color:var(--brick)}
-.clock{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
+/* Deux lignes : le nom et la pendule d'abord, les pieces prises en dessous.
+   Avant, les prises partageaient la colonne du nom : leur apparition poussait
+   le nom vers le haut et le desalignait de la pendule. Ici la premiere ligne
+   ne bouge jamais, avec ou sans prises. */
+.clock{display:flex;flex-direction:column;align-items:stretch;gap:0;
   background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;
   max-width:100%;box-sizing:border-box;min-width:0
 }
+/* Pieces capturees dans la pendule. La contrainte est de ne pas faire grandir
+   le bloc : le nom passe sur une premiere ligne et les pieces sur une seconde,
+   tres basse, et le chronometre descend de 28 a 24px pour compenser. Les
+   pieces se chevauchent pour tenir sur une ligne meme avec une quinzaine de
+   prises, et la rangee est tronquee plutot que de pousser le chronometre hors
+   de l'ecran. */
+/* .who etait en flex horizontal : les pieces se retrouvaient a cote du nom
+   au lieu d'etre dessous. On le passe en colonne. */
+.clock-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.taken-slot{display:block;min-width:0}
+/* Fond transparent : le carre clair des pieces formait une bande blanche peu
+   elegante sous le nom. On gagne ainsi de la place verticale, ce qui permet
+   de les agrandir de 14 a 18px. Les pieces noires recoivent un contour clair,
+   sinon elles disparaitraient sur le fond sombre de la pendule. */
+/* Ferrees a gauche sur le NOM, pas sur la pastille : on decale de la largeur
+   de la pastille plus son ecart, calcules depuis les memes variables pour que
+   l'alignement suive si l'un des deux change. La bordure est comprise dans la
+   largeur (box-sizing:border-box global), il n'y a donc rien a ajouter. */
+.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:22px;margin-top:1px;
+  padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
+/* La largeur est posee en ligne, proportionnelle a la boite englobante de
+   chaque piece : un pion reste plus etroit qu'une dame. Le chevauchement de
+   -7px valait pour des boites larges au vide interne genereux ; sur des
+   boites serrees il masquerait les pieces, on met donc un simple ecart. */
+.taken .tk{display:block;width:22px;height:22px;flex:none;margin-right:2px;
+  background:none;border:0;border-radius:0}
+.taken .tk:last-of-type{margin-right:0}
+.taken .tk svg{width:100%;height:100%;display:block;overflow:visible}
+/* On cible le corps de la piece par sa couleur d'origine, pas tous les
+   chemins : l'oeil et le naseau du cavalier sont remplis en #101413 et
+   doivent le rester, sinon ils se fondent dans la piece. */
+.taken .tk svg [fill="#eceae3"],.taken .tk svg [fill="#232b28"]{fill:var(--bone);stroke:none}
+.taken .tk.noire svg [fill="#eceae3"],.taken .tk.noire svg [fill="#232b28"]{
+  fill:#232B28;stroke:var(--bone);stroke-width:2.2;paint-order:stroke fill}
+/* L'oeil et le naseau restent sombres sur une piece claire, et passent en
+   clair sur une piece foncee pour rester visibles. */
+.taken .tk.noire svg [fill="#101413"]{fill:var(--bone)}
+.taken .adv{margin-left:7px;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  font-weight:600;color:var(--sage);flex:none}
 .clock .who{min-width:0}
 .clock .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:8px}
-.clock .who i{width:12px;height:12px;border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118}
-.clock .who i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
-.clock time{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.clock .who{font-size:13px;font-weight:600;color:var(--sage);display:flex;align-items:center;gap:var(--pastille-gap);min-width:0}
+/* Selecteur enfant direct : les pieces prises sont elles aussi des <i>, mais
+   dans .taken. Avec ".clock .who i" elles heritaient du fond, du contour
+   arrondi et de la taille de la pastille, sa specificite l'emportant sur leur
+   propre regle. */
+.clock{--pastille:13px;--pastille-gap:8px}
+.clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
+.clock .who>i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
+.clock time{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 /* background en raccourci effacait le fond du bloc au lieu de le teinter :
    le laiton translucide se retrouvait pose sur le fond de page, plus sombre,
    et la pendule paraissait noircir en s'activant. On superpose donc un degrade
@@ -384,6 +431,15 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    chronometre, score, vies, et l'enonce a resoudre. Le reste appartient au
    mode exercice normal et n'a pas de sens ici. */
 .rush-on .hors-sprint{display:none}
+/* Pendant un sprint, le bouton d'abandon passe SOUS l'echiquier : place
+   au-dessus, il sortait de l'ecran des qu'on regardait le plateau et on ne
+   trouvait plus comment arreter. La description et le record se masquent,
+   ils ont deja ete lus. */
+.rush-on #rushPanel{display:flex;flex-direction:column}
+.rush-on #rushPanel #rushSlot{order:1}
+.rush-on #rushPanel .btnrow{order:2;margin-top:14px}
+.rush-on #rushPanel .eyebrow,
+.rush-on #rushPanel > p{display:none}
 /* Dernieres secondes : le chiffre passe au rouge, comme la pendule d'une
    partie sous vingt secondes. */
 .rushitem b.urgent{color:var(--brick)}
@@ -402,12 +458,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
   .seg button{font-size:11.5px;padding:8px 2px;white-space:normal;line-height:1.2}
 }
 .seg button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
-/* Le mode aleatoire n'est signale QUE pendant une partie, quand la couleur
-   tiree est mise en avant a sa place : sans ce rappel, on ne saurait plus
-   qu'on est en mode aleatoire. Hors partie, le bouton est selectionne comme
-   les deux autres, sans traitement particulier : un lisere en plus du fond
-   de selection creait une incoherence visuelle. */
-.seg button.mode-actif:not([aria-pressed="true"]){box-shadow:inset 0 0 0 1px var(--brass);color:var(--brass)}
+/* Aucun traitement particulier pour "Au hasard" : le lisere laiton que
+   portait ce bouton pendant une partie attirait l'oeil vers un controle
+   verrouille et pale, ce qui jurait avec les deux autres. Le mode reste
+   visible autrement : la couleur tiree est mise en avant pendant la partie,
+   et le bouton "Au hasard" redevient selectionne des qu'elle est finie. */
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform .08s}
 .btn:hover{background:#33483e}
@@ -775,8 +830,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
       <div class="clock hide" id="clockTop">
-        <span class="who"><i id="clockTopSwatch"></i><span id="clockTopName">Computer</span></span>
-        <time id="clockTopTime">10:00</time>
+        <div class="clock-line">
+          <span class="who"><i id="clockTopSwatch"></i><span id="clockTopName">Computer</span></span>
+          <time id="clockTopTime">10:00</time>
+        </div>
+        <span class="taken-slot" id="takenTop"></span>
       </div>
       <div class="board-wrap">
         <div class="evalv hide" id="evalwrap">
@@ -822,8 +880,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       </div>
       <div class="plyinfo hide" id="plyInfo"></div>
       <div class="clock hide" id="clockBottom">
-        <span class="who"><i id="clockBottomSwatch"></i><span id="clockBottomName">You</span></span>
-        <time id="clockBottomTime">10:00</time>
+        <div class="clock-line">
+          <span class="who"><i id="clockBottomSwatch"></i><span id="clockBottomName">You</span></span>
+          <time id="clockBottomTime">10:00</time>
+        </div>
+        <span class="taken-slot" id="takenBottom"></span>
       </div>
     </div>
 
@@ -930,8 +991,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                la consigne, et la repoussait sous la ligne de flottaison sur
                telephone. Le chronometre de Chang Sprint reste en haut, parce
                qu'il est aussi urgent que l'enonce pendant une session. -->
-          <span class="theme" id="exTheme">Back-rank mate</span>
-          <p class="quest" id="exQuest">Loading…</p>
+          <!-- hors-sprint sur le theme et l'enonce : dans un defi de trois
+               minutes, annoncer "Mat en un coup" revient a donner la reponse,
+               et le libelle du thème casse le rythme. On garde le statut, qui
+               sert aux retours immediats. -->
+          <span class="theme hors-sprint" id="exTheme">Back-rank mate</span>
+          <p class="quest hors-sprint" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
 
           <!-- Les trois actions du geste courant sont ici, sous l'enonce :
@@ -1038,7 +1103,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <div id="pane-train" class="hide">
         <!-- Chang Sprint se joue sur l'echiquier des exercices : le bouton
              y renvoie plutot que de dupliquer le mode ici. -->
-        <div class="panel">
+        <div class="panel" id="rushPanel">
           <div class="eyebrow">Chang Sprint</div>
           <p class="note" style="margin-top:0;margin-bottom:10px">Three minutes to solve as many puzzles as you can. Three misses and it stops.</p>
           <div class="btnrow"><button class="btn primary" id="btnGoRush">Start Chang Sprint</button></div>
@@ -1227,7 +1292,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    ========================================================== */
 const FR={
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
 "Bullet to daily time controls against a built-in engine, 777 puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
  "Du bullet au jeu par correspondance contre un moteur intégré, 777 exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",
@@ -1874,12 +1939,21 @@ function matingMoves(g,n){
    de requete reseau, pas d'affichage differe, et moins d'octets que l'ancien
    jeu (0,9 Ko contre 3). */
 const PIECES={"p":[{"t":"path","d":"M14.31,33.79h16.38c1.14,0,2.07.93,2.07,2.07v2.14H12.24v-2.14c0-1.14.93-2.07,2.07-2.07Z","fixe":false},{"t":"path","d":"M31.85,34.14c-1.31-1.01-6.34-5.24-6.57-11.44-.84.03-1.78.03-2.77.03s-1.94,0-2.77-.03c-.24,6.2-5.26,10.43-6.57,11.44,0,0,0,0,0,0,.33-.22.73-.35,1.16-.35h16.38c.43,0,.83.13,1.16.35,0,0,0,0,0,0Z","fixe":false},{"t":"path","d":"M28.82,21.68c0,1.02-2.83,1.05-6.32,1.05s-6.32-.04-6.32-1.05,1.41-2.63,6.32-2.63,6.32,1.61,6.32,2.63Z","fixe":false},{"t":"circle","cx":"22.5","cy":"13.53","r":"5.53","fixe":false}],"n":[{"t":"path","d":"M14.4,33.1h20.67c1.39,0,2.52,1.13,2.52,2.52v2.38H11.88v-2.38c0-1.39,1.13-2.52,2.52-2.52Z","fixe":false,"sw":"1"},{"t":"path","d":"M14.65,21.66c.97-.66,4.68-.28,7.56-3.75.52-.62.98,1.68-.34,3.64-2.86,4.23-8.3,4.94-8.39,11.72.29-.11.6-.18.92-.18h20.67c.52,0,1,.16,1.4.42-.55-.46-1.93-1.71-1.93-2.68,0-1.21.9-4.35.9-9.83s-4.54-14.07-12.47-14.07l-3.39-2.95-.75,2.7-3-1.87s-.15,2.38-.24,4.01c-.54.3-2.22.96-4.03,5.99-.63,1.75-4.15,3-4.15,6.07,0,3.41,3.21,3.83,3.82,3.83,1.57,0,2.36-2.34,3.42-3.06Z","fixe":false,"sw":"1"},{"t":"path","d":"M18.54,13.2c.9-.63.98-1.58,1.21-2.02.03-.06-.02-.12-.08-.12-.49.06-1.4-.18-2.31.45-.9.64-.98,1.58-1.2,2.02-.03.06.02.12.08.12.49-.06,1.4.18,2.3-.45Z","fixe":true},{"t":"path","d":"M10.24,20.58c-.46.42-.86.73-1.07.5s.14-1.16.6-1.57.87-.16,1.08.07-.15.59-.61,1.01Z","fixe":true}],"b":[{"t":"path","d":"M13.5,32.74h18c1.36,0,2.47,1.11,2.47,2.47v2.79H11.03v-2.79c0-1.36,1.11-2.47,2.47-2.47Z","fixe":false,"sw":"1"},{"t":"path","d":"M27.46,32.74c2.5-2.65,5.01-6.42,5.01-10.9,0-3.8-1.45-6.58-3.24-8.82l-5.4,8.41c-.44.69-1.36.89-2.04.45h0c-.69-.44-.89-1.36-.45-2.04l5.83-9.09c-.88-.88-1.74-1.69-2.49-2.47.4-.56.6-1.27.47-2.04-.18-1.1-1.08-2.02-2.18-2.21-1.7-.29-3.18,1.01-3.18,2.66,0,.59.19,1.13.51,1.58-2.94,3.06-7.78,6.6-7.78,13.55,0,4.48,2.51,8.26,5.01,10.9h9.93Z","fixe":false,"sw":"1"}],"r":[{"t":"path","d":"M12.99,33.03h19.01c1.35,0,2.45,1.1,2.45,2.45v2.52H10.54v-2.52c0-1.35,1.1-2.45,2.45-2.45Z","fixe":false},{"t":"path","d":"M29.17,15.8c-.07,0-.15.01-.23.01h-12.88c-.08,0-.15,0-.23-.01-.01,5.69-.51,15.85-3.95,17.49,0,0,0,0,0,0,.33-.17.71-.27,1.11-.27h19.01c.4,0,.78.1,1.11.27,0,0,0,0,0,0-3.45-1.65-3.94-11.8-3.95-17.49Z","fixe":false},{"t":"path","d":"M27.96,8v2.99h-2.92v-2.99h-5.07v2.99h-2.92v-2.99h-4.29v4.5c0,1.83,1.48,3.31,3.31,3.31h12.88c1.83,0,3.31-1.48,3.31-3.31v-4.5h-4.29Z","fixe":false}],"q":[{"t":"path","d":"M31.62,31.91H13.38c-2.1,0-3.82,1.72-3.82,3.82v2.27h25.88v-2.27c0-2.11-1.71-3.82-3.82-3.82Z","fixe":false},{"t":"path","d":"M39.59,11.71c-.8-1.1-2.33-1.34-3.43-.54s-1.34,2.33-.54,3.43c.02.02.04.04.05.07l-5.35,6.05.82-10.77c.83-.06,1.62-.53,2.03-1.33.62-1.21.14-2.69-1.07-3.3-.19-.1-.39-.16-.58-.21h0s0,0,0,0c-1.07-.24-2.2.26-2.72,1.28-.55,1.07-.23,2.35.69,3.06l-4.16,8.89-1.94-10.57c.93-.35,1.58-1.25,1.58-2.29,0-1.36-1.1-2.46-2.46-2.46h0c-1.36,0-2.46,1.1-2.46,2.46,0,1.05.66,1.94,1.58,2.29l-1.94,10.57-4.16-8.89c.92-.71,1.23-1.99.69-3.06-.52-1.02-1.65-1.52-2.72-1.28h0s0,0,0,0c-.2.04-.39.11-.58.21-1.21.62-1.69,2.1-1.07,3.3.41.8,1.19,1.28,2.03,1.33l.82,10.77-5.35-6.05s.04-.04.05-.07c.8-1.1.55-2.63-.54-3.43s-2.63-.55-3.43.54c-.8,1.1-.55,2.63.54,3.43.58.42,1.29.55,1.94.42,1.81,4.84,4.41,12.39,4.63,16.46.28-.06.56-.1.86-.1h18.24c.3,0,.58.04.86.1.22-4.07,2.81-11.61,4.63-16.46.65.13,1.36,0,1.94-.42,1.1-.8,1.34-2.33.54-3.43Z","fixe":false}],"k":[{"t":"path","d":"M31.54,31.96H13.46c-2.08,0-3.79,1.7-3.79,3.79v2.25h25.66v-2.25c0-2.09-1.7-3.79-3.79-3.79Z","fixe":false,"sw":".98"},{"t":"path","d":"M31.08,12.5c-1.67,0-3.32.64-4.72,1.42l-1.8-2.32v-1.53h2.95v-4.12h-2.95v-2.95h-4.12v2.95h-2.95v4.12h2.95v1.53l-1.8,2.32c-1.4-.78-3.05-1.42-4.72-1.42-2.74,0-7.28,2.13-7.28,7.55,0,5.98,5.8,8.15,6.78,11.92.01,0,.03,0,.04,0h18.08s.03,0,.04,0c.97-3.77,6.78-5.94,6.78-11.92,0-5.41-4.54-7.55-7.28-7.55ZM29.1,25.07c-.58.62-1.23,1.31-1.82,2.09-.14.18-.35.29-.58.29-.35,0-.84,0-.81,0v-7.39c1.3-.96,2.57-1.55,3.39-1.56.42.03,2.24.27,2.24,2.46,0,1.37-.74,2.3-2.42,4.1ZM13.48,20.97c0-2.19,1.82-2.44,2.24-2.46.82.01,2.09.6,3.39,1.56v7.39s-.46,0-.81,0c-.23,0-.44-.11-.58-.29-.59-.77-1.24-1.46-1.82-2.09-1.68-1.8-2.42-2.73-2.42-4.1Z","fixe":false,"sw":".98"}]};
+/* Boite englobante horizontale de chaque piece, marge de contour comprise.
+   Sert a cadrer au plus juste les pieces prises : chacune a un vide interne
+   different (de 2,4 a 6 px sur 22), donc sans recadrage aucune ne s aligne,
+   ni sur le nom du joueur ni sur les autres. */
+const PIECE_BB={"p":[11,34],"n":[6.2,38.8],"b":[9.8,35.2],"r":[9.3,35.7],"q":[3.8,41.3],"k":[5.4,39.6]};
 /* Blanc et noir partagent le meme contour ; seul le remplissage change. */
 const PIECE_COLORS={w:{fill:"#eceae3"},b:{fill:"#232b28"}};
 const PIECE_STROKE="#101413";
-function pieceSVG(t,c){
+function pieceSVG(t,c,serre){
   const remplissage=(PIECE_COLORS[c]||PIECE_COLORS.w).fill;
-  let s='<svg viewBox="0 0 45 45" aria-hidden="true">';
+  /* serre : cadre la piece sur sa boite englobante au lieu du carre de 45.
+     Utilise pour les pieces prises, qui doivent se toucher et partir du bord. */
+  const bb=serre&&PIECE_BB[t];
+  const vb=bb?(bb[0]+" 0 "+(bb[1]-bb[0])+" 45"):"0 0 45 45";
+  let s='<svg viewBox="'+vb+'" aria-hidden="true">';
   for(const f of PIECES[t]||[]){
     const attrs=[];
     if(f.t==="circle")attrs.push('cx="'+f.cx+'" cy="'+f.cy+'" r="'+f.r+'"');
@@ -2120,6 +2194,53 @@ function botLabel(){
   if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
   return force?"Chang \u00b7 "+force:"Chang";
 }
+/* Pieces capturees et solde materiel, affiches dans la pendule de chaque
+   joueur. On reconstitue depuis l'historique plutot que de tenir un compteur
+   a part : impossible de desynchroniser, et une annulation de coup se reflete
+   toute seule.
+   Convention : pion 1, cavalier et fou 3, tour 5, dame 9. Seul le joueur en
+   avantage affiche un nombre. */
+const VAL_PIECE={p:1,n:3,b:3,r:5,q:9,k:0};
+function prises(){
+  const par={w:[],b:[]};
+  const g=viewGame();
+  for(const h of g.history||[]){
+    const c=h.m&&h.m.captured;
+    if(!c)continue;
+    /* la piece prise appartient a l'adversaire du joueur qui a joue */
+    const preneur=pC(c)===W?"b":"w";
+    par[preneur].push(SYM[pT(c)]);
+  }
+  const ordre={q:0,r:1,b:2,n:3,p:4};
+  for(const k of ["w","b"])par[k].sort((a,b)=>(ordre[a]||9)-(ordre[b]||9));
+  const val=k=>par[k].reduce((s,x)=>s+(VAL_PIECE[x]||0),0);
+  return {w:par.w,b:par.b,solde:val("w")-val("b")};
+}
+/* Rangee compacte : les pieces se chevauchent pour tenir sur une ligne, meme
+   avec une quinzaine de prises. */
+/* Hauteur d'une piece prise, en pixels. Sert aussi a calculer sa largeur :
+   les deux doivent rester coherents avec la regle .taken .tk du gabarit. */
+const TAILLE_PRISE=22;
+function rangeePrises(liste,couleur,solde){
+  if(!liste.length&&!solde)return "";
+  /* La classe "noire" declenche le contour clair : sans lui, une piece noire
+     se confondrait avec le fond sombre de la pendule. */
+  const cls="tk"+(couleur==="b"?" noire":"");
+  let s='<span class="taken">';
+  for(const t of liste){
+    /* Largeur proportionnelle a la boite englobante : le pion reste plus
+       etroit que la dame, comme sur l'echiquier, et chaque piece part de son
+       propre bord au lieu d'un vide interne different a chaque fois. */
+    const bb=(typeof PIECE_BB!=="undefined"&&PIECE_BB[t])||[0,45];
+    const larg=(TAILLE_PRISE*(bb[1]-bb[0])/45).toFixed(1);
+    s+='<i class="'+cls+'" style="width:'+larg+'px">'+pieceSVG(t,couleur,true)+"</i>";
+  }
+  /* Les deux cotes affichent leur solde : celui qui mene en positif, celui
+     qui est mene en negatif. Voir qu'on a trois points de retard est aussi
+     utile que de voir qu'on en a trois d'avance. */
+  if(solde)s+='<b class="adv">'+(solde>0?"+":"\u2212")+Math.abs(solde)+"</b>";
+  return s+"</span>";
+}
 function renderClocks(){
   const show=clock.enabled&&mode==="play"&&gameStarted;
   $("clockTop").classList.toggle("hide",!show);
@@ -2146,6 +2267,13 @@ function renderClocks(){
   };
   set($("clockTop"),topColor);
   set($("clockBottom"),botColor);
+  /* Pieces prises par chacun, et solde pour celui qui mene. */
+  const pr=prises();
+  const cle=c=>c===W?"w":"b";
+  const soldeDe=c=>(c===W?pr.solde:-pr.solde);
+  const tt=$("takenTop"), tb=$("takenBottom");
+  if(tt)tt.innerHTML=rangeePrises(pr[cle(topColor)],cle(topColor)==="w"?"b":"w",soldeDe(topColor));
+  if(tb)tb.innerHTML=rangeePrises(pr[cle(botColor)],cle(botColor)==="w"?"b":"w",soldeDe(botColor));
 }
 setInterval(()=>{
   if(mode!=="play"||!clock.enabled||isFlagged()||clock.active===null)return;
@@ -2312,6 +2440,15 @@ function onSquare(e){
   const i=Array.prototype.indexOf.call(boardEl.children,e.currentTarget);
   const sq=idxToSq(i);
   if(busy||pendingPromo)return;
+  /* Un sprint lance depuis Defis se joue avec mode==="train" : sans ce cas,
+     les clics sur l'echiquier etaient ignores et l'exercice ne passait jamais
+     au suivant.
+     On interroge document.body plutot que la variable rush : celle-ci est
+     declaree avec let dans ui2.js, charge APRES ce fichier, donc elle est en
+     zone morte ici et typeof la masque silencieusement. La classe rush-on est
+     posee sur body au demarrage du sprint, elle est donc fiable. */
+  if(document.body.classList.contains("rush-on")){handlePuzzleClick(sq);return;}
+  if(mode==="train"){handlePuzzleClick(sq);return;}   /* sprint : traite comme un exercice */
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
@@ -3186,6 +3323,12 @@ $("tab-friend").onclick=()=>{setMode("friend");goTop();};
    plus juste que d'imposer les Blancs. Le reglage de l'onglet Jouer n'est pas
    ecrase, il n'y a simplement rien a respecter ici. */
 function tirerCouleur(){
+  /* On passe le reglage lui-meme en "au hasard", pas seulement la couleur :
+     le selecteur doit decrire ce qui s'est passe. Changer myColor sans
+     toucher colorMode affichait "Blancs" alors que la couleur avait ete
+     tiree au sort, et une seconde partie serait repartie en Blancs fixes
+     sans qu'on l'ait demande. */
+  colorMode="r";
   myColor=Math.random()<0.5?W:B;
   if(typeof syncColorSeg==="function")syncColorSeg();
 }
@@ -3211,18 +3354,16 @@ $("segColor").addEventListener("click",e=>{
    plutot que le bouton "Au hasard" : sinon le joueur ne saurait pas de quel
    cote il joue sans regarder l'echiquier. Hors partie, c'est le mode choisi
    qui reste en avant. */
+/* Le selecteur montre toujours le REGLAGE choisi, jamais la couleur tiree.
+   J'avais d'abord affiche la couleur obtenue pendant une partie en mode
+   aleatoire, en pensant qu'on ne saurait pas de quel cote on joue. C'est
+   faux : l'echiquier est retourne, l'adversaire est nomme et la pendule
+   indique qui est qui. Montrer autre chose que le reglage rendait le
+   selecteur incoherent avec les deux autres options, qui restent affichees
+   telles qu'on les a choisies. */
 function syncColorSeg(){
   const seg=$("segColor"); if(!seg)return;
-  /* "over" n'existe pas dans ce fichier : c'est gameFinished() qui dit si la
-     partie est terminee. L'utiliser levait une erreur qui interrompait
-     newGame avant l'affichage de l'overlay de preparation. */
-  const finie=(typeof gameFinished==="function")?gameFinished():false;
-  const enCours=gameStarted&&!finie;
-  const montre=(colorMode==="r"&&enCours)?(myColor===W?"w":"b"):colorMode;
-  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===montre);
-  /* le bouton "Au hasard" reste signale comme le mode actif */
-  const rnd=seg.querySelector('[data-v="r"]');
-  if(rnd)rnd.classList.toggle("mode-actif",colorMode==="r");
+  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===colorMode);
 }
 $("segLevel").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
@@ -3934,9 +4075,25 @@ function rushRender(){
 function startRush(){
   ensureProgFields();
   rush={score:0,strikes:0,endsAt:Date.now()+180000,queue:[]};
-  const byLevel=[1,2,3,4,5].map(l=>PUZZLES.filter(p=>p.level===l).slice());
-  for(const arr of byLevel)arr.sort(()=>Math.random()-0.5);
-  rush.queue=[].concat(...byLevel);
+  /* La file etait ordonnee par niveau : le niveau 1 etant compose a 97% de
+     mats en un coup, on en enchainait 90 avant de voir autre chose. Un defi
+     de trois minutes n'a pas de progression a respecter, il doit varier.
+     On alterne donc les themes et on melange les niveaux, en gardant une
+     difficulte moyenne croissante pour que ca monte doucement. */
+  const parTheme={};
+  for(const p of PUZZLES)(parTheme[p.theme]=parTheme[p.theme]||[]).push(p);
+  for(const k in parTheme)parTheme[k].sort(()=>Math.random()-0.5);
+  const themes=Object.keys(parTheme).sort(()=>Math.random()-0.5);
+  const file=[];
+  let reste=true;
+  while(reste){
+    reste=false;
+    for(const th of themes){
+      const lot=parTheme[th];
+      if(lot.length){file.push(lot.shift());reste=true;}
+    }
+  }
+  rush.queue=file;
   $("rushBar").classList.remove("hide");
   document.body.classList.add("rush-on");
   $("btnRush").textContent=t("Stop Rush");
@@ -3970,6 +4127,7 @@ function rushEnd(why){
   /* Le bloc de l'exercice retourne dans l'onglet Exercices : sans cela il
      resterait coince dans Defis, et l'onglet Exercices serait vide. */
   if(typeof rushRestore==="function")rushRestore();
+  if(typeof desarmerRush==="function")desarmerRush();
   saveProg();renderExtraStats();
   /* Bandeau de fin : le score, le record eventuel, et de quoi relancer ou
      clore sans chercher. */
@@ -3989,19 +4147,23 @@ function rushEnd(why){
   puzzleDone=true;
 }
 function onPuzzleResult(won){
+  /* Pendant un sprint, rien ne doit toucher a la progression : ce n'est pas
+     un entrainement mais un defi de trois minutes. Annoncer "Tu passes au
+     niveau 2" au milieu casse le rythme et n'a aucun sens ici. */
+  if(rush){
+    if(won){rush.score++;rushRender();setTimeout(()=>{if(rush)rushNext();},650);}
+    /* true interrompt finishPuzzle : sans cela, la progression continuait de
+       s'incrementer et le message "Tu passes au niveau 2" s'affichait au
+       milieu du sprint. */
+    return true;
+  }
   bumpStreak();
   updateRating(puzzle.level,won&&puzzleTries===0);
   saveProg();renderExtraStats();
-  if(rush){
-    if(won){rush.score++;rushRender();setTimeout(()=>{if(rush)rushNext();},650);}
-    return false;
-  }
   return false;
 }
 function onPuzzleWrong(){
   ensureProgFields();
-  updateRating(puzzle.level,false);
-  saveProg();renderExtraStats();
   if(rush){
     rush.strikes++;rushRender();
     if(rush.strikes>=3){rushEnd(t("Three misses."));return;}
@@ -4194,14 +4356,47 @@ setMode=function(m,opts){
    lance le mode, plutot que de dupliquer la logique dans l'onglet Defis. */
 /* Le sprint se joue desormais sans quitter Defis : on y deplace le bloc de
    l'exercice, l'echiquier etant deja partage entre les onglets. */
+/* Pendant un sprint, le bouton devient un abandon, avec les memes codes que
+   "Abandonner la partie" : couleur d'alerte et confirmation en deux temps,
+   pour ne pas perdre trois minutes sur un clic malheureux. */
+let rushArmTimer=null;
+function desarmerRush(){
+  const b=$("btnGoRush"); if(!b)return;
+  b.classList.remove("armed");
+  b.textContent=(typeof rush!=="undefined"&&rush)?t("Give up the Sprint"):t("Start Chang Sprint");
+  b.classList.toggle("danger",!!(typeof rush!=="undefined"&&rush));
+  b.classList.toggle("primary",!(typeof rush!=="undefined"&&rush));
+  if(rushArmTimer){clearTimeout(rushArmTimer);rushArmTimer=null;}
+}
 if($("btnGoRush"))$("btnGoRush").onclick=()=>{
+  /* sprint en cours : le bouton abandonne, apres confirmation */
+  if(typeof rush!=="undefined"&&rush){
+    const b=$("btnGoRush");
+    if(!b.classList.contains("armed")){
+      b.classList.add("armed");
+      b.textContent=t("Confirm give up");
+      rushArmTimer=setTimeout(desarmerRush,5000);
+      return;
+    }
+    desarmerRush();
+    rushEnd(t("Given up."));
+    return;
+  }
+  /* Le bouton descend sous l'echiquier pendant le sprint : place au-dessus,
+     il sortait de l'ecran des qu'on regardait le plateau, et on ne trouvait
+     plus comment abandonner. */
+  /* Symetrique : on arrete les coordonnees avant de lancer un sprint. */
+  if(typeof coord!=="undefined"&&coord&&typeof stopCoord==="function")stopCoord();
   const p=$("exPanel"), slot=$("rushSlot");
   if(p&&slot&&!slot.contains(p))slot.appendChild(p);
   if(typeof goTop==="function")goTop();
   /* Trois minutes chronometrees et une erreur suffit a tout arreter : on
      annonce la regle et on attend le feu vert, comme pour une partie. */
   showReadyFor(t("Three minutes · three misses and it stops"),
-    ()=>{if(typeof startRush==="function")startRush();},
+    ()=>{
+      if(typeof startRush==="function")startRush();
+      if(typeof desarmerRush==="function")desarmerRush();   /* passe en abandon */
+    },
     t("Start"));
 };
 /* Remise en place a la fin du sprint. */
@@ -4293,6 +4488,11 @@ function fmtNum(x){
 let readyAction=null;
 function showReadyFor(sousTitre,action,libelle){
   const b=$("readyBanner"); if(!b)return;
+  /* On enchaine sur une nouvelle epreuve : le bandeau de fin de la
+     precedente n'a plus lieu d'etre, et deux panneaux superposes seraient
+     illisibles. */
+  const fin=$("resultBanner");
+  if(fin&&!fin.classList.contains("hide")){fin.className="result hide";finAction=null;}
   readyAction=action||null;
   $("readyTitle").textContent=t("Ready when you are");
   $("readySub").textContent=sousTitre;
@@ -4650,6 +4850,11 @@ $("btnEgNew").onclick=()=>{if(coord)stopCoord();startEndgame(eg?eg.scen.id:"kq")
   const st=$("egStatus");st.className="status";st.textContent=t("New position. White to move.");};
 $("btnCoord").onclick=()=>{
   if(coord){stopCoord();return;}
+  /* Une seule epreuve a la fois : sans cela, un sprint en cours continuait de
+     tourner en arriere-plan, son chronometre decomptait et son bandeau restait
+     affiche au-dessus de celui des coordonnees. */
+  if(typeof rush!=="undefined"&&rush&&typeof rushEnd==="function")
+    rushEnd(t("Stopped."));
   /* Trente secondes seulement : perdre les deux premieres a comprendre ou on
      est, ca compte. Meme overlay que les parties chronometrees. */
   if(typeof showReadyFor==="function")
@@ -4929,7 +5134,11 @@ $("tab-train").onclick=()=>{setMode("train");goTop();};
 const baseOnSquare=onSquare;
 onSquare=function(e){
   if(suppressClick)return;
-  if(mode==="train"){
+  /* Un Chang Sprint lance depuis Defis tourne avec mode==="train" : sans ce
+     garde, les clics partaient vers handleTrainClick, qui gere les finales et
+     les coordonnees, et l'exercice ne passait jamais au suivant. Le sprint
+     prime donc sur l'onglet courant. */
+  if(mode==="train"&&!(typeof rush!=="undefined"&&rush)){
     const i=Array.prototype.indexOf.call(boardEl.children,e.currentTarget);
     handleTrainClick(idxToSq(i));
     return;

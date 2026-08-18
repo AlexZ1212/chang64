@@ -3,7 +3,7 @@
    ========================================================== */
 const FR={
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
 "Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
  "Du bullet au jeu par correspondance contre un moteur intégré, __NP__ exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",

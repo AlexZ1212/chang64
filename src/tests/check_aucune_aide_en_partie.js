@@ -8,11 +8,12 @@
    revenir en arriere si elle ne plait pas. Retire, y compris en cadence
    libre. C'est en se trompant qu'on apprend.
 
-   "Voir le meilleur coup" et Stockfish appartiennent a la revue
-   d'apres-partie. Ils etaient deja sans effet pendant une partie, mais
-   apparaissaient parmi les commandes de jeu, ce qui laissait croire qu'ils
-   pouvaient aider a jouer. Ils sont desormais dans le panneau Revue et
-   explicitement grises tant que la partie n'est pas finie.
+   "Voir le meilleur coup" et "Analyser la partie" (qui utilise Stockfish
+   depuis la fusion des deux moteurs) appartiennent a la revue d'apres-partie.
+   Ils etaient deja sans effet pendant une partie, mais apparaissaient parmi
+   les commandes de jeu, ce qui laissait croire qu'ils pouvaient aider a
+   jouer. Ils sont desormais dans le panneau Revue et explicitement grises
+   tant que la partie n'est pas finie.
 */
 const fs = require("fs");
 const path = require("path");
@@ -57,7 +58,7 @@ setTimeout(async () => {
   if (rb && !rb.classList.contains("hide")) { d.getElementById("readyStart").click(); await wait(400); }
   cells()[52].click(); await wait(120); cells()[36].click(); await wait(1700);
   T("Voir le meilleur coup grise", d.getElementById("btnHint").disabled);
-  T("Stockfish grise", d.getElementById("btnStockfish").disabled);
+  T("Analyser la partie grise", d.getElementById("btnAnalyse").disabled);
   T("Abandonner reste le seul actif", !d.getElementById("btnResign").disabled);
   T("Nouvelle partie grisee", d.getElementById("btnNew").disabled);
 
@@ -65,7 +66,7 @@ setTimeout(async () => {
   d.getElementById("btnResign").click(); await wait(250);
   d.getElementById("btnResign").click(); await wait(700);
   T("Voir le meilleur coup actif", !d.getElementById("btnHint").disabled);
-  T("Stockfish actif", !d.getElementById("btnStockfish").disabled);
+  T("Analyser la partie actif", !d.getElementById("btnAnalyse").disabled);
 
   console.log("\n--- En francais ---");
   [...d.getElementById("langSwitch").children].find(b => b.dataset.lang === "fr").click();

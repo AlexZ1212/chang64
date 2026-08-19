@@ -5,6 +5,16 @@ const SITE = require("path").join(__dirname, "..", "site");
 const BASE = process.env.CHANG64_BASELINE || "";   /* site deja en ligne, facultatif */
 const fs=require("fs");
 const S=SITE, L=BASE;
+if(!L){
+  /* Pas de convention "IGNORE" dans ce harnais (juste OK/FAIL) : on ne fait
+     donc pas semblant d'avoir verifie quoi que ce soit en affichant un faux
+     "0 OK, 0 FAIL" qui se fondrait dans les verifications reussies. On sort
+     proprement, sans pile d'appels, mais run_tests.js continue de compter ce
+     fichier comme "sans resultat" puisqu'il n'y en a reellement aucun. */
+  console.log("\n--- Aucune URL indexee ne tombe en 404 ---");
+  console.log("  IGNORE  CHANG64_BASELINE n'est pas defini (chemin vers une copie du site deja en ligne, avec son sitemap.xml) : verification sautee, aucun resultat a comparer.");
+  process.exit(0);
+}
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 

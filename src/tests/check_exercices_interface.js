@@ -5,6 +5,7 @@ const SITE = require("path").join(__dirname, "..", "site");
 const BASE = process.env.CHANG64_BASELINE || "";   /* site deja en ligne, facultatif */
 const fs=require("fs"),jd=require("jsdom");
 const html=fs.readFileSync(""+SITE+"/index.html","utf8");
+const NPUZ=JSON.parse(fs.readFileSync(require("path").join(__dirname,"..","puzzles.json"),"utf8")).length;
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/",virtualConsole:new jd.VirtualConsole()});
@@ -12,7 +13,7 @@ const w=dom.window,d=w.document;
 setTimeout(async()=>{
   console.log("\n--- La banque est bien chargee ---");
   const hc=d.getElementById("hCount");
-  T("compteur d'exercices en page d'accueil", hc && +hc.textContent===777, hc&&hc.textContent);
+  T("compteur d'exercices en page d'accueil", hc && +hc.textContent===NPUZ, hc&&hc.textContent);
 
   console.log("\n--- Le filtre par theme propose les nouveaux motifs ---");
   d.getElementById("tab-train").click();
@@ -83,7 +84,9 @@ setTimeout(async()=>{
   T("le bloc de l'exercice y est deplace", ou()==="train", ou());
   T("la barre de score est visible", !d.getElementById("rushBar").classList.contains("hide"));
   T("l'echiquier est charge", d.querySelectorAll(".sq .piece").length>1);
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,600));
   T("le bloc revient a sa place a l'arret", ou()==="puzzles", ou());
   /* second cas : on quitte Defis pendant un sprint */
@@ -115,7 +118,9 @@ setTimeout(async()=>{
   d.getElementById("readyStart").click();
   await new Promise(r=>setTimeout(r,500));
   T("il demarre au feu vert", !!w.eval("rush"));
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,500));
 
   d.getElementById("tab-train").click();
@@ -133,7 +138,7 @@ setTimeout(async()=>{
      pas de sens dans une epreuve chronometree : "Exercice suivant" sortirait
      de la file du sprint et chargerait un exercice du mode normal, l'indice
      serait une aide, et la progression par niveau ne s'applique pas puisque
-     le sprint enchaine les cinq niveaux. Il a ses propres compteurs en haut. */
+     le sprint enchaine tous les niveaux. Il a ses propres compteurs en haut. */
   d.getElementById("tab-train").click();
   await new Promise(r=>setTimeout(r,400));
   d.getElementById("btnGoRush").click();
@@ -164,7 +169,9 @@ setTimeout(async()=>{
   T("le statut ne repete plus la regle",
     !/Rush|trois échecs|three misses/i.test(d.getElementById("exStatus").textContent),
     d.getElementById("exStatus").textContent.slice(0,40));
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,500));
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,600));
@@ -220,7 +227,9 @@ setTimeout(async()=>{
       w.eval("game.history.length")!==avant || Number(d.getElementById("rushScore").textContent)>=2);
     T("et il est toujours en cours", !!w.eval("rush"));
   }
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,500));
   {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
   await new Promise(r=>setTimeout(r,300));
@@ -261,6 +270,14 @@ setTimeout(async()=>{
     /* variete : la file alterne les themes au lieu de grouper par niveau */
     const themes=w.eval("new Set(rush.queue.slice(0,20).map(function(p){return p.theme;})).size");
     T("au moins 5 themes dans les 20 premiers", themes>=5, themes+" themes");
+
+    /* Le statut annonce "Trouve le coup gagnant" (singulier) : un mat en
+       deux coups demande de jouer, attendre la reponse du moteur, puis en
+       trouver un second. Un joueur se retrouvait donc a jouer plusieurs
+       coups sur un exercice alors qu'on lui en avait promis un seul. La
+       file du sprint ne doit donc plus contenir aucun mat a plus d'un coup. */
+    const multiCoups=w.eval('rush.queue.filter(function(p){return p.type==="mate"&&p.n>1;}).length');
+    T("aucun mat a plusieurs coups dans la file du sprint", multiCoups===0, multiCoups+" sur "+w.eval("rush.queue.length"));
 
     /* resoudre trois exercices ne doit pas toucher la progression */
     const cells=[...d.querySelectorAll(".sq")];
@@ -314,7 +331,9 @@ setTimeout(async()=>{
   T("leur bandeau disparait", d.getElementById("coordHud").classList.contains("hide"));
   d.getElementById("readyStart").click();
   await new Promise(r=>setTimeout(r,500));
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,500));
   {const b=d.getElementById("resultBanner"); if(!b.classList.contains("hide"))d.getElementById("resultClose").click();}
   await new Promise(r=>setTimeout(r,300));
@@ -330,7 +349,9 @@ setTimeout(async()=>{
   await new Promise(r=>setTimeout(r,400));
   d.getElementById("readyStart").click();
   await new Promise(r=>setTimeout(r,500));
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,600));
   const ban=d.getElementById("resultBanner");
   T("bandeau affiche a la fin du sprint", !ban.classList.contains("hide"));
@@ -342,7 +363,9 @@ setTimeout(async()=>{
   await new Promise(r=>setTimeout(r,700));
   T("'Rejouer' relance le sprint", !!w.eval("rush"));
   T("et reste dans Defis", !d.getElementById("pane-train").classList.contains("hide"));
-  d.getElementById("btnRush").click();
+  d.getElementById("btnGoRush").click();
+  await new Promise(r=>setTimeout(r,300));
+  d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,600));
   d.getElementById("resultClose").click();
   await new Promise(r=>setTimeout(r,300));

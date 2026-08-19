@@ -48,13 +48,17 @@ setTimeout(async()=>{
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,400));
   const of_=d.getElementById("lvlOf");
-  T("Niveau 1 sur 5, plus 'of'", of_ && of_.textContent==="sur", of_&&of_.textContent);
+  T("Niveau 1 sur X, plus 'of'", of_ && of_.textContent==="sur", of_&&of_.textContent);
+  /* Dix paliers desormais (voir LEVELS dans ui.js) : le nombre affiche doit
+     suivre, pas rester fige a l'ancien plafond de cinq. */
+  const max_=d.getElementById("lvlMax");
+  T("le plafond affiche est bien 10", max_ && max_.textContent==="10", max_&&max_.textContent);
   const lab=[...d.querySelectorAll("#pane-puzzles .stat span")].map(s=>s.textContent);
   T("Record Sprint remplace Record Rush", lab.includes("Record Sprint")&&!lab.includes("Record Rush"), lab.join(", "));
 
   console.log("\n--- Rien n'a disparu ---");
   for(const id of ["exTheme","exQuest","exStatus","rushBar","ladder","lvlNum","lvlName",
-                   "stSolved","stStreak","stBest","stRating","stDays","stRush","themeFilter","btnRush"])
+                   "stSolved","stStreak","stBest","stRating","stDays","stRush","themeFilter"])
     T(id+" present", !!d.getElementById(id));
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

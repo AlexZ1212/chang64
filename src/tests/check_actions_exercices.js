@@ -30,11 +30,10 @@ setTimeout(async()=>{
   console.log("\n--- Les reglages occasionnels restent en bas ---");
   T("filtre par theme apres les actions", pos("themeFilter")>pos("btnNext"));
   T("Exercice du jour apres", pos("btnDaily")>pos("btnNext"));
-  T("Chang Sprint apres", pos("btnRush")>pos("btnNext"));
   T("Reinitialiser tout en bas", pos("btnReset")>pos("themeFilter"));
 
   console.log("\n--- Aucun doublon, les boutons fonctionnent ---");
-  for(const id of ["btnNext","btnHintEx","btnDaily","btnRush","btnRetry","btnReset"])
+  for(const id of ["btnNext","btnHintEx","btnDaily","btnRetry","btnReset"])
     T(id+" unique dans le document", d.querySelectorAll("#"+id).length===1,
        d.querySelectorAll("#"+id).length+" occurrences");
 

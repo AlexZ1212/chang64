@@ -157,7 +157,14 @@ const H = w => {
   T("day streak started", a.$("stDays").textContent === "1", a.$("stDays").textContent);
 
   console.log("\nPUZZLE RUSH");
-  a.click(a.$("btnRush")); await wait(600);
+  /* Le Sprint ne demarre plus que depuis Defis : btnGoRush, puis l'overlay
+     de preparation attend le feu vert avant de vraiment lancer le chrono. */
+  a.click(a.$("tab-train")); await wait(400);
+  a.click(a.$("btnGoRush")); await wait(400);
+  {
+    const rb = a.$("readyBanner");
+    if (rb && !rb.className.includes("hide")) { a.click(a.$("readyStart")); await wait(400); }
+  }
   T("rush bar visible", !a.$("rushBar").className.includes("hide"));
   T("timer running", /^[0-2]:\d\d$/.test(a.$("rushTime").textContent), a.$("rushTime").textContent);
   T("three strikes shown", a.$("rushStrikes").textContent === "✗✗✗", a.$("rushStrikes").textContent);
@@ -167,25 +174,26 @@ const H = w => {
     await wait(900);
     T("rush score increments", a.$("rushScore").textContent === "1", a.$("rushScore").textContent);
   }
-  a.click(a.$("btnRush")); await wait(400);
-  T("rush stops cleanly", a.$("rushBar").className.includes("hide") && a.$("btnRush").textContent === "Chang Sprint");
+  /* Abandon en deux temps, comme "Abandonner la partie" : premier clic
+     arme, second confirme. */
+  a.click(a.$("btnGoRush")); await wait(300);
+  a.click(a.$("btnGoRush")); await wait(600);
+  T("rush stops cleanly", a.$("rushBar").className.includes("hide") && a.$("btnGoRush").textContent === "Start Chang Sprint");
   T("rush best saved", +a.$("stRush").textContent >= 1, a.$("stRush").textContent);
+  {const b = a.$("resultBanner"); if (b && !b.className.includes("hide")) { a.click(a.$("resultClose")); await wait(300); }}
 
   console.log("\nWATCH");
   a.click(a.$("tab-watch")); await wait(400);
   T("watch pane shown", !a.$("pane-watch").className.includes("hide"));
   T("board hidden", a.$("appLayout").className.includes("hide"));
-  T("three channels", a.$("channels").children.length === 3, Array.from(a.$("channels").children).map(c => c.querySelector("h3").textContent).join(", "));
-  T("nothing loaded before click", a.$("ytPlayer").className.includes("hide"));
-  a.click(a.$("channels").children[0].querySelectorAll("button")[1]);
-  await wait(300);
-  const iframe = a.$("ytPlayer").querySelector("iframe");
-  T("player appears after click", !!iframe);
-  T("uses nocookie domain", iframe && /youtube-nocookie\.com/.test(iframe.src), iframe ? iframe.src : "");
-  T("uploads playlist id correct", iframe && iframe.src.includes("list=UUQHX6ViZmPsWiYSFAyS0a3Q"), iframe ? iframe.src.split("list=")[1] : "");
-  a.click(a.$("channels").children[1].querySelectorAll("button")[0]);
-  await wait(300);
-  T("live embed uses channel id", a.$("ytPlayer").querySelector("iframe").src.includes("live_stream?channel=UCweCc7bSMX5J4jEH7HFImng"));
+  T("nine channels", a.$("channels").children.length === 9, Array.from(a.$("channels").children).map(c => c.querySelector("h3").textContent).join(", "));
+  T("each card has an auto-updating embed", [...a.$("channels").children].every(c => {
+    const f = c.querySelector("iframe");
+    return f && /youtube-nocookie\.com\/embed\/videoseries\?list=UU/.test(f.src);
+  }));
+  T("one button per channel card", a.$("channels").children[0].querySelectorAll("button").length === 1);
+  a.click(a.$("channels").children[0].querySelectorAll("button")[0]);
+  await wait(200);
 
   console.log("\nLEGAL");
   a.click(a.$("footLegal")); await wait(300);

@@ -372,33 +372,43 @@ boardEl.addEventListener("pointercancel",()=>{
 const SF_PATH="engine/stockfish-18-lite-single.js";
 let sf={worker:null,ready:false,busy:false};
 function sfStatus(msg){const el=$("sfStatus");if(el)el.textContent=msg;}
+/* Charge Stockfish si besoin et renvoie une promesse resolue a true (pret)
+   ou false (echec, on continuera avec le moteur integre). Un seul point
+   d'entree desormais : "Analyser la partie" l'appelle lui-meme au premier
+   clic, il n'y a plus de bouton "Activer Stockfish" separe a cote. Le
+   telechargement ne demarre donc qu'une fois, meme si l'analyse est lancee
+   plusieurs fois de suite pendant qu'il est en cours. */
+let sfLoading=null;
 function sfEnable(){
-  if(sf.ready){sfStatus(t("Stockfish is already running."));return;}
-  const btn=$("btnStockfish");btn.disabled=true;btn.textContent=t("Loading…");
+  if(sf.ready)return Promise.resolve(true);
+  if(sfLoading)return sfLoading;
   sfStatus(t("Fetching the engine, this can take a moment on a first visit."));
-  let settled=false;
-  const fail=why=>{
-    if(settled)return;settled=true;
-    btn.disabled=false;btn.textContent=t("Stockfish for review");
-    sf.worker=null;sf.ready=false;
-    sfStatus(t("Stockfish could not start ({why}). The built-in engine stays in use.",{why:t(why)}));
-  };
-  try{
-    const w=new Worker(SF_PATH);
-    const timer=setTimeout(()=>fail("timed out"),25000);
-    w.onerror=()=>{clearTimeout(timer);fail("file not found");};
-    w.onmessage=ev=>{
-      const line=typeof ev.data==="string"?ev.data:(ev.data&&ev.data.data)||"";
-      if(/uciok/.test(line)){w.postMessage("isready");}
-      else if(/readyok/.test(line)&&!settled){
-        settled=true;clearTimeout(timer);
-        sf.worker=w;sf.ready=true;
-        btn.disabled=false;btn.textContent=t("Stockfish enabled");
-        sfStatus(t("Stockfish is ready. Game review will now use it instead of the built-in engine."));
-      }
+  sfLoading=new Promise(resolve=>{
+    let settled=false;
+    const fail=why=>{
+      if(settled)return;settled=true;sfLoading=null;
+      sf.worker=null;sf.ready=false;
+      sfStatus(t("Stockfish could not start ({why}); this review uses the built-in engine instead.",{why:t(why)}));
+      resolve(false);
     };
-    w.postMessage("uci");
-  }catch(e){fail(e.message||"blocked");}
+    try{
+      const w=new Worker(SF_PATH);
+      const timer=setTimeout(()=>fail("timed out"),25000);
+      w.onerror=()=>{clearTimeout(timer);fail("file not found");};
+      w.onmessage=ev=>{
+        const line=typeof ev.data==="string"?ev.data:(ev.data&&ev.data.data)||"";
+        if(/uciok/.test(line)){w.postMessage("isready");}
+        else if(/readyok/.test(line)&&!settled){
+          settled=true;clearTimeout(timer);sfLoading=null;
+          sf.worker=w;sf.ready=true;
+          sfStatus(t("Stockfish is ready."));
+          resolve(true);
+        }
+      };
+      w.postMessage("uci");
+    }catch(e){fail(e.message||"blocked");}
+  });
+  return sfLoading;
 }
 function sfEvalFen(fen,depth){
   return new Promise(resolve=>{
@@ -440,19 +450,38 @@ async function analyseWithStockfish(){
     bar.firstElementChild.style.width=(100*(i+1)/gameUci.length).toFixed(0)+"%";
   }
   if(!plies.length){btn.disabled=false;btn.textContent=t("Analyse this game");bar.classList.add("hide");
-    sfStatus(t("Stockfish stopped responding, falling back to the built-in engine."));sf.ready=false;analyseGame();return;}
+    /* baseAnalyseGame(), pas analyseGame() : sf.ready=false ferait sinon
+       relancer un telechargement de Stockfish au lieu du repli immediat sur
+       le moteur integre qu'annonce le message. */
+    sfStatus(t("Stockfish stopped responding, falling back to the built-in engine."));sf.ready=false;baseAnalyseGame();return;}
   finishAnalysis(plies);
   $("analysisNote").textContent=$("analysisNote").textContent.replace(
     t("Accuracy here is a rough guide from a shallow search, not a rating."),
     t("Analysed with Stockfish at depth 12."));
 }
+/* Un seul bouton, "Analyser la partie" : il utilise Stockfish s'il est deja
+   pret, sinon il le telecharge d'abord (silencieusement, avec un libelle de
+   progression), et se rabat sur le moteur integre si le telechargement
+   echoue. Avant la fusion, il fallait cliquer "Activer Stockfish" puis
+   "Analyser la partie" pour obtenir la meilleure analyse : deux moteurs,
+   deux boutons, pour un seul geste ("analyser ma partie"). */
 const baseAnalyseGame=analyseGame;
-analyseGame=function(){
+analyseGame=async function(){
+  if(mode==="play"&&!isReviewGame&&!gameFinished()&&!analysis)return;
+  if(!gameUci.length){$("analysisNote").textContent=t("Play a few moves first.");$("analysisOut").classList.remove("hide");return;}
+  if(typeof focusBoard==="function")focusBoard();
   if(sf.ready){analyseWithStockfish();return;}
-  baseAnalyseGame();
+  const btn=$("btnAnalyse");
+  btn.disabled=true;btn.textContent=t("Downloading the engine…");
+  const ok=await sfEnable();
+  if(!ok){
+    btn.disabled=false;btn.textContent=t("Analyse this game");
+    baseAnalyseGame();
+    return;
+  }
+  analyseWithStockfish();
 };
 $("btnAnalyse").onclick=()=>analyseGame();
-$("btnStockfish").onclick=sfEnable;
 
 /* ==========================================================
    19. INSTALL AS AN APP

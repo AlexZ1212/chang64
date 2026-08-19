@@ -110,5 +110,22 @@ console.log("\n--- Le menu signale la section sur les pages de detail ---");
   T("sur l'index, c'est un simple texte", /<span aria-current="page">/.test(navIdx));
 }
 
+console.log("\n--- Le menu ne bouge plus quand la police arrive ---");
+/* display=swap peint d'abord avec la police de secours (system-ui) puis la
+   remplace par Archivo des qu'elle arrive. Sur ces pages sans etat persistant,
+   chaque clic recharge tout le document : ce remplacement rejouait donc a
+   chaque navigation. Sur le menu du haut, une rangee de courtes pastilles
+   cote a cote, l'ecart de largeur entre les deux polices (mesure avec la
+   vraie police Archivo : jusqu'a 40 px sur les six entrees) se voyait comme
+   un reflow du menu, comme si la page revenait a son etat initial.
+   display=optional laisse un tres court delai (la police arrive bien avant
+   depuis le cache sur une navigation suivante) puis, s'il n'est pas tenu,
+   garde la police de secours pour toute la vue sans jamais la remplacer plus
+   tard : plus de bascule visible apres le premier affichage. */
+T("Google Fonts en display=optional sur les pages claires",
+  /fonts\.googleapis\.com\/css2\?[^"]*display=optional/.test(h), h.match(/fonts\.googleapis[^"]*/)?.[0]);
+T("plus de display=swap sur ces pages (reflow du menu a chaque clic)",
+  !/fonts\.googleapis\.com\/css2\?[^"]*display=swap/.test(h));
+
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
 process.exit(ko?1:0);

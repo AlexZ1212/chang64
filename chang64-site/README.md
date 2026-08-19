@@ -14,7 +14,7 @@ the board. The elephant was the piece that, over centuries, became the modern bi
 
 - A chess engine written from scratch, validated against standard perft tests
 - Four bot difficulty levels with bullet, blitz, rapid, classical and daily time controls
-- 777 engine-verified tactics puzzles, with adaptive difficulty, theme filter and Chang Sprint
+- 1000 engine-verified tactics puzzles, with adaptive difficulty, theme filter and Chang Sprint
 - Game review with an evaluation graph and a verdict on every move
 - PGN import and export, opening detection, game history stored in the browser
 - Endgame trainer and coordinate drill

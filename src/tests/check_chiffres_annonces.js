@@ -6,7 +6,9 @@
    d'accueil, dans la meta description, dans l'image de partage, dans les
    donnees structurees, dans les tuiles de navigation, et cela dans les deux
    langues. Ces chiffres etaient ecrits en dur et sont restes bloques sur 489
-   alors que la banque en comptait 777.
+   alors que la banque en comptait deja 777. La banque est depuis passee a
+   1000 exercices sur dix niveaux ; le meme risque existe a chaque
+   enrichissement, d'ou cette suite plutot qu'une correction ponctuelle.
 
    Un chiffre faux sur la page d'accueil est visible par tous les visiteurs et
    par Google. Cette suite compare chaque nombre affiche aux donnees reelles.
@@ -31,8 +33,11 @@ console.log("  exercices : " + NP + "   familles : " + NF + "   lignes : " + NL)
 const idx = fs.readFileSync(SITE + "/index.html", "utf8");
 
 console.log("\n--- Aucun chiffre perime ne subsiste ---");
-/* 489 etait le nombre d'exercices avant enrichissement : il ne doit plus
-   apparaitre nulle part comme quantite annoncee. */
+/* 489 etait le nombre d'exercices avant le premier enrichissement (a 777) ;
+   777 etait a son tour le compte avant celui-ci (a 1000, sur dix niveaux).
+   Ni l'un ni l'autre ne doit plus apparaitre nulle part comme quantite
+   annoncee : le bug d'origine (texte fige pendant que la banque grossit) se
+   reproduirait a l'identique avec le nombre precedent. */
 const perimes = [];
 (function walk(p) {
   for (const f of fs.readdirSync(p)) {
@@ -40,11 +45,11 @@ const perimes = [];
     if (fs.statSync(q).isDirectory()) walk(q);
     else if (f.endsWith(".html")) {
       const h = fs.readFileSync(q, "utf8");
-      if (/489 (puzzles|exercices|positions|verified|engine)/.test(h)) perimes.push(q.replace(SITE, ""));
+      if (/(489|777) (puzzles|exercices|positions|verified|engine)/.test(h)) perimes.push(q.replace(SITE, ""));
     }
   }
 })(SITE);
-T("aucune page n'annonce encore 489", perimes.length === 0, perimes.slice(0, 5).join(", "));
+T("aucune page n'annonce encore 489 ou 777", perimes.length === 0, perimes.slice(0, 5).join(", "));
 
 console.log("\n--- Aucun jeton de substitution oublie ---");
 const jetons = [];
@@ -53,7 +58,7 @@ const jetons = [];
     const q = path.join(p, f);
     if (fs.statSync(q).isDirectory()) walk(q);
     else if (/\.(html|json|webmanifest)$/.test(f)) {
-      if (/__NP__|__NF__|__NL__|__PUZZLES__|__OPENINGS__|__I18N__/.test(fs.readFileSync(q, "utf8")))
+      if (/__NP__|__NF__|__NL__|__PUZZLES__|__OPENINGS__|__I18N__|__BRANDMARK__/.test(fs.readFileSync(q, "utf8")))
         jetons.push(q.replace(SITE, ""));
     }
   }
@@ -79,6 +84,20 @@ for (const [p, lbl] of [["/puzzles/index.html", "exercices EN"], ["/fr/exercices
   T(lbl + " : " + p, String(nb) === String(NP), "annonce " + nb + ", reel " + NP);
 }
 
+console.log("\n--- Meta description sous 160 caracteres (le nombre grossit avec la banque) ---");
+/* check_seo_entete.js ne verifie cette limite que sur la page d'accueil.
+   Ces deux pages d'index affichent aussi le compte d'exercices dans leur
+   description : passer de 777 a 1000, ou de "cinq" a "dix" niveaux, ajoute
+   des caracteres et peut faire deborder un texte deja proche du seuil (c'est
+   arrive : la version francaise est passee de 174 a 123 caracteres a cette
+   occasion). On le verifie ici plutot que de decouvrir le depassement dans
+   les resultats de recherche. */
+for (const [p, lbl] of [["/index.html", "accueil"], ["/puzzles/index.html", "exercices EN"], ["/fr/exercices/index.html", "exercices FR"]]) {
+  const h = fs.readFileSync(SITE + p, "utf8");
+  const d = (h.match(/name="description" content="([^"]*)"/) || [])[1] || "";
+  T(lbl + " : description sous 160 caracteres (" + d.length + ")", d.length > 0 && d.length <= 160, d);
+}
+
 console.log("\n--- Ouvertures : familles et lignes ---");
 T("nombre de familles", new RegExp(NF + ' (families|familles)').test(idx),
   (idx.match(/(\d+) (?:families|familles)/) || [])[1]);
@@ -100,7 +119,7 @@ for (const f of ["template.html", "i18n.js", "ui2.js", "build_site.js"]) {
     .replace(/\/\*[\s\S]*?\*\//g, "")
     .replace(/<!--[\s\S]*?-->/g, "");
   T(f + " sans quantite ecrite en dur",
-    !/\b(489|1758)\s*(puzzles|exercices|positions|verified|named lines|variantes)/.test(s) &&
+    !/\b(489|777|1758)\s*(puzzles|exercices|positions|verified|named lines|variantes)/.test(s) &&
     !/\b141 (families|familles)/.test(s));
 }
 
@@ -123,7 +142,7 @@ const empruntes = [];
 })(SITE);
 T("aucun nom de fonctionnalite emprunte", empruntes.length === 0, empruntes.slice(0, 5).join(", "));
 T("Chang Sprint present dans l'interface", /Chang Sprint/.test(idx));
-T("le bouton porte le nouveau nom", /id="btnRush">Chang Sprint</.test(idx));
+T("le bouton porte le nouveau nom", /id="btnGoRush">Start Chang Sprint</.test(idx));
 T("traduction francaise en place", /"Chang Sprint":"Chang Sprint"/.test(idx));
 T("donnees structurees a jour", /"Chang Sprint"/.test(idx.match(/featureList[^\]]*\]/)?.[0] || ""));
 T("cle de progression inchangee (rushBest)", /rushBest/.test(idx),

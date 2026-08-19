@@ -17,16 +17,16 @@ lance depuis n'importe ou.
 - `og_render.py` — convertit les 147 images de partage de SVG en PNG 1200x630, puis supprime les SVG. Appelé automatiquement par build_site.js. Sans lui, les balises og:image pointent vers des PNG inexistants et les vignettes de partage restent vides.
 - `licence/` — COPYING.CONTENT et README.md, copiés à la racine du site à chaque construction.
 - `ds/` — pieces.json et mark-on-dark.svg, issus du design system (dossier design-system/ du dépôt).
-- `content.js` — génère les 1066 pages de contenu : règles (8), lexique (20), finales (5), pièges (6), exercices (489), page profil. Bilingue.
-- `template.html` — coquille HTML + CSS. Contient les marqueurs /*__I18N__*/ /*__ENGINE__*/ /*__PIECES__*/ /*__UI__*/ /*__UI2__*/ /*__UI3__*/ remplacés à la construction.
+- `content.js` — génère les 2088 pages de contenu : règles (8), lexique (20), finales (5), pièges (6), exercices (1000), page profil. Bilingue.
+- `template.html` — coquille HTML + CSS. Contient les marqueurs /*__I18N__*/ /*__ENGINE__*/ /*__PIECES__*/ /*__UI__*/ /*__UI2__*/ /*__UI3__*/ /*__BRANDMARK__*/ remplacés à la construction.
 - `engine.js` — moteur d'échecs (module Node, utilisé par les tests et la génération).
 - `engine_browser.js` — même moteur, version navigateur.
-- `pieces_browser.js` / `pieces.js` — SVG des pièces.
+- `pieces_browser.js` — SVG des pièces.
 - `ui.js` — partie contre le bot, exercices, entre amis, code de reprise, horloges.
-- `ui2.js` — ouvertures, navigation dans la partie, analyse, PGN, Puzzle Rush, classement, série, YouTube, mentions légales, bannière de résultat.
+- `ui2.js` — ouvertures, navigation dans la partie, analyse, PGN, Chang Sprint, classement, série, YouTube, mentions légales, bannière de résultat.
 - `ui3.js` — finales, coordonnées, glisser-déposer, Stockfish, installation PWA, bascule de langue, préférences (thèmes d'échiquier, annonces lecteur d'écran, navigation clavier).
-- `i18n.js` — moteur de traduction + dictionnaire français (~280 entrées).
-- `puzzles.json` — 489 exercices vérifiés. `themes.json` — traduction des thèmes. `openings.json` — 1758 lignes d'ouvertures (source : lichess-org/chess-openings).
+- `i18n.js` — moteur de traduction + dictionnaire français (~400 entrées).
+- `puzzles.json` — 1000 exercices vérifiés, dix niveaux. `themes.json` — traduction des thèmes. `openings.json` — 1758 lignes d'ouvertures (source : lichess-org/chess-openings).
 
 ## Tests
     node uitest6.js   # partie, exercices, amis
@@ -140,7 +140,7 @@ Termes consacrés, ne pas revenir en arrière :
   d'accueil qui parle de jeu par correspondance
 - Le mode chronométré s'appelle **Chang Sprint** (voir plus bas)
 
-Le tutoiement est de rigueur dans les 363 chaînes. Pas de tiret cadratin.
+Le tutoiement est de rigueur dans toutes les chaînes traduites. Pas de tiret cadratin.
 Espace avant la ponctuation double. Apostrophes droites, uniformément.
 
 `tests/check_traductions.js` bascule l'interface en français, parcourt tous
@@ -165,9 +165,11 @@ banque en comptait 777.
 réelles et refuse tout jeton non substitué.
 
 ## Exercices
-777 exercices. Les 288 derniers ont été produits par `gen_puzzles.js` puis
-vérifiés indépendamment à profondeur supérieure : 12 des 300 générés ont été
-écartés (4 %), pour solution non unique ou coup qui n'était pas le meilleur.
+1000 exercices, sur dix niveaux. La banque est passée de 489 à 777 puis de
+777 à 1000 par deux campagnes de `gen_puzzles.js`, chacune vérifiée
+indépendamment à profondeur supérieure avant d'être retenue (voir l'en-tête
+du script pour le détail de la première campagne : 12 des 300 générés
+écartés, 4 %, pour solution non unique ou coup qui n'était pas le meilleur).
 
 Le générateur retient une position seulement si un seul coup atteint le
 meilleur score et si l'écart avec le deuxième dépasse 200 centièmes de pion.
@@ -323,7 +325,7 @@ simulent le DOM mais ne calculent pas les dimensions) :
    téléphone (à ne faire que si nécessaire : cela réduit la surface de jeu).
 
 ## Recherche sur les pages d'index
-Les index des ouvertures (141 entrées) et des exercices (777) portent un champ
+Les index des ouvertures (141 entrées) et des exercices (1000) portent un champ
 de filtrage. Il cherche sur le nom dans les deux langues, les coups, le code
 ECO, le thème, le niveau et le numéro, sans tenir compte des accents.
 
@@ -331,7 +333,7 @@ Deux règles à ne pas casser :
 1. Le champ est masqué par défaut et révélé par le script. Sans JavaScript la
    page reste ce qu'elle était : personne ne voit un champ inerte.
 2. Le script n'est émis que sur les pages qui portent `id="grille"`. Émis
-   partout, il ajoutait 3 Mo de code inutile sur 1 929 pages pour 4 qui s'en
+   partout, il ajoutait du code inutile sur 2371 pages pour 4 qui s'en
    servent.
 
 Sur les exercices, groupés par thème, le filtrage masque aussi les sections

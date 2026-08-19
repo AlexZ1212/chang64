@@ -3,12 +3,25 @@
    ========================================================== */
 const PUZZLES = __PUZZLES__;
 
+/* Dix paliers plutot que cinq : avec cinq, on atteignait le sommet en une
+   quinzaine d'exercices reussis (trois de suite pour monter), ce qui donnait
+   une impression de plafond bas. Le nom de chaque palier reste honnete avec
+   ce que la banque contient reellement a ce niveau de difficulte (calculee a
+   la generation, voir gen_puzzles.js et le champ "diff" de puzzles.json) :
+   les niveaux 9 et 10 sont presque exclusivement des mats en deux, les huit
+   premiers melangent surtout des prises et des mats en un de complexite
+   croissante. */
 const LEVELS=[
   {n:1,name:"First mates",hint:"One move is enough."},
   {n:2,name:"Winning moves",hint:"Look for the loose piece."},
   {n:3,name:"Forks and pins",hint:"One piece can attack two at once."},
-  {n:4,name:"Mate in two",hint:"Your first move forces the reply."},
-  {n:5,name:"Combinations",hint:"A sacrifice often opens the door."}
+  {n:4,name:"Double trouble",hint:"Two threats, only one defence."},
+  {n:5,name:"Skewers and pins",hint:"Force the bigger piece to move first."},
+  {n:6,name:"Sharper tactics",hint:"Count every capture before you play."},
+  {n:7,name:"Deeper calculation",hint:"See two moves ahead, not one."},
+  {n:8,name:"Mating patterns",hint:"The back rank is not as safe as it looks."},
+  {n:9,name:"Mate in two",hint:"Your first move forces the reply."},
+  {n:10,name:"Grandmaster combinations",hint:"The quiet move is often the strongest."}
 ];
 
 /* ==========================================================
@@ -236,23 +249,40 @@ function prises(){
   return {w:par.w,b:par.b,solde:val("w")-val("b")};
 }
 /* Rangee compacte : les pieces se chevauchent pour tenir sur une ligne, meme
-   avec une quinzaine de prises. */
+   avec une quinzaine de prises. Le chevauchement ne vaut qu'au sein d'un
+   meme type : trois pions pris se tassent en petit tas, mais le tas de pions
+   ne se melange pas visuellement a celui des fous. La liste est deja triee
+   par type (voir prises() plus haut), donc deux prises voisines du meme
+   type sont forcement consecutives dans la boucle. */
 /* Hauteur d'une piece prise, en pixels. Sert aussi a calculer sa largeur :
    les deux doivent rester coherents avec la regle .taken .tk du gabarit. */
 const TAILLE_PRISE=22;
+/* Chevauchement au sein d'un groupe : assez pour que le tas se voie, pas
+   assez pour masquer la silhouette du dessous (le pion, piece la plus
+   etroite une fois recadree sur sa boite, ne fait que 11px : au-dela on ne
+   distinguerait plus qu'une seule piece). Ecart entre deux groupes : plus
+   large que l'ancien espacement uniforme de 2px, pour que la coupure entre
+   deux types saute aux yeux sans avoir besoin d'un separateur visuel. */
+const CHEVAUCHEMENT_GROUPE=-5,ECART_GROUPE=4;
 function rangeePrises(liste,couleur,solde){
   if(!liste.length&&!solde)return "";
   /* La classe "noire" declenche le contour clair : sans lui, une piece noire
      se confondrait avec le fond sombre de la pendule. */
   const cls="tk"+(couleur==="b"?" noire":"");
   let s='<span class="taken">';
+  let precedent=null;
   for(const t of liste){
     /* Largeur proportionnelle a la boite englobante : le pion reste plus
        etroit que la dame, comme sur l'echiquier, et chaque piece part de son
        propre bord au lieu d'un vide interne different a chaque fois. */
     const bb=(typeof PIECE_BB!=="undefined"&&PIECE_BB[t])||[0,45];
     const larg=(TAILLE_PRISE*(bb[1]-bb[0])/45).toFixed(1);
-    s+='<i class="'+cls+'" style="width:'+larg+'px">'+pieceSVG(t,couleur,true)+"</i>";
+    /* Premiere piece de la rangee : pas de marge, elle part du bord (deja
+       decale par le padding-left de .taken). Les suivantes reprennent le
+       chevauchement ou l'ecart selon qu'elles poursuivent le meme groupe. */
+    const marge=precedent===null?0:(precedent===t?CHEVAUCHEMENT_GROUPE:ECART_GROUPE);
+    s+='<i class="'+cls+'" style="width:'+larg+'px;margin-left:'+marge+'px">'+pieceSVG(t,couleur,true)+"</i>";
+    precedent=t;
   }
   /* Les deux cotes affichent leur solde : celui qui mene en positif, celui
      qui est mene en negatif. Voir qu'on a trois points de retard est aussi
@@ -511,11 +541,12 @@ function refreshGame(){
      Deux raisons distinctes :
      - changer de couleur relancait immediatement une nouvelle partie et
        faisait disparaitre celle en cours sans prevenir ;
-     - un bouton Stockfish cliquable pendant qu'on joue laisse croire qu'il
-       peut servir a trouver le meilleur coup. Il ne le peut pas, la
-       suggestion utilise le moteur integre et reste bloquee tant que la
-       partie n'est pas finie, mais aux echecs le soupcon de triche suffit a
-       poser probleme : mieux vaut lever toute ambiguite. */
+     - un bouton "Analyser la partie" cliquable pendant qu'on joue laisse
+       croire qu'il peut servir a trouver le meilleur coup (Stockfish tourne
+       derriere ce bouton depuis la fusion des deux moteurs). Il ne le peut
+       pas, l'analyse reste bloquee tant que la partie n'est pas finie, mais
+       aux echecs le soupcon de triche suffit a poser probleme : mieux vaut
+       lever toute ambiguite. */
   const enCours=gameStarted&&!over;
   /* En mode aleatoire, le selecteur montre la couleur tiree pendant la
      partie et le mode choisi en dehors : son etat depend donc du deroulement
@@ -528,14 +559,17 @@ function refreshGame(){
      commandes de jeu, ce qui laissait croire qu'il pouvait aider a jouer. Il
      est desormais explicitement grise, comme le reste. */
   geler("btnHint");
-  /* Stockfish : ne pas contrarier son propre etat. Pendant le telechargement
-     il se desactive lui-meme, et on ne doit surtout pas le rallumer. */
+  /* "Analyser la partie" : ne pas contrarier son propre etat. Pendant le
+     telechargement de Stockfish ou le calcul de l'analyse, il se desactive
+     lui-meme (voir ui3.js) et change son libelle ; on ne doit surtout pas le
+     rallumer entre-temps, d'ou le test sur son texte plutot que sur enCours
+     seul. */
   {
-    const sfBtn=$("btnStockfish");
-    if(sfBtn){
-      const enChargement=typeof sf!=="undefined"&&sf&&!sf.ready&&sf.worker;
-      if(enCours)sfBtn.disabled=true;
-      else if(!enChargement)sfBtn.disabled=false;
+    const ba=$("btnAnalyse");
+    if(ba){
+      const enTrain=ba.textContent!==t("Analyse this game");
+      if(enCours)ba.disabled=true;
+      else if(!enTrain)ba.disabled=!(isReviewGame||(typeof gameFinished==="function"&&gameFinished()))&&!analysis;
     }
   }
   for(const seg of ["segColor","segLevel"]){
@@ -803,11 +837,18 @@ function renderThemeFilter(){
     themes.map(th=>'<option value="'+th.replace(/"/g,"&quot;")+'">'+t(th)+" ("+counts[th]+")</option>").join("");
   sel.value=prog.theme||"";
 }
+/* A l'interieur d'un meme niveau, les exercices ne sortaient pas dans un
+   ordre particulier : deux prises faciles pouvaient suivre un mat en deux
+   difficile, ou l'inverse. On les sert desormais du plus facile au plus
+   difficile (champ "diff", calcule une fois a la generation, voir
+   gen_puzzles.js), en ne reprenant jamais un exercice deja vu tant qu'il en
+   reste un plus dur non essaye : la difficulte augmente donc en enchainant,
+   pas seulement en changeant de niveau. */
 function nextPuzzle(){
-  const pool=levelPool(prog.level);
+  const pool=levelPool(prog.level).slice().sort((a,b)=>(a.diff||0)-(b.diff||0));
   const fresh=pool.filter(p=>!prog.seen.includes(p.id));
-  const list=fresh.length?fresh:pool;
-  puzzle=list[Math.floor(Math.random()*list.length)];
+  if(fresh.length){puzzle=fresh[0];}
+  else{const list=pool;puzzle=list[Math.floor(Math.random()*list.length)];}
   puzzle.daily=false;
   loadPuzzle();
 }
@@ -914,7 +955,7 @@ function finishPuzzle(won,msg){
 function registerSolved(){
   prog.solved++;prog.streak++;prog.correctRun++;prog.wrongRun=0;
   if(prog.streak>prog.best)prog.best=prog.streak;
-  if(prog.correctRun>=3&&prog.level<5){
+  if(prog.correctRun>=3&&prog.level<LEVELS.length){
     prog.level++;prog.correctRun=0;
     setTimeout(()=>{
       const st=$("exStatus");st.className="status win";
@@ -938,8 +979,9 @@ function renderProgress(){
      moins trois caracteres alphabetiques et l'ignorait, d'ou un "Niveau 1 of
      5" en francais. On le pose donc a la main. */
   { const o=$("lvlOf"); if(o)o.textContent=t("of"); }
+  { const m=$("lvlMax"); if(m)m.textContent=LEVELS.length; }
   let h="";
-  for(let i=1;i<=5;i++)h+='<i class="'+(i<=prog.level?"on":"")+'"></i>';
+  for(let i=1;i<=LEVELS.length;i++)h+='<i class="'+(i<=prog.level?"on":"")+'"></i>';
   $("ladder").innerHTML=h;
   renderThemeFilter();
   $("hLevel").textContent=prog.level;
@@ -1453,8 +1495,10 @@ const icoBrass=t=>{
   }
   return s+'</svg>';
 };
-$("brandmark").innerHTML=markSVG("#E0A93B");
-$("originMark").innerHTML=markSVG("#E0A93B");
+/* La marque a l'elephant (entete + filigrane "The elephant on the board")
+   fait desormais partie du HTML genere par build_site.js, comme sur les
+   pages claires : elle s'affiche meme si ce script ne s'execute jamais
+   (moteur d'indexation, previsualisation sans JavaScript). Rien a poser ici. */
 $("icoPlay").innerHTML=icoBrass("n");
 $("icoPuzzles").innerHTML=icoBrass("q");
 $("icoFriend").innerHTML=icoBrass("p");

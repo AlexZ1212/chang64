@@ -98,10 +98,15 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
   T("clicking still works after dragging", (()=>{const i=cellFor("d2");click(cells()[i]);return $("board").querySelectorAll(".dot,.ring").length>0;})());
 
   console.log("\nSTOCKFISH");
-  T("button present", !!$("btnStockfish"));
-  T("honest default message", /built-in engine/.test($("sfStatus").textContent));
-  click($("btnStockfish")); await wait(1500);
-  T("failure handled gracefully", /could not start|Fetching/.test($("sfStatus").textContent), $("sfStatus").textContent);
+  /* Le bouton dedie a disparu : "Analyser la partie" charge Stockfish tout
+     seul au premier clic. Il faut d'abord finir la partie en cours, sinon le
+     bouton reste verrouille comme le reste des commandes de jeu. */
+  click($("btnResign")); await wait(200);
+  click($("btnResign")); await wait(400);
+  T("button present", !!$("btnAnalyse"));
+  T("honest default message", /never helps you while you play/.test($("sfStatus").textContent));
+  click($("btnAnalyse")); await wait(2500);
+  T("failure handled gracefully", /could not start|Fetching|Downloading/.test($("sfStatus").textContent), $("sfStatus").textContent);
   T("app still alive after failure", $("board").children.length===64);
 
   console.log("\nINSTALL");

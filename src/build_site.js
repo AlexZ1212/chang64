@@ -461,6 +461,28 @@ function varFr(name) {
 }
 const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+/* Description meta : Google tronque au-dela d'environ 160 caracteres, sans
+   prevenir ni chercher une coupure propre. Plusieurs pages (ouvertures,
+   exercices, regles, glossaire, finales, pieges) construisaient la leur en
+   prenant les 280 ou 300 premiers caracteres d'un texte plus long ecrit pour
+   se lire en entier : la coupure tombait donc en plein milieu d'une phrase,
+   parfois d'un mot. Cette fonction coupe a la fin de la derniere phrase
+   entiere qui tient dans la limite ; si aucune ne tient (une seule longue
+   phrase), elle coupe au dernier espace et ajoute une ellipse plutot que de
+   trancher un mot en deux. */
+function metaDesc(raw, max) {
+  max = max || 160;
+  const text = String(raw).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+  if (text.length <= max) return text;
+  const fenetre = text.slice(0, max);
+  const phrase = fenetre.match(/^.*[.!?](?=\s|$)/);
+  if (phrase && phrase[0].length >= max * 0.5) return phrase[0].trim();
+  let coupe = text.slice(0, max - 1);
+  const esp = coupe.lastIndexOf(" ");
+  if (esp > max * 0.5) coupe = coupe.slice(0, esp);
+  return coupe.trim() + "…";
+}
+
 const CSS = `*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
 --bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
@@ -614,6 +636,18 @@ function brandMark() {
   return _mark;
 }
 
+/* L'application posait la marque par JavaScript au demarrage
+   ($("brandmark").innerHTML=markSVG(...) dans ui.js), contrairement aux
+   pages claires ou brandMark() est deja posee ici, a la construction. Un
+   visiteur qui affiche la page sans executer ce script (moteur d'indexation,
+   extension qui bloque le JavaScript, previsualisation qui ne l'execute pas)
+   voyait donc un entete sans logo, le temps que le script tourne ou pour de
+   bon si ce script ne tourne jamais. Les deux emplacements (l'entete et le
+   filigrane de la section "The elephant on the board") sont desormais poses
+   ici, comme sur les pages claires : le logo fait partie du HTML, il n'a
+   plus besoin du script pour exister. */
+app = app.split("/*__BRANDMARK__*/").join(brandMark());
+
 /* Liens vers toutes les sections, dans la langue de la page. La page en cours
    est signalee et non cliquable : un lien vers soi-meme n'apporte rien. */
 const SECTIONS = {
@@ -679,7 +713,18 @@ ${alts || ""}
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<!-- display=swap montrait d'abord la police de secours puis la remplacait
+     par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
+     navigation recharge le document (ce ne sont pas des pages d'application
+     a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
+     menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
+     largeur entre les deux polices (mesure : jusqu'a 40px sur les six
+     entrees) se voyait comme un reflow du menu, comme si la page repartait
+     de zero. display=optional laisse un tres bref delai (~100ms, largement
+     suffisant pour une police deja en cache) puis, s'il n'est pas tenu,
+     garde la police de secours pour toute la vue sans jamais la remplacer
+     plus tard : plus de bascule visible apres le premier affichage. -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=optional" rel="stylesheet">
 <style>${CSS}</style>
 ${jsonld ? '<script type="application/ld+json">' + JSON.stringify(jsonld) + "</script>" : ""}
 </head>
@@ -721,6 +766,14 @@ ${body}
 </footer>
 </div>
 <script>
+/* L'application (accessible via le logo ou "Accueil") partage le meme
+   stockage que ces pages, sous la cle "chang64:lang" (voir window.storage et
+   loadLang dans i18n.js), mais ne le lisait jamais depuis ici : choisir
+   l'anglais sur une page claire, puis revenir a l'accueil, retombait sur la
+   langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
+   chaque visite d'une page claire, dans le meme format qu'attend loadLang
+   (chaine "fr" ou "en", pas de JSON). */
+try{localStorage.setItem("chang64:lang","${lang}");}catch(e){}
 ${!/id="grille"/.test(body) ? "" : `
 /* Filtrage de la liste des ouvertures.
    Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page
@@ -896,7 +949,7 @@ for (const lang of ["en", "fr"]) {
     const fallback = lang === "fr"
       ? `La ${name} commence par ${numbered(p.main.moves)} (ECO ${ecoRange}). Cette page recense ses ${p.count} variante${p.count > 1 ? "s" : ""} répertoriée${p.count > 1 ? "s" : ""} avec leurs coups et leurs codes ECO, sur un échiquier depuis lequel tu peux jouer contre le moteur.`
       : `The ${name} begins ${numbered(p.main.moves)} (ECO ${ecoRange}). This page lists its ${p.count} named variation${p.count > 1 ? "s" : ""} with their moves and ECO codes, on a board you can play from against the engine.`;
-    const desc = (note ? note + (lang === "fr" ? ` La ${name} couvre les codes ECO ${ecoRange}.` : ` The ${name} covers ECO ${ecoRange}.`) : fallback).replace(/\s+/g, " ").trim().slice(0, 300);
+    const desc = metaDesc(note ? note + (lang === "fr" ? ` La ${name} couvre les codes ECO ${ecoRange}.` : ` The ${name} covers ECO ${ecoRange}.`) : fallback);
     const alsoKnown = (lang === "fr" && p.nameFr !== p.family)
       ? `<p style="font-size:13px;color:var(--sage)">Nom anglais couramment utilisé : <strong>${esc(p.family)}</strong>.</p>` : "";
     const rows = p.variations.map(v =>
@@ -1095,7 +1148,7 @@ function queueOg(name, title, subtitle, fen) {
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()
@@ -1176,7 +1229,7 @@ fs.writeFileSync(OUT + "/robots.txt", `User-agent: *\nAllow: /\nDisallow: /engin
 
 const today = new Date().toISOString().slice(0, 10);
 const extraUrls = require("./content.js")({
-  fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent
+  fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc
 });
 console.log("Pages de contenu   :", extraUrls.length);
 try {

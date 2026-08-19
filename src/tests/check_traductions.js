@@ -102,9 +102,9 @@ setTimeout(async () => {
 
   console.log("\n--- Points corriges qui ne doivent pas revenir ---");
   const lvlOf = d.getElementById("lvlOf");
-  T("Niveau X sur 5, et non 'of'", lvlOf && lvlOf.textContent === "sur", lvlOf && lvlOf.textContent);
+  T("Niveau X sur Y, et non 'of'", lvlOf && lvlOf.textContent === "sur", lvlOf && lvlOf.textContent);
   T("le message sur Stockfish est traduit",
-    /moteur int/.test(d.getElementById("sfStatus").textContent),
+    /automatiquement/.test(d.getElementById("sfStatus").textContent),
     d.getElementById("sfStatus").textContent.slice(0, 60));
 
   console.log("\n--- Vocabulaire des cadences ---");

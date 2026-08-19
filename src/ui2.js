@@ -545,7 +545,10 @@ $("btnHistoryClear").onclick=()=>{
 /* ==========================================================
    10. PUZZLE RATING, DAY STREAK, PUZZLE RUSH
    ========================================================== */
-const LEVEL_RATING=[800,1050,1300,1600,1900];
+/* Un point par palier de LEVELS (voir ui.js) : dix valeurs desormais, dans
+   le meme esprit qu'un classement Elo approximatif par niveau, pour que
+   updateRating() sache a quoi comparer une victoire ou une defaite. */
+const LEVEL_RATING=[800,1000,1150,1300,1450,1600,1750,1900,2100,2300];
 function ensureProgFields(){
   if(typeof prog.showEval!=="boolean")prog.showEval=false;
   if(typeof prog.theme!=="string")prog.theme="";
@@ -593,9 +596,13 @@ function renderExtraStats(){
 
 /* --- Chang Sprint : le mode chronometre. Anciennement "Puzzle Rush",
    renomme pour ne pas reprendre le nom d'une fonctionnalite existante
-   ailleurs. Les identifiants internes (rush, rushBest, btnRush) sont
-   conserves : les renommer casserait la progression deja enregistree chez
-   les visiteurs, dont la cle rushBest. --- */
+   ailleurs. Les identifiants internes (rush, rushBest) sont conserves :
+   les renommer casserait la progression deja enregistree chez les
+   visiteurs, dont la cle rushBest. Un seul point d'entree desormais,
+   btnGoRush dans Defis : l'ancien bouton btnRush (Exercices) laissait le
+   panneau theme/Puzzle du jour/Restart actif pendant un sprint en cours,
+   sans aucun garde-fou contre un clic qui aurait charge un exercice hors
+   file et desynchronise le score. --- */
 let rush=null;
 function rushRender(){
   if(!rush)return;
@@ -624,8 +631,17 @@ function startRush(){
      de trois minutes n'a pas de progression a respecter, il doit varier.
      On alterne donc les themes et on melange les niveaux, en gardant une
      difficulte moyenne croissante pour que ca monte doucement. */
+  /* Seuls les exercices resolus en un coup entrent dans le sprint : le
+     statut affiche "Trouve LE coup gagnant" (singulier) et le rythme du
+     mode repose sur un jugement instantane par position. Les mats en 2
+     (188 sur 1000) demandent de jouer un coup, attendre la reponse du
+     moteur, puis en trouver un second : un joueur s'y retrouvait a jouer
+     plusieurs coups alors qu'on lui avait promis d'en chercher un seul. */
   const parTheme={};
-  for(const p of PUZZLES)(parTheme[p.theme]=parTheme[p.theme]||[]).push(p);
+  for(const p of PUZZLES){
+    if(p.type==="mate"&&p.n>1)continue;
+    (parTheme[p.theme]=parTheme[p.theme]||[]).push(p);
+  }
   for(const k in parTheme)parTheme[k].sort(()=>Math.random()-0.5);
   const themes=Object.keys(parTheme).sort(()=>Math.random()-0.5);
   const file=[];
@@ -640,7 +656,6 @@ function startRush(){
   rush.queue=file;
   $("rushBar").classList.remove("hide");
   document.body.classList.add("rush-on");
-  $("btnRush").textContent=t("Stop Rush");
   rushNext();
   /* 100 ms : sans cela, les dixiemes sauteraient de 3 en 3. */
   rush.timer=setInterval(rushRender,100);
@@ -667,7 +682,6 @@ function rushEnd(why){
   rush=null;
   $("rushBar").classList.add("hide");
   document.body.classList.remove("rush-on");
-  $("btnRush").textContent=t("Chang Sprint");
   /* Le bloc de l'exercice retourne dans l'onglet Exercices : sans cela il
      resterait coince dans Defis, et l'onglet Exercices serait vide. */
   if(typeof rushRestore==="function")rushRestore();
@@ -714,7 +728,6 @@ function onPuzzleWrong(){
     setTimeout(()=>{if(rush)rushNext();},750);
   }
 }
-$("btnRush").onclick=()=>{if(rush)rushEnd(t("Stopped."));else startRush();};
 
 /* ==========================================================
    11. WATCH
@@ -722,33 +735,31 @@ $("btnRush").onclick=()=>{if(rush)rushEnd(t("Stopped."));else startRush();};
 const CHANNELS=[
   {id:"UCQHX6ViZmPsWiYSFAyS0a3Q",name:"GothamChess",handle:"@GothamChess",desc:"Game recaps, opening guides and the friendliest teaching on the platform."},
   {id:"UCweCc7bSMX5J4jEH7HFImng",name:"GMHikaru",handle:"@GMHikaru",desc:"Super-grandmaster speed chess, tournament recaps and long live streams."},
-  {id:"UCL5YbN5WLFD8dLIegT5QAbA",name:"agadmator's Chess Channel",handle:"@agadmator",desc:"Calm, story-driven walkthroughs of historic and current games."}
+  {id:"UCL5YbN5WLFD8dLIegT5QAbA",name:"agadmator's Chess Channel",handle:"@agadmator",desc:"Calm, story-driven walkthroughs of historic and current games."},
+  {id:"UChDxbOUQRXEZ1zdI14Zyx9w",name:"Chess Vibes",handle:"@ChessVibesOfficial",desc:"Practical lessons and rating-climb series built for beginner and intermediate players."},
+  {id:"UCUfvZgo9uLvTEt7unKw_Xhw",name:"Blunder Man",handle:"@Blunder_Man",desc:"An advanced player working openly to cut out his own blunders, one honest game at a time."},
+  {id:"UC76v5qR-TKSRalQeKskzoDg",name:"Alex Banzea",handle:"@AlexBanzea",desc:"Romanian IM breaking down openings, especially the London System and Caro-Kann, with tournament recaps."},
+  {id:"UC4liTXRJ-XknH6OtKz-tOuw",name:"ChessDojo",handle:"@ChessDojo",desc:"Three coaches reviewing student games and teaching the fundamentals behind real improvement."},
+  {id:"UClV9nqHHcsrm2krkFDPPr-g",name:"GingerGM",handle:"@GingerGM",desc:"GM Simon Williams brings aggressive attacking chess and lively commentary on his own games."},
+  {id:"UCXy10-NEFGxQ3b4NVrzHw1Q",name:"Eric Rosen",handle:"@eric-rosen",desc:"Calm, friendly streaming highlights from an IM known for the Stafford Gambit and London System."}
 ];
-function ytLoad(url,label){
-  const w=$("ytPlayer");
-  w.classList.remove("hide");
-  w.innerHTML='<iframe src="'+url+'" title="'+label+'" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
-  $("ytNote").textContent=t("Now loading: {label}. YouTube is serving this player, so their terms and cookies apply from here on.",{label:label});
-  w.scrollIntoView&&w.scrollIntoView({block:"nearest"});
-}
 function renderChannels(){
   const box=$("channels");if(!box)return;
   box.innerHTML="";
   for(const c of CHANNELS){
     const el=document.createElement("div");
     el.className="chan";
-    el.innerHTML='<h3>'+c.name+'</h3><p>'+t(c.desc)+'</p>';
+    /* list=UU+id : playlist "uploads" de la chaine. YouTube y place toujours
+       la derniere video en premier, donc l'aperçu se met a jour tout seul,
+       sans jamais coder une video precise en dur. youtube-nocookie.com pour
+       limiter le pistage tant que la video n'est pas lancee. */
+    el.innerHTML='<div class="chanEmbed"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+c.id.slice(2)+'" title="'+c.name+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
+      '<h3>'+c.name+'</h3><p>'+t(c.desc)+'</p>';
     const row=document.createElement("div");row.className="btnrow";
-    const live=document.createElement("button");
-    live.className="btn primary";live.textContent=t("Live");
-    live.onclick=()=>ytLoad("https://www.youtube-nocookie.com/embed/live_stream?channel="+c.id,c.name+" live");
-    const latest=document.createElement("button");
-    latest.className="btn";latest.textContent=t("Latest");
-    latest.onclick=()=>ytLoad("https://www.youtube-nocookie.com/embed/videoseries?list=UU"+c.id.slice(2),c.name+" latest uploads");
     const open=document.createElement("button");
-    open.className="btn";open.textContent=t("Channel");
+    open.className="btn primary";open.textContent=t("See the channel");
     open.onclick=()=>window.open("https://www.youtube.com/"+c.handle,"_blank","noopener");
-    row.appendChild(live);row.appendChild(latest);row.appendChild(open);
+    row.appendChild(open);
     el.appendChild(row);
     box.appendChild(el);
   }
@@ -783,7 +794,7 @@ function renderLegal(){
       "moteur d'échecs libre développé par les contributeurs du projet Stockfish et distribué sous licence GNU GPL v3. "+
       "Son code source est disponible sur <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
       "et le texte de sa licence accompagne le moteur. C'est parce que chang64 distribue Stockfish que son propre code est publié sous la même licence. "+
-      "Stockfish est optionnel : il n'est chargé qu'après activation explicite depuis le panneau d'analyse.</p>"+
+      "Stockfish est optionnel : il n'est chargé qu'au moment où tu analyses une partie terminée, jamais pendant que tu joues.</p>"+
       "<h4>Contenus tiers</h4><p>La section Vidéos intègre des lecteurs YouTube. Ces vidéos appartiennent à leurs chaînes respectives ; "+
       "chang64 n'a aucun lien avec elles et rien ne se charge avant que tu appuies sur lecture.</p>"+
       "<h4>Signalement</h4><p>Toute demande relative au contenu du site peut être adressée à "+PUBLISHER.email+".</p>"
@@ -807,7 +818,7 @@ function renderLegal(){
       "a free and open source chess engine developed by the Stockfish contributors and distributed under the GNU GPL v3. "+
       "Its source code is available at <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
       "and its licence text ships alongside the engine. It is because chang64 distributes Stockfish that its own code is released under the same licence. "+
-      "Stockfish is optional: it is only loaded once you enable it from the analysis panel.</p>"+
+      "Stockfish is optional: it is only loaded when you analyse a finished game, never while you play.</p>"+
       "<h4>Third-party content</h4><p>The Watch section embeds YouTube players. Those videos belong to their respective channels; "+
       "chang64 has no affiliation with them and nothing is loaded until you press play.</p>"+
       "<h4>Reporting</h4><p>Any request concerning the content of this site can be sent to "+PUBLISHER.email+".</p>";
@@ -872,7 +883,12 @@ function applyEvalPref(){
    ========================================================== */
 const baseSetMode=setMode;
 setMode=function(m,opts){
-  if(rush&&m!=="puzzles")rushEnd(t("Stopped."));
+  /* Le sprint ne peut plus demarrer que depuis Defis (btnGoRush) : comparer
+     a l'onglet courant, plutot qu'a un nom d'onglet fige ("train"), reste
+     la version la plus sure si un futur point d'entree ou un renommage
+     d'onglet est ajoute, et n'arrete le sprint que lors d'un vrai
+     changement d'onglet. */
+  if(rush&&m!==mode)rushEnd(t("Stopped."));
   if(m==="watch"||m==="legal"||m==="prefs"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;}
     mode=m;

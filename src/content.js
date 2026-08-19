@@ -1,6 +1,6 @@
 /* Génération des pages de contenu bilingues */
 module.exports = function (H) {
-  const { fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent } = H;
+  const { fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc } = H;
   const urls = [];
   const mk = d => fs.mkdirSync(OUT + "/" + d, { recursive: true });
 
@@ -15,14 +15,21 @@ module.exports = function (H) {
   mk("players");
 
   const UI = {
+    /* Dix niveaux desormais (voir LEVELS dans ui.js) : ce descriptif de
+       difficulte est propre aux pages de contenu, independant du nom de
+       palier affiche dans l'application, mais doit couvrir les memes dix
+       crans sous peine d'un u.levels[p.level-1] indefini sur les exercices
+       les plus difficiles (level 6 a 10). */
     en: { play: "Play a game", back: "Back to the index", solution: "Show the solution",
           moves: "Moves", diagram: "Diagram", related: "Keep going", difficulty: "Difficulty",
           theme: "Theme", sideToMove: s => `${s} to move`, white: "White", black: "Black",
-          levels: ["Very easy", "Easy", "Medium", "Hard", "Very hard"] },
+          levels: ["Very easy", "Easy", "Fairly easy", "Medium", "Fairly hard",
+                   "Hard", "Quite hard", "Very hard", "Expert", "Master"] },
     fr: { play: "Jouer une partie", back: "Retour à l'index", solution: "Afficher la solution",
           moves: "Coups", diagram: "Diagramme", related: "Pour aller plus loin", difficulty: "Difficulté",
           theme: "Thème", sideToMove: s => `Trait aux ${s}`, white: "Blancs", black: "Noirs",
-          levels: ["Très facile", "Facile", "Moyen", "Difficile", "Très difficile"] }
+          levels: ["Très facile", "Facile", "Assez facile", "Moyen", "Assez difficile",
+                   "Difficile", "Corsé", "Très difficile", "Expert", "Maître"] }
   };
 
   const THEME_FR = {
@@ -180,7 +187,7 @@ module.exports = function (H) {
   </div>
 </div>`;
       page(lang, dir, r.slug[lang] + ".html", r.title[lang] + " | chang64",
-        r.body[lang][0].replace(/<[^>]+>/g, "").slice(0, 280), body,
+        metaDesc(r.body[lang][0]), body,
         { "@context": "https://schema.org", "@type": "Article", headline: r.title[lang], inLanguage: lang },
         alt, canonical);
     }
@@ -283,7 +290,7 @@ module.exports = function (H) {
   </div>` : `<div><a class="cta" href="/">${u.play}</a></div>`;
       const body = `<h1>${esc(title)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
       page(lang, dir, sl + ".html", `${title} \u2014 ${lang === "fr" ? "définition et exemple" : "chess term explained"} | chang64`,
-        def.slice(0, 280), body,
+        metaDesc(def), body,
         { "@context": "https://schema.org", "@type": "DefinedTerm", name: title, description: def, inLanguage: lang },
         alt, canonical);
     }
@@ -354,7 +361,7 @@ module.exports = function (H) {
 <a class="cta" href="/#train=${e.id}">${lang === "fr" ? "S'entraîner sur cette finale" : "Train this endgame"}</a>
 <a class="cta ghost" href="/${dir}/">${u.back}</a></div></div>`;
       page(lang, dir, e.slug[lang] + ".html", e.title[lang] + " | chang64",
-        e.body[lang][0].slice(0, 280), body,
+        metaDesc(e.body[lang][0]), body,
         { "@context": "https://schema.org", "@type": "Article", headline: e.title[lang], inLanguage: lang }, alt, canonical);
     }
     const t = lang === "fr" ? "Les finales élémentaires expliquées" : "The elementary chess endgames";
@@ -418,7 +425,7 @@ module.exports = function (H) {
          pas etre reprise en chapo : c'etait les 280 premiers caracteres du
          texte affiche juste en dessous, donc le lecteur lisait deux fois le
          meme debut. */
-      const desc = tr.body[lang].slice(0, 280);
+      const desc = metaDesc(tr.body[lang]);
       const chapo = lang === "fr"
         ? `Le piège en ${tr.line.san.length} demi-coups, rejoué par le moteur, avec la position finale et l'explication.`
         : `The trap in ${tr.line.san.length} half-moves, replayed by the engine, with the final position and the explanation.`;
@@ -463,9 +470,14 @@ module.exports = function (H) {
         ? `${th} nº${num} : ${side} jouent et gagnent | chang64`
         : `${th} #${num}: ${side} to play and win | chang64`;
       if (title.length > 75) title = `${th} nº${num} | chang64`;
-      const desc = lang === "fr"
-        ? `Exercice de tactique ${th.toLowerCase()} : ${side.toLowerCase()} jouent et ${goal}. Position vérifiée par le moteur, difficulté ${u.levels[p.level - 1].toLowerCase()}. Solution masquée, à jouer sur l'échiquier.`
-        : `A ${th.toLowerCase()} tactics puzzle: ${side.toLowerCase()} ${goal}. Engine-verified position, ${u.levels[p.level - 1].toLowerCase()} difficulty. Solution hidden until you ask for it.`;
+      /* Passait au-dessus de 160 caracteres des que le theme (ex. "fourchette
+         de cavalier") et la difficulte (ex. "assez difficile", ajoutee avec
+         le passage a dix niveaux) se cumulaient. Reformule plus court, et
+         passe par metaDesc en filet de securite si une future combinaison
+         depassait quand meme. */
+      const desc = metaDesc(lang === "fr"
+        ? `Exercice ${th.toLowerCase()} : ${side.toLowerCase()} jouent et ${goal}. Vérifié par le moteur, difficulté ${u.levels[p.level - 1].toLowerCase()}.`
+        : `A ${th.toLowerCase()} puzzle: ${side.toLowerCase()} ${goal}. Engine-verified, ${u.levels[p.level - 1].toLowerCase()} difficulty.`);
       const canonical = `${SITE}/${dir}/${puzzleSlug(p, lang)}.html`;
       const alt = `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/${puzzleSlug(p, lang === "en" ? "fr" : "en")}.html`;
       const body = `<h1>${esc(lang === "fr" ? `${side} jouent et ${goal}` : `${side} ${goal}`)}</h1>
@@ -485,8 +497,15 @@ module.exports = function (H) {
     }
     const t = lang === "fr" ? `${puzzles.length} exercices de tactique vérifiés` : `${puzzles.length} verified chess tactics puzzles`;
     const lede = lang === "fr"
-      ? `Chaque position a été démontrée par le moteur avant d'entrer dans la banque. Mats en un et deux coups, fourchettes, clouages, enfilades et sacrifices, classés en cinq niveaux.`
-      : `Every position was proved by the engine before entering the set. Mates in one and two, forks, pins, skewers and sacrifices, sorted into five levels.`;
+      /* Ce texte sert aussi de meta description sur cette page (voir plus bas
+         dans ce fichier) : il doit rester sous la limite generale verifiee
+         par check_seo_entete.js (160 caracteres), avec la meme marge que la
+         page d'accueil plutot que de la longer au ras du seuil. Le passage a
+         dix niveaux a failli faire deborder la version francaise (174
+         caracteres avec "cinq"/"dix" a l'identique) : le texte est reformule
+         plus court, pas juste le mot "cinq" remplace par "dix". */
+      ? `Chaque position a été démontrée par le moteur : mats, fourchettes, clouages, enfilades, sacrifices, classés en dix niveaux.`
+      : `Every position was proved by the engine: mates, forks, pins, skewers and sacrifices, sorted into ten levels.`;
     const groups = {};
     for (const p of puzzles) (groups[p.theme] = groups[p.theme] || []).push(p);
     const ordered = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
@@ -494,7 +513,7 @@ module.exports = function (H) {
     const toc = `<nav class="toc" aria-label="${lang === "fr" ? "Thèmes" : "Themes"}">` +
       ordered.map(th => `<a href="#${anchor(th)}">${esc(themeOf(th, lang))} <b>${groups[th].length}</b></a>`).join("") + `</nav>`;
     /* Champ masque par defaut, revele par le script : sans JavaScript la page
-       reste ce qu'elle etait. 777 exercices repartis en themes ne se
+       reste ce qu'elle etait. Mille exercices repartis en themes ne se
        parcourent pas a l'oeil. */
     const filtre = `<div class="filtre hide" id="filtreBloc">
   <input type="search" id="filtre" autocomplete="off"

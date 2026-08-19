@@ -53,7 +53,7 @@ setTimeout(()=>{
   T("bouton dans le pied de page", !!d.getElementById("footPrefs"));
 
   console.log("\n--- Rien n'a ete casse ---");
-  for(const id of ["pane-play","pane-legal","btnStockfish","legalBody","privacyBody","board","opening"])
+  for(const id of ["pane-play","pane-legal","btnAnalyse","legalBody","privacyBody","board","opening"])
     T(id+" toujours present", !!d.getElementById(id));
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

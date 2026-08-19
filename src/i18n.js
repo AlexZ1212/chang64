@@ -58,15 +58,11 @@ const FR={
 
 /* --- navigation dans la partie --- */
 "Review":"Analyse","Analyse this game":"Analyser cette partie","Analysing with Stockfish…":"Analyse avec Stockfish…",
-"Stockfish for review":"Stockfish pour l'analyse","Stockfish is only used to review a finished game, never to help you play.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues.","Stockfish enabled":"Stockfish activé","Loading…":"Chargement…",
-"The built-in engine reviews your game instantly. Stockfish is stronger but downloads about 7 MB the first time.":
- "Le moteur intégré analyse ta partie instantanément. Stockfish est plus fort mais télécharge environ 7 Mo la première fois.",
-"Stockfish is ready. Game review will now use it instead of the built-in engine.":
- "Stockfish est prêt. L'analyse de partie l'utilisera désormais à la place du moteur intégré.",
-"Stockfish could not start ({why}). The built-in engine stays in use.":
- "Stockfish n'a pas pu démarrer ({why}). Le moteur intégré reste en service.",
-"Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.":"Stockfish ne sert qu'à analyser une partie terminée, jamais à t'aider pendant que tu joues. Il est plus fort que le moteur intégré, et télécharge environ 7 Mo à la première utilisation.",
-"Stockfish is already running.":"Stockfish tourne déjà.",
+"Downloading the engine…":"Téléchargement du moteur…","Stockfish is ready.":"Stockfish est prêt.",
+"Analysing a finished game downloads Stockfish (about 7 MB, once) and uses it automatically. Stockfish never helps you while you play.":
+ "Analyser une partie terminée télécharge Stockfish (environ 7 Mo, une seule fois) et l'utilise automatiquement. Stockfish ne t'aide jamais pendant que tu joues.",
+"Stockfish could not start ({why}); this review uses the built-in engine instead.":
+ "Stockfish n'a pas pu démarrer ({why}) ; cette analyse utilise le moteur intégré à la place.",
 "Fetching the engine, this can take a moment on a first visit.":"Téléchargement du moteur, cela peut prendre un moment à la première visite.",
 "Stockfish stopped responding, falling back to the built-in engine.":"Stockfish ne répond plus, retour au moteur intégré.",
 "timed out":"délai dépassé","file not found":"fichier introuvable","blocked":"bloqué",
@@ -97,11 +93,19 @@ const FR={
 "Restart puzzle":"Recommencer","Reset my progress":"Réinitialiser ma progression",
 "Find the winning move.":"Trouve le coup gagnant.","Loading…":"Chargement…",
 "First mates":"Premiers mats","Winning moves":"Coups gagnants","Forks and pins":"Fourchettes et clouages",
-"Mate in two":"Mats en deux coups","Combinations":"Combinaisons",
+"Mate in two":"Mats en deux coups",
+"Double trouble":"Double menace","Skewers and pins":"Enfilades et clouages",
+"Sharper tactics":"Tactiques plus fines","Deeper calculation":"Calcul plus profond",
+"Mating patterns":"Motifs de mat","Grandmaster combinations":"Combinaisons de grand maître",
 "One move is enough.":"Un seul coup suffit.","Look for the loose piece.":"Cherche la pièce mal protégée.",
 "One piece can attack two at once.":"Une pièce peut en attaquer deux à la fois.",
 "Your first move forces the reply.":"Ton premier coup force la réponse.",
-"A sacrifice often opens the door.":"Un sacrifice ouvre souvent la voie.",
+"Two threats, only one defence.":"Deux menaces, une seule défense.",
+"Force the bigger piece to move first.":"Force la pièce la plus forte à bouger la première.",
+"Count every capture before you play.":"Compte chaque prise avant de jouer.",
+"See two moves ahead, not one.":"Vois deux coups à l'avance, pas un seul.",
+"The back rank is not as safe as it looks.":"La dernière rangée est moins sûre qu'il n'y paraît.",
+"The quiet move is often the strongest.":"Le coup silencieux est souvent le plus fort.",
 "White to play and mate in {n} move.":"Les Blancs jouent et matent en {n} coup.",
 "White to play and mate in {n} moves.":"Les Blancs jouent et matent en {n} coups.",
 "Black to play and mate in {n} move.":"Les Noirs jouent et matent en {n} coup.",
@@ -121,7 +125,7 @@ const FR={
 "Puzzle of the day · ":"Exercice du jour · ",
 
 /* --- rush --- */
-"Chang Sprint":"Chang Sprint","Stop Rush":"Arrêter","Left":"Restant","Score":"Score","Strikes":"Vies",
+"Chang Sprint":"Chang Sprint","Left":"Restant","Score":"Score","Strikes":"Vies",
 "Time is up.":"Temps écoulé.","Three misses.":"Trois échecs.","Stopped.":"Arrêté.","You cleared every puzzle.":"Tu as épuisé tous les exercices.",
 "{why} Score: {score} — a new personal best.":"{why} Score : {score}, nouveau record personnel.",
 "{why} Score: {score} (best: {best}).":"{why} Score : {score} (record : {best}).",
@@ -195,19 +199,27 @@ const FR={
 
 /* --- vidéos --- */
 "Chess on YouTube":"Les échecs sur YouTube",
-"Nothing loads until you press play, so YouTube sets no cookies before you ask it to.":
- "Rien ne se charge avant que tu appuies sur lecture : YouTube ne dépose donc aucun cookie sans ton accord.",
-"Pick a channel below. “Live” opens the current stream if the channel is broadcasting, “Latest” plays their most recent uploads.":
- "Choisis une chaîne ci-dessous. « Direct » ouvre le flux en cours si la chaîne émet, « Récent » lance ses dernières vidéos.",
-"Live":"Direct","Latest":"Récent","Channel":"Chaîne",
-"Now loading: {label}. YouTube is serving this player, so their terms and cookies apply from here on.":
- "Chargement de {label}. C'est YouTube qui sert ce lecteur : ses conditions et ses cookies s'appliquent à partir d'ici.",
+"The latest video from each channel, updated automatically.":
+ "La dernière vidéo de chaque chaîne, mise à jour automatiquement.",
+"See the channel":"Voir la chaîne",
 "Game recaps, opening guides and the friendliest teaching on the platform.":
  "Résumés de parties, guides d'ouvertures et la pédagogie la plus accessible de la plateforme.",
 "Super-grandmaster speed chess, tournament recaps and long live streams.":
  "Parties rapides d'un super grand maître, résumés de tournois et longs directs.",
 "Calm, story-driven walkthroughs of historic and current games.":
  "Analyses posées et racontées, de parties historiques comme actuelles.",
+"Practical lessons and rating-climb series built for beginner and intermediate players.":
+ "Leçons pratiques et séries de progression de classement pour joueurs débutants et intermédiaires.",
+"An advanced player working openly to cut out his own blunders, one honest game at a time.":
+ "Un joueur avancé qui travaille ouvertement à éliminer ses propres gaffes, partie après partie.",
+"Romanian IM breaking down openings, especially the London System and Caro-Kann, with tournament recaps.":
+ "MI roumain qui décortique les ouvertures, notamment le système London et la Caro-Kann, avec des résumés de tournois.",
+"Three coaches reviewing student games and teaching the fundamentals behind real improvement.":
+ "Trois entraîneurs qui analysent des parties d'élèves et enseignent les fondamentaux d'une vraie progression.",
+"GM Simon Williams brings aggressive attacking chess and lively commentary on his own games.":
+ "Le grand maître Simon Williams propose des échecs d'attaque agressifs et des commentaires vivants sur ses propres parties.",
+"Calm, friendly streaming highlights from an IM known for the Stafford Gambit and London System.":
+ "Extraits de stream calmes et chaleureux d'un MI connu pour le gambit Stafford et le système London.",
 
 /* --- thèmes des exercices --- */
 "Mate in one":"Mat en un coup","Mate in two":"Mat en deux coups","Winning capture":"Prise gagnante",

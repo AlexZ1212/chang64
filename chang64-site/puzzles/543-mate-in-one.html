@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mate in one #543: White to play and mate in 1 | chang64</title>
+<meta name="description" content="A mate in one puzzle: white to play and mate in 1. Engine-verified, hard difficulty.">
+<link rel="canonical" href="https://chang64.com/puzzles/543-mate-in-one.html">
+<!-- Les icones existaient mais n'etaient declarees nulle part hors du
+     manifeste : invisibles dans l'onglet du navigateur et dans les resultats
+     de recherche. -->
+<link rel="icon" href="/icon-192.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.svg">
+<link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/543-mate-in-one.html">
+<link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/543-mat-en-un-coup.html">
+<link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/543-mate-in-one.html">
+<meta property="og:title" content="Mate in one #543: White to play and mate in 1 | chang64">
+<meta property="og:description" content="A mate in one puzzle: white to play and mate in 1. Engine-verified, hard difficulty.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chang64.com/puzzles/543-mate-in-one.html">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://chang64.com/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- display=swap montrait d'abord la police de secours puis la remplacait
+     par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
+     navigation recharge le document (ce ne sont pas des pages d'application
+     a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
+     menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
+     largeur entre les deux polices (mesure : jusqu'a 40px sur les six
+     entrees) se voyait comme un reflow du menu, comme si la page repartait
+     de zero. display=optional laisse un tres bref delai (~100ms, largement
+     suffisant pour une police deja en cache) puis, s'il n'est pas tenu,
+     garde la police de secours pour toute la vue sans jamais la remplacer
+     plus tard : plus de bascule visible apres le premier affichage. -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=optional" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
+--bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
+--rule:rgba(21,32,28,.14);--r:8px}
+body{background:var(--ink);color:var(--chalk);
+font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}
+.wrap{max-width:880px;margin:0 auto}
+a{color:var(--brass)}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
+padding-bottom:14px;border-bottom:1px solid var(--rule)}
+/* Meme logo que l'application : memes tailles, memes proportions, meme
+   position relative des elements. Seules les couleurs changent, pour un fond
+   clair : l'elephant et le 64 en laiton, "chang" et la baseline en gris
+   fonce. */
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--chalk)}
+.brandmark{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}
+.brand .names{display:flex;flex-direction:column;gap:2px}
+.brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}
+.brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
+.brand .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
+@media(max-width:620px){.brand .tagline{display:none}}
+.brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
+/* Le menu depassait la largeur d'un telephone : quatre entrees plus le
+   selecteur de langue reclament environ 458 px pour 362 disponibles. Les
+   marges a gauche empechaient un retour a la ligne propre. On passe en
+   disposition souple, qui replie naturellement au lieu de deborder. */
+/* Cette regle generique s'appliquait aussi a .sitenav et son flex-wrap:wrap
+   annulait le defilement horizontal : la rangee passait a la ligne au lieu de
+   defiler. Elle est desormais limitee aux nav qui ne sont pas le menu
+   principal. */
+header nav:not(.sitenav){display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}
+nav a{font-size:13px;text-decoration:none;color:var(--sage)}
+nav a:hover{color:var(--brass)}
+h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}
+h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}
+p{margin-bottom:12px;max-width:66ch}
+.lede{font-size:17px;color:var(--sage);margin-bottom:24px}
+.cols{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.diagram{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:10px}
+.anim svg{display:block;width:100%;height:auto;border-radius:6px}
+/* l'attribut hidden sur un <g> SVG depend de la feuille du navigateur :
+   on l'impose explicitement plutot que d'en dependre */
+.anim g[data-ply][hidden]{display:none}
+/* Le filtrage masque les tuiles avec l'attribut hidden. Or la regle
+   [hidden]{display:none} vient de la feuille par defaut du navigateur : elle
+   est plus faible que n'importe quel selecteur de classe, et .tile{display:
+   block} l'emportait. Les tuiles restaient donc visibles alors que l'attribut
+   etait bien pose, et la recherche semblait ne rien faire.
+   Meme piege que sur les groupes SVG de l'echiquier anime. */
+[hidden],.tile[hidden],[data-theme][hidden],.toc[hidden]{display:none!important}
+.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
+/* Ces commandes avaient herite des jetons du theme sombre de l'application,
+   posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
+   symboles etaient beiges sur blanc casse, soit un contraste de 1,11:1 pour
+   un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
+   ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
+   visuellement les commandes au diagramme qu'elles pilotent. */
+.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
+  width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
+.animctl button:hover{background:var(--board);color:var(--slate)}
+.animctl button:disabled{opacity:.38;cursor:default}
+.animctl button:disabled:hover{background:var(--slate);color:var(--board)}
+.animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
+.diagram svg{width:100%;height:auto;display:block;border-radius:2px}
+.moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
+border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+.eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);
+border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px}
+th{text-align:left;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);padding:8px;border-bottom:1px solid var(--rule)}
+td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}
+td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk);white-space:nowrap}
+.cta{display:inline-block;background:var(--brass);color:#FFF;font-weight:600;font-size:14px;text-decoration:none;
+padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}
+.cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);
+border:1px solid var(--rule);border-radius:12px}
+.toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;
+color:var(--chalk);background:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 12px}
+.toc a:hover{border-color:var(--brass);color:var(--brass)}
+.toc a b{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--sage);font-size:12px}
+h2{scroll-margin-top:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tile{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:14px;text-decoration:none;display:block}
+.tile:hover{border-color:var(--brass)}
+.tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
+.tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}
+.filtre{margin-bottom:18px}
+.filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
+  padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
+  background:var(--slate);color:var(--chalk)}
+.filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
+.filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
+/* Menu principal : meme forme que les onglets de l'application, une pastille
+   arrondie posee sur un fond legerement contraste, la section courante
+   surlignee en laiton. Seules les couleurs changent, prises dans les jetons
+   du theme clair. Sur ecran etroit la rangee defile plutot que d'elargir la
+   page. */
+.sitenav{display:flex;gap:3px;background-color:var(--slate);padding:4px;
+  border-radius:999px;border:1px solid var(--rule);
+  overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.sitenav::-webkit-scrollbar{display:none}
+.sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);
+  text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;
+  transition:background .18s,color .18s}
+.sitenav a:hover{color:var(--chalk)}
+.sitenav [aria-current="page"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}
+@media(max-width:520px){.sitenav a,.sitenav span{padding:8px 11px;font-size:12.5px}}
+/* Bascule de langue : meme pastille que dans l'application, avec le meme
+   rayon et le meme fond. Ici ce sont deux liens, chaque langue etant une page
+   distincte. */
+.langsw{display:flex;gap:3px;background-color:var(--ink);padding:3px;
+  border-radius:8px;border:1px solid var(--rule);flex:none}
+/* Reprise exacte de .langswitch button dans l'application : JetBrains Mono
+   en 600, corps 11.5px, marges 7px 10px, flex:none. Ce n'est pas la police du
+   corps de texte, c'est celle du "64" de la marque : le selecteur de langue
+   appartient a la meme famille visuelle. */
+.langsw a{flex:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  font-weight:600;text-align:center;text-decoration:none;color:var(--sage);
+  padding:7px 10px;border-radius:6px;white-space:nowrap;
+  transition:background .18s,color .18s}
+.langsw a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
+.langsw a:hover{color:var(--chalk)}
+
+.footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
+.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
+.footnav a:hover{text-decoration:underline}
+.footnav [aria-current="page"]{color:var(--sage);font-weight:600}
+.footnote{margin:0}</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Quiz","name":"Mate in one #543: White to play and mate in 1 | chang64","inLanguage":"en","about":{"@type":"Thing","name":"Mate in one"}}</script>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="brand" href="/"><svg class="brandmark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"/><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"/><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"/><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"/><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"/><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"/></g></svg><span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">The elephant on 64 squares</span></span></a>
+  <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
+       le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
+       place du contenu. Sur ecran etroit la rangee defile horizontalement,
+       comme les onglets de l'application. -->
+  <div class="langsw" role="group" aria-label="Language">
+    <a href="/puzzles/543-mate-in-one.html" hreflang="en" rel="alternate" aria-current="true">EN</a>
+    <a href="/fr/exercices/543-mat-en-un-coup.html" hreflang="fr" rel="alternate">FR</a>
+  </div>
+  <nav class="sitenav"><a href="/openings/">Openings</a><a href="/puzzles/" aria-current="page">Puzzles</a><a href="/learn/">Rules</a><a href="/endgames/">Endgames</a><a href="/traps/">Opening traps</a><a href="/glossary/">Glossary</a></nav>
+</header>
+<h1>White to play and mate in 1</h1>
+<p class="lede">A mate in one puzzle: white to play and mate in 1. Engine-verified, hard difficulty.</p>
+<div class="cols"><div class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-label="Chess position"><rect x="0" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><defs><symbol id="pbk" viewBox="0 0 45 45"><path d="M31.54,31.96H13.46c-2.08,0-3.79,1.7-3.79,3.79v2.25h25.66v-2.25c0-2.09-1.7-3.79-3.79-3.79Z" fill="#232b28" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/><path d="M31.08,12.5c-1.67,0-3.32.64-4.72,1.42l-1.8-2.32v-1.53h2.95v-4.12h-2.95v-2.95h-4.12v2.95h-2.95v4.12h2.95v1.53l-1.8,2.32c-1.4-.78-3.05-1.42-4.72-1.42-2.74,0-7.28,2.13-7.28,7.55,0,5.98,5.8,8.15,6.78,11.92.01,0,.03,0,.04,0h18.08s.03,0,.04,0c.97-3.77,6.78-5.94,6.78-11.92,0-5.41-4.54-7.55-7.28-7.55ZM29.1,25.07c-.58.62-1.23,1.31-1.82,2.09-.14.18-.35.29-.58.29-.35,0-.84,0-.81,0v-7.39c1.3-.96,2.57-1.55,3.39-1.56.42.03,2.24.27,2.24,2.46,0,1.37-.74,2.3-2.42,4.1ZM13.48,20.97c0-2.19,1.82-2.44,2.24-2.46.82.01,2.09.6,3.39,1.56v7.39s-.46,0-.81,0c-.23,0-.44-.11-.58-.29-.59-.77-1.24-1.46-1.82-2.09-1.68-1.8-2.42-2.73-2.42-4.1Z" fill="#232b28" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/></symbol><symbol id="pwr" viewBox="0 0 45 45"><path d="M12.99,33.03h19.01c1.35,0,2.45,1.1,2.45,2.45v2.52H10.54v-2.52c0-1.35,1.1-2.45,2.45-2.45Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.17,15.8c-.07,0-.15.01-.23.01h-12.88c-.08,0-.15,0-.23-.01-.01,5.69-.51,15.85-3.95,17.49,0,0,0,0,0,0,.33-.17.71-.27,1.11-.27h19.01c.4,0,.78.1,1.11.27,0,0,0,0,0,0-3.45-1.65-3.94-11.8-3.95-17.49Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/><path d="M27.96,8v2.99h-2.92v-2.99h-5.07v2.99h-2.92v-2.99h-4.29v4.5c0,1.83,1.48,3.31,3.31,3.31h12.88c1.83,0,3.31-1.48,3.31-3.31v-4.5h-4.29Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="pwq" viewBox="0 0 45 45"><path d="M31.62,31.91H13.38c-2.1,0-3.82,1.72-3.82,3.82v2.27h25.88v-2.27c0-2.11-1.71-3.82-3.82-3.82Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/><path d="M39.59,11.71c-.8-1.1-2.33-1.34-3.43-.54s-1.34,2.33-.54,3.43c.02.02.04.04.05.07l-5.35,6.05.82-10.77c.83-.06,1.62-.53,2.03-1.33.62-1.21.14-2.69-1.07-3.3-.19-.1-.39-.16-.58-.21h0s0,0,0,0c-1.07-.24-2.2.26-2.72,1.28-.55,1.07-.23,2.35.69,3.06l-4.16,8.89-1.94-10.57c.93-.35,1.58-1.25,1.58-2.29,0-1.36-1.1-2.46-2.46-2.46h0c-1.36,0-2.46,1.1-2.46,2.46,0,1.05.66,1.94,1.58,2.29l-1.94,10.57-4.16-8.89c.92-.71,1.23-1.99.69-3.06-.52-1.02-1.65-1.52-2.72-1.28h0s0,0,0,0c-.2.04-.39.11-.58.21-1.21.62-1.69,2.1-1.07,3.3.41.8,1.19,1.28,2.03,1.33l.82,10.77-5.35-6.05s.04-.04.05-.07c.8-1.1.55-2.63-.54-3.43s-2.63-.55-3.43.54c-.8,1.1-.55,2.63.54,3.43.58.42,1.29.55,1.94.42,1.81,4.84,4.41,12.39,4.63,16.46.28-.06.56-.1.86-.1h18.24c.3,0,.58.04.86.1.22-4.07,2.81-11.61,4.63-16.46.65.13,1.36,0,1.94-.42,1.1-.8,1.34-2.33.54-3.43Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="pwk" viewBox="0 0 45 45"><path d="M31.54,31.96H13.46c-2.08,0-3.79,1.7-3.79,3.79v2.25h25.66v-2.25c0-2.09-1.7-3.79-3.79-3.79Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/><path d="M31.08,12.5c-1.67,0-3.32.64-4.72,1.42l-1.8-2.32v-1.53h2.95v-4.12h-2.95v-2.95h-4.12v2.95h-2.95v4.12h2.95v1.53l-1.8,2.32c-1.4-.78-3.05-1.42-4.72-1.42-2.74,0-7.28,2.13-7.28,7.55,0,5.98,5.8,8.15,6.78,11.92.01,0,.03,0,.04,0h18.08s.03,0,.04,0c.97-3.77,6.78-5.94,6.78-11.92,0-5.41-4.54-7.55-7.28-7.55ZM29.1,25.07c-.58.62-1.23,1.31-1.82,2.09-.14.18-.35.29-.58.29-.35,0-.84,0-.81,0v-7.39c1.3-.96,2.57-1.55,3.39-1.56.42.03,2.24.27,2.24,2.46,0,1.37-.74,2.3-2.42,4.1ZM13.48,20.97c0-2.19,1.82-2.44,2.24-2.46.82.01,2.09.6,3.39,1.56v7.39s-.46,0-.81,0c-.23,0-.44-.11-.58-.29-.59-.77-1.24-1.46-1.82-2.09-1.68-1.8-2.42-2.73-2.42-4.1Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/></symbol><symbol id="pwn" viewBox="0 0 45 45"><path d="M14.4,33.1h20.67c1.39,0,2.52,1.13,2.52,2.52v2.38H11.88v-2.38c0-1.39,1.13-2.52,2.52-2.52Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path d="M14.65,21.66c.97-.66,4.68-.28,7.56-3.75.52-.62.98,1.68-.34,3.64-2.86,4.23-8.3,4.94-8.39,11.72.29-.11.6-.18.92-.18h20.67c.52,0,1,.16,1.4.42-.55-.46-1.93-1.71-1.93-2.68,0-1.21.9-4.35.9-9.83s-4.54-14.07-12.47-14.07l-3.39-2.95-.75,2.7-3-1.87s-.15,2.38-.24,4.01c-.54.3-2.22.96-4.03,5.99-.63,1.75-4.15,3-4.15,6.07,0,3.41,3.21,3.83,3.82,3.83,1.57,0,2.36-2.34,3.42-3.06Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/><path d="M18.54,13.2c.9-.63.98-1.58,1.21-2.02.03-.06-.02-.12-.08-.12-.49.06-1.4-.18-2.31.45-.9.64-.98,1.58-1.2,2.02-.03.06.02.12.08.12.49-.06,1.4.18,2.3-.45Z" fill="#101413"/><path d="M10.24,20.58c-.46.42-.86.73-1.07.5s.14-1.16.6-1.57.87-.16,1.08.07-.15.59-.61,1.01Z" fill="#101413"/></symbol></defs><use href="#pbk" x="262.5" y="0.0" width="37.5" height="37.5"/><use href="#pwr" x="37.5" y="75.0" width="37.5" height="37.5"/><use href="#pwq" x="225.0" y="75.0" width="37.5" height="37.5"/><use href="#pwk" x="75.0" y="112.5" width="37.5" height="37.5"/><use href="#pwn" x="75.0" y="187.5" width="37.5" height="37.5"/></svg><p style="font-size:12px;color:var(--sage);margin:8px 0 0">White to move</p></div>
+<div>
+  <p><span class="eco">Mate in one</span> <span class="eco">Hard</span></p>
+  <p>This position comes from the chang64 puzzle set. Every puzzle is proved by the engine: for a mate, every defence was checked; for a material win, the margin over the second-best move was measured.</p>
+  <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">Show the solution</summary>
+    <div class="moves" style="margin-top:10px">Rb8#</div></details>
+  <a class="cta" href="/#puzzle=p543">Solve it on the board</a>
+  <a class="cta ghost" href="/puzzles/">Back to the index</a>
+</div></div>
+<footer>
+  <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
+       repeter en bas etait un doublon. Le pied de page garde son role
+       classique, les liens legaux. -->
+  <nav class="footnav" aria-label="Legal information">
+    <a href="/">Home</a>
+    <a href="/#legal">Legal notice</a>
+    <a href="/#privacy">Privacy</a>
+    <a href="/#prefs">Preferences</a>
+    <a href="/#accessibilite">Accessibility</a>
+  </nav>
+  <p class="footnote">chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.</p>
+</footer>
+</div>
+<script>
+/* L'application (accessible via le logo ou "Accueil") partage le meme
+   stockage que ces pages, sous la cle "chang64:lang" (voir window.storage et
+   loadLang dans i18n.js), mais ne le lisait jamais depuis ici : choisir
+   l'anglais sur une page claire, puis revenir a l'accueil, retombait sur la
+   langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
+   chaque visite d'une page claire, dans le meme format qu'attend loadLang
+   (chaine "fr" ou "en", pas de JSON). */
+try{localStorage.setItem("chang64:lang","en");}catch(e){}
+
+/* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
+   repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
+   servent. */
+
+/* Pilote l'echiquier anime des pages d'ouverture.
+   Sans ce script, la position finale reste affichee et les commandes sont
+   masquees : la page fonctionne exactement comme avant. */
+(function(){
+  var box=document.querySelector(".anim"); if(!box)return;
+  var plies=[]; try{plies=JSON.parse(box.getAttribute("data-plies"))||[];}catch(e){}
+  var groups=box.querySelectorAll("svg > g[data-ply]");
+  if(groups.length<2)return;
+  var ctl=box.querySelector(".animctl"), lab=box.querySelector(".animply");
+  var btn={}; if(ctl){ctl.hidden=false;
+    ctl.querySelectorAll("button").forEach(function(b){btn[b.dataset.act]=b;});}
+  var i=groups.length-1, timer=null;
+  function show(n){
+    i=Math.max(0,Math.min(groups.length-1,n));
+    /* .hidden est une propriete de HTMLElement, pas de SVGElement : sur un
+       <g> il faut passer par l'attribut, sinon rien ne se passe. */
+    for(var k=0;k<groups.length;k++){
+      if(k===i)groups[k].removeAttribute("hidden");
+      else groups[k].setAttribute("hidden","");
+    }
+    if(lab)lab.textContent=plies[i]||"";
+    if(btn.prev)btn.prev.disabled=(i===0);
+    if(btn.next)btn.next.disabled=(i===groups.length-1);
+  }
+  function stop(){if(timer){clearInterval(timer);timer=null;}
+    if(btn.play)btn.play.innerHTML="&#9654;";}
+  function playFrom(n){
+    stop(); show(n);
+    if(btn.play)btn.play.innerHTML="&#10073;&#10073;";
+    timer=setInterval(function(){
+      if(i>=groups.length-1){stop();return;}
+      show(i+1);
+    },850);
+  }
+  if(btn.prev)btn.prev.onclick=function(){stop();show(i-1);};
+  if(btn.next)btn.next.onclick=function(){stop();show(i+1);};
+  if(btn.play)btn.play.onclick=function(){
+    if(timer)stop(); else playFrom(i>=groups.length-1?0:i);
+  };
+  /* Une personne qui a demande moins d'animation garde la position finale
+     et pilote elle-meme. Les autres voient la ligne se jouer une fois. */
+  var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(calm){show(groups.length-1);return;}
+  show(0);
+  var started=false;
+  function go(){if(started)return;started=true;playFrom(0);}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){go();io.disconnect();}});
+    },{threshold:.35});
+    io.observe(box);
+  }else go();
+})();
+</script>
+</body>
+</html>

@@ -130,7 +130,7 @@ html{overflow-x:hidden}
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit}
 .brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:6px}
-.brand .glyph{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none}
+.brand .glyph{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}
 .brand .glyph svg{width:100%;height:100%;display:block}
 .brand h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1}
 .brand h1 .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
@@ -309,12 +309,13 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:22px;margin-top:1px;
   padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
 /* La largeur est posee en ligne, proportionnelle a la boite englobante de
-   chaque piece : un pion reste plus etroit qu'une dame. Le chevauchement de
-   -7px valait pour des boites larges au vide interne genereux ; sur des
-   boites serrees il masquerait les pieces, on met donc un simple ecart. */
-.taken .tk{display:block;width:22px;height:22px;flex:none;margin-right:2px;
+   chaque piece : un pion reste plus etroit qu'une dame. L'espacement entre
+   pieces (chevauchement au sein d'un type, ecart entre deux types) est lui
+   aussi pose en ligne par rangeePrises() dans ui.js, piece par piece : il
+   depend de la piece precedente et ne peut donc pas etre une regle CSS
+   unique. */
+.taken .tk{display:block;width:22px;height:22px;flex:none;margin:0;
   background:none;border:0;border-radius:0}
-.taken .tk:last-of-type{margin-right:0}
 .taken .tk svg{width:100%;height:100%;display:block;overflow:visible}
 /* On cible le corps de la piece par sa couleur d'origine, pas tous les
    chemins : l'oeil et le naseau du cavalier sont remplis en #101413 et
@@ -591,7 +592,7 @@ header>*{min-width:0}
 .origin{position:relative;overflow:hidden}
 .origin-mark{
   position:absolute;right:-3%;top:0;width:min(44%,300px);aspect-ratio:1;opacity:.14;
-  transform:translateY(-60%);pointer-events:none;z-index:0;line-height:0
+  transform:translateY(-60%);pointer-events:none;z-index:0;line-height:0;color:var(--brass)
 }
 .origin-mark svg{width:100%;height:auto;display:block}
 @media(max-width:620px){.origin-mark{right:-14%;width:74%;transform:translateY(-52%);opacity:.11}}
@@ -660,11 +661,11 @@ header>*{min-width:0}
 .rushitem{flex:1;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 4px;text-align:center}
 .rushitem b{display:block;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600}
 .rushitem span{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage)}
-.ytwrap{position:relative;padding-top:56.25%;border-radius:8px;overflow:hidden;background:#000;margin-bottom:12px}
-.ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.channels{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.channels{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
 @media(max-width:620px){.channels{grid-template-columns:1fr}}
-.chan{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:16px}
+.chan{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:16px;overflow:hidden}
+.chanEmbed{position:relative;padding-top:56.25%;margin:-16px -16px 12px;background:#000;overflow:hidden}
+.chanEmbed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .chan h3{font-family:'Source Serif 4',Georgia,serif;font-size:16px;font-weight:600;margin-bottom:4px}
 .chan p{color:var(--sage);font-size:12.5px;margin-bottom:10px}
 .prose{font-size:13.5px;line-height:1.7;color:var(--chalk)}
@@ -709,7 +710,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   <a class="skiplink" href="#contenu">Skip to main content</a>
   <header>
     <button class="brand" id="brand" aria-label="chang64 home">
-      <span class="glyph" id="brandmark"></span>
+      <span class="glyph" id="brandmark">/*__BRANDMARK__*/</span>
       <span class="names">
         <h1>chang<span class="sixtyfour">64</span></h1>
         <span class="tagline">The elephant on 64 squares</span>
@@ -774,7 +775,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
     </div>
 
     <div class="panel origin" style="margin-bottom:16px">
-      <span class="origin-mark" id="originMark" aria-hidden="true"></span>
+      <span class="origin-mark" id="originMark" aria-hidden="true">/*__BRANDMARK__*/</span>
       <div class="origin-text">
         <h2>The elephant on the board</h2>
         <p>Chang (ช้าง) is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.</p>
@@ -944,9 +945,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           </div>
           <div class="btnrow" style="margin-top:8px">
             <button class="btn" id="btnHint">Show the best move</button>
-            <button class="btn" id="btnStockfish">Stockfish for review</button>
           </div>
-          <p class="note" id="sfStatus">Stockfish is only used to review a finished game, never to help you play. It is stronger than the built-in engine, and downloads about 7 MB the first time.</p>
+          <p class="note" id="sfStatus">Analysing a finished game downloads Stockfish (about 7 MB, once) and uses it automatically. Stockfish never helps you while you play.</p>
           <div id="analysisOut" class="hide">
             <div class="accrow">
               <div class="stat"><b id="accScore">—</b><span>Accuracy</span></div>
@@ -1024,7 +1024,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <hr class="rule">
 
           <div class="ladder" id="ladder"></div>
-          <div class="lvlrow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> 5</span><span id="lvlName">First mates</span></div>
+          <div class="lvlrow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> <b id="lvlMax">10</b></span><span id="lvlName">First mates</span></div>
           <div class="stats">
             <div class="stat"><b id="stSolved">0</b><span>Solved</span></div>
             <div class="stat"><b id="stStreak">0</b><span>Streak</span></div>
@@ -1044,7 +1044,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           </div>
           <div class="btnrow">
             <button class="btn" id="btnDaily">Puzzle of the day</button>
-            <button class="btn" id="btnRush">Chang Sprint</button>
             <button class="btn" id="btnRetry">Restart puzzle</button>
           </div>
           <div class="btnrow" style="margin-top:8px">
@@ -1177,9 +1176,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   <div id="pane-watch" class="hide">
     <div class="panel">
       <h2>Chess on YouTube</h2>
-      <p class="sub">Nothing loads until you press play, so YouTube sets no cookies before you ask it to.</p>
-      <div id="ytPlayer" class="ytwrap hide"></div>
-      <p class="note" id="ytNote">Pick a channel below. “Live” opens the current stream if the channel is broadcasting, “Latest” plays their most recent uploads.</p>
+      <p class="sub">The latest video from each channel, updated automatically.</p>
     </div>
     <div class="channels" id="channels"></div>
   </div>

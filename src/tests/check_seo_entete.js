@@ -168,9 +168,13 @@ console.log("\n--- En-tetes de securite ---");
   for (const [besoin, motif, pourquoi] of [
     ["polices Google", "fonts.googleapis.com", "feuille de style des polices"],
     ["fichiers de police", "fonts.gstatic.com", "les polices elles-memes"],
-    ["videos YouTube", "youtube-nocookie.com", "l'onglet Videos utilise un iframe"],
+    ["videos YouTube", "youtube-nocookie.com", "l'onglet Videos affiche la derniere video de chaque chaine en iframe"],
     ["travailleurs web", "worker-src", "Stockfish tourne dans un Worker"],
-    ["styles en ligne", "'unsafe-inline'", "le site pose des styles par script"]
+    ["styles en ligne", "'unsafe-inline'", "le site pose des styles par script"],
+    ["compilation WebAssembly", "'wasm-unsafe-eval'",
+      "Stockfish est un module .wasm ; sans ce mot-cle dans script-src, Chrome " +
+      "refuse WebAssembly.instantiateStreaming() et Stockfish reste bloque " +
+      "silencieusement sur \"n'a pas pu demarrer\", meme si le fichier se telecharge"]
   ]) T(besoin + " autorises (" + pourquoi + ")", csp.includes(motif), csp.slice(0, 60));
   T("le site ne peut pas etre encadre ailleurs", /frame-ancestors 'self'/.test(csp));
 }

@@ -1,7 +1,7 @@
 /* Verification automatique de chang64.
    Lancement : node tests/check_recherche_exercices.js
 
-   777 exercices groupes par theme sur une seule page. Le champ filtre sur le
+   Les exercices sont groupes par theme sur une seule page. Le champ filtre sur le
    theme (dans les deux langues), le niveau et le numero.
 
    Particularite par rapport aux ouvertures : les exercices sont groupes en
@@ -10,6 +10,7 @@
    sommaire est masque pendant une recherche : il ne mene plus nulle part. */
 const fs=require("fs"),jd=require("jsdom");
 const S=require("path").join(__dirname,"..","site");
+const NPUZ=JSON.parse(fs.readFileSync(require("path").join(__dirname,"..","puzzles.json"),"utf8")).length;
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 const html=fs.readFileSync(S+"/fr/exercices/index.html","utf8");
@@ -18,7 +19,7 @@ console.log("\n--- Sans JavaScript ---");
 {
   const d=new jd.JSDOM(html).window.document;
   T("champ masque", d.getElementById("filtreBloc").classList.contains("hide"));
-  T("777 exercices presents", d.querySelectorAll("[data-cle]").length===777,
+  T(NPUZ+" exercices presents", d.querySelectorAll("[data-cle]").length===NPUZ,
      d.querySelectorAll("[data-cle]").length);
   T("sommaire des themes present", !!d.querySelector(".toc"));
   T("sections thematiques visibles", [...d.querySelectorAll("[data-theme]")].every(s=>!s.hidden));
@@ -50,7 +51,11 @@ setTimeout(()=>{
 
   console.log("\n--- Recherche par numero ---");
   saisir("#42");
-  T("'#42' filtre finement", vis().length>0&&vis().length<20, vis().length+" resultats");
+  /* Seuil relatif plutot que fige : "#42" trouve tout identifiant qui le
+     contient (#42, #420-429, #142...942), donc le nombre de resultats croit
+     avec la taille de la banque. Le test verifie que le filtre reste fin
+     (largement sous la totalite), pas un compte exact. */
+  T("'#42' filtre finement", vis().length>0&&vis().length<NPUZ/10, vis().length+" resultats");
 
   console.log("\n--- Recherche dans l'autre langue ---");
   saisir("pin");
@@ -58,7 +63,7 @@ setTimeout(()=>{
 
   console.log("\n--- Retour a l'etat initial ---");
   saisir("");
-  T("tous les exercices reviennent", vis().length===777, vis().length);
+  T("tous les exercices reviennent", vis().length===NPUZ, vis().length);
   T("toutes les sections reviennent", blocsVis().length===[...d.querySelectorAll("[data-theme]")].length);
   T("le sommaire revient", !d.querySelector(".toc").hidden);
 

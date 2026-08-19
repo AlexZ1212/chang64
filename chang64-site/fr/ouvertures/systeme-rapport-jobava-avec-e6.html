@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Système Rapport-Jobava, avec e6 : coups et variantes | chang64</title>
-<meta name="description" content="La Système Rapport-Jobava, avec e6 commence par 1.d4 d5 2.Nc3 e6 3.Bf4 (ECO D01). Cette page recense ses 1 variante répertoriée avec leurs coups et leurs codes ECO, sur un échiquier depuis lequel tu peux jouer contre le moteur.">
+<meta name="description" content="La Système Rapport-Jobava, avec e6 commence par 1.d4 d5 2.Nc3 e6 3.Bf4 (ECO D01).">
 <link rel="canonical" href="https://chang64.com/fr/ouvertures/systeme-rapport-jobava-avec-e6.html">
 <!-- Les icones existaient mais n'etaient declarees nulle part hors du
      manifeste : invisibles dans l'onglet du navigateur et dans les resultats
@@ -15,7 +15,7 @@
 <link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/systeme-rapport-jobava-avec-e6.html">
 <link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/rapport-jobava-system-with-e6.html">
 <meta property="og:title" content="Système Rapport-Jobava, avec e6 : coups et variantes | chang64">
-<meta property="og:description" content="La Système Rapport-Jobava, avec e6 commence par 1.d4 d5 2.Nc3 e6 3.Bf4 (ECO D01). Cette page recense ses 1 variante répertoriée avec leurs coups et leurs codes ECO, sur un échiquier depuis lequel tu peux jouer contre le moteur.">
+<meta property="og:description" content="La Système Rapport-Jobava, avec e6 commence par 1.d4 d5 2.Nc3 e6 3.Bf4 (ECO D01).">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chang64.com/fr/ouvertures/systeme-rapport-jobava-avec-e6.html">
 <meta property="og:locale" content="fr_FR">
@@ -25,7 +25,18 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<!-- display=swap montrait d'abord la police de secours puis la remplacait
+     par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
+     navigation recharge le document (ce ne sont pas des pages d'application
+     a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
+     menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
+     largeur entre les deux polices (mesure : jusqu'a 40px sur les six
+     entrees) se voyait comme un reflow du menu, comme si la page repartait
+     de zero. display=optional laisse un tres bref delai (~100ms, largement
+     suffisant pour une police deja en cache) puis, s'il n'est pas tenu,
+     garde la police de secours pour toute la vue sans jamais la remplacer
+     plus tard : plus de bascule visible apres le premier affichage. -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=optional" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
 --bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
@@ -159,7 +170,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .footnav a:hover{text-decoration:underline}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}</style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Système Rapport-Jobava, avec e6 : ouverture d'échecs","description":"La Système Rapport-Jobava, avec e6 commence par 1.d4 d5 2.Nc3 e6 3.Bf4 (ECO D01). Cette page recense ses 1 variante répertoriée avec leurs coups et leurs codes ECO, sur un échiquier depuis lequel tu peux jouer contre le moteur.","inLanguage":"fr","about":{"@type":"Thing","name":"Système Rapport-Jobava, avec e6"},"isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Système Rapport-Jobava, avec e6 : ouverture d'échecs","description":"La Système Rapport-Jobava, avec e6 commence par 1.d4 d5 2.Nc3 e6 3.Bf4 (ECO D01).","inLanguage":"fr","about":{"@type":"Thing","name":"Système Rapport-Jobava, avec e6"},"isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"}}</script>
 </head>
 <body>
 <div class="wrap">
@@ -221,6 +232,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 </footer>
 </div>
 <script>
+/* L'application (accessible via le logo ou "Accueil") partage le meme
+   stockage que ces pages, sous la cle "chang64:lang" (voir window.storage et
+   loadLang dans i18n.js), mais ne le lisait jamais depuis ici : choisir
+   l'anglais sur une page claire, puis revenir a l'accueil, retombait sur la
+   langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
+   chaque visite d'une page claire, dans le meme format qu'attend loadLang
+   (chaine "fr" ou "en", pas de JSON). */
+try{localStorage.setItem("chang64:lang","fr");}catch(e){}
 
 /* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
    repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en

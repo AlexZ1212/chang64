@@ -81,5 +81,20 @@ console.log("\n--- Le logo reprend exactement celui de l'application ---");
   T("elephant en laiton", (st(pg,".brandmark")||{}).color==="var(--brass)");
 }
 
+console.log("\n--- L'application affiche aussi la marque sans JavaScript ---");
+/* L'application la posait par script au demarrage ($("brandmark").innerHTML=
+   markSVG(...) dans ui.js) : un moteur d'indexation, une extension qui
+   bloque le JavaScript, ou une previsualisation qui ne l'execute pas
+   voyaient un entete sans logo. Elle est desormais dans le HTML genere,
+   comme sur les pages claires, aux deux emplacements ou elle apparait. */
+{
+  const app=fs.readFileSync(S+"/index.html","utf8");
+  const glyph=(app.match(/<span class="glyph" id="brandmark">([\s\S]*?)<\/span>/)||[])[1]||"";
+  T("marque presente dans l'entete sans script", /<svg class="brandmark"/.test(glyph), glyph.slice(0,60));
+  const origin=(app.match(/<span class="origin-mark" id="originMark"[^>]*>([\s\S]*?)<\/span>/)||[])[1]||"";
+  T("marque presente dans le filigrane sans script", /<svg class="brandmark"/.test(origin), origin.slice(0,60));
+  T("plus aucun jeton de substitution oublie", !app.includes("__BRANDMARK__"));
+}
+
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
 process.exit(ko?1:0);

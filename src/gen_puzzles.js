@@ -1,8 +1,12 @@
 /* Generateur d'exercices tactiques.
 
-   La banque existante est tres desequilibree : 436 des 489 exercices sont des
-   prises gagnantes ou des mats en un ou deux coups, et des motifs courants
-   comme le clouage ou l'enfilade sont absents.
+   La banque d'origine (489 exercices) etait tres desequilibree : 436 sur les
+   489 etaient des prises gagnantes ou des mats en un ou deux coups, et des
+   motifs courants comme le clouage ou l'enfilade etaient absents. Ce
+   generateur a servi une premiere fois pour porter la banque a 777
+   exercices, puis une seconde fois pour la porter a 1000 sur dix niveaux :
+   les chiffres ci-dessus decrivent l'etat de depart qui a motive son
+   ecriture, pas la banque actuelle.
 
    Methode : on part de parties jouees au hasard avec un peu de recherche pour
    rester plausible, puis on retient une position uniquement si le moteur
@@ -286,6 +290,13 @@ function verify(p) {
   const from = nameToSq(uci.slice(0, 2)), to = nameToSq(uci.slice(2, 4));
   const mv = g.moves().find(m => m.from === from && m.to === to);
   if (!mv) return false;
+  /* Position de depart illegale si l'adversaire de celui qui doit jouer est
+     deja en echec : une partie jouee coup par coup ne peut jamais y mener
+     (le dernier coup joue aurait laisse son propre roi en echec), donc toute
+     "solution" y serait un artefact plutot qu'une vraie tactique. randomPosition()
+     ne produit jamais ce cas puisqu'elle ne joue que des coups legaux, mais un
+     ajout manuel futur pourrait s'y tromper : on le rejette ici, une bonne fois. */
+  if (g.inCheck && g.inCheck(g.turn ^ 1)) return false;
   if (g.inCheck && g.inCheck() && p.type === "gain") return false;   /* deja en echec : ambigu */
   const after = new Game(p.fen);
   after.makeMove(after.moves().find(m => m.from === from && m.to === to));
@@ -297,6 +308,12 @@ function nameToSq(n) {
   return r * 16 + f;
 }
 
+/* Reutilisable par d'autres scripts (recolte de mats dedies, curation) sans
+   declencher la production par lots ci-dessous, qui ne tourne que si ce
+   fichier est execute directement (node gen_puzzles.js ...). */
+module.exports = { randomPosition, makePuzzle, verify, classify, rankMoves, mateLength, kingSq, MATE };
+
+if (require.main === module) {
 /* ---------------------------------------------------------------- */
 /* Production par lots : le generateur est relance plusieurs fois et accumule
    ses resultats dans le meme fichier. Chaque lot est borne en temps pour
@@ -332,3 +349,4 @@ fs.writeFileSync(OUT, JSON.stringify(made, null, 1));
 const byTheme = {};
 for (const p of made) byTheme[p.theme] = (byTheme[p.theme] || 0) + 1;
 console.log(JSON.stringify(byTheme, null, 1));
+}

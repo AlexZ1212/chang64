@@ -135,7 +135,7 @@ setTimeout(async () => {
      il n'y a simplement rien a respecter depuis l'accueil. */
   const tir=[];
   for(let i=0;i<8;i++){
-    d.getElementById("tab-home").click(); await wait(220);
+    d.getElementById("brand").click(); await wait(220);
     d.getElementById("heroPlay").click(); await wait(450);
     tir.push(/Black|Noirs/.test(d.getElementById("readySub").textContent)?"N":"B");
     d.getElementById("readyStart").click(); await wait(180);
@@ -148,7 +148,7 @@ setTimeout(async () => {
   /* Le reglage lui-meme passe en "au hasard" : sinon le selecteur afficherait
      "Blancs" alors que la couleur a ete tiree, et la partie suivante
      repartirait en Blancs fixes sans qu'on l'ait demande. */
-  d.getElementById("tab-home").click(); await wait(250);
+  d.getElementById("brand").click(); await wait(250);
   d.getElementById("heroPlay").click(); await wait(500);
   d.getElementById("readyStart").click(); await wait(400);
   T("le selecteur affiche 'Au hasard'", enAvant().v==="r", enAvant().v);

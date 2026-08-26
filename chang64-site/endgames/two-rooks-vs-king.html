@@ -97,7 +97,7 @@ p{margin-bottom:12px;max-width:66ch}
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
 .animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
-  width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
+  width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}
 .animctl button:hover{background:var(--board);color:var(--slate)}
 .animctl button:disabled{opacity:.38;cursor:default}
 .animctl button:disabled:hover{background:var(--slate);color:var(--board)}
@@ -150,7 +150,7 @@ html{
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px;text-align:center}
 .filtre{margin-bottom:18px}
 .filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
   padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
@@ -177,6 +177,16 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .sitenav::-webkit-scrollbar{display:none}
+/* Indice de defilement, allege pour ~1900 pages. */
+.sitenav::before,.sitenav::after{content:"";position:sticky;width:22px;
+  flex:none;pointer-events:none;z-index:2;opacity:0;display:flex;align-items:center;
+  font-size:13px;color:var(--sage)}
+.sitenav::before{left:-4px;order:-1;margin-right:-22px;border-radius:999px 0 0 999px;
+  background:linear-gradient(to right,var(--slate) 38%,transparent);content:"‹";padding-left:6px}
+.sitenav::after{right:-4px;order:999;margin-left:-22px;border-radius:0 999px 999px 0;
+  background:linear-gradient(to left,var(--slate) 38%,transparent);content:"›";
+  justify-content:flex-end;padding-right:6px}
+.sitenav.sl::before,.sitenav.sr::after{opacity:1}
 .sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);
   text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;
   transition:background .18s,color .18s}
@@ -199,7 +209,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .langsw a:hover{color:var(--chalk)}
 
-.footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
+.footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
 .footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
 .footnav a:hover{text-decoration:underline}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
@@ -218,7 +228,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
     <a href="/endgames/two-rooks-vs-king.html" hreflang="en" rel="alternate" aria-current="true">EN</a>
     <a href="/fr/finales/deux-tours-contre-roi.html" hreflang="fr" rel="alternate">FR</a>
   </div>
-  <nav class="sitenav"><a href="/openings/">Openings</a><a href="/puzzles/">Puzzles</a><a href="/learn/">Rules</a><a href="/endgames/" aria-current="page">Endgames</a><a href="/traps/">Opening traps</a><a href="/glossary/">Glossary</a></nav>
+  <nav class="sitenav"><a href="/openings/">Openings</a><a href="/puzzles/">Puzzles</a><a href="/learn/">Rules</a><a href="/endgames/" aria-current="page" id="cn">Endgames</a><a href="/traps/">Opening traps</a><a href="/glossary/">Glossary</a></nav>
 </header>
 <h1>Two rooks versus king: the ladder mate</h1>
 <div class="cols"><div class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300" role="img" aria-label="Chess position"><rect x="0" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="0" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="0" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="37.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="37.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="75" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="75" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="112.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="112.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="150" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="150" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="187.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="187.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="0" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="37.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="75" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="112.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="150" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="187.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="225" y="225" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="262.5" y="225" width="37.5" height="37.5" fill="#4B6B63"/><rect x="0" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="37.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="75" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="112.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="150" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="187.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><rect x="225" y="262.5" width="37.5" height="37.5" fill="#4B6B63"/><rect x="262.5" y="262.5" width="37.5" height="37.5" fill="#EDE4D2"/><defs><symbol id="pbk" viewBox="0 0 45 45"><path d="M31.54,31.96H13.46c-2.08,0-3.79,1.7-3.79,3.79v2.25h25.66v-2.25c0-2.09-1.7-3.79-3.79-3.79Z" fill="#232b28" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/><path d="M31.08,12.5c-1.67,0-3.32.64-4.72,1.42l-1.8-2.32v-1.53h2.95v-4.12h-2.95v-2.95h-4.12v2.95h-2.95v4.12h2.95v1.53l-1.8,2.32c-1.4-.78-3.05-1.42-4.72-1.42-2.74,0-7.28,2.13-7.28,7.55,0,5.98,5.8,8.15,6.78,11.92.01,0,.03,0,.04,0h18.08s.03,0,.04,0c.97-3.77,6.78-5.94,6.78-11.92,0-5.41-4.54-7.55-7.28-7.55ZM29.1,25.07c-.58.62-1.23,1.31-1.82,2.09-.14.18-.35.29-.58.29-.35,0-.84,0-.81,0v-7.39c1.3-.96,2.57-1.55,3.39-1.56.42.03,2.24.27,2.24,2.46,0,1.37-.74,2.3-2.42,4.1ZM13.48,20.97c0-2.19,1.82-2.44,2.24-2.46.82.01,2.09.6,3.39,1.56v7.39s-.46,0-.81,0c-.23,0-.44-.11-.58-.29-.59-.77-1.24-1.46-1.82-2.09-1.68-1.8-2.42-2.73-2.42-4.1Z" fill="#232b28" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/></symbol><symbol id="pwr" viewBox="0 0 45 45"><path d="M12.99,33.03h19.01c1.35,0,2.45,1.1,2.45,2.45v2.52H10.54v-2.52c0-1.35,1.1-2.45,2.45-2.45Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.17,15.8c-.07,0-.15.01-.23.01h-12.88c-.08,0-.15,0-.23-.01-.01,5.69-.51,15.85-3.95,17.49,0,0,0,0,0,0,.33-.17.71-.27,1.11-.27h19.01c.4,0,.78.1,1.11.27,0,0,0,0,0,0-3.45-1.65-3.94-11.8-3.95-17.49Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/><path d="M27.96,8v2.99h-2.92v-2.99h-5.07v2.99h-2.92v-2.99h-4.29v4.5c0,1.83,1.48,3.31,3.31,3.31h12.88c1.83,0,3.31-1.48,3.31-3.31v-4.5h-4.29Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="pwk" viewBox="0 0 45 45"><path d="M31.54,31.96H13.46c-2.08,0-3.79,1.7-3.79,3.79v2.25h25.66v-2.25c0-2.09-1.7-3.79-3.79-3.79Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/><path d="M31.08,12.5c-1.67,0-3.32.64-4.72,1.42l-1.8-2.32v-1.53h2.95v-4.12h-2.95v-2.95h-4.12v2.95h-2.95v4.12h2.95v1.53l-1.8,2.32c-1.4-.78-3.05-1.42-4.72-1.42-2.74,0-7.28,2.13-7.28,7.55,0,5.98,5.8,8.15,6.78,11.92.01,0,.03,0,.04,0h18.08s.03,0,.04,0c.97-3.77,6.78-5.94,6.78-11.92,0-5.41-4.54-7.55-7.28-7.55ZM29.1,25.07c-.58.62-1.23,1.31-1.82,2.09-.14.18-.35.29-.58.29-.35,0-.84,0-.81,0v-7.39c1.3-.96,2.57-1.55,3.39-1.56.42.03,2.24.27,2.24,2.46,0,1.37-.74,2.3-2.42,4.1ZM13.48,20.97c0-2.19,1.82-2.44,2.24-2.46.82.01,2.09.6,3.39,1.56v7.39s-.46,0-.81,0c-.23,0-.44-.11-.58-.29-.59-.77-1.24-1.46-1.82-2.09-1.68-1.8-2.42-2.73-2.42-4.1Z" fill="#eceae3" stroke="#101413" stroke-linecap="round" stroke-linejoin="round" stroke-width=".98"/></symbol></defs><use href="#pbk" x="150.0" y="112.5" width="37.5" height="37.5"/><use href="#pwr" x="0.0" y="225.0" width="37.5" height="37.5"/><use href="#pwr" x="0.0" y="262.5" width="37.5" height="37.5"/><use href="#pwk" x="150.0" y="262.5" width="37.5" height="37.5"/></svg></div>
@@ -249,7 +259,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
    chaque visite d'une page claire, dans le meme format qu'attend loadLang
    (chaine "fr" ou "en", pas de JSON). */
-try{localStorage.setItem("chang64:lang","en");}catch(e){}
+try{localStorage.setItem("chang64:lang","en");var c=document.getElementById("cn"),sn=c.parentElement;c.scrollIntoView({block:"nearest"});var u=function(){sn.classList.toggle("sl",sn.scrollLeft>2);sn.classList.toggle("sr",sn.scrollLeft<sn.scrollWidth-sn.clientWidth-2);};u();sn.onscroll=u;}catch(e){}
 
 /* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
    repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
@@ -279,11 +289,13 @@ try{localStorage.setItem("chang64:lang","en");}catch(e){}
     if(btn.prev)btn.prev.disabled=(i===0);
     if(btn.next)btn.next.disabled=(i===groups.length-1);
   }
+  var pp=btn.play&&btn.play.querySelectorAll("path");
+  function tog(k){pp[k].style.display="";pp[1-k].style.display="none";}
   function stop(){if(timer){clearInterval(timer);timer=null;}
-    if(btn.play)btn.play.innerHTML="&#9654;";}
+    if(pp)tog(0);}
   function playFrom(n){
     stop(); show(n);
-    if(btn.play)btn.play.innerHTML="&#10073;&#10073;";
+    if(pp)tog(1);
     timer=setInterval(function(){
       if(i>=groups.length-1){stop();return;}
       show(i+1);

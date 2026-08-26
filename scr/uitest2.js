@@ -110,7 +110,7 @@ function currentPuzzle() {
   /* La bande de statistiques de l'accueil ne doit apparaitre qu'une fois
      une progression reelle acquise : avant, elle n'afficherait que des zeros,
      qu'un premier visiteur lit comme "le site est vide". */
-  click($("tab-home")); await wait(400);
+  click($("brand")); await wait(400);
   const strip = $("homeStrip"), start = $("homeStart");
   const vus = solved > 0;
   console.log("Bande d'accueil après", solved, "exercices résolus :",

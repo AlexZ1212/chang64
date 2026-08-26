@@ -36,8 +36,15 @@ setTimeout(async()=>{
   T("force de nouveau reglable", seg("segLevel").every(b=>!b.disabled));
   T("cadence de nouveau reglable", seg("tcCats2").every(b=>!b.disabled));
   T("bouton de partie actif", !d.getElementById("btnNew").disabled);
-  T("statut invite a choisir", /couleur|colour|force|strength/i.test(d.getElementById("status").textContent||""),
-     d.getElementById("status").textContent);
+  /* Le texte d'instruction a rejoint la bulle (i) de "Reglages" (voir
+     template.html) : #status lui-meme reste vide et son panneau se masque
+     pendant le parametrage, plutot que d'y dupliquer un message qui vivait
+     avant dans le meme encart que le statut en direct d'une partie. */
+  T("panneau de statut cache pendant le parametrage",
+    d.getElementById("statusPanel").classList.contains("hide"));
+  T("l'explication vit dans la bulle Reglages",
+    /couleur|colour|force|strength/i.test(d.getElementById("tipSettings").textContent||""),
+    d.getElementById("tipSettings").textContent);
 
   console.log("\n--- Le reglage prend effet ---");
   seg("segLevel").find(b=>b.dataset.v==="4").click(); await wait(250);
@@ -62,7 +69,7 @@ setTimeout(async()=>{
      l'overlay laissait couleur, force et cadence modifiables, alors qu'une
      partie relancee apres abandon les verrouillait correctement. La
      difference venait de ce que newGame, lui, passe par refreshGame. */
-  d.getElementById("tab-home").click(); await wait(300);
+  d.getElementById("brand").click(); await wait(300);
   d.getElementById("heroPlay").click(); await wait(600);
   const rb2=d.getElementById("readyBanner");
   T("overlay affiche depuis l'accueil", !rb2.classList.contains("hide"));
@@ -92,10 +99,12 @@ setTimeout(async()=>{
   }
   const visibles=()=>!d.getElementById("clockTop").classList.contains("hide");
   T("visibles pendant une partie", visibles());
-  for(const [id,nom] of [["tab-puzzles","Exercices"],["tab-train","Defis"],["tab-home","Accueil"]]){
+  for(const [id,nom] of [["tab-puzzles","Exercices"],["tab-train","Defis"]]){
     d.getElementById(id).click(); await wait(400);
     T("masquees dans "+nom, !visibles());
   }
+  d.getElementById("brand").click(); await wait(400);
+  T("masquees dans Accueil", !visibles());
   d.getElementById("tab-play").click(); await wait(450);
   T("de retour dans Jouer", visibles());
 
@@ -109,7 +118,13 @@ setTimeout(async()=>{
   await lancer2();
   {
     const bas=d.getElementById("takenBottom"), haut=d.getElementById("takenTop");
-    T("aucune piece en debut de partie", (bas.innerHTML||"")==="" && (haut.innerHTML||"")==="");
+    /* La rangee est desormais toujours presente (voir rangeePrises dans
+       ui.js) : la hauteur de la pendule ne doit plus varier entre le debut
+       de partie et la premiere prise. On verifie donc l'absence de pieces,
+       pas l'absence de la rangee elle-meme. */
+    T("aucune piece en debut de partie",
+      bas.querySelectorAll(".tk").length===0 && haut.querySelectorAll(".tk").length===0);
+    const hAvant=d.getElementById("clockBottom").getBoundingClientRect().height;
     /* On pose la position directement plutot que de jouer les coups : le bot
        repond entre-temps et la sequence deraille. Ici : les blancs ont pris un
        pion et la dame, les noirs deux pions. */
@@ -126,6 +141,9 @@ setTimeout(async()=>{
     T("solde +8 pour les blancs", p.solde===8, String(p.solde));
     T("les pieces sont affichees", bas.querySelectorAll(".tk").length===2,
       String(bas.querySelectorAll(".tk").length));
+    T("hauteur de la pendule stable, prises ou non",
+      d.getElementById("clockBottom").getBoundingClientRect().height===hAvant,
+      hAvant+" -> "+d.getElementById("clockBottom").getBoundingClientRect().height);
     /* le joueur en avantage est en haut ou en bas selon la couleur tiree :
        on verifie qu'un seul des deux porte le nombre. */
     const avecNombre=[bas,haut].filter(x=>/\+/.test(x.textContent));

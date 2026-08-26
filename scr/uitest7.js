@@ -76,11 +76,11 @@ const H = w => {
   T("scoresheet filled", a.$("sheet").querySelectorAll(".sheet-row").length === 6);
 
   console.log("\nMOVE NAVIGATION");
-  a.click(a.$("navStart")); await wait(250);
+  a.click(a.$("navScroll").querySelector('[data-ply="0"]')); await wait(250);
   T("jump to start", a.placement() === "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", a.placement().slice(0, 20));
   T("nav note updated", /Reviewing move 0/.test(a.$("navNote").textContent), a.$("navNote").textContent);
-  a.click(a.$("navNext")); await wait(200);
-  a.click(a.$("navNext")); await wait(200);
+  a.click(a.$("navScroll").querySelector('[data-ply="1"]')); await wait(200);
+  a.click(a.$("navScroll").querySelector('[data-ply="2"]')); await wait(200);
   const ref = new Engine.Game();
   ref.makeMove(ref.moves().find(m => ref.uci(m) === "e2e4"));
   ref.makeMove(ref.moves().find(m => ref.uci(m) === "c7c5"));
@@ -129,7 +129,7 @@ const H = w => {
     while (!(a.$("opening").textContent || "").trim() && Date.now() < jusqua) await wait(120);
   }
   T("opening shown while playing", a.$("opening").textContent.length > 0, a.$("opening").textContent);
-  a.click(a.$("navPrev")); await wait(250);
+  a.click(a.$("navScroll").querySelector('[data-ply="0"]')); await wait(250);
   const beforeCount = a.$("sheet").querySelectorAll("[data-ply]").length;
   await a.play("d2", "d4");
   T("clicking board leaves review instead of moving", a.$("sheet").querySelectorAll("[data-ply]").length === beforeCount);

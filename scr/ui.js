@@ -89,6 +89,18 @@ const boardEl=$("board");
 let mode="home";
 let game=new Game();
 let flipped=false;
+/* Consomme par newGame() : demarre la partie depuis cette position plutot
+   que le depart standard, sans changer la signature de newGame() (appelee
+   sans argument partout ailleurs). Pose par l'editeur de position (ui3.js,
+   "Jouer contre le bot depuis ici"). */
+let pendingStartFen=null;
+/* Consomme egalement par newGame() : force une partie sans pendule, quel
+   que soit le dernier reglage de cadence choisi dans l'onglet Jouer. Pose
+   par "Jouer contre le bot depuis ici" (editeur de position) -- reprendre
+   la derniere cadence choisie n'aurait aucun sens pour une position deja
+   en cours (un chrono frais de 10 minutes sur une fin de partie a trois
+   coups, par exemple). */
+let pendingNoClock=false;
 /* Animation des deplacements : activee par defaut, desactivable dans les
    preferences. Le reglage est relu au demarrage depuis le stockage local. */
 let animOn=true;
@@ -117,7 +129,7 @@ let colorMode="w";
 let botLevel=2;
 let pendingPromo=null;
 let sanList=[];
-let mainGame=null,mainSan=null,mainLast=null,mainStarted=false;
+let mainGame=null,mainSan=null,mainLast=null,mainStarted=false,mainFlipped=false;
 let gameStarted=false;
 
 /* puzzles */
@@ -282,7 +294,7 @@ function prises(){
    type sont forcement consecutives dans la boucle. */
 /* Hauteur d'une piece prise, en pixels. Sert aussi a calculer sa largeur :
    les deux doivent rester coherents avec la regle .taken .tk du gabarit. */
-const TAILLE_PRISE=22;
+const TAILLE_PRISE=20;
 /* Chevauchement au sein d'un groupe : assez pour que le tas se voie, pas
    assez pour masquer la silhouette du dessous (le pion, piece la plus
    etroite une fois recadree sur sa boite, ne fait que 11px : au-dela on ne
@@ -291,10 +303,12 @@ const TAILLE_PRISE=22;
    deux types saute aux yeux sans avoir besoin d'un separateur visuel. */
 const CHEVAUCHEMENT_GROUPE=-5,ECART_GROUPE=4;
 function rangeePrises(liste,couleur,solde){
-  if(!liste.length&&!solde)return "";
-  /* La classe "noire" declenche le contour clair : sans lui, une piece noire
-     se confondrait avec le fond sombre de la pendule. */
-  const cls="tk"+(couleur==="b"?" noire":"");
+  /* Toujours retourner la rangee, meme sans aucune prise ni solde (au lieu
+     d'une chaine vide) : sinon le bloc pendule demarrait plus bas, puis
+     grandissait brusquement des la premiere prise, decalant l'echiquier et
+     tout ce qui suit. La hauteur reste ainsi fixe du debut a la fin de la
+     partie. */
+  const cls="tk"+(couleur==="b"?" noire":""); // "noire" declenche le contour clair, sinon confondue au fond sombre
   let s='<span class="taken">';
   let precedent=null;
   for(const t of liste){
@@ -394,6 +408,19 @@ function buildBoard(){
     d.setAttribute("role","button");
     d.addEventListener("click",onSquare);
     d.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();onSquare(ev);}});
+    /* Glisser-depose : uniquement dans l'editeur de position (mode==="edit"),
+       et uniquement depuis une case occupee -- une case vide n'a rien a
+       glisser, le tap-pour-poser habituel (via le "click" ci-dessus) reste
+       seul en jeu dans ce cas. Voir la section dediee dans ui3.js pour le
+       detail complet de la mecanique. */
+    d.addEventListener("pointerdown",ev=>{
+      if(mode!=="edit"||typeof editPointerDown!=="function")return;
+      const i=Array.prototype.indexOf.call(boardEl.children,ev.currentTarget);
+      const sq=idxToSq(i);
+      const p=game.board[sq];
+      if(!p)return;
+      editPointerDown(ev,{source:"board",sq:sq,piece:p});
+    });
     boardEl.appendChild(d);
   }
   /* Une seule case porte tabindex=0. On la pose directement, sans passer par
@@ -494,21 +521,36 @@ function prefersReducedMotion(){
 }
 function updateEval(){
   const g=viewGame();
-  let cp=null;
-  if(typeof evalFromAnalysis==="function")cp=evalFromAnalysis();
-  const raw=cp!==null?cp:evaluate(g)*(g.turn===W?1:-1);
-  const pawns=Math.max(-10,Math.min(10,raw/100));
+  let cpTrue=null,mate=null;
+  if(typeof evalFromAnalysis==="function"){
+    const ea=evalFromAnalysis();
+    if(ea){cpTrue=ea.cpTrue;mate=ea.mate;}
+  }
+  if(cpTrue===null&&mate===null)cpTrue=evaluate(g)*(g.turn===W?1:-1);
+  const pawnsTrue=(cpTrue||0)/100;
+  /* BAR_CAP : ecretage VISUEL de la barre seulement (comme sur chess.com et
+     lichess, dont la barre est quasi pleine bien avant un avantage de 10
+     pions). Ce plafond ne touche plus le nombre affiche : avant ce
+     correctif, Math.max(-10,Math.min(10,...)) ecretait aussi le texte, donc
+     "+14.0" restait bloque a "+10.0". Sur un mat force, la barre va au
+     maximum du cote gagnant plutot que de suivre un pseudo-score. */
+  const BAR_CAP=10;
+  const pawnsForBar=mate!==null?(mate>0?BAR_CAP:-BAR_CAP):Math.max(-BAR_CAP,Math.min(BAR_CAP,pawnsTrue));
   /* La hauteur represente toujours la part des Blancs. C'est l'orientation
      de la barre qui suit celle de l'echiquier, pas la valeur. */
-  $("evalfill").style.height=(50+pawns*4.4).toFixed(1)+"%";
+  $("evalfill").style.height=(50+pawnsForBar*4.4).toFixed(1)+"%";
   { const tr=document.querySelector(".evaltrack");
     if(tr)tr.classList.toggle("flipped",!!flipped); }
-  $("evalnum").textContent=(pawns>0?"+":"")+pawns.toFixed(1);
+  /* Sur un mat force, chess.com et lichess affichent "M{n}" (le nombre de
+     coups jusqu'au mat) plutot qu'une valeur en pions : un score numerique
+     n'a pas de sens face a une issue forcee et binaire. */
+  $("evalnum").textContent=mate!==null?(mate>0?"M":"\u2212M")+Math.abs(mate):(pawnsTrue>0?"+":"")+pawnsTrue.toFixed(1);
   const el=$("evaltxt");
-  const side=pawns>0?"White":"Black";
-  if(Math.abs(pawns)<0.6)el.textContent=t("Even position");
-  else if(Math.abs(pawns)<1.6)el.textContent=t(side+" slightly better");
-  else if(Math.abs(pawns)<3.5)el.textContent=t(side+" is better");
+  const side=(mate!==null?mate>0:pawnsTrue>0)?"White":"Black";
+  if(mate!==null)el.textContent=t(side+" mates in {n}",{n:Math.abs(mate)});
+  else if(Math.abs(pawnsTrue)<0.6)el.textContent=t("Even position");
+  else if(Math.abs(pawnsTrue)<1.6)el.textContent=t(side+" slightly better");
+  else if(Math.abs(pawnsTrue)<3.5)el.textContent=t(side+" is better");
   else el.textContent=t(side+" is winning");
 }
 function onSquare(e){
@@ -527,6 +569,8 @@ function onSquare(e){
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
+  else if(mode==="edit"){if(typeof handleEditorClick==="function")handleEditorClick(sq);}
+  else if(mode==="analyse"){if(typeof handleAnalyseClick==="function")handleAnalyseClick(sq);}
 }
 function pickMove(from,to){
   const c=legalCache.filter(m=>m.from===from&&m.to===to);
@@ -552,15 +596,72 @@ function askPromo(cands,then){
 /* ==========================================================
    PLAY VS COMPUTER
    ========================================================== */
+/* Tant qu'aucune partie n'est active (reglages pas encore lances), le
+   plateau lui-meme reste cache : le voir plein de pieces avant meme d'avoir
+   choisi couleur/force/cadence laissait croire qu'on pouvait deja jouer, le
+   clic ne faisant en realite rien (handleGameClick commence par
+   "if(!gameStarted)return", sans aucun signal). Exception : le choix de
+   reprise d'une partie sauvegardee (pendingPlaySave) doit rester visible,
+   il vit dans ce meme bloc (readyBanner, a l'interieur de .board-wrap).
+   Appelee depuis refreshGame() (couvre la quasi-totalite des transitions
+   d'etat en mode Jouer) et explicitement depuis showResumeChoice(), le seul
+   chemin qui ne passe pas par refreshGame(). */
+function updatePlayBoardVisibility(){
+  const bw=document.querySelector(".board-wrap");
+  if(!bw)return;
+  const hide=mode==="play"&&!gameStarted&&!(typeof pendingPlaySave!=="undefined"&&pendingPlaySave);
+  bw.classList.toggle("hide",hide);
+  if(mode==="play"){ const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",hide); }
+}
 function refreshGame(){
   legalCache=game.moves();
   render();updateEval();renderSheetInto("sheet",sanList);renderClocks();
+  updatePlayBoardVisibility();
   const over=gameOver();
-  $("turnline").textContent=!gameStarted?t("Not started yet."):(over?t("Game over."):(game.turn===W?t("White to move."):t("Black to move.")));
+  /* turnline (element "Ta partie" / "Trait aux Blancs.") a ete retire : il
+     ne faisait plus que repeter l'overlay de preparation et l'evidence de
+     l'echiquier. La seule info utile de ce bloc, l'ouverture detectee, reste
+     affichee via #opening ; le reste (echec, calcul en cours, resultat)
+     continue de vivre dans #status, qui portait deja ces messages. */
   if(typeof afterGameRender==="function")afterGameRender(over);
   $("btnNew").textContent=gameStarted?t("New game"):t("Start game");
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
+  /* Masque plutot que grise tant qu'aucune partie n'existe : "Abandonner"
+     une partie qui n'a jamais commence n'a pas de sens a montrer du tout,
+     grise sans explication ou pas (meme principe que "Annuler mon coup"
+     en mode Entre amis). Reste disponible (grise selon la ligne au-dessus)
+     une fois qu'une partie a reellement existe, y compris terminee. */
+  $("btnResign").classList.toggle("hide",!gameStarted);
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
+  /* Ces trois blocs n'ont un sens que lorsqu'il y a effectivement une partie
+     (en cours ou terminee) a montrer/exporter/analyser : masques plutot que
+     laisses vides ou desactives sans explication pendant le parametrage.
+     Revue : jamais pendant le parametrage NI pendant qu'on joue (l'analyse
+     reste bloquee tant que la partie n'est pas finie, deja le cas plus bas
+     dans ce fichier) -- seulement une fois la partie finie, ou en train de
+     revoir un PGN importe. Feuille de partie et export PGN : des qu'il y a
+     au moins un coup a montrer/exporter, meme en cours de partie. */
+  {
+    const hasMoves=sanList.length>0;
+    const finished=(typeof gameFinished==="function"&&gameFinished())||(typeof isReviewGame!=="undefined"&&isReviewGame);
+    const sp=$("scoresheetPanel"); if(sp)sp.classList.toggle("hide",!hasMoves);
+    const rp=$("reviewPanel"); if(rp)rp.classList.toggle("hide",!finished);
+    const pe=$("pgnExportRow"); if(pe)pe.classList.toggle("hide",!hasMoves);
+    /* Le bloc ouverture/statut n'a rien a montrer avant qu'une partie
+       n'existe (l'instruction correspondante vit desormais dans la bulle
+       (i) de "Reglages", voir template.html) : masque pendant le
+       parametrage, reapparait avec la partie pour le statut en direct. */
+    const stp=$("statusPanel"); if(stp)stp.classList.toggle("hide",!gameStarted);
+    /* Reglages et PGN n'ont plus rien a faire une fois la partie
+       reellement en cours : le choix de couleur/force/cadence est deja
+       fait (et verrouille juste apres), et importer un PGN reecraserait la
+       partie en train de se jouer. Les deux redeviennent utiles avant que
+       la partie ne commence, ou une fois qu'elle est terminee (choisir la
+       suivante, exporter celle qui vient de se jouer). */
+    const midGame=gameStarted&&!finished;
+    const gp=$("settingsPanel"); if(gp)gp.classList.toggle("hide",midGame);
+    const pp=$("pgnPanel"); if(pp)pp.classList.toggle("hide",midGame);
+  }
   /* (le verrouillage en cours de partie, plus bas, a le dernier mot) */
 
   /* Pendant une partie en cours, seul "Abandonner" reste actif.
@@ -574,6 +675,15 @@ function refreshGame(){
        aux echecs le soupcon de triche suffit a poser probleme : mieux vaut
        lever toute ambiguite. */
   const enCours=gameStarted&&!over;
+  /* Sauvegarde/effacement de la partie en cours (mode Jouer uniquement,
+     jamais pendant une revue de PGN importe). Voir la section 20 de ui2.js
+     pour le detail : un coup vient d'etre joue -> on sauvegarde ; la partie
+     vient de se terminer (mat, pat, abandon, temps) -> on efface, sinon une
+     partie finie resterait proposee a la reprise par erreur. */
+  if(typeof isReviewGame==="undefined"||!isReviewGame){
+    if(enCours){if(typeof savePlay==="function")savePlay();}
+    else if(gameStarted){if(typeof clearPlaySave==="function")clearPlaySave();}
+  }
   /* En mode aleatoire, le selecteur montre la couleur tiree pendant la
      partie et le mode choisi en dehors : son etat depend donc du deroulement
      et doit etre rafraichi ici. */
@@ -709,6 +819,7 @@ function setupGame(){
   resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
   if(typeof clearAnalysis==="function")clearAnalysis();
+  if(typeof gameStartFen!=="undefined")gameStartFen=null;
   game=new Game();sanList=[];lastMove=null;selected=-1;marks={};busy=false;
   reviewGame=null;reviewLast=null;
   flipped=myColor===B;
@@ -717,7 +828,6 @@ function setupGame(){
   mainGame=null;
   refreshGame();
   const s=$("status");s.className="status";
-  s.textContent=t("Choose your colour, the engine's strength and a time control, then start.");
 }
 function newGame(){
   /* Le tirage est refait a chaque partie : choisir "Au hasard" une fois doit
@@ -731,7 +841,9 @@ function newGame(){
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
   reviewGame=null;reviewLast=null;
   if(typeof clearAnalysis==="function")clearAnalysis();
-  game=new Game();sanList=[];lastMove=null;selected=-1;marks={};busy=false;
+  game=pendingStartFen?new Game(pendingStartFen):new Game();
+  if(typeof gameStartFen!=="undefined")gameStartFen=pendingStartFen;
+  pendingStartFen=null;sanList=[];lastMove=null;selected=-1;marks={};busy=false;
   flipped=myColor===B;
   /* Entree en fondu des pieces. La classe est retiree apres l'animation pour
      ne pas la rejouer a chaque rendu de l'echiquier en cours de partie. */
@@ -741,8 +853,13 @@ function newGame(){
     boardEl.classList.add("dealt");
     setTimeout(function(){boardEl.classList.remove("dealt");},900);
   }
-  clockSetup();
-  const {cat,item}=tcCurrent();
+  if(pendingNoClock){
+    clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
+    clockHist=[{w:0,b:0}];
+    renderClocks();
+  } else clockSetup();
+  const {cat,item}=pendingNoClock?{cat:"none",item:null}:tcCurrent();
+  pendingNoClock=false;
   const s=$("status");s.className="status";
   const tcTxt=cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1));
   s.textContent=myColor===W?t("New game, {tc}. You start.",{tc:tcTxt}):t("New game, {tc}. The computer opens.",{tc:tcTxt});
@@ -1221,6 +1338,13 @@ function updateAmiNote(){
 }
 
 let amiMoves=[],amiColor=W,amiGame=new Game(),amiSan=[],amiPace=3;
+/* Miroir de gameStarted (mode Jouer) : distingue "rien configure" de "une
+   vraie partie existe" (creee ou rejointe via un lien). Sans lui, l'echiquier
+   par defaut (amiGame neuf, amiColor=W) repondait deja aux clics avant meme
+   d'avoir clique "Creer la partie" -- pire que le probleme equivalent en
+   mode Jouer, puisque le coup joue par erreur etait reellement enregistre
+   (amiMoves, sauvegarde), pas seulement ignore en silence. */
+let amiStarted=false;
 function rebuildAmi(){
   amiGame=new Game();amiSan=[];
   for(const m of amiMoves){
@@ -1232,15 +1356,62 @@ function rebuildAmi(){
   return true;
 }
 function amiIsMyTurn(){return amiGame.turn===amiColor;}
+/* Meme principe que updatePlayBoardVisibility (mode Jouer) : le plateau et
+   ses a-cotes (bandeau de coups, feuille de partie, lien a envoyer) restent
+   caches tant qu'aucune partie n'a ete creee ou rejointe. */
+function updateAmiBoardVisibility(){
+  if(mode!=="friend")return;
+  const bw=document.querySelector(".board-wrap");
+  if(bw)bw.classList.toggle("hide",!amiStarted);
+  const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",!amiStarted);
+  const sp=$("amiScoresheetPanel"); if(sp)sp.classList.toggle("hide",!amiStarted);
+}
 function showAmi(){
-  game=amiGame;flipped=amiColor===B;
+  /* "flipped" n'est PAS remis a plat ici : showAmi() est appelee apres
+     CHAQUE coup (voir handleAmiClick, undo, resign...), donc y remettre
+     l'orientation par defaut a chaque fois effacerait tout retournement
+     manuel au coup suivant. La valeur par defaut (cote du joueur) est posee
+     une seule fois, a l'entree reelle dans la partie : newAmiGame() pour qui
+     la cree, readHash() pour qui la rejoint via le lien. */
+  game=amiGame;
   legalCache=game.moves();
   lastMove=game.history.length?game.history[game.history.length-1].m:null;
   selected=-1;marks={};
   render();updateEval();renderSheetInto("amiSheet",amiSan);
+  updateAmiBoardVisibility();
   const st=$("amiStatus");
+  if(!amiStarted){
+    /* Rien n'a encore ete configure : l'echiquier reste cache (voir
+       updateAmiBoardVisibility ci-dessus), inutile de calculer un statut de
+       partie ou de tour qui n'existe pas encore. */
+    if(st){st.className="status";st.textContent=t("Choose your colour, then create a game.");}
+    const lp=$("amiLinkPanel"); if(lp)lp.classList.add("hide");
+    /* Masques plutot que grises : "Annuler mon coup"/"Abandonner" une
+       partie qui n'existe pas encore n'ont pas de sens a montrer du tout. */
+    $("btnAmiUndo").classList.add("hide");
+    $("btnAmiResign").classList.add("hide");
+    return;
+  }
   const over=!legalCache.length||game.isDraw();
   if(!over)renderResult(false);
+  /* Une fois une partie reellement lancee, ces deux boutons redeviennent
+     visibles pour de bon (ils ne se recachent plus ensuite, meme la partie
+     terminee : voir le mode Jouer, meme logique pour "Abandonner"). */
+  $("btnAmiUndo").classList.remove("hide");
+  $("btnAmiResign").classList.remove("hide");
+  /* "Creer la partie" et le choix de couleur se verrouillent tant qu'une
+     partie est activement en cours (mais pas une fois terminee ou
+     abandonnee) : meme principe que geler() en mode Jouer, pour eviter
+     d'ecraser par erreur une partie en cours avec une nouvelle. */
+  {
+    const enCoursAmi=amiResigned===null&&!over;
+    const bn=$("btnAmiNew"); if(bn)bn.disabled=enCoursAmi;
+    const cg=$("segAmiColor"); if(cg)for(const b of cg.children)b.disabled=enCoursAmi;
+    /* Masque entierement plutot que grise sans explication pendant qu'une
+       partie est activement en cours : meme principe applique cote Jouer
+       (voir refreshGame() dans ui.js) pour le panneau de reglages. */
+    const anp=$("amiNewGamePanel"); if(anp)anp.classList.toggle("hide",enCoursAmi);
+  }
   $("amiLinkPanel").classList.toggle("hide",amiMoves.length===0&&amiColor===W);
   $("btnAmiUndo").disabled=!(amiMoves.length&&!amiIsMyTurn())||over;
   $("amiLink").value=amiUrl();
@@ -1275,6 +1446,7 @@ function showAmi(){
   updateAmiNote();
 }
 function handleAmiClick(sq){
+  if(!amiStarted)return;
   if(amiResigned!==null)return;
   if(!amiIsMyTurn())return;
   if(!legalCache.length||game.isDraw())return;
@@ -1300,7 +1472,8 @@ function undoAmi(){
   amiMoves.pop();rebuildAmi();showAmi();saveAmi();
 }
 function newAmiGame(){
-  amiResigned=null;amiMoves=[];rebuildAmi();showAmi();saveAmi();
+  amiStarted=true;
+  amiResigned=null;amiMoves=[];flipped=amiColor===B;rebuildAmi();showAmi();saveAmi();
   if(typeof focusBoard==="function")focusBoard();
   const st=$("amiStatus");st.className="status";
   st.textContent=amiColor===W
@@ -1316,7 +1489,7 @@ function newAmiGame(){
 async function saveAmi(){try{await window.storage.set("chang64:friend",JSON.stringify({m:amiMoves,c:amiColor,p:amiPace,r:amiResigned}));}catch(e){}}
 async function loadAmi(){
   try{const r=await window.storage.get("chang64:friend");
-    if(r&&r.value){const d=JSON.parse(r.value);amiMoves=d.m||[];amiColor=d.c===1?B:W;amiPace=d.p||3;amiResigned=(d.r===0||d.r===1)?d.r:null;}}catch(e){}
+    if(r&&r.value){const d=JSON.parse(r.value);amiMoves=d.m||[];amiColor=d.c===1?B:W;amiPace=d.p||3;amiResigned=(d.r===0||d.r===1)?d.r:null;amiStarted=true;}}catch(e){}
 }
 function readDeepLink(){
   const h=location.hash||"";
@@ -1381,6 +1554,8 @@ function readHash(){
   const rm=h.match(/[#&]r=([wb])/);
   amiResigned=rm?(rm[1]==="w"?W:B):null;
   amiColor=amiResigned!==null?(amiResigned===W?B:W):amiGame.turn;
+  flipped=amiColor===B;
+  amiStarted=true;
   saveAmi();
   return true;
 }
@@ -1448,9 +1623,9 @@ function setMode(m,opts){
     const nr=$("navRow"); if(nr)nr.classList.add("hide");
     const pi=$("plyInfo"); if(pi)pi.className="plyinfo hide";
   }
-  if(mode==="play"&&m!=="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;}
+  if(mode==="play"&&m!=="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
   mode=m;busy=false;
-  const tabs={home:"tab-home",play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend"};
+  const tabs={play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend"};
   for(const k in tabs)$(tabs[k]).setAttribute("aria-selected",k===m);
   $("pane-home").classList.toggle("hide",m!=="home");
   $("appLayout").classList.toggle("hide",m==="home");
@@ -1458,6 +1633,24 @@ function setMode(m,opts){
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");
   $("evalwrap").classList.toggle("hide",m!=="play");
+  /* Bouton de retournement : visible en Jouer et Entre amis (les deux
+     modes ou #board, partage par tout le site, affiche une vraie partie
+     avec un camp). Masque ailleurs (Exercices, Defis...) : ces ecrans
+     pilotent deja "flipped" eux-memes pour presenter la position du bon
+     point de vue (cote du trait dans un exercice, etc.), un retournement
+     manuel y entrerait en conflit avec ce choix deliberer. Le conteneur
+     #boardTools (pas seulement le bouton) : il doit rester visible meme
+     quand le bandeau de coups interne est masque (avant le premier coup,
+     ou en mode Entre amis qui n'a pas de bandeau de coups du tout). */
+  { const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",m!=="play"&&m!=="friend"); }
+  /* Pour tout mode autre que Jouer/Entre amis, le plateau doit toujours
+     etre visible (Exercices, Defis, Analyser en ont besoin des l'entree).
+     Pour Jouer/Entre amis specifiquement, on laisse la decision a
+     updatePlayBoardVisibility()/updateAmiBoardVisibility(), appelees juste
+     apres par les branches ci-dessous (setupGame/newGame/showAmi...) : sans
+     ce garde-fou ici, quitter Entre amis avant d'avoir cree de partie vers
+     un autre onglet aurait laisse le plateau cache partout ensuite. */
+  { const bw=document.querySelector(".board-wrap"); if(bw&&m!=="play"&&m!=="friend")bw.classList.remove("hide"); }
   /* Les pendules ne concernent que l'onglet Jouer. renderClocks le sait deja,
      mais rien ne l'appelait au changement d'onglet : elles restaient donc
      affichees au-dessus de l'echiquier des exercices. */
@@ -1465,7 +1658,8 @@ function setMode(m,opts){
   if(m==="home"){renderProgress();syncTC();return;}
   if(m==="play"){
     if(opts.fresh)newGame();
-    else if(mainGame&&mainStarted){game=mainGame;sanList=mainSan;lastMove=mainLast;gameStarted=true;flipped=myColor===B;selected=-1;marks={};refreshGame();}
+    else if(mainGame&&mainStarted){game=mainGame;sanList=mainSan;lastMove=mainLast;gameStarted=true;flipped=mainFlipped;selected=-1;marks={};refreshGame();}
+    else if(pendingPlaySave&&typeof showResumeChoice==="function")showResumeChoice();
     else setupGame();
     syncTC();
   } else if(m==="puzzles"){
@@ -1485,12 +1679,12 @@ function setMode(m,opts){
     if(typeof renderEndgame==="function")renderEndgame();
   } else {
     renderDailyChips();rebuildAmi();showAmi();
+    if(typeof renderAmiHistory==="function")renderAmiHistory();
   }
 }
 
 /* ---------- listeners ---------- */
 $("brand").onclick=()=>{setMode("home");goTop();};
-$("tab-home").onclick=()=>{setMode("home");goTop();};
 $("tab-play").onclick=()=>{setMode("play");goTop();};
 $("tab-puzzles").onclick=()=>{setMode("puzzles");goTop();};
 $("tab-friend").onclick=()=>{setMode("friend");goTop();};
@@ -1576,6 +1770,12 @@ $("segAmiColor").addEventListener("click",e=>{
 $("btnAmiNew").onclick=newAmiGame;
 $("btnAmiUndo").onclick=undoAmi;
 $("btnResign").onclick=resignGame;
+/* Retournement manuel de l'echiquier (Jouer + Entre amis, voir setMode).
+   Purement visuel : render()/updateEval() savent deja tout dessiner selon
+   "flipped" (deja utilise pour l'orientation automatique cote Noirs), donc
+   il n'y a rien d'autre a synchroniser. */
+function toggleFlip(){flipped=!flipped;render();updateEval();}
+if($("btnFlip"))$("btnFlip").onclick=toggleFlip;
 $("btnAmiResign").onclick=()=>{
   const b=$("btnAmiResign");
   if(!b.classList.contains("armed")){
@@ -1619,7 +1819,7 @@ $("icoFriend").innerHTML=icoBrass("p");
 const _hc=$("hCount"); if(_hc)_hc.textContent=PUZZLES.length;
 
 buildBoard();
-Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory()]).then(()=>{
+Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAmiHistory()]).then(()=>{
   applyI18n();
   renderProgress();syncTC();renderDailyChips();renderExplore();renderHistory();
   shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);

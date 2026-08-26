@@ -51,7 +51,7 @@ function boot(lang){
   console.log("\nSWITCH TO FRENCH");
   click($("langSwitch").children[1]); await wait(500);
   T("html lang updated", w.document.documentElement.lang==="fr", w.document.documentElement.lang);
-  T("tabs translated", $("tab-play").textContent==="Jouer" && $("tab-puzzles").textContent==="Exercices",
+  T("tabs translated", $("tab-play").textContent==="Jouer" && $("tab-puzzles").textContent==="Résoudre",
      $("tab-play").textContent+"/"+$("tab-puzzles").textContent);
   T("hero translated", /Joue aux échecs/.test($("pane-home").textContent));
   T("cards translated", /Quatre niveaux/.test($("pane-home").textContent));
@@ -60,7 +60,9 @@ function boot(lang){
   console.log("\nDYNAMIC STRINGS IN FRENCH");
   click($("tab-play")); await wait(700);
   await startGame();
-  T("turn line", $("turnline").textContent==="Trait aux Blancs.", $("turnline").textContent);
+  /* #turnline a ete retire (redondant avec l'overlay de preparation et le
+     bandeau #status) : la ligne suivante couvre deja la traduction
+     dynamique d'un message d'etat en francais. */
   T("new game status", /Nouvelle partie/.test($("status").textContent), $("status").textContent);
   T("settings translated", nb($("segColor").children[0].textContent)==="Jouer les Blancs", $("segColor").children[0].textContent);
   /* Vocabulaire consacre en francais : Classique et non "Longue",
@@ -115,7 +117,12 @@ function boot(lang){
   T("endgame status back to english after navigating away then back", /White to move/.test($("egStatus").textContent), $("egStatus").textContent);
   T("endgame brief back to english after navigating away then back", /queen/i.test($("egBrief").textContent), $("egBrief").textContent.slice(0,50));
   click($("tab-play")); await wait(600);
-  T("turn line back to english", /to move|Game over/.test($("turnline").textContent), $("turnline").textContent);
+  /* #turnline retire : verifie desormais la meme chose (retraduction
+     dynamique au retour sur l'onglet) sur #navNote, recalcule par le meme
+     refreshGame() que turnline auparavant. #status ne convient pas : il
+     peut retenir un message plus ancien (un indice, par exemple) jamais
+     recalcule par le seul fait de changer d'onglet. */
+  T("nav note back to english", /arrow keys/i.test($("navNote").textContent), $("navNote").textContent);
   T("game preserved through language switches", $("sheet").textContent.includes("e4"), $("sheet").textContent.replace(/\s+/g," ").trim().slice(0,24));
 
   console.log("\nJS errors:", errors.join(" | ")||"none");

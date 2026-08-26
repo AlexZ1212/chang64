@@ -45,10 +45,15 @@ let max=0,maxf="";
 for(const f of en){const s=fs.statSync(S+"/puzzles/"+f).size; if(s>max){max=s;maxf=f;}}
 T("page la plus lourde sous 40 Ko", max<40960, Math.round(max/1024)+" Ko ("+maxf+")");
 const tot=en.reduce((a,f)=>a+fs.statSync(S+"/puzzles/"+f).size,0);
-/* Seuil releve de 25 a 30 Ko : la feuille de style s'est enrichie (menu
-   unifie, pastille de langue, champ de recherche, logo complet). Le plafond
-   reste utile pour detecter une derive, mais il doit suivre le produit. */
-T("moyenne sous 35 Ko", tot/en.length<35840, Math.round(tot/en.length/1024)+" Ko de moyenne");
+/* Seuil : 25 -> 30 -> 35 Ko au fil des enrichissements de la feuille de
+   style (menu unifie, pastille de langue, champ de recherche, logo complet).
+   Releve a 36 Ko pour le script de recentrage du menu sur la section active
+   au chargement (voir shell() dans build_site.js) : sans lui, arriver sur
+   une page apres avoir fait defiler le menu vers la droite (ex. Lexique)
+   laissait le menu revenu tout a gauche, masquant la section dans laquelle
+   on venait d'entrer. Le plafond reste utile pour detecter une derive, mais
+   il doit suivre le produit. */
+T("moyenne sous 36 Ko", tot/en.length<36864, Math.round(tot/en.length/1024)+" Ko de moyenne");
 
 console.log("\n--- Toutes au sitemap ---");
 const sm=fs.readFileSync(S+"/sitemap.xml","utf8");

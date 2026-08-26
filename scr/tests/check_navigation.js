@@ -37,7 +37,7 @@ setTimeout(async()=>{
   T("Accessibilite vise sa section", cibles.includes("accessibilite"), cibles.join(", "));
 
   console.log("\n--- Les onglets remontent en haut ---");
-  for(const id of ["tab-play","tab-puzzles","tab-friend","tab-home"]){
+  for(const id of ["tab-play","tab-puzzles","tab-friend","tab-explore"]){
     const avant=tops;
     d.getElementById(id).click(); await wait(250);
     T(id+" remonte", tops>avant, "appels : "+(tops-avant));
@@ -45,7 +45,7 @@ setTimeout(async()=>{
 
   console.log("\n--- Les cartes de l'accueil aussi ---");
   for(const id of ["cardPuzzles","cardFriend"]){
-    d.getElementById("tab-home").click(); await wait(200);
+    d.getElementById("brand").click(); await wait(200);
     const avant=tops;
     d.getElementById(id).click(); await wait(250);
     T(id+" remonte", tops>avant);
@@ -75,7 +75,7 @@ setTimeout(async()=>{
     ["cardFriend","carte Entre amis"],["tab-train","onglet Defis"],
     ["tab-watch","onglet Videos"]
   ]){
-    d.getElementById("tab-home").click(); await wait(250);
+    d.getElementById("brand").click(); await wait(250);
     const avant=tops;
     const e=d.getElementById(id);
     if(!e){T(nom+" present", false); continue;}

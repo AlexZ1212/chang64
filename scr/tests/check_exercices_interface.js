@@ -463,7 +463,7 @@ setTimeout(async()=>{
   d.getElementById("reviewPrev").click();
   await new Promise(r=>setTimeout(r,300));
   T("retour a la position 1 sur 2 apres Precedent", d.getElementById("reviewPos").textContent.includes("1"), d.getElementById("reviewPos").textContent);
-  d.getElementById("tab-home").click();
+  d.getElementById("tab-explore").click();
   await new Promise(r=>setTimeout(r,300));
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,400));

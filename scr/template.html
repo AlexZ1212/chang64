@@ -94,7 +94,19 @@ html{-webkit-text-size-adjust:100%;background-color:#101413;background-color:var
 body{
   background-color:#101413;
   background-color:var(--ink);
-  background-image:radial-gradient(1100px 620px at 18% -12%, #17201D 0%, transparent 62%);
+  /* Le decalage vertical du degrade etait en %, donc calcule par rapport a
+     la hauteur TOTALE de la page (tout le contenu scrollable), pas par
+     rapport a l'ecran visible. Or cette hauteur varie enormement d'un
+     onglet a l'autre (de ~1100px sur Defis a ~3500px sur Watch) : sur les
+     pages courtes le centre du degrade se retrouvait plaque juste sous le
+     haut de l'ecran (tache verte intense, cadre visible contre le fond uni
+     de l'entete ancre), et sur les pages longues il se retrouvait projete
+     tres loin au-dessus (degrade quasi invisible). Un decalage en px fixe
+     ancre le degrade par rapport au haut du document, donc par rapport a
+     l'ecran au chargement, quelle que soit la longueur du contenu en
+     dessous. Valeur choisie pour reproduire l'intensite visuelle d'origine
+     sur un ecran de hauteur courante (~800px). */
+  background-image:radial-gradient(1100px 620px at 18% -90px, #17201D 0%, transparent 62%);
   background-repeat:no-repeat;
   color:var(--chalk);
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
@@ -234,7 +246,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
   #pane-puzzles .quest{font-size:16px;margin-bottom:2px}
   #pane-puzzles .status{min-height:0;padding:7px 10px}
   #pane-puzzles .btnrow{margin-top:8px!important}
-  #pane-puzzles hr.rule{margin-top:14px}
+  #pane-puzzles hr.rule{margin-top:14px;margin-bottom:10px}
 }
 @media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
@@ -242,6 +254,24 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .strip .stat span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
 
 /* ---------- layout ---------- */
+/* Bande d'intro de l'editeur de position : hors de la grille .layout (donc
+   hors du bloc echiquier, partage avec Jouer/Entre amis, qui s'affiche
+   toujours en premier dans ce bloc). Volontairement fine (une ligne, pas un
+   .panel complet) : sur mobile, le but est de loger l'echiquier ET la
+   palette de pieces sur un seul ecran sans avoir a scroller, ce qu'un bloc
+   de texte epais empechait. Inspiration : m.nextchessmove.com, dont toute
+   la consigne d'usage tient en une ligne au-dessus du plateau.
+   .edit-intro-row (pas .edit-intro lui-meme) porte le flex : la bulle
+   d'info (.info-tip-pop) doit rester un bloc normal qui retombe sous cette
+   rangee, pas un troisieme element aligne dans la meme ligne flex.
+   Le style "eyebrow" (majuscules, gras) reste lui aussi limite a
+   .edit-intro-row : pose sur .edit-intro, il se serait transmis par
+   heritage CSS a la bulle d'info, dont le texte se serait retrouve en
+   majuscules et en gras au lieu du style normal utilise pour toutes les
+   autres bulles du site. */
+.edit-intro{margin-bottom:10px}
+.edit-intro-row{display:flex;align-items:center;gap:2px;font-size:12.5px;color:var(--sage);
+  font-weight:600;text-transform:uppercase;letter-spacing:.03em}
 .layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:22px;align-items:start}
 @media(max-width:860px){.layout{grid-template-columns:1fr}}
 .board-side{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -295,7 +325,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    le nom vers le haut et le desalignait de la pendule. Ici la premiere ligne
    ne bouge jamais, avec ou sans prises. */
 .clock{display:flex;flex-direction:column;align-items:stretch;gap:0;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:7px 12px;
   max-width:100%;box-sizing:border-box;min-width:0
 }
 /* Pieces capturees dans la pendule. La contrainte est de ne pas faire grandir
@@ -306,7 +336,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    de l'ecran. */
 /* .who etait en flex horizontal : les pieces se retrouvaient a cote du nom
    au lieu d'etre dessous. On le passe en colonne. */
-.clock-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.clock-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;line-height:1}
 .taken-slot{display:block;min-width:0}
 /* Fond transparent : le carre clair des pieces formait une bande blanche peu
    elegante sous le nom. On gagne ainsi de la place verticale, ce qui permet
@@ -316,7 +346,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    de la pastille plus son ecart, calcules depuis les memes variables pour que
    l'alignement suive si l'un des deux change. La bordure est comprise dans la
    largeur (box-sizing:border-box global), il n'y a donc rien a ajouter. */
-.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:22px;margin-top:1px;
+.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:20px;margin-top:0;
   padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
 /* La largeur est posee en ligne, proportionnelle a la boite englobante de
    chaque piece : un pion reste plus etroit qu'une dame. L'espacement entre
@@ -324,7 +354,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    aussi pose en ligne par rangeePrises() dans ui.js, piece par piece : il
    depend de la piece precedente et ne peut donc pas etre une regle CSS
    unique. */
-.taken .tk{display:block;width:22px;height:22px;flex:none;margin:0;
+.taken .tk{display:block;width:20px;height:20px;flex:none;margin:0;
   background:none;border:0;border-radius:0}
 .taken .tk svg{width:100%;height:100%;display:block;overflow:visible}
 /* On cible le corps de la piece par sa couleur d'origine, pas tous les
@@ -348,7 +378,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .clock{--pastille:13px;--pastille-gap:8px}
 .clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
 .clock .who>i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
-.clock time{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.clock time{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
 /* background en raccourci effacait le fond du bloc au lieu de le teinter :
    le laiton translucide se retrouvait pose sur le fond de page, plus sombre,
    et la pendule paraissait noircir en s'activant. On superpose donc un degrade
@@ -367,13 +397,29 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    depasser la place disponible, quelle que soit la cause. box-sizing evite
    que la marge interieure ne s'ajoute a la largeur. */
 .board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34);max-width:100%;box-sizing:border-box}
+/* Bouton de retournement de l'echiquier : deplace du coin de l'echiquier
+   (ou il recouvrait une piece, le cadre n'ayant que 10px de marge) vers le
+   bandeau de coups, a droite du chevron "suivant" -- voir .board-tools plus
+   bas. Purement visuel (ne touche jamais qui joue quoi) : voir toggleFlip()
+   dans ui.js. Style repris de .navchev pour rester coherent avec les deux
+   autres boutons du meme bandeau. */
 .board{
   display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));
   aspect-ratio:1/1;width:100%;max-width:100%;box-sizing:border-box;
   border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
 }
 .sq:focus-visible{outline:2px dashed var(--chalk);outline-offset:-3px;z-index:6}
-.sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+/* Glisser-depose de l'editeur de position : case survolee pendant un
+   glissement, et case d'origine attenuee tant qu'elle est "en main". */
+.sq.drag-over{box-shadow:inset 0 0 0 3px var(--brass)}
+.sq.drag-source{opacity:.35}
+/* Piece "fantome" qui suit le pointeur pendant un glissement : hors du flux
+   normal (position:fixed), ignore les evenements pour ne jamais fausser
+   elementFromPoint (sinon le fantome se detecterait lui-meme comme cible). */
+.edit-ghost{position:fixed;top:0;left:0;pointer-events:none;z-index:50;
+  transform:translate(-50%,-50%);opacity:.92;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.edit-ghost svg{width:100%;height:100%;display:block}
 .sq.l{background-color:var(--bone)}
 .sq.d{background-color:var(--board)}
 .sq .co{position:absolute;font-size:9px;font-weight:500;font-family:'JetBrains Mono',monospace;pointer-events:none;z-index:7}
@@ -566,8 +612,36 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    gardait la largeur de son contenu et elargissait toute la page. flex-basis
    a 100 % la force a prendre la ligne entiere et rien de plus, ce qui rend
    enfin son defilement interne operant. */
-.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none}
+.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none;position:relative}
 .tabs::-webkit-scrollbar{display:none}
+/* Indice discret "il y a plus a voir en glissant" : un fin degrade colle au
+   bord grace a position:sticky (reste a sa place pendant le defilement,
+   contrairement a un simple absolute qui defilerait avec le contenu).
+   Arrondi comme le conteneur (border-radius:999px, une vraie pilule, donc
+   arrondie sur toute la hauteur du bord et pas juste au coin) pour ne pas
+   avoir l'air d'un rectangle colle sur une forme ronde. N'apparait que
+   lorsque necessaire : voir le petit script de bascule des classes
+   has-scroll-left/has-scroll-right, colle au chargement et au defilement. */
+.tabs::before,.tabs::after{
+  content:"";position:sticky;align-self:stretch;width:25px;flex:none;
+  pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+  background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%
+}
+/* Chevron en image de fond (SVG intégré), pas en contenu texte : le
+   contenu de ::before/::after peut se retrouver lu par certains lecteurs
+   d'ecran selon le navigateur, une image de fond jamais -- purement
+   decoratif, l'indice reste redondant avec le simple fait que le menu
+   deborde reellement. */
+.tabs::before{left:-4px;order:-1;margin-right:-25px;border-radius:999px 0 0 999px;
+  background-position:7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to right,var(--slate) 38%,transparent)}
+.tabs::after{right:-4px;order:999;margin-left:-25px;border-radius:0 999px 999px 0;
+  background-position:right 7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to left,var(--slate) 38%,transparent)}
+.tabs.has-scroll-left::before{opacity:1}
+.tabs.has-scroll-right::after{opacity:1}
 /* L'entete elle-meme ne doit pas pouvoir etre elargie par un de ses enfants. */
 header{min-width:0}
 header>*{min-width:0}
@@ -618,6 +692,21 @@ header>*{min-width:0}
    grand chiffre) restent plus petits : ce ne sont pas des textes a lire, et
    les agrandir degraderait l'echiquier. */
 .note{font-size:12.5px;color:var(--sage);margin-top:9px;line-height:1.5}
+/* Bulles d'info pedagogiques : discretes par defaut (petit rond avec un i),
+   contenu affiche uniquement au tap/clic, jamais au survol seul (public
+   mobile). Une seule ouverte a la fois, voir le gestionnaire delegue plus
+   bas dans le script. En flux normal (pas de position:fixed) pour eviter
+   les soucis de positionnement deja rencontres sur Safari iOS ailleurs sur
+   ce site. */
+.info-tip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+  margin-left:6px;border-radius:50%;border:1px solid var(--rule);background:transparent;
+  color:var(--sage);font-size:12px;font-weight:700;font-style:italic;
+  font-family:Georgia,'Times New Roman',serif;line-height:1;cursor:pointer;
+  vertical-align:middle;flex:none;padding:0}
+.info-tip:hover,.info-tip:focus-visible{color:var(--chalk);border-color:var(--sage)}
+.info-tip-pop{margin:8px 0 2px;padding:9px 11px;font-size:12.5px;line-height:1.5;
+  color:var(--sage);background:var(--raise);border:1px solid var(--rule);border-radius:var(--r)}
+.info-tip-pop.hide{display:none}
 /* .note seul n'a pas de marge basse : suffisant partout ailleurs, ou ce qui
    suit a deja son propre espacement. Ici, .result-actions n'en apporte
    aucun de son cote, laissant la phrase collee aux boutons. */
@@ -633,6 +722,17 @@ header>*{min-width:0}
 .promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:8px;width:60px;height:60px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .promos button:hover{background:#fff2d4}
 .promos button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+/* Palette de pieces de l'editeur de position (onglet Analyse) : meme
+   esthetique que .promos (le selecteur de promotion), en plus petit pour
+   loger 6 pieces par rangee sur mobile. */
+.editpal{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.editpal button{background-color:var(--bone);border:2px solid var(--rule);border-radius:8px;width:46px;height:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;touch-action:none}
+.editpal button svg{width:30px;height:30px;display:block}
+.editpal button:hover{background:#fff2d4}
+.editpal button[aria-pressed="true"]{border-color:var(--brass)}
+.editpal button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+#editErase[aria-pressed="true"]{border-color:var(--brass);color:var(--brass);font-weight:600}
 
 .origin{position:relative;overflow:hidden}
 .origin-mark{
@@ -704,8 +804,57 @@ header>*{min-width:0}
 .opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(217,168,63,.35)}
 .opening a:hover{border-bottom-color:var(--brass)}
 .opening{font-size:12.5px;color:var(--brass);margin-top:2px;min-height:18px}
-.navrow{display:flex;gap:6px}
-.navbtn{flex:1;font-family:'JetBrains Mono',monospace;font-size:13px;padding:8px 4px;min-width:0}
+/* Vide (avant toute partie, ou tant qu'aucune ouverture n'est detectee), la
+   reserve de hauteur ci-dessus desequilibrait le bloc au-dessus de #status :
+   plus d'espace en haut qu'en bas, le texte n'y etait pas centre. */
+.opening:empty{display:none;margin-top:0;min-height:0}
+/* Conteneur commun au bandeau de coups et au bouton de retournement : reste
+   visible en Jouer/Entre amis meme quand le bandeau de coups lui-meme est
+   masque (aucun coup joue, ou mode Entre amis qui n'a pas de bandeau) --
+   sinon le bouton de retournement disparaitrait avec lui, alors qu'il doit
+   rester disponible independamment du nombre de coups. */
+.board-tools{display:flex;align-items:stretch;gap:6px}
+.flip-btn{flex:none;margin-left:auto;height:29px}
+.navstrip{display:flex;align-items:stretch;gap:6px;flex:1;min-width:0}
+.navchev{flex:none;width:30px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);
+  border-radius:8px;cursor:pointer}
+.navchev svg{width:17px;height:17px}
+.navscroll{flex:1;display:flex;align-items:center;gap:1px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;min-width:0;position:relative;
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:8px;padding:0 6px}
+.navscroll::-webkit-scrollbar{display:none}
+/* Meme indice de defilement que la barre d'onglets (degrade colle au bord +
+   chevron), a la place des deux boutons |< >| separes qu'il remplace :
+   swipe et tap sur un coup restent les gestes principaux, les fleches du
+   clavier couvrent le pas-a-pas. */
+.navscroll::before,.navscroll::after{content:"";position:sticky;align-self:stretch;width:25px;
+  flex:none;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+  background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%}
+.navscroll::before{left:-7px;order:-1;margin-right:-25px;border-radius:8px 0 0 8px;
+  background-position:7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to right,var(--slate) 38%,transparent)}
+.navscroll::after{right:-7px;order:999;margin-left:-25px;border-radius:0 8px 8px 0;
+  background-position:right 7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to left,var(--slate) 38%,transparent)}
+.navscroll.sl::before,.navscroll.sr::after{opacity:1}
+.navchip{flex:none;display:inline-flex;align-items:center;gap:2px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap;
+  padding:4px 5px;color:var(--sage);cursor:pointer;border-radius:6px;scroll-snap-align:center}
+.navchip .navnum{color:var(--sage);opacity:.7;margin-right:1px;font-size:10.5px}
+/* Le picto de piece porte deja la distinction visuelle voulue (piece +
+   camp) : le coup courant se signale par un fond discret et du gras,
+   plutot que par un aplat brass qui n'apportait rien de plus. */
+.navchip.cur{background-color:var(--raise);color:var(--chalk);font-weight:600}
+.navpiece{flex:none;width:15px;height:15px;display:inline-block;opacity:.9}
+.navpiece.side-b{opacity:.5}
+.navpiece svg{width:100%;height:100%;display:block}
+.navchip.tag-blunder{color:#D9584A}
+.navchip.tag-mistake{color:#C4762A}
+.navchip.tag-inacc{color:#8A7A2A}
+.navchip.start{font-style:italic}
 .accrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .graph{background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:6px;overflow:hidden}
 .graph svg{display:block;width:100%;height:96px}
@@ -779,13 +928,14 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <button data-lang="en" aria-pressed="true">EN</button>
       <button data-lang="fr" aria-pressed="false">FR</button>
     </div>
-    <nav class="tabs" role="tablist" aria-label="Sections">
-      <button role="tab" id="tab-home" aria-selected="true">Home</button>
+    <nav class="tabs" id="tabsNav" role="tablist" aria-label="Sections">
       <button role="tab" id="tab-play" aria-selected="false">Play</button>
-      <button role="tab" id="tab-puzzles" aria-selected="false">Puzzles</button>
-      <button role="tab" id="tab-train" aria-selected="false">Challenges</button>
-      <button role="tab" id="tab-friend" aria-selected="false">Friends</button>
+      <button role="tab" id="tab-puzzles" aria-selected="false">Solve</button>
+      <button role="tab" id="tab-train" aria-selected="false">Train</button>
+      <button role="tab" id="tab-edit" aria-selected="false">Analyse</button>
+      <button role="tab" id="tab-friend" aria-selected="false">Invite</button>
       <button role="tab" id="tab-watch" aria-selected="false">Watch</button>
+      <button role="tab" id="tab-explore" aria-selected="false">Explore</button>
     </nav>
   </header>
 
@@ -799,7 +949,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <p class="promise">No account. No ads. No noise. Just chess.</p>
       <p>Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
       <div class="tc-block">
-        <div class="eyebrow">Time control</div>
+        <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl" aria-label="More info">i</button></div>
+        <p class="info-tip-pop hide" id="tipTimeControl">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
         <div class="tc-cats" id="tcCats"></div>
         <div class="tc-chips" id="tcChips"></div>
         <p class="tc-note" id="tcNote"></p>
@@ -843,12 +994,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       </div>
     </div>
 
-    <div class="panel" style="margin-bottom:16px">
-      <div class="eyebrow" id="exploreTitle">Explore</div>
-      <p class="note" id="exploreNote" style="margin-top:0;margin-bottom:12px"></p>
-      <div class="explore" id="exploreLinks"></div>
-    </div>
-
     <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
          n'afficherait que des zeros, ce qu'un premier visiteur lit comme
          "le site est vide" alors qu'il s'agit de sa propre progression.
@@ -868,6 +1013,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   </div>
 
   <!-- ================= BOARD + PANELS ================= -->
+  <div class="edit-intro hide" id="editIntro">
+    <div class="edit-intro-row">
+      <span>Board editor</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipEdit" aria-label="More info">i</button>
+    </div>
+    <p class="info-tip-pop hide" id="tipEdit">Set up any position to study it: check an idea from a book, a puzzle you saw elsewhere, or an endgame, without replaying a whole game to get there. Pick a piece below, then tap a square. Tap a piece already on the board to remove it.</p>
+  </div>
   <div class="layout hide" id="appLayout">
     <div class="board-side">
       <!-- Au-dessus de l'echiquier, comme le bandeau des coordonnees : le
@@ -911,8 +1062,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
              quoi il joue, et rien ne demarre avant qu'il le decide. -->
         <div class="result hide" id="readyBanner" role="dialog" aria-modal="false" aria-labelledby="readyTitle">
           <div class="result-card">
-            <b id="readyTitle">Ready?</b>
+            <b id="readyTitle">Ready?</b><button type="button" class="info-tip hide" id="tipResumeBtn" aria-expanded="false" aria-controls="tipResume" aria-label="More info">i</button>
             <span id="readySub"></span>
+            <p class="info-tip-pop hide" id="tipResume">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
             <div class="result-actions">
               <button class="btn primary" id="readyStart">Start</button>
               <button class="btn" id="readySettings">Change settings</button>
@@ -934,11 +1086,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
       </div>
-      <div class="navrow hide" id="navRow">
-        <button class="btn navbtn" id="navStart" aria-label="First move">&#124;&lt;</button>
-        <button class="btn navbtn" id="navPrev" aria-label="Previous move">&lt;</button>
-        <button class="btn navbtn" id="navNext" aria-label="Next move">&gt;</button>
-        <button class="btn navbtn" id="navEnd" aria-label="Last move">&gt;&#124;</button>
+      <div class="board-tools hide" id="boardTools">
+        <div class="navstrip hide" id="navRow">
+          <div class="navscroll" id="navScroll" role="list"></div>
+        </div>
+        <button type="button" class="navchev flip-btn" id="btnFlip" aria-label="Flip the board"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7-6 7 6"/><path d="M5 15l7 6 7-6"/></svg></button>
       </div>
       <div class="plyinfo hide" id="plyInfo"></div>
       <div class="clock hide" id="clockBottom">
@@ -953,14 +1105,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
     <div>
       <!-- ---------- PLAY ---------- -->
       <div id="pane-play" class="hide">
-        <div class="panel">
-          <h2>Your game</h2>
-          <p class="sub" id="turnline">White to move.</p>
+        <div class="panel" id="statusPanel">
           <p class="opening" id="opening"></p>
           <div class="status" id="status">Pick a colour and a strength, then play.</div>
+          <div class="btnrow" style="margin-top:10px">
+            <button class="btn danger" id="btnResign">Resign</button>
+          </div>
         </div>
-        <div class="panel">
-          <div class="eyebrow">Settings</div>
+        <div class="panel" id="settingsPanel">
+          <div class="eyebrow">Settings<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipSettings" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipSettings">Choose your colour, the engine's strength and a time control, then start.</p>
           <div class="field"><div class="seg" id="segColor">
             <button data-v="w" aria-pressed="true">Play White</button>
             <button data-v="b" aria-pressed="false">Play Black</button>
@@ -973,7 +1127,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <button data-v="4" aria-pressed="false">Tough</button>
           </div></div>
           <div class="field">
-            <div class="eyebrow">Time control</div>
+            <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl2" aria-label="More info">i</button></div>
+            <p class="info-tip-pop hide" id="tipTimeControl2">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
             <div class="tc-cats" id="tcCats2"></div>
             <div class="tc-chips" id="tcChips2"></div>
           </div>
@@ -985,12 +1140,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="btnrow">
             <button class="btn primary" id="btnNew">New game</button>
           </div>
-          <div class="btnrow" style="margin-top:8px">
-            <button class="btn danger" id="btnResign">Resign</button>
-          </div>
         </div>
-        <div class="panel">
-          <div class="eyebrow">Scoresheet</div>
+        <div class="panel" id="scoresheetPanel">
+          <div class="eyebrow">Scoresheet<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipScoresheet" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipScoresheet">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
           <div class="sheet">
             <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
             <div class="sheet-body" id="sheet"><div class="sheet-empty">No moves yet</div></div>
@@ -998,8 +1151,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <p class="note" id="navNote">Use the arrow keys to step through the game.</p>
         </div>
 
-        <div class="panel">
-          <div class="eyebrow">Review</div>
+        <div class="panel" id="reviewPanel">
+          <div class="eyebrow">Review<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipReview" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipReview">The bar shows the engine's opinion, not certainty. "M4" means mate in 4 moves.</p>
           <p class="note" id="reviewLock" style="margin-top:0;margin-bottom:10px"></p>
           <div class="btnrow">
             <button class="btn primary" id="btnAnalyse">Analyse this game</button>
@@ -1021,7 +1175,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
 
         <div class="panel">
-          <div class="eyebrow" id="historyTitle">Your games</div>
+          <div class="eyebrow" id="historyTitle"><span id="historyTitleTxt">Your games</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipHistory" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipHistory">Saved only in this browser. No account: clearing your browsing data or switching devices loses it.</p>
           <p class="note" id="historyNote" style="margin-top:0;margin-bottom:10px"></p>
           <div class="history" id="historyList"></div>
           <div class="btnrow hide" id="historyActions" style="margin-top:10px">
@@ -1029,9 +1184,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           </div>
         </div>
 
-        <div class="panel">
-          <div class="eyebrow">PGN</div>
-          <div class="btnrow">
+        <div class="panel" id="pgnPanel">
+          <div class="eyebrow">PGN<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipPgn" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipPgn">PGN is the standard notation format for chess games, readable by most chess sites and software.</p>
+          <div class="btnrow" id="pgnExportRow">
             <button class="btn" id="btnPgnCopy">Copy PGN</button>
             <button class="btn" id="btnPgnDownload">Download</button>
           </div>
@@ -1043,7 +1199,54 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
 
-      <!-- ---------- PUZZLES ---------- -->
+      <!-- ---------- ANALYSE (editeur de position) ---------- -->
+      <div id="pane-edit" class="hide">
+        <div class="panel">
+          <div class="eyebrow">Pieces</div>
+          <div class="editpal" id="editPalWhite"></div>
+          <div class="editpal" id="editPalBlack"></div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Side to move</div>
+          <div class="seg" id="editTurnSeg">
+            <button data-v="w" aria-pressed="true">White</button>
+            <button data-v="b" aria-pressed="false">Black</button>
+          </div>
+          <div class="btnrow" style="margin-top:10px">
+            <button class="btn" id="editStart">Starting position</button>
+            <button class="btn" id="editClear">Clear board</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="btnrow">
+            <button class="btn primary" id="editAnalyse">Analyse this position</button>
+            <button class="btn" id="editPlay">Play against the bot from here</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">FEN<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFen" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipFen">A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.</p>
+          <input class="linkbox" id="editFenOut" readonly aria-label="Current position, FEN">
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="editFenCopy">Copy FEN</button>
+          </div>
+          <div style="margin-top:10px">
+            <textarea class="linkbox" id="editFenIn" rows="2" placeholder="Paste a FEN here to load it" aria-label="FEN to import"></textarea>
+            <div class="btnrow"><button class="btn" id="editFenLoad">Load FEN</button></div>
+          </div>
+          <p class="note" id="editMsg"></p>
+        </div>
+      </div>
+
+      <!-- ---------- ANALYSE (exploration libre) ---------- -->
+      <div id="pane-analyse" class="hide">
+        <div class="panel">
+          <p class="note" id="analyseBest"></p>
+          <div class="btnrow">
+            <button class="btn" id="analyseBack">Back to the editor</button>
+          </div>
+        </div>
+      </div>
       <div id="pane-puzzles" class="hide">
         <div class="panel" id="exPanel">
           <!-- L'enonce passe avant les statistiques : c'est lui qui dit quoi
@@ -1208,12 +1411,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="status" id="amiStatus">Start a game.</div>
         </div>
         <div class="panel" id="amiLinkPanel">
-          <div class="eyebrow">Link to send</div>
+          <div class="eyebrow">Link to send<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFriendLink" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipFriendLink">Saved in this browser: you can close the tab and come back to it.</p>
           <input class="linkbox" id="amiLink" readonly aria-label="Game link">
           <div class="shareRow" id="amiShare"></div>
           <p class="note" id="amiNote"></p>
         </div>
-        <div class="panel">
+        <div class="panel" id="amiNewGamePanel">
           <div class="eyebrow">New game</div>
           <div class="field"><div class="seg" id="segAmiColor">
             <button data-v="w" aria-pressed="true">Play White</button>
@@ -1235,11 +1439,20 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="eyebrow">Invite to chang64</div>
           <div class="shareRow" id="siteShare"></div>
         </div>
-        <div class="panel">
+        <div class="panel" id="amiScoresheetPanel">
           <div class="eyebrow">Scoresheet</div>
           <div class="sheet">
             <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
             <div class="sheet-body" id="amiSheet"><div class="sheet-empty">No moves yet</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow" id="amiHistoryTitle"><span>Your friend games</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipAmiHistory" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipAmiHistory">Saved only in this browser. No account: clearing your browsing data or switching devices loses it.</p>
+          <p class="note" id="amiHistoryNote" style="margin-top:0;margin-bottom:10px"></p>
+          <div class="history" id="amiHistoryList"></div>
+          <div class="btnrow hide" id="amiHistoryActions" style="margin-top:10px">
+            <button class="btn" id="btnAmiHistoryClear">Clear history</button>
           </div>
         </div>
       </div>
@@ -1253,6 +1466,19 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <p class="sub">The latest video from each channel, updated automatically.</p>
     </div>
     <div class="channels" id="channels"></div>
+  </div>
+
+  <!-- ================= EXPLORE ================= -->
+  <!-- Deplace depuis l'accueil (etait le bloc "Explore" en bas de page) :
+       6 liens vers les pages statiques (ouvertures, regles, lexique...),
+       desormais leur propre onglet plutot qu'un pave de plus a faire
+       defiler sur l'accueil. -->
+  <div id="pane-explore" class="hide">
+    <div class="panel">
+      <div class="eyebrow" id="exploreTitle">Explore</div>
+      <p class="note" id="exploreNote" style="margin-top:0;margin-bottom:12px"></p>
+      <div class="explore" id="exploreLinks"></div>
+    </div>
   </div>
 
   <!-- ================= LEGAL ================= -->

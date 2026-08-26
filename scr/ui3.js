@@ -446,16 +446,26 @@ function sfEnable(){
 function sfEvalFen(fen,depth){
   return new Promise(resolve=>{
     if(!sf.ready){resolve(null);return;}
-    let score=null,best=null,done=false;
-    const finish=()=>{if(!done){done=true;sf.worker.onmessage=prev;resolve({cp:score,best:best});}};
+    /* score : toujours rempli, y compris sur un mat force (grande valeur
+       synthetique +-20000, uniquement pour comparer avant/apres et classer
+       la qualite du coup). mate : rempli UNIQUEMENT sur un mat force, avec
+       la distance signee telle que rendue par Stockfish (positif = le
+       camp au trait mate en n coups, negatif = il est mate en n coups) :
+       c'est cette valeur, et non score, qui doit atteindre l'affichage. */
+    let score=null,mate=null,best=null,done=false;
+    const finish=()=>{if(!done){done=true;sf.worker.onmessage=prev;resolve({cp:score,mate:mate,best:best});}};
     const prev=sf.worker.onmessage;
     const timer=setTimeout(finish,4000);
     sf.worker.onmessage=ev=>{
       const line=typeof ev.data==="string"?ev.data:(ev.data&&ev.data.data)||"";
       let m=line.match(/score cp (-?\d+)/);
-      if(m)score=parseInt(m[1],10);
+      if(m){score=parseInt(m[1],10);mate=null;}
       m=line.match(/score mate (-?\d+)/);
-      if(m)score=(parseInt(m[1],10)>0?1:-1)*(20000-Math.abs(parseInt(m[1],10))*100);
+      if(m){
+        const n=parseInt(m[1],10);
+        mate=n;
+        score=(n>0?1:-1)*(20000-Math.abs(n)*100);
+      }
       m=line.match(/^bestmove (\S+)/);
       if(m){best=m[1];clearTimeout(timer);finish();}
     };
@@ -478,7 +488,16 @@ async function analyseWithStockfish(){
     const after=await sfEvalFen(g.fen(),12);
     const b=Math.max(-CLAMP,Math.min(CLAMP,before.cp||0));
     const a=Math.max(-CLAMP,Math.min(CLAMP,-(after&&after.cp||0)));
-    plies.push({cp:mover===W?a:-a,loss:Math.max(0,b-a),
+    /* cpTrue : la vraie valeur en centipawns (non ecretee, non substituee par
+       la grande valeur synthetique d'un mat), pour l'affichage numerique.
+       mate : distance de mat, perspective Blancs (positif = les Blancs
+       matent), null hors mat force. after.mate est donne du point de vue du
+       camp au trait APRES le coup (l'adversaire du mover), d'ou l'inversion
+       de signe, comme pour after.cp plus haut. */
+    const afterMateForMover=(after&&after.mate!=null)?-after.mate:null;
+    const mate=afterMateForMover==null?null:(mover===W?afterMateForMover:-afterMateForMover);
+    const cpTrue=(after&&after.mate==null)?(mover===W?-(after.cp||0):(after.cp||0)):null;
+    plies.push({cp:mover===W?a:-a,cpTrue:cpTrue,mate:mate,loss:Math.max(0,b-a),
       tag:classify(Math.max(0,b-a),bestUci===gameUci[i]),best:bestUci,mover:mover});
     bar.firstElementChild.style.width=(100*(i+1)/gameUci.length).toFixed(0)+"%";
   }
@@ -597,18 +616,26 @@ const prevSetMode=setMode;
 setMode=function(m,opts){
   if(coord)stopCoord();
   if(m==="train"){
-    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;}
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="train";
-    const tabs={home:"tab-home",play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch"};
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
     for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
+    { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
     $("pane-legal").classList.add("hide");
     $("appLayout").classList.remove("hide");
     $("pane-play").classList.add("hide");
     $("pane-puzzles").classList.add("hide");
     $("pane-friend").classList.add("hide");
     $("pane-train").classList.remove("hide");
+    /* Le plateau reste cache tant que la partie Jouer n'a pas demarre (voir
+       updatePlayBoardVisibility) : cette branche gerant elle-meme son
+       propre mode, sans jamais redescendre vers la logique centrale de
+       setMode() (ui.js) qui s'en charge d'habitude, cet etat "cache"
+       restait colle en arrivant ici depuis l'ecran de reglages de Jouer --
+       alors que Chang Sprint/coordonnees en ont besoin des l'entree. */
+    { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
     $("evalwrap").classList.add("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
     $("coordHud").classList.add("hide");
@@ -941,3 +968,570 @@ if($("footAccess"))$("footAccess").onclick=()=>{
   goToSection("accessibilite");   /* meme mecanique que les autres sections */
 };
 loadPrefs();
+
+/* ==========================================================
+   BULLES D'INFO PEDAGOGIQUES
+   ========================================================== */
+/* Gestionnaire delegue unique : chaque bulle est un simple couple bouton
+   (.info-tip, aria-controls -> id du texte) + texte (.info-tip-pop, cache
+   par defaut). Pas de re-branchement necessaire quand un panneau est
+   recree ou reaffiche dynamiquement (Entre amis, banniere de reprise...),
+   puisque la delegation se fait sur le document entier. Une seule bulle
+   ouverte a la fois, pour rester discret : en ouvrir une referme les
+   autres. */
+function closeAllInfoTips(){
+  document.querySelectorAll(".info-tip-pop:not(.hide)").forEach(p=>p.classList.add("hide"));
+  document.querySelectorAll('.info-tip[aria-expanded="true"]').forEach(b=>b.setAttribute("aria-expanded","false"));
+}
+document.addEventListener("click",e=>{
+  const btn=e.target.closest(".info-tip");
+  if(btn){
+    const pop=document.getElementById(btn.getAttribute("aria-controls"));
+    if(!pop)return;
+    const willOpen=pop.classList.contains("hide");
+    closeAllInfoTips();
+    if(willOpen){pop.classList.remove("hide");btn.setAttribute("aria-expanded","true");}
+    return;
+  }
+  if(!e.target.closest(".info-tip-pop"))closeAllInfoTips();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAllInfoTips();});
+
+/* ==========================================================
+   EDITEUR DE POSITION (onglet Analyse)
+   ========================================================== */
+/* Reutilise directement la variable globale "game" (comme Jouer et Entre
+   amis), pas un objet dedie : render(), pieceSVG() et le reste du rendu du
+   plateau partage n'ont donc rien de nouveau a apprendre. editGame/
+   editGameTurn memorisent la composition en cours quand on quitte l'onglet,
+   sur le meme principe que mainGame pour Jouer -- sinon revenir sur Analyse
+   apres un detour par Exercices ou Entre amis effacerait la position. */
+let editTool=null,editTurnVal="w",editGame=null,editGameTurn="w";
+/* Glisser-depose : etat de bas niveau, voir la section dediee plus bas
+   (apres editRenderPalette) pour le detail de la mecanique. */
+let editDrag=null,editDragJustHappened=false;
+const EDIT_DRAG_THRESHOLD=6;
+const EDIT_ORDER=["k","q","r","b","n","p"];
+function editPieceName(sym){
+  const names={k:t("King"),q:t("Queen"),r:t("Rook"),b:t("Bishop"),n:t("Knight"),p:t("Pawn")};
+  return names[sym]||sym;
+}
+function editRenderPalette(){
+  for(const color of ["w","b"]){
+    const el=$(color==="w"?"editPalWhite":"editPalBlack"); if(!el)continue;
+    el.innerHTML="";
+    for(const sym of EDIT_ORDER){
+      const b=document.createElement("button");
+      b.type="button";
+      b.innerHTML=pieceSVG(sym,color);
+      b.setAttribute("aria-pressed","false");
+      b.setAttribute("aria-label",editPieceName(sym)+" ("+(color==="w"?t("White"):t("Black"))+")");
+      b.onclick=()=>selectEditTool(sym,color);
+      b.addEventListener("pointerdown",ev=>{
+        if(typeof editPointerDown==="function")editPointerDown(ev,{source:"palette",tool:{t:sym,c:color}});
+      });
+      el.appendChild(b);
+    }
+  }
+}
+function selectEditTool(sym,color){
+  editTool={t:sym,c:color};
+  document.querySelectorAll(".editpal button").forEach(b=>b.setAttribute("aria-pressed","false"));
+  const idx=EDIT_ORDER.indexOf(sym);
+  const el=$(color==="w"?"editPalWhite":"editPalBlack");
+  if(el&&el.children[idx])el.children[idx].setAttribute("aria-pressed","true");
+}
+function handleEditorClick(sq){
+  /* Le "click" natif qui suit un vrai glissement (voir la mecanique de
+     glisser-depose plus bas) est ignore ici : le glissement a deja tout
+     fait, ce clic fantome ne doit rien refaire par-dessus. */
+  if(editDragJustHappened){editDragJustHappened=false;return;}
+  /* Taper une case deja occupee la vide, quel que soit l'outil en main :
+     c'est le geste le plus naturel pour corriger une position, et evite un
+     bouton "gomme" separe. Sinon, poser la piece choisie dans la palette.
+     Exception : le roi ne peut jamais etre retire, seulement deplace --
+     une position sans roi n'a pas de sens et bloquait "Jouer"/"Analyser"
+     de toute facon ; autant l'empecher a la source plutot que de laisser
+     l'utilisateur decouvrir le blocage apres coup. */
+  if(game.board[sq]){
+    const p=game.board[sq];
+    if(pT(p)===K)return;
+    game.board[sq]=0;
+    editRefresh();
+    return;
+  }
+  if(!editTool)return;
+  const ty=FSYM[editTool.t],c=editTool.c==="w"?W:B;
+  if(ty===K&&game.kingSq[c]>=0&&game.kingSq[c]!==sq)game.board[game.kingSq[c]]=0;
+  if(ty===K)game.kingSq[c]=sq;
+  game.board[sq]=mk(ty,c);
+  editRefresh();
+}
+/* Droits au roque deduits de la position plutot que geres a la main : roi
+   et tour encore sur leurs cases d'origine. Une seule case pour le concept
+   "prise en passant" existe cote moteur, mais l'editeur ne la propose pas
+   (cas rare, complexite disproportionnee pour ce que ca apporte ici). */
+function editCastling(){
+  let c=0;
+  if(game.board[nSq("e1")]===mk(K,W)){
+    if(game.board[nSq("h1")]===mk(R,W))c|=CWK;
+    if(game.board[nSq("a1")]===mk(R,W))c|=CWQ;
+  }
+  if(game.board[nSq("e8")]===mk(K,B)){
+    if(game.board[nSq("h8")]===mk(R,B))c|=CBK;
+    if(game.board[nSq("a8")]===mk(R,B))c|=CBQ;
+  }
+  return c;
+}
+function editRefresh(){
+  game.turn=editTurnVal==="b"?B:W;
+  game.castling=editCastling();
+  game.ep=-1;game.half=0;game.full=1;
+  legalCache=[];selected=-1;
+  render();
+  const out=$("editFenOut"); if(out)out.value=game.fen();
+  const kw=game.kingSq[W]>=0,kb=game.kingSq[B]>=0,ok=kw&&kb;
+  const msg=$("editMsg");
+  if(msg)msg.textContent=ok?"":(!kw&&!kb?t("Place a king for each side."):!kw?t("Place a white king."):t("Place a black king."));
+  const pb=$("editPlay"); if(pb)pb.disabled=!ok;
+}
+function editSyncTurnSeg(){
+  const seg=$("editTurnSeg"); if(!seg)return;
+  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===editTurnVal);
+}
+editRenderPalette();
+{ const seg=$("editTurnSeg");
+  if(seg)for(const b of seg.children)b.onclick=()=>{editTurnVal=b.dataset.v;editSyncTurnSeg();editRefresh();};
+}
+if($("editStart"))$("editStart").onclick=()=>{
+  game=new Game();editTurnVal="w";editSyncTurnSeg();editRefresh();
+};
+if($("editClear"))$("editClear").onclick=()=>{
+  /* Les rois restent sur leurs cases de depart plutot qu'un echiquier
+     totalement vide : ce sont les seules pieces qu'une position ne peut
+     jamais ne pas avoir, autant eviter l'aller-retour "vider puis
+     reposer les deux rois a la main" a chaque fois. */
+  game=new Game("4k3/8/8/8/8/8/8/4K3 w - - 0 1");editTurnVal="w";editSyncTurnSeg();editRefresh();
+};
+if($("editFenCopy"))$("editFenCopy").onclick=()=>{
+  copyText($("editFenOut").value);
+  const msg=$("editMsg"); if(msg)msg.textContent=t("FEN copied to the clipboard.");
+};
+if($("editFenLoad"))$("editFenLoad").onclick=()=>{
+  const v=$("editFenIn").value.trim(); if(!v)return;
+  let g=null;
+  try{g=new Game(v);}catch(e){g=null;}
+  if(!g||g.kingSq[W]<0||g.kingSq[B]<0){
+    const msg=$("editMsg"); if(msg)msg.textContent=t("Each side needs exactly one king.");
+    return;
+  }
+  game=g;editTurnVal=game.turn===B?"b":"w";editSyncTurnSeg();
+  $("editFenIn").value="";
+  editRefresh();
+};
+/* pendingStartFen : consomme par newGame() (ui.js) pour demarrer une partie
+   depuis cette position plutot que depuis le depart standard, sans changer
+   la signature de newGame() (appelee sans argument partout ailleurs). */
+if($("editPlay"))$("editPlay").onclick=()=>{
+  if(game.kingSq[W]<0||game.kingSq[B]<0)return;
+  pendingStartFen=game.fen();
+  pendingNoClock=true;
+  myColor=editTurnVal==="b"?B:W;
+  colorMode=myColor===W?"w":"b";
+  skipReady=true;
+  setMode("play",{fresh:true});
+  /* La partie nait depuis l'editeur : on reste visuellement sur l'onglet
+     Analyser plutot que de faire sauter la barre sur "Jouer" -- seule la
+     surbrillance change, le contenu affiche est bien celui du mode Jouer. */
+  const tp=$("tab-play"),te=$("tab-edit");
+  if(tp)tp.setAttribute("aria-selected","false");
+  if(te)te.setAttribute("aria-selected","true");
+};
+
+const prevSetModeEdit=setMode;
+setMode=function(m,opts){
+  if(m==="edit"){
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
+    mode="edit";busy=false;
+    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
+    $("pane-home").classList.add("hide");
+    $("pane-watch").classList.add("hide");
+    { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
+    const pp=$("pane-prefs"); if(pp)pp.classList.add("hide");
+    $("appLayout").classList.remove("hide");
+    $("pane-play").classList.add("hide");
+    $("pane-puzzles").classList.add("hide");
+    $("pane-friend").classList.add("hide");
+    const pt=$("pane-train"); if(pt)pt.classList.add("hide");
+    $("pane-edit").classList.remove("hide");
+    { const ei=$("editIntro"); if(ei)ei.classList.remove("hide"); }
+    /* Meme garde-fou que pour Train (voir plus haut) : sans lui, arriver
+       ici depuis l'ecran de reglages de Jouer (plateau cache tant que la
+       partie n'a pas demarre) laissait l'editeur sans echiquier du tout. */
+    { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    $("evalwrap").classList.add("hide");
+    $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
+    /* Le bouton de retournement rejoint la bande "Editeur de position" : en
+       edition, il n'y a pas de bandeau de coups a cote de lui dans
+       #boardTools, qui se serait donc reduit a une ligne entiere pour ce
+       seul bouton -- de la place perdue, precieuse sur mobile pour loger
+       le plateau et la palette sur un seul ecran. #boardTools n'a alors
+       plus rien a montrer : masque. */
+    { const eir=document.querySelector("#editIntro .edit-intro-row"),fb=$("btnFlip"); if(eir&&fb&&fb.parentElement!==eir)eir.appendChild(fb); }
+    { const bt=$("boardTools"); if(bt)bt.classList.add("hide"); }
+    { const nr=$("navRow"); if(nr)nr.classList.add("hide"); }
+    game=editGame||new Game();
+    editTurnVal=editGame?editGameTurn:"w";
+    editGame=null;
+    editSyncTurnSeg();
+    editRefresh();
+    return;
+  }
+  const pe=$("pane-edit"); if(pe)pe.classList.add("hide");
+  { const ei=$("editIntro"); if(ei)ei.classList.add("hide"); }
+  /* Le bouton de retournement reprend sa place habituelle a droite du
+     bandeau de coups, avant que le code de la chaine plus bas ne decide de
+     l'afficher ou non pour la destination reelle (m). */
+  { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
+  const te=$("tab-edit"); if(te)te.setAttribute("aria-selected","false");
+  if(mode==="edit"&&game){editGame=game;editGameTurn=editTurnVal;}
+  prevSetModeEdit(m,opts);
+};
+if($("tab-edit"))$("tab-edit").onclick=()=>{setMode("edit");goTop();};
+
+/* ==========================================================
+   MODE ANALYSE (exploration libre depuis l'editeur de position)
+   ========================================================== */
+/* Contrairement a Jouer, les deux camps sont deplacables (pas de bot, pas
+   de camp attribue) : on explore une ligne pour la comprendre, pas pour
+   affronter quelqu'un. La jauge d'evaluation et le meilleur coup sont donc
+   affiches en direct des le premier coup -- Jouer les masque expres tant
+   que la partie n'est pas finie ("pas d'aide du moteur pendant que tu
+   joues"), une regle qui n'a pas de sens ici puisqu'il n'y a personne a
+   affronter. */
+let analyseUci=[],analysePly=null,analyseStartFen=null,analyseEvalCache=null,analyseEvalToken=0;
+function handleAnalyseClick(sq){
+  if(!legalCache.length||game.isDraw())return;
+  const p=game.board[sq];
+  if(selected>=0){
+    const r=pickMove(selected,sq);
+    if(r){
+      marks={};
+      if(r.promo){askPromo(r.promo,m=>playAnalyseMove(m));selected=-1;render();return;}
+      playAnalyseMove(r.move);return;
+    }
+  }
+  if(p&&pC(p)===game.turn){selected=sq;marks={};} else selected=-1;
+  render();
+}
+function playAnalyseMove(m){
+  /* Rejouer un coup depuis une position anterieure (apres avoir navigue en
+     arriere dans le bandeau) ecrase la suite deja exploree : meme principe
+     qu'un logiciel d'analyse classique, une seule ligne a la fois, pas un
+     arbre de variantes complet (hors de portee raisonnable pour cette
+     premiere version). */
+  if(analysePly!==null&&analysePly<analyseUci.length){sanList.length=analysePly;analyseUci.length=analysePly;}
+  analysePly=null;
+  sanList.push(game.san(m));
+  analyseUci.push(sqN(m.from)+sqN(m.to)+(m.promo?SYM[m.promo]:""));
+  game.makeMove(m);lastMove=m;selected=-1;marks={};
+  legalCache=game.moves();
+  render();
+  renderAnalyseNav();
+  queueAnalyseEval();
+}
+function analyseGoto(ply){
+  ply=Math.max(0,Math.min(analyseUci.length,ply));
+  const g=new Game(analyseStartFen);
+  let lm=null;
+  for(let i=0;i<ply;i++){
+    const mv=g.moves().find(x=>g.uci(x)===analyseUci[i]);
+    if(!mv)break;
+    g.makeMove(mv);lm=mv;
+  }
+  game=g;lastMove=lm;selected=-1;marks={};
+  legalCache=game.moves();
+  analysePly=ply===analyseUci.length?null:ply;
+  render();
+  renderAnalyseNav();
+  queueAnalyseEval();
+}
+function renderAnalyseNav(){
+  const n=analyseUci.length,at=analysePly===null?n:analysePly;
+  const row=$("navRow"); if(row)row.classList.remove("hide");
+  const el=$("navScroll"); if(!el)return;
+  let h='<span class="navchip start'+(at===0?" cur":"")+'" data-ply="0">'+t("Game start")+'</span>';
+  for(let i=0;i<sanList.length;i++){
+    const cls="navchip"+(i===at-1?" cur":"");
+    const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
+    const side=i%2===0?"w":"b";
+    const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+'</span>';
+  }
+  el.innerHTML=h;
+  el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>analyseGoto(+sp.dataset.ply);});
+  const curEl=el.querySelector(".cur");
+  if(curEl&&typeof curEl.scrollIntoView==="function"){
+    try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
+  }
+  if(typeof updateNavScrollHint==="function")updateNavScrollHint();
+}
+/* Interroge Stockfish (avec repli sur le moteur integre, comme partout
+   ailleurs sur le site) pour la position actuellement affichee, qu'elle
+   soit la derniere jouee ou une position anterieure consultee dans le
+   bandeau. Le jeton evite qu'une reponse tardive d'un coup precedent
+   n'ecrase l'affichage d'une position consultee depuis. */
+async function queueAnalyseEval(){
+  const myToken=++analyseEvalToken;
+  const fen=game.fen(),turnAtQuery=game.turn;
+  const be=$("analyseBest"); if(be)be.textContent=t("Analysing…");
+  let cp=null,mateVal=null,bestUci=null;
+  if(typeof sf!=="undefined"&&sf.ready){
+    const r=await sfEvalFen(fen,14);
+    if(myToken!==analyseEvalToken)return;
+    if(r){
+      cp=turnAtQuery===W?(r.cp||0):-(r.cp||0);
+      mateVal=r.mate==null?null:(turnAtQuery===W?r.mate:-r.mate);
+      bestUci=r.best;
+    }
+  }
+  if(cp===null&&mateVal===null){
+    const r=search(game,3,300);
+    if(myToken!==analyseEvalToken)return;
+    cp=turnAtQuery===W?r.score:-r.score;
+    bestUci=r.move?game.uci(r.move):null;
+  }
+  analyseEvalCache={cp:cp||0,cpTrue:cp||0,mate:mateVal};
+  if(typeof updateEval==="function")updateEval();
+  if(be){
+    if(!bestUci)be.textContent="";
+    else{
+      const mv=game.moves().find(x=>game.uci(x)===bestUci);
+      be.textContent=mv?t("Best move: {m}",{m:game.san(mv)}):"";
+    }
+  }
+}
+if($("editAnalyse"))$("editAnalyse").onclick=()=>{
+  if(game.kingSq[W]<0||game.kingSq[B]<0)return;
+  analyseStartFen=game.fen();
+  /* editGame/editGameTurn ne sont normalement mis a jour qu'en quittant
+     l'onglet Analyse (voir l'extension setMode plus bas) : passer par
+     "Analyser cette position" contourne ce chemin, il faut donc les fixer
+     ici explicitement. Sans ca, revenir depuis l'exploration affichait soit
+     une position perimee (si l'onglet avait deja ete quitte une fois
+     avant), soit la position de depart standard par defaut (la toute
+     premiere fois), jamais la position reellement composee. */
+  /* new Game(analyseStartFen), pas game directement : game est le meme
+     objet mutable qui va ensuite recevoir tous les coups de l'exploration
+     (game.makeMove() modifie l'instance en place). Y stocker une simple
+     reference aurait fait "bouger" editGame avec chaque coup explore au
+     lieu de rester fige sur la position de depart. */
+  editGame=new Game(analyseStartFen);editGameTurn=editTurnVal;
+  sanList=[];analyseUci=[];analysePly=null;lastMove=null;selected=-1;marks={};analyseEvalCache=null;
+  setMode("analyse");
+};
+if($("analyseBack"))$("analyseBack").onclick=()=>setMode("edit");
+
+
+const prevSetModeAnalyse=setMode;
+setMode=function(m,opts){
+  if(m==="analyse"){
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
+    mode="analyse";busy=false;
+    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k==="edit");}
+    $("pane-home").classList.add("hide");
+    $("pane-watch").classList.add("hide");
+    { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
+    const pp=$("pane-prefs"); if(pp)pp.classList.add("hide");
+    $("appLayout").classList.remove("hide");
+    $("pane-play").classList.add("hide");
+    $("pane-puzzles").classList.add("hide");
+    $("pane-friend").classList.add("hide");
+    const pt=$("pane-train"); if(pt)pt.classList.add("hide");
+    $("pane-edit").classList.add("hide");
+    { const ei=$("editIntro"); if(ei)ei.classList.add("hide"); }
+    $("pane-analyse").classList.remove("hide");
+    /* Meme garde-fou que pour Train/Analyse-editeur (voir plus haut). */
+    { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    $("evalwrap").classList.remove("hide");
+    $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
+    { const bt=$("boardTools"); if(bt)bt.classList.remove("hide"); }
+    { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
+    legalCache=game.moves();selected=-1;marks={};
+    render();
+    renderAnalyseNav();
+    queueAnalyseEval();
+    return;
+  }
+  const pa=$("pane-analyse"); if(pa)pa.classList.add("hide");
+  prevSetModeAnalyse(m,opts);
+};
+
+/* ==========================================================
+   GLISSER-DEPOSER DANS L'EDITEUR DE POSITION
+   ========================================================== */
+/* Pointer Events : un seul jeu d'evenements pour souris/tactile/stylet,
+   bien supporte partout. Actif uniquement quand mode==="edit" (verifie a
+   l'origine du geste, dans buildBoard() et editRenderPalette() ci-dessus) :
+   ne remplace ni ne desactive le systeme de clic classique utilise partout
+   ailleurs sur le site (Jouer, Entre amis, exploration Analyser), qui
+   continue de fonctionner a l'identique.
+
+   Un simple tap (deplacement sous le seuil) ne fait rien ici : le "click"
+   natif qui suit s'execute ensuite normalement, geree par handleEditorClick
+   / selectEditTool comme avant. Un vrai glissement (au-dela du seuil) prend
+   le relais et, pour une origine "board", court-circuite ensuite ce meme
+   clic fantome via editDragJustHappened (sinon le clic qui suit un
+   glissement termine sur la case de depart aurait retire la piece qu'on
+   vient juste de reposer dessus).
+
+   setPointerCapture sur l'element d'origine garantit que pointermove/up
+   continuent d'arriver meme quand le pointeur sort de ses limites -- pas
+   besoin d'ecouteurs poses/retires sur document. La case ou la piece
+   atterrirait est retrouvee via elementFromPoint sur les coordonnees du
+   pointeur, independant de la capture. */
+function editCellIndexFromPoint(x,y){
+  const el=document.elementFromPoint(x,y);
+  const cell=el&&el.closest?el.closest(".sq"):null;
+  if(!cell||cell.parentElement!==boardEl)return -1;
+  return Array.prototype.indexOf.call(boardEl.children,cell);
+}
+function editHighlightCellAt(x,y){
+  const idx=editCellIndexFromPoint(x,y);
+  for(const c of boardEl.children)c.classList.remove("drag-over");
+  if(idx>=0)boardEl.children[idx].classList.add("drag-over");
+  return idx;
+}
+function editMakeGhost(sym,color){
+  const g=document.createElement("div");
+  g.className="edit-ghost";
+  g.innerHTML=pieceSVG(sym,color);
+  document.body.appendChild(g);
+  return g;
+}
+function editPositionGhost(x,y){
+  if(!editDrag||!editDrag.ghost)return;
+  editDrag.ghost.style.left=x+"px";
+  editDrag.ghost.style.top=y+"px";
+}
+function editEndDrag(){
+  if(editDrag&&editDrag.ghost&&editDrag.ghost.parentNode)editDrag.ghost.parentNode.removeChild(editDrag.ghost);
+  for(const c of boardEl.children)c.classList.remove("drag-over","drag-source");
+  editDrag=null;
+}
+function editPointerDown(e,info){
+  if(mode!=="edit"||(e.button!=null&&e.button>0))return;
+  const el=e.currentTarget;
+  if(el.setPointerCapture){try{el.setPointerCapture(e.pointerId);}catch(err){}}
+  editDrag={...info,startX:e.clientX,startY:e.clientY,moved:false,ghost:null,el:el};
+  el.addEventListener("pointermove",editPointerMove,{passive:false});
+  el.addEventListener("pointerup",editPointerUp,{passive:false});
+  el.addEventListener("pointercancel",editPointerCancel,{passive:false});
+}
+function editPointerMove(e){
+  if(!editDrag)return;
+  if(!editDrag.moved){
+    const dx=e.clientX-editDrag.startX,dy=e.clientY-editDrag.startY;
+    if(Math.sqrt(dx*dx+dy*dy)<EDIT_DRAG_THRESHOLD)return;
+    editDrag.moved=true;
+    const sym=editDrag.source==="board"?SYM[pT(editDrag.piece)]:editDrag.tool.t;
+    const col=editDrag.source==="board"?(pC(editDrag.piece)===W?"w":"b"):editDrag.tool.c;
+    editDrag.ghost=editMakeGhost(sym,col);
+    const rect=editDrag.el.getBoundingClientRect();
+    editDrag.ghost.style.width=rect.width+"px";
+    editDrag.ghost.style.height=rect.height+"px";
+    if(editDrag.source==="board")editDrag.el.classList.add("drag-source");
+  }
+  e.preventDefault();
+  editPositionGhost(e.clientX,e.clientY);
+  editHighlightCellAt(e.clientX,e.clientY);
+}
+function editPointerUp(e){
+  if(!editDrag)return;
+  const el=editDrag.el;
+  el.removeEventListener("pointermove",editPointerMove);
+  el.removeEventListener("pointerup",editPointerUp);
+  el.removeEventListener("pointercancel",editPointerCancel);
+  if(!editDrag.moved){editEndDrag();return;}
+  if(editDrag.source==="board")editDragJustHappened=true;
+  const targetIdx=editCellIndexFromPoint(e.clientX,e.clientY);
+  const drag=editDrag;
+  editEndDrag();
+  editApplyDrop(drag,targetIdx);
+}
+function editPointerCancel(){
+  if(!editDrag)return;
+  const el=editDrag.el;
+  el.removeEventListener("pointermove",editPointerMove);
+  el.removeEventListener("pointerup",editPointerUp);
+  el.removeEventListener("pointercancel",editPointerCancel);
+  editEndDrag();
+}
+/* Applique le resultat d'un glissement termine : deplacement/retrait pour
+   une origine "board", pose pour une origine "palette". Le roi ne peut
+   jamais etre retire (lache hors de l'echiquier) -- seulement deplace --
+   meme regle que pour le retrait au tap (handleEditorClick). */
+function editApplyDrop(drag,targetIdx){
+  if(drag.source==="board"){
+    const sourceSq=drag.sq,piece=drag.piece;
+    if(targetIdx<0){
+      if(pT(piece)===K)return;
+      game.board[sourceSq]=0;
+      editRefresh();
+      return;
+    }
+    const targetSq=idxToSq(targetIdx);
+    if(targetSq===sourceSq)return;
+    const existing=game.board[targetSq];
+    if(existing&&pT(existing)===K)game.kingSq[pC(existing)]=-1;
+    game.board[targetSq]=piece;
+    game.board[sourceSq]=0;
+    if(pT(piece)===K)game.kingSq[pC(piece)]=targetSq;
+    editRefresh();
+  } else {
+    if(targetIdx<0)return;
+    const targetSq=idxToSq(targetIdx);
+    const ty=FSYM[drag.tool.t],c=drag.tool.c==="w"?W:B;
+    if(ty===K&&game.kingSq[c]>=0&&game.kingSq[c]!==targetSq)game.board[game.kingSq[c]]=0;
+    const existing=game.board[targetSq];
+    if(existing&&pT(existing)===K)game.kingSq[pC(existing)]=-1;
+    game.board[targetSq]=mk(ty,c);
+    if(ty===K)game.kingSq[c]=targetSq;
+    editRefresh();
+  }
+}
+
+/* ==========================================================
+   INDICE DE DEFILEMENT DE LA BARRE D'ONGLETS
+   ========================================================== */
+/* Sur mobile, les libelles tronques par le bord de l'ecran peuvent laisser
+   croire que le menu s'arrete la (ex. "Inviter" semble etre le dernier
+   onglet alors que "Regarder"/"Explorer" suivent). Un fin degrade colle a
+   chaque bord (voir le CSS de .tabs) signale qu'il y a plus a voir en
+   glissant -- uniquement quand c'est vrai, jamais du cote ou il n'y a
+   effectivement plus rien. */
+function updateTabsScrollHint(){
+  const el=$("tabsNav"); if(!el)return;
+  const max=el.scrollWidth-el.clientWidth;
+  el.classList.toggle("has-scroll-left",el.scrollLeft>2);
+  el.classList.toggle("has-scroll-right",el.scrollLeft<max-2);
+}
+{
+  const el=$("tabsNav");
+  if(el){
+    updateTabsScrollHint();
+    el.addEventListener("scroll",updateTabsScrollHint,{passive:true});
+    window.addEventListener("resize",updateTabsScrollHint);
+    /* Les libelles changent de longueur au changement de langue (le
+       francais deborde plus que l'anglais, deja constate) : un observateur
+       de mutations recalcule alors tout seul, sans avoir a modifier chaque
+       endroit du code qui appelle applyI18n(). */
+    if("MutationObserver" in window){
+      new MutationObserver(updateTabsScrollHint).observe(el,{characterData:true,childList:true,subtree:true});
+    }
+  }
+}

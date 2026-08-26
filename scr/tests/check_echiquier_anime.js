@@ -50,8 +50,10 @@ setTimeout(()=>{
   prev.click();
   T("precedent recule", vis()===1, "ply "+vis());
   play.click();
-  T("lecture demarree (icone pause)", play.innerHTML.includes("\u2759")||play.innerHTML.includes("&#10073;")||play.innerHTML!=="\u25b6",
-     JSON.stringify(play.innerHTML));
+  /* Le picto ne reecrit plus innerHTML (deux formes fixes dans le meme SVG,
+     bascule par l'attribut hidden) : on verifie directement l'etat visible,
+     pas une chaine de caracteres qui ne change plus au clic. */
+  T("lecture demarree (icone pause)", play.querySelectorAll("path")[1].style.display!=="none", "");
 
   console.log("\n--- Toujours une seule position visible ---");
   T("invariant respecte", [...g].filter(x=>!x.hasAttribute("hidden")).length===1);

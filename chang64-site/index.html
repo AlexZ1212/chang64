@@ -94,7 +94,19 @@ html{-webkit-text-size-adjust:100%;background-color:#101413;background-color:var
 body{
   background-color:#101413;
   background-color:var(--ink);
-  background-image:radial-gradient(1100px 620px at 18% -12%, #17201D 0%, transparent 62%);
+  /* Le decalage vertical du degrade etait en %, donc calcule par rapport a
+     la hauteur TOTALE de la page (tout le contenu scrollable), pas par
+     rapport a l'ecran visible. Or cette hauteur varie enormement d'un
+     onglet a l'autre (de ~1100px sur Defis a ~3500px sur Watch) : sur les
+     pages courtes le centre du degrade se retrouvait plaque juste sous le
+     haut de l'ecran (tache verte intense, cadre visible contre le fond uni
+     de l'entete ancre), et sur les pages longues il se retrouvait projete
+     tres loin au-dessus (degrade quasi invisible). Un decalage en px fixe
+     ancre le degrade par rapport au haut du document, donc par rapport a
+     l'ecran au chargement, quelle que soit la longueur du contenu en
+     dessous. Valeur choisie pour reproduire l'intensite visuelle d'origine
+     sur un ecran de hauteur courante (~800px). */
+  background-image:radial-gradient(1100px 620px at 18% -90px, #17201D 0%, transparent 62%);
   background-repeat:no-repeat;
   color:var(--chalk);
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
@@ -234,7 +246,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
   #pane-puzzles .quest{font-size:16px;margin-bottom:2px}
   #pane-puzzles .status{min-height:0;padding:7px 10px}
   #pane-puzzles .btnrow{margin-top:8px!important}
-  #pane-puzzles hr.rule{margin-top:14px}
+  #pane-puzzles hr.rule{margin-top:14px;margin-bottom:10px}
 }
 @media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
@@ -242,6 +254,24 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .strip .stat span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
 
 /* ---------- layout ---------- */
+/* Bande d'intro de l'editeur de position : hors de la grille .layout (donc
+   hors du bloc echiquier, partage avec Jouer/Entre amis, qui s'affiche
+   toujours en premier dans ce bloc). Volontairement fine (une ligne, pas un
+   .panel complet) : sur mobile, le but est de loger l'echiquier ET la
+   palette de pieces sur un seul ecran sans avoir a scroller, ce qu'un bloc
+   de texte epais empechait. Inspiration : m.nextchessmove.com, dont toute
+   la consigne d'usage tient en une ligne au-dessus du plateau.
+   .edit-intro-row (pas .edit-intro lui-meme) porte le flex : la bulle
+   d'info (.info-tip-pop) doit rester un bloc normal qui retombe sous cette
+   rangee, pas un troisieme element aligne dans la meme ligne flex.
+   Le style "eyebrow" (majuscules, gras) reste lui aussi limite a
+   .edit-intro-row : pose sur .edit-intro, il se serait transmis par
+   heritage CSS a la bulle d'info, dont le texte se serait retrouve en
+   majuscules et en gras au lieu du style normal utilise pour toutes les
+   autres bulles du site. */
+.edit-intro{margin-bottom:10px}
+.edit-intro-row{display:flex;align-items:center;gap:2px;font-size:12.5px;color:var(--sage);
+  font-weight:600;text-transform:uppercase;letter-spacing:.03em}
 .layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:22px;align-items:start}
 @media(max-width:860px){.layout{grid-template-columns:1fr}}
 .board-side{display:flex;flex-direction:column;gap:10px;min-width:0}
@@ -295,7 +325,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    le nom vers le haut et le desalignait de la pendule. Ici la premiere ligne
    ne bouge jamais, avec ou sans prises. */
 .clock{display:flex;flex-direction:column;align-items:stretch;gap:0;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px 14px;
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:7px 12px;
   max-width:100%;box-sizing:border-box;min-width:0
 }
 /* Pieces capturees dans la pendule. La contrainte est de ne pas faire grandir
@@ -306,7 +336,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    de l'ecran. */
 /* .who etait en flex horizontal : les pieces se retrouvaient a cote du nom
    au lieu d'etre dessous. On le passe en colonne. */
-.clock-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.clock-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;line-height:1}
 .taken-slot{display:block;min-width:0}
 /* Fond transparent : le carre clair des pieces formait une bande blanche peu
    elegante sous le nom. On gagne ainsi de la place verticale, ce qui permet
@@ -316,7 +346,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    de la pastille plus son ecart, calcules depuis les memes variables pour que
    l'alignement suive si l'un des deux change. La bordure est comprise dans la
    largeur (box-sizing:border-box global), il n'y a donc rien a ajouter. */
-.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:22px;margin-top:1px;
+.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:20px;margin-top:0;
   padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
 /* La largeur est posee en ligne, proportionnelle a la boite englobante de
    chaque piece : un pion reste plus etroit qu'une dame. L'espacement entre
@@ -324,7 +354,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    aussi pose en ligne par rangeePrises() dans ui.js, piece par piece : il
    depend de la piece precedente et ne peut donc pas etre une regle CSS
    unique. */
-.taken .tk{display:block;width:22px;height:22px;flex:none;margin:0;
+.taken .tk{display:block;width:20px;height:20px;flex:none;margin:0;
   background:none;border:0;border-radius:0}
 .taken .tk svg{width:100%;height:100%;display:block;overflow:visible}
 /* On cible le corps de la piece par sa couleur d'origine, pas tous les
@@ -348,7 +378,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .clock{--pastille:13px;--pastille-gap:8px}
 .clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
 .clock .who>i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
-.clock time{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.clock time{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
 /* background en raccourci effacait le fond du bloc au lieu de le teinter :
    le laiton translucide se retrouvait pose sur le fond de page, plus sombre,
    et la pendule paraissait noircir en s'activant. On superpose donc un degrade
@@ -367,13 +397,29 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    depasser la place disponible, quelle que soit la cause. box-sizing evite
    que la marge interieure ne s'ajoute a la largeur. */
 .board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34);max-width:100%;box-sizing:border-box}
+/* Bouton de retournement de l'echiquier : deplace du coin de l'echiquier
+   (ou il recouvrait une piece, le cadre n'ayant que 10px de marge) vers le
+   bandeau de coups, a droite du chevron "suivant" -- voir .board-tools plus
+   bas. Purement visuel (ne touche jamais qui joue quoi) : voir toggleFlip()
+   dans ui.js. Style repris de .navchev pour rester coherent avec les deux
+   autres boutons du meme bandeau. */
 .board{
   display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));
   aspect-ratio:1/1;width:100%;max-width:100%;box-sizing:border-box;
   border-radius:2px;overflow:hidden;position:relative;touch-action:manipulation
 }
 .sq:focus-visible{outline:2px dashed var(--chalk);outline-offset:-3px;z-index:6}
-.sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.sq{position:relative;aspect-ratio:1/1;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+/* Glisser-depose de l'editeur de position : case survolee pendant un
+   glissement, et case d'origine attenuee tant qu'elle est "en main". */
+.sq.drag-over{box-shadow:inset 0 0 0 3px var(--brass)}
+.sq.drag-source{opacity:.35}
+/* Piece "fantome" qui suit le pointeur pendant un glissement : hors du flux
+   normal (position:fixed), ignore les evenements pour ne jamais fausser
+   elementFromPoint (sinon le fantome se detecterait lui-meme comme cible). */
+.edit-ghost{position:fixed;top:0;left:0;pointer-events:none;z-index:50;
+  transform:translate(-50%,-50%);opacity:.92;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.edit-ghost svg{width:100%;height:100%;display:block}
 .sq.l{background-color:var(--bone)}
 .sq.d{background-color:var(--board)}
 .sq .co{position:absolute;font-size:9px;font-weight:500;font-family:'JetBrains Mono',monospace;pointer-events:none;z-index:7}
@@ -566,8 +612,36 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
    gardait la largeur de son contenu et elargissait toute la page. flex-basis
    a 100 % la force a prendre la ligne entiere et rien de plus, ce qui rend
    enfin son defilement interne operant. */
-.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none}
+.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none;position:relative}
 .tabs::-webkit-scrollbar{display:none}
+/* Indice discret "il y a plus a voir en glissant" : un fin degrade colle au
+   bord grace a position:sticky (reste a sa place pendant le defilement,
+   contrairement a un simple absolute qui defilerait avec le contenu).
+   Arrondi comme le conteneur (border-radius:999px, une vraie pilule, donc
+   arrondie sur toute la hauteur du bord et pas juste au coin) pour ne pas
+   avoir l'air d'un rectangle colle sur une forme ronde. N'apparait que
+   lorsque necessaire : voir le petit script de bascule des classes
+   has-scroll-left/has-scroll-right, colle au chargement et au defilement. */
+.tabs::before,.tabs::after{
+  content:"";position:sticky;align-self:stretch;width:25px;flex:none;
+  pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+  background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%
+}
+/* Chevron en image de fond (SVG intégré), pas en contenu texte : le
+   contenu de ::before/::after peut se retrouver lu par certains lecteurs
+   d'ecran selon le navigateur, une image de fond jamais -- purement
+   decoratif, l'indice reste redondant avec le simple fait que le menu
+   deborde reellement. */
+.tabs::before{left:-4px;order:-1;margin-right:-25px;border-radius:999px 0 0 999px;
+  background-position:7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to right,var(--slate) 38%,transparent)}
+.tabs::after{right:-4px;order:999;margin-left:-25px;border-radius:0 999px 999px 0;
+  background-position:right 7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to left,var(--slate) 38%,transparent)}
+.tabs.has-scroll-left::before{opacity:1}
+.tabs.has-scroll-right::after{opacity:1}
 /* L'entete elle-meme ne doit pas pouvoir etre elargie par un de ses enfants. */
 header{min-width:0}
 header>*{min-width:0}
@@ -618,6 +692,21 @@ header>*{min-width:0}
    grand chiffre) restent plus petits : ce ne sont pas des textes a lire, et
    les agrandir degraderait l'echiquier. */
 .note{font-size:12.5px;color:var(--sage);margin-top:9px;line-height:1.5}
+/* Bulles d'info pedagogiques : discretes par defaut (petit rond avec un i),
+   contenu affiche uniquement au tap/clic, jamais au survol seul (public
+   mobile). Une seule ouverte a la fois, voir le gestionnaire delegue plus
+   bas dans le script. En flux normal (pas de position:fixed) pour eviter
+   les soucis de positionnement deja rencontres sur Safari iOS ailleurs sur
+   ce site. */
+.info-tip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+  margin-left:6px;border-radius:50%;border:1px solid var(--rule);background:transparent;
+  color:var(--sage);font-size:12px;font-weight:700;font-style:italic;
+  font-family:Georgia,'Times New Roman',serif;line-height:1;cursor:pointer;
+  vertical-align:middle;flex:none;padding:0}
+.info-tip:hover,.info-tip:focus-visible{color:var(--chalk);border-color:var(--sage)}
+.info-tip-pop{margin:8px 0 2px;padding:9px 11px;font-size:12.5px;line-height:1.5;
+  color:var(--sage);background:var(--raise);border:1px solid var(--rule);border-radius:var(--r)}
+.info-tip-pop.hide{display:none}
 /* .note seul n'a pas de marge basse : suffisant partout ailleurs, ou ce qui
    suit a deja son propre espacement. Ici, .result-actions n'en apporte
    aucun de son cote, laissant la phrase collee aux boutons. */
@@ -633,6 +722,17 @@ header>*{min-width:0}
 .promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:8px;width:60px;height:60px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .promos button:hover{background:#fff2d4}
 .promos button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+/* Palette de pieces de l'editeur de position (onglet Analyse) : meme
+   esthetique que .promos (le selecteur de promotion), en plus petit pour
+   loger 6 pieces par rangee sur mobile. */
+.editpal{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.editpal button{background-color:var(--bone);border:2px solid var(--rule);border-radius:8px;width:46px;height:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;touch-action:none}
+.editpal button svg{width:30px;height:30px;display:block}
+.editpal button:hover{background:#fff2d4}
+.editpal button[aria-pressed="true"]{border-color:var(--brass)}
+.editpal button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+#editErase[aria-pressed="true"]{border-color:var(--brass);color:var(--brass);font-weight:600}
 
 .origin{position:relative;overflow:hidden}
 .origin-mark{
@@ -704,8 +804,57 @@ header>*{min-width:0}
 .opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(217,168,63,.35)}
 .opening a:hover{border-bottom-color:var(--brass)}
 .opening{font-size:12.5px;color:var(--brass);margin-top:2px;min-height:18px}
-.navrow{display:flex;gap:6px}
-.navbtn{flex:1;font-family:'JetBrains Mono',monospace;font-size:13px;padding:8px 4px;min-width:0}
+/* Vide (avant toute partie, ou tant qu'aucune ouverture n'est detectee), la
+   reserve de hauteur ci-dessus desequilibrait le bloc au-dessus de #status :
+   plus d'espace en haut qu'en bas, le texte n'y etait pas centre. */
+.opening:empty{display:none;margin-top:0;min-height:0}
+/* Conteneur commun au bandeau de coups et au bouton de retournement : reste
+   visible en Jouer/Entre amis meme quand le bandeau de coups lui-meme est
+   masque (aucun coup joue, ou mode Entre amis qui n'a pas de bandeau) --
+   sinon le bouton de retournement disparaitrait avec lui, alors qu'il doit
+   rester disponible independamment du nombre de coups. */
+.board-tools{display:flex;align-items:stretch;gap:6px}
+.flip-btn{flex:none;margin-left:auto;height:29px}
+.navstrip{display:flex;align-items:stretch;gap:6px;flex:1;min-width:0}
+.navchev{flex:none;width:30px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);
+  border-radius:8px;cursor:pointer}
+.navchev svg{width:17px;height:17px}
+.navscroll{flex:1;display:flex;align-items:center;gap:1px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;min-width:0;position:relative;
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:8px;padding:0 6px}
+.navscroll::-webkit-scrollbar{display:none}
+/* Meme indice de defilement que la barre d'onglets (degrade colle au bord +
+   chevron), a la place des deux boutons |< >| separes qu'il remplace :
+   swipe et tap sur un coup restent les gestes principaux, les fleches du
+   clavier couvrent le pas-a-pas. */
+.navscroll::before,.navscroll::after{content:"";position:sticky;align-self:stretch;width:25px;
+  flex:none;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+  background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%}
+.navscroll::before{left:-7px;order:-1;margin-right:-25px;border-radius:8px 0 0 8px;
+  background-position:7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to right,var(--slate) 38%,transparent)}
+.navscroll::after{right:-7px;order:999;margin-left:-25px;border-radius:0 8px 8px 0;
+  background-position:right 7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to left,var(--slate) 38%,transparent)}
+.navscroll.sl::before,.navscroll.sr::after{opacity:1}
+.navchip{flex:none;display:inline-flex;align-items:center;gap:2px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap;
+  padding:4px 5px;color:var(--sage);cursor:pointer;border-radius:6px;scroll-snap-align:center}
+.navchip .navnum{color:var(--sage);opacity:.7;margin-right:1px;font-size:10.5px}
+/* Le picto de piece porte deja la distinction visuelle voulue (piece +
+   camp) : le coup courant se signale par un fond discret et du gras,
+   plutot que par un aplat brass qui n'apportait rien de plus. */
+.navchip.cur{background-color:var(--raise);color:var(--chalk);font-weight:600}
+.navpiece{flex:none;width:15px;height:15px;display:inline-block;opacity:.9}
+.navpiece.side-b{opacity:.5}
+.navpiece svg{width:100%;height:100%;display:block}
+.navchip.tag-blunder{color:#D9584A}
+.navchip.tag-mistake{color:#C4762A}
+.navchip.tag-inacc{color:#8A7A2A}
+.navchip.start{font-style:italic}
 .accrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .graph{background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:6px;overflow:hidden}
 .graph svg{display:block;width:100%;height:96px}
@@ -779,13 +928,14 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <button data-lang="en" aria-pressed="true">EN</button>
       <button data-lang="fr" aria-pressed="false">FR</button>
     </div>
-    <nav class="tabs" role="tablist" aria-label="Sections">
-      <button role="tab" id="tab-home" aria-selected="true">Home</button>
+    <nav class="tabs" id="tabsNav" role="tablist" aria-label="Sections">
       <button role="tab" id="tab-play" aria-selected="false">Play</button>
-      <button role="tab" id="tab-puzzles" aria-selected="false">Puzzles</button>
-      <button role="tab" id="tab-train" aria-selected="false">Challenges</button>
-      <button role="tab" id="tab-friend" aria-selected="false">Friends</button>
+      <button role="tab" id="tab-puzzles" aria-selected="false">Solve</button>
+      <button role="tab" id="tab-train" aria-selected="false">Train</button>
+      <button role="tab" id="tab-edit" aria-selected="false">Analyse</button>
+      <button role="tab" id="tab-friend" aria-selected="false">Invite</button>
       <button role="tab" id="tab-watch" aria-selected="false">Watch</button>
+      <button role="tab" id="tab-explore" aria-selected="false">Explore</button>
     </nav>
   </header>
 
@@ -799,7 +949,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <p class="promise">No account. No ads. No noise. Just chess.</p>
       <p>Bullet to daily time controls against a built-in engine, 1000 puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
       <div class="tc-block">
-        <div class="eyebrow">Time control</div>
+        <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl" aria-label="More info">i</button></div>
+        <p class="info-tip-pop hide" id="tipTimeControl">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
         <div class="tc-cats" id="tcCats"></div>
         <div class="tc-chips" id="tcChips"></div>
         <p class="tc-note" id="tcNote"></p>
@@ -843,12 +994,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       </div>
     </div>
 
-    <div class="panel" style="margin-bottom:16px">
-      <div class="eyebrow" id="exploreTitle">Explore</div>
-      <p class="note" id="exploreNote" style="margin-top:0;margin-bottom:12px"></p>
-      <div class="explore" id="exploreLinks"></div>
-    </div>
-
     <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
          n'afficherait que des zeros, ce qu'un premier visiteur lit comme
          "le site est vide" alors qu'il s'agit de sa propre progression.
@@ -868,6 +1013,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   </div>
 
   <!-- ================= BOARD + PANELS ================= -->
+  <div class="edit-intro hide" id="editIntro">
+    <div class="edit-intro-row">
+      <span>Board editor</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipEdit" aria-label="More info">i</button>
+    </div>
+    <p class="info-tip-pop hide" id="tipEdit">Set up any position to study it: check an idea from a book, a puzzle you saw elsewhere, or an endgame, without replaying a whole game to get there. Pick a piece below, then tap a square. Tap a piece already on the board to remove it.</p>
+  </div>
   <div class="layout hide" id="appLayout">
     <div class="board-side">
       <!-- Au-dessus de l'echiquier, comme le bandeau des coordonnees : le
@@ -911,8 +1062,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
              quoi il joue, et rien ne demarre avant qu'il le decide. -->
         <div class="result hide" id="readyBanner" role="dialog" aria-modal="false" aria-labelledby="readyTitle">
           <div class="result-card">
-            <b id="readyTitle">Ready?</b>
+            <b id="readyTitle">Ready?</b><button type="button" class="info-tip hide" id="tipResumeBtn" aria-expanded="false" aria-controls="tipResume" aria-label="More info">i</button>
             <span id="readySub"></span>
+            <p class="info-tip-pop hide" id="tipResume">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
             <div class="result-actions">
               <button class="btn primary" id="readyStart">Start</button>
               <button class="btn" id="readySettings">Change settings</button>
@@ -934,11 +1086,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
       </div>
-      <div class="navrow hide" id="navRow">
-        <button class="btn navbtn" id="navStart" aria-label="First move">&#124;&lt;</button>
-        <button class="btn navbtn" id="navPrev" aria-label="Previous move">&lt;</button>
-        <button class="btn navbtn" id="navNext" aria-label="Next move">&gt;</button>
-        <button class="btn navbtn" id="navEnd" aria-label="Last move">&gt;&#124;</button>
+      <div class="board-tools hide" id="boardTools">
+        <div class="navstrip hide" id="navRow">
+          <div class="navscroll" id="navScroll" role="list"></div>
+        </div>
+        <button type="button" class="navchev flip-btn" id="btnFlip" aria-label="Flip the board"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7-6 7 6"/><path d="M5 15l7 6 7-6"/></svg></button>
       </div>
       <div class="plyinfo hide" id="plyInfo"></div>
       <div class="clock hide" id="clockBottom">
@@ -953,14 +1105,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
     <div>
       <!-- ---------- PLAY ---------- -->
       <div id="pane-play" class="hide">
-        <div class="panel">
-          <h2>Your game</h2>
-          <p class="sub" id="turnline">White to move.</p>
+        <div class="panel" id="statusPanel">
           <p class="opening" id="opening"></p>
           <div class="status" id="status">Pick a colour and a strength, then play.</div>
+          <div class="btnrow" style="margin-top:10px">
+            <button class="btn danger" id="btnResign">Resign</button>
+          </div>
         </div>
-        <div class="panel">
-          <div class="eyebrow">Settings</div>
+        <div class="panel" id="settingsPanel">
+          <div class="eyebrow">Settings<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipSettings" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipSettings">Choose your colour, the engine's strength and a time control, then start.</p>
           <div class="field"><div class="seg" id="segColor">
             <button data-v="w" aria-pressed="true">Play White</button>
             <button data-v="b" aria-pressed="false">Play Black</button>
@@ -973,7 +1127,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <button data-v="4" aria-pressed="false">Tough</button>
           </div></div>
           <div class="field">
-            <div class="eyebrow">Time control</div>
+            <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl2" aria-label="More info">i</button></div>
+            <p class="info-tip-pop hide" id="tipTimeControl2">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
             <div class="tc-cats" id="tcCats2"></div>
             <div class="tc-chips" id="tcChips2"></div>
           </div>
@@ -985,12 +1140,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="btnrow">
             <button class="btn primary" id="btnNew">New game</button>
           </div>
-          <div class="btnrow" style="margin-top:8px">
-            <button class="btn danger" id="btnResign">Resign</button>
-          </div>
         </div>
-        <div class="panel">
-          <div class="eyebrow">Scoresheet</div>
+        <div class="panel" id="scoresheetPanel">
+          <div class="eyebrow">Scoresheet<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipScoresheet" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipScoresheet">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
           <div class="sheet">
             <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
             <div class="sheet-body" id="sheet"><div class="sheet-empty">No moves yet</div></div>
@@ -998,8 +1151,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <p class="note" id="navNote">Use the arrow keys to step through the game.</p>
         </div>
 
-        <div class="panel">
-          <div class="eyebrow">Review</div>
+        <div class="panel" id="reviewPanel">
+          <div class="eyebrow">Review<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipReview" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipReview">The bar shows the engine's opinion, not certainty. "M4" means mate in 4 moves.</p>
           <p class="note" id="reviewLock" style="margin-top:0;margin-bottom:10px"></p>
           <div class="btnrow">
             <button class="btn primary" id="btnAnalyse">Analyse this game</button>
@@ -1021,7 +1175,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
 
         <div class="panel">
-          <div class="eyebrow" id="historyTitle">Your games</div>
+          <div class="eyebrow" id="historyTitle"><span id="historyTitleTxt">Your games</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipHistory" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipHistory">Saved only in this browser. No account: clearing your browsing data or switching devices loses it.</p>
           <p class="note" id="historyNote" style="margin-top:0;margin-bottom:10px"></p>
           <div class="history" id="historyList"></div>
           <div class="btnrow hide" id="historyActions" style="margin-top:10px">
@@ -1029,9 +1184,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           </div>
         </div>
 
-        <div class="panel">
-          <div class="eyebrow">PGN</div>
-          <div class="btnrow">
+        <div class="panel" id="pgnPanel">
+          <div class="eyebrow">PGN<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipPgn" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipPgn">PGN is the standard notation format for chess games, readable by most chess sites and software.</p>
+          <div class="btnrow" id="pgnExportRow">
             <button class="btn" id="btnPgnCopy">Copy PGN</button>
             <button class="btn" id="btnPgnDownload">Download</button>
           </div>
@@ -1043,7 +1199,54 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
 
-      <!-- ---------- PUZZLES ---------- -->
+      <!-- ---------- ANALYSE (editeur de position) ---------- -->
+      <div id="pane-edit" class="hide">
+        <div class="panel">
+          <div class="eyebrow">Pieces</div>
+          <div class="editpal" id="editPalWhite"></div>
+          <div class="editpal" id="editPalBlack"></div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">Side to move</div>
+          <div class="seg" id="editTurnSeg">
+            <button data-v="w" aria-pressed="true">White</button>
+            <button data-v="b" aria-pressed="false">Black</button>
+          </div>
+          <div class="btnrow" style="margin-top:10px">
+            <button class="btn" id="editStart">Starting position</button>
+            <button class="btn" id="editClear">Clear board</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="btnrow">
+            <button class="btn primary" id="editAnalyse">Analyse this position</button>
+            <button class="btn" id="editPlay">Play against the bot from here</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow">FEN<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFen" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipFen">A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.</p>
+          <input class="linkbox" id="editFenOut" readonly aria-label="Current position, FEN">
+          <div class="btnrow" style="margin-top:8px">
+            <button class="btn" id="editFenCopy">Copy FEN</button>
+          </div>
+          <div style="margin-top:10px">
+            <textarea class="linkbox" id="editFenIn" rows="2" placeholder="Paste a FEN here to load it" aria-label="FEN to import"></textarea>
+            <div class="btnrow"><button class="btn" id="editFenLoad">Load FEN</button></div>
+          </div>
+          <p class="note" id="editMsg"></p>
+        </div>
+      </div>
+
+      <!-- ---------- ANALYSE (exploration libre) ---------- -->
+      <div id="pane-analyse" class="hide">
+        <div class="panel">
+          <p class="note" id="analyseBest"></p>
+          <div class="btnrow">
+            <button class="btn" id="analyseBack">Back to the editor</button>
+          </div>
+        </div>
+      </div>
       <div id="pane-puzzles" class="hide">
         <div class="panel" id="exPanel">
           <!-- L'enonce passe avant les statistiques : c'est lui qui dit quoi
@@ -1208,12 +1411,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="status" id="amiStatus">Start a game.</div>
         </div>
         <div class="panel" id="amiLinkPanel">
-          <div class="eyebrow">Link to send</div>
+          <div class="eyebrow">Link to send<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFriendLink" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipFriendLink">Saved in this browser: you can close the tab and come back to it.</p>
           <input class="linkbox" id="amiLink" readonly aria-label="Game link">
           <div class="shareRow" id="amiShare"></div>
           <p class="note" id="amiNote"></p>
         </div>
-        <div class="panel">
+        <div class="panel" id="amiNewGamePanel">
           <div class="eyebrow">New game</div>
           <div class="field"><div class="seg" id="segAmiColor">
             <button data-v="w" aria-pressed="true">Play White</button>
@@ -1235,11 +1439,20 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="eyebrow">Invite to chang64</div>
           <div class="shareRow" id="siteShare"></div>
         </div>
-        <div class="panel">
+        <div class="panel" id="amiScoresheetPanel">
           <div class="eyebrow">Scoresheet</div>
           <div class="sheet">
             <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
             <div class="sheet-body" id="amiSheet"><div class="sheet-empty">No moves yet</div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="eyebrow" id="amiHistoryTitle"><span>Your friend games</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipAmiHistory" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipAmiHistory">Saved only in this browser. No account: clearing your browsing data or switching devices loses it.</p>
+          <p class="note" id="amiHistoryNote" style="margin-top:0;margin-bottom:10px"></p>
+          <div class="history" id="amiHistoryList"></div>
+          <div class="btnrow hide" id="amiHistoryActions" style="margin-top:10px">
+            <button class="btn" id="btnAmiHistoryClear">Clear history</button>
           </div>
         </div>
       </div>
@@ -1253,6 +1466,19 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <p class="sub">The latest video from each channel, updated automatically.</p>
     </div>
     <div class="channels" id="channels"></div>
+  </div>
+
+  <!-- ================= EXPLORE ================= -->
+  <!-- Deplace depuis l'accueil (etait le bloc "Explore" en bas de page) :
+       6 liens vers les pages statiques (ouvertures, regles, lexique...),
+       desormais leur propre onglet plutot qu'un pave de plus a faire
+       defiler sur l'accueil. -->
+  <div id="pane-explore" class="hide">
+    <div class="panel">
+      <div class="eyebrow" id="exploreTitle">Explore</div>
+      <p class="note" id="exploreNote" style="margin-top:0;margin-bottom:12px"></p>
+      <div class="explore" id="exploreLinks"></div>
+    </div>
   </div>
 
   <!-- ================= LEGAL ================= -->
@@ -1363,12 +1589,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    ========================================================== */
 const FR={
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Regarder","Solve":"Résoudre","Invite":"Inviter",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
 "Bullet to daily time controls against a built-in engine, 1000 puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
  "Du bullet au jeu par correspondance contre un moteur intégré, 1000 exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",
 "Play now":"Jouer maintenant","Puzzle of the day":"Exercice du jour","Install the app":"Installer l'application",
-"Time control":"Cadence","Play the computer":"Jouer contre l'ordinateur",
+"Time control":"Cadence","Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.":"Bullet, blitz, rapide, classique : ce sont juste des tranches selon le temps de départ. Les chiffres (comme 10+0) donnent les minutes, puis les secondes rendues après chaque coup. Plus c'est lent, plus tu as le temps de réfléchir.","Play the computer":"Jouer contre l'ordinateur",
 "Start a game →":"Commencer une partie →","Tactics trainer":"Entraînement tactique",
 "puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.":
  "exercices, chacun démontré par le moteur. La difficulté monte après trois réussites et redescend quand tu trébuches.",
@@ -1386,12 +1612,14 @@ const FR={
 "Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Show the best move":"Voir le meilleur coup","Suggest a move":"Suggérer un coup",
 "Scoresheet":"Feuille de partie","White":"Blancs","Black":"Noirs","No moves yet":"Aucun coup joué",
 "Use the arrow keys to step through the game.":"Utilise les flèches du clavier pour parcourir la partie.",
+"Game start":"Début",
 "Pick a colour and a strength, then play.":"Choisis ta couleur et la force du moteur, puis joue.",
 "White to move.":"Trait aux Blancs.","Black to move.":"Trait aux Noirs.","Game over.":"Partie terminée.",
 "Even position":"Position équilibrée",
 "White slightly better":"Les Blancs sont un peu mieux","Black slightly better":"Les Noirs sont un peu mieux",
 "White is better":"Les Blancs ont l'avantage","Black is better":"Les Noirs ont l'avantage",
 "White is winning":"Les Blancs gagnent","Black is winning":"Les Noirs gagnent",
+"White mates in {n}":"Les Blancs matent en {n}","Black mates in {n}":"Les Noirs matent en {n}",
 "Checkmate. You win.":"Échec et mat, tu gagnes.","Checkmate. The computer wins.":"Échec et mat, l'ordinateur gagne.",
 "Stalemate. The game is drawn.":"Pat : la partie est nulle.","The game is drawn.":"Partie nulle.",
 "The computer is thinking…":"L'ordinateur réfléchit…","Check. Your move.":"Échec au roi. À toi de jouer.",
@@ -1418,6 +1646,7 @@ const FR={
 
 /* --- navigation dans la partie --- */
 "Review":"Analyse","Analyse this game":"Analyser cette partie","Analysing with Stockfish…":"Analyse avec Stockfish…",
+"The bar shows the engine's opinion, not certainty. \"M4\" means mate in 4 moves.":"La barre montre l'avis du moteur, pas une certitude. « M4 » signifie mat en 4 coups.",
 "Downloading the engine…":"Téléchargement du moteur…","Stockfish is ready.":"Stockfish est prêt.",
 "Analysing a finished game downloads Stockfish (about 7 MB, once) and uses it automatically. Stockfish never helps you while you play.":
  "Analyser une partie terminée télécharge Stockfish (environ 7 Mo, une seule fois) et l'utilise automatiquement. Stockfish ne t'aide jamais pendant que tu joues.",
@@ -1438,6 +1667,7 @@ const FR={
 
 /* --- PGN --- */
 "Copy PGN":"Copier le PGN","Download":"Télécharger","Load PGN":"Charger le PGN",
+"PGN is the standard notation format for chess games, readable by most chess sites and software.":"Le PGN est le format standard de notation des parties d'échecs, lisible par la plupart des sites et logiciels d'échecs.",
 "Paste a PGN here to load and review it":"Colle ici un PGN pour le charger et l'analyser",
 "PGN copied to the clipboard.":"PGN copié dans le presse-papiers.","Download started.":"Téléchargement lancé.",
 "Download unavailable here, PGN copied instead.":"Téléchargement indisponible ici, PGN copié à la place.",
@@ -1554,7 +1784,8 @@ const FR={
 /* --- entre amis --- */
 "Each move produces a link. Send it, your friend plays, they send theirs back.":
  "Chaque coup produit un lien. Tu l'envoies, ton ami joue, il te renvoie le sien.",
-"Start a game.":"Commence une partie.","Link to send":"Lien à envoyer","Pace":"Rythme",
+"Start a game.":"Commence une partie.","Choose your colour, then create a game.":"Choisis ta couleur, puis crée la partie.","Link to send":"Lien à envoyer","Pace":"Rythme",
+"Saved in this browser: you can close the tab and come back to it.":"Sauvegardé dans ce navigateur : tu peux fermer l'onglet et y revenir plus tard.",
 "Create game":"Créer la partie","Undo my move":"Annuler mon coup","Invite to chang64":"Inviter sur chang64",
 "Your move, then send the link.":"À toi de jouer, puis envoie le lien.",
 "Move saved. Send this link to your friend.":"Coup enregistré. Envoie ce lien à ton ami.",
@@ -1625,12 +1856,13 @@ const FR={
  "Astuce : « Suggérer un coup » montre ce que le moteur jouerait dans la position que tu regardes.",
 
 /* --- divers --- */
-"Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier",
+"Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier","King":"Roi","Pawn":"Pion",
 "chang64 home":"Accueil chang64","First move":"Premier coup","Previous move":"Coup précédent",
 "Next move":"Coup suivant","Last move":"Dernier coup","PGN to import":"PGN à importer",
 "You win":"Tu gagnes","You lose":"Tu perds","Draw":"Partie nulle","Review":"Analyser","Dismiss":"Masquer",
 "Opening played out. Continue the game from here.":"Ouverture jouée. Poursuis la partie à partir d'ici.",
-"Your games":"Tes parties","No finished game yet.":"Aucune partie terminée pour l'instant.",
+"Your games":"Tes parties","Your friend games":"Tes parties entre amis","No finished game yet.":"Aucune partie terminée pour l'instant.",
+"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Sauvegardé uniquement dans ce navigateur. Pas de compte : vider les données du site ou changer d'appareil fait tout perdre.",
 "Finished games are stored in this browser so you can replay and review them later.":"Les parties terminées sont conservées dans ce navigateur, pour les rejouer et les analyser plus tard.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":"{n} partie(s) conservée(s) sur cet appareil. Choisis-en une pour la rejouer et l'analyser.",
 "Clear history":"Effacer l'historique","Confirm":"Confirmer","Game":"Partie","{n} moves":"{n} coups",
@@ -1648,6 +1880,18 @@ const FR={
 "Your progress will show up here.":"Ta progression s'affichera ici.",
 "Solve your first puzzle →":"Résous ton premier exercice →",
 "Ready when you are":"Quand tu veux","Start":"Commencer","Three minutes · three misses and it stops":"Trois minutes · trois erreurs et ça s'arrête","Thirty seconds · click the square that is named":"Trente secondes · clique la case nommée","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press start when you are ready.":"Appuie sur Commencer quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
+"You have an unfinished game":"Tu as une partie en cours","Resume the game":"Reprendre la partie","New game instead":"Nouvelle partie","Move {n}":"Coup {n}",
+"Analyse":"Analyser","Board editor":"Éditeur de position","Flip the board":"Retourner l'échiquier",
+"Set up any position to study it: check an idea from a book, a puzzle you saw elsewhere, or an endgame, without replaying a whole game to get there. Pick a piece below, then tap a square. Tap a piece already on the board to remove it.":"Compose n'importe quelle position pour l'étudier : reprends une idée vue dans un livre, un problème vu ailleurs, ou une finale, sans avoir à rejouer toute une partie pour y arriver. Choisis une pièce ci-dessous, puis touche une case. Touche une pièce déjà posée pour la retirer.",
+"Pieces":"Pièces","Side to move":"Trait à jouer","Starting position":"Position de départ","Clear board":"Vider l'échiquier",
+"Copy FEN":"Copier le FEN","Load FEN":"Charger le FEN","FEN copied to the clipboard.":"FEN copié dans le presse-papiers.",
+"A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Une courte ligne de texte qui décrit une position : quelle pièce sur quelle case, à qui le trait. C'est la façon standard de sauvegarder ou partager une position, lisible par la plupart des sites et logiciels d'échecs.",
+"Could not read that FEN.":"Ce FEN est illisible.","Each side needs exactly one king.":"Chaque camp doit avoir exactement un roi.",
+"Place a king for each side.":"Place un roi pour chaque camp.","Place a white king.":"Place un roi blanc.","Place a black king.":"Place un roi noir.",
+"Play against the bot from here":"Jouer contre le bot depuis ici",
+"Analyse this position":"Analyser cette position","Back to the editor":"Retour à l'éditeur",
+"Analysing…":"Analyse en cours…","Best move: {m}":"Meilleur coup : {m}",
+"Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.":"Tu ne perds pas ta partie en quittant la page : elle se sauvegarde automatiquement dans ce navigateur, prête à reprendre.","More info":"Plus d'infos",
 "Legal notice":"Mentions légales","Privacy":"Confidentialité","Preferences":"Préférences","Accessibility":"Accessibilité","Publisher and hosting details.":"Éditeur et hébergeur.",
 "chang64 · no account, no tracking · progress saved on this device":
  "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",
@@ -2168,6 +2412,18 @@ const boardEl=$("board");
 let mode="home";
 let game=new Game();
 let flipped=false;
+/* Consomme par newGame() : demarre la partie depuis cette position plutot
+   que le depart standard, sans changer la signature de newGame() (appelee
+   sans argument partout ailleurs). Pose par l'editeur de position (ui3.js,
+   "Jouer contre le bot depuis ici"). */
+let pendingStartFen=null;
+/* Consomme egalement par newGame() : force une partie sans pendule, quel
+   que soit le dernier reglage de cadence choisi dans l'onglet Jouer. Pose
+   par "Jouer contre le bot depuis ici" (editeur de position) -- reprendre
+   la derniere cadence choisie n'aurait aucun sens pour une position deja
+   en cours (un chrono frais de 10 minutes sur une fin de partie a trois
+   coups, par exemple). */
+let pendingNoClock=false;
 /* Animation des deplacements : activee par defaut, desactivable dans les
    preferences. Le reglage est relu au demarrage depuis le stockage local. */
 let animOn=true;
@@ -2196,7 +2452,7 @@ let colorMode="w";
 let botLevel=2;
 let pendingPromo=null;
 let sanList=[];
-let mainGame=null,mainSan=null,mainLast=null,mainStarted=false;
+let mainGame=null,mainSan=null,mainLast=null,mainStarted=false,mainFlipped=false;
 let gameStarted=false;
 
 /* puzzles */
@@ -2361,7 +2617,7 @@ function prises(){
    type sont forcement consecutives dans la boucle. */
 /* Hauteur d'une piece prise, en pixels. Sert aussi a calculer sa largeur :
    les deux doivent rester coherents avec la regle .taken .tk du gabarit. */
-const TAILLE_PRISE=22;
+const TAILLE_PRISE=20;
 /* Chevauchement au sein d'un groupe : assez pour que le tas se voie, pas
    assez pour masquer la silhouette du dessous (le pion, piece la plus
    etroite une fois recadree sur sa boite, ne fait que 11px : au-dela on ne
@@ -2370,10 +2626,12 @@ const TAILLE_PRISE=22;
    deux types saute aux yeux sans avoir besoin d'un separateur visuel. */
 const CHEVAUCHEMENT_GROUPE=-5,ECART_GROUPE=4;
 function rangeePrises(liste,couleur,solde){
-  if(!liste.length&&!solde)return "";
-  /* La classe "noire" declenche le contour clair : sans lui, une piece noire
-     se confondrait avec le fond sombre de la pendule. */
-  const cls="tk"+(couleur==="b"?" noire":"");
+  /* Toujours retourner la rangee, meme sans aucune prise ni solde (au lieu
+     d'une chaine vide) : sinon le bloc pendule demarrait plus bas, puis
+     grandissait brusquement des la premiere prise, decalant l'echiquier et
+     tout ce qui suit. La hauteur reste ainsi fixe du debut a la fin de la
+     partie. */
+  const cls="tk"+(couleur==="b"?" noire":""); // "noire" declenche le contour clair, sinon confondue au fond sombre
   let s='<span class="taken">';
   let precedent=null;
   for(const t of liste){
@@ -2473,6 +2731,19 @@ function buildBoard(){
     d.setAttribute("role","button");
     d.addEventListener("click",onSquare);
     d.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();onSquare(ev);}});
+    /* Glisser-depose : uniquement dans l'editeur de position (mode==="edit"),
+       et uniquement depuis une case occupee -- une case vide n'a rien a
+       glisser, le tap-pour-poser habituel (via le "click" ci-dessus) reste
+       seul en jeu dans ce cas. Voir la section dediee dans ui3.js pour le
+       detail complet de la mecanique. */
+    d.addEventListener("pointerdown",ev=>{
+      if(mode!=="edit"||typeof editPointerDown!=="function")return;
+      const i=Array.prototype.indexOf.call(boardEl.children,ev.currentTarget);
+      const sq=idxToSq(i);
+      const p=game.board[sq];
+      if(!p)return;
+      editPointerDown(ev,{source:"board",sq:sq,piece:p});
+    });
     boardEl.appendChild(d);
   }
   /* Une seule case porte tabindex=0. On la pose directement, sans passer par
@@ -2573,21 +2844,36 @@ function prefersReducedMotion(){
 }
 function updateEval(){
   const g=viewGame();
-  let cp=null;
-  if(typeof evalFromAnalysis==="function")cp=evalFromAnalysis();
-  const raw=cp!==null?cp:evaluate(g)*(g.turn===W?1:-1);
-  const pawns=Math.max(-10,Math.min(10,raw/100));
+  let cpTrue=null,mate=null;
+  if(typeof evalFromAnalysis==="function"){
+    const ea=evalFromAnalysis();
+    if(ea){cpTrue=ea.cpTrue;mate=ea.mate;}
+  }
+  if(cpTrue===null&&mate===null)cpTrue=evaluate(g)*(g.turn===W?1:-1);
+  const pawnsTrue=(cpTrue||0)/100;
+  /* BAR_CAP : ecretage VISUEL de la barre seulement (comme sur chess.com et
+     lichess, dont la barre est quasi pleine bien avant un avantage de 10
+     pions). Ce plafond ne touche plus le nombre affiche : avant ce
+     correctif, Math.max(-10,Math.min(10,...)) ecretait aussi le texte, donc
+     "+14.0" restait bloque a "+10.0". Sur un mat force, la barre va au
+     maximum du cote gagnant plutot que de suivre un pseudo-score. */
+  const BAR_CAP=10;
+  const pawnsForBar=mate!==null?(mate>0?BAR_CAP:-BAR_CAP):Math.max(-BAR_CAP,Math.min(BAR_CAP,pawnsTrue));
   /* La hauteur represente toujours la part des Blancs. C'est l'orientation
      de la barre qui suit celle de l'echiquier, pas la valeur. */
-  $("evalfill").style.height=(50+pawns*4.4).toFixed(1)+"%";
+  $("evalfill").style.height=(50+pawnsForBar*4.4).toFixed(1)+"%";
   { const tr=document.querySelector(".evaltrack");
     if(tr)tr.classList.toggle("flipped",!!flipped); }
-  $("evalnum").textContent=(pawns>0?"+":"")+pawns.toFixed(1);
+  /* Sur un mat force, chess.com et lichess affichent "M{n}" (le nombre de
+     coups jusqu'au mat) plutot qu'une valeur en pions : un score numerique
+     n'a pas de sens face a une issue forcee et binaire. */
+  $("evalnum").textContent=mate!==null?(mate>0?"M":"\u2212M")+Math.abs(mate):(pawnsTrue>0?"+":"")+pawnsTrue.toFixed(1);
   const el=$("evaltxt");
-  const side=pawns>0?"White":"Black";
-  if(Math.abs(pawns)<0.6)el.textContent=t("Even position");
-  else if(Math.abs(pawns)<1.6)el.textContent=t(side+" slightly better");
-  else if(Math.abs(pawns)<3.5)el.textContent=t(side+" is better");
+  const side=(mate!==null?mate>0:pawnsTrue>0)?"White":"Black";
+  if(mate!==null)el.textContent=t(side+" mates in {n}",{n:Math.abs(mate)});
+  else if(Math.abs(pawnsTrue)<0.6)el.textContent=t("Even position");
+  else if(Math.abs(pawnsTrue)<1.6)el.textContent=t(side+" slightly better");
+  else if(Math.abs(pawnsTrue)<3.5)el.textContent=t(side+" is better");
   else el.textContent=t(side+" is winning");
 }
 function onSquare(e){
@@ -2606,6 +2892,8 @@ function onSquare(e){
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
+  else if(mode==="edit"){if(typeof handleEditorClick==="function")handleEditorClick(sq);}
+  else if(mode==="analyse"){if(typeof handleAnalyseClick==="function")handleAnalyseClick(sq);}
 }
 function pickMove(from,to){
   const c=legalCache.filter(m=>m.from===from&&m.to===to);
@@ -2631,15 +2919,72 @@ function askPromo(cands,then){
 /* ==========================================================
    PLAY VS COMPUTER
    ========================================================== */
+/* Tant qu'aucune partie n'est active (reglages pas encore lances), le
+   plateau lui-meme reste cache : le voir plein de pieces avant meme d'avoir
+   choisi couleur/force/cadence laissait croire qu'on pouvait deja jouer, le
+   clic ne faisant en realite rien (handleGameClick commence par
+   "if(!gameStarted)return", sans aucun signal). Exception : le choix de
+   reprise d'une partie sauvegardee (pendingPlaySave) doit rester visible,
+   il vit dans ce meme bloc (readyBanner, a l'interieur de .board-wrap).
+   Appelee depuis refreshGame() (couvre la quasi-totalite des transitions
+   d'etat en mode Jouer) et explicitement depuis showResumeChoice(), le seul
+   chemin qui ne passe pas par refreshGame(). */
+function updatePlayBoardVisibility(){
+  const bw=document.querySelector(".board-wrap");
+  if(!bw)return;
+  const hide=mode==="play"&&!gameStarted&&!(typeof pendingPlaySave!=="undefined"&&pendingPlaySave);
+  bw.classList.toggle("hide",hide);
+  if(mode==="play"){ const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",hide); }
+}
 function refreshGame(){
   legalCache=game.moves();
   render();updateEval();renderSheetInto("sheet",sanList);renderClocks();
+  updatePlayBoardVisibility();
   const over=gameOver();
-  $("turnline").textContent=!gameStarted?t("Not started yet."):(over?t("Game over."):(game.turn===W?t("White to move."):t("Black to move.")));
+  /* turnline (element "Ta partie" / "Trait aux Blancs.") a ete retire : il
+     ne faisait plus que repeter l'overlay de preparation et l'evidence de
+     l'echiquier. La seule info utile de ce bloc, l'ouverture detectee, reste
+     affichee via #opening ; le reste (echec, calcul en cours, resultat)
+     continue de vivre dans #status, qui portait deja ces messages. */
   if(typeof afterGameRender==="function")afterGameRender(over);
   $("btnNew").textContent=gameStarted?t("New game"):t("Start game");
   $("btnResign").disabled=!gameStarted||(over&&resigned===null);
+  /* Masque plutot que grise tant qu'aucune partie n'existe : "Abandonner"
+     une partie qui n'a jamais commence n'a pas de sens a montrer du tout,
+     grise sans explication ou pas (meme principe que "Annuler mon coup"
+     en mode Entre amis). Reste disponible (grise selon la ligne au-dessus)
+     une fois qu'une partie a reellement existe, y compris terminee. */
+  $("btnResign").classList.toggle("hide",!gameStarted);
   $("btnHint").disabled=busy||(typeof gameFinished==="function"&&!gameFinished()&&!isReviewGame);
+  /* Ces trois blocs n'ont un sens que lorsqu'il y a effectivement une partie
+     (en cours ou terminee) a montrer/exporter/analyser : masques plutot que
+     laisses vides ou desactives sans explication pendant le parametrage.
+     Revue : jamais pendant le parametrage NI pendant qu'on joue (l'analyse
+     reste bloquee tant que la partie n'est pas finie, deja le cas plus bas
+     dans ce fichier) -- seulement une fois la partie finie, ou en train de
+     revoir un PGN importe. Feuille de partie et export PGN : des qu'il y a
+     au moins un coup a montrer/exporter, meme en cours de partie. */
+  {
+    const hasMoves=sanList.length>0;
+    const finished=(typeof gameFinished==="function"&&gameFinished())||(typeof isReviewGame!=="undefined"&&isReviewGame);
+    const sp=$("scoresheetPanel"); if(sp)sp.classList.toggle("hide",!hasMoves);
+    const rp=$("reviewPanel"); if(rp)rp.classList.toggle("hide",!finished);
+    const pe=$("pgnExportRow"); if(pe)pe.classList.toggle("hide",!hasMoves);
+    /* Le bloc ouverture/statut n'a rien a montrer avant qu'une partie
+       n'existe (l'instruction correspondante vit desormais dans la bulle
+       (i) de "Reglages", voir template.html) : masque pendant le
+       parametrage, reapparait avec la partie pour le statut en direct. */
+    const stp=$("statusPanel"); if(stp)stp.classList.toggle("hide",!gameStarted);
+    /* Reglages et PGN n'ont plus rien a faire une fois la partie
+       reellement en cours : le choix de couleur/force/cadence est deja
+       fait (et verrouille juste apres), et importer un PGN reecraserait la
+       partie en train de se jouer. Les deux redeviennent utiles avant que
+       la partie ne commence, ou une fois qu'elle est terminee (choisir la
+       suivante, exporter celle qui vient de se jouer). */
+    const midGame=gameStarted&&!finished;
+    const gp=$("settingsPanel"); if(gp)gp.classList.toggle("hide",midGame);
+    const pp=$("pgnPanel"); if(pp)pp.classList.toggle("hide",midGame);
+  }
   /* (le verrouillage en cours de partie, plus bas, a le dernier mot) */
 
   /* Pendant une partie en cours, seul "Abandonner" reste actif.
@@ -2653,6 +2998,15 @@ function refreshGame(){
        aux echecs le soupcon de triche suffit a poser probleme : mieux vaut
        lever toute ambiguite. */
   const enCours=gameStarted&&!over;
+  /* Sauvegarde/effacement de la partie en cours (mode Jouer uniquement,
+     jamais pendant une revue de PGN importe). Voir la section 20 de ui2.js
+     pour le detail : un coup vient d'etre joue -> on sauvegarde ; la partie
+     vient de se terminer (mat, pat, abandon, temps) -> on efface, sinon une
+     partie finie resterait proposee a la reprise par erreur. */
+  if(typeof isReviewGame==="undefined"||!isReviewGame){
+    if(enCours){if(typeof savePlay==="function")savePlay();}
+    else if(gameStarted){if(typeof clearPlaySave==="function")clearPlaySave();}
+  }
   /* En mode aleatoire, le selecteur montre la couleur tiree pendant la
      partie et le mode choisi en dehors : son etat depend donc du deroulement
      et doit etre rafraichi ici. */
@@ -2788,6 +3142,7 @@ function setupGame(){
   resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
   if(typeof clearAnalysis==="function")clearAnalysis();
+  if(typeof gameStartFen!=="undefined")gameStartFen=null;
   game=new Game();sanList=[];lastMove=null;selected=-1;marks={};busy=false;
   reviewGame=null;reviewLast=null;
   flipped=myColor===B;
@@ -2796,7 +3151,6 @@ function setupGame(){
   mainGame=null;
   refreshGame();
   const s=$("status");s.className="status";
-  s.textContent=t("Choose your colour, the engine's strength and a time control, then start.");
 }
 function newGame(){
   /* Le tirage est refait a chaque partie : choisir "Au hasard" une fois doit
@@ -2810,7 +3164,9 @@ function newGame(){
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
   reviewGame=null;reviewLast=null;
   if(typeof clearAnalysis==="function")clearAnalysis();
-  game=new Game();sanList=[];lastMove=null;selected=-1;marks={};busy=false;
+  game=pendingStartFen?new Game(pendingStartFen):new Game();
+  if(typeof gameStartFen!=="undefined")gameStartFen=pendingStartFen;
+  pendingStartFen=null;sanList=[];lastMove=null;selected=-1;marks={};busy=false;
   flipped=myColor===B;
   /* Entree en fondu des pieces. La classe est retiree apres l'animation pour
      ne pas la rejouer a chaque rendu de l'echiquier en cours de partie. */
@@ -2820,8 +3176,13 @@ function newGame(){
     boardEl.classList.add("dealt");
     setTimeout(function(){boardEl.classList.remove("dealt");},900);
   }
-  clockSetup();
-  const {cat,item}=tcCurrent();
+  if(pendingNoClock){
+    clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
+    clockHist=[{w:0,b:0}];
+    renderClocks();
+  } else clockSetup();
+  const {cat,item}=pendingNoClock?{cat:"none",item:null}:tcCurrent();
+  pendingNoClock=false;
   const s=$("status");s.className="status";
   const tcTxt=cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1));
   s.textContent=myColor===W?t("New game, {tc}. You start.",{tc:tcTxt}):t("New game, {tc}. The computer opens.",{tc:tcTxt});
@@ -3300,6 +3661,13 @@ function updateAmiNote(){
 }
 
 let amiMoves=[],amiColor=W,amiGame=new Game(),amiSan=[],amiPace=3;
+/* Miroir de gameStarted (mode Jouer) : distingue "rien configure" de "une
+   vraie partie existe" (creee ou rejointe via un lien). Sans lui, l'echiquier
+   par defaut (amiGame neuf, amiColor=W) repondait deja aux clics avant meme
+   d'avoir clique "Creer la partie" -- pire que le probleme equivalent en
+   mode Jouer, puisque le coup joue par erreur etait reellement enregistre
+   (amiMoves, sauvegarde), pas seulement ignore en silence. */
+let amiStarted=false;
 function rebuildAmi(){
   amiGame=new Game();amiSan=[];
   for(const m of amiMoves){
@@ -3311,15 +3679,62 @@ function rebuildAmi(){
   return true;
 }
 function amiIsMyTurn(){return amiGame.turn===amiColor;}
+/* Meme principe que updatePlayBoardVisibility (mode Jouer) : le plateau et
+   ses a-cotes (bandeau de coups, feuille de partie, lien a envoyer) restent
+   caches tant qu'aucune partie n'a ete creee ou rejointe. */
+function updateAmiBoardVisibility(){
+  if(mode!=="friend")return;
+  const bw=document.querySelector(".board-wrap");
+  if(bw)bw.classList.toggle("hide",!amiStarted);
+  const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",!amiStarted);
+  const sp=$("amiScoresheetPanel"); if(sp)sp.classList.toggle("hide",!amiStarted);
+}
 function showAmi(){
-  game=amiGame;flipped=amiColor===B;
+  /* "flipped" n'est PAS remis a plat ici : showAmi() est appelee apres
+     CHAQUE coup (voir handleAmiClick, undo, resign...), donc y remettre
+     l'orientation par defaut a chaque fois effacerait tout retournement
+     manuel au coup suivant. La valeur par defaut (cote du joueur) est posee
+     une seule fois, a l'entree reelle dans la partie : newAmiGame() pour qui
+     la cree, readHash() pour qui la rejoint via le lien. */
+  game=amiGame;
   legalCache=game.moves();
   lastMove=game.history.length?game.history[game.history.length-1].m:null;
   selected=-1;marks={};
   render();updateEval();renderSheetInto("amiSheet",amiSan);
+  updateAmiBoardVisibility();
   const st=$("amiStatus");
+  if(!amiStarted){
+    /* Rien n'a encore ete configure : l'echiquier reste cache (voir
+       updateAmiBoardVisibility ci-dessus), inutile de calculer un statut de
+       partie ou de tour qui n'existe pas encore. */
+    if(st){st.className="status";st.textContent=t("Choose your colour, then create a game.");}
+    const lp=$("amiLinkPanel"); if(lp)lp.classList.add("hide");
+    /* Masques plutot que grises : "Annuler mon coup"/"Abandonner" une
+       partie qui n'existe pas encore n'ont pas de sens a montrer du tout. */
+    $("btnAmiUndo").classList.add("hide");
+    $("btnAmiResign").classList.add("hide");
+    return;
+  }
   const over=!legalCache.length||game.isDraw();
   if(!over)renderResult(false);
+  /* Une fois une partie reellement lancee, ces deux boutons redeviennent
+     visibles pour de bon (ils ne se recachent plus ensuite, meme la partie
+     terminee : voir le mode Jouer, meme logique pour "Abandonner"). */
+  $("btnAmiUndo").classList.remove("hide");
+  $("btnAmiResign").classList.remove("hide");
+  /* "Creer la partie" et le choix de couleur se verrouillent tant qu'une
+     partie est activement en cours (mais pas une fois terminee ou
+     abandonnee) : meme principe que geler() en mode Jouer, pour eviter
+     d'ecraser par erreur une partie en cours avec une nouvelle. */
+  {
+    const enCoursAmi=amiResigned===null&&!over;
+    const bn=$("btnAmiNew"); if(bn)bn.disabled=enCoursAmi;
+    const cg=$("segAmiColor"); if(cg)for(const b of cg.children)b.disabled=enCoursAmi;
+    /* Masque entierement plutot que grise sans explication pendant qu'une
+       partie est activement en cours : meme principe applique cote Jouer
+       (voir refreshGame() dans ui.js) pour le panneau de reglages. */
+    const anp=$("amiNewGamePanel"); if(anp)anp.classList.toggle("hide",enCoursAmi);
+  }
   $("amiLinkPanel").classList.toggle("hide",amiMoves.length===0&&amiColor===W);
   $("btnAmiUndo").disabled=!(amiMoves.length&&!amiIsMyTurn())||over;
   $("amiLink").value=amiUrl();
@@ -3354,6 +3769,7 @@ function showAmi(){
   updateAmiNote();
 }
 function handleAmiClick(sq){
+  if(!amiStarted)return;
   if(amiResigned!==null)return;
   if(!amiIsMyTurn())return;
   if(!legalCache.length||game.isDraw())return;
@@ -3379,7 +3795,8 @@ function undoAmi(){
   amiMoves.pop();rebuildAmi();showAmi();saveAmi();
 }
 function newAmiGame(){
-  amiResigned=null;amiMoves=[];rebuildAmi();showAmi();saveAmi();
+  amiStarted=true;
+  amiResigned=null;amiMoves=[];flipped=amiColor===B;rebuildAmi();showAmi();saveAmi();
   if(typeof focusBoard==="function")focusBoard();
   const st=$("amiStatus");st.className="status";
   st.textContent=amiColor===W
@@ -3395,7 +3812,7 @@ function newAmiGame(){
 async function saveAmi(){try{await window.storage.set("chang64:friend",JSON.stringify({m:amiMoves,c:amiColor,p:amiPace,r:amiResigned}));}catch(e){}}
 async function loadAmi(){
   try{const r=await window.storage.get("chang64:friend");
-    if(r&&r.value){const d=JSON.parse(r.value);amiMoves=d.m||[];amiColor=d.c===1?B:W;amiPace=d.p||3;amiResigned=(d.r===0||d.r===1)?d.r:null;}}catch(e){}
+    if(r&&r.value){const d=JSON.parse(r.value);amiMoves=d.m||[];amiColor=d.c===1?B:W;amiPace=d.p||3;amiResigned=(d.r===0||d.r===1)?d.r:null;amiStarted=true;}}catch(e){}
 }
 function readDeepLink(){
   const h=location.hash||"";
@@ -3460,6 +3877,8 @@ function readHash(){
   const rm=h.match(/[#&]r=([wb])/);
   amiResigned=rm?(rm[1]==="w"?W:B):null;
   amiColor=amiResigned!==null?(amiResigned===W?B:W):amiGame.turn;
+  flipped=amiColor===B;
+  amiStarted=true;
   saveAmi();
   return true;
 }
@@ -3527,9 +3946,9 @@ function setMode(m,opts){
     const nr=$("navRow"); if(nr)nr.classList.add("hide");
     const pi=$("plyInfo"); if(pi)pi.className="plyinfo hide";
   }
-  if(mode==="play"&&m!=="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;}
+  if(mode==="play"&&m!=="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
   mode=m;busy=false;
-  const tabs={home:"tab-home",play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend"};
+  const tabs={play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend"};
   for(const k in tabs)$(tabs[k]).setAttribute("aria-selected",k===m);
   $("pane-home").classList.toggle("hide",m!=="home");
   $("appLayout").classList.toggle("hide",m==="home");
@@ -3537,6 +3956,24 @@ function setMode(m,opts){
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");
   $("evalwrap").classList.toggle("hide",m!=="play");
+  /* Bouton de retournement : visible en Jouer et Entre amis (les deux
+     modes ou #board, partage par tout le site, affiche une vraie partie
+     avec un camp). Masque ailleurs (Exercices, Defis...) : ces ecrans
+     pilotent deja "flipped" eux-memes pour presenter la position du bon
+     point de vue (cote du trait dans un exercice, etc.), un retournement
+     manuel y entrerait en conflit avec ce choix deliberer. Le conteneur
+     #boardTools (pas seulement le bouton) : il doit rester visible meme
+     quand le bandeau de coups interne est masque (avant le premier coup,
+     ou en mode Entre amis qui n'a pas de bandeau de coups du tout). */
+  { const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",m!=="play"&&m!=="friend"); }
+  /* Pour tout mode autre que Jouer/Entre amis, le plateau doit toujours
+     etre visible (Exercices, Defis, Analyser en ont besoin des l'entree).
+     Pour Jouer/Entre amis specifiquement, on laisse la decision a
+     updatePlayBoardVisibility()/updateAmiBoardVisibility(), appelees juste
+     apres par les branches ci-dessous (setupGame/newGame/showAmi...) : sans
+     ce garde-fou ici, quitter Entre amis avant d'avoir cree de partie vers
+     un autre onglet aurait laisse le plateau cache partout ensuite. */
+  { const bw=document.querySelector(".board-wrap"); if(bw&&m!=="play"&&m!=="friend")bw.classList.remove("hide"); }
   /* Les pendules ne concernent que l'onglet Jouer. renderClocks le sait deja,
      mais rien ne l'appelait au changement d'onglet : elles restaient donc
      affichees au-dessus de l'echiquier des exercices. */
@@ -3544,7 +3981,8 @@ function setMode(m,opts){
   if(m==="home"){renderProgress();syncTC();return;}
   if(m==="play"){
     if(opts.fresh)newGame();
-    else if(mainGame&&mainStarted){game=mainGame;sanList=mainSan;lastMove=mainLast;gameStarted=true;flipped=myColor===B;selected=-1;marks={};refreshGame();}
+    else if(mainGame&&mainStarted){game=mainGame;sanList=mainSan;lastMove=mainLast;gameStarted=true;flipped=mainFlipped;selected=-1;marks={};refreshGame();}
+    else if(pendingPlaySave&&typeof showResumeChoice==="function")showResumeChoice();
     else setupGame();
     syncTC();
   } else if(m==="puzzles"){
@@ -3564,12 +4002,12 @@ function setMode(m,opts){
     if(typeof renderEndgame==="function")renderEndgame();
   } else {
     renderDailyChips();rebuildAmi();showAmi();
+    if(typeof renderAmiHistory==="function")renderAmiHistory();
   }
 }
 
 /* ---------- listeners ---------- */
 $("brand").onclick=()=>{setMode("home");goTop();};
-$("tab-home").onclick=()=>{setMode("home");goTop();};
 $("tab-play").onclick=()=>{setMode("play");goTop();};
 $("tab-puzzles").onclick=()=>{setMode("puzzles");goTop();};
 $("tab-friend").onclick=()=>{setMode("friend");goTop();};
@@ -3655,6 +4093,12 @@ $("segAmiColor").addEventListener("click",e=>{
 $("btnAmiNew").onclick=newAmiGame;
 $("btnAmiUndo").onclick=undoAmi;
 $("btnResign").onclick=resignGame;
+/* Retournement manuel de l'echiquier (Jouer + Entre amis, voir setMode).
+   Purement visuel : render()/updateEval() savent deja tout dessiner selon
+   "flipped" (deja utilise pour l'orientation automatique cote Noirs), donc
+   il n'y a rien d'autre a synchroniser. */
+function toggleFlip(){flipped=!flipped;render();updateEval();}
+if($("btnFlip"))$("btnFlip").onclick=toggleFlip;
 $("btnAmiResign").onclick=()=>{
   const b=$("btnAmiResign");
   if(!b.classList.contains("armed")){
@@ -3698,7 +4142,7 @@ $("icoFriend").innerHTML=icoBrass("p");
 const _hc=$("hCount"); if(_hc)_hc.textContent=PUZZLES.length;
 
 buildBoard();
-Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory()]).then(()=>{
+Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAmiHistory()]).then(()=>{
   applyI18n();
   renderProgress();syncTC();renderDailyChips();renderExplore();renderHistory();
   shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);
@@ -3813,10 +4257,18 @@ function renderExplore(){
 let gameUci=[];          // moves of the current play-mode game, in UCI
 let reviewPly=null;      // null = live position
 let analysis=null;       // per-ply analysis once computed
+/* FEN de depart de la partie Jouer en cours : null pour la position
+   standard (l'immense majorite des cas), sinon la position composee dans
+   l'editeur ("Jouer contre le bot depuis ici"). rebuildTo() en a besoin
+   pour reconstruire correctement une position anterieure : sans ca, revenir
+   en arriere dans le bandeau de coups d'une partie demarree depuis une
+   position personnalisee repartait toujours du plateau standard, donnant
+   un echiquier plein n'importe quoi au lieu de la position jouee. */
+let gameStartFen=null;
 
 function recordUci(m){gameUci.push(sqN(m.from)+sqN(m.to)+(m.promo?SYM[m.promo]:""));}
 function rebuildTo(ply){
-  const g=new Game();
+  const g=gameStartFen?new Game(gameStartFen):new Game();
   let last=null;
   for(let i=0;i<ply&&i<gameUci.length;i++){
     const mv=g.moves().find(x=>g.uci(x)===gameUci[i]);
@@ -3852,10 +4304,19 @@ function markBestMove(){
   marks[nSq(from)]="hint";marks[nSq(to)]="hint";
 }
 function evalFromAnalysis(){
+  /* Renvoie {cp, cpTrue, mate} : cp reste la valeur ecretee (graphique,
+     classement des coups), cpTrue la valeur reelle non tronquee pour
+     l'affichage numerique, et mate la distance de mat forcee (perspective
+     Blancs) quand le moteur en a trouve un a cette ply, sinon null.
+     Mode "analyse" (exploration libre depuis l'editeur de position) : pas
+     de partie/liste de coups a consulter, juste la derniere evaluation
+     recue en direct (voir queueAnalyseEval, ui3.js), mise a jour a chaque
+     coup ou changement de position dans le bandeau. */
+  if(mode==="analyse")return analyseEvalCache;
   if(reviewPly===null||!analysis)return null;
-  if(reviewPly===0)return 0;
+  if(reviewPly===0)return {cp:0,cpTrue:0,mate:null};
   const a=analysis.plies[reviewPly-1];
-  return a?a.cp:null;
+  return a?{cp:a.cp,cpTrue:(a.cpTrue!=null?a.cpTrue:a.cp),mate:a.mate}:null;
 }
 function gotoPly(ply){
   ply=Math.max(0,Math.min(gameUci.length,ply));
@@ -3876,14 +4337,65 @@ function renderNav(){
   const n=gameUci.length;
   const at=reviewPly===null?n:reviewPly;
   const row=$("navRow");
-  if(row)row.classList.toggle("hide",mode!=="play"||n===0);
-  $("navStart").disabled=at===0;
-  $("navPrev").disabled=at===0;
-  $("navNext").disabled=at>=n;
-  $("navEnd").disabled=at>=n;
+  if(row)row.classList.toggle("hide",mode!=="play");
+  renderNavStrip(at);
   $("navNote").textContent=reviewPly===null
     ? t(n?"Live position. Arrow keys step through the game.":"Use the arrow keys to step through the game.")
     : t("Reviewing move {i} of {n}. Play a move or press End to return.",{i:at,n:n});
+}
+/* Bandeau horizontal de coups (remplace les boutons |< et >| : taper la
+   premiere ou la derniere puce fait la meme chose, et Origine/Fin au
+   clavier restent disponibles). Reconstruit a chaque appel de renderNav :
+   la partie reste courte (quelques dizaines de coups au grand maximum),
+   donc pas besoin d'un rendu incrémental. */
+function sanPieceType(san){
+  const s=(san||"").replace(/[+#]/g,"");
+  if(s.indexOf("O-O")===0)return "k";
+  const c=s[0];
+  return "NBRQK".indexOf(c)>=0?c.toLowerCase():"p";
+}
+function renderNavStrip(at){
+  const el=$("navScroll"); if(!el)return;
+  let h='<span class="navchip start'+(at===0?" cur":"")+'" data-ply="0">'+t("Game start")+'</span>';
+  for(let i=0;i<sanList.length;i++){
+    const a=analysis&&analysis.plies[i];
+    const tag=a&&a.tag?TAGS[a.tag]:"";
+    const cls=["navchip",(i===at-1?"cur":""),(a&&a.tag?"tag-"+a.tag:"")].filter(Boolean).join(" ");
+    const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
+    /* Petit picto de la piece jouee : reprend le jeu de pieces du site
+       (pieces_browser.js), recadre sur sa boite englobante (serre=true,
+       meme technique que les pieces prises au-dessus de la pendule).
+       Toujours rendu avec le remplissage clair (memes contours) : le
+       remplissage "noir" des pieces (#232b28) est quasi invisible sur le
+       fond sombre du bandeau, contrairement a un vrai plateau ou les cases
+       apportent le contraste. Blancs/Noirs restent distingues par le
+       numero de coup (present uniquement cote Blancs) et une opacite
+       reduite cote Noirs. */
+    const side=i%2===0?"w":"b";
+    const icon=typeof pieceSVG==="function"
+      ?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+tag+'</span>';
+  }
+  el.innerHTML=h;
+  el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
+  /* Garde le coup courant visible dans le bandeau sans faire defiler toute
+     la page (block:"nearest" plutot que "center" par defaut). */
+  const curEl=el.querySelector(".cur");
+  if(curEl&&typeof curEl.scrollIntoView==="function"){
+    try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
+  }
+  updateNavScrollHint();
+}
+/* Meme indice de defilement que la barre d'onglets (voir updateTabsScrollHint
+   dans ui3.js) : degrade + chevron aux bords de #navScroll, visibles
+   seulement quand il y a reellement plus a voir dans ce sens. Appelee ici
+   et depuis renderAnalyseNav() (ui3.js), les deux constructions du meme
+   bandeau. */
+function updateNavScrollHint(){
+  const el=$("navScroll"); if(!el)return;
+  el.classList.toggle("sl",el.scrollLeft>2);
+  el.classList.toggle("sr",el.scrollLeft<el.scrollWidth-el.clientWidth-2);
+  el.onscroll=updateNavScrollHint;
 }
 const TAGS={blunder:"??",mistake:"?",inacc:"?!"};
 function renderSheetPlay(){
@@ -3912,12 +4424,15 @@ function renderSheetPlay(){
 let resultDismissed=false;
 function renderResult(show){
   const b=$("resultBanner"); if(!b)return;
-  if(show&&resultInfo&&mode==="play")saveFinishedGame();
+  if(show&&resultInfo){
+    if(mode==="play")saveFinishedGame();
+    else if(mode==="friend"&&typeof saveFinishedAmiGame==="function")saveFinishedAmiGame();
+  }
   if(!show||!resultInfo||resultDismissed){b.className="result hide";return;}
   b.className="result "+resultInfo.kind;
   $("resultTitle").textContent=resultInfo.title;
   $("resultSub").textContent=resultInfo.sub;
-  $("resultAnalyse").classList.toggle("hide",mode!=="play");
+  $("resultAnalyse").classList.toggle("hide",mode!=="play"&&mode!=="friend");
   $("resultNew").textContent=mode==="friend"?t("Create game"):t("New game");
   $("resultAnalyse").textContent=t("Review");
   $("resultClose").textContent=t("Dismiss");
@@ -3931,10 +4446,17 @@ function afterGameRender(over){
 $("resultNew").onclick=()=>{
   if(finAction){const f=finAction;finAction=null;$("resultBanner").className="result hide";f();return;}
   resultDismissed=false;
-  /* On relance depuis le bandeau de fin : le choix vient d'etre fait, on ne
-     represente pas l'overlay de preparation. */
+  /* Retour aux reglages plutot qu'une relance directe avec les memes choix :
+     l'occasion de reconsiderer (couleur, force, cadence) avant de rejouer,
+     plutot que d'etre embarque dans le meme parametrage sans le vouloir.
+     Les reglages restent presorted sur le dernier choix (rien ne les
+     reinitialise ailleurs), donc rejouer a l'identique ne demande qu'un tap
+     de plus sur "Jouer". skipReady n'a alors plus lieu d'etre : reprendre
+     depuis les reglages redevient un demarrage normal, l'overlay "Pret ?"
+     d'une partie chronometree doit s'y proposer comme n'importe quelle
+     autre fois. */
   if(mode==="friend")newAmiGame();
-  else {skipReady=true;newGame();}
+  else setupGame();
 };
 $("resultClose").onclick=()=>{
   resultDismissed=true;
@@ -3970,6 +4492,13 @@ function showFin(titre,sousTitre,libelleRejouer,action){
 $("resultAnalyse").onclick=()=>{
   resultDismissed=true;
   $("resultBanner").className="result hide";
+  if(mode==="friend"){
+    /* saveFinishedAmiGame() vient de s'executer (voir renderResult) : la
+       partie qui se termine est deja en tete de l'historique Entre amis,
+       on la rouvre directement plutot que de dupliquer sa logique ici. */
+    if(typeof openAmiHistoryGame==="function")openAmiHistoryGame(0);
+    return;
+  }
   if($("btnAnalyse")){$("btnAnalyse").scrollIntoView&&$("btnAnalyse").scrollIntoView({block:"center"});analyseGame();}
 };
 document.addEventListener("keydown",e=>{
@@ -3985,10 +4514,6 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="Home"){e.preventDefault();gotoPly(0);}
   else if(e.key==="End"){e.preventDefault();exitReview();}
 });
-$("navStart").onclick=()=>gotoPly(0);
-$("navPrev").onclick=()=>gotoPly((reviewPly===null?gameUci.length:reviewPly)-1);
-$("navNext").onclick=()=>gotoPly((reviewPly===null?gameUci.length:reviewPly)+1);
-$("navEnd").onclick=()=>exitReview();
 
 /* ==========================================================
    8. GAME ANALYSIS
@@ -4026,7 +4551,23 @@ function analyseGame(){
     const r2=search(g,2,140);
     const afterForMover=Math.max(-CLAMP,Math.min(CLAMP,-r2.score));
     const loss=Math.max(0,before-afterForMover);
-    plies.push({cp:mover===W?afterForMover:-afterForMover,loss:loss,
+    /* Detection de mat force par le moteur integre : alphabeta() renvoie
+       MATE-ply (ou -MATE+ply) quand un mat est trouve dans l'arbre, ply
+       etant le nombre de demi-coups depuis la racine de CETTE recherche
+       (celle d'apres coup, donc perspective de l'adversaire du mover).
+       Le seuil MATE-100 est le meme que celui deja utilise par search()
+       pour arreter l'approfondissement iteratif des qu'un mat est trouve. */
+    let mate=null;
+    if(Math.abs(r2.score)>MATE-100){
+      const plyDist=MATE-Math.abs(r2.score);
+      const movesDist=Math.max(1,Math.ceil(plyDist/2));
+      /* r2.score positif => l'adversaire (au trait apres le coup) mate =>
+         defavorable au mover => signe oppose une fois ramene au mover. */
+      const mateForMover=(r2.score>0?-1:1)*movesDist;
+      mate=mover===W?mateForMover:-mateForMover;
+    }
+    const cpTrue=mate==null?(mover===W?afterForMover:-afterForMover):null;
+    plies.push({cp:mover===W?afterForMover:-afterForMover,cpTrue:cpTrue,mate:mate,loss:loss,
       tag:classify(loss,bestUci===gameUci[i]),best:bestUci,mover:mover});
     i++;
     bar.firstElementChild.style.width=(100*i/gameUci.length).toFixed(0)+"%";
@@ -4128,6 +4669,7 @@ function loadPgn(text){
   clearAnalysis();
   isReviewGame=true;
   game=g;sanList=san;gameUci=uci;
+  gameStartFen=null;
   lastMove=g.history.length?g.history[g.history.length-1].m:null;
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
   myColor=W;flipped=false;mainGame=null;
@@ -4181,7 +4723,8 @@ function saveFinishedGame(){
     r:resultCode(),
     tc:cat==="none"?"":tcLabel(cat,item),
     lvl:botLevel,
-    m:gameUci.join(" ")
+    m:gameUci.join(" "),
+    fen:gameStartFen||null
   });
   history=history.slice(0,30);
   saveHistory();renderHistory();
@@ -4195,7 +4738,7 @@ function fmtDate(ts){
 const RES_LABEL={win:"W",loss:"L",draw:"D"};
 function renderHistory(){
   const box=$("historyList"); if(!box)return;
-  $("historyTitle").textContent=t("Your games");
+  const htt=$("historyTitleTxt"); if(htt)htt.textContent=t("Your games");
   $("historyActions").classList.toggle("hide",history.length===0);
   if(!history.length){
     $("historyNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
@@ -4207,7 +4750,7 @@ function renderHistory(){
   history.forEach((g,i)=>{
     const b=document.createElement("button");
     b.className="history-item";
-    const san=sanOf(g.m);
+    const san=sanOf(g.m,g.fen);
     const op=detectOpening(san);
     const side=g.c==="w"?t("White"):t("Black");
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
@@ -4218,8 +4761,8 @@ function renderHistory(){
     box.appendChild(b);
   });
 }
-function sanOf(uciStr){
-  const g=new Game(),out=[];
+function sanOf(uciStr,fen){
+  const g=fen?new Game(fen):new Game(),out=[];
   for(const u of uciStr.split(" ").filter(Boolean)){
     const mv=g.moves().find(x=>g.uci(x)===u);
     if(!mv)break;
@@ -4227,9 +4770,14 @@ function sanOf(uciStr){
   }
   return out;
 }
+/* Ouvrir une ancienne partie du journal reste dans Jouer, dans la meme
+   interface de revue que juste apres avoir joue (bandeau, jauge, panneau
+   Revue) -- appelee uniquement depuis l'onglet Jouer lui-meme (le journal y
+   vit), aucun changement de mode n'est necessaire. */
 function openHistoryGame(i){
   const rec=history[i]; if(!rec)return;
-  const g=new Game(),san=[],uci=[];
+  const startFen=typeof rec.fen==="string"?rec.fen:null;
+  const g=startFen?new Game(startFen):new Game(),san=[],uci=[];
   for(const u of rec.m.split(" ").filter(Boolean)){
     const mv=g.moves().find(x=>g.uci(x)===u);
     if(!mv)break;
@@ -4239,6 +4787,7 @@ function openHistoryGame(i){
   clearAnalysis();
   isReviewGame=true;gameSaved=true;
   game=g;sanList=san;gameUci=uci;
+  gameStartFen=startFen;
   myColor=rec.c==="w"?W:B;flipped=myColor===B;
   lastMove=g.history.length?g.history[g.history.length-1].m:null;
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
@@ -4260,6 +4809,111 @@ $("btnHistoryClear").onclick=()=>{
   }
   b.classList.remove("armed");b.textContent=t("Clear history");
   history=[];saveHistory();renderHistory();
+};
+
+/* ==========================================================
+   HISTORIQUE ENTRE AMIS
+   ========================================================== */
+/* Meme principe que l'historique de Jouer (chang64:games) juste au-dessus,
+   mais separe : contrairement a une partie Jouer, une partie Entre amis
+   n'avait jusqu'ici aucune trace persistante au-dela de la plus recente
+   (chang64:friend, ecrasee a chaque nouvelle partie) -- impossible de
+   retrouver une ancienne partie une fois la suivante commencee. */
+let amiHistory=[],amiGameSaved=false;
+async function loadAmiHistory(){
+  try{const r=await window.storage.get("chang64:friendgames");
+    if(r&&r.value){const d=JSON.parse(r.value);if(Array.isArray(d))amiHistory=d;}}catch(e){}
+}
+async function saveAmiHistory(){
+  try{await window.storage.set("chang64:friendgames",JSON.stringify(amiHistory.slice(0,30)));}catch(e){}
+}
+function amiResultCode(){
+  if(amiResigned!==null)return amiResigned===amiColor?"loss":"win";
+  if(game.isCheckmate())return (game.turn===W?B:W)===amiColor?"win":"loss";
+  return "draw";
+}
+function saveFinishedAmiGame(){
+  if(amiGameSaved||mode!=="friend")return;
+  if(amiMoves.length<2)return;
+  /* amiMoves stocke des objets {from64,to64,promo} (voir rebuildAmi), pas
+     des chaines UCI comme gameUci en mode Jouer : il faut rejouer la partie
+     pour en tirer la liste UCI reellement utilisable par gotoPly()/
+     rebuildTo() une fois la partie rouverte depuis l'historique. */
+  const g=new Game(),uci=[];
+  for(const m of amiMoves){
+    const mv=g.moves().find(x=>sq64(x.from)===m.from64&&sq64(x.to)===m.to64&&(x.promo||0)===(m.promo||0));
+    if(!mv)break;
+    uci.push(sqN(mv.from)+sqN(mv.to)+(mv.promo?SYM[mv.promo]:""));
+    g.makeMove(mv);
+  }
+  if(uci.length<2)return;
+  amiGameSaved=true;
+  amiHistory.unshift({t:Date.now(),c:amiColor===W?"w":"b",r:amiResultCode(),m:uci.join(" ")});
+  amiHistory=amiHistory.slice(0,30);
+  saveAmiHistory();renderAmiHistory();
+}
+function renderAmiHistory(){
+  const box=$("amiHistoryList"); if(!box)return;
+  $("amiHistoryActions").classList.toggle("hide",amiHistory.length===0);
+  if(!amiHistory.length){
+    $("amiHistoryNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
+    box.innerHTML='<p class="history-empty">'+t("No finished game yet.")+'</p>';
+    return;
+  }
+  $("amiHistoryNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:amiHistory.length});
+  box.innerHTML="";
+  amiHistory.forEach((g,i)=>{
+    const b=document.createElement("button");
+    b.className="history-item";
+    const san=sanOf(g.m,null);
+    const op=detectOpening(san);
+    const side=g.c==="w"?t("White"):t("Black");
+    const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
+    b.innerHTML='<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
+      '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
+      '<span>'+fmtDate(g.t)+" \u00b7 "+side+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>';
+    b.onclick=()=>openAmiHistoryGame(i);
+    box.appendChild(b);
+  });
+}
+/* Meme principe que openHistoryGame juste au-dessus, "idem pour inviter" :
+   reste dans l'interface de revue de Jouer plutot que de basculer vers
+   Analyser. mainGame/mainSan/mainStarted sont le cache que setMode("play")
+   restaure normalement en y revenant depuis un autre onglet -- les
+   pre-remplir ici avec la partie choisie fait prendre exactement ce
+   chemin, sans dupliquer la logique de setMode(). */
+function openAmiHistoryGame(i){
+  const rec=amiHistory[i]; if(!rec)return;
+  const g=new Game(),san=[],uci=[];
+  for(const u of rec.m.split(" ").filter(Boolean)){
+    const mv=g.moves().find(x=>g.uci(x)===u);
+    if(!mv)break;
+    san.push(g.san(mv));uci.push(u);g.makeMove(mv);
+  }
+  if(!san.length)return;
+  if(typeof clearAnalysis==="function")clearAnalysis();
+  gameUci=uci;gameStartFen=null;
+  isReviewGame=true;gameSaved=true;
+  myColor=rec.c==="w"?W:B;
+  if(typeof resigned!=="undefined")resigned=null;
+  resultInfo=null;
+  mainGame=g;mainSan=san;
+  mainLast=g.history.length?g.history[g.history.length-1].m:null;
+  mainStarted=true;mainFlipped=myColor===B;
+  setMode("play");
+  gotoPly(0);
+  const st=$("status"); if(st){st.className="status";st.textContent=t("Replaying a saved game. Step through it or run the review.");}
+  if(typeof focusBoard==="function")focusBoard();
+}
+$("btnAmiHistoryClear").onclick=()=>{
+  const b=$("btnAmiHistoryClear");
+  if(!b.classList.contains("armed")){
+    b.classList.add("armed");b.textContent=t("Confirm");
+    setTimeout(()=>{b.classList.remove("armed");b.textContent=t("Clear history");},5000);
+    return;
+  }
+  b.classList.remove("armed");b.textContent=t("Clear history");
+  amiHistory=[];saveAmiHistory();renderAmiHistory();
 };
 
 /* ==========================================================
@@ -4722,24 +5376,28 @@ setMode=function(m,opts){
      d'onglet est ajoute, et n'arrete le sprint que lors d'un vrai
      changement d'onglet. */
   if(rush&&m!==mode)rushEnd(t("Stopped."));
-  if(m==="watch"||m==="legal"||m==="prefs"){
-    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;}
+  if(m==="watch"||m==="legal"||m==="prefs"||m==="explore"){
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode=m;
-    const tabs={home:"tab-home",play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend",watch:"tab-watch"};
-    for(const k in tabs)$(tabs[k]).setAttribute("aria-selected",k===m);
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
     $("pane-home").classList.add("hide");
     $("appLayout").classList.add("hide");
     $("pane-watch").classList.toggle("hide",m!=="watch");
     $("pane-legal").classList.toggle("hide",m!=="legal");
     const pp=$("pane-prefs"); if(pp)pp.classList.toggle("hide",m!=="prefs");
+    const pe=$("pane-explore"); if(pe)pe.classList.toggle("hide",m!=="explore");
     if(m==="watch")renderChannels();
     else if(m==="prefs"){if(typeof renderPrefs==="function")renderPrefs();}
+    else if(m==="explore"){if(typeof renderExplore==="function")renderExplore();}
     else renderLegal();
     return;
   }
   $("pane-watch").classList.add("hide");
   $("pane-legal").classList.add("hide");
   { const pp=$("pane-prefs"); if(pp)pp.classList.add("hide"); }
+  { const pe=$("pane-explore"); if(pe)pe.classList.add("hide"); }
+  { const tex=$("tab-explore"); if(tex)tex.setAttribute("aria-selected","false"); }
   $("tab-watch").setAttribute("aria-selected","false");
   baseSetMode(m,opts);
   renderExtraStats();applyEvalPref();
@@ -4826,6 +5484,7 @@ function rushRestore(){
   }
 })();
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
+if($("tab-explore"))$("tab-explore").onclick=()=>{setMode("explore");goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
 /* Les pages de contenu renvoient vers /#legal et /#privacy : ces panneaux
@@ -4855,12 +5514,25 @@ botMove=function(){
   if(game.history.length>before){
     const h=game.history[game.history.length-1];
     recordUci(h.m);analysis=null;
+    /* baseBotMove() a deja appele refreshGame() (donc mon crochet de
+       sauvegarde de la partie en cours, voir plus bas) AVANT que gameUci
+       soit mis a jour ici : sans ce second appel explicite, le coup du bot
+       n'atteignait jamais la sauvegarde -- seuls les coups du joueur
+       (recordUci avant basePlayUser, lui, l'ordre inverse) etaient captures.
+       Meme logique de garde qu'a l'interieur de refreshGame() : un mat livre
+       par le bot doit effacer la sauvegarde, pas la reecrire perimee. */
+    if(gameStarted&&typeof gameOver==="function"&&!gameOver()){if(typeof savePlay==="function")savePlay();}
+    else if(gameStarted&&typeof clearPlaySave==="function")clearPlaySave();
   }
 };
 undoGame=function(){
   const before=game.history.length;
   baseUndoGame();
-  if(game.history.length<before){gameUci.splice(-2);analysis=null;}
+  if(game.history.length<before){
+    gameUci.splice(-2);analysis=null;
+    if(gameStarted&&typeof gameOver==="function"&&!gameOver()){if(typeof savePlay==="function")savePlay();}
+    else if(gameStarted&&typeof clearPlaySave==="function")clearPlaySave();
+  }
 };
 $("btnHint").onclick=()=>hintGame();
 
@@ -4894,7 +5566,12 @@ function fmtNum(x){
    libelle : son texte. Sans action, on retombe sur le comportement d'origine,
    celui des parties. */
 let readyAction=null;
-function showReadyFor(sousTitre,action,libelle){
+/* readySecondaryAction : meme principe que readyAction, mais pour le bouton
+   "readySettings". Sert au choix de reprise d'une partie sauvegardee (voir
+   showResumeChoice plus bas) : ce bouton propose alors "Nouvelle partie"
+   plutot que son role habituel de reglages. */
+let readySecondaryAction=null;
+function showReadyFor(sousTitre,action,libelle,titre,secondaryLibelle,secondaryAction){
   const b=$("readyBanner"); if(!b)return;
   /* On enchaine sur une nouvelle epreuve : le bandeau de fin de la
      precedente n'a plus lieu d'etre, et deux panneaux superposes seraient
@@ -4902,12 +5579,25 @@ function showReadyFor(sousTitre,action,libelle){
   const fin=$("resultBanner");
   if(fin&&!fin.classList.contains("hide")){fin.className="result hide";finAction=null;}
   readyAction=action||null;
-  $("readyTitle").textContent=t("Ready when you are");
+  readySecondaryAction=secondaryAction||null;
+  /* La bulle "sauvegarde automatique" n'a de sens que pour le choix de
+     reprise (showResumeChoice, qui la reactive juste apres cet appel) :
+     partout ailleurs (Chang Sprint, coordonnees...), elle doit rester
+     masquee par defaut. */
+  const tb=$("tipResumeBtn");
+  if(tb){tb.classList.add("hide");tb.setAttribute("aria-expanded","false");}
+  const tp=$("tipResume"); if(tp)tp.classList.add("hide");
+  $("readyTitle").textContent=titre||t("Ready when you are");
   $("readySub").textContent=sousTitre;
   $("readyStart").textContent=libelle||t("Start");
-  /* "Changer les reglages" n'a pas de sens ici : les epreuves n'en ont pas. */
+  /* "Changer les reglages" n'a pas de sens ici : les epreuves n'en ont pas.
+     Exception : un secondaryAction explicite (choix de reprise), qui
+     reutilise ce bouton pour une action alternative dediee. */
   const st=$("readySettings");
-  if(st)st.classList.toggle("hide",!!action);
+  if(st){
+    if(secondaryAction){st.classList.remove("hide");st.textContent=secondaryLibelle||t("Change settings");}
+    else st.classList.toggle("hide",!!action);
+  }
   b.classList.remove("hide");
   /* preventScroll : sans lui, focus() recadre lui-meme la vue sur le
      bouton, en concurrence avec le defilement deja pose par focusBoard()
@@ -4917,6 +5607,10 @@ function showReadyFor(sousTitre,action,libelle){
 }
 function showReady(tcTxt){
   readyAction=null;
+  readySecondaryAction=null;
+  const tb=$("tipResumeBtn");
+  if(tb){tb.classList.add("hide");tb.setAttribute("aria-expanded","false");}
+  const tp=$("tipResume"); if(tp)tp.classList.add("hide");
   const st=$("readySettings"); if(st)st.classList.remove("hide");
   const b=$("readyBanner"); if(!b)return;
   /* Le libelle de force est lu directement sur le selecteur : il est deja
@@ -4955,10 +5649,11 @@ function startReadyGame(){
   if(typeof focusBoard==="function")focusBoard();
 }
 if($("readyStart"))$("readyStart").onclick=()=>{
-  if(readyAction){const f=readyAction;readyAction=null;hideReady();f();return;}
+  if(readyAction){const f=readyAction;readyAction=null;readySecondaryAction=null;hideReady();f();return;}
   startReadyGame();
 };
 if($("readySettings"))$("readySettings").onclick=()=>{
+  if(readySecondaryAction){const f=readySecondaryAction;readyAction=null;readySecondaryAction=null;hideReady();f();return;}
   /* La partie n'a pas commence : on l'annule pour de bon, sinon le
      verrouillage en cours de partie garde les reglages desactives et le
      bouton menait a des reglages intouchables. */
@@ -4972,6 +5667,138 @@ if($("readySettings"))$("readySettings").onclick=()=>{
   const s=$("status");
   if(s)s.textContent=t("Pick a colour and a strength, then play.");
 };
+
+/* ==========================================================
+   20. SAUVEGARDE DE LA PARTIE EN COURS (mode Jouer, contre le bot)
+   ==========================================================
+   Contrairement a "Entre amis" (deja persistant via chang64:friend) et a
+   l'historique des parties terminees (chang64:games), une partie "Jouer"
+   en cours ne survivait jusqu'ici a aucun rechargement : fermer l'onglet
+   ou recharger la perdait purement et simplement.
+
+   Choix retenus (discussion du 24/08/2026) :
+   - la pendule continue de s'ecouler pendant l'absence, comme une horloge
+     reelle : on sauvegarde clock.last tel quel (l'horodatage n'est PAS
+     remis a l'heure au moment de la sauvegarde), et clockDrain() -- deja
+     appele par la boucle setInterval existante -- decompte naturellement
+     tout le temps ecoule des le retour, drapeau compris si le depassement
+     est deja consomme.
+   - au retour sur l'onglet Jouer, pas de reprise automatique et
+     silencieuse : un choix explicite est propose ("Reprendre" / "Nouvelle
+     partie"), pour ne pas surprendre quelqu'un qui voulait repartir a
+     zero et avait oublie sa partie en cours.
+   - perimetre : uniquement le mode Jouer contre le bot. */
+let pendingPlaySave=null;
+async function savePlay(){
+  try{
+    await window.storage.set("chang64:play",JSON.stringify({
+      v:1,
+      uci:gameUci,
+      startFen:gameStartFen,
+      myColor:myColor===B?1:0,
+      botLevel:botLevel,
+      flipped:!!flipped,
+      tcCat:tcCat,tcIdx:tcIdx,
+      clock:clock
+    }));
+  }catch(e){}
+}
+async function clearPlaySave(){
+  pendingPlaySave=null;
+  try{await window.storage.delete("chang64:play");}catch(e){}
+}
+async function loadPlaySave(){
+  try{
+    const r=await window.storage.get("chang64:play");
+    if(r&&r.value){
+      const d=JSON.parse(r.value);
+      if(d&&d.v===1&&Array.isArray(d.uci)&&d.uci.length)pendingPlaySave=d;
+    }
+  }catch(e){}
+}
+/* Rejoue la liste de coups UCI sauvegardee sur une position vierge : meme
+   principe defensif que loadPgn(), on s'arrete au premier coup qui ne
+   validerait plus (donnees corrompues, ou regle du moteur qui aurait
+   change entre-temps) plutot que de planter. */
+function resumeSavedPlay(){
+  const d=pendingPlaySave; pendingPlaySave=null;
+  if(!d){setupGame();return;}
+  const startFen=typeof d.startFen==="string"?d.startFen:null;
+  const g=startFen?new Game(startFen):new Game(),san=[];
+  for(const u of d.uci){
+    const mv=g.moves().find(x=>g.uci(x)===u);
+    if(!mv)break;
+    san.push(g.san(mv));g.makeMove(mv);
+  }
+  if(!san.length){clearPlaySave();setupGame();return;}
+  /* clearAnalysis() remet gameUci a [] (elle sert normalement a repartir
+     d'une partie vierge) : elle doit donc s'executer AVANT de restaurer
+     gameUci ci-dessous, jamais apres. */
+  if(typeof clearAnalysis==="function")clearAnalysis();
+  game=g;sanList=san;gameUci=d.uci.slice(0,san.length);
+  gameStartFen=startFen;
+  myColor=d.myColor===1?B:W;
+  if(TC_CATS.some(c=>c.id===d.tcCat)){tcCat=d.tcCat;tcIdx=d.tcIdx||0;}
+  if(typeof d.botLevel==="number")botLevel=d.botLevel;
+  flipped=!!d.flipped;
+  gameStarted=true;
+  if(typeof isReviewGame!=="undefined")isReviewGame=false;
+  resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
+  reviewGame=null;reviewLast=null;selected=-1;marks={};busy=false;
+  lastMove=g.history.length?g.history[g.history.length-1].m:null;
+  /* La pendule reprend telle quelle : "last" reste l'ancien horodatage,
+     donc le prochain passage de clockDrain() (boucle setInterval deja en
+     place, toutes les 100ms) decompte tout seul le temps ecoule pendant
+     l'absence, drapeau compris s'il est deja depasse -- cette meme boucle
+     gere alors la fin de partie normalement, sans rien de plus a faire ici. */
+  clock=d.clock||{enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
+  clockHist=[{w:clock.w,b:clock.b}];
+  awaitingStart=false;
+  mainGame=null;
+  /* refreshGame() recalcule legalCache pour CETTE position avant toute
+     verification de fin de partie : l'appeler avant, comme gameOver() le
+     ferait sur l'ancien legalCache (celui d'avant la reprise, potentiellement
+     vide), donnerait un faux mat/pat. On fixe donc un statut neutre ici, et
+     c'est refreshGame() -- puis, le cas echeant, la boucle de pendule
+     100ms -- qui etablit l'etat reel. */
+  const s=$("status");
+  if(s){s.className="status";s.textContent=game.turn===myColor?t("Your move."):t("The computer is thinking…");}
+  refreshGame();
+  if(typeof focusBoard==="function")focusBoard();
+  if(!gameFinished_safe()&&game.turn!==myColor){busy=true;setTimeout(botMove,220);}
+}
+function gameFinished_safe(){
+  try{return (typeof gameOver==="function")&&gameOver();}catch(e){return false;}
+}
+function discardSavedPlayAndSetup(){
+  clearPlaySave();
+  hideReady();
+  awaitingStart=false;
+  gameStarted=false;
+  if(typeof setupGame==="function")setupGame();
+  refreshGame();
+}
+/* Choix explicite affiche a l'arrivee sur l'onglet Jouer quand une partie
+   non terminee a ete retrouvee (voir setMode). Reutilise le bandeau
+   "readyBanner" comme les autres epreuves chronometrees, avec un titre
+   dedie et le bouton secondaire repurpose en "Nouvelle partie". */
+function showResumeChoice(){
+  const d=pendingPlaySave;
+  if(!d){setupGame();return;}
+  if(TC_CATS.some(c=>c.id===d.tcCat)){tcCat=d.tcCat;tcIdx=d.tcIdx||0;}
+  const {cat,item}=tcCurrent();
+  const tcTxt=cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1));
+  const nMoves=Math.ceil((d.uci||[]).length/2);
+  const sousTitre=tcTxt+" \u00b7 "+(d.myColor===1?t("You play Black."):t("You play White."))+
+    " \u00b7 "+t("Move {n}",{n:nMoves});
+  showReadyFor(sousTitre,resumeSavedPlay,t("Resume the game"),
+    t("You have an unfinished game"),t("New game instead"),discardSavedPlayAndSetup);
+  const tb=$("tipResumeBtn"); if(tb)tb.classList.remove("hide");
+  /* pendingPlaySave est encore renseigne ici (resumeSavedPlay() ne le vide
+     qu'au moment reel de la reprise) : le plateau doit rester visible pour
+     que ce choix, qui vit dedans (readyBanner), soit seulement lisible. */
+  if(typeof updatePlayBoardVisibility==="function")updatePlayBoardVisibility();
+}
 
 
 /* --- ramener l'échiquier sous les yeux quand l'action part d'un bouton situé plus bas --- */
@@ -5422,16 +6249,26 @@ function sfEnable(){
 function sfEvalFen(fen,depth){
   return new Promise(resolve=>{
     if(!sf.ready){resolve(null);return;}
-    let score=null,best=null,done=false;
-    const finish=()=>{if(!done){done=true;sf.worker.onmessage=prev;resolve({cp:score,best:best});}};
+    /* score : toujours rempli, y compris sur un mat force (grande valeur
+       synthetique +-20000, uniquement pour comparer avant/apres et classer
+       la qualite du coup). mate : rempli UNIQUEMENT sur un mat force, avec
+       la distance signee telle que rendue par Stockfish (positif = le
+       camp au trait mate en n coups, negatif = il est mate en n coups) :
+       c'est cette valeur, et non score, qui doit atteindre l'affichage. */
+    let score=null,mate=null,best=null,done=false;
+    const finish=()=>{if(!done){done=true;sf.worker.onmessage=prev;resolve({cp:score,mate:mate,best:best});}};
     const prev=sf.worker.onmessage;
     const timer=setTimeout(finish,4000);
     sf.worker.onmessage=ev=>{
       const line=typeof ev.data==="string"?ev.data:(ev.data&&ev.data.data)||"";
       let m=line.match(/score cp (-?\d+)/);
-      if(m)score=parseInt(m[1],10);
+      if(m){score=parseInt(m[1],10);mate=null;}
       m=line.match(/score mate (-?\d+)/);
-      if(m)score=(parseInt(m[1],10)>0?1:-1)*(20000-Math.abs(parseInt(m[1],10))*100);
+      if(m){
+        const n=parseInt(m[1],10);
+        mate=n;
+        score=(n>0?1:-1)*(20000-Math.abs(n)*100);
+      }
       m=line.match(/^bestmove (\S+)/);
       if(m){best=m[1];clearTimeout(timer);finish();}
     };
@@ -5454,7 +6291,16 @@ async function analyseWithStockfish(){
     const after=await sfEvalFen(g.fen(),12);
     const b=Math.max(-CLAMP,Math.min(CLAMP,before.cp||0));
     const a=Math.max(-CLAMP,Math.min(CLAMP,-(after&&after.cp||0)));
-    plies.push({cp:mover===W?a:-a,loss:Math.max(0,b-a),
+    /* cpTrue : la vraie valeur en centipawns (non ecretee, non substituee par
+       la grande valeur synthetique d'un mat), pour l'affichage numerique.
+       mate : distance de mat, perspective Blancs (positif = les Blancs
+       matent), null hors mat force. after.mate est donne du point de vue du
+       camp au trait APRES le coup (l'adversaire du mover), d'ou l'inversion
+       de signe, comme pour after.cp plus haut. */
+    const afterMateForMover=(after&&after.mate!=null)?-after.mate:null;
+    const mate=afterMateForMover==null?null:(mover===W?afterMateForMover:-afterMateForMover);
+    const cpTrue=(after&&after.mate==null)?(mover===W?-(after.cp||0):(after.cp||0)):null;
+    plies.push({cp:mover===W?a:-a,cpTrue:cpTrue,mate:mate,loss:Math.max(0,b-a),
       tag:classify(Math.max(0,b-a),bestUci===gameUci[i]),best:bestUci,mover:mover});
     bar.firstElementChild.style.width=(100*(i+1)/gameUci.length).toFixed(0)+"%";
   }
@@ -5573,18 +6419,26 @@ const prevSetMode=setMode;
 setMode=function(m,opts){
   if(coord)stopCoord();
   if(m==="train"){
-    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;}
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="train";
-    const tabs={home:"tab-home",play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch"};
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
     for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
+    { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
     $("pane-legal").classList.add("hide");
     $("appLayout").classList.remove("hide");
     $("pane-play").classList.add("hide");
     $("pane-puzzles").classList.add("hide");
     $("pane-friend").classList.add("hide");
     $("pane-train").classList.remove("hide");
+    /* Le plateau reste cache tant que la partie Jouer n'a pas demarre (voir
+       updatePlayBoardVisibility) : cette branche gerant elle-meme son
+       propre mode, sans jamais redescendre vers la logique centrale de
+       setMode() (ui.js) qui s'en charge d'habitude, cet etat "cache"
+       restait colle en arrivant ici depuis l'ecran de reglages de Jouer --
+       alors que Chang Sprint/coordonnees en ont besoin des l'entree. */
+    { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
     $("evalwrap").classList.add("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
     $("coordHud").classList.add("hide");
@@ -5917,6 +6771,573 @@ if($("footAccess"))$("footAccess").onclick=()=>{
   goToSection("accessibilite");   /* meme mecanique que les autres sections */
 };
 loadPrefs();
+
+/* ==========================================================
+   BULLES D'INFO PEDAGOGIQUES
+   ========================================================== */
+/* Gestionnaire delegue unique : chaque bulle est un simple couple bouton
+   (.info-tip, aria-controls -> id du texte) + texte (.info-tip-pop, cache
+   par defaut). Pas de re-branchement necessaire quand un panneau est
+   recree ou reaffiche dynamiquement (Entre amis, banniere de reprise...),
+   puisque la delegation se fait sur le document entier. Une seule bulle
+   ouverte a la fois, pour rester discret : en ouvrir une referme les
+   autres. */
+function closeAllInfoTips(){
+  document.querySelectorAll(".info-tip-pop:not(.hide)").forEach(p=>p.classList.add("hide"));
+  document.querySelectorAll('.info-tip[aria-expanded="true"]').forEach(b=>b.setAttribute("aria-expanded","false"));
+}
+document.addEventListener("click",e=>{
+  const btn=e.target.closest(".info-tip");
+  if(btn){
+    const pop=document.getElementById(btn.getAttribute("aria-controls"));
+    if(!pop)return;
+    const willOpen=pop.classList.contains("hide");
+    closeAllInfoTips();
+    if(willOpen){pop.classList.remove("hide");btn.setAttribute("aria-expanded","true");}
+    return;
+  }
+  if(!e.target.closest(".info-tip-pop"))closeAllInfoTips();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAllInfoTips();});
+
+/* ==========================================================
+   EDITEUR DE POSITION (onglet Analyse)
+   ========================================================== */
+/* Reutilise directement la variable globale "game" (comme Jouer et Entre
+   amis), pas un objet dedie : render(), pieceSVG() et le reste du rendu du
+   plateau partage n'ont donc rien de nouveau a apprendre. editGame/
+   editGameTurn memorisent la composition en cours quand on quitte l'onglet,
+   sur le meme principe que mainGame pour Jouer -- sinon revenir sur Analyse
+   apres un detour par Exercices ou Entre amis effacerait la position. */
+let editTool=null,editTurnVal="w",editGame=null,editGameTurn="w";
+/* Glisser-depose : etat de bas niveau, voir la section dediee plus bas
+   (apres editRenderPalette) pour le detail de la mecanique. */
+let editDrag=null,editDragJustHappened=false;
+const EDIT_DRAG_THRESHOLD=6;
+const EDIT_ORDER=["k","q","r","b","n","p"];
+function editPieceName(sym){
+  const names={k:t("King"),q:t("Queen"),r:t("Rook"),b:t("Bishop"),n:t("Knight"),p:t("Pawn")};
+  return names[sym]||sym;
+}
+function editRenderPalette(){
+  for(const color of ["w","b"]){
+    const el=$(color==="w"?"editPalWhite":"editPalBlack"); if(!el)continue;
+    el.innerHTML="";
+    for(const sym of EDIT_ORDER){
+      const b=document.createElement("button");
+      b.type="button";
+      b.innerHTML=pieceSVG(sym,color);
+      b.setAttribute("aria-pressed","false");
+      b.setAttribute("aria-label",editPieceName(sym)+" ("+(color==="w"?t("White"):t("Black"))+")");
+      b.onclick=()=>selectEditTool(sym,color);
+      b.addEventListener("pointerdown",ev=>{
+        if(typeof editPointerDown==="function")editPointerDown(ev,{source:"palette",tool:{t:sym,c:color}});
+      });
+      el.appendChild(b);
+    }
+  }
+}
+function selectEditTool(sym,color){
+  editTool={t:sym,c:color};
+  document.querySelectorAll(".editpal button").forEach(b=>b.setAttribute("aria-pressed","false"));
+  const idx=EDIT_ORDER.indexOf(sym);
+  const el=$(color==="w"?"editPalWhite":"editPalBlack");
+  if(el&&el.children[idx])el.children[idx].setAttribute("aria-pressed","true");
+}
+function handleEditorClick(sq){
+  /* Le "click" natif qui suit un vrai glissement (voir la mecanique de
+     glisser-depose plus bas) est ignore ici : le glissement a deja tout
+     fait, ce clic fantome ne doit rien refaire par-dessus. */
+  if(editDragJustHappened){editDragJustHappened=false;return;}
+  /* Taper une case deja occupee la vide, quel que soit l'outil en main :
+     c'est le geste le plus naturel pour corriger une position, et evite un
+     bouton "gomme" separe. Sinon, poser la piece choisie dans la palette.
+     Exception : le roi ne peut jamais etre retire, seulement deplace --
+     une position sans roi n'a pas de sens et bloquait "Jouer"/"Analyser"
+     de toute facon ; autant l'empecher a la source plutot que de laisser
+     l'utilisateur decouvrir le blocage apres coup. */
+  if(game.board[sq]){
+    const p=game.board[sq];
+    if(pT(p)===K)return;
+    game.board[sq]=0;
+    editRefresh();
+    return;
+  }
+  if(!editTool)return;
+  const ty=FSYM[editTool.t],c=editTool.c==="w"?W:B;
+  if(ty===K&&game.kingSq[c]>=0&&game.kingSq[c]!==sq)game.board[game.kingSq[c]]=0;
+  if(ty===K)game.kingSq[c]=sq;
+  game.board[sq]=mk(ty,c);
+  editRefresh();
+}
+/* Droits au roque deduits de la position plutot que geres a la main : roi
+   et tour encore sur leurs cases d'origine. Une seule case pour le concept
+   "prise en passant" existe cote moteur, mais l'editeur ne la propose pas
+   (cas rare, complexite disproportionnee pour ce que ca apporte ici). */
+function editCastling(){
+  let c=0;
+  if(game.board[nSq("e1")]===mk(K,W)){
+    if(game.board[nSq("h1")]===mk(R,W))c|=CWK;
+    if(game.board[nSq("a1")]===mk(R,W))c|=CWQ;
+  }
+  if(game.board[nSq("e8")]===mk(K,B)){
+    if(game.board[nSq("h8")]===mk(R,B))c|=CBK;
+    if(game.board[nSq("a8")]===mk(R,B))c|=CBQ;
+  }
+  return c;
+}
+function editRefresh(){
+  game.turn=editTurnVal==="b"?B:W;
+  game.castling=editCastling();
+  game.ep=-1;game.half=0;game.full=1;
+  legalCache=[];selected=-1;
+  render();
+  const out=$("editFenOut"); if(out)out.value=game.fen();
+  const kw=game.kingSq[W]>=0,kb=game.kingSq[B]>=0,ok=kw&&kb;
+  const msg=$("editMsg");
+  if(msg)msg.textContent=ok?"":(!kw&&!kb?t("Place a king for each side."):!kw?t("Place a white king."):t("Place a black king."));
+  const pb=$("editPlay"); if(pb)pb.disabled=!ok;
+}
+function editSyncTurnSeg(){
+  const seg=$("editTurnSeg"); if(!seg)return;
+  for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v===editTurnVal);
+}
+editRenderPalette();
+{ const seg=$("editTurnSeg");
+  if(seg)for(const b of seg.children)b.onclick=()=>{editTurnVal=b.dataset.v;editSyncTurnSeg();editRefresh();};
+}
+if($("editStart"))$("editStart").onclick=()=>{
+  game=new Game();editTurnVal="w";editSyncTurnSeg();editRefresh();
+};
+if($("editClear"))$("editClear").onclick=()=>{
+  /* Les rois restent sur leurs cases de depart plutot qu'un echiquier
+     totalement vide : ce sont les seules pieces qu'une position ne peut
+     jamais ne pas avoir, autant eviter l'aller-retour "vider puis
+     reposer les deux rois a la main" a chaque fois. */
+  game=new Game("4k3/8/8/8/8/8/8/4K3 w - - 0 1");editTurnVal="w";editSyncTurnSeg();editRefresh();
+};
+if($("editFenCopy"))$("editFenCopy").onclick=()=>{
+  copyText($("editFenOut").value);
+  const msg=$("editMsg"); if(msg)msg.textContent=t("FEN copied to the clipboard.");
+};
+if($("editFenLoad"))$("editFenLoad").onclick=()=>{
+  const v=$("editFenIn").value.trim(); if(!v)return;
+  let g=null;
+  try{g=new Game(v);}catch(e){g=null;}
+  if(!g||g.kingSq[W]<0||g.kingSq[B]<0){
+    const msg=$("editMsg"); if(msg)msg.textContent=t("Each side needs exactly one king.");
+    return;
+  }
+  game=g;editTurnVal=game.turn===B?"b":"w";editSyncTurnSeg();
+  $("editFenIn").value="";
+  editRefresh();
+};
+/* pendingStartFen : consomme par newGame() (ui.js) pour demarrer une partie
+   depuis cette position plutot que depuis le depart standard, sans changer
+   la signature de newGame() (appelee sans argument partout ailleurs). */
+if($("editPlay"))$("editPlay").onclick=()=>{
+  if(game.kingSq[W]<0||game.kingSq[B]<0)return;
+  pendingStartFen=game.fen();
+  pendingNoClock=true;
+  myColor=editTurnVal==="b"?B:W;
+  colorMode=myColor===W?"w":"b";
+  skipReady=true;
+  setMode("play",{fresh:true});
+  /* La partie nait depuis l'editeur : on reste visuellement sur l'onglet
+     Analyser plutot que de faire sauter la barre sur "Jouer" -- seule la
+     surbrillance change, le contenu affiche est bien celui du mode Jouer. */
+  const tp=$("tab-play"),te=$("tab-edit");
+  if(tp)tp.setAttribute("aria-selected","false");
+  if(te)te.setAttribute("aria-selected","true");
+};
+
+const prevSetModeEdit=setMode;
+setMode=function(m,opts){
+  if(m==="edit"){
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
+    mode="edit";busy=false;
+    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
+    $("pane-home").classList.add("hide");
+    $("pane-watch").classList.add("hide");
+    { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
+    const pp=$("pane-prefs"); if(pp)pp.classList.add("hide");
+    $("appLayout").classList.remove("hide");
+    $("pane-play").classList.add("hide");
+    $("pane-puzzles").classList.add("hide");
+    $("pane-friend").classList.add("hide");
+    const pt=$("pane-train"); if(pt)pt.classList.add("hide");
+    $("pane-edit").classList.remove("hide");
+    { const ei=$("editIntro"); if(ei)ei.classList.remove("hide"); }
+    /* Meme garde-fou que pour Train (voir plus haut) : sans lui, arriver
+       ici depuis l'ecran de reglages de Jouer (plateau cache tant que la
+       partie n'a pas demarre) laissait l'editeur sans echiquier du tout. */
+    { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    $("evalwrap").classList.add("hide");
+    $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
+    /* Le bouton de retournement rejoint la bande "Editeur de position" : en
+       edition, il n'y a pas de bandeau de coups a cote de lui dans
+       #boardTools, qui se serait donc reduit a une ligne entiere pour ce
+       seul bouton -- de la place perdue, precieuse sur mobile pour loger
+       le plateau et la palette sur un seul ecran. #boardTools n'a alors
+       plus rien a montrer : masque. */
+    { const eir=document.querySelector("#editIntro .edit-intro-row"),fb=$("btnFlip"); if(eir&&fb&&fb.parentElement!==eir)eir.appendChild(fb); }
+    { const bt=$("boardTools"); if(bt)bt.classList.add("hide"); }
+    { const nr=$("navRow"); if(nr)nr.classList.add("hide"); }
+    game=editGame||new Game();
+    editTurnVal=editGame?editGameTurn:"w";
+    editGame=null;
+    editSyncTurnSeg();
+    editRefresh();
+    return;
+  }
+  const pe=$("pane-edit"); if(pe)pe.classList.add("hide");
+  { const ei=$("editIntro"); if(ei)ei.classList.add("hide"); }
+  /* Le bouton de retournement reprend sa place habituelle a droite du
+     bandeau de coups, avant que le code de la chaine plus bas ne decide de
+     l'afficher ou non pour la destination reelle (m). */
+  { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
+  const te=$("tab-edit"); if(te)te.setAttribute("aria-selected","false");
+  if(mode==="edit"&&game){editGame=game;editGameTurn=editTurnVal;}
+  prevSetModeEdit(m,opts);
+};
+if($("tab-edit"))$("tab-edit").onclick=()=>{setMode("edit");goTop();};
+
+/* ==========================================================
+   MODE ANALYSE (exploration libre depuis l'editeur de position)
+   ========================================================== */
+/* Contrairement a Jouer, les deux camps sont deplacables (pas de bot, pas
+   de camp attribue) : on explore une ligne pour la comprendre, pas pour
+   affronter quelqu'un. La jauge d'evaluation et le meilleur coup sont donc
+   affiches en direct des le premier coup -- Jouer les masque expres tant
+   que la partie n'est pas finie ("pas d'aide du moteur pendant que tu
+   joues"), une regle qui n'a pas de sens ici puisqu'il n'y a personne a
+   affronter. */
+let analyseUci=[],analysePly=null,analyseStartFen=null,analyseEvalCache=null,analyseEvalToken=0;
+function handleAnalyseClick(sq){
+  if(!legalCache.length||game.isDraw())return;
+  const p=game.board[sq];
+  if(selected>=0){
+    const r=pickMove(selected,sq);
+    if(r){
+      marks={};
+      if(r.promo){askPromo(r.promo,m=>playAnalyseMove(m));selected=-1;render();return;}
+      playAnalyseMove(r.move);return;
+    }
+  }
+  if(p&&pC(p)===game.turn){selected=sq;marks={};} else selected=-1;
+  render();
+}
+function playAnalyseMove(m){
+  /* Rejouer un coup depuis une position anterieure (apres avoir navigue en
+     arriere dans le bandeau) ecrase la suite deja exploree : meme principe
+     qu'un logiciel d'analyse classique, une seule ligne a la fois, pas un
+     arbre de variantes complet (hors de portee raisonnable pour cette
+     premiere version). */
+  if(analysePly!==null&&analysePly<analyseUci.length){sanList.length=analysePly;analyseUci.length=analysePly;}
+  analysePly=null;
+  sanList.push(game.san(m));
+  analyseUci.push(sqN(m.from)+sqN(m.to)+(m.promo?SYM[m.promo]:""));
+  game.makeMove(m);lastMove=m;selected=-1;marks={};
+  legalCache=game.moves();
+  render();
+  renderAnalyseNav();
+  queueAnalyseEval();
+}
+function analyseGoto(ply){
+  ply=Math.max(0,Math.min(analyseUci.length,ply));
+  const g=new Game(analyseStartFen);
+  let lm=null;
+  for(let i=0;i<ply;i++){
+    const mv=g.moves().find(x=>g.uci(x)===analyseUci[i]);
+    if(!mv)break;
+    g.makeMove(mv);lm=mv;
+  }
+  game=g;lastMove=lm;selected=-1;marks={};
+  legalCache=game.moves();
+  analysePly=ply===analyseUci.length?null:ply;
+  render();
+  renderAnalyseNav();
+  queueAnalyseEval();
+}
+function renderAnalyseNav(){
+  const n=analyseUci.length,at=analysePly===null?n:analysePly;
+  const row=$("navRow"); if(row)row.classList.remove("hide");
+  const el=$("navScroll"); if(!el)return;
+  let h='<span class="navchip start'+(at===0?" cur":"")+'" data-ply="0">'+t("Game start")+'</span>';
+  for(let i=0;i<sanList.length;i++){
+    const cls="navchip"+(i===at-1?" cur":"");
+    const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
+    const side=i%2===0?"w":"b";
+    const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+'</span>';
+  }
+  el.innerHTML=h;
+  el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>analyseGoto(+sp.dataset.ply);});
+  const curEl=el.querySelector(".cur");
+  if(curEl&&typeof curEl.scrollIntoView==="function"){
+    try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
+  }
+  if(typeof updateNavScrollHint==="function")updateNavScrollHint();
+}
+/* Interroge Stockfish (avec repli sur le moteur integre, comme partout
+   ailleurs sur le site) pour la position actuellement affichee, qu'elle
+   soit la derniere jouee ou une position anterieure consultee dans le
+   bandeau. Le jeton evite qu'une reponse tardive d'un coup precedent
+   n'ecrase l'affichage d'une position consultee depuis. */
+async function queueAnalyseEval(){
+  const myToken=++analyseEvalToken;
+  const fen=game.fen(),turnAtQuery=game.turn;
+  const be=$("analyseBest"); if(be)be.textContent=t("Analysing…");
+  let cp=null,mateVal=null,bestUci=null;
+  if(typeof sf!=="undefined"&&sf.ready){
+    const r=await sfEvalFen(fen,14);
+    if(myToken!==analyseEvalToken)return;
+    if(r){
+      cp=turnAtQuery===W?(r.cp||0):-(r.cp||0);
+      mateVal=r.mate==null?null:(turnAtQuery===W?r.mate:-r.mate);
+      bestUci=r.best;
+    }
+  }
+  if(cp===null&&mateVal===null){
+    const r=search(game,3,300);
+    if(myToken!==analyseEvalToken)return;
+    cp=turnAtQuery===W?r.score:-r.score;
+    bestUci=r.move?game.uci(r.move):null;
+  }
+  analyseEvalCache={cp:cp||0,cpTrue:cp||0,mate:mateVal};
+  if(typeof updateEval==="function")updateEval();
+  if(be){
+    if(!bestUci)be.textContent="";
+    else{
+      const mv=game.moves().find(x=>game.uci(x)===bestUci);
+      be.textContent=mv?t("Best move: {m}",{m:game.san(mv)}):"";
+    }
+  }
+}
+if($("editAnalyse"))$("editAnalyse").onclick=()=>{
+  if(game.kingSq[W]<0||game.kingSq[B]<0)return;
+  analyseStartFen=game.fen();
+  /* editGame/editGameTurn ne sont normalement mis a jour qu'en quittant
+     l'onglet Analyse (voir l'extension setMode plus bas) : passer par
+     "Analyser cette position" contourne ce chemin, il faut donc les fixer
+     ici explicitement. Sans ca, revenir depuis l'exploration affichait soit
+     une position perimee (si l'onglet avait deja ete quitte une fois
+     avant), soit la position de depart standard par defaut (la toute
+     premiere fois), jamais la position reellement composee. */
+  /* new Game(analyseStartFen), pas game directement : game est le meme
+     objet mutable qui va ensuite recevoir tous les coups de l'exploration
+     (game.makeMove() modifie l'instance en place). Y stocker une simple
+     reference aurait fait "bouger" editGame avec chaque coup explore au
+     lieu de rester fige sur la position de depart. */
+  editGame=new Game(analyseStartFen);editGameTurn=editTurnVal;
+  sanList=[];analyseUci=[];analysePly=null;lastMove=null;selected=-1;marks={};analyseEvalCache=null;
+  setMode("analyse");
+};
+if($("analyseBack"))$("analyseBack").onclick=()=>setMode("edit");
+
+
+const prevSetModeAnalyse=setMode;
+setMode=function(m,opts){
+  if(m==="analyse"){
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
+    mode="analyse";busy=false;
+    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k==="edit");}
+    $("pane-home").classList.add("hide");
+    $("pane-watch").classList.add("hide");
+    { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
+    const pp=$("pane-prefs"); if(pp)pp.classList.add("hide");
+    $("appLayout").classList.remove("hide");
+    $("pane-play").classList.add("hide");
+    $("pane-puzzles").classList.add("hide");
+    $("pane-friend").classList.add("hide");
+    const pt=$("pane-train"); if(pt)pt.classList.add("hide");
+    $("pane-edit").classList.add("hide");
+    { const ei=$("editIntro"); if(ei)ei.classList.add("hide"); }
+    $("pane-analyse").classList.remove("hide");
+    /* Meme garde-fou que pour Train/Analyse-editeur (voir plus haut). */
+    { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    $("evalwrap").classList.remove("hide");
+    $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
+    { const bt=$("boardTools"); if(bt)bt.classList.remove("hide"); }
+    { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
+    legalCache=game.moves();selected=-1;marks={};
+    render();
+    renderAnalyseNav();
+    queueAnalyseEval();
+    return;
+  }
+  const pa=$("pane-analyse"); if(pa)pa.classList.add("hide");
+  prevSetModeAnalyse(m,opts);
+};
+
+/* ==========================================================
+   GLISSER-DEPOSER DANS L'EDITEUR DE POSITION
+   ========================================================== */
+/* Pointer Events : un seul jeu d'evenements pour souris/tactile/stylet,
+   bien supporte partout. Actif uniquement quand mode==="edit" (verifie a
+   l'origine du geste, dans buildBoard() et editRenderPalette() ci-dessus) :
+   ne remplace ni ne desactive le systeme de clic classique utilise partout
+   ailleurs sur le site (Jouer, Entre amis, exploration Analyser), qui
+   continue de fonctionner a l'identique.
+
+   Un simple tap (deplacement sous le seuil) ne fait rien ici : le "click"
+   natif qui suit s'execute ensuite normalement, geree par handleEditorClick
+   / selectEditTool comme avant. Un vrai glissement (au-dela du seuil) prend
+   le relais et, pour une origine "board", court-circuite ensuite ce meme
+   clic fantome via editDragJustHappened (sinon le clic qui suit un
+   glissement termine sur la case de depart aurait retire la piece qu'on
+   vient juste de reposer dessus).
+
+   setPointerCapture sur l'element d'origine garantit que pointermove/up
+   continuent d'arriver meme quand le pointeur sort de ses limites -- pas
+   besoin d'ecouteurs poses/retires sur document. La case ou la piece
+   atterrirait est retrouvee via elementFromPoint sur les coordonnees du
+   pointeur, independant de la capture. */
+function editCellIndexFromPoint(x,y){
+  const el=document.elementFromPoint(x,y);
+  const cell=el&&el.closest?el.closest(".sq"):null;
+  if(!cell||cell.parentElement!==boardEl)return -1;
+  return Array.prototype.indexOf.call(boardEl.children,cell);
+}
+function editHighlightCellAt(x,y){
+  const idx=editCellIndexFromPoint(x,y);
+  for(const c of boardEl.children)c.classList.remove("drag-over");
+  if(idx>=0)boardEl.children[idx].classList.add("drag-over");
+  return idx;
+}
+function editMakeGhost(sym,color){
+  const g=document.createElement("div");
+  g.className="edit-ghost";
+  g.innerHTML=pieceSVG(sym,color);
+  document.body.appendChild(g);
+  return g;
+}
+function editPositionGhost(x,y){
+  if(!editDrag||!editDrag.ghost)return;
+  editDrag.ghost.style.left=x+"px";
+  editDrag.ghost.style.top=y+"px";
+}
+function editEndDrag(){
+  if(editDrag&&editDrag.ghost&&editDrag.ghost.parentNode)editDrag.ghost.parentNode.removeChild(editDrag.ghost);
+  for(const c of boardEl.children)c.classList.remove("drag-over","drag-source");
+  editDrag=null;
+}
+function editPointerDown(e,info){
+  if(mode!=="edit"||(e.button!=null&&e.button>0))return;
+  const el=e.currentTarget;
+  if(el.setPointerCapture){try{el.setPointerCapture(e.pointerId);}catch(err){}}
+  editDrag={...info,startX:e.clientX,startY:e.clientY,moved:false,ghost:null,el:el};
+  el.addEventListener("pointermove",editPointerMove,{passive:false});
+  el.addEventListener("pointerup",editPointerUp,{passive:false});
+  el.addEventListener("pointercancel",editPointerCancel,{passive:false});
+}
+function editPointerMove(e){
+  if(!editDrag)return;
+  if(!editDrag.moved){
+    const dx=e.clientX-editDrag.startX,dy=e.clientY-editDrag.startY;
+    if(Math.sqrt(dx*dx+dy*dy)<EDIT_DRAG_THRESHOLD)return;
+    editDrag.moved=true;
+    const sym=editDrag.source==="board"?SYM[pT(editDrag.piece)]:editDrag.tool.t;
+    const col=editDrag.source==="board"?(pC(editDrag.piece)===W?"w":"b"):editDrag.tool.c;
+    editDrag.ghost=editMakeGhost(sym,col);
+    const rect=editDrag.el.getBoundingClientRect();
+    editDrag.ghost.style.width=rect.width+"px";
+    editDrag.ghost.style.height=rect.height+"px";
+    if(editDrag.source==="board")editDrag.el.classList.add("drag-source");
+  }
+  e.preventDefault();
+  editPositionGhost(e.clientX,e.clientY);
+  editHighlightCellAt(e.clientX,e.clientY);
+}
+function editPointerUp(e){
+  if(!editDrag)return;
+  const el=editDrag.el;
+  el.removeEventListener("pointermove",editPointerMove);
+  el.removeEventListener("pointerup",editPointerUp);
+  el.removeEventListener("pointercancel",editPointerCancel);
+  if(!editDrag.moved){editEndDrag();return;}
+  if(editDrag.source==="board")editDragJustHappened=true;
+  const targetIdx=editCellIndexFromPoint(e.clientX,e.clientY);
+  const drag=editDrag;
+  editEndDrag();
+  editApplyDrop(drag,targetIdx);
+}
+function editPointerCancel(){
+  if(!editDrag)return;
+  const el=editDrag.el;
+  el.removeEventListener("pointermove",editPointerMove);
+  el.removeEventListener("pointerup",editPointerUp);
+  el.removeEventListener("pointercancel",editPointerCancel);
+  editEndDrag();
+}
+/* Applique le resultat d'un glissement termine : deplacement/retrait pour
+   une origine "board", pose pour une origine "palette". Le roi ne peut
+   jamais etre retire (lache hors de l'echiquier) -- seulement deplace --
+   meme regle que pour le retrait au tap (handleEditorClick). */
+function editApplyDrop(drag,targetIdx){
+  if(drag.source==="board"){
+    const sourceSq=drag.sq,piece=drag.piece;
+    if(targetIdx<0){
+      if(pT(piece)===K)return;
+      game.board[sourceSq]=0;
+      editRefresh();
+      return;
+    }
+    const targetSq=idxToSq(targetIdx);
+    if(targetSq===sourceSq)return;
+    const existing=game.board[targetSq];
+    if(existing&&pT(existing)===K)game.kingSq[pC(existing)]=-1;
+    game.board[targetSq]=piece;
+    game.board[sourceSq]=0;
+    if(pT(piece)===K)game.kingSq[pC(piece)]=targetSq;
+    editRefresh();
+  } else {
+    if(targetIdx<0)return;
+    const targetSq=idxToSq(targetIdx);
+    const ty=FSYM[drag.tool.t],c=drag.tool.c==="w"?W:B;
+    if(ty===K&&game.kingSq[c]>=0&&game.kingSq[c]!==targetSq)game.board[game.kingSq[c]]=0;
+    const existing=game.board[targetSq];
+    if(existing&&pT(existing)===K)game.kingSq[pC(existing)]=-1;
+    game.board[targetSq]=mk(ty,c);
+    if(ty===K)game.kingSq[c]=targetSq;
+    editRefresh();
+  }
+}
+
+/* ==========================================================
+   INDICE DE DEFILEMENT DE LA BARRE D'ONGLETS
+   ========================================================== */
+/* Sur mobile, les libelles tronques par le bord de l'ecran peuvent laisser
+   croire que le menu s'arrete la (ex. "Inviter" semble etre le dernier
+   onglet alors que "Regarder"/"Explorer" suivent). Un fin degrade colle a
+   chaque bord (voir le CSS de .tabs) signale qu'il y a plus a voir en
+   glissant -- uniquement quand c'est vrai, jamais du cote ou il n'y a
+   effectivement plus rien. */
+function updateTabsScrollHint(){
+  const el=$("tabsNav"); if(!el)return;
+  const max=el.scrollWidth-el.clientWidth;
+  el.classList.toggle("has-scroll-left",el.scrollLeft>2);
+  el.classList.toggle("has-scroll-right",el.scrollLeft<max-2);
+}
+{
+  const el=$("tabsNav");
+  if(el){
+    updateTabsScrollHint();
+    el.addEventListener("scroll",updateTabsScrollHint,{passive:true});
+    window.addEventListener("resize",updateTabsScrollHint);
+    /* Les libelles changent de longueur au changement de langue (le
+       francais deborde plus que l'anglais, deja constate) : un observateur
+       de mutations recalcule alors tout seul, sans avoir a modifier chaque
+       endroit du code qui appelle applyI18n(). */
+    if("MutationObserver" in window){
+      new MutationObserver(updateTabsScrollHint).observe(el,{characterData:true,childList:true,subtree:true});
+    }
+  }
+}
 
 </script>
 </body>

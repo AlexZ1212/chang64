@@ -3,12 +3,12 @@
    ========================================================== */
 const FR={
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Vidéos",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Regarder","Solve":"Résoudre","Invite":"Inviter",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
 "Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
  "Du bullet au jeu par correspondance contre un moteur intégré, __NP__ exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",
 "Play now":"Jouer maintenant","Puzzle of the day":"Exercice du jour","Install the app":"Installer l'application",
-"Time control":"Cadence","Play the computer":"Jouer contre l'ordinateur",
+"Time control":"Cadence","Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.":"Bullet, blitz, rapide, classique : ce sont juste des tranches selon le temps de départ. Les chiffres (comme 10+0) donnent les minutes, puis les secondes rendues après chaque coup. Plus c'est lent, plus tu as le temps de réfléchir.","Play the computer":"Jouer contre l'ordinateur",
 "Start a game →":"Commencer une partie →","Tactics trainer":"Entraînement tactique",
 "puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.":
  "exercices, chacun démontré par le moteur. La difficulté monte après trois réussites et redescend quand tu trébuches.",
@@ -26,12 +26,14 @@ const FR={
 "Choose your colour, the engine's strength and a time control, then start.":"Choisis ta couleur, la force du moteur et une cadence, puis lance la partie.","Show the best move":"Voir le meilleur coup","Suggest a move":"Suggérer un coup",
 "Scoresheet":"Feuille de partie","White":"Blancs","Black":"Noirs","No moves yet":"Aucun coup joué",
 "Use the arrow keys to step through the game.":"Utilise les flèches du clavier pour parcourir la partie.",
+"Game start":"Début",
 "Pick a colour and a strength, then play.":"Choisis ta couleur et la force du moteur, puis joue.",
 "White to move.":"Trait aux Blancs.","Black to move.":"Trait aux Noirs.","Game over.":"Partie terminée.",
 "Even position":"Position équilibrée",
 "White slightly better":"Les Blancs sont un peu mieux","Black slightly better":"Les Noirs sont un peu mieux",
 "White is better":"Les Blancs ont l'avantage","Black is better":"Les Noirs ont l'avantage",
 "White is winning":"Les Blancs gagnent","Black is winning":"Les Noirs gagnent",
+"White mates in {n}":"Les Blancs matent en {n}","Black mates in {n}":"Les Noirs matent en {n}",
 "Checkmate. You win.":"Échec et mat, tu gagnes.","Checkmate. The computer wins.":"Échec et mat, l'ordinateur gagne.",
 "Stalemate. The game is drawn.":"Pat : la partie est nulle.","The game is drawn.":"Partie nulle.",
 "The computer is thinking…":"L'ordinateur réfléchit…","Check. Your move.":"Échec au roi. À toi de jouer.",
@@ -58,6 +60,7 @@ const FR={
 
 /* --- navigation dans la partie --- */
 "Review":"Analyse","Analyse this game":"Analyser cette partie","Analysing with Stockfish…":"Analyse avec Stockfish…",
+"The bar shows the engine's opinion, not certainty. \"M4\" means mate in 4 moves.":"La barre montre l'avis du moteur, pas une certitude. « M4 » signifie mat en 4 coups.",
 "Downloading the engine…":"Téléchargement du moteur…","Stockfish is ready.":"Stockfish est prêt.",
 "Analysing a finished game downloads Stockfish (about 7 MB, once) and uses it automatically. Stockfish never helps you while you play.":
  "Analyser une partie terminée télécharge Stockfish (environ 7 Mo, une seule fois) et l'utilise automatiquement. Stockfish ne t'aide jamais pendant que tu joues.",
@@ -78,6 +81,7 @@ const FR={
 
 /* --- PGN --- */
 "Copy PGN":"Copier le PGN","Download":"Télécharger","Load PGN":"Charger le PGN",
+"PGN is the standard notation format for chess games, readable by most chess sites and software.":"Le PGN est le format standard de notation des parties d'échecs, lisible par la plupart des sites et logiciels d'échecs.",
 "Paste a PGN here to load and review it":"Colle ici un PGN pour le charger et l'analyser",
 "PGN copied to the clipboard.":"PGN copié dans le presse-papiers.","Download started.":"Téléchargement lancé.",
 "Download unavailable here, PGN copied instead.":"Téléchargement indisponible ici, PGN copié à la place.",
@@ -194,7 +198,8 @@ const FR={
 /* --- entre amis --- */
 "Each move produces a link. Send it, your friend plays, they send theirs back.":
  "Chaque coup produit un lien. Tu l'envoies, ton ami joue, il te renvoie le sien.",
-"Start a game.":"Commence une partie.","Link to send":"Lien à envoyer","Pace":"Rythme",
+"Start a game.":"Commence une partie.","Choose your colour, then create a game.":"Choisis ta couleur, puis crée la partie.","Link to send":"Lien à envoyer","Pace":"Rythme",
+"Saved in this browser: you can close the tab and come back to it.":"Sauvegardé dans ce navigateur : tu peux fermer l'onglet et y revenir plus tard.",
 "Create game":"Créer la partie","Undo my move":"Annuler mon coup","Invite to chang64":"Inviter sur chang64",
 "Your move, then send the link.":"À toi de jouer, puis envoie le lien.",
 "Move saved. Send this link to your friend.":"Coup enregistré. Envoie ce lien à ton ami.",
@@ -265,12 +270,13 @@ const FR={
  "Astuce : « Suggérer un coup » montre ce que le moteur jouerait dans la position que tu regardes.",
 
 /* --- divers --- */
-"Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier",
+"Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier","King":"Roi","Pawn":"Pion",
 "chang64 home":"Accueil chang64","First move":"Premier coup","Previous move":"Coup précédent",
 "Next move":"Coup suivant","Last move":"Dernier coup","PGN to import":"PGN à importer",
 "You win":"Tu gagnes","You lose":"Tu perds","Draw":"Partie nulle","Review":"Analyser","Dismiss":"Masquer",
 "Opening played out. Continue the game from here.":"Ouverture jouée. Poursuis la partie à partir d'ici.",
-"Your games":"Tes parties","No finished game yet.":"Aucune partie terminée pour l'instant.",
+"Your games":"Tes parties","Your friend games":"Tes parties entre amis","No finished game yet.":"Aucune partie terminée pour l'instant.",
+"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Sauvegardé uniquement dans ce navigateur. Pas de compte : vider les données du site ou changer d'appareil fait tout perdre.",
 "Finished games are stored in this browser so you can replay and review them later.":"Les parties terminées sont conservées dans ce navigateur, pour les rejouer et les analyser plus tard.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":"{n} partie(s) conservée(s) sur cet appareil. Choisis-en une pour la rejouer et l'analyser.",
 "Clear history":"Effacer l'historique","Confirm":"Confirmer","Game":"Partie","{n} moves":"{n} coups",
@@ -288,6 +294,18 @@ const FR={
 "Your progress will show up here.":"Ta progression s'affichera ici.",
 "Solve your first puzzle →":"Résous ton premier exercice →",
 "Ready when you are":"Quand tu veux","Start":"Commencer","Three minutes · three misses and it stops":"Trois minutes · trois erreurs et ça s'arrête","Thirty seconds · click the square that is named":"Trente secondes · clique la case nommée","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press start when you are ready.":"Appuie sur Commencer quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
+"You have an unfinished game":"Tu as une partie en cours","Resume the game":"Reprendre la partie","New game instead":"Nouvelle partie","Move {n}":"Coup {n}",
+"Analyse":"Analyser","Board editor":"Éditeur de position","Flip the board":"Retourner l'échiquier",
+"Set up any position to study it: check an idea from a book, a puzzle you saw elsewhere, or an endgame, without replaying a whole game to get there. Pick a piece below, then tap a square. Tap a piece already on the board to remove it.":"Compose n'importe quelle position pour l'étudier : reprends une idée vue dans un livre, un problème vu ailleurs, ou une finale, sans avoir à rejouer toute une partie pour y arriver. Choisis une pièce ci-dessous, puis touche une case. Touche une pièce déjà posée pour la retirer.",
+"Pieces":"Pièces","Side to move":"Trait à jouer","Starting position":"Position de départ","Clear board":"Vider l'échiquier",
+"Copy FEN":"Copier le FEN","Load FEN":"Charger le FEN","FEN copied to the clipboard.":"FEN copié dans le presse-papiers.",
+"A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Une courte ligne de texte qui décrit une position : quelle pièce sur quelle case, à qui le trait. C'est la façon standard de sauvegarder ou partager une position, lisible par la plupart des sites et logiciels d'échecs.",
+"Could not read that FEN.":"Ce FEN est illisible.","Each side needs exactly one king.":"Chaque camp doit avoir exactement un roi.",
+"Place a king for each side.":"Place un roi pour chaque camp.","Place a white king.":"Place un roi blanc.","Place a black king.":"Place un roi noir.",
+"Play against the bot from here":"Jouer contre le bot depuis ici",
+"Analyse this position":"Analyser cette position","Back to the editor":"Retour à l'éditeur",
+"Analysing…":"Analyse en cours…","Best move: {m}":"Meilleur coup : {m}",
+"Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.":"Tu ne perds pas ta partie en quittant la page : elle se sauvegarde automatiquement dans ce navigateur, prête à reprendre.","More info":"Plus d'infos",
 "Legal notice":"Mentions légales","Privacy":"Confidentialité","Preferences":"Préférences","Accessibility":"Accessibilité","Publisher and hosting details.":"Éditeur et hébergeur.",
 "chang64 · no account, no tracking · progress saved on this device":
  "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",

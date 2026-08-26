@@ -196,6 +196,17 @@ function usesFor(fen, S) {
   return out;
 }
 
+/* Picto play/pause du lecteur d'ouverture : une seule definition SVG (les
+   deux formes dedans, chevrons pleins et coins arrondis, dans l'esprit des
+   chevrons precedent/suivant) plutot que les glyphes typographiques
+   &#9654;/&#10073;&#10073; d'origine, peu nets a cette taille. Les deux
+   formes sont posees une fois dans le HTML ; le script client bascule
+   juste une classe CSS pour choisir laquelle est visible, au lieu de
+   reecrire le balisage a chaque clic -- ce lecteur vit aussi sur les pages
+   d'exercices (1000 pages), dont le budget de poids moyen est deja serre :
+   dupliquer un SVG verbeux dans le JS de bascule l'avait fait deraper. */
+const PLAYPAUSE_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7V5Z"/><path d="M5 5h4v14H5zM15 5h4v14h-4z" style="display:none"/></svg>';
+
 function animBoard(moveStr, size, labels) {
   const steps = fensAlong(moveStr);
   if (!steps || steps.length < 2) return null;
@@ -213,9 +224,9 @@ function animBoard(moveStr, size, labels) {
     ${pieceDefs()}<g>${sq}</g>${groups}
   </svg>
   <div class="animctl" hidden>
-    <button type="button" data-act="prev" aria-label="${esc(labels.prev)}">&#8249;</button>
-    <button type="button" data-act="play" aria-label="${esc(labels.play)}">&#9654;</button>
-    <button type="button" data-act="next" aria-label="${esc(labels.next)}">&#8250;</button>
+    <button type="button" data-act="prev" aria-label="${esc(labels.prev)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <button type="button" data-act="play" aria-label="${esc(labels.play)}">${PLAYPAUSE_SVG}</button>
+    <button type="button" data-act="next" aria-label="${esc(labels.next)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
     <span class="animply"></span>
   </div>
 </div>`;
@@ -534,6 +545,13 @@ function metaDesc(raw, max) {
   return coupe.trim() + "…";
 }
 
+/* Chevrons precedent/suivant du lecteur d'ouvertures (.animctl svg) passes
+   en SVG a trait epais, pour s'harmoniser avec le bandeau de coups de
+   l'onglet Jouer : les caracteres typographiques <>etaient trop fins a
+   cette taille. Commentaire volontairement HORS du template CSS ci-dessous :
+   ce bloc est injecte tel quel (sans minification) dans chaque page
+   statique, un commentaire a l'interieur se retrouve donc duplique sur des
+   milliers de pages et alourdit la moyenne mesuree par les tests de poids. */
 const CSS = `*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
 --bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
@@ -594,7 +612,7 @@ p{margin-bottom:12px;max-width:66ch}
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
 .animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
-  width:30px;height:28px;font-size:13px;line-height:1;cursor:pointer;padding:0}
+  width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}
 .animctl button:hover{background:var(--board);color:var(--slate)}
 .animctl button:disabled{opacity:.38;cursor:default}
 .animctl button:disabled:hover{background:var(--slate);color:var(--board)}
@@ -647,7 +665,7 @@ html{
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px;text-align:center}
 .filtre{margin-bottom:18px}
 .filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
   padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
@@ -674,6 +692,16 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .sitenav::-webkit-scrollbar{display:none}
+/* Indice de defilement, allege pour ~1900 pages. */
+.sitenav::before,.sitenav::after{content:"";position:sticky;width:22px;
+  flex:none;pointer-events:none;z-index:2;opacity:0;display:flex;align-items:center;
+  font-size:13px;color:var(--sage)}
+.sitenav::before{left:-4px;order:-1;margin-right:-22px;border-radius:999px 0 0 999px;
+  background:linear-gradient(to right,var(--slate) 38%,transparent);content:"‹";padding-left:6px}
+.sitenav::after{right:-4px;order:999;margin-left:-22px;border-radius:0 999px 999px 0;
+  background:linear-gradient(to left,var(--slate) 38%,transparent);content:"›";
+  justify-content:flex-end;padding-right:6px}
+.sitenav.sl::before,.sitenav.sr::after{opacity:1}
 .sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);
   text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;
   transition:background .18s,color .18s}
@@ -696,7 +724,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .langsw a:hover{color:var(--chalk)}
 
-.footnav{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:14px}
+.footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
 .footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
 .footnav a:hover{text-decoration:underline}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
@@ -763,12 +791,23 @@ function sectionLinks(lang, canonical) {
      qui est utile. Seul l'index lui-meme devient un simple texte, puisqu'il
      pointerait sur la page courante. */
   return SECTIONS[lang === "fr" ? "fr" : "en"].map(([href, nom]) => {
-    if (ici === href) return `<span aria-current="page">${nom}</span>`;
-    if (ici.startsWith(href)) return `<a href="${href}" aria-current="page">${nom}</a>`;
+    if (ici === href) return `<span aria-current="page" id="cn">${nom}</span>`;
+    if (ici.startsWith(href)) return `<a href="${href}" aria-current="page" id="cn">${nom}</a>`;
     return `<a href="${href}">${nom}</a>`;
   }).join("");
 }
 
+/* shell() genere l'enveloppe HTML commune a toutes les pages statiques (menu,
+   pied de page, script partage). Note sur le script de recentrage du menu
+   (recherche "sn=document.querySelector" plus bas) : le menu (.sitenav) est
+   une rangee qui defile horizontalement sur ecran etroit. Sans ce script,
+   chaque page repartait avec le menu scrolle tout a gauche -- cliquer sur
+   une entree loin a droite (ex. Lexique) apres avoir scrolle le menu, puis
+   arriver sur la nouvelle page, masquait justement la section dans laquelle
+   on venait d'entrer : le menu s'etait remis a zero, un nouveau document
+   HTML ne conserve pas la position de defilement d'un element interne comme
+   le navigateur le fait pour la page entiere. block:"nearest" dans l'appel
+   evite tout defilement vertical de la page elle-meme. */
 function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage) {
   lang = lang || "en";
   const d = L[lang];
@@ -858,7 +897,7 @@ ${body}
    langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
    chaque visite d'une page claire, dans le meme format qu'attend loadLang
    (chaine "fr" ou "en", pas de JSON). */
-try{localStorage.setItem("chang64:lang","${lang}");}catch(e){}
+try{localStorage.setItem("chang64:lang","${lang}");var c=document.getElementById("cn"),sn=c.parentElement;c.scrollIntoView({block:"nearest"});var u=function(){sn.classList.toggle("sl",sn.scrollLeft>2);sn.classList.toggle("sr",sn.scrollLeft<sn.scrollWidth-sn.clientWidth-2);};u();sn.onscroll=u;}catch(e){}
 ${!/id="grille"/.test(body) ? "" : `
 /* Filtrage de la liste des ouvertures.
    Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page
@@ -976,11 +1015,13 @@ ${!/id="grille"/.test(body) ? "" : `
     if(btn.prev)btn.prev.disabled=(i===0);
     if(btn.next)btn.next.disabled=(i===groups.length-1);
   }
+  var pp=btn.play&&btn.play.querySelectorAll("path");
+  function tog(k){pp[k].style.display="";pp[1-k].style.display="none";}
   function stop(){if(timer){clearInterval(timer);timer=null;}
-    if(btn.play)btn.play.innerHTML="&#9654;";}
+    if(pp)tog(0);}
   function playFrom(n){
     stop(); show(n);
-    if(btn.play)btn.play.innerHTML="&#10073;&#10073;";
+    if(pp)tog(1);
     timer=setInterval(function(){
       if(i>=groups.length-1){stop();return;}
       show(i+1);

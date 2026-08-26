@@ -58,7 +58,7 @@ const dom = new JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true
   url: "https://chang64.com/", virtualConsole: new VirtualConsole() });
 const w = dom.window, d = w.document;
 
-const PANES = ["tab-home", "tab-play", "tab-puzzles", "tab-train", "tab-friend", "tab-watch"];
+const PANES = ["brand", "tab-play", "tab-puzzles", "tab-train", "tab-friend", "tab-watch", "tab-explore"];
 const PIEDS = ["footLegal", "footPrivacy", "footPrefs", "footAccess"];
 const attendre = ms => new Promise(r => setTimeout(r, ms));
 

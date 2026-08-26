@@ -107,7 +107,7 @@ console.log("\n--- Le menu signale la section sur les pages de detail ---");
     /<a href="\/fr\/finales\/" aria-current="page"/.test(nav));
   const idx=fsx.readFileSync(S+"/fr/finales/index.html","utf8");
   const navIdx=(idx.match(/<nav class="sitenav">[\s\S]*?<\/nav>/)||[""])[0];
-  T("sur l'index, c'est un simple texte", /<span aria-current="page">/.test(navIdx));
+  T("sur l'index, c'est un simple texte", /<span aria-current="page"/.test(navIdx)&&!/<a[^>]*aria-current/.test(navIdx));
 }
 
 console.log("\n--- Le menu ne bouge plus quand la police arrive ---");

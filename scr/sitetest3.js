@@ -8,7 +8,7 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
 const read=p=>fs.readFileSync(OUT+"/"+p,"utf8");
 const list=d=>fs.readdirSync(OUT+"/"+d).filter(f=>f.endsWith(".html"));
 
-const SEC=[["learn","fr/apprendre",9],["glossary","fr/lexique",21],["endgames","fr/finales",6],["traps","fr/pieges",7],["puzzles","fr/exercices",puzzles.length+1]];
+const SEC=[["learn","fr/apprendre",10],["glossary","fr/lexique",21],["endgames","fr/finales",6],["traps","fr/pieges",7],["puzzles","fr/exercices",puzzles.length+1]];
 for(const [en,fr,n] of SEC){
   T(`${en}: ${n} pages EN`, list(en).length===n, list(en).length);
   T(`${en}: ${n} pages FR`, list(fr).length===n, list(fr).length);

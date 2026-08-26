@@ -101,10 +101,18 @@ function renderExplore(){
 let gameUci=[];          // moves of the current play-mode game, in UCI
 let reviewPly=null;      // null = live position
 let analysis=null;       // per-ply analysis once computed
+/* FEN de depart de la partie Jouer en cours : null pour la position
+   standard (l'immense majorite des cas), sinon la position composee dans
+   l'editeur ("Jouer contre le bot depuis ici"). rebuildTo() en a besoin
+   pour reconstruire correctement une position anterieure : sans ca, revenir
+   en arriere dans le bandeau de coups d'une partie demarree depuis une
+   position personnalisee repartait toujours du plateau standard, donnant
+   un echiquier plein n'importe quoi au lieu de la position jouee. */
+let gameStartFen=null;
 
 function recordUci(m){gameUci.push(sqN(m.from)+sqN(m.to)+(m.promo?SYM[m.promo]:""));}
 function rebuildTo(ply){
-  const g=new Game();
+  const g=gameStartFen?new Game(gameStartFen):new Game();
   let last=null;
   for(let i=0;i<ply&&i<gameUci.length;i++){
     const mv=g.moves().find(x=>g.uci(x)===gameUci[i]);
@@ -140,10 +148,19 @@ function markBestMove(){
   marks[nSq(from)]="hint";marks[nSq(to)]="hint";
 }
 function evalFromAnalysis(){
+  /* Renvoie {cp, cpTrue, mate} : cp reste la valeur ecretee (graphique,
+     classement des coups), cpTrue la valeur reelle non tronquee pour
+     l'affichage numerique, et mate la distance de mat forcee (perspective
+     Blancs) quand le moteur en a trouve un a cette ply, sinon null.
+     Mode "analyse" (exploration libre depuis l'editeur de position) : pas
+     de partie/liste de coups a consulter, juste la derniere evaluation
+     recue en direct (voir queueAnalyseEval, ui3.js), mise a jour a chaque
+     coup ou changement de position dans le bandeau. */
+  if(mode==="analyse")return analyseEvalCache;
   if(reviewPly===null||!analysis)return null;
-  if(reviewPly===0)return 0;
+  if(reviewPly===0)return {cp:0,cpTrue:0,mate:null};
   const a=analysis.plies[reviewPly-1];
-  return a?a.cp:null;
+  return a?{cp:a.cp,cpTrue:(a.cpTrue!=null?a.cpTrue:a.cp),mate:a.mate}:null;
 }
 function gotoPly(ply){
   ply=Math.max(0,Math.min(gameUci.length,ply));
@@ -164,14 +181,65 @@ function renderNav(){
   const n=gameUci.length;
   const at=reviewPly===null?n:reviewPly;
   const row=$("navRow");
-  if(row)row.classList.toggle("hide",mode!=="play"||n===0);
-  $("navStart").disabled=at===0;
-  $("navPrev").disabled=at===0;
-  $("navNext").disabled=at>=n;
-  $("navEnd").disabled=at>=n;
+  if(row)row.classList.toggle("hide",mode!=="play");
+  renderNavStrip(at);
   $("navNote").textContent=reviewPly===null
     ? t(n?"Live position. Arrow keys step through the game.":"Use the arrow keys to step through the game.")
     : t("Reviewing move {i} of {n}. Play a move or press End to return.",{i:at,n:n});
+}
+/* Bandeau horizontal de coups (remplace les boutons |< et >| : taper la
+   premiere ou la derniere puce fait la meme chose, et Origine/Fin au
+   clavier restent disponibles). Reconstruit a chaque appel de renderNav :
+   la partie reste courte (quelques dizaines de coups au grand maximum),
+   donc pas besoin d'un rendu incrémental. */
+function sanPieceType(san){
+  const s=(san||"").replace(/[+#]/g,"");
+  if(s.indexOf("O-O")===0)return "k";
+  const c=s[0];
+  return "NBRQK".indexOf(c)>=0?c.toLowerCase():"p";
+}
+function renderNavStrip(at){
+  const el=$("navScroll"); if(!el)return;
+  let h='<span class="navchip start'+(at===0?" cur":"")+'" data-ply="0">'+t("Game start")+'</span>';
+  for(let i=0;i<sanList.length;i++){
+    const a=analysis&&analysis.plies[i];
+    const tag=a&&a.tag?TAGS[a.tag]:"";
+    const cls=["navchip",(i===at-1?"cur":""),(a&&a.tag?"tag-"+a.tag:"")].filter(Boolean).join(" ");
+    const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
+    /* Petit picto de la piece jouee : reprend le jeu de pieces du site
+       (pieces_browser.js), recadre sur sa boite englobante (serre=true,
+       meme technique que les pieces prises au-dessus de la pendule).
+       Toujours rendu avec le remplissage clair (memes contours) : le
+       remplissage "noir" des pieces (#232b28) est quasi invisible sur le
+       fond sombre du bandeau, contrairement a un vrai plateau ou les cases
+       apportent le contraste. Blancs/Noirs restent distingues par le
+       numero de coup (present uniquement cote Blancs) et une opacite
+       reduite cote Noirs. */
+    const side=i%2===0?"w":"b";
+    const icon=typeof pieceSVG==="function"
+      ?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+tag+'</span>';
+  }
+  el.innerHTML=h;
+  el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
+  /* Garde le coup courant visible dans le bandeau sans faire defiler toute
+     la page (block:"nearest" plutot que "center" par defaut). */
+  const curEl=el.querySelector(".cur");
+  if(curEl&&typeof curEl.scrollIntoView==="function"){
+    try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
+  }
+  updateNavScrollHint();
+}
+/* Meme indice de defilement que la barre d'onglets (voir updateTabsScrollHint
+   dans ui3.js) : degrade + chevron aux bords de #navScroll, visibles
+   seulement quand il y a reellement plus a voir dans ce sens. Appelee ici
+   et depuis renderAnalyseNav() (ui3.js), les deux constructions du meme
+   bandeau. */
+function updateNavScrollHint(){
+  const el=$("navScroll"); if(!el)return;
+  el.classList.toggle("sl",el.scrollLeft>2);
+  el.classList.toggle("sr",el.scrollLeft<el.scrollWidth-el.clientWidth-2);
+  el.onscroll=updateNavScrollHint;
 }
 const TAGS={blunder:"??",mistake:"?",inacc:"?!"};
 function renderSheetPlay(){
@@ -200,12 +268,15 @@ function renderSheetPlay(){
 let resultDismissed=false;
 function renderResult(show){
   const b=$("resultBanner"); if(!b)return;
-  if(show&&resultInfo&&mode==="play")saveFinishedGame();
+  if(show&&resultInfo){
+    if(mode==="play")saveFinishedGame();
+    else if(mode==="friend"&&typeof saveFinishedAmiGame==="function")saveFinishedAmiGame();
+  }
   if(!show||!resultInfo||resultDismissed){b.className="result hide";return;}
   b.className="result "+resultInfo.kind;
   $("resultTitle").textContent=resultInfo.title;
   $("resultSub").textContent=resultInfo.sub;
-  $("resultAnalyse").classList.toggle("hide",mode!=="play");
+  $("resultAnalyse").classList.toggle("hide",mode!=="play"&&mode!=="friend");
   $("resultNew").textContent=mode==="friend"?t("Create game"):t("New game");
   $("resultAnalyse").textContent=t("Review");
   $("resultClose").textContent=t("Dismiss");
@@ -219,10 +290,17 @@ function afterGameRender(over){
 $("resultNew").onclick=()=>{
   if(finAction){const f=finAction;finAction=null;$("resultBanner").className="result hide";f();return;}
   resultDismissed=false;
-  /* On relance depuis le bandeau de fin : le choix vient d'etre fait, on ne
-     represente pas l'overlay de preparation. */
+  /* Retour aux reglages plutot qu'une relance directe avec les memes choix :
+     l'occasion de reconsiderer (couleur, force, cadence) avant de rejouer,
+     plutot que d'etre embarque dans le meme parametrage sans le vouloir.
+     Les reglages restent presorted sur le dernier choix (rien ne les
+     reinitialise ailleurs), donc rejouer a l'identique ne demande qu'un tap
+     de plus sur "Jouer". skipReady n'a alors plus lieu d'etre : reprendre
+     depuis les reglages redevient un demarrage normal, l'overlay "Pret ?"
+     d'une partie chronometree doit s'y proposer comme n'importe quelle
+     autre fois. */
   if(mode==="friend")newAmiGame();
-  else {skipReady=true;newGame();}
+  else setupGame();
 };
 $("resultClose").onclick=()=>{
   resultDismissed=true;
@@ -258,6 +336,13 @@ function showFin(titre,sousTitre,libelleRejouer,action){
 $("resultAnalyse").onclick=()=>{
   resultDismissed=true;
   $("resultBanner").className="result hide";
+  if(mode==="friend"){
+    /* saveFinishedAmiGame() vient de s'executer (voir renderResult) : la
+       partie qui se termine est deja en tete de l'historique Entre amis,
+       on la rouvre directement plutot que de dupliquer sa logique ici. */
+    if(typeof openAmiHistoryGame==="function")openAmiHistoryGame(0);
+    return;
+  }
   if($("btnAnalyse")){$("btnAnalyse").scrollIntoView&&$("btnAnalyse").scrollIntoView({block:"center"});analyseGame();}
 };
 document.addEventListener("keydown",e=>{
@@ -273,10 +358,6 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="Home"){e.preventDefault();gotoPly(0);}
   else if(e.key==="End"){e.preventDefault();exitReview();}
 });
-$("navStart").onclick=()=>gotoPly(0);
-$("navPrev").onclick=()=>gotoPly((reviewPly===null?gameUci.length:reviewPly)-1);
-$("navNext").onclick=()=>gotoPly((reviewPly===null?gameUci.length:reviewPly)+1);
-$("navEnd").onclick=()=>exitReview();
 
 /* ==========================================================
    8. GAME ANALYSIS
@@ -314,7 +395,23 @@ function analyseGame(){
     const r2=search(g,2,140);
     const afterForMover=Math.max(-CLAMP,Math.min(CLAMP,-r2.score));
     const loss=Math.max(0,before-afterForMover);
-    plies.push({cp:mover===W?afterForMover:-afterForMover,loss:loss,
+    /* Detection de mat force par le moteur integre : alphabeta() renvoie
+       MATE-ply (ou -MATE+ply) quand un mat est trouve dans l'arbre, ply
+       etant le nombre de demi-coups depuis la racine de CETTE recherche
+       (celle d'apres coup, donc perspective de l'adversaire du mover).
+       Le seuil MATE-100 est le meme que celui deja utilise par search()
+       pour arreter l'approfondissement iteratif des qu'un mat est trouve. */
+    let mate=null;
+    if(Math.abs(r2.score)>MATE-100){
+      const plyDist=MATE-Math.abs(r2.score);
+      const movesDist=Math.max(1,Math.ceil(plyDist/2));
+      /* r2.score positif => l'adversaire (au trait apres le coup) mate =>
+         defavorable au mover => signe oppose une fois ramene au mover. */
+      const mateForMover=(r2.score>0?-1:1)*movesDist;
+      mate=mover===W?mateForMover:-mateForMover;
+    }
+    const cpTrue=mate==null?(mover===W?afterForMover:-afterForMover):null;
+    plies.push({cp:mover===W?afterForMover:-afterForMover,cpTrue:cpTrue,mate:mate,loss:loss,
       tag:classify(loss,bestUci===gameUci[i]),best:bestUci,mover:mover});
     i++;
     bar.firstElementChild.style.width=(100*i/gameUci.length).toFixed(0)+"%";
@@ -416,6 +513,7 @@ function loadPgn(text){
   clearAnalysis();
   isReviewGame=true;
   game=g;sanList=san;gameUci=uci;
+  gameStartFen=null;
   lastMove=g.history.length?g.history[g.history.length-1].m:null;
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
   myColor=W;flipped=false;mainGame=null;
@@ -469,7 +567,8 @@ function saveFinishedGame(){
     r:resultCode(),
     tc:cat==="none"?"":tcLabel(cat,item),
     lvl:botLevel,
-    m:gameUci.join(" ")
+    m:gameUci.join(" "),
+    fen:gameStartFen||null
   });
   history=history.slice(0,30);
   saveHistory();renderHistory();
@@ -483,7 +582,7 @@ function fmtDate(ts){
 const RES_LABEL={win:"W",loss:"L",draw:"D"};
 function renderHistory(){
   const box=$("historyList"); if(!box)return;
-  $("historyTitle").textContent=t("Your games");
+  const htt=$("historyTitleTxt"); if(htt)htt.textContent=t("Your games");
   $("historyActions").classList.toggle("hide",history.length===0);
   if(!history.length){
     $("historyNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
@@ -495,7 +594,7 @@ function renderHistory(){
   history.forEach((g,i)=>{
     const b=document.createElement("button");
     b.className="history-item";
-    const san=sanOf(g.m);
+    const san=sanOf(g.m,g.fen);
     const op=detectOpening(san);
     const side=g.c==="w"?t("White"):t("Black");
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
@@ -506,8 +605,8 @@ function renderHistory(){
     box.appendChild(b);
   });
 }
-function sanOf(uciStr){
-  const g=new Game(),out=[];
+function sanOf(uciStr,fen){
+  const g=fen?new Game(fen):new Game(),out=[];
   for(const u of uciStr.split(" ").filter(Boolean)){
     const mv=g.moves().find(x=>g.uci(x)===u);
     if(!mv)break;
@@ -515,9 +614,14 @@ function sanOf(uciStr){
   }
   return out;
 }
+/* Ouvrir une ancienne partie du journal reste dans Jouer, dans la meme
+   interface de revue que juste apres avoir joue (bandeau, jauge, panneau
+   Revue) -- appelee uniquement depuis l'onglet Jouer lui-meme (le journal y
+   vit), aucun changement de mode n'est necessaire. */
 function openHistoryGame(i){
   const rec=history[i]; if(!rec)return;
-  const g=new Game(),san=[],uci=[];
+  const startFen=typeof rec.fen==="string"?rec.fen:null;
+  const g=startFen?new Game(startFen):new Game(),san=[],uci=[];
   for(const u of rec.m.split(" ").filter(Boolean)){
     const mv=g.moves().find(x=>g.uci(x)===u);
     if(!mv)break;
@@ -527,6 +631,7 @@ function openHistoryGame(i){
   clearAnalysis();
   isReviewGame=true;gameSaved=true;
   game=g;sanList=san;gameUci=uci;
+  gameStartFen=startFen;
   myColor=rec.c==="w"?W:B;flipped=myColor===B;
   lastMove=g.history.length?g.history[g.history.length-1].m:null;
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
@@ -548,6 +653,111 @@ $("btnHistoryClear").onclick=()=>{
   }
   b.classList.remove("armed");b.textContent=t("Clear history");
   history=[];saveHistory();renderHistory();
+};
+
+/* ==========================================================
+   HISTORIQUE ENTRE AMIS
+   ========================================================== */
+/* Meme principe que l'historique de Jouer (chang64:games) juste au-dessus,
+   mais separe : contrairement a une partie Jouer, une partie Entre amis
+   n'avait jusqu'ici aucune trace persistante au-dela de la plus recente
+   (chang64:friend, ecrasee a chaque nouvelle partie) -- impossible de
+   retrouver une ancienne partie une fois la suivante commencee. */
+let amiHistory=[],amiGameSaved=false;
+async function loadAmiHistory(){
+  try{const r=await window.storage.get("chang64:friendgames");
+    if(r&&r.value){const d=JSON.parse(r.value);if(Array.isArray(d))amiHistory=d;}}catch(e){}
+}
+async function saveAmiHistory(){
+  try{await window.storage.set("chang64:friendgames",JSON.stringify(amiHistory.slice(0,30)));}catch(e){}
+}
+function amiResultCode(){
+  if(amiResigned!==null)return amiResigned===amiColor?"loss":"win";
+  if(game.isCheckmate())return (game.turn===W?B:W)===amiColor?"win":"loss";
+  return "draw";
+}
+function saveFinishedAmiGame(){
+  if(amiGameSaved||mode!=="friend")return;
+  if(amiMoves.length<2)return;
+  /* amiMoves stocke des objets {from64,to64,promo} (voir rebuildAmi), pas
+     des chaines UCI comme gameUci en mode Jouer : il faut rejouer la partie
+     pour en tirer la liste UCI reellement utilisable par gotoPly()/
+     rebuildTo() une fois la partie rouverte depuis l'historique. */
+  const g=new Game(),uci=[];
+  for(const m of amiMoves){
+    const mv=g.moves().find(x=>sq64(x.from)===m.from64&&sq64(x.to)===m.to64&&(x.promo||0)===(m.promo||0));
+    if(!mv)break;
+    uci.push(sqN(mv.from)+sqN(mv.to)+(mv.promo?SYM[mv.promo]:""));
+    g.makeMove(mv);
+  }
+  if(uci.length<2)return;
+  amiGameSaved=true;
+  amiHistory.unshift({t:Date.now(),c:amiColor===W?"w":"b",r:amiResultCode(),m:uci.join(" ")});
+  amiHistory=amiHistory.slice(0,30);
+  saveAmiHistory();renderAmiHistory();
+}
+function renderAmiHistory(){
+  const box=$("amiHistoryList"); if(!box)return;
+  $("amiHistoryActions").classList.toggle("hide",amiHistory.length===0);
+  if(!amiHistory.length){
+    $("amiHistoryNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
+    box.innerHTML='<p class="history-empty">'+t("No finished game yet.")+'</p>';
+    return;
+  }
+  $("amiHistoryNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:amiHistory.length});
+  box.innerHTML="";
+  amiHistory.forEach((g,i)=>{
+    const b=document.createElement("button");
+    b.className="history-item";
+    const san=sanOf(g.m,null);
+    const op=detectOpening(san);
+    const side=g.c==="w"?t("White"):t("Black");
+    const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
+    b.innerHTML='<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
+      '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
+      '<span>'+fmtDate(g.t)+" \u00b7 "+side+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>';
+    b.onclick=()=>openAmiHistoryGame(i);
+    box.appendChild(b);
+  });
+}
+/* Meme principe que openHistoryGame juste au-dessus, "idem pour inviter" :
+   reste dans l'interface de revue de Jouer plutot que de basculer vers
+   Analyser. mainGame/mainSan/mainStarted sont le cache que setMode("play")
+   restaure normalement en y revenant depuis un autre onglet -- les
+   pre-remplir ici avec la partie choisie fait prendre exactement ce
+   chemin, sans dupliquer la logique de setMode(). */
+function openAmiHistoryGame(i){
+  const rec=amiHistory[i]; if(!rec)return;
+  const g=new Game(),san=[],uci=[];
+  for(const u of rec.m.split(" ").filter(Boolean)){
+    const mv=g.moves().find(x=>g.uci(x)===u);
+    if(!mv)break;
+    san.push(g.san(mv));uci.push(u);g.makeMove(mv);
+  }
+  if(!san.length)return;
+  if(typeof clearAnalysis==="function")clearAnalysis();
+  gameUci=uci;gameStartFen=null;
+  isReviewGame=true;gameSaved=true;
+  myColor=rec.c==="w"?W:B;
+  if(typeof resigned!=="undefined")resigned=null;
+  resultInfo=null;
+  mainGame=g;mainSan=san;
+  mainLast=g.history.length?g.history[g.history.length-1].m:null;
+  mainStarted=true;mainFlipped=myColor===B;
+  setMode("play");
+  gotoPly(0);
+  const st=$("status"); if(st){st.className="status";st.textContent=t("Replaying a saved game. Step through it or run the review.");}
+  if(typeof focusBoard==="function")focusBoard();
+}
+$("btnAmiHistoryClear").onclick=()=>{
+  const b=$("btnAmiHistoryClear");
+  if(!b.classList.contains("armed")){
+    b.classList.add("armed");b.textContent=t("Confirm");
+    setTimeout(()=>{b.classList.remove("armed");b.textContent=t("Clear history");},5000);
+    return;
+  }
+  b.classList.remove("armed");b.textContent=t("Clear history");
+  amiHistory=[];saveAmiHistory();renderAmiHistory();
 };
 
 /* ==========================================================
@@ -1010,24 +1220,28 @@ setMode=function(m,opts){
      d'onglet est ajoute, et n'arrete le sprint que lors d'un vrai
      changement d'onglet. */
   if(rush&&m!==mode)rushEnd(t("Stopped."));
-  if(m==="watch"||m==="legal"||m==="prefs"){
-    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;}
+  if(m==="watch"||m==="legal"||m==="prefs"||m==="explore"){
+    if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode=m;
-    const tabs={home:"tab-home",play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend",watch:"tab-watch"};
-    for(const k in tabs)$(tabs[k]).setAttribute("aria-selected",k===m);
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
     $("pane-home").classList.add("hide");
     $("appLayout").classList.add("hide");
     $("pane-watch").classList.toggle("hide",m!=="watch");
     $("pane-legal").classList.toggle("hide",m!=="legal");
     const pp=$("pane-prefs"); if(pp)pp.classList.toggle("hide",m!=="prefs");
+    const pe=$("pane-explore"); if(pe)pe.classList.toggle("hide",m!=="explore");
     if(m==="watch")renderChannels();
     else if(m==="prefs"){if(typeof renderPrefs==="function")renderPrefs();}
+    else if(m==="explore"){if(typeof renderExplore==="function")renderExplore();}
     else renderLegal();
     return;
   }
   $("pane-watch").classList.add("hide");
   $("pane-legal").classList.add("hide");
   { const pp=$("pane-prefs"); if(pp)pp.classList.add("hide"); }
+  { const pe=$("pane-explore"); if(pe)pe.classList.add("hide"); }
+  { const tex=$("tab-explore"); if(tex)tex.setAttribute("aria-selected","false"); }
   $("tab-watch").setAttribute("aria-selected","false");
   baseSetMode(m,opts);
   renderExtraStats();applyEvalPref();
@@ -1114,6 +1328,7 @@ function rushRestore(){
   }
 })();
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
+if($("tab-explore"))$("tab-explore").onclick=()=>{setMode("explore");goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
 /* Les pages de contenu renvoient vers /#legal et /#privacy : ces panneaux
@@ -1143,12 +1358,25 @@ botMove=function(){
   if(game.history.length>before){
     const h=game.history[game.history.length-1];
     recordUci(h.m);analysis=null;
+    /* baseBotMove() a deja appele refreshGame() (donc mon crochet de
+       sauvegarde de la partie en cours, voir plus bas) AVANT que gameUci
+       soit mis a jour ici : sans ce second appel explicite, le coup du bot
+       n'atteignait jamais la sauvegarde -- seuls les coups du joueur
+       (recordUci avant basePlayUser, lui, l'ordre inverse) etaient captures.
+       Meme logique de garde qu'a l'interieur de refreshGame() : un mat livre
+       par le bot doit effacer la sauvegarde, pas la reecrire perimee. */
+    if(gameStarted&&typeof gameOver==="function"&&!gameOver()){if(typeof savePlay==="function")savePlay();}
+    else if(gameStarted&&typeof clearPlaySave==="function")clearPlaySave();
   }
 };
 undoGame=function(){
   const before=game.history.length;
   baseUndoGame();
-  if(game.history.length<before){gameUci.splice(-2);analysis=null;}
+  if(game.history.length<before){
+    gameUci.splice(-2);analysis=null;
+    if(gameStarted&&typeof gameOver==="function"&&!gameOver()){if(typeof savePlay==="function")savePlay();}
+    else if(gameStarted&&typeof clearPlaySave==="function")clearPlaySave();
+  }
 };
 $("btnHint").onclick=()=>hintGame();
 
@@ -1182,7 +1410,12 @@ function fmtNum(x){
    libelle : son texte. Sans action, on retombe sur le comportement d'origine,
    celui des parties. */
 let readyAction=null;
-function showReadyFor(sousTitre,action,libelle){
+/* readySecondaryAction : meme principe que readyAction, mais pour le bouton
+   "readySettings". Sert au choix de reprise d'une partie sauvegardee (voir
+   showResumeChoice plus bas) : ce bouton propose alors "Nouvelle partie"
+   plutot que son role habituel de reglages. */
+let readySecondaryAction=null;
+function showReadyFor(sousTitre,action,libelle,titre,secondaryLibelle,secondaryAction){
   const b=$("readyBanner"); if(!b)return;
   /* On enchaine sur une nouvelle epreuve : le bandeau de fin de la
      precedente n'a plus lieu d'etre, et deux panneaux superposes seraient
@@ -1190,12 +1423,25 @@ function showReadyFor(sousTitre,action,libelle){
   const fin=$("resultBanner");
   if(fin&&!fin.classList.contains("hide")){fin.className="result hide";finAction=null;}
   readyAction=action||null;
-  $("readyTitle").textContent=t("Ready when you are");
+  readySecondaryAction=secondaryAction||null;
+  /* La bulle "sauvegarde automatique" n'a de sens que pour le choix de
+     reprise (showResumeChoice, qui la reactive juste apres cet appel) :
+     partout ailleurs (Chang Sprint, coordonnees...), elle doit rester
+     masquee par defaut. */
+  const tb=$("tipResumeBtn");
+  if(tb){tb.classList.add("hide");tb.setAttribute("aria-expanded","false");}
+  const tp=$("tipResume"); if(tp)tp.classList.add("hide");
+  $("readyTitle").textContent=titre||t("Ready when you are");
   $("readySub").textContent=sousTitre;
   $("readyStart").textContent=libelle||t("Start");
-  /* "Changer les reglages" n'a pas de sens ici : les epreuves n'en ont pas. */
+  /* "Changer les reglages" n'a pas de sens ici : les epreuves n'en ont pas.
+     Exception : un secondaryAction explicite (choix de reprise), qui
+     reutilise ce bouton pour une action alternative dediee. */
   const st=$("readySettings");
-  if(st)st.classList.toggle("hide",!!action);
+  if(st){
+    if(secondaryAction){st.classList.remove("hide");st.textContent=secondaryLibelle||t("Change settings");}
+    else st.classList.toggle("hide",!!action);
+  }
   b.classList.remove("hide");
   /* preventScroll : sans lui, focus() recadre lui-meme la vue sur le
      bouton, en concurrence avec le defilement deja pose par focusBoard()
@@ -1205,6 +1451,10 @@ function showReadyFor(sousTitre,action,libelle){
 }
 function showReady(tcTxt){
   readyAction=null;
+  readySecondaryAction=null;
+  const tb=$("tipResumeBtn");
+  if(tb){tb.classList.add("hide");tb.setAttribute("aria-expanded","false");}
+  const tp=$("tipResume"); if(tp)tp.classList.add("hide");
   const st=$("readySettings"); if(st)st.classList.remove("hide");
   const b=$("readyBanner"); if(!b)return;
   /* Le libelle de force est lu directement sur le selecteur : il est deja
@@ -1243,10 +1493,11 @@ function startReadyGame(){
   if(typeof focusBoard==="function")focusBoard();
 }
 if($("readyStart"))$("readyStart").onclick=()=>{
-  if(readyAction){const f=readyAction;readyAction=null;hideReady();f();return;}
+  if(readyAction){const f=readyAction;readyAction=null;readySecondaryAction=null;hideReady();f();return;}
   startReadyGame();
 };
 if($("readySettings"))$("readySettings").onclick=()=>{
+  if(readySecondaryAction){const f=readySecondaryAction;readyAction=null;readySecondaryAction=null;hideReady();f();return;}
   /* La partie n'a pas commence : on l'annule pour de bon, sinon le
      verrouillage en cours de partie garde les reglages desactives et le
      bouton menait a des reglages intouchables. */
@@ -1260,3 +1511,135 @@ if($("readySettings"))$("readySettings").onclick=()=>{
   const s=$("status");
   if(s)s.textContent=t("Pick a colour and a strength, then play.");
 };
+
+/* ==========================================================
+   20. SAUVEGARDE DE LA PARTIE EN COURS (mode Jouer, contre le bot)
+   ==========================================================
+   Contrairement a "Entre amis" (deja persistant via chang64:friend) et a
+   l'historique des parties terminees (chang64:games), une partie "Jouer"
+   en cours ne survivait jusqu'ici a aucun rechargement : fermer l'onglet
+   ou recharger la perdait purement et simplement.
+
+   Choix retenus (discussion du 24/08/2026) :
+   - la pendule continue de s'ecouler pendant l'absence, comme une horloge
+     reelle : on sauvegarde clock.last tel quel (l'horodatage n'est PAS
+     remis a l'heure au moment de la sauvegarde), et clockDrain() -- deja
+     appele par la boucle setInterval existante -- decompte naturellement
+     tout le temps ecoule des le retour, drapeau compris si le depassement
+     est deja consomme.
+   - au retour sur l'onglet Jouer, pas de reprise automatique et
+     silencieuse : un choix explicite est propose ("Reprendre" / "Nouvelle
+     partie"), pour ne pas surprendre quelqu'un qui voulait repartir a
+     zero et avait oublie sa partie en cours.
+   - perimetre : uniquement le mode Jouer contre le bot. */
+let pendingPlaySave=null;
+async function savePlay(){
+  try{
+    await window.storage.set("chang64:play",JSON.stringify({
+      v:1,
+      uci:gameUci,
+      startFen:gameStartFen,
+      myColor:myColor===B?1:0,
+      botLevel:botLevel,
+      flipped:!!flipped,
+      tcCat:tcCat,tcIdx:tcIdx,
+      clock:clock
+    }));
+  }catch(e){}
+}
+async function clearPlaySave(){
+  pendingPlaySave=null;
+  try{await window.storage.delete("chang64:play");}catch(e){}
+}
+async function loadPlaySave(){
+  try{
+    const r=await window.storage.get("chang64:play");
+    if(r&&r.value){
+      const d=JSON.parse(r.value);
+      if(d&&d.v===1&&Array.isArray(d.uci)&&d.uci.length)pendingPlaySave=d;
+    }
+  }catch(e){}
+}
+/* Rejoue la liste de coups UCI sauvegardee sur une position vierge : meme
+   principe defensif que loadPgn(), on s'arrete au premier coup qui ne
+   validerait plus (donnees corrompues, ou regle du moteur qui aurait
+   change entre-temps) plutot que de planter. */
+function resumeSavedPlay(){
+  const d=pendingPlaySave; pendingPlaySave=null;
+  if(!d){setupGame();return;}
+  const startFen=typeof d.startFen==="string"?d.startFen:null;
+  const g=startFen?new Game(startFen):new Game(),san=[];
+  for(const u of d.uci){
+    const mv=g.moves().find(x=>g.uci(x)===u);
+    if(!mv)break;
+    san.push(g.san(mv));g.makeMove(mv);
+  }
+  if(!san.length){clearPlaySave();setupGame();return;}
+  /* clearAnalysis() remet gameUci a [] (elle sert normalement a repartir
+     d'une partie vierge) : elle doit donc s'executer AVANT de restaurer
+     gameUci ci-dessous, jamais apres. */
+  if(typeof clearAnalysis==="function")clearAnalysis();
+  game=g;sanList=san;gameUci=d.uci.slice(0,san.length);
+  gameStartFen=startFen;
+  myColor=d.myColor===1?B:W;
+  if(TC_CATS.some(c=>c.id===d.tcCat)){tcCat=d.tcCat;tcIdx=d.tcIdx||0;}
+  if(typeof d.botLevel==="number")botLevel=d.botLevel;
+  flipped=!!d.flipped;
+  gameStarted=true;
+  if(typeof isReviewGame!=="undefined")isReviewGame=false;
+  resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
+  reviewGame=null;reviewLast=null;selected=-1;marks={};busy=false;
+  lastMove=g.history.length?g.history[g.history.length-1].m:null;
+  /* La pendule reprend telle quelle : "last" reste l'ancien horodatage,
+     donc le prochain passage de clockDrain() (boucle setInterval deja en
+     place, toutes les 100ms) decompte tout seul le temps ecoule pendant
+     l'absence, drapeau compris s'il est deja depasse -- cette meme boucle
+     gere alors la fin de partie normalement, sans rien de plus a faire ici. */
+  clock=d.clock||{enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
+  clockHist=[{w:clock.w,b:clock.b}];
+  awaitingStart=false;
+  mainGame=null;
+  /* refreshGame() recalcule legalCache pour CETTE position avant toute
+     verification de fin de partie : l'appeler avant, comme gameOver() le
+     ferait sur l'ancien legalCache (celui d'avant la reprise, potentiellement
+     vide), donnerait un faux mat/pat. On fixe donc un statut neutre ici, et
+     c'est refreshGame() -- puis, le cas echeant, la boucle de pendule
+     100ms -- qui etablit l'etat reel. */
+  const s=$("status");
+  if(s){s.className="status";s.textContent=game.turn===myColor?t("Your move."):t("The computer is thinking…");}
+  refreshGame();
+  if(typeof focusBoard==="function")focusBoard();
+  if(!gameFinished_safe()&&game.turn!==myColor){busy=true;setTimeout(botMove,220);}
+}
+function gameFinished_safe(){
+  try{return (typeof gameOver==="function")&&gameOver();}catch(e){return false;}
+}
+function discardSavedPlayAndSetup(){
+  clearPlaySave();
+  hideReady();
+  awaitingStart=false;
+  gameStarted=false;
+  if(typeof setupGame==="function")setupGame();
+  refreshGame();
+}
+/* Choix explicite affiche a l'arrivee sur l'onglet Jouer quand une partie
+   non terminee a ete retrouvee (voir setMode). Reutilise le bandeau
+   "readyBanner" comme les autres epreuves chronometrees, avec un titre
+   dedie et le bouton secondaire repurpose en "Nouvelle partie". */
+function showResumeChoice(){
+  const d=pendingPlaySave;
+  if(!d){setupGame();return;}
+  if(TC_CATS.some(c=>c.id===d.tcCat)){tcCat=d.tcCat;tcIdx=d.tcIdx||0;}
+  const {cat,item}=tcCurrent();
+  const tcTxt=cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1));
+  const nMoves=Math.ceil((d.uci||[]).length/2);
+  const sousTitre=tcTxt+" \u00b7 "+(d.myColor===1?t("You play Black."):t("You play White."))+
+    " \u00b7 "+t("Move {n}",{n:nMoves});
+  showReadyFor(sousTitre,resumeSavedPlay,t("Resume the game"),
+    t("You have an unfinished game"),t("New game instead"),discardSavedPlayAndSetup);
+  const tb=$("tipResumeBtn"); if(tb)tb.classList.remove("hide");
+  /* pendingPlaySave est encore renseigne ici (resumeSavedPlay() ne le vide
+     qu'au moment reel de la reprise) : le plateau doit rester visible pour
+     que ce choix, qui vit dedans (readyBanner), soit seulement lisible. */
+  if(typeof updatePlayBoardVisibility==="function")updatePlayBoardVisibility();
+}

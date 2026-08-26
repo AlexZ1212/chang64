@@ -22,7 +22,14 @@ function open_(url){
     const tabs=[...d.querySelectorAll('[role="tab"],.tabs button')];
     const oneSelected=tabs.filter(t=>t.getAttribute("aria-selected")==="true").length;
     T(bad.slice(0,20)+" : echiquier intact", !!board&&board.children.length===64, board?board.children.length:"absent");
-    T(bad.slice(0,20)+" : un seul onglet actif", oneSelected===1, oneSelected+" onglets actifs");
+    /* Repli sur l'accueil (lien totalement illisible) : plus aucun onglet ne
+       lui correspond depuis qu'Accueil a ete retire de la barre (0 est
+       correct). Mais certains de ces liens degrades (ex. "#p=" vide,
+       "#line=" partiellement lisible) aboutissent a un mode reel plutot
+       qu'au repli -- Entre amis ou Jouer, avec alors 1 onglet actif,
+       comportement inchange et legitime. Ce qui compte reellement ici :
+       jamais plus d'un onglet actif a la fois (pas de double affichage). */
+    T(bad.slice(0,20)+" : au plus un onglet actif", oneSelected<=1, oneSelected+" onglets actifs");
     T(bad.slice(0,20)+" : aucune erreur JS", errs.length===0, errs.slice(0,1).join(""));
   }
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

@@ -56,7 +56,7 @@ console.log("\n--- Le francais est bien le cas le plus contraignant ---");
    telephone, les anglais tiennent de justesse. */
 const i18n = fs.readFileSync(path.join(SRC, "i18n.js"), "utf8");
 const tr = k => { const m = i18n.match(new RegExp('"' + k + '":"([^"]*)"')); return m ? m[1] : k; };
-const EN = ["Home", "Play", "Puzzles", "Train", "Friends", "Watch"];
+const EN = ["Play", "Solve", "Train", "Analyse", "Invite", "Watch", "Explore"];
 const FR = EN.map(tr);
 const largeur = l => Math.round(l.reduce((s, m) => s + m.length * 6.8 + 22, 0) + (l.length - 1) * 3 + 8);
 const dispo = 390 - 28;

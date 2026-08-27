@@ -552,6 +552,20 @@ function metaDesc(raw, max) {
    ce bloc est injecte tel quel (sans minification) dans chaque page
    statique, un commentaire a l'interieur se retrouve donc duplique sur des
    milliers de pages et alourdit la moyenne mesuree par les tests de poids. */
+/* Entete des pages statiques (commentaire ici, HORS du template CSS, meme
+   raison que ci-dessus) : le filet du bas etait trace avec --rule (gris
+   fonce) et se voyait comme un contour net sur le fond clair, autour du bloc
+   logo/langue/menu. Purement decoratif (aucun autre element n'en dependait),
+   il est retire plutot que repeint de la couleur du fond : le repeindre
+   aurait coute des octets (var(--rule) -> var(--ink), meme longueur) pour un
+   resultat identique, invisible dans les deux cas. padding-top passe de 14px
+   a 10px pour s'aligner sur le rythme vertical de l'application (le logo
+   demarrait quelques pixels plus bas ici, sur mobile, qu'en fond sombre).
+   Le box-shadow ajoute, pour 4 bytes nets sur l'entete entiere une fois le
+   filet retire (poids serre sur ~2000 pages dupliquees, marge mesuree
+   d'environ 38 bytes/page sur check_pages_exercices.js), un fondu flou de la
+   couleur du fond sous l'entete : il adoucit la coupure quand le contenu
+   defile sous la zone collante, au lieu d'un bord net. */
 const CSS = `*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
 --bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
@@ -561,8 +575,9 @@ font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-hei
 .wrap{max-width:880px;margin:0 auto}
 a{color:var(--brass)}
 header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
-padding-bottom:14px;border-bottom:1px solid var(--rule);
-position:sticky;top:0;z-index:30;background-color:var(--ink);padding-top:14px}
+padding-bottom:14px;
+position:sticky;top:0;z-index:30;background-color:var(--ink);padding-top:10px;
+box-shadow:0 14px 14px -6px var(--ink)}
 /* Meme logo que l'application : memes tailles, memes proportions, meme
    position relative des elements. Seules les couleurs changent, pour un fond
    clair : l'elephant et le 64 en laiton, "chang" et la baseline en gris

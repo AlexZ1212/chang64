@@ -106,7 +106,7 @@ body{
      l'ecran au chargement, quelle que soit la longueur du contenu en
      dessous. Valeur choisie pour reproduire l'intensite visuelle d'origine
      sur un ecran de hauteur courante (~800px). */
-  background-image:radial-gradient(1100px 620px at 18% -90px, #17201D 0%, transparent 62%);
+  background-image:radial-gradient(1100px 620px at 18% -400px, #17201D 0%, transparent 62%);
   background-repeat:no-repeat;
   color:var(--chalk);
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
@@ -150,6 +150,8 @@ html{overflow-x:hidden}
 /* ---------- header ---------- */
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;
   position:sticky;top:0;z-index:30;background-color:var(--ink);padding:10px 0}
+header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
+  background-image:linear-gradient(var(--ink),transparent);pointer-events:none}
 .brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit}
 .brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:6px}
 .brand .glyph{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}
@@ -7140,6 +7142,7 @@ if($("analyseBack"))$("analyseBack").onclick=()=>setMode("edit");
 
 const prevSetModeAnalyse=setMode;
 setMode=function(m,opts){
+  if(m!=="play"){const rb=$("readyBanner"); if(rb)rb.classList.add("hide");}
   if(m==="analyse"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="analyse";busy=false;

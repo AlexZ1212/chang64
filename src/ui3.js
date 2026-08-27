@@ -1337,6 +1337,18 @@ if($("analyseBack"))$("analyseBack").onclick=()=>setMode("edit");
 
 const prevSetModeAnalyse=setMode;
 setMode=function(m,opts){
+  /* L'ecran "Ready when you are" (readyBanner) n'appartient qu'au flux
+     Jouer (clic sur Start game avant confirmation, ou reprise d'une partie
+     sauvegardee) : il vit dans .board-wrap, que Train/Editeur/Analyse/
+     Exercices/Entre amis/Regarder forcent tous a rester visible pour leur
+     propre plateau (voir plus bas et plus haut : "meme garde-fou"). Sans
+     ceci, quitter Jouer alors que ce panneau etait affiche le laissait
+     colle par-dessus l'ecran de destination, quel qu'il soit -- verifie
+     sur les 6 autres onglets, pas seulement Analyser. Point d'entree unique
+     choisi ici car c'est la couche la plus externe : tout appel a
+     setMode(), quelle que soit sa cible, passe par cette fonction en
+     premier avant de redescendre eventuellement vers prevSetModeAnalyse. */
+  if(m!=="play"){const rb=$("readyBanner"); if(rb)rb.classList.add("hide");}
   if(m==="analyse"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="analyse";busy=false;

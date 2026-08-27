@@ -104,9 +104,17 @@ body{
      tres loin au-dessus (degrade quasi invisible). Un decalage en px fixe
      ancre le degrade par rapport au haut du document, donc par rapport a
      l'ecran au chargement, quelle que soit la longueur du contenu en
-     dessous. Valeur choisie pour reproduire l'intensite visuelle d'origine
-     sur un ecran de hauteur courante (~800px). */
-  background-image:radial-gradient(1100px 620px at 18% -90px, #17201D 0%, transparent 62%);
+     dessous. Second probleme, distinct du premier : l'entete (a l'interieur
+     de .wrap) est un aplat "ink" uni, mais la marge du body tout autour
+     (18px en haut, 14px de chaque cote) n'est jamais couverte par cet aplat
+     et laissait donc voir le degrade nu, plus clair a gauche (proche du
+     centre a 18%) qu'a droite : deux teintes de fond visiblement differentes
+     de part et d'autre de l'entete au chargement. Centre remonte de -90px a
+     -230px pour que le degrade soit deja retombe a transparent avant
+     d'atteindre cette marge (measure : ancien centre laissait un residu
+     visible jusqu'a environ y=100px ; le bas de l'entete meme dans son plus
+     grand etat de retour a la ligne mobile approche les 150px). */
+  background-image:radial-gradient(1100px 620px at 18% -400px, #17201D 0%, transparent 62%);
   background-repeat:no-repeat;
   color:var(--chalk);
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
@@ -150,6 +158,15 @@ html{overflow-x:hidden}
 /* ---------- header ---------- */
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;
   position:sticky;top:0;z-index:30;background-color:var(--ink);padding:10px 0}
+/* L'entete est un aplat uni de --ink, pose par-dessus le degrade radial du
+   body (voir plus haut : tache verte ancree en haut de page). Contre ce
+   fond degrade, le rectangle uni tranchait nettement en bas de l'entete,
+   surtout pendant le defilement ou le contenu semblait se faire couper net
+   en disparaissant sous la zone collante. Ce pseudo-element etend l'aplat
+   de l'entete en un fondu vers la transparence, pour que la coupure soit
+   progressive plutot qu'un bord dur. */
+header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
+  background-image:linear-gradient(var(--ink),transparent);pointer-events:none}
 .brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit}
 .brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:6px}
 .brand .glyph{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}

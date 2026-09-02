@@ -14,7 +14,7 @@ the board. The elephant was the piece that, over centuries, became the modern bi
 
 - A chess engine written from scratch, validated against standard perft tests
 - Four bot difficulty levels with bullet, blitz, rapid, classical and daily time controls
-- 1000 engine-verified tactics puzzles, with adaptive difficulty, theme filter and Chang Sprint
+- 51638 engine-verified tactics puzzles, with adaptive difficulty, theme filter and Chang Sprint
 - Game review with an evaluation graph and a verdict on every move
 - PGN import and export, opening detection, game history stored in the browser
 - Endgame trainer and coordinate drill
@@ -58,7 +58,7 @@ The GPL above covers the **program**. It does not cover the editorial and creati
 material distributed alongside it, which remains the property of its author. The exact
 scope is set out in [COPYING.CONTENT](COPYING.CONTENT), and covers in short:
 
-- the written content of the 1,353 pages, in both languages
+- the written content of the 433 pages, in both languages
 - the puzzle set and its curation
 - the opening notes and commentary
 - the visual identity: logo, elephant mark, chess piece artwork, colour system
@@ -111,7 +111,7 @@ Le **code** est publié sous licence GNU GPL v3 ou ultérieure, parce que le sit
 distribue Stockfish, lui-même sous GPL v3. Il peut donc être étudié, modifié et
 redistribué, à condition de conserver la même licence.
 
-Le **contenu éditorial** (les textes des 1 353 pages, la base d'exercices, l'identité
+Le **contenu éditorial** (les textes des 433 pages, la base d'exercices, l'identité
 visuelle) n'est pas couvert par la GPL et reste soumis aux droits de son auteur. Le
 détail figure dans [COPYING.CONTENT](COPYING.CONTENT).
 

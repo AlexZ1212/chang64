@@ -1,6 +1,37 @@
 const fs = require("fs");
 const path = require("path");
 const { Game, pType, pColor } = require("./engine.js");
+/* Minification a la livraison (session du 29/08) : PageSpeed Insights
+   relevait ~30 Ko d'economie possible (CSS+JS) sur l'app. Le code source
+   reste intact et commente -- terser/le minifieur maison ne s'appliquent
+   qu'au texte ecrit dans index.html, jamais aux fichiers .js eux-memes.
+   Installation requise une seule fois : npm install terser --no-save
+   (ou --save-dev si vous preferez le garder trace dans un package.json). */
+let terser;
+try { terser = require("terser"); } catch (e) {
+  console.error("terser manquant : lancez `npm install terser --no-save` puis relancez le build.");
+  process.exit(1);
+}
+function minifyJs(code, label) {
+  const r = terser.minify_sync(code, { compress: {}, mangle: false });
+  if (r.error) {
+    console.error(`Minification JS echouee sur ${label}, fichier livre non minifie pour cette partie :`, r.error.message || r.error);
+    return code;
+  }
+  return r.code;
+}
+/* CSS : minifieur maison plutot qu'une dependance de plus, volontairement
+   prudent (pas de fusion de regles, pas de suppression de point-virgule
+   ambigu) -- suffisant pour l'essentiel du gain (commentaires + espaces),
+   sans le risque d'un minifieur CSS plus agressif sur un fichier qu'on ne
+   revalide pas visuellement a chaque build. */
+function minifyCss(css) {
+  return css.replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s*([{}:;,>])\s*/g, "$1")
+    .replace(/;\}/g, "}")
+    .trim();
+}
 
 const OUT = path.join(__dirname, "site");
 const SITE = "https://chang64.com";
@@ -10,19 +41,29 @@ const THEMES = JSON.parse(fs.readFileSync(path.join(__dirname, "themes.json"), "
 const puzzles = JSON.parse(fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
 for (const p of puzzles) if (THEMES[p.theme]) p.theme = THEMES[p.theme];
 
-const engine = fs.readFileSync(path.join(__dirname, "engine_browser.js"), "utf8");
-const pieces = fs.readFileSync(path.join(__dirname, "pieces_browser.js"), "utf8");
-let ui = fs.readFileSync(path.join(__dirname, "ui.js"), "utf8").replace("__PUZZLES__", JSON.stringify(puzzles));
-let ui2 = fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8");
+const engine = minifyJs(fs.readFileSync(path.join(__dirname, "engine_browser.js"), "utf8"), "engine_browser.js");
+const pieces = minifyJs(fs.readFileSync(path.join(__dirname, "pieces_browser.js"), "utf8"), "pieces_browser.js");
+/* La banque complete n'est plus embarquee dans ui.js (etait __PUZZLES__,
+   remplace par JSON.stringify(puzzles) -- 16 Mo bruts a 51638 exercices,
+   embarques tels quels dans index.html). Chaque niveau devient un fichier a
+   part sous site/data/, charge a la demande cote client (voir loadLevel/
+   loadPuzzleById/loadRushPool dans ui.js) -- voir writePuzzleData() plus
+   bas, appelee apres la creation de OUT. Seul le compte total reste
+   necessaire tout de suite, pour __TOTAL_PUZZLES__ (juste un nombre, pas de
+   cout). */
+let ui = minifyJs(fs.readFileSync(path.join(__dirname, "ui.js"), "utf8").replace("__TOTAL_PUZZLES__", String(puzzles.length)), "ui.js");
+let ui2 = minifyJs(fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8"), "ui2.js");
 // la table famille -> adresses de pages est construite plus bas, après le calcul des slugs
-let ui3 = fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8");
-const i18n = fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8");
+let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8"), "ui3.js");
+const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), "i18n.js");
 /* Le nombre d'exercices etait ecrit en dur a neuf endroits : accueil, meta
    description, image de partage, donnees structurees, tuiles de navigation,
    dans les deux langues. Il devenait faux des qu'on enrichissait la banque.
    Un seul jeton, remplace ici a partir du fichier reel. */
 const NP = String(puzzles.length);
-let app = fs.readFileSync(path.join(__dirname, "template.html"), "utf8")
+let app = fs.readFileSync(path.join(__dirname, "template.html"), "utf8");
+app = app.replace(/<style>[\s\S]*?<\/style>/, m => "<style>" + minifyCss(m.slice("<style>".length, -"</style>".length)) + "</style>");
+app = app
   .replace("/*__I18N__*/", i18n)
   .replace("/*__ENGINE__*/", engine).replace("/*__PIECES__*/", pieces)
   .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3)
@@ -32,9 +73,64 @@ fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT + "/openings", { recursive: true });
 fs.mkdirSync(OUT + "/engine", { recursive: true });
 fs.mkdirSync(OUT + "/og", { recursive: true });
+fs.mkdirSync(OUT + "/data", { recursive: true });
 /* Livre d'ouvertures servi a part : 94 Ko retires de index.html, charges
    seulement quand une partie commence (voir loadOpeningBook dans ui2.js). */
 fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirname, "openings.json"), "utf8"));
+/* Meme principe applique a la banque d'exercices, a bien plus grande
+   echelle (voir loadLevel/loadPuzzleById/loadRushPool/loadThemeCounts dans
+   ui.js et ui2.js) : plus aucun exercice n'est embarque dans index.html,
+   chaque fichier ici est charge a la demande cote client, mis en cache par
+   le service worker comme le reste des assets statiques.
+   - data/level-N.json (N=1..10) : exercices complets de ce niveau, pour
+     Resoudre et la difficulte adaptative.
+   - data/puzzle-index.json : { id: niveau } pour tous les exercices, seul
+     moyen leger de retrouver le niveau d'un id (lien direct /#puzzle=...,
+     revision d'une erreur de Sprint) sans charger toute la banque.
+   - data/theme-counts.json : { theme: nombre total } pour le filtre par
+     theme, sans avoir a charger un niveau juste pour compter.
+   - data/rush-pool.json : echantillon dedie pour le Sprint (voir la note
+     dans startRush, ui2.js) -- jusqu'a 400 exercices resolus en un coup par
+     theme, tires de toute la banque plutot que d'un seul niveau, taille
+     bornee plutot que la banque complete. */
+(function writePuzzleData() {
+  const byLevel = {};
+  const puzzleIndex = {};
+  const themeCounts = {};
+  for (const p of puzzles) {
+    (byLevel[p.level] = byLevel[p.level] || []).push(p);
+    puzzleIndex[p.id] = p.level;
+    themeCounts[p.theme] = (themeCounts[p.theme] || 0) + 1;
+  }
+  for (const lvl in byLevel) {
+    fs.writeFileSync(OUT + "/data/level-" + lvl + ".json", JSON.stringify(byLevel[lvl]));
+  }
+  fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
+  fs.writeFileSync(OUT + "/data/theme-counts.json", JSON.stringify(themeCounts));
+
+  const RUSH_CAP_PER_THEME = 400;
+  const byThemeSingleMove = {};
+  for (const p of puzzles) {
+    if (p.sol.length > 1) continue;
+    (byThemeSingleMove[p.theme] = byThemeSingleMove[p.theme] || []).push(p);
+  }
+  const rushPool = [];
+  for (const th in byThemeSingleMove) {
+    const list = byThemeSingleMove[th].slice();
+    /* Echantillon aleatoire (pas les N premiers) : sinon on ne pioche que
+       dans les identifiants les plus bas et le Sprint perd la variete de
+       difficulte qu'il est cense avoir au sein d'un theme. Le melange final
+       cote client (startRush, ui2.js) s'occupe de l'ordre de jeu ; celui-ci
+       ne sert qu'a choisir QUELS exercices entrent dans l'echantillon. */
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    rushPool.push(...list.slice(0, RUSH_CAP_PER_THEME));
+  }
+  fs.writeFileSync(OUT + "/data/rush-pool.json", JSON.stringify(rushPool));
+  console.log("Donnees d'exercices  :", Object.keys(byLevel).length, "niveaux,", rushPool.length, "dans le pool Sprint");
+})();
 const ogJobs = [];
 // index.html est écrit plus bas, après injection de la table des ouvertures
 
@@ -48,12 +144,6 @@ fs.copyFileSync(path.join(__dirname, "sf/package/Copying.txt"), OUT + "/engine/L
    a chaque construction : les poser a la main dans le site livre ne tiendrait
    pas. Les originaux vivent a cote des sources, dans licence/. */
 fs.copyFileSync(path.join(__dirname, "sf/package/Copying.txt"), OUT + "/LICENSE");
-for (const f of ["COPYING.CONTENT", "README.md"]) {
-  /* Le README annonce lui aussi des quantites : on y substitue le meme jeton
-     que dans le site, sinon il derive comme le reste. */
-  const txt = fs.readFileSync(path.join(__dirname, "licence/") + f, "utf8").split("__NP__").join(NP);
-  fs.writeFileSync(OUT + "/" + f, txt);
-}
 fs.writeFileSync(OUT + "/engine/README.txt",
 `Stockfish 18 (lite, single-threaded) : https://stockfishchess.org
 Licensed under the GNU General Public License v3, see LICENSE-GPLv3.txt.
@@ -636,6 +726,16 @@ p{margin-bottom:12px;max-width:66ch}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+/* Separateur visuel entre les exemples d'une page categorie (Clouage,
+   Enfilade...) : sans ca, les 2-3 exemples s'enchainaient sans aucune
+   rupture visuelle, seul le h2 "Exemple N" les distinguait a l'oeil, et
+   maigrement (meme taille que les autres h2 de la page). Trou de style
+   preexistant, pas introduit par le passage aux pages categories -- l'ancien
+   index filtrable groupait deja ses puzzles par theme dans des sections de
+   cette meme classe, jamais stylee non plus. */
+.theme-bloc{padding-top:20px;margin-top:20px;border-top:1px solid var(--rule)}
+.theme-bloc:first-of-type{padding-top:0;margin-top:0;border-top:none}
+.theme-bloc h2{margin-top:0}
 .eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);
 border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}
 /* Meme forme que .eco (theme, difficulte) mais en gris discret plutot qu'en
@@ -1441,6 +1541,21 @@ fs.writeFileSync(OUT + "/sitemap.xml",
 console.log("Pages d'ouvertures :", pages.length);
 console.log("Lignes indexees    :", lines.length);
 console.log("URLs au sitemap    :", urls.length);
+/* Meme piege que __NP__, trouve sur le tas : COPYING.CONTENT et README.md
+   annoncaient aussi un nombre de pages ("1,353 pages"), fige en dur au lieu
+   d'un jeton -- reste juste apres avoir corrige le nombre d'exercices,
+   repere en verifiant les vrais fichiers de licence recuperes depuis le
+   depot. urls.length (deja les deux langues confondues, comme le texte le
+   dit) est la mesure la plus fidele a "le contenu redige de X pages" :
+   openings + ouvertures FR + toutes les pages generees par content.js, un
+   comptage qui derive sinon a chaque changement de structure du site (page
+   par exercice -> pages par categorie, ajout du calendrier...). */
+const NPAGES = String(urls.length);
+for (const f of ["COPYING.CONTENT", "README.md"]) {
+  const txt = fs.readFileSync(path.join(__dirname, "licence/") + f, "utf8")
+    .split("__NP__").join(NP).split("__NPAGES__").join(NPAGES);
+  fs.writeFileSync(OUT + "/" + f, txt);
+}
 const size = p => fs.statSync(p).size;
 console.log("index.html         :", Math.round(size(OUT + "/index.html") / 1024), "Ko");
 let total = 0;

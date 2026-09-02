@@ -114,7 +114,6 @@ class Game{
   makeMove(m){
     const us=this.turn;
     this.history.push({m,castling:this.castling,ep:this.ep,half:this.half,full:this.full,kw:this.kingSq[0],kb:this.kingSq[1]});
-    this.bump(-1);
     const pc=this.board[m.from];
     this.board[m.from]=0;
     this.board[m.to]=m.promo?mk(m.promo,us):pc;
@@ -132,6 +131,12 @@ class Game{
     this.turn=us^1;
     this.bump(1);
   }
+  /* Correctif repetition (voir engine.js pour le detail) : makeMove()
+     n'incremente que la position d'arrivee, ne decremente plus jamais
+     celle qu'on quitte -- sinon un coup reel effacait le compteur de la
+     position quittee, empechant toute triple repetition d'etre jamais
+     detectee. undoMove() decremente ce qu'on annule sans plus jamais
+     re-incrementer ce qu'on retrouve (jamais decremente, deja correct). */
   undoMove(){
     const h=this.history.pop(); if(!h)return;
     this.bump(-1);
@@ -143,7 +148,7 @@ class Game{
     if(m.flags&32){const rf=us===W?119:7,rt=us===W?117:5;this.board[rf]=this.board[rt];this.board[rt]=0;}
     if(m.flags&64){const rf=us===W?112:0,rt=us===W?115:3;this.board[rf]=this.board[rt];this.board[rt]=0;}
     this.castling=h.castling;this.ep=h.ep;this.half=h.half;this.full=h.full;
-    this.kingSq[0]=h.kw;this.kingSq[1]=h.kb;this.turn=us;this.bump(1);
+    this.kingSq[0]=h.kw;this.kingSq[1]=h.kb;this.turn=us;
   }
   san(m){
     const legal=this.moves();let s;

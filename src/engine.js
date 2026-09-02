@@ -262,13 +262,15 @@ class Game {
     return res;
   }
 
+  /* posCounts ne se decremente plus jamais en quittant une position
+     (correctif : voir plus bas). makeMove() se contente d'incrementer la
+     position d'arrivee. */
   makeMove(m) {
     const us = this.turn, them = us ^ 1;
     this.history.push({
       m, castling: this.castling, ep: this.ep, half: this.half, full: this.full,
       kw: this.kingSq[0], kb: this.kingSq[1], key: this.posKey()
     });
-    this.bump(-1);
     const piece = this.board[m.from];
     this.board[m.from] = 0;
     this.board[m.to] = m.promo ? mk(m.promo, us) : piece;
@@ -304,6 +306,26 @@ class Game {
     this.bump(1);
   }
 
+  /* CORRECTIF REPETITION : l'ancien code decrementait la position quittee
+     dans makeMove() (bump(-1) avant de deplacer la piece), puis undoMove()
+     la re-incrementait en la restaurant. Ce va-et-vient est correct pour
+     une sonde temporaire (moves() fait makeMove()+undoMove() pour tester
+     la legalite de chaque coup, effet net nul) -- mais FAUX pour un coup
+     REEL joue sans annulation : quitter une position via un coup reel
+     effacait purement et simplement son compteur (jusqu'a suppression de
+     l'entree si le compte tombait a zero), donc si la partie revenait plus
+     tard EXACTEMENT sur cette position, le compteur repartait de 1 au lieu
+     de 2 -- la triple repetition ne pouvait donc jamais se declencher,
+     quel que soit le nombre reel de repetitions jouees (verifie : une
+     sequence Cb1-c3 Cb8-c6 Cc3-b1 Cc6-b8 repetee ne faisait jamais monter
+     le compteur au-dela de 1, meme apres un retour exact a la position de
+     depart). Nouveau comportement : makeMove() n'incremente QUE la
+     position d'arrivee, ne touche jamais celle qu'on quitte -- une
+     position reellement visitee reste comptee pour toujours. undoMove()
+     decremente la position qu'on annule (sonde temporaire OU vrai retour
+     en arriere d'un coup reel), sans plus jamais re-incrementer celle
+     qu'on retrouve : elle n'avait jamais ete decrementee, son compte est
+     donc deja correct tel quel. */
   undoMove() {
     const h = this.history.pop();
     if (!h) return;
@@ -329,7 +351,6 @@ class Game {
     this.kingSq[0] = h.kw; this.kingSq[1] = h.kb;
     this.turn = us;
     this.computeKey();
-    this.bump(1);
   }
 
   san(m) {

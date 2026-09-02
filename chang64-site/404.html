@@ -105,6 +105,16 @@ p{margin-bottom:12px;max-width:66ch}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+/* Separateur visuel entre les exemples d'une page categorie (Clouage,
+   Enfilade...) : sans ca, les 2-3 exemples s'enchainaient sans aucune
+   rupture visuelle, seul le h2 "Exemple N" les distinguait a l'oeil, et
+   maigrement (meme taille que les autres h2 de la page). Trou de style
+   preexistant, pas introduit par le passage aux pages categories -- l'ancien
+   index filtrable groupait deja ses puzzles par theme dans des sections de
+   cette meme classe, jamais stylee non plus. */
+.theme-bloc{padding-top:20px;margin-top:20px;border-top:1px solid var(--rule)}
+.theme-bloc:first-of-type{padding-top:0;margin-top:0;border-top:none}
+.theme-bloc h2{margin-top:0}
 .eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);
 border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}
 /* Meme forme que .eco (theme, difficulte) mais en gris discret plutot qu'en
@@ -233,7 +243,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   <a class="tile" href="/"><b>Play chess</b><span>chang64.com</span></a>
   <a class="tile" href="/openings/"><b>Openings</b><span>141 families</span></a>
   <a class="tile" href="/fr/ouvertures/"><b>Ouvertures</b><span>141 familles</span></a>
-  <a class="tile" href="/puzzles/"><b>Puzzles</b><span>1000 positions</span></a>
+  <a class="tile" href="/puzzles/"><b>Puzzles</b><span>51638 positions</span></a>
 </div>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le

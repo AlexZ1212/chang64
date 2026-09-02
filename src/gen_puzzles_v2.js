@@ -135,6 +135,42 @@ function lineBetween(a, b) {
   }
   return null;
 }
+/* Meme correctif que gen_puzzles.js (classify()) : reconnait un clouage deja
+   present sur l'echiquier avant le coup, exploite pour gagner du materiel
+   ailleurs, plutot que de ne reconnaitre que les clouages crees PAR le coup
+   solution lui-meme. */
+function absolutePin(g, sq, side) {
+  const ks = kingSq(g, side);
+  if (ks < 0 || ks === sq) return null;
+  const ln = lineBetween(sq, ks);
+  if (!ln || ln.between.some(s => g.board[s])) return null;
+  const isDiag = Math.abs(ln.dir) === 15 || Math.abs(ln.dir) === 17;
+  let s = sq - ln.dir;
+  while (onB(s)) {
+    const pc = g.board[s];
+    if (pc) {
+      if (pColor(pc) !== side) {
+        const t = pType(pc);
+        if ((isDiag && (t === BI || t === Q)) || (!isDiag && (t === R || t === Q)))
+          return { sq: s, piece: t };
+      }
+      return null;
+    }
+    s -= ln.dir;
+  }
+  return null;
+}
+function pinnedDefenderOf(g, target, bySide) {
+  for (let s = 0; s < 128; s++) {
+    if (s & 0x88) { s += 7; continue; }
+    const pc = g.board[s];
+    if (!pc || pColor(pc) !== bySide || s === target) continue;
+    if (!attacksFrom(g, s).includes(target)) continue;
+    const pin = absolutePin(g, s, bySide);
+    if (pin) return { sq: s, piece: pType(pc), pinner: pin };
+  }
+  return null;
+}
 
 /* ------------------------------------------------------------------ */
 /* 1. Source de positions "guidee" : un camp joue a peu pres serieux,  */
@@ -283,6 +319,30 @@ function classifyBase(gBefore, mv, isMate, mateLen) {
     if (t === P) return { theme: "Pawn fork", detail };
     return { theme: "Double attack", detail };
   }
+  /* Prise directe verifiee AVANT clouage/enfilade (correctif) : un clouage
+     ou une enfilade decrit un gain qui se materialise APRES que la piece
+     avant (souvent le roi, sur simple echec) ait du bouger -- si la case
+     d'arrivee contenait deja une piece, le gain reel est cette capture,
+     immediate, pas le motif geometrique accessoire qui l'accompagne.
+     Exemple concret ayant revele le bug : Dxd8+ (dame adverse degarnie
+     capturee) etait etiquete "Skewer" parce que la dame, une fois en d8,
+     attaquait aussi au travers du roi vers un cavalier en b8 -- l'enonce
+     parlait du cavalier "derriere le roi" en occultant la dame qu'on
+     venait de croquer. Ordre inverse ci-dessous : capture d'abord, motif
+     geometrique seulement si la case d'arrivee etait vide (clouage/
+     enfilade "silencieux", le seul cas ou le motif geometrique EST le
+     gain, pas un a-cote). */
+  if (gBefore.board[to]) {
+    const pin = pinnedDefenderOf(gBefore, to, them);
+    if (pin) {
+      return { theme: "Pin", detail: {
+        captured: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) },
+        pinned: { sq: sqName(pin.sq), piece: letter(pin.piece) },
+        behind: { sq: sqName(kingSq(gBefore, them)), piece: "k" }
+      } };
+    }
+    return { theme: "Winning capture", detail: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) } };
+  }
   if (t === BI || t === R || t === Q) {
     const ks = kingSq(after, them);
     const ln = lineBetween(to, ks);
@@ -303,15 +363,19 @@ function classifyBase(gBefore, mv, isMate, mateLen) {
       while (onB(nx)) {
         const p2 = after.board[nx];
         if (p2) {
-          if (pColor(p2) === them && (VAL[pType(pc)] || 0) >= (VAL[pType(p2)] || 0))
-            return { theme: "Skewer", detail: { from: sqName(to), pinned: { sq: sqName(s), piece: letter(pType(pc)) }, behind: { sq: sqName(nx), piece: letter(pType(p2)) } } };
+          if (pColor(p2) === them) {
+            const frontVal = VAL[pType(pc)] || 0, backVal = VAL[pType(p2)] || 0;
+            const detail = { from: sqName(to), pinned: { sq: sqName(s), piece: letter(pType(pc)) }, behind: { sq: sqName(nx), piece: letter(pType(p2)) } };
+            /* Meme correctif que gen_puzzles.js : le clouage relatif (hors
+               roi) n'etait jamais detecte, seule l'enfilade l'etait. */
+            return { theme: frontVal >= backVal ? "Skewer" : "Pin", detail };
+          }
           break;
         }
         nx += beyond.dir;
       }
     }
   }
-  if (gBefore.board[to]) return { theme: "Winning capture", detail: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) } };
   return { theme: "Winning move", detail: {} };
 }
 
@@ -333,17 +397,37 @@ function classifyQuiet(gBefore, line) {
       const pc = after1.board[sq];
       if (!pc || pType(pc) === K) continue;
       /* cette piece attaquee defendait-elle quelque chose avant le coup
-         silencieux, qui devient donc prenable ensuite ? */
-      const before = gBefore;
+         silencieux, qui devient donc prenable ensuite ? Correctif 1 : le
+         filtre de couleur etait inverse -- il retenait ce que `pc`
+         MENACAIT plutot que ce qu'il DEFENDAIT. Correctif 2 (le vrai
+         probleme, plus profond) : meme corrige, "pc defend quelque chose
+         quelque part" est presque toujours vrai dans une position de
+         milieu de partie normale -- ca ne prouve pas que la deviation est
+         le point reel de l'exercice. Le test qui compte : le coup final
+         DE LA SOLUTION (3e demi-coup, apres la reponse forcee de
+         l'adversaire) va-t-il effectivement recuperer une des cases que
+         `pc` gardait ? Sans ca, "Deflection" se declenchait sur a peu pres
+         n'importe quelle position -- verifie empiriquement (64% des
+         positions testees avant ce correctif). */
       const guardedBefore = [];
       for (let s = 0; s < 128; s++) {
         if (s & 0x88) { s += 7; continue; }
-        const target = before.board[s];
-        if (!target || pColor(target) === pColor(pc)) continue;
-        if (attacksFrom(before, sq).includes(s)) guardedBefore.push(s);
+        const target = gBefore.board[s];
+        if (!target || pColor(target) !== pColor(pc)) continue;
+        if (attacksFrom(gBefore, sq).includes(s)) guardedBefore.push(s);
       }
-      if (guardedBefore.length) {
-        return { theme: "Deflection", detail: { from: sqName(first.from), to: sqName(first.to), deflected: { sq: sqName(sq), piece: "_pnbrqk"[pType(pc)] || "" } } };
+      if (!guardedBefore.length) continue;
+      const finalMv = line[2].mv;
+      if (guardedBefore.includes(finalMv.to)) {
+        const after2 = new Game(after1.fen());
+        const oppMv = line[1].mv;
+        const oppFull = after2.moves().find(m => m.from === oppMv.from && m.to === oppMv.to && m.promo === oppMv.promo);
+        if (oppFull) after2.makeMove(oppFull);
+        return { theme: "Deflection", detail: {
+          from: sqName(first.from), to: sqName(first.to),
+          deflected: { sq: sqName(sq), piece: "_pnbrqk"[pType(pc)] || "" },
+          gained: { sq: sqName(finalMv.to), piece: "_pnbrqk"[pType(after2.board[finalMv.to])] || "" }
+        } };
       }
     }
   }
@@ -382,6 +466,21 @@ function makePuzzleV2(g, depth, opts) {
   } else {
     if (best.score < 200) return null;
     if (best.score - second.score < 200) return null;
+  }
+
+  /* Controle final robuste (meme correctif que mine_puzzles.js, meme cause
+     racine ici : rankMoves()/le classement initial tourne a budget court,
+     un run soutenu sous charge peut laisser passer un coup qui perd en
+     fait la piece qui vient de bouger). Rejoue le coup avec un budget de
+     recherche large et verifie que la position reste bien favorable. */
+  if (!isMate) {
+    const cCheck = new Game(g.fen());
+    const mvCheck = cCheck.moves().find(m => m.from === best.mv.from && m.to === best.mv.to && m.promo === best.mv.promo);
+    cCheck.makeMove(mvCheck);
+    if (cCheck.moves().length > 0) {
+      const robust = -search(cCheck, 3, 3000).score;
+      if (robust < 100) return null;
+    }
   }
 
   const quiet = isQuiet(g, best.mv);

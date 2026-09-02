@@ -107,6 +107,16 @@ p{margin-bottom:12px;max-width:66ch}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+/* Separateur visuel entre les exemples d'une page categorie (Clouage,
+   Enfilade...) : sans ca, les 2-3 exemples s'enchainaient sans aucune
+   rupture visuelle, seul le h2 "Exemple N" les distinguait a l'oeil, et
+   maigrement (meme taille que les autres h2 de la page). Trou de style
+   preexistant, pas introduit par le passage aux pages categories -- l'ancien
+   index filtrable groupait deja ses puzzles par theme dans des sections de
+   cette meme classe, jamais stylee non plus. */
+.theme-bloc{padding-top:20px;margin-top:20px;border-top:1px solid var(--rule)}
+.theme-bloc:first-of-type{padding-top:0;margin-top:0;border-top:none}
+.theme-bloc h2{margin-top:0}
 .eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);
 border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}
 /* Meme forme que .eco (theme, difficulte) mais en gris discret plutot qu'en
@@ -250,7 +260,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 <a class="tile" href="/glossary/passed-pawn.html"><b>Passed pawn</b><span>A pawn with no enemy pawn ahead of it on its own file or the…</span></a>
 <a class="tile" href="/glossary/hanging-piece.html"><b>Hanging piece</b><span>A piece that is attacked and not defended. Scanning for hang…</span></a>
 <a class="tile" href="/glossary/sacrifice.html"><b>Sacrifice</b><span>Giving up material on purpose for something worth more: mate…</span></a>
-<a class="tile" href="/glossary/perpetual-check.html"><b>Perpetual check</b><span>An unending series of checks the defender cannot escape. The…</span></a></div>
+<a class="tile" href="/glossary/perpetual-check.html"><b>Perpetual check</b><span>An unending series of checks the defender cannot escape. The…</span></a>
+<a class="tile" href="/glossary/blunder.html"><b>Blunder</b><span>A move that loses material or the game outright, usually bec…</span></a>
+<a class="tile" href="/glossary/mistake.html"><b>Mistake</b><span>A move that makes the position clearly worse without losing …</span></a>
+<a class="tile" href="/glossary/inaccuracy.html"><b>Inaccuracy</b><span>A move that is not the best available and quietly gives some…</span></a>
+<a class="tile" href="/glossary/best-move.html"><b>Best move</b><span>The move an engine ranks above every alternative in a given …</span></a>
+<a class="tile" href="/glossary/only-move.html"><b>Only move</b><span>A position where every other legal move loses, often by forc…</span></a>
+<a class="tile" href="/glossary/brilliant-move.html"><b>Brilliant move</b><span>A move that gives up material yet turns out to be objectivel…</span></a>
+<a class="tile" href="/glossary/elo-rating.html"><b>The Elo rating: what your number actually means</b><span>An Elo rating is a running estimate of skill built from one …</span></a></div>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role

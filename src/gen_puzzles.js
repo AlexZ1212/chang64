@@ -135,6 +135,52 @@ function kingSq(g, side) {
   return -1;
 }
 
+/* Une piece de `side` en `sq` est-elle clouee de facon absolue contre son
+   propre roi (alignement libre jusqu'au roi, et au-dela de `sq` dans l'autre
+   sens, une piece adverse a longue portee du bon type pour tenir la ligne) ?
+   Utilise pour reconnaitre un clouage DEJA PRESENT sur l'echiquier avant le
+   coup solution -- jusqu'ici, seuls les clouages CREES par le coup lui-meme
+   etaient reconnus ; le clouage deja en place, exploite pour gagner du
+   materiel ailleurs (la piece clouee ne peut pas defendre/reprendre), n'etait
+   jamais signale comme tel : l'exercice retombait en "Winning capture"
+   generique, alors que le motif reel a repérer est justement le clouage. */
+function absolutePin(g, sq, side) {
+  const ks = kingSq(g, side);
+  if (ks < 0 || ks === sq) return null;
+  const ln = lineBetween(sq, ks);
+  if (!ln || ln.between.some(s => g.board[s])) return null;
+  const isDiag = Math.abs(ln.dir) === 15 || Math.abs(ln.dir) === 17;
+  let s = sq - ln.dir;
+  while (onB(s)) {
+    const pc = g.board[s];
+    if (pc) {
+      if (pColor(pc) !== side) {
+        const t = pType(pc);
+        if ((isDiag && (t === BI || t === Q)) || (!isDiag && (t === R || t === Q)))
+          return { sq: s, piece: t };
+      }
+      return null;
+    }
+    s -= ln.dir;
+  }
+  return null;
+}
+/* La piece adverse (a `sq`, camp `bySide`) qui defend `target`, si elle est
+   elle-meme absolument clouee contre son roi -- le cas ou une capture n'est
+   sure QUE parce que le defenseur ne peut pas legalement reprendre. Renvoie
+   la premiere trouvee (assez rare d'en avoir deux sur la meme case). */
+function pinnedDefenderOf(g, target, bySide) {
+  for (let s = 0; s < 128; s++) {
+    if (s & 0x88) { s += 7; continue; }
+    const pc = g.board[s];
+    if (!pc || pColor(pc) !== bySide || s === target) continue;
+    if (!attacksFrom(g, s).includes(target)) continue;
+    const pin = absolutePin(g, s, bySide);
+    if (pin) return { sq: s, piece: pType(pc), pinner: pin };
+  }
+  return null;
+}
+
 /* Identifie le motif apres avoir joue le coup solution. */
 /* Retourne {theme, detail} plutot qu'une simple chaine : detail retient les
    cases et pieces precises qui justifient le theme (qui est fourchette avec
@@ -191,6 +237,30 @@ function classify(gBefore, mv, isMate, mateLen) {
     if (t === P) return { theme: "Pawn fork", detail };
     return { theme: "Double attack", detail };
   }
+  /* Prise directe verifiee AVANT clouage/enfilade (correctif, session du
+     [date]) : un clouage/enfilade decrit un gain qui se materialise APRES
+     que la piece devant (souvent le roi, sur simple echec) ait du bouger --
+     si la case d'arrivee contenait deja une piece, le gain reel est cette
+     capture immediate, pas le motif geometrique accessoire qui l'accompagne.
+     Cas ayant revele le bug : Dxd8+ (dame degarnie capturee) etiquete
+     "Skewer" parce que la dame, en d8, attaquait aussi au travers du roi
+     vers un cavalier en b8 -- l'enonce parlait du cavalier "derriere le
+     roi" en occultant la dame qu'on venait de croquer. */
+  if (gBefore.board[to]) {
+    /* Le defenseur du butin est-il lui-meme cloue ? Si oui, c'est LA raison
+       pour laquelle la prise est sure -- l'exercice est un clouage exploite,
+       pas une simple prise generique. Verifie AVANT de renvoyer "Winning
+       capture" par defaut. */
+    const pin = pinnedDefenderOf(gBefore, to, them);
+    if (pin) {
+      return { theme: "Pin", detail: {
+        captured: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) },
+        pinned: { sq: sqName(pin.sq), piece: letter(pin.piece) },
+        behind: { sq: sqName(kingSq(gBefore, them)), piece: "k" }
+      } };
+    }
+    return { theme: "Winning capture", detail: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) } };
+  }
   if (t === BI || t === R || t === Q) {
     const ks = kingSq(after, them);
     const ln = lineBetween(to, ks);
@@ -212,15 +282,24 @@ function classify(gBefore, mv, isMate, mateLen) {
       while (onB(nx)) {
         const p2 = after.board[nx];
         if (p2) {
-          if (pColor(p2) === them && (VAL[pType(pc)] || 0) >= (VAL[pType(p2)] || 0))
-            return { theme: "Skewer", detail: { from: sqName(to), pinned: { sq: sqName(s), piece: letter(pType(pc)) }, behind: { sq: sqName(nx), piece: letter(pType(p2)) } } };
+          if (pColor(p2) === them) {
+            const frontVal = VAL[pType(pc)] || 0, backVal = VAL[pType(p2)] || 0;
+            const detail = { from: sqName(to), pinned: { sq: sqName(s), piece: letter(pType(pc)) }, behind: { sq: sqName(nx), piece: letter(pType(p2)) } };
+            /* Jusqu'ici : uniquement l'enfilade (piece de devant >= piece de
+               derriere), le clouage RELATIF (piece de moindre valeur immobilisee
+               devant une piece plus precieuse, hors roi -- ex. cavalier cloue
+               devant la dame) n'etait tout simplement jamais detecte, et
+               retombait dans le fourre-tout "Winning move". Meme logique de
+               valeur que la branche clouage-sur-le-roi juste au-dessus,
+               desormais appliquee ici aussi. */
+            return { theme: frontVal >= backVal ? "Skewer" : "Pin", detail };
+          }
           break;
         }
         nx += beyond.dir;
       }
     }
   }
-  if (gBefore.board[to]) return { theme: "Winning capture", detail: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) } };
   return { theme: "Winning move", detail: {} };
 }
 

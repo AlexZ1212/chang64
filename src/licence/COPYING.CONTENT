@@ -1,0 +1,78 @@
+SCOPE OF THE GPL IN THIS REPOSITORY
+===================================
+
+Repository: https://github.com/AlexZ1212/chang64
+Site:       https://chang64.com
+
+The GNU General Public License v3, whose full text is in the file LICENSE, applies to
+the PROGRAM: the chess engine, the user interface, the build scripts, the service
+worker, and every other piece of executable code in this repository.
+
+It does NOT apply to the editorial and creative material distributed alongside the
+program. The following remain the exclusive property of the author and are not
+licensed for reuse:
+
+  1. The written content of the site's pages in English and French: opening notes,
+     rule explanations, glossary entries, endgame commentary, trap descriptions, and
+     all accompanying prose.
+
+  2. The tactics puzzle collection as a curated set, together with its themes,
+     difficulty calibration and ordering.
+
+  3. The visual identity: the chang64 name, the elephant mark, the logotype, the
+     chess piece artwork, and the colour and typography system.
+
+  4. The Open Graph share images generated from the above.
+
+Anyone exercising their rights under the GPL is free to take the program. To publish a
+derivative site, replace the material listed above with your own.
+
+THIRD PARTY MATERIAL
+--------------------
+
+Stockfish (engine/) is copyright the Stockfish developers and distributed under the
+GNU General Public License v3. Its licence text is kept with the binary in
+engine/LICENSE-GPLv3.txt. Source: https://github.com/official-stockfish/Stockfish
+
+Opening names and ECO codes derive from the Lichess opening database
+(lichess-org/chess-openings), published under the CC0 public domain dedication.
+
+
+PORTEE DE LA GPL DANS CE DEPOT
+==============================
+
+Depot : https://github.com/AlexZ1212/chang64
+Site  : https://chang64.com
+
+La licence GNU GPL v3, dont le texte complet figure dans le fichier LICENSE,
+s'applique au PROGRAMME : le moteur d'echecs, l'interface, les scripts de generation,
+le service worker, et tout autre code executable de ce depot.
+
+Elle ne s'applique PAS au materiel editorial et creatif distribue avec le programme.
+Les elements suivants restent la propriete exclusive de l'auteur et ne sont pas
+concedes en licence :
+
+  1. Le contenu redactionnel des pages du site en anglais et en francais : notes
+     d'ouvertures, explications des regles, entrees du glossaire, commentaires de
+     finales, descriptions des pieges, et l'ensemble des textes qui les accompagnent.
+
+  2. La collection d'exercices tactiques en tant qu'ensemble constitue, avec ses
+     themes, son calibrage de difficulte et son ordonnancement.
+
+  3. L'identite visuelle : le nom chang64, la marque a l'elephant, le logotype, le
+     dessin des pieces, ainsi que le systeme de couleurs et de typographie.
+
+  4. Les images de partage Open Graph generees a partir des elements ci-dessus.
+
+Quiconque exerce ses droits au titre de la GPL est libre de reprendre le programme.
+Pour publier un site derive, remplacez les elements listes ci-dessus par les votres.
+
+MATERIEL DE TIERS
+-----------------
+
+Stockfish (engine/) est la propriete des developpeurs de Stockfish et distribue sous
+licence GNU GPL v3. Le texte de sa licence accompagne le binaire dans
+engine/LICENSE-GPLv3.txt. Source : https://github.com/official-stockfish/Stockfish
+
+Les noms d'ouvertures et les codes ECO proviennent de la base d'ouvertures de Lichess
+(lichess-org/chess-openings), publiee sous la dedicace au domaine public CC0.

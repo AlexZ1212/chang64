@@ -1,7 +1,102 @@
 /* ==========================================================
    PUZZLES + LEVELS
    ========================================================== */
-const PUZZLES = __PUZZLES__;
+/* Jusqu'ici, la banque entiere (__PUZZLES__, des dizaines de milliers
+   d'exercices) etait embarquee telle quelle dans ce script, integre a
+   index.html : la page d'accueil pesait plusieurs Mo pour un visiteur qui
+   n'en resoudra jamais qu'une fraction dans une session. Meme principe que
+   loadOpeningBook/openingMap plus bas (ui2.js) pour le livre d'ouvertures :
+   chaque niveau de difficulte est un fichier a part (/data/level-N.json),
+   charge a la demande au premier besoin reel, puis mis en cache en memoire
+   pour le reste de la session. Un petit index id->niveau (/data/puzzle-
+   index.json) et un decompte par theme (/data/theme-counts.json) restent
+   legers et permettent de resoudre un id ou d'afficher les compteurs sans
+   charger un niveau entier. Le Sprint (ui2.js) pioche dans un echantillon
+   dedie (/data/rush-pool.json) plutot que dans la banque complete, pour ne
+   jamais avoir a tout charger d'un coup, meme en jouant.
+   Meme mecanique de repli que loadOpeningBook : si une requete echoue, on
+   reessaie au prochain appel (rien ne reste bloque), et un message clair
+   s'affiche plutot qu'un exercice qui ne charge jamais silencieusement. */
+const TOTAL_PUZZLES = __TOTAL_PUZZLES__;
+const LEVEL_CACHE = {}, LEVEL_PENDING = {};
+const PUZZLE_CACHE = {};
+let PUZZLE_INDEX = null, PUZZLE_INDEX_PENDING = false;
+let THEME_COUNTS = null, THEME_COUNTS_PENDING = false;
+
+function fetchJSON(url, done, fail) {
+  if (typeof fetch === "function") {
+    fetch(url).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(done).catch(fail);
+  } else if (typeof XMLHttpRequest === "function") {
+    try {
+      const x = new XMLHttpRequest();
+      x.open("GET", url, true);
+      x.onload = () => { try { x.status >= 200 && x.status < 300 ? done(JSON.parse(x.responseText)) : fail(); } catch (e) { fail(); } };
+      x.onerror = fail;
+      x.send();
+    } catch (e) { fail(); }
+  } else fail();
+}
+function puzzleDataError() {
+  const s = $("status");
+  if (s) { s.className = "status lose"; s.textContent = t("Couldn't load puzzles. Check your connection and try again."); }
+}
+/* onReady est rappelee des l'arrivee des donnees (comme done() dans
+   loadOpeningBook) : chaque appelant se re-declenche lui-meme une fois
+   pret, plutot que de threader des Promises dans tout le fichier -- meme
+   choix que le livre d'ouvertures, pour rester coherent avec le reste du
+   code et limiter la surface du changement. */
+function loadLevel(lvl, onReady) {
+  if (LEVEL_CACHE[lvl]) { onReady && onReady(LEVEL_CACHE[lvl]); return; }
+  if (LEVEL_PENDING[lvl]) return;
+  LEVEL_PENDING[lvl] = true;
+  fetchJSON("/data/level-" + lvl + ".json",
+    data => { LEVEL_CACHE[lvl] = data; LEVEL_PENDING[lvl] = false; for (const p of data) PUZZLE_CACHE[p.id] = p; onReady && onReady(data); },
+    () => { LEVEL_PENDING[lvl] = false; puzzleDataError(); });
+}
+function loadPuzzleIndex(onReady) {
+  if (PUZZLE_INDEX) { onReady && onReady(PUZZLE_INDEX); return; }
+  if (PUZZLE_INDEX_PENDING) return;
+  PUZZLE_INDEX_PENDING = true;
+  fetchJSON("/data/puzzle-index.json",
+    data => { PUZZLE_INDEX = data; PUZZLE_INDEX_PENDING = false; onReady && onReady(data); },
+    () => { PUZZLE_INDEX_PENDING = false; puzzleDataError(); });
+}
+function loadThemeCounts(onReady) {
+  if (THEME_COUNTS) { onReady && onReady(THEME_COUNTS); return; }
+  if (THEME_COUNTS_PENDING) return;
+  THEME_COUNTS_PENDING = true;
+  fetchJSON("/data/theme-counts.json",
+    data => { THEME_COUNTS = data; THEME_COUNTS_PENDING = false; onReady && onReady(data); },
+    () => { THEME_COUNTS_PENDING = false; puzzleDataError(); });
+}
+/* Echantillon dedie pour le Sprint (Defis) : jusqu'a 400 exercices resolus
+   en un coup par theme (voir la note dans startRush, ui2.js), pioches sur
+   toute la banque plutot que sur un seul niveau -- le Sprint doit varier et
+   monter doucement en difficulte en trois minutes, ce qu'un seul niveau ne
+   permettrait pas. Fichier a part et de taille bornee (~quelques centaines
+   de Ko) plutot que la banque complete : charger tout pour jouer un sprint
+   de trois minutes irait a l'encontre du chargement a la demande. */
+let RUSH_POOL = null, RUSH_POOL_PENDING = false;
+function loadRushPool(onReady) {
+  if (RUSH_POOL) { onReady && onReady(RUSH_POOL); return; }
+  if (RUSH_POOL_PENDING) return;
+  RUSH_POOL_PENDING = true;
+  fetchJSON("/data/rush-pool.json",
+    data => { RUSH_POOL = data; RUSH_POOL_PENDING = false; for (const p of data) PUZZLE_CACHE[p.id] = p; onReady && onReady(data); },
+    () => { RUSH_POOL_PENDING = false; puzzleDataError(); });
+}
+/* Resout un exercice par id sans connaitre son niveau a l'avance (lien
+   direct /#puzzle=..., ou reprise d'un exercice de revision) : consulte
+   d'abord le cache, sinon l'index (leger, toujours charge en un coup), puis
+   le niveau concerne. */
+function loadPuzzleById(id, onReady) {
+  if (PUZZLE_CACHE[id]) { onReady && onReady(PUZZLE_CACHE[id]); return; }
+  loadPuzzleIndex(idx => {
+    const lvl = idx[id];
+    if (!lvl) { onReady && onReady(null); return; }
+    loadLevel(lvl, () => onReady && onReady(PUZZLE_CACHE[id] || null));
+  });
+}
 
 /* Dix paliers plutot que cinq : avec cinq, on atteignait le sommet en une
    quinzaine d'exercices reussis (trois de suite pour monter), ce qui donnait
@@ -133,8 +228,15 @@ let mainGame=null,mainSan=null,mainLast=null,mainStarted=false,mainFlipped=false
 let gameStarted=false;
 
 /* puzzles */
-let puzzle=null,puzzleN=0,puzzleTries=0,puzzleDone=false,solCache={};
+let puzzle=null,puzzleN=0,puzzleTries=0,puzzleDone=false,puzzleSolPly=0,solCache={};
 let prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[]};
+/* Delta de notation du dernier exercice juge (integration ELO) : mis a
+   jour par updateRating() (ui2.js), lu par finishPuzzle() juste apres pour
+   l'afficher a cote du verdict. Reinitialise a chaque nouvel exercice
+   charge (loadPuzzle) pour ne jamais laisser un delta perime s'afficher
+   sur l'exercice suivant si jamais l'affichage etait lu avant qu'un nouveau
+   delta ne soit calcule. */
+let lastRatingDelta=null;
 
 /* ---------- storage ----------
    window.storage n'existe pas dans un navigateur : cette API vient de
@@ -965,18 +1067,27 @@ function undoGame(){
    PUZZLES
    ========================================================== */
 function themeOK(p){return !prog.theme||p.theme===prog.theme;}
+function allLoadedPuzzles(){
+  const out=[];
+  for(const lvl in LEVEL_CACHE)out.push(...LEVEL_CACHE[lvl]);
+  return out;
+}
 function levelPool(lvl){
-  let pool=PUZZLES.filter(p=>p.level===lvl&&themeOK(p));
-  if(!pool.length&&prog.theme)pool=PUZZLES.filter(themeOK);   // thème rare : on ignore le niveau
-  return pool.length?pool:PUZZLES.filter(p=>p.level===lvl);
+  const bank=LEVEL_CACHE[lvl]||[];
+  let pool=bank.filter(themeOK);
+  /* theme rare, aucun exercice a ce niveau precis : on retombe sur les
+     niveaux deja charges en cache (pas de nouvelle requete pour un cas
+     limite) plutot que de laisser la liste vide. */
+  if(!pool.length&&prog.theme)pool=allLoadedPuzzles().filter(themeOK);
+  return pool.length?pool:bank;
 }
 function renderThemeFilter(){
   const sel=$("themeFilter"); if(!sel)return;
   $("themeTitle").textContent=t("Theme");
-  const counts={};
-  for(const p of PUZZLES)counts[p.theme]=(counts[p.theme]||0)+1;
+  if(!THEME_COUNTS){loadThemeCounts(renderThemeFilter);return;}
+  const counts=THEME_COUNTS;
   const themes=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-  sel.innerHTML='<option value="">'+t("All themes")+" ("+PUZZLES.length+")</option>"+
+  sel.innerHTML='<option value="">'+t("All themes")+" ("+TOTAL_PUZZLES+")</option>"+
     themes.map(th=>'<option value="'+th.replace(/"/g,"&quot;")+'">'+t(th)+" ("+counts[th]+")</option>").join("");
   sel.value=prog.theme||"";
 }
@@ -992,6 +1103,16 @@ function renderThemeFilter(){
    la sequence varie donc d'une session a l'autre, sans jamais faire suivre
    un exercice difficile juste apres un evident. */
 function nextPuzzle(){
+  /* Niveau pas encore en cache : on le charge puis on se rappelle soi-meme,
+     meme mecanique que loadOpeningBook/openingMap. Le statut affiche un
+     message le temps du chargement, plutot qu'un bouton qui semble ne rien
+     faire -- seul le tout premier acces a un niveau donne dans la session
+     est concerne, les suivants sont instantanes (cache memoire). */
+  if(!LEVEL_CACHE[prog.level]){
+    const s=$("status"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
+    loadLevel(prog.level,nextPuzzle);
+    return;
+  }
   /* "Exercice suivant" sans jamais resoudre n'ajoutait rien a prog.seen
      (seul finishPuzzle() le faisait, au moment de resoudre) : cliquer
      plusieurs fois de suite sans repondre pouvait donc rester coince dans
@@ -1017,10 +1138,25 @@ function nextPuzzle(){
   puzzle.daily=false;
   loadPuzzle();
 }
+/* Exercice du jour : meme rotation globale qu'avant (index du jour modulo
+   la taille de la banque), mais resolue via l'index leger id->niveau
+   plutot qu'en indexant un tableau complet embarque -- l'ordre des cles de
+   PUZZLE_INDEX correspond a l'ordre d'origine de puzzles.json (chaine non
+   numerique, ordre d'insertion garanti par la specification JS), donc la
+   formule et le resultat pour un jour donne restent identiques a avant. */
 function dailyPuzzle(){
+  if(!PUZZLE_INDEX){
+    const s=$("status"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
+    loadPuzzleIndex(dailyPuzzle);
+    return;
+  }
   const d=new Date();
   const n=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);
-  puzzle=PUZZLES[n%PUZZLES.length];
+  const ids=Object.keys(PUZZLE_INDEX);
+  const id=ids[n%ids.length];
+  const lvl=PUZZLE_INDEX[id];
+  if(!LEVEL_CACHE[lvl]){loadLevel(lvl,dailyPuzzle);return;}
+  puzzle=PUZZLE_CACHE[id];
   puzzle.daily=true;
   loadPuzzle();
 }
@@ -1030,7 +1166,18 @@ function loadPuzzle(){
   flipped=game.turn===B;
   selected=-1;marks={};lastMove=null;busy=false;
   puzzleN=puzzle.type==="mate"?puzzle.n:0;
+  /* Progression dans puzzle.sol pour les gains a plusieurs coups (ex.
+     Deviation : mon coup, reponse forcee de l'adversaire, mon coup final).
+     Jusqu'ici, tout puzzle "gain" (type!=="mate") terminait des le premier
+     coup correct, quelle que soit la longueur reelle de sol -- juste apres
+     avoir introduit des gains a plusieurs coups (voir tryPuzzleMove). */
+  puzzleSolPly=0;
   puzzleTries=0;puzzleDone=false;
+  /* Repart a zero a chaque exercice : sans ca, le delta du PRECEDENT
+     exercice resterait affiche par erreur si jamais quelque chose lisait
+     lastRatingDelta avant que le nouveau ne soit calcule (ex: un exercice
+     abandonne sans etre juge, rechargement de page). */
+  lastRatingDelta=null;
   /* Le bouton d'aide repart sur "Indice" a chaque exercice. */
   hintShown=false;
   if(typeof syncHintBtn==="function")syncHintBtn();
@@ -1046,6 +1193,25 @@ function loadPuzzle(){
        comme a l'ecrit. */
     ec.setAttribute("aria-label",puzzle.code?t("Exercise ID: {code} · useful when reporting an issue",{code:puzzle.code}):"");
   }
+  /* Force estimee de l'exercice vs la tienne (integration ELO, point 3) :
+     LEVEL_RATING[level-1] est la meme table que celle utilisee par
+     updateRating() pour juger la partie -- afficher exactement ce a quoi
+     l'exercice est compare, pas un chiffre invente separement qui
+     risquerait de diverger. Bulle d'info plutot que texte permanent
+     (signale : "~1150 rated · you: 930" retombait a la ligne sur mobile
+     et poussait le bouton "Exercice suivant" plus bas, hors d'atteinte
+     sans defiler) -- meme mecanisme delegue que les autres bulles du site
+     (.info-tip/.info-tip-pop, voir ui3.js), zero JS supplementaire a
+     brancher. Fermee explicitement a chaque nouvel exercice : sinon une
+     bulle laissee ouverte sur le precedent resterait affichee, avec un
+     contenu qui n'a pas encore ete mis a jour au moment du re-rendu. */
+  const ts=$("tipStrength");
+  if(ts&&typeof LEVEL_RATING!=="undefined"){
+    ensureProgFields();
+    const pr=LEVEL_RATING[(puzzle.level||1)-1];
+    ts.textContent=t("This exercise is rated about {pr}. You: {yr}.",{pr:pr,yr:prog.rating});
+  }
+  if(typeof closeAllInfoTips==="function")closeAllInfoTips();
   $("exQuest").textContent=puzzle.type==="mate"
     ? t(side+" to play and mate in {n} "+(puzzle.n>1?"moves.":"move."),{n:puzzle.n})
     : t(side+" to play and win material.");
@@ -1063,7 +1229,12 @@ function currentSolutions(){
      banque ne soit prete levait une TypeError qui remontait jusqu'a la
      console et laissait l'interface dans un etat incoherent. */
   if(!puzzle)return [];
-  if(puzzle.type!=="mate")return game.moves().filter(m=>puzzle.sol.includes(game.uci(m)));
+  /* Gain a plusieurs coups (Deviation...) : ne verifie que le coup attendu
+     a CETTE etape precise (puzzle.sol[puzzleSolPly]), pas n'importe quelle
+     entree du tableau -- correct par construction plutot que par coincidence
+     (un coup adverse de la sequence n'est de toute facon jamais legal a mon
+     tour, mais autant etre precis que de compter dessus). */
+  if(puzzle.type!=="mate")return game.moves().filter(m=>game.uci(m)===puzzle.sol[puzzleSolPly]);
   const key=game.fen()+"|"+puzzleN;
   if(!solCache[key])solCache[key]=matingMoves(game,puzzleN);
   return solCache[key];
@@ -1105,7 +1276,37 @@ function tryPuzzleMove(m){
   legalCache=game.moves();
   render();updateEval();
   if(!legalCache.length&&game.inCheck()){finishPuzzle(true,t("{san} — checkmate.",{san:san}));return;}
-  if(puzzle.type!=="mate"){finishPuzzle(true,t("{san} — material won. Nicely spotted.",{san:san}));return;}
+  puzzleSolPly++;
+  /* Gain a plusieurs coups : la sequence continue tant qu'il reste des
+     coups dans puzzle.sol (ma reponse suivante, apres la replique forcee
+     de l'adversaire). Avant ce correctif, TOUT gain (type!=="mate")
+     terminait ici des le premier coup, quelle que soit sa longueur reelle
+     -- invisible tant que mine_puzzles.js ne produisait que des gains a un
+     seul coup, redevenu faux depuis la Deviation (coup + reponse forcee +
+     coup final, sol.length===3). */
+  if(puzzle.type!=="mate"&&puzzleSolPly>=puzzle.sol.length){finishPuzzle(true,t("{san} — material won. Nicely spotted.",{san:san}));return;}
+  if(puzzle.type!=="mate"){
+    /* La replique adverse est CONNUE d'avance (puzzle.sol), pas a chercher :
+       contrairement au mat (matingMoves() doit explorer, l'adversaire ayant
+       plusieurs defenses possibles a refuter une a une), un gain valide a
+       ete extrait avec une suite precise -- la rejouer telle quelle est a
+       la fois plus fiable et plus rapide qu'un appel a search(). */
+    const st=$("exStatus");st.className="status";
+    st.textContent=t("{san}. The defence replies…",{san:san});
+    busy=true;
+    setTimeout(()=>{
+      const oppUci=puzzle.sol[puzzleSolPly];
+      const oppMv=game.moves().find(x=>game.uci(x)===oppUci);
+      if(!oppMv){busy=false;finishPuzzle(true,t("{san} — material won. Nicely spotted.",{san:san}));return;}
+      game.makeMove(oppMv);lastMove=oppMv;busy=false;
+      puzzleSolPly++;
+      legalCache=game.moves();marks={};
+      render();updateEval();
+      const s2=$("exStatus");s2.className="status";
+      s2.textContent=t("Correct. Your move.");
+    },420);
+    return;
+  }
   puzzleN--;
   const st=$("exStatus");st.className="status";
   st.textContent=t("{san}. The defence replies…",{san:san});
@@ -1156,31 +1357,88 @@ function explainSentence(p){
     }
     case "Pin":
     case "Skewer":
+      if(ex.captured&&ex.pinned){
+        /* Accord de genre : {pinned} peut etre n'importe quelle piece (dame,
+           tour = feminin ; les quatre autres = masculin), donc un seul
+           gabarit traduit avec "defendu"/"cloue" fixes serait faux une fois
+           sur deux ("la dame... defendu"). Compose directement plutot que
+           de passer par un seul t() a un seul genre. */
+        const fem=ex.pinned.piece&&"qr".includes(ex.pinned.piece.toLowerCase());
+        if(LANG==="fr"){
+          return nounPhrase(ex.captured.piece,ex.captured.sq,true)+" n'était défendu"+(fem?"e":"")+" que par "+
+            nounPhrase(ex.pinned.piece,ex.pinned.sq,false)+", qui est cloué"+(fem?"e":"")+" et ne peut pas reprendre.";
+        }
+        return t("{captured} was only defended by {pinned}, which is pinned and can't recapture.",
+          {captured:nounPhrase(ex.captured.piece,ex.captured.sq,true),pinned:nounPhrase(ex.pinned.piece,ex.pinned.sq,false)});
+      }
       return (ex.pinned&&ex.behind)?t("{pinned} can't move without exposing {behind}.",
         {pinned:nounPhrase(ex.pinned.piece,ex.pinned.sq,true),behind:nounPhrase(ex.behind.piece,ex.behind.sq,false)}):"";
     case "Back-rank mate":
       return ex.king?t("The king on {sq} had no square to escape to.",{sq:ex.king}):"";
+    case "Deflection":
+      if(!ex.deflected)return "";
+      if(LANG==="fr"){
+        const fem=ex.deflected.piece&&"qr".includes(ex.deflected.piece.toLowerCase());
+        return nounPhrase(ex.deflected.piece,ex.deflected.sq,true)+" était l'unique défenseur"+
+          " — forcé"+(fem?"e":"")+" de s'écarter, "+(fem?"elle":"il")+" ne peut plus aider.";
+      }
+      return t("{deflected} was the only defender — forced away, it can no longer help.",
+        {deflected:nounPhrase(ex.deflected.piece,ex.deflected.sq,true)});
     case "Smothered mate":
       return ex.king?t("The king on {sq} was boxed in by its own pieces.",{sq:ex.king}):"";
     default:
       return "";
   }
 }
+/* Pedagogie coup juste / coup faute (exercices mines depuis de vraies
+   parties via mine_puzzles.js -- absent sur les exercices generes par
+   auto-jeu, qui n'ont pas ce champ). p.pedagogy vient d'un calcul reel
+   (bestDistractorExplanation) : le coup tentant candidateSan et la
+   refutation refutationSan sont une ligne effectivement calculee par le
+   moteur, pas une phrase generique -- si le coup tentant s'effondre plus
+   loin que ce qu'un simple regard suffit a voir (trapDepth>0), le rappelle
+   pour souligner que ce n'etait pas une erreur idiote. */
+function pedagogySentence(p){
+  const pg=p.pedagogy;
+  if(!pg||!pg.candidateSan||!pg.refutationSan)return"";
+  return pg.trapDepth>0
+    ? t("{candidate} looks tempting, but only {refutation} actually refutes it — worth calculating a move further next time.",{candidate:pg.candidateSan,refutation:pg.refutationSan})
+    : t("Careful with {candidate}: {refutation} punishes it.",{candidate:pg.candidateSan,refutation:pg.refutationSan});
+}
 function finishPuzzle(won,msg){
   puzzleDone=true;
   if(typeof onPuzzleResult==="function"&&onPuzzleResult(won,msg))return;
   const st=$("exStatus");
   st.className="status "+(won?"win":"lose");
-  st.textContent=msg;
+  /* Delta de notation affiche a cote du verdict (integration ELO, point 1) :
+     lastRatingDelta vient d'etre pose par updateRating(), appele DANS
+     onPuzzleResult() juste au-dessus -- toujours a jour a ce point precis
+     du code, jamais un residu de l'exercice precedent (remis a null au
+     chargement de chaque nouvel exercice, voir loadPuzzle()). Absent
+     (null) pendant un Chang Sprint : onPuzzleResult() retourne avant
+     d'appeler updateRating() dans ce cas, la notation ne bouge pas pendant
+     un sprint -- donc rien a afficher, comportement correct par defaut
+     sans code special ici. */
+  st.textContent=msg+(typeof lastRatingDelta==="number"?" "+t("({delta} rating)",{delta:(lastRatingDelta>=0?"+":"\u2212")+Math.abs(lastRatingDelta)}):"");
   const ex=$("exExplain");if(ex)ex.textContent=won?explainSentence(puzzle):"";
+  const pg=$("exPedagogy");if(pg)pg.textContent=won?pedagogySentence(puzzle):"";
   if(won&&puzzleTries===0)registerSolved();
   else if(won)registerPartial();
   if(!prog.seen.includes(puzzle.id)){prog.seen.push(puzzle.id);if(prog.seen.length>200)prog.seen.shift();}
+  /* Calendrier de completion : une seule entree par jour, peu importe le
+     nombre de tentatives -- reussi une fois dans la journee suffit. Pas de
+     distinction "jamais tente" vs "rate" : les cases non marquees couvrent
+     les deux, plus simple a lire d'un coup d'oeil. */
+  if(won&&puzzle.daily&&typeof todayKey==="function"){
+    if(typeof ensureProgFields==="function")ensureProgFields();
+    prog.dailyLog[todayKey()]=true;
+  }
   saveProg();renderProgress();
 }
 function registerSolved(){
   prog.solved++;prog.streak++;prog.correctRun++;prog.wrongRun=0;
   if(prog.streak>prog.best)prog.best=prog.streak;
+  if(typeof checkBadges==="function")checkBadges();
   if(prog.correctRun>=3&&prog.level<LEVELS.length){
     prog.level++;prog.correctRun=0;
     setTimeout(()=>{
@@ -1513,10 +1771,15 @@ function applyDeepLink(d){
     return true;
   }
   if(d.kind==="puzzle"){
-    const pz=PUZZLES.find(p=>p.id===d.id);
-    if(!pz)return false;
     setMode("puzzles");
-    puzzle=pz;puzzle.daily=false;loadPuzzle();
+    /* Resolution asynchrone (index leger + niveau concerne) : on s'engage
+       tout de suite sur ce mode plutot que d'attendre la reponse, comme
+       pour les autres branches -- si l'id s'avere introuvable (lien perime),
+       on retombe sur un exercice normal plutot que de laisser l'ecran vide. */
+    loadPuzzleById(d.id,pz=>{
+      if(!pz){nextPuzzle();return;}
+      puzzle=pz;puzzle.daily=false;loadPuzzle();
+    });
     return true;
   }
   if(d.kind==="line"){
@@ -1816,7 +2079,7 @@ const icoBrass=t=>{
 $("icoPlay").innerHTML=icoBrass("n");
 $("icoPuzzles").innerHTML=icoBrass("q");
 $("icoFriend").innerHTML=icoBrass("p");
-const _hc=$("hCount"); if(_hc)_hc.textContent=PUZZLES.length;
+const _hc=$("hCount"); if(_hc)_hc.textContent=TOTAL_PUZZLES;
 
 buildBoard();
 Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAmiHistory()]).then(()=>{

@@ -460,6 +460,97 @@ function drawGraph(plies){
     (d?'<path d="'+d+'" fill="none" stroke="#D9A83F" stroke-width="2" stroke-linejoin="round"/>':"")+
     '</svg>';
 }
+/* Historique de notation (integration ELO, point 2). Meme principe que
+   drawGraph() ci-dessus (SVG en ligne, viewBox proportionnel) mais avec une
+   echelle DYNAMIQUE plutot que le CLAMP fixe de l'eval : la notation n'a
+   pas de plage naturelle a l'avance (peut aller de 400 a plus de 2300),
+   contrairement au centipawn deja borne par construction. Min/max calcules
+   sur l'historique lui-meme a chaque rendu -- toujours a jour, jamais une
+   plage codee en dur qui deviendrait fausse a mesure que la notation
+   progresse au fil des mois.
+   preserveAspectRatio="xMidYMid meet" (pas "none" comme drawGraph) : le
+   texte des graduations serait deforme si le rendu ne matchait pas
+   exactement le ratio du viewBox -- voir .graph.ratinggraph svg en CSS,
+   qui fixe ce ratio via aspect-ratio plutot qu'une hauteur figee, pour que
+   "meet" n'ait justement jamais besoin d'ajouter de bandes vides. */
+function drawRatingGraph(){
+  const el=$("ratingGraph"); if(!el)return;
+  ensureProgFields();
+  const hist=prog.ratingHistory;
+  const w=300,h=90,padL=30,padR=6,padT=8,padB=16;
+  const plotW=w-padL-padR,plotH=h-padT-padB;
+  /* Etat vide/quasi-vide (signale : "pas tres joli lorsqu'il est vide") :
+     une ligne pointillee et un message plutot qu'un cadre nu qui se lit
+     comme un bug -- meme esprit que "Rien de resolu, on propose de
+     commencer" deja applique ailleurs dans l'app pour un premier
+     visiteur. Il faut au moins 2 points pour tracer une ligne. */
+  if(hist.length<2){
+    /* Marges symetriques ici (pas padL/padR, reserves aux graduations du
+       mode rempli) : signale, les pointilles n'etaient pas centres --
+       cause exacte, padL (30, reserve aux libelles Elo) et padR (6)
+       n'ont aucune raison d'etre asymetriques quand il n'y a justement
+       aucun libelle a afficher en mode vide. */
+    const ePad=10;
+    el.innerHTML='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+t("Rating over time")+'">'+
+      '<line x1="'+ePad+'" y1="'+(h/2)+'" x2="'+(w-ePad)+'" y2="'+(h/2)+'" stroke="rgba(239,233,217,.18)" stroke-width="1" stroke-dasharray="4 4"/>'+
+      '<text x="'+(w/2)+'" y="'+(h/2-10)+'" text-anchor="middle" fill="var(--sage)" font-size="10">'+t("Solve a few puzzles to see your progress here.")+'</text>'+
+      '</svg>';
+    return;
+  }
+  const values=hist.map(p=>p.r);
+  const min=Math.min.apply(null,values),max=Math.max.apply(null,values);
+  const range=Math.max(1,max-min);
+  /* Graduations verticales : pas ROND (100/200/400/500...) adapte a
+     l'etendue reelle de l'historique plutot qu'un nombre de lignes fixe --
+     sinon on affiche des valeurs illisibles comme "1053, 1179, 1305" des
+     que min/max ne tombent pas sur des ronds. Vise environ 3 intervalles. */
+  const rawStep=range/3;
+  const mag=Math.pow(10,Math.floor(Math.log10(rawStep||1)));
+  const niceSteps=[1,2,5,10];
+  let step=mag*10;
+  for(const n of niceSteps){if(rawStep<=n*mag){step=n*mag;break;}}
+  const gridVals=[];
+  for(let v=Math.ceil(min/step)*step;v<=max+0.001;v+=step)gridVals.push(Math.round(v));
+  let gridSvg="";
+  for(const v of gridVals){
+    const y=padT+plotH-((v-min)/range)*plotH;
+    gridSvg+='<line x1="'+padL+'" y1="'+y.toFixed(1)+'" x2="'+(w-padR)+'" y2="'+y.toFixed(1)+'" stroke="rgba(239,233,217,.10)" stroke-width="1"/>'+
+      '<text x="'+(padL-4)+'" y="'+(y+3).toFixed(1)+'" text-anchor="end" fill="var(--sage)" font-size="8.5">'+v+'</text>';
+  }
+  /* Graduation horizontale : la date du premier et du dernier point.
+     Un historique construit un point par exercice resolu (pas un point
+     par jour), donc des graduations intermediaires egalement espacees ne
+     correspondraient a aucun intervalle de temps regulier -- seules les
+     deux extremites ont une date sure a afficher sans supposer une
+     repartition uniforme dans le temps. */
+  /* Format americain (mois/jour) en anglais, francais (jour/mois) en
+     francais -- nom distinct de fmtDate() plus haut dans ce fichier
+     (utilisee pour l'historique des parties, portee locale ici donc pas
+     de collision reelle), mais meme faille repartie a ne pas reproduire :
+     un simple gabarit identique pour les deux langues afficherait "jour"
+     partout sans jamais vraiment adapter l'ordre a la langue active. */
+  const fmtDate=ts=>{
+    const d=new Date(ts),mo=d.getMonth()+1,da=d.getDate();
+    return LANG==="fr"?da+"/"+mo:mo+"/"+da;
+  };
+  const dateSvg='<text x="'+padL+'" y="'+(h-3)+'" text-anchor="start" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[0].t)+'</text>'+
+    '<text x="'+(w-padR)+'" y="'+(h-3)+'" text-anchor="end" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[hist.length-1].t)+'</text>';
+  let d="";
+  hist.forEach((p,i)=>{
+    const x=padL+(hist.length>1?(i/(hist.length-1))*plotW:plotW/2);
+    const y=padT+plotH-((p.r-min)/range)*plotH;
+    d+=(i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1);
+  });
+  /* Couleur laiton du site (signale : "si la barre reste tout du long,
+     autant la mettre dans le jaune du site") -- c'est un element permanent
+     de l'interface, pas un accuse de reception ponctuel (contrairement au
+     vert des badges debloques), donc coherent de reprendre l'accent
+     principal du site plutot qu'une couleur secondaire. */
+  el.innerHTML='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+t("Rating over time")+'">'+
+    gridSvg+dateSvg+
+    '<path d="'+d+'" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linejoin="round"/>'+
+    '</svg>';
+}
 $("btnAnalyse").onclick=analyseGame;
 
 /* ==========================================================
@@ -767,6 +858,65 @@ $("btnAmiHistoryClear").onclick=()=>{
    le meme esprit qu'un classement Elo approximatif par niveau, pour que
    updateRating() sache a quoi comparer une victoire ou une defaite. */
 const LEVEL_RATING=[800,1000,1150,1300,1450,1600,1750,1900,2100,2300];
+/* Badges de constance/volume/notation (session gamification) : construits
+   sur des compteurs deja suivis (prog.solved/days/rating), pas de nouvel
+   etat a inventer pour ceux-la. Le seuil, une fois franchi, reste acquis
+   pour toujours meme si le compteur redescend ensuite (rating qui baisse
+   apres une mauvaise serie, streak de jours qui se casse) -- prog.badges
+   n'enregistre que les ids deja debloques, jamais retires. Pas de badges
+   thematiques ici volontairement : ils demandent un historique par motif
+   qui n'existe pas encore (a construire une fois la banque de puzzles
+   stabilisee, cf. classify() corrige cette semaine). Noms factuels plutot
+   que des titres ronflants ("Centurion" etc.) : coherent avec le ton
+   "No account. No ads. No noise." du reste du site. */
+const BADGES=[
+  {id:"solved_10",type:"solved",n:10,label:"10 solved"},
+  {id:"solved_25",type:"solved",n:25,label:"25 solved"},
+  {id:"solved_50",type:"solved",n:50,label:"50 solved"},
+  {id:"solved_100",type:"solved",n:100,label:"100 solved"},
+  {id:"solved_250",type:"solved",n:250,label:"250 solved"},
+  {id:"solved_500",type:"solved",n:500,label:"500 solved"},
+  {id:"solved_1000",type:"solved",n:1000,label:"1000 solved"},
+  {id:"solved_2000",type:"solved",n:2000,label:"2000 solved"},
+  {id:"solved_5000",type:"solved",n:5000,label:"5000 solved"},
+  {id:"days_1",type:"days",n:1,label:"First day"},
+  {id:"days_3",type:"days",n:3,label:"3-day streak"},
+  {id:"days_7",type:"days",n:7,label:"7-day streak"},
+  {id:"days_14",type:"days",n:14,label:"14-day streak"},
+  {id:"days_30",type:"days",n:30,label:"30-day streak"},
+  {id:"days_60",type:"days",n:60,label:"60-day streak"},
+  {id:"days_100",type:"days",n:100,label:"100-day streak"},
+  {id:"days_365",type:"days",n:365,label:"365-day streak"},
+  {id:"rating_900",type:"rating",n:900,label:"900 rating"},
+  {id:"rating_1000",type:"rating",n:1000,label:"1000 rating"},
+  {id:"rating_1100",type:"rating",n:1100,label:"1100 rating"},
+  {id:"rating_1200",type:"rating",n:1200,label:"1200 rating"},
+  {id:"rating_1350",type:"rating",n:1350,label:"1350 rating"},
+  {id:"rating_1500",type:"rating",n:1500,label:"1500 rating"},
+  {id:"rating_1650",type:"rating",n:1650,label:"1650 rating"},
+  {id:"rating_1800",type:"rating",n:1800,label:"1800 rating"},
+  {id:"rating_2000",type:"rating",n:2000,label:"2000 rating"},
+  {id:"rating_2100",type:"rating",n:2100,label:"2100 rating"},
+  {id:"rating_2300",type:"rating",n:2300,label:"2300 rating"}
+];
+function checkBadges(){
+  ensureProgFields();
+  const stat={solved:prog.solved||0,days:prog.days||0,rating:prog.rating||0};
+  let gained=null;
+  for(const b of BADGES){
+    if(prog.badges.includes(b.id))continue;
+    if(stat[b.type]>=b.n){prog.badges.push(b.id);gained=b;}
+  }
+  return gained; /* le dernier nouveau badge de cet appel, pour un eventuel accuse de reception discret -- pas de popup pour l'instant, cf. "no noise" */
+}
+function renderBadges(){
+  const el=$("badgeGrid");if(!el)return;
+  ensureProgFields();
+  el.innerHTML=BADGES.map(b=>{
+    const unlocked=prog.badges.includes(b.id);
+    return '<div class="badge'+(unlocked?' unlocked':'')+'">'+t(b.label)+'</div>';
+  }).join("");
+}
 function ensureProgFields(){
   if(typeof prog.showEval!=="boolean")prog.showEval=false;
   if(typeof prog.theme!=="string")prog.theme="";
@@ -777,6 +927,9 @@ function ensureProgFields(){
   if(typeof prog.coordBest!=="number")prog.coordBest=0;
   if(!prog.endgames)prog.endgames={};
   if(!prog.lastDay)prog.lastDay="";
+  if(!Array.isArray(prog.badges))prog.badges=[];
+  if(!Array.isArray(prog.ratingHistory))prog.ratingHistory=[];
+  if(!prog.dailyLog||typeof prog.dailyLog!=="object")prog.dailyLog={};
 }
 function todayKey(){
   const d=new Date();
@@ -790,12 +943,148 @@ function bumpStreak(){
   const yk=y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");
   prog.days=prog.lastDay===yk?prog.days+1:1;
   prog.lastDay=day;
+  if(typeof checkBadges==="function")checkBadges();
+}
+/* ==========================================================
+   CALENDRIER DE COMPLETION (exercices du jour)
+   ========================================================== */
+/* Pas d'Intl.DateTimeFormat pour les noms de mois/jours : meme choix que
+   fmtDate() plus haut (graphique de notation), un gabarit fige par langue
+   plutot qu'une API dont la disponibilite des locales varie selon le
+   navigateur. */
+const MONTH_NAMES={
+  en:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  fr:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]
+};
+const WEEKDAY_SHORT={en:["Mo","Tu","We","Th","Fr","Sa","Su"],fr:["L","M","M","J","V","S","D"]};
+function calDateKey(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
+/* Meme formule que dailyPuzzle() (ui.js), mais pour une date donnee plutot
+   que "aujourd'hui" -- doit rester EXACTEMENT synchronisee avec elle (meme
+   epoch, meme modulo) sinon le calendrier pointerait vers un autre
+   exercice que celui reellement resolu ce jour-la. */
+function dateToDailyId(key){
+  const [y,m,d]=key.split("-").map(Number);
+  const n=Math.floor(Date.UTC(y,m-1,d)/86400000);
+  const ids=Object.keys(PUZZLE_INDEX);
+  return ids[n%ids.length];
+}
+/* Rouvre l'exercice du jour d'une date passee, solution deja jouee et
+   affichee (mode consultation) -- reutilise loadAndRevealSolution(), deja
+   ecrit pour la revision des erreurs de Sprint, meme mecanique. */
+function viewDailyArchive(key){
+  if(!PUZZLE_INDEX){loadPuzzleIndex(()=>viewDailyArchive(key));return;}
+  const id=dateToDailyId(key);
+  const lvl=PUZZLE_INDEX[id];
+  if(!lvl)return;
+  if(!LEVEL_CACHE[lvl]){loadLevel(lvl,()=>viewDailyArchive(key));return;}
+  const p=PUZZLE_CACHE[id];
+  if(!p)return;
+  if(typeof setMode==="function")setMode("puzzles");
+  loadAndRevealSolution(p);
+  /* loadAndRevealSolution() pose puzzle.daily=false (ecrit pour le Sprint,
+     qui n'a pas ce concept) : on le remet a true ici pour que l'etiquette
+     "Puzzle of the day" reste correcte sur un exercice archive, et on
+     rafraichit le texte deja pose par loadPuzzle() avec l'ancienne valeur. */
+  puzzle.daily=true;
+  const et=$("exTheme"); if(et)et.textContent=t("Puzzle of the day · ")+t(puzzle.theme);
+}
+/* opts.nav=true : fleches mois precedent/suivant (page a part). Sans nav :
+   mois courant fixe, pas de bouton (widget compact de l'ecran de
+   progression). monthOffset=0 est toujours le mois en cours ; on empeche
+   d'avancer au-dela (les exercices futurs n'existent pas encore a jouer). */
+function renderCalendarGrid(containerId,monthOffset,opts){
+  const el=$(containerId); if(!el)return;
+  ensureProgFields();
+  const now=new Date();
+  const base=new Date(now.getFullYear(),now.getMonth()+monthOffset,1);
+  const y=base.getFullYear(),m=base.getMonth();
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  let startWeekday=new Date(y,m,1).getDay();
+  startWeekday=(startWeekday+6)%7; /* dimanche=0 -> lundi=0 */
+  const todayStr=calDateKey(now.getFullYear(),now.getMonth(),now.getDate());
+  const wk=WEEKDAY_SHORT[LANG]||WEEKDAY_SHORT.en;
+  const mo=MONTH_NAMES[LANG]||MONTH_NAMES.en;
+  const nav=opts&&opts.nav;
+  let html="";
+  if(nav){
+    html+='<div class="cal-head"><button type="button" class="cal-nav" data-dir="-1" aria-label="'+t("Previous month")+'">\u2039</button>'+
+      '<span class="cal-title">'+mo[m]+" "+y+'</span>'+
+      '<button type="button" class="cal-nav" data-dir="1" aria-label="'+t("Next month")+'"'+(monthOffset>=0?" disabled":"")+'>\u203a</button></div>';
+  } else {
+    html+='<div class="cal-head"><span class="cal-title">'+mo[m]+" "+y+"</span></div>";
+  }
+  html+='<div class="cal-grid">';
+  for(const d of wk)html+='<div class="cal-dow">'+d+"</div>";
+  for(let i=0;i<startWeekday;i++)html+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const key=calDateKey(y,m,d);
+    const done=!!prog.dailyLog[key];
+    const isFuture=key>todayStr;
+    const cls=["cal-day"];
+    if(done)cls.push("done");
+    if(key===todayStr)cls.push("today");
+    if(isFuture)cls.push("future");
+    const clickable=done&&!isFuture;
+    html+='<div class="'+cls.join(" ")+'"'+(clickable?' data-date="'+key+'" role="button" tabindex="0" aria-label="'+key+'"':"")+">"+d+"</div>";
+  }
+  html+="</div>";
+  el.innerHTML=html;
+  el.querySelectorAll(".cal-day.done[data-date]").forEach(cell=>{
+    cell.addEventListener("click",()=>viewDailyArchive(cell.getAttribute("data-date")));
+    cell.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();viewDailyArchive(cell.getAttribute("data-date"));}});
+  });
+  if(nav){
+    el.querySelectorAll(".cal-nav").forEach(btn=>{
+      if(btn.disabled)return;
+      btn.addEventListener("click",()=>{
+        const next=monthOffset+parseInt(btn.dataset.dir,10);
+        if(opts.onNav)opts.onNav(next);
+        renderCalendarGrid(containerId,next,opts);
+      });
+    });
+  }
+}
+let calFullOffset=0;
+function renderCalendarWidget(){
+  const eb=$("tipCalendar"); if(eb)eb.textContent=t("Highlighted days are puzzles of the day you've solved. Tap one to see it again with the solution shown.");
+  const fl=$("calFullLink"); if(fl)fl.textContent=t("See full calendar");
+  renderCalendarGrid("calWidget",0,{nav:false});
+}
+function renderFullCalendar(){
+  const ti=$("calendarTitle"); if(ti)ti.textContent=t("Daily puzzle calendar");
+  const su=$("calendarSub"); if(su)su.textContent=t("Every day you've solved the puzzle of the day. Tap a highlighted day to see it again.");
+  const bl=$("calBackLink"); if(bl)bl.textContent=t("Back to your progress");
+  /* Conserve le mois affiche lors d'un changement de langue en cours de
+     navigation (refreshCurrentMode rappelle cette fonction) : sans ca, on
+     etait systematiquement ramene au mois courant. */
+  renderCalendarGrid("calFull",calFullOffset,{nav:true,onNav:o=>{calFullOffset=o;}});
 }
 function updateRating(puzzleLevel,won){
+
   ensureProgFields();
   const pr=LEVEL_RATING[(puzzleLevel||1)-1];
   const e=1/(1+Math.pow(10,(pr-prog.rating)/400));
-  prog.rating=Math.round(Math.max(400,prog.rating+28*((won?1:0)-e)));
+  const oldRating=prog.rating;
+  /* Delta reellement applique, pas le delta "brut" : pres du plancher a
+     400, l'arrondi + le Math.max ecretent parfois le changement reel
+     (ex: -11 de calcul brut mais seulement -4 realises si on etait deja a
+     404). Recalculer newRating-oldRating APRES le clamp, plutot que de
+     stocker le delta brut, garantit que le nombre affiche a l'ecran
+     correspond exactement a ce qui vient de se passer. */
+  const newRating=Math.round(Math.max(400,oldRating+28*((won?1:0)-e)));
+  prog.rating=newRating;
+  lastRatingDelta=newRating-oldRating;
+  /* Historique de notation (integration ELO, point 2) : un point par
+     resolution, plafonne pour ne jamais grossir sans limite -- 500 points
+     couvrent des mois d'usage normal (quelques exercices par jour) sans
+     jamais peser sur le stockage local. On garde les PLUS RECENTS (shift
+     en tete) plutot que les plus anciens : la courbe recente est ce qui
+     interesse, pas le tout debut de l'historique si la limite est atteinte.
+     prog.ratingHistory deja initialise par ensureProgFields() ci-dessus. */
+  prog.ratingHistory.push({t:Date.now(),r:newRating});
+  if(prog.ratingHistory.length>500)prog.ratingHistory.shift();
+  if(typeof checkBadges==="function")checkBadges();
+  return lastRatingDelta;
 }
 function renderExtraStats(){
   ensureProgFields();
@@ -803,6 +1092,9 @@ function renderExtraStats(){
   set("stRating",prog.rating);set("stDays",prog.days);
   set("hRating",prog.rating);set("hStreak",prog.days);
   set("rushBestTrain",prog.rushBest);   /* meme record, affiche dans Defis */
+  if(typeof renderBadges==="function")renderBadges();
+  if(typeof renderCalendarWidget==="function")renderCalendarWidget();
+  if(typeof drawRatingGraph==="function")drawRatingGraph();
   /* Rien de resolu : la bande n'afficherait que des zeros, ce qu'un premier
      visiteur lit comme "le site est vide" plutot que comme sa propre
      progression encore vierge. On lui propose de commencer a la place. */
@@ -845,6 +1137,13 @@ function rushRender(){
 }
 function startRush(){
   ensureProgFields();
+  /* Le pool dedie n'est pas encore en cache : on le charge puis on se
+     rappelle soi-meme, meme mecanique que nextPuzzle/dailyPuzzle (ui.js). */
+  if(!RUSH_POOL){
+    const s=$("exStatus"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
+    loadRushPool(startRush);
+    return;
+  }
   rush={score:0,strikes:0,endsAt:Date.now()+180000,queue:[],history:[]};
   /* La file etait ordonnee par niveau : le niveau 1 etant compose a 97% de
      mats en un coup, on en enchainait 90 avant de voir autre chose. Un defi
@@ -856,10 +1155,19 @@ function startRush(){
      mode repose sur un jugement instantane par position. Les mats en 2
      (188 sur 1000) demandent de jouer un coup, attendre la reponse du
      moteur, puis en trouver un second : un joueur s'y retrouvait a jouer
-     plusieurs coups alors qu'on lui avait promis d'en chercher un seul. */
+     plusieurs coups alors qu'on lui avait promis d'en chercher un seul.
+     Filtre etendu de "type mat a plus d'un coup" a "solution a plus d'un
+     coup" tout court : gen_puzzles_v2.js introduit des gains materiels a
+     2-3 coups (deviation, suite forcee), invisibles pour ce garde-fou tant
+     qu'il ne regardait que le type -- 113 exercices du nouveau lot
+     seraient passes au travers sans ce changement.
+     Puise desormais dans RUSH_POOL (echantillon dedie, voir loadRushPool
+     dans ui.js) plutot que dans la banque complete -- deja filtre a la
+     construction du site, mais le garde-fou reste ici par prudence, au cas
+     ou le fichier serait un jour genere autrement. */
   const parTheme={};
-  for(const p of PUZZLES){
-    if(p.type==="mate"&&p.n>1)continue;
+  for(const p of RUSH_POOL){
+    if(p.sol.length>1)continue;
     (parTheme[p.theme]=parTheme[p.theme]||[]).push(p);
   }
   for(const k in parTheme)parTheme[k].sort(()=>Math.random()-0.5);
@@ -961,16 +1269,29 @@ function loadAndRevealSolution(p){
      puisque le coup est deja joue) et les boutons Exercice suivant/Indice,
      qui n'ont aucun sens sur un exercice deja resolu et revele. */
   document.body.classList.add("reviewing-rush");
-  const mv=typeof currentSolutions==="function"?currentSolutions()[0]:null;
-  if(!mv)return;
-  const san=game.san(mv);
-  game.makeMove(mv);lastMove=mv;selected=-1;marks={};
+  /* Rejoue TOUTE la sequence stockee (puzzle.sol), pas seulement le premier
+     coup : necessaire depuis la Deviation (gain a plusieurs coups,
+     sol.length>1) -- s'arreter au premier coup y laissait le plateau a
+     mi-chemin, sans jamais montrer la prise finale qui est pourtant le
+     point de l'exercice. Rejoue directement depuis puzzle.sol (pas
+     currentSolutions()/puzzleSolPly, qui suivent l'etat d'une partie EN
+     COURS de resolution par le joueur -- ici on affiche une reponse toute
+     faite, sans lien avec cet etat). */
+  const sanParts=[];
+  for(const uci of puzzle.sol){
+    const mv=game.moves().find(x=>game.uci(x)===uci);
+    if(!mv)break;
+    sanParts.push(game.san(mv));
+    game.makeMove(mv);lastMove=mv;
+  }
   legalCache=game.moves();
+  selected=-1;marks={};
   puzzleDone=true;
   render();
   const st=$("exStatus");st.className="status win";
-  st.textContent=t("The winning move was {san}.",{san:san});
+  st.textContent=t("The winning move was {san}.",{san:sanParts.join(" ")});
   const ex=$("exExplain");if(ex)ex.textContent=typeof explainSentence==="function"?explainSentence(puzzle):"";
+  const pg=$("exPedagogy");if(pg)pg.textContent=typeof pedagogySentence==="function"?pedagogySentence(puzzle):"";
 }
 /* Les exercices rates d'un meme sprint, pour les enchainer sans revenir au
    bandeau a chaque fois. Cliquer une pastille reussie affiche l'exercice
@@ -997,10 +1318,12 @@ function reviewRushPuzzle(id){
   if(typeof setMode==="function")setMode("train");
   reviewMistakes=lastRushHistory.filter(h=>!h.correct).map(h=>h.id);
   const idx=reviewMistakes.indexOf(id);
-  const p=PUZZLES.find(x=>x.id===id);
   /* loadAndRevealSolution() appelle loadPuzzle(), qui remet reviewIdx a -1
-     pour tout chargement normal : on ne fixe la vraie valeur qu'apres. */
-  if(p)loadAndRevealSolution(p);
+     pour tout chargement normal : on ne fixe la vraie valeur qu'apres.
+     Deja en cache dans l'immense majorite des cas (l'exercice vient d'etre
+     joue), donc resolu sans latence visible ; loadPuzzleById ne refait une
+     requete que si necessaire. */
+  loadPuzzleById(id,p=>{if(p)loadAndRevealSolution(p);});
   reviewIdx=idx;
   updateReviewNav();
   if(typeof focusBoard==="function")focusBoard();
@@ -1008,8 +1331,7 @@ function reviewRushPuzzle(id){
 if($("reviewPrev"))$("reviewPrev").onclick=()=>{
   if(reviewIdx<=0)return;
   const idx=reviewIdx-1;
-  const p=PUZZLES.find(x=>x.id===reviewMistakes[idx]);
-  if(p)loadAndRevealSolution(p);
+  loadPuzzleById(reviewMistakes[idx],p=>{if(p)loadAndRevealSolution(p);});
   reviewIdx=idx;
   updateReviewNav();
   if(typeof focusBoard==="function")focusBoard();
@@ -1017,8 +1339,7 @@ if($("reviewPrev"))$("reviewPrev").onclick=()=>{
 if($("reviewNext"))$("reviewNext").onclick=()=>{
   if(reviewIdx>=reviewMistakes.length-1)return;
   const idx=reviewIdx+1;
-  const p=PUZZLES.find(x=>x.id===reviewMistakes[idx]);
-  if(p)loadAndRevealSolution(p);
+  loadPuzzleById(reviewMistakes[idx],p=>{if(p)loadAndRevealSolution(p);});
   reviewIdx=idx;
   updateReviewNav();
   if(typeof focusBoard==="function")focusBoard();
@@ -1220,7 +1541,7 @@ setMode=function(m,opts){
      d'onglet est ajoute, et n'arrete le sprint que lors d'un vrai
      changement d'onglet. */
   if(rush&&m!==mode)rushEnd(t("Stopped."));
-  if(m==="watch"||m==="legal"||m==="prefs"||m==="explore"){
+  if(m==="watch"||m==="legal"||m==="prefs"||m==="explore"||m==="calendar"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode=m;
     const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
@@ -1231,9 +1552,11 @@ setMode=function(m,opts){
     $("pane-legal").classList.toggle("hide",m!=="legal");
     const pp=$("pane-prefs"); if(pp)pp.classList.toggle("hide",m!=="prefs");
     const pe=$("pane-explore"); if(pe)pe.classList.toggle("hide",m!=="explore");
+    const pc=$("pane-calendar"); if(pc)pc.classList.toggle("hide",m!=="calendar");
     if(m==="watch")renderChannels();
     else if(m==="prefs"){if(typeof renderPrefs==="function")renderPrefs();}
     else if(m==="explore"){if(typeof renderExplore==="function")renderExplore();}
+    else if(m==="calendar"){calFullOffset=0;if(typeof renderFullCalendar==="function")renderFullCalendar();}
     else renderLegal();
     return;
   }
@@ -1241,6 +1564,7 @@ setMode=function(m,opts){
   $("pane-legal").classList.add("hide");
   { const pp=$("pane-prefs"); if(pp)pp.classList.add("hide"); }
   { const pe=$("pane-explore"); if(pe)pe.classList.add("hide"); }
+  { const pc=$("pane-calendar"); if(pc)pc.classList.add("hide"); }
   { const tex=$("tab-explore"); if(tex)tex.setAttribute("aria-selected","false"); }
   $("tab-watch").setAttribute("aria-selected","false");
   baseSetMode(m,opts);
@@ -1329,6 +1653,8 @@ function rushRestore(){
 })();
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
 if($("tab-explore"))$("tab-explore").onclick=()=>{setMode("explore");goTop();};
+if($("calFullLink"))$("calFullLink").onclick=(e)=>{e.preventDefault();setMode("calendar");goTop();};
+if($("calBackLink"))$("calBackLink").onclick=(e)=>{e.preventDefault();setMode("home");goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
 /* Les pages de contenu renvoient vers /#legal et /#privacy : ces panneaux

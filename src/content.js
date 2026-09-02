@@ -44,7 +44,8 @@ module.exports = function (H) {
     "Promotion": "Promotion", "Central knight": "Cavalier central", "Advanced knight": "Cavalier avancé",
     "Mate defence": "Défense du mat", "Opposition": "Opposition", "Castling": "Roque",
     "Doubled rooks": "Doublement des tours", "Opera Game finish": "Finale de l'Opéra",
-    "Scholar's mate": "Mat du berger", "Black to move": "Trait aux Noirs"
+    "Scholar's mate": "Mat du berger", "Black to move": "Trait aux Noirs",
+    "Quiet move": "Coup silencieux", "Mate in three": "Mat en trois coups"
   };
   const themeOf = (th, lang) => lang === "fr" ? (THEME_FR[th] || th) : th;
 
@@ -179,7 +180,105 @@ module.exports = function (H) {
         fr: ["Nul besoin de théorie pour jouer une ouverture correcte. Quatre idées couvrent presque tout.",
              "<strong>Prends le centre.</strong> Un pion en e4 ou d4 contrôle des cases que l'adversaire convoite. <strong>Développe chaque pièce une fois.</strong> Cavaliers et fous vers le centre ; bouger deux fois la même pièce en ouverture revient le plus souvent à perdre un temps pour rien.",
              "<strong>Roque tôt.</strong> Au dixième coup, le centre commence à s'ouvrir, et un roi resté là devient une cible. <strong>Ne sors pas la dame trop vite.</strong> Elle vaut neuf points : chaque pièce mineure qui l'attaque gagne un temps gratuitement.",
-             "Le diagramme montre le résultat : les Blancs ont trois pièces développées, un pion au centre et un roi roqué, en sept coups. Rien d'astucieux, juste les principes appliqués dans l'ordre."] } }
+             "Le diagramme montre le résultat : les Blancs ont trois pièces développées, un pion au centre et un roi roqué, en sept coups. Rien d'astucieux, juste les principes appliqués dans l'ordre."] } },
+{ slug: { en: "spotting-a-hanging-piece", fr: "reperer-une-piece-qui-traine" },
+    fen: "4k3/8/8/8/8/8/4q3/4R1K1 w - - 0 1",
+    title: { en: "Spotting a hanging piece", fr: "Repérer une pièce qui traîne" },
+    body: {
+      en: ["A piece is <strong>hanging</strong> when it can be captured for free: nothing defends it, or what defends it is worth less than the attacker risks. Most tactics below build on top of this one skill, so it comes first.",
+           "Before every move, form the habit of asking two questions in this order: what did my opponent's last move create or abandon, and is anything of mine or theirs currently undefended? The diagram is the simplest case: a rook takes a queen that nobody is watching.",
+           "This sounds trivial written down, and it is exactly why it gets missed in a real game: nobody hangs a queen on purpose, it happens because attention was somewhere else. Scanning for hanging pieces after every single move, yours and theirs, catches far more than any pattern name below."],
+      fr: ["Une pièce <strong>traîne</strong> quand elle peut être prise gratuitement : rien ne la défend, ou ce qui la défend vaut moins que ce que l'attaquant risque. Presque tous les motifs ci-dessous s'appuient sur ce seul réflexe, c'est pour ça qu'il vient en premier.",
+           "Avant chaque coup, prends l'habitude de te poser deux questions, dans cet ordre : qu'est-ce que le dernier coup adverse a créé ou abandonné, et est-ce que quelque chose, à moi ou à l'adversaire, traîne sans défense en ce moment ? Le diagramme montre le cas le plus simple : une tour prend une dame que personne ne surveille.",
+           "Ça paraît trivial une fois écrit, et c'est justement pour ça que ça passe inaperçu en vraie partie : personne ne laisse traîner sa dame exprès, ça arrive parce que l'attention était ailleurs. Scanner les pièces non défendues après chaque coup, le tien comme celui de l'adversaire, rapporte plus que n'importe quel motif nommé ci-dessous."] } },
+
+  { slug: { en: "knight-fork", fr: "la-fourchette-de-cavalier" },
+    fen: "4r1k1/8/8/7N/8/8/8/7K w - - 0 1",
+    title: { en: "The knight fork", fr: "La fourchette de cavalier" },
+    body: {
+      en: ["A <strong>fork</strong> is one piece attacking two targets at once, so the opponent can only save one of them. The knight is the classic forking piece: its L-shaped move lets it attack squares that look completely unrelated to each other from anywhere else on the board.",
+           "In the diagram, the knight jumps to f6. That move gives check to the king on g8, and from that same square it also attacks the rook on e8. The king must move first, since check always comes first, and the rook falls next move.",
+           "What makes knight forks dangerous is exactly this: the two targets rarely look connected. A queen and a rook on opposite sides of the board can both be one knight jump away from the same square. Whenever a knight has just moved or is about to, it is worth checking every square it now attacks, not just the obvious one."],
+      fr: ["Une <strong>fourchette</strong>, c'est une pièce qui attaque deux cibles à la fois : l'adversaire ne peut en sauver qu'une. Le cavalier est la pièce fourchette par excellence : son déplacement en L lui permet d'attaquer des cases qui n'ont, vues d'ailleurs sur l'échiquier, absolument aucun rapport entre elles.",
+           "Sur le diagramme, le cavalier saute en f6. Ce coup met le roi en g8 en échec, et depuis cette même case, il attaque aussi la tour en e8. Le roi doit bouger en premier, l'échec passant toujours avant tout, et la tour tombe au coup suivant.",
+           "Ce qui rend les fourchettes de cavalier dangereuses, c'est précisément ça : les deux cibles n'ont presque jamais l'air liées. Une dame et une tour aux deux bouts de l'échiquier peuvent très bien se retrouver à un seul saut de cavalier l'une de l'autre. Dès qu'un cavalier vient de bouger ou s'apprête à le faire, ça vaut le coup de vérifier toutes les cases qu'il attaque désormais, pas seulement la plus visible."] } },
+
+  { slug: { en: "pawn-fork", fr: "la-fourchette-de-pion" },
+    fen: "4k3/8/8/3q1r2/4P3/8/8/4K3 w - - 0 1",
+    title: { en: "The pawn fork", fr: "La fourchette de pion" },
+    body: {
+      en: ["Pawns capture diagonally, one square forward. That single detail means a single pawn already attacks two squares at once, which makes it a natural forking piece the moment two enemy pieces line up on those two diagonals.",
+           "In the diagram, the white pawn on e4 attacks both d5 and f5, where a queen and a rook happen to sit. Whichever one moves, the pawn takes the other. Neither piece can simply capture the pawn back for free without losing more material than it gains.",
+           "Pawn forks are easy to miss because pawns look passive. A piece that can only inch forward one square rarely feels like a threat, right up until it is standing next to two pieces that both need to move at once."],
+      fr: ["Les pions capturent en diagonale, une case en avant. Ce seul détail fait qu'un pion attaque déjà deux cases à la fois, ce qui en fait une pièce à fourchette naturelle dès que deux pièces adverses se retrouvent alignées sur ces deux diagonales.",
+           "Sur le diagramme, le pion blanc en e4 attaque à la fois d5 et f5, où se trouvent justement une dame et une tour. Quelle que soit celle qui bouge, le pion prend l'autre. Aucune des deux ne peut simplement reprendre le pion gratuitement sans perdre plus qu'elle ne gagne.",
+           "Les fourchettes de pion passent facilement inaperçues parce qu'un pion a l'air passif. Une pièce qui ne fait qu'avancer d'une case à la fois ne ressemble à une menace que trop tard, une fois qu'elle se retrouve juste à côté de deux pièces qui doivent bouger en même temps."] } },
+
+  { slug: { en: "double-attack", fr: "la-double-attaque" },
+    fen: "4r1k1/8/8/8/8/8/8/4Q1K1 w - - 0 1",
+    title: { en: "Double attack: forks that aren't knight moves", fr: "La double attaque : les fourchettes sans cavalier" },
+    body: {
+      en: ["Any piece can create a fork, not only knights and pawns. A queen, rook or bishop attacking two targets at once from a single square works on exactly the same logic: the opponent has one move to save two things.",
+           "A queen is especially good at this because it moves like a rook and a bishop combined, so it can line up threats along a file, a rank, and a diagonal all from the same square, something no other piece can do.",
+           "The habit to build is the same as for a knight fork: after any queen, rook or bishop move, check every square that piece attacks from its new position, not only the one that motivated the move in the first place."],
+      fr: ["N'importe quelle pièce peut créer une fourchette, pas seulement le cavalier et le pion. Une dame, une tour ou un fou qui attaquent deux cibles à la fois depuis une seule case obéissent exactement à la même logique : l'adversaire n'a qu'un coup pour en sauver deux.",
+           "La dame excelle particulièrement à ça, puisqu'elle se déplace comme une tour et un fou réunis : elle peut aligner des menaces sur une colonne, une rangée et une diagonale depuis la même case, ce qu'aucune autre pièce ne sait faire.",
+           "Le réflexe à prendre est le même que pour une fourchette de cavalier : après tout coup de dame, de tour ou de fou, vérifie toutes les cases attaquées depuis la nouvelle position, pas seulement celle qui a motivé le coup au départ."] } },
+
+  { slug: { en: "the-pin", fr: "le-clouage" },
+    fen: "4k3/8/4r3/8/4Q3/8/8/4K3 w - - 0 1",
+    title: { en: "The pin: a piece that can't move", fr: "Le clouage : une pièce qui ne peut pas bouger" },
+    body: {
+      en: ["A piece is <strong>pinned</strong> when moving it would expose a more valuable piece behind it, usually the king, to attack. A pinned piece is not captured or threatened directly: it is simply frozen, unable to do its normal job.",
+           "In the diagram, the black rook on e6 sits between the white queen and the black king, all three lined up on the e-file. The rook cannot move off that file at all: doing so would put its own king in check, which is illegal. It can only shuffle along the very file that traps it.",
+           "A pin against the king, like this one, is absolute: there is no legal way around the rule. A pin against any other piece is merely costly to break, not illegal, but the practical effect is often the same: the pinned piece is removed from the game as long as the pin holds."],
+      fr: ["Une pièce est <strong>clouée</strong> quand la bouger exposerait une pièce plus précieuse derrière elle, en général le roi, à une attaque. Une pièce clouée n'est ni capturée ni menacée directement : elle est simplement figée, incapable de jouer son rôle habituel.",
+           "Sur le diagramme, la tour noire en e6 est prise en sandwich entre la dame blanche et le roi noir, tous trois alignés sur la colonne e. La tour ne peut absolument pas quitter cette colonne : le faire mettrait son propre roi en échec, ce qui est interdit. Elle ne peut que se déplacer le long de la colonne qui la piège.",
+           "Un clouage contre le roi, comme ici, est absolu : il n'existe aucun moyen légal de le contourner. Un clouage contre une autre pièce est seulement coûteux à briser, pas interdit, mais l'effet pratique est souvent le même : la pièce clouée sort du jeu tant que le clouage tient."] } },
+
+  { slug: { en: "the-skewer", fr: "l-enfilade" },
+    fen: "4q3/8/8/8/4k3/8/8/4R2K b - - 0 1",
+    title: { en: "The skewer: a pin turned around", fr: "L'enfilade : un clouage à l'envers" },
+    body: {
+      en: ["A <strong>skewer</strong> is a pin in reverse. Instead of a low-value piece shielding a high-value one, the high-value piece is in front and forced to move, uncovering something less valuable directly behind it on the same line.",
+           "In the diagram it is White's rook giving check to the black king along the e-file, with the black queen sitting right behind it. The king has no choice but to move off the file to answer the check. Once it does, the rook simply takes the queen on the next move.",
+           "The distinction between a pin and a skewer is entirely about which piece is in front. If the valuable piece is in front and forced to move, it's a skewer. If the valuable piece is behind and frozen in place, it's a pin. Both come from the exact same geometry: three pieces on one line."],
+      fr: ["Une <strong>enfilade</strong> est un clouage à l'envers. Au lieu d'une pièce de faible valeur qui protège une pièce précieuse, c'est la pièce précieuse qui est devant et forcée de bouger, découvrant quelque chose de moins précieux juste derrière elle sur la même ligne.",
+           "Sur le diagramme, c'est la tour blanche qui met le roi noir en échec le long de la colonne e, avec la dame noire juste derrière. Le roi n'a d'autre choix que de quitter la colonne pour répondre à l'échec. Une fois cela fait, la tour n'a qu'à prendre la dame au coup suivant.",
+           "La différence entre un clouage et une enfilade tient entièrement à quelle pièce est devant. Si la pièce précieuse est devant et forcée de bouger, c'est une enfilade. Si la pièce précieuse est derrière et figée sur place, c'est un clouage. Les deux viennent exactement de la même géométrie : trois pièces sur une ligne."] } },
+
+  { slug: { en: "back-rank-mate", fr: "le-mat-du-couloir" },
+    fen: "6k1/5ppp/8/8/8/8/8/4R1K1 w - - 0 1",
+    title: { en: "The back-rank mate", fr: "Le mat du couloir" },
+    body: {
+      en: ["Castling tucks the king away safely, and the pawns in front of it feel like protection. They can just as easily become a wall with the king inside it: a king with no pawn moved in front of it has nowhere to go if a rook or queen reaches its back rank.",
+           "In the diagram, the black king on g8 is boxed in by its own pawns on f7, g7 and h7. When the white rook arrives on e8, the king cannot step anywhere: every square is either occupied by a friendly pawn or attacked by the rook itself. That is checkmate.",
+           "The fix is simple and worth doing on reflex once a game reaches this kind of position: push one pawn one square, usually the one nearest the king, to give it an escape square. Players call this <strong>luft</strong>, German for air, and forgetting it is one of the most common ways to lose an otherwise winning position."],
+      fr: ["Le roque met le roi à l'abri, et les pions devant lui donnent une impression de protection. Ils peuvent tout aussi bien devenir un mur qui l'enferme : un roi dont aucun pion devant lui n'a bougé n'a nulle part où aller si une tour ou une dame atteint sa dernière rangée.",
+           "Sur le diagramme, le roi noir en g8 est encerclé par ses propres pions en f7, g7 et h7. Quand la tour blanche arrive en e8, le roi ne peut aller nulle part : chaque case est soit occupée par un pion ami, soit attaquée par la tour elle-même. C'est échec et mat.",
+           "La parade est simple et vaut le coup de devenir un réflexe dès qu'une partie atteint ce genre de position : avance un pion d'une case, en général celui le plus proche du roi, pour lui donner une case d'évasion. On appelle ça <strong>luft</strong> (l'air, en allemand), et l'oublier est l'une des façons les plus courantes de perdre une position pourtant gagnante."] } },
+
+  { slug: { en: "deflection", fr: "la-deviation" },
+    fen: "3q2k1/5ppp/8/3r4/8/5P2/8/3RR2K w - - 0 1",
+    title: { en: "Deflection: one piece, two jobs", fr: "La déviation : une pièce, deux tâches" },
+    body: {
+      en: ["Some pieces end up doing two jobs at once without anyone intending it: a queen defending a piece on one line while also being the only thing stopping a checkmate on another. <strong>Deflection</strong> is attacking that piece to force it to choose.",
+           "In the diagram, the black queen on d8 is the only piece guarding both the rook on d5 and the back rank behind it. Capturing the rook invites the natural recapture with the queen, but doing so would pull the queen off the back rank, and a white rook is waiting on e1 for exactly that moment.",
+           "This is the pattern to look for, more than any single position: find a defender doing more than one job, and ask what happens to the job it's not currently doing if it's forced to move. The best defence isn't always to recapture, which is exactly why deflections work: giving up the material you deflected with is still worth it if the second job was more important than the piece you spent to expose it."],
+      fr: ["Certaines pièces se retrouvent à faire deux travaux à la fois sans que personne ne l'ait vraiment prévu : une dame qui défend une pièce sur une ligne tout en étant aussi la seule chose empêchant un mat sur une autre. La <strong>déviation</strong> consiste à attaquer cette pièce pour la forcer à choisir.",
+           "Sur le diagramme, la dame noire en d8 est la seule à garder à la fois la tour en d5 et la dernière rangée derrière elle. Prendre la tour invite à la reprise naturelle avec la dame, mais celle-ci quitterait alors la dernière rangée, et une tour blanche attend justement en e1 pour ce moment précis.",
+           "C'est ce motif-là qu'il faut chercher, plus qu'une position précise : trouve un défenseur qui fait plus d'un travail, et demande-toi ce qui arrive au travail qu'il ne fait plus s'il est forcé de bouger. La meilleure défense n'est pas toujours de reprendre, et c'est exactement pour ça que les déviations fonctionnent : sacrifier le matériel qui a servi à dévier reste rentable si le second travail comptait plus que la pièce dépensée pour l'exposer."] } },
+
+  { slug: { en: "the-quiet-move", fr: "le-coup-silencieux" },
+    fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    title: { en: "The quiet move: the hardest kind to find", fr: "Le coup silencieux : le plus dur à trouver" },
+    body: {
+      en: ["Every pattern above starts the same way: a capture or a check, something forcing and loud. A <strong>quiet move</strong> does neither. It doesn't take anything and doesn't give check, which is exactly why it's the hardest kind of winning move to find.",
+           "The human eye is trained, correctly, to look at captures and checks first: they are forcing, so they narrow down what the opponent can do in reply. A quiet move gives the opponent every option on the board, which makes it feel like it can't possibly be the strongest choice. Often it is anyway, because it sets something up two or three moves ahead that no amount of checking or capturing right now would achieve.",
+           "There is no diagram that teaches this one the way a fork or a pin can be shown in a single frozen position: the whole point is that nothing dramatic is happening yet. The only real training is the habit itself: once the obvious captures and checks have been considered and rejected, force yourself to also look at moves that do neither, before deciding none of them work."],
+      fr: ["Tous les motifs ci-dessus commencent de la même façon : une prise ou un échec, quelque chose de forçant et de visible. Un <strong>coup silencieux</strong> ne fait ni l'un ni l'autre. Il ne prend rien et ne fait pas échec, ce qui explique justement pourquoi c'est le type de coup gagnant le plus dur à trouver.",
+           "L'œil humain est entraîné, à juste titre, à regarder les prises et les échecs en premier : ils sont forçants, donc ils réduisent ce que l'adversaire peut répondre. Un coup silencieux laisse toutes les options ouvertes à l'adversaire, ce qui donne l'impression qu'il ne peut pas être le meilleur choix. C'est pourtant souvent le cas, parce qu'il prépare quelque chose deux ou trois coups plus loin, quelque chose qu'aucun échec ni aucune prise immédiate n'obtiendrait.",
+           "Aucun diagramme n'enseigne vraiment celui-là comme on peut montrer une fourchette ou un clouage sur une position figée : tout l'enjeu, c'est que rien de spectaculaire ne se passe encore. Le seul vrai entraînement, c'est le réflexe lui-même : une fois les prises et les échecs évidents examinés puis écartés, force-toi à regarder aussi les coups qui ne font ni l'un ni l'autre, avant de conclure qu'aucun ne fonctionne."] } }
   ];
 
   for (const lang of ["en", "fr"]) {
@@ -275,15 +374,226 @@ module.exports = function (H) {
      "Céder du matériel volontairement pour quelque chose de plus précieux : le mat, une attaque décisive ou une finale gagnante. Un sacrifice que l'on calcule jusqu'au bout n'est qu'un bon coup.", "Sacrifice"],
     ["perpetual-check", "echec-perpetuel", "Perpetual check", "Échec perpétuel",
      "An unending series of checks the defender cannot escape. The game is drawn by repetition, which makes it the standard lifeline in a losing position.",
-     "Une série d'échecs à laquelle le défenseur ne peut pas échapper. La partie est nulle par répétition, ce qui en fait la bouée de sauvetage classique dans une position perdue.", "King attack"]
+     "Une série d'échecs à laquelle le défenseur ne peut pas échapper. La partie est nulle par répétition, ce qui en fait la bouée de sauvetage classique dans une position perdue.", "King attack"],
+    ["blunder", "gaffe", "Blunder", "Gaffe",
+     "A move that loses material or the game outright, usually because a threat or a hanging piece was missed. Most of chang64's tactics puzzles exist because a real player, somewhere, made exactly this mistake.",
+     "Un coup qui perd du matériel ou la partie tout net, en général parce qu'une menace ou une pièce en prise est passée inaperçue. La plupart des exercices de chang64 existent parce qu'un vrai joueur, quelque part, a commis exactement cette erreur.", "Winning capture"],
+    ["mistake", "erreur", "Mistake", "Erreur",
+     "A move that makes the position clearly worse without losing outright, one notch below a blunder. It hands the opponent a real advantage rather than an immediate win.",
+     "Un coup qui dégrade nettement la position sans pour autant tout perdre, un cran en dessous de la gaffe. Il offre un vrai avantage à l'adversaire, mais pas un gain immédiat.", "Winning move"],
+    ["inaccuracy", "imprecision", "Inaccuracy", "Imprécision",
+     "A move that is not the best available and quietly gives something back: a tempo, a square, a fraction of an advantage. Rarely punished on the spot, but a habit of inaccuracies is how good positions slip away.",
+     "Un coup qui n'est pas le meilleur possible et qui cède discrètement quelque chose : un temps, une case, une fraction d'avantage. Rarement puni sur le moment, mais une habitude d'imprécisions, c'est ainsi qu'une bonne position finit par filer.", ""],
+    ["best-move", "meilleur-coup", "Best move", "Meilleur coup",
+     "The move an engine ranks above every alternative in a given position. Playing the best move every time is not the goal of a human game: playing well under time pressure with an imperfect view of the position is the actual skill.",
+     "Le coup qu'un moteur classe au-dessus de tous les autres dans une position donnée. Jouer le meilleur coup à chaque fois n'est pas le but d'une partie humaine : la vraie compétence, c'est bien jouer sous la pression du temps avec une vue imparfaite de la position.", ""],
+    ["only-move", "seul-coup", "Only move", "Seul coup",
+     "A position where every other legal move loses, often by force. Spotting that a move is forced, rather than merely good, is itself a skill: it tells you how much room for error is actually left.",
+     "Une position où tout autre coup légal perd, souvent de façon forcée. Repérer qu'un coup est forcé, et pas seulement bon, est une compétence en soi : ça indique la marge d'erreur qu'il reste réellement.", ""],
+    ["brilliant-move", "coup-brillant", "Brilliant move", "Coup brillant",
+     "A move that gives up material yet turns out to be objectively strong, often the only way to keep an advantage or force a win. What makes it brilliant is that giving up material almost never looks correct at first glance.",
+     "Un coup qui cède du matériel tout en étant objectivement fort, souvent la seule façon de garder l'avantage ou de forcer le gain. Ce qui le rend brillant, c'est que céder du matériel n'a presque jamais l'air correct au premier regard.", "Deflection"],
+    ["elo-rating", "le-classement-elo", "The Elo rating: what your number actually means", "Le classement Elo : ce que ton chiffre veut vraiment dire",
+     "An Elo rating is a running estimate of skill built from one simple idea: each result nudges the number up or down by an amount that depends on how surprising it was. Beating someone much stronger moves it a lot; beating someone much weaker barely moves it at all. chang64 treats each puzzle level as an opponent of a fixed strength and updates your rating the same way after every attempt. Worth saying plainly: this number is a personal, relative tracker, not a certified skill measurement. Sites like Lichess calibrate their puzzle ratings against millions of real attempts from real players, cross-checked against each other; chang64 keeps no accounts and tracks nothing across players, by design, so there is no population to calibrate against. Your rating here is honest about your own progress over time — it isn't a claim that a given number equals the same strength on Lichess or in a FIDE-rated tournament. That doesn't make it meaningless: watching it rise still means exactly what it always has, that you're solving problems that used to be out of reach.",
+     "Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps — ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.", ""]
   ];
 
   const byTheme = {};
   for (const p of puzzles) (byTheme[p.theme] = byTheme[p.theme] || []).push(p);
 
-  function puzzleSlug(p, lang) {
-    const th = themeOf(p.theme, lang);
-    return `${p.id.replace("p", "")}-${slug(th)}`;
+  /* ================= EXEMPLES PAR CATEGORIE (remplace les pages 1/exercice) =================
+     Ancien systeme : une page statique par exercice (2x banque, en+fr) -- tenable a 1779
+     exercices (3558 pages), plus du tout a 51638 (103k+ pages, largement au-dessus du plafond
+     Cloudflare Pages : 20k gratuit / 100k payant). Nouveau systeme : une page par categorie
+     (10 categories x 2 langues = 20 pages), chacune montrant 3 exemples selectionnes et
+     expliques en detail plutot qu'une fiche par exercice. La banque complete (51638) reste
+     intacte comme donnees de jeu (Resoudre, Puzzle Rush, difficulte adaptative) -- seule la
+     generation de pages statiques change. */
+  /* 13 categories au total dans la banque (10 principales + 3 marginales en
+     volume : Deflection 5, Quiet move 49, Mate in three 61) -- toutes ont
+     desormais leur page, la taille du groupe ne changeant rien au nombre
+     d'exemples affiches (toujours 3). */
+  const THEME10 = ["Winning capture", "Double attack", "Skewer", "Mate in two", "Winning move",
+                    "Knight fork", "Mate in one", "Back-rank mate", "Pin", "Pawn fork",
+                    "Deflection", "Quiet move", "Mate in three"];
+
+  function categorySlug(theme, lang) { return slug(themeOf(theme, lang)); }
+
+  /* 3 exemples par categorie, choisis a des percentiles de difficulte fixes (15/50/85) sur le
+     champ diff deja calcule par difficulty_v2.js -- un facile, un moyen, un plus dur, plutot
+     que les 3 premiers rencontres (qui seraient quasi tous du meme niveau vu le tri par id). */
+  const examplesByTheme = {};
+  for (const th of THEME10) {
+    const pool = (byTheme[th] || []).slice().sort((a, b) => a.diff - b.diff);
+    const n = pool.length;
+    if (!n) { examplesByTheme[th] = []; continue; }
+    const idxs = [Math.floor(n * 0.15), Math.floor(n * 0.5), Math.floor(n * 0.85)];
+    examplesByTheme[th] = idxs.map(i => pool[Math.min(i, n - 1)]);
+  }
+
+  const THEME_DEFS = {
+    "Winning capture": {
+      en: "The simplest tactic there is: a piece is undefended, or defended by less than it's worth, so it can just be taken for a clean material gain.",
+      fr: "Le motif le plus simple qui soit : une pièce n'est pas défendue, ou l'est par moins qu'elle ne vaut, donc on la prend tout net, pour un gain de matériel sans contrepartie." },
+    "Double attack": {
+      en: "One move creates two threats at once, against two different targets. The defender can only deal with one of them, so the other falls.",
+      fr: "Un seul coup crée deux menaces à la fois, sur deux cibles différentes. Le défenseur ne peut en parer qu'une : l'autre tombe." },
+    "Skewer": {
+      en: "The reverse of a pin: the valuable piece is in front and must move to avoid capture, leaving the piece behind it to be taken.",
+      fr: "L'inverse du clouage : la pièce de valeur est devant et doit bouger pour ne pas être prise, ce qui abandonne la pièce qui se trouve juste derrière." },
+    "Mate in two": {
+      en: "A forced sequence: whatever the defender plays, checkmate follows exactly two moves later. Every possible reply has been checked by the engine, not just the most obvious one.",
+      fr: "Une séquence forcée : quoi que joue le défenseur, le mat tombe exactement deux coups plus tard. Chaque réponse possible a été vérifiée par le moteur, pas seulement la plus évidente." },
+    "Winning move": {
+      en: "A position where the strongest move doesn't fit a single named pattern below — it may combine several ideas at once, or simply be the one move that keeps every option open. Verified by direct engine comparison against every alternative.",
+      fr: "Une position où le coup le plus fort ne rentre dans aucun motif nommé ci-dessus — il peut combiner plusieurs idées à la fois, ou être tout simplement le seul coup qui garde toutes les options ouvertes. Vérifié par comparaison directe du moteur avec chaque alternative." },
+    "Knight fork": {
+      en: "One knight move attacks two enemy pieces at once. Because a knight's move can't be blocked by anything standing between the squares, there is no way to defend both — one of them has to fall.",
+      fr: "Un coup de cavalier attaque deux pièces adverses à la fois. Comme le déplacement du cavalier ne peut être bloqué par rien de ce qui se trouve entre les cases, impossible de défendre les deux en même temps : l'une doit tomber." },
+    "Mate in one": {
+      en: "A single move delivers checkmate immediately: the king has no legal escape square, no piece can block the attack, and no piece can capture the attacker.",
+      fr: "Un seul coup donne échec et mat immédiatement : le roi n'a aucune case de fuite légale, aucune pièce ne peut bloquer l'attaque, et aucune pièce ne peut prendre l'attaquant." },
+    "Back-rank mate": {
+      en: "A rook or queen mates a castled king trapped behind its own unmoved pawns. The most common mate in club chess, and the reason players open a small escape square early.",
+      fr: "Une tour ou une dame mate un roi roqué, coincé derrière ses propres pions qui n'ont pas bougé. Le mat le plus fréquent en club, et la raison pour laquelle on ouvre tôt une case de fuite." },
+    "Pin": {
+      en: "A piece cannot move without exposing a more valuable piece standing behind it. If the piece behind is the king, the pin is absolute and the pinned piece is legally frozen in place.",
+      fr: "Une pièce ne peut pas bouger sans exposer une pièce plus précieuse qui se trouve juste derrière elle. Si c'est le roi qui est derrière, le clouage est absolu et la pièce clouée est légalement immobilisée." },
+    "Pawn fork": {
+      en: "A humble pawn move attacks two pieces at once, one on each of its diagonal capture squares. Because it's only a pawn, the defender often doesn't see it coming — and can't save both pieces either way.",
+      fr: "Un simple coup de pion attaque deux pièces à la fois, une sur chacune de ses deux cases de capture en diagonale. Comme ce n'est qu'un pion, le défenseur ne le voit souvent pas venir — et ne peut de toute façon pas sauver les deux pièces." },
+    "Deflection": {
+      en: "A move — often a sacrifice — attacks the one piece standing guard over something else. Forced to deal with the immediate threat, that piece abandons its post, and what it was protecting falls.",
+      fr: "Un coup, souvent un sacrifice, attaque la seule pièce qui protégeait autre chose. Forcée de parer la menace immédiate, cette pièce abandonne son poste, et ce qu'elle gardait tombe." },
+    "Quiet move": {
+      en: "The winning move captures nothing and gives no check, which is exactly what makes it hard to find — nothing about it jumps out as a candidate. It still turns out to be the strongest move on the board.",
+      fr: "Le coup gagnant ne capture rien et ne fait pas échec, ce qui explique pourquoi il est difficile à trouver — rien ne le distingue au premier regard. C'est pourtant le coup le plus fort de la position." },
+    "Mate in three": {
+      en: "A forced sequence: whatever the defender plays, checkmate follows exactly three moves later. Every possible defence at every step has been checked by the engine, not just the most obvious one.",
+      fr: "Une séquence forcée : quoi que joue le défenseur, le mat tombe exactement trois coups plus tard. Chaque défense possible, à chaque étape, a été vérifiée par le moteur, pas seulement la plus évidente." }
+  };
+
+  const FR_PIECE = { p: ["pion", "m"], n: ["cavalier", "m"], b: ["fou", "m"], r: ["tour", "f"], q: ["dame", "f"], k: ["roi", "m"] };
+  const EN_PIECE = { p: "pawn", n: "knight", b: "bishop", r: "rook", q: "queen", k: "king" };
+  function pieceFr(letter) {
+    const [w, g] = FR_PIECE[letter] || ["pièce", "f"];
+    return { w, art: g === "f" ? "la" : "le", suf: g === "f" ? "e" : "" };
+  }
+  function pieceEn(letter) { return EN_PIECE[letter] || "piece"; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  /* Rejoue la solution complete pour recuperer le SAN de chaque coup et le camp au trait --
+     ne fait AUCUNE hypothese sur la position, tout est recalcule depuis le fen reel. */
+  function replaySolution(p) {
+    const g = new Game(p.fen);
+    const side = g.turn === 0 ? "w" : "b";
+    const sans = [];
+    for (const uci of p.sol) {
+      const mv = g.moves().find(m => g.uci(m) === uci);
+      if (!mv) break;
+      sans.push(g.san(mv));
+      g.makeMove(mv);
+    }
+    return { side, sans };
+  }
+
+  /* Explication specifique par theme, batie UNIQUEMENT sur des donnees reellement calculees
+     par classify()/classifyBase() (champ p.explain) et sur le SAN rejoue ci-dessus -- jamais
+     une affirmation tactique inventee au-dela de ce que ces deux sources etablissent. */
+  function exampleExplanation(lang, p, side, sans) {
+    const d = p.explain || {};
+    const sideLabel = lang === "fr" ? (side === "w" ? "Les Blancs" : "Les Noirs") : (side === "w" ? "White" : "Black");
+    const first = sans[0];
+    if (p.theme === "Winning capture") {
+      const pc = lang === "fr" ? pieceFr(d.piece) : null;
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first}. ${cap(pc.art)} ${pc.w} adverse en ${d.sq} n'était pas suffisamment défendu${pc.suf} : il suffit de ${pc.art} prendre, pour un gain de matériel sans contrepartie.`
+        : `${sideLabel} play ${first}. The ${pieceEn(d.piece)} on ${d.sq} wasn't defended enough to survive — it's simply captured, for a clean material gain.`;
+    }
+    if (p.theme === "Double attack" || p.theme === "Knight fork" || p.theme === "Pawn fork") {
+      const [t1, t2] = d.targets || [];
+      if (!t1 || !t2) return "";
+      const pieceKind = p.theme === "Knight fork" ? (lang === "fr" ? "cavalier" : "knight")
+        : p.theme === "Pawn fork" ? (lang === "fr" ? "pion" : "pawn") : null;
+      if (lang === "fr") {
+        const p1 = pieceFr(t1.piece), p2 = pieceFr(t2.piece);
+        const via = pieceKind ? `Le ${pieceKind} en ${d.from}` : `Depuis ${d.from}, la pièce`;
+        return `${sideLabel} jouent ${first}. ${via} attaque à la fois ${p1.art} ${p1.w} en ${t1.sq} et ${p2.art} ${p2.w} en ${t2.sq} : impossible de sauver les deux en un seul coup.`;
+      }
+      const via = pieceKind ? `The ${pieceKind} on ${d.from}` : `From ${d.from}, the piece`;
+      return `${sideLabel} play ${first}. ${via} attacks both the ${pieceEn(t1.piece)} on ${t1.sq} and the ${pieceEn(t2.piece)} on ${t2.sq} at once — there's no single move that saves both.`;
+    }
+    if (p.theme === "Pin" || p.theme === "Skewer") {
+      const pin = d.pinned, beh = d.behind;
+      if (!pin || !beh) return "";
+      if (d.captured) {
+        /* Clouage DEJA present, exploite par le coup (pas cree par lui) : le
+           defenseur ne pouvait pas reprendre, cloue contre son roi. Detail
+           different (captured + pinned + behind) de celui du clouage cree
+           par le coup (from + pinned + behind) -- meme theme, mecanique
+           inverse, donc texte different. */
+        const caught = d.captured;
+        if (lang === "fr") {
+          const pc1 = pieceFr(caught.piece), pc2 = pieceFr(pin.piece);
+          return `${sideLabel} jouent ${first}. ${cap(pc1.art)} ${pc1.w} en ${caught.sq} n'était défendu${pc1.suf} que par ${pc2.art} ${pc2.w} en ${pin.sq} — mais celui-ci est cloué contre son roi et ne peut pas légalement reprendre : la prise est sûre.`;
+        }
+        return `${sideLabel} play ${first}. The ${pieceEn(caught.piece)} on ${caught.sq} was only defended by the ${pieceEn(pin.piece)} on ${pin.sq} — but that piece is pinned to its king and can't legally recapture: the capture is completely safe.`;
+      }
+      if (lang === "fr") {
+        const p1 = pieceFr(pin.piece), p2 = pieceFr(beh.piece);
+        return p.theme === "Pin"
+          ? `${sideLabel} jouent ${first}. ${cap(p1.art)} ${p1.w} adverse en ${pin.sq} ne peut pas bouger sans exposer ${p2.art} ${p2.w}, juste derrière en ${beh.sq} : ${p1.art === "la" ? "elle" : "il"} est cloué${p1.suf}.`
+          : `${sideLabel} jouent ${first}. ${cap(p1.art)} ${p1.w} adverse en ${pin.sq} doit bouger pour ne pas être pris${p1.suf}, ce qui abandonne ${p2.art} ${p2.w} qui se trouvait juste derrière, en ${beh.sq}.`;
+      }
+      return p.theme === "Pin"
+        ? `${sideLabel} play ${first}. The ${pieceEn(pin.piece)} on ${pin.sq} can't move without exposing the ${pieceEn(beh.piece)} right behind it, on ${beh.sq} — it's pinned.`
+        : `${sideLabel} play ${first}. The ${pieceEn(pin.piece)} on ${pin.sq} has to move to avoid capture, which abandons the ${pieceEn(beh.piece)} that was standing right behind it, on ${beh.sq}.`;
+    }
+    if (p.theme === "Back-rank mate") {
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first} et matent. Le roi adverse en ${d.king} est coincé sur sa dernière rangée par ses propres pions : aucune case de fuite, mat immédiat.`
+        : `${sideLabel} play ${first} and deliver mate. The enemy king on ${d.king} is trapped on the back rank by its own pawns — no escape square, immediate mate.`;
+    }
+    if (p.theme === "Mate in one") {
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first} et matent d'un seul coup : le roi adverse n'a ni case de fuite légale, ni pièce pour bloquer ou prendre l'attaquant.`
+        : `${sideLabel} play ${first} for immediate mate: the enemy king has no legal escape square, and no piece can block or capture the attacker.`;
+    }
+    if (p.theme === "Mate in two") {
+      const line = sans.map((s, i) => (i % 2 === 0 ? `${Math.floor(i / 2) + 1}.` : "") + s).join(" ");
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first}. Quoi que réponde l'adversaire, le mat suit exactement deux coups plus tard (séquence complète : ${line}) — chaque défense possible a été vérifiée par le moteur.`
+        : `${sideLabel} play ${first}. Whatever the defender tries, mate follows exactly two moves later (full line: ${line}) — every possible defence has been checked by the engine.`;
+    }
+    if (p.theme === "Winning move") {
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first}. Ce coup ne rentre dans aucun motif nommé précis, mais c'est objectivement le meilleur : le moteur le préfère nettement à toute autre possibilité.`
+        : `${sideLabel} play ${first}. This move doesn't fit one single named pattern, but it's objectively the strongest — the engine ranks it clearly above every alternative.`;
+    }
+    if (p.theme === "Deflection") {
+      const df = d.deflected, gn = d.gained;
+      const line = sans.map((s, i) => (i % 2 === 0 ? `${Math.floor(i / 2) + 1}.` : "") + s).join(" ");
+      if (!df) return "";
+      if (lang === "fr") {
+        const pd = pieceFr(df.piece);
+        const gainTxt = gn ? ` Une fois déviée, elle ne défend plus ${gn.sq === df.sq ? "cette case" : `la case ${gn.sq}`}, qui tombe au coup suivant.` : "";
+        return `${sideLabel} jouent ${first}. Ce coup attaque directement ${pd.art} ${pd.w} adverse en ${df.sq}, seule pièce qui protégeait autre chose : forcée de s'en occuper, elle abandonne son poste.${gainTxt} (séquence complète : ${line})`;
+      }
+      const gainTxt = gn ? ` Once deflected, it no longer guards ${gn.sq}, which falls on the next move.` : "";
+      return `${sideLabel} play ${first}. This move attacks the ${pieceEn(df.piece)} on ${df.sq} directly — the one piece guarding something else. Forced to deal with it, that piece abandons its post.${gainTxt} (full line: ${line})`;
+    }
+    if (p.theme === "Quiet move") {
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first}. Ce coup ne capture rien et ne fait pas échec — rien ne le distingue au premier regard — et pourtant c'est le meilleur coup de la position, qui gagne du matériel par la suite.`
+        : `${sideLabel} play ${first}. This move captures nothing and gives no check — nothing about it stands out at first glance — yet it's the strongest move on the board, and it wins material.`;
+    }
+    if (p.theme === "Mate in three") {
+      const line = sans.map((s, i) => (i % 2 === 0 ? `${Math.floor(i / 2) + 1}.` : "") + s).join(" ");
+      return lang === "fr"
+        ? `${sideLabel} jouent ${first}. Quoi que réponde l'adversaire, le mat suit exactement trois coups plus tard (séquence complète : ${line}) — chaque défense possible, à chaque étape, a été vérifiée par le moteur.`
+        : `${sideLabel} play ${first}. Whatever the defender tries, mate follows exactly three moves later (full line: ${line}) — every possible defence, at every step, has been checked by the engine.`;
+    }
+    return "";
   }
 
   for (const lang of ["en", "fr"]) {
@@ -297,7 +607,7 @@ module.exports = function (H) {
   ${diagram(sample.fen, (lang === "fr" ? "Exemple : " : "Example: ") + themeOf(sample.theme, lang))}
   <div><p>${lang === "fr" ? "Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée." : "The diagram shows an example, taken from the chang64 puzzle set. Every position there is proved by the engine before it is offered."}</p>
     <a class="cta" href="/#puzzle=${sample.id}">${lang === "fr" ? "Résoudre cet exercice" : "Solve this puzzle"}</a>
-    <a class="cta ghost" href="/${DIRS.puzzles[lang]}/${puzzleSlug(sample, lang)}.html">${lang === "fr" ? "Voir la fiche" : "See the page"}</a>
+    ${THEME10.includes(theme) ? `<a class="cta ghost" href="/${DIRS.puzzles[lang]}/${categorySlug(theme, lang)}.html">${lang === "fr" ? "Voir des exemples expliqués" : "See worked examples"}</a>` : ""}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>` : `<div><a class="cta" href="/">${u.play}</a></div>`;
       const body = `<h1>${esc(title)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
@@ -461,102 +771,56 @@ module.exports = function (H) {
       `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
   }
 
-  /* ================= 5. PUZZLE PAGES ================= */
+  /* ================= 5. CATEGORY EXAMPLE PAGES (10 x 2 langues, remplace 1 page/exercice) ================= */
   for (const lang of ["en", "fr"]) {
     const dir = DIRS.puzzles[lang], u = UI[lang];
-    for (const p of puzzles) {
-      const g = new Game(p.fen);
-      const mv = g.moves().find(m => g.uci(m) === p.sol[0]);
-      if (!mv) continue;
-      const san = g.san(mv);
-      const side = g.turn === 0 ? u.white : u.black;
-      const th = themeOf(p.theme, lang);
-      const goal = p.type === "mate"
-        ? (lang === "fr" ? `matent en ${p.n} coup${p.n > 1 ? "s" : ""}` : `to play and mate in ${p.n}`)
-        : (lang === "fr" ? "gagnent du matériel" : "to play and win material");
-      const num = p.id.replace("p", "");
-      let title = lang === "fr"
-        ? `${th} nº${num} : ${side} jouent et ${goal} | chang64`
-        : `${th} #${num}: ${side} ${goal} | chang64`;
-      if (title.length > 75) title = lang === "fr"
-        ? `${th} nº${num} : ${side} jouent et gagnent | chang64`
-        : `${th} #${num}: ${side} to play and win | chang64`;
-      if (title.length > 75) title = `${th} nº${num} | chang64`;
-      /* Passait au-dessus de 160 caracteres des que le theme (ex. "fourchette
-         de cavalier") et la difficulte (ex. "assez difficile", ajoutee avec
-         le passage a dix niveaux) se cumulaient. Reformule plus court, et
-         passe par metaDesc en filet de securite si une future combinaison
-         depassait quand meme. */
+    for (const th of THEME10) {
+      const examples = examplesByTheme[th];
+      if (!examples.length) continue;
+      const thLabel = themeOf(th, lang);
+      const def = THEME_DEFS[th][lang];
+      const title = lang === "fr" ? `${thLabel} : 3 exemples expliqués | chang64` : `${thLabel}: 3 worked examples | chang64`;
       const desc = metaDesc(lang === "fr"
-        ? `Exercice ${th.toLowerCase()} : ${side.toLowerCase()} jouent et ${goal}. Vérifié par le moteur, difficulté ${u.levels[p.level - 1].toLowerCase()}.`
-        : `A ${th.toLowerCase()} puzzle: ${side.toLowerCase()} ${goal}. Engine-verified, ${u.levels[p.level - 1].toLowerCase()} difficulty.`);
-      const canonical = `${SITE}/${dir}/${puzzleSlug(p, lang)}.html`;
-      const alt = `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/${puzzleSlug(p, lang === "en" ? "fr" : "en")}.html`;
-      const body = `<h1>${esc(lang === "fr" ? `${side} jouent et ${goal}` : `${side} ${goal}`)}</h1>
-<p class="lede">${esc(desc)}</p>
-<div class="cols">${diagram(p.fen, u.sideToMove(side))}
-<div>
-  <p><span class="eco">${esc(th)}</span> <span class="eco">${esc(u.levels[p.level - 1])}</span> <span class="excode" aria-label="${esc(lang === "fr" ? `Identifiant de l'exercice : ${p.code}, utile pour signaler un problème` : `Exercise ID: ${p.code}, useful when reporting an issue`)}">#${esc(p.code)}</span></p>
-  <p>${lang === "fr" ? "Cette position vient de la banque d'exercices de chang64. Chaque exercice a été démontré par le moteur : pour un mat, toutes les défenses adverses ont été vérifiées ; pour un gain de matériel, la marge sur le deuxième meilleur coup a été mesurée." : "This position comes from the chang64 puzzle set. Every puzzle is proved by the engine: for a mate, every defence was checked; for a material win, the margin over the second-best move was measured."}</p>
-  <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">${u.solution}</summary>
-    <div class="moves" style="margin-top:10px">${esc(san)}</div></details>
-  <a class="cta" href="/#puzzle=${p.id}">${lang === "fr" ? "Résoudre sur l'échiquier" : "Solve it on the board"}</a>
-  <a class="cta ghost" href="/${dir}/">${u.back}</a>
-</div></div>`;
-      page(lang, dir, puzzleSlug(p, lang) + ".html", title, desc, body,
-        { "@context": "https://schema.org", "@type": "Quiz", name: title, inLanguage: lang,
-          about: { "@type": "Thing", name: th } }, alt, canonical);
+        ? `${thLabel} aux échecs : la définition, et trois positions réelles expliquées coup par coup, vérifiées par le moteur.`
+        : `${thLabel} in chess: the definition, and three real positions explained move by move, engine-verified.`);
+      const canonical = `${SITE}/${dir}/${categorySlug(th, lang)}.html`;
+      const alt = `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/${categorySlug(th, lang === "en" ? "fr" : "en")}.html`;
+      const blocks = examples.map((p, i) => {
+        const { side, sans } = replaySolution(p);
+        const sideLabel = lang === "fr" ? (side === "w" ? "Blancs" : "Noirs") : (side === "w" ? "White" : "Black");
+        const expl = exampleExplanation(lang, p, side, sans);
+        const levelLabel = u.levels[p.level - 1];
+        return `<section class="theme-bloc">
+  <h2>${lang === "fr" ? "Exemple" : "Example"} ${i + 1} <span style="color:var(--sage);font-size:13px">(${esc(levelLabel)})</span></h2>
+  <div class="cols">${diagram(p.fen, u.sideToMove(sideLabel))}
+  <div>
+    <p>${esc(expl)}</p>
+    <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">${u.solution}</summary>
+      <div class="moves" style="margin-top:10px">${esc(sans.join(" "))}</div></details>
+    <a class="cta" href="/#puzzle=${p.id}">${lang === "fr" ? "Tester sur l'échiquier" : "Try it on the board"}</a>
+  </div></div>
+</section>`;
+      }).join("\n");
+      const body = `<h1>${esc(thLabel)}</h1>
+<p class="lede">${esc(def)}</p>
+${blocks}
+<p><a class="cta ghost" href="/${dir}/">${u.back}</a></p>`;
+      page(lang, dir, categorySlug(th, lang) + ".html", title, desc, body,
+        { "@context": "https://schema.org", "@type": "LearningResource", name: title, inLanguage: lang,
+          about: { "@type": "Thing", name: thLabel }, educationalLevel: "beginner" }, alt, canonical);
     }
-    const t = lang === "fr" ? `${puzzles.length} exercices de tactique vérifiés` : `${puzzles.length} verified chess tactics puzzles`;
+
+    /* Index leger : 10 tuiles vers les pages de categorie, plutot que la grille complete des
+       51638 exercices (l'ancienne approche, intenable a cette echelle -- voir la note en tete
+       de section). D'autres categories/pages viendront s'y ajouter au fil du temps. */
+    const t = lang === "fr" ? "Bibliothèque d'exemples tactiques" : "Tactics example library";
     const lede = lang === "fr"
-      /* Ce texte sert aussi de meta description sur cette page (voir plus bas
-         dans ce fichier) : il doit rester sous la limite generale verifiee
-         par check_seo_entete.js (160 caracteres), avec la meme marge que la
-         page d'accueil plutot que de la longer au ras du seuil. Le passage a
-         dix niveaux a failli faire deborder la version francaise (174
-         caracteres avec "cinq"/"dix" a l'identique) : le texte est reformule
-         plus court, pas juste le mot "cinq" remplace par "dix". */
-      ? `Chaque position a été démontrée par le moteur : mats, fourchettes, clouages, enfilades, sacrifices, classés en dix niveaux.`
-      : `Every position was proved by the engine: mates, forks, pins, skewers and sacrifices, sorted into ten levels.`;
-    const groups = {};
-    for (const p of puzzles) (groups[p.theme] = groups[p.theme] || []).push(p);
-    const ordered = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
-    const anchor = th => "t-" + slug(themeOf(th, "en"));
-    const toc = `<nav class="toc" aria-label="${lang === "fr" ? "Thèmes" : "Themes"}">` +
-      ordered.map(th => `<a href="#${anchor(th)}">${esc(themeOf(th, lang))} <b>${groups[th].length}</b></a>`).join("") + `</nav>`;
-    /* Champ masque par defaut, revele par le script : sans JavaScript la page
-       reste ce qu'elle etait. Mille exercices repartis en themes ne se
-       parcourent pas a l'oeil. */
-    const filtre = `<div class="filtre hide" id="filtreBloc">
-  <input type="search" id="filtre" autocomplete="off"
-         placeholder="${lang === "fr" ? "Chercher : thème, niveau ou numéro" : "Search: theme, level or number"}"
-         aria-label="${lang === "fr" ? "Filtrer les exercices" : "Filter puzzles"}" aria-controls="grille">
-  <!-- Contrairement aux ouvertures, le trait est une propriete stricte de
-       la position (pas une tradition de repertoire) : "all" reste quand
-       meme la valeur par defaut, par coherence avec le meme controle sur
-       la page des ouvertures. -->
-  <div class="cotefiltre" id="coteFiltre" role="group" aria-label="${lang === "fr" ? "Filtrer par trait" : "Filter by side to move"}">
-    <button type="button" data-side="all" aria-pressed="true">${lang === "fr" ? "Tous" : "All"}</button>
-    <button type="button" data-side="w" aria-pressed="false">${lang === "fr" ? "Trait aux Blancs" : "White to move"}</button>
-    <button type="button" data-side="b" aria-pressed="false">${lang === "fr" ? "Trait aux Noirs" : "Black to move"}</button>
-  </div>
-  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite"></p>
-</div>`;
-    const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p>` + filtre + `<div id="grille">` + toc +
-      ordered.map(th =>
-        `<section class="theme-bloc" data-theme><h2 id="${anchor(th)}">${esc(themeOf(th, lang))} <span style="color:var(--sage);font-size:13px">(${groups[th].length})</span></h2><div class="grid">` +
-        groups[th].map(p => {
-          /* Cle de recherche : theme dans les deux langues, niveau, numero.
-             Sans accents ni ponctuation, pour que "clouage" trouve
-             "Clouage" et "mat en un" trouve "Mat en un coup". */
-          const cle = sansAccent([
-            themeOf(p.theme, lang), themeOf(p.theme, lang === "fr" ? "en" : "fr"),
-            UI[lang].levels[p.level - 1], "#" + p.id.replace("p", "")
-          ].join(" "));
-          const cote = new Game(p.fen).turn === 0 ? "w" : "b";
-          return `<a class="tile" data-cle="${esc(cle)}" data-side="${cote}" href="/${dir}/${puzzleSlug(p, lang)}.html"><b>${esc(themeOf(p.theme, lang))} #${p.id.replace("p", "")}</b><span>${esc(UI[lang].levels[p.level - 1])}</span></a>`;
-        }).join("") +
-        `</div></section>`).join("\n") + `</div>`;
+      ? `Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de ${puzzles.length} positions vérifiées par le moteur.`
+      : `Ten tactical patterns, three worked examples for each, drawn from a bank of ${puzzles.length} engine-verified positions.`;
+    const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
+      THEME10.filter(th => examplesByTheme[th].length).map(th =>
+        `<a class="tile" href="/${dir}/${categorySlug(th, lang)}.html"><b>${esc(themeOf(th, lang))}</b><span>${lang === "fr" ? "3 exemples" : "3 examples"}</span></a>`
+      ).join("") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);

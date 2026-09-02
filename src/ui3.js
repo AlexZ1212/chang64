@@ -593,6 +593,7 @@ $("langSwitch").addEventListener("click",e=>{
   /* le panneau de preferences est construit en JS : il ne passe pas par
      applyI18n et doit donc etre redessine a la bascule de langue */
   if(typeof renderPrefs==="function"&&mode==="prefs")renderPrefs();
+  if(typeof renderFullCalendar==="function"&&mode==="calendar")renderFullCalendar();
   /* Le nom de l'adversaire porte la force ("Chang · Coriace"), composee en
      JavaScript : elle ne passe pas par applyI18n et resterait en anglais
      apres un changement de langue. */
@@ -623,6 +624,7 @@ setMode=function(m,opts){
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    { const pcal=$("pane-calendar"); if(pcal)pcal.classList.add("hide"); }
     $("pane-legal").classList.add("hide");
     $("appLayout").classList.remove("hide");
     $("pane-play").classList.add("hide");
@@ -1158,6 +1160,7 @@ setMode=function(m,opts){
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    { const pcal=$("pane-calendar"); if(pcal)pcal.classList.add("hide"); }
     const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
     const pp=$("pane-prefs"); if(pp)pp.classList.add("hide");
     $("appLayout").classList.remove("hide");
@@ -1357,6 +1360,7 @@ setMode=function(m,opts){
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
+    { const pcal=$("pane-calendar"); if(pcal)pcal.classList.add("hide"); }
     const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
     const pp=$("pane-prefs"); if(pp)pp.classList.add("hide");
     $("appLayout").classList.remove("hide");

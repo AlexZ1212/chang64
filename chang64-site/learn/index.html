@@ -107,6 +107,16 @@ p{margin-bottom:12px;max-width:66ch}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
 .moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}
+/* Separateur visuel entre les exemples d'une page categorie (Clouage,
+   Enfilade...) : sans ca, les 2-3 exemples s'enchainaient sans aucune
+   rupture visuelle, seul le h2 "Exemple N" les distinguait a l'oeil, et
+   maigrement (meme taille que les autres h2 de la page). Trou de style
+   preexistant, pas introduit par le passage aux pages categories -- l'ancien
+   index filtrable groupait deja ses puzzles par theme dans des sections de
+   cette meme classe, jamais stylee non plus. */
+.theme-bloc{padding-top:20px;margin-top:20px;border-top:1px solid var(--rule)}
+.theme-bloc:first-of-type{padding-top:0;margin-top:0;border-top:none}
+.theme-bloc h2{margin-top:0}
 .eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);
 border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}
 /* Meme forme que .eco (theme, difficulte) mais en gris discret plutot qu'en
@@ -239,7 +249,16 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 <a class="tile" href="/learn/how-games-are-drawn.html"><b>Every way a chess game can be drawn</b></a>
 <a class="tile" href="/learn/chess-notation.html"><b>Reading and writing chess notation</b></a>
 <a class="tile" href="/learn/time-controls.html"><b>Time controls: what blitz, rapid and 10+0 mean</b></a>
-<a class="tile" href="/learn/opening-principles.html"><b>The four opening principles that matter</b></a></div>
+<a class="tile" href="/learn/opening-principles.html"><b>The four opening principles that matter</b></a>
+<a class="tile" href="/learn/spotting-a-hanging-piece.html"><b>Spotting a hanging piece</b></a>
+<a class="tile" href="/learn/knight-fork.html"><b>The knight fork</b></a>
+<a class="tile" href="/learn/pawn-fork.html"><b>The pawn fork</b></a>
+<a class="tile" href="/learn/double-attack.html"><b>Double attack: forks that aren't knight moves</b></a>
+<a class="tile" href="/learn/the-pin.html"><b>The pin: a piece that can't move</b></a>
+<a class="tile" href="/learn/the-skewer.html"><b>The skewer: a pin turned around</b></a>
+<a class="tile" href="/learn/back-rank-mate.html"><b>The back-rank mate</b></a>
+<a class="tile" href="/learn/deflection.html"><b>Deflection: one piece, two jobs</b></a>
+<a class="tile" href="/learn/the-quiet-move.html"><b>The quiet move: the hardest kind to find</b></a></div>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role

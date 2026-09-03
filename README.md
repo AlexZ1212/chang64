@@ -19,7 +19,7 @@ node build_site.js     # produces src/site/
 node run_tests.js      # runs every check
 ```
 
-Read [`src/README.md`](src/README.md) first. It documents the build, the pitfalls that
+Read [`src/SESSION_HANDOFF.md`](src/SESSION_HANDOFF.md) first. It documents the build, the pitfalls that
 have already cost time, and what remains to be done.
 
 ## [`chang64-site/`](chang64-site/) : the site as published

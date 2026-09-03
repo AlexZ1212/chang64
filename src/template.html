@@ -21,11 +21,11 @@
 <link rel="alternate" hreflang="fr" href="https://chang64.com/">
 <link rel="alternate" hreflang="x-default" href="https://chang64.com/">
 <meta name="theme-color" content="#101413">
-<title>chang64 — play chess, solve tactics</title>
+<title>chang64 · play chess, solve tactics</title>
 <!-- 174 caracteres a l'origine : tronquee dans les resultats de recherche,
      ce qui coupait les arguments de fin. Ramenee sous 155. -->
 <meta name="description" content="Play chess against the computer, solve __NP__ tactics puzzles verified move by move, and challenge a friend by link. No account, no ads.">
-<meta property="og:title" content="chang64 — play chess, solve tactics">
+<meta property="og:title" content="chang64 · play chess, solve tactics">
 <meta property="og:description" content="Bullet, blitz, rapid and daily chess. __NP__ verified puzzles with adaptive difficulty. Challenge a friend with a link.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://chang64.com/">
@@ -490,6 +490,19 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 
 /* ---------- panels ---------- */
 .panel{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;box-shadow:var(--e1)}
+/* Menu d'entree de Resoudre : 5 cartes a egalite (Puzzles/Puzzle du
+   jour/Sprint/Coordonnees/Finales), meme habillage que .panel puisque ce
+   sont deja des blocs cliquables entiers plutot que des boutons inline. */
+.solveCard{display:block;width:100%;text-align:left;background-color:var(--slate);
+  border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;
+  box-shadow:var(--e1);margin-bottom:10px;cursor:pointer;font:inherit;color:inherit;
+  transition:border-color .16s,transform .08s}
+.solveCard:hover{border-color:var(--brass)}
+.solveCard:active{transform:scale(.99)}
+.solveCard:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.solveCard b{display:block;font-size:16px;color:var(--chalk);margin-bottom:4px}
+.solveCard-desc{display:block;font-size:13px;color:var(--sage);line-height:1.4}
+.solveCard-sub{display:block;font-size:12px;color:var(--brass);margin-top:8px;min-height:1em}
 /* Blocs repliables. <details> est natif : il fonctionne sans JavaScript et
    le clavier le gere tout seul. On masque seulement le marqueur par defaut
    du navigateur pour poser le notre, qui pivote a l'ouverture. */
@@ -692,6 +705,7 @@ header>*{min-width:0}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.badge{background-color:var(--ink);border:1px solid var(--rule);border-radius:999px;
   padding:6px 12px;font-size:12px;color:var(--sage);opacity:.45}
 .badge.unlocked{color:var(--brass);border-color:var(--brass);opacity:1}
+.badge-date{opacity:.65;font-size:11px}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .cal-title{font-size:13px;color:var(--chalk);font-weight:600;text-transform:capitalize}
 .cal-nav{background:none;border:1px solid var(--rule);border-radius:6px;color:var(--chalk);
@@ -985,7 +999,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
     <nav class="tabs" id="tabsNav" role="tablist" aria-label="Sections">
       <button role="tab" id="tab-play" aria-selected="false">Play</button>
       <button role="tab" id="tab-puzzles" aria-selected="false">Solve</button>
-      <button role="tab" id="tab-train" aria-selected="false">Train</button>
       <button role="tab" id="tab-edit" aria-selected="false">Analyse</button>
       <button role="tab" id="tab-friend" aria-selected="false">Invite</button>
       <button role="tab" id="tab-watch" aria-selected="false">Watch</button>
@@ -1048,6 +1061,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       </div>
     </div>
 
+    <!-- Recap hebdo : une ligne discrete, masquee par defaut (renderWeeklyRecap
+         la remplit et l'affiche seulement s'il y a eu au moins un exercice
+         reussi dans les 7 derniers jours glissants). -->
+    <p class="note hide" id="weeklyRecap"></p>
     <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
          n'afficherait que des zeros, ce qu'un premier visiteur lit comme
          "le site est vide" alors qu'il s'agit de sa propre progression.
@@ -1086,7 +1103,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <div class="coordhud hide" id="coordHud">
         <div class="chud-target">
           <span class="chud-label" id="chudLabel">Find</span>
-          <b id="chudSquare">—</b>
+          <b id="chudSquare">–</b>
         </div>
         <div class="chud-meta">
           <span><b id="chudTime">30.0</b><i id="chudTimeLabel">Seconds</i></span>
@@ -1119,6 +1136,15 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <b id="readyTitle">Ready?</b><button type="button" class="info-tip hide" id="tipResumeBtn" aria-expanded="false" aria-controls="tipResume" aria-label="More info">i</button>
             <span id="readySub"></span>
             <p class="info-tip-pop hide" id="tipResume">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
+            <!-- Choix de couleur, optionnel : masque par defaut (showReadyFor,
+                 ui2.js), revele uniquement pour Coordonnees, seule epreuve ou
+                 le point de vue se choisit avant de commencer. Meme carte que
+                 le reste de l'overlay plutot qu'un ecran a part -- juste un
+                 controle de plus quand il est pertinent. -->
+            <div class="seg hide" id="readySide" style="margin:14px 0">
+              <button type="button" data-v="w" aria-pressed="true">White's view</button>
+              <button type="button" data-v="b" aria-pressed="false">Black's view</button>
+            </div>
             <div class="result-actions">
               <button class="btn primary" id="readyStart">Start</button>
               <button class="btn" id="readySettings">Change settings</button>
@@ -1218,7 +1244,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <p class="note" id="sfStatus">Analysing a finished game downloads Stockfish (about 7 MB, once) and uses it automatically. Stockfish never helps you while you play.</p>
           <div id="analysisOut" class="hide">
             <div class="accrow">
-              <div class="stat"><b id="accScore">—</b><span>Accuracy</span></div>
+              <div class="stat"><b id="accScore">–</b><span>Accuracy</span></div>
               <div class="stat"><b id="accBlunders">0</b><span>Blunders</span></div>
               <div class="stat"><b id="accMistakes">0</b><span>Mistakes</span></div>
             </div>
@@ -1302,7 +1328,74 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
       <div id="pane-puzzles" class="hide">
-        <div class="panel" id="exPanel">
+        <!-- Menu d'entree de "Resoudre" (item de la discussion UX du
+             2026-09-03) : 5 categories a egalite -- Puzzles, Puzzle du jour,
+             Chang Sprint, Coordonnees, Finales -- chacune avec une ligne de
+             pedagogie et un sous-texte d'etat (niveau/notation, serie du
+             jour, records...), plutot qu'un bouton "Continuer" a part qui
+             recreerait une hierarchie implicite entre les categories.
+             Affiche par defaut a l'entree sur l'onglet ; les liens profonds
+             (#puzzle=, defi du jour, revision d'une erreur) le contournent
+             et vont droit au contenu, voir showSolveScreen() dans ui2.js. -->
+        <div id="solveMenu">
+          <button type="button" class="solveCard" id="cardSolvePuzzles">
+            <b>Puzzles</b>
+            <span class="solveCard-desc">Solve tactical exercises at your level, as much as you like. The level adjusts as you improve.</span>
+            <span class="solveCard-sub" id="subSolvePuzzles"></span>
+          </button>
+          <button type="button" class="solveCard" id="cardSolveDaily">
+            <b>Puzzle of the day</b>
+            <span class="solveCard-desc">One new puzzle every day. Come back to build your streak, and revisit any past day in the calendar.</span>
+            <span class="solveCard-sub" id="subSolveDaily"></span>
+          </button>
+          <button type="button" class="solveCard" id="cardSolveSprint">
+            <b>Chang Sprint</b>
+            <span class="solveCard-desc">Three minutes to solve as many puzzles as you can. Three misses and it stops.</span>
+            <span class="solveCard-sub" id="subSolveSprint"></span>
+          </button>
+          <button type="button" class="solveCard" id="cardSolveCoord">
+            <b>Coordinates</b>
+            <span class="solveCard-desc">Recognise every square at a glance, the foundation of fast calculation.</span>
+            <span class="solveCard-sub" id="subSolveCoord"></span>
+          </button>
+          <button type="button" class="solveCard" id="cardSolveEndgames">
+            <b>Endgames</b>
+            <span class="solveCard-desc">Five essential endgames worth knowing cold, they matter in almost any game.</span>
+            <span class="solveCard-sub" id="subSolveEndgames"></span>
+          </button>
+          <!-- Actions "de compte" : deplacees ici depuis le bas de l'onglet
+               Puzzles -- ce ne sont pas des reglages propres a une categorie
+               d'exercice, elles s'appliquent a toute la progression. -->
+          <details class="panel repliable">
+            <summary><span class="eyebrow">Continue on another device</span></summary>
+            <div class="repliable-corps">
+            <p class="note" style="margin-top:0;margin-bottom:10px">Your progress is stored on this device. To pick it up elsewhere, copy this code and paste it there.</p>
+            <div class="btnrow" style="margin-bottom:10px">
+              <button class="btn primary" id="btnCodeGen">Show my code</button>
+              <button class="btn" id="btnCodeCopy">Copy</button>
+            </div>
+            <input class="linkbox" id="codeOut" readonly aria-label="Your transfer code">
+            <div style="margin-top:14px">
+              <input class="linkbox" id="codeIn" placeholder="Paste a transfer code here" aria-label="Transfer code to restore">
+              <div class="btnrow"><button class="btn" id="btnCodeLoad">Restore progress</button></div>
+              <p class="note" id="codeMsg"></p>
+            </div>
+            </div>
+          </details>
+          <details class="panel repliable">
+            <summary><span class="eyebrow">Reset my progress</span></summary>
+            <div class="repliable-corps">
+            <p class="note" style="margin-top:0;margin-bottom:10px">Clears your level, badges, streaks and calendar on this device. This can't be undone.</p>
+            <div class="btnrow"><button class="btn" id="btnReset">Reset everything</button></div>
+            </div>
+          </details>
+        </div>
+        <!-- Ecran "Puzzles" et "Puzzle du jour" : meme carte d'exercice
+             partagee (exPanel), puisqu'elle ne fait qu'afficher quel que
+             soit le puzzle charge -- seule la barre laterale en dessous
+             differe entre les deux (voir solvePuzzlesSidebar/
+             solveDailySidebar plus bas). -->
+        <div class="panel hide" id="exPanel">
           <!-- L'enonce passe avant les statistiques : c'est lui qui dit quoi
                faire, alors que les compteurs ne sont qu'un contexte. Les
                laisser en tete obligeait a lire six chiffres avant d'arriver a
@@ -1346,6 +1439,26 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                  avant d'obtenir la reponse. -->
             <button class="btn" id="btnHintEx">Hint</button>
           </div>
+          <div class="btnrow hors-sprint review-hide" style="margin-top:8px">
+            <button class="btn" id="btnRetry">Restart puzzle</button>
+          </div>
+          <!-- Duel du jour (item 6, dernier de la liste "pour plus tard") :
+               reutilise integralement le mecanisme de lien deja en place
+               pour les parties entre amis (shareButtons(), baseUrl(), meme
+               style .linkbox/.shareRow) -- aucune infrastructure nouvelle,
+               juste une nouvelle url via le deep-link #puzzle=<id> deja
+               gere par applyDeepLink() (voir ui.js). Masque par defaut,
+               remis a l'etat masque a chaque nouvel exercice (loadPuzzle,
+               ui.js) et revele seulement apres une reussite sur LE puzzle
+               du jour precisement (finishPuzzle, ui.js) -- avant ca,
+               "j'ai resolu..." serait faux. -->
+          <div class="hide" id="dailyChallengeBlock" style="margin-top:8px">
+            <button class="btn" id="btnChallengeDaily">Challenge a friend</button>
+            <div class="panel hide" id="dailyChallengePanel" style="margin-top:8px">
+              <input class="linkbox" id="dailyChallengeLink" readonly aria-label="Challenge link">
+              <div class="shareRow" id="dailyChallengeShare"></div>
+            </div>
+          </div>
 
           <!-- Le sprint enchaine tous les niveaux et a ses propres compteurs
                en haut : la progression du mode normal ne s'y applique pas.
@@ -1354,7 +1467,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                d'une erreur ensuite (rush deja termine a ce moment-la, donc
                rush-on absent), ou "Niveau 1 sur 10" et les compteurs
                n'ont pourtant pas plus de sens. -->
-          <div class="hors-sprint review-hide">
+          <div class="hors-sprint review-hide" id="solvePuzzlesSidebar">
           <hr class="rule">
 
           <div class="ladder" id="ladder"></div>
@@ -1366,40 +1479,76 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           </div>
           <div class="stats stats-2">
             <div class="stat"><b id="stRating">800</b><span>Rating</span></div>
+          </div>
+          <!-- Graphique garde visible en permanence (decision du 2026-09-03,
+               "c'est stimulant de le voir") -- seuls les records et les
+               badges rejoignent le repli ci-dessous. -->
+          <div class="eyebrow">Rating over time<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipRatingGraph" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipRatingGraph">One point per exercise you complete. It only tracks your own progress against past-you, not a certified skill level. See the "Elo rating" glossary entry for more.</p>
+          <div class="graph ratinggraph" id="ratingGraph"></div>
+          <div class="hide" id="mistakeSection">
+            <div class="eyebrow">Mistakes to review<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipMistakes" aria-label="More info">i</button></div>
+            <p class="info-tip-pop hide" id="tipMistakes">Puzzles you've gotten wrong, from any mode. Tap one to try it again. Each success spaces it out further before it comes back. Solve it enough times and it drops off this list for good.</p>
+            <div class="rushHistory" id="mistakeGrid"></div>
+          </div>
+          <!-- Le theme n'est pas une statistique a consulter, c'est un
+               reglage qu'on ajuste avant de resoudre : reste visible, ne
+               rejoint pas le repli "Mon historique" ci-dessous
+               (decision du 2026-09-03, "ce n'est pas un badge"). -->
+          <div class="field">
+            <div class="eyebrow" id="themeTitle">Theme</div>
+            <select class="select" id="themeFilter" aria-label="Filter puzzles by theme"></select>
+          </div>
+          <!-- "Mon historique" (2026-09-03) : regroupe ce qu'on consulte de
+               temps en temps plutot qu'a chaque exercice -- records et
+               badges. Meme patron que Finales/"Continue on another device"
+               avant leur promotion en ecrans a part : replie par defaut,
+               <details> natif donc ca marche sans JS. Les badges y sont en
+               plus compactes (voir renderBadgeSummary, ui2.js) : la grille
+               complete des 41 badges genait meme repliee, la plupart etant
+               grises/verrouilles pour un nouveau venu. -->
+          <details class="panel repliable">
+            <summary><span class="eyebrow">My history</span></summary>
+            <div class="repliable-corps">
+            <div class="eyebrow">Personal records<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipRecords" aria-label="More info">i</button></div>
+            <p class="info-tip-pop hide" id="tipRecords">Your best-ever times: quickest first-try solve, and the most puzzles solved in a single day. These stay even if a later day is quieter.</p>
+            <div class="stats stats-2">
+              <div class="stat"><b id="stFastest">–</b><span>Fastest solve</span></div>
+              <div class="stat"><b id="stBestDay">0</b><span>Best day</span></div>
+            </div>
+            <div class="eyebrow">Badges<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipBadges" aria-label="More info">i</button></div>
+            <p class="info-tip-pop hide" id="tipBadges">Milestones for volume, daily streaks and rating. Once unlocked, a badge stays unlocked even if the number behind it later drops.</p>
+            <p class="note" id="badgeSummary" style="margin-top:0">0/41 unlocked</p>
+            <div class="badges" id="badgeRecentGrid"></div>
+            <details class="repliable" id="badgeAllWrap">
+              <summary><span class="sub-inline" id="badgeAllToggle">See all badges</span></summary>
+              <div class="repliable-corps" style="padding:0">
+              <div class="badges" id="badgeGrid" style="margin-top:10px"></div>
+              </div>
+            </details>
+            </div>
+          </details>
+          </div>
+          <!-- Barre laterale "Puzzle du jour" : serie stricte (uniquement
+               les jours ou LE puzzle du jour precis a ete resolu, migree
+               depuis l'ancien "Day streak" general le 2026-09-03) et
+               calendrier. Masquee par defaut, visible uniquement pour
+               l'ecran "daily" (voir showSolveScreen(), ui2.js). -->
+          <div class="hide hors-sprint review-hide" id="solveDailySidebar">
+          <hr class="rule">
+          <div class="stats stats-2">
             <div class="stat"><b id="stDays">0</b><span>Day streak</span></div>
           </div>
-          <div class="eyebrow">Rating over time<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipRatingGraph" aria-label="More info">i</button></div>
-          <p class="info-tip-pop hide" id="tipRatingGraph">One point per exercise you complete. It only tracks your own progress against past-you, not a certified skill level — see the "Elo rating" glossary entry for more.</p>
-          <div class="graph ratinggraph" id="ratingGraph"></div>
-          <div class="eyebrow">Badges<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipBadges" aria-label="More info">i</button></div>
-          <p class="info-tip-pop hide" id="tipBadges">Milestones for volume, daily streaks and rating. Once unlocked, a badge stays unlocked even if the number behind it later drops.</p>
-          <div class="badges" id="badgeGrid"></div>
           <div class="eyebrow">Daily puzzle calendar<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipCalendar" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipCalendar">Highlighted days are puzzles of the day you've solved. Tap one to see it again with the solution shown.</p>
           <div id="calWidget"></div>
           <p class="note"><a href="#calendar" id="calFullLink">See full calendar</a></p>
           </div>
         </div>
-        <div class="panel">
-          <div class="field">
-            <div class="eyebrow" id="themeTitle">Theme</div>
-            <select class="select" id="themeFilter" aria-label="Filter puzzles by theme"></select>
-          </div>
-          <div class="btnrow">
-            <button class="btn" id="btnDaily">Puzzle of the day</button>
-            <button class="btn" id="btnRetry">Restart puzzle</button>
-          </div>
-          <div class="btnrow" style="margin-top:8px">
-            <button class="btn" id="btnReset">Reset my progress</button>
-          </div>
-        </div>
-        <!-- Replie par defaut : sur telephone, l'onglet Exercices devenait
-             tres long. Les finales sont un entrainement a part, on ne les
-             ouvre que quand on veut les travailler. <details> est natif,
-             donc ca fonctionne sans JavaScript. -->
-        <details class="panel repliable">
-          <summary><span class="eyebrow">Endgames</span><span class="sub-inline">Five you should know</span></summary>
-          <div class="repliable-corps">
+        <!-- Ecran "Finales" : promu depuis le <details> replie qu'il etait
+             jusqu'ici -- categorie a part entiere maintenant, plus une
+             annexe repliee au bas de l'onglet Puzzles. -->
+        <div class="panel hide" id="solveEndgamesScreen">
           <div class="bloc">
           <h2 id="egName">Queen vs King</h2>
           <p class="sub" id="egBrief"></p>
@@ -1411,32 +1560,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="stats" style="margin-top:14px">
             <div class="stat"><b id="egMoves">0</b><span>Moves used</span></div>
             <div class="stat"><b id="egBudget">12</b><span>Target</span></div>
-            <div class="stat"><b id="egBest">—</b><span>Your best</span></div>
+            <div class="stat"><b id="egBest">–</b><span>Personal best</span></div>
           </div>
           <div class="btnrow"><button class="btn primary" id="btnEgNew">New position</button></div>
           </div>
-          </div>
-        </details>
-        <!-- Replie aussi : ce bloc ne sert qu'une fois, quand on change
-             d'appareil. Il occupait autant de place que les finales, en
-             permanence. -->
-        <details class="panel repliable">
-          <summary><span class="eyebrow">Continue on another device</span></summary>
-          <div class="repliable-corps">
-
-          <p class="note" style="margin-top:0;margin-bottom:10px">Your progress is stored on this device. To pick it up elsewhere, copy this code and paste it there.</p>
-          <div class="btnrow" style="margin-bottom:10px">
-            <button class="btn primary" id="btnCodeGen">Show my code</button>
-            <button class="btn" id="btnCodeCopy">Copy</button>
-          </div>
-          <input class="linkbox" id="codeOut" readonly aria-label="Your transfer code">
-          <div style="margin-top:14px">
-            <input class="linkbox" id="codeIn" placeholder="Paste a transfer code here" aria-label="Transfer code to restore">
-            <div class="btnrow"><button class="btn" id="btnCodeLoad">Restore progress</button></div>
-            <p class="note" id="codeMsg"></p>
-          </div>
-          </div>
-        </details>
+        </div>
       </div>
 
       <!-- Les finales ont rejoint les exercices : ce sont des positions a
@@ -1453,14 +1581,22 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
              le contenu de l'exercice. -->
         <div id="rushSlot"></div>
         <div class="panel" id="rushLauncher">
+          <!-- Description retiree (2026-09-03) : deja dite sur la carte du
+               menu et dans l'overlay (showReadyFor, ui2.js) -- la repeter
+               ici faisait triple emploi. Ce panneau ne sert plus, dans le
+               parcours normal, qu'a l'abandon d'un sprint en cours (voir
+               btnGoRush) ; l'eyebrow suffit a l'identifier a ce moment-la. -->
           <div class="eyebrow hors-sprint">Chang Sprint</div>
-          <p class="note hors-sprint" style="margin-top:0;margin-bottom:10px">Three minutes to solve as many puzzles as you can. Three misses and it stops.</p>
           <div class="btnrow"><button class="btn primary" id="btnGoRush">Start Chang Sprint</button></div>
           <p class="note hors-sprint">Personal best: <b id="rushBestTrain">0</b></p>
         </div>
-        <div class="panel">
+        <div class="panel" id="coordLauncher">
+          <!-- Description retiree (2026-09-03), meme raison que
+               rushLauncher juste au-dessus. coordSide reste, lui : au-dela
+               du choix initial (deja dans l'overlay), il retourne aussi le
+               plateau EN DIRECT pendant l'epreuve (voir son gestionnaire
+               de clic, ui3.js) -- pas seulement un reglage de depart. -->
           <div class="eyebrow">Coordinates</div>
-          <p class="note" style="margin-top:0;margin-bottom:10px">Thirty seconds to click as many named squares as you can. Knowing the board by name makes everything else faster.</p>
           <div class="field"><div class="seg" id="coordSide">
             <button data-v="w" aria-pressed="true">White's view</button>
             <button data-v="b" aria-pressed="false">Black's view</button>

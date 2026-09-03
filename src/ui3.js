@@ -161,7 +161,7 @@ function renderEndgame(){
   $("egMoves").textContent=eg.moves;
   $("egBudget").textContent=eg.scen.budget;
   const best=(prog.endgames||{})[eg.scen.id];
-  $("egBest").textContent=best?best:"—";
+  $("egBest").textContent=best?best:"–";
   for(const b of $("egChips").children)b.setAttribute("aria-pressed",b.dataset.id===eg.scen.id);
   renderEgStatus();
 }
@@ -259,9 +259,10 @@ function stopCoord(){
   clearInterval(coord.timer);
   const s=coord.score;
   prog.coordBest=Math.max(prog.coordBest||0,s);
+  if(typeof checkBadges==="function")checkBadges();
   coord=null;
   $("coordHud").classList.add("hide");
-  $("chudSquare").textContent="\u2014";
+  $("chudSquare").textContent="\u2013";
   if(eg&&eg.g){game=eg.g;legalCache=game.moves();selected=-1;marks={};}
   render();
   $("btnCoord").textContent=t("Start 30 seconds");
@@ -312,8 +313,13 @@ function renderEgChips(){
   }
 }
 $("btnEgNew").onclick=()=>{if(coord)stopCoord();startEndgame(eg?eg.scen.id:"kq","new");};
-$("btnCoord").onclick=()=>{
-  if(coord){stopCoord();return;}
+/* Extrait le 2026-09-03, meme raison que beginRushFlow() (ui2.js) : le clic
+   sur la carte "Coordonnees" du menu peut desormais aller droit a l'ecran
+   "Ready" plutot que de repasser par le bouton "Start 30 seconds" du
+   panneau Defis. sideChoice=true reste specifique aux coordonnees : c'est
+   la seule des epreuves chronometrees ou le point de vue se choisit avant
+   de commencer (voir showReadyFor, ui2.js). */
+function beginCoordFlow(){
   /* Une seule epreuve a la fois : sans cela, un sprint en cours continuait de
      tourner en arriere-plan, son chronometre decomptait et son bandeau restait
      affiche au-dessus de celui des coordonnees. */
@@ -326,16 +332,35 @@ $("btnCoord").onclick=()=>{
      endroit scrolle plus bas, par exemple juste apres avoir lu la
      description de ce meme bloc. */
   if(typeof focusBoard==="function")focusBoard();
+  /* Titre "Coordinates" plutot que le "Ready when you are" generique
+     (2026-09-03), meme raison que beginRushFlow() (ui2.js). */
   if(typeof showReadyFor==="function")
     showReadyFor(t("Thirty seconds · click the square that is named"),
-      ()=>startCoord(), t("Start"));
+      ()=>startCoord(), t("Start"), t("Coordinates"), null, null, true);
   else startCoord();
+}
+$("btnCoord").onclick=()=>{
+  if(coord){stopCoord();return;}
+  beginCoordFlow();
 };
 $("coordSide").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
   if(coord){flipped=b.dataset.v==="b";render();}
 });
+/* Le choix de couleur de l'overlay (readySide, template.html) reste
+   synchronise avec coordSide plutot que d'etre une source separee :
+   startCoord() (plus haut) continue de lire coordSide sans modification,
+   et rouvrir le panneau Defis (abandon en cours, etc.) retrouve le meme
+   choix que celui fait dans l'overlay. */
+{ const rs=$("readySide");
+  if(rs)rs.addEventListener("click",e=>{
+    const b=e.target.closest("button");if(!b)return;
+    for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
+    const cs=$("coordSide");
+    if(cs)for(const x of cs.children)x.setAttribute("aria-pressed",x.dataset.v===b.dataset.v);
+  });
+}
 
 /* ==========================================================
    17. DRAG AND DROP
@@ -613,13 +638,19 @@ $("langSwitch").addEventListener("click",e=>{
 /* ==========================================================
    20. MODE EXTENSION FOR TRAIN
    ========================================================== */
+/* Sprint et Coordonnees partagent toujours ce mode ("train" en interne,
+   plus d'onglet dedie dans la nav depuis le menu a 5 cartes du
+   2026-09-03) -- trainView dit lequel des deux lanceurs afficher.
+   Defaut "sprint" : au cas ou quelque chose appellerait setMode("train")
+   sans etre passe par une carte du menu (lien profond, etc.). */
+let trainView="sprint";
 const prevSetMode=setMode;
 setMode=function(m,opts){
   if(coord)stopCoord();
   if(m==="train"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="train";
-    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
     for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
@@ -631,6 +662,12 @@ setMode=function(m,opts){
     $("pane-puzzles").classList.add("hide");
     $("pane-friend").classList.add("hide");
     $("pane-train").classList.remove("hide");
+    /* Un seul des deux lanceurs visible a la fois : Sprint et Coordonnees
+       sont deux cartes distinctes du menu desormais (2026-09-03), plus
+       une paire toujours affichee ensemble comme du temps de l'onglet
+       "Entrainement". */
+    { const rl=$("rushLauncher"); if(rl)rl.classList.toggle("hide",trainView!=="sprint"); }
+    { const cl=$("coordLauncher"); if(cl)cl.classList.toggle("hide",trainView!=="coord"); }
     /* Le plateau reste cache tant que la partie Jouer n'a pas demarre (voir
        updatePlayBoardVisibility) : cette branche gerant elle-meme son
        propre mode, sans jamais redescendre vers la logique centrale de
@@ -644,32 +681,24 @@ setMode=function(m,opts){
     renderCoordHud();
     $("coordBest").textContent=prog.coordBest||0;
     /* Les finales ont demenage dans Exercices (voir refreshCurrentMode et
-       setMode("puzzles") dans ui.js) : elles ne vivent plus ici. Ce bloc
-       appelait encore startEndgame("kq") a chaque arrivee sur Defis, ce qui
-       ecrasait silencieusement l'echiquier partage avec une position
-       Dame+Roi generee au hasard, sans aucune puce ni statut visible pour
-       l'expliquer puisqu'ils sont dans le panneau (cache) d'Exercices.
-       Confirme par un test direct : 3 pieces apparaissaient sur le plateau
-       au simple clic sur Defis, avant meme de lancer un Sprint ou un
-       entrainement aux coordonnees. On ne touche plus a l'echiquier ici (ni
+       setMode("puzzles") dans ui.js), et ont depuis leur propre ecran dans
+       le menu a 5 cartes (2026-09-03) : elles ne vivent plus ici. Ce bloc
+       appelait auparavant startEndgame("kq") a chaque arrivee sur Defis,
+       ce qui ecrasait silencieusement l'echiquier partage avec une
+       position Dame+Roi generee au hasard, sans aucune puce ni statut
+       visible pour l'expliquer. On ne touche plus a l'echiquier ici (ni
        startEndgame, ni reassignation de game) : il garde son dernier
        contenu jusqu'a ce que Sprint ou Coordonnees le remplacent
-       explicitement au demarrage.
-       Provisoire (a trancher plus tard avec l'utilisateur, cf. discussion) :
-       ce retrait avait aussi supprime le seul appel a render() de ce
-       chemin, laissant l'echiquier vide (cases construites mais jamais
-       peintes) quand Defis est le tout premier onglet visite dans la
-       session, avant Jouer ou Exercices. On rappelle donc render() ici,
-       qui affiche alors la position de depart standard (valeur par defaut
-       de `game`, voir engine.js) plutot qu'un echiquier vide. */
+       explicitement au demarrage. render() reste necessaire quand Defis
+       est le tout premier ecran visite dans la session (avant Jouer ou
+       Resoudre) : sans lui, l'echiquier serait construit mais jamais
+       peint. */
     render();
     return;
   }
   $("pane-train").classList.add("hide");
-  const tt=$("tab-train");if(tt)tt.setAttribute("aria-selected","false");
   prevSetMode(m,opts);
 };
-$("tab-train").onclick=()=>{setMode("train");goTop();};
 
 /* clics du plateau : router vers l'entraînement, et ignorer le clic issu d'un glisser */
 const baseOnSquare=onSquare;

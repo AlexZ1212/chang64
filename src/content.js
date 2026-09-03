@@ -393,9 +393,9 @@ module.exports = function (H) {
     ["brilliant-move", "coup-brillant", "Brilliant move", "Coup brillant",
      "A move that gives up material yet turns out to be objectively strong, often the only way to keep an advantage or force a win. What makes it brilliant is that giving up material almost never looks correct at first glance.",
      "Un coup qui cède du matériel tout en étant objectivement fort, souvent la seule façon de garder l'avantage ou de forcer le gain. Ce qui le rend brillant, c'est que céder du matériel n'a presque jamais l'air correct au premier regard.", "Deflection"],
-    ["elo-rating", "le-classement-elo", "The Elo rating: what your number actually means", "Le classement Elo : ce que ton chiffre veut vraiment dire",
-     "An Elo rating is a running estimate of skill built from one simple idea: each result nudges the number up or down by an amount that depends on how surprising it was. Beating someone much stronger moves it a lot; beating someone much weaker barely moves it at all. chang64 treats each puzzle level as an opponent of a fixed strength and updates your rating the same way after every attempt. Worth saying plainly: this number is a personal, relative tracker, not a certified skill measurement. Sites like Lichess calibrate their puzzle ratings against millions of real attempts from real players, cross-checked against each other; chang64 keeps no accounts and tracks nothing across players, by design, so there is no population to calibrate against. Your rating here is honest about your own progress over time — it isn't a claim that a given number equals the same strength on Lichess or in a FIDE-rated tournament. That doesn't make it meaningless: watching it rise still means exactly what it always has, that you're solving problems that used to be out of reach.",
-     "Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps — ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.", ""]
+    ["elo-rating", "le-classement-elo", "The Elo rating: what your number means", "Ce que veut dire ton classement Elo",
+     "An Elo rating is a running estimate of skill built from one simple idea: each result nudges the number up or down by an amount that depends on how surprising it was. Beating someone much stronger moves it a lot; beating someone much weaker barely moves it at all. chang64 treats each puzzle level as an opponent of a fixed strength and updates your rating the same way after every attempt. Worth saying plainly: this number is a personal, relative tracker, not a certified skill measurement. Sites like Lichess calibrate their puzzle ratings against millions of real attempts from real players, cross-checked against each other; chang64 keeps no accounts and tracks nothing across players, by design, so there is no population to calibrate against. Your rating here is honest about your own progress over time. It isn't a claim that a given number equals the same strength on Lichess or in a FIDE-rated tournament. That doesn't make it meaningless: watching it rise still means exactly what it always has, that you're solving problems that used to be out of reach.",
+     "Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps. Ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.", ""]
   ];
 
   const byTheme = {};
@@ -445,10 +445,10 @@ module.exports = function (H) {
       en: "A forced sequence: whatever the defender plays, checkmate follows exactly two moves later. Every possible reply has been checked by the engine, not just the most obvious one.",
       fr: "Une séquence forcée : quoi que joue le défenseur, le mat tombe exactement deux coups plus tard. Chaque réponse possible a été vérifiée par le moteur, pas seulement la plus évidente." },
     "Winning move": {
-      en: "A position where the strongest move doesn't fit a single named pattern below — it may combine several ideas at once, or simply be the one move that keeps every option open. Verified by direct engine comparison against every alternative.",
-      fr: "Une position où le coup le plus fort ne rentre dans aucun motif nommé ci-dessus — il peut combiner plusieurs idées à la fois, ou être tout simplement le seul coup qui garde toutes les options ouvertes. Vérifié par comparaison directe du moteur avec chaque alternative." },
+      en: "A position where the strongest move doesn't fit a single named pattern below. It may combine several ideas at once, or simply be the one move that keeps every option open. Verified by direct engine comparison against every alternative.",
+      fr: "Une position où le coup le plus fort ne rentre dans aucun motif nommé ci-dessus. Il peut combiner plusieurs idées à la fois, ou être tout simplement le seul coup qui garde toutes les options ouvertes. Vérifié par comparaison directe du moteur avec chaque alternative." },
     "Knight fork": {
-      en: "One knight move attacks two enemy pieces at once. Because a knight's move can't be blocked by anything standing between the squares, there is no way to defend both — one of them has to fall.",
+      en: "One knight move attacks two enemy pieces at once. Because a knight's move can't be blocked by anything standing between the squares, there is no way to defend both. One of them has to fall.",
       fr: "Un coup de cavalier attaque deux pièces adverses à la fois. Comme le déplacement du cavalier ne peut être bloqué par rien de ce qui se trouve entre les cases, impossible de défendre les deux en même temps : l'une doit tomber." },
     "Mate in one": {
       en: "A single move delivers checkmate immediately: the king has no legal escape square, no piece can block the attack, and no piece can capture the attacker.",
@@ -460,14 +460,14 @@ module.exports = function (H) {
       en: "A piece cannot move without exposing a more valuable piece standing behind it. If the piece behind is the king, the pin is absolute and the pinned piece is legally frozen in place.",
       fr: "Une pièce ne peut pas bouger sans exposer une pièce plus précieuse qui se trouve juste derrière elle. Si c'est le roi qui est derrière, le clouage est absolu et la pièce clouée est légalement immobilisée." },
     "Pawn fork": {
-      en: "A humble pawn move attacks two pieces at once, one on each of its diagonal capture squares. Because it's only a pawn, the defender often doesn't see it coming — and can't save both pieces either way.",
-      fr: "Un simple coup de pion attaque deux pièces à la fois, une sur chacune de ses deux cases de capture en diagonale. Comme ce n'est qu'un pion, le défenseur ne le voit souvent pas venir — et ne peut de toute façon pas sauver les deux pièces." },
+      en: "A humble pawn move attacks two pieces at once, one on each of its diagonal capture squares. Because it's only a pawn, the defender often doesn't see it coming, and can't save both pieces either way.",
+      fr: "Un simple coup de pion attaque deux pièces à la fois, une sur chacune de ses deux cases de capture en diagonale. Comme ce n'est qu'un pion, le défenseur ne le voit souvent pas venir, et ne peut de toute façon pas sauver les deux pièces." },
     "Deflection": {
-      en: "A move — often a sacrifice — attacks the one piece standing guard over something else. Forced to deal with the immediate threat, that piece abandons its post, and what it was protecting falls.",
+      en: "A move (often a sacrifice) attacks the one piece standing guard over something else. Forced to deal with the immediate threat, that piece abandons its post, and what it was protecting falls.",
       fr: "Un coup, souvent un sacrifice, attaque la seule pièce qui protégeait autre chose. Forcée de parer la menace immédiate, cette pièce abandonne son poste, et ce qu'elle gardait tombe." },
     "Quiet move": {
-      en: "The winning move captures nothing and gives no check, which is exactly what makes it hard to find — nothing about it jumps out as a candidate. It still turns out to be the strongest move on the board.",
-      fr: "Le coup gagnant ne capture rien et ne fait pas échec, ce qui explique pourquoi il est difficile à trouver — rien ne le distingue au premier regard. C'est pourtant le coup le plus fort de la position." },
+      en: "The winning move captures nothing and gives no check, which is exactly what makes it hard to find. Nothing about it jumps out as a candidate. It still turns out to be the strongest move on the board.",
+      fr: "Le coup gagnant ne capture rien et ne fait pas échec, ce qui explique pourquoi il est difficile à trouver. Rien ne le distingue au premier regard. C'est pourtant le coup le plus fort de la position." },
     "Mate in three": {
       en: "A forced sequence: whatever the defender plays, checkmate follows exactly three moves later. Every possible defence at every step has been checked by the engine, not just the most obvious one.",
       fr: "Une séquence forcée : quoi que joue le défenseur, le mat tombe exactement trois coups plus tard. Chaque défense possible, à chaque étape, a été vérifiée par le moteur, pas seulement la plus évidente." }
@@ -508,7 +508,7 @@ module.exports = function (H) {
       const pc = lang === "fr" ? pieceFr(d.piece) : null;
       return lang === "fr"
         ? `${sideLabel} jouent ${first}. ${cap(pc.art)} ${pc.w} adverse en ${d.sq} n'était pas suffisamment défendu${pc.suf} : il suffit de ${pc.art} prendre, pour un gain de matériel sans contrepartie.`
-        : `${sideLabel} play ${first}. The ${pieceEn(d.piece)} on ${d.sq} wasn't defended enough to survive — it's simply captured, for a clean material gain.`;
+        : `${sideLabel} play ${first}. The ${pieceEn(d.piece)} on ${d.sq} wasn't defended enough to survive. It's simply captured, for a clean material gain.`;
     }
     if (p.theme === "Double attack" || p.theme === "Knight fork" || p.theme === "Pawn fork") {
       const [t1, t2] = d.targets || [];
@@ -521,7 +521,7 @@ module.exports = function (H) {
         return `${sideLabel} jouent ${first}. ${via} attaque à la fois ${p1.art} ${p1.w} en ${t1.sq} et ${p2.art} ${p2.w} en ${t2.sq} : impossible de sauver les deux en un seul coup.`;
       }
       const via = pieceKind ? `The ${pieceKind} on ${d.from}` : `From ${d.from}, the piece`;
-      return `${sideLabel} play ${first}. ${via} attacks both the ${pieceEn(t1.piece)} on ${t1.sq} and the ${pieceEn(t2.piece)} on ${t2.sq} at once — there's no single move that saves both.`;
+      return `${sideLabel} play ${first}. ${via} attacks both the ${pieceEn(t1.piece)} on ${t1.sq} and the ${pieceEn(t2.piece)} on ${t2.sq} at once. There's no single move that saves both.`;
     }
     if (p.theme === "Pin" || p.theme === "Skewer") {
       const pin = d.pinned, beh = d.behind;
@@ -535,9 +535,9 @@ module.exports = function (H) {
         const caught = d.captured;
         if (lang === "fr") {
           const pc1 = pieceFr(caught.piece), pc2 = pieceFr(pin.piece);
-          return `${sideLabel} jouent ${first}. ${cap(pc1.art)} ${pc1.w} en ${caught.sq} n'était défendu${pc1.suf} que par ${pc2.art} ${pc2.w} en ${pin.sq} — mais celui-ci est cloué contre son roi et ne peut pas légalement reprendre : la prise est sûre.`;
+          return `${sideLabel} jouent ${first}. ${cap(pc1.art)} ${pc1.w} en ${caught.sq} n'était défendu${pc1.suf} que par ${pc2.art} ${pc2.w} en ${pin.sq}, mais celui-ci est cloué contre son roi et ne peut pas légalement reprendre : la prise est sûre.`;
         }
-        return `${sideLabel} play ${first}. The ${pieceEn(caught.piece)} on ${caught.sq} was only defended by the ${pieceEn(pin.piece)} on ${pin.sq} — but that piece is pinned to its king and can't legally recapture: the capture is completely safe.`;
+        return `${sideLabel} play ${first}. The ${pieceEn(caught.piece)} on ${caught.sq} was only defended by the ${pieceEn(pin.piece)} on ${pin.sq}, but that piece is pinned to its king and can't legally recapture: the capture is completely safe.`;
       }
       if (lang === "fr") {
         const p1 = pieceFr(pin.piece), p2 = pieceFr(beh.piece);
@@ -546,13 +546,13 @@ module.exports = function (H) {
           : `${sideLabel} jouent ${first}. ${cap(p1.art)} ${p1.w} adverse en ${pin.sq} doit bouger pour ne pas être pris${p1.suf}, ce qui abandonne ${p2.art} ${p2.w} qui se trouvait juste derrière, en ${beh.sq}.`;
       }
       return p.theme === "Pin"
-        ? `${sideLabel} play ${first}. The ${pieceEn(pin.piece)} on ${pin.sq} can't move without exposing the ${pieceEn(beh.piece)} right behind it, on ${beh.sq} — it's pinned.`
+        ? `${sideLabel} play ${first}. The ${pieceEn(pin.piece)} on ${pin.sq} can't move without exposing the ${pieceEn(beh.piece)} right behind it, on ${beh.sq}. It's pinned.`
         : `${sideLabel} play ${first}. The ${pieceEn(pin.piece)} on ${pin.sq} has to move to avoid capture, which abandons the ${pieceEn(beh.piece)} that was standing right behind it, on ${beh.sq}.`;
     }
     if (p.theme === "Back-rank mate") {
       return lang === "fr"
         ? `${sideLabel} jouent ${first} et matent. Le roi adverse en ${d.king} est coincé sur sa dernière rangée par ses propres pions : aucune case de fuite, mat immédiat.`
-        : `${sideLabel} play ${first} and deliver mate. The enemy king on ${d.king} is trapped on the back rank by its own pawns — no escape square, immediate mate.`;
+        : `${sideLabel} play ${first} and deliver mate. The enemy king on ${d.king} is trapped on the back rank by its own pawns: no escape square, immediate mate.`;
     }
     if (p.theme === "Mate in one") {
       return lang === "fr"
@@ -562,13 +562,13 @@ module.exports = function (H) {
     if (p.theme === "Mate in two") {
       const line = sans.map((s, i) => (i % 2 === 0 ? `${Math.floor(i / 2) + 1}.` : "") + s).join(" ");
       return lang === "fr"
-        ? `${sideLabel} jouent ${first}. Quoi que réponde l'adversaire, le mat suit exactement deux coups plus tard (séquence complète : ${line}) — chaque défense possible a été vérifiée par le moteur.`
-        : `${sideLabel} play ${first}. Whatever the defender tries, mate follows exactly two moves later (full line: ${line}) — every possible defence has been checked by the engine.`;
+        ? `${sideLabel} jouent ${first}. Quoi que réponde l'adversaire, le mat suit exactement deux coups plus tard (séquence complète : ${line}). Chaque défense possible a été vérifiée par le moteur.`
+        : `${sideLabel} play ${first}. Whatever the defender tries, mate follows exactly two moves later (full line: ${line}). Every possible defence has been checked by the engine.`;
     }
     if (p.theme === "Winning move") {
       return lang === "fr"
         ? `${sideLabel} jouent ${first}. Ce coup ne rentre dans aucun motif nommé précis, mais c'est objectivement le meilleur : le moteur le préfère nettement à toute autre possibilité.`
-        : `${sideLabel} play ${first}. This move doesn't fit one single named pattern, but it's objectively the strongest — the engine ranks it clearly above every alternative.`;
+        : `${sideLabel} play ${first}. This move doesn't fit one single named pattern, but it's objectively the strongest: the engine ranks it clearly above every alternative.`;
     }
     if (p.theme === "Deflection") {
       const df = d.deflected, gn = d.gained;
@@ -580,18 +580,18 @@ module.exports = function (H) {
         return `${sideLabel} jouent ${first}. Ce coup attaque directement ${pd.art} ${pd.w} adverse en ${df.sq}, seule pièce qui protégeait autre chose : forcée de s'en occuper, elle abandonne son poste.${gainTxt} (séquence complète : ${line})`;
       }
       const gainTxt = gn ? ` Once deflected, it no longer guards ${gn.sq}, which falls on the next move.` : "";
-      return `${sideLabel} play ${first}. This move attacks the ${pieceEn(df.piece)} on ${df.sq} directly — the one piece guarding something else. Forced to deal with it, that piece abandons its post.${gainTxt} (full line: ${line})`;
+      return `${sideLabel} play ${first}. This move attacks the ${pieceEn(df.piece)} on ${df.sq} directly (the one piece guarding something else). Forced to deal with it, that piece abandons its post.${gainTxt} (full line: ${line})`;
     }
     if (p.theme === "Quiet move") {
       return lang === "fr"
-        ? `${sideLabel} jouent ${first}. Ce coup ne capture rien et ne fait pas échec — rien ne le distingue au premier regard — et pourtant c'est le meilleur coup de la position, qui gagne du matériel par la suite.`
-        : `${sideLabel} play ${first}. This move captures nothing and gives no check — nothing about it stands out at first glance — yet it's the strongest move on the board, and it wins material.`;
+        ? `${sideLabel} jouent ${first}. Ce coup ne capture rien et ne fait pas échec (rien ne le distingue au premier regard), et pourtant c'est le meilleur coup de la position, qui gagne du matériel par la suite.`
+        : `${sideLabel} play ${first}. This move captures nothing and gives no check (nothing about it stands out at first glance), yet it's the strongest move on the board, and it wins material.`;
     }
     if (p.theme === "Mate in three") {
       const line = sans.map((s, i) => (i % 2 === 0 ? `${Math.floor(i / 2) + 1}.` : "") + s).join(" ");
       return lang === "fr"
-        ? `${sideLabel} jouent ${first}. Quoi que réponde l'adversaire, le mat suit exactement trois coups plus tard (séquence complète : ${line}) — chaque défense possible, à chaque étape, a été vérifiée par le moteur.`
-        : `${sideLabel} play ${first}. Whatever the defender tries, mate follows exactly three moves later (full line: ${line}) — every possible defence, at every step, has been checked by the engine.`;
+        ? `${sideLabel} jouent ${first}. Quoi que réponde l'adversaire, le mat suit exactement trois coups plus tard (séquence complète : ${line}). Chaque défense possible, à chaque étape, a été vérifiée par le moteur.`
+        : `${sideLabel} play ${first}. Whatever the defender tries, mate follows exactly three moves later (full line: ${line}). Every possible defence, at every step, has been checked by the engine.`;
     }
     return "";
   }
@@ -611,7 +611,7 @@ module.exports = function (H) {
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>` : `<div><a class="cta" href="/">${u.play}</a></div>`;
       const body = `<h1>${esc(title)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
-      page(lang, dir, sl + ".html", `${title} \u2014 ${lang === "fr" ? "définition et exemple" : "chess term explained"} | chang64`,
+      page(lang, dir, sl + ".html", `${title} \u00b7 ${lang === "fr" ? "définition et exemple" : "chess term explained"} | chang64`,
         metaDesc(def), body,
         { "@context": "https://schema.org", "@type": "DefinedTerm", name: title, description: def, inLanguage: lang },
         alt, canonical);

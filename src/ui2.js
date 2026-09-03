@@ -897,15 +897,57 @@ const BADGES=[
   {id:"rating_1800",type:"rating",n:1800,label:"1800 rating"},
   {id:"rating_2000",type:"rating",n:2000,label:"2000 rating"},
   {id:"rating_2100",type:"rating",n:2100,label:"2100 rating"},
-  {id:"rating_2300",type:"rating",n:2300,label:"2300 rating"}
+  {id:"rating_2300",type:"rating",n:2300,label:"2300 rating"},
+  /* Badges thematiques (item logue "pour plus tard" dans les sessions
+     precedentes, deferré jusqu'a stabilisation des 13 categories -- fait
+     maintenant). Un seul palier par theme (25, comme l'exemple donne :
+     "Pin: 25 solved") plutot que plusieurs paliers comme solved/days/rating
+     : au nombre de 13 themes, multiplier les paliers gonflerait vite la
+     grille de badges pour un gain de lisibilite douteux. Facile a etendre
+     a plusieurs paliers plus tard si besoin. label est un gabarit
+     {theme}/{n}, pas une chaine figee -- voir renderBadges() qui construit
+     le texte final via t(b.label,{theme:t(b.theme),n:b.n}), et checkBadges()
+     qui compare a prog.themeSolved[b.theme] plutot qu'a un champ de stat
+     plat. theme reprend exactement les 13 libellés de content.js/THEME10,
+     pas de nouvelle liste a maintenir en parallele. */
+  {id:"theme_winning_capture",type:"theme",theme:"Winning capture",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_double_attack",type:"theme",theme:"Double attack",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_skewer",type:"theme",theme:"Skewer",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_mate_in_two",type:"theme",theme:"Mate in two",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_winning_move",type:"theme",theme:"Winning move",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_knight_fork",type:"theme",theme:"Knight fork",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_mate_in_one",type:"theme",theme:"Mate in one",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_back_rank_mate",type:"theme",theme:"Back-rank mate",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_pin",type:"theme",theme:"Pin",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_pawn_fork",type:"theme",theme:"Pawn fork",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_deflection",type:"theme",theme:"Deflection",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_quiet_move",type:"theme",theme:"Quiet move",n:25,label:"{theme}: {n} solved"},
+  {id:"theme_mate_in_three",type:"theme",theme:"Mate in three",n:25,label:"{theme}: {n} solved"},
+  /* Sprint et Coordonnees (2026-09-03, "allons-y tant qu'on y est") : un
+     seul palier chacun, meme logique minimale que les badges thematiques
+     ci-dessus -- pas une echelle complete comme solved/days/rating, ce
+     sont des defis courts et rejouables, pas une progression a collectionner.
+     Seuils estimes (pas de donnees de jeu reelles pour calibrer) : a
+     ajuster si l'un des deux se revele trop facile ou trop dur une fois
+     essaye en conditions reelles, meme esprit que les seuils de poids de
+     page ailleurs dans le projet -- des reperes vivants, pas graves dans
+     le marbre. type compare directement a prog.rushBest/prog.coordBest
+     (deja suivis, rien de nouveau a journaliser) -- voir checkBadges(). */
+  {id:"sprint_15",type:"rushBest",n:15,label:"Chang Sprint: {n} solved"},
+  {id:"coord_20",type:"coordBest",n:20,label:"Coordinates: {n} correct"}
 ];
 function checkBadges(){
   ensureProgFields();
-  const stat={solved:prog.solved||0,days:prog.days||0,rating:prog.rating||0};
+  const stat={solved:prog.solved||0,days:prog.days||0,rating:prog.rating||0,
+    rushBest:prog.rushBest||0,coordBest:prog.coordBest||0};
   let gained=null;
   for(const b of BADGES){
     if(prog.badges.includes(b.id))continue;
-    if(stat[b.type]>=b.n){prog.badges.push(b.id);gained=b;}
+    /* type "theme" compare a un compteur par theme (prog.themeSolved), pas
+       au flat "stat" ci-dessus -- seul type qui a besoin d'une cle
+       supplementaire (b.theme) plutot que juste b.n. */
+    const val=b.type==="theme"?(prog.themeSolved[b.theme]||0):stat[b.type];
+    if(val>=b.n){prog.badges.push(b.id);prog.badgeDates[b.id]=Date.now();gained=b;}
   }
   return gained; /* le dernier nouveau badge de cet appel, pour un eventuel accuse de reception discret -- pas de popup pour l'instant, cf. "no noise" */
 }
@@ -914,7 +956,41 @@ function renderBadges(){
   ensureProgFields();
   el.innerHTML=BADGES.map(b=>{
     const unlocked=prog.badges.includes(b.id);
-    return '<div class="badge'+(unlocked?' unlocked':'')+'">'+t(b.label)+'</div>';
+    const label=badgeLabel(b);
+    return '<div class="badge'+(unlocked?' unlocked':'')+'">'+label+'</div>';
+  }).join("");
+}
+function badgeLabel(b){
+  /* {n} passe desormais a tous les types, pas seulement "theme" : les
+     badges Sprint/Coordonnees (2026-09-03) en ont besoin pour leur
+     gabarit "Chang Sprint: {n} solved". Inoffensif pour les anciens
+     libelles fixes ("10 solved") qui n'ont pas de {n} a remplacer. */
+  return b.type==="theme"?t(b.label,{theme:t(b.theme),n:b.n}):t(b.label,{n:b.n});
+}
+/* JJ/MM, sans heure -- juste le jour de deblocage, pas le moment precis
+   (contrairement a fmtDate(), pense pour l'historique de parties). Meme
+   convention deux chiffres/deux chiffres que fmtDate() par coherence, et
+   parce qu'un format nomme (ex: "3 Sep") demanderait sa propre table de
+   traduction FR alors que ce format-la n'en a pas besoin. */
+function fmtDayMonth(ts){
+  const d=new Date(ts);
+  return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0");
+}
+/* Resume compact des badges (2026-09-03) : la grille complete (41 badges,
+   la plupart grises pour un nouveau venu) restait lourde meme repliee dans
+   "Mon historique". Affiche "X/41 debloques" et les quelques plus
+   recents avec leur date -- la grille complete reste disponible juste en
+   dessous, dans son propre repli imbrique (voir template.html). */
+function renderBadgeSummary(){
+  const sum=$("badgeSummary"),recent=$("badgeRecentGrid");
+  if(!sum||!recent)return;
+  ensureProgFields();
+  sum.textContent=t("{n}/{total} unlocked",{n:prog.badges.length,total:BADGES.length});
+  const ids=prog.badges.slice().sort((a,b)=>(prog.badgeDates[b]||0)-(prog.badgeDates[a]||0)).slice(0,4);
+  recent.innerHTML=ids.map(id=>{
+    const b=BADGES.find(x=>x.id===id); if(!b)return "";
+    const d=prog.badgeDates[id];
+    return '<div class="badge unlocked">'+badgeLabel(b)+(d?' · <span class="badge-date">'+fmtDayMonth(d)+'</span>':'')+'</div>';
   }).join("");
 }
 function ensureProgFields(){
@@ -930,6 +1006,54 @@ function ensureProgFields(){
   if(!Array.isArray(prog.badges))prog.badges=[];
   if(!Array.isArray(prog.ratingHistory))prog.ratingHistory=[];
   if(!prog.dailyLog||typeof prog.dailyLog!=="object")prog.dailyLog={};
+  /* Compteur par theme (badges thematiques) : {"Pin":12,"Skewer":3,...},
+     incremente dans finishPuzzle() (ui.js) a chaque exercice reussi, tous
+     modes confondus SAUF Chang Sprint (onPuzzleResult() y court-circuite
+     finishPuzzle avant d'atteindre ce code, comme pour prog.solved). */
+  if(!prog.themeSolved||typeof prog.themeSolved!=="object")prog.themeSolved={};
+  /* Recap hebdo (item 3 de la liste "pour plus tard") : deux journaux
+     timestampes de plus, meme logique de plafonnement que
+     prog.ratingHistory (shift() des plus anciens au-dela de 500 entrees --
+     largement plus que 7 jours d'usage normal, la fenetre glissante ne lit
+     jamais que la queue recente). solveLog : un timestamp par exercice
+     REUSSI (pas par tentative, contrairement a prog.ratingHistory qui logge
+     aussi les echecs) -- c'est "solved" au sens ou le reste du site
+     l'entend deja (prog.solved, badges "solved_N"). badgeDates : date de
+     deblocage de chaque badge, cle=id du badge -- absent avant cette
+     session, prog.badges ne contenait que les ids sans horodatage. */
+  if(!Array.isArray(prog.solveLog))prog.solveLog=[];
+  if(!prog.badgeDates||typeof prog.badgeDates!=="object")prog.badgeDates={};
+  /* Records personnels au-dela du Sprint (item 3, "pour plus tard") :
+     - fastestSolveMs : record absolu, jamais recalcule a la baisse -- meme
+       philosophie que prog.best (streak) et les badges, un record acquis
+       reste acquis. undefined tant qu'aucun exercice n'a ete resolu du
+       premier coup (voir finishPuzzle) : distinct de 0, qui serait un
+       temps reel (impossible mais on evite l'ambiguite).
+     - dayCount/dayCountDate : compteur du jour EN COURS uniquement (remis a
+       zero au changement de date, meme mecanique que prog.lastDay dans
+       bumpStreak()) -- pas destine a etre lu directement, sert juste a
+       calculer bestDay ci-dessous sans dependre de prog.solveLog (qui est
+       plafonne a 500 entrees et perdrait un record ancien avec le temps).
+     - bestDay : record absolu du nombre d'exercices resolus en une seule
+       journee, derive de dayCount mais persistant independamment de lui. */
+  if(typeof prog.fastestSolveMs!=="number")prog.fastestSolveMs=undefined;
+  if(typeof prog.dayCount!=="number")prog.dayCount=0;
+  if(!prog.dayCountDate)prog.dayCountDate="";
+  if(typeof prog.bestDay!=="number")prog.bestDay=0;
+  /* File de revision des erreurs (item 4, "pour plus tard") : jusqu'ici,
+     la revision (reviewMistakes/loadAndRevealSolution) n'existait que pour
+     le Sprint et seulement pendant la session en cours (lastRushHistory,
+     variable JS non persistee). Ici : une file PERSISTANTE, alimentee
+     depuis TOUS les modes (registerWrong(), ui.js), disponible n'importe
+     quand apres -- pas de fenetre de 3 minutes. {id,theme,code,ts,box,due}
+     par entree, dedupliquee par id (un exercice rate plusieurs fois de
+     suite n'apparait qu'une fois), plafonnee a 200 comme les autres
+     journaux. box/due : repetition espacee (item 5, ajoutee dans la meme
+     session) -- voir SRS_DELAYS_DAYS plus bas pour le barème. Une entree
+     n'est retiree qu'apres 5 reussites espacees (finishPuzzle, ui.js), pas
+     des la premiere : contrairement a une simple liste "a corriger", elle
+     doit reapparaitre plusieurs fois avant de se vider pour de bon. */
+  if(!Array.isArray(prog.mistakeQueue))prog.mistakeQueue=[];
 }
 function todayKey(){
   const d=new Date();
@@ -968,6 +1092,120 @@ function dateToDailyId(key){
   const ids=Object.keys(PUZZLE_INDEX);
   return ids[n%ids.length];
 }
+/* Duel du jour (item 6) : le lien pointe vers #puzzle=<id du jour>, deja
+   compris par applyDeepLink() (ui.js) -- l'ami qui l'ouvre tombe
+   directement sur l'exercice, quel que soit le jour ou il clique (l'id est
+   calcule a partir de la date d'AUJOURD'HUI au moment du partage, pas
+   recalcule cote destinataire ; s'il ouvre le lien un autre jour, il joue
+   quand meme LE bon exercice, celui du jour ou son ami l'a envoye -- pas
+   forcement celui de SON propre jour). {n} coups : longueur de puzzle.sol,
+   propriete de l'exercice lui-meme, pas une performance personnelle a
+   suivre -- rien de nouveau a stocker. */
+function openDailyChallenge(){
+  const panel=$("dailyChallengePanel"),link=$("dailyChallengeLink"),share=$("dailyChallengeShare");
+  if(!panel||!link||!share||!puzzle)return;
+  const url=baseUrl()+"#puzzle="+dateToDailyId(todayKey());
+  link.value=url;
+  panel.classList.remove("hide");
+  shareButtons(share,url,t("I solved today's puzzle in {n} moves. Your turn:",{n:(puzzle.sol||[]).length}),true);
+}
+if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
+/* ==========================================================
+   MENU A 5 CARTES DE "RESOUDRE" (discussion UX, 2026-09-03)
+   ========================================================== */
+/* Routeur interne a l'onglet "puzzles", independant des couches de
+   setMode() (voir ui.js/ui3.js) -- Puzzles/Puzzle du jour/Finales sont de
+   nouveaux "ecrans" geres ici ; Sprint et Coordonnees restent geres par
+   setMode("train") comme avant (ce mode partage deja le meme plateau et
+   sait deja router les clics vers l'entrainement, pas de raison de le
+   dupliquer), juste selectionnes via trainView (ui3.js) avant d'y entrer. */
+let solveScreen="menu";
+function showSolveScreen(screen){
+  solveScreen=screen;
+  const menu=$("solveMenu"),ex=$("exPanel"),pzSide=$("solvePuzzlesSidebar"),
+    daySide=$("solveDailySidebar"),eg=$("solveEndgamesScreen");
+  if(menu)menu.classList.toggle("hide",screen!=="menu");
+  if(ex)ex.classList.toggle("hide",screen!=="puzzles"&&screen!=="daily");
+  if(pzSide)pzSide.classList.toggle("hide",screen!=="puzzles");
+  if(daySide)daySide.classList.toggle("hide",screen!=="daily");
+  if(eg)eg.classList.toggle("hide",screen!=="endgames");
+  /* "Exercice suivant" n'a de sens que sur l'ecran Puzzles (file classique) :
+     il n'existe pas de "prochain" puzzle du jour, il n'y en a qu'un par
+     jour. Le laisser visible sur l'ecran "daily" chargeait silencieusement
+     un exercice de la file classique tout en gardant affichee la barre
+     laterale du jour (serie + calendrier) -- rien a voir l'un avec
+     l'autre. Indice et Recommencer restent utiles sur les deux ecrans,
+     donc seul ce bouton est cache, pas toute la rangee. */
+  { const nb=$("btnNext"); if(nb)nb.classList.toggle("hide",screen==="daily"); }
+  /* setMode() (ui.js) force le plateau partage visible pour tout mode
+     autre que Jouer/Entre amis, juste avant d'arriver ici -- le menu est
+     le seul ecran de "puzzles" qui n'a rien a y montrer, donc on le
+     masque apres coup plutot que de contredire setMode() avant. */
+  const bw=document.querySelector(".board-wrap");
+  if(bw)bw.classList.toggle("hide",screen==="menu");
+  if(screen==="menu"){renderSolveMenu();return;}
+  if(screen==="puzzles"){nextPuzzle();return;}
+  if(screen==="daily"){dailyPuzzle();return;}
+  /* "endgames" : pas de demarrage automatique -- "Pick an endgame below."
+     (deja dans le HTML) invite a choisir une puce. Un auto-demarrage ici
+     a deja cause un bug par le passe (voir le commentaire dans ui3.js,
+     branche "train" : plateau ecrase par une position Dame+Roi au simple
+     passage sur l'onglet, avant meme un clic) -- on ne le reproduit pas.
+*/
+}
+/* Sous-texte d'etat par carte : contexte de reprise sans bouton
+   "Continuer" a part (aurait recree une hierarchie entre les 5 cartes,
+   voir la discussion). Donnees deja stockees, juste affichees ici. */
+function renderSolveMenu(){
+  ensureProgFields();
+  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
+  set("subSolvePuzzles",t("Level {n} · {r} rating",{n:prog.level,r:prog.rating}));
+  const doneToday=!!(prog.dailyLog&&prog.dailyLog[todayKey()]);
+  set("subSolveDaily",t(doneToday?"Done today ✓ · {n}-day streak":"Not done yet · {n}-day streak",{n:prog.days||0}));
+  set("subSolveSprint",t("Best: {n}",{n:prog.rushBest||0}));
+  set("subSolveCoord",t("Best: {n}",{n:prog.coordBest||0}));
+  /* "Reussies" plutot que "tentees" (2026-09-03) : une finale tentee sans
+     jamais tenir l'objectif de coups ne dit pas grand-chose sur la maitrise
+     reelle. prog.endgames[id] est le meilleur nombre de coups obtenu ; on
+     compare a scenario.budget (ENDGAMES, ui3.js) pour savoir si ce record
+     tient effectivement l'objectif, pas seulement si la finale a ete
+     essayee au moins une fois. */
+  const egDone=typeof ENDGAMES!=="undefined"?ENDGAMES.filter(sc=>{
+    const best=(prog.endgames||{})[sc.id];
+    return typeof best==="number"&&best<=sc.budget;
+  }).length:0;
+  set("subSolveEndgames",t("{n}/5 mastered",{n:egDone}));
+}
+if($("cardSolvePuzzles"))$("cardSolvePuzzles").onclick=()=>showSolveScreen("puzzles");
+if($("cardSolveDaily"))$("cardSolveDaily").onclick=()=>showSolveScreen("daily");
+if($("cardSolveEndgames"))$("cardSolveEndgames").onclick=()=>showSolveScreen("endgames");
+if($("cardSolveSprint"))$("cardSolveSprint").onclick=()=>{
+  trainView="sprint";setMode("train");
+  /* Precharge le pool en tache de fond des le clic sur la carte : le temps
+     que l'utilisateur lise "Ready when you are" et clique sur "Start", il
+     est generalement deja arrive -- evite que startRush() (ui2.js) n'ait
+     a afficher "Chargement des exercices..." juste apres avoir dit qu'on
+     etait pret, contradiction qui n'avait aucun sens a l'ecran. */
+  if(!RUSH_POOL&&typeof loadRushPool==="function")loadRushPool();
+  /* Va directement a l'ecran "Ready when you are" (beginRushFlow, plus
+     bas) : cliquer la carte exprime deja l'intention de demarrer, pas la
+     peine de repasser par le bouton "Start Chang Sprint" du panneau
+     -- sauf si un sprint est deja en cours (repli sur ce meme panneau
+     pour l'abandonner, pas de demarrage force par-dessus). */
+  if(!(typeof rush!=="undefined"&&rush)&&typeof beginRushFlow==="function")beginRushFlow();
+  goTop();
+};
+if($("cardSolveCoord"))$("cardSolveCoord").onclick=()=>{
+  trainView="coord";setMode("train");
+  /* Meme logique que la carte Chang Sprint (ui2.js) : va directement a
+     l'ecran "Ready", saute le bouton intermediaire "Start 30 seconds" du
+     panneau. Ne force rien si des coordonnees tournent deja (repli sur le
+     panneau pour arreter). coordSide reste toujours present dans le DOM
+     (juste cache par CSS, jamais retire), donc beginCoordFlow() peut le
+     lire sans attendre quoi que ce soit. */
+  if(!coord&&typeof beginCoordFlow==="function")beginCoordFlow();
+  goTop();
+};
 /* Rouvre l'exercice du jour d'une date passee, solution deja jouee et
    affichee (mode consultation) -- reutilise loadAndRevealSolution(), deja
    ecrit pour la revision des erreurs de Sprint, meme mecanique. */
@@ -979,7 +1217,7 @@ function viewDailyArchive(key){
   if(!LEVEL_CACHE[lvl]){loadLevel(lvl,()=>viewDailyArchive(key));return;}
   const p=PUZZLE_CACHE[id];
   if(!p)return;
-  if(typeof setMode==="function")setMode("puzzles");
+  if(typeof setMode==="function")setMode("puzzles",{screen:"daily"});
   loadAndRevealSolution(p);
   /* loadAndRevealSolution() pose puzzle.daily=false (ecrit pour le Sprint,
      qui n'a pas ce concept) : on le remet a true ici pour que l'etiquette
@@ -1007,7 +1245,24 @@ function renderCalendarGrid(containerId,monthOffset,opts){
   const nav=opts&&opts.nav;
   let html="";
   if(nav){
-    html+='<div class="cal-head"><button type="button" class="cal-nav" data-dir="-1" aria-label="'+t("Previous month")+'">\u2039</button>'+
+    /* "Mois precedent" borne au premier jour reellement enregistre dans
+       prog.dailyLog (2026-09-03) : sans limite, on pouvait remonter
+       indefiniment vers des mois forcement vides, puisque le calendrier
+       n'existait pas avant. Pas de date de lancement fixe a coder en dur
+       (site sans compte, chaque appareil a sa propre premiere utilisation) :
+       on se base sur les propres donnees de la personne. Aucune donnee du
+       tout -> rien d'utile a voir en arriere, le bouton est desactive des
+       le mois courant. */
+    const keys=Object.keys(prog.dailyLog||{});
+    let prevDisabled=true;
+    if(keys.length){
+      keys.sort();
+      const [ey,emRaw]=keys[0].split("-").map(Number);
+      const em=emRaw-1;
+      const prevBase=new Date(y,m-1,1);
+      prevDisabled=prevBase.getFullYear()<ey||(prevBase.getFullYear()===ey&&prevBase.getMonth()<em);
+    }
+    html+='<div class="cal-head"><button type="button" class="cal-nav" data-dir="-1" aria-label="'+t("Previous month")+'"'+(prevDisabled?" disabled":"")+'>\u2039</button>'+
       '<span class="cal-title">'+mo[m]+" "+y+'</span>'+
       '<button type="button" class="cal-nav" data-dir="1" aria-label="'+t("Next month")+'"'+(monthOffset>=0?" disabled":"")+'>\u203a</button></div>';
   } else {
@@ -1092,9 +1347,18 @@ function renderExtraStats(){
   set("stRating",prog.rating);set("stDays",prog.days);
   set("hRating",prog.rating);set("hStreak",prog.days);
   set("rushBestTrain",prog.rushBest);   /* meme record, affiche dans Defis */
+  /* Records personnels : "–" tant qu'aucun record n'existe encore (distinct
+     d'un vrai "0:00", qui laisserait croire a un exercice resolu en temps
+     nul), fmtTime() deja ecrit pour les pendules de partie -- meme format
+     mm:ss.d, pas de nouveau formateur a maintenir. */
+  set("stFastest",typeof prog.fastestSolveMs==="number"?fmtTime(prog.fastestSolveMs):"–");
+  set("stBestDay",prog.bestDay||0);
   if(typeof renderBadges==="function")renderBadges();
+  if(typeof renderBadgeSummary==="function")renderBadgeSummary();
   if(typeof renderCalendarWidget==="function")renderCalendarWidget();
   if(typeof drawRatingGraph==="function")drawRatingGraph();
+  if(typeof renderWeeklyRecap==="function")renderWeeklyRecap();
+  if(typeof renderMistakeQueue==="function")renderMistakeQueue();
   /* Rien de resolu : la bande n'afficherait que des zeros, ce qu'un premier
      visiteur lit comme "le site est vide" plutot que comme sa propre
      progression encore vierge. On lui propose de commencer a la place. */
@@ -1102,6 +1366,110 @@ function renderExtraStats(){
   const strip=$("homeStrip"), start=$("homeStart");
   if(strip)strip.classList.toggle("hide",vierge);
   if(start)start.classList.toggle("hide",!vierge);
+}
+/* Recap hebdo (item 3, "pour plus tard") : une ligne discrete sur l'ecran
+   d'accueil, pas de popup -- coherent avec "No account. No ads. No noise."
+   deja affiche dans le code. Fenetre GLISSANTE de 7 jours (Date.now()-7j),
+   pas la semaine calendaire (lundi-dimanche) : plus simple, et evite l'
+   effet de bord d'un recap qui se vide brutalement chaque lundi matin.
+   Masquee entierement si 0 exercice cette semaine plutot que d'afficher
+   "0 exercices" -- meme logique que le refus du streak-freeze : rien qui
+   ressemble a une relance culpabilisante. */
+function renderWeeklyRecap(){
+  ensureProgFields();
+  const el=$("weeklyRecap"); if(!el)return;
+  const since=Date.now()-7*86400000;
+  const n=prog.solveLog.filter(ts=>ts>=since).length;
+  const badgesThisWeek=Object.values(prog.badgeDates).filter(ts=>ts>=since).length;
+  /* Corrige le 2026-09-03 : la condition d'affichage ne regardait QUE "n"
+     (puzzles classiques cette semaine), donc une semaine passee entierement
+     sur Chang Sprint/Coordonnees -- badges Sprint/Coordonnees ajoutes ce
+     meme jour inclus -- laissait le recap entierement invisible, alors
+     qu'il y avait bien quelque chose a montrer. Le declencheur est
+     desormais "y a-t-il au moins une clause a dire", pas seulement des
+     puzzles resolus. */
+  if(!n&&!badgesThisWeek){el.classList.add("hide");el.textContent="";return;}
+  const parts=[];
+  if(n)parts.push(t("{n} puzzles",{n:n}));
+  /* Delta de notation sur la fenetre : rating actuel moins le rating juste
+     AVANT le premier point de la fenetre (le point precedent le premier
+     "recent", pas le premier point recent lui-meme -- sinon on rate le
+     changement du tout debut de la fenetre). Si toute l'historique est
+     dans la fenetre (compte recent depuis moins de 7 jours), 800 (rating de
+     depart, meme valeur que ensureProgFields()) sert de reference. Omis si
+     delta nul : pas plus parlant qu'un "+0", juste du bruit. Reste
+     conditionne a "n" : la notation ne bouge que par la resolution
+     classique (Sprint et Coordonnees n'y touchent jamais), donc un delta
+     sans aucun puzzle cette semaine n'a pas de sens a chercher. */
+  if(n){
+    const hist=prog.ratingHistory;
+    const idx=hist.findIndex(h=>h.t>=since);
+    if(idx!==-1){
+      const baseline=idx>0?hist[idx-1].r:800;
+      const delta=prog.rating-baseline;
+      if(delta!==0)parts.push(t("{d} rating",{d:(delta>=0?"+":"\u2212")+Math.abs(delta)}));
+    }
+  }
+  if(badgesThisWeek===1)parts.push(t("{n} new badge",{n:badgesThisWeek}));
+  else if(badgesThisWeek>1)parts.push(t("{n} new badges",{n:badgesThisWeek}));
+  el.textContent=t("This week:")+" "+parts.join(", ")+".";
+  el.classList.remove("hide");
+}
+/* File de revision des erreurs, etendue a tous les modes (item 4, "pour
+   plus tard") : reprend le meme langage visuel que le bilan de fin de
+   sprint (.rushHistory/.loss, pastilles rouges scrollables), mais persiste
+   au-dela d'une session et se vide au fur et a mesure des reussites
+   (prog.mistakeQueue, alimentee dans registerWrong() et videe dans
+   finishPuzzle(), toutes deux dans ui.js). Section entiere masquee si la
+   file est vide : un "aucune erreur a revoir" en permanence pour un
+   nouveau visiteur serait juste du bruit, meme logique que le recap hebdo
+   masque au premier passage. */
+/* Repetition espacee (item 5, "pour plus tard") : barème de type Leitner,
+   valide avec l'utilisateur avant codage. 5 reussites pour maitriser un
+   exercice, avec un ecart croissant entre chacune -- delays[box-1] est le
+   delai APRES la reussite au palier "box" (palier 1->2 : 1 jour ; 2->3 :
+   3 jours ; 3->4 : 7 jours ; 4->5 : 16 jours). La 5e reussite (palier 5)
+   maitrise l'exercice et le retire directement : le 5e delai (35 jours)
+   n'est donc jamais reellement applique comme une attente -- il marque le
+   seuil au-dela duquel on a juge inutile de programmer un 6e passage,
+   plutot qu'un vrai palier supplementaire. */
+const SRS_DELAYS_DAYS=[1,3,7,16,35];
+function renderMistakeQueue(){
+  ensureProgFields();
+  const sec=$("mistakeSection"),box=$("mistakeGrid");
+  if(!sec||!box)return;
+  /* Seules les entrees ECHUES (due<=maintenant) s'affichent -- celles en
+     attente d'un prochain palier restent invisibles jusqu'a leur tour,
+     sans aucun compteur "X en attente" qui inviterait a revenir plus tot.
+     (m.due||0) : entree plus ancienne sans champ due (avant cette session)
+     -> traitee comme echue immediatement, pas de migration necessaire. */
+  const now=Date.now();
+  const due=prog.mistakeQueue.filter(m=>(m.due||0)<=now);
+  if(!due.length){sec.classList.add("hide");box.innerHTML="";return;}
+  box.innerHTML="";
+  due.forEach(m=>{
+    const b=document.createElement("button");
+    b.className="loss";
+    b.textContent="✗";
+    b.setAttribute("aria-label",m.code?t(m.theme)+" · #"+m.code:t(m.theme));
+    b.onclick=()=>retryMistake(m.id);
+    box.appendChild(b);
+  });
+  sec.classList.remove("hide");
+}
+/* Recharge l'exercice rate EN MODE TENTATIVE normal (pas loadAndRevealSolution,
+   qui ne fait que rejouer et montrer la solution) -- "rejouer ce qu'on a
+   rate", explicitement demande, pas juste le revoir. Une reussite ici
+   passe par le chemin habituel (tryPuzzleMove -> finishPuzzle) et retire
+   donc l'entree de la file normalement, sans code special. */
+function retryMistake(id){
+  if(typeof setMode==="function")setMode("puzzles",{screen:"puzzles"});
+  loadPuzzleById(id,p=>{
+    if(!p)return;
+    puzzle=p;puzzle.daily=false;
+    loadPuzzle();
+    if(typeof focusBoard==="function")focusBoard();
+  });
 }
 
 /* --- Chang Sprint : le mode chronometre. Anciennement "Puzzle Rush",
@@ -1132,7 +1500,7 @@ function rushRender(){
     el.classList.remove("urgent");
   }
   $("rushScore").textContent=rush.score;
-  $("rushStrikes").textContent="\u2717".repeat(3-rush.strikes)||"—";
+  $("rushStrikes").textContent="\u2717".repeat(3-rush.strikes)||"–";
   if(left<=0)rushEnd(t("Time is up."));
 }
 function startRush(){
@@ -1207,6 +1575,11 @@ function rushEnd(why){
   const score=rush.score;
   const best=score>prog.rushBest;
   if(best)prog.rushBest=score;
+  /* Badge de score (2026-09-03) : verifie sur prog.rushBest, pas sur
+     "score" directement -- meme si ce n'est pas un nouveau record, le
+     score du jour peut suffire a depasser le seuil du badge la premiere
+     fois qu'on l'atteint. */
+  if(typeof checkBadges==="function")checkBadges();
   lastRushHistory=rush.history.slice();
   rush=null;
   $("rushBar").classList.add("hide");
@@ -1225,14 +1598,13 @@ function rushEnd(why){
       :t("Score: {score}. Your best is {best}.",{score:score,best:prog.rushBest});
   lastRushSummary={titre,sousTitre};
   showFin(titre,sousTitre,t("Play again"),()=>{
-    const p=$("exPanel"), slot=$("rushSlot");
-    if(p&&slot&&!slot.contains(p))slot.appendChild(p);
+    moveExPanelToRush();
     if(typeof setMode==="function")setMode("train");
     startRush();
   });
   renderRushHistory(lastRushHistory);
   const st=$("exStatus");st.className="status "+(best?"win":"");
-  st.textContent=best?t("{why} Score: {score} — a new personal best.",{why:why,score:score}):t("{why} Score: {score} (best: {best}).",{why:why,score:score,best:prog.rushBest});
+  st.textContent=best?t("{why} Score: {score}, a new personal best.",{why:why,score:score}):t("{why} Score: {score} (best: {best}).",{why:why,score:score,best:prog.rushBest});
   puzzleDone=true;
 }
 /* Bilan de fin de sprint : une pastille par exercice tente, dans l'ordre,
@@ -1313,8 +1685,7 @@ function reviewRushPuzzle(id){
      le ramene ici, dans Defis, plutot que de changer d'onglet pour aller le
      chercher. L'utilisateur est deja sur Defis en consultant ce bilan, il
      n'a aucune raison d'en repartir pour revoir une erreur. */
-  const p2=$("exPanel"), slot=$("rushSlot");
-  if(p2&&slot&&!slot.contains(p2))slot.appendChild(p2);
+  moveExPanelToRush();
   if(typeof setMode==="function")setMode("train");
   reviewMistakes=lastRushHistory.filter(h=>!h.correct).map(h=>h.id);
   const idx=reviewMistakes.indexOf(id);
@@ -1349,8 +1720,7 @@ if($("btnRushSummary"))$("btnRushSummary").onclick=()=>{
   /* focusBoard() n'est plus necessaire ici : showFin() l'appelle desormais
      elle-meme pour tous ses appelants (voir plus haut). */
   showFin(lastRushSummary.titre,lastRushSummary.sousTitre,t("Play again"),()=>{
-    const p=$("exPanel"), slot=$("rushSlot");
-    if(p&&slot&&!slot.contains(p))slot.appendChild(p);
+    moveExPanelToRush();
     if(typeof setMode==="function")setMode("train");
     startRush();
   });
@@ -1367,7 +1737,9 @@ function onPuzzleResult(won){
        milieu du sprint. */
     return true;
   }
-  bumpStreak();
+  /* bumpStreak() ne s'appelle plus ici depuis le 2026-09-03 : la serie de
+     jours est desormais strictement liee au Puzzle du jour (voir
+     finishPuzzle(), ui.js), pas a n'importe quel exercice reussi. */
   updateRating(puzzle.level,won&&puzzleTries===0);
   saveProg();renderExtraStats();
   return false;
@@ -1587,6 +1959,47 @@ function desarmerRush(){
   b.classList.toggle("primary",!(typeof rush!=="undefined"&&rush));
   if(rushArmTimer){clearTimeout(rushArmTimer);rushArmTimer=null;}
 }
+/* Extrait le 2026-09-03 : ce bloc etait uniquement dans le clic de
+   btnGoRush (bouton "Start Chang Sprint" du panneau Defis). Avec le menu a
+   5 cartes, cliquer sur la carte "Chang Sprint" passait D'ABORD par ce
+   panneau et son propre bouton "Start", avant l'ecran "Ready when you
+   are" -- redondant, la carte du menu exprime deja l'intention de
+   demarrer un sprint. La carte appelle maintenant cette fonction
+   directement, sautant le clic intermediaire ; btnGoRush.onclick continue
+   de l'appeler aussi (il reste necessaire une fois un sprint en cours,
+   pour abandonner -- voir plus bas, ce n'est pas un bouton mort). */
+function beginRushFlow(){
+  if(typeof coord!=="undefined"&&coord&&typeof stopCoord==="function")stopCoord();
+  /* Si Defis est visite avant Exercices, aucun exercice n'a jamais ete
+     charge : exPanel affichait alors ses valeurs brutes du HTML ("Back-rank
+     mate", "Loading…", code vide) sous l'ecran "Ready", au lieu d'un vrai
+     exercice. */
+  if(!puzzle&&typeof nextPuzzle==="function")nextPuzzle();
+  moveExPanelToRush();
+  /* Sans ceci, la vue reduite du sprint ne s'activait qu'au clic sur
+     "Start" dans l'ecran "Ready when you are" : en attendant, l'ecran
+     "Ready" (qui ne recouvre que l'echiquier) laissait voir l'enonce
+     complet, les boutons Exercice suivant/Indice et le niveau/statistiques
+     d'Exercices juste en dessous. */
+  document.body.classList.add("rush-on");
+  /* goTop() ramenait le tout haut de la page, sans tenir compte de l'en-tete
+     ancree ni de la position reelle de l'echiquier : selon d'ou partait le
+     clic, l'ecran "Ready" pouvait rester hors champ. focusBoard() vise
+     l'echiquier lui-meme et tient compte de scroll-padding-top. */
+  if(typeof focusBoard==="function")focusBoard();
+  /* Trois minutes chronometrees et une erreur suffit a tout arreter : on
+     annonce la regle et on attend le feu vert, comme pour une partie.
+     Titre "Chang Sprint" plutot que le "Ready when you are" generique
+     (2026-09-03) : la carte du menu a deja dit "clic = je veux demarrer",
+     inutile de re-demander confirmation d'un ton neutre -- autant nommer
+     directement ce qui va commencer. */
+  showReadyFor(t("Three minutes · three misses and it stops"),
+    ()=>{
+      if(typeof startRush==="function")startRush();
+      if(typeof desarmerRush==="function")desarmerRush();   /* passe en abandon */
+    },
+    t("Start"),t("Chang Sprint"));
+}
 if($("btnGoRush"))$("btnGoRush").onclick=()=>{
   /* sprint en cours : le bouton abandonne, apres confirmation */
   if(typeof rush!=="undefined"&&rush){
@@ -1604,40 +2017,32 @@ if($("btnGoRush"))$("btnGoRush").onclick=()=>{
   /* Le bouton descend sous l'echiquier pendant le sprint : place au-dessus,
      il sortait de l'ecran des qu'on regardait le plateau, et on ne trouvait
      plus comment abandonner. */
-  /* Symetrique : on arrete les coordonnees avant de lancer un sprint. */
-  if(typeof coord!=="undefined"&&coord&&typeof stopCoord==="function")stopCoord();
-  /* Si Defis est visite avant Exercices, aucun exercice n'a jamais ete
-     charge : exPanel affichait alors ses valeurs brutes du HTML ("Back-rank
-     mate", "Loading…", code vide) sous l'ecran "Ready", au lieu d'un vrai
-     exercice. */
-  if(!puzzle&&typeof nextPuzzle==="function")nextPuzzle();
-  const p=$("exPanel"), slot=$("rushSlot");
-  if(p&&slot&&!slot.contains(p))slot.appendChild(p);
-  /* Sans ceci, la vue reduite du sprint ne s'activait qu'au clic sur
-     "Start" dans l'ecran "Ready when you are" : en attendant, l'ecran
-     "Ready" (qui ne recouvre que l'echiquier) laissait voir l'enonce
-     complet, les boutons Exercice suivant/Indice et le niveau/statistiques
-     d'Exercices juste en dessous. */
-  document.body.classList.add("rush-on");
-  /* goTop() ramenait le tout haut de la page, sans tenir compte de l'en-tete
-     ancree ni de la position reelle de l'echiquier : selon d'ou partait le
-     clic, l'ecran "Ready" pouvait rester hors champ. focusBoard() vise
-     l'echiquier lui-meme et tient compte de scroll-padding-top. */
-  if(typeof focusBoard==="function")focusBoard();
-  /* Trois minutes chronometrees et une erreur suffit a tout arreter : on
-     annonce la regle et on attend le feu vert, comme pour une partie. */
-  showReadyFor(t("Three minutes · three misses and it stops"),
-    ()=>{
-      if(typeof startRush==="function")startRush();
-      if(typeof desarmerRush==="function")desarmerRush();   /* passe en abandon */
-    },
-    t("Start"));
+  beginRushFlow();
 };
 /* Remise en place a la fin du sprint. */
+/* Deplace exPanel dans #rushSlot (Defis) en s'assurant qu'il est visible.
+   Ajoute le 2026-09-03 avec le menu a 5 cartes : exPanel porte desormais
+   une classe "hide" par defaut (seul showSolveScreen() la retire, pour
+   les ecrans Puzzles/Puzzle du jour) -- sans ce retrait explicite ici,
+   arriver sur un Sprint depuis le menu (exPanel encore cache a ce moment)
+   laissait l'enonce et le statut invisibles pendant tout le sprint. Les 4
+   endroits qui deplacaient exPanel vers rushSlot utilisent desormais
+   cette fonction plutot que de repeter la logique. */
+function moveExPanelToRush(){
+  const p=$("exPanel"),slot=$("rushSlot");
+  if(p&&slot&&!slot.contains(p))slot.appendChild(p);
+  if(p)p.classList.remove("hide");
+}
 function rushRestore(){
   const p=$("exPanel"), pane=$("pane-puzzles");
   if(!p||!pane||pane.contains(p))return;
   pane.insertBefore(p,pane.firstElementChild);
+  /* De retour dans Exercices : exPanel ne doit rester visible que si
+     l'ecran courant en a besoin (Puzzles ou Puzzle du jour), pas sur le
+     menu -- sinon la carte d'exercice resterait affichee au-dessus du
+     menu apres un sprint lance depuis Defis. */
+  if(typeof solveScreen!=="undefined")
+    p.classList.toggle("hide",solveScreen!=="puzzles"&&solveScreen!=="daily");
 }
 /* Le code de reprise n'etait genere qu'au clic sur "Copier" : dans un bloc
    replie, on ouvre pour le lire, pas pour le copier a l'aveugle. On le
@@ -1741,7 +2146,7 @@ let readyAction=null;
    showResumeChoice plus bas) : ce bouton propose alors "Nouvelle partie"
    plutot que son role habituel de reglages. */
 let readySecondaryAction=null;
-function showReadyFor(sousTitre,action,libelle,titre,secondaryLibelle,secondaryAction){
+function showReadyFor(sousTitre,action,libelle,titre,secondaryLibelle,secondaryAction,sideChoice){
   const b=$("readyBanner"); if(!b)return;
   /* On enchaine sur une nouvelle epreuve : le bandeau de fin de la
      precedente n'a plus lieu d'etre, et deux panneaux superposes seraient
@@ -1767,6 +2172,21 @@ function showReadyFor(sousTitre,action,libelle,titre,secondaryLibelle,secondaryA
   if(st){
     if(secondaryAction){st.classList.remove("hide");st.textContent=secondaryLibelle||t("Change settings");}
     else st.classList.toggle("hide",!!action);
+  }
+  /* Choix de couleur (Coordonnees uniquement) : reprend l'etat deja choisi
+     dans coordSide (panneau Defis) plutot que de repartir a "Blancs" a
+     chaque overlay -- change de camp puis relancer par la carte du menu
+     ne devait pas oublier le choix precedent. Les deux controles restent
+     synchronises (voir le gestionnaire de clic plus bas) : startCoord()
+     (ui3.js) continue de lire coordSide sans modification. */
+  const rs=$("readySide");
+  if(rs){
+    rs.classList.toggle("hide",!sideChoice);
+    if(sideChoice){
+      const cs=$("coordSide");
+      const black=cs&&cs.children[1].getAttribute("aria-pressed")==="true";
+      for(const x of rs.children)x.setAttribute("aria-pressed",String((x.dataset.v==="b")===!!black));
+    }
   }
   b.classList.remove("hide");
   /* preventScroll : sans lui, focus() recadre lui-meme la vue sur le

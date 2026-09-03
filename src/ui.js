@@ -229,6 +229,13 @@ let gameStarted=false;
 
 /* puzzles */
 let puzzle=null,puzzleN=0,puzzleTries=0,puzzleDone=false,puzzleSolPly=0,solCache={};
+/* Horodatage du chargement de l'exercice courant, pour le record "Fastest
+   solve" (records personnels, item 3 de la liste "pour plus tard").
+   Remis a zero a CHAQUE loadPuzzle() (voir plus bas), y compris pendant un
+   Chang Sprint -- sans consequence, puisque finishPuzzle() court-circuite
+   avant d'atteindre le code qui lit cette variable pendant un sprint (meme
+   garde que pour prog.solved/themeSolved/solveLog). */
+let puzzleStartTs=0;
 let prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[]};
 /* Delta de notation du dernier exercice juge (integration ELO) : mis a
    jour par updateRating() (ui2.js), lu par finishPuzzle() juste apres pour
@@ -1162,6 +1169,7 @@ function dailyPuzzle(){
 }
 function loadPuzzle(){
   solCache={};
+  puzzleStartTs=Date.now();
   game=new Game(puzzle.fen);
   flipped=game.turn===B;
   selected=-1;marks={};lastMove=null;busy=false;
@@ -1181,6 +1189,14 @@ function loadPuzzle(){
   /* Le bouton d'aide repart sur "Indice" a chaque exercice. */
   hintShown=false;
   if(typeof syncHintBtn==="function")syncHintBtn();
+  /* Duel du jour : masque a chaque nouvel exercice, y compris pendant un
+     Chang Sprint (rushNext() appelle aussi loadPuzzle()) -- revele
+     uniquement apres une reussite sur le puzzle du jour precis, voir
+     finishPuzzle(). */
+  { const dcb=$("dailyChallengeBlock"),dcp=$("dailyChallengePanel");
+    if(dcb)dcb.classList.add("hide");
+    if(dcp)dcp.classList.add("hide");
+  }
   legalCache=game.moves();
   const side=game.turn===W?"White":"Black";
   $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day · "):"")+t(puzzle.theme);
@@ -1275,7 +1291,7 @@ function tryPuzzleMove(m){
   game.makeMove(m);lastMove=m;marks={};marks[m.to]="good";
   legalCache=game.moves();
   render();updateEval();
-  if(!legalCache.length&&game.inCheck()){finishPuzzle(true,t("{san} — checkmate.",{san:san}));return;}
+  if(!legalCache.length&&game.inCheck()){finishPuzzle(true,t("{san}: checkmate.",{san:san}));return;}
   puzzleSolPly++;
   /* Gain a plusieurs coups : la sequence continue tant qu'il reste des
      coups dans puzzle.sol (ma reponse suivante, apres la replique forcee
@@ -1284,7 +1300,7 @@ function tryPuzzleMove(m){
      -- invisible tant que mine_puzzles.js ne produisait que des gains a un
      seul coup, redevenu faux depuis la Deviation (coup + reponse forcee +
      coup final, sol.length===3). */
-  if(puzzle.type!=="mate"&&puzzleSolPly>=puzzle.sol.length){finishPuzzle(true,t("{san} — material won. Nicely spotted.",{san:san}));return;}
+  if(puzzle.type!=="mate"&&puzzleSolPly>=puzzle.sol.length){finishPuzzle(true,t("{san}: material won. Nicely spotted.",{san:san}));return;}
   if(puzzle.type!=="mate"){
     /* La replique adverse est CONNUE d'avance (puzzle.sol), pas a chercher :
        contrairement au mat (matingMoves() doit explorer, l'adversaire ayant
@@ -1297,7 +1313,7 @@ function tryPuzzleMove(m){
     setTimeout(()=>{
       const oppUci=puzzle.sol[puzzleSolPly];
       const oppMv=game.moves().find(x=>game.uci(x)===oppUci);
-      if(!oppMv){busy=false;finishPuzzle(true,t("{san} — material won. Nicely spotted.",{san:san}));return;}
+      if(!oppMv){busy=false;finishPuzzle(true,t("{san}: material won. Nicely spotted.",{san:san}));return;}
       game.makeMove(oppMv);lastMove=oppMv;busy=false;
       puzzleSolPly++;
       legalCache=game.moves();marks={};
@@ -1380,9 +1396,9 @@ function explainSentence(p){
       if(LANG==="fr"){
         const fem=ex.deflected.piece&&"qr".includes(ex.deflected.piece.toLowerCase());
         return nounPhrase(ex.deflected.piece,ex.deflected.sq,true)+" était l'unique défenseur"+
-          " — forcé"+(fem?"e":"")+" de s'écarter, "+(fem?"elle":"il")+" ne peut plus aider.";
+          ". Forcé"+(fem?"e":"")+" de s'écarter, "+(fem?"elle":"il")+" ne peut plus aider.";
       }
-      return t("{deflected} was the only defender — forced away, it can no longer help.",
+      return t("{deflected} was the only defender. Forced away, it can no longer help.",
         {deflected:nounPhrase(ex.deflected.piece,ex.deflected.sq,true)});
     case "Smothered mate":
       return ex.king?t("The king on {sq} was boxed in by its own pieces.",{sq:ex.king}):"";
@@ -1402,7 +1418,7 @@ function pedagogySentence(p){
   const pg=p.pedagogy;
   if(!pg||!pg.candidateSan||!pg.refutationSan)return"";
   return pg.trapDepth>0
-    ? t("{candidate} looks tempting, but only {refutation} actually refutes it — worth calculating a move further next time.",{candidate:pg.candidateSan,refutation:pg.refutationSan})
+    ? t("{candidate} looks tempting, but only {refutation} actually refutes it. Worth calculating a move further next time.",{candidate:pg.candidateSan,refutation:pg.refutationSan})
     : t("Careful with {candidate}: {refutation} punishes it.",{candidate:pg.candidateSan,refutation:pg.refutationSan});
 }
 function finishPuzzle(won,msg){
@@ -1425,13 +1441,78 @@ function finishPuzzle(won,msg){
   if(won&&puzzleTries===0)registerSolved();
   else if(won)registerPartial();
   if(!prog.seen.includes(puzzle.id)){prog.seen.push(puzzle.id);if(prog.seen.length>200)prog.seen.shift();}
-  /* Calendrier de completion : une seule entree par jour, peu importe le
-     nombre de tentatives -- reussi une fois dans la journee suffit. Pas de
-     distinction "jamais tente" vs "rate" : les cases non marquees couvrent
-     les deux, plus simple a lire d'un coup d'oeil. */
-  if(won&&puzzle.daily&&typeof todayKey==="function"){
+  if(won){
     if(typeof ensureProgFields==="function")ensureProgFields();
-    prog.dailyLog[todayKey()]=true;
+    /* Calendrier de completion : une seule entree par jour, peu importe le
+       nombre de tentatives -- reussi une fois dans la journee suffit. Pas de
+       distinction "jamais tente" vs "rate" : les cases non marquees couvrent
+       les deux, plus simple a lire d'un coup d'oeil. */
+    if(puzzle.daily&&typeof todayKey==="function"){
+      prog.dailyLog[todayKey()]=true;
+      const dcb=$("dailyChallengeBlock");if(dcb)dcb.classList.remove("hide");
+      /* Serie de jours : migree ici depuis onPuzzleResult() (ui2.js) le
+         2026-09-03, ou elle comptait N'IMPORTE QUEL exercice reussi. Avec
+         "Puzzle du jour" devenu sa propre categorie du menu (a cote de
+         Puzzles/Sprint/Coordonnees/Finales), la serie doit correspondre a
+         ce que montre son calendrier -- donc strict desormais : seul LE
+         puzzle du jour precis, reussi, la fait avancer. Les series deja
+         accumulees par les utilisateurs ne sont pas remises a zero, seul
+         le calcul futur change. */
+      if(typeof bumpStreak==="function")bumpStreak();
+    }
+    /* Badges thematiques : compte tout exercice reussi (premier essai ou
+       apres une tentative ratee, meme logique que prog.solved deja compte
+       dans registerSolved()/registerPartial()), sur le theme reel de
+       l'exercice tel que renvoye par classify(). checkBadges() est deja
+       appele par registerSolved() plus haut, mais AVANT cette
+       incrementation -- on le rappelle ici pour que le badge se debloque
+       des l'exercice qui l'atteint, pas au suivant. Inoffensif de
+       l'appeler deux fois (boucle sur BADGES, ids deja acquis ignores). */
+    prog.themeSolved[puzzle.theme]=(prog.themeSolved[puzzle.theme]||0)+1;
+    /* Recap hebdo : un timestamp par reussite, plafonne comme
+       prog.ratingHistory. Pousse ici plutot que dans registerSolved()/
+       registerPartial() pour rester au meme endroit que dailyLog et
+       themeSolved ci-dessus -- un seul point d'entree "won" pour tout ce
+       qui journalise une reussite. */
+    prog.solveLog.push(Date.now());
+    if(prog.solveLog.length>500)prog.solveLog.shift();
+    /* Record "meilleur jour" : compteur du jour courant, remis a zero au
+       changement de date (meme mecanique que prog.lastDay/bumpStreak()) --
+       compte toute reussite, meme logique que prog.solved/solveLog
+       ci-dessus (premier essai ou apres une tentative ratee). */
+    { const dk=todayKey();
+      if(prog.dayCountDate!==dk){prog.dayCountDate=dk;prog.dayCount=0;}
+      prog.dayCount++;
+      if(prog.dayCount>prog.bestDay)prog.bestDay=prog.dayCount;
+    }
+    /* Record "Fastest solve" : uniquement les reussites du PREMIER coup
+       (puzzleTries===0), coherent avec le "Streak" existant qui a la meme
+       exigence -- un temps qui inclut des tentatives ratees ne mesure pas
+       la meme chose. Plancher de 300ms : filet de securite contre un
+       artefact improbable (ex: rechargement d'etat) plutot qu'un vrai
+       record, pas une hypothese sur la rapidite humaine reelle. */
+    if(puzzleTries===0){
+      const elapsed=Date.now()-puzzleStartTs;
+      if(elapsed>=300&&(typeof prog.fastestSolveMs!=="number"||elapsed<prog.fastestSolveMs))
+        prog.fastestSolveMs=elapsed;
+    }
+    if(typeof checkBadges==="function")checkBadges();
+    /* Repetition espacee : une reussite fait avancer d'un palier plutot que
+       de retirer l'entree tout de suite (sauf a la 5e reussite, ou c'est
+       la "maitrise" -- voir SRS_DELAYS_DAYS, ui2.js, pour le detail du
+       barème). Rejoue via retryMistake() (ui2.js) -- le seul chemin normal
+       vers ces ids, puisque prog.seen les exclut deja du tirage classique. */
+    if(prog.mistakeQueue.length){
+      const mi=prog.mistakeQueue.findIndex(m=>m.id===puzzle.id);
+      if(mi!==-1){
+        const m=prog.mistakeQueue[mi];
+        if(m.box>=5)prog.mistakeQueue.splice(mi,1);
+        else{
+          const delayDays=(typeof SRS_DELAYS_DAYS!=="undefined"&&SRS_DELAYS_DAYS[m.box-1])||1;
+          m.box++;m.due=Date.now()+delayDays*86400000;
+        }
+      }
+    }
   }
   saveProg();renderProgress();
 }
@@ -1451,6 +1532,24 @@ function registerPartial(){prog.solved++;prog.correctRun=0;prog.streak=0;}
 function registerWrong(){
   prog.streak=0;prog.correctRun=0;prog.wrongRun++;
   if(prog.wrongRun>=4&&prog.level>1){prog.level--;prog.wrongRun=0;}
+  /* File de revision persistante, avec repetition espacee (paliers de type
+     Leitner) depuis cette session -- voir SRS_DELAYS_DAYS (ui2.js) pour le
+     detail des delais. Ici : un echec, qu'il s'agisse d'un premier rate ou
+     d'une revision qui echoue, ramene TOUJOURS au palier 1 (due
+     immediatement) -- pas de penalite progressive, plus simple a
+     comprendre qu'un algorithme qui punirait plus fort a chaque echec.
+     Tous modes confondus, y compris Chang Sprint -- ses erreurs deviennent
+     ainsi revisables plus tard aussi, pas seulement dans le bilan de fin
+     de sprint (lastRushHistory, qui reste par ailleurs inchange). */
+  if(typeof ensureProgFields==="function")ensureProgFields();
+  if(puzzle){
+    const existing=prog.mistakeQueue.find(m=>m.id===puzzle.id);
+    if(existing){existing.box=1;existing.due=Date.now();existing.ts=Date.now();}
+    else{
+      prog.mistakeQueue.push({id:puzzle.id,theme:puzzle.theme,code:puzzle.code||"",ts:Date.now(),box:1,due:Date.now()});
+      if(prog.mistakeQueue.length>200)prog.mistakeQueue.shift();
+    }
+  }
   saveProg();renderProgress();
 }
 function renderProgress(){
@@ -1583,7 +1682,7 @@ function shareButtons(container,url,text,withNative){
   mk("Messenger","msg",()=>{
     const mobile=/android|iphone|ipad|ipod/i.test(navigator.userAgent);
     if(mobile)location.href="fb-messenger://share/?link="+encodeURIComponent(url);
-    else{copyText(url);$("amiNote").textContent=t("Link copied — paste it into Messenger.");}
+    else{copyText(url);$("amiNote").textContent=t("Link copied, paste it into Messenger.");}
   });
   mk("Facebook","fb",()=>{window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(url),"_blank","noopener");});
   mk(t("Copy"),"",()=>{copyText(url);$("amiNote").textContent=t("Link copied.");});
@@ -1700,7 +1799,7 @@ function showAmi(){
   st.textContent=amiIsMyTurn()
     ? (game.inCheck()?t("Check. Your move."):t("Your move, then send the link."))
     : t("Move saved. Send this link to your friend.");
-  shareButtons($("amiShare"),amiUrl(),t("Chess on chang64 — your move ({pace}):",{pace:t(amiPace===1?"{n} day/move":"{n} days/move",{n:amiPace})}),true);
+  shareButtons($("amiShare"),amiUrl(),t("Chess on chang64, your move ({pace}):",{pace:t(amiPace===1?"{n} day/move":"{n} days/move",{n:amiPace})}),true);
   updateAmiNote();
 }
 function handleAmiClick(sq){
@@ -1740,7 +1839,7 @@ function newAmiGame(){
   if(amiColor===B){
     $("amiLinkPanel").classList.remove("hide");
     $("amiLink").value=amiUrl();
-    shareButtons($("amiShare"),amiUrl(),t("I challenge you on chang64 — you play White:"),true);
+    shareButtons($("amiShare"),amiUrl(),t("I challenge you on chang64, you play White:"),true);
     updateAmiNote();
   }
 }
@@ -1762,7 +1861,15 @@ function readDeepLink(){
 function applyDeepLink(d){
   if(!d)return false;
   if(d.kind==="train"){
-    setMode("train");
+    /* Corrige le 2026-09-03 : ce lien (#train=<id>) visait une finale
+       precise, mais pointait vers setMode("train") -- l'onglet Defis, qui
+       ne montre plus les finales depuis leur demenagement dans Exercices
+       (voir ui3.js). startEndgame() tournait donc derriere un panneau qui
+       n'affichait ni puces ni statut pour l'expliquer. Route maintenant
+       vers l'ecran dedie du menu Resoudre. Le format du lien ne change
+       pas (compatibilite avec d'anciens liens deja partages), seul son
+       traitement est corrige. */
+    setMode("puzzles",{screen:"endgames"});
     if(typeof startEndgame==="function"&&ENDGAMES.some(e=>e.id===d.id)){
       startEndgame(d.id);
       const st=$("egStatus");st.className="status";
@@ -1771,7 +1878,7 @@ function applyDeepLink(d){
     return true;
   }
   if(d.kind==="puzzle"){
-    setMode("puzzles");
+    setMode("puzzles",{screen:"puzzles"});
     /* Resolution asynchrone (index leger + niveau concerne) : on s'engage
        tout de suite sur ce mode plutot que d'attendre la reponse, comme
        pour les autres branches -- si l'id s'avere introuvable (lien perime),
@@ -1930,7 +2037,6 @@ function setMode(m,opts){
        on le ramene avant d'afficher l'onglet, sinon il serait vide. */
     if(typeof rushRestore==="function")rushRestore();
     renderProgress();
-    if(opts.daily)dailyPuzzle(); else nextPuzzle();
     /* Les finales sont dans cet onglet depuis la reorganisation : sans cet
        appel, la liste des cinq positions restait vide. Elles vivaient
        auparavant dans l'onglet "train", qui les preparait de son cote. */
@@ -1940,6 +2046,15 @@ function setMode(m,opts){
        langue fait pendant qu'on etait sur un autre onglet, puisque rien ne
        rappelait renderEndgame() au retour sur Exercices. */
     if(typeof renderEndgame==="function")renderEndgame();
+    /* Menu a 5 cartes (discussion UX du 2026-09-03) : par defaut, un clic
+       sur l'onglet "Resoudre" (aucun opts.screen precise) montre le menu,
+       pas un plateau directement -- seul un choix explicite (clic sur une
+       carte) ou un lien profond/le duel du jour/une revision d'erreur
+       (qui passent opts.screen eux-memes) va droit au contenu.
+       opts.daily est garde pour compatibilite avec les appels existants
+       (deep-link #puzzle=, etc.) qui ne connaissaient pas encore "screen". */
+    const screen=opts.screen||(opts.daily?"daily":"menu");
+    if(typeof showSolveScreen==="function")showSolveScreen(screen);
   } else {
     renderDailyChips();rebuildAmi();showAmi();
     if(typeof renderAmiHistory==="function")renderAmiHistory();
@@ -2014,7 +2129,9 @@ $("themeFilter").addEventListener("change",e=>{
   saveProg();
   if(mode==="puzzles")nextPuzzle();
 });
-$("btnDaily").onclick=dailyPuzzle;
+/* btnDaily a disparu du HTML (menu a 5 cartes, 2026-09-03) : "Puzzle du
+   jour" se rejoint desormais via cardSolveDaily, cable plus bas avec les
+   4 autres cartes du menu. */
 $("btnHintEx").onclick=hintPuzzle;
 /* btnSolve a fusionne avec btnHintEx : plus de bouton dedie. */
 $("btnRetry").onclick=loadPuzzle;

@@ -207,6 +207,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .hero p{color:var(--sage);font-size:clamp(14px,2.6vw,16.5px);max-width:46ch;margin-bottom:24px;position:relative}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative}
 .hero .cta .btn{font-size:14.5px;padding:12px 22px}
+/* "Jouer maintenant" + "Puzzle du jour" resserres sur mobile (mise en page) :
+   au-dela de 22px de rembourrage chacun, les deux libelles ne tenaient plus
+   cote a cote sur un ecran de telephone etroit -- "Puzzle du jour", plus
+   long, passait seul a la ligne suivante. Rembourrage/police ramenes pres
+   de la taille par defaut de .btn (10px 14px) sous ce seuil, assez pour
+   que les deux restent sur la meme ligne sans perdre en lisibilite. */
+@media(max-width:480px){.hero .cta .btn{font-size:13px;padding:10px 14px}}
 
 .tc-block{margin-bottom:22px;position:relative}
 .tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:9px;border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto}
@@ -513,7 +520,12 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .repliable summary::after{content:"";margin-left:auto;width:8px;height:8px;
   border-right:2px solid var(--sage);border-bottom:2px solid var(--sage);
   transform:rotate(45deg);transition:transform .2s;flex:none}
-.repliable[open] summary::after{transform:rotate(-135deg)}
+/* Enfant DIRECT (>) et non descendant (item 3) : sans ca, ouvrir un
+   .repliable qui en contient un autre niche (ex: "Mon historique" ->
+   "Voir tous les badges") faisait aussi pivoter le chevron du niche, meme
+   ferme -- le selecteur descendant matchait n'importe quel summary sous
+   un .repliable[open], pas seulement le sien. */
+.repliable[open] > summary::after{transform:rotate(-135deg)}
 /* Pas de changement de couleur au survol ni a l'ouverture : le titre reste
    celui de partout ailleurs. Seul le chevron indique l'etat. */
 .repliable summary .eyebrow{margin-bottom:0}
@@ -637,7 +649,9 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    compris pendant Chang Sprint puisqu'il ne revele rien de la solution.
    user-select:all : un clic-glisser partiel selectionne le code entier,
    plus simple a copier tel quel pour un signalement. */
-.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage);border:1px solid rgba(151,164,157,.35);padding:2px 8px;border-radius:999px;margin-left:8px;margin-bottom:10px;user-select:all}
+.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage);border:1px solid rgba(151,164,157,.35);padding:2px 8px;border-radius:999px;margin-bottom:10px;user-select:all}
+.excode-wrap{display:inline-flex;align-items:center;margin-left:8px;margin-bottom:10px}
+.excode-wrap .excode{margin-left:0;margin-bottom:0}
 /* min-width:0 est indispensable, pas cosmetique. Les boutons sont en
    white-space:nowrap, donc la largeur minimale de la rangee vaut la somme de
    leurs textes. Comme .tabs est un element flexible de l'entete, son
@@ -718,6 +732,11 @@ header>*{min-width:0}
 .cal-day.empty{background:none}
 .cal-day.done{background-color:var(--brass);color:var(--ink);font-weight:600;cursor:pointer}
 .cal-day.done:hover{filter:brightness(1.1)}
+/* "Manque, mais rattrapable" (item 1) : contour pointille couleur brass
+   plutot que le fond plein de .done -- distinct au premier coup d'oeil
+   d'un jour deja resolu, tout en signalant que c'est cliquable. */
+.cal-day.missed{border:1px dashed var(--brass);color:var(--brass);cursor:pointer}
+.cal-day.missed:hover{background-color:var(--brass);color:var(--ink)}
 .cal-day.today{border-color:var(--chalk)}
 .cal-day.future{opacity:.3}
 #pane-calendar .panel{max-width:420px;margin:0 auto}
@@ -1407,8 +1426,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                et le libelle du thème casse le rythme. On garde le statut, qui
                sert aux retours immediats. -->
           <span class="theme hors-sprint" id="exTheme">Back-rank mate</span>
-          <span class="excode" id="exCode"></span>
-          <button type="button" class="info-tip hors-sprint" aria-expanded="false" aria-controls="tipStrength" aria-label="More info">i</button>
+          <!-- Regroupe le code de l'exercice et le bouton d'info dans un
+               seul bloc inline-flex (mise en page) : avant, ce sont deux
+               elements inline separes qui pouvaient se retrouver chacun
+               sur sa propre ligne des que la pastille de theme prenait
+               deja toute la largeur sur mobile -- le "i" (22x22) se
+               retrouvait seul sur sa ligne, orphelin. Regroupes, ils
+               passent a la ligne ENSEMBLE, jamais l'un sans l'autre. -->
+          <span class="excode-wrap">
+            <span class="excode" id="exCode"></span>
+            <button type="button" class="info-tip hors-sprint" aria-expanded="false" aria-controls="tipStrength" aria-label="More info">i</button>
+          </span>
           <p class="info-tip-pop hide" id="tipStrength"></p>
           <p class="quest hors-sprint review-hide" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
@@ -1430,16 +1458,23 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                Sprint. "Exercice suivant" sortirait de la file du sprint et
                chargerait un exercice du mode normal, et l'indice serait une
                aide dans une epreuve chronometree. -->
+          <!-- Item 6 : "Exercice suivant" seul sur sa ligne (action
+               principale), Indice/Recommencer groupes cote a cote juste en
+               dessous (actions secondaires liees -- aide sur l'exercice
+               COURANT). Avant, retirer "Exercice suivant" de l'ecran
+               Puzzle du jour avait laisse Indice puis Recommencer seuls,
+               chacun pleine largeur, empiles sans lien visuel alors que ce
+               sont deux aides sur le meme exercice. -->
           <div class="btnrow hors-sprint review-hide" style="margin-top:12px">
             <button class="btn primary" id="btnNext">Next puzzle</button>
+          </div>
+          <div class="btnrow hors-sprint review-hide" style="margin-top:8px">
             <!-- Un seul bouton a deux etats : "Indice" surligne la piece a
                  jouer, puis le meme bouton devient "Voir la solution" et donne
                  le coup complet. Ca libere une place dans une rangee chargee
                  sur telephone, et ca impose de tenter avec un coup de pouce
                  avant d'obtenir la reponse. -->
             <button class="btn" id="btnHintEx">Hint</button>
-          </div>
-          <div class="btnrow hors-sprint review-hide" style="margin-top:8px">
             <button class="btn" id="btnRetry">Restart puzzle</button>
           </div>
           <!-- Duel du jour (item 6, dernier de la liste "pour plus tard") :
@@ -1587,7 +1622,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                parcours normal, qu'a l'abandon d'un sprint en cours (voir
                btnGoRush) ; l'eyebrow suffit a l'identifier a ce moment-la. -->
           <div class="eyebrow hors-sprint">Chang Sprint</div>
-          <div class="btnrow"><button class="btn primary" id="btnGoRush">Start Chang Sprint</button></div>
+          <!-- Cache par defaut (item 5) : hors sprint, la carte du menu
+               amene deja directement a l'ecran "Ready" (beginRushFlow),
+               ce bouton en double dessous n'a plus de role tant qu'aucun
+               sprint n'est en cours -- desarmerRush() (ui2.js) le retire
+               de ce hide/le remet des que "rush" devient vrai/faux. -->
+          <div class="btnrow"><button class="btn primary hide" id="btnGoRush">Start Chang Sprint</button></div>
           <p class="note hors-sprint">Personal best: <b id="rushBestTrain">0</b></p>
         </div>
         <div class="panel" id="coordLauncher">

@@ -1142,7 +1142,7 @@ function nextPuzzle(){
   const fresh=pool.filter(p=>!prog.seen.includes(p.id));
   if(fresh.length){puzzle=fresh[0];}
   else{const list=pool;puzzle=list[Math.floor(Math.random()*list.length)];}
-  puzzle.daily=false;
+  puzzle.daily=false;puzzle.dailyCatchupKey=null;
   loadPuzzle();
 }
 /* Exercice du jour : meme rotation globale qu'avant (index du jour modulo
@@ -1164,7 +1164,7 @@ function dailyPuzzle(){
   const lvl=PUZZLE_INDEX[id];
   if(!LEVEL_CACHE[lvl]){loadLevel(lvl,dailyPuzzle);return;}
   puzzle=PUZZLE_CACHE[id];
-  puzzle.daily=true;
+  puzzle.daily=true;puzzle.dailyCatchupKey=null; /* le vrai puzzle du jour, pas un rattrapage */
   loadPuzzle();
 }
 function loadPuzzle(){
@@ -1448,17 +1448,28 @@ function finishPuzzle(won,msg){
        distinction "jamais tente" vs "rate" : les cases non marquees couvrent
        les deux, plus simple a lire d'un coup d'oeil. */
     if(puzzle.daily&&typeof todayKey==="function"){
-      prog.dailyLog[todayKey()]=true;
-      const dcb=$("dailyChallengeBlock");if(dcb)dcb.classList.remove("hide");
-      /* Serie de jours : migree ici depuis onPuzzleResult() (ui2.js) le
-         2026-09-03, ou elle comptait N'IMPORTE QUEL exercice reussi. Avec
-         "Puzzle du jour" devenu sa propre categorie du menu (a cote de
-         Puzzles/Sprint/Coordonnees/Finales), la serie doit correspondre a
-         ce que montre son calendrier -- donc strict desormais : seul LE
-         puzzle du jour precis, reussi, la fait avancer. Les series deja
-         accumulees par les utilisateurs ne sont pas remises a zero, seul
-         le calcul futur change. */
-      if(typeof bumpStreak==="function")bumpStreak();
+      if(puzzle.dailyCatchupKey){
+        /* Rattrapage d'un jour PASSE et manque (item 1) : on coche le jour
+           CLIQUE dans le calendrier, pas aujourd'hui -- et on s'arrete la.
+           Pas de bumpStreak() : rattraper un trou ancien ne fait pas
+           reapparaitre une continuite qui, ce jour-la, avait ete rompue.
+           Pas de "Defier un ami" : ce bouton affirme "j'ai resolu
+           l'exercice DU JOUR", faux dans ce cas -- il reste reserve au vrai
+           puzzle du jour, juste en dessous. */
+        prog.dailyLog[puzzle.dailyCatchupKey]=true;
+      } else {
+        prog.dailyLog[todayKey()]=true;
+        const dcb=$("dailyChallengeBlock");if(dcb)dcb.classList.remove("hide");
+        /* Serie de jours : migree ici depuis onPuzzleResult() (ui2.js) le
+           2026-09-03, ou elle comptait N'IMPORTE QUEL exercice reussi. Avec
+           "Puzzle du jour" devenu sa propre categorie du menu (a cote de
+           Puzzles/Sprint/Coordonnees/Finales), la serie doit correspondre a
+           ce que montre son calendrier -- donc strict desormais : seul LE
+           puzzle du jour precis, reussi, la fait avancer. Les series deja
+           accumulees par les utilisateurs ne sont pas remises a zero, seul
+           le calcul futur change. */
+        if(typeof bumpStreak==="function")bumpStreak();
+      }
     }
     /* Badges thematiques : compte tout exercice reussi (premier essai ou
        apres une tentative ratee, meme logique que prog.solved deja compte

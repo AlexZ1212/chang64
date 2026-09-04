@@ -651,7 +651,18 @@ setMode=function(m,opts){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="train";
     const tabs={play:"tab-play",puzzles:"tab-puzzles",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
-    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
+    /* "Resoudre" reste surligne pendant Chang Sprint/Coordonnees (bug
+       trouve en verifiant les autres endroits touches par la disparition
+       de l'onglet "S'entrainer") : ce tableau ne referencait plus "train"
+       du tout depuis que tab-train a ete retire du HTML (2026-09-03,
+       remplace par le menu a 5 cartes) -- aucune cle ne valait jamais m
+       ("train"), donc AUCUN onglet ne restait marque selectionne des
+       qu'on lancait un sprint ou une seance de coordonnees. Or les deux
+       s'atteignent desormais depuis les cartes du menu de "Resoudre"
+       (cardSolveSprint/cardSolveCoord, voir ui2.js) : tab-puzzles doit
+       donc rester actif tant que mode==="train", pas seulement quand
+       m==="puzzles" a la lettre. */
+    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k==="puzzles"?(m===k||m==="train"):k===m);}
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
@@ -668,6 +679,12 @@ setMode=function(m,opts){
        "Entrainement". */
     { const rl=$("rushLauncher"); if(rl)rl.classList.toggle("hide",trainView!=="sprint"); }
     { const cl=$("coordLauncher"); if(cl)cl.classList.toggle("hide",trainView!=="coord"); }
+    /* Resynchronise l'etat (visible/cache, texte, couleur) du bouton
+       "Start Chang Sprint" a chaque entree sur Defis (item 5) : couvre le
+       tout premier arrivage (avant meme un clic sur la carte), et evite
+       tout residu visuel d'un etat precedent si on revient ici entre deux
+       ecrans sans etre passe par rushEnd()/beginRushFlow(). */
+    if(typeof desarmerRush==="function")desarmerRush();
     /* Le plateau reste cache tant que la partie Jouer n'a pas demarre (voir
        updatePlayBoardVisibility) : cette branche gerant elle-meme son
        propre mode, sans jamais redescendre vers la logique centrale de

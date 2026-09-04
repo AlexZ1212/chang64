@@ -530,7 +530,7 @@ function drawRatingGraph(){
      un simple gabarit identique pour les deux langues afficherait "jour"
      partout sans jamais vraiment adapter l'ordre a la langue active. */
   const fmtDate=ts=>{
-    const d=new Date(ts),mo=d.getMonth()+1,da=d.getDate();
+    const d=new Date(ts),mo=String(d.getMonth()+1).padStart(2,"0"),da=String(d.getDate()).padStart(2,"0");
     return LANG==="fr"?da+"/"+mo:mo+"/"+da;
   };
   const dateSvg='<text x="'+padL+'" y="'+(h-3)+'" text-anchor="start" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[0].t)+'</text>'+
@@ -985,7 +985,16 @@ function renderBadgeSummary(){
   const sum=$("badgeSummary"),recent=$("badgeRecentGrid");
   if(!sum||!recent)return;
   ensureProgFields();
-  sum.textContent=t("{n}/{total} unlocked",{n:prog.badges.length,total:BADGES.length});
+  /* Accord singulier/pluriel de "debloque(s)" (mise en page/texte) : le
+     francais exige l'accord ("1/43 debloque" vs "2/43 debloques"), chose
+     dont l'anglais n'a pas besoin ("1/43 unlocked" est deja correct quel
+     que soit n) -- passer par LANG directement plutot que par deux cles
+     t() distinctes, qui auraient du texte anglais identique pour un
+     resultat francais different (impossible avec un dictionnaire a cle
+     unique comme t()). */
+  sum.textContent=LANG==="fr"
+    ? prog.badges.length+"/"+BADGES.length+" débloqué"+(prog.badges.length===1?"":"s")
+    : prog.badges.length+"/"+BADGES.length+" unlocked";
   const ids=prog.badges.slice().sort((a,b)=>(prog.badgeDates[b]||0)-(prog.badgeDates[a]||0)).slice(0,4);
   recent.innerHTML=ids.map(id=>{
     const b=BADGES.find(x=>x.id===id); if(!b)return "";
@@ -1120,6 +1129,25 @@ if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
    sait deja router les clics vers l'entrainement, pas de raison de le
    dupliquer), juste selectionnes via trainView (ui3.js) avant d'y entrer. */
 let solveScreen="menu";
+/* Drapeau anti-course (bug trouve en corrigeant le rattrapage des jours
+   manques, item 1) : showSolveScreen("puzzles"|"daily") declenche en
+   interne nextPuzzle()/dailyPuzzle(), qui chargent chacun un exercice de
+   facon ASYNCHRONE (niveau pas encore en cache -> loadLevel(cb)). Un
+   appelant qui veut charger LUI-MEME un exercice precis (rattrapage d'un
+   jour, revision d'une erreur, revisite d'un jour deja fait) doit d'abord
+   passer par setMode()/showSolveScreen() pour amener le bon ecran a
+   l'affichage -- mais si on laisse faire, ce chargement interne demarre sa
+   propre chaine asynchrone en parallele de celle de l'appelant, et peut
+   ecraser silencieusement le puzzle voulu si elle termine APRES la
+   sienne (l'ordre des deux chaines n'est pas garanti, ca depend de ce qui
+   est deja en cache). Ce drapeau, leve juste autour de l'appel a
+   setMode()/showSolveScreen() puis aussitot redescendu (lecture/ecriture
+   synchrones, aucun risque d'entrelacement), supprime purement et
+   simplement le chargement interne concurrent -- l'appelant reste seul
+   maitre du puzzle charge. Touche attemptDailyArchive() (ci-dessous),
+   viewDailyArchive() et retryMistake() : les trois amenent un exercice
+   precis vers l'ecran "puzzles"/"daily". */
+let solveScreenSuppressAutoload=false;
 function showSolveScreen(screen){
   solveScreen=screen;
   const menu=$("solveMenu"),ex=$("exPanel"),pzSide=$("solvePuzzlesSidebar"),
@@ -1144,8 +1172,8 @@ function showSolveScreen(screen){
   const bw=document.querySelector(".board-wrap");
   if(bw)bw.classList.toggle("hide",screen==="menu");
   if(screen==="menu"){renderSolveMenu();return;}
-  if(screen==="puzzles"){nextPuzzle();return;}
-  if(screen==="daily"){dailyPuzzle();return;}
+  if(screen==="puzzles"){if(!solveScreenSuppressAutoload)nextPuzzle();return;}
+  if(screen==="daily"){if(!solveScreenSuppressAutoload)dailyPuzzle();return;}
   /* "endgames" : pas de demarrage automatique -- "Pick an endgame below."
      (deja dans le HTML) invite a choisir une puce. Un auto-demarrage ici
      a deja cause un bug par le passe (voir le commentaire dans ui3.js,
@@ -1217,14 +1245,45 @@ function viewDailyArchive(key){
   if(!LEVEL_CACHE[lvl]){loadLevel(lvl,()=>viewDailyArchive(key));return;}
   const p=PUZZLE_CACHE[id];
   if(!p)return;
+  /* Voir solveScreenSuppressAutoload plus haut : sans ce drapeau,
+     showSolveScreen("daily") lancait sa propre chaine asynchrone
+     (dailyPuzzle(), exercice d'AUJOURD'HUI) qui pouvait ecraser p apres
+     coup, silencieusement -- bug de course trouve en corrigeant le
+     rattrapage (item 1), touchait deja ce code existant. */
+  solveScreenSuppressAutoload=true;
   if(typeof setMode==="function")setMode("puzzles",{screen:"daily"});
+  solveScreenSuppressAutoload=false;
   loadAndRevealSolution(p);
   /* loadAndRevealSolution() pose puzzle.daily=false (ecrit pour le Sprint,
      qui n'a pas ce concept) : on le remet a true ici pour que l'etiquette
      "Puzzle of the day" reste correcte sur un exercice archive, et on
      rafraichit le texte deja pose par loadPuzzle() avec l'ancienne valeur. */
   puzzle.daily=true;
+  puzzle.dailyCatchupKey=null; /* consultation d'un jour deja fait, pas un rattrapage */
   const et=$("exTheme"); if(et)et.textContent=t("Puzzle of the day · ")+t(puzzle.theme);
+}
+/* Rattrapage d'un jour PASSE et MANQUE (item 1) : contrairement a
+   viewDailyArchive() ci-dessus (qui rejoue la solution DEJA connue), on
+   charge l'exercice en vraie tentative -- meme mecanique que dailyPuzzle(),
+   juste pour une date choisie plutot que celle du jour. puzzle.dailyCatchupKey
+   indique a finishPuzzle() (ui.js) de cocher CE jour-la dans le calendrier
+   (pas aujourd'hui), de ne pas faire avancer la serie, et de ne pas
+   reveler "Defier un ami" (qui affirme resoudre le puzzle du jour ACTUEL). */
+function attemptDailyArchive(key){
+  if(!PUZZLE_INDEX){loadPuzzleIndex(()=>attemptDailyArchive(key));return;}
+  const id=dateToDailyId(key);
+  const lvl=PUZZLE_INDEX[id];
+  if(!lvl)return;
+  if(!LEVEL_CACHE[lvl]){loadLevel(lvl,()=>attemptDailyArchive(key));return;}
+  const p=PUZZLE_CACHE[id];
+  if(!p)return;
+  solveScreenSuppressAutoload=true;
+  if(typeof setMode==="function")setMode("puzzles",{screen:"daily"});
+  solveScreenSuppressAutoload=false;
+  puzzle=p;
+  puzzle.daily=true;
+  puzzle.dailyCatchupKey=key;
+  loadPuzzle();
 }
 /* opts.nav=true : fleches mois precedent/suivant (page a part). Sans nav :
    mois courant fixe, pas de bouton (widget compact de l'ecran de
@@ -1275,11 +1334,20 @@ function renderCalendarGrid(containerId,monthOffset,opts){
     const key=calDateKey(y,m,d);
     const done=!!prog.dailyLog[key];
     const isFuture=key>todayStr;
+    const isToday=key===todayStr;
+    /* "Manque, mais rattrapable" (item 1) : jour PASSE (pas aujourd'hui,
+       pas futur -- inutile de proposer un rattrapage pour un jour qui
+       n'est pas encore termine, il a deja son propre acces via l'ecran
+       "Puzzle du jour") et jamais coche. Style distinct de "done" (voir
+       CSS .cal-day.missed) -- contour pointille plutot que fond plein,
+       pour ne pas laisser croire que le jour a ete resolu. */
+    const missed=!done&&!isFuture&&!isToday;
     const cls=["cal-day"];
     if(done)cls.push("done");
-    if(key===todayStr)cls.push("today");
+    if(missed)cls.push("missed");
+    if(isToday)cls.push("today");
     if(isFuture)cls.push("future");
-    const clickable=done&&!isFuture;
+    const clickable=(done||missed)&&!isFuture;
     html+='<div class="'+cls.join(" ")+'"'+(clickable?' data-date="'+key+'" role="button" tabindex="0" aria-label="'+key+'"':"")+">"+d+"</div>";
   }
   html+="</div>";
@@ -1287,6 +1355,10 @@ function renderCalendarGrid(containerId,monthOffset,opts){
   el.querySelectorAll(".cal-day.done[data-date]").forEach(cell=>{
     cell.addEventListener("click",()=>viewDailyArchive(cell.getAttribute("data-date")));
     cell.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();viewDailyArchive(cell.getAttribute("data-date"));}});
+  });
+  el.querySelectorAll(".cal-day.missed[data-date]").forEach(cell=>{
+    cell.addEventListener("click",()=>attemptDailyArchive(cell.getAttribute("data-date")));
+    cell.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();attemptDailyArchive(cell.getAttribute("data-date"));}});
   });
   if(nav){
     el.querySelectorAll(".cal-nav").forEach(btn=>{
@@ -1390,7 +1462,7 @@ function renderWeeklyRecap(){
      puzzles resolus. */
   if(!n&&!badgesThisWeek){el.classList.add("hide");el.textContent="";return;}
   const parts=[];
-  if(n)parts.push(t("{n} puzzles",{n:n}));
+  if(n)parts.push(t(n===1?"{n} puzzle":"{n} puzzles",{n:n}));
   /* Delta de notation sur la fenetre : rating actuel moins le rating juste
      AVANT le premier point de la fenetre (le point precedent le premier
      "recent", pas le premier point recent lui-meme -- sinon on rate le
@@ -1463,10 +1535,17 @@ function renderMistakeQueue(){
    passe par le chemin habituel (tryPuzzleMove -> finishPuzzle) et retire
    donc l'entree de la file normalement, sans code special. */
 function retryMistake(id){
+  /* Meme drapeau anti-course qu'attemptDailyArchive()/viewDailyArchive()
+     (voir solveScreenSuppressAutoload plus haut) : showSolveScreen("puzzles")
+     lancait sa propre chaine asynchrone (nextPuzzle(), exercice au hasard)
+     qui pouvait ecraser l'erreur qu'on voulait rejouer -- deuxieme endroit
+     deja en production touche par le meme defaut latent (item 1). */
+  solveScreenSuppressAutoload=true;
   if(typeof setMode==="function")setMode("puzzles",{screen:"puzzles"});
+  solveScreenSuppressAutoload=false;
   loadPuzzleById(id,p=>{
     if(!p)return;
-    puzzle=p;puzzle.daily=false;
+    puzzle=p;puzzle.daily=false;puzzle.dailyCatchupKey=null;
     loadPuzzle();
     if(typeof focusBoard==="function")focusBoard();
   });
@@ -1739,8 +1818,18 @@ function onPuzzleResult(won){
   }
   /* bumpStreak() ne s'appelle plus ici depuis le 2026-09-03 : la serie de
      jours est desormais strictement liee au Puzzle du jour (voir
-     finishPuzzle(), ui.js), pas a n'importe quel exercice reussi. */
-  updateRating(puzzle.level,won&&puzzleTries===0);
+     finishPuzzle(), ui.js), pas a n'importe quel exercice reussi.
+     Symetriquement : la notation (ELO) ne doit bouger QUE par la
+     resolution classique (l'echelle de niveaux de l'ecran "Puzzles"),
+     jamais par le Puzzle du jour (puzzle.daily, y compris un rattrapage
+     via attemptDailyArchive -- meme drapeau) ni par Sprint/Coordonnees
+     (deja exclus plus haut). Chaque categorie du menu a sa propre mesure
+     de progres (niveau/ELO, serie de jours, meilleur score, record de
+     coups) ; avant cette correction, resoudre UNIQUEMENT le puzzle du
+     jour, jour apres jour, faisait quand meme progresser le classement
+     sans jamais toucher a l'echelle de niveaux -- incoherent avec
+     l'affichage "Niveau {n}" juste a cote, qui ne bougeait pas lui. */
+  if(!puzzle.daily)updateRating(puzzle.level,won&&puzzleTries===0);
   saveProg();renderExtraStats();
   return false;
 }
@@ -1953,10 +2042,18 @@ setMode=function(m,opts){
 let rushArmTimer=null;
 function desarmerRush(){
   const b=$("btnGoRush"); if(!b)return;
+  const enCours=!!(typeof rush!=="undefined"&&rush);
   b.classList.remove("armed");
-  b.textContent=(typeof rush!=="undefined"&&rush)?t("Give up the Sprint"):t("Start Chang Sprint");
-  b.classList.toggle("danger",!!(typeof rush!=="undefined"&&rush));
-  b.classList.toggle("primary",!(typeof rush!=="undefined"&&rush));
+  b.textContent=enCours?t("Give up the Sprint"):t("Start Chang Sprint");
+  b.classList.toggle("danger",enCours);
+  b.classList.toggle("primary",!enCours);
+  /* Item 5 : visible seulement pendant un sprint actif (ou son role
+     redevient "abandonner"). Hors sprint, la carte du menu emmene deja
+     directement vers l'ecran "Ready" (beginRushFlow) -- ce bouton en
+     double, sous le panneau, n'a plus rien a faire tant que rien n'est
+     lance. "Record personnel" (rushBestTrain, hors-sprint) n'est pas
+     concerne, il reste toujours affiche. */
+  b.classList.toggle("hide",!enCours);
   if(rushArmTimer){clearTimeout(rushArmTimer);rushArmTimer=null;}
 }
 /* Extrait le 2026-09-03 : ce bloc etait uniquement dans le clic de
@@ -2059,7 +2156,11 @@ function rushRestore(){
 $("tab-watch").onclick=()=>{setMode("watch");goTop();};
 if($("tab-explore"))$("tab-explore").onclick=()=>{setMode("explore");goTop();};
 if($("calFullLink"))$("calFullLink").onclick=(e)=>{e.preventDefault();setMode("calendar");goTop();};
-if($("calBackLink"))$("calBackLink").onclick=(e)=>{e.preventDefault();setMode("home");goTop();};
+/* "Retour a ta progression" (item 2) : le seul point d'entree vers le
+   calendrier complet est "Voir le calendrier complet" (calFullLink),
+   dans l'ecran "Puzzle du jour" (voir juste au-dessus) -- le retour doit y
+   ramener, pas a l'accueil general dont ce lien n'est jamais parti. */
+if($("calBackLink"))$("calBackLink").onclick=(e)=>{e.preventDefault();setMode("puzzles",{screen:"daily"});goTop();};
 /* Les deux liens ouvrent le meme panneau : sans cible, "Confidentialite"
    amenait sur les mentions legales. On amene chacun a sa propre section. */
 /* Les pages de contenu renvoient vers /#legal et /#privacy : ces panneaux
@@ -2216,7 +2317,13 @@ function showReady(tcTxt){
   $("readyStart").textContent=t("Start the game");
   $("readySettings").textContent=t("Change settings");
   b.classList.remove("hide");
-  const s=$("status"); if(s)s.textContent=t("Press start when you are ready.");
+  /* Cite desormais le vrai libelle du bouton juste au-dessus (texte) :
+     "Commencer" seul ne correspondait a aucun bouton reel de cet ecran,
+     qui affiche "Commencer la partie" (readyStart.textContent, ligne
+     precedente) -- ce statut n'est utilise que pour Jouer (voir grep, un
+     seul site d'appel), donc pas de risque de desynchronisation avec un
+     autre libelle de bouton partage ailleurs (Sprint dit juste "Start"). */
+  const s=$("status"); if(s)s.textContent=t("Press \u201cStart the game\u201d when you are ready.");
   try{$("readyStart").focus({preventScroll:true});}catch(e){try{$("readyStart").focus();}catch(e2){}}
 }
 function hideReady(){

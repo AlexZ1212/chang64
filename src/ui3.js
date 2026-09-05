@@ -605,6 +605,16 @@ function refreshCurrentMode(){
   else if(mode==="legal")renderLegal();
   syncTC();renderExplore();renderHistory();
   renderProgress();renderExtraStats();
+  /* Sous-titres des 5 tuiles du menu Resoudre (Niveau, À faire, Record...) :
+     composes en JS par renderSolveMenu() (ui2.js), donc hors d'applyI18n
+     qui ne retraduit que le texte statique du HTML. Sans cet appel, basculer
+     la langue pendant que ce menu est affiche laissait ces sous-titres dans
+     l'ancienne langue -- le seul appel existant a renderSolveMenu() se
+     trouve dans showSolveScreen("menu"), jamais rejoue ici. Appel
+     inconditionnel comme les autres lignes ci-dessus (renderHistory etc.) :
+     sans cout reel puisque set() ne touche que des elements deja dans le
+     DOM, visibles ou non. */
+  if(typeof renderSolveMenu==="function")renderSolveMenu();
   shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);
   const n=$("tcNote"); if(n&&TC_NOTES[tcCat])n.textContent=t(TC_NOTES[tcCat]);
   renderDailyChips();
@@ -1321,10 +1331,7 @@ function renderAnalyseNav(){
   }
   el.innerHTML=h;
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>analyseGoto(+sp.dataset.ply);});
-  const curEl=el.querySelector(".cur");
-  if(curEl&&typeof curEl.scrollIntoView==="function"){
-    try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
-  }
+  if(typeof recenterNavChip==="function")recenterNavChip(el);
   if(typeof updateNavScrollHint==="function")updateNavScrollHint();
 }
 /* Interroge Stockfish (avec repli sur le moteur integre, comme partout

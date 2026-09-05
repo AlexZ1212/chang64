@@ -83,7 +83,25 @@ const EXPLORE=[
   {en:["/glossary/","Glossary","Forks, pins, zugzwang"],fr:["/fr/lexique/","Lexique","Fourchettes, clouages, zugzwang"]},
   {en:["/endgames/","Endgames","The five you must know"],fr:["/fr/finales/","Finales","Les cinq à connaître"]},
   {en:["/traps/","Opening traps","Scholar's, Legal's, Fried Liver"],fr:["/fr/pieges/","Pièges d'ouverture","Berger, Légal, Fegatello"]},
-  {en:["/puzzles/","Puzzle library","__NP__ verified positions"],fr:["/fr/exercices/","Bibliothèque d'exercices","__NP__ positions vérifiées"]}
+  /* "10 motifs, 3 exemples chacun" plutot que "__NP__ positions verifiees"
+     (2026-09-04) : cette tuile ne mene PAS a un parcours des 51619
+     positions de la banque (approche abandonnee a cette echelle, voir la
+     note dans content.js pres de THEME10) mais a une page de 10 motifs
+     tactiques avec 3 exemples expliques chacun -- le grand nombre brut
+     annoncait donc un contenu different de ce qui suit reellement le clic.
+     Longueur calibree sur les autres sous-titres de ce bloc (24 a 33
+     caracteres, ex. "Fourchettes, clouages, zugzwang") pour ne pas
+     deborder sur deux lignes et desequilibrer la hauteur des tuiles
+     voisines dans la meme rangee de la grille. */
+  /* Titre aligne sur celui de la page elle-meme (2026-09-04, suite a la
+     remarque d'Alexandre sur le libelle de nav des pages statiques,
+     build_site.js/SECTIONS) : "Bibliotheque d'exercices"/"Puzzle library"
+     ne correspondait deja plus a ce que la page dit d'elle-meme
+     ("Bibliotheque d'exemples tactiques"/"Tactics example library", voir
+     content.js) -- meme mot ("exercices") que celui qu'on vient de retirer
+     du menu de navigation, pour la meme raison : ce n'est pas une liste
+     d'exercices a resoudre. */
+  {en:["/puzzles/","Tactics example library","10 patterns, 3 examples each"],fr:["/fr/exercices/","Bibliothèque d'exemples tactiques","10 motifs, 3 exemples chacun"]}
 ];
 function renderExplore(){
   const box=$("exploreLinks"); if(!box)return;
@@ -222,13 +240,59 @@ function renderNavStrip(at){
   }
   el.innerHTML=h;
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
-  /* Garde le coup courant visible dans le bandeau sans faire defiler toute
-     la page (block:"nearest" plutot que "center" par defaut). */
-  const curEl=el.querySelector(".cur");
-  if(curEl&&typeof curEl.scrollIntoView==="function"){
-    try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
-  }
+  recenterNavChip(el);
   updateNavScrollHint();
+}
+/* Etat partage du defilement manuel du bandeau de coups (2026-09-04,
+   demande d'Alexandre) : scroller/glisser #navScroll a la main doit mettre
+   a jour l'echiquier sur la PREMIERE position que le bandeau affiche
+   desormais, sans attendre un clic sur une puce precise. Deux soucis a
+   eviter avec une simple ecoute de "scroll" :
+   1. renderNavStrip()/renderAnalyseNav() recentrent deja la puce courante
+      au clic ou au clavier (scrollIntoView) -- sans garde, ce recentrage
+      programme declencherait a son tour la synchro, qui rappellerait
+      gotoPly(), qui rappellerait renderNavStrip(), qui recentrerait a
+      nouveau : boucle. navScrollSuppressed coupe la synchro pendant cette
+      animation-la precisement (levee au scrollend, ou apres un delai de
+      repli si le navigateur ne le supporte pas).
+   2. Symetriquement, synchroniser depuis un scroll manuel ne doit PAS
+      relancer le recentrage automatique : l'utilisateur vient de placer le
+      bandeau exactement ou il le voulait, le repositionner de force sous
+      lui annulerait son propre geste. navSyncFromScroll indique a
+      renderNavStrip()/renderAnalyseNav() de sauter cette etape, une fois. */
+let navScrollSuppressed=false;
+let navSyncFromScroll=false;
+let navScrollSyncTimer=null;
+/* Premiere puce (au moins partiellement) visible depuis le bord gauche du
+   bandeau -- "la premiere position affichee par la barre", telle que
+   demandee. */
+function firstVisibleNavPly(el){
+  const chips=el.querySelectorAll("[data-ply]");
+  const left=el.getBoundingClientRect().left;
+  for(const c of chips){
+    if(c.getBoundingClientRect().right>left+4)return +c.dataset.ply;
+  }
+  return null;
+}
+function handleNavScroll(){
+  updateNavScrollHint();
+  if(navScrollSuppressed)return;
+  clearTimeout(navScrollSyncTimer);
+  /* Attend un court silence apres le dernier evenement de scroll plutot que
+     de suivre chaque tick : recalculer la position (rebuildTo un coup par
+     coup) a chaque pixel de defilement serait autant de travail inutile
+     pendant un geste encore en cours. */
+  navScrollSyncTimer=setTimeout(()=>{
+    const el=$("navScroll"); if(!el)return;
+    const ply=firstVisibleNavPly(el); if(ply===null)return;
+    if(mode==="play"){
+      const at=reviewPly===null?sanList.length:reviewPly;
+      if(ply!==at){navSyncFromScroll=true;gotoPly(ply);}
+    }else if(mode==="edit"&&typeof analyseGoto==="function"){
+      const at=analysePly===null?sanList.length:analysePly;
+      if(ply!==at){navSyncFromScroll=true;analyseGoto(ply);}
+    }
+  },150);
 }
 /* Meme indice de defilement que la barre d'onglets (voir updateTabsScrollHint
    dans ui3.js) : degrade + chevron aux bords de #navScroll, visibles
@@ -239,9 +303,50 @@ function updateNavScrollHint(){
   const el=$("navScroll"); if(!el)return;
   el.classList.toggle("sl",el.scrollLeft>2);
   el.classList.toggle("sr",el.scrollLeft<el.scrollWidth-el.clientWidth-2);
-  el.onscroll=updateNavScrollHint;
+  el.onscroll=handleNavScroll;
+}
+/* Centre la puce courante dans le bandeau, sauf juste apres une synchro
+   partie depuis un defilement manuel (voir plus haut) : deplacer le
+   bandeau sous les doigts de la personne qui vient tout juste de le
+   positionner elle-meme annulerait son geste. Pose navScrollSuppressed
+   pendant l'animation pour eviter la boucle de rappel decrite plus haut. */
+function recenterNavChip(el){
+  if(navSyncFromScroll){navSyncFromScroll=false;return;}
+  const curEl=el.querySelector(".cur");
+  if(!curEl||typeof curEl.scrollIntoView!=="function")return;
+  navScrollSuppressed=true;
+  try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
+  if("onscrollend" in el)el.addEventListener("scrollend",()=>{navScrollSuppressed=false;},{once:true});
+  else setTimeout(()=>{navScrollSuppressed=false;},400);
+}
+/* Meme mecanique, pour les rangees de pastilles ✓/✗ (bilan de Chang Sprint
+   #rushHistory, et #mistakeGrid dans "Exercices a revoir") : element pris en
+   parametre plutot qu'un id fixe comme updateNavScrollHint ci-dessus,
+   puisqu'il y a ici deux rangees distinctes a couvrir avec la meme fonction. */
+function updateRushHistoryScrollHint(el){
+  if(!el)return;
+  el.classList.toggle("sl",el.scrollLeft>2);
+  el.classList.toggle("sr",el.scrollLeft<el.scrollWidth-el.clientWidth-2);
+  el.onscroll=()=>updateRushHistoryScrollHint(el);
 }
 const TAGS={blunder:"??",mistake:"?",inacc:"?!"};
+/* Fait defiler une feuille de partie (#sheet ou #amiSheet) pour amener la
+   ligne du coup courant en haut de la zone visible, plutot qu'en bas
+   (2026-09-04, signale par Alexandre) : "en bas" etait correct tant qu'on ne
+   faisait QUE jouer (le dernier coup EST la derniere ligne), mais faux des
+   qu'on revoit l'historique via gotoPly() (fleches du clavier/bandeau de
+   coups, mode Jouer) -- le plateau changeait de position mais la feuille
+   restait bloquee tout en bas, sur les DERNIERS coups plutot que celui
+   affiche a l'ecran. Calcule via getBoundingClientRect() plutot que
+   offsetTop : correct quelle que soit la chaine d'ancetres positionnes,
+   sans dependre de la structure DOM autour de la feuille. rowEl absent
+   (revue de la position de depart, avant le premier coup) -> haut de la
+   feuille, deja "le coup courant" par convention dans ce cas. */
+function scrollSheetToCurrent(el,rowEl){
+  if(!rowEl){el.scrollTop=0;return;}
+  const target=rowEl.getBoundingClientRect().top-el.getBoundingClientRect().top+el.scrollTop;
+  el.scrollTop=Math.max(0,target);
+}
 function renderSheetPlay(){
   const el=$("sheet");
   if(!sanList.length){el.innerHTML='<div class="sheet-empty">'+t("No moves yet")+'</div>';renderNav();return;}
@@ -262,10 +367,18 @@ function renderSheetPlay(){
   el.querySelectorAll("[data-ply]").forEach(sp=>{
     sp.onclick=()=>gotoPly(+sp.dataset.ply);
   });
-  el.scrollTop=el.scrollHeight;
+  const viewEl=el.querySelector(".view");
+  scrollSheetToCurrent(el,viewEl?viewEl.closest(".sheet-row"):null);
   renderNav();
 }
 let resultDismissed=false;
+/* Vrai uniquement entre un rushEnd()/reouverture du bilan (btnRushSummary)
+   et la fermeture du bandeau qui suit : distingue "on vient de fermer un
+   Chang Sprint" de toute autre fermeture de #resultBanner (fin de partie
+   normale via renderResult, ou Coordonnees qui partage aussi showFin()).
+   Sert uniquement a decider si btnRushAgain doit apparaitre au clic sur
+   "Fermer" -- voir plus bas. */
+let finWasRushSprint=false;
 function renderResult(show){
   const b=$("resultBanner"); if(!b)return;
   if(show&&resultInfo){
@@ -306,6 +419,14 @@ $("resultClose").onclick=()=>{
   resultDismissed=true;
   $("resultBanner").className="result hide";
   finAction=null;
+  /* btnRushAgain (voir template.html, pres d'exStatus) : discret, et ne
+     survit qu'a CETTE fermeture-ci -- masque a nouveau des qu'un exercice
+     normal se charge (loadPuzzle(), ui.js), donc jamais un bouton qui
+     traine en permanence dans l'onglet Exercices. */
+  if(finWasRushSprint){
+    const ba=$("btnRushAgain"); if(ba)ba.classList.remove("hide");
+  }
+  finWasRushSprint=false;
 };
 /* Bandeau de fin generique, reutilise pour Chang Sprint et les coordonnees.
    Le message ne vivait que dans la barre de statut, facile a manquer, et le
@@ -315,6 +436,13 @@ let finAction=null;
 function showFin(titre,sousTitre,libelleRejouer,action){
   const b=$("resultBanner"); if(!b)return;
   finAction=action||null;
+  /* Reset par defaut a chaque appel : showFin() est partagee par Chang
+     Sprint (rushEnd/btnRushSummary, qui reposent ce drapeau a true juste
+     apres) et les Coordonnees (stopCoord, ui3.js, qui ne le fait jamais).
+     Sans ce reset ici, fermer un bilan de Coordonnees juste apres avoir
+     ferme un Chang Sprint plus tot dans la session proposerait a tort de
+     relancer un sprint. */
+  finWasRushSprint=false;
   $("resultTitle").textContent=titre;
   $("resultSub").textContent=sousTitre;
   /* Generique aux fins de partie normales : la rangee de bilan du sprint
@@ -1528,6 +1656,7 @@ function renderMistakeQueue(){
     box.appendChild(b);
   });
   sec.classList.remove("hide");
+  updateRushHistoryScrollHint(box);
 }
 /* Recharge l'exercice rate EN MODE TENTATIVE normal (pas loadAndRevealSolution,
    qui ne fait que rejouer et montrer la solution) -- "rejouer ce qu'on a
@@ -1681,6 +1810,10 @@ function rushEnd(why){
     if(typeof setMode==="function")setMode("train");
     startRush();
   });
+  /* Apres showFin() : showFin() remet ce drapeau a false a chaque appel
+     (voir renderResult), donc il faut le reposer a true ICI, une fois
+     qu'on sait vraiment qu'il s'agit d'une fin de Chang Sprint. */
+  finWasRushSprint=true;
   renderRushHistory(lastRushHistory);
   const st=$("exStatus");st.className="status "+(best?"win":"");
   st.textContent=best?t("{why} Score: {score}, a new personal best.",{why:why,score:score}):t("{why} Score: {score} (best: {best}).",{why:why,score:score,best:prog.rushBest});
@@ -1709,6 +1842,7 @@ function renderRushHistory(history){
   });
   box.classList.remove("hide");
   if(note){note.textContent=t("Tap ✓ or ✗ to see how it was solved.");note.classList.remove("hide");}
+  updateRushHistoryScrollHint(box);
 }
 /* Charge un exercice deja joue avec sa solution posee sur l'echiquier et
    l'explication affichee, sans repasser par une tentative. */
@@ -1803,7 +1937,18 @@ if($("btnRushSummary"))$("btnRushSummary").onclick=()=>{
     if(typeof setMode==="function")setMode("train");
     startRush();
   });
+  finWasRushSprint=true;
   renderRushHistory(lastRushHistory);
+};
+/* Meme action que "Play again" dans le bandeau de fin (voir rushEnd) :
+   relance directement, sans repasser par le menu Resoudre ni l'ecran
+   "Ready" -- l'intention est deja claire, on vient de fermer un sprint et
+   de dire qu'on veut en relancer un. */
+if($("btnRushAgain"))$("btnRushAgain").onclick=()=>{
+  $("btnRushAgain").classList.add("hide");
+  moveExPanelToRush();
+  if(typeof setMode==="function")setMode("train");
+  startRush();
 };
 function onPuzzleResult(won){
   /* Pendant un sprint, rien ne doit toucher a la progression : ce n'est pas
@@ -2055,6 +2200,14 @@ function desarmerRush(){
      concerne, il reste toujours affiche. */
   b.classList.toggle("hide",!enCours);
   if(rushArmTimer){clearTimeout(rushArmTimer);rushArmTimer=null;}
+  /* rushLauncher lui-meme (2026-09-04) : vide pendant l'ecran "Ready" (voir
+     beginRushFlow, qui le masque), le cadre disparait avec son contenu
+     plutot que de rester vide -- redevient legitime des qu'un sprint
+     demarre pour de bon (b, juste au-dessus, devient "Abandonner") ou que
+     rush-on est retire (retour a l'etat normal hors sprint, ou eyebrow et
+     "Personal best" redeviennent visibles par eux-memes). */
+  const rl=$("rushLauncher");
+  if(rl)rl.classList.toggle("hide",document.body.classList.contains("rush-on")&&!enCours);
 }
 /* Extrait le 2026-09-03 : ce bloc etait uniquement dans le clic de
    btnGoRush (bouton "Start Chang Sprint" du panneau Defis). Avec le menu a
@@ -2070,9 +2223,39 @@ function beginRushFlow(){
   /* Si Defis est visite avant Exercices, aucun exercice n'a jamais ete
      charge : exPanel affichait alors ses valeurs brutes du HTML ("Back-rank
      mate", "Loading…", code vide) sous l'ecran "Ready", au lieu d'un vrai
-     exercice. */
-  if(!puzzle&&typeof nextPuzzle==="function")nextPuzzle();
+     exercice. Meme chose si un exercice VIENT d'etre resolu dans Resoudre
+     juste avant de cliquer la carte Chang Sprint (puzzle non nul mais
+     puzzleDone=true) : exStatus ("Bien joue ! (+n rating)") et la position
+     deja jouee restaient visibles sous l'ecran "Ready", puisque seul
+     exExplain/exTheme/exQuest sont masques par hors-sprint -- exStatus et
+     le plateau ne le sont pas. Recharger un exercice frais (non resolu)
+     dans les deux cas dissipe ce residu ; le VRAI premier exercice du
+     sprint est de toute facon charge separement par rushNext() (ui2.js)
+     au clic sur "Commencer", cet appel-ci ne sert qu'a l'aperçu affiche
+     avant le lancement. */
+  if((!puzzle||puzzleDone)&&typeof nextPuzzle==="function")nextPuzzle();
   moveExPanelToRush();
+  /* exPanel n'a pour l'instant plus rien a montrer : tout son contenu est
+     soit hors-sprint (masque des que rush-on est actif, pose juste plus
+     bas), soit le statut/code de l'exercice-apercu ci-dessus, sans rapport
+     avec le sprint qui va reellement commencer (2026-09-04). Une boite
+     vide (cadre + padding, sans rien dedans) sous l'ecran "Ready" n'apporte
+     rien : masquee ici, elle redevient legitime des que loadPuzzle()
+     (ui.js) charge un vrai exercice -- le premier exercice reel du sprint
+     y compris, via rushNext() au clic sur "Commencer". */
+  const ep=$("exPanel"); if(ep)ep.classList.add("hide");
+  /* btnRushAgain (rushLauncher, template.html) : si on relance un sprint
+     par un autre chemin que ce bouton lui-meme (la carte du menu, par
+     exemple), il doit disparaitre comme si on l'avait clique -- jamais
+     laisse affiche pendant qu'un sprint tourne a nouveau. */
+  const bra=$("btnRushAgain");if(bra)bra.classList.add("hide");
+  /* rushLauncher lui-meme : vide au meme instant, pour la meme raison --
+     eyebrow/"Personal best" sont hors-sprint (masques par rush-on juste
+     plus bas), et btnGoRush ne redevient visible qu'une fois le sprint
+     REELLEMENT lance (desarmerRush(), plus bas dans ce fichier, qui leve
+     ce masquage des que "rush" existe). Un cadre vide de plus, evite de la
+     meme facon. */
+  const rl=$("rushLauncher"); if(rl)rl.classList.add("hide");
   /* Sans ceci, la vue reduite du sprint ne s'activait qu'au clic sur
      "Start" dans l'ecran "Ready when you are" : en attendant, l'ecran
      "Ready" (qui ne recouvre que l'echiquier) laissait voir l'enonce

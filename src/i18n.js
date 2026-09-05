@@ -67,7 +67,7 @@ const FR={
 "Puzzles you've gotten wrong, from any mode. Tap one to try it again. Each success spaces it out further before it comes back. Solve it enough times and it drops off this list for good.":"Des exercices ratés, tous modes confondus. Touche-en un pour le retenter. Chaque réussite espace un peu plus son retour. Assez de réussites et il disparaît de cette liste pour de bon.",
 "Solve a few puzzles to see your progress here.":"Résous quelques exercices pour voir ta progression ici.",
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Regarder","Solve":"Résoudre","Invite":"Inviter",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Play Chang Sprint again":"Relancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Regarder","Solve":"Résoudre","Invite":"Inviter",
 "Loading puzzles…":"Chargement des exercices…","Couldn't load puzzles. Check your connection and try again.":"Impossible de charger les exercices. Vérifie ta connexion et réessaie.",
 "Quiet move":"Coup silencieux","Mate in three":"Mat en trois coups",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
@@ -83,6 +83,8 @@ const FR={
  "Chaque coup produit un lien. Tu l'envoies par WhatsApp ou Messenger, ton ami te renvoie le sien. Rien à installer.",
 "Challenge a friend →":"Défier un ami →",
 "Puzzle level":"Niveau","Solved":"Résolus","Best streak":"Record","Puzzle rating":"Classement","Day streak":"Jours d'affilée",
+"My progress":"Ma progression",
+"This reflects classic puzzle solving only, the level ladder in Solve. Puzzle of the day, Chang Sprint and Coordinates each track their own separate record.":"Ceci ne reflète que la résolution classique d'exercices, l'échelle de niveaux de Résoudre. Le Puzzle du jour, le Chang Sprint et les Coordonnées ont chacun leur propre record séparé.",
 
 /* --- partie --- */
 "Computer":"Ordinateur","You":"Toi","Your game":"Ta partie","Settings":"Réglages",
@@ -271,8 +273,8 @@ const FR={
 /* --- entre amis --- */
 "Each move produces a link. Send it, your friend plays, they send theirs back.":
  "Chaque coup produit un lien. Tu l'envoies, ton ami joue, il te renvoie le sien.",
-"Start a game.":"Commence une partie.","Choose your colour, then create a game.":"Choisis ta couleur, puis crée la partie.","Link to send":"Lien à envoyer","Pace":"Rythme",
-"Saved in this browser: you can close the tab and come back to it.":"Sauvegardé dans ce navigateur : tu peux fermer l'onglet et y revenir plus tard.",
+"Start a game.":"Commence une partie.","Choose your colour, then create a game.":"Choisis ta couleur, puis crée la partie.","My position":"Ma position","Pace":"Rythme",
+"This link carries the whole game by itself, no server or account behind it. Each move creates a new one to pass along.":"Ce lien porte toute la partie à lui seul, sans serveur ni compte derrière. Chaque coup en crée un nouveau à transmettre.",
 "Create game":"Créer la partie","Undo my move":"Annuler mon coup","Invite to chang64":"Inviter sur chang64",
 "Your move, then send the link.":"À toi de jouer, puis envoie le lien.",
 "Move saved. Send this link to your friend.":"Coup enregistré. Envoie ce lien à ton ami.",
@@ -344,6 +346,7 @@ const FR={
 
 /* --- divers --- */
 "Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier","King":"Roi","Pawn":"Pion",
+"Choose your colour":"Choisis ta couleur",
 "chang64 home":"Accueil chang64","First move":"Premier coup","Previous move":"Coup précédent",
 "Next move":"Coup suivant","Last move":"Dernier coup","PGN to import":"PGN à importer",
 "You win":"Tu gagnes","You lose":"Tu perds","Draw":"Partie nulle","Review":"Analyser","Dismiss":"Masquer",

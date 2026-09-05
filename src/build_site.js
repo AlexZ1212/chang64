@@ -199,9 +199,14 @@ const PIECE_SHAPES = (() => {
   return { p: j.pawn, n: j.knight, b: j.bishop, r: j.rook, q: j.queen, k: j.king };
 })();
 
-function boardSvg(fen, size) {
+/* flipped : oriente le diagramme du point de vue du camp au trait plutot que
+   toujours depuis les Blancs (2026-09-04, demande d'Alexandre sur les pages
+   Motifs) -- range 0 devient la 1ere rangee et les colonnes se lisent h->a
+   au lieu de a->h, l'inverse exact d'un retournement d'echiquier normal. */
+function boardSvg(fen, size, flipped) {
   const S = size / 8;
-  const rows = fen.split(" ")[0].split("/");
+  let rows = fen.split(" ")[0].split("/");
+  if (flipped) rows = rows.slice().reverse().map(row => row.split("").reverse().join(""));
   let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="Chess position">`;
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
     svg += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? "#4B6B63" : "#EDE4D2"}"/>`;
@@ -840,8 +845,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a:hover{color:var(--chalk)}
 
 .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
-.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
-.footnav a:hover{text-decoration:underline}
+/* Aligne l'aspect sur les liens de pied de page de l'application a fond
+   noir (.linkbtn, template.html : souligne, poids normal, 11.5px), la
+   couleur restant seule adaptee au fond clair (chalk au lieu de sage,
+   plus lisible ici). Avant (2026-09-04) : sans soulignement, graisse 500
+   et taille heritee du pied de page (13px) -- un aspect plus "bouton" que
+   les liens sobres et discrets du reste du site. */
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px}
+.footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}`;
 
@@ -877,14 +888,20 @@ function brandMark() {
 app = app.split("/*__BRANDMARK__*/").join(brandMark());
 
 /* Liens vers toutes les sections, dans la langue de la page. La page en cours
-   est signalee et non cliquable : un lien vers soi-meme n'apporte rien. */
+   est signalee et non cliquable : un lien vers soi-meme n'apporte rien.
+   "Motifs"/"Patterns" plutot que "Exercices"/"Puzzles" (2026-09-04, remarque
+   d'Alexandre) : la page elle-meme n'a jamais ete une liste d'exercices a
+   resoudre mais 10 motifs tactiques avec 3 exemples expliques chacun -- son
+   propre chapeau d'intro dit deja "Dix motifs tactiques", seul ce libelle de
+   nav restait sur l'ancien mot. Chemin (/fr/exercices/, /puzzles/) inchange :
+   seul le texte affiche change, pas l'URL. */
 const SECTIONS = {
   en: [
-    ["/openings/", "Openings"], ["/puzzles/", "Puzzles"], ["/learn/", "Rules"],
+    ["/openings/", "Openings"], ["/puzzles/", "Patterns"], ["/learn/", "Rules"],
     ["/endgames/", "Endgames"], ["/traps/", "Opening traps"], ["/glossary/", "Glossary"]
   ],
   fr: [
-    ["/fr/ouvertures/", "Ouvertures"], ["/fr/exercices/", "Exercices"], ["/fr/apprendre/", "Apprendre"],
+    ["/fr/ouvertures/", "Ouvertures"], ["/fr/exercices/", "Motifs"], ["/fr/apprendre/", "Apprendre"],
     ["/fr/finales/", "Finales"], ["/fr/pieges/", "Pièges d'ouverture"], ["/fr/lexique/", "Lexique"]
   ]
 };
@@ -1175,7 +1192,7 @@ ${!/id="grille"/.test(body) ? "" : `
 
 const L = {
   en: { dir: "openings", index: "/openings/", label: "English",
-        nav: ["Play", "Openings", "Puzzles"], all: "All openings", play: "Play this opening",
+        nav: ["Play", "Openings", "Patterns"], all: "All openings", play: "Play this opening",
         namedLines: "Named lines", variation: "Variation", movesHead: "Moves",
         posAfter: "Position after", showing: (a, b) => `Showing the ${a} shortest of ${b} known lines.`,
         listIntro: (n, f) => `This page lists ${n} named line${n > 1 ? "s" : ""} in the ${f}, taken from the open Lichess opening database. You can play any of them against the built-in engine and have the game reviewed move by move afterwards.`,
@@ -1185,7 +1202,7 @@ const L = {
         idxDesc: (a, b) => `A complete index of ${a} chess opening families and ${b} named lines, each with its moves, ECO code and a playable board.`,
         foot: "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project." },
   fr: { dir: "fr/ouvertures", index: "/fr/ouvertures/", label: "Français",
-        nav: ["Jouer", "Ouvertures", "Exercices"], all: "Toutes les ouvertures", play: "Jouer cette ouverture",
+        nav: ["Jouer", "Ouvertures", "Motifs"], all: "Toutes les ouvertures", play: "Jouer cette ouverture",
         namedLines: "Variantes répertoriées", variation: "Variante", movesHead: "Coups",
         posAfter: "Position après", showing: (a, b) => `Les ${a} lignes les plus courtes sur ${b} répertoriées.`,
         listIntro: (n, f) => `Cette page recense ${n} ligne${n > 1 ? "s" : ""} répertoriée${n > 1 ? "s" : ""} dans la ${f}, d'après la base d'ouvertures libre de Lichess. Tu peux jouer chacune d'elles contre le moteur intégré, puis faire analyser la partie coup par coup.`,

@@ -59,8 +59,8 @@ module.exports = function (H) {
     fs.writeFileSync(`${OUT}/${dir}/${file}`, shell(title, desc, canonical, body, jsonld, lang, alts, altUrl));
     urls.push({ loc: canonical, pri: "0.6", alt: altUrl, lang });
   }
-  function diagram(fen, caption) {
-    return `<div class="diagram">${boardSvg(fen, 300)}${caption ? `<p style="font-size:12px;color:var(--sage);margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
+  function diagram(fen, caption, flipped) {
+    return `<div class="diagram">${boardSvg(fen, 300, flipped)}${caption ? `<p style="font-size:12px;color:var(--sage);margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
   }
   function sanLine(moves) {
     const g = new Game();
@@ -395,7 +395,71 @@ module.exports = function (H) {
      "Un coup qui cède du matériel tout en étant objectivement fort, souvent la seule façon de garder l'avantage ou de forcer le gain. Ce qui le rend brillant, c'est que céder du matériel n'a presque jamais l'air correct au premier regard.", "Deflection"],
     ["elo-rating", "le-classement-elo", "The Elo rating: what your number means", "Ce que veut dire ton classement Elo",
      "An Elo rating is a running estimate of skill built from one simple idea: each result nudges the number up or down by an amount that depends on how surprising it was. Beating someone much stronger moves it a lot; beating someone much weaker barely moves it at all. chang64 treats each puzzle level as an opponent of a fixed strength and updates your rating the same way after every attempt. Worth saying plainly: this number is a personal, relative tracker, not a certified skill measurement. Sites like Lichess calibrate their puzzle ratings against millions of real attempts from real players, cross-checked against each other; chang64 keeps no accounts and tracks nothing across players, by design, so there is no population to calibrate against. Your rating here is honest about your own progress over time. It isn't a claim that a given number equals the same strength on Lichess or in a FIDE-rated tournament. That doesn't make it meaningless: watching it rise still means exactly what it always has, that you're solving problems that used to be out of reach.",
-     "Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps. Ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.", ""]
+     "Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps. Ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.", ""],
+    /* Ajoute (2026-09-04, remarque d'Alexandre) : "ECO" apparait deja partout
+       sur les pages Ouvertures (titre, description, en-tete de tableau,
+       placeholder de recherche -- voir build_site.js) mais n'y est jamais
+       explique. theme:"" comme les autres entrees sans exemple lie
+       (inaccuracy, best-move, only-move) : ECO n'est pas un motif tactique
+       classable dans la banque d'exercices. */
+    ["eco-code", "code-eco", "ECO code", "Code ECO",
+     "Short for Encyclopaedia of Chess Openings, the letter-and-two-digit code (A00 to E99) that classifies every named opening by its early moves. chang64's own opening pages show one next to every family and variation, mostly to make searching and cross-referencing other databases easier.",
+     "Abréviation d'Encyclopaedia of Chess Openings, le code à une lettre et deux chiffres (A00 à E99) qui classe chaque ouverture répertoriée selon ses premiers coups. Les pages Ouvertures de chang64 en affichent un à côté de chaque famille et variante, surtout pour faciliter la recherche et le recoupement avec d'autres bases de données.", ""],
+    /* 15 entrees ajoutees (2026-09-04, choisies avec Alexandre) : motifs
+       tactiques absents jusqu'ici, structure de pions (aucune notion sur le
+       sujet n'existait), quelques concepts strategiques usuels, et les
+       resultats nuls/le pat -- deja cites en passant ailleurs sur le site
+       (la regle des 50 coups apparait dans la page finale fou+cavalier)
+       sans jamais etre expliques, meme lacune que le code ECO ci-dessus.
+       Aucune de ces notions ne correspond a un theme de la banque de
+       puzzles (voir la liste reelle des themes utilises) : theme:"" partout,
+       meme repli generique ("Jouer une partie") que inaccuracy/best-move/
+       only-move/elo-rating/eco-code. */
+    ["zwischenzug", "coup-intermediaire", "Zwischenzug (in-between move)", "Coup intermédiaire (zwischenzug)",
+     "A forcing move played before the expected reply to a threat, usually a check or a capture with its own threat attached. It works because the opponent must deal with the new problem first, often on worse terms than if you'd answered immediately.",
+     "Un coup fort intercalé avant de répondre à la menace attendue, en général un échec ou une prise qui pose elle-même un problème. Il fonctionne parce que l'adversaire doit d'abord régler ce nouveau souci, souvent dans de moins bonnes conditions que si tu avais répondu tout de suite.", ""],
+    ["overloading", "surcharge", "Overloading", "Surcharge",
+     "A piece is asked to guard two things at once and cannot cover both if attacked on either. Removing or distracting the overloaded piece from one duty wins whatever it was also protecting.",
+     "Une pièce doit garder deux choses à la fois et ne peut pas couvrir les deux si l'une des deux est attaquée. Éliminer ou détourner la pièce surchargée d'une de ses tâches fait tomber l'autre.", ""],
+    ["removing-the-defender", "elimination-du-defenseur", "Removing the defender", "Élimination du défenseur",
+     "Capturing or trading off the piece that guards a key square or piece, rather than forcing it away as in a deflection. Once the defender is gone, whatever it protected falls for free.",
+     "Prendre ou échanger la pièce qui garde une case ou une pièce clé, plutôt que de la forcer à partir comme dans une déviation. Une fois le défenseur supprimé, ce qu'il protégeait tombe gratuitement.", ""],
+    ["interference", "interference", "Interference", "Interférence",
+     "A piece is placed on the line between two enemy pieces, blocking a defence or a connection between them. The interposing piece is often left to be captured on purpose, since its job was only to get in the way for one move.",
+     "Une pièce se place sur la ligne entre deux pièces adverses, coupant une défense ou un lien entre elles. Cette pièce interposée est souvent sacrifiée volontairement : son seul rôle était de gêner le temps d'un coup.", ""],
+    ["windmill", "moulin", "Windmill", "Moulin",
+     "A repeating sequence of discovered check followed by a capture with the piece that moves, over and over, each cycle picking up more material. Once set up it is almost impossible to stop, since every reply is a forced response to check.",
+     "Une séquence répétée d'échec à la découverte suivi d'une prise par la pièce qui bouge, encore et encore, chaque cycle grignotant du matériel. Une fois lancé, il est presque impossible à arrêter puisque chaque réponse est forcée par l'échec.", ""],
+    ["isolated-pawn", "pion-isole", "Isolated pawn", "Pion isolé",
+     "A pawn with no friendly pawn on either neighbouring file to defend it. It often controls useful central squares in the middlegame but becomes a fixed target once the pieces come off in an endgame.",
+     "Un pion sans aucun pion ami sur les colonnes voisines pour le défendre. Il contrôle souvent des cases centrales utiles au milieu de partie, mais devient une cible fixe une fois les pièces échangées en finale.", ""],
+    ["doubled-pawns", "pions-doubles", "Doubled pawns", "Pions doublés",
+     "Two pawns of the same colour stacked on one file, usually the result of a capture. They defend each other less well than side-by-side pawns and one of them is often permanently unable to advance.",
+     "Deux pions de la même couleur empilés sur une colonne, en général après une prise. Ils se défendent moins bien que des pions côte à côte, et l'un des deux se retrouve souvent incapable d'avancer durablement.", ""],
+    ["backward-pawn", "pion-arriere", "Backward pawn", "Pion arriéré",
+     "A pawn that has fallen behind its neighbours and can no longer be safely advanced, because the square in front of it is controlled by an enemy pawn it cannot itself challenge. It usually sits on a half-open file, permanently exposed to attack.",
+     "Un pion resté en retard par rapport à ses voisins, qui ne peut plus avancer sans risque, car la case devant lui est contrôlée par un pion adverse qu'il ne peut pas défier lui-même. Il se retrouve en général sur une colonne semi-ouverte, exposé en permanence.", ""],
+    ["pawn-majority", "majorite-de-pions", "Pawn majority", "Majorité de pions",
+     "More pawns than the opponent on one side of the board, for example three against two on the queenside. Pushed forward in an endgame, a majority can create a passed pawn that the opponent has no pawn left to stop.",
+     "Plus de pions que l'adversaire d'un côté de l'échiquier, par exemple trois contre deux à l'aile dame. Poussée en finale, une majorité peut créer un pion passé qu'il ne reste plus aucun pion adverse pour arrêter.", ""],
+    ["outpost", "avant-poste", "Outpost", "Avant-poste",
+     "A square, usually in enemy territory, that can never be attacked by an enemy pawn because both neighbouring pawns are gone or fixed elsewhere. A knight parked there is often worth more than a bishop, since it can never be chased away.",
+     "Une case, en général en territoire adverse, qu'aucun pion ennemi ne pourra jamais attaquer parce que les deux pions voisins ont disparu ou sont fixés ailleurs. Un cavalier posté là vaut souvent plus qu'un fou, puisqu'il ne pourra jamais être délogé.", ""],
+    ["bishop-pair", "paire-de-fous", "Bishop pair", "Paire de fous",
+     "Owning both bishops while the opponent has traded one of theirs away. Together the two bishops cover every square on the board, a long-term advantage that tends to grow as the position opens up.",
+     "Posséder ses deux fous alors que l'adversaire en a déjà échangé un. Ensemble, les deux fous couvrent toutes les cases de l'échiquier, un avantage durable qui tend à grandir à mesure que la position s'ouvre.", ""],
+    ["prophylaxis", "prophylaxie", "Prophylaxis", "Prophylaxie",
+     "A move made to prevent an opponent's plan before it starts, rather than to further your own. Named by Aron Nimzowitsch, it is the habit of asking what the opponent wants to do next and denying it first.",
+     "Un coup joué pour empêcher un projet adverse avant même qu'il ne commence, plutôt que pour avancer le sien. Le terme vient d'Aron Nimzowitsch : c'est le réflexe de se demander ce que l'adversaire veut faire, et de le lui refuser en premier.", ""],
+    ["stalemate", "pat", "Stalemate", "Pat",
+     "The player to move has no legal move and is not in check. The game is an immediate draw, which makes stalemate the standard escape when losing: trap the enemy king with no checks and no moves left, and a lost position survives.",
+     "Le joueur au trait n'a aucun coup légal et n'est pas en échec. La partie est immédiatement nulle, ce qui fait du pat l'échappatoire classique quand on perd : enfermer le roi adverse sans échec ni coup possible, et une position perdue est sauvée.", ""],
+    ["fifty-move-rule", "regle-des-50-coups", "Fifty-move rule", "Règle des 50 coups",
+     "Either player can claim a draw if 50 moves pass, by both sides, without a pawn move or a capture. It exists to stop a player with no real winning method from shuffling pieces forever hoping for a mistake.",
+     "N'importe quel joueur peut réclamer la nulle si 50 coups s'écoulent, des deux côtés, sans coup de pion ni prise. Elle existe pour empêcher qu'un joueur sans méthode de gain réelle ne fasse traîner la partie indéfiniment en espérant une erreur.", ""],
+    ["threefold-repetition", "triple-repetition", "Threefold repetition", "Triple répétition",
+     "A draw can be claimed if the same position, with the same player to move, occurs three times in a game. It's the usual way a perpetual check is actually recorded as a result, rather than checking forever.",
+     "La nulle peut être réclamée si la même position, avec le même joueur au trait, survient trois fois dans une partie. C'est ainsi qu'un échec perpétuel se traduit concrètement en résultat, plutôt que de donner échec indéfiniment.", ""]
   ];
 
   const byTheme = {};
@@ -617,11 +681,24 @@ module.exports = function (H) {
         alt, canonical);
     }
     const t = lang === "fr" ? "Lexique des échecs : les termes qui comptent" : "Chess glossary: the terms that matter";
+    /* Nombre calcule plutot qu'ecrit en dur (2026-09-04) : "Vingt" ne
+       correspondait deja plus au compte reel (27, avant l'ajout du code ECO
+       ci-dessus) -- se resynchronise tout seul a chaque ajout ou retrait
+       d'entree, plutot que de se decaler silencieusement comme ici. */
     const lede = lang === "fr"
-      ? "Vingt notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique."
-      : "Twenty ideas explained in two sentences, each with a verified position and a puzzle to practise it.";
+      ? `${TERMS.length} notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.`
+      : `${TERMS.length} ideas explained in two sentences, each with a verified position and a puzzle to practise it.`;
+    /* Tri alphabetique par la langue de LA PAGE (2026-09-04, demande
+       d'Alexandre), pas par l'ordre de TERMS lui-meme : les titres FR et EN
+       ne partagent pas le meme ordre alphabetique (ex. "Pin" vs "Clouage"),
+       donc une seule copie triee ne peut jamais etre juste pour les deux
+       langues a la fois. On trie une COPIE juste avant l'affichage de cette
+       grille -- l'ordre de TERMS dans le fichier source, lui, reste libre
+       (les pages individuelles de chaque terme n'en dependent pas). */
+    const sortedTerms = TERMS.slice().sort((a, b) =>
+      (lang === "fr" ? a[3] : a[2]).localeCompare(lang === "fr" ? b[3] : b[2], lang));
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      TERMS.map(x => `<a class="tile" href="/${dir}/${lang === "fr" ? x[1] : x[0]}.html"><b>${esc(lang === "fr" ? x[3] : x[2])}</b><span>${esc((lang === "fr" ? x[5] : x[4]).slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
+      sortedTerms.map(x => `<a class="tile" href="/${dir}/${lang === "fr" ? x[1] : x[0]}.html"><b>${esc(lang === "fr" ? x[3] : x[2])}</b><span>${esc((lang === "fr" ? x[5] : x[4]).slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
@@ -792,7 +869,7 @@ module.exports = function (H) {
         const levelLabel = u.levels[p.level - 1];
         return `<section class="theme-bloc">
   <h2>${lang === "fr" ? "Exemple" : "Example"} ${i + 1} <span style="color:var(--sage);font-size:13px">(${esc(levelLabel)})</span></h2>
-  <div class="cols">${diagram(p.fen, u.sideToMove(sideLabel))}
+  <div class="cols">${diagram(p.fen, u.sideToMove(sideLabel), side === "b")}
   <div>
     <p>${esc(expl)}</p>
     <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">${u.solution}</summary>
@@ -818,8 +895,14 @@ ${blocks}
       ? `Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de ${puzzles.length} positions vérifiées par le moteur.`
       : `Ten tactical patterns, three worked examples for each, drawn from a bank of ${puzzles.length} engine-verified positions.`;
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
+      /* Plus de "3 exemples" repete sous chaque tuile (2026-09-04, remarque
+         d'Alexandre) : identique sur les 10, ca ne faisait que redire ce que
+         le chapeau d'intro juste au-dessus annonce deja une fois pour toutes
+         ("trois exemples expliques pour chacun"). Le nom du motif seul
+         suffit ici, contrairement aux tuiles de Finales ou Ouvertures dont
+         le sous-titre change reellement d'une tuile a l'autre. */
       THEME10.filter(th => examplesByTheme[th].length).map(th =>
-        `<a class="tile" href="/${dir}/${categorySlug(th, lang)}.html"><b>${esc(themeOf(th, lang))}</b><span>${lang === "fr" ? "3 exemples" : "3 examples"}</span></a>`
+        `<a class="tile" href="/${dir}/${categorySlug(th, lang)}.html"><b>${esc(themeOf(th, lang))}</b></a>`
       ).join("") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },

@@ -259,6 +259,14 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;align-items:center;
   justify-content:space-between;gap:8px;font-size:13.5px;color:var(--sage)}
 .startline .linkbtn{font-size:13.5px}
+/* homeStrip/homeStart vivent desormais dans un .panel (2026-09-04, "Ma
+   progression") : leur margin-bottom de 16px, pensee pour l'espacement dans
+   le flux de page ou ils vivaient seuls avant, s'ajouterait sinon au
+   padding-bottom du panneau (16px lui aussi) sans rien en face cote haut --
+   meme piege deja rencontre et corrige sur le bloc YouTube de Regarder. Les
+   deux n'etant utilises QUE dans ce panneau (aucune autre page ne les
+   reprend), le neutraliser ici ne touche rien d'autre. */
+#homeProgressPanel .strip,#homeProgressPanel .startline{margin-bottom:0}
 
 /* Sur telephone, l'objectif est que "Exercice suivant" reste atteignable
    sans defiler apres chaque exercice. On resserre donc ce qui separe
@@ -266,7 +274,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    minimale du statut. Rien n'est retire, seulement compacte. */
 @media(max-width:520px){
   #pane-puzzles .panel{padding:12px}
-  #pane-puzzles .theme{margin-bottom:6px}
+  #pane-puzzles .theme-row{margin-bottom:6px}
   #pane-puzzles .quest{font-size:16px;margin-bottom:2px}
   #pane-puzzles .status{min-height:0;padding:7px 10px}
   #pane-puzzles .btnrow{margin-top:8px!important}
@@ -409,7 +417,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    propre regle. */
 .clock{--pastille:13px;--pastille-gap:8px}
 .clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
-.clock .who>i.dark{background:#221D17;border-color:rgba(239,226,194,.5)}
+/* #221D17 remplace par #232B28 (2026-09-04) : cette pastille est censee
+   annoncer la couleur des pieces de qui joue, mais son marron ne
+   correspondait a rien -- #232B28 est le vrai remplissage des pieces
+   noires (voir PIECE_COLORS dans pieces_browser.js, deja repris tel quel
+   ligne 397 ci-dessous pour les pieces prises). La bordure claire reste
+   inchangee, elle assurait deja le contour visible sur fond tres sombre. */
+.clock .who>i.dark{background:#232B28;border-color:rgba(239,226,194,.5)}
 .clock time{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
 /* background en raccourci effacait le fond du bloc au lieu de le teinter :
    le laiton translucide se retrouvait pose sur le fond de page, plus sombre,
@@ -643,15 +657,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 
 /* ---------- puzzles ---------- */
 .quest{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;line-height:1.35;margin-bottom:4px}
-.theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(217,168,63,.4);padding:2px 8px;border-radius:999px;margin-bottom:10px}
+/* .theme-row regroupe la puce de theme et le bloc code+info (2026-09-04) :
+   un vrai gap de flex remplace les margin-left/margin-bottom individuels
+   qui creaient un decalage residuel quand le groupe passait a la ligne --
+   voir le commentaire dans le HTML, juste au-dessus de cette rangee. */
+.theme-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(217,168,63,.4);padding:2px 8px;border-radius:999px}
 /* Identifiant court de l'exercice : discret (mono, couleur sourde, pas de
    pastille) pour ne pas rivaliser avec le thème, mais toujours visible, y
    compris pendant Chang Sprint puisqu'il ne revele rien de la solution.
    user-select:all : un clic-glisser partiel selectionne le code entier,
    plus simple a copier tel quel pour un signalement. */
-.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage);border:1px solid rgba(151,164,157,.35);padding:2px 8px;border-radius:999px;margin-bottom:10px;user-select:all}
-.excode-wrap{display:inline-flex;align-items:center;margin-left:8px;margin-bottom:10px}
-.excode-wrap .excode{margin-left:0;margin-bottom:0}
+.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage);border:1px solid rgba(151,164,157,.35);padding:2px 8px;border-radius:999px;user-select:all}
+.excode-wrap{display:inline-flex;align-items:center}
+.excode-wrap .excode{margin-left:0}
 /* min-width:0 est indispensable, pas cosmetique. Les boutons sont en
    white-space:nowrap, donc la largeur minimale de la rangee vaut la somme de
    leurs textes. Comme .tabs est un element flexible de l'entete, son
@@ -758,12 +777,12 @@ header>*{min-width:0}
 .linkbox{width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--chalk);background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 10px;margin-bottom:10px}
 .linkbox:focus{outline:2px solid var(--brass);outline-offset:1px}
 .shareRow{display:flex;gap:8px;flex-wrap:wrap}
-.shareRow button{flex:1;min-width:88px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:8px;padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
+.shareRow button{flex:1;min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:5px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:8px;padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
 .shareRow button:hover{background:#33483e}
 .shareRow button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .shareRow button.wa{border-color:rgba(37,211,102,.45)}
 .shareRow button.msg{border-color:rgba(0,132,255,.45)}
-.shareRow button.fb{border-color:rgba(66,103,178,.5)}
+.shareRow button.tg{border-color:rgba(38,165,228,.5)}
 .shareRow button.native{background-color:var(--brass);border-color:var(--brass);color:#1b1508}
 /* 12.5px et non 11.5 : ce sont de vraies phrases explicatives, pas des
    etiquettes. En dessous de 12px, un texte destine a etre lu devient penible
@@ -784,7 +803,15 @@ header>*{min-width:0}
   font-family:Georgia,'Times New Roman',serif;line-height:1;cursor:pointer;
   vertical-align:middle;flex:none;padding:0}
 .info-tip:hover,.info-tip:focus-visible{color:var(--chalk);border-color:var(--sage)}
-.info-tip-pop{margin:8px 0 2px;padding:9px 11px;font-size:12.5px;line-height:1.5;
+/* margin-bottom:12px plutot que 2px (2026-09-04) : une fois l'infobulle
+   ouverte, le texte qui suit (sans rapport avec elle) collait directement
+   sous son cadre -- pas assez d'air pour lire les deux comme deux blocs
+   distincts. Meme valeur que #rushHistoryNote juste en dessous, deja
+   utilisee sur ce fichier pour le meme genre d'ecart "apres un bloc".
+   Regle unique et partagee par les ~19 infobulles du site (voir la classe
+   .info-tip-pop dans le HTML) : un seul changement les harmonise toutes,
+   pas la peine de reprendre chaque instance separement. */
+.info-tip-pop{margin:8px 0 12px;padding:9px 11px;font-size:12.5px;line-height:1.5;
   color:var(--sage);background:var(--raise);border:1px solid var(--rule);border-radius:var(--r)}
 .info-tip-pop.hide{display:none}
 /* .note seul n'a pas de marge basse : suffisant partout ailleurs, ou ce qui
@@ -855,7 +882,7 @@ header>*{min-width:0}
    qu'invente, pour rester coherent avec le reste du site. Rangee scrollable
    comme .sitenav : un sprint de trois minutes peut degager 20-30 exercices,
    largement plus qu'un ecran de telephone n'en affiche de front. */
-.rushHistory{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:4px 0 2px;-webkit-overflow-scrolling:touch}
+.rushHistory{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:4px 0 2px;-webkit-overflow-scrolling:touch;position:relative}
 .rushHistory::-webkit-scrollbar{display:none}
 .rushHistory button{
   flex:none;width:30px;height:30px;border-radius:6px;border:none;cursor:pointer;
@@ -864,6 +891,28 @@ header>*{min-width:0}
 .rushHistory button.win{background-color:var(--jade)}
 .rushHistory button.loss{background-color:var(--brick)}
 .rushHistory button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+/* Indice de defilement (2026-09-04) : meme degrade + chevron que .navscroll
+   (le bandeau de coups), jusqu'ici seulement promis par le commentaire
+   ci-dessus ("comme .sitenav") sans jamais avoir ete pose. Fond en
+   var(--slate) plutot que le border-radius/fond propre de .navscroll : cette
+   rangee-ci n'a pas de boite a elle, elle vit directement sur le fond du
+   panneau (.result-card ou .panel, tous deux --slate) qu'elle recouvre donc
+   fidelement en s'estompant. Visible uniquement quand il y a reellement plus
+   a voir dans ce sens (classes .sl/.sr, voir updateRushHistoryScrollHint,
+   ui2.js), jamais un degrade fantome sur une rangee assez courte pour tenir
+   entiere. */
+.rushHistory::before,.rushHistory::after{content:"";position:sticky;align-self:stretch;width:20px;
+  flex:none;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+  background-repeat:no-repeat,no-repeat;background-size:8px 8px,100% 100%}
+.rushHistory::before{left:0;order:-1;margin-right:-20px;
+  background-position:3px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to right,var(--slate) 38%,transparent)}
+.rushHistory::after{right:0;order:999;margin-left:-20px;
+  background-position:right 3px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
+    linear-gradient(to left,var(--slate) 38%,transparent)}
+.rushHistory.sl::before,.rushHistory.sr::after{opacity:1}
 .history-item .meta{min-width:0;flex:1}
 .history-item .meta b{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .history-item .meta span{display:block;font-size:11.5px;color:var(--sage)}
@@ -883,11 +932,14 @@ header>*{min-width:0}
 .plyinfo.best{border-left-color:var(--jade)}
 .opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(217,168,63,.35)}
 .opening a:hover{border-bottom-color:var(--brass)}
-.opening{font-size:12.5px;color:var(--brass);margin-top:2px;min-height:18px}
+.opening{font-size:12.5px;color:var(--brass);margin-top:2px;margin-bottom:12px;min-height:18px}
 /* Vide (avant toute partie, ou tant qu'aucune ouverture n'est detectee), la
    reserve de hauteur ci-dessus desequilibrait le bloc au-dessus de #status :
-   plus d'espace en haut qu'en bas, le texte n'y etait pas centre. */
-.opening:empty{display:none;margin-top:0;min-height:0}
+   plus d'espace en haut qu'en bas, le texte n'y etait pas centre. Le
+   margin-bottom ajoute au-dessus (2026-09-04, signale par Alexandre) doit
+   disparaitre avec le reste dans ce cas precis, sans quoi ce meme
+   desequilibre reapparaitrait par en bas cette fois-ci. */
+.opening:empty{display:none;margin-top:0;margin-bottom:0;min-height:0}
 /* Conteneur commun au bandeau de coups et au bouton de retournement : reste
    visible en Jouer/Entre amis meme quand le bandeau de coups lui-meme est
    masque (aucun coup joue, ou mode Entre amis qui n'a pas de bandeau) --
@@ -896,8 +948,15 @@ header>*{min-width:0}
 .board-tools{display:flex;align-items:stretch;gap:6px}
 .flip-btn{flex:none;margin-left:auto;height:29px}
 .navstrip{display:flex;align-items:stretch;gap:6px;flex:1;min-width:0}
+/* color:var(--sage) plutot que --chalk (2026-09-04) : les fleches de
+   retournement sont le seul element de ce bandeau en texte clair/appuye,
+   alors que le reste de l'interface reserve ce contraste au contenu
+   (coups, texte a lire) et garde les elements d'interface secondaires en
+   sage -- meme couleur que les libelles en capitales (.eyebrow) et le "i"
+   des info-tip. Seul element avec cette classe (verifie), donc sans
+   incidence ailleurs. */
 .navchev{flex:none;width:30px;display:flex;align-items:center;justify-content:center;
-  border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);
+  border:1px solid var(--rule);background-color:var(--raise);color:var(--sage);
   border-radius:8px;cursor:pointer}
 .navchev svg{width:17px;height:17px}
 .navscroll{flex:1;display:flex;align-items:center;gap:1px;overflow-x:auto;
@@ -1084,21 +1143,35 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
          la remplit et l'affiche seulement s'il y a eu au moins un exercice
          reussi dans les 7 derniers jours glissants). -->
     <p class="note hide" id="weeklyRecap"></p>
-    <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
-         n'afficherait que des zeros, ce qu'un premier visiteur lit comme
-         "le site est vide" alors qu'il s'agit de sa propre progression.
-         On lui propose donc de commencer, et la bande apparait des qu'il
-         a quelque chose a y voir. -->
-    <div class="strip" id="homeStrip">
-      <div class="stat"><b id="hLevel">1</b><span>Puzzle level</span></div>
-      <div class="stat"><b id="hSolved">0</b><span>Solved</span></div>
-      <div class="stat"><b id="hBest">0</b><span>Best streak</span></div>
-      <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
-      <div class="stat"><b id="hStreak">0</b><span>Day streak</span></div>
-    </div>
-    <div class="startline hide" id="homeStart">
-      <span>Your progress will show up here.</span>
-      <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>
+    <!-- Encadre avec titre (2026-09-04, demande d'Alexandre) : ces 5 chiffres
+         s'affichaient jusqu'ici sans aucun cadre ni titre, contrairement aux
+         statistiques equivalentes de Resoudre ("Mon historique", "Records
+         personnels"). Meme intitule au singulier-possessif ("Ma progression")
+         que "Mon historique" pour rester dans le meme registre plutot que
+         d'inventer un vouvoiement ("Votre progression") que le reste du site
+         n'utilise jamais. Infobulle : precise ce que "Classement" recouvre
+         EXACTEMENT, plutot que de laisser deviner -- rejoint ce qui est deja
+         vrai dans le code (onPuzzleResult, ui2.js) mais qu'aucune bulle
+         n'expliquait encore ici meme. -->
+    <div class="panel" id="homeProgressPanel">
+      <div class="eyebrow">My progress<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipHomeProgress" aria-label="More info">i</button></div>
+      <p class="info-tip-pop hide" id="tipHomeProgress">This reflects classic puzzle solving only, the level ladder in Solve. Puzzle of the day, Chang Sprint and Coordinates each track their own separate record.</p>
+      <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
+           n'afficherait que des zeros, ce qu'un premier visiteur lit comme
+           "le site est vide" alors qu'il s'agit de sa propre progression.
+           On lui propose donc de commencer, et la bande apparait des qu'il
+           a quelque chose a y voir. -->
+      <div class="strip" id="homeStrip">
+        <div class="stat"><b id="hLevel">1</b><span>Puzzle level</span></div>
+        <div class="stat"><b id="hSolved">0</b><span>Solved</span></div>
+        <div class="stat"><b id="hBest">0</b><span>Best streak</span></div>
+        <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
+        <div class="stat"><b id="hStreak">0</b><span>Day streak</span></div>
+      </div>
+      <div class="startline hide" id="homeStart">
+        <span>Your progress will show up here.</span>
+        <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>
+      </div>
     </div>
   </div>
 
@@ -1425,6 +1498,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                minutes, annoncer "Mat en un coup" revient a donner la reponse,
                et le libelle du thème casse le rythme. On garde le statut, qui
                sert aux retours immediats. -->
+          <!-- Regroupe le theme et le code de l'exercice dans une rangee flex
+               commune (2026-09-04) : avant, ".excode-wrap" portait un
+               margin-left:8px pense pour l'ecart avec le theme quand ils
+               tenaient sur la meme ligne, mais ce margin restait applique
+               meme replie seul sur sa propre ligne (theme trop long pour
+               entrer) -- decalant la puce de code + le "i" vers la droite,
+               desaligne du bord gauche du theme au-dessus. Un vrai "gap" de
+               conteneur flex ne cree jamais ce decalage residuel : il
+               n'existe qu'ENTRE deux elements, jamais comme marge de tete
+               d'un element replie seul sur sa ligne. -->
+          <div class="theme-row">
           <span class="theme hors-sprint" id="exTheme">Back-rank mate</span>
           <!-- Regroupe le code de l'exercice et le bouton d'info dans un
                seul bloc inline-flex (mise en page) : avant, ce sont deux
@@ -1437,6 +1521,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <span class="excode" id="exCode"></span>
             <button type="button" class="info-tip hors-sprint" aria-expanded="false" aria-controls="tipStrength" aria-label="More info">i</button>
           </span>
+          </div>
           <p class="info-tip-pop hide" id="tipStrength"></p>
           <p class="quest hors-sprint review-hide" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
@@ -1541,8 +1626,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                <details> natif donc ca marche sans JS. Les badges y sont en
                plus compactes (voir renderBadgeSummary, ui2.js) : la grille
                complete des 41 badges genait meme repliee, la plupart etant
-               grises/verrouilles pour un nouveau venu. -->
-          <details class="panel repliable">
+               grises/verrouilles pour un nouveau venu.
+               PAS de classe "panel" ici (2026-09-04) : ce bloc vit DEJA a
+               l'interieur d'exPanel (lui-meme .panel) -- lui donner sa
+               propre boite (fond/bordure/ombre) créait un panneau imbrique
+               dans un panneau, un niveau visuel de plus que "Thème" juste
+               au-dessus, qui lui reste un simple .field sans boite. Meme
+               genre que "Voir tous les badges" plus bas (deja sans classe
+               panel) : .repliable seul garde le meme padding de 16px sur le
+               summary/corps, juste sans le cadre. -->
+          <details class="repliable">
             <summary><span class="eyebrow">My history</span></summary>
             <div class="repliable-corps">
             <div class="eyebrow">Personal records<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipRecords" aria-label="More info">i</button></div>
@@ -1553,7 +1646,14 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             </div>
             <div class="eyebrow">Badges<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipBadges" aria-label="More info">i</button></div>
             <p class="info-tip-pop hide" id="tipBadges">Milestones for volume, daily streaks and rating. Once unlocked, a badge stays unlocked even if the number behind it later drops.</p>
-            <p class="note" id="badgeSummary" style="margin-top:0">0/41 unlocked</p>
+            <!-- margin-bottom ajoute (2026-09-04) : sans lui, ce paragraphe
+                 (margin-top deja mis a 0 pour coller a l'eyebrow juste
+                 au-dessus) touchait directement la premiere rangee de
+                 pastilles de badges juste en dessous -- *{margin:0} de base
+                 ne laisse alors aucun espace entre les deux. Meme valeur que
+                 l'ecart eyebrow->contenu standard du site (.eyebrow
+                 margin-bottom:8px). -->
+            <p class="note" id="badgeSummary" style="margin-top:0;margin-bottom:8px">0/41 unlocked</p>
             <div class="badges" id="badgeRecentGrid"></div>
             <details class="repliable" id="badgeAllWrap">
               <summary><span class="sub-inline" id="badgeAllToggle">See all badges</span></summary>
@@ -1629,6 +1729,24 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                de ce hide/le remet des que "rush" devient vrai/faux. -->
           <div class="btnrow"><button class="btn primary hide" id="btnGoRush">Start Chang Sprint</button></div>
           <p class="note hors-sprint">Personal best: <b id="rushBestTrain">0</b></p>
+          <!-- Bouton plein (primary/laiton), pas un lien discret (2026-09-04,
+               essai precedent) : voir finWasRushSprint et le clic sur
+               resultClose (ui2.js). N'apparait que si le bandeau qu'on vient
+               de fermer etait bien un bilan de Chang Sprint (pas
+               Coordonnees, pas une fin de partie Jouer/Entre amis, qui
+               partagent le meme #resultBanner). Place ICI, dans
+               rushLauncher, et pas dans exPanel comme un tout premier essai
+               l'avait fait : juste apres avoir ferme, mode reste "train" et
+               exPanel/pane-puzzles restent invisibles (rushRestore() y
+               replace bien exPanel, mais rien ne change "mode" tout seul) --
+               un bouton depose la-bas ne se serait jamais vu. Se recache
+               au clic, au demarrage d'un nouveau sprint (beginRushFlow) ou
+               des qu'un exercice normal se charge (loadPuzzle(), ui.js) :
+               jamais un bouton qui reste en permanence dans Defis, juste un
+               raccourci le temps d'y revenir. -->
+          <div class="btnrow" style="margin-top:10px">
+            <button type="button" class="btn primary hide" id="btnRushAgain">Play Chang Sprint again</button>
+          </div>
         </div>
         <div class="panel" id="coordLauncher">
           <!-- Description retiree (2026-09-03), meme raison que
@@ -1654,22 +1772,42 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="status" id="amiStatus">Start a game.</div>
         </div>
         <div class="panel" id="amiLinkPanel">
-          <div class="eyebrow">Link to send<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFriendLink" aria-label="More info">i</button></div>
-          <p class="info-tip-pop hide" id="tipFriendLink">Saved in this browser: you can close the tab and come back to it.</p>
+          <!-- "My position" plutot que "Link to send" (2026-09-04, discussion
+               avec Alexandre) : plus parlant, puisque ce lien encode
+               litteralement la position de la partie a cet instant --
+               valable aussi bien pour la position de depart (avant le
+               premier coup) que pour ton dernier coup joue. Style aligne sur
+               les autres eyebrows courtes de ce panneau ("Rythme",
+               "Nouvelle partie"), un nom plutot qu'une phrase, le verbe
+               etant deja porte par les boutons de partage juste en dessous.
+               Infobulle repensee dans le meme mouvement : elle expliquait
+               seulement la persistance locale (deja couverte par ailleurs
+               dans "Tes parties amis" un peu plus bas), sans dire ce que ce
+               lien EST ni pourquoi il marche sans serveur -- desormais plus
+               pedagogique sur le mecanisme lui-meme, complementaire de
+               amiNote juste sous les boutons qui explique le geste
+               (envoyer/recevoir), pas le pourquoi. -->
+          <div class="eyebrow">My position<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFriendLink" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipFriendLink">This link carries the whole game by itself, no server or account behind it. Each move creates a new one to pass along.</p>
           <input class="linkbox" id="amiLink" readonly aria-label="Game link">
           <div class="shareRow" id="amiShare"></div>
           <p class="note" id="amiNote"></p>
         </div>
         <div class="panel" id="amiNewGamePanel">
           <div class="eyebrow">New game</div>
-          <div class="field"><div class="seg" id="segAmiColor">
-            <button data-v="w" aria-pressed="true">Play White</button>
-            <button data-v="b" aria-pressed="false">Play Black</button>
-          </div></div>
           <div class="field">
             <div class="eyebrow">Pace</div>
             <div class="tc-chips" id="dailyChips"></div>
           </div>
+          <!-- Choix de couleur passe en overlay (2026-09-04, voir amiColorModal
+               plus bas) : le controle segAmiColor vivait ici en ligne, un champ
+               parmi d'autres dans ce panneau -- moins visible que son
+               equivalent cote Jouer (segColor, toujours en tete d'ecran) et
+               sans rien de comparable a l'ecran "Ready" du Sprint/Coordonnees.
+               "Create game" ouvre desormais la modale plutot que de creer
+               directement avec la derniere couleur choisie : choisir SA
+               couleur devient l'action elle-meme, plus une case a cocher avant
+               un bouton separe. -->
           <div class="btnrow">
             <button class="btn primary" id="btnAmiNew">Create game</button>
             <button class="btn" id="btnAmiUndo">Undo my move</button>
@@ -1706,7 +1844,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   <div id="pane-watch" class="hide">
     <div class="panel">
       <h2>Chess on YouTube</h2>
-      <p class="sub">The latest video from each channel, updated automatically.</p>
+      <!-- margin-bottom:0 (2026-09-04) : ".sub" porte par defaut
+           margin-bottom:14px, pense pour separer le sous-titre d'un
+           contenu qui suit DANS le meme panneau (voir Explorer/Calendrier,
+           qui gardent tout dans une seule boite). Ici la grille de chaines
+           est un bloc frere APRES le panneau, pas dedans -- ce sous-titre
+           est donc le dernier enfant du panneau. Son margin-bottom
+           s'ajoutait au padding-bottom du panneau (16px) sans rien en face
+           cote padding-top (juste 16px, aucune marge sur h2), d'ou une
+           boite visiblement plus haute en bas qu'en haut (30px vs 16px).
+           A 0, les deux cotes valent desormais 16px. -->
+      <p class="sub" style="margin-bottom:0">The latest video from each channel, updated automatically.</p>
     </div>
     <div class="channels" id="channels"></div>
   </div>
@@ -1814,6 +1962,24 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   <div class="box">
     <h3>Choose a promotion piece</h3>
     <div class="promos" id="promoBtns"></div>
+  </div>
+</div>
+
+<!-- Choix de couleur pour une partie par correspondance (2026-09-04) :
+     meme patron que promoModal ci-dessus (seule autre modale du site),
+     reutilise plutot que reinvente. Choisir une couleur agit tout de suite
+     (comme choisir une piece de promotion) : pas de bouton "Valider"
+     separe, un clic suffit et cree la partie (voir btnAmiNew/newAmiGame,
+     ui.js). Le rythme (Pace) reste dans le panneau "New game" en dessous,
+     seule la couleur -- le vrai choix a faire avant de commencer -- passe
+     en overlay. -->
+<div class="modal" id="amiColorModal">
+  <div class="box">
+    <h3>Choose your colour</h3>
+    <div class="btnrow" id="amiColorBtns">
+      <button type="button" class="btn primary" data-v="w">Play White</button>
+      <button type="button" class="btn" data-v="b">Play Black</button>
+    </div>
   </div>
 </div>
 

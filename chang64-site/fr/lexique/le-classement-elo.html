@@ -221,8 +221,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a:hover{color:var(--chalk)}
 
 .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
-.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
-.footnav a:hover{text-decoration:underline}
+/* Aligne l'aspect sur les liens de pied de page de l'application a fond
+   noir (.linkbtn, template.html : souligne, poids normal, 11.5px), la
+   couleur restant seule adaptee au fond clair (chalk au lieu de sage,
+   plus lisible ici). Avant (2026-09-04) : sans soulignement, graisse 500
+   et taille heritee du pied de page (13px) -- un aspect plus "bouton" que
+   les liens sobres et discrets du reste du site. */
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px}
+.footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}</style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"DefinedTerm","name":"Ce que veut dire ton classement Elo","description":"Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps. Ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.","inLanguage":"fr"}</script>
@@ -239,7 +245,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
     <a href="/glossary/elo-rating.html" hreflang="en" rel="alternate">EN</a>
     <a href="/fr/lexique/le-classement-elo.html" hreflang="fr" rel="alternate" aria-current="true">FR</a>
   </div>
-  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Exercices</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/" aria-current="page" id="cn">Lexique</a></nav>
+  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Motifs</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/" aria-current="page" id="cn">Lexique</a></nav>
 </header>
 <h1>Ce que veut dire ton classement Elo</h1><p class="lede">Un classement Elo est une estimation continue du niveau, construite sur une idée simple : chaque résultat déplace le chiffre vers le haut ou le bas, d'autant plus que le résultat était surprenant. Battre bien plus fort que soi fait beaucoup bouger le curseur ; battre bien plus faible le bouge à peine. chang64 traite chaque niveau d'exercice comme un adversaire d'une force fixe, et met à jour ta notation de la même façon après chaque tentative. Autant le dire clairement : ce chiffre est un repère personnel et relatif, pas une mesure de niveau certifiée. Des sites comme Lichess calibrent leur classement de puzzles sur des millions de vraies tentatives de vrais joueurs, recoupées entre elles ; chang64 ne garde aucun compte et ne suit rien d'un joueur à l'autre, par choix, donc il n'existe aucune population à laquelle se calibrer. Ta notation ici est honnête sur ta propre progression dans le temps. Ce n'est pas une affirmation qu'un chiffre donné équivaut à la même force sur Lichess ou dans un tournoi homologué FIDE. Ça ne la rend pas dénuée de sens pour autant : la voir monter veut toujours dire exactement la même chose, que tu résous des problèmes qui étaient hors de portée avant.</p><div class="cols"><div><a class="cta" href="/">Jouer une partie</a></div></div>
 <footer>

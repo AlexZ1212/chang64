@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lexique des échecs : les termes qui comptent | chang64</title>
-<meta name="description" content="Vingt notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.">
+<meta name="description" content="43 notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.">
 <link rel="canonical" href="https://chang64.com/fr/lexique/">
 <!-- Les icones existaient mais n'etaient declarees nulle part hors du
      manifeste : invisibles dans l'onglet du navigateur et dans les resultats
@@ -15,7 +15,7 @@
 <link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/">
 <link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/">
 <meta property="og:title" content="Lexique des échecs : les termes qui comptent | chang64">
-<meta property="og:description" content="Vingt notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.">
+<meta property="og:description" content="43 notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://chang64.com/fr/lexique/">
 <meta property="og:locale" content="fr_FR">
@@ -221,8 +221,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a:hover{color:var(--chalk)}
 
 .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
-.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
-.footnav a:hover{text-decoration:underline}
+/* Aligne l'aspect sur les liens de pied de page de l'application a fond
+   noir (.linkbtn, template.html : souligne, poids normal, 11.5px), la
+   couleur restant seule adaptee au fond clair (chalk au lieu de sage,
+   plus lisible ici). Avant (2026-09-04) : sans soulignement, graisse 500
+   et taille heritee du pied de page (13px) -- un aspect plus "bouton" que
+   les liens sobres et discrets du reste du site. */
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px}
+.footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}</style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Lexique des échecs : les termes qui comptent","inLanguage":"fr"}</script>
@@ -239,35 +245,51 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
     <a href="/glossary/" hreflang="en" rel="alternate">EN</a>
     <a href="/fr/lexique/" hreflang="fr" rel="alternate" aria-current="true">FR</a>
   </div>
-  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Exercices</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><span aria-current="page" id="cn">Lexique</span></nav>
+  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Motifs</a><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><span aria-current="page" id="cn">Lexique</span></nav>
 </header>
-<h1>Lexique des échecs : les termes qui comptent</h1><p class="lede">Vingt notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.</p><div class="grid"><a class="tile" href="/fr/lexique/fourchette.html"><b>Fourchette</b><span>Une pièce en attaque deux ou plus en même temps. Le cavalier…</span></a>
+<h1>Lexique des échecs : les termes qui comptent</h1><p class="lede">43 notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.</p><div class="grid"><a class="tile" href="/fr/lexique/attaque-a-la-decouverte.html"><b>Attaque à la découverte</b><span>En déplaçant une pièce, on démasque l'attaque d'une autre si…</span></a>
+<a class="tile" href="/fr/lexique/avant-poste.html"><b>Avant-poste</b><span>Une case, en général en territoire adverse, qu'aucun pion en…</span></a>
+<a class="tile" href="/fr/lexique/le-classement-elo.html"><b>Ce que veut dire ton classement Elo</b><span>Un classement Elo est une estimation continue du niveau, con…</span></a>
 <a class="tile" href="/fr/lexique/clouage.html"><b>Clouage</b><span>Une pièce ne peut pas bouger sans exposer une pièce plus pré…</span></a>
-<a class="tile" href="/fr/lexique/enfilade.html"><b>Enfilade</b><span>L'inverse du clouage : la pièce de valeur est devant, elle d…</span></a>
-<a class="tile" href="/fr/lexique/attaque-a-la-decouverte.html"><b>Attaque à la découverte</b><span>En déplaçant une pièce, on démasque l'attaque d'une autre si…</span></a>
+<a class="tile" href="/fr/lexique/code-eco.html"><b>Code ECO</b><span>Abréviation d'Encyclopaedia of Chess Openings, le code à une…</span></a>
+<a class="tile" href="/fr/lexique/colonne-ouverte.html"><b>Colonne ouverte</b><span>Une colonne sans aucun pion. C'est la place des tours : une …</span></a>
+<a class="tile" href="/fr/lexique/coup-brillant.html"><b>Coup brillant</b><span>Un coup qui cède du matériel tout en étant objectivement for…</span></a>
+<a class="tile" href="/fr/lexique/coup-intermediaire.html"><b>Coup intermédiaire (zwischenzug)</b><span>Un coup fort intercalé avant de répondre à la menace attendu…</span></a>
+<a class="tile" href="/fr/lexique/developpement.html"><b>Développement</b><span>Amener les pièces de leur case de départ vers des cases util…</span></a>
+<a class="tile" href="/fr/lexique/deviation.html"><b>Déviation</b><span>Forcer une pièce défensive à quitter la case ou la ligne qu'…</span></a>
 <a class="tile" href="/fr/lexique/echec-double.html"><b>Échec double</b><span>Deux pièces donnent échec en même temps. On ne peut ni les p…</span></a>
+<a class="tile" href="/fr/lexique/echec-perpetuel.html"><b>Échec perpétuel</b><span>Une série d'échecs à laquelle le défenseur ne peut pas échap…</span></a>
+<a class="tile" href="/fr/lexique/elimination-du-defenseur.html"><b>Élimination du défenseur</b><span>Prendre ou échanger la pièce qui garde une case ou une pièce…</span></a>
+<a class="tile" href="/fr/lexique/enfilade.html"><b>Enfilade</b><span>L'inverse du clouage : la pièce de valeur est devant, elle d…</span></a>
+<a class="tile" href="/fr/lexique/erreur.html"><b>Erreur</b><span>Un coup qui dégrade nettement la position sans pour autant t…</span></a>
+<a class="tile" href="/fr/lexique/fianchetto.html"><b>Fianchetto</b><span>Développer un fou en b2, g2, b7 ou g7 après avoir avancé d'u…</span></a>
+<a class="tile" href="/fr/lexique/fourchette.html"><b>Fourchette</b><span>Une pièce en attaque deux ou plus en même temps. Le cavalier…</span></a>
+<a class="tile" href="/fr/lexique/gaffe.html"><b>Gaffe</b><span>Un coup qui perd du matériel ou la partie tout net, en génér…</span></a>
+<a class="tile" href="/fr/lexique/gambit.html"><b>Gambit</b><span>Offrir du matériel, en général un pion, pour gagner du temps…</span></a>
+<a class="tile" href="/fr/lexique/imprecision.html"><b>Imprécision</b><span>Un coup qui n'est pas le meilleur possible et qui cède discr…</span></a>
+<a class="tile" href="/fr/lexique/interference.html"><b>Interférence</b><span>Une pièce se place sur la ligne entre deux pièces adverses, …</span></a>
+<a class="tile" href="/fr/lexique/majorite-de-pions.html"><b>Majorité de pions</b><span>Plus de pions que l'adversaire d'un côté de l'échiquier, par…</span></a>
 <a class="tile" href="/fr/lexique/mat-du-couloir.html"><b>Mat du couloir</b><span>Une tour ou une dame mate un roi roqué, coincé derrière ses …</span></a>
 <a class="tile" href="/fr/lexique/mat-etouffe.html"><b>Mat étouffé</b><span>Un cavalier mate un roi entièrement enfermé par ses propres …</span></a>
-<a class="tile" href="/fr/lexique/deviation.html"><b>Déviation</b><span>Forcer une pièce défensive à quitter la case ou la ligne qu'…</span></a>
-<a class="tile" href="/fr/lexique/zugzwang.html"><b>Zugzwang</b><span>Une position où tout coup aggrave la situation, mais où l'on…</span></a>
-<a class="tile" href="/fr/lexique/opposition.html"><b>Opposition</b><span>Deux rois se font face avec une case entre eux. Celui qui n'…</span></a>
-<a class="tile" href="/fr/lexique/fianchetto.html"><b>Fianchetto</b><span>Développer un fou en b2, g2, b7 ou g7 après avoir avancé d'u…</span></a>
-<a class="tile" href="/fr/lexique/gambit.html"><b>Gambit</b><span>Offrir du matériel, en général un pion, pour gagner du temps…</span></a>
-<a class="tile" href="/fr/lexique/tempo.html"><b>Tempo</b><span>Un coup considéré comme une unité de temps. Attaquer une piè…</span></a>
-<a class="tile" href="/fr/lexique/developpement.html"><b>Développement</b><span>Amener les pièces de leur case de départ vers des cases util…</span></a>
-<a class="tile" href="/fr/lexique/colonne-ouverte.html"><b>Colonne ouverte</b><span>Une colonne sans aucun pion. C'est la place des tours : une …</span></a>
-<a class="tile" href="/fr/lexique/septieme-rangee.html"><b>Septième rangée</b><span>Une tour sur la septième rangée adverse attaque les pions re…</span></a>
-<a class="tile" href="/fr/lexique/pion-passe.html"><b>Pion passé</b><span>Un pion qui n'a plus aucun pion adverse devant lui, ni sur s…</span></a>
-<a class="tile" href="/fr/lexique/piece-en-prise.html"><b>Pièce en prise</b><span>Une pièce attaquée et non défendue. Vérifier les pièces en p…</span></a>
-<a class="tile" href="/fr/lexique/sacrifice.html"><b>Sacrifice</b><span>Céder du matériel volontairement pour quelque chose de plus …</span></a>
-<a class="tile" href="/fr/lexique/echec-perpetuel.html"><b>Échec perpétuel</b><span>Une série d'échecs à laquelle le défenseur ne peut pas échap…</span></a>
-<a class="tile" href="/fr/lexique/gaffe.html"><b>Gaffe</b><span>Un coup qui perd du matériel ou la partie tout net, en génér…</span></a>
-<a class="tile" href="/fr/lexique/erreur.html"><b>Erreur</b><span>Un coup qui dégrade nettement la position sans pour autant t…</span></a>
-<a class="tile" href="/fr/lexique/imprecision.html"><b>Imprécision</b><span>Un coup qui n'est pas le meilleur possible et qui cède discr…</span></a>
 <a class="tile" href="/fr/lexique/meilleur-coup.html"><b>Meilleur coup</b><span>Le coup qu'un moteur classe au-dessus de tous les autres dan…</span></a>
+<a class="tile" href="/fr/lexique/moulin.html"><b>Moulin</b><span>Une séquence répétée d'échec à la découverte suivi d'une pri…</span></a>
+<a class="tile" href="/fr/lexique/opposition.html"><b>Opposition</b><span>Deux rois se font face avec une case entre eux. Celui qui n'…</span></a>
+<a class="tile" href="/fr/lexique/paire-de-fous.html"><b>Paire de fous</b><span>Posséder ses deux fous alors que l'adversaire en a déjà écha…</span></a>
+<a class="tile" href="/fr/lexique/pat.html"><b>Pat</b><span>Le joueur au trait n'a aucun coup légal et n'est pas en éche…</span></a>
+<a class="tile" href="/fr/lexique/piece-en-prise.html"><b>Pièce en prise</b><span>Une pièce attaquée et non défendue. Vérifier les pièces en p…</span></a>
+<a class="tile" href="/fr/lexique/pion-arriere.html"><b>Pion arriéré</b><span>Un pion resté en retard par rapport à ses voisins, qui ne pe…</span></a>
+<a class="tile" href="/fr/lexique/pion-isole.html"><b>Pion isolé</b><span>Un pion sans aucun pion ami sur les colonnes voisines pour l…</span></a>
+<a class="tile" href="/fr/lexique/pion-passe.html"><b>Pion passé</b><span>Un pion qui n'a plus aucun pion adverse devant lui, ni sur s…</span></a>
+<a class="tile" href="/fr/lexique/pions-doubles.html"><b>Pions doublés</b><span>Deux pions de la même couleur empilés sur une colonne, en gé…</span></a>
+<a class="tile" href="/fr/lexique/prophylaxie.html"><b>Prophylaxie</b><span>Un coup joué pour empêcher un projet adverse avant même qu'i…</span></a>
+<a class="tile" href="/fr/lexique/regle-des-50-coups.html"><b>Règle des 50 coups</b><span>N'importe quel joueur peut réclamer la nulle si 50 coups s'é…</span></a>
+<a class="tile" href="/fr/lexique/sacrifice.html"><b>Sacrifice</b><span>Céder du matériel volontairement pour quelque chose de plus …</span></a>
+<a class="tile" href="/fr/lexique/septieme-rangee.html"><b>Septième rangée</b><span>Une tour sur la septième rangée adverse attaque les pions re…</span></a>
 <a class="tile" href="/fr/lexique/seul-coup.html"><b>Seul coup</b><span>Une position où tout autre coup légal perd, souvent de façon…</span></a>
-<a class="tile" href="/fr/lexique/coup-brillant.html"><b>Coup brillant</b><span>Un coup qui cède du matériel tout en étant objectivement for…</span></a>
-<a class="tile" href="/fr/lexique/le-classement-elo.html"><b>Ce que veut dire ton classement Elo</b><span>Un classement Elo est une estimation continue du niveau, con…</span></a></div>
+<a class="tile" href="/fr/lexique/surcharge.html"><b>Surcharge</b><span>Une pièce doit garder deux choses à la fois et ne peut pas c…</span></a>
+<a class="tile" href="/fr/lexique/tempo.html"><b>Tempo</b><span>Un coup considéré comme une unité de temps. Attaquer une piè…</span></a>
+<a class="tile" href="/fr/lexique/triple-repetition.html"><b>Triple répétition</b><span>La nulle peut être réclamée si la même position, avec le mêm…</span></a>
+<a class="tile" href="/fr/lexique/zugzwang.html"><b>Zugzwang</b><span>Une position où tout coup aggrave la situation, mais où l'on…</span></a></div>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role

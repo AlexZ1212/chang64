@@ -221,8 +221,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a:hover{color:var(--chalk)}
 
 .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
-.footnav a{color:var(--chalk);text-decoration:none;font-weight:500}
-.footnav a:hover{text-decoration:underline}
+/* Aligne l'aspect sur les liens de pied de page de l'application a fond
+   noir (.linkbtn, template.html : souligne, poids normal, 11.5px), la
+   couleur restant seule adaptee au fond clair (chalk au lieu de sage,
+   plus lisible ici). Avant (2026-09-04) : sans soulignement, graisse 500
+   et taille heritee du pied de page (13px) -- un aspect plus "bouton" que
+   les liens sobres et discrets du reste du site. */
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px}
+.footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}</style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Bibliothèque d'exemples tactiques","inLanguage":"fr"}</script>
@@ -239,9 +245,9 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
     <a href="/puzzles/" hreflang="en" rel="alternate">EN</a>
     <a href="/fr/exercices/" hreflang="fr" rel="alternate" aria-current="true">FR</a>
   </div>
-  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><span aria-current="page" id="cn">Exercices</span><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a></nav>
+  <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><span aria-current="page" id="cn">Motifs</span><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a></nav>
 </header>
-<h1>Bibliothèque d'exemples tactiques</h1><p class="lede">Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de 51619 positions vérifiées par le moteur.</p><div class="grid"><a class="tile" href="/fr/exercices/prise-gagnante.html"><b>Prise gagnante</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/attaque-double.html"><b>Attaque double</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/enfilade.html"><b>Enfilade</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/mat-en-deux-coups.html"><b>Mat en deux coups</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/coup-gagnant.html"><b>Coup gagnant</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/fourchette-de-cavalier.html"><b>Fourchette de cavalier</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/mat-en-un-coup.html"><b>Mat en un coup</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/mat-du-couloir.html"><b>Mat du couloir</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/clouage.html"><b>Clouage</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/fourchette-de-pion.html"><b>Fourchette de pion</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/deviation.html"><b>Déviation</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/coup-silencieux.html"><b>Coup silencieux</b><span>3 exemples</span></a><a class="tile" href="/fr/exercices/mat-en-trois-coups.html"><b>Mat en trois coups</b><span>3 exemples</span></a></div>
+<h1>Bibliothèque d'exemples tactiques</h1><p class="lede">Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de 51619 positions vérifiées par le moteur.</p><div class="grid"><a class="tile" href="/fr/exercices/prise-gagnante.html"><b>Prise gagnante</b></a><a class="tile" href="/fr/exercices/attaque-double.html"><b>Attaque double</b></a><a class="tile" href="/fr/exercices/enfilade.html"><b>Enfilade</b></a><a class="tile" href="/fr/exercices/mat-en-deux-coups.html"><b>Mat en deux coups</b></a><a class="tile" href="/fr/exercices/coup-gagnant.html"><b>Coup gagnant</b></a><a class="tile" href="/fr/exercices/fourchette-de-cavalier.html"><b>Fourchette de cavalier</b></a><a class="tile" href="/fr/exercices/mat-en-un-coup.html"><b>Mat en un coup</b></a><a class="tile" href="/fr/exercices/mat-du-couloir.html"><b>Mat du couloir</b></a><a class="tile" href="/fr/exercices/clouage.html"><b>Clouage</b></a><a class="tile" href="/fr/exercices/fourchette-de-pion.html"><b>Fourchette de pion</b></a><a class="tile" href="/fr/exercices/deviation.html"><b>Déviation</b></a><a class="tile" href="/fr/exercices/coup-silencieux.html"><b>Coup silencieux</b></a><a class="tile" href="/fr/exercices/mat-en-trois-coups.html"><b>Mat en trois coups</b></a></div>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role

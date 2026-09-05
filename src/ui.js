@@ -921,7 +921,16 @@ function renderSheetInto(id,list){
        '<span class="'+(i===last?"cur":"")+'">'+(list[i]||"")+'</span>'+
        '<span class="'+(i+1===last?"cur":"")+'">'+(list[i+1]||"")+'</span></div>';
   }
-  el.innerHTML=h;el.scrollTop=el.scrollHeight;
+  el.innerHTML=h;
+  /* En haut plutot qu'en bas (2026-09-04) : meme raison et meme fonction
+     que renderSheetPlay() (ui2.js) -- ".cur" designe ici toujours le tout
+     dernier coup (aucune revue de l'historique cote Jouer via ce chemin ni
+     cote Entre amis, qui n'a pas cette fonctionnalite), donc le
+     comportement pour CE cas precis ne change pas ; seule la position dans
+     la zone visible (haut plutot que juste-encore-visible en bas) change,
+     pour rester coherent avec la feuille de partie de Jouer en mode revue. */
+  const curEl=el.querySelector(".cur");
+  scrollSheetToCurrent(el,curEl?curEl.closest(".sheet-row"):null);
 }
 function setupGame(){
   gameStarted=false;
@@ -1199,6 +1208,11 @@ function loadPuzzle(){
   }
   legalCache=game.moves();
   const side=game.turn===W?"White":"Black";
+  /* Leve le masquage cible pose par beginRushFlow() (ui2.js) sur l'apercu
+     affiche sous l'ecran "Ready" du Sprint : des qu'un exercice, quel qu'il
+     soit, se charge pour de bon (y compris le vrai premier exercice du
+     sprint, via rushNext()), exPanel redevient legitime a montrer. */
+  const ep=$("exPanel"); if(ep)ep.classList.remove("hide");
   $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day · "):"")+t(puzzle.theme);
   const ec=$("exCode");
   if(ec){
@@ -1236,6 +1250,10 @@ function loadPuzzle(){
   const ex=$("exExplain");if(ex)ex.textContent="";
   reviewIdx=-1;
   const rn=$("reviewNav");if(rn)rn.classList.add("hide");
+  /* btnRushAgain (voir template.html) : raccourci qui n'existe que juste
+     apres avoir ferme un bilan de Chang Sprint, jamais plus loin -- se
+     recache des qu'un exercice quelconque se charge, sprint ou pas. */
+  const bra=$("btnRushAgain");if(bra)bra.classList.add("hide");
   document.body.classList.remove("reviewing-rush");
   render();updateEval();renderProgress();
   if(typeof focusBoard==="function")focusBoard();
@@ -1680,22 +1698,44 @@ function copyText(t){
   try{document.execCommand("copy");}catch(e){}
   document.body.removeChild(ta);
 }
+/* Pictogrammes de marque a cote du texte des boutons de partage (2026-09-04) :
+   coherent avec le reste du site, deja illustre en SVG (pieces, fleches de
+   retournement) plutot que texte seul. currentColor n'aurait pas de sens
+   ici (chaque marque a sa propre couleur reconnaissable) : fill fixe,
+   assorti a la couleur de bordure deja posee par .shareRow button.wa/.msg/
+   .tg plus bas dans le CSS. */
+const SHARE_ICONS={
+  wa:'<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.77.46 3.45 1.28 4.9L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.9C21.96 6.45 17.5 2 12.04 2zm5.5 14.14c-.23.65-1.36 1.24-1.87 1.28-.51.05-.98.24-3.3-.69-2.8-1.13-4.61-3.98-4.75-4.16-.14-.19-1.14-1.51-1.14-2.89 0-1.37.72-2.05.97-2.33.25-.28.55-.34.73-.34.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.79 1.9.86 2.03.07.14.11.3.02.48-.09.19-.14.3-.28.46-.14.16-.29.36-.42.48-.14.14-.28.28-.12.55.16.28.72 1.19 1.55 1.93 1.06.95 1.96 1.24 2.24 1.38.28.14.44.12.61-.07.16-.19.7-.81.89-1.09.19-.28.38-.23.63-.14.26.1 1.63.77 1.9.91.28.14.46.21.53.33.07.12.07.68-.16 1.33z"/></svg>',
+  msg:'<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path fill="#0084FF" d="M12 2C6.48 2 2 6.15 2 11.25c0 2.9 1.44 5.49 3.7 7.19v3.31l3.38-1.86c.9.25 1.87.39 2.92.39 5.52 0 10-4.15 10-9.25S17.52 2 12 2zm1.01 12.46l-2.55-2.72-4.97 2.72 5.47-5.8 2.61 2.72 4.9-2.72-5.46 5.8z"/></svg>',
+  tg:'<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path fill="#26A5E4" d="M21.5 4.5l-3.4 15.8c-.26 1.15-.94 1.43-1.9.9l-5.26-3.88-2.54 2.44c-.28.28-.52.52-1.06.52l.38-5.36 9.76-8.82c.42-.38-.1-.6-.65-.22L6.3 12.62l-5.24-1.64c-1.14-.36-1.16-1.14.24-1.68L20.1 3.02c.95-.36 1.78.22 1.4 1.48z"/></svg>'
+};
+/* Facebook (partage sur le mur) retire, Telegram ajoute (2026-09-04,
+   discussion avec Alexandre) : sharer.php vise une diffusion publique large
+   (poster sur son mur), pas l'envoi d'un lien prive a UN ami precis -- de
+   plus il n'accepte meme pas de texte personnalise, seulement l'URL brute,
+   contrairement a WhatsApp/Messenger/Telegram. Telegram a, lui, un vrai
+   site web (t.me) qui fonctionne a l'identique sur desktop et mobile,
+   contrairement a Messenger qui se rabat sur une simple copie silencieuse
+   hors mobile (voir plus bas) -- et son usage est en forte croissance,
+   proche de WhatsApp en telechargements. */
 function shareButtons(container,url,text,withNative){
   container.innerHTML="";
-  const mk=(label,cls,fn)=>{
+  const mk=(label,cls,fn,icon)=>{
     const b=document.createElement("button");
-    b.className=cls;b.textContent=label;b.onclick=fn;container.appendChild(b);
+    b.className=cls;
+    b.innerHTML=(icon?icon+" ":"")+label;
+    b.onclick=fn;container.appendChild(b);
   };
   if(withNative&&navigator.share){
     mk(t("Share"),"native",async()=>{try{await navigator.share({title:"chang64",text:text,url:url});}catch(e){}});
   }
-  mk("WhatsApp","wa",()=>{window.open("https://wa.me/?text="+encodeURIComponent(text+" "+url),"_blank","noopener");});
+  mk("WhatsApp","wa",()=>{window.open("https://wa.me/?text="+encodeURIComponent(text+" "+url),"_blank","noopener");},SHARE_ICONS.wa);
   mk("Messenger","msg",()=>{
     const mobile=/android|iphone|ipad|ipod/i.test(navigator.userAgent);
     if(mobile)location.href="fb-messenger://share/?link="+encodeURIComponent(url);
     else{copyText(url);$("amiNote").textContent=t("Link copied, paste it into Messenger.");}
-  });
-  mk("Facebook","fb",()=>{window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(url),"_blank","noopener");});
+  },SHARE_ICONS.msg);
+  mk("Telegram","tg",()=>{window.open("https://t.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(text),"_blank","noopener");},SHARE_ICONS.tg);
   mk(t("Copy"),"",()=>{copyText(url);$("amiNote").textContent=t("Link copied.");});
 }
 function updateAmiNote(){
@@ -1767,14 +1807,17 @@ function showAmi(){
      terminee : voir le mode Jouer, meme logique pour "Abandonner"). */
   $("btnAmiUndo").classList.remove("hide");
   $("btnAmiResign").classList.remove("hide");
-  /* "Creer la partie" et le choix de couleur se verrouillent tant qu'une
-     partie est activement en cours (mais pas une fois terminee ou
-     abandonnee) : meme principe que geler() en mode Jouer, pour eviter
-     d'ecraser par erreur une partie en cours avec une nouvelle. */
+  /* "Creer la partie" se verrouille tant qu'une partie est activement en
+     cours (mais pas une fois terminee ou abandonnee) : meme principe que
+     geler() en mode Jouer, pour eviter d'ecraser par erreur une partie en
+     cours avec une nouvelle. Plus de segAmiColor a desactiver ici depuis le
+     passage du choix de couleur en modale (2026-09-04) : amiNewGamePanel,
+     qui contient aussi bien "Create game" que la modale n'est declenchee
+     que depuis lui, se masque entierement juste en dessous -- inaccessible
+     de toute facon pendant une partie active. */
   {
     const enCoursAmi=amiResigned===null&&!over;
     const bn=$("btnAmiNew"); if(bn)bn.disabled=enCoursAmi;
-    const cg=$("segAmiColor"); if(cg)for(const b of cg.children)b.disabled=enCoursAmi;
     /* Masque entierement plutot que grise sans explication pendant qu'une
        partie est activement en cours : meme principe applique cote Jouer
        (voir refreshGame() dans ui.js) pour le panneau de reglages. */
@@ -2153,12 +2196,20 @@ $("btnReset").onclick=()=>{
   prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[]};
   saveProg();renderProgress();nextPuzzle();
 };
-$("segAmiColor").addEventListener("click",e=>{
-  const b=e.target.closest("button"); if(!b)return;
-  for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
+/* Choix de couleur pour une partie par correspondance, en overlay (voir
+   amiColorModal, template.html) plutot qu'en ligne dans le panneau "New
+   game" : "Nouvelle partie" ouvre la modale, choisir une couleur cree la
+   partie tout de suite (amiColor pose puis newAmiGame(), meme mecanique
+   qu'avant, juste sans bouton "Creer" separe). Un clic sur le fond ferme
+   sans rien creer, comme un choix qu'on peut annuler. */
+$("btnAmiNew").onclick=()=>{$("amiColorModal").classList.add("on");};
+$("amiColorModal").addEventListener("click",e=>{
+  if(e.target.id==="amiColorModal"){$("amiColorModal").classList.remove("on");return;}
+  const b=e.target.closest("button[data-v]"); if(!b)return;
   amiColor=b.dataset.v==="w"?W:B;
+  $("amiColorModal").classList.remove("on");
+  newAmiGame();
 });
-$("btnAmiNew").onclick=newAmiGame;
 $("btnAmiUndo").onclick=undoAmi;
 $("btnResign").onclick=resignGame;
 /* Retournement manuel de l'echiquier (Jouer + Entre amis, voir setMode).
@@ -2214,7 +2265,11 @@ Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAm
   applyI18n();
   renderProgress();syncTC();renderDailyChips();renderExplore();renderHistory();
   shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);
-  for(const x of $("segAmiColor").children)x.setAttribute("aria-pressed",x.dataset.v===(amiColor===W?"w":"b"));
+  /* Plus de segAmiColor a resynchroniser au demarrage (2026-09-04) : le
+     choix de couleur d'une partie par correspondance vit desormais dans
+     amiColorModal (voir plus haut), une modale sans etat persistant a
+     restaurer -- chaque clic y agit tout de suite, rien a cocher au
+     chargement. */
   const deep=readDeepLink();
   if(deep&&applyDeepLink(deep)){}
   else if(readHash())setMode("friend");

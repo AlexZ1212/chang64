@@ -103,7 +103,14 @@ function boot(lang){
   T("endgame status translated", /Blancs/i.test($("egStatus").textContent), $("egStatus").textContent);
 
   console.log("\nTRAIN + FRIENDS + LEGAL IN FRENCH");
-  click($("tab-train")); await wait(700);
+  /* Mis a jour le 2026-09-06 : l'onglet "S'entrainer" (tab-train) a ete
+     supprime le 03/09 au profit du menu a 5 cartes de Resoudre. Le clic sur
+     $("tab-train") rendait null et plantait la suite, ce qui a laisse sans
+     surveillance tout ce qui suit : Entre amis en francais, mentions
+     legales, confidentialite, et surtout le retour a l'anglais teste plus
+     bas, qui garde un bug rapporte. On passe par tab-puzzles, qui est
+     l'onglet reel, et le trajet reste le meme : un detour avant Entre amis. */
+  click($("tab-puzzles")); await wait(700);
   click($("tab-friend")); await wait(600);
   T("friend status translated", /partie|jouer|lien/i.test($("amiStatus").textContent), $("amiStatus").textContent);
   T("share buttons translated", Array.from($("amiShare").children||[]).some(b=>b.textContent==="Copier")||true);

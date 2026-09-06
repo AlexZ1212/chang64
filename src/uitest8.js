@@ -46,12 +46,16 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
      chudTime, chudSquare, chudScore. Le test visait une interface disparue et
      plantait avant d'avoir rien verifie. */
   console.log("\nCOORDINATE TRAINER");
-  /* Le drill de coordonnees vit dans Defis, un onglet plus loin que les
-     finales desormais. */
-  click($("tab-train")); await wait(500);
+  /* Mis a jour le 2026-09-06 : le drill vivait dans Defis (tab-train), onglet
+     supprime le 03/09. On y entre desormais par la carte "Coordonnees" du
+     menu Resoudre, qui mene directement a l'ecran "Ready" en sautant le
+     bouton intermediaire btnCoord du panneau (voir ui2.js, cardSolveCoord).
+     Le clic sur tab-train rendait null et plantait avant toute verification :
+     tout ce fichier a partir d'ici ne tournait plus depuis le 03/09. */
+  click($("tab-puzzles")); await wait(500);
+  click($("cardSolveCoord")); await wait(400);
   /* Un overlay attend le feu vert avant de lancer les trente secondes :
      perdre les deux premieres a comprendre ou on est, ca compte. */
-  click($("btnCoord")); await wait(400);
   if(!$("readyBanner").classList.contains("hide")){click($("readyStart")); await wait(400);}
   T("timer started", parseFloat($("chudTime").textContent)<30 && parseFloat($("chudTime").textContent)>28, $("chudTime").textContent);
   T("board emptied", pieceCount()===0, pieceCount()+" pieces");

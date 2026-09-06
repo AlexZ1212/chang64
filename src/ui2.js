@@ -274,9 +274,36 @@ function firstVisibleNavPly(el){
   }
   return null;
 }
+/* Une partie encore en cours ne doit JAMAIS etre deplacee par un defilement
+   du bandeau (2026-09-06, signale par Alexandre). La synchro depuis le
+   scroll avait ete demandee pour l'analyse, ou l'on parcourt une partie
+   terminee ; appliquee a une partie vivante elle produit exactement
+   l'inverse de ce qu'on veut : jouer un coup rallonge le bandeau, le
+   navigateur emet des evenements de scroll pendant que la puce courante se
+   recentre, la garde navScrollSuppressed retombe avant que tout soit stable,
+   handleNavScroll lit alors la premiere puce visible -- souvent le coup 1 --
+   et ramene l'echiquier au debut de la partie. La personne perd la position
+   qu'elle etait en train de jouer.
+   On ne bricole donc pas les delais de suppression, qui ne feraient que
+   rendre le bug intermittent : on interdit la synchro tant que la partie est
+   vivante. Parcourir les coups reste possible en cliquant une puce, ce qui
+   passe par gotoPly() et pas par ici. */
+function partieVivante(){
+  if(mode!=="play"&&mode!=="friend")return false;
+  if(typeof gameStarted!=="undefined"&&!gameStarted)return false;
+  if(typeof isReviewGame!=="undefined"&&isReviewGame)return false;      /* on relit une partie enregistree */
+  if(typeof resigned!=="undefined"&&resigned!==null)return false;
+  if(typeof amiResigned!=="undefined"&&amiResigned!==null)return false;
+  if(typeof isFlagged==="function"&&isFlagged())return false;
+  /* Plus de coup legal ou nulle : la partie est finie, on peut la parcourir. */
+  if(typeof legalCache!=="undefined"&&!legalCache.length)return false;
+  if(typeof game!=="undefined"&&game.isDraw&&game.isDraw())return false;
+  return true;
+}
 function handleNavScroll(){
   updateNavScrollHint();
   if(navScrollSuppressed)return;
+  if(partieVivante())return;
   clearTimeout(navScrollSyncTimer);
   /* Attend un court silence apres le dernier evenement de scroll plutot que
      de suivre chaque tick : recalculer la position (rebuildTo un coup par
@@ -1276,6 +1303,38 @@ let solveScreen="menu";
    viewDailyArchive() et retryMistake() : les trois amenent un exercice
    precis vers l'ecran "puzzles"/"daily". */
 let solveScreenSuppressAutoload=false;
+/* "Exercice suivant" reste desactive tant que l'exercice en cours n'est pas
+   termine (2026-09-06, demande d'Alexandre). Sans cela on peut enchainer les
+   exercices sans jamais en resoudre un : la file perd son sens et la
+   progression ne mesure plus rien.
+   Le critere n'est PAS puzzleDone, et c'est le point important. Un mauvais
+   coup n'est pas terminal : il incremente puzzleTries, affiche "Pas tout a
+   fait" et rend la main pour un nouvel essai. Et rien ne clot un exercice en
+   echec, meme solvePuzzle() se contente d'afficher la reponse en demandant
+   de la jouer. Bloquer sur puzzleDone enfermerait donc pour de bon quelqu'un
+   qui ne veut pas jouer le coup qu'on vient de lui montrer : le seul moyen
+   de sortir serait de recharger la page.
+   On bloque donc tant que rien n'a ete TENTE, et on libere des le premier
+   essai, indice ou solution compris (ils posent puzzleTries a 1). On ne peut
+   plus enchainer les exercices sans les regarder, ce qui etait la demande, et
+   personne ne se retrouve coince, ce qui etait la contrainte.
+   A appeler partout ou puzzle, puzzleDone ou puzzleTries changent. */
+function majBoutonSuivant(){
+  const nb=$("btnNext"); if(!nb)return;
+  const enCours=!!puzzle&&!puzzleDone&&(typeof puzzleTries==="undefined"||puzzleTries===0);
+  nb.disabled=enCours;
+  if(enCours)nb.setAttribute("title",t("Try this puzzle first."));
+  else nb.removeAttribute("title");
+  /* Un bouton grise sans explication laisse la personne devant un mur, et
+     l'infobulle n'existe pas au doigt. On dit donc sous l'echiquier ce qui
+     debloque, en nommant l'indice : un second clic dessus donne la solution,
+     c'est la sortie pour qui ne trouve pas. */
+  const vl=$("nextLock");
+  if(vl){
+    vl.textContent=t("Play a move, or use Hint, to unlock the next puzzle.");
+    vl.classList.toggle("hide",!enCours);
+  }
+}
 function showSolveScreen(screen){
   solveScreen=screen;
   const menu=$("solveMenu"),ex=$("exPanel"),pzSide=$("solvePuzzlesSidebar"),
@@ -1293,6 +1352,7 @@ function showSolveScreen(screen){
      l'autre. Indice et Recommencer restent utiles sur les deux ecrans,
      donc seul ce bouton est cache, pas toute la rangee. */
   { const nb=$("btnNext"); if(nb)nb.classList.toggle("hide",screen==="daily"); }
+  majBoutonSuivant();
   /* setMode() (ui.js) force le plateau partage visible pour tout mode
      autre que Jouer/Entre amis, juste avant d'arriver ici -- le menu est
      le seul ecran de "puzzles" qui n'a rien a y montrer, donc on le
@@ -1368,9 +1428,10 @@ if($("cardSolveCoord"))$("cardSolveCoord").onclick=()=>{
 function viewDailyArchive(key){
   if(!PUZZLE_INDEX){loadPuzzleIndex(()=>viewDailyArchive(key));return;}
   const id=dateToDailyId(key);
-  const lvl=PUZZLE_INDEX[id];
-  if(!lvl)return;
-  if(!LEVEL_CACHE[lvl]){loadLevel(lvl,()=>viewDailyArchive(key));return;}
+  if(!PUZZLE_INDEX[id])return;
+  /* Depuis le decoupage en morceaux, LEVEL_CACHE[lvl] ne garantit plus que
+     CET exercice est charge : loadPuzzleById va chercher le bon morceau. */
+  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,()=>viewDailyArchive(key));return;}
   const p=PUZZLE_CACHE[id];
   if(!p)return;
   /* Voir solveScreenSuppressAutoload plus haut : sans ce drapeau,
@@ -1400,9 +1461,10 @@ function viewDailyArchive(key){
 function attemptDailyArchive(key){
   if(!PUZZLE_INDEX){loadPuzzleIndex(()=>attemptDailyArchive(key));return;}
   const id=dateToDailyId(key);
-  const lvl=PUZZLE_INDEX[id];
-  if(!lvl)return;
-  if(!LEVEL_CACHE[lvl]){loadLevel(lvl,()=>attemptDailyArchive(key));return;}
+  if(!PUZZLE_INDEX[id])return;
+  /* Depuis le decoupage en morceaux, LEVEL_CACHE[lvl] ne garantit plus que
+     CET exercice est charge : loadPuzzleById va chercher le bon morceau. */
+  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,()=>attemptDailyArchive(key));return;}
   const p=PUZZLE_CACHE[id];
   if(!p)return;
   solveScreenSuppressAutoload=true;
@@ -1817,7 +1879,7 @@ function rushEnd(why){
   renderRushHistory(lastRushHistory);
   const st=$("exStatus");st.className="status "+(best?"win":"");
   st.textContent=best?t("{why} Score: {score}, a new personal best.",{why:why,score:score}):t("{why} Score: {score} (best: {best}).",{why:why,score:score,best:prog.rushBest});
-  puzzleDone=true;
+  puzzleDone=true;majBoutonSuivant();
 }
 /* Bilan de fin de sprint : une pastille par exercice tente, dans l'ordre,
    verte ou rouge. Cliquer dessus rejoue directement le coup gagnant et
@@ -1871,7 +1933,7 @@ function loadAndRevealSolution(p){
   }
   legalCache=game.moves();
   selected=-1;marks={};
-  puzzleDone=true;
+  puzzleDone=true;majBoutonSuivant();
   render();
   const st=$("exStatus");st.className="status win";
   st.textContent=t("The winning move was {san}.",{san:sanParts.join(" ")});

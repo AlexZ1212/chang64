@@ -64,9 +64,18 @@ const locs=[...sm.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
    que chaque page d'ouverture y figure, et que le sitemap couvre bien
    l'ensemble du site. */
 {
+  /* Mis a jour le 2026-09-06 : depuis le correctif du 05/09, les pages
+     d'ouvertures sans note redigee portent noindex,follow et sont donc
+     volontairement hors du sitemap. Declarer une page en noindex au sitemap
+     serait la vraie faute. On verifie desormais la regle exacte : toute page
+     indexable y figure, aucune page noindex n'y figure. */
   const url=f=>"https://chang64.com/openings/"+f;
-  const abs=files.filter(f=>f!=="index.html"&&!locs.includes(url(f)));
-  T("sitemap lists every opening page", abs.length===0, abs.slice(0,3).join(", "));
+  const noindex=f=>/noindex/.test(fs.readFileSync(OUT+"/openings/"+f,"utf8"));
+  const pages=files.filter(f=>f!=="index.html");
+  const absente=pages.filter(f=>!noindex(f)&&!locs.includes(url(f)));
+  const enTrop=pages.filter(f=>noindex(f)&&locs.includes(url(f)));
+  T("sitemap lists every indexable opening page", absente.length===0, absente.slice(0,3).join(", "));
+  T("sitemap excludes every noindex opening page", enTrop.length===0, enTrop.slice(0,3).join(", "));
   T("sitemap covers the whole site", locs.length>=files.length, locs.length+" urls pour "+files.length+" ouvertures");
 }
 T("sitemap is well formed", sm.startsWith("<?xml") && sm.includes("</urlset>"));

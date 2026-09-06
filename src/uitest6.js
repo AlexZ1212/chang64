@@ -8,7 +8,22 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 function open_(url) {
   const errors = [];
-  const dom = new JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url });
+  /* Ajoute le 2026-09-06 : les exercices et le livre d'ouvertures sont
+     charges a la demande via fetch, et jsdom n'a pas de reseau. Sans ce stub,
+     exQuest restait sur "Loading…" et les assertions sur l'exercice charge
+     echouaient sur un faux negatif. On sert les fichiers depuis le disque,
+     exactement comme le ferait Cloudflare. Meme mecanique que dans
+     uitest7.js, garde identique volontairement. */
+  const SITE = require("path").join(__dirname, "site");
+  const dom = new JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url,
+    beforeParse(w) {
+      w.fetch = u => {
+        const p = SITE + String(u).replace(/^https?:\/\/[^/]+/, "");
+        return fs.existsSync(p)
+          ? Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(JSON.parse(fs.readFileSync(p, "utf8"))) })
+          : Promise.resolve({ ok: false, status: 404 });
+      };
+    } });
   dom.window.addEventListener("error", e => errors.push(e.message));
   return { dom, w: dom.window, errors };
 }
@@ -48,7 +63,11 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   T("landing shown, board hidden", !a.$("pane-home").className.includes("hide") && a.$("appLayout").className.includes("hide"));
   T("puzzle count on home", a.$("hCount").textContent === String(PUZZLES.length), a.$("hCount").textContent);
   const cats = Array.from(a.$("tcCats").children).map(b => b.textContent);
-  T("time control categories", cats.join(",") === "Bullet,Blitz,Rapid,Classical,Daily,No clock", cats.join(" "));
+  /* Mis a jour le 2026-09-06 : la pastille "No clock" a ete retiree de la
+     rangee d'accueil le 05/09 (une cadence sans pendule n'est pas une
+     cadence, et elle restait accessible depuis les reglages de partie).
+     L'attendu suivait encore l'ancienne rangee a six entrees. */
+  T("time control categories", cats.join(",") === "Bullet,Blitz,Rapid,Classical,Daily", cats.join(" "));
   const chips = Array.from(a.$("tcChips").children).map(b => b.textContent);
   T("rapid variants by default", chips.join(" ") === "10+0 10+5 15+10", chips.join(" "));
   T("note follows category", a.$("tcNote").textContent.startsWith("Rapid"));
@@ -111,13 +130,20 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   T("clocks hidden after new unlimited game", a.$("clockTop").className.includes("hide"));
 
   console.log("\nPUZZLES");
+  /* Mis a jour le 2026-09-06 : tab-puzzles ouvre le menu a 5 cartes depuis le
+     03/09 et ne charge plus d'exercice, et btnDaily a laisse la place a la
+     carte "Puzzle du jour". Le test lisait donc exQuest avant tout
+     chargement, puis plantait sur btnDaily devenu null. */
   a.click(a.$("tab-puzzles"));
-  await wait(700);
+  await wait(500);
+  a.click(a.$("cardSolvePuzzles"));
+  await wait(1200);
   T("puzzle loaded", a.$("exQuest").textContent.length > 0, a.$("exQuest").textContent);
-  T("english wording", /to play and/.test(a.$("exQuest").textContent));
+  T("english wording", /to play and/.test(a.$("exQuest").textContent), a.$("exQuest").textContent);
   T("theme in english", !/[éèàç]/.test(a.$("exTheme").textContent), a.$("exTheme").textContent);
-  a.click(a.$("btnDaily"));
-  await wait(600);
+  a.click(a.$("tab-puzzles")); await wait(400);
+  a.click(a.$("cardSolveDaily"));
+  await wait(900);
   T("puzzle of the day labelled", a.$("exTheme").textContent.startsWith("Puzzle of the day"), a.$("exTheme").textContent);
   const daily1 = a.placement();
 
@@ -142,11 +168,19 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   await wait(500);
   const paces = Array.from(a.$("dailyChips").children).map(b => b.textContent);
   T("daily pace options", paces.join(" ") === "1 day/move 3 days/move 7 days/move", paces.join(" "));
-  a.click(a.$("btnAmiNew")); await wait(300);
+  /* Mis a jour le 2026-09-06 : "Create game" ouvre desormais la modale de
+     choix de couleur (04/09), c'est le clic sur la couleur qui cree la
+     partie. Sans ce clic, amiLink restait vide et la suite plantait. */
+  a.click(a.$("btnAmiNew")); await wait(200);
+  a.click([...a.$("amiColorBtns").children].find(b => b.dataset.v === "w")); await wait(300);
   await a.play("d2", "d4");
   const link = a.$("amiLink").value;
   T("link produced", /#p=/.test(link), link);
-  T("share buttons", Array.from(a.$("amiShare").children).map(b => b.textContent).join(",") === "WhatsApp,Messenger,Facebook,Copy");
+  /* Mis a jour le 2026-09-06 : Facebook a ete retire le 04/09 au profit de
+     Telegram (voir ui.js l.1759). Les libelles portent une icone en tete,
+     d'ou le nettoyage des espaces avant comparaison. */
+  T("share buttons", Array.from(a.$("amiShare").children).map(b => b.textContent.trim()).join(",") === "WhatsApp,Messenger,Telegram,Copy",
+    Array.from(a.$("amiShare").children).map(b => b.textContent.trim()).join(","));
 
   const B = open_(link);
   await wait(700);

@@ -8,17 +8,24 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
 const read=p=>fs.readFileSync(OUT+"/"+p,"utf8");
 const list=d=>fs.readdirSync(OUT+"/"+d).filter(f=>f.endsWith(".html"));
 
-/* Comptes verifies le 2026-09-02 :
-   - learn 10->19, glossary 21->28 : contenu pedagogique enrichi au fil des
-     sessions (pages de lexique et de motifs ajoutees), croissance normale.
-   - puzzles puzzles.length+1 -> 14 : depuis la refonte en 13 pages de theme
-     (au lieu d'une page par exercice), /puzzles/ contient 13 pages de theme
-     + index.html = 14, quelle que soit la taille de la banque desormais. */
-const SEC=[["learn","fr/apprendre",19],["glossary","fr/lexique",28],["endgames","fr/finales",6],["traps","fr/pieges",7],["puzzles","fr/exercices",14]];
-for(const [en,fr,n] of SEC){
-  T(`${en}: ${n} pages EN`, list(en).length===n, list(en).length);
-  T(`${en}: ${n} pages FR`, list(fr).length===n, list(fr).length);
+/* Mis a jour le 2026-09-06 : ces effectifs etaient figes en dur et deja
+   corriges une fois (learn 10->19, glossary 21->28). Le Lexique est passe a
+   44 pages depuis, et le test echouait a nouveau sur une croissance normale
+   du contenu. Un compte fige condamne ce test a echouer a chaque page
+   ajoutee, et un echec permanent finit par masquer les vrais.
+   On garde donc ce qui ne se perime pas : chaque section existe, et la
+   version francaise a exactement le meme nombre de pages que l'anglaise.
+   C'est la propriete reellement utile, une page ajoutee d'un seul cote
+   etant le vrai defaut a attraper.
+   /puzzles/ reste a part : depuis la refonte en 13 pages de theme, il en
+   contient 13 + index.html quelle que soit la taille de la banque. */
+const SEC=[["learn","fr/apprendre"],["glossary","fr/lexique"],["endgames","fr/finales"],["traps","fr/pieges"],["puzzles","fr/exercices"]];
+for(const [en,fr] of SEC){
+  T(`${en}: section non vide`, list(en).length>0, list(en).length);
+  T(`${en}: autant de pages FR que EN`, list(en).length===list(fr).length,
+    list(en).length+" EN pour "+list(fr).length+" FR");
 }
+T("puzzles: 13 pages de theme + index", list("puzzles").length===14, list("puzzles").length);
 
 // metadonnees
 let bad={t:0,d:0,c:0,h:0,l:0};
@@ -110,10 +117,22 @@ T("sitemap covers the new sections", ["/learn/","/glossary/","/endgames/","/trap
   (function walk(p){for(const f of fs.readdirSync(p)){const q=p+"/"+f;
     const st=fs.statSync(q);
     if(st.isDirectory())walk(q); else if(f.endsWith(".html"))html.push(q.replace(OUT,""));}})(OUT);
+  /* Mis a jour le 2026-09-06 : le correctif du 05/09 met noindex,follow sur
+     les pages d'ouvertures sans note redigee. Elles restent publiees et
+     maillees depuis /openings/, mais n'ont plus rien a faire au sitemap :
+     y declarer une page noindex est contradictoire. Le controle porte
+     desormais sur les seules pages indexables, et verifie en plus qu'aucune
+     page noindex n'y figure. */
+  const estNoindex=u=>/name="robots" content="noindex/.test(fs.readFileSync(OUT+u,"utf8"));
   const publiables=html.filter(u=>!u.startsWith("/players/")&&!u.endsWith("/404.html"));
+  const indexables=publiables.filter(u=>!estNoindex(u));
   const locs=new Set([...sm.matchAll(/<loc>https:\/\/chang64\.com([^<]*)<\/loc>/g)].map(m=>m[1]));
-  const absentes=publiables.filter(u=>!locs.has(u)&&!locs.has(u.replace(/index\.html$/,"")));
-  T("sitemap couvre toutes les pages publiees", absentes.length===0,
+  const dansLeSitemap=u=>locs.has(u)||locs.has(u.replace(/index\.html$/,""));
+  const absentes=indexables.filter(u=>!dansLeSitemap(u));
+  const enTrop=publiables.filter(u=>estNoindex(u)&&dansLeSitemap(u));
+  T("sitemap couvre toutes les pages indexables", absentes.length===0,
     absentes.length+" absentes : "+absentes.slice(0,3).join(", "));
-  T("sitemap non vide et coherent", locs.size>=publiables.length*0.9, locs.size+" URL pour "+publiables.length+" pages");
+  T("aucune page noindex au sitemap", enTrop.length===0,
+    enTrop.length+" en trop : "+enTrop.slice(0,3).join(", "));
+  T("sitemap non vide et coherent", locs.size>=indexables.length*0.9, locs.size+" URL pour "+indexables.length+" pages indexables");
 }

@@ -146,6 +146,21 @@ body{
   background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;
   padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
+/* Avertissement de stockage : discret mais pas decoratif, il contredit la
+   ligne juste en dessous qui promet une progression enregistree. */
+/* Explique pourquoi "Exercice suivant" est grise, la ou la personne regarde
+   deja : juste sous l'echiquier, sous le statut de l'exercice. L'infobulle du
+   bouton ne sert a rien au doigt. Discret, c'est une indication, pas une
+   alerte. */
+.nextlock{margin:6px 0 0;font-size:12.5px;line-height:1.45;color:var(--sage);opacity:.9}
+.storagewarn{margin:0 auto 12px;max-width:640px;padding:10px 14px;text-align:left;
+  background-color:var(--slate);color:var(--chalk);border-left:3px solid var(--brass);
+  font-size:13px;line-height:1.5;border-radius:0 6px 6px 0}
+/* Message affiche uniquement quand JavaScript est absent : il doit se voir
+   sans dependre de quoi que ce soit qui s'execute. */
+.nojs{margin:0;padding:14px 16px;background-color:var(--slate);color:var(--chalk);
+  border-left:3px solid var(--brass);font-size:14px;line-height:1.55}
+.nojs a{color:var(--brass)}
 /* La regle [hidden]{display:none} vient de la feuille par defaut du
    navigateur : elle est plus faible que n'importe quel selecteur de classe.
    Un element avec display explicite reste donc visible malgre l'attribut,
@@ -1096,6 +1111,18 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
        sauter la navigation pour aller droit au contenu. Invisible tant qu'il
        n'a pas le focus, comme le veut l'usage. -->
   <a class="skiplink" href="#contenu">Skip to main content</a>
+  <!-- Ajoute le 2026-09-06. Sans JavaScript, cette page rendait sa mise en
+       page et son texte de presentation, avec un seul lien utilisable, et
+       aucun bouton ne repondait -- sans que rien ne l'explique. Mesure :
+       2258px de contenu affiche, 1 lien. Le public de ce site est justement
+       enclin a bloquer des scripts, il merite qu'on le lui dise. Les pages
+       de contenu, elles, fonctionnent sans JavaScript et n'ont pas besoin de
+       ce message. -->
+  <noscript>
+    <p class="nojs">chang64 a besoin de JavaScript pour jouer, résoudre des exercices et analyser des parties. Sans lui, rien sur cette page ne répondra.<br>
+    Les pages de contenu fonctionnent sans JavaScript : <a href="/openings/">ouvertures</a>, <a href="/learn/">règles</a>, <a href="/glossary/">lexique</a>, <a href="/endgames/">finales</a>.<br>
+    <span lang="en">chang64 needs JavaScript to play, solve puzzles and analyse games. The content pages above work without it.</span></p>
+  </noscript>
   <header>
     <button class="brand" id="brand" aria-label="chang64 home">
       <span class="glyph" id="brandmark">/*__BRANDMARK__*/</span>
@@ -1568,6 +1595,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <p class="info-tip-pop hide" id="tipStrength"></p>
           <p class="quest hors-sprint review-hide" id="exQuest">Loading…</p>
           <div class="status" id="exStatus">Find the winning move.</div>
+          <p class="nextlock hide hors-sprint" id="nextLock">Play a move, or use Hint, to unlock the next puzzle.</p>
           <p class="explain hors-sprint" id="exExplain"></p>
           <p class="explain hors-sprint" id="exPedagogy"></p>
           <div class="reviewNav hide" id="reviewNav">
@@ -1990,6 +2018,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   </div>
 
   </main>
+
+  <p class="storagewarn hide" id="storageWarn" role="status"></p>
 
   <footer>
     chang64 &middot; no account, no tracking &middot; progress saved on this device<br>

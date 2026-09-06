@@ -45,13 +45,47 @@ function puzzleDataError() {
    pret, plutot que de threader des Promises dans tout le fichier -- meme
    choix que le livre d'ouvertures, pour rester coherent avec le reste du
    code et limiter la surface du changement. */
-function loadLevel(lvl, onReady) {
-  if (LEVEL_CACHE[lvl]) { onReady && onReady(LEVEL_CACHE[lvl]); return; }
-  if (LEVEL_PENDING[lvl]) return;
-  LEVEL_PENDING[lvl] = true;
+/* ---------- Chargement par morceaux (2026-09-06) ----------
+   Un niveau tenait dans un seul fichier : 256 a 428 Ko gzip pour afficher UN
+   exercice. Il est desormais coupe en morceaux de 500, dans l'ordre de
+   difficulte croissante, celui-la meme que nextPuzzle() consomme. Le premier
+   morceau suffit donc pour commencer (une vingtaine de Ko), les suivants
+   arrivent quand le joueur avance.
+   LEVEL_CACHE[lvl] garde le meme sens qu'avant, le tableau des exercices
+   disponibles pour ce niveau : il grandit au fil des morceaux au lieu
+   d'arriver d'un bloc. Tout le code qui le lit continue de marcher sans
+   changement, y compris levelPool() et le repli sur allLoadedPuzzles(). */
+const LEVEL_META = {}, LEVEL_MORCEAUX = {};
+function loadLevelMeta(lvl, onReady) {
+  if (LEVEL_META[lvl]) { onReady && onReady(LEVEL_META[lvl]); return; }
   fetchJSON("/data/level-" + lvl + ".json",
-    data => { LEVEL_CACHE[lvl] = data; LEVEL_PENDING[lvl] = false; for (const p of data) PUZZLE_CACHE[p.id] = p; onReady && onReady(data); },
-    () => { LEVEL_PENDING[lvl] = false; puzzleDataError(); });
+    m => { LEVEL_META[lvl] = m; onReady && onReady(m); },
+    () => puzzleDataError());
+}
+function loadLevelChunk(lvl, k, onReady) {
+  const etat = LEVEL_MORCEAUX[lvl] = LEVEL_MORCEAUX[lvl] || {};
+  if (etat[k] === "ok") { onReady && onReady(LEVEL_CACHE[lvl]); return; }
+  if (etat[k] === "encours") return;      /* deja demande, le rappel viendra */
+  etat[k] = "encours";
+  fetchJSON("/data/level-" + lvl + "-" + k + ".json",
+    data => {
+      etat[k] = "ok";
+      LEVEL_CACHE[lvl] = (LEVEL_CACHE[lvl] || []).concat(data);
+      for (const p of data) PUZZLE_CACHE[p.id] = p;
+      onReady && onReady(LEVEL_CACHE[lvl]);
+    },
+    () => { etat[k] = null; puzzleDataError(); });
+}
+/* Premier morceau non encore demande, -1 s'il n'en reste aucun. */
+function morceauSuivant(lvl) {
+  const m = LEVEL_META[lvl]; if (!m) return -1;
+  const etat = LEVEL_MORCEAUX[lvl] || {};
+  for (let k = 0; k < m.morceaux; k++) if (etat[k] !== "ok" && etat[k] !== "encours") return k;
+  return -1;
+}
+function loadLevel(lvl, onReady) {
+  if (LEVEL_CACHE[lvl] && LEVEL_CACHE[lvl].length) { onReady && onReady(LEVEL_CACHE[lvl]); return; }
+  loadLevelMeta(lvl, () => loadLevelChunk(lvl, 0, onReady));
 }
 function loadPuzzleIndex(onReady) {
   if (PUZZLE_INDEX) { onReady && onReady(PUZZLE_INDEX); return; }
@@ -92,9 +126,12 @@ function loadRushPool(onReady) {
 function loadPuzzleById(id, onReady) {
   if (PUZZLE_CACHE[id]) { onReady && onReady(PUZZLE_CACHE[id]); return; }
   loadPuzzleIndex(idx => {
-    const lvl = idx[id];
-    if (!lvl) { onReady && onReady(null); return; }
-    loadLevel(lvl, () => onReady && onReady(PUZZLE_CACHE[id] || null));
+    /* L'index porte [niveau, morceau] depuis le decoupage : un lien direct
+       vers un exercice ne charge que son morceau, pas tout le niveau. */
+    const e = idx[id];
+    if (!e) { onReady && onReady(null); return; }
+    const lvl = Array.isArray(e) ? e[0] : e, k = Array.isArray(e) ? e[1] : 0;
+    loadLevelMeta(lvl, () => loadLevelChunk(lvl, k, () => onReady && onReady(PUZZLE_CACHE[id] || null)));
   });
 }
 
@@ -106,17 +143,42 @@ function loadPuzzleById(id, onReady) {
    les niveaux 9 et 10 sont presque exclusivement des mats en deux, les huit
    premiers melangent surtout des prises et des mats en un de complexite
    croissante. */
+/* Noms refaits le 2026-09-06, une deuxieme fois et pour de bon. Le premier
+   passage s'etait contente de retirer les fausses promesses ("Mating attacks"
+   pour 8% de mats) sans toucher au decoupage : les noms devenaient honnetes
+   mais ne decrivaient qu'un degre, parce que les niveaux 7 a 10 avaient des
+   profils presque identiques.
+   Le decoupage a ete refait dans build_site.js, une famille d'exercices par
+   niveau. Chaque nom est desormais verifiable contre les donnees : le niveau
+   6 contient 100% de fourchettes, le niveau 10 100% de mats. Si tu changes
+   l'un, change l'autre, ils ne tiennent plus que l'un par l'autre.
+   Ancienne note conservee pour memoire :
+   Les bandes sont decoupees sur le seul score diff du moteur, et un mat en un
+   obtient un diff bas : les mats se concentrent donc en bas de l'echelle, a
+   l'exact inverse de ce que les noms promettaient. Mesure : "Mating attacks"
+   contenait 8% de mats, "Forcing mates" 3%, "Grandmaster finishes" 4%, contre
+   26% pour "First steps". La profondeur suit la meme pente a l'envers, 18%
+   d'exercices a plusieurs coups au niveau 6 contre 5% au niveau 10.
+   Les cinq premiers gardent leur nom : ils ne promettent rien de precis et
+   leur contenu ne les dement pas. Les cinq derniers decrivent desormais ce
+   qu'ils contiennent vraiment, la ou "Winning capture" disparait au profit
+   des fourchettes, enfilades et attaques doubles.
+   C'est le correctif honnete, pas le correctif complet : tant que le
+   decoupage se fait sur diff seul, l'echelle ne distingue que des degres,
+   pas des familles. Le rendre reellement progressif demanderait d'ajouter le
+   type d'exercice comme second critere et de rejouer le classement de toute
+   la banque. */
 const LEVELS=[
   {n:1,name:"First steps"},
-  {n:2,name:"Building confidence"},
-  {n:3,name:"Everyday tactics"},
-  {n:4,name:"Sharper eyes"},
-  {n:5,name:"Wider board"},
-  {n:6,name:"Real calculation"},
-  {n:7,name:"Advanced tactics"},
-  {n:8,name:"Mating attacks"},
-  {n:9,name:"Forcing mates"},
-  {n:10,name:"Grandmaster finishes"}
+  {n:2,name:"Loose pieces"},
+  {n:3,name:"Quieter captures"},
+  {n:4,name:"Well-hidden captures"},
+  {n:5,name:"Mate in one"},
+  {n:6,name:"Forks"},
+  {n:7,name:"Pins and skewers"},
+  {n:8,name:"Double attacks"},
+  {n:9,name:"The winning move"},
+  {n:10,name:"Mate in two"}
 ];
 /* L'indice suivait autrefois le niveau (1 phrase fixe pour les dix), pas
    l'exercice : "cherche la piece mal protegee" s'affichait par exemple sur
@@ -260,12 +322,26 @@ let lastRatingDelta=null;
 (function(){
   if(window.storage&&typeof window.storage.get==="function")return;
   var mem=Object.create(null),usable=false;
+  /* Signale une fois que rien n'est plus conserve (2026-09-06). Le repli en
+     memoire evitait le plantage, mais en silence : le pied de page continuait
+     d'annoncer "progression enregistree sur cet appareil" alors qu'elle
+     partait a la fermeture de l'onglet. Sur un site sans compte, ou ce
+     mecanisme EST la sauvegarde, c'est la seule promesse qui compte.
+     Un drapeau plutot qu'un appel direct : ce bloc s'execute avant que
+     l'interface existe, et il ne doit dependre de rien. ui3.js le lit a
+     l'initialisation et ecoute l'evenement pour le cas ou le quota saute
+     plus tard, en cours de partie. */
+  function memoireSeule(){
+    if(window.storageMemoireSeule)return;
+    window.storageMemoireSeule=true;
+    try{window.dispatchEvent(new CustomEvent("chang64:stockage-memoire"));}catch(e){}
+  }
   try{
     var probe="chang64:__probe";
     window.localStorage.setItem(probe,"1");
     window.localStorage.removeItem(probe);
     usable=true;
-  }catch(e){}
+  }catch(e){memoireSeule();}
   function rd(k){
     if(!usable)return mem[k]===undefined?null:mem[k];
     try{return window.localStorage.getItem(k);}catch(e){return mem[k]===undefined?null:mem[k];}
@@ -274,7 +350,7 @@ let lastRatingDelta=null;
     mem[k]=v;
     if(!usable)return;
     try{window.localStorage.setItem(k,v);}
-    catch(e){usable=false;}   /* quota depasse : on bascule en memoire */
+    catch(e){usable=false;memoireSeule();}   /* quota depasse : on bascule en memoire */
   }
   function rm(k){
     delete mem[k];
@@ -515,6 +591,15 @@ function buildBoard(){
        fleches deplacent ensuite le curseur (voir ui3.js). */
     d.tabIndex=-1;
     d.setAttribute("role","button");
+    /* Nom accessible pose des la construction, pas seulement au render()
+       (2026-09-06). Quand un shard de /data/ ne repond pas -- avion, cache
+       HTTP expire, l'exclusion de /data/ du service worker rendant le cas
+       reel -- l'echiquier reste affiche et visible, 340px de large sans
+       ancetre masque, mais render() n'a jamais tourne : un lecteur d'ecran
+       rencontrait alors 64 boutons sans nom. Un argument seul suffit ici,
+       sqLabel() rend le nom de case nu et ne touche pas a ui3.js, donc pas
+       de zone morte temporelle a l'appel depuis le haut du fichier. */
+    d.setAttribute("aria-label",sqLabel(idxToSq(i)));
     d.addEventListener("click",onSquare);
     d.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();onSquare(ev);}});
     /* Glisser-depose : uniquement dans l'editeur de position (mode==="edit"),
@@ -544,8 +629,10 @@ function idxToSq(i){
 }
 /* Nom accessible d'une case, dans la langue courante : "e4" si elle est
    vide, "cavalier blanc en f3" / "white knight on f3" si elle est occupee.
-   Meme formulation qu'announceCell() (ui3.js), volontairement : les deux
-   decrivent la meme chose et doivent se repondre.
+   Source unique depuis le 2026-09-06 : c'est le seul endroit ou une case est
+   mise en mots. La region live de ui3.js n'annonce plus les cases, le lecteur
+   d'ecran lisant deja ce nom au focus ; deux formulations concurrentes
+   avaient fini par se contredire sur les 64 cases.
    pieceWord() vit dans ui3.js et lit PIECE_WORDS, une const : au tout
    premier render() de l'initialisation, ui3.js n'a pas encore ete evalue
    et cette const est en zone morte temporelle (piege deja rencontre sur
@@ -587,9 +674,9 @@ function render(){
     /* Nom accessible de la case (2026-09-05). Sans lui, les 64 cases sont
        des role="button" sans contenu textuel (le SVG des pieces est
        aria-hidden) : un lecteur d'ecran en mode navigation annonce
-       "bouton" 64 fois de suite. announceCell() (ui3.js) ne comble le
-       trou qu'en mode focus, et seulement si l'utilisateur a active les
-       annonces -- ce qui n'est pas le reglage par defaut. */
+       "bouton" 64 fois de suite. C'est le seul canal : depuis le
+       2026-09-06 la region live n'annonce plus les cases, elle ne faisait
+       que repeter ce nom. */
     c.setAttribute("aria-label",sqLabel(sq,p));
     let html="";
     const r=Math.floor(i/8),f=i%8;
@@ -1179,7 +1266,18 @@ function nextPuzzle(){
     }
     pool.push(...tranche);
   }
-  const fresh=pool.filter(p=>!prog.seen.includes(p.id));
+  let fresh=pool.filter(p=>!prog.seen.includes(p.id));
+  /* Le joueur avance dans le niveau par difficulte croissante et finit par
+     epuiser les morceaux charges. On va chercher le suivant : en secours
+     immediat s'il n'y a plus rien a proposer, en anticipation sinon, pour que
+     l'attente n'arrive jamais au moment ou il clique. */
+  {
+    const k=morceauSuivant(prog.level);
+    if(k>=0){
+      if(!fresh.length){loadLevelChunk(prog.level,k,nextPuzzle);return;}
+      if(fresh.length<40)loadLevelChunk(prog.level,k);
+    }
+  }
   if(fresh.length){puzzle=fresh[0];}
   else{const list=pool;puzzle=list[Math.floor(Math.random()*list.length)];}
   puzzle.daily=false;puzzle.dailyCatchupKey=null;
@@ -1201,8 +1299,10 @@ function dailyPuzzle(){
   const n=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);
   const ids=Object.keys(PUZZLE_INDEX);
   const id=ids[n%ids.length];
-  const lvl=PUZZLE_INDEX[id];
-  if(!LEVEL_CACHE[lvl]){loadLevel(lvl,dailyPuzzle);return;}
+  /* Passe par loadPuzzleById depuis le decoupage en morceaux : tester
+     LEVEL_CACHE[lvl] ne dit plus que l'exercice voulu est charge, seulement
+     qu'une partie du niveau l'est. */
+  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,()=>dailyPuzzle());return;}
   puzzle=PUZZLE_CACHE[id];
   puzzle.daily=true;puzzle.dailyCatchupKey=null; /* le vrai puzzle du jour, pas un rattrapage */
   loadPuzzle();
@@ -1220,7 +1320,7 @@ function loadPuzzle(){
      coup correct, quelle que soit la longueur reelle de sol -- juste apres
      avoir introduit des gains a plusieurs coups (voir tryPuzzleMove). */
   puzzleSolPly=0;
-  puzzleTries=0;puzzleDone=false;
+  puzzleTries=0;puzzleDone=false;majBoutonSuivant();
   /* Repart a zero a chaque exercice : sans ca, le delta du PRECEDENT
      exercice resterait affiche par erreur si jamais quelque chose lisait
      lastRatingDelta avant que le nouveau ne soit calcule (ex: un exercice
@@ -1323,7 +1423,7 @@ function tryPuzzleMove(m){
   const ok=currentSolutions().some(x=>game.uci(x)===uci);
   selected=-1;
   if(!ok){
-    puzzleTries++;
+    puzzleTries++;majBoutonSuivant();
     marks={};marks[m.to]="bad";render();
     boardEl.classList.add("shake");
     setTimeout(()=>boardEl.classList.remove("shake"),340);
@@ -1471,7 +1571,7 @@ function pedagogySentence(p){
     : t("Careful with {candidate}: {refutation} punishes it.",{candidate:pg.candidateSan,refutation:pg.refutationSan});
 }
 function finishPuzzle(won,msg){
-  puzzleDone=true;
+  puzzleDone=true;majBoutonSuivant();
   if(typeof onPuzzleResult==="function"&&onPuzzleResult(won,msg))return;
   const st=$("exStatus");
   st.className="status "+(won?"win":"lose");
@@ -1648,6 +1748,7 @@ function hintPuzzle(){
   const st=$("exStatus");st.className="status";
   st.textContent=t("The piece to move is highlighted.");
   if(puzzleTries===0)puzzleTries=1;
+  majBoutonSuivant();
   hintShown=true;
   syncHintBtn();
 }
@@ -1656,7 +1757,7 @@ function solvePuzzle(){
   const mv=currentSolutions()[0]; if(!mv)return;
   const san=game.san(mv);
   marks={};marks[mv.from]="hint";marks[mv.to]="hint";render();
-  puzzleTries=Math.max(puzzleTries,1);
+  puzzleTries=Math.max(puzzleTries,1);majBoutonSuivant();
   const st=$("exStatus");st.className="status";
   st.textContent=t("The answer is {san}. Play it to continue.",{san:san});
 }
@@ -1681,7 +1782,14 @@ function readCode(txt){
   const nums=parts[0].split(".").map(Number);
   if(nums.length<6||nums.some(isNaN))return null;
   const seen=(parts[1]||"").split(".").filter(Boolean).map(x=>"p"+parseInt(x,36)).filter(x=>x!=="pNaN");
-  return {level:Math.min(5,Math.max(1,nums[0]|0)),solved:Math.max(0,nums[1]|0),best:Math.max(0,nums[2]|0),
+  /* Corrige le 2026-09-06 : le niveau restaure etait borne a 5 alors que
+     LEVELS en compte 10 et que la montee va jusqu'a LEVELS.length (voir plus
+     haut). Un joueur au niveau 8 qui rechargeait son code sur un autre
+     appareil repartait au niveau 5, avec un message lui confirmant "niveau 5"
+     : perte silencieuse, sur la fonction meme qui porte la promesse du site
+     sans compte. La borne suit desormais la longueur du tableau, pour ne pas
+     redevenir fausse le jour ou un onzieme niveau apparait. */
+  return {level:Math.min(LEVELS.length,Math.max(1,nums[0]|0)),solved:Math.max(0,nums[1]|0),best:Math.max(0,nums[2]|0),
     streak:Math.max(0,nums[3]|0),correctRun:Math.max(0,nums[4]|0),wrongRun:Math.max(0,nums[5]|0),seen:seen};
 }
 function showCode(){

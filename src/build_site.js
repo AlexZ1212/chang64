@@ -41,6 +41,109 @@ const SITE = "https://chang64.com";
    temporelle a ce moment-la et ferait echouer le build (piege deja
    rencontre plusieurs fois sur ce projet). */
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
+/* ---------- registre des dates de contenu (2026-09-06) ----------
+   Avant : dateModified valait la date de construction. Exact au sens strict,
+   les pages etant regenerees a chaque build, mais inutilisable comme signal :
+   les 467 pages remontaient toutes ensemble a chaque deploiement, y compris
+   celles dont pas un mot n'avait change. Un signal de fraicheur qui se
+   declenche partout a chaque fois ne dit plus rien. Et datePublished etait
+   absent faute de date fiable, alors qu'il suffit de la retenir la premiere
+   fois qu'on voit une page.
+   Le registre est un fichier versionne, content-dates.json : pour chaque
+   page, l'empreinte de son contenu, sa date de premiere publication et sa
+   date de derniere vraie modification. Une page dont l'empreinte n'a pas
+   bouge garde sa date. Ne pas supprimer ce fichier : il serait reconstruit
+   avec la date du jour partout, et on perdrait tout l'historique. */
+const DATES_PATH = path.join(__dirname, "content-dates.json");
+const DATES = fs.existsSync(DATES_PATH) ? JSON.parse(fs.readFileSync(DATES_PATH, "utf8")) : {};
+if (!fs.existsSync(DATES_PATH) && fs.existsSync(path.join(__dirname, "site", "openings"))) {
+  /* Le registre manque alors qu'un site a deja ete construit ici : soit il
+     n'a jamais ete commite, soit il a ete supprime. Dans les deux cas les 466
+     pages vont repartir a la date du jour et tout l'historique de publication
+     est perdu, sans que rien ne le signale au moment ou c'est reparable.
+     On ne bloque pas la construction, on la rend impossible a rater. */
+  console.log("\n" + "!".repeat(58));
+  console.log("  content-dates.json est ABSENT.");
+  console.log("  Toutes les pages vont etre datees d'aujourd'hui et");
+  console.log("  l'historique de publication sera perdu.");
+  console.log("  Ce fichier doit etre commite avec les sources.");
+  console.log("  Si tu l'as supprime par erreur : recupere-le avant de pousser.");
+  console.log("!".repeat(58) + "\n");
+}
+let datesNouvelles = 0, datesModifiees = 0;
+function datesDe(cheminPublic, contenu) {
+  /* L'empreinte porte sur le CORPS de la page, pas sur le document entier :
+     l'entete, le pied et le JSON-LD contiennent la date elle-meme et des
+     elements communs, les inclure ferait changer l'empreinte a chaque build
+     et ramenerait le probleme d'origine. */
+  const sceau = require("crypto").createHash("sha1").update(contenu, "utf8").digest("hex").slice(0, 16);
+  const connu = DATES[cheminPublic];
+  if (!connu) { DATES[cheminPublic] = { sceau, publiee: BUILD_DATE, modifiee: BUILD_DATE }; datesNouvelles++; }
+  else if (connu.sceau !== sceau) { connu.sceau = sceau; connu.modifiee = BUILD_DATE; datesModifiees++; }
+  return DATES[cheminPublic];
+}
+const MOIS_FR = ["janvier","février","mars","avril","mai","juin","juillet",
+  "août","septembre","octobre","novembre","décembre"];
+/* "2026-09-06" -> "6 septembre 2026". toLocaleDateString depend de la locale
+   de la machine qui construit le site, ce qui donnerait un resultat different
+   selon l'endroit d'ou on deploie. */
+function frDate(iso) {
+  const [a, m, j] = iso.split("-");
+  return parseInt(j, 10) + " " + MOIS_FR[parseInt(m, 10) - 1] + " " + a;
+}
+/* ---------- hachages de la CSP (2026-09-06) ----------
+   script-src portait 'unsafe-inline', ce qui annulait la protection XSS que
+   le reste de l'en-tete laissait croire : une injection reussie s'executait.
+   Un premier chiffrage pendant l'audit avait conclu que la sortie coutait 936
+   hachages, donc qu'elle etait impraticable. Ce chiffre etait faux : il
+   comptait les blocs <script type="application/ld+json">, qui sont des blocs
+   de DONNEES et ne sont pas executes, donc pas soumis a script-src. En ne
+   comptant que le script reellement executable, il n'y en a qu'un par page et
+   cinq empreintes distinctes en tout : le script commun des pages anglaises,
+   celui des pages francaises, et trois pages a part.
+   Les empreintes sont calculees APRES generation, sur le site tel qu'il est
+   servi : les deduire des gabarits reviendrait a hacher ce qu'on croit avoir
+   ecrit plutot que ce qui est livre, et le moindre ecart de minification
+   couperait tout le JavaScript du site.
+   Ne remets pas 'unsafe-inline' pour faire taire une erreur de console :
+   c'est le signe qu'un script a change sans que cette fonction repasse, et la
+   bonne reponse est de reconstruire. tests/check_csp.js garde la regle.
+   style-src garde 'unsafe-inline' : les attributs style="..." ne peuvent pas
+   etre couverts par un hachage, et une feuille de style injectee ne
+   s'execute pas. Le risque n'est pas du meme ordre. */
+function poserHachagesCSP() {
+  const crypto = require("crypto");
+  const vus = new Set();
+  (function walk(d) {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d, f);
+      if (fs.statSync(p).isDirectory()) { walk(p); continue; }
+      if (!f.endsWith(".html")) continue;
+      const h = fs.readFileSync(p, "utf8");
+      for (const m of h.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+        const attrs = m[1] || "";
+        if (/\ssrc=/.test(attrs)) continue;                                  /* script externe : couvert par 'self' */
+        if (/type\s*=\s*"application\/ld\+json"/.test(attrs)) continue;      /* bloc de donnees, non execute */
+        vus.add("'sha256-" + crypto.createHash("sha256").update(m[2], "utf8").digest("base64") + "'");
+      }
+    }
+  })(OUT);
+  const liste = [...vus].sort();
+  const chemin = OUT + "/_headers";
+  fs.writeFileSync(chemin, fs.readFileSync(chemin, "utf8").replace("__HACHAGES__", liste.join(" ")));
+  console.log("Hachages CSP       : " + liste.length + " script(s) en ligne autorise(s), plus d'unsafe-inline");
+}
+
+function ecrireRegistreDates() {
+  /* Trie a l'ecriture : sans cela l'ordre des cles suivrait l'ordre de
+     generation et le fichier produirait un diff illisible a chaque build. */
+  const trie = {};
+  for (const k of Object.keys(DATES).sort()) trie[k] = DATES[k];
+  fs.writeFileSync(DATES_PATH, JSON.stringify(trie, null, 1) + "\n");
+  console.log("Dates de contenu   : " + Object.keys(trie).length + " pages, " +
+    datesNouvelles + " nouvelle(s), " + datesModifiees + " modifiee(s)");
+}
 /* Meme identite que la page Mentions legales de l'application (PUBLISHER
    dans ui2.js). Duplique faute de module partage entre l'application et le
    generateur : a garder synchronise si elle change. */
@@ -104,17 +207,93 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
      theme, tires de toute la banque plutot que d'un seul niveau, taille
      bornee plutot que la banque complete. */
 (function writePuzzleData() {
+  /* ---------- Redecoupage des dix niveaux (2026-09-06) ----------
+     Avant : les bandes etaient taillees sur le seul score diff du moteur.
+     Mesure du resultat : "Mating attacks" contenait 8% de mats, "Forcing
+     mates" 3%, "Grandmaster finishes" 4%, contre 26% pour "First steps", et
+     la profondeur de calcul DIMINUAIT en montant, 18% d'exercices a plusieurs
+     coups au niveau 6 contre 5% au niveau 10. L'echelle promettait donc
+     exactement l'inverse de ce qu'elle servait.
+     La cause n'est pas un mauvais reglage : diff n'est pas comparable d'une
+     famille d'exercices a l'autre. Un mat obtient un score bas parce qu'il
+     est forcant, pas parce qu'il est facile a trouver. Trier toute la banque
+     sur cette seule valeur revient a melanger deux echelles.
+     Le decoupage suit desormais ce que l'exercice demande au joueur : voir
+     une prise, puis un mat immediat, puis un motif geometrique nomme, puis un
+     motif a deux cibles, puis un coup sans capture, puis un calcul a deux
+     coups. diff garde son role LA ou il est valable, a l'interieur d'une
+     famille, pour ordonner et pour couper les prises en quatre paliers.
+     Les niveaux n'ont volontairement pas la meme taille : une famille ne se
+     coupe pas en morceaux egaux sans redevenir arbitraire. De 3790 a 7512.
+     Si tu ajoutes un theme a la banque, ajoute-le ici : ce qui n'est declare
+     nulle part atterrit au dernier niveau et la construction le signale.
+     Garde par tests/check_bandes_niveaux.js. */
+  {
+    const BANDES = [
+      { paliers: 4, themes: ["Winning capture"] },
+      { paliers: 1, themes: ["Mate in one"] },
+      { paliers: 1, themes: ["Knight fork", "Pawn fork"] },
+      { paliers: 1, themes: ["Pin", "Skewer", "Deflection"] },
+      { paliers: 1, themes: ["Double attack"] },
+      { paliers: 1, themes: ["Winning move", "Quiet move"] },
+      { paliers: 1, themes: ["Mate in two", "Mate in three", "Back-rank mate"] }
+    ];
+    const declares = new Set(BANDES.flatMap(b => b.themes));
+    const orphelins = [...new Set(puzzles.map(p => p.theme))].filter(t => !declares.has(t));
+    if (orphelins.length) console.log("ATTENTION themes non classes : " + orphelins.join(", ") + " -> derniers niveaux");
+    let niveau = 0;
+    for (const b of BANDES) {
+      const lot = puzzles.filter(p => b.themes.includes(p.theme));
+      lot.sort((x, y) => (x.diff || 0) - (y.diff || 0));
+      const par = Math.ceil(lot.length / b.paliers);
+      for (let i = 0; i < b.paliers; i++) {
+        niveau++;
+        for (const p of lot.slice(i * par, (i + 1) * par)) p.level = niveau;
+      }
+    }
+    for (const p of puzzles) if (!declares.has(p.theme)) p.level = 10;
+    const tailles = [];
+    for (let l = 1; l <= 10; l++) tailles.push(puzzles.filter(p => p.level === l).length);
+    console.log("Niveaux redecoupes : " + tailles.join(", "));
+  }
   const byLevel = {};
   const puzzleIndex = {};
   const themeCounts = {};
   for (const p of puzzles) {
     (byLevel[p.level] = byLevel[p.level] || []).push(p);
-    puzzleIndex[p.id] = p.level;
+    /* valeur posee plus bas, au decoupage : [niveau, morceau] */
     themeCounts[p.theme] = (themeCounts[p.theme] || 0) + 1;
   }
+  /* ---------- Decoupage des shards (2026-09-06) ----------
+     Chaque niveau tenait dans un seul fichier : 256 a 428 Ko gzip a
+     telecharger pour afficher UN exercice. C'etait le plus gros poste de
+     performance restant.
+     Le decoupage n'est pas arbitraire : nextPuzzle() (ui.js) trie le niveau
+     par difficulte croissante et le consomme dans cet ordre. En decoupant
+     dans le MEME ordre, le joueur n'a besoin que du premier morceau pour
+     commencer, et les suivants arrivent quand il progresse. Un morceau de
+     500 exercices pese une vingtaine de Ko gzip.
+     Ne decoupe pas dans un autre ordre : un decoupage aleatoire obligerait a
+     tout charger pour retrouver la progression par difficulte, et on
+     reviendrait au probleme d'origine en pire.
+     Le fichier level-N.json n'est plus le tableau mais un manifeste ; l'index
+     porte desormais [niveau, morceau] pour qu'un lien direct vers un exercice
+     ne charge que son morceau. */
+  const TAILLE_MORCEAU = 500;
+  let morceauxEcrits = 0;
   for (const lvl in byLevel) {
-    fs.writeFileSync(OUT + "/data/level-" + lvl + ".json", JSON.stringify(byLevel[lvl]));
+    const lot = byLevel[lvl].slice().sort((a, b) => (a.diff || 0) - (b.diff || 0));
+    const morceaux = Math.ceil(lot.length / TAILLE_MORCEAU);
+    for (let k = 0; k < morceaux; k++) {
+      const tranche = lot.slice(k * TAILLE_MORCEAU, (k + 1) * TAILLE_MORCEAU);
+      for (const p of tranche) puzzleIndex[p.id] = [+lvl, k];
+      fs.writeFileSync(OUT + "/data/level-" + lvl + "-" + k + ".json", JSON.stringify(tranche));
+      morceauxEcrits++;
+    }
+    fs.writeFileSync(OUT + "/data/level-" + lvl + ".json",
+      JSON.stringify({ total: lot.length, taille: TAILLE_MORCEAU, morceaux: morceaux }));
   }
+  console.log("Morceaux d'exercices : " + morceauxEcrits + " fichiers de " + TAILLE_MORCEAU + " exercices");
   fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
   fs.writeFileSync(OUT + "/data/theme-counts.json", JSON.stringify(themeCounts));
 
@@ -972,6 +1151,13 @@ function sectionLinks(lang, canonical) {
    le navigateur le fait pour la page entiere. block:"nearest" dans l'appel
    evite tout defilement vertical de la page elle-meme. */
 function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage, noindex) {
+  const dates = datesDe(canonical.replace(SITE, ""), body);
+  /* Une page non indexable n'est pas du contenu : 404 et le profil ne portent
+     donc pas de date. On teste aussi alts, parce que plusieurs appelants
+     passent leur <meta robots> par ce parametre plutot que par le dixieme
+     (voir l'appel de 404.html) : se fier au seul parametre noindex laissait
+     une date sur des pages qui n'en veulent pas. */
+  const horsContenu = !!noindex || /noindex/.test(String(alts || ""));
   lang = lang || "en";
   const d = L[lang];
   const other = lang === "fr" ? "en" : "fr";
@@ -1029,6 +1215,9 @@ ${alts || ""}
      "le premier bloc <style>", casse constatee sur check_pied_de_page.js
      (11 echecs, regles .sitenav/.tabs cherchees dans le mauvais bloc). -->
 <style>
+.skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
+.skiplink:focus{left:0}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -1050,10 +1239,22 @@ ${(() => {
      vaut ne rien declarer que declarer faux. */
   if (!jsonld) return "";
   const d = { ...jsonld };
-  if (d["@type"] === "Article" || d["@type"] === "LearningResource") {
+  /* Elargi le 2026-09-06 : le complement ne visait qu'Article et
+     LearningResource, alors que 100 pages emettent d'autres types de
+     CreativeWork (CollectionPage pour les index de rubrique, DefinedTerm pour
+     le lexique...). Elles portaient une date visible dans le pied mais rien
+     de structure, et un moteur voyait donc deux versions de la meme page.
+     ItemList et BreadcrumbList restent dehors : ce ne sont pas des
+     CreativeWork, datePublished n'y a pas de sens. */
+  const DATABLES = ["Article", "LearningResource", "CollectionPage", "WebPage",
+    "DefinedTerm", "DefinedTermSet", "HowTo", "FAQPage", "CreativeWork", "Game"];
+  if (DATABLES.includes(d["@type"])) {
     d.author = d.author || { "@type": "Person", name: PUBLISHER.name };
+    /* author/publisher/image n'ont de sens que pour un vrai article ; sur une
+       page de rubrique on se limite aux dates et au rattachement. */
     d.publisher = d.publisher || { "@type": "Organization", name: "chang64", url: SITE };
-    d.dateModified = d.dateModified || BUILD_DATE;
+    d.datePublished = d.datePublished || dates.publiee;
+    d.dateModified = d.dateModified || dates.modifiee;
     d.mainEntityOfPage = d.mainEntityOfPage || { "@type": "WebPage", "@id": canonical };
     d.image = d.image || (ogImage || SITE + "/og/home.png");
     d.isPartOf = d.isPartOf || { "@type": "WebSite", name: "chang64", url: SITE };
@@ -1084,6 +1285,15 @@ ${(() => {
 })()}
 </head>
 <body>
+${/* Lien d'evitement ajoute le 2026-09-06. L'application en avait un, ces
+     466 pages non : au clavier il fallait retraverser les seize liens de
+     l'entete a CHAQUE page avant d'atteindre le texte (critere WCAG 2.4.1).
+     Le commentaire vit ici et pas dans le gabarit : tout ce qui est ecrit
+     entre les accents graves part dans les 466 pages livrees, un premier
+     essai avait alourdi le site de 400 Ko pour trois phrases.
+     La cible est le <main id="contenu"> pose plus bas, qui sert aussi de
+     repere de region principale. Aucune regle CSS ne vise main dans ces
+     pages, l'ajout ne change donc rien a la mise en page. */""}<a class="skiplink" href="#contenu">${lang === "fr" ? "Aller au contenu" : "Skip to main content"}</a>
 <div class="wrap">
 <header>
   <a class="brand" href="/">${brandMark()}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${lang === "fr" ? "L'éléphant sur 64 cases" : "The elephant on 64 squares"}</span></span></a>
@@ -1105,7 +1315,9 @@ ${(() => {
   })() : ""}
   <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
 </header>
+<main id="contenu">
 ${body}
+</main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role
@@ -1118,6 +1330,9 @@ ${body}
     <a href="/#accessibilite">${lang === "fr" ? "Accessibilité" : "Accessibility"}</a>
   </nav>
   <p class="footnote">${d.foot}</p>
+  ${horsContenu ? "" : `<p class="pagedate">${lang === "fr"
+      ? "Publiée le " + frDate(dates.publiee) + (dates.modifiee !== dates.publiee ? ", mise à jour le " + frDate(dates.modifiee) : "")
+      : "Published " + dates.publiee + (dates.modifiee !== dates.publiee ? ", updated " + dates.modifiee : "")}</p>`}
 </footer>
 </div>
 <script>
@@ -1482,12 +1697,26 @@ fs.writeFileSync(OUT + "/sw.js", `/* chang64 offline cache
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
 const CACHE="chang64-${SW_VERSION}";
+const DATA_CACHE="chang64-data-${SW_VERSION}";
+/* Trois entrees au maximum dans le cache de donnees (2026-09-06). Un shard
+   de niveau pese 1 a 2 Mo : trois plafonnent l'occupation autour de 5 Mo,
+   loin des 17 Mo qui avaient fait sauter le quota iOS et evince le cache
+   ENTIER, coquille de l'application comprise. En pratique un joueur reste
+   sur son niveau et le suivant, donc trois suffisent presque toujours. */
+const DATA_MAX=3;
+/* Les ecritures du cache de donnees sont mises a la queue leu leu. Mesure
+   avant serialisation : cinq shards demandes en meme temps laissaient six
+   entrees au lieu de trois, chaque requete lisant keys() avant qu'aucune
+   ecriture n'ait atterri, donc aucune ne voyait de raison d'evincer. Le
+   plafond ne tenait pas du tout. Ne pas remplacer cette chaine par des
+   appels paralleles. */
+let fileDeco=Promise.resolve();
 const CORE=["/","/index.html","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));
 });
 self.addEventListener("activate",e=>{
-  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
+  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE&&k!==DATA_CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
 });
 self.addEventListener("fetch",e=>{
   const r=e.request;
@@ -1499,10 +1728,39 @@ self.addEventListener("fetch",e=>{
      puzzle-index) etaient mis en cache sans plafond. Sur iOS le quota par
      origine est etroit et son depassement evince le cache ENTIER, coquille
      de l'application comprise : le site tombait alors hors ligne d'un coup.
-     Ces fichiers sont deja gardes par le cache HTTP du navigateur, donc les
-     exclure ici ne coute qu'un aller-retour au premier chargement et met la
-     coquille a l'abri. */
-  if(url.pathname.startsWith("/data/"))return;
+     Les exclure a mis la coquille a l'abri, mais au prix d'une perte seche :
+     sans reseau, /data/ ne repondait plus du tout, exQuest restait sur
+     "Loading…" et le site affichait "Impossible de charger les exercices".
+     Un utilisateur en avion perdait donc les exercices, c'est-a-dire la
+     moitie du site. Mesure faite en bloquant /data/ : l'echiquier restait
+     affiche, vide, sous un message d'erreur.
+     Depuis le 2026-09-06 ils reviennent dans un cache A PART, plafonne a
+     DATA_MAX entrees. Le cache separe et le plafond traitent la vraie cause
+     du probleme iOS, qui etait le volume, pas la mise en cache elle-meme :
+     trois shards pesent environ 5 Mo la ou la banque entiere en pesait 17.
+     Ne pas remettre ces fichiers dans CACHE : c'est ce melange qui faisait
+     tomber la coquille avec les donnees. */
+  if(url.pathname.startsWith("/data/")){
+    e.respondWith(
+      caches.open(DATA_CACHE).then(c=>c.match(r).then(hit=>hit||fetch(r).then(resp=>{
+        if(resp&&resp.ok){
+          const copy=resp.clone();
+          /* Plafond applique a l'ecriture, une ecriture a la fois : on evince
+             la plus ancienne entree plutot que de laisser le cache grossir.
+             keys() rend les entrees dans leur ordre d'insertion, la premiere
+             est donc la plus vieille. */
+          fileDeco=fileDeco.then(()=>c.keys().then(ks=>{
+            const trop=ks.length-(DATA_MAX-1);
+            return trop>0?Promise.all(ks.slice(0,trop).map(k=>c.delete(k))):null;
+          }).then(()=>c.put(r,copy))).catch(()=>{});
+        }
+        return resp;
+      })))
+      /* Hors ligne et jamais mis en cache : on laisse l'echec remonter tel
+         quel, fetchJSON le traduit en message lisible (puzzleDataError). */
+    );
+    return;
+  }
   e.respondWith(
     caches.match(r).then(hit=>hit||fetch(r).then(resp=>{
       const copy=resp.clone();
@@ -1570,7 +1828,7 @@ function queueOg(name, title, subtitle, fen) {
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' __HACHAGES__ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()
@@ -1581,6 +1839,10 @@ fs.writeFileSync(OUT + "/_headers", `/*
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: font/woff2
+
+/data/*
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=600
 
 /*.svg
   Cache-Control: public, max-age=604800
@@ -1716,4 +1978,6 @@ const size = p => fs.statSync(p).size;
 console.log("index.html         :", Math.round(size(OUT + "/index.html") / 1024), "Ko");
 let total = 0;
 (function walk(d) { for (const f of fs.readdirSync(d)) { const fp = path.join(d, f); const st = fs.statSync(fp); st.isDirectory() ? walk(fp) : total += st.size; } })(OUT);
+poserHachagesCSP();
+ecrireRegistreDates();
 console.log("Poids du site      :", (total / 1048576).toFixed(1), "Mo");

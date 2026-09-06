@@ -59,8 +59,16 @@ const helpers = w => {
   a.click(a.$("tab-friend"));
   await wait(300);
   console.log("Onglet Entre amis ouvert :", a.$("pane-friend").className.includes("hide") ? "ECHEC" : "OK");
+  /* Mis a jour le 2026-09-06 : depuis le 04/09, "Create game" n'ouvre plus
+     qu'une modale de choix de couleur (ui.js l.2288), c'est le clic sur la
+     couleur qui cree la partie. Le test s'arretait au bouton, amiLink restait
+     vide et open_(lien) plantait sur une URL vide : tout le parcours entre
+     deux joueurs n'etait plus verifie depuis. On prend les Blancs, le
+     scenario jouant 1.e4 juste apres. */
   a.click(a.$("btnAmiNew"));
   await wait(200);
+  a.click([...a.$("amiColorBtns").children].find(b => b.dataset.v === "w"));
+  await wait(300);
   console.log("Statut initial :", a.$("amiStatus").textContent);
   console.log("Boutons de partage du site :", a.$("siteShare").children.length);
   console.log("Libellés :", Array.from(a.$("siteShare").children).map(b => b.textContent).join(", "));

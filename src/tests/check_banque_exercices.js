@@ -92,7 +92,19 @@ console.log("\n--- Les mats annonces sont bien des mats forces, quel que soit n 
    exactement la meme verification exhaustive (contre toutes les defenses)
    que le code du navigateur, ici cote Node. */
 let notMate=[],wrongLen=[];
-for(const p of P.filter(x=>x.type==="mate")){
+/* Echantillonnage ajoute le 2026-09-06. La verification exhaustive des 11455
+   mats ne termine pas dans un temps utilisable : elle depassait les 300 s du
+   lanceur, donc cette section n'etait JAMAIS executee et la limitation etait
+   documentee comme permanente. Un test qui ne tourne pas ne garde rien.
+   On en verifie desormais un echantillon deterministe (un sur N, pas un
+   tirage au sort : deux executions doivent donner le meme resultat, sinon un
+   echec devient impossible a reproduire). CHANG64_MATS=0 remet la
+   verification complete, a lancer de temps en temps hors du lanceur. */
+const PAS_MATS=process.env.CHANG64_MATS==="0"?1:(+process.env.CHANG64_MATS||12);
+const MATS=P.filter(x=>x.type==="mate").filter((_,i)=>i%PAS_MATS===0);
+console.log("  ("+MATS.length+" mats verifies sur "+P.filter(x=>x.type==="mate").length+
+  (PAS_MATS>1?", un sur "+PAS_MATS+" ; CHANG64_MATS=0 pour tout verifier)":", verification complete)"));
+for(const p of MATS){
   const g=new Game(p.fen);
   const mm=allMatingMoves(g,p.n);
   if(!mm.length){notMate.push(p.id+" (n="+p.n+")");continue;}
@@ -110,16 +122,27 @@ for(const p of P)byTheme[p.theme]=(byTheme[p.theme]||0)+1;
 for(const th of ["Pin","Skewer","Double attack","Knight fork"])
   T(th+" : "+(byTheme[th]||0)+" exercices", (byTheme[th]||0)>=20, String(byTheme[th]||0));
 
-console.log("\n--- Chaque motif couvre plusieurs niveaux ---");
-for(const th of ["Pin","Skewer"]){
-  const lv=new Set(P.filter(p=>p.theme===th).map(p=>p.level));
-  T(th+" reparti sur "+lv.size+" niveaux", lv.size>=2, [...lv].sort().join(","));
-}
+/* Retire le 2026-09-06 : "chaque motif couvre plusieurs niveaux" lisait le
+   champ level de puzzles.json, qui n'est PLUS celui qui est servi. Depuis le
+   redecoupage, build_site.js recalcule les niveaux par famille d'exercices,
+   et un motif vit desormais dans un seul niveau : c'est le but. L'assertion
+   ne passait que parce qu'elle lisait une valeur perimee. La composition des
+   niveaux est gardee par tests/check_bandes_niveaux.js, sur les fichiers
+   reellement publies.
+   ATTENTION : le champ level de puzzles.json n'est plus une source de
+   verite. Ne rien en deduire ici. */
 
-console.log("\n--- Les themes ont tous une traduction ---");
-const TH=JSON.parse(fs.readFileSync(require("path").join(__dirname,"..","themes.json"),"utf8"));
-const trad=new Set(Object.values(TH));
-const sansTrad=Object.keys(byTheme).filter(t=>!trad.has(t));
+console.log("\n--- Les themes ont tous une traduction francaise ---");
+/* Corrige le 2026-09-06 : cette assertion lisait themes.json, qui est une
+   table de RENOMMAGE de themes (vide aujourd'hui), pas une table de
+   traduction. Elle declarait donc les 13 themes non traduits alors qu'ils le
+   sont tous. Personne ne l'avait vu parce que la section precedente, la
+   verification exhaustive des 11455 mats, depassait les 300 s du lanceur :
+   ce fichier n'atteignait jamais cette ligne. Un test qui ne tourne pas ne
+   garde rien, et il peut mentir longtemps.
+   On lit maintenant i18n.js, le vrai chemin : exTheme affiche t(puzzle.theme). */
+const I18N=fs.readFileSync(require("path").join(__dirname,"..","i18n.js"),"utf8");
+const sansTrad=Object.keys(byTheme).filter(th=>!new RegExp('"'+th.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+'"\\s*:\\s*"[^"]+"').test(I18N));
 T("aucun theme sans traduction francaise", sansTrad.length===0, sansTrad.join(", "));
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

@@ -135,16 +135,34 @@ const H = w => {
   T("clicking board leaves review instead of moving", a.$("sheet").querySelectorAll("[data-ply]").length === beforeCount);
 
   console.log("\nPUZZLE RATING + STREAK");
+  /* Mis a jour le 2026-09-06 : depuis le 03/09, tab-puzzles ouvre le menu a
+     5 cartes et ne charge plus aucun exercice. Le test enchainait directement
+     sur la boucle de resolution, donc le premier tour travaillait sur ce que
+     l'echiquier affichait encore, cur() ne trouvait rien et le tour etait
+     perdu : d'ou le 2/3 constant, pris a tort pour un alea du tirage. */
   a.click(a.$("tab-puzzles")); await wait(700);
+  a.click(a.$("cardSolvePuzzles")); await wait(1200);
   const rating0 = +a.$("stRating").textContent;
   T("rating displayed", rating0 > 0, String(rating0));
   let solved = 0;
   for (let i = 0; i < 3; i++) {
     const pz = a.cur();
     if (!pz) { a.click(a.$("btnNext")); await wait(400); continue; }
-    await a.play(pz.sol[0].slice(0, 2), pz.sol[0].slice(2, 4));
-    if (a.$("promoModal").className.includes("on")) { a.click(a.$("promoBtns").children[0]); await wait(400); }
-    if (pz.type === "mate" && pz.n === 2 && a.$("exStatus").textContent.includes("mate in")) {
+    /* Mis a jour le 2026-09-06 : la boucle ne jouait que pz.sol[0], avec un
+       rattrapage special pour les mats en deux. Tout exercice a plusieurs
+       coups qui n'etait pas un mat restait donc inacheve et comptait comme
+       un echec, d'ou un resultat qui oscillait entre 2/3 et 3/3 selon le
+       tirage. On joue maintenant tous les demi-coups du joueur, ceux d'indice
+       pair, la reponse adverse etant jouee par le site. */
+    for (let k = 0; k < pz.sol.length; k += 2) {
+      await a.play(pz.sol[k].slice(0, 2), pz.sol[k].slice(2, 4));
+      if (a.$("promoModal").className.includes("on")) { a.click(a.$("promoBtns").children[0]); await wait(400); }
+      if (a.$("exStatus").className.includes("win")) break;
+    }
+    /* Un mat annonce accepte n'importe quel mat, pas seulement celui de la
+       solution enregistree : si le site attend encore le coup de mat, on le
+       lui donne. */
+    if (pz.type === "mate" && a.$("exStatus").textContent.includes("mate in")) {
       const g2 = new Engine.Game(a.placement() + " " + pz.fen.split(" ")[1] + " - - 0 1");
       const mm = Engine.allMatingMoves(g2, 1);
       if (mm.length) { const u = g2.uci(mm[0]); await a.play(u.slice(0, 2), u.slice(2, 4)); }
@@ -154,13 +172,23 @@ const H = w => {
   }
   T("puzzles still solvable", solved === 3, solved + "/3");
   T("rating moved", +a.$("stRating").textContent !== rating0, rating0 + " -> " + a.$("stRating").textContent);
-  T("day streak started", a.$("stDays").textContent === "1", a.$("stDays").textContent);
+  /* Mis a jour le 2026-09-06 : la serie de jours est passee a un compteur
+     strictement quotidien fin aout. Resoudre des exercices classiques ne la
+     demarre plus, seul le Puzzle du jour le fait. L'assertion verifiait
+     l'ancienne regle et echouait sur le comportement voulu ; elle garde
+     desormais la nouvelle. */
+  T("day streak untouched by ordinary puzzles", a.$("stDays").textContent === "0", a.$("stDays").textContent);
 
   console.log("\nPUZZLE RUSH");
-  /* Le Sprint ne demarre plus que depuis Defis : btnGoRush, puis l'overlay
-     de preparation attend le feu vert avant de vraiment lancer le chrono. */
-  a.click(a.$("tab-train")); await wait(400);
-  a.click(a.$("btnGoRush")); await wait(400);
+  /* Mis a jour le 2026-09-06 : le Sprint partait de Defis (tab-train), onglet
+     supprime le 03/09, puis de btnGoRush. La carte "Chang Sprint" du menu
+     Resoudre appelle maintenant beginRushFlow() directement et saute ce
+     bouton intermediaire (voir ui2.js, cardSolveSprint). btnGoRush n'est pas
+     mort pour autant, il sert a abandonner un sprint en cours, mais ce n'est
+     plus le chemin d'entree. L'overlay de preparation attend toujours le feu
+     vert avant de lancer le chrono. */
+  a.click(a.$("tab-puzzles")); await wait(400);
+  a.click(a.$("cardSolveSprint")); await wait(400);
   {
     const rb = a.$("readyBanner");
     if (rb && !rb.className.includes("hide")) { a.click(a.$("readyStart")); await wait(400); }
@@ -208,7 +236,12 @@ const H = w => {
   T("home restored", !a.$("pane-home").className.includes("hide"));
   T("legal hidden", a.$("pane-legal").className.includes("hide"));
   T("home shows rating", +a.$("hRating").textContent > 0, a.$("hRating").textContent);
-  T("home shows streak", a.$("hStreak").textContent === "1", a.$("hStreak").textContent);
+  /* Mis a jour le 2026-09-06 : hStreak affiche prog.days (ui2.js l.1548), la
+     serie de jours devenue strictement quotidienne fin aout. Elle ne bouge
+     que pour le Puzzle du jour, pas pour les exercices classiques resolus
+     plus haut. Meme correction que "day streak untouched by ordinary
+     puzzles". */
+  T("home shows the day streak, untouched by ordinary puzzles", a.$("hStreak").textContent === "0", a.$("hStreak").textContent);
   a.click(a.$("tab-play")); await wait(500);
   T("play still works after everything", !a.$("pane-play").className.includes("hide") && a.$("board").children.length === 64);
 

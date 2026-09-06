@@ -807,11 +807,19 @@ function announce(msg,level){
   el.textContent = msg===lastAnnounce ? msg+"\u00a0" : msg;
   lastAnnounce=el.textContent;
 }
+/* Corrige le 2026-09-06 : la rangee etait calculee 1+(s>>4) alors que tout le
+   reste du projet utilise 8-(s>>4) -- engine_browser.js l.11 (sqN, la
+   reference du moteur) et sqLabel() dans ui.js. Les deux formules sont
+   l'image miroir l'une de l'autre et ne coincident pour aucune rangee, donc
+   les 64 cases etaient annoncees a l'envers : la tour noire en a8 etait
+   annoncee "a1". Mesure avant correction : 0 case sur 64 ou le nom accessible
+   et l'annonce concordaient. Ne pas "simplifier" en 1+(s>>4) : c'est la
+   numerotation interne du damier 0x88, pas le nom lu par un humain. */
 const SQ_NAMES=(()=>{
   const o={};
   for(let s=0;s<128;s++){
     if(s&0x88)continue;
-    o[s]="abcdefgh"[s&7]+(1+(s>>4));
+    o[s]="abcdefgh"[s&7]+(8-(s>>4));
   }
   return o;
 })();
@@ -848,29 +856,27 @@ function setRoving(i){
   for(let k=0;k<cells.length;k++)cells[k].tabIndex = k===i?0:-1;
   kbdIdx=i;
 }
+/* Plus d'annonce de case dans la region live (2026-09-06).
+   Deux fonctions decrivaient la meme case et avaient fini par se contredire :
+   sqLabel() posait le nom accessible que le lecteur d'ecran lit quand le
+   focus arrive sur la case, announceCell() ecrivait sa propre phrase dans la
+   region live. Une fois les deux remises d'accord, le defaut restant sautait
+   aux yeux : elles disaient exactement la meme chose, donc l'utilisateur
+   l'entendait deux fois.
+   On garde le nom accessible et on retire l'annonce. Le focus est le bon
+   canal ici : la navigation aux fleches n'existe que quand une case a le
+   focus (voir le gestionnaire keydown plus bas, qui exige que e.target soit
+   une case), donc le lecteur d'ecran annonce forcement le nom au moment ou
+   le curseur bouge. La region live n'ajoutait rien.
+   Elle reste utilisee pour ce que le focus ne dit jamais : les coups joues,
+   le statut de la partie, l'annulation d'une selection. Le reglage
+   "Annonces aux lecteurs d'ecran" continue donc de servir.
+   Une case vide n'est plus dite "case vide e6" mais "e6", ce qui reste sans
+   ambiguite : une case occupee nomme toujours sa piece. */
 function focusCell(i){
   setRoving(i);
   const c=boardCells()[i];
-  if(c){c.focus();announceCell(i);}
-}
-function announceCell(i){
-  if(prefAnnounce==="off")return;
-  const sq=idxToSq(i);
-  const g=(typeof viewGame==="function")?viewGame():game;
-  let msg=sqName(sq);
-  try{
-    const pc=g.board[sq];
-    if(pc){
-      const isWhite=pColor(pc)===W;
-      const ch="pnbrqk"[pType(pc)-1]||"";
-      const side=sideWord(ch,isWhite);
-      const word=pieceWord(ch);
-      msg=(LANG==="fr"?word+" "+side+" en "+sqName(sq):side+" "+word+" on "+sqName(sq));
-    }else{
-      msg=(LANG==="fr"?"case vide "+sqName(sq):"empty "+sqName(sq));
-    }
-  }catch(e){}
-  announce(msg,"cell");
+  if(c)c.focus();
 }
 if(typeof boardEl!=="undefined"&&boardEl){
   boardEl.addEventListener("keydown",e=>{
@@ -910,6 +916,26 @@ if(typeof boardEl!=="undefined"&&boardEl){
 /* Le tabindex roulant est pose directement dans buildBoard (ui.js) : une
    surcharge ici ne fonctionnerait pas, buildBoard etant une declaration de
    fonction dont les appels internes ne passent pas par la reassignation. */
+
+/* ---------- avertissement de stockage ---------- */
+/* Pose ici et pas dans ui.js : le texte doit passer par t(), qui vit dans
+   i18n.js, et suivre un changement de langue comme le reste de l'interface.
+   collectI18n() ne peut pas s'en charger, l'element etant vide au chargement
+   et rempli seulement si le stockage lache. */
+function majAvertissementStockage(){
+  const el=$("storageWarn");
+  if(!el)return;
+  if(!window.storageMemoireSeule){el.classList.add("hide");el.textContent="";return;}
+  el.textContent=t("This browser isn't keeping your progress: it will be lost when you close the tab. Private browsing or a full storage can cause this.");
+  el.classList.remove("hide");
+}
+window.addEventListener("chang64:stockage-memoire",majAvertissementStockage);
+majAvertissementStockage();
+/* Retraduit avec le reste quand la langue change. */
+if(typeof applyI18n==="function"){
+  const baseApply=applyI18n;
+  applyI18n=function(){baseApply.apply(this,arguments);majAvertissementStockage();};
+}
 
 /* ---------- annonce des coups joues ---------- */
 if(typeof playUser==="function"){
@@ -1010,8 +1036,12 @@ function renderPrefs(){
       b.type="button";
       b.setAttribute("data-v",v);
       b.setAttribute("role","radio");
+      /* aria-checked seul (2026-09-06) : aria-pressed n'est pas valide sur
+         role="radio", il appartient au patron bouton bascule. Les porter tous
+         les deux fait annoncer deux etats concurrents pour un seul controle
+         par certains lecteurs d'ecran. Le groupe est bien un radiogroup, voir
+         le conteneur segAnnounce dans le gabarit. */
       b.setAttribute("aria-checked",String(v===prefAnnounce));
-      b.setAttribute("aria-pressed",String(v===prefAnnounce));
       b.textContent=labels[v];
       b.onclick=()=>{
         prefAnnounce=v;savePrefs();renderPrefs();

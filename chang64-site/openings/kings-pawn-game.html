@@ -54,6 +54,9 @@
      "le premier bloc <style>", casse constatee sur check_pied_de_page.js
      (11 echecs, regles .sitenav/.tabs cherchees dans le mauvais bloc). -->
 <style>
+.skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
+.skiplink:focus{left:0}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -258,10 +261,11 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}</style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"King's Pawn Game chess opening","description":"The King's Pawn Game begins 1.e4 (ECO B00–C44). This page lists its 34 named variations with their moves and ECO codes, on a board you can play from against…","inLanguage":"en","about":{"@type":"Thing","name":"King's Pawn Game"},"isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"},"author":{"@type":"Person","name":"AlexZ1212"},"publisher":{"@type":"Organization","name":"chang64","url":"https://chang64.com"},"dateModified":"2026-09-06","mainEntityOfPage":{"@type":"WebPage","@id":"https://chang64.com/openings/kings-pawn-game.html"},"image":"https://chang64.com/og/op-kings-pawn-game.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"King's Pawn Game chess opening","description":"The King's Pawn Game begins 1.e4 (ECO B00–C44). This page lists its 34 named variations with their moves and ECO codes, on a board you can play from against…","inLanguage":"en","about":{"@type":"Thing","name":"King's Pawn Game"},"isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"},"author":{"@type":"Person","name":"AlexZ1212"},"publisher":{"@type":"Organization","name":"chang64","url":"https://chang64.com"},"datePublished":"2026-09-06","dateModified":"2026-09-06","mainEntityOfPage":{"@type":"WebPage","@id":"https://chang64.com/openings/kings-pawn-game.html"},"image":"https://chang64.com/og/op-kings-pawn-game.png"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"chang64","item":"https://chang64.com/"},{"@type":"ListItem","position":2,"name":"Openings","item":"https://chang64.com/openings/"},{"@type":"ListItem","position":3,"name":"King's Pawn Game : moves, variations and ECO codes","item":"https://chang64.com/openings/kings-pawn-game.html"}]}</script>
 </head>
 <body>
+<a class="skiplink" href="#contenu">Skip to main content</a>
 <div class="wrap">
 <header>
   <a class="brand" href="/"><svg class="brandmark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z"/><path d="M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z"/><path d="M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z"/><path d="M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z"/><path d="M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z"/><path d="M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"/></g></svg><span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">The elephant on 64 squares</span></span></a>
@@ -275,6 +279,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   </div>
   <nav class="sitenav"><a href="/openings/" aria-current="page" id="cn">Openings</a><a href="/puzzles/">Patterns</a><a href="/learn/">Rules</a><a href="/endgames/">Endgames</a><a href="/traps/">Opening traps</a><a href="/glossary/">Glossary</a></nav>
 </header>
+<main id="contenu">
 
 <h1>King's Pawn Game</h1>
 <p class="lede">1.e4 · B00, B07, C20, C40, C44 · 34 named lines, with a board to play them from.</p>
@@ -307,6 +312,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 <div class="tablewrap"><table><thead><tr><th>Variation</th><th>Moves</th><th>ECO</th></tr></thead><tbody><tr><td>Main line</td><td class="mono">1.e4</td><td class="mono">B00</td></tr><tr><td>Main line</td><td class="mono">1.e4 e5</td><td class="mono">C20</td></tr><tr><td>King's Head Opening</td><td class="mono">1.e4 e5 2.f3</td><td class="mono">C20</td></tr><tr><td>Leonardis Variation</td><td class="mono">1.e4 e5 2.d3</td><td class="mono">C20</td></tr><tr><td>MacLeod Attack</td><td class="mono">1.e4 e5 2.c3</td><td class="mono">C20</td></tr><tr><td>Mengarini's Opening</td><td class="mono">1.e4 e5 2.a3</td><td class="mono">C20</td></tr><tr><td>Alapin Opening</td><td class="mono">1.e4 e5 2.Ne2</td><td class="mono">C20</td></tr><tr><td>Napoleon Attack</td><td class="mono">1.e4 e5 2.Qf3</td><td class="mono">C20</td></tr><tr><td>Tortoise Opening</td><td class="mono">1.e4 e5 2.Bd3</td><td class="mono">C20</td></tr><tr><td>Wayward Queen Attack</td><td class="mono">1.e4 e5 2.Qh5</td><td class="mono">C20</td></tr><tr><td>Maróczy Defense</td><td class="mono">1.e4 d6 2.d4 e5</td><td class="mono">B07</td></tr><tr><td>Bavarian Gambit</td><td class="mono">1.e4 e5 2.c4 d5</td><td class="mono">C20</td></tr><tr><td>Beyer Gambit</td><td class="mono">1.e4 e5 2.d4 d5</td><td class="mono">C20</td></tr><tr><td>Clam Variation, King's Gambit Reversed</td><td class="mono">1.e4 e5 2.d3 f5</td><td class="mono">C20</td></tr><tr><td>MacLeod Attack, Lasa Gambit</td><td class="mono">1.e4 e5 2.c3 f5</td><td class="mono">C20</td></tr><tr><td>Damiano Defense</td><td class="mono">1.e4 e5 2.Nf3 f6</td><td class="mono">C40</td></tr><tr><td>Gunderam Gambit</td><td class="mono">1.e4 e5 2.Nf3 c6</td><td class="mono">C40</td></tr><tr><td>Wayward Queen Attack, Kiddie Countergambit</td><td class="mono">1.e4 e5 2.Qh5 Nf6</td><td class="mono">C20</td></tr><tr><td>Busch-Gass Gambit</td><td class="mono">1.e4 e5 2.Nf3 Bc5</td><td class="mono">C40</td></tr><tr><td>McConnell Defense</td><td class="mono">1.e4 e5 2.Nf3 Qf6</td><td class="mono">C40</td></tr><tr><td>King's Head Opening</td><td class="mono">1.e4 e5 2.f3 Nf6 3.Nc3</td><td class="mono">C20</td></tr><tr><td>Dresden Opening</td><td class="mono">1.e4 e5 2.Nf3 Nc6 3.c4</td><td class="mono">C44</td></tr><tr><td>Pachman Wing Gambit</td><td class="mono">1.e4 e5 2.Nf3 Nc6 3.b4</td><td class="mono">C44</td></tr><tr><td>Tayler Opening</td><td class="mono">1.e4 e5 2.Nf3 Nc6 3.Be2</td><td class="mono">C44</td></tr><tr><td>Clam Variation, Radisch Gambit</td><td class="mono">1.e4 e5 2.d3 Nf6 3.f4 Bc5</td><td class="mono">C20</td></tr><tr><td>MacLeod Attack, Norwalde Gambit</td><td class="mono">1.e4 e5 2.c3 d5 3.Qh5 Bd6</td><td class="mono">C20</td></tr><tr><td>Philidor Gambit</td><td class="mono">1.e4 e5 2.d4 d6 3.dxe5 Bd7</td><td class="mono">C20</td></tr><tr><td>Gunderam Defense, Gunderam Gambit</td><td class="mono">1.e4 e5 2.Nf3 Qe7 3.Bc4 f5</td><td class="mono">C40</td></tr><tr><td>Busch-Gass Gambit, Chiodini Gambit</td><td class="mono">1.e4 e5 2.Nf3 Bc5 3.Nxe5 Nc6</td><td class="mono">C40</td></tr><tr><td>Tayler Opening</td><td class="mono">1.e4 e5 2.Nf3 Nc6 3.Be2 Nf6 4.d4</td><td class="mono">C44</td></tr><tr><td>La Bourdonnais Gambit</td><td class="mono">1.e4 e5 2.Nf3 Qf6 3.Bc4 Qg6 4.O-O</td><td class="mono">C40</td></tr><tr><td>Schulze-Müller Gambit</td><td class="mono">1.e4 e5 2.Nf3 Nc6 3.Nxe5 Nxe5 4.d4</td><td class="mono">C44</td></tr><tr><td>Damiano Defense, Damiano Gambit, Chigorin Gambit</td><td class="mono">1.e4 e5 2.Nf3 f6 3.Nxe5 Qe7 4.Nf3 d5</td><td class="mono">C40</td></tr><tr><td>Weber Gambit</td><td class="mono">1.e4 e5 2.d3 d5 3.exd5 c6 4.dxc6 Nxc6</td><td class="mono">C20</td></tr></tbody></table></div>
 
 
+</main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role
@@ -319,6 +325,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
     <a href="/#accessibilite">Accessibility</a>
   </nav>
   <p class="footnote">chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.</p>
+  
 </footer>
 </div>
 <script>

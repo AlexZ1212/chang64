@@ -166,8 +166,10 @@ const FR={
 "Find the winning move.":"Trouve le coup gagnant.","Loading…":"Chargement…",
 "First steps":"Premiers pas","Building confidence":"Prendre confiance","Everyday tactics":"Tactiques du quotidien",
 "Sharper eyes":"L'œil plus affûté","Wider board":"Voir tout l'échiquier",
-"Real calculation":"Vrai calcul","Advanced tactics":"Tactiques avancées",
-"Mating attacks":"Attaques de mat","Forcing mates":"Mats forcés","Grandmaster finishes":"Finitions de grand maître",
+"Loose pieces":"Pièces en prise","Quieter captures":"Prises plus discrètes",
+"Well-hidden captures":"Prises bien cachées","Mate in one":"Mat en un","Forks":"Fourchettes",
+"Pins and skewers":"Clouages et enfilades","Double attacks":"Attaques doubles",
+"The winning move":"Le coup gagnant","Mate in two":"Mat en deux",
 "Mate in two":"Mats en deux coups",
 "One move is enough.":"Un seul coup suffit.","Look for the loose piece.":"Cherche la pièce mal protégée.",
 "One piece can attack two at once.":"Une pièce peut en attaquer deux à la fois.",
@@ -390,6 +392,9 @@ const FR={
 "Analysing…":"Analyse en cours…","Best move: {m}":"Meilleur coup : {m}",
 "Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.":"Tu ne perds pas ta partie en quittant la page : elle se sauvegarde automatiquement dans ce navigateur, prête à reprendre.","More info":"Plus d'infos",
 "Legal notice":"Mentions légales","Privacy":"Confidentialité","Preferences":"Préférences","Accessibility":"Accessibilité","Publisher and hosting details.":"Éditeur et hébergeur.",
+"Play a move, or use Hint, to unlock the next puzzle.":"Joue un coup, ou utilise l'indice, pour débloquer l'exercice suivant.",
+"Try this puzzle first.":"Essaie d'abord cet exercice.",
+"This browser isn't keeping your progress: it will be lost when you close the tab. Private browsing or a full storage can cause this.":"Ce navigateur ne conserve pas ta progression : elle sera perdue en fermant l'onglet. La navigation privée ou un stockage plein peuvent en être la cause.",
 "chang64 · no account, no tracking · progress saved on this device":
  "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",
 "Use your browser menu: Add to home screen":"Passe par le menu du navigateur : Ajouter à l'écran d'accueil"

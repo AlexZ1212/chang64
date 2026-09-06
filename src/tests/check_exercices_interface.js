@@ -53,17 +53,26 @@ setTimeout(async()=>{
   console.log("\n--- Explication apres resolution (pas avant, pas apres un echec) ---");
   /* PUZZLES etait un tableau global embarque, remplace depuis la refonte en
      donnees par niveau charge a la demande (LEVEL_CACHE/PUZZLE_CACHE,
-     "10 patterns, 3 examples each") : ce nom n'existe plus. p23 (niveau 4,
-     theme "Winning capture", explain.piece="b") est verifie present dans
-     puzzles.json au moment d'ecrire ce test -- reference fixe plutot que
-     recherche en direct, pour ne pas dependre de l'ordre ou du contenu
-     exact d'un niveau qui peut evoluer. */
+     "10 patterns, 3 examples each") : ce nom n'existe plus. On travaille sur
+     p23, verifie present dans puzzles.json et porteur d'un explain.piece.
+     Mis a jour le 2026-09-06 : son niveau etait ecrit en dur (4). Le
+     redecoupage des niveaux par famille l'a deplace, et le test s'est mis a
+     charger un shard qui ne le contenait plus. Le commentaire d'origine
+     disait vouloir ne pas dependre du contenu d'un niveau : il en dependait
+     entierement. On lit desormais son niveau dans puzzle-index.json, que le
+     site publie justement pour ca. */
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,300));
   d.getElementById("cardSolvePuzzles").click();
   await new Promise(r=>setTimeout(r,300));
-  w.eval('loadLevel(4, function(){})');
-  await new Promise(r=>setTimeout(r,400));
+  /* Mis a jour le 2026-09-06, deuxieme fois : apres le decoupage des shards,
+     l'index rend [niveau, morceau] et charger le niveau ne charge plus que
+     son premier morceau, ou p23 n'est pas forcement. loadPuzzleById va
+     chercher le bon morceau et c'est la seule bonne facon d'atteindre un
+     exercice precis. Le niveau ecrit en dur, puis le niveau lu dans l'index,
+     ont chacun casse a leur tour : ne remets pas de chemin plus court ici. */
+  w.eval('loadPuzzleById("p23", function(){})');
+  await new Promise(r=>setTimeout(r,800));
   const withExplain=w.eval('PUZZLE_CACHE["p23"]&&PUZZLE_CACHE["p23"].explain&&PUZZLE_CACHE["p23"].explain.piece');
   T("un exercice avec detail exploitable existe", !!withExplain);
   w.eval('puzzle=PUZZLE_CACHE["p23"]; loadPuzzle();');

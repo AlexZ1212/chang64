@@ -35,6 +35,16 @@ function minifyCss(css) {
 
 const OUT = path.join(__dirname, "site");
 const SITE = "https://chang64.com";
+/* Definis ici, tout en haut, et pas a cote de leur premier usage : shell()
+   les lit pendant la generation des pages, qui se termine bien avant la
+   fin du fichier. Une const declaree plus bas serait en zone morte
+   temporelle a ce moment-la et ferait echouer le build (piege deja
+   rencontre plusieurs fois sur ce projet). */
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+/* Meme identite que la page Mentions legales de l'application (PUBLISHER
+   dans ui2.js). Duplique faute de module partage entre l'application et le
+   generateur : a garder synchronise si elle change. */
+const PUBLISHER = { name: "AlexZ1212" };
 
 /* ---------- 1. application ---------- */
 const THEMES = JSON.parse(fs.readFileSync(path.join(__dirname, "themes.json"), "utf8"));
@@ -139,6 +149,23 @@ for (const f of ["stockfish-18-lite-single.js", "stockfish-18-lite-single.wasm"]
   fs.copyFileSync(path.join(__dirname, "sf/package/bin", f), OUT + "/engine/" + f);
 }
 fs.copyFileSync(path.join(__dirname, "sf/package/Copying.txt"), OUT + "/engine/LICENSE-GPLv3.txt");
+/* ---------- 2bis. Polices auto-hebergees ---------- */
+/* Remplace le chargement depuis fonts.googleapis.com/fonts.gstatic.com le
+   2026-09-05 (voir SESSION_HANDOFF, audit confidentialite : la page
+   Confidentialite promet "aucun traqueur", Google Fonts recevait pourtant
+   IP et user-agent de chaque visiteur a chaque page). Six fichiers, memes
+   familles et poids qu'avant (Source Serif 4/600, Archivo/400,500,600,
+   JetBrains Mono/500,700), en woff2 sous-jeu latin. Vivent a cote des
+   sources dans fonts/, comme sf/package pour Stockfish, et sont recopies
+   ici a chaque build puisque OUT est vide au depart. */
+fs.mkdirSync(OUT + "/fonts", { recursive: true });
+for (const f of [
+  "source-serif-4-v14-latin-600.woff2",
+  "archivo-v25-latin-400.woff2", "archivo-v25-latin-500.woff2", "archivo-v25-latin-600.woff2",
+  "jetbrains-mono-v24-latin-500.woff2", "jetbrains-mono-v24-latin-700.woff2"
+]) {
+  fs.copyFileSync(path.join(__dirname, "fonts", f), OUT + "/fonts/" + f);
+}
 /* chang64 distribue Stockfish, donc son propre code est sous GPL v3.
    Ces trois fichiers sont ecrits ici parce que le rmSync ci-dessus vide OUT
    a chaque construction : les poser a la main dans le site livre ne tiendrait
@@ -851,7 +878,11 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    plus lisible ici). Avant (2026-09-04) : sans soulignement, graisse 500
    et taille heritee du pied de page (13px) -- un aspect plus "bouton" que
    les liens sobres et discrets du reste du site. */
-.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px}
+/* inline-block + padding vertical le 2026-09-05 : mesures au navigateur
+   reel, ces liens faisaient 18px de haut, sous le plancher de 24px de
+   WCAG 2.2 (2.5.8, Target Size Minimum). Meme correctif que .linkbtn cote
+   application, pour que les deux pieds de page aient la meme cible. */
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:6px 2px}
 .footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}`;
@@ -940,7 +971,7 @@ function sectionLinks(lang, canonical) {
    HTML ne conserve pas la position de defilement d'un element interne comme
    le navigateur le fait pour la page entiere. block:"nearest" dans l'appel
    evite tout defilement vertical de la page elle-meme. */
-function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage) {
+function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage, noindex) {
   lang = lang || "en";
   const d = L[lang];
   const other = lang === "fr" ? "en" : "fr";
@@ -952,6 +983,7 @@ function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogIma
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">
+${noindex ? '<meta name="robots" content="noindex,follow">' : ""}
 <!-- Les icones existaient mais n'etaient declarees nulle part hors du
      manifeste : invisibles dans l'onglet du navigateur et dans les resultats
      de recherche. -->
@@ -967,22 +999,89 @@ ${alts || ""}
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- display=swap montrait d'abord la police de secours puis la remplacait
+<!-- Auto-heberge depuis le 2026-09-05 (voir audit : la promesse "aucun
+     traqueur" de la page Confidentialite etait fausse tant que Google
+     Fonts recevait IP et user-agent de chaque visiteur). Le raisonnement
+     display=optional ci-dessous reste identique et s'applique de la meme
+     facon a des fichiers locaux : optional laisse un tres court delai
+     (largement tenu ici, les fichiers etant sur la meme origine que la
+     page) puis, s'il n'est pas tenu, garde la police de secours pour toute
+     la vue sans jamais la remplacer plus tard.
+     display=swap montrait d'abord la police de secours puis la remplacait
      par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
      navigation recharge le document (ce ne sont pas des pages d'application
      a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
      menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
-     de zero. display=optional laisse un tres bref delai (~100ms, largement
-     suffisant pour une police deja en cache) puis, s'il n'est pas tenu,
-     garde la police de secours pour toute la vue sans jamais la remplacer
-     plus tard : plus de bascule visible apres le premier affichage. -->
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=optional" rel="stylesheet">
-<style>${CSS}</style>
-${jsonld ? '<script type="application/ld+json">' + JSON.stringify(jsonld) + "</script>" : ""}
+     de zero.
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
+     ces pages vivent a des profondeurs variees (/openings/*.html,
+     /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
+     selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
+     partout tel quel. Fige sur le domaine de production aurait aussi rate
+     tout apercu servi ailleurs (previsualisation de branche Cloudflare
+     Pages, environnement local) -- constate en testant ce correctif : les
+     six polices tombaient en erreur reseau des qu'on sortait de
+     production.
+     Regroupe dans le MEME <style> que ${'${CSS}'} depuis ce correctif : une
+     balise separee decalait ce que plusieurs tests/check_*.js lisent comme
+     "le premier bloc <style>", casse constatee sur check_pied_de_page.js
+     (11 echecs, regles .sitenav/.tabs cherchees dans le mauvais bloc). -->
+<style>
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
+${CSS}</style>
+${(() => {
+  /* Complement automatique du JSON-LD (2026-09-05). Les Article emis par
+     les huit generateurs ne portaient que headline, description et
+     inLanguage : ni auteur, ni editeur, ni date, ni page d'appartenance.
+     Schema.org les attend, et une fiche incomplete est moins susceptible
+     d'etre reprise comme source. Complete ici plutot que dans chaque
+     generateur : une seule source, et rien n'ecrase ce qu'un generateur a
+     deja pose.
+     dateModified vaut la date de construction, ce qui est exact : ces
+     pages sont regenerees a chaque build. datePublished n'est PAS
+     invente : faute de date de premiere publication fiable par page, mieux
+     vaut ne rien declarer que declarer faux. */
+  if (!jsonld) return "";
+  const d = { ...jsonld };
+  if (d["@type"] === "Article" || d["@type"] === "LearningResource") {
+    d.author = d.author || { "@type": "Person", name: PUBLISHER.name };
+    d.publisher = d.publisher || { "@type": "Organization", name: "chang64", url: SITE };
+    d.dateModified = d.dateModified || BUILD_DATE;
+    d.mainEntityOfPage = d.mainEntityOfPage || { "@type": "WebPage", "@id": canonical };
+    d.image = d.image || (ogImage || SITE + "/og/home.png");
+    d.isPartOf = d.isPartOf || { "@type": "WebSite", name: "chang64", url: SITE };
+  }
+  return '<script type="application/ld+json">' + JSON.stringify(d) + "</script>";
+})()}
+${(() => {
+  /* Fil d'Ariane structure (2026-09-05). Le site n'en emettait aucun : les
+     pages profondes se presentaient a Google comme des documents isoles,
+     sans rattachement a leur rubrique, et les resultats de recherche
+     affichaient l'URL brute au lieu du chemin lisible.
+     Le fil est deduit du canonical plutot que passe en parametre par
+     chacun des huit generateurs de pages : une seule source, et une page
+     ajoutee plus tard l'obtient sans qu'on y pense. Les pages d'index de
+     rubrique s'arretent a deux niveaux (accueil puis rubrique), les pages
+     de detail en ont trois. */
+  const items = [{ name: "chang64", item: SITE + "/" }];
+  const path = canonical.replace(SITE, "");
+  const sec = (SECTIONS[lang] || SECTIONS.en).find(s => path.startsWith(s[0]));
+  if (sec) items.push({ name: sec[1], item: SITE + sec[0] });
+  const isIndex = sec && (path === sec[0] || path === sec[0] + "index.html");
+  if (!isIndex) items.push({ name: title.replace(/\s*\|\s*chang64\s*$/, ""), item: canonical });
+  if (items.length < 2) return "";
+  return '<script type="application/ld+json">' + JSON.stringify({
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, item: it.item }))
+  }) + "</script>";
+})()}
 </head>
 <body>
 <div class="wrap">
@@ -1285,8 +1384,20 @@ ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.cou
     if (title.length > 70) title = `${name} | chang64`;
     const ogName = "op-" + p.slugEn;
     if (lang === "en") queueOg(ogName, p.family, numbered(p.main.moves) + "  \u00b7  ECO " + ecoRange, p.fen);
+    /* noindex,follow sur les familles sans note redigee (2026-09-05).
+       Mesure avant decision : similarite Jaccard de 0,67 a 0,88 entre ces
+       pages, 150 a 240 mots dont l'essentiel est du texte de gabarit
+       identique d'une page a l'autre. Elles sont utiles a qui navigue
+       (l'echiquier rejoue la ligne, le tableau ECO est juste), mais elles
+       n'apportent rien qu'un moteur puisse vouloir citer, et 112 pages
+       quasi jumelles diluent les 29 qui, elles, disent quelque chose.
+       "follow" est delibere : les liens sortants continuent de circuler.
+       Le pilotage se fait tout seul par FAMILY_NOTES/NOTES_FR : ecrire une
+       note retire sa page du noindex et la remet au sitemap au build
+       suivant, sans toucher a ce fichier. */
+    const sansNote = !note;
     fs.writeFileSync(`${OUT}/${d.dir}/${lang === "fr" ? p.slugFr : p.slugEn}.html`,
-      shell(title, desc, urlFor(lang, p), body, jsonld, lang, altLinks(p), urlFor(other, p), `${SITE}/og/${ogName}.png`));
+      shell(title, desc, urlFor(lang, p), body, jsonld, lang, altLinks(p), urlFor(other, p), `${SITE}/og/${ogName}.png`, sansNote));
   }
   const idxBody = `
 <h1>${d.idxH1}</h1>
@@ -1384,6 +1495,14 @@ self.addEventListener("fetch",e=>{
   const url=new URL(r.url);
   if(url.origin!==location.origin)return;
   if(url.pathname.startsWith("/engine/"))return;   // 7 MB engine stays out of the cache
+  /* Les shards d'exercices (17 Mo au total : level-1..10, rush-pool,
+     puzzle-index) etaient mis en cache sans plafond. Sur iOS le quota par
+     origine est etroit et son depassement evince le cache ENTIER, coquille
+     de l'application comprise : le site tombait alors hors ligne d'un coup.
+     Ces fichiers sont deja gardes par le cache HTTP du navigateur, donc les
+     exclure ici ne coute qu'un aller-retour au premier chargement et met la
+     coquille a l'abri. */
+  if(url.pathname.startsWith("/data/"))return;
   e.respondWith(
     caches.match(r).then(hit=>hit||fetch(r).then(resp=>{
       const copy=resp.clone();
@@ -1438,16 +1557,30 @@ function queueOg(name, title, subtitle, fen) {
 }
 
 /* ---------- Cloudflare Pages : en-têtes, redirections, page 404 ---------- */
+/* static.cloudflareinsights.com (script-src) et cloudflareinsights.com
+   (connect-src) retires le 2026-09-05. La page Confidentialite affirme que
+   le site "n'utilise aucun traqueur" et promet d'etre mise a jour AVANT
+   qu'une mesure d'audience soit mise en service : garder ces deux origines
+   autorisees revenait a laisser la porte ouverte a un mouchard tiers que le
+   texte nie. La CSP fait maintenant respecter la promesse d'elle-meme, meme
+   si Cloudflare Web Analytics venait a etre active par inadvertance dans le
+   tableau de bord -- le script serait alors bloque, avec une erreur en
+   console et aucune donnee envoyee. A desactiver aussi cote tableau de bord
+   si jamais il tourne, la CSP n'etant qu'un filet de securite. */
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 /engine/*
   Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: font/woff2
 
 /*.svg
   Cache-Control: public, max-age=604800
@@ -1520,7 +1653,7 @@ ${oldFrRedirects}
 
 fs.writeFileSync(OUT + "/robots.txt", `User-agent: *\nAllow: /\nDisallow: /engine/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 
-const today = new Date().toISOString().slice(0, 10);
+const today = BUILD_DATE;   /* meme date que dateModified des fiches JSON-LD */
 const extraUrls = require("./content.js")({
   fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc
 });
@@ -1530,12 +1663,18 @@ try {
 } catch (e) { console.log("ATTENTION : conversion des images de partage impossible"); }
 console.log("Images de partage  :", ogJobs.length);
 
+/* Seules les familles pourvues d'une note redigee entrent au sitemap : les
+   autres portent un meta robots noindex (voir plus haut), et declarer au
+   sitemap une page qu'on demande par ailleurs de ne pas indexer est un
+   signal contradictoire que la Search Console remonte comme une erreur.
+   Meme condition des deux cotes, meme source (FAMILY_NOTES/NOTES_FR). */
+const pagesIndexables = pages.filter(p => p.note || p.noteFr);
 const urls = [
   { loc: SITE + "/", pri: "1.0", alt: null },
   { loc: SITE + "/openings/", pri: "0.9", alt: SITE + "/fr/ouvertures/", lang: "en" },
   { loc: SITE + "/fr/ouvertures/", pri: "0.9", alt: SITE + "/openings/", lang: "fr" },
-  ...pages.map(p => ({ loc: urlFor("en", p), pri: "0.7", alt: urlFor("fr", p), lang: "en" })),
-  ...pages.map(p => ({ loc: urlFor("fr", p), pri: "0.7", alt: urlFor("en", p), lang: "fr" })),
+  ...pagesIndexables.map(p => ({ loc: urlFor("en", p), pri: "0.7", alt: urlFor("fr", p), lang: "en" })),
+  ...pagesIndexables.map(p => ({ loc: urlFor("fr", p), pri: "0.7", alt: urlFor("en", p), lang: "fr" })),
   ...extraUrls
 ];
 fs.writeFileSync(OUT + "/sitemap.xml",

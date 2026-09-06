@@ -52,8 +52,29 @@ T("aucune redirection ne masque une page reelle",
 
 console.log("\n--- Le site reste complet ---");
 const cnt=d=>{let n=0;(function w(p){for(const f of fs.readdirSync(p)){const q=p+"/"+f;fs.statSync(q).isDirectory()?w(q):f.endsWith(".html")&&n++}})(d);return n};
-T("plus de 1350 pages HTML", cnt(S)>=1350, cnt(S));
-{const n=(fs.readFileSync(S+"/sitemap.xml","utf8").match(/<loc>/g)||[]).length; T("sitemap peuple", n>=1350, n+" URL");}
+/* Seuils repris le 2026-09-05. "Plus de 1350 pages" datait de l'architecture
+   a une page par exercice, abandonnee en aout au profit de 13 pages de
+   categorie : le site en compte 467 depuis, et la copie de reference en
+   compte exactement autant -- l'assertion echouait donc deja avant cette
+   session, sans rapport avec quoi que ce soit de casse.
+   Le sitemap, lui, est volontairement plus court que le nombre de pages
+   depuis le passage en noindex des 112 familles d'ouvertures sans note
+   redigee. Comparer a un nombre fige n'apprend plus rien ; on compare a la
+   copie de reference, ce qui detecte un vrai effondrement (build casse,
+   generateur muet) sans se perimer au prochain arbitrage editorial. */
+const pagesIci=cnt(S), pagesRef=BASE?cnt(BASE):null;
+T("le site n'a pas perdu de pages en masse",
+  pagesRef===null ? pagesIci>=400 : pagesIci>=pagesRef*0.9,
+  pagesIci+" pages" + (pagesRef!==null ? " contre "+pagesRef+" en reference" : ""));
+{
+  const n=(fs.readFileSync(S+"/sitemap.xml","utf8").match(/<loc>/g)||[]).length;
+  const noindex=(function(){let k=0;(function w(p){for(const f of fs.readdirSync(p)){const q=p+"/"+f;
+    if(fs.statSync(q).isDirectory())w(q);
+    else if(f.endsWith(".html")&&/name="robots" content="noindex/.test(fs.readFileSync(q,"utf8")))k++;}})(S);return k;})();
+  T("sitemap peuple et coherent avec les pages indexables",
+    n>0 && Math.abs(n-(pagesIci-noindex))<=10,
+    n+" URL au sitemap, "+pagesIci+" pages dont "+noindex+" en noindex");
+}
 T("LICENSE toujours ecrit", fs.existsSync(S+"/LICENSE"));
 T("livre d'ouvertures separe", fs.existsSync(S+"/openings-book.json"));
 

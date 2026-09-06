@@ -32,10 +32,20 @@ T("chaque page EN pointe vers une page FR existante", bad.length===0, bad.slice(
 T("chaque page FR pointe vers une page EN existante", badFr.length===0, badFr.slice(0,5).join(", "));
 
 console.log("\n--- Sitemap ---");
+/* Depuis le 2026-09-05, seules les familles pourvues d'une note redigee
+   (FAMILY_NOTES/NOTES_FR, build_site.js) entrent au sitemap ; les autres
+   portent un meta robots noindex,follow (voir SESSION_HANDOFF : similarite
+   Jaccard de 0,67 a 0,88 entre elles, rien qu'un moteur voudrait citer).
+   "Toutes les pages FR sont au sitemap" a cesse d'etre l'attente : seules
+   celles qui ne sont PAS en noindex doivent s'y trouver. */
 const sm=fs.readFileSync(S+"/sitemap.xml","utf8");
 const locs=new Set([...sm.matchAll(/<loc>https:\/\/chang64\.com([^<]*)<\/loc>/g)].map(m=>m[1]));
-const missing=fr.filter(f=>!locs.has("/fr/ouvertures/"+f));
-T("toutes les pages FR sont au sitemap", missing.length===0, missing.slice(0,5).join(", "));
+const indexable=fr.filter(f=>!/name="robots" content="noindex/.test(fs.readFileSync(S+"/fr/ouvertures/"+f,"utf8")));
+const nonIndexable=fr.filter(f=>!indexable.includes(f));
+const missing=indexable.filter(f=>!locs.has("/fr/ouvertures/"+f));
+const enTrop=nonIndexable.filter(f=>locs.has("/fr/ouvertures/"+f));
+T("chaque page FR indexable est au sitemap", missing.length===0, missing.slice(0,5).join(", "));
+T("aucune page FR en noindex n'est au sitemap", enTrop.length===0, enTrop.slice(0,5).join(", "));
 
 console.log("\n--- Index des ouvertures ---");
 const idxFr=fs.readFileSync(S+"/fr/ouvertures/index.html","utf8");

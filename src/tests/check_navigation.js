@@ -69,10 +69,16 @@ setTimeout(async()=>{
      ne s'est passe. Deux boutons avaient ete oublies, "Jouer maintenant" et
      l'onglet Defis. Le controle porte sur tous les boutons qui appellent
      setMode, pour qu'un futur oubli soit signale. */
+  /* "tab-train" retire de cette liste le 2026-09-05 : l'onglet Defis
+     n'existe plus dans le HTML depuis le 2026-09-03 (remplace par le menu
+     a cinq cartes de Resoudre). Le test echouait donc sur un element
+     absent, un echec qui ne signalait rien de reel et masquait les vrais.
+     Les ecrans qu'il couvrait sont atteints par les cartes du menu, dont
+     le passage par setMode est verifie ailleurs. */
   for(const [id,nom] of [
     ["heroPlay","Jouer maintenant"],["heroPuzzle","Exercice du jour"],
     ["cardPlay","carte Jouer"],["cardPuzzles","carte Exercices"],
-    ["cardFriend","carte Entre amis"],["tab-train","onglet Defis"],
+    ["cardFriend","carte Entre amis"],
     ["tab-watch","onglet Videos"]
   ]){
     d.getElementById("brand").click(); await wait(250);

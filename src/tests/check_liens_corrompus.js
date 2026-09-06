@@ -20,7 +20,7 @@ function open_(url){
     await new Promise(r=>setTimeout(r,700));
     const board=d.getElementById("board");
     const tabs=[...d.querySelectorAll('[role="tab"],.tabs button')];
-    const oneSelected=tabs.filter(t=>t.getAttribute("aria-selected")==="true").length;
+    const oneSelected=tabs.filter(t=>t.getAttribute("aria-current")==="page").length;
     T(bad.slice(0,20)+" : echiquier intact", !!board&&board.children.length===64, board?board.children.length:"absent");
     /* Repli sur l'accueil (lien totalement illisible) : plus aucun onglet ne
        lui correspond depuis qu'Accueil a ete retire de la barre (0 est

@@ -29,11 +29,28 @@ setTimeout(async()=>{
 
   console.log("\n--- Les reglages occasionnels restent en bas ---");
   T("filtre par theme apres les actions", pos("themeFilter")>pos("btnNext"));
-  T("Exercice du jour apres", pos("btnDaily")>pos("btnNext"));
-  T("Reinitialiser tout en bas", pos("btnReset")>pos("themeFilter"));
+  /* Reecrit le 2026-09-05. Deux elements ont change de nature avec le menu
+     a 5 cartes (2026-09-03), pas seulement de place :
+     - btnDaily n'existe plus : "Puzzle du jour" est devenu une carte du
+       menu (cardSolveDaily), pas un bouton de la rangee d'actions. Le test
+       cherchait donc un element absent -- et pos() renvoyant 1e9 pour un
+       introuvable, l'ancienne assertion "Exercice du jour apres" PASSAIT a
+       tort, ce qui est pire qu'un echec.
+     - btnReset a quitte l'ecran d'exercice pour l'ecran menu, dans un
+       <details> replie. "Tout en bas du panneau" n'a plus de sens : il est
+       sur un autre ecran. L'intention d'origine (les reglages rares ne
+       polluent pas les actions frequentes) est mieux servie qu'avant, et
+       c'est elle qu'on verifie maintenant. */
+  T("Puzzle du jour est une carte du menu, plus un bouton d'action",
+    !d.getElementById("btnDaily") && !!d.getElementById("cardSolveDaily"));
+  T("Reinitialiser vit sur l'ecran menu, hors de la carte d'exercice",
+    d.getElementById("solveMenu").contains(d.getElementById("btnReset")) &&
+    !d.getElementById("exPanel").contains(d.getElementById("btnReset")));
+  T("et reste replie derriere un <details>",
+    !!d.getElementById("btnReset").closest("details"));
 
   console.log("\n--- Aucun doublon, les boutons fonctionnent ---");
-  for(const id of ["btnNext","btnHintEx","btnDaily","btnRetry","btnReset"])
+  for(const id of ["btnNext","btnHintEx","btnRetry","btnReset"])
     T(id+" unique dans le document", d.querySelectorAll("#"+id).length===1,
        d.querySelectorAll("#"+id).length+" occurrences");
 

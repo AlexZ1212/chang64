@@ -665,16 +665,43 @@ module.exports = function (H) {
     for (const [sEn, sFr, tEn, tFr, dEn, dFr, theme] of TERMS) {
       const sl = lang === "fr" ? sFr : sEn, title = lang === "fr" ? tFr : tEn, def = lang === "fr" ? dFr : dEn;
       const sample = (byTheme[theme] || [])[0];
+      /* Orientation du diagramme (2026-09-05, dette signalee le 04). Les
+         pages Motifs retournent deja l'echiquier quand le trait est aux
+         Noirs, pas le Lexique : la meme position s'y presentait toujours
+         du point de vue des Blancs, donc a l'envers pour qui doit jouer.
+         Le camp au trait se lit dans le deuxieme champ de la FEN, la meme
+         source que celle utilisee par replaySolution() cote Motifs, donc
+         legende et orientation ne peuvent pas se contredire. */
+      const sampleSide = sample ? (sample.fen.split(" ")[1] === "b" ? "b" : "w") : "w";
+      const sampleLabel = sampleSide === "b" ? u.black : u.white;
       const canonical = `${SITE}/${dir}/${sl}.html`;
       const alt = `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/${lang === "en" ? sFr : sEn}.html`;
       const pz = sample ? `
-  ${diagram(sample.fen, (lang === "fr" ? "Exemple : " : "Example: ") + themeOf(sample.theme, lang))}
+  ${diagram(sample.fen, (lang === "fr" ? "Exemple : " : "Example: ") + themeOf(sample.theme, lang) + " \u00b7 " + u.sideToMove(sampleLabel), sampleSide === "b")}
   <div><p>${lang === "fr" ? "Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée." : "The diagram shows an example, taken from the chang64 puzzle set. Every position there is proved by the engine before it is offered."}</p>
     <a class="cta" href="/#puzzle=${sample.id}">${lang === "fr" ? "Résoudre cet exercice" : "Solve this puzzle"}</a>
     ${THEME10.includes(theme) ? `<a class="cta ghost" href="/${DIRS.puzzles[lang]}/${categorySlug(theme, lang)}.html">${lang === "fr" ? "Voir des exemples expliqués" : "See worked examples"}</a>` : ""}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
-  </div>` : `<div><a class="cta" href="/">${u.play}</a></div>`;
-      const body = `<h1>${esc(title)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
+  </div>` : `<div>
+    <p>${lang === "fr" ? "Aucun exercice de la banque ne porte précisément sur cette notion : elle se rencontre en partie plutôt que dans un exercice isolé." : "No puzzle in the set targets this idea on its own: it comes up in games rather than in a single isolated position."}</p>
+    <a class="cta" href="/">${u.play}</a>
+    <a class="cta ghost" href="/${DIRS.puzzles[lang]}/">${lang === "fr" ? "Les motifs tactiques" : "Tactical patterns"}</a>
+    <a class="cta ghost" href="/${dir}/">${u.back}</a>
+  </div>`;
+      /* H1 suffixe le 2026-09-05. Quatre entrees du Lexique (clouage,
+         enfilade, mat du couloir, deviation) ont une page Motifs qui porte
+         exactement le meme nom : deux URL avec un H1 identique, c'est
+         Google qui choisit laquelle repondre, et les deux se genent. Le
+         partage retenu : la page Motifs garde le mot nu, puisque c'est
+         elle qui porte les exemples jouables et vise la requete
+         principale ; le Lexique annonce ce qu'il est, une definition.
+         Applique aux 43 entrees et pas seulement aux quatre en conflit :
+         un H1 different d'une entree a l'autre dans la meme rubrique se
+         verrait, et les futures collisions sont couvertes d'avance.
+         Le nom nu reste dans le JSON-LD DefinedTerm, ou il est la valeur
+         attendue, et dans la grille d'index. */
+      const h1 = lang === "fr" ? `${title} : définition` : `${title}: definition`;
+      const body = `<h1>${esc(h1)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
       page(lang, dir, sl + ".html", `${title} \u00b7 ${lang === "fr" ? "définition et exemple" : "chess term explained"} | chang64`,
         metaDesc(def), body,
         { "@context": "https://schema.org", "@type": "DefinedTerm", name: title, description: def, inLanguage: lang },
@@ -828,12 +855,26 @@ module.exports = function (H) {
       const chapo = lang === "fr"
         ? `Le piège en ${tr.line.san.length} demi-coups, rejoué par le moteur, avec la position finale et l'explication.`
         : `The trap in ${tr.line.san.length} half-moves, replayed by the engine, with the final position and the explanation.`;
+      /* Lien profond vers l'application (2026-09-05). Les pages Pieges
+         renvoyaient vers l'accueil nu, alors que la route #line= existe
+         deja (ui.js, applyDeepLink) et rejoue une suite de coups SAN avant
+         de rendre la main : c'est exactement ce que font les 141 pages
+         Ouvertures.
+         Quand le piege se termine par un mat, on s'arrete UN coup avant :
+         deposer le lecteur sur une partie deja finie n'a aucun interet,
+         alors que lui laisser porter le coup decisif lui-meme est le seul
+         moment ou la page devient un exercice. Pour les pieges qui ne
+         matent pas, la ligne entiere est rejouee. */
+      const ctaMoves = tr.line.mate ? tr.line.san.slice(0, -1) : tr.line.san;
+      const ctaLabel = tr.line.mate
+        ? (lang === "fr" ? "À toi de porter le coup décisif" : "Now find the finishing move")
+        : (lang === "fr" ? "Rejouer ce piège sur l'échiquier" : "Play this trap out on the board");
       const body = `<h1>${esc(tr.title[lang])}</h1><p class="lede">${esc(chapo)}</p>
 <div class="cols">${diagram(tr.line.fen, (lang === "fr" ? "Position finale après " : "Final position after ") + numberLine(tr.line.san))}
 <div><div class="moves">${esc(numberLine(tr.line.san))}${tr.line.mate ? "" : ""}</div>
 <p>${esc(tr.body[lang])}</p>
 <p>${lang === "fr" ? "Toute la séquence a été rejouée par le moteur de chang64 : chaque coup est légal et la position finale est celle du diagramme." : "The whole sequence was replayed by the chang64 engine: every move is legal and the final position is the one in the diagram."}${tr.line.mate ? (lang === "fr" ? " La position finale est un échec et mat." : " The final position is checkmate.") : ""}</p>
-<a class="cta" href="/">${u.play}</a><a class="cta ghost" href="/${dir}/">${u.back}</a></div></div>`;
+<a class="cta" href="/#line=${encodeURIComponent(ctaMoves.join("_"))}">${ctaLabel}</a><a class="cta ghost" href="/${dir}/">${u.back}</a></div></div>`;
       page(lang, dir, tr.slug[lang] + ".html", tr.title[lang] + " | chang64", desc, body,
         { "@context": "https://schema.org", "@type": "Article", headline: tr.title[lang], inLanguage: lang }, alt, canonical);
     }

@@ -99,7 +99,7 @@ setTimeout(async()=>{
   }
   const visibles=()=>!d.getElementById("clockTop").classList.contains("hide");
   T("visibles pendant une partie", visibles());
-  for(const [id,nom] of [["tab-puzzles","Exercices"],["tab-train","Defis"]]){
+  for(const [id,nom] of [["tab-puzzles","Exercices"],["cardSolveSprint","Defis"]]){
     d.getElementById(id).click(); await wait(400);
     T("masquees dans "+nom, !visibles());
   }

@@ -6,6 +6,7 @@
 <title>Saragossa Opening : moves, variations and ECO codes | chang64</title>
 <meta name="description" content="The Saragossa Opening begins 1.c3 (ECO A00). This page lists its 1 named variation with their moves and ECO codes, on a board you can play from against the…">
 <link rel="canonical" href="https://chang64.com/openings/saragossa-opening.html">
+<meta name="robots" content="noindex,follow">
 <!-- Les icones existaient mais n'etaient declarees nulle part hors du
      manifeste : invisibles dans l'onglet du navigateur et dans les resultats
      de recherche. -->
@@ -23,21 +24,43 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- display=swap montrait d'abord la police de secours puis la remplacait
+<!-- Auto-heberge depuis le 2026-09-05 (voir audit : la promesse "aucun
+     traqueur" de la page Confidentialite etait fausse tant que Google
+     Fonts recevait IP et user-agent de chaque visiteur). Le raisonnement
+     display=optional ci-dessous reste identique et s'applique de la meme
+     facon a des fichiers locaux : optional laisse un tres court delai
+     (largement tenu ici, les fichiers etant sur la meme origine que la
+     page) puis, s'il n'est pas tenu, garde la police de secours pour toute
+     la vue sans jamais la remplacer plus tard.
+     display=swap montrait d'abord la police de secours puis la remplacait
      par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
      navigation recharge le document (ce ne sont pas des pages d'application
      a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
      menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
-     de zero. display=optional laisse un tres bref delai (~100ms, largement
-     suffisant pour une police deja en cache) puis, s'il n'est pas tenu,
-     garde la police de secours pour toute la vue sans jamais la remplacer
-     plus tard : plus de bascule visible apres le premier affichage. -->
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=optional" rel="stylesheet">
-<style>*{box-sizing:border-box;margin:0;padding:0}
+     de zero.
+     Chemins relatifs a la racine ("/fonts/...", pas "https://chang64.com/fonts/...") :
+     ces pages vivent a des profondeurs variees (/openings/*.html,
+     /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
+     selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
+     partout tel quel. Fige sur le domaine de production aurait aussi rate
+     tout apercu servi ailleurs (previsualisation de branche Cloudflare
+     Pages, environnement local) -- constate en testant ce correctif : les
+     six polices tombaient en erreur reseau des qu'on sortait de
+     production.
+     Regroupe dans le MEME <style> que ${CSS} depuis ce correctif : une
+     balise separee decalait ce que plusieurs tests/check_*.js lisent comme
+     "le premier bloc <style>", casse constatee sur check_pied_de_page.js
+     (11 echecs, regles .sitenav/.tabs cherchees dans le mauvais bloc). -->
+<style>
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
 --bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
 --rule:rgba(21,32,28,.14);--r:8px}
@@ -227,11 +250,16 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    plus lisible ici). Avant (2026-09-04) : sans soulignement, graisse 500
    et taille heritee du pied de page (13px) -- un aspect plus "bouton" que
    les liens sobres et discrets du reste du site. */
-.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px}
+/* inline-block + padding vertical le 2026-09-05 : mesures au navigateur
+   reel, ces liens faisaient 18px de haut, sous le plancher de 24px de
+   WCAG 2.2 (2.5.8, Target Size Minimum). Meme correctif que .linkbtn cote
+   application, pour que les deux pieds de page aient la meme cible. */
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:6px 2px}
 .footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 .footnote{margin:0}</style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Saragossa Opening chess opening","description":"The Saragossa Opening begins 1.c3 (ECO A00). This page lists its 1 named variation with their moves and ECO codes, on a board you can play from against the…","inLanguage":"en","about":{"@type":"Thing","name":"Saragossa Opening"},"isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Saragossa Opening chess opening","description":"The Saragossa Opening begins 1.c3 (ECO A00). This page lists its 1 named variation with their moves and ECO codes, on a board you can play from against the…","inLanguage":"en","about":{"@type":"Thing","name":"Saragossa Opening"},"isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"},"author":{"@type":"Person","name":"AlexZ1212"},"publisher":{"@type":"Organization","name":"chang64","url":"https://chang64.com"},"dateModified":"2026-09-06","mainEntityOfPage":{"@type":"WebPage","@id":"https://chang64.com/openings/saragossa-opening.html"},"image":"https://chang64.com/og/op-saragossa-opening.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"chang64","item":"https://chang64.com/"},{"@type":"ListItem","position":2,"name":"Openings","item":"https://chang64.com/openings/"},{"@type":"ListItem","position":3,"name":"Saragossa Opening : moves, variations and ECO codes","item":"https://chang64.com/openings/saragossa-opening.html"}]}</script>
 </head>
 <body>
 <div class="wrap">

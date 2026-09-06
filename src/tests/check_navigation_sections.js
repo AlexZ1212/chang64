@@ -122,10 +122,15 @@ console.log("\n--- Le menu ne bouge plus quand la police arrive ---");
    depuis le cache sur une navigation suivante) puis, s'il n'est pas tenu,
    garde la police de secours pour toute la vue sans jamais la remplacer plus
    tard : plus de bascule visible apres le premier affichage. */
-T("Google Fonts en display=optional sur les pages claires",
-  /fonts\.googleapis\.com\/css2\?[^"]*display=optional/.test(h), h.match(/fonts\.googleapis[^"]*/)?.[0]);
-T("plus de display=swap sur ces pages (reflow du menu a chaque clic)",
-  !/fonts\.googleapis\.com\/css2\?[^"]*display=swap/.test(h));
+/* Auto-heberge depuis le 2026-09-05 : les six regles @font-face vivent
+   maintenant dans une balise <style> de la page plutot que dans une
+   feuille Google Fonts chargee a part, mais le raisonnement ne change
+   pas. Le controle porte donc sur font-display dans ces regles au lieu
+   de l'ancien parametre d'URL. */
+T("polices en display=optional sur les pages claires (pas de reflow du menu)",
+  /@font-face\{[^}]*font-display:optional/.test(h));
+T("plus aucune police chargee depuis Google Fonts",
+  !/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(h));
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
 process.exit(ko?1:0);

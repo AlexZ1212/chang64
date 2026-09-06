@@ -2151,7 +2151,7 @@ setMode=function(m,opts){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode=m;
     const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
-    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
+    for(const k in tabs)markTab($(tabs[k]),k===m);
     $("pane-home").classList.add("hide");
     $("appLayout").classList.add("hide");
     $("pane-watch").classList.toggle("hide",m!=="watch");
@@ -2171,8 +2171,8 @@ setMode=function(m,opts){
   { const pp=$("pane-prefs"); if(pp)pp.classList.add("hide"); }
   { const pe=$("pane-explore"); if(pe)pe.classList.add("hide"); }
   { const pc=$("pane-calendar"); if(pc)pc.classList.add("hide"); }
-  { const tex=$("tab-explore"); if(tex)tex.setAttribute("aria-selected","false"); }
-  $("tab-watch").setAttribute("aria-selected","false");
+  markTab($("tab-explore"),false);
+  markTab($("tab-watch"),false);
   baseSetMode(m,opts);
   renderExtraStats();applyEvalPref();
   if(m==="play"){renderOpening();renderSheetPlay();}

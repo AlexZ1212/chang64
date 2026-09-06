@@ -79,7 +79,7 @@ const helpers = w => {
   await wait(600);
   const b = helpers(B.w);
   console.log("\n--- Joueur B ouvre le lien ---");
-  console.log("Onglet actif Entre amis :", b.$("tab-friend").getAttribute("aria-selected"));
+  console.log("Onglet actif Entre amis :", b.$("tab-friend").getAttribute("aria-current"));
   console.log("Plateau retourné pour les Noirs :", b.isFlipped() ? "OK" : "ECHEC");
   const ref = new Engine.Game();
   ref.makeMove(ref.moves().find(m => ref.uci(m) === "e2e4"));
@@ -113,7 +113,7 @@ const helpers = w => {
   const D = open_("https://chang64.com/#p=!!!!zzz");
   await wait(500);
   const d = helpers(D.w);
-  console.log("\nLien corrompu — mode actif :", d.$("tab-play").getAttribute("aria-selected") === "true" ? "retour à la partie normale (OK)" : "?");
+  console.log("\nLien corrompu — mode actif :", d.$("tab-play").getAttribute("aria-current") === "page" ? "retour à la partie normale (OK)" : "?");
   console.log("Erreurs cumulées :", [...A.errors, ...B.errors, ...C.errors, ...D.errors].join(" | ") || "aucune");
   process.exit(0);
 })();

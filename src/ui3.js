@@ -672,7 +672,7 @@ setMode=function(m,opts){
        (cardSolveSprint/cardSolveCoord, voir ui2.js) : tab-puzzles doit
        donc rester actif tant que mode==="train", pas seulement quand
        m==="puzzles" a la lettre. */
-    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k==="puzzles"?(m===k||m==="train"):k===m);}
+    for(const k in tabs)markTab($(tabs[k]),k==="puzzles"?(m===k||m==="train"):k===m);
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
@@ -824,6 +824,16 @@ function pieceWord(ch){
   const k=(ch||"").toLowerCase();
   return (PIECE_WORDS[LANG==="fr"?"fr":"en"][k])||"";
 }
+/* "tour" et "dame" sont feminins, les quatre autres pieces masculines : sans
+   cet accord, une annonce disait "tour blanc en h1" et "dame noir en d8"
+   (2026-09-05). Ce n'est pas un detail de style pour un lecteur d'ecran,
+   c'est la seule information qu'il prononce a voix haute. */
+const PIECES_FEM={r:true,q:true};
+function sideWord(ch,isWhite){
+  if(LANG!=="fr")return isWhite?"white":"black";
+  const fem=PIECES_FEM[(ch||"").toLowerCase()];
+  return isWhite?(fem?"blanche":"blanc"):(fem?"noire":"noir");
+}
 
 /* ---------- navigation clavier sur l'echiquier ----------
    Une seule case est atteignable a la tabulation (tabindex roulant) :
@@ -852,8 +862,9 @@ function announceCell(i){
     const pc=g.board[sq];
     if(pc){
       const isWhite=pColor(pc)===W;
-      const side=LANG==="fr"?(isWhite?"blanc":"noir"):(isWhite?"white":"black");
-      const word=pieceWord("pnbrqk"[pType(pc)-1]||"");
+      const ch="pnbrqk"[pType(pc)-1]||"";
+      const side=sideWord(ch,isWhite);
+      const word=pieceWord(ch);
       msg=(LANG==="fr"?word+" "+side+" en "+sqName(sq):side+" "+word+" on "+sqName(sq));
     }else{
       msg=(LANG==="fr"?"case vide "+sqName(sq):"empty "+sqName(sq));
@@ -1202,8 +1213,8 @@ if($("editPlay"))$("editPlay").onclick=()=>{
      Analyser plutot que de faire sauter la barre sur "Jouer" -- seule la
      surbrillance change, le contenu affiche est bien celui du mode Jouer. */
   const tp=$("tab-play"),te=$("tab-edit");
-  if(tp)tp.setAttribute("aria-selected","false");
-  if(te)te.setAttribute("aria-selected","true");
+  markTab(tp,false);
+  markTab(te,true);
 };
 
 const prevSetModeEdit=setMode;
@@ -1212,7 +1223,7 @@ setMode=function(m,opts){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="edit";busy=false;
     const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
-    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k===m);}
+    for(const k in tabs)markTab($(tabs[k]),k===m);
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
@@ -1254,7 +1265,7 @@ setMode=function(m,opts){
      bandeau de coups, avant que le code de la chaine plus bas ne decide de
      l'afficher ou non pour la destination reelle (m). */
   { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
-  const te=$("tab-edit"); if(te)te.setAttribute("aria-selected","false");
+  markTab($("tab-edit"),false);
   if(mode==="edit"&&game){editGame=game;editGameTurn=editTurnVal;}
   prevSetModeEdit(m,opts);
 };
@@ -1409,7 +1420,7 @@ setMode=function(m,opts){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="analyse";busy=false;
     const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
-    for(const k in tabs){const el=$(tabs[k]);if(el)el.setAttribute("aria-selected",k==="edit");}
+    for(const k in tabs)markTab($(tabs[k]),k==="edit");
     $("pane-home").classList.add("hide");
     $("pane-watch").classList.add("hide");
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
@@ -1602,5 +1613,13 @@ function updateTabsScrollHint(){
     if("MutationObserver" in window){
       new MutationObserver(updateTabsScrollHint).observe(el,{characterData:true,childList:true,subtree:true});
     }
+    /* Pas de navigation aux fleches ici. Elle avait ete ajoutee le matin du
+       2026-09-05, quand la barre s'annoncait encore comme un role="tablist"
+       et devait donc la fournir. La barre etant passee dans la journee au
+       patron "navigation" (voir template.html), les fleches deviendraient
+       au contraire une surprise : dans une <nav>, un lecteur d'ecran les
+       reserve a la lecture du texte, et les intercepter lui retirerait ce
+       geste. Les six entrees restent atteignables au Tab, comme n'importe
+       quel groupe de liens. */
   }
 }

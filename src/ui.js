@@ -542,6 +542,30 @@ function idxToSq(i){
   const r=Math.floor(i/8),f=i%8;
   return flipped?(7-r)*16+(7-f):r*16+f;
 }
+/* Nom accessible d'une case, dans la langue courante : "e4" si elle est
+   vide, "cavalier blanc en f3" / "white knight on f3" si elle est occupee.
+   Meme formulation qu'announceCell() (ui3.js), volontairement : les deux
+   decrivent la meme chose et doivent se repondre.
+   pieceWord() vit dans ui3.js et lit PIECE_WORDS, une const : au tout
+   premier render() de l'initialisation, ui3.js n'a pas encore ete evalue
+   et cette const est en zone morte temporelle (piege deja rencontre sur
+   ce projet). D'ou le try : en cas d'echec on retombe sur le seul nom de
+   la case, ce qui reste un nom accessible valide, et les rendus suivants
+   auront la version complete. */
+function sqLabel(sq,p){
+  const name="abcdefgh"[fOf(sq)]+(8-rOf(sq));
+  if(!p)return name;
+  try{
+    const fr=(typeof LANG!=="undefined"&&LANG==="fr");
+    const ch=SYM[pT(p)];
+    const word=(typeof pieceWord==="function")?pieceWord(ch):"";
+    const side=(typeof sideWord==="function")
+      ? sideWord(ch,pC(p)===W)
+      : (pC(p)===W?(fr?"blanc":"white"):(fr?"noir":"black"));
+    if(word)return fr?(word+" "+side+" en "+name):(side+" "+word+" on "+name);
+  }catch(e){}
+  return name;
+}
 let reviewGame=null,reviewLast=null;
 function viewGame(){return reviewGame||game;}
 function render(){
@@ -560,6 +584,13 @@ function render(){
     if(sq===checkSq)cls+=" check";
     if(marks[sq])cls+=" "+marks[sq];
     c.className=cls;
+    /* Nom accessible de la case (2026-09-05). Sans lui, les 64 cases sont
+       des role="button" sans contenu textuel (le SVG des pieces est
+       aria-hidden) : un lecteur d'ecran en mode navigation annonce
+       "bouton" 64 fois de suite. announceCell() (ui3.js) ne comble le
+       trou qu'en mode focus, et seulement si l'utilisateur a active les
+       annonces -- ce qui n'est pas le reglage par defaut. */
+    c.setAttribute("aria-label",sqLabel(sq,p));
     let html="";
     const r=Math.floor(i/8),f=i%8;
     if(r===7)html+='<span class="co f">'+"abcdefgh"[fOf(sq)]+'</span>';
@@ -1792,7 +1823,12 @@ function showAmi(){
     /* Rien n'a encore ete configure : l'echiquier reste cache (voir
        updateAmiBoardVisibility ci-dessus), inutile de calculer un statut de
        partie ou de tour qui n'existe pas encore. */
-    if(st){st.className="status";st.textContent=t("Choose your colour, then create a game.");}
+    /* Reformule le 2026-09-05 : disait "Choisis ta couleur, puis cree la
+       partie", ce qui decrivait l'ancien selecteur de couleur affiche en
+       ligne. Depuis son passage en modale (2026-09-04), le choix arrive
+       APRES le clic sur "Creer la partie" : la consigne annoncait donc une
+       etape introuvable a l'ecran. */
+    if(st){st.className="status";st.textContent=t("Pick a pace, then create the game.");}
     const lp=$("amiLinkPanel"); if(lp)lp.classList.add("hide");
     /* Masques plutot que grises : "Annuler mon coup"/"Abandonner" une
        partie qui n'existe pas encore n'ont pas de sens a montrer du tout. */
@@ -1908,8 +1944,27 @@ function readDeepLink(){
   if(m)return {kind:"train",id:m[1]};
   m=h.match(/[#&]puzzle=([a-zA-Z0-9]+)/);
   if(m)return {kind:"puzzle",id:m[1]};
-  m=h.match(/[#&]line=([A-Za-z0-9_+#=-]+)/);
-  if(m)return {kind:"line",moves:decodeURIComponent(m[1]).split("_").filter(Boolean)};
+  /* "%" ajoute le 2026-09-05. La valeur est passee a decodeURIComponent
+     juste en dessous, donc elle est encodee a la source : un "+" devient
+     "%2B". Sans "%" dans la classe, la capture s'arretait au premier
+     caractere encode et la ligne etait tronquee EN SILENCE -- avec un
+     repli sur "aucun coup valide" au lieu d'une erreur. Invisible
+     jusqu'ici parce que les lignes d'ouverture (seules a utiliser cette
+     route) ne contiennent presque jamais d'echec ; les pages Pieges, qui
+     s'y branchent depuis aujourd'hui, en sont pleines. */
+  m=h.match(/[#&]line=([A-Za-z0-9_+#=%-]+)/);
+  if(m){
+    /* decodeURIComponent leve une URIError sur une sequence pourcent
+       invalide ("%%%", "%zz"). Depuis que "%" est accepte dans la classe
+       ci-dessus, un lien volontairement casse atteint cette ligne au lieu
+       d'etre rejete par le motif : sans ce garde, l'erreur remonterait non
+       capturee et l'initialisation s'arreterait la. On traite un lien
+       illisible comme un lien absent, ce que fait deja le reste de la
+       fonction. Cas couvert par tests/check_liens_corrompus.js. */
+    let brut;
+    try{brut=decodeURIComponent(m[1]);}catch(e){return null;}
+    return {kind:"line",moves:brut.split("_").filter(Boolean)};
+  }
   return null;
 }
 function applyDeepLink(d){
@@ -1990,7 +2045,21 @@ function readHash(){
 function renderTC(catsId,chipsId,allowDaily){
   const cats=$(catsId),chips=$(chipsId);
   if(!cats||!chips)return;
-  const list=TC_CATS.filter(c=>allowDaily||c.id!=="daily");
+  /* allowDaily distingue en pratique les deux rangees : l'accueil (true) et
+     l'onglet Jouer (false).
+     "Sans pendule" retire de l'accueil le 2026-09-05. Mesure au navigateur
+     reel : a 390px de large, les six categories debordaient de 80px et la
+     sixieme, precisement "Sans pendule", tombait hors ecran sans que rien
+     ne le signale. L'accueil sert a lancer une partie en deux gestes ; la
+     cadence libre reste entiere dans l'onglet Jouer, ou la rangee tient.
+     Exception : si c'est la categorie ACTUELLEMENT choisie (reglee depuis
+     Jouer, l'etat etant partage), on l'affiche quand meme -- sinon
+     l'accueil montrerait "0+0" sans qu'aucun bouton ne soit marque. */
+  const list=TC_CATS.filter(c=>{
+    if(c.id==="daily")return allowDaily;
+    if(c.id==="none"&&allowDaily)return tcCat==="none";
+    return true;
+  });
   cats.innerHTML="";
   for(const c of list){
     const b=document.createElement("button");
@@ -2039,6 +2108,20 @@ function renderDailyChips(){
 /* ==========================================================
    NAVIGATION
    ========================================================== */
+/* Marque l'entree active de la barre du haut. Une seule fonction pour les
+   dix endroits qui le faisaient chacun a leur maniere (ui.js, ui2.js,
+   ui3.js), depuis le passage du patron "onglets" au patron "navigation"
+   le 2026-09-05 : aria-current="page" remplace aria-selected, qui n'a de
+   sens que dans un vrai groupe d'onglets (voir le commentaire au-dessus de
+   #tabsNav dans template.html). aria-current s'enleve quand il est faux,
+   la ou aria-selected se mettait a "false" : c'est la convention de
+   l'attribut, un aria-current="false" partout serait du bruit. */
+function markTab(el,actif){
+  if(!el)return;
+  el.removeAttribute("aria-selected");
+  if(actif)el.setAttribute("aria-current","page");
+  else el.removeAttribute("aria-current");
+}
 function setMode(m,opts){
   opts=opts||{};
   reviewGame=null;reviewLast=null;
@@ -2050,7 +2133,7 @@ function setMode(m,opts){
   if(mode==="play"&&m!=="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
   mode=m;busy=false;
   const tabs={play:"tab-play",puzzles:"tab-puzzles",friend:"tab-friend"};
-  for(const k in tabs)$(tabs[k]).setAttribute("aria-selected",k===m);
+  for(const k in tabs)markTab($(tabs[k]),k===m);
   $("pane-home").classList.toggle("hide",m!=="home");
   $("appLayout").classList.toggle("hide",m==="home");
   $("pane-play").classList.toggle("hide",m!=="play");

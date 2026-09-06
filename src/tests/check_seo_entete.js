@@ -82,22 +82,24 @@ T("langue declaree", /<html lang=/.test(home));
 T("viewport", /name="viewport"/.test(home));
 
 console.log("\n--- Les polices ne bloquent pas le rendu ---");
-/* La feuille Google Fonts en rel="stylesheet" bloquait le premier affichage
-   pendant environ 1,5 s sur mobile en 4G lente. display=swap ne suffit pas :
-   il ne concerne que les fichiers de police, pas la feuille qui les declare.
-   Elle est donc chargee en preload puis promue une fois arrivee. */
-T("feuille de polices non bloquante", /rel="preload" as="style"[^>]*fonts\.googleapis/.test(home));
-T("promue en feuille une fois chargee", /onload="this\.onload=null;this\.rel='stylesheet'"/.test(home));
-T("repli sans JavaScript", /<noscript><link rel="stylesheet"[^>]*fonts\.googleapis/.test(home));
-T("display=swap conserve", /display=swap/.test(home));
+/* Jusqu'au 2026-09-05, la feuille Google Fonts en rel="stylesheet" bloquait
+   le premier affichage pendant environ 1,5 s sur mobile en 4G lente, d'ou le
+   patron preload+onload+noscript teste ici auparavant. Passees en
+   @font-face auto-heberge dans une balise <style> inline, ces polices ne
+   dependent plus d'aucune feuille externe a charger avant de s'appliquer :
+   le probleme qu'elles resolvaient a disparu avec sa cause. Seul reste a
+   verifier ce qui compte encore : font-display:swap sur les six regles (le
+   texte s'affiche avec la police de repli sans attendre), et l'absence de
+   toute origine Google. */
+T("polices declarees en @font-face auto-heberge", (home.match(/@font-face\{/g) || []).length >= 6);
+T("display=swap conserve", /@font-face\{[^}]*font-display:swap/.test(home));
+T("plus aucune dependance a une feuille externe", !/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(home));
 /* Sans police de repli declaree, le texte serait invisible pendant l'attente. */
 for (const [nom, rx] of [
   ["serif", /'Source Serif 4',Georgia,serif/],
   ["sans-serif", /'Archivo',ui-sans-serif,system-ui,sans-serif/],
   ["chasse fixe", /'JetBrains Mono',monospace/]
 ]) T("police de repli " + nom, rx.test(home));
-T("preconnexion aux deux origines",
-  /preconnect[^>]*fonts\.googleapis/.test(home) && /preconnect[^>]*fonts\.gstatic/.test(home));
 
 console.log("\n--- Redirections et indexation ---");
 /* Search Console signale trois motifs de non-indexation. Deux sont benins et
@@ -166,8 +168,6 @@ console.log("\n--- En-tetes de securite ---");
   const csp = (h.match(/Content-Security-Policy:([^\n]*)/) || [])[1] || "";
   /* Chaque ressource externe reellement utilisee doit etre autorisee. */
   for (const [besoin, motif, pourquoi] of [
-    ["polices Google", "fonts.googleapis.com", "feuille de style des polices"],
-    ["fichiers de police", "fonts.gstatic.com", "les polices elles-memes"],
     ["videos YouTube", "youtube-nocookie.com", "l'onglet Videos affiche la derniere video de chaque chaine en iframe"],
     ["travailleurs web", "worker-src", "Stockfish tourne dans un Worker"],
     ["styles en ligne", "'unsafe-inline'", "le site pose des styles par script"],
@@ -176,6 +176,14 @@ console.log("\n--- En-tetes de securite ---");
       "refuse WebAssembly.instantiateStreaming() et Stockfish reste bloque " +
       "silencieusement sur \"n'a pas pu demarrer\", meme si le fichier se telecharge"]
   ]) T(besoin + " autorises (" + pourquoi + ")", csp.includes(motif), csp.slice(0, 60));
+  /* Polices auto-hebergees depuis le 2026-09-05 : la CSP ne doit plus
+     autoriser Google Fonts du tout, la promesse "aucun traqueur" de la
+     page Confidentialite en dependait (voir audit). font-src 'self'
+     suffit, les six fichiers vivant desormais sous /fonts/ sur le meme
+     domaine. */
+  T("Google Fonts absent de la CSP (polices auto-hebergees)",
+    !csp.includes("fonts.googleapis.com") && !csp.includes("fonts.gstatic.com"), csp.slice(0, 60));
+  T("les polices se chargent en local", /font-src[^;]*'self'/.test(csp));
   T("le site ne peut pas etre encadre ailleurs", /frame-ancestors 'self'/.test(csp));
 }
 

@@ -33,18 +33,29 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- La feuille Google Fonts bloquait le rendu pendant environ 1,5 s sur
-     mobile en 4G lente : le navigateur attendait de la recevoir avant
-     d'afficher quoi que ce soit. display=swap ne suffit pas, il ne concerne
-     que les fichiers de police, pas la feuille qui les declare.
-     On la charge donc comme une ressource non bloquante, puis on la promeut
-     en feuille de style une fois arrivee. Le <noscript> assure le meme
-     resultat sans JavaScript. -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap"></noscript>
+<!-- Polices auto-hebergees depuis le 2026-09-05 (voir audit : la page
+     Confidentialite promettait "aucun traqueur" alors que Google Fonts
+     recevait IP et user-agent de chaque visiteur a chaque chargement).
+     Les six fichiers sont les memes poids que ceux charges avant, en
+     woff2 sous-jeu latin : plus de feuille de style intermediaire a
+     attendre, plus de connexion tierce, et font-display:swap fait le
+     meme travail que le montage asynchrone precedent sans le JS qu'il
+     fallait pour ca.
+     Les regles @font-face vivent dans le MEME <style> que le reste du CSS
+     applicatif, pas dans une balise separee : plusieurs outils du projet
+     (plusieurs tests/check_*.js, et probablement le pipeline de
+     minification terser) supposent un seul bloc <style> par page et en
+     lisent le premier trouve. Un second bloc ajoute avant decalait ce
+     qu'ils y trouvaient -- constate a l'usage : 11 echecs dans
+     check_pied_de_page.js, qui cherchait des regles .sitenav/.tabs
+     retrouvees dans le mauvais bloc. -->
 <style>
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
 :root{
   --ink:#101413;
   --slate:#191F1D;
@@ -55,7 +66,15 @@
   --board:#4B6B63;
   --brass:#E0A93B;
   --jade:#5FBF92;
-  --brick:#D9584A;
+  /* Eclairci le 2026-09-05 : #D9584A ne donnait que 3,76:1 sur --raise et
+     4,34:1 sur --slate, sous le seuil WCAG AA de 4,5:1 pour du texte
+     normal. Or --brick sert de couleur de TEXTE a plusieurs endroits
+     (pendule en zone rouge, chrono des Coordonnees, exercice urgent en
+     Sprint). #E4776A donne 4,94:1 sur --raise, 5,69:1 sur --slate et
+     6,32:1 sur --ink, et reste lisible en fond avec du texte sombre
+     dessus (6,32:1) pour les usages inverses (.btn.danger.armed,
+     historique perdu). */
+  --brick:#E4776A;
   --rule:rgba(236,234,227,.12);
   --r:8px;
   --e1:0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,234,227,.04);
@@ -178,7 +197,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   font:inherit;font-size:13px;font-weight:500;color:var(--sage);background:none;border:0;
   padding:8px 15px;border-radius:999px;cursor:pointer;transition:background .18s,color .18s;white-space:nowrap
 }
-.tabs button[aria-selected="true"]{background-color:var(--brass);color:#1b1508;font-weight:600}
+.tabs button[aria-current="page"]{background-color:var(--brass);color:#1b1508;font-weight:600}
 .tabs button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 @media(max-width:520px){.tabs button{padding:8px 11px;font-size:12.5px}}
 
@@ -778,6 +797,12 @@ header>*{min-width:0}
 .linkbox:focus{outline:2px solid var(--brass);outline-offset:1px}
 .shareRow{display:flex;gap:8px;flex-wrap:wrap}
 .shareRow button{flex:1;min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:5px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:8px;padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
+/* Les pictogrammes de marque sont des elements flex comme le libelle : sans
+   flex:none le navigateur les comprime quand le texte ne tient pas. Mesure
+   au navigateur reel le 2026-09-05 : Messenger, dont le libelle est le plus
+   long, tombait a 4px de large pour 15 de haut -- un point bleu illisible --
+   et WhatsApp a 9px. Le trace SVG n'y etait pour rien. */
+.shareRow button svg{flex:none}
 .shareRow button:hover{background:#33483e}
 .shareRow button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .shareRow button.wa{border-color:rgba(37,211,102,.45)}
@@ -797,7 +822,11 @@ header>*{min-width:0}
    bas dans le script. En flux normal (pas de position:fixed) pour eviter
    les soucis de positionnement deja rencontres sur Safari iOS ailleurs sur
    ce site. */
-.info-tip{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+/* 24x24 depuis le 2026-09-05 : WCAG 2.2 critere 2.5.8 (Target Size Minimum)
+   fixe 24x24 CSS px comme plancher, et 22x22 passait juste dessous. Le
+   disque grandit donc de 2px : la lettre et la bordure restent inchangees,
+   seul le diametre bouge. */
+.info-tip{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
   margin-left:6px;border-radius:50%;border:1px solid var(--rule);background:transparent;
   color:var(--sage);font-size:12px;font-weight:700;font-style:italic;
   font-family:Georgia,'Times New Roman',serif;line-height:1;cursor:pointer;
@@ -1026,7 +1055,12 @@ header>*{min-width:0}
 .prose h4{font-family:'Source Serif 4',Georgia,serif;font-size:15px;margin:16px 0 4px}
 .prose p{margin-bottom:8px;color:var(--sage)}
 .prose strong{color:var(--chalk)}
-.linkbtn{background:none;border:0;color:var(--sage);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:2px}
+/* padding vertical porte a 6px le 2026-09-05 : mesure au navigateur reel,
+   ces boutons faisaient 24px de haut au total mais 18px de zone reellement
+   cliquable en pied de page, sous le plancher WCAG 2.2 (2.5.8). Le padding
+   agrandit la cible sans toucher a la taille du texte ni a l'alignement,
+   les boutons etant en ligne. */
+.linkbtn{background:none;border:0;color:var(--sage);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:6px 2px}
 .linkbtn:hover{color:var(--brass)}
 .linkbtn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 textarea.select{
@@ -1074,13 +1108,22 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <button data-lang="en" aria-pressed="true">EN</button>
       <button data-lang="fr" aria-pressed="false">FR</button>
     </div>
-    <nav class="tabs" id="tabsNav" role="tablist" aria-label="Sections">
-      <button role="tab" id="tab-play" aria-selected="false">Play</button>
-      <button role="tab" id="tab-puzzles" aria-selected="false">Solve</button>
-      <button role="tab" id="tab-edit" aria-selected="false">Analyse</button>
-      <button role="tab" id="tab-friend" aria-selected="false">Invite</button>
-      <button role="tab" id="tab-watch" aria-selected="false">Watch</button>
-      <button role="tab" id="tab-explore" aria-selected="false">Explore</button>
+    <!-- Barre passee du patron "onglets" au patron "navigation" le
+         2026-09-05. Un role="tablist" promet a un lecteur d'ecran des
+         panneaux autonomes (role="tabpanel"), chacun contenant tout le
+         contenu de son onglet. Ici l'echiquier est PARTAGE par Jouer,
+         Resoudre, Analyser et Inviter : il vit hors des panneaux, qui ne
+         portent donc que les reglages. Aucun tabpanel honnete n'etait
+         possible, et le site annoncait depuis toujours une structure
+         qu'il n'avait pas. Ces boutons naviguent entre des vues, ce que
+         decrit exactement <nav> plus aria-current="page". -->
+    <nav class="tabs" id="tabsNav" aria-label="Sections">
+      <button id="tab-play">Play</button>
+      <button id="tab-puzzles">Solve</button>
+      <button id="tab-edit">Analyse</button>
+      <button id="tab-friend">Invite</button>
+      <button id="tab-watch">Watch</button>
+      <button id="tab-explore">Explore</button>
     </nav>
   </header>
 

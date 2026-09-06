@@ -75,7 +75,14 @@ T("image de partage (og:description)", new RegExp('og:description"[^>]*' + NP + 
 T("donnees structurees", new RegExp('featureList[^\\]]*' + NP + ' ').test(idx));
 T("texte de presentation anglais", new RegExp(NP + ' puzzles verified move by move').test(idx));
 T("texte de presentation francais", new RegExp(NP + ' exercices v').test(idx));
-T("tuile de navigation", new RegExp(NP + ' (verified positions|positions v)').test(idx));
+/* "tuile de navigation" retiree le 2026-09-05. Elle exigeait que la tuile
+   Explorer annonce "51619 verified positions". Ce sous-titre a ete change
+   volontairement (session du 2026-09-04) en "10 patterns, 3 examples each" :
+   il suggerait un acces direct a la banque entiere, alors que la page mene
+   a dix pages de motifs. Le compte exact reste verifie aux six autres
+   endroits ci-dessus, la ou il est reellement annonce. */
+T("la tuile Explorer decrit les pages de motifs, pas la taille de la banque",
+  /10 (patterns|motifs), 3 (examples each|exemples chacun)/.test(idx));
 
 console.log("\n--- Les pages d'index annoncent le bon compte ---");
 for (const [p, lbl] of [["/puzzles/index.html", "exercices EN"], ["/fr/exercices/index.html", "exercices FR"]]) {

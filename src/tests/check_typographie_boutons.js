@@ -35,10 +35,35 @@ setTimeout(async()=>{
   await wait(500);
   d.getElementById("tab-puzzles").click(); await wait(400);
   const lire=id=>{const e=d.getElementById(id);return e?e.textContent:"";};
-  for(const [id,att] of [["btnDaily","du"],["btnDaily","du"],["btnReset","ma"]]){
-    const t=lire(id);
-    T(id+" : article lie", t.includes(att+NB), JSON.stringify(t));
-  }
+  /* Reecrit le 2026-09-05. Les trois assertions precedentes visaient
+     btnDaily (deux fois) et btnReset : le premier n'existe plus (devenu la
+     carte cardSolveDaily le 2026-09-03), le second a change de libelle
+     ("Tout reinitialiser" ne contient plus d'article court a lier). Le test
+     echouait donc sur des libelles disparus, pas sur la regle.
+     On verifie desormais la REGLE elle-meme (MOTS_LIES dans i18n.js) sur
+     tous les boutons francais reellement affiches : aucun mot court de la
+     liste ne doit rester suivi d'une espace ordinaire. Un libelle qui
+     change ne perimera plus ce test, et un nouveau bouton mal traite sera
+     attrape tout seul. */
+  const MOTS="du|de|des|le|la|les|un|une|au|aux|en|et|ma|mon|ta|ton|sur|par|a|à";
+  /* Ce qu'on traque : un mot court qui pourrait se retrouver SEUL en fin de
+     ligne. Un mot deja rattache au precedent par une insecable ("par le"
+     dans "par\u00a0le moteur") n'est pas dans ce cas : si la ligne casse
+     apres lui, elle se termine par deux mots, ce que la regle autorise. Le
+     separateur qui precede doit donc etre un debut de chaine ou une espace
+     ORDINAIRE, jamais une insecable -- d'ou \u0020 des deux cotes et non
+     \s, qui en JavaScript englobe aussi \u00a0 (piege qui m'avait fait
+     signaler comme fautifs des libelles parfaitement corrects). */
+  const fautifs=[...d.querySelectorAll("button")]
+    .map(b=>({id:b.id||b.className,txt:(b.textContent||"").trim()}))
+    .filter(o=>o.txt && new RegExp("(^|[\\u0020\\n])(" + MOTS + ")\\u0020(?=\\S)","i").test(o.txt));
+  T("aucun mot court suivi d une espace ordinaire dans les boutons",
+    fautifs.length===0, fautifs.slice(0,4).map(o=>o.id+": "+JSON.stringify(o.txt)).join(" | "));
+  /* Controle positif : au moins un bouton exerce reellement la regle, sinon
+     l'assertion ci-dessus passerait aussi sur une page sans aucun article. */
+  const lies=[...d.querySelectorAll("button")]
+    .filter(b=>new RegExp("(" + MOTS + ")" + NB,"i").test(b.textContent||""));
+  T("la regle s'applique bien quelque part", lies.length>0, lies.length+" bouton(s) concerne(s)");
   /* "btnHintEx apres un clic : article lie" retire le 2026-09-02 : cette
      assertion a besoin qu'un exercice soit charge (fetch de /data/*.json),
      et jsdom perd la liaison des variables globales let/const au niveau

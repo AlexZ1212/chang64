@@ -37,7 +37,14 @@ const perdus=live.filter(f=>{
 });
 const renommes=live.filter(f=>!gen.has(f)&&f!=="/.htaccess").length;
 T("aucun fichier perdu sans redirection", perdus.length===0, perdus.slice(0,5).join(", "));
-T(renommes+" fichiers renommes, tous rediriges", renommes>0);
+/* Corrige le 2026-09-05 : cette assertion exigeait renommes>0, c'est-a-dire
+   qu'au moins un fichier ait change de nom depuis la copie de reference.
+   Ecrite au moment ou 94 pages d'ouvertures venaient d'etre traduites, elle
+   transformait en echec le cas le plus sain qui soit -- une livraison qui ne
+   renomme rien. Ce qui compte n'est pas qu'il y ait des renommages, c'est
+   que ceux qui existent soient tous rediriges, et c'est exactement ce que
+   verifie "perdus" juste au-dessus. On se contente donc d'en rendre compte. */
+T(renommes+" fichier(s) renomme(s), tous rediriges", perdus.length===0, renommes+" renomme(s)");
 T(".htaccess bien retire", !gen.has("/.htaccess"));
 
 console.log("\n--- Toutes les URL indexees restent joignables ---");
@@ -66,8 +73,18 @@ const html=[...gen].filter(f=>f.endsWith(".html"));
 const sm=fs.readFileSync(G+"/sitemap.xml","utf8");
 const locs=new Set([...sm.matchAll(/<loc>https:\/\/chang64\.com([^<]*)<\/loc>/g)].map(m=>m[1]));
 const publiables=html.filter(u=>!u.startsWith("/players/")&&u!=="/404.html");
-const abs=publiables.filter(u=>!locs.has(u)&&!locs.has(u.replace(/index\.html$/,"")));
-T(publiables.length+" pages publiables, toutes au sitemap", abs.length===0, abs.slice(0,4).join(", "));
+/* Nuance ajoutee le 2026-09-05 : "publiable" ne veut plus dire "indexable".
+   Les 112 familles d'ouvertures sans note redigee portent un meta robots
+   noindex,follow et sont volontairement hors sitemap (voir build_site.js) ;
+   elles restent navigables et liees, d'ou leur presence ici. Declarer au
+   sitemap une page qu'on demande par ailleurs de ne pas indexer est un
+   signal contradictoire que la Search Console remonte comme une erreur. */
+const estNoindex=u=>/name="robots" content="noindex/.test(fs.readFileSync(G+u,"utf8"));
+const indexables=publiables.filter(u=>!estNoindex(u));
+const abs=indexables.filter(u=>!locs.has(u)&&!locs.has(u.replace(/index\.html$/,"")));
+T(indexables.length+" pages indexables, toutes au sitemap", abs.length===0, abs.slice(0,4).join(", "));
+const enTrop=publiables.filter(u=>estNoindex(u)&&(locs.has(u)||locs.has(u.replace(/index\.html$/,""))));
+T("aucune page en noindex declaree au sitemap", enTrop.length===0, enTrop.slice(0,4).join(", "));
 T("profil exclu du sitemap", ![...locs].some(u=>u.startsWith("/players/")));
 T("404 exclue du sitemap", !locs.has("/404.html"));
 T("robots autorise l'exploration", /Allow: \//.test(fs.readFileSync(G+"/robots.txt","utf8")));

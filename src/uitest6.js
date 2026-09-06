@@ -153,7 +153,7 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   const b = H(B.w);
   const ref = new Engine.Game();
   ref.makeMove(ref.moves().find(m => ref.uci(m) === "d2d4"));
-  T("friend opens on friends tab", b.$("tab-friend").getAttribute("aria-selected") === "true");
+  T("friend opens on friends tab", b.$("tab-friend").getAttribute("aria-current") === "page");
   T("board flipped for black", b.isFlipped());
   T("position replayed", b.placement() === ref.fen().split(" ")[0]);
 

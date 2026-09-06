@@ -273,7 +273,7 @@ const FR={
 /* --- entre amis --- */
 "Each move produces a link. Send it, your friend plays, they send theirs back.":
  "Chaque coup produit un lien. Tu l'envoies, ton ami joue, il te renvoie le sien.",
-"Start a game.":"Commence une partie.","Choose your colour, then create a game.":"Choisis ta couleur, puis crée la partie.","My position":"Ma position","Pace":"Rythme",
+"Start a game.":"Commence une partie.","Pick a pace, then create the game.":"Choisis un rythme, puis crée la partie.","My position":"Ma position","Pace":"Rythme",
 "This link carries the whole game by itself, no server or account behind it. Each move creates a new one to pass along.":"Ce lien porte toute la partie à lui seul, sans serveur ni compte derrière. Chaque coup en crée un nouveau à transmettre.",
 "Create game":"Créer la partie","Undo my move":"Annuler mon coup","Invite to chang64":"Inviter sur chang64",
 "Your move, then send the link.":"À toi de jouer, puis envoie le lien.",
@@ -403,9 +403,26 @@ let LANG=(navigator.language||"en").toLowerCase().indexOf("fr")===0?"fr":"en";
    courante, sans effet quand le texte tient sur une ligne. */
 const MOTS_LIES=/(^|\s)(du|de|des|le|la|les|un|une|au|aux|en|et|ma|mon|ta|ton|sur|par|a|à|d'|l')(\s)(?=\S)/gi;
 function lier(x){
-  return String(x).replace(MOTS_LIES, function(_, av, mot, ap){
-    return av + mot + (mot.endsWith("'") ? "" : "\u00a0");
-  });
+  /* Corrige le 2026-09-05 : la regle sautait un mot sur deux dans une suite
+     de mots courts. Le motif consomme l'espace QUI PRECEDE le mot ; apres
+     avoir traite "par" dans "par le moteur", le balayage reprend sur "le"
+     sans espace disponible devant lui, donc "le" restait suivi d'une espace
+     ordinaire et pouvait finir seul en fin de ligne -- precisement ce que la
+     regle existe pour eviter. Pareil pour "a volonte" ou "de la partie".
+     On rejoue donc le remplacement jusqu'a stabilisation. La borne a 5 tours
+     n'est pas de la prudence decorative : sans elle, une regle mal modifiee
+     un jour pourrait boucler sans fin sur une chaine du site. En pratique
+     deux tours suffisent, les suites de plus de trois mots courts d'affilee
+     n'existant pas dans nos libelles. */
+  let out=String(x),avant;
+  for(let i=0;i<5;i++){
+    avant=out;
+    out=out.replace(MOTS_LIES, function(_, av, mot, ap){
+      return av + mot + (mot.endsWith("'") ? "" : "\u00a0");
+    });
+    if(out===avant)break;
+  }
+  return out;
 }
 function t(s,v){
   let out=(LANG==="fr"&&FR[s])||s;

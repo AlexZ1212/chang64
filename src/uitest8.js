@@ -32,9 +32,15 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
     Array.from($("egChips").children).map(c=>c.textContent).join(", "));
   click($("egChips").children[0]); await wait(400);
   T("position generated", pieceCount()>=3, pieceCount()+" pieces");
-  T("target shown", $("egBudget").textContent==="12", $("egBudget").textContent);
+  /* Budgets desserres le 2026-09-06 : ils etaient cales sur le jeu parfait
+     (12 pour Dame contre Roi, 34 pour Fou+Cavalier, soit l'optimum
+     theorique), donc inatteignables pour qui apprend la finale. Ces deux
+     nombres suivent ENDGAMES (ui3.js) et doivent etre repris ici a chaque
+     changement : la constante est un const de portee script, invisible
+     depuis le test. */
+  T("target shown", $("egBudget").textContent==="16", $("egBudget").textContent);
   click($("egChips").children[1]); await wait(400);
-  T("switching scenario works", $("egName").textContent==="Rook vs King" && $("egBudget").textContent==="20", $("egName").textContent);
+  T("switching scenario works", $("egName").textContent==="Rook vs King" && $("egBudget").textContent==="26", $("egName").textContent);
   T("rook on the board", $("board").innerHTML.includes('data-p="wr"'));
   const before=pieceCount();
   click($("btnEgNew")); await wait(400);

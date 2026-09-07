@@ -1284,6 +1284,14 @@ if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
    sait deja router les clics vers l'entrainement, pas de raison de le
    dupliquer), juste selectionnes via trainView (ui3.js) avant d'y entrer. */
 let solveScreen="menu";
+/* Vrai quand l'ecran Finales est a l'affichage. Declaree en fonction et non
+   lue directement depuis ui.js : solveScreen est un "let" de ce fichier,
+   charge APRES ui.js, alors qu'une declaration de fonction est hissee sur
+   tout le script concatene et donc appelable de partout au moment utile.
+   Meme precaution que pour "rush" (voir onSquare, ui.js). */
+function enFinales(){
+  return typeof mode!=="undefined"&&mode==="puzzles"&&solveScreen==="endgames";
+}
 /* Drapeau anti-course (bug trouve en corrigeant le rattrapage des jours
    manques, item 1) : showSolveScreen("puzzles"|"daily") declenche en
    interne nextPuzzle()/dailyPuzzle(), qui chargent chacun un exercice de
@@ -1337,13 +1345,15 @@ function majBoutonSuivant(){
 }
 function showSolveScreen(screen){
   solveScreen=screen;
+  /* "egEcran" et non "eg" : "eg" est la partie de finale en cours (ui3.js),
+     et un const local du meme nom la masquait dans toute cette fonction. */
   const menu=$("solveMenu"),ex=$("exPanel"),pzSide=$("solvePuzzlesSidebar"),
-    daySide=$("solveDailySidebar"),eg=$("solveEndgamesScreen");
+    daySide=$("solveDailySidebar"),egEcran=$("solveEndgamesScreen");
   if(menu)menu.classList.toggle("hide",screen!=="menu");
   if(ex)ex.classList.toggle("hide",screen!=="puzzles"&&screen!=="daily");
   if(pzSide)pzSide.classList.toggle("hide",screen!=="puzzles");
   if(daySide)daySide.classList.toggle("hide",screen!=="daily");
-  if(eg)eg.classList.toggle("hide",screen!=="endgames");
+  if(egEcran)egEcran.classList.toggle("hide",screen!=="endgames");
   /* "Exercice suivant" n'a de sens que sur l'ecran Puzzles (file classique) :
      il n'existe pas de "prochain" puzzle du jour, il n'y en a qu'un par
      jour. Le laisser visible sur l'ecran "daily" chargeait silencieusement
@@ -1359,15 +1369,31 @@ function showSolveScreen(screen){
      masque apres coup plutot que de contredire setMode() avant. */
   const bw=document.querySelector(".board-wrap");
   if(bw)bw.classList.toggle("hide",screen==="menu");
+  if(typeof majLayoutSolo==="function")majLayoutSolo();
   if(screen==="menu"){renderSolveMenu();return;}
   if(screen==="puzzles"){if(!solveScreenSuppressAutoload)nextPuzzle();return;}
   if(screen==="daily"){if(!solveScreenSuppressAutoload)dailyPuzzle();return;}
-  /* "endgames" : pas de demarrage automatique -- "Pick an endgame below."
-     (deja dans le HTML) invite a choisir une puce. Un auto-demarrage ici
-     a deja cause un bug par le passe (voir le commentaire dans ui3.js,
-     branche "train" : plateau ecrase par une position Dame+Roi au simple
-     passage sur l'onglet, avant meme un clic) -- on ne le reproduit pas.
-*/
+  /* "endgames" : l'ecran ne touchait pas au plateau, qui restait donc sur
+     la position de l'exercice tactique precedent -- on arrivait sur les
+     finales devant un puzzle. Deux cas distincts :
+     - une finale existe deja (commencee, ou terminee et pas encore rejouee)
+       : on remet SA position, comme stopCoord() le fait en quittant les
+       coordonnees ;
+     - aucune : on en ouvre une. L'auto-demarrage qui avait pose probleme
+       par le passe (voir la branche "train" dans ui3.js) se declenchait au
+       simple survol de l'onglet ; ici on ne vient que d'un clic explicite
+       sur la carte "Finales" ou d'un lien profond, ou ouvrir une position
+       est precisement ce qui est demande. */
+  if(screen==="endgames"){
+    if(typeof eg!=="undefined"&&eg&&eg.g){
+      game=eg.g;legalCache=game.moves();selected=-1;marks={};
+      if(typeof render==="function")render();
+      if(typeof renderEndgame==="function")renderEndgame();
+    } else if(typeof startEndgame==="function"){
+      startEndgame("kq","chip");
+    }
+    return;
+  }
 }
 /* Sous-texte d'etat par carte : contexte de reprise sans bouton
    "Continuer" a part (aurait recree une hierarchie entre les 5 cartes,

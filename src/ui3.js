@@ -50,18 +50,41 @@ function goToSection(id){
 /* ==========================================================
    14. ENDGAME TRAINER
    ========================================================== */
+/* Les budgets etaient cales sur le jeu PARFAIT : 34 coups pour Fou+Cavalier,
+   c'est exactement l'optimum theorique, 12 pour Dame contre Roi en est a un
+   coup. Un exercice dont la reussite exige de ne jamais devier n'est pas
+   atteignable pour qui l'apprend, et c'est bien la ce qu'on lui demande
+   d'apprendre. Marge ajoutee : la contrainte reste reelle (on ne peut pas
+   errer), le mat reste possible sans jouer comme une table de finales. */
 const ENDGAMES=[
-  {id:"kq",name:"Queen vs King",budget:12,white:["Q"],black:[],
+  {id:"kq",name:"Queen vs King",budget:16,white:["Q"],black:[],
    brief:"Push the lone king to the edge with the queen, then bring your own king up. Watch for stalemate."},
-  {id:"kr",name:"Rook vs King",budget:20,white:["R"],black:[],
+  {id:"kr",name:"Rook vs King",budget:26,white:["R"],black:[],
    brief:"Cut the king off with the rook and shrink the box one rank at a time."},
-  {id:"krr",name:"Two rooks vs King",budget:10,white:["R","R"],black:[],
+  {id:"krr",name:"Two rooks vs King",budget:14,white:["R","R"],black:[],
    brief:"The ladder: one rook cuts, the other checks, and they alternate."},
-  {id:"kbn",name:"Bishop and knight",budget:34,white:["B","N"],black:[],
+  {id:"kbn",name:"Bishop and knight",budget:45,white:["B","N"],black:[],
    brief:"The hard one. Mate only happens in a corner your bishop controls."},
-  {id:"kp",name:"King and pawn",budget:26,white:["P"],black:[],
+  {id:"kp",name:"King and pawn",budget:32,white:["P"],black:[],
    brief:"Promote the pawn, then mate. Opposition decides it."}
 ];
+/* Roi et pion : une position tiree au hasard est nulle une bonne partie du
+   temps (roi noir devant le pion, opposition du mauvais cote). L'exercice
+   demande un mat : la position doit donc etre gagnante, sinon on demande
+   l'impossible. Deux configurations sures, verifiees plutot que devinees :
+   - le roi noir est hors du carre du pion, qui passe alors tout seul ;
+   - le roi blanc est devant son pion et a portee, le roi noir strictement
+     plus loin de la case de promotion que lui.
+   Ce n'est pas une table KPK, c'est un filtre conservateur : il ecarte les
+   positions douteuses, quitte a refuser des positions qui seraient gagnantes.
+   Le generateur retire jusqu'a 400 fois, il a de la marge. */
+function kpGagnable(wk,bk,pion){
+  const pr=rOf(pion),pf=fOf(pion);      /* rangee 0 = case de promotion */
+  const dPromo=sq=>Math.max(rOf(sq),Math.abs(fOf(sq)-pf));
+  if(dPromo(bk)>pr)return true;
+  const devant=rOf(wk)<pr&&Math.abs(fOf(wk)-pf)<=1&&pr-rOf(wk)<=2;
+  return devant&&dPromo(bk)>dPromo(wk)+1;
+}
 let eg=null;   // {scen, moves, done}
 
 function randEndgame(scen){
@@ -73,17 +96,19 @@ function randEndgame(scen){
     const wk=place(),bk=place();
     if(Math.abs(rOf(wk)-rOf(bk))<=1&&Math.abs(fOf(wk)-fOf(bk))<=1)continue;
     const board={};board[wk]="K";board[bk]="k";
-    let ok=true;
+    let ok=true,pion=-1;
     for(const p of scen.white){
       let s;
       if(p==="P"){
         let g=0;
         do{s=(1+Math.floor(Math.random()*5))*16+Math.floor(Math.random()*8);g++;}while(used.has(s)&&g<40);
         if(used.has(s)){ok=false;break;}
+        pion=s;
       } else s=place();
       used.add(s);board[s]=p;
     }
     if(!ok)continue;
+    if(pion>=0&&!kpGagnable(wk,bk,pion))continue;
     let fen="";
     for(let r=0;r<8;r++){
       let e=0;
@@ -374,6 +399,10 @@ function squareFromPoint(x,y){
   return idxToSq(i);
 }
 function modeClick(sq){
+  /* Meme cas que dans onSquare (ui.js) : les finales vivent dans l'onglet
+     Resoudre, donc avec mode==="puzzles". Sans ce test, le glisser-deposer
+     comme le clic partaient vers handlePuzzleClick. */
+  if(typeof enFinales==="function"&&enFinales()){handleEndgameClick(sq);return;}
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
@@ -702,6 +731,7 @@ setMode=function(m,opts){
        restait colle en arrivant ici depuis l'ecran de reglages de Jouer --
        alors que Chang Sprint/coordonnees en ont besoin des l'entree. */
     { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    if(typeof majLayoutSolo==="function")majLayoutSolo();
     $("evalwrap").classList.add("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
     $("coordHud").classList.add("hide");
@@ -1271,6 +1301,7 @@ setMode=function(m,opts){
        ici depuis l'ecran de reglages de Jouer (plateau cache tant que la
        partie n'a pas demarre) laissait l'editeur sans echiquier du tout. */
     { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    if(typeof majLayoutSolo==="function")majLayoutSolo();
     $("evalwrap").classList.add("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
     /* Le bouton de retournement rejoint la bande "Editeur de position" : en
@@ -1467,6 +1498,7 @@ setMode=function(m,opts){
     $("pane-analyse").classList.remove("hide");
     /* Meme garde-fou que pour Train/Analyse-editeur (voir plus haut). */
     { const bw=document.querySelector(".board-wrap"); if(bw)bw.classList.remove("hide"); }
+    if(typeof majLayoutSolo==="function")majLayoutSolo();
     $("evalwrap").classList.remove("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
     { const bt=$("boardTools"); if(bt)bt.classList.remove("hide"); }

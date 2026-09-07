@@ -793,6 +793,11 @@ function onSquare(e){
      posee sur body au demarrage du sprint, elle est donc fiable. */
   if(document.body.classList.contains("rush-on")){handlePuzzleClick(sq);return;}
   if(mode==="train"){handlePuzzleClick(sq);return;}   /* sprint : traite comme un exercice */
+  /* Les finales ont rejoint l'onglet Resoudre, donc mode==="puzzles" : sans
+     ce cas, tous leurs clics partaient vers handlePuzzleClick, qui les
+     validait contre l'exercice tactique charge auparavant. Aucune piece ne
+     bougeait, et l'ecran gardait la position du puzzle precedent. */
+  if(typeof enFinales==="function"&&enFinales()){handleEndgameClick(sq);return;}
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
@@ -833,12 +838,24 @@ function askPromo(cands,then){
    Appelee depuis refreshGame() (couvre la quasi-totalite des transitions
    d'etat en mode Jouer) et explicitement depuis showResumeChoice(), le seul
    chemin qui ne passe pas par refreshGame(). */
+/* Voir .layout.solo (template.html). Pendant les phases de preparation le
+   plateau est masque, mais la grille gardait ses deux colonnes : le contenu
+   restait tasse a droite avec un trou a gauche. On repasse alors en colonne
+   unique centree. Une seule source de verite, l'etat reel de .board-wrap,
+   plutot qu'une liste d'ecrans a tenir a jour ; a rappeler partout ou ce
+   masquage change. */
+function majLayoutSolo(){
+  const bw=document.querySelector(".board-wrap"),al=$("appLayout");
+  if(!bw||!al)return;
+  al.classList.toggle("solo",bw.classList.contains("hide"));
+}
 function updatePlayBoardVisibility(){
   const bw=document.querySelector(".board-wrap");
   if(!bw)return;
   const hide=mode==="play"&&!gameStarted&&!(typeof pendingPlaySave!=="undefined"&&pendingPlaySave);
   bw.classList.toggle("hide",hide);
   if(mode==="play"){ const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",hide); }
+  majLayoutSolo();
 }
 function refreshGame(){
   legalCache=game.moves();
@@ -873,6 +890,13 @@ function refreshGame(){
     const finished=(typeof gameFinished==="function"&&gameFinished())||(typeof isReviewGame!=="undefined"&&isReviewGame);
     const sp=$("scoresheetPanel"); if(sp)sp.classList.toggle("hide",!hasMoves);
     const rp=$("reviewPanel"); if(rp)rp.classList.toggle("hide",!finished);
+    /* Une fois la partie finie, le bloc "Revue" est ce qu'on vient chercher,
+       mais il se retrouvait en quatrieme position : les reglages redeviennent
+       visibles juste au-dessus, et la feuille de partie le precede. Plutot
+       que de deplacer le HTML (l'ordre du document sert la lecture au clavier
+       pendant la partie), on reordonne visuellement le temps de la revue :
+       voir #pane-play.revue dans la feuille de style. */
+    const pv=$("pane-play"); if(pv)pv.classList.toggle("revue",!!finished);
     const pe=$("pgnExportRow"); if(pe)pe.classList.toggle("hide",!hasMoves);
     /* Le bloc ouverture/statut n'a rien a montrer avant qu'une partie
        n'existe (l'instruction correspondante vit desormais dans la bulle
@@ -1912,6 +1936,7 @@ function updateAmiBoardVisibility(){
   if(bw)bw.classList.toggle("hide",!amiStarted);
   const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",!amiStarted);
   const sp=$("amiScoresheetPanel"); if(sp)sp.classList.toggle("hide",!amiStarted);
+  majLayoutSolo();
 }
 function showAmi(){
   /* "flipped" n'est PAS remis a plat ici : showAmi() est appelee apres
@@ -2266,6 +2291,7 @@ function setMode(m,opts){
      ce garde-fou ici, quitter Entre amis avant d'avoir cree de partie vers
      un autre onglet aurait laisse le plateau cache partout ensuite. */
   { const bw=document.querySelector(".board-wrap"); if(bw&&m!=="play"&&m!=="friend")bw.classList.remove("hide"); }
+  majLayoutSolo();
   /* Les pendules ne concernent que l'onglet Jouer. renderClocks le sait deja,
      mais rien ne l'appelait au changement d'onglet : elles restaient donc
      affichees au-dessus de l'echiquier des exercices. */

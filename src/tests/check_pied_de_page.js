@@ -148,5 +148,61 @@ T("le menu est annonce comme navigation", /<nav class="footnav" aria-label="/.te
 T("style applique", /\.footnav\{/.test(fr));
 T("aucun tiret cadratin", !fr.includes("\u2014"), (fr.match(/.{20}\u2014.{20}/)||[])[0]||"");
 
+console.log("\n--- Le dernier lien n'est jamais seul sur sa ligne ---");
+/* Sur telephone, "Accessibilite" se retrouvait seul sur sa propre ligne, des
+   deux cotes du site. Les deux derniers liens sont regroupes dans un
+   .foot-pair insecable : ils passent a la ligne ensemble ou pas du tout. */
+{
+  const app=fs.readFileSync(S+"/index.html","utf8");
+  const fa=(app.match(/<footer>([\s\S]*?)<\/footer>/)||[])[1]||"";
+  const pied=(fr.match(/<nav class="footnav"[^>]*>([\s\S]*?)<\/nav>/)||[])[1]||"";
+  const paire=t=>(t.match(/<span class="foot-pair">([\s\S]*?)<\/span>/)||[])[1]||"";
+  T("application : les deux derniers liens sont lies",
+    /footPrefs/.test(paire(fa))&&/footAccess/.test(paire(fa)), paire(fa).slice(0,60));
+  T("pages claires : les deux derniers liens sont lies",
+    /prefs/.test(paire(pied))&&/accessibilite/.test(paire(pied)), paire(pied).slice(0,60));
+  T("le groupe est bien le DERNIER du pied", /<\/span>\s*$/.test(pied.trim()), pied.trim().slice(-40));
+  const jd=require("jsdom");
+  const win=f=>new jd.JSDOM(fs.readFileSync(f,"utf8"),{pretendToBeVisual:true,virtualConsole:new jd.VirtualConsole()}).window;
+  const wa=win(S+"/index.html"), wb=win(S+"/fr/ouvertures/index.html");
+  for(const [nom,wx] of [["application",wa],["pages claires",wb]]){
+    const el=wx.document.querySelector(".foot-pair");
+    T(nom+" : le groupe est insecable", el&&wx.getComputedStyle(el).whiteSpace==="nowrap",
+      el?wx.getComputedStyle(el).whiteSpace:"absent");
+  }
+
+  console.log("\n--- Meme aspect sur fond clair et sur fond fonce ---");
+  /* Les deux pieds de page divergeaient : 13px contre 12.5px, pas
+     d'interlettrage ni d'interlignage cote clair, et surtout une mise en
+     page differente (rangee flex a gouttieres d'un cote, liens en ligne
+     separes par des points medians de l'autre). */
+  const sa=wa.getComputedStyle(wa.document.querySelector("footer"));
+  const sb=wb.getComputedStyle(wb.document.querySelector("footer"));
+  for(const k of ["fontSize","letterSpacing","lineHeight","textAlign"])
+    T("pied de page, "+k+" identique", String(sa[k])===String(sb[k]), sa[k]+" vs "+sb[k]);
+  /* Les liens se comparent sur les declarations et non sur les styles
+     calcules : jsdom ne sait pas resoudre le raccourci "font:inherit" de
+     .linkbtn et rend une taille heritee au lieu des 11.5px declares. */
+  /* Extraction ancree sur un DEBUT de regle, commentaires retires au
+     prealable. Sans l'ancrage, ".linkbtn{" tombait sur
+     ".startline .linkbtn{font-size:13.5px}" declare plus haut ; sans le
+     retrait des commentaires, une regle precedee d'un commentaire n'etait
+     plus reconnue du tout et la comparaison passait sur du vide. */
+  const sansCom=t=>t.replace(/\/\*[\s\S]*?\*\//g,"");
+  const regle=(css,sel)=>((sansCom(css).match(new RegExp("(?:^|[};])\\s*"+sel.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\{([^}]*)\\}"))||[])[1]||"");
+  const cssApp=(app.match(/<style>([\s\S]*?)<\/style>/)||[])[1]||"";
+  const cssClair=(fr.match(/<style>([\s\S]*?)<\/style>/)||[])[1]||"";
+  const rApp=regle(cssApp,".linkbtn"), rClair=regle(cssClair,".footnav a");
+  T("les deux regles de lien ont bien ete trouvees", rApp.length>0&&rClair.length>0,
+    "app "+rApp.length+" car., clair "+rClair.length+" car.");
+  for(const [quoi,motif] of [["taille",/font-size:11\.5px/],["soulignement",/text-decoration:underline/]])
+    T("liens, meme "+quoi, motif.test(rApp)&&motif.test(rClair), rApp+"  VS  "+rClair);
+  T("liens, aucune graisse ajoutee sur fond clair", !/font-weight:[5-9]/.test(rClair), rClair);
+  T("pas de rangee flex a gouttieres sur fond clair",
+    !/\.footnav\{[^}]*display:flex/.test(cssClair), regle(cssClair,".footnav"));
+  T("des points medians separent les liens, comme dans l'application",
+    (pied.match(/&middot;/g)||[]).length===4, String((pied.match(/&middot;/g)||[]).length));
+}
+
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
 process.exit(ko?1:0);

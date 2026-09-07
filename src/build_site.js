@@ -991,7 +991,12 @@ html{
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:13px;text-align:center}
+/* Memes mesures typographiques que le pied de page de l'application
+   (template.html) : 12.5px, letter-spacing .03em, interligne 1.7. Le trait
+   de separation reste, lui : sur une page de contenu il marque la fin du
+   texte, la ou l'application est deja decoupee en panneaux. */
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);
+  font-size:12.5px;letter-spacing:.03em;line-height:1.7;text-align:center}
 .filtre{margin-bottom:18px}
 .filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
   padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
@@ -1050,7 +1055,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .langsw a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .langsw a:hover{color:var(--chalk)}
 
-.footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:14px}
+/* Meme construction que le pied de page de l'application : des liens en
+   ligne separes par des points medians, et non une rangee flex a
+   gouttieres -- deux mises en page differentes pour le meme pied de page
+   se voyaient au passage d'une page a l'autre. */
+.footnav{margin-bottom:14px}
+/* Le dernier lien se retrouvait seul sur sa ligne sur telephone. Les deux
+   derniers passent a la ligne ensemble ou pas du tout. */
+.foot-pair{white-space:nowrap}
 /* Aligne l'aspect sur les liens de pied de page de l'application a fond
    noir (.linkbtn, template.html : souligne, poids normal, 11.5px), la
    couleur restant seule adaptee au fond clair (chalk au lieu de sage,
@@ -1323,11 +1335,11 @@ ${body}
        repeter en bas etait un doublon. Le pied de page garde son role
        classique, les liens legaux. -->
   <nav class="footnav" aria-label="${lang === "fr" ? "Informations légales" : "Legal information"}">
-    <a href="/">${lang === "fr" ? "Accueil" : "Home"}</a>
-    <a href="/#legal">${lang === "fr" ? "Mentions légales" : "Legal notice"}</a>
-    <a href="/#privacy">${lang === "fr" ? "Confidentialité" : "Privacy"}</a>
-    <a href="/#prefs">${lang === "fr" ? "Préférences" : "Preferences"}</a>
-    <a href="/#accessibilite">${lang === "fr" ? "Accessibilité" : "Accessibility"}</a>
+    <a href="/">${lang === "fr" ? "Accueil" : "Home"}</a> &middot;
+    <a href="/#legal">${lang === "fr" ? "Mentions légales" : "Legal notice"}</a> &middot;
+    <a href="/#privacy">${lang === "fr" ? "Confidentialité" : "Privacy"}</a> &middot;
+    <span class="foot-pair"><a href="/#prefs">${lang === "fr" ? "Préférences" : "Preferences"}</a> &middot;
+    <a href="/#accessibilite">${lang === "fr" ? "Accessibilité" : "Accessibility"}</a></span>
   </nav>
   <p class="footnote">${d.foot}</p>
   ${horsContenu ? "" : `<p class="pagedate">${lang === "fr"

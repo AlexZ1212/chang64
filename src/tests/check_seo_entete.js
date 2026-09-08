@@ -187,5 +187,55 @@ console.log("\n--- En-tetes de securite ---");
   T("le site ne peut pas etre encadre ailleurs", /frame-ancestors 'self'/.test(csp));
 }
 
+/* ---------- fil d'Ariane (2026-09-07) ----------
+   La feuille reprenait le <title> entier, donc "Moulin · definition et
+   exemple" ou "Partie viennoise : coups, variantes et codes ECO" : verbeux
+   la ou le fil s'affiche, sous le lien dans un resultat de recherche.
+
+   Deux garanties a tenir, et la seconde compte autant que la premiere.
+   Les suffixes MECANIQUES des trois sections a gabarit doivent partir. Les
+   titres REDIGES d'Apprendre, Pieges et Finales doivent rester entiers :
+   dans "Le mat de Legal : le sacrifice de dame", ce qui suit les deux-points
+   porte du sens, et une regle qui couperait a tous les deux-points ferait
+   perdre de l'information au lieu d'en retirer.
+
+   Troisieme garantie : la feuille ne doit jamais reprendre le nom de sa
+   section, qui occupe deja le deuxieme niveau. "chang64 > Lexique >
+   Lexique · Moulin" serait un doublon. */
+{
+  const filDe = p => {
+    const s = fs.readFileSync(p, "utf8");
+    for (const m of s.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      const j = JSON.parse(m[1]);
+      if (j["@type"] === "BreadcrumbList") return j.itemListElement.map(i => i.name);
+    }
+    return null;
+  };
+  const unePageDe = d => {
+    const l = fs.readdirSync(SITE + "/" + d).filter(f => f.endsWith(".html") && f !== "index.html").sort();
+    return SITE + "/" + d + "/" + l[0];
+  };
+  console.log("\n--- Fil d'Ariane ---");
+  const GABARITS = [
+    ["fr/lexique", "définition et exemple"], ["glossary", "chess term explained"],
+    ["fr/ouvertures", "codes ECO"], ["openings", "ECO codes"],
+    ["fr/exercices", "exemples expliqués"], ["puzzles", "worked examples"]
+  ];
+  for (const [d, suffixe] of GABARITS) {
+    const f = filDe(unePageDe(d));
+    T(d + " : fil a trois niveaux", !!f && f.length === 3, f ? f.join(" > ") : "aucun fil");
+    if (!f) continue;
+    T(d + " : le suffixe de gabarit est retire", !f[2].includes(suffixe), f[2]);
+    T(d + " : la feuille ne redit pas la section", !f[2].startsWith(f[1]), f[2]);
+    T(d + " : la feuille n'est pas vide", f[2].trim().length > 1, f[2]);
+  }
+  const REDIGES = ["fr/apprendre", "learn", "fr/pieges", "fr/finales"];
+  for (const d of REDIGES) {
+    const p = unePageDe(d), f = filDe(p);
+    const titre = fs.readFileSync(p, "utf8").match(/<title>(.*?)<\/title>/)[1].replace(/\s*\|\s*chang64\s*$/, "");
+    T(d + " : titre redige laisse intact", !!f && f[2] === titre, f ? f[2] : "aucun fil");
+  }
+}
+
 console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
 process.exit(ko ? 1 : 0);

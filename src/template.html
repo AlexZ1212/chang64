@@ -237,6 +237,46 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .names{display:flex;flex-direction:column;gap:2px;min-width:0}
 .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
 @media(max-width:620px){.tagline{display:none}}
+/* Deux colonnes des 700px, et non 860 : un telephone en paysage fait 844px
+   de large (iPhone 12) et se retrouvait en colonne unique alors que c'est
+   exactement l'orientation ou la place manque en hauteur, pas en largeur.
+   En dessous de 700px, l'echiquier disparait purement et simplement, comme
+   la signature "L'elephant sur 64 cases" de l'entete a 620px : empile sous
+   le texte sur un telephone en portrait, il repoussait "Jouer maintenant"
+   sous la ligne de flottaison, et une illustration qui coute le bouton
+   principal ne vaut pas sa place. display:none et non visibility:hidden :
+   il ne doit rien occuper du tout, et c'est aussi ce qui garantit que
+   l'IntersectionObserver ne demarre jamais le minuteur sur telephone (voir
+   ui3.js), donc pas une image dessinee ni un calcul de trop.
+   La colonne de l'echiquier prend la plus petite des trois mesures :
+   340px de plafond sur grand ecran, 58vh pour qu'il ne mange jamais tout un
+   ecran bas de plafond (390px de haut en paysage), et 34% pour laisser au
+   titre les 438px dont sa ligne la plus longue a besoin a taille pleine.
+   minmax(0,...) sur la colonne de texte : sans lui, le contenu impose sa
+   largeur minimale et la grille deborde, le meme piege que la barre
+   d'onglets. */
+.hero{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(20px,4vw,36px);align-items:center}
+.hero-text{min-width:0;position:relative}
+.hero-visual{display:none}
+@media(min-width:700px){
+  .hero{grid-template-columns:minmax(0,1fr) min(340px,58vh,34%)}
+  .hero-visual{display:block;min-width:0;position:relative;justify-self:end}
+  /* Le titre suit la largeur au lieu d'etre fige a 44px : c'est ce qui
+     empeche "Travaille la tactique." de passer a la ligne dans une colonne
+     retrecie par l'echiquier. Au-dela de 1000px, le plafond de 44px reprend
+     la main et le rendu bureau ne bouge pas. */
+  .hero h2{font-size:clamp(30px,4.4vw,44px)}
+}
+/* L'echiquier d'accueil ne se joue pas : ni curseur main, ni cible de clic,
+   ni focus. C'est la seule difference avec le vrai plateau, tout le reste
+   (couleurs de cases, theme choisi, pieces) vient des memes regles. */
+.hero-board{box-shadow:var(--e2);cursor:default}
+.hero-board .sq{cursor:default;pointer-events:none}
+/* La piece qui vient de bouger glisse depuis sa case de depart. Transition
+   posee seulement le temps du glissement (voir jouerCoupAccueil, ui3.js) :
+   une transition permanente rejouerait aussi les redessins de fin de boucle,
+   ou toutes les pieces reviennent d'un coup a leur case initiale. */
+.hero-board .piece.slide{transition:transform .34s cubic-bezier(.22,.7,.3,1)}
 .hero h2{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,7vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:12px;position:relative}
 .hero p{color:var(--sage);font-size:clamp(14px,2.6vw,16.5px);max-width:46ch;margin-bottom:24px;position:relative}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative}
@@ -267,7 +307,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 /* Meme correction que pour la pendule : background en raccourci effacait le
    fond --ink de la puce, qui paraissait donc s'assombrir en etant selectionnee
    au lieu de se teinter de laiton. */
-.chip[aria-pressed="true"]{border-color:var(--brass);
+.chip[aria-pressed="true"],.chip[aria-checked="true"]{border-color:var(--brass);
   background-color:var(--ink);
   background-image:linear-gradient(rgba(217,168,63,.16),rgba(217,168,63,.16));
   color:var(--brass)}
@@ -553,9 +593,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 
 /* ---------- panels ---------- */
 .panel{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;box-shadow:var(--e1)}
-/* Menu d'entree de Resoudre : 5 cartes a egalite (Puzzles/Puzzle du
-   jour/Sprint/Coordonnees/Finales), meme habillage que .panel puisque ce
-   sont deja des blocs cliquables entiers plutot que des boutons inline. */
+/* Menu d'entree de Resoudre : 6 cartes a egalite (Puzzles/Puzzle du
+   jour/Sprint/Coordonnees/Finales/Par motif), meme habillage que .panel
+   puisque ce sont deja des blocs cliquables entiers plutot que des boutons
+   inline. */
 .solveCard{display:block;width:100%;text-align:left;background-color:var(--slate);
   border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;
   box-shadow:var(--e1);margin-bottom:10px;cursor:pointer;font:inherit;color:inherit;
@@ -566,6 +607,30 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .solveCard b{display:block;font-size:16px;color:var(--chalk);margin-bottom:4px}
 .solveCard-desc{display:block;font-size:13px;color:var(--sage);line-height:1.4}
 .solveCard-sub{display:block;font-size:12px;color:var(--brass);margin-top:8px;min-height:1em}
+/* Grille des motifs. Deux colonnes des qu'il y a la place, une seule en
+   dessous : douze tuiles empilees sur une colonne feraient un ecran de
+   defilement pour un simple choix. auto-fill plutot qu'un nombre fixe, pour
+   que la grille suive la largeur sans point de rupture a maintenir. */
+.motif-groupe{margin-bottom:18px}
+.motif-groupe .eyebrow{margin-bottom:8px}
+.motif-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:8px}
+.motif-tuile{display:block;text-align:left;background-color:var(--slate);
+  border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;
+  cursor:pointer;font:inherit;color:inherit;transition:border-color .16s,transform .08s}
+.motif-tuile:hover{border-color:var(--brass)}
+.motif-tuile:active{transform:scale(.99)}
+.motif-tuile:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.motif-tuile[aria-current="true"]{border-color:var(--brass);background-color:var(--raise)}
+.motif-tuile b{display:block;font-size:14px;color:var(--chalk);margin-bottom:3px;font-weight:600}
+/* Le decompte vient des donnees, jamais d'une valeur ecrite dans le
+   gabarit : c'est ce qui garantit que la tuile ne peut pas annoncer plus
+   d'exercices que la banque n'en contient. */
+.motif-compte{display:block;font-size:11.5px;color:var(--sage);letter-spacing:.02em}
+.motif-fait{color:var(--brass)}
+.motif-bandeau{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background-color:var(--raise);border:1px solid var(--brass);border-radius:var(--r);
+  padding:10px 12px;margin-bottom:12px}
+.motif-bandeau b{display:block;font-size:14px;color:var(--chalk)}
 /* Blocs repliables. <details> est natif : il fonctionne sans JavaScript et
    le clavier le gere tout seul. On masque seulement le marqueur par defaut
    du navigateur pour poser le notre, qui pivote a l'ouverture. */
@@ -657,7 +722,14 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(max-width:430px){
   .seg button{font-size:11.5px;padding:8px 2px;white-space:normal;line-height:1.2}
 }
-.seg button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
+/* Deux attributs acceptes, et c'est voulu : les groupes en role="radiogroup"
+   (themes d'echiquier, animation, annonces) portent aria-checked, les
+   simples boutons bascule portent aria-pressed. Ne cibler qu'aria-pressed
+   laissait le groupe des annonces sans aucun etat visible depuis qu'il est
+   passe en aria-checked seul (2026-09-06) : on cliquait, la preference
+   changeait bien, mais rien ne bougeait a l'ecran, ce qui se lit comme un
+   bouton mort. */
+.seg button[aria-pressed="true"],.seg button[aria-checked="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 /* Aucun traitement particulier pour "Au hasard" : le lisere laiton que
    portait ce bouton pendant une partie attirait l'oeil vers un controle
    verrouille et pale, ce qui jurait avec les deux autres. Le mode reste
@@ -674,7 +746,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   opacity:.38;cursor:default;pointer-events:none
 }
 .btn:disabled:hover,.btn:disabled:active{background-color:var(--raise);transform:none}
-.seg button:disabled[aria-pressed="true"],.tc-cats button:disabled[aria-pressed="true"]{opacity:.5}
+.seg button:disabled[aria-pressed="true"],.seg button:disabled[aria-checked="true"],.tc-cats button:disabled[aria-pressed="true"]{opacity:.5}
 .btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .btn.danger{border-color:rgba(196,87,63,.5);color:#E4907C}
 .btn.danger:hover{background:rgba(196,87,63,.16)}
@@ -819,13 +891,35 @@ header>*{min-width:0}
 .cal-day.empty{background:none}
 .cal-day.done{background-color:var(--brass);color:var(--ink);font-weight:600;cursor:pointer}
 .cal-day.done:hover{filter:brightness(1.1)}
-/* "Manque, mais rattrapable" (item 1) : contour pointille couleur brass
-   plutot que le fond plein de .done -- distinct au premier coup d'oeil
-   d'un jour deja resolu, tout en signalant que c'est cliquable. */
-.cal-day.missed{border:1px dashed var(--brass);color:var(--brass);cursor:pointer}
-.cal-day.missed:hover{background-color:var(--brass);color:var(--ink)}
-.cal-day.today{border-color:var(--chalk)}
+/* Cinq etats, separes par la FORME autant que par la couleur : fond plein,
+   contour pointille, fond releve, anneau, effacement. Une difference de
+   teinte seule ne passerait ni le daltonisme ni un ecran en plein soleil
+   (WCAG 1.4.1). La serie, elle, se lit sur une dimension a part, l'anneau
+   jade, parce qu'elle se SUPERPOSE a "fait" au lieu de s'y substituer. */
+/* Passe non fait, rattrapable : pointille sage et non plus laiton. En laiton
+   il pesait visuellement autant qu'un jour reussi, alors qu'il dit
+   l'inverse ; le laiton revient au survol, la ou il annonce l'action. */
+.cal-day.missed{border:1px dashed var(--sage);color:var(--sage);cursor:pointer}
+.cal-day.missed:hover{border-color:var(--brass);color:var(--brass)}
+/* Aujourd'hui pas encore fait : fond releve, plus clair que le fond du
+   calendrier, pour se detacher des jours passes non faits sans emprunter le
+   laiton des jours reussis. */
+.cal-day.todo{background-color:var(--raise);color:var(--chalk);font-weight:600;cursor:pointer}
+.cal-day.todo:hover{background-color:var(--brass);color:var(--ink)}
+/* Anneau chalk sur les DEUX cas d'aujourd'hui (fait ou non) : c'est le
+   reperage de la date du jour, pas un etat de resolution. */
+.cal-day.today{border:2px solid var(--chalk)}
+/* Halo jade porte a 2px : avec la gouttiere de 3px de la grille, les halos
+   de deux jours voisins se rejoignent, et la serie se lit comme une chaine
+   continue plutot que comme des cases isolees. */
+.cal-day.streak{box-shadow:0 0 0 2px var(--jade)}
 .cal-day.future{opacity:.3}
+/* Legende : sans elle, cinq etats a deviner. Les pastilles reprennent
+   exactement les memes classes que les cases, pour qu'un futur changement de
+   style ne puisse pas desynchroniser la legende de ce qu'elle explique. */
+.cal-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:12px;font-size:11.5px;color:var(--sage)}
+.cal-legend span{display:inline-flex;align-items:center;gap:6px}
+.cal-legend .cal-day{width:14px;height:14px;aspect-ratio:auto;flex:none;font-size:0;border-radius:4px}
 #pane-calendar .panel{max-width:420px;margin:0 auto}
 .ladder{display:flex;gap:4px;margin-bottom:6px}
 .ladder i{flex:1;height:5px;border-radius:999px;background-color:var(--raise)}
@@ -900,12 +994,13 @@ header>*{min-width:0}
 /* ---------- modal ---------- */
 .modal{position:fixed;inset:0;background:rgba(10,16,14,.72);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
 .modal.on{display:flex}
-/* La promotion est le seul choix qui porte sur l'echiquier lui-meme : son
-   overlay se cale donc dessus, exactement comme .result (meme inset, meme
-   rayon, meme voile), au lieu de couvrir tout le navigateur. #promoModal vit
-   dans .board-frame, qui est en position:relative. */
-#promoModal{position:absolute;inset:10px;background:rgba(10,16,14,.62);border-radius:2px;padding:12px}
-#promoModal .box{max-width:min(320px,100%);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)}
+/* La promotion et le choix de couleur portent tous deux sur l'echiquier
+   lui-meme : leur overlay se cale donc dessus, exactement comme .result
+   (meme inset, meme rayon, meme voile), au lieu de couvrir tout le
+   navigateur. Les deux vivent dans .board-frame, qui est en
+   position:relative. */
+#promoModal,#amiColorModal{position:absolute;inset:10px;background:rgba(10,16,14,.62);border-radius:2px;padding:12px}
+#promoModal .box,#amiColorModal .box{max-width:min(320px,100%);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)}
 .modal .box{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);box-shadow:var(--e2);padding:20px;text-align:center;max-width:320px;width:100%}
 .modal h3{font-family:'Source Serif 4',Georgia,serif;font-size:18px;margin-bottom:12px}
 .promos{display:flex;gap:8px;justify-content:center}
@@ -1200,6 +1295,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   <!-- ================= HOME ================= -->
   <div id="pane-home">
     <section class="hero">
+      <div class="hero-text">
       <h2>Play chess.<br>Solve tactics.<br>Get better.</h2>
       <p class="promise">No account. No ads. No noise. Just chess.</p>
       <p>Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
@@ -1215,6 +1311,21 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         <button class="btn primary" id="heroPlay">Play now</button>
         <button class="btn" id="heroPuzzle">Puzzle of the day</button>
         <button class="btn hide" id="btnInstall">Install the app</button>
+      </div>
+      </div>
+      <!-- Apercu anime : montrer l'echiquier reel du site des la premiere
+           page, avec le theme de couleurs choisi par la personne (les cases
+           reprennent les memes classes .board/.sq/.piece, donc le meme CSS
+           et les memes pieces SVG). Rempli par ui3.js, vide dans le gabarit :
+           64 cases ecrites en dur auraient alourdi le HTML de chaque visite
+           pour un contenu purement decoratif. Pas de legende : la partie
+           jouee reste a reconnaitre, c'est voulu. aria-hidden parce que
+           c'est une illustration, non jouable, dont le contenu n'apporte
+           rien a qui ne la voit pas -- et parce qu'un plateau annonce case
+           par case en plein milieu de l'accueil serait un obstacle, pas un
+           service. -->
+      <div class="hero-visual">
+        <div class="board hero-board" id="heroBoard" aria-hidden="true"></div>
       </div>
     </section>
 
@@ -1379,6 +1490,27 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="box">
             <h3>Choose a promotion piece</h3>
             <div class="promos" id="promoBtns"></div>
+          </div>
+        </div>
+        <!-- Choix de couleur pour une partie par correspondance (2026-09-04,
+             deplace ici le 2026-09-07) : meme patron que promoModal, dont il
+             partage desormais aussi la geometrie. Choisir une couleur agit
+             tout de suite (comme choisir une piece de promotion) : pas de
+             bouton "Valider" separe, un clic suffit et cree la partie (voir
+             btnAmiNew/newAmiGame, ui.js). Le rythme (Pace) reste dans le
+             panneau "New game" en dessous, seule la couleur -- le vrai choix
+             a faire avant de commencer -- passe en overlay.
+             Attention : .board-wrap est masque tant qu'aucune partie ami
+             n'est creee, donc ouvrir cette modale exige de devoiler le
+             plateau d'abord (apercuPlateauAmi, ui.js), sinon elle se
+             retrouve dans un conteneur en display:none. -->
+        <div class="modal" id="amiColorModal">
+          <div class="box">
+            <h3>Choose your colour</h3>
+            <div class="btnrow" id="amiColorBtns">
+              <button type="button" class="btn primary" data-v="w">Play White</button>
+              <button type="button" class="btn" data-v="b">Play Black</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1580,6 +1712,22 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <span class="solveCard-desc">Five essential endgames worth knowing cold, they matter in almost any game.</span>
             <span class="solveCard-sub" id="subSolveEndgames"></span>
           </button>
+          <!-- Sixieme carte (2026-09-07). Elle remplace le filtre par motif
+               qui vivait en menu deroulant dans l'ecran Puzzles : celui-ci
+               etait invisible, et surtout il mentait. Un motif ne vit plus
+               sur toute l'echelle depuis le redecoupage par famille, il tient
+               entierement dans UN niveau. Le filtre laissait donc l'echelle
+               courir et servait un autre motif que celui affiche des la
+               premiere montee de niveau, sans rien signaler.
+               Ici l'echelle est suspendue, comme elle l'est deja pour le
+               Sprint, les Coordonnees et les Finales : seule la carte
+               "Exercices" est branchee dessus, et c'est ce qui rend les
+               autres modes sans danger pour la progression. -->
+          <button type="button" class="solveCard" id="cardSolveMotifs">
+            <b>By pattern</b>
+            <span class="solveCard-desc">Drill one tactic at a time, as long as you like. Your level doesn't move here.</span>
+            <span class="solveCard-sub" id="subSolveMotifs"></span>
+          </button>
           <!-- Actions "de compte" : deplacees ici depuis le bas de l'onglet
                Puzzles -- ce ne sont pas des reglages propres a une categorie
                d'exercice, elles s'appliquent a toute la progression. -->
@@ -1606,6 +1754,18 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <div class="btnrow"><button class="btn" id="btnReset">Reset everything</button></div>
             </div>
           </details>
+        </div>
+        <!-- Ecran "Par motif" : la grille est composee en JavaScript
+             (renderMotifsMenu, ui2.js) parce que les decomptes viennent de
+             /data/theme-counts.json. Rien n'est ecrit en dur ici : si une
+             fournee de minage rend moins que prevu, la tuile affiche moins.
+             Une promesse que la banque ne tient pas est impossible. -->
+        <div class="panel hide" id="solveMotifsScreen">
+          <div class="bloc">
+            <h2 id="motifsTitle">Train one pattern</h2>
+            <p class="sub" id="motifsBrief">Pick a tactic and drill it. Your level and streak stay where they are.</p>
+          </div>
+          <div id="motifsGrid"></div>
         </div>
         <!-- Ecran "Puzzles" et "Puzzle du jour" : meme carte d'exercice
              partagee (exPanel), puisqu'elle ne fait qu'afficher quel que
@@ -1716,8 +1876,21 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="hors-sprint review-hide" id="solvePuzzlesSidebar">
           <hr class="rule">
 
+          <!-- Bandeau d'aparte "Par motif" (2026-09-07). Il PREND LA PLACE de
+               l'echelle au lieu de s'ajouter a elle : pendant l'aparte le
+               niveau ne bouge plus, et continuer a l'afficher laisserait
+               croire qu'on progresse dessus. Il porte aussi la sortie, sans
+               quoi on ne saurait pas qu'on est dans un mode particulier ni
+               comment en partir. -->
+          <div class="motif-bandeau hide" id="motifBandeau">
+            <div>
+              <b id="motifNom"></b>
+              <span class="motif-compte" id="motifNote"></span>
+            </div>
+            <button type="button" class="btn" id="btnMotifSortie">Leave</button>
+          </div>
           <div class="ladder" id="ladder"></div>
-          <div class="lvlrow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> <b id="lvlMax">10</b></span><span id="lvlName">First mates</span></div>
+          <div class="lvlrow" id="lvlRow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> <b id="lvlMax">10</b></span><span id="lvlName">First mates</span></div>
           <div class="stats">
             <div class="stat"><b id="stSolved">0</b><span>Solved</span></div>
             <div class="stat"><b id="stStreak">0</b><span>Streak</span></div>
@@ -1737,14 +1910,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <p class="info-tip-pop hide" id="tipMistakes">Puzzles you've gotten wrong, from any mode. Tap one to try it again. Each success spaces it out further before it comes back. Solve it enough times and it drops off this list for good.</p>
             <div class="rushHistory" id="mistakeGrid"></div>
           </div>
-          <!-- Le theme n'est pas une statistique a consulter, c'est un
-               reglage qu'on ajuste avant de resoudre : reste visible, ne
-               rejoint pas le repli "Mon historique" ci-dessous
-               (decision du 2026-09-03, "ce n'est pas un badge"). -->
-          <div class="field">
-            <div class="eyebrow" id="themeTitle">Theme</div>
-            <select class="select" id="themeFilter" aria-label="Filter puzzles by theme"></select>
-          </div>
+          <!-- Le filtre par motif vivait ici (menu deroulant, 2026-09-03).
+               Retire le 2026-09-07 et remplace par la carte "Par motif" du
+               menu Resoudre. Deux raisons, la seconde etant la vraie :
+               personne ne le trouvait, et surtout il MENTAIT. Depuis le
+               redecoupage par famille, un motif tient entierement dans un
+               niveau ; le filtre laissait l'echelle courir et servait un
+               autre motif que celui affiche des la premiere montee, sans
+               rien signaler. Le nouvel ecran suspend l'echelle, ce qu'un
+               reglage pose au milieu de l'ecran de resolution ne pouvait
+               pas faire sans devenir un piege. -->
           <!-- "Mon historique" (2026-09-03) : regroupe ce qu'on consulte de
                temps en temps plutot qu'a chaque exercice -- records et
                badges. Meme patron que Finales/"Continue on another device"
@@ -2011,6 +2186,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <h2 id="calendarTitle">Daily puzzle calendar</h2>
       <p class="sub" id="calendarSub">Every day you've solved the puzzle of the day. Tap a highlighted day to see it again.</p>
       <div id="calFull"></div>
+      <div class="cal-legend" id="calLegend"></div>
       <p class="note" id="calBackWrap"><a href="#" id="calBackLink">Back</a></p>
     </div>
   </div>
@@ -2091,25 +2267,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
     <span class="foot-pair"><button class="linkbtn" id="footPrefs">Preferences</button> &middot;
     <button class="linkbtn" id="footAccess">Accessibility</button></span>
   </footer>
-</div>
-
-<!-- Choix de couleur pour une partie par correspondance (2026-09-04) :
-     meme patron que promoModal (l'autre modale du site, desormais posee
-     dans .board-frame),
-     reutilise plutot que reinvente. Choisir une couleur agit tout de suite
-     (comme choisir une piece de promotion) : pas de bouton "Valider"
-     separe, un clic suffit et cree la partie (voir btnAmiNew/newAmiGame,
-     ui.js). Le rythme (Pace) reste dans le panneau "New game" en dessous,
-     seule la couleur -- le vrai choix a faire avant de commencer -- passe
-     en overlay. -->
-<div class="modal" id="amiColorModal">
-  <div class="box">
-    <h3>Choose your colour</h3>
-    <div class="btnrow" id="amiColorBtns">
-      <button type="button" class="btn primary" data-v="w">Play White</button>
-      <button type="button" class="btn" data-v="b">Play Black</button>
-    </div>
-  </div>
 </div>
 
 <script>

@@ -40,8 +40,34 @@ setTimeout(()=>{
   T("aide clavier presente", !!d.getElementById("kbdHelp"));
 
   console.log("\n--- Tabindex roulant sur l'echiquier ---");
-  const cells=d.querySelectorAll(".sq");
+  /* Selecteur restreint a #board depuis le 2026-09-07 : l'accueil affiche un
+     second plateau, purement decoratif (.hero-board), qui porte les memes
+     classes .board/.sq pour heriter du theme choisi. Un ".sq" nu en comptait
+     donc 128. Le comportement teste ici, lui, n'a pas change : c'est le
+     tabindex roulant du plateau JOUABLE. */
+  const cells=d.querySelectorAll("#board .sq");
   T("64 cases construites", cells.length===64, cells.length+" cases");
+  /* Corollaire du changement ci-dessus, et la vraie garantie a tenir : le
+     plateau decoratif ne doit ajouter aucune etape au parcours clavier ni
+     aucun bouton a annoncer. */
+  const deco=d.querySelectorAll("#heroBoard .sq");
+  T("plateau d'accueil construit", deco.length===64, deco.length+" cases");
+  T("plateau d'accueil hors du parcours clavier",
+    [...deco].every(c=>!c.hasAttribute("tabindex")&&!c.hasAttribute("role")));
+  T("plateau d'accueil masque aux lecteurs d'ecran",
+    d.getElementById("heroBoard").getAttribute("aria-hidden")==="true");
+  /* Le seuil de bascule existe a DEUX endroits : la media query de
+     .hero-visual et la constante REQUETE_ACCUEIL de ui3.js, qui decide de
+     ne rien construire quand le bloc est masque. Les desynchroniser
+     donnerait soit un plateau construit pour rien sur telephone, soit un
+     trou blanc en paysage. jsdom n'implemente pas matchMedia, donc le
+     comportement lui-meme n'est pas testable ici : on verrouille au moins
+     l'accord des deux valeurs, qui est la faute la plus probable. */
+  const seuilCss=(html.match(/@media\(min-width:(\d+)px\)\{[^@]*\.hero-visual\{display:block/)||[])[1];
+  const seuilJs=(html.match(/REQUETE_ACCUEIL="\(min-width:(\d+)px\)"/)||[])[1];
+  T("l'echiquier d'accueil est masque par defaut", html.includes(".hero-visual{display:none}"));
+  T("seuil CSS et seuil JS accordes", !!seuilCss&&seuilCss===seuilJs,
+    "css "+seuilCss+" / js "+seuilJs);
   if(cells.length===64){
     const focusables=[...cells].filter(c=>c.tabIndex===0).length;
     T("une seule case atteignable au Tab", focusables===1, focusables+" cases a tabindex=0");

@@ -243,6 +243,71 @@ function bestDistractorExplanation(fen, solUci) {
 /* ------------------------------------------------------------------ */
 /* Boucle principale : rejoue chaque partie, detecte les gaffes. */
 /* ------------------------------------------------------------------ */
+/* Le motif d'un exercice depend du coup solution, qu'on ne connait qu'apres
+   la recherche moteur : impossible de filtrer sur le motif lui-meme avant de
+   payer. On teste donc une condition NECESSAIRE, purement geometrique : la
+   position peut-elle seulement produire ce motif ? Si aucun coup legal ne
+   peut le donner, inutile d'evaluer.
+   Large a dessein. Un faux positif ne coute qu'une evaluation qu'on aurait
+   faite de toute facon ; un faux negatif perdrait un exercice pour toujours,
+   sans que rien ne le signale. En cas de doute on garde. */
+function peutDonnerMotif(g, motifs) {
+  const P = 1, N = 2, BI = 3, R = 4, Q = 5, K = 6;
+  const pT = p => p & 7, pC = p => p >> 3, onB = s => !(s & 0x88);
+  const glissantes = { [BI]: [15, 17, -15, -17], [R]: [1, -1, 16, -16], [Q]: [1, -1, 16, -16, 15, 17, -15, -17] };
+  for (const mv of g.moves()) {
+    const piece = g.board[mv.from];
+    if (!piece) continue;
+    const t = pT(piece), moi = pC(piece), eux = moi ^ 1;
+    /* Deviation et coup tranquille : un coup qui ne prend rien. Ne filtre
+       quasiment rien en pratique (mesure : 100 % retenus), n'utiliser une
+       passe ciblee pour eux n'a donc aucun interet. */
+    if ((motifs.has("Deflection") || motifs.has("Quiet move")) && !g.board[mv.to]) return true;
+    /* Fourchettes : le coup doit attaquer au moins deux pieces adverses
+       depuis sa case d'arrivee. On simule la case sans rejouer la partie. */
+    const veutFourchette = (motifs.has("Pawn fork") && t === P)
+      || (motifs.has("Knight fork") && t === N)
+      || motifs.has("Double attack");
+    const veutLigne = (motifs.has("Pin") || motifs.has("Skewer")) && glissantes[t];
+    if (!veutFourchette && !veutLigne) continue;
+    const apres = new Game(g.fen());
+    const complet = apres.moves().find(m => m.from === mv.from && m.to === mv.to && m.promo === mv.promo);
+    if (!complet) continue;
+    apres.makeMove(complet);
+    const cibles = [];
+    /* On lit la piece REELLEMENT posee sur la case d'arrivee, pas celle qui
+       est partie : une promotion transforme le pion en dame, et le
+       classificateur calcule alors les cibles avec la geometrie de la dame
+       tout en gardant l'etiquette "Pawn fork". Utiliser la geometrie du pion
+       perdait ces cas -- un sur trois cents, mesure. */
+    const arrivee = pT(apres.board[mv.to]) || t;
+    const dirs = glissantes[arrivee];
+    if (dirs) {
+      for (const d of dirs) { let x = mv.to + d;
+        while (onB(x)) { if (apres.board[x]) { cibles.push(x); break; } x += d; } }
+    } else if (arrivee === N) {
+      for (const d of [14, 18, 31, 33, -14, -18, -31, -33]) { const x = mv.to + d; if (onB(x) && apres.board[x]) cibles.push(x); }
+    } else if (arrivee === P) {
+      /* Attention au signe : l'index de case descend depuis la rangee 8
+         (b7 vaut 17, a8 vaut 0), donc un pion BLANC avance en soustrayant
+         16, pas en ajoutant. Le sens inverse faisait rejeter 96 % des
+         positions qui donnaient reellement une fourchette de pion, sans
+         qu'aucune erreur ne soit levee : le filtre regardait deux cases
+         vides derriere le pion. */
+      const av = moi === 0 ? -16 : 16;
+      for (const d of [av - 1, av + 1]) { const x = mv.to + d; if (onB(x) && apres.board[x]) cibles.push(x); }
+    }
+    const adverses = cibles.filter(s => pC(apres.board[s]) === eux);
+    /* Le roi COMPTE comme cible de fourchette : targets() (gen_puzzles_v2.js)
+       le retient explicitement, et une fourchette de pion est tres souvent un
+       echec double d'une attaque sur une piece. L'exclure faisait rejeter 96 %
+       des positions qui avaient reellement donne une fourchette de pion -- un
+       faux negatif massif et silencieux, mesure avant d'etre corrige. */
+    if (veutFourchette && adverses.length >= 2) return true;
+    if (veutLigne && adverses.length >= 1) return true;
+  }
+  return false;
+}
 function mineFromPgn(pgnText, opts) {
   opts = opts || {};
   const minPly = opts.minPly || 12;
@@ -251,6 +316,8 @@ function mineFromPgn(pgnText, opts) {
   const depth = opts.depth || 3;
   const maxGames = opts.maxGames || Infinity;
   const minElo = opts.minElo || 0;
+  /* Ensemble de motifs recherches, ou null pour une passe ordinaire. */
+  const motifsVoulus = opts.motifs && opts.motifs.length ? new Set(opts.motifs) : null;
 
   const games = splitGames(pgnText);
   const found = [];
@@ -289,10 +356,24 @@ function mineFromPgn(pgnText, opts) {
            ce n'est qu'un detecteur de gaffe grossier, la vraie rigueur
            (extractPuzzleAt, plus lente) n'intervient qu'une fois un ecart
            deja repere, pas a chaque demi-coup de chaque partie. */
-        const before = search(g, 2, 60).score;
         const c = new Game(g.fen());
         const full = c.moves().find(m => m.from === mv.from && m.to === mv.to && m.promo === mv.promo);
         c.makeMove(full);
+        /* Passe ciblee (2026-09-07) : quand on ne cherche QU'UN motif precis,
+           on ecarte d'abord geometriquement, sans moteur. Les deux recherches
+           ci-dessous coutent jusqu'a 120 ms par demi-coup et representent
+           l'essentiel du temps de minage ; le test geometrique coute quelques
+           microsecondes.
+           Mesure sur la banque : ce filtre ne retient que 2 % des positions
+           pour la fourchette de pion, d'ou une passe ~50x plus rapide. Il ne
+           sert a RIEN pour le clouage (96 % retenus) ni pour la deviation
+           (100 %), ou il n'y a pas de raccourci a esperer : dans ces cas on
+           lance une passe ordinaire, sans --motifs.
+           Le critere est une condition NECESSAIRE et volontairement large :
+           il ne doit jamais ecarter une position qui aurait pu donner le
+           motif, seulement celles qui ne le peuvent pas. */
+        if (motifsVoulus && !peutDonnerMotif(c, motifsVoulus)) { g.makeMove(mv); ply++; continue; }
+        const before = search(g, 2, 60).score;
         const afterPlayed = -search(c, 2, 60).score;
         if (before - afterPlayed >= blunderThreshold) {
           const p = extractPuzzleAt(c, { depth });
@@ -312,7 +393,7 @@ function mineFromPgn(pgnText, opts) {
   return { found, gamesParsed, gamesSkipped, gamesFiltered };
 }
 
-module.exports = { mineFromPgn, splitGames, tokenizeMovetext, moveFromSan, extractPuzzleAt, bestDistractorExplanation };
+module.exports = { mineFromPgn, splitGames, tokenizeMovetext, moveFromSan, extractPuzzleAt, bestDistractorExplanation, peutDonnerMotif };
 
 /* Lecture en flux du fichier PGN source : un dump Lichess decompresse fait
    facilement plusieurs dizaines de Go, bien au-dela de ce qu'un simple
@@ -356,8 +437,14 @@ if (require.main === module) {
   const maxGames = +process.argv[4] || 5000;
   const minElo = +process.argv[5] || 1800;
   const overreadFactor = +process.argv[6] || 30;
+  /* --motifs=Pawn fork,Knight fork : passe CIBLEE. N'a d'interet que pour les
+     motifs que la geometrie sait ecarter, en pratique les fourchettes. Pour
+     tout le reste, lancer sans cette option : le filtre ne retiendrait rien
+     et on aurait paye un test pour rien. */
+  const argMotifs = process.argv.find(a => a.startsWith("--motifs="));
+  const motifs = argMotifs ? argMotifs.slice("--motifs=".length).split(",").map(x => x.trim()).filter(Boolean) : null;
   if (!pgnPath) {
-    console.error("Usage: node mine_puzzles.js parties.pgn sortie.json [maxGames=5000] [minElo=1800] [overreadFactor=30]");
+    console.error("Usage: node mine_puzzles.js parties.pgn sortie.json [maxGames=5000] [minElo=1800] [overreadFactor=30] [--motifs=A,B]");
     process.exit(1);
   }
   (async () => {
@@ -366,7 +453,7 @@ if (require.main === module) {
     console.error(`Extrait charge : ${(pgnText.length / 1e6).toFixed(1)} Mo.`);
     const t0 = Date.now();
     const { found, gamesParsed, gamesSkipped, gamesFiltered } = mineFromPgn(pgnText, {
-      maxGames: maxGames * overreadFactor, minElo,
+      maxGames: maxGames * overreadFactor, minElo, motifs,
       /* Sauvegarde intermediaire (nouveaute) : ecrit l'etat courant a
          chaque point de progression (tous les 50 parties), pas seulement
          a la toute fin. Sur un vrai dump Lichess la duree totale est

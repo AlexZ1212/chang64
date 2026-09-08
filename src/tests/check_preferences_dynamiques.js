@@ -13,7 +13,7 @@ const w=dom.window,d=w.document;
 const key=(el,k)=>el.dispatchEvent(new w.KeyboardEvent("keydown",{key:k,bubbles:true,cancelable:true}));
 
 setTimeout(async()=>{
-  const cells=[...d.querySelectorAll(".sq")];
+  const cells=[...d.querySelectorAll("#board .sq")];
 
   console.log("\n--- Navigation aux fleches ---");
   cells[56].focus();

@@ -60,8 +60,16 @@ setTimeout(async()=>{
   T("plus aucune trace du record Sprint ici non plus", !lab.includes("Record Sprint")&&!lab.includes("Record Rush"), lab.join(", "));
 
   console.log("\n--- Rien n'a disparu ---");
+  /* themeFilter retire de cette liste le 2026-09-07 : le menu deroulant de
+     filtre par motif n'existe plus, il est remplace par la carte "Par motif"
+     et son ecran de choix (voir check_entrainement_motif.js). Ce n'est donc
+     pas une disparition accidentelle, qui est ce que cette liste surveille,
+     mais un deplacement volontaire. On surveille a la place le bandeau qui
+     signale l'aparte, dont la disparition serait au contraire un vrai
+     defaut : sans lui on ne saurait plus qu'on est dans un mode ou le
+     niveau ne bouge pas. */
   for(const id of ["exTheme","exQuest","exStatus","rushBar","ladder","lvlNum","lvlName",
-                   "stSolved","stStreak","stBest","stRating","stDays","themeFilter"])
+                   "stSolved","stStreak","stBest","stRating","stDays","motifBandeau"])
     T(id+" present", !!d.getElementById(id));
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

@@ -76,6 +76,27 @@ function loadLevelChunk(lvl, k, onReady) {
     },
     () => { etat[k] = null; puzzleDataError(); });
 }
+/* Un motif ne tient pas forcement dans le PREMIER morceau de son niveau.
+   Le niveau 7 en est l'exemple : son morceau 0 ne contient que du Pin et de
+   l'enfilade, la deviation n'apparait qu'a partir du morceau 1. Or les
+   morceaux sont tries par difficulte et charges a la demande, donc arriver
+   par un lien sur un motif rare donnait un lot vide -- et levelPool()
+   retombe alors silencieusement sur le lot entier, c'est-a-dire sur un autre
+   motif que celui annonce par le lien.
+   On charge donc morceau par morceau jusqu'a en tenir un du motif demande,
+   sans jamais depasser le nombre reel de morceaux du niveau. Ce n'est pas
+   une boucle sur toute la banque : le premier morceau qui en contient
+   suffit, et nextPuzzle() prendra la suite normalement. */
+function chargerJusquAuMotif(lvl, theme, fini){
+  loadLevelMeta(lvl, meta=>{
+    const total=(meta&&meta.morceaux)||1;
+    (function essaie(k){
+      if(allLoadedPuzzles().some(p=>p.theme===theme)){fini();return;}
+      if(k>=total){fini();return;}
+      loadLevelChunk(lvl,k,()=>essaie(k+1));
+    })(0);
+  });
+}
 /* Premier morceau non encore demande, -1 s'il n'en reste aucun. */
 function morceauSuivant(lvl) {
   const m = LEVEL_META[lvl]; if (!m) return -1;
@@ -87,21 +108,59 @@ function loadLevel(lvl, onReady) {
   if (LEVEL_CACHE[lvl] && LEVEL_CACHE[lvl].length) { onReady && onReady(LEVEL_CACHE[lvl]); return; }
   loadLevelMeta(lvl, () => loadLevelChunk(lvl, 0, onReady));
 }
+/* Les trois chargeurs ci-dessous partagent le meme defaut, decouvert le
+   2026-09-07 en branchant la route #theme= : quand une requete etait deja en
+   vol, "if (PENDING) return" abandonnait le rappel du deuxieme appelant
+   SANS RIEN DIRE. Le premier etait servi, le second attendait pour toujours.
+
+   Invisible jusqu'ici parce qu'un seul appelant demandait chaque fichier a
+   la fois. La route #theme= en a introduit un deuxieme : setMode("puzzles")
+   declenchait alors le rendu du filtre par motif, qui lance le chargement,
+   et la validation
+   du theme arrivait juste apres, dans la seconde. Symptome : le filtre
+   restait vide et le lien ouvrait un exercice quelconque.
+
+   D'ou cette liste d'attente. Le comportement ne change pour personne quand
+   il n'y a qu'un appelant, il repare seulement le cas ou il y en a
+   plusieurs. En cas d'echec la liste est videe sans rappeler personne, comme
+   avant : puzzleDataError() affiche deja le probleme a l'ecran. */
+function fileDAttente(){ return { liste: [], ajoute(f){ if(f)this.liste.push(f); },
+  sert(d){ const l=this.liste; this.liste=[]; for(const f of l)f(d); },
+  vide(){ this.liste=[]; } }; }
+const ATTENTE_INDEX = fileDAttente(), ATTENTE_THEMES = fileDAttente(), ATTENTE_RUSH = fileDAttente();
 function loadPuzzleIndex(onReady) {
   if (PUZZLE_INDEX) { onReady && onReady(PUZZLE_INDEX); return; }
+  ATTENTE_INDEX.ajoute(onReady);
   if (PUZZLE_INDEX_PENDING) return;
   PUZZLE_INDEX_PENDING = true;
   fetchJSON("/data/puzzle-index.json",
-    data => { PUZZLE_INDEX = data; PUZZLE_INDEX_PENDING = false; onReady && onReady(data); },
-    () => { PUZZLE_INDEX_PENDING = false; puzzleDataError(); });
+    data => { PUZZLE_INDEX = data; PUZZLE_INDEX_PENDING = false; ATTENTE_INDEX.sert(data); },
+    () => { PUZZLE_INDEX_PENDING = false; ATTENTE_INDEX.vide(); puzzleDataError(); });
 }
 function loadThemeCounts(onReady) {
   if (THEME_COUNTS) { onReady && onReady(THEME_COUNTS); return; }
+  ATTENTE_THEMES.ajoute(onReady);
   if (THEME_COUNTS_PENDING) return;
   THEME_COUNTS_PENDING = true;
   fetchJSON("/data/theme-counts.json",
-    data => { THEME_COUNTS = data; THEME_COUNTS_PENDING = false; onReady && onReady(data); },
-    () => { THEME_COUNTS_PENDING = false; puzzleDataError(); });
+    data => { THEME_COUNTS = data; THEME_COUNTS_PENDING = false; ATTENTE_THEMES.sert(data); },
+    () => { THEME_COUNTS_PENDING = false; ATTENTE_THEMES.vide(); puzzleDataError(); });
+}
+/* Ou vit chaque motif. Depuis le redecoupage par famille, un motif tient
+   entierement dans UN niveau : Pin en 7, Fourchette de cavalier en 6, Mat du
+   couloir en 10. Filtrer sur un theme sans aller a son niveau revient donc a
+   filtrer un lot qui n'en contient aucun -- et levelPool() retombe alors
+   silencieusement sur le lot entier, c'est-a-dire sur un autre motif. */
+let THEME_LEVELS = null, THEME_LEVELS_PENDING = false;
+const ATTENTE_NIVEAUX = fileDAttente();
+function loadThemeLevels(onReady) {
+  if (THEME_LEVELS) { onReady && onReady(THEME_LEVELS); return; }
+  ATTENTE_NIVEAUX.ajoute(onReady);
+  if (THEME_LEVELS_PENDING) return;
+  THEME_LEVELS_PENDING = true;
+  fetchJSON("/data/theme-levels.json",
+    data => { THEME_LEVELS = data; THEME_LEVELS_PENDING = false; ATTENTE_NIVEAUX.sert(data); },
+    () => { THEME_LEVELS_PENDING = false; ATTENTE_NIVEAUX.vide(); puzzleDataError(); });
 }
 /* Echantillon dedie pour le Sprint (Defis) : jusqu'a 400 exercices resolus
    en un coup par theme (voir la note dans startRush, ui2.js), pioches sur
@@ -113,11 +172,12 @@ function loadThemeCounts(onReady) {
 let RUSH_POOL = null, RUSH_POOL_PENDING = false;
 function loadRushPool(onReady) {
   if (RUSH_POOL) { onReady && onReady(RUSH_POOL); return; }
+  ATTENTE_RUSH.ajoute(onReady);
   if (RUSH_POOL_PENDING) return;
   RUSH_POOL_PENDING = true;
   fetchJSON("/data/rush-pool.json",
-    data => { RUSH_POOL = data; RUSH_POOL_PENDING = false; for (const p of data) PUZZLE_CACHE[p.id] = p; onReady && onReady(data); },
-    () => { RUSH_POOL_PENDING = false; puzzleDataError(); });
+    data => { RUSH_POOL = data; RUSH_POOL_PENDING = false; for (const p of data) PUZZLE_CACHE[p.id] = p; ATTENTE_RUSH.sert(data); },
+    () => { RUSH_POOL_PENDING = false; ATTENTE_RUSH.vide(); puzzleDataError(); });
 }
 /* Resout un exercice par id sans connaitre son niveau a l'avance (lien
    direct /#puzzle=..., ou reprise d'un exercice de revision) : consulte
@@ -168,6 +228,49 @@ function loadPuzzleById(id, onReady) {
    pas des familles. Le rendre reellement progressif demanderait d'ajouter le
    type d'exercice comme second critere et de rejouer le classement de toute
    la banque. */
+/* Motifs proposes a l'entrainement (2026-09-07). Liste EDITORIALE, pas un
+   deversement de /data/theme-counts.json : la banque compte treize
+   etiquettes, toutes ne sont pas des motifs qu'un joueur reconnait.
+
+   Le critere retenu : un motif merite une carte quand il porte un nom qu'on
+   peut apprendre. C'est le meme test que pour les pages Apprendre, et les
+   deux listes coincident exactement, ce qui est plutot bon signe.
+
+   Un seul exclu, "Winning move" : c'est le fourre-tout de fin de cascade
+   (voir classifyBase, gen_puzzles_v2.js), le nom ne dit rien a personne et
+   "trouve le coup gagnant" est la consigne de TOUS les exercices du site.
+   Une carte qui promet ca ne promet rien. Ses exercices restent dans la
+   banque et sortent normalement au niveau 9, ils ne sont pas perdus.
+
+   Les mats forment un second groupe : ce ne sont pas des motifs mais des
+   cibles de calcul, et les melanger aux motifs brouillerait les deux.
+
+   AUCUN decompte n'est ecrit ici. Les nombres affiches viennent de
+   THEME_COUNTS, donc des donnees reellement produites : si une fournee de
+   minage rend moins que prevu, la carte affiche moins, et il est impossible
+   d'y ecrire une promesse que la banque ne tient pas. */
+const MOTIFS_ENTRAINEMENT=[
+  {groupe:"motifs",theme:"Winning capture"},
+  {groupe:"motifs",theme:"Knight fork"},
+  {groupe:"motifs",theme:"Pawn fork"},
+  {groupe:"motifs",theme:"Pin"},
+  {groupe:"motifs",theme:"Skewer"},
+  {groupe:"motifs",theme:"Deflection"},
+  {groupe:"motifs",theme:"Double attack"},
+  {groupe:"motifs",theme:"Quiet move"},
+  {groupe:"motifs",theme:"Back-rank mate"},
+  {groupe:"mats",theme:"Mate in one"},
+  {groupe:"mats",theme:"Mate in two"},
+  {groupe:"mats",theme:"Mate in three"}
+];
+/* Motif en cours d'entrainement, ou null. Tant qu'il est pose, l'echelle des
+   niveaux est SUSPENDUE : ni montee apres trois reussites, ni descente apres
+   quatre erreurs. C'est le point de tout ce mode. Le filtre par motif de
+   l'ecran Puzzles faisait l'inverse -- il laissait l'echelle courir et se
+   mettait a mentir des la premiere montee, en servant un autre motif que
+   celui affiche. Ici l'aparte est explicite : on y entre, on en sort, la
+   progression retrouve exactement l'etat ou on l'avait laissee. */
+let motifEnCours=null,motifNiveau=1;
 const LEVELS=[
   {n:1,name:"First steps"},
   {n:2,name:"Loose pieces"},
@@ -241,6 +344,31 @@ function tcLabel(cat,item){
    INTERFACE
    ========================================================== */
 const $=id=>document.getElementById(id);
+/* Point de passage unique pour toute ecriture de HTML dans le document
+   (2026-09-07). Les 56 assignations a .innerHTML de l'interface passent
+   desormais par ici.
+
+   Premier volet de Trusted Types, et le seul qui vaille aujourd'hui. La
+   directive require-trusted-types-for n'est PAS activee et ne doit pas
+   l'etre tant qu'il n'y a rien de mieux a mettre ici qu'un passe-plat : une
+   politique qui rend la chaine telle quelle donnerait l'illusion de la
+   protection sans rien changer, et rendrait plus difficile de voir qu'il
+   reste du travail. Ce qui a de la valeur des maintenant, c'est le goulot :
+   une politique, un assainissement ou une simple trace se posent d'un seul
+   geste au lieu de cinquante-six.
+
+   Volontairement STRICT : pas de "if(el)". Un element absent doit lever
+   comme avant, sinon on transformerait une erreur bruyante en panne
+   silencieuse, et les appels qui doivent tolerer l'absence testent deja
+   eux-memes (voir les "if(tt)" de refreshCaptures). */
+function poserHtml(el,html){ el.innerHTML=html; return el; }
+/* Echappement pour tout texte insere dans une chaine de HTML. Les valeurs
+   concernees sont aujourd'hui internes (noms de motifs, traductions), donc
+   sures ; l'echappement est la quand meme, parce que la prochaine personne
+   qui reutilisera ces gabarits n'aura pas forcement cette garantie en tete. */
+function echappe(v){ return String(v==null?"":v)
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 const boardEl=$("board");
 
 let mode="home";
@@ -546,8 +674,8 @@ function renderClocks(){
   const cle=c=>c===W?"w":"b";
   const soldeDe=c=>(c===W?pr.solde:-pr.solde);
   const tt=$("takenTop"), tb=$("takenBottom");
-  if(tt)tt.innerHTML=rangeePrises(pr[cle(topColor)],cle(topColor)==="w"?"b":"w",soldeDe(topColor));
-  if(tb)tb.innerHTML=rangeePrises(pr[cle(botColor)],cle(botColor)==="w"?"b":"w",soldeDe(botColor));
+  if(tt)poserHtml(tt,rangeePrises(pr[cle(topColor)],cle(topColor)==="w"?"b":"w",soldeDe(topColor)));
+  if(tb)poserHtml(tb,rangeePrises(pr[cle(botColor)],cle(botColor)==="w"?"b":"w",soldeDe(botColor)));
 }
 setInterval(()=>{
   if(mode!=="play"||!clock.enabled||isFlagged()||clock.active===null)return;
@@ -582,7 +710,7 @@ setInterval(()=>{
    BOARD
    ========================================================== */
 function buildBoard(){
-  boardEl.innerHTML="";
+  poserHtml(boardEl,"");
   for(let i=0;i<64;i++){
     const d=document.createElement("div");
     d.className="sq";
@@ -689,7 +817,7 @@ function render(){
          faisant partir de l'ancienne case. */
       html+='<span class="piece" data-sq="'+sq+'" data-p="'+cc+SYM[pT(p)]+'">'+pieceSVG(SYM[pT(p)],cc)+'</span>';}
     if(targets.has(sq))html+=p?'<span class="ring"></span>':'<span class="dot"></span>';
-    c.innerHTML=html;
+    poserHtml(c,html);
   }
   /* Anime le dernier coup joue, quel que soit le mode : partie, exercice,
      finale ou revue. On compare au coup precedemment anime pour ne pas
@@ -812,12 +940,12 @@ function pickMove(from,to){
 }
 function askPromo(cands,then){
   pendingPromo=true;
-  const box=$("promoBtns");box.innerHTML="";
+  const box=$("promoBtns");poserHtml(box,"");
   const names={5:t("Queen"),4:t("Rook"),3:t("Bishop"),2:t("Knight")};
   for(const t of [Q,R,BI,N]){
     const m=cands.find(x=>x.promo===t); if(!m)continue;
     const b=document.createElement("button");
-    b.innerHTML=pieceSVG(SYM[t],game.turn===W?"w":"b");
+    poserHtml(b,pieceSVG(SYM[t],game.turn===W?"w":"b"));
     b.setAttribute("aria-label",names[t]);
     b.onclick=()=>{$("promoModal").classList.remove("on");pendingPromo=null;then(m);};
     box.appendChild(b);
@@ -1055,7 +1183,7 @@ function botMove(){
 }
 function renderSheetInto(id,list){
   const el=$(id); if(!el)return;
-  if(!list||!list.length){el.innerHTML='<div class="sheet-empty">'+t("No moves yet")+'</div>';return;}
+  if(!list||!list.length){poserHtml(el,'<div class="sheet-empty">'+t("No moves yet")+'</div>');return;}
   let h="";
   for(let i=0;i<list.length;i+=2){
     const last=list.length-1;
@@ -1063,7 +1191,7 @@ function renderSheetInto(id,list){
        '<span class="'+(i===last?"cur":"")+'">'+(list[i]||"")+'</span>'+
        '<span class="'+(i+1===last?"cur":"")+'">'+(list[i+1]||"")+'</span></div>';
   }
-  el.innerHTML=h;
+  poserHtml(el,h);
   /* En haut plutot qu'en bas (2026-09-04) : meme raison et meme fonction
      que renderSheetPlay() (ui2.js) -- ".cur" designe ici toujours le tout
      dernier coup (aucune revue de l'historique cote Jouer via ce chemin ni
@@ -1224,7 +1352,6 @@ function undoGame(){
 /* ==========================================================
    PUZZLES
    ========================================================== */
-function themeOK(p){return !prog.theme||p.theme===prog.theme;}
 function allLoadedPuzzles(){
   const out=[];
   for(const lvl in LEVEL_CACHE)out.push(...LEVEL_CACHE[lvl]);
@@ -1232,43 +1359,28 @@ function allLoadedPuzzles(){
 }
 function levelPool(lvl){
   const bank=LEVEL_CACHE[lvl]||[];
-  let pool=bank.filter(themeOK);
-  /* theme rare, aucun exercice a ce niveau precis : on retombe sur les
-     niveaux deja charges en cache (pas de nouvelle requete pour un cas
-     limite) plutot que de laisser la liste vide. */
-  if(!pool.length&&prog.theme)pool=allLoadedPuzzles().filter(themeOK);
-  return pool.length?pool:bank;
+  /* Mode "Par motif" : le vivier EST le motif, pas le niveau, et il n'y a
+     aucun repli. C'est le point de tout ce mode. L'ancien filtre retombait
+     silencieusement sur le lot entier quand le motif n'y etait pas, donc il
+     annoncait un motif et en servait un autre. Rendre une liste vide est
+     honnete : nextPuzzle() ira chercher le morceau suivant du niveau qui
+     contient ce motif. */
+  if(motifEnCours)return allLoadedPuzzles().filter(p=>p.theme===motifEnCours);
+  return bank;
 }
-function renderThemeFilter(){
-  const sel=$("themeFilter"); if(!sel)return;
-  $("themeTitle").textContent=t("Theme");
-  if(!THEME_COUNTS){loadThemeCounts(renderThemeFilter);return;}
-  const counts=THEME_COUNTS;
-  const themes=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-  sel.innerHTML='<option value="">'+t("All themes")+" ("+TOTAL_PUZZLES+")</option>"+
-    themes.map(th=>'<option value="'+th.replace(/"/g,"&quot;")+'">'+t(th)+" ("+counts[th]+")</option>").join("");
-  sel.value=prog.theme||"";
-}
-/* A l'interieur d'un meme niveau, les exercices ne sortaient pas dans un
-   ordre particulier : deux prises faciles pouvaient suivre un mat en deux
-   difficile, ou l'inverse. Un tri strict par difficulte (champ "diff") a
-   corrige ca, mais au prix d'un defaut signale : en partant de zero, la
-   sequence etait entierement figee, toujours le meme premier exercice
-   (#WVFK3), toujours le meme deuxieme (#HX2YE), etc., identique a chaque
-   nouvelle session puisque le tri est deterministe. On decoupe desormais
-   le niveau en tranches de difficulte croissante (la progression generale
-   reste la meme), mais on merange l'ordre a l'interieur de chaque tranche :
-   la sequence varie donc d'une session a l'autre, sans jamais faire suivre
-   un exercice difficile juste apres un evident. */
 function nextPuzzle(){
   /* Niveau pas encore en cache : on le charge puis on se rappelle soi-meme,
      meme mecanique que loadOpeningBook/openingMap. Le statut affiche un
      message le temps du chargement, plutot qu'un bouton qui semble ne rien
      faire -- seul le tout premier acces a un niveau donne dans la session
      est concerne, les suivants sont instantanes (cache memoire). */
-  if(!LEVEL_CACHE[prog.level]){
+  /* En mode motif on lit les exercices du niveau qui l'heberge, mais on ne
+     TOUCHE PAS a prog.level : la progression doit se retrouver intacte en
+     sortant de l'aparte. D'ou une variable locale plutot qu'une ecriture. */
+  const lvl=motifEnCours?motifNiveau:prog.level;
+  if(!LEVEL_CACHE[lvl]){
     const s=$("status"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
-    loadLevel(prog.level,nextPuzzle);
+    loadLevel(lvl,nextPuzzle);
     return;
   }
   /* "Exercice suivant" sans jamais resoudre n'ajoutait rien a prog.seen
@@ -1278,7 +1390,7 @@ function nextPuzzle(){
      jamais au-dela d'elle. On marque ici l'exercice qu'on quitte, resolu ou
      non : avoir ete vu suffit, peu importe l'issue. */
   if(puzzle&&!prog.seen.includes(puzzle.id)){prog.seen.push(puzzle.id);if(prog.seen.length>200)prog.seen.shift();}
-  const sorted=levelPool(prog.level).slice().sort((a,b)=>(a.diff||0)-(b.diff||0));
+  const sorted=levelPool(lvl).slice().sort((a,b)=>(a.diff||0)-(b.diff||0));
   const TRANCHES=5;
   const taille=Math.max(1,Math.ceil(sorted.length/TRANCHES));
   const pool=[];
@@ -1296,10 +1408,10 @@ function nextPuzzle(){
      immediat s'il n'y a plus rien a proposer, en anticipation sinon, pour que
      l'attente n'arrive jamais au moment ou il clique. */
   {
-    const k=morceauSuivant(prog.level);
+    const k=morceauSuivant(lvl);
     if(k>=0){
-      if(!fresh.length){loadLevelChunk(prog.level,k,nextPuzzle);return;}
-      if(fresh.length<40)loadLevelChunk(prog.level,k);
+      if(!fresh.length){loadLevelChunk(lvl,k,nextPuzzle);return;}
+      if(fresh.length<40)loadLevelChunk(lvl,k);
     }
   }
   if(fresh.length){puzzle=fresh[0];}
@@ -1704,7 +1816,13 @@ function registerSolved(){
   prog.solved++;prog.streak++;prog.correctRun++;prog.wrongRun=0;
   if(prog.streak>prog.best)prog.best=prog.streak;
   if(typeof checkBadges==="function")checkBadges();
-  if(prog.correctRun>=3&&prog.level<LEVELS.length){
+  /* Echelle suspendue pendant un aparte "Par motif" : ni montee ici, ni
+     descente dans registerWrong(). Sans ca, trois reussites feraient monter
+     de niveau et le mode se mettrait a servir un autre motif que celui
+     annonce -- exactement le defaut de l'ancien filtre par menu deroulant.
+     Le reste (compteur resolu, serie, badges, file de revision) continue de
+     compter normalement : travailler un motif reste du travail. */
+  if(!motifEnCours&&prog.correctRun>=3&&prog.level<LEVELS.length){
     prog.level++;prog.correctRun=0;
     setTimeout(()=>{
       const st=$("exStatus");st.className="status win";
@@ -1715,7 +1833,7 @@ function registerSolved(){
 function registerPartial(){prog.solved++;prog.correctRun=0;prog.streak=0;}
 function registerWrong(){
   prog.streak=0;prog.correctRun=0;prog.wrongRun++;
-  if(prog.wrongRun>=4&&prog.level>1){prog.level--;prog.wrongRun=0;}
+  if(!motifEnCours&&prog.wrongRun>=4&&prog.level>1){prog.level--;prog.wrongRun=0;}
   /* File de revision persistante, avec repetition espacee (paliers de type
      Leitner) depuis cette session -- voir SRS_DELAYS_DAYS (ui2.js) pour le
      detail des delais. Ici : un echec, qu'il s'agisse d'un premier rate ou
@@ -1749,8 +1867,22 @@ function renderProgress(){
   { const m=$("lvlMax"); if(m)m.textContent=LEVELS.length; }
   let h="";
   for(let i=1;i<=LEVELS.length;i++)h+='<i class="'+(i<=prog.level?"on":"")+'"></i>';
-  $("ladder").innerHTML=h;
-  renderThemeFilter();
+  poserHtml($("ladder"),h);
+  /* Pendant un aparte "Par motif", l'echelle et la ligne de niveau cedent la
+     place au bandeau du motif. Les afficher cote a cote laisserait croire
+     qu'on progresse dessus alors qu'elles sont gelees, ce qui serait le meme
+     mensonge que l'ancien filtre, juste deplace d'un cran. */
+  { const band=$("motifBandeau"),ech=$("ladder"),lig=$("lvlRow");
+    const dedans=!!motifEnCours;
+    if(band)band.classList.toggle("hide",!dedans);
+    if(ech)ech.classList.toggle("hide",dedans);
+    if(lig)lig.classList.toggle("hide",dedans);
+    if(dedans){
+      const nom=$("motifNom"); if(nom)nom.textContent=t(motifEnCours);
+      const note=$("motifNote");
+      if(note)note.textContent=t("Your level stays at {n} while you train this.",{n:prog.level});
+    }
+  }
   $("hLevel").textContent=prog.level;
   $("hSolved").textContent=prog.solved;
   $("hBest").textContent=prog.best;
@@ -1882,11 +2014,11 @@ const SHARE_ICONS={
    hors mobile (voir plus bas) -- et son usage est en forte croissance,
    proche de WhatsApp en telechargements. */
 function shareButtons(container,url,text,withNative){
-  container.innerHTML="";
+  poserHtml(container,"");
   const mk=(label,cls,fn,icon)=>{
     const b=document.createElement("button");
     b.className=cls;
-    b.innerHTML=(icon?icon+" ":"")+label;
+    poserHtml(b,(icon?icon+" ":"")+label);
     b.onclick=fn;container.appendChild(b);
   };
   if(withNative&&navigator.share){
@@ -2098,6 +2230,30 @@ function readDeepLink(){
     try{brut=decodeURIComponent(m[1]);}catch(e){return null;}
     return {kind:"line",moves:brut.split("_").filter(Boolean)};
   }
+  /* #theme=<nom> (2026-09-07) : entree depuis les pages Apprendre, pour
+     s'entrainer sur le motif que la page vient d'expliquer. Les noms de
+     theme contiennent espaces et traits d'union ("Knight fork",
+     "Back-rank mate"), ils sont donc encodes a la source, d'ou le "%" dans
+     la classe et le garde autour de decodeURIComponent : meme piege que
+     #line= juste au-dessus, ou une sequence pourcent invalide levait une
+     URIError qui arretait toute l'initialisation. */
+  m=h.match(/[#&]theme=([A-Za-z0-9+%_-]+)/);
+  if(m){
+    let nom;
+    try{nom=decodeURIComponent(m[1].replace(/\+/g," "));}catch(e){return null;}
+    if(nom)return {kind:"theme",name:nom};
+  }
+  /* #fen=<position> (2026-09-07) : entree depuis les pages Apprendre, pour
+     manipuler la position que la page vient d'expliquer. Une FEN contient
+     des barres obliques et des espaces, elle est donc encodee a la source :
+     meme classe permissive et meme garde autour de decodeURIComponent que
+     #line= et #theme=. */
+  m=h.match(/[#&]fen=([A-Za-z0-9+%_./ -]+)/);
+  if(m){
+    let brut;
+    try{brut=decodeURIComponent(m[1].replace(/\+/g," "));}catch(e){return null;}
+    if(brut.trim())return {kind:"fen",fen:brut.trim()};
+  }
   return null;
 }
 function applyDeepLink(d){
@@ -2130,6 +2286,59 @@ function applyDeepLink(d){
       puzzle=pz;puzzle.daily=false;loadPuzzle();
     });
     return true;
+  }
+  if(d.kind==="theme"){
+    setMode("puzzles",{screen:"puzzles"});
+    /* Le decompte par theme arrive par requete : on valide DANS son rappel
+       plutot que d'accepter telle quelle une valeur venue de l'adresse. Un
+       theme inconnu (lien perime, faute de frappe) viderait sinon le filtre
+       et laisserait l'ecran sans exercice. On retombe alors sur un exercice
+       ordinaire, comme #puzzle= le fait pour un identifiant introuvable.
+       Pas de saveProg() explicite ici : le lien vaut pour cette visite. Si
+       la personne resout un exercice, finishPuzzle() enregistrera le choix
+       comme n'importe quel autre, exactement comme si elle avait pris le
+       motif dans le menu deroulant. */
+    loadThemeLevels(map=>{
+      /* Validation contre les motifs REELS plutot que contre une valeur venue
+         de l'adresse : un motif inconnu (lien perime, faute de frappe)
+         viderait le filtre et l'ecran resterait sur un exercice quelconque
+         sans que rien ne l'explique. On retombe alors sur un exercice
+         ordinaire, comme #puzzle= le fait pour un identifiant introuvable.
+         Le niveau est pose EN MEME TEMPS que le theme, et c'est le point
+         essentiel : sans lui, on filtre sur un lot qui ne contient pas le
+         motif demande. */
+      /* Depuis le 2026-09-07 le lien mene a l'aparte "Par motif" et non plus
+         a un filtre pose sur l'ecran des exercices : la progression de la
+         personne n'a pas a bouger parce qu'elle a suivi un lien depuis une
+         page de cours. startMotif() s'occupe du niveau a charger. */
+      if(map&&Object.prototype.hasOwnProperty.call(map,d.name)&&typeof startMotif==="function"){
+        startMotif(d.name);
+        return;
+      }
+      nextPuzzle();
+    });
+    return true;
+  }
+  if(d.kind==="fen"){
+    /* Position illisible ou incomplete : on refuse plutot que d'ouvrir un
+       echiquier bancal. Le meme controle qu'au chargement manuel d'une FEN
+       dans l'editeur (editFenLoad, ui3.js) -- deux rois, ni plus ni moins.
+       En refusant, applyDeepLink rend false et l'initialisation retombe sur
+       l'accueil, comme pour n'importe quel lien perime. */
+    let g=null;
+    try{g=new Game(d.fen);}catch(e){g=null;}
+    if(!g||g.kingSq[W]<0||g.kingSq[B]<0)return false;
+    if(typeof ouvrirExploration!=="function")return false;
+    /* Passage par l'editeur d'abord : c'est lui qui detient editTurnVal et
+       la mecanique de retour ("Revenir a l'editeur" depuis l'exploration).
+       Arriver directement en mode analyse laisserait ce retour sur une
+       position sans rapport. */
+    setMode("edit");
+    game=g;
+    editTurnVal=game.turn===B?"b":"w";
+    if(typeof editSyncTurnSeg==="function")editSyncTurnSeg();
+    if(typeof editRefresh==="function")editRefresh();
+    return ouvrirExploration();
   }
   if(d.kind==="line"){
     setMode("play",{fresh:true});
@@ -2193,7 +2402,7 @@ function renderTC(catsId,chipsId,allowDaily){
     if(c.id==="none"&&allowDaily)return tcCat==="none";
     return true;
   });
-  cats.innerHTML="";
+  poserHtml(cats,"");
   for(const c of list){
     const b=document.createElement("button");
     b.textContent=t(c.label);
@@ -2202,7 +2411,7 @@ function renderTC(catsId,chipsId,allowDaily){
     cats.appendChild(b);
   }
   const cat=TC_CATS.find(c=>c.id===tcCat)||TC_CATS[2];
-  chips.innerHTML="";
+  poserHtml(chips,"");
   cat.items.forEach((item,i)=>{
     const b=document.createElement("button");
     b.className="chip";
@@ -2227,7 +2436,7 @@ function onTCChange(){
 }
 function renderDailyChips(){
   const el=$("dailyChips"); if(!el)return;
-  el.innerHTML="";
+  poserHtml(el,"");
   for(const d of [1,3,7]){
     const b=document.createElement("button");
     b.className="chip";
@@ -2259,6 +2468,13 @@ function setMode(m,opts){
   opts=opts||{};
   reviewGame=null;reviewLast=null;
   const rb=$("resultBanner"); if(rb)rb.classList.add("hide");
+  /* Tant que cette modale couvrait tout le navigateur, la barre d'onglets
+     etait hors d'atteinte et on ne pouvait pas changer de section en la
+     laissant ouverte. Posee sur le plateau, elle laisse les onglets
+     cliquables : il faut donc la refermer explicitement, sinon elle
+     resterait affichee par-dessus l'echiquier de la section suivante. */
+  const acm=$("amiColorModal");
+  if(acm&&acm.classList.contains("on")){acm.classList.remove("on");apercuPlateauAmi(false);}
   if(m!=="play"){
     const nr=$("navRow"); if(nr)nr.classList.add("hide");
     const pi=$("plyInfo"); if(pi)pi.className="plyinfo hide";
@@ -2395,11 +2611,6 @@ $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
 /* plus de bouton Reprendre : la fonction reste pour l'historique du code */
 $("btnHint").onclick=hintGame;
 $("btnNext").onclick=nextPuzzle;
-$("themeFilter").addEventListener("change",e=>{
-  prog.theme=e.target.value||"";
-  saveProg();
-  if(mode==="puzzles")nextPuzzle();
-});
 /* btnDaily a disparu du HTML (menu a 5 cartes, 2026-09-03) : "Puzzle du
    jour" se rejoint desormais via cardSolveDaily, cable plus bas avec les
    4 autres cartes du menu. */
@@ -2419,9 +2630,30 @@ $("btnReset").onclick=()=>{
    partie tout de suite (amiColor pose puis newAmiGame(), meme mecanique
    qu'avant, juste sans bouton "Creer" separe). Un clic sur le fond ferme
    sans rien creer, comme un choix qu'on peut annuler. */
-$("btnAmiNew").onclick=()=>{$("amiColorModal").classList.add("on");};
+/* La modale vit maintenant dans .board-frame (voir template.html), or
+   updateAmiBoardVisibility() garde .board-wrap en display:none tant
+   qu'aucune partie n'est creee : sans ce devoilement temporaire l'overlay
+   serait pose dans un conteneur masque, donc invisible. On ne montre que le
+   plateau, ni la barre d'outils ni la feuille de partie, qui n'auraient rien
+   a afficher avant le premier coup. Le plateau est deja rendu par showAmi()
+   meme quand il est cache : rien a redessiner ici, seule la classe change.
+   majLayoutSolo() suit, c'est lui qui tient la colonne unique a jour a
+   partir de l'etat reel de .board-wrap. */
+function apercuPlateauAmi(actif){
+  const bw=document.querySelector(".board-wrap");
+  if(bw)bw.classList.toggle("hide",!actif&&!amiStarted);
+  majLayoutSolo();
+}
+function fermerAmiColor(){
+  $("amiColorModal").classList.remove("on");
+  apercuPlateauAmi(false);
+}
+$("btnAmiNew").onclick=()=>{
+  apercuPlateauAmi(true);
+  $("amiColorModal").classList.add("on");
+};
 $("amiColorModal").addEventListener("click",e=>{
-  if(e.target.id==="amiColorModal"){$("amiColorModal").classList.remove("on");return;}
+  if(e.target.id==="amiColorModal"){fermerAmiColor();return;}
   const b=e.target.closest("button[data-v]"); if(!b)return;
   amiColor=b.dataset.v==="w"?W:B;
   $("amiColorModal").classList.remove("on");
@@ -2472,9 +2704,9 @@ const icoBrass=t=>{
    fait desormais partie du HTML genere par build_site.js, comme sur les
    pages claires : elle s'affiche meme si ce script ne s'execute jamais
    (moteur d'indexation, previsualisation sans JavaScript). Rien a poser ici. */
-$("icoPlay").innerHTML=icoBrass("n");
-$("icoPuzzles").innerHTML=icoBrass("q");
-$("icoFriend").innerHTML=icoBrass("p");
+poserHtml($("icoPlay"),icoBrass("n"));
+poserHtml($("icoPuzzles"),icoBrass("q"));
+poserHtml($("icoFriend"),icoBrass("p"));
 const _hc=$("hCount"); if(_hc)_hc.textContent=TOTAL_PUZZLES;
 
 buildBoard();

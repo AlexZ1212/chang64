@@ -21,11 +21,13 @@ module.exports = function (H) {
        crans sous peine d'un u.levels[p.level-1] indefini sur les exercices
        les plus difficiles (level 6 a 10). */
     en: { play: "Play a game", back: "Back to the index", solution: "Show the solution",
+          train: "Train this pattern", explore: "Explore this position",
           moves: "Moves", diagram: "Diagram", related: "Keep going", difficulty: "Difficulty",
           theme: "Theme", sideToMove: s => `${s} to move`, white: "White", black: "Black",
           levels: ["Very easy", "Easy", "Fairly easy", "Medium", "Fairly hard",
                    "Hard", "Quite hard", "Very hard", "Expert", "Master"] },
     fr: { play: "Jouer une partie", back: "Retour à l'index", solution: "Afficher la solution",
+          train: "Entraîne-toi sur ce motif", explore: "Explore cette position",
           moves: "Coups", diagram: "Diagramme", related: "Pour aller plus loin", difficulty: "Difficulté",
           theme: "Thème", sideToMove: s => `Trait aux ${s}`, white: "Blancs", black: "Noirs",
           levels: ["Très facile", "Facile", "Assez facile", "Moyen", "Assez difficile",
@@ -284,8 +286,46 @@ module.exports = function (H) {
   for (const lang of ["en", "fr"]) {
     const dir = DIRS.learn[lang], u = UI[lang];
     const idxUrl = `${SITE}/${dir}/`;
+  /* Motif de la banque d'exercices correspondant a une page Apprendre
+     (2026-09-07). Neuf pages sur dix-huit en ont un ; les autres n'en
+     recoivent PAS, et c'est voulu. Une page sur les cadences ou la notation
+     n'a rien a faire reproduire sur un echiquier, et lui coller un bouton
+     pour faire comme les autres serait pire que de ne rien mettre.
+
+     La cle est le slug ANGLAIS, qui sert d'identifiant stable a la page dans
+     les deux langues : le slug francais peut etre retouche pour le
+     referencement sans casser cette table.
+
+     Les valeurs sont les noms de theme tels qu'ils existent dans
+     /data/theme-counts.json, non traduits : c'est la valeur que le filtre
+     compare, la traduction se fait a l'affichage. Une faute de frappe ici ne
+     casse rien de visible, le lien retombe sur un exercice ordinaire (voir
+     applyDeepLink, ui.js), d'ou le test qui verifie la table contre le
+     fichier de decomptes reel. */
+  /* Position de depart standard. Quatre pages l'utilisent comme illustration
+     (deplacement des pieces, notation, cadences, coup tranquille) : leur
+     proposer d'explorer "cette position" reviendrait a les envoyer sur
+     l'accueil, ce qui est deja ce que fait "Jouer une partie". */
+  const FEN_DEPART = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const THEME_DE_LA_PAGE = {
+    "spotting-a-hanging-piece": "Winning capture",
+    "knight-fork": "Knight fork",
+    "pawn-fork": "Pawn fork",
+    "double-attack": "Double attack",
+    "the-pin": "Pin",
+    "the-skewer": "Skewer",
+    "back-rank-mate": "Back-rank mate",
+    "deflection": "Deflection",
+    "the-quiet-move": "Quiet move"
+  };
     for (const r of RULES) {
-      try { new Game(r.fen); } catch (e) { throw new Error("FEN invalide: " + r.fen); }
+      let jeuDeLaPage = null;
+      try { jeuDeLaPage = new Game(r.fen); } catch (e) { throw new Error("FEN invalide: " + r.fen); }
+      /* Une position sans coup legal (la page sur l'echec et mat montre un
+         mat) ne se PREND pas en main : l'exploration libre y serait un
+         cul-de-sac. Elle n'obtient donc pas le bouton, au meme titre que les
+         pages illustrees par le plateau de depart. */
+      const explorable = r.fen !== FEN_DEPART && jeuDeLaPage.moves().length > 0;
       const canonical = `${SITE}/${dir}/${r.slug[lang]}.html`;
       const alt = `${SITE}/${DIRS.learn[lang === "en" ? "fr" : "en"]}/${r.slug[lang === "en" ? "fr" : "en"]}.html`;
       const body = `
@@ -293,7 +333,28 @@ module.exports = function (H) {
 <div class="cols">
   ${diagram(r.fen, "")}
   <div>${r.body[lang].map(p => `<p>${p}</p>`).join("\n")}
-    <a class="cta" href="/">${u.play}</a>
+    ${/* Trois boutons possibles, jamais tous les trois par hasard.
+          "Entraine-toi" quand la banque connait le motif : apres avoir lu ce
+          qu'est un clouage, s'exercer sur mille clouages vaut mieux que
+          commencer une partie quelconque.
+          "Explore cette position" quand la page a une vraie position a
+          montrer. Les pages qui illustrent avec le plateau de depart
+          (deplacement des pieces, notation, cadences, coup tranquille) n'y
+          ont pas droit : un lien vers la position de depart est un lien
+          vers l'accueil, il n'apporte rien.
+          Certaines pages n'ont donc qu'un bouton, d'autres aucun des deux.
+          C'est voulu : une page sur les cadences n'a rien a proposer sur un
+          echiquier, et lui coller un bouton pour faire comme les autres
+          serait pire que de ne rien mettre. */""}
+    ${THEME_DE_LA_PAGE[r.slug.en]
+      ? `<a class="cta" href="/#theme=${encodeURIComponent(THEME_DE_LA_PAGE[r.slug.en])}">${u.train}</a>`
+      : ""}
+    ${explorable
+      ? `<a class="cta${THEME_DE_LA_PAGE[r.slug.en] ? " ghost" : ""}" href="/#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
+      : ""}
+    ${THEME_DE_LA_PAGE[r.slug.en] || explorable
+      ? `<a class="cta ghost" href="/">${u.play}</a>`
+      : `<a class="cta" href="/">${u.play}</a>`}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>
 </div>`;

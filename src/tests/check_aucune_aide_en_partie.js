@@ -27,7 +27,7 @@ const dom = new JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true
   url: "https://chang64.com/", virtualConsole: new VirtualConsole() });
 const w = dom.window, d = w.document;
 const wait = ms => new Promise(r => setTimeout(r, ms));
-const cells = () => d.querySelectorAll(".sq");
+const cells = () => d.querySelectorAll("#board .sq");
 
 setTimeout(async () => {
   console.log("\n--- Aucune annulation de coup possible ---");

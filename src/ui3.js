@@ -328,7 +328,7 @@ function handleTrainClick(sq){
   else handleEndgameClick(sq);
 }
 function renderEgChips(){
-  const box=$("egChips");box.innerHTML="";
+  const box=$("egChips");poserHtml(box,"");
   for(const s of ENDGAMES){
     const b=document.createElement("button");
     b.className="chip";b.textContent=t(s.name);b.dataset.id=s.id;
@@ -428,7 +428,7 @@ boardEl.addEventListener("pointermove",e=>{
     el.className="dragghost";
     const r=boardEl.getBoundingClientRect();
     el.style.cssText="position:fixed;pointer-events:none;z-index:60;width:"+(r.width/8*0.86)+"px;height:"+(r.height/8*0.86)+"px;transform:translate(-50%,-50%)";
-    el.innerHTML=pieceSVG(SYM[pT(p)],pC(p)===W?"w":"b");
+    poserHtml(el,pieceSVG(SYM[pT(p)],pC(p)===W?"w":"b"));
     document.body.appendChild(el);
     drag.ghost=el;
     if(selected!==drag.from){selected=drag.from;render();}
@@ -530,7 +530,11 @@ function sfEvalFen(fen,depth){
 async function analyseWithStockfish(){
   const btn=$("btnAnalyse");btn.disabled=true;btn.textContent=t("Analysing with Stockfish…");
   const bar=$("anaProgress");bar.classList.remove("hide");bar.firstElementChild.style.width="0%";
-  const g=new Game(),plies=[],CLAMP=1200;
+  /* gameStartFen, sinon une partie lancee depuis Analyser (position
+     personnalisee) sortait de la boucle des le premier coup, et la liste
+     vide etait lue comme "le moteur n'a pas repondu" : on affichait
+     "Stockfish ne repond plus" alors que Stockfish allait tres bien. */
+  const g=gameStartFen?new Game(gameStartFen):new Game(),plies=[],CLAMP=1200;
   for(let i=0;i<gameUci.length;i++){
     const before=await sfEvalFen(g.fen(),12);
     if(!before){break;}
@@ -593,9 +597,29 @@ $("btnAnalyse").onclick=()=>analyseGame();
    19. INSTALL AS AN APP
    ========================================================== */
 let installEvent=null;
+/* Chromium bureau envoie encore beforeinstallprompt dans la fenetre d'une
+   application deja installee : le bouton "Installer l'application"
+   apparaissait donc DANS l'application, et pas dans le navigateur, ou
+   l'evenement ne part plus une fois l'installation faite. Exactement
+   l'inverse de ce qu'il faut. On ne se fie donc pas a la seule presence de
+   l'evenement, on regarde le mode d'affichage reel. window-controls-overlay
+   couvre les fenetres d'application de bureau, navigator.standalone iOS. */
+function estDejaInstallee(){
+  if(navigator.standalone===true)return true;
+  if(!window.matchMedia)return false;
+  return ["standalone","window-controls-overlay","minimal-ui","fullscreen"]
+    .some(m=>matchMedia("(display-mode: "+m+")").matches);
+}
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();installEvent=e;
+  if(estDejaInstallee())return;
   const b=$("btnInstall");if(b)b.classList.remove("hide");
+});
+/* Le navigateur qui vient de faire l'installation garde l'onglet ouvert :
+   sans ceci le bouton resterait propose alors qu'il n'a plus d'objet. */
+window.addEventListener("appinstalled",()=>{
+  installEvent=null;
+  const b=$("btnInstall");if(b)b.classList.add("hide");
 });
 const bi=$("btnInstall");
 if(bi)bi.onclick=async()=>{
@@ -609,6 +633,151 @@ if("serviceWorker" in navigator&&location.protocol==="https:"){
     navigator.serviceWorker.register("sw.js").catch(()=>{});
   });
 }
+
+/* ==========================================================
+   19c. ECHIQUIER ANIME DE L'ACCUEIL
+   ========================================================== */
+/* Partie de l'Opera : Morphy contre le duc de Brunswick et le comte
+   Isouard, Paris 1858. Choisie pour trois raisons : 33 demi-coups, donc une
+   boucle d'une quarantaine de secondes et non de plusieurs minutes ; elle
+   finit sur un vrai mat et pas sur un abandon, donc la boucle a une fin
+   nette ; et elle est assez connue pour etre reconnue par une partie des
+   visiteurs. Les coups d'une partie sont des faits, pas une oeuvre.
+   Stockee en UCI, 164 octets. Le moteur du site la rejoue a la volee : rien
+   n'est precalcule, aucune position n'est stockee, aucune image n'est
+   chargee. Les cases et les pieces reprennent les classes du vrai plateau,
+   donc le visuel suit aussi le theme d'echiquier choisi dans les
+   preferences, sans une ligne de CSS en plus. Verifiee contre engine.js :
+   les 33 coups sont legaux et le dernier est bien mat. */
+const COUPS_ACCUEIL=("e2e4 e7e5 g1f3 d7d6 d2d4 c8g4 d4e5 g4f3 d1f3 d6e5 f1c4 g8f6 f3b3 d8e7 "+
+  "b1c3 c7c6 c1g5 b7b5 c3b5 c6b5 c4b5 b8d7 e1c1 a8d8 d1d7 d8d7 h1d1 e7e6 b5d7 f6d7 "+
+  "b3b8 d7b8 d1d8").split(" ");
+const CADENCE_ACCUEIL=1100;   /* un demi-coup toutes les 1,1 s */
+const PAUSE_MAT_ACCUEIL=3400; /* le mat reste affiche avant de reboucler */
+let partieAccueil=null,plyAccueil=0,minuteurAccueil=null,accueilVisible=false;
+function cellulesAccueil(){
+  const el=$("heroBoard"); if(!el)return null;
+  if(!el.childElementCount){
+    for(let i=0;i<64;i++){
+      const c=document.createElement("div");
+      /* Meme calcul que idxToSq() (ui.js) mais sans "flipped" : ce plateau
+         n'est jamais retourne, il ne depend pas de l'etat de la partie en
+         cours de la personne. */
+      const r=Math.floor(i/8),f=i%8;
+      c.className="sq "+(((r+f)%2===1)?"d":"l");
+      c.dataset.sq=String(r*16+f);
+      el.appendChild(c);
+    }
+  }
+  return el;
+}
+function dessinerAccueil(coup){
+  const el=cellulesAccueil(); if(!el||!partieAccueil)return;
+  const cells=el.children;
+  for(let i=0;i<64;i++){
+    const r=Math.floor(i/8),f=i%8,sq=r*16+f;
+    const c=cells[i],p=partieAccueil.board[sq];
+    let cls="sq "+(((r+f)%2===1)?"d":"l");
+    if(coup&&(sq===coup.from||sq===coup.to))cls+=" last";
+    c.className=cls;
+    poserHtml(c,p?'<span class="piece">'+pieceSVG(SYM[pT(p)],pC(p)===W?"w":"b")+"</span>":"");
+  }
+  if(!coup)return;
+  /* Glissement : la piece est deja dessinee sur sa case d'arrivee, on la
+     repart visuellement de sa case de depart puis on relache au cadre
+     suivant. Le decalage se calcule en cases et non en pixels mesures, ce
+     qui reste juste quelle que soit la taille du plateau et n'oblige a lire
+     aucune geometrie (donc aucun reflow force). */
+  const dep=cells[(coup.from>>4)*8+(coup.from&7)];
+  const arr=cells[(coup.to>>4)*8+(coup.to&7)];
+  const piece=arr&&arr.firstElementChild;
+  if(!dep||!piece)return;
+  const dx=((coup.from&7)-(coup.to&7))*100,dy=(((coup.from>>4))-((coup.to>>4)))*100;
+  piece.style.transform="translate("+dx+"%,"+dy+"%)";
+  requestAnimationFrame(()=>{
+    piece.classList.add("slide");
+    piece.style.transform="";
+  });
+}
+function coupSuivantAccueil(){
+  if(!partieAccueil)return;
+  if(plyAccueil>=COUPS_ACCUEIL.length){
+    /* Fin de boucle : on repart de zero. dessinerAccueil() sans coup, donc
+       sans glissement, sinon les 32 pieces glisseraient toutes a la fois. */
+    partieAccueil=new Game();plyAccueil=0;dessinerAccueil(null);
+    minuteurAccueil=setTimeout(coupSuivantAccueil,CADENCE_ACCUEIL);
+    return;
+  }
+  const u=COUPS_ACCUEIL[plyAccueil++];
+  const mv=partieAccueil.moves().find(m=>partieAccueil.uci(m)===u);
+  /* Un coup introuvable ne devrait pas arriver (la suite est verifiee), mais
+     on s'arrete proprement plutot que de boucler sur une position figee. */
+  if(!mv){arreterAccueil();return;}
+  partieAccueil.makeMove(mv);
+  dessinerAccueil(mv);
+  const fini=plyAccueil>=COUPS_ACCUEIL.length;
+  minuteurAccueil=setTimeout(coupSuivantAccueil,fini?PAUSE_MAT_ACCUEIL:CADENCE_ACCUEIL);
+}
+function arreterAccueil(){
+  if(minuteurAccueil){clearTimeout(minuteurAccueil);minuteurAccueil=null;}
+}
+function demarrerAccueil(){
+  if(minuteurAccueil||!accueilVisible||document.hidden)return;
+  if(!partieAccueil){partieAccueil=new Game();plyAccueil=0;dessinerAccueil(null);}
+  minuteurAccueil=setTimeout(coupSuivantAccueil,CADENCE_ACCUEIL);
+}
+/* Doit rester alignee sur la media query de .hero-visual dans
+   template.html : en dessous de ce seuil le bloc est en display:none, et il
+   ne s'agit pas seulement de ne pas l'animer mais de ne rien construire du
+   tout. Dessiner 32 pieces SVG dans un element invisible serait du travail
+   pur perte sur chaque chargement mobile, c'est-a-dire sur la majorite. */
+const REQUETE_ACCUEIL="(min-width:700px)";
+let accueilPret=false,ecouteAccueil=false;
+function initAccueilAnime(){
+  const el=$("heroBoard"); if(!el)return;
+  const mq=window.matchMedia?matchMedia(REQUETE_ACCUEIL):null;
+  /* Une rotation en paysage franchit le seuil : on construit a ce
+     moment-la plutot que jamais. Une seule inscription, quel que soit le
+     nombre d'allers-retours. */
+  if(mq&&mq.addEventListener&&!ecouteAccueil){
+    ecouteAccueil=true;
+    mq.addEventListener("change",()=>initAccueilAnime());
+  }
+  if(mq&&!mq.matches){arreterAccueil();return;}
+  if(accueilPret)return;
+  accueilPret=true;
+  cellulesAccueil();
+  partieAccueil=new Game();plyAccueil=0;dessinerAccueil(null);
+  /* Mouvement reduit : on montre la position finale, immobile. Le but du
+     bloc est de montrer l'echiquier, pas le mouvement ; le supprimer
+     entierement priverait ces personnes du visuel pour rien. */
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){
+    for(const u of COUPS_ACCUEIL){
+      const mv=partieAccueil.moves().find(m=>partieAccueil.uci(m)===u);
+      if(!mv)break;
+      partieAccueil.makeMove(mv);
+    }
+    dessinerAccueil(null);
+    return;
+  }
+  /* Ne tourner que quand le bloc est reellement a l'ecran. Cela couvre d'un
+     coup les trois cas ou l'animation ne servirait a rien et couterait du
+     processeur : onglet du site quitte (le panneau d'accueil passe en
+     display:none, donc plus d'intersection), page defilee plus bas, et
+     onglet du navigateur en arriere-plan (visibilitychange ci-dessous). */
+  if(window.IntersectionObserver){
+    new IntersectionObserver(entries=>{
+      accueilVisible=entries.some(e=>e.isIntersecting);
+      if(accueilVisible)demarrerAccueil();else arreterAccueil();
+    },{threshold:.15}).observe(el);
+  } else {
+    accueilVisible=true;demarrerAccueil();
+  }
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden)arreterAccueil();else demarrerAccueil();
+  });
+}
+initAccueilAnime();
 
 /* ==========================================================
    19b. LANGUAGE SWITCH
@@ -1015,14 +1184,17 @@ function renderPrefs(){
 
   const box=$("boardThemes");
   if(box){
-    box.innerHTML="";
+    poserHtml(box,"");
     for(const th of BOARD_THEMES){
       const b=document.createElement("button");
       b.className="chip";
       b.type="button";
       b.setAttribute("role","radio");
+      /* aria-checked seul, comme segAnnounce : aria-pressed n'est pas valide
+         sur role="radio". Le style suit desormais les deux attributs (voir
+         .chip[aria-checked] dans la feuille), donc plus rien n'oblige a
+         porter le doublon. */
       b.setAttribute("aria-checked",String(th.id===prefBoard));
-      b.setAttribute("aria-pressed",String(th.id===prefBoard));
       b.textContent=fr?th.fr:th.en;
       b.onclick=()=>{
         prefBoard=th.id;applyBoardTheme();savePrefs();renderPrefs();
@@ -1042,15 +1214,15 @@ function renderPrefs(){
   const segA=$("segAnim");
   if(segA){
     const lab=fr?{on:"Activée",off:"Désactivée"}:{on:"On",off:"Off"};
-    segA.innerHTML="";
+    poserHtml(segA,"");
     for(const v of ["on","off"]){
       const b=document.createElement("button");
       b.type="button";
       b.setAttribute("data-v",v);
       b.setAttribute("role","radio");
       const actif=(v==="on")===animOn;
+      /* Idem : aria-checked seul sur un role="radio". */
       b.setAttribute("aria-checked",String(actif));
-      b.setAttribute("aria-pressed",String(actif));
       b.textContent=lab[v];
       b.onclick=()=>{animOn=(v==="on");savePrefs();renderPrefs();};
       segA.appendChild(b);
@@ -1060,7 +1232,7 @@ function renderPrefs(){
   if(seg){
     const labels=fr?{off:"Aucune",moves:"Les coups",full:"Coups et état"}
                   :{off:"Off",moves:"Moves",full:"Moves and status"};
-    seg.innerHTML="";
+    poserHtml(seg,"");
     for(const v of ["off","moves","full"]){
       const b=document.createElement("button");
       b.type="button";
@@ -1082,9 +1254,9 @@ function renderPrefs(){
   }
   const help=$("kbdHelp");
   if(help){
-    help.innerHTML=fr
+    poserHtml(help,fr
       ? "<p>Sur l'échiquier : les <b>flèches</b> déplacent le curseur, <b>Entrée</b> ou <b>Espace</b> sélectionne une pièce puis sa case d'arrivée, <b>Échap</b> annule la sélection. <b>Origine</b> et <b>Fin</b> vont au bord de la rangée, <b>Page haut</b> et <b>Page bas</b> aux extrémités de la colonne.</p>"
-      : "<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>";
+      : "<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>");
   }
 }
 if($("homeStartBtn"))$("homeStartBtn").onclick=()=>setMode("puzzles");
@@ -1148,11 +1320,11 @@ function editPieceName(sym){
 function editRenderPalette(){
   for(const color of ["w","b"]){
     const el=$(color==="w"?"editPalWhite":"editPalBlack"); if(!el)continue;
-    el.innerHTML="";
+    poserHtml(el,"");
     for(const sym of EDIT_ORDER){
       const b=document.createElement("button");
       b.type="button";
-      b.innerHTML=pieceSVG(sym,color);
+      poserHtml(b,pieceSVG(sym,color));
       b.setAttribute("aria-pressed","false");
       b.setAttribute("aria-label",editPieceName(sym)+" ("+(color==="w"?t("White"):t("Black"))+")");
       b.onclick=()=>selectEditTool(sym,color);
@@ -1401,7 +1573,7 @@ function renderAnalyseNav(){
     const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
     h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+'</span>';
   }
-  el.innerHTML=h;
+  poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>analyseGoto(+sp.dataset.ply);});
   if(typeof recenterNavChip==="function")recenterNavChip(el);
   if(typeof updateNavScrollHint==="function")updateNavScrollHint();
@@ -1441,8 +1613,12 @@ async function queueAnalyseEval(){
     }
   }
 }
-if($("editAnalyse"))$("editAnalyse").onclick=()=>{
-  if(game.kingSq[W]<0||game.kingSq[B]<0)return;
+/* Extrait du gestionnaire de "Analyser cette position" le 2026-09-07 : la
+   route #fen= (voir applyDeepLink, ui.js) emprunte exactement ce chemin.
+   Les deux pieges documentes ci-dessous se seraient reproduits a
+   l'identique dans une copie, et personne ne l'aurait vu avant longtemps. */
+function ouvrirExploration(){
+  if(game.kingSq[W]<0||game.kingSq[B]<0)return false;
   analyseStartFen=game.fen();
   /* editGame/editGameTurn ne sont normalement mis a jour qu'en quittant
      l'onglet Analyse (voir l'extension setMode plus bas) : passer par
@@ -1459,7 +1635,9 @@ if($("editAnalyse"))$("editAnalyse").onclick=()=>{
   editGame=new Game(analyseStartFen);editGameTurn=editTurnVal;
   sanList=[];analyseUci=[];analysePly=null;lastMove=null;selected=-1;marks={};analyseEvalCache=null;
   setMode("analyse");
-};
+  return true;
+}
+if($("editAnalyse"))$("editAnalyse").onclick=()=>{ouvrirExploration();};
 if($("analyseBack"))$("analyseBack").onclick=()=>setMode("edit");
 
 
@@ -1551,7 +1729,7 @@ function editHighlightCellAt(x,y){
 function editMakeGhost(sym,color){
   const g=document.createElement("div");
   g.className="edit-ghost";
-  g.innerHTML=pieceSVG(sym,color);
+  poserHtml(g,pieceSVG(sym,color));
   document.body.appendChild(g);
   return g;
 }

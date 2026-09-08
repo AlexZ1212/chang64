@@ -73,9 +73,9 @@ function renderOpening(){
   const family=o.name.split(":")[0].trim();
   const href=openingHref(family);
   const label=o.eco+" \u00b7 "+o.name;
-  el.innerHTML=href
+  poserHtml(el,href
     ? '<a href="'+href+'">'+label.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</a>'
-    : label.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+    : label.replace(/&/g,"&amp;").replace(/</g,"&lt;"));
 }
 const EXPLORE=[
   {en:["/openings/","Openings","__NF__ families, __NL__ named lines"],fr:["/fr/ouvertures/","Ouvertures","__NF__ familles, __NL__ variantes"]},
@@ -107,10 +107,10 @@ function renderExplore(){
   const box=$("exploreLinks"); if(!box)return;
   $("exploreTitle").textContent=t("Explore");
   $("exploreNote").textContent=t("Every page below is built from the same engine that runs the board.");
-  box.innerHTML=EXPLORE.map(e=>{
+  poserHtml(box,EXPLORE.map(e=>{
     const [href,title,sub]=LANG==="fr"?e.fr:e.en;
     return '<a href="'+href+'">'+title+'<span>'+sub+'</span></a>';
-  }).join("");
+  }).join(""));
 }
 
 /* ==========================================================
@@ -156,7 +156,7 @@ function renderPlyInfo(){
     else html+=' <span class="better">'+t("Engine preferred")+' <b>'+bestSan+'</b></span>'+
       '<span class="verdict">'+t(VERDICT[a.tag])+" \u00b7 "+t("{n} advantage lost.",{n:fmtNum(a.loss/100)})+'</span>';
   }
-  box.innerHTML=html;
+  poserHtml(box,html);
 }
 function markBestMove(){
   if(reviewPly===null||!analysis)return;
@@ -238,7 +238,7 @@ function renderNavStrip(at){
       ?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
     h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+tag+'</span>';
   }
-  el.innerHTML=h;
+  poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
   recenterNavChip(el);
   updateNavScrollHint();
@@ -376,7 +376,7 @@ function scrollSheetToCurrent(el,rowEl){
 }
 function renderSheetPlay(){
   const el=$("sheet");
-  if(!sanList.length){el.innerHTML='<div class="sheet-empty">'+t("No moves yet")+'</div>';renderNav();return;}
+  if(!sanList.length){poserHtml(el,'<div class="sheet-empty">'+t("No moves yet")+'</div>');renderNav();return;}
   const at=reviewPly===null?sanList.length:reviewPly;
   let h="";
   for(let i=0;i<sanList.length;i+=2){
@@ -390,7 +390,7 @@ function renderSheetPlay(){
     }
     h+='</div>';
   }
-  el.innerHTML=h;
+  poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{
     sp.onclick=()=>gotoPly(+sp.dataset.ply);
   });
@@ -474,7 +474,7 @@ function showFin(titre,sousTitre,libelleRejouer,action){
   $("resultSub").textContent=sousTitre;
   /* Generique aux fins de partie normales : la rangee de bilan du sprint
      n'a de sens que pour rushEnd(), qui la remplit juste apres cet appel. */
-  const rh=$("rushHistory"); if(rh){rh.innerHTML="";rh.classList.add("hide");}
+  const rh=$("rushHistory"); if(rh){poserHtml(rh,"");rh.classList.add("hide");}
   $("resultNew").textContent=libelleRejouer;
   /* "Revoir la partie" n'a pas de sens pour une epreuve. */
   const an=$("resultAnalyse"); if(an)an.classList.toggle("hide",!!action);
@@ -534,7 +534,12 @@ function analyseGame(){
   if(!gameUci.length){$("analysisNote").textContent=t("Play a few moves first.");$("analysisOut").classList.remove("hide");return;}
   const btn=$("btnAnalyse");btn.disabled=true;btn.textContent=t("Analysing…");
   const bar=$("anaProgress");bar.classList.remove("hide");bar.firstElementChild.style.width="0%";
-  const g=new Game();
+  /* Meme regle que rebuildTo() plus haut : une partie lancee depuis Analyser
+     part d'une position personnalisee, et la rejouer depuis le plateau
+     standard ne retrouve aucun des coups joues. Le premier find() echouait,
+     on sortait avec plies vide et finishAnalysis() rendait une analyse de
+     zero coup, sans rien dire. */
+  const g=gameStartFen?new Game(gameStartFen):new Game();
   const plies=[];
   let i=0;
   const CLAMP=1200;
@@ -608,12 +613,11 @@ function drawGraph(plies){
     d+=(i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1);
   });
   const area=d?d+"L"+w+" "+mid+"L0 "+mid+"Z":"";
-  $("evalGraph").innerHTML=
-    '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" role="img" aria-label="'+t("Evaluation over the game")+'">'+
+  poserHtml($("evalGraph"),'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" role="img" aria-label="'+t("Evaluation over the game")+'">'+
     '<line x1="0" y1="'+mid+'" x2="'+w+'" y2="'+mid+'" stroke="rgba(239,233,217,.25)" stroke-width="1"/>'+
     (area?'<path d="'+area+'" fill="rgba(217,168,63,.18)"/>':"")+
     (d?'<path d="'+d+'" fill="none" stroke="#D9A83F" stroke-width="2" stroke-linejoin="round"/>':"")+
-    '</svg>';
+    '</svg>');
 }
 /* Historique de notation (integration ELO, point 2). Meme principe que
    drawGraph() ci-dessus (SVG en ligne, viewBox proportionnel) mais avec une
@@ -646,10 +650,10 @@ function drawRatingGraph(){
        n'ont aucune raison d'etre asymetriques quand il n'y a justement
        aucun libelle a afficher en mode vide. */
     const ePad=10;
-    el.innerHTML='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+t("Rating over time")+'">'+
+    poserHtml(el,'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+t("Rating over time")+'">'+
       '<line x1="'+ePad+'" y1="'+(h/2)+'" x2="'+(w-ePad)+'" y2="'+(h/2)+'" stroke="rgba(239,233,217,.18)" stroke-width="1" stroke-dasharray="4 4"/>'+
       '<text x="'+(w/2)+'" y="'+(h/2-10)+'" text-anchor="middle" fill="var(--sage)" font-size="10">'+t("Solve a few puzzles to see your progress here.")+'</text>'+
-      '</svg>';
+      '</svg>');
     return;
   }
   const values=hist.map(p=>p.r);
@@ -701,10 +705,10 @@ function drawRatingGraph(){
      de l'interface, pas un accuse de reception ponctuel (contrairement au
      vert des badges debloques), donc coherent de reprendre l'accent
      principal du site plutot qu'une couleur secondaire. */
-  el.innerHTML='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+t("Rating over time")+'">'+
+  poserHtml(el,'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+t("Rating over time")+'">'+
     gridSvg+dateSvg+
     '<path d="'+d+'" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linejoin="round"/>'+
-    '</svg>';
+    '</svg>');
 }
 $("btnAnalyse").onclick=analyseGame;
 
@@ -832,11 +836,11 @@ function renderHistory(){
   $("historyActions").classList.toggle("hide",history.length===0);
   if(!history.length){
     $("historyNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
-    box.innerHTML='<p class="history-empty">'+t("No finished game yet.")+'</p>';
+    poserHtml(box,'<p class="history-empty">'+t("No finished game yet.")+'</p>');
     return;
   }
   $("historyNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:history.length});
-  box.innerHTML="";
+  poserHtml(box,"");
   history.forEach((g,i)=>{
     const b=document.createElement("button");
     b.className="history-item";
@@ -844,9 +848,9 @@ function renderHistory(){
     const op=detectOpening(san);
     const side=g.c==="w"?t("White"):t("Black");
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
-    b.innerHTML='<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
+    poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
       '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" \u00b7 "+side+(g.tc?" \u00b7 "+g.tc:"")+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>';
+      '<span>'+fmtDate(g.t)+" \u00b7 "+side+(g.tc?" \u00b7 "+g.tc:"")+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>');
     b.onclick=()=>openHistoryGame(i);
     box.appendChild(b);
   });
@@ -947,11 +951,11 @@ function renderAmiHistory(){
   $("amiHistoryActions").classList.toggle("hide",amiHistory.length===0);
   if(!amiHistory.length){
     $("amiHistoryNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
-    box.innerHTML='<p class="history-empty">'+t("No finished game yet.")+'</p>';
+    poserHtml(box,'<p class="history-empty">'+t("No finished game yet.")+'</p>');
     return;
   }
   $("amiHistoryNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:amiHistory.length});
-  box.innerHTML="";
+  poserHtml(box,"");
   amiHistory.forEach((g,i)=>{
     const b=document.createElement("button");
     b.className="history-item";
@@ -959,9 +963,9 @@ function renderAmiHistory(){
     const op=detectOpening(san);
     const side=g.c==="w"?t("White"):t("Black");
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
-    b.innerHTML='<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
+    poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
       '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" \u00b7 "+side+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>';
+      '<span>'+fmtDate(g.t)+" \u00b7 "+side+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>');
     b.onclick=()=>openAmiHistoryGame(i);
     box.appendChild(b);
   });
@@ -1109,11 +1113,11 @@ function checkBadges(){
 function renderBadges(){
   const el=$("badgeGrid");if(!el)return;
   ensureProgFields();
-  el.innerHTML=BADGES.map(b=>{
+  poserHtml(el,BADGES.map(b=>{
     const unlocked=prog.badges.includes(b.id);
     const label=badgeLabel(b);
     return '<div class="badge'+(unlocked?' unlocked':'')+'">'+label+'</div>';
-  }).join("");
+  }).join(""));
 }
 function badgeLabel(b){
   /* {n} passe desormais a tous les types, pas seulement "theme" : les
@@ -1151,11 +1155,11 @@ function renderBadgeSummary(){
     ? prog.badges.length+"/"+BADGES.length+" débloqué"+(prog.badges.length===1?"":"s")
     : prog.badges.length+"/"+BADGES.length+" unlocked";
   const ids=prog.badges.slice().sort((a,b)=>(prog.badgeDates[b]||0)-(prog.badgeDates[a]||0)).slice(0,4);
-  recent.innerHTML=ids.map(id=>{
+  poserHtml(recent,ids.map(id=>{
     const b=BADGES.find(x=>x.id===id); if(!b)return "";
     const d=prog.badgeDates[id];
     return '<div class="badge unlocked">'+badgeLabel(b)+(d?' · <span class="badge-date">'+fmtDayMonth(d)+'</span>':'')+'</div>';
-  }).join("");
+  }).join(""));
 }
 function ensureProgFields(){
   if(typeof prog.showEval!=="boolean")prog.showEval=false;
@@ -1348,8 +1352,16 @@ function showSolveScreen(screen){
   /* "egEcran" et non "eg" : "eg" est la partie de finale en cours (ui3.js),
      et un const local du meme nom la masquait dans toute cette fonction. */
   const menu=$("solveMenu"),ex=$("exPanel"),pzSide=$("solvePuzzlesSidebar"),
-    daySide=$("solveDailySidebar"),egEcran=$("solveEndgamesScreen");
+    daySide=$("solveDailySidebar"),egEcran=$("solveEndgamesScreen"),
+    motifsEcran=$("solveMotifsScreen");
+  /* Quitter l'ecran des exercices ferme l'aparte. Le motif ne doit jamais
+     survivre en arriere-plan : c'est ce qui rendait l'ancien filtre par menu
+     deroulant piegeux, il restait pose sans qu'on s'en souvienne. Le seul
+     ecran qui le conserve est celui ou on resout, et startMotif() le repose
+     juste apres cet appel. */
+  if(screen!=="puzzles")stopMotif();
   if(menu)menu.classList.toggle("hide",screen!=="menu");
+  if(motifsEcran)motifsEcran.classList.toggle("hide",screen!=="motifs");
   if(ex)ex.classList.toggle("hide",screen!=="puzzles"&&screen!=="daily");
   if(pzSide)pzSide.classList.toggle("hide",screen!=="puzzles");
   if(daySide)daySide.classList.toggle("hide",screen!=="daily");
@@ -1368,9 +1380,10 @@ function showSolveScreen(screen){
      le seul ecran de "puzzles" qui n'a rien a y montrer, donc on le
      masque apres coup plutot que de contredire setMode() avant. */
   const bw=document.querySelector(".board-wrap");
-  if(bw)bw.classList.toggle("hide",screen==="menu");
+  if(bw)bw.classList.toggle("hide",screen==="menu"||screen==="motifs");
   if(typeof majLayoutSolo==="function")majLayoutSolo();
   if(screen==="menu"){renderSolveMenu();return;}
+  if(screen==="motifs"){renderMotifsMenu();return;}
   if(screen==="puzzles"){if(!solveScreenSuppressAutoload)nextPuzzle();return;}
   if(screen==="daily"){if(!solveScreenSuppressAutoload)dailyPuzzle();return;}
   /* "endgames" : l'ecran ne touchait pas au plateau, qui restait donc sur
@@ -1417,7 +1430,68 @@ function renderSolveMenu(){
     return typeof best==="number"&&best<=sc.budget;
   }).length:0;
   set("subSolveEndgames",t("{n}/5 mastered",{n:egDone}));
+  /* Compte les motifs deja travailles, pas les exercices : "3/12 motifs" dit
+     quelque chose, "1 847 exercices" ne dit rien sur soi. prog.themeSolved
+     existe depuis les badges par theme, on le reutilise plutot que d'ajouter
+     un compteur. */
+  const motifsFaits=MOTIFS_ENTRAINEMENT.filter(m=>(prog.themeSolved||{})[m.theme]>0).length;
+  set("subSolveMotifs",t("{n}/{total} patterns started",{n:motifsFaits,total:MOTIFS_ENTRAINEMENT.length}));
 }
+/* Grille des motifs. Les decomptes viennent de THEME_COUNTS, donc du fichier
+   reellement produit par le build : une tuile ne peut pas annoncer plus
+   d'exercices que la banque n'en contient, quelle que soit la fournee de
+   minage. Un motif absent des donnees n'est pas affiche du tout plutot que
+   d'etre affiche a zero -- une tuile qu'on ne peut pas ouvrir est pire
+   qu'une tuile absente. */
+function renderMotifsMenu(){
+  const box=$("motifsGrid"); if(!box)return;
+  if(!THEME_COUNTS){loadThemeCounts(renderMotifsMenu);return;}
+  ensureProgFields();
+  const faits=prog.themeSolved||{};
+  const groupes=[["motifs",t("Tactical patterns")],["mats",t("Checkmates")]];
+  let h="";
+  for(const [cle,titre] of groupes){
+    const lignes=MOTIFS_ENTRAINEMENT.filter(m=>m.groupe===cle&&THEME_COUNTS[m.theme]>0);
+    if(!lignes.length)continue;
+    h+='<div class="motif-groupe"><div class="eyebrow">'+echappe(titre)+'</div><div class="motif-grille">';
+    for(const m of lignes){
+      const n=THEME_COUNTS[m.theme],f=faits[m.theme]||0;
+      h+='<button type="button" class="motif-tuile" data-motif="'+echappe(m.theme)+'"'
+        +(motifEnCours===m.theme?' aria-current="true"':"")+'>'
+        +"<b>"+echappe(t(m.theme))+"</b>"
+        +'<span class="motif-compte">'+t("{n} puzzles",{n:n})
+        +(f?' · <span class="motif-fait">'+t("{n} solved",{n:f})+"</span>":"")
+        +"</span></button>";
+    }
+    h+="</div></div>";
+  }
+  poserHtml(box,h);
+  for(const b of box.querySelectorAll("button[data-motif]"))
+    b.onclick=()=>startMotif(b.getAttribute("data-motif"));
+}
+/* Entree dans l'aparte. On note le niveau qui heberge le motif pour savoir
+   quels morceaux charger, mais on ne touche PAS a prog.level : c'est toute
+   la difference avec l'ancien filtre. */
+function startMotif(theme){
+  loadThemeLevels(map=>{
+    if(!map||!Object.prototype.hasOwnProperty.call(map,theme))return;
+    /* showSolveScreen() remet motifEnCours a null en entrant sur un ecran
+       (voir le stopMotif() qui l'ouvre) : on pose donc le motif APRES, pas
+       avant, sinon il serait efface aussitot. */
+    showSolveScreen("puzzles");
+    motifEnCours=theme;
+    motifNiveau=map[theme];
+    if(typeof nextPuzzle==="function")nextPuzzle();
+  });
+}
+/* Sortie. Le motif ne survit pas a la session ni au changement d'ecran :
+   il n'est pas enregistre dans prog, justement pour qu'on ne puisse pas se
+   retrouver dedans sans l'avoir demande. */
+function stopMotif(){ motifEnCours=null; }
+/* Sortie explicite : on revient au choix des motifs, pas au menu general.
+   Quelqu'un qui quitte un motif veut le plus souvent en prendre un autre. */
+if($("btnMotifSortie"))$("btnMotifSortie").onclick=()=>showSolveScreen("motifs");
+if($("cardSolveMotifs"))$("cardSolveMotifs").onclick=()=>showSolveScreen("motifs");
 if($("cardSolvePuzzles"))$("cardSolvePuzzles").onclick=()=>showSolveScreen("puzzles");
 if($("cardSolveDaily"))$("cardSolveDaily").onclick=()=>showSolveScreen("daily");
 if($("cardSolveEndgames"))$("cardSolveEndgames").onclick=()=>showSolveScreen("endgames");
@@ -1505,6 +1579,26 @@ function attemptDailyArchive(key){
    mois courant fixe, pas de bouton (widget compact de l'ecran de
    progression). monthOffset=0 est toujours le mois en cours ; on empeche
    d'avancer au-dela (les exercices futurs n'existent pas encore a jouer). */
+/* Serie en cours : suite de jours coches consecutifs qui se termine
+   aujourd'hui, ou hier tant que l'exercice du jour n'est pas fait. Sans ce
+   report sur hier, la serie paraitrait rompue toute la journee jusqu'a ce
+   qu'on resolve l'exercice, ce qui est exactement le contraire de ce qu'un
+   compteur de serie doit dire.
+   Recalculee depuis prog.dailyLog plutot que lue dans prog.days : c'est le
+   journal par date qui fait foi pour le calendrier, et lui seul permet de
+   savoir QUELLES cases forment la serie, pas seulement combien. Le garde-fou
+   a 4000 tours ne sert qu'a borner un journal abime : une serie honnete de
+   dix ans reste tres en dessous. */
+function serieEnCours(){
+  const vus=new Set();
+  if(!prog.dailyLog)return vus;
+  const d=new Date();
+  const cle=n=>calDateKey(n.getFullYear(),n.getMonth(),n.getDate());
+  if(!prog.dailyLog[cle(d)])d.setDate(d.getDate()-1);
+  let garde=0;
+  while(prog.dailyLog[cle(d)]&&garde++<4000){vus.add(cle(d));d.setDate(d.getDate()-1);}
+  return vus;
+}
 function renderCalendarGrid(containerId,monthOffset,opts){
   const el=$(containerId); if(!el)return;
   ensureProgFields();
@@ -1546,6 +1640,7 @@ function renderCalendarGrid(containerId,monthOffset,opts){
   html+='<div class="cal-grid">';
   for(const d of wk)html+='<div class="cal-dow">'+d+"</div>";
   for(let i=0;i<startWeekday;i++)html+='<div class="cal-day empty"></div>';
+  const serie=serieEnCours();
   for(let d=1;d<=daysInMonth;d++){
     const key=calDateKey(y,m,d);
     const done=!!prog.dailyLog[key];
@@ -1553,21 +1648,37 @@ function renderCalendarGrid(containerId,monthOffset,opts){
     const isToday=key===todayStr;
     /* "Manque, mais rattrapable" (item 1) : jour PASSE (pas aujourd'hui,
        pas futur -- inutile de proposer un rattrapage pour un jour qui
-       n'est pas encore termine, il a deja son propre acces via l'ecran
-       "Puzzle du jour") et jamais coche. Style distinct de "done" (voir
-       CSS .cal-day.missed) -- contour pointille plutot que fond plein,
+       n'est pas encore termine) et jamais coche. Style distinct de "done"
+       (voir CSS .cal-day.missed) -- contour pointille plutot que fond plein,
        pour ne pas laisser croire que le jour a ete resolu. */
     const missed=!done&&!isFuture&&!isToday;
+    /* Aujourd'hui pas encore fait. Cette case n'etait rattachee a rien : ni
+       "done" ni "missed", donc ni data-date, ni role, ni gestionnaire. Elle
+       ressemblait aux autres et ne repondait pas, ce qui se lit comme un jour
+       desactive. L'intention d'origine etait qu'on y accede par la carte
+       "Puzzle du jour", mais rien dans le calendrier ne le disait. Elle mene
+       donc maintenant a ce meme ecran. */
+    const todo=isToday&&!done;
     const cls=["cal-day"];
     if(done)cls.push("done");
     if(missed)cls.push("missed");
+    if(todo)cls.push("todo");
     if(isToday)cls.push("today");
     if(isFuture)cls.push("future");
-    const clickable=(done||missed)&&!isFuture;
-    html+='<div class="'+cls.join(" ")+'"'+(clickable?' data-date="'+key+'" role="button" tabindex="0" aria-label="'+key+'"':"")+">"+d+"</div>";
+    /* La serie est une deuxieme dimension, pas un sixieme etat : elle se
+       superpose a "fait" (un jour de serie est forcement coche) au lieu de
+       le remplacer, d'ou une classe a part et un anneau plutot qu'un fond. */
+    if(serie.has(key))cls.push("streak");
+    const clickable=(done||missed||todo)&&!isFuture;
+    /* Sans libelle explicite, un lecteur d'ecran n'annoncait que la date : la
+       distinction fond plein / pointille / anneau, elle, ne s'entend pas. */
+    const label=done?t("{d}, solved",{d:key})
+      :todo?t("{d}, today's puzzle, tap to solve it",{d:key})
+      :t("{d}, not solved, tap to catch up",{d:key});
+    html+='<div class="'+cls.join(" ")+'"'+(clickable?' data-date="'+key+'" role="button" tabindex="0" aria-label="'+label+'"':"")+">"+d+"</div>";
   }
   html+="</div>";
-  el.innerHTML=html;
+  poserHtml(el,html);
   el.querySelectorAll(".cal-day.done[data-date]").forEach(cell=>{
     cell.addEventListener("click",()=>viewDailyArchive(cell.getAttribute("data-date")));
     cell.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();viewDailyArchive(cell.getAttribute("data-date"));}});
@@ -1575,6 +1686,15 @@ function renderCalendarGrid(containerId,monthOffset,opts){
   el.querySelectorAll(".cal-day.missed[data-date]").forEach(cell=>{
     cell.addEventListener("click",()=>attemptDailyArchive(cell.getAttribute("data-date")));
     cell.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();attemptDailyArchive(cell.getAttribute("data-date"));}});
+  });
+  /* Pas attemptDailyArchive() ici : ce chemin-la pose dailyCatchupKey, qui
+     sert a cocher un jour PASSE. Pour aujourd'hui on veut l'ecran normal, le
+     meme que la carte "Puzzle du jour", donc setMode sans le drapeau de
+     suppression -- c'est lui qui declenche dailyPuzzle(). */
+  el.querySelectorAll(".cal-day.todo").forEach(cell=>{
+    const ouvrir=()=>{if(typeof setMode==="function")setMode("puzzles",{screen:"daily"});};
+    cell.addEventListener("click",ouvrir);
+    cell.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();ouvrir();}});
   });
   if(nav){
     el.querySelectorAll(".cal-nav").forEach(btn=>{
@@ -1586,6 +1706,21 @@ function renderCalendarGrid(containerId,monthOffset,opts){
       });
     });
   }
+}
+function renderCalendarLegend(){
+  const box=$("calLegend"); if(!box)return;
+  /* Les pastilles portent les memes classes que les cases du calendrier :
+     toute retouche de style s'applique aux deux d'un coup, la legende ne
+     peut pas se mettre a decrire un affichage qui n'existe plus. */
+  const items=[
+    ["cal-day todo today",t("Today, still to do")],
+    ["cal-day done today",t("Solved today")],
+    ["cal-day done",t("Solved")],
+    ["cal-day missed",t("Not solved")],
+    ["cal-day done streak",t("Current streak")],
+    ["cal-day future",t("Upcoming")]
+  ];
+  poserHtml(box,items.map(([c,l])=>'<span><i class="'+c+'" aria-hidden="true"></i>'+l+"</span>").join(""));
 }
 let calFullOffset=0;
 function renderCalendarWidget(){
@@ -1601,6 +1736,7 @@ function renderFullCalendar(){
      navigation (refreshCurrentMode rappelle cette fonction) : sans ca, on
      etait systematiquement ramene au mois courant. */
   renderCalendarGrid("calFull",calFullOffset,{nav:true,onNav:o=>{calFullOffset=o;}});
+  renderCalendarLegend();
 }
 function updateRating(puzzleLevel,won){
 
@@ -1733,8 +1869,8 @@ function renderMistakeQueue(){
      -> traitee comme echue immediatement, pas de migration necessaire. */
   const now=Date.now();
   const due=prog.mistakeQueue.filter(m=>(m.due||0)<=now);
-  if(!due.length){sec.classList.add("hide");box.innerHTML="";return;}
-  box.innerHTML="";
+  if(!due.length){sec.classList.add("hide");poserHtml(box,"");return;}
+  poserHtml(box,"");
   due.forEach(m=>{
     const b=document.createElement("button");
     b.className="loss";
@@ -1914,7 +2050,7 @@ function rushEnd(why){
 function renderRushHistory(history){
   const box=$("rushHistory"); if(!box)return;
   const note=$("rushHistoryNote");
-  box.innerHTML="";
+  poserHtml(box,"");
   if(!history||!history.length){
     box.classList.add("hide");
     if(note)note.classList.add("hide");
@@ -2091,7 +2227,7 @@ const CHANNELS=[
 ];
 function renderChannels(){
   const box=$("channels");if(!box)return;
-  box.innerHTML="";
+  poserHtml(box,"");
   for(const c of CHANNELS){
     const el=document.createElement("div");
     el.className="chan";
@@ -2099,8 +2235,8 @@ function renderChannels(){
        la derniere video en premier, donc l'aperçu se met a jour tout seul,
        sans jamais coder une video precise en dur. youtube-nocookie.com pour
        limiter le pistage tant que la video n'est pas lancee. */
-    el.innerHTML='<div class="chanEmbed"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+c.id.slice(2)+'" title="'+c.name+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
-      '<h3>'+c.name+'</h3><p>'+t(c.desc)+'</p>';
+    poserHtml(el,'<div class="chanEmbed"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+c.id.slice(2)+'" title="'+c.name+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
+      '<h3>'+c.name+'</h3><p>'+t(c.desc)+'</p>');
     const row=document.createElement("div");row.className="btnrow";
     const open=document.createElement("button");
     open.className="btn primary";open.textContent=t("See the channel");
@@ -2119,7 +2255,7 @@ const HOST={name:"Cloudflare, Inc.",address:"101 Townsend Street, San Francisco,
 const REGISTRAR={name:"OVH SAS",address:"2 rue Kellermann, 59100 Roubaix, France"};
 function renderLegal(){
   const fr=LANG==="fr";
-  $("legalBody").innerHTML= fr
+  poserHtml($("legalBody"),fr
     ? "<h4>Éditeur</h4><p><strong>"+PUBLISHER.name+"</strong><br>Directeur de la publication : "+PUBLISHER.name+
       "<br>Contact : "+PUBLISHER.email+"</p>"+
       "<p>chang64 est édité par un particulier, à titre non professionnel. Conformément à l'article 1-1, II de la loi pour la confiance dans l'économie numérique, "+
@@ -2167,8 +2303,8 @@ function renderLegal(){
       "Stockfish is optional: it is only loaded when you analyse a finished game, never while you play.</p>"+
       "<h4>Third-party content</h4><p>The Watch section embeds YouTube players. Those videos belong to their respective channels; "+
       "chang64 has no affiliation with them and nothing is loaded until you press play.</p>"+
-      "<h4>Reporting</h4><p>Any request concerning the content of this site can be sent to "+PUBLISHER.email+".</p>";
-  $("privacyBody").innerHTML= fr
+      "<h4>Reporting</h4><p>Any request concerning the content of this site can be sent to "+PUBLISHER.email+".</p>");
+  poserHtml($("privacyBody"),fr
     ? "<h4>En bref</h4><p>chang64 n'a ni compte, ni inscription, ni publicité. Le site ne demande jamais ton nom, "+
       "ton adresse électronique ni aucune autre donnée personnelle.</p>"+
       "<h4>Ce qui est enregistré, et où</h4><p>Ta progression, ton classement, ta série de jours et ta partie entre amis en cours sont "+
@@ -2198,7 +2334,7 @@ function renderLegal(){
       "applies its own privacy policy. Players are requested through youtube-nocookie.com.</p>"+
       "<h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any "+
       "question can go to "+PUBLISHER.email+".</p>"+
-      "<h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live.</p>";
+      "<h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live.</p>");
 }
 
 let isReviewGame=false;

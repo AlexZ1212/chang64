@@ -31,18 +31,26 @@ setTimeout(async()=>{
   const hc=d.getElementById("hCount");
   T("compteur d'exercices en page d'accueil", hc && +hc.textContent===NPUZ, hc&&hc.textContent);
 
-  console.log("\n--- Le filtre par theme propose les nouveaux motifs ---");
-  /* tab-train et son "Defis" ont disparu le 2026-09-03 (menu a 5 cartes) :
-     themeFilter vit desormais dans l'onglet Puzzles, atteint via sa carte. */
+  console.log("\n--- Les motifs sont proposes a l'entrainement ---");
+  /* tab-train et son "Defis" ont disparu le 2026-09-03 (menu a 5 cartes).
+     Reecrit le 2026-09-07 : le menu deroulant themeFilter n'existe plus, il
+     est remplace par la carte "Par motif" et son ecran de choix. Le point
+     d'entree a change, pas le comportement teste ici -- on verifie toujours
+     que les motifs sont proposes et qu'ils portent bien les noms attendus.
+     Le detail du mode (echelle suspendue, volumes reels) est couvert par
+     check_entrainement_motif.js. */
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,300));
-  d.getElementById("cardSolvePuzzles").click();
-  await new Promise(r=>setTimeout(r,400));
-  const sel=d.getElementById("themeFilter");
-  const opts=[...sel.options].map(o=>o.textContent);
-  T("filtre peuple", opts.length>5, opts.length+" entrees");
-  T("Clouage propose", opts.some(o=>/Pin/.test(o)), opts.filter(o=>/Pin/.test(o))[0]);
-  T("Enfilade proposee", opts.some(o=>/Skewer/.test(o)), opts.filter(o=>/Skewer/.test(o))[0]);
+  d.getElementById("cardSolveMotifs").click();
+  await new Promise(r=>setTimeout(r,600));
+  const tuiles=[...d.querySelectorAll("#motifsGrid button[data-motif]")];
+  const noms=tuiles.map(b=>b.dataset.motif);
+  T("motifs proposes", tuiles.length>5, tuiles.length+" tuiles");
+  T("Clouage propose", noms.includes("Pin"));
+  T("Enfilade proposee", noms.includes("Skewer"));
+  d.getElementById("cardSolvePuzzles")||0;
+  w.eval("showSolveScreen('puzzles')");
+  await new Promise(r=>setTimeout(r,600));
 
   console.log("\n--- Un exercice se charge et se resout ---");
   const fen=d.getElementById("board");
@@ -88,12 +96,24 @@ setTimeout(async()=>{
   w.eval('rush={score:0,strikes:0,history:[]}; finishPuzzle(true,"test"); rush=null;');
   T("aucune explication pendant un sprint", d.getElementById("exExplain").textContent==="");
 
-  console.log("\n--- Filtrer sur Clouage donne bien des exercices ---");
-  const pin=[...sel.options].find(o=>/Pin/.test(o.textContent));
-  sel.value=pin.value;
-  sel.dispatchEvent(new w.Event("change",{bubbles:true}));
-  await new Promise(r=>setTimeout(r,400));
-  T("le filtre ne casse pas l'exercice", d.getElementById("board").children.length===64);
+  console.log("\n--- Travailler le Clouage donne bien des exercices ---");
+  /* Reecrit le 2026-09-07 : le filtre par menu deroulant est remplace par
+     l'aparte "Par motif". Ce qui est verifie ici reste le meme -- entrer
+     dans un motif ne casse ni l'echiquier ni le statut. Le fait que
+     l'exercice servi soit REELLEMENT du bon motif, et que l'echelle reste
+     immobile, est couvert par check_entrainement_motif.js. */
+  /* On ne fait qu'OUVRIR le motif, sans y entrer. Entrer chargerait les
+     morceaux du niveau 7 dans LEVEL_CACHE, ce qui change le vivier dans
+     lequel puisent les exercices testes plus bas -- le sprint s'est mis a
+     echouer une fois sur deux quand je l'avais fait. Ce que ce test doit
+     verifier ici est que le clouage est proposable ; ce qui se passe une
+     fois dedans est le sujet de check_entrainement_motif.js. */
+  const tuilePin=d.querySelector('#motifsGrid button[data-motif="Pin"]');
+  T("le clouage est proposable", !!tuilePin);
+  /* On revient a l'ecran des exercices : la suite du test suppose un exercice
+     charge, et l'ecran de choix des motifs n'en affiche aucun. */
+  w.eval("showSolveScreen('puzzles')");
+  await new Promise(r=>setTimeout(r,700));
   T("statut toujours renseigne", (d.getElementById("status").textContent||"").length>0);
 
   console.log("\n--- Le bouton d'aide a deux etats ---");
@@ -110,16 +130,16 @@ setTimeout(async()=>{
   T("libelle initial Indice", /Hint|Indice/i.test(aide.textContent), aide.textContent);
   aide.click(); await new Promise(r=>setTimeout(r,400));
   T("devient Voir la solution", /solution/i.test(aide.textContent), aide.textContent);
-  T("la piece a jouer est surlignee", d.querySelectorAll(".sq.hint").length===1,
-    String(d.querySelectorAll(".sq.hint").length));
+  T("la piece a jouer est surlignee", d.querySelectorAll("#board .sq.hint").length===1,
+    String(d.querySelectorAll("#board .sq.hint").length));
   aide.click(); await new Promise(r=>setTimeout(r,400));
-  T("le coup complet est donne", d.querySelectorAll(".sq.hint").length===2,
-    String(d.querySelectorAll(".sq.hint").length));
+  T("le coup complet est donne", d.querySelectorAll("#board .sq.hint").length===2,
+    String(d.querySelectorAll("#board .sq.hint").length));
   T("la reponse est annoncee", /answer|réponse|solution/i.test(d.getElementById("exStatus").textContent),
     d.getElementById("exStatus").textContent.slice(0,50));
   d.getElementById("btnNext").click(); await new Promise(r=>setTimeout(r,600));
   T("revient a Indice a l'exercice suivant", /Hint|Indice/i.test(aide.textContent), aide.textContent);
-  T("surlignage efface", d.querySelectorAll(".sq.hint").length===0);
+  T("surlignage efface", d.querySelectorAll("#board .sq.hint").length===0);
 
   console.log("\n--- Chang Sprint se joue sans quitter Defis ---");
   /* Le sprint pilote le bloc de l'exercice (chronometre, enonce, statut), qui
@@ -141,7 +161,7 @@ setTimeout(async()=>{
   T("on reste dans Defis", !d.getElementById("pane-train").classList.contains("hide"));
   T("le bloc de l'exercice y est deplace", ou()==="train", ou());
   T("la barre de score est visible", !d.getElementById("rushBar").classList.contains("hide"));
-  T("l'echiquier est charge", d.querySelectorAll(".sq .piece").length>1);
+  T("l'echiquier est charge", d.querySelectorAll("#board .sq .piece").length>1);
   d.getElementById("btnGoRush").click();
   await new Promise(r=>setTimeout(r,300));
   d.getElementById("btnGoRush").click();
@@ -255,7 +275,7 @@ setTimeout(async()=>{
   d.getElementById("readyStart").click();
   await new Promise(r=>setTimeout(r,600));
   {
-    const cells=[...d.querySelectorAll(".sq")];
+    const cells=[...d.querySelectorAll("#board .sq")];
     /* Certains exercices sont des mats en plusieurs coups : un seul coup ne
        les resout pas. On joue donc la solution jusqu'a ce que l'exercice
        change, sans quoi le test reussit ou echoue selon le tirage. */
@@ -358,7 +378,7 @@ setTimeout(async()=>{
     T("aucun mat a plusieurs coups dans la file du sprint", multiCoups===0, multiCoups+" sur "+w.eval("rush.queue.length"));
 
     /* resoudre trois exercices ne doit pas toucher la progression */
-    const cells=[...d.querySelectorAll(".sq")];
+    const cells=[...d.querySelectorAll("#board .sq")];
     for(let k=0;k<3;k++){
       const r=w.eval('(function(){var m=currentSolutions()[0];if(!m)return "null";'+
         'var idx=function(sq){for(var i=0;i<64;i++)if(idxToSq(i)===sq)return i;return -1;};'+

@@ -259,10 +259,26 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
   const byLevel = {};
   const puzzleIndex = {};
   const themeCounts = {};
+  /* Niveau ou vit chaque motif (2026-09-07). Depuis le redecoupage par
+     famille, un motif n'est plus reparti sur toute l'echelle : il tient
+     ENTIEREMENT dans un niveau, Pin en 7, Fourchette de cavalier en 6,
+     Mat du couloir en 10. Le filtre par theme ne pouvait donc pas
+     fonctionner sans savoir ou aller chercher : rester au niveau courant
+     revenait a filtrer sur un lot qui n'en contient aucun.
+     On garde le niveau le plus fourni plutot que le premier rencontre : si
+     un motif venait a s'etaler sur deux niveaux, on tomberait sur celui qui
+     en a le plus, et non sur le premier de la boucle. */
+  const themeLevels = {}, themeParNiveau = {};
   for (const p of puzzles) {
     (byLevel[p.level] = byLevel[p.level] || []).push(p);
     /* valeur posee plus bas, au decoupage : [niveau, morceau] */
     themeCounts[p.theme] = (themeCounts[p.theme] || 0) + 1;
+    (themeParNiveau[p.theme] = themeParNiveau[p.theme] || {})[p.level] =
+      (themeParNiveau[p.theme][p.level] || 0) + 1;
+  }
+  for (const th in themeParNiveau) {
+    themeLevels[th] = +Object.keys(themeParNiveau[th])
+      .sort((a, b) => themeParNiveau[th][b] - themeParNiveau[th][a])[0];
   }
   /* ---------- Decoupage des shards (2026-09-06) ----------
      Chaque niveau tenait dans un seul fichier : 256 a 428 Ko gzip a
@@ -296,6 +312,7 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
   console.log("Morceaux d'exercices : " + morceauxEcrits + " fichiers de " + TAILLE_MORCEAU + " exercices");
   fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
   fs.writeFileSync(OUT + "/data/theme-counts.json", JSON.stringify(themeCounts));
+  fs.writeFileSync(OUT + "/data/theme-levels.json", JSON.stringify(themeLevels));
 
   const RUSH_CAP_PER_THEME = 400;
   const byThemeSingleMove = {};
@@ -1076,7 +1093,25 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 .footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:6px 2px}
 .footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
-.footnote{margin:0}`;
+/* Ces deux paragraphes heritaient du max-width:66ch pose sur tous les p pour
+   la lisibilite du corps de texte. Dans un pied de page centre, ca donne une
+   boite d'environ 473px calee a GAUCHE d'un conteneur de 880px : le texte
+   etait bien centre, mais dans sa boite, donc decale d'environ 200px vers la
+   gauche par rapport a la rangee de liens juste au-dessus, qui occupe elle
+   toute la largeur. Visible uniquement sur ecran large, la ou 66ch est plus
+   etroit que le conteneur. On garde la mesure de lecture et on centre la
+   boite, plutot que de supprimer le max-width. */
+.footnote,.pagedate{margin-left:auto;margin-right:auto}
+.footnote{margin-top:0;margin-bottom:0}`;
+
+/* La feuille de l'application passe par minifyCss() depuis longtemps (voir
+   l'appel sur le <style> de template.html plus haut), mais pas celle des
+   pages de contenu : elles embarquaient 6,5 Ko de commentaires chacune, soit
+   38 % de leur feuille et environ 2,9 Mo sur les 466 pages. Les commentaires
+   restent evidemment dans la source ci-dessus, ou ils servent ; ils ne
+   servent a personne dans le fichier livre. Calcule une seule fois et non
+   dans shell(), qui est appele une fois par page. */
+const CSS_MIN = minifyCss(CSS);
 
 /* La marque a l'elephant n'apparaissait que dans l'application : les pages
    d'ouvertures et de contenu n'affichaient que le texte "chang64". Rien ne
@@ -1117,6 +1152,37 @@ app = app.split("/*__BRANDMARK__*/").join(brandMark());
    propre chapeau d'intro dit deja "Dix motifs tactiques", seul ce libelle de
    nav restait sur l'ancien mot. Chemin (/fr/exercices/, /puzzles/) inchange :
    seul le texte affiche change, pas l'URL. */
+/* Suffixes de gabarit du fil d'Ariane (2026-09-07).
+
+   La feuille du fil reprenait le <title> entier, donc "Moulin · definition et
+   exemple" ou "Partie viennoise : coups, variantes et codes ECO". Utile dans
+   un onglet de navigateur, verbeux dans un resultat de recherche, ou le fil
+   s'affiche sous le lien.
+
+   Seuls les suffixes MECANIQUES sont listes ici, ceux que les generateurs
+   collent a l'identique sur chaque page d'une section : lexique, ouvertures,
+   motifs, dans les deux langues, soit 394 pages. Apprendre, Pieges et
+   Finales en sont absents volontairement : leurs titres sont rediges, et ce
+   qui suit les deux-points y porte du sens ("Le mat de Legal : le sacrifice
+   de dame"). Couper la ferait perdre de l'information au lieu d'en retirer.
+
+   La liste vit ici et pas dans les generateurs, pour la meme raison que le
+   fil est deduit du canonical : une source unique. Faire remonter un nom
+   court en parametre depuis chacun des huit generateurs marcherait aussi,
+   mais une page ajoutee plus tard oublierait de le passer. */
+const SUFFIXES_FIL = [
+  " · définition et exemple", " · chess term explained",
+  " : coups, variantes et codes ECO", " : moves, variations and ECO codes",
+  " : 3 exemples expliqués", ": 3 worked examples"
+];
+/* Le prefixe de section n'est jamais ajoute ici : le fil porte deja la
+   section a son deuxieme niveau, et une feuille "Lexique · Moulin"
+   afficherait "chang64 > Lexique > Lexique · Moulin". */
+function nomCourtFil(title) {
+  const n = title.replace(/\s*\|\s*chang64\s*$/, "");
+  for (const s of SUFFIXES_FIL) if (n.endsWith(s) && n.length > s.length) return n.slice(0, -s.length).trim();
+  return n;
+}
 const SECTIONS = {
   en: [
     ["/openings/", "Openings"], ["/puzzles/", "Patterns"], ["/learn/", "Rules"],
@@ -1236,7 +1302,7 @@ ${alts || ""}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
-${CSS}</style>
+${CSS_MIN}</style>
 ${(() => {
   /* Complement automatique du JSON-LD (2026-09-05). Les Article emis par
      les huit generateurs ne portaient que headline, description et
@@ -1288,7 +1354,7 @@ ${(() => {
   const sec = (SECTIONS[lang] || SECTIONS.en).find(s => path.startsWith(s[0]));
   if (sec) items.push({ name: sec[1], item: SITE + sec[0] });
   const isIndex = sec && (path === sec[0] || path === sec[0] + "index.html");
-  if (!isIndex) items.push({ name: title.replace(/\s*\|\s*chang64\s*$/, ""), item: canonical });
+  if (!isIndex) items.push({ name: nomCourtFil(title), item: canonical });
   if (items.length < 2) return "";
   return '<script type="application/ld+json">' + JSON.stringify({
     "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -1931,7 +1997,14 @@ const today = BUILD_DATE;   /* meme date que dateModified des fiches JSON-LD */
 const extraUrls = require("./content.js")({
   fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc
 });
-console.log("Pages de contenu   :", extraUrls.length);
+/* Etiquette corrigee le 2026-09-07 : ce nombre n'a jamais compte les pages
+   ecrites par content.js, mais les URLs qu'il verse au sitemap, c'est-a-dire
+   les seules pages indexables. L'ecart est large -- 180 contre 466 pages
+   reellement produites, le reste portant un meta robots noindex -- et il a
+   deja coute un aller-retour entre deux handoffs, ou le meme build semblait
+   avoir perdu la moitie de ses pages d'une session a l'autre. Le compte reel
+   est donne plus bas par "Dates de contenu". */
+console.log("URLs de contenu    :", extraUrls.length);
 try {
   require("child_process").execSync(`python3 "${path.join(__dirname, "og_render.py")}"`, { stdio: "inherit" });
 } catch (e) { console.log("ATTENTION : conversion des images de partage impossible"); }

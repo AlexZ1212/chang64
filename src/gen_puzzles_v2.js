@@ -115,6 +115,36 @@ function targets(g, from, side) {
     return pType(pc) === K || tv > val || !defended(g, s, side ^ 1);
   });
 }
+/* Une fourchette ne vaut que si la piece qui fourche SURVIT au coup.
+   targets() verifie que les deux cibles sont prenables, jamais que le
+   fourcheur tient : #UCYR0 (Cxe2+, fourchette annoncee sur le roi g1 et le
+   fou d4) etait etiquete "Knight fork" alors que Dxe2 reprend aussitot et
+   que le fou n'est jamais gagne. Le gain reel y est la tour prise en e2.
+   Meme famille que le correctif prise-avant-geometrie ci-dessous, cote
+   fourchette au lieu du cote clouage.
+
+   `apres` est la position APRES le coup, donc l'adversaire au trait : ses
+   prises sur la case sont exactement celles que la generation legale lui
+   autorise, cloueages et obligation de parer l'echec compris. On prend son
+   attaquant le moins cher, et la fourchette tombe si la prise ne lui coute
+   rien.
+
+   Limite assumee : deux demi-coups, pas un SEE complet. Une case disputee
+   par trois pieces de chaque cote sera mal jugee. Condition volontairement
+   simple et lisible plutot qu'exacte, comme classifyQuiet. */
+function fourcheurTient(apres, caseF) {
+  const val = VAL[pType(apres.board[caseF])] || 0;
+  const prises = apres.moves().filter(m => m.to === caseF);
+  if (!prises.length) return true;
+  prises.sort((a, b) => (VAL[pType(a.piece)] || 0) - (VAL[pType(b.piece)] || 0));
+  const pr = prises[0];
+  const valPreneur = VAL[pType(pr.piece)] || 0;
+  const sonde = new Game(apres.fen());
+  const m2 = sonde.moves().find(m => m.from === pr.from && m.to === pr.to && m.promo === pr.promo);
+  sonde.makeMove(m2);
+  const reprise = sonde.moves().some(m => m.to === caseF);
+  return val - (reprise ? valPreneur : 0) < 0;
+}
 function defended(g, sq, bySide) {
   for (let s = 0; s < 128; s++) {
     if (s & 0x88) { s += 7; continue; }
@@ -312,7 +342,7 @@ function classifyBase(gBefore, mv, isMate, mateLen) {
   if (isMate) return { theme: mateLen === 2 ? "Mate in two" : "Mate in three", detail: {} };
 
   const hit = targets(after, to, me);
-  if (hit.length >= 2) {
+  if (hit.length >= 2 && fourcheurTient(after, to)) {
     const tg = hit.slice(0, 2).map(s => ({ sq: sqName(s), piece: letter(pType(after.board[s])) }));
     const detail = { from: sqName(to), targets: tg };
     if (t === N) return { theme: "Knight fork", detail };
@@ -537,7 +567,16 @@ function makePuzzleV2(g, depth, opts) {
     const full = gSan.moves().find(m => m.from === mv.from && m.to === mv.to && m.promo === mv.promo);
     if (!full) break;
     sanParts.push(gSan.san(full));
-    uciParts.push(sqName(mv.from) + sqName(mv.to) + (mv.promo ? "qrbn"[mv.promo - 2] || "" : ""));
+    /* Serialisation UCI de la promotion : passe par g.uci(), la seule
+       source de verite du moteur (correctif 2026-09-09). La table locale
+       "qrbn"[promo-2] etait ecrite a l'envers des constantes du moteur
+       (N=2, BI=3, R=4, Q=5) : une promotion en dame ressortait en "n",
+       une en cavalier en "q". Invisible pendant des mois parce que
+       verifyFull() cherchait le coup sur from/to seuls et retrouvait donc
+       toujours une promotion, n'importe laquelle. 1110 exercices de la
+       banque en portent la trace, dont 893 gains qui refusent la dame et
+       exigent le cavalier. */
+    uciParts.push(gSan.uci(full));
     gSan.makeMove(full);
   }
 
@@ -566,9 +605,19 @@ function verifyFull(p) {
   if (g.inCheck && g.inCheck() && p.type === "gain") return false;
   for (let i = 0; i < p.sol.length; i++) {
     const uci = p.sol[i];
-    const from = (uci.charCodeAt(0) - 97) + (8 - (+uci[1])) * 16;
-    const to = (uci.charCodeAt(2) - 97) + (8 - (+uci[3])) * 16;
-    const mv = g.moves().find(m => m.from === from && m.to === to);
+    /* La piece de promotion fait partie du coup (correctif 2026-09-09). La
+       recherche se faisait sur from/to seuls : sur "e2e1q" elle prenait le
+       PREMIER coup e2-e1 rendu par le generateur, promotion en cavalier ou
+       en fou selon l'ordre, jouait donc autre chose que la solution, ne
+       trouvait pas le mat et declarait l'exercice invalide. 206 exercices
+       de la banque, tous des promotions, dont #EELBI (f2f1b) ou le choix de
+       la piece EST l'exercice. Cette laxite masquait la cause reelle : les
+       trois generateurs ecrivaient la lettre de promotion a l'envers.
+       Consequence en aval, la vraie : merge_puzzles.js appelle verifyFull()
+       sur chaque entrant, donc toute promotion minee etait rejetee en
+       "verification echouee" -- le compteur que la procedure de fusion
+       demande justement de surveiller comme signe d'un minage defectueux. */
+    const mv = g.moves().find(m => g.uci(m) === uci);
     if (!mv) return false;
     g.makeMove(mv);
   }

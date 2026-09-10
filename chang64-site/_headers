@@ -1,7 +1,7 @@
 /*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-04KrXgC9HFL9pMrwKAx/JQO2juz2dp+EcZbDUEyAToQ=' 'sha256-1EF9Rw14Q4wsqC90kcgc4Se1jngIq4bjLX6V2x2OkN4=' 'sha256-HmaJnyeNVLICpMeyczwYr6bd34iwcDCftsJJt5jF3oc=' 'sha256-Znuhvp/hhE88gLiYXhAWZPRAzy5/iCpBBSevNfMz6ag=' 'sha256-kL+PUzCkdDZusBuK3e3ANh2GxIX3EWJYnMD6epeOLmQ=' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-04KrXgC9HFL9pMrwKAx/JQO2juz2dp+EcZbDUEyAToQ=' 'sha256-1EF9Rw14Q4wsqC90kcgc4Se1jngIq4bjLX6V2x2OkN4=' 'sha256-HmaJnyeNVLICpMeyczwYr6bd34iwcDCftsJJt5jF3oc=' 'sha256-iKb+FHEJ1Mws/6L8z1Tqvj7QdKbXE/gXhhTUpyKWH2A=' 'sha256-kL+PUzCkdDZusBuK3e3ANh2GxIX3EWJYnMD6epeOLmQ=' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()

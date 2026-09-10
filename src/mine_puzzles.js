@@ -198,7 +198,16 @@ function extractPuzzleAt(g, opts) {
     const full = gSan.moves().find(m => m.from === mv.from && m.to === mv.to && m.promo === mv.promo);
     if (!full) break;
     sanParts.push(gSan.san(full));
-    uciParts.push(sqName(mv.from) + sqName(mv.to) + (mv.promo ? "qrbn"[mv.promo - 2] || "" : ""));
+    /* Serialisation UCI de la promotion : passe par g.uci(), la seule
+       source de verite du moteur (correctif 2026-09-09). La table locale
+       "qrbn"[promo-2] etait ecrite a l'envers des constantes du moteur
+       (N=2, BI=3, R=4, Q=5) : une promotion en dame ressortait en "n",
+       une en cavalier en "q". Invisible pendant des mois parce que
+       verifyFull() cherchait le coup sur from/to seuls et retrouvait donc
+       toujours une promotion, n'importe laquelle. 1110 exercices de la
+       banque en portent la trace, dont 893 gains qui refusent la dame et
+       exigent le cavalier. */
+    uciParts.push(gSan.uci(full));
     gSan.makeMove(full);
   }
 

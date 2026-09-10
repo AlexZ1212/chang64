@@ -789,7 +789,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .explain{font-size:12.5px;color:var(--sage);margin-top:6px;line-height:1.5}
 .explain:empty{display:none}
 .reviewNav{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
-.reviewNav #reviewPos{font-size:12.5px;color:var(--sage)}
+.reviewNav #reviewPos,.reviewNav #solPos{font-size:12.5px;color:var(--sage)}
 .reviewNav button{padding:6px 12px}
 .reviewNav #btnRushSummary{padding:2px;margin-left:auto}
 .status.win{border-color:var(--jade)}
@@ -1813,6 +1813,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <p class="nextlock hide hors-sprint" id="nextLock">Play a move, or use Hint, to unlock the next puzzle.</p>
           <p class="explain hors-sprint" id="exExplain"></p>
           <p class="explain hors-sprint" id="exPedagogy"></p>
+          <!-- Navigation dans la solution, visible en revue seulement.
+               L'exercice s'ouvre sur sa position de depart et on avance
+               demi-coup par demi-coup : sans ca, une solution qui prend une
+               piece se joue avant qu'on ait regarde le plateau, et la piece
+               prise n'apparait jamais. -->
+          <div class="reviewNav hide" id="solutionNav">
+            <button class="btn" id="solPrev" aria-label="Previous move">‹</button>
+            <span id="solPos"></span>
+            <button class="btn" id="solNext" aria-label="Next move">›</button>
+          </div>
           <div class="reviewNav hide" id="reviewNav">
             <button class="btn" id="reviewPrev" aria-label="Previous mistake">‹</button>
             <span id="reviewPos"></span>

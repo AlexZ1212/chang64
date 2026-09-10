@@ -43,11 +43,30 @@ T("aucun code en double", new Set(P.map(p=>p.code)).size===P.length,
    resoudre. On accepte donc un code derive soit directement, soit par
    salage, mais jamais un code arbitraire. */
 const SEL_MAX=20;
+/* Le 2026-09-09, fix_promotions.js a corrige la lettre de promotion de 1107
+   exercices : les trois generateurs l'ecrivaient a l'envers des constantes du
+   moteur, si bien qu'une promotion en dame etait notee "n". La solution a donc
+   change, mais PAS le code -- un code est affiche aux gens, quelqu'un a pu en
+   noter un pour signaler un probleme, et le refabriquer aurait fait pointer
+   ces signalements dans le vide.
+   Le code de ces exercices derive donc du contenu d'AVANT la correction. On
+   l'accepte explicitement, en rejouant l'echange, qui est sa propre inverse.
+   Ce n'est pas un assouplissement : un code invente au hasard echoue
+   toujours, la derivation reste verifiee, simplement des deux cotes d'une
+   correction connue et datee. */
+const AVANT_CORRECTION={q:"n",n:"q",r:"b",b:"r"};
+const solAvant=sol=>sol.map(s=>s.length===5?s.slice(0,4)+(AVANT_CORRECTION[s[4]]||s[4]):s);
+const contenus=p=>{
+  const a=p.sol.join(" "), b=solAvant(p.sol).join(" ");
+  return a===b?[a]:[a,b];
+};
 function codeAdmissible(p){
-  if(p.code===puzzleCode(p.fen,p.sol))return true;
-  for(let n=1;n<=SEL_MAX;n++){
-    const h=crypto.createHash("sha256").update(p.fen+"|"+p.sol.join(" ")+"|"+n).digest();
-    if(p.code===(h.readUInt32BE(0)%Math.pow(36,5)).toString(36).toUpperCase().padStart(5,"0"))return true;
+  for(const sol of contenus(p)){
+    if(p.code===puzzleCode(p.fen,sol.split(" ")))return true;
+    for(let n=1;n<=SEL_MAX;n++){
+      const h=crypto.createHash("sha256").update(p.fen+"|"+sol+"|"+n).digest();
+      if(p.code===(h.readUInt32BE(0)%Math.pow(36,5)).toString(36).toUpperCase().padStart(5,"0"))return true;
+    }
   }
   return false;
 }
@@ -56,7 +75,7 @@ T("le code derive du contenu (directement ou par variante anti-collision)", code
   codeDerive.length+" hors schema : "+codeDerive.slice(0,4).map(p=>p.id).join(", "));
 /* Garde-fou : le salage ne doit rester qu'une exception rare. S'il explosait,
    ce serait le signe que la derivation elle-meme a un probleme. */
-const sales=P.filter(p=>p.code!==puzzleCode(p.fen,p.sol));
+const sales=P.filter(p=>!contenus(p).some(sol=>p.code===puzzleCode(p.fen,sol.split(" "))));
 T("les variantes salees restent marginales (< 0,1% de la banque)",
   sales.length < P.length*0.001, sales.length+" sur "+P.length);
 

@@ -13,12 +13,32 @@ if(!L){
      fichier comme "sans resultat" puisqu'il n'y en a reellement aucun. */
   console.log("\n--- Aucune regression par rapport au site en ligne ---");
   console.log("  IGNORE  CHANG64_BASELINE n'est pas defini (chemin vers une copie du site deja en ligne) : verification sautee, aucun resultat a comparer.");
+  /* Une suite qui ne dit rien est comptee comme plantage par
+     run_tests.js, et c'est voulu : une suite muette a deja passe pour un
+     succes pendant des mois. On annonce donc explicitement qu'on se
+     saute, plutot que de sortir sans un mot. */
+  console.log("=== 0 OK, 0 FAIL === (ignore)");
   process.exit(0);
 }
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
-const all=d=>{const o=[];(function w(p){for(const f of fs.readdirSync(p)){const q=path.join(p,f);
-  fs.statSync(q).isDirectory()?w(q):o.push(q.replace(d,""));}})(d);return o;};
+/* Les chemins sont ramenes a des URL, avec des barres obliques, quel que
+   soit le systeme (correctif 2026-09-09). path.join() rend des antislashs sous
+   Windows : "\\endgames\\index.html" au lieu de "/endgames/index.html". Toutes
+   les comparaisons de ce fichier se font contre des chaines commencant par
+   "/", donc AUCUNE ne pouvait aboutir, et les quinze fichiers critiques
+   ressortaient absents d'un site ou ils sont tous presents. Un echec massif
+   et parfaitement faux, qui ne se voit pas sous Linux.
+   La racine est debarrassee de son separateur final au cas ou la variable
+   d'environnement en porte un, sinon la barre de tete de chaque entree
+   disparaitrait avec. */
+const all=d=>{
+  const racine=d.replace(/[\\/]+$/,"");
+  const o=[];
+  (function w(p){for(const f of fs.readdirSync(p)){const q=path.join(p,f);
+    fs.statSync(q).isDirectory()?w(q):o.push(q.slice(racine.length).split(path.sep).join("/"));}})(racine);
+  return o;
+};
 
 console.log("\n--- Aucune regression par rapport au site en ligne ---");
 const gen=new Set(all(G)), live=all(L);

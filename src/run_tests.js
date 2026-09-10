@@ -45,6 +45,13 @@ for (const f of CHECKS) {
   const out = run(path.join("tests", f), HERE);
   const m = out.match(/(\d+) OK, (\d+) FAIL/);
   if (!m) { plantages.push("tests/" + f); console.log("  " + f.padEnd(42) + "AUCUN RESULTAT"); continue; }
+  /* Une suite peut se sauter faute de point de comparaison, et le dire. Ce
+     n'est ni un succes ni un plantage : on l'affiche a part pour qu'elle
+     reste visible sans polluer le decompte. */
+  if (/\(ignore\)/.test(out)) {
+    console.log("  " + f.replace(/^check_|\.js$/g, "").padEnd(42) + "  ignore");
+    continue;
+  }
   totalOk += +m[1]; totalKo += +m[2];
   console.log("  " + f.replace(/^check_|\.js$/g, "").padEnd(42) +
     String(m[1]).padStart(4) + " ok" + (+m[2] ? "   " + m[2] + " FAIL" : ""));

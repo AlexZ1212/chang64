@@ -13,6 +13,11 @@ if(!L){
      fichier comme "sans resultat" puisqu'il n'y en a reellement aucun. */
   console.log("\n--- Aucune URL indexee ne tombe en 404 ---");
   console.log("  IGNORE  CHANG64_BASELINE n'est pas defini (chemin vers une copie du site deja en ligne, avec son sitemap.xml) : verification sautee, aucun resultat a comparer.");
+  /* Une suite qui ne dit rien est comptee comme plantage par
+     run_tests.js, et c'est voulu : une suite muette a deja passe pour un
+     succes pendant des mois. On annonce donc explicitement qu'on se
+     saute, plutot que de sortir sans un mot. */
+  console.log("=== 0 OK, 0 FAIL === (ignore)");
   process.exit(0);
 }
 let ok=0,ko=0;

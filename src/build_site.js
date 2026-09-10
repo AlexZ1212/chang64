@@ -2005,10 +2005,28 @@ const extraUrls = require("./content.js")({
    avoir perdu la moitie de ses pages d'une session a l'autre. Le compte reel
    est donne plus bas par "Dates de contenu". */
 console.log("URLs de contenu    :", extraUrls.length);
+/* Conversion des images de partage en PNG, par og_render.js (Node + sharp).
+   Remplace og_render.py depuis le 2026-09-09 : la chaine Python + cairosvg +
+   Cairo etait impraticable sous Windows, et build_site.js appelait de surcroit
+   "python3", un nom que l'installeur de python.org ne pose pas.
+   og_render.py reste dans le depot, inutilise, pour qui voudrait la chaine
+   Python.
+   Le compteur n'est affiche qu'en cas de succes : annoncer "Images de partage :
+   147" apres un echec de conversion, comme le faisait la version d'avant,
+   laissait croire que les PNG etaient produits alors que le dossier restait
+   vide, et un build muet de ce cote est parti en ligne sans ses apercus. */
+let ogFait = false;
 try {
-  require("child_process").execSync(`python3 "${path.join(__dirname, "og_render.py")}"`, { stdio: "inherit" });
-} catch (e) { console.log("ATTENTION : conversion des images de partage impossible"); }
-console.log("Images de partage  :", ogJobs.length);
+  require("child_process").execSync(
+    `node "${path.join(__dirname, "og_render.js")}"`, { stdio: "inherit" });
+  ogFait = true;
+} catch (e) { /* message deja affiche par og_render.js */ }
+if (ogFait) console.log("Images de partage  :", ogJobs.length);
+else {
+  console.log("ATTENTION : images de partage NON converties.");
+  console.log("  Les " + ogJobs.length + " apercus de partage seront absents du site.");
+  console.log("  A regler avant toute mise en ligne : npm install sharp --no-save");
+}
 
 /* Seules les familles pourvues d'une note redigee entrent au sitemap : les
    autres portent un meta robots noindex (voir plus haut), et declarer au

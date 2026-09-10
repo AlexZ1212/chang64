@@ -392,7 +392,9 @@ function makePuzzle(g, depth) {
   const { theme, detail } = classify(g, best.mv, isMate, len);
   const solSan = g.san(g.moves().find(m => m.from === best.mv.from && m.to === best.mv.to && m.promo === best.mv.promo));
   const fen = g.fen();
-  const sol = [sqName(best.mv.from) + sqName(best.mv.to) + (best.mv.promo ? "qrbn"[best.mv.promo - 2] || "" : "")];
+  /* Meme correctif que gen_puzzles_v2.js et mine_puzzles.js : la table
+     locale "qrbn"[promo-2] etait a l'envers des constantes du moteur. */
+  const sol = [g.uci(g.moves().find(m => m.from === best.mv.from && m.to === best.mv.to && m.promo === best.mv.promo))];
 
   return {
     fen,

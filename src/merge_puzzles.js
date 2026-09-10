@@ -103,7 +103,16 @@ for (const f of fichiers) {
     /* 3. Verification, identique a la generation. */
     if (!verifyFull(brut)) { rejets.verification++; continue; }
 
-    /* 4. Reclassification. On ne fait pas confiance a l'etiquette recue. */
+    /* 4. Reclassification. On ne fait pas confiance a l'etiquette recue.
+       Ni a l'explication recue (correctif 2026-09-09) : mine_puzzles.js
+       ecrit explain = detail de SON classifyBase, au moment du minage. Tant
+       que les deux bouts tournent avec le meme classificateur, garder l'un
+       ou l'autre revient au meme -- mais une passe de minage dure des jours,
+       et le classificateur peut changer entre-temps. On se retrouvait alors
+       avec un motif recalcule ici et une explication d'avant : explainSentence()
+       cherche les champs du nouveau motif, ne les trouve pas, et rend une
+       chaine vide. Aucune erreur, aucune phrase, personne ne le voit. Le
+       detail suit donc le motif, ils viennent du meme calcul. */
     let motif = null, detail = null;
     try {
       const g = new Game(brut.fen);
@@ -136,7 +145,7 @@ for (const f of fichiers) {
       level: niveauDuMotif[motif],
       diff: diff,
       code: code,
-      explain: brut.explain || detail || {}
+      explain: detail || brut.explain || {}
     };
     if (brut.pedagogy) p.pedagogy = brut.pedagogy;
     if (brut.source) p.source = brut.source;

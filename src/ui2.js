@@ -2068,8 +2068,40 @@ function renderRushHistory(history){
   if(note){note.textContent=t("Tap ✓ or ✗ to see how it was solved.");note.classList.remove("hide");}
   updateRushHistoryScrollHint(box);
 }
-/* Charge un exercice deja joue avec sa solution posee sur l'echiquier et
-   l'explication affichee, sans repasser par une tentative. */
+/* Curseur de la revue : les coups de la solution, leur SAN, et le nombre de
+   demi-coups actuellement poses sur l'echiquier. */
+let solMoves=[],solSan=[],solPly=0;
+/* Pose la position apres n demi-coups de la solution. On avance et on recule
+   sur le meme objet Game plutot que de le reconstruire : les objets de coup
+   restent valides d'un pas a l'autre, et render() anime le coup courant
+   exactement comme un coup joue, en partant de sa case d'origine.
+   L'echiquier reste inerte pendant la revue (puzzleDone est vrai, et
+   handlePuzzleClick sort aussitot), donc aucun clic ne peut desynchroniser
+   le curseur de la pile d'annulation. */
+function montreSolutionPly(n){
+  n=Math.max(0,Math.min(n,solMoves.length));
+  while(solPly<n){game.makeMove(solMoves[solPly]);solPly++;}
+  while(solPly>n){game.undoMove();solPly--;}
+  lastMove=solPly?solMoves[solPly-1]:null;
+  legalCache=game.moves();
+  selected=-1;marks={};
+  render();
+  majSolutionNav();
+}
+function majSolutionNav(){
+  const nav=$("solutionNav");if(!nav)return;
+  if(!solMoves.length){nav.classList.add("hide");return;}
+  nav.classList.remove("hide");
+  $("solPrev").disabled=solPly<=0;
+  $("solNext").disabled=solPly>=solMoves.length;
+  $("solPos").textContent=solPly===0
+    ? t("Starting position")
+    : t("Move {a} of {b}: {san}",{a:solPly,b:solMoves.length,san:solSan[solPly-1]});
+}
+if($("solPrev"))$("solPrev").onclick=()=>montreSolutionPly(solPly-1);
+if($("solNext"))$("solNext").onclick=()=>montreSolutionPly(solPly+1);
+/* Charge un exercice deja joue avec sa solution disponible sur l'echiquier
+   et l'explication affichee, sans repasser par une tentative. */
 function loadAndRevealSolution(p){
   puzzle=p;puzzle.daily=false;
   loadPuzzle();
@@ -2086,19 +2118,33 @@ function loadAndRevealSolution(p){
      currentSolutions()/puzzleSolPly, qui suivent l'etat d'une partie EN
      COURS de resolution par le joueur -- ici on affiche une reponse toute
      faite, sans lien avec cet etat). */
-  const sanParts=[];
+  /* La sequence est PREPAREE, plus jouee d'emblee (2026-09-09). Jouer les
+     coups au chargement rendait la revue inutilisable des qu'il y avait une
+     prise : le rendu partait deja de la position finale, donc la piece prise
+     avait disparu, et la seule animation visible glissait sur une case dont
+     on ne saurait jamais ce qu'elle contenait. Sur #UCYR0 (Cxe2+) on voyait
+     le cavalier arriver en e2 sans avoir jamais vu la tour qui s'y trouvait,
+     et c'est pourtant elle le gain de l'exercice.
+     Le plateau reste donc sur la position de depart et on avance demi-coup
+     par demi-coup. Le texte du bandeau annonce toujours la solution
+     complete : rien n'est cache, c'est l'ordre d'apparition qui change.
+     Rejoue depuis puzzle.sol et non currentSolutions()/puzzleSolPly, qui
+     suivent l'etat d'une resolution EN COURS par le joueur. */
+  solMoves=[];solSan=[];
   for(const uci of puzzle.sol){
     const mv=game.moves().find(x=>game.uci(x)===uci);
     if(!mv)break;
-    sanParts.push(game.san(mv));
-    game.makeMove(mv);lastMove=mv;
+    /* Le SAN depend de la position ou le coup est joue : on ne peut le
+       relever qu'en avancant. On revient ensuite au depart. */
+    solSan.push(game.san(mv));solMoves.push(mv);
+    game.makeMove(mv);
   }
-  legalCache=game.moves();
-  selected=-1;marks={};
+  for(let i=0;i<solMoves.length;i++)game.undoMove();
+  solPly=0;
   puzzleDone=true;majBoutonSuivant();
-  render();
+  montreSolutionPly(0);
   const st=$("exStatus");st.className="status win";
-  st.textContent=t("The winning move was {san}.",{san:sanParts.join(" ")});
+  st.textContent=t("The winning move was {san}.",{san:solSan.join(" ")});
   const ex=$("exExplain");if(ex)ex.textContent=typeof explainSentence==="function"?explainSentence(puzzle):"";
   const pg=$("exPedagogy");if(pg)pg.textContent=typeof pedagogySentence==="function"?pedagogySentence(puzzle):"";
 }

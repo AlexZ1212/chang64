@@ -1,0 +1,11 @@
+{
+  "name": "chang64-build",
+  "private": true,
+  "description": "Outils de construction et de test de chang64. Le site lui-meme n'a aucune dependance : ces trois paquets ne servent qu'a construire et a verifier, jamais a l'execution dans le navigateur.",
+  "comment-pourquoi-ce-fichier": "Sans package.json, npm considere tout ce qui est dans node_modules comme surnumeraire et le supprime a la premiere installation suivante. Un 'npm install sharp --no-save' a ainsi efface terser et jsdom, ce qui a fait passer 52 suites pour des plantages alors que rien n'etait casse. Declarer les trois ici rend 'npm install' reproductible et empeche toute installation ulterieure d'en supprimer une autre.",
+  "devDependencies": {
+    "jsdom": "^30.0.1",
+    "sharp": "^0.35.4",
+    "terser": "^5.51.2"
+  }
+}

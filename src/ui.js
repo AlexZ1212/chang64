@@ -1517,6 +1517,14 @@ function loadPuzzle(){
   const ex=$("exExplain");if(ex)ex.textContent="";
   reviewIdx=-1;
   const rn=$("reviewNav");if(rn)rn.classList.add("hide");
+  /* Meme raison : la navigation dans la solution n'a de sens qu'en revue, et
+     loadAndRevealSolution() la rouvre juste apres nous avoir appeles. */
+  /* On masque, on ne remet pas solMoves/solPly a zero ici : ces variables
+     sont declarees en let dans ui2.js, concatene APRES ui.js, et un
+     loadPuzzle() precoce lirait un binding encore en zone morte -- que
+     typeof ne protege pas. loadAndRevealSolution() les reinitialise
+     lui-meme, c'est le seul endroit qui en a besoin. */
+  const sn=$("solutionNav");if(sn)sn.classList.add("hide");
   /* btnRushAgain (voir template.html) : raccourci qui n'existe que juste
      apres avoir ferme un bilan de Chang Sprint, jamais plus loin -- se
      recache des qu'un exercice quelconque se charge, sprint ou pas. */

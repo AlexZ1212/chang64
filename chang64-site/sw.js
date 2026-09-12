@@ -12,8 +12,8 @@
  * La version du cache est calculee a la construction : chaque build invalide
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-202609100611";
-const DATA_CACHE="chang64-data-202609100611";
+const CACHE="chang64-202609121505";
+const DATA_CACHE="chang64-data-202609121505";
 /* Trois entrees au maximum dans le cache de donnees (2026-09-06). Un shard
    de niveau pese 1 a 2 Mo : trois plafonnent l'occupation autour de 5 Mo,
    loin des 17 Mo qui avaient fait sauter le quota iOS et evince le cache

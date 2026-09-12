@@ -81,6 +81,10 @@ for (const f of fichiers) {
 
   let repares = 0, deja = 0;
   const refuses = [], casses = [], indecis = [];
+  /* Une fournee fraiche n'a pas encore de code : ils sont attribues a la
+     fusion. On se rabat sur la position, qui identifie l'exercice aussi
+     surement et permet de le retrouver dans le fichier. */
+  const nom = p => p.code || p.fen;
 
   let vus = 0;
   for (const p of avecPromo) {
@@ -88,7 +92,7 @@ for (const f of fichiers) {
     const avantOk = verifyFull(p);
     const neuf = p.sol.map(s => s.length === 5 ? s.slice(0, 4) + (ECHANGE[s[4]] || s[4]) : s);
     const essai = Object.assign({}, p, { sol: neuf });
-    if (!verifyFull(essai)) { (avantOk ? (deja++, refuses) : casses).push(p.code); continue; }
+    if (!verifyFull(essai)) { (avantOk ? (deja++, refuses) : casses).push(nom(p)); continue; }
 
     /* Gain dont le PREMIER coup est une promotion : c'est celui que le joueur
        doit trouver, et verifyFull() ne dit rien de sa qualite. On tranche au
@@ -97,8 +101,8 @@ for (const f of fichiers) {
     if (p.type !== "mate" && p.sol[0].length === 5) {
       const best = meilleurePromotion(p.fen, p.sol[0]);
       if (best && best !== neuf[0]) {
-        if (best === p.sol[0]) { deja++; refuses.push(p.code); }
-        else indecis.push(p.code + " (moteur: " + best + ")");
+        if (best === p.sol[0]) { deja++; refuses.push(nom(p)); }
+        else indecis.push(nom(p) + "  sol=" + p.sol[0] + "  moteur=" + best);
         continue;
       }
     }

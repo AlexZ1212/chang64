@@ -40,15 +40,38 @@ const { Game } = require(path.join(__dirname, "engine.js"));
 const { classifyBase, verifyFull } = require(path.join(__dirname, "gen_puzzles_v2.js"));
 const { distractorScore } = require(path.join(__dirname, "difficulty_v2.js"));
 
-const BANQUE = path.join(__dirname, "puzzles.json");
-const ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const crypto = require("crypto");
+const { puzzleCode } = require(path.join(__dirname, "gen_puzzles.js"));
 
-function codeAuHasard() {
-  let c = "";
-  for (let i = 0; i < 5; i++) c += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
-  return c;
+const BANQUE = path.join(__dirname, "puzzles.json");
+
+/* Le code DERIVE du contenu, il n'est pas tire au sort (correctif
+   2026-09-12). gen_puzzles.js explique pourquoi : un identifiant qui ne
+   depend pas de la position se deplacerait silencieusement sur un autre
+   exercice si la banque etait un jour reordonnee ou regeneree, et tout
+   signalement fait entre-temps deviendrait faux. Un tirage au hasard a
+   exactement ce defaut.
+   Le hasard tenait tant que la fusion n'ajoutait presque rien ; la premiere
+   vraie fournee a fait echouer check_banque_exercices.js sur la totalite des
+   entrants d'un coup.
+   En cas de collision, on sale avec un compteur, comme le fait le test. */
+function codeDerive(p, pris) {
+  for (let n = 0; n <= 20; n++) {
+    const c = n === 0 ? puzzleCode(p.fen, p.sol)
+      : (crypto.createHash("sha256").update(p.fen + "|" + p.sol.join(" ") + "|" + n)
+        .digest().readUInt32BE(0) % Math.pow(36, 5)).toString(36).toUpperCase().padStart(5, "0");
+    if (!pris.has(c)) return c;
+  }
+  return null;
 }
-function cle(p) { return p.fen + "|" + (p.sol && p.sol[0]); }
+/* Deduplication sur la POSITION seule, quatre premiers champs de la FEN.
+   Les compteurs de coups n'en font pas partie : la meme position atteinte au
+   23e ou au 31e coup est le meme exercice pour le joueur. Et la solution non
+   plus : deux solutions differentes sur une meme position, c'est une position
+   montree deux fois, ce que check_banque_exercices.js refuse.
+   L'ancienne cle, fen complete + premier coup, laissait passer les deux cas :
+   22 doublons sur la premiere vraie fournee. */
+function cle(p) { return p.fen.split(" ").slice(0, 4).join(" "); }
 
 const fichiers = process.argv.slice(2).filter(a => !a.startsWith("--"));
 const dry = process.argv.includes("--dry");
@@ -88,7 +111,7 @@ for (const p of banque) { const n = +String(p.id).slice(1); if (n > maxId) maxId
 const avant = {};
 for (const p of banque) avant[p.theme] = (avant[p.theme] || 0) + 1;
 
-const rejets = { doublon: 0, verification: 0, motif: 0, motifInconnu: 0, illisible: 0 };
+const rejets = { doublon: 0, verification: 0, motif: 0, motifInconnu: 0, illisible: 0, collision: 0 };
 const ajoutes = [];
 
 for (const f of fichiers) {
@@ -131,8 +154,8 @@ for (const f of fichiers) {
 
     /* 7. Identifiant et code neufs. Le tirage est verifie contre TOUS les
        codes, anciens et deja attribues dans cette passe. */
-    let code;
-    do { code = codeAuHasard(); } while (codes.has(code));
+    const code = codeDerive(brut, codes);
+    if (!code) { rejets.collision++; continue; }
     codes.add(code);
 
     const p = {
@@ -161,6 +184,7 @@ for (const p of fusion) apres[p.theme] = (apres[p.theme] || 0) + 1;
 
 console.log("\n--- Rejets ---");
 console.log("  deja dans la banque :", rejets.doublon);
+if (rejets.collision) console.log("  collision de code     :", rejets.collision, "(21 sels epuises, a signaler)");
 console.log("  verification echouee:", rejets.verification);
 console.log("  motif introuvable   :", rejets.motif);
 console.log("  motif inconnu       :", rejets.motifInconnu);

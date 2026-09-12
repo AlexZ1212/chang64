@@ -7,3 +7,5 @@ src/a_retirer.txt
 src/node
 src/set
 src/site/
+src/fournee*.json
+src/fournee-*.json

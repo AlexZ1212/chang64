@@ -82,9 +82,14 @@ const FR={
 "Every move produces a link. Send it on WhatsApp or Messenger, your friend replies with theirs. Nothing to install.":
  "Chaque coup produit un lien. Tu l'envoies par WhatsApp ou Messenger, ton ami te renvoie le sien. Rien à installer.",
 "Challenge a friend →":"Défier un ami →",
-"Puzzle level":"Niveau","Solved":"Résolus","Best streak":"Record","Puzzle rating":"Classement","Day streak":"Jours d'affilée",
+/* Bande "Ma progression" de l'accueil. "Puzzle level" et "Puzzle rating"
+   ont disparu au profit de "Level"/"Rating" nus : la tuile porte desormais
+   sa provenance en dessous ("Exercices", "Exercices, jour", "Exercice du
+   jour"), ce que le libelle essayait de dire tout seul et disait mal. */
+"Solved":"Résolus","Best streak":"Meilleure série","Day streak":"Jours d'affilée",
+"Puzzles, daily":"Exercices, jour",
 "My progress":"Ma progression",
-"This reflects classic puzzle solving only, the level ladder in Solve. Puzzle of the day, Chang Sprint and Coordinates each track their own separate record.":"Ceci ne reflète que la résolution classique d'exercices, l'échelle de niveaux de Résoudre. Le Puzzle du jour, le Chang Sprint et les Coordonnées ont chacun leur propre record séparé.",
+"Level and rating come from the Puzzles ladder alone. Solved and best streak also count the puzzle of the day. Day streak counts only the puzzle of the day. Chang Sprint and Coordinates keep their own records, on their own cards, and never move these numbers.":"Le niveau et le classement ne viennent que de l'échelle des Exercices. Résolus et meilleure série comptent aussi l'exercice du jour. Les jours d'affilée ne comptent que l'exercice du jour. Le Chang Sprint et les Coordonnées gardent leurs propres records, sur leurs propres cartes, et ne déplacent jamais ces chiffres.",
 
 /* --- partie --- */
 "Computer":"Ordinateur","You":"Toi","Your game":"Ta partie","Settings":"Réglages",
@@ -202,6 +207,10 @@ const FR={
 "Not quite. Look at the enemy king and its escape squares.":"Pas tout à fait. Regarde le roi adverse et ses cases de fuite.",
 "Still not it. A hint or the solution can help.":"Toujours pas. Un indice ou la solution peuvent aider.",
 "{san}: checkmate.":"{san} : échec et mat.","{san}: material won. Nicely spotted.":"{san} : matériel gagné, bien vu.",
+/* Coup equivalent accepte (champ alt, voir currentSolutions dans ui.js).
+   Le message nomme la ligne enregistree parce que l'explication qui suit
+   decrit CELLE-LA : sans ce rappel, elle paraitrait parler du coup joue. */
+"{san} wins too. The line recorded here is {best}.":"{san} gagne aussi. La ligne enregistrée ici est {best}.",
 "{san}. The defence replies…":"{san}. La défense répond…",
 "Correct. Your move.":"Correct. À toi de jouer.",
 "Correct. Now mate in {n} move.":"Bonne réponse. Maintenant mate en {n} coup.",
@@ -353,6 +362,11 @@ const FR={
 /* --- divers --- */
 "Choose a promotion piece":"Choisis la pièce de promotion","Queen":"Dame","Rook":"Tour","Bishop":"Fou","Knight":"Cavalier","King":"Roi","Pawn":"Pion",
 "Choose your colour":"Choisis ta couleur",
+/* Lien d'evitement : premier element focalisable de la page, et le seul
+   texte du gabarit qui restait en anglais en francais (releve du
+   2026-09-12). Il ne se voit qu'au clavier, ce qui explique qu'il ait
+   traverse toutes les relectures a l'oeil. */
+"Skip to main content":"Aller au contenu principal",
 "chang64 home":"Accueil chang64","First move":"Premier coup","Previous move":"Coup précédent",
 "Next move":"Coup suivant","Last move":"Dernier coup","PGN to import":"PGN à importer",
 "You win":"Tu gagnes","You lose":"Tu perds","Draw":"Partie nulle","Review":"Analyser","Dismiss":"Masquer",
@@ -398,7 +412,7 @@ const FR={
 "{n}/{total} patterns started":"{n}/{total} motifs entamés",
 "{n} puzzles":"{n} exercices",
 "{n} solved":"{n} résolus",
-"Solved":"Résolu",
+"Solved, earlier day":"Jour passé réussi",
 "Not solved":"Non résolu",
 "Today, still to do":"Aujourd'hui, à faire",
 "Solved today":"Résolu aujourd'hui",

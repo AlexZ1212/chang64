@@ -520,7 +520,51 @@ module.exports = function (H) {
      "N'importe quel joueur peut réclamer la nulle si 50 coups s'écoulent, des deux côtés, sans coup de pion ni prise. Elle existe pour empêcher qu'un joueur sans méthode de gain réelle ne fasse traîner la partie indéfiniment en espérant une erreur.", ""],
     ["threefold-repetition", "triple-repetition", "Threefold repetition", "Triple répétition",
      "A draw can be claimed if the same position, with the same player to move, occurs three times in a game. It's the usual way a perpetual check is actually recorded as a result, rather than checking forever.",
-     "La nulle peut être réclamée si la même position, avec le même joueur au trait, survient trois fois dans une partie. C'est ainsi qu'un échec perpétuel se traduit concrètement en résultat, plutôt que de donner échec indéfiniment.", ""]
+     "La nulle peut être réclamée si la même position, avec le même joueur au trait, survient trois fois dans une partie. C'est ainsi qu'un échec perpétuel se traduit concrètement en résultat, plutôt que de donner échec indéfiniment.", ""],
+    /* 10 entrees ajoutees (2026-09-12, liste d'Alexandre). Aucune n'existait
+       encore ; les douze autres notions de sa liste (fourchette, clouage,
+       enfilade, attaque a la decouverte, sacrifice, deviation, elimination
+       du defenseur, surcharge, coup intermediaire, interference, mat du
+       couloir, echec perpetuel) etaient deja la et ne sont donc pas
+       redoublees. Le 7e champ reste "" partout ou la banque n'a pas de motif
+       correspondant : mieux vaut la mention honnete "aucun exercice ne porte
+       precisement sur cette notion" qu'un exemple rattache de force a un
+       motif voisin. Deux exceptions, ou le motif existe vraiment et porte
+       exactement le meme sens : l'attaque double et le gain de materiel.
+       "Attaque de mat" et "attaque sur le roi" sont deux entrees distinctes
+       a dessein : la premiere annonce un mat force, la seconde une pression
+       qui peut n'aboutir qu'a du materiel -- les confondre est precisement
+       l'erreur que l'entree doit eviter. */
+    ["double-attack", "attaque-double", "Double attack", "Attaque double",
+     "One move creates two threats at once, and the defender can only answer one of them. The fork is the version delivered by a single piece; a double attack can also come from two different pieces starting to threaten at the same moment.",
+     "Un seul coup crée deux menaces à la fois, et la défense ne peut en parer qu'une. La fourchette en est la version portée par une seule pièce ; une attaque double peut aussi naître de deux pièces qui se mettent à menacer en même temps.", "Double attack"],
+    ["attraction", "attraction", "Attraction", "Attraction",
+     "The opposite of a deflection: instead of driving a defender away, a sacrifice drags an enemy piece onto a square where it becomes the target. Drawing the king onto a forking square is the classic case.",
+     "L'inverse de la déviation : au lieu de chasser un défenseur, un sacrifice attire une pièce adverse sur la case où elle devient la cible. Attirer le roi sur une case de fourchette en est le cas classique.", ""],
+    ["clearance", "degagement", "Clearance", "Dégagement",
+     "A move whose point is to empty a square or a line for another piece, often by sacrificing the piece that was in the way. What looks like a giveaway is really a door being opened.",
+     "Un coup dont le but est de vider une case ou une ligne pour une autre pièce, souvent en sacrifiant celle qui gênait. Ce qui ressemble à un cadeau est en réalité une porte que l'on ouvre.", ""],
+    ["trapped-piece", "piece-piegee", "Trapped piece", "Pièce piégée",
+     "A piece that has no safe square left, usually after venturing too far into enemy territory. It is not captured yet, so the win of material comes from closing the last exit rather than from taking anything at once.",
+     "Une pièce à qui il ne reste aucune case sûre, en général après s'être trop avancée en territoire adverse. Elle n'est pas encore prise : le gain de matériel vient de la fermeture de la dernière issue, pas d'une capture immédiate.", ""],
+    ["promotion", "promotion", "Promotion", "Promotion",
+     "A pawn reaching the last rank is replaced at once by a queen, rook, bishop or knight of its own colour. The choice is free and unlimited, so a side can end up with two queens or more.",
+     "Un pion qui atteint la dernière rangée est aussitôt remplacé par une dame, une tour, un fou ou un cavalier de sa couleur. Le choix est libre et sans limite : un camp peut donc se retrouver avec deux dames ou plus.", ""],
+    ["underpromotion", "sous-promotion", "Underpromotion", "Sous-promotion",
+     "Promoting to anything other than a queen, which is right far more rarely than beginners fear. The two real reasons are a knight that gives check or forks immediately, and a rook that avoids stalemating a lone king.",
+     "Promouvoir en autre chose qu'une dame, ce qui est bien plus rarement juste que les débutants ne le craignent. Les deux vraies raisons sont un cavalier qui donne échec ou fourche tout de suite, et une tour qui évite de faire pat un roi seul.", ""],
+    ["mating-attack", "attaque-de-mat", "Mating attack", "Attaque de mat",
+     "An assault whose object is the king itself, not material: every move is measured by whether it brings mate closer. Material is routinely given up along the way, because a mate ends the game whatever the balance of pieces says.",
+     "Une offensive dont l'objet est le roi lui-même, et non le matériel : chaque coup se juge à ce qu'il rapproche du mat. On y cède couramment du matériel, puisqu'un mat clôt la partie quel que soit le compte des pièces.", ""],
+    ["king-attack", "attaque-sur-le-roi", "King attack", "Attaque sur le roi",
+     "Pressure aimed at the squares around the enemy king, usually by opening a file or a diagonal towards it and piling pieces up behind. It does not have to end in mate: many king attacks simply win material once the defence has to give something up.",
+     "Une pression dirigée sur les cases qui entourent le roi adverse, en général en ouvrant une colonne ou une diagonale vers lui et en accumulant les pièces derrière. Elle n'aboutit pas forcément au mat : beaucoup d'attaques sur le roi gagnent simplement du matériel dès que la défense doit lâcher quelque chose.", ""],
+    ["material-gain", "gain-de-materiel", "Material gain", "Gain de matériel",
+     "Coming out of a sequence with more force on the board than the opponent, counted with the usual values: pawn 1, knight and bishop 3, rook 5, queen 9. Most tactics end here rather than in mate, and a single extra pawn decides a great many endgames.",
+     "Sortir d'une séquence avec plus de force sur l'échiquier que l'adversaire, au compte habituel : pion 1, cavalier et fou 3, tour 5, dame 9. La plupart des tactiques finissent là plutôt qu'au mat, et un seul pion d'avance décide un très grand nombre de finales.", "Winning capture"],
+    ["combination", "combinaison", "Combination", "Combinaison",
+     "A forced sequence of moves, usually beginning with a sacrifice, that reaches a gain the opponent cannot avoid. Forced is the key word: at every step the defence has no real choice, which is what separates a combination from a plan.",
+     "Une suite de coups forcée, commençant le plus souvent par un sacrifice, qui aboutit à un gain que l'adversaire ne peut pas éviter. Le mot qui compte est forcée : à chaque étape la défense n'a pas de vrai choix, et c'est ce qui distingue une combinaison d'un plan.", ""]
   ];
 
   const byTheme = {};
@@ -756,7 +800,7 @@ module.exports = function (H) {
          partage retenu : la page Motifs garde le mot nu, puisque c'est
          elle qui porte les exemples jouables et vise la requete
          principale ; le Lexique annonce ce qu'il est, une definition.
-         Applique aux 43 entrees et pas seulement aux quatre en conflit :
+         Applique aux 53 entrees et pas seulement aux quatre en conflit :
          un H1 different d'une entree a l'autre dans la meme rubrique se
          verrait, et les futures collisions sont couvertes d'avance.
          Le nom nu reste dans le JSON-LD DefinedTerm, ou il est la valeur

@@ -1,0 +1,3077 @@
+[
+ {
+  "code": "7YKA8",
+  "id": "p1129",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1ETN5",
+  "id": "p2947",
+  "probleme": "la solution ne gagne pas (0.94)"
+ },
+ {
+  "code": "V49YR",
+  "id": "p4395",
+  "probleme": "la solution ne gagne pas (0.05)"
+ },
+ {
+  "code": "821FG",
+  "id": "p4596",
+  "probleme": "la solution ne gagne pas (-0.51)"
+ },
+ {
+  "code": "BS0NM",
+  "id": "p5239",
+  "probleme": "la solution ne gagne pas (0.53)"
+ },
+ {
+  "code": "AUDVY",
+  "id": "p5653",
+  "probleme": "la solution ne gagne pas (0.90)"
+ },
+ {
+  "code": "1313Z",
+  "id": "p6227",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "0B5R3",
+  "id": "p6360",
+  "probleme": "la solution ne gagne pas (0.62)"
+ },
+ {
+  "code": "62RG8",
+  "id": "p7359",
+  "probleme": "la solution ne gagne pas (0.18)"
+ },
+ {
+  "code": "42LUT",
+  "id": "p7681",
+  "probleme": "la solution ne gagne pas (-0.42)"
+ },
+ {
+  "code": "J4DDF",
+  "id": "p7940",
+  "probleme": "la solution ne gagne pas (-0.02)"
+ },
+ {
+  "code": "VTKDR",
+  "id": "p8227",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "MAQSV",
+  "id": "p8361",
+  "probleme": "la solution ne gagne pas (-6.42)"
+ },
+ {
+  "code": "I3NGQ",
+  "id": "p9214",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "R8F0H",
+  "id": "p9438",
+  "probleme": "la solution ne gagne pas (-4.92)"
+ },
+ {
+  "code": "8ISXC",
+  "id": "p10839",
+  "probleme": "la solution ne gagne pas (-1.33)"
+ },
+ {
+  "code": "IE82S",
+  "id": "p10860",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "K685T",
+  "id": "p11722",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "24RR2",
+  "id": "p12475",
+  "probleme": "la solution ne gagne pas (-5.45)"
+ },
+ {
+  "code": "5541I",
+  "id": "p12523",
+  "probleme": "la solution ne gagne pas (0.87)"
+ },
+ {
+  "code": "REVOA",
+  "id": "p12913",
+  "probleme": "la solution ne gagne pas (0.98)"
+ },
+ {
+  "code": "3T1OJ",
+  "id": "p13615",
+  "probleme": "la solution ne gagne pas (-2.12)"
+ },
+ {
+  "code": "2YXC4",
+  "id": "p14173",
+  "probleme": "la solution ne gagne pas (-0.78)"
+ },
+ {
+  "code": "C519R",
+  "id": "p14278",
+  "probleme": "la solution ne gagne pas (0.84)"
+ },
+ {
+  "code": "TRW3C",
+  "id": "p15231",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "AQJNA",
+  "id": "p15914",
+  "probleme": "la solution ne gagne pas (-1.69)"
+ },
+ {
+  "code": "BLI0B",
+  "id": "p15969",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "QVYS7",
+  "id": "p16028",
+  "probleme": "la solution ne gagne pas (-5.11)"
+ },
+ {
+  "code": "IQQAH",
+  "id": "p16414",
+  "probleme": "la solution ne gagne pas (0.71)"
+ },
+ {
+  "code": "4NB32",
+  "id": "p16785",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "UHD6F",
+  "id": "p17594",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OGOT1",
+  "id": "p17792",
+  "probleme": "la solution ne gagne pas (-5.77)"
+ },
+ {
+  "code": "S4CYT",
+  "id": "p18214",
+  "probleme": "la solution ne gagne pas (-1.06)"
+ },
+ {
+  "code": "Z4ZMX",
+  "id": "p18701",
+  "probleme": "la solution ne gagne pas (-0.33)"
+ },
+ {
+  "code": "91UMZ",
+  "id": "p18968",
+  "probleme": "la solution ne gagne pas (-4.81)"
+ },
+ {
+  "code": "9EYIJ",
+  "id": "p19443",
+  "probleme": "la solution ne gagne pas (-0.35)"
+ },
+ {
+  "code": "OGGIK",
+  "id": "p19613",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "5NBHO",
+  "id": "p20403",
+  "probleme": "la solution ne gagne pas (0.34)"
+ },
+ {
+  "code": "ZFZPN",
+  "id": "p22124",
+  "probleme": "la solution ne gagne pas (-3.25)"
+ },
+ {
+  "code": "KJF52",
+  "id": "p22136",
+  "probleme": "la solution ne gagne pas (-0.86)"
+ },
+ {
+  "code": "E65LC",
+  "id": "p22165",
+  "probleme": "la solution ne gagne pas (-1.20)"
+ },
+ {
+  "code": "B6IQH",
+  "id": "p23494",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "0DLYF",
+  "id": "p24426",
+  "probleme": "la solution ne gagne pas (-3.42)"
+ },
+ {
+  "code": "0MUWE",
+  "id": "p24952",
+  "probleme": "la solution ne gagne pas (-1.51)"
+ },
+ {
+  "code": "GQXPI",
+  "id": "p25271",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "7J14Y",
+  "id": "p25612",
+  "probleme": "la solution ne gagne pas (-0.79)"
+ },
+ {
+  "code": "UH46V",
+  "id": "p26674",
+  "probleme": "la solution ne gagne pas (-1.79)"
+ },
+ {
+  "code": "3OIEM",
+  "id": "p26690",
+  "probleme": "la solution ne gagne pas (0.66)"
+ },
+ {
+  "code": "DFNJE",
+  "id": "p28779",
+  "probleme": "la solution ne gagne pas (0.69)"
+ },
+ {
+  "code": "NEZRR",
+  "id": "p28852",
+  "probleme": "la solution ne gagne pas (0.96)"
+ },
+ {
+  "code": "MZSPF",
+  "id": "p28953",
+  "probleme": "la solution ne gagne pas (-0.19)"
+ },
+ {
+  "code": "NG9MR",
+  "id": "p29690",
+  "probleme": "la solution ne gagne pas (0.11)"
+ },
+ {
+  "code": "FWZUJ",
+  "id": "p30412",
+  "probleme": "la solution ne gagne pas (-1.09)"
+ },
+ {
+  "code": "I0ZMX",
+  "id": "p31100",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "GYY6B",
+  "id": "p31220",
+  "probleme": "la solution ne gagne pas (-3.50)"
+ },
+ {
+  "code": "FVEBK",
+  "id": "p31665",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "MEDJ1",
+  "id": "p31902",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "R4AOJ",
+  "id": "p32179",
+  "probleme": "la solution ne gagne pas (-4.27)"
+ },
+ {
+  "code": "XIGXP",
+  "id": "p32313",
+  "probleme": "la solution ne gagne pas (0.62)"
+ },
+ {
+  "code": "FPAOR",
+  "id": "p32520",
+  "probleme": "la solution ne gagne pas (-6.73)"
+ },
+ {
+  "code": "E4RS8",
+  "id": "p32871",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "LZ78I",
+  "id": "p33042",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "2ZORH",
+  "id": "p34124",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1UW95",
+  "id": "p34788",
+  "probleme": "la solution ne gagne pas (0.96)"
+ },
+ {
+  "code": "8JCMO",
+  "id": "p35062",
+  "probleme": "la solution ne gagne pas (0.53)"
+ },
+ {
+  "code": "CJJ9Y",
+  "id": "p35911",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "VKS1J",
+  "id": "p36058",
+  "probleme": "la solution ne gagne pas (-0.25)"
+ },
+ {
+  "code": "MXKM6",
+  "id": "p36516",
+  "probleme": "la solution ne gagne pas (0.49)"
+ },
+ {
+  "code": "NZ6SG",
+  "id": "p36604",
+  "probleme": "la solution ne gagne pas (-1.20)"
+ },
+ {
+  "code": "QN1RY",
+  "id": "p36773",
+  "probleme": "la solution ne gagne pas (-3.70)"
+ },
+ {
+  "code": "PVM6Z",
+  "id": "p37325",
+  "probleme": "la solution ne gagne pas (-0.27)"
+ },
+ {
+  "code": "7XDSE",
+  "id": "p37601",
+  "probleme": "la solution ne gagne pas (0.79)"
+ },
+ {
+  "code": "DSRC9",
+  "id": "p38247",
+  "probleme": "la solution ne gagne pas (-1.18)"
+ },
+ {
+  "code": "GVVFU",
+  "id": "p38307",
+  "probleme": "la solution ne gagne pas (-5.34)"
+ },
+ {
+  "code": "3KE4J",
+  "id": "p38741",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "E0V2M",
+  "id": "p38747",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "O7P58",
+  "id": "p39720",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "EJYK0",
+  "id": "p39876",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "HCS3M",
+  "id": "p39893",
+  "probleme": "la solution ne gagne pas (-13.79)"
+ },
+ {
+  "code": "XX6G4",
+  "id": "p40048",
+  "probleme": "la solution ne gagne pas (0.80)"
+ },
+ {
+  "code": "DMPC0",
+  "id": "p40221",
+  "probleme": "la solution ne gagne pas (-0.54)"
+ },
+ {
+  "code": "P45RU",
+  "id": "p41177",
+  "probleme": "la solution ne gagne pas (0.35)"
+ },
+ {
+  "code": "1YN3Y",
+  "id": "p42213",
+  "probleme": "la solution ne gagne pas (0.28)"
+ },
+ {
+  "code": "RU3A0",
+  "id": "p42470",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "7TRZR",
+  "id": "p42490",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "XHH6N",
+  "id": "p43060",
+  "probleme": "la solution ne gagne pas (-0.28)"
+ },
+ {
+  "code": "BUHQI",
+  "id": "p43260",
+  "probleme": "la solution ne gagne pas (-2.05)"
+ },
+ {
+  "code": "2S9HX",
+  "id": "p43315",
+  "probleme": "la solution ne gagne pas (0.91)"
+ },
+ {
+  "code": "W6LIF",
+  "id": "p43505",
+  "probleme": "la solution ne gagne pas (-5.33)"
+ },
+ {
+  "code": "4UTIG",
+  "id": "p43513",
+  "probleme": "la solution ne gagne pas (0.35)"
+ },
+ {
+  "code": "CLEPS",
+  "id": "p44076",
+  "probleme": "la solution ne gagne pas (0.36)"
+ },
+ {
+  "code": "MWUJS",
+  "id": "p45417",
+  "probleme": "la solution ne gagne pas (0.74)"
+ },
+ {
+  "code": "1ZSKX",
+  "id": "p46547",
+  "probleme": "la solution ne gagne pas (-0.79)"
+ },
+ {
+  "code": "JCQHV",
+  "id": "p47466",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "SX399",
+  "id": "p47816",
+  "probleme": "la solution ne gagne pas (-1.76)"
+ },
+ {
+  "code": "DITEN",
+  "id": "p49077",
+  "probleme": "la solution ne gagne pas (-13.09)"
+ },
+ {
+  "code": "QG3K3",
+  "id": "p49254",
+  "probleme": "la solution ne gagne pas (-2.48)"
+ },
+ {
+  "code": "WSIBR",
+  "id": "p50404",
+  "probleme": "la solution ne gagne pas (0.02)"
+ },
+ {
+  "code": "P818B",
+  "id": "p51000",
+  "probleme": "la solution ne gagne pas (0.79)"
+ },
+ {
+  "code": "CYBDG",
+  "id": "p51081",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "CHCA8",
+  "id": "p51093",
+  "probleme": "la solution ne gagne pas (0.43)"
+ },
+ {
+  "code": "42KRH",
+  "id": "p51134",
+  "probleme": "la solution ne gagne pas (0.32)"
+ },
+ {
+  "code": "GNS4H",
+  "id": "p51270",
+  "probleme": "la solution ne gagne pas (0.60)"
+ },
+ {
+  "code": "E249N",
+  "id": "p51463",
+  "probleme": "la solution ne gagne pas (-1.84)"
+ },
+ {
+  "code": "W4R1N",
+  "id": "p51598",
+  "probleme": "la solution ne gagne pas (-0.34)"
+ },
+ {
+  "code": "O0BYF",
+  "id": "p133",
+  "probleme": "la solution ne gagne pas (0.73)"
+ },
+ {
+  "code": "F10PF",
+  "id": "p2341",
+  "probleme": "la solution ne gagne pas (-2.33)"
+ },
+ {
+  "code": "B96YH",
+  "id": "p2552",
+  "probleme": "la solution ne gagne pas (0.69)"
+ },
+ {
+  "code": "1SO67",
+  "id": "p2765",
+  "probleme": "la solution ne gagne pas (-0.26)"
+ },
+ {
+  "code": "HX1LO",
+  "id": "p3191",
+  "probleme": "la solution ne gagne pas (-0.96)"
+ },
+ {
+  "code": "RA7J6",
+  "id": "p3282",
+  "probleme": "la solution ne gagne pas (-2.04)"
+ },
+ {
+  "code": "JJLYM",
+  "id": "p3749",
+  "probleme": "la solution ne gagne pas (-5.85)"
+ },
+ {
+  "code": "U6326",
+  "id": "p4597",
+  "probleme": "la solution ne gagne pas (0.82)"
+ },
+ {
+  "code": "KEECL",
+  "id": "p5065",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "V28F6",
+  "id": "p5181",
+  "probleme": "la solution ne gagne pas (0.80)"
+ },
+ {
+  "code": "RDXHF",
+  "id": "p5846",
+  "probleme": "la solution ne gagne pas (-0.12)"
+ },
+ {
+  "code": "FEF62",
+  "id": "p5982",
+  "probleme": "la solution ne gagne pas (0.20)"
+ },
+ {
+  "code": "O2QAH",
+  "id": "p6152",
+  "probleme": "la solution ne gagne pas (-8.07)"
+ },
+ {
+  "code": "5BDKL",
+  "id": "p6912",
+  "probleme": "la solution ne gagne pas (0.08)"
+ },
+ {
+  "code": "VBQGQ",
+  "id": "p6975",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "I3OGC",
+  "id": "p7932",
+  "probleme": "la solution ne gagne pas (-1.99)"
+ },
+ {
+  "code": "RT3OO",
+  "id": "p9133",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "R1E1Q",
+  "id": "p9680",
+  "probleme": "la solution ne gagne pas (-0.08)"
+ },
+ {
+  "code": "XOLVP",
+  "id": "p10050",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "IIESE",
+  "id": "p10115",
+  "probleme": "la solution ne gagne pas (-3.34)"
+ },
+ {
+  "code": "AMQC7",
+  "id": "p10784",
+  "probleme": "la solution ne gagne pas (-2.21)"
+ },
+ {
+  "code": "R6EL7",
+  "id": "p11892",
+  "probleme": "la solution ne gagne pas (0.15)"
+ },
+ {
+  "code": "IK8W8",
+  "id": "p12805",
+  "probleme": "la solution ne gagne pas (0.44)"
+ },
+ {
+  "code": "EUI86",
+  "id": "p13876",
+  "probleme": "la solution ne gagne pas (0.68)"
+ },
+ {
+  "code": "O0R6Y",
+  "id": "p14168",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "WCHEV",
+  "id": "p15892",
+  "probleme": "la solution ne gagne pas (0.27)"
+ },
+ {
+  "code": "HXCT9",
+  "id": "p17193",
+  "probleme": "la solution ne gagne pas (0.33)"
+ },
+ {
+  "code": "NCIMV",
+  "id": "p17700",
+  "probleme": "la solution ne gagne pas (0.65)"
+ },
+ {
+  "code": "TLFYD",
+  "id": "p18247",
+  "probleme": "la solution ne gagne pas (-0.66)"
+ },
+ {
+  "code": "WQ0RR",
+  "id": "p18294",
+  "probleme": "la solution ne gagne pas (-2.76)"
+ },
+ {
+  "code": "YQNBM",
+  "id": "p18593",
+  "probleme": "la solution ne gagne pas (0.09)"
+ },
+ {
+  "code": "7NMYR",
+  "id": "p18702",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "YSQKC",
+  "id": "p20522",
+  "probleme": "la solution ne gagne pas (0.92)"
+ },
+ {
+  "code": "SR546",
+  "id": "p21682",
+  "probleme": "la solution ne gagne pas (0.17)"
+ },
+ {
+  "code": "K3G09",
+  "id": "p23070",
+  "probleme": "la solution ne gagne pas (-5.37)"
+ },
+ {
+  "code": "JAW5O",
+  "id": "p23476",
+  "probleme": "la solution ne gagne pas (-1.01)"
+ },
+ {
+  "code": "VQ621",
+  "id": "p23615",
+  "probleme": "la solution ne gagne pas (0.51)"
+ },
+ {
+  "code": "E6XFY",
+  "id": "p23932",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "WSXLD",
+  "id": "p25021",
+  "probleme": "la solution ne gagne pas (0.22)"
+ },
+ {
+  "code": "MJVRZ",
+  "id": "p26572",
+  "probleme": "la solution ne gagne pas (0.12)"
+ },
+ {
+  "code": "12ORR",
+  "id": "p28012",
+  "probleme": "la solution ne gagne pas (0.57)"
+ },
+ {
+  "code": "KK1UV",
+  "id": "p28069",
+  "probleme": "la solution ne gagne pas (0.66)"
+ },
+ {
+  "code": "GI1IM",
+  "id": "p28466",
+  "probleme": "la solution ne gagne pas (0.48)"
+ },
+ {
+  "code": "CG6FW",
+  "id": "p28954",
+  "probleme": "la solution ne gagne pas (-0.05)"
+ },
+ {
+  "code": "VWWFC",
+  "id": "p29347",
+  "probleme": "la solution ne gagne pas (0.54)"
+ },
+ {
+  "code": "PLQL3",
+  "id": "p29493",
+  "probleme": "la solution ne gagne pas (0.55)"
+ },
+ {
+  "code": "B5GBG",
+  "id": "p29953",
+  "probleme": "la solution ne gagne pas (-3.40)"
+ },
+ {
+  "code": "475ZV",
+  "id": "p30344",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "6GGGY",
+  "id": "p30826",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "40CNL",
+  "id": "p31452",
+  "probleme": "la solution ne gagne pas (-0.45)"
+ },
+ {
+  "code": "EK3RJ",
+  "id": "p31843",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "2406N",
+  "id": "p32162",
+  "probleme": "la solution ne gagne pas (0.55)"
+ },
+ {
+  "code": "7NEXM",
+  "id": "p32858",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "QUIVD",
+  "id": "p33241",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "BZSLN",
+  "id": "p33430",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "CRV9J",
+  "id": "p33526",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "8MVM8",
+  "id": "p33690",
+  "probleme": "la solution ne gagne pas (-2.01)"
+ },
+ {
+  "code": "ON2KW",
+  "id": "p33893",
+  "probleme": "la solution ne gagne pas (-4.93)"
+ },
+ {
+  "code": "IHY7Q",
+  "id": "p34163",
+  "probleme": "la solution ne gagne pas (0.66)"
+ },
+ {
+  "code": "JG9WQ",
+  "id": "p35175",
+  "probleme": "la solution ne gagne pas (0.06)"
+ },
+ {
+  "code": "O8MKM",
+  "id": "p35234",
+  "probleme": "la solution ne gagne pas (-0.04)"
+ },
+ {
+  "code": "S0SAO",
+  "id": "p35353",
+  "probleme": "la solution ne gagne pas (0.65)"
+ },
+ {
+  "code": "UNI85",
+  "id": "p35948",
+  "probleme": "la solution ne gagne pas (0.85)"
+ },
+ {
+  "code": "RFWZ4",
+  "id": "p36059",
+  "probleme": "la solution ne gagne pas (0.07)"
+ },
+ {
+  "code": "JQ9HQ",
+  "id": "p36248",
+  "probleme": "la solution ne gagne pas (0.54)"
+ },
+ {
+  "code": "3FRJY",
+  "id": "p38820",
+  "probleme": "la solution ne gagne pas (0.38)"
+ },
+ {
+  "code": "KGDL4",
+  "id": "p38874",
+  "probleme": "la solution ne gagne pas (-1.95)"
+ },
+ {
+  "code": "P9RX6",
+  "id": "p39598",
+  "probleme": "la solution ne gagne pas (-3.84)"
+ },
+ {
+  "code": "JL82L",
+  "id": "p40313",
+  "probleme": "la solution ne gagne pas (0.43)"
+ },
+ {
+  "code": "73PLU",
+  "id": "p40390",
+  "probleme": "la solution ne gagne pas (0.24)"
+ },
+ {
+  "code": "Z3HNE",
+  "id": "p42764",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "ZPFT0",
+  "id": "p43172",
+  "probleme": "la solution ne gagne pas (0.47)"
+ },
+ {
+  "code": "DJZYG",
+  "id": "p43255",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "8I2S9",
+  "id": "p44030",
+  "probleme": "la solution ne gagne pas (-0.27)"
+ },
+ {
+  "code": "W27L4",
+  "id": "p44668",
+  "probleme": "la solution ne gagne pas (0.18)"
+ },
+ {
+  "code": "2CWAK",
+  "id": "p45017",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "8TSRO",
+  "id": "p45234",
+  "probleme": "la solution ne gagne pas (-0.80)"
+ },
+ {
+  "code": "85ML4",
+  "id": "p45965",
+  "probleme": "la solution ne gagne pas (-4.03)"
+ },
+ {
+  "code": "KNQNQ",
+  "id": "p46171",
+  "probleme": "la solution ne gagne pas (0.18)"
+ },
+ {
+  "code": "91N0Z",
+  "id": "p46607",
+  "probleme": "la solution ne gagne pas (-0.56)"
+ },
+ {
+  "code": "5WY90",
+  "id": "p47618",
+  "probleme": "la solution ne gagne pas (0.86)"
+ },
+ {
+  "code": "BF7SL",
+  "id": "p49130",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "GZ452",
+  "id": "p49401",
+  "probleme": "la solution ne gagne pas (-6.76)"
+ },
+ {
+  "code": "W8Z0W",
+  "id": "p49714",
+  "probleme": "la solution ne gagne pas (-1.93)"
+ },
+ {
+  "code": "209RW",
+  "id": "p49756",
+  "probleme": "la solution ne gagne pas (0.41)"
+ },
+ {
+  "code": "A3R8E",
+  "id": "p50581",
+  "probleme": "la solution ne gagne pas (0.07)"
+ },
+ {
+  "code": "RUOYD",
+  "id": "p51143",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "T1PB9",
+  "id": "p51831",
+  "probleme": "la solution ne gagne pas (0.85)"
+ },
+ {
+  "code": "VQ9O6",
+  "id": "p51917",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "ONE1P",
+  "id": "p1478",
+  "probleme": "la solution ne gagne pas (-1.56)"
+ },
+ {
+  "code": "9HKHU",
+  "id": "p1847",
+  "probleme": "la solution ne gagne pas (0.26)"
+ },
+ {
+  "code": "KM54Z",
+  "id": "p2568",
+  "probleme": "la solution ne gagne pas (0.36)"
+ },
+ {
+  "code": "11KDA",
+  "id": "p3299",
+  "probleme": "la solution ne gagne pas (-2.06)"
+ },
+ {
+  "code": "0ECZJ",
+  "id": "p3944",
+  "probleme": "la solution ne gagne pas (0.02)"
+ },
+ {
+  "code": "ET4VZ",
+  "id": "p4267",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "JW0L8",
+  "id": "p4309",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "W18UN",
+  "id": "p5281",
+  "probleme": "la solution ne gagne pas (0.23)"
+ },
+ {
+  "code": "4NJOK",
+  "id": "p6044",
+  "probleme": "la solution ne gagne pas (0.27)"
+ },
+ {
+  "code": "HIJD9",
+  "id": "p6827",
+  "probleme": "la solution ne gagne pas (-5.82)"
+ },
+ {
+  "code": "CBFUJ",
+  "id": "p6921",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "MST3X",
+  "id": "p8800",
+  "probleme": "la solution ne gagne pas (0.96)"
+ },
+ {
+  "code": "6G3F9",
+  "id": "p9246",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "97GDG",
+  "id": "p10137",
+  "probleme": "la solution ne gagne pas (0.30)"
+ },
+ {
+  "code": "4VB1J",
+  "id": "p10403",
+  "probleme": "la solution ne gagne pas (-0.04)"
+ },
+ {
+  "code": "DQ6PI",
+  "id": "p11310",
+  "probleme": "la solution ne gagne pas (0.47)"
+ },
+ {
+  "code": "670TL",
+  "id": "p13287",
+  "probleme": "la solution ne gagne pas (-6.11)"
+ },
+ {
+  "code": "RGUI4",
+  "id": "p13309",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1PFMH",
+  "id": "p13906",
+  "probleme": "la solution ne gagne pas (-4.60)"
+ },
+ {
+  "code": "OMBS2",
+  "id": "p14473",
+  "probleme": "la solution ne gagne pas (0.06)"
+ },
+ {
+  "code": "JT5VW",
+  "id": "p16401",
+  "probleme": "la solution ne gagne pas (-0.45)"
+ },
+ {
+  "code": "CGB46",
+  "id": "p18282",
+  "probleme": "la solution ne gagne pas (-1.39)"
+ },
+ {
+  "code": "MCH5R",
+  "id": "p19109",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "MKMEY",
+  "id": "p19232",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "0T0O9",
+  "id": "p19644",
+  "probleme": "la solution ne gagne pas (-1.41)"
+ },
+ {
+  "code": "ULONZ",
+  "id": "p19891",
+  "probleme": "la solution ne gagne pas (0.83)"
+ },
+ {
+  "code": "XXEQQ",
+  "id": "p20561",
+  "probleme": "la solution ne gagne pas (0.71)"
+ },
+ {
+  "code": "9SLF9",
+  "id": "p20825",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "O6WR8",
+  "id": "p21156",
+  "probleme": "la solution ne gagne pas (-1.34)"
+ },
+ {
+  "code": "I82Q1",
+  "id": "p22081",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "4QWFY",
+  "id": "p22780",
+  "probleme": "la solution ne gagne pas (0.78)"
+ },
+ {
+  "code": "UCBJU",
+  "id": "p22855",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "KLFLW",
+  "id": "p23175",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "NJSNP",
+  "id": "p23456",
+  "probleme": "la solution ne gagne pas (-4.92)"
+ },
+ {
+  "code": "3FIO1",
+  "id": "p23536",
+  "probleme": "la solution ne gagne pas (-2.95)"
+ },
+ {
+  "code": "OR7L6",
+  "id": "p23757",
+  "probleme": "la solution ne gagne pas (0.24)"
+ },
+ {
+  "code": "MD85H",
+  "id": "p24584",
+  "probleme": "la solution ne gagne pas (0.38)"
+ },
+ {
+  "code": "KHYTT",
+  "id": "p25022",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "7YLWL",
+  "id": "p25212",
+  "probleme": "la solution ne gagne pas (-0.60)"
+ },
+ {
+  "code": "8PIGH",
+  "id": "p25334",
+  "probleme": "la solution ne gagne pas (-1.82)"
+ },
+ {
+  "code": "HW6DA",
+  "id": "p25922",
+  "probleme": "la solution ne gagne pas (-3.27)"
+ },
+ {
+  "code": "B4ZY4",
+  "id": "p26307",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "X5Y92",
+  "id": "p26442",
+  "probleme": "la solution ne gagne pas (0.64)"
+ },
+ {
+  "code": "74G11",
+  "id": "p26783",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "EC17G",
+  "id": "p26946",
+  "probleme": "la solution ne gagne pas (0.73)"
+ },
+ {
+  "code": "Q0GK2",
+  "id": "p26987",
+  "probleme": "la solution ne gagne pas (0.21)"
+ },
+ {
+  "code": "212ID",
+  "id": "p27244",
+  "probleme": "la solution ne gagne pas (-0.20)"
+ },
+ {
+  "code": "7ZHJO",
+  "id": "p27412",
+  "probleme": "la solution ne gagne pas (-0.36)"
+ },
+ {
+  "code": "GAU15",
+  "id": "p28055",
+  "probleme": "la solution ne gagne pas (-1.20)"
+ },
+ {
+  "code": "3ZB6D",
+  "id": "p28122",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "2D1ZW",
+  "id": "p28575",
+  "probleme": "la solution ne gagne pas (-3.94)"
+ },
+ {
+  "code": "B3X54",
+  "id": "p29657",
+  "probleme": "la solution ne gagne pas (-0.45)"
+ },
+ {
+  "code": "DXDZ7",
+  "id": "p29994",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "5K1LS",
+  "id": "p30126",
+  "probleme": "la solution ne gagne pas (-4.27)"
+ },
+ {
+  "code": "96IXJ",
+  "id": "p30280",
+  "probleme": "la solution ne gagne pas (-0.32)"
+ },
+ {
+  "code": "6VYYA",
+  "id": "p30647",
+  "probleme": "la solution ne gagne pas (-0.51)"
+ },
+ {
+  "code": "RDXIT",
+  "id": "p30836",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "388RC",
+  "id": "p30860",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "HJAY3",
+  "id": "p31275",
+  "probleme": "la solution ne gagne pas (-3.41)"
+ },
+ {
+  "code": "ZD4QE",
+  "id": "p32016",
+  "probleme": "la solution ne gagne pas (-0.30)"
+ },
+ {
+  "code": "LWTX6",
+  "id": "p32127",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "FH9PP",
+  "id": "p32163",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "BD7SP",
+  "id": "p32222",
+  "probleme": "la solution ne gagne pas (0.25)"
+ },
+ {
+  "code": "SBYE3",
+  "id": "p32549",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "HN4OL",
+  "id": "p33692",
+  "probleme": "la solution ne gagne pas (0.49)"
+ },
+ {
+  "code": "3ML9Y",
+  "id": "p33834",
+  "probleme": "la solution ne gagne pas (0.74)"
+ },
+ {
+  "code": "P96EP",
+  "id": "p34026",
+  "probleme": "la solution ne gagne pas (0.41)"
+ },
+ {
+  "code": "GHJNR",
+  "id": "p35017",
+  "probleme": "la solution ne gagne pas (0.69)"
+ },
+ {
+  "code": "UAVJR",
+  "id": "p35327",
+  "probleme": "la solution ne gagne pas (0.50)"
+ },
+ {
+  "code": "MEZI0",
+  "id": "p35742",
+  "probleme": "la solution ne gagne pas (0.82)"
+ },
+ {
+  "code": "4MU7E",
+  "id": "p36264",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "5SYJX",
+  "id": "p38720",
+  "probleme": "la solution ne gagne pas (-6.30)"
+ },
+ {
+  "code": "PKTA6",
+  "id": "p38915",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "SWCHY",
+  "id": "p39159",
+  "probleme": "la solution ne gagne pas (0.80)"
+ },
+ {
+  "code": "S21ZE",
+  "id": "p39589",
+  "probleme": "la solution ne gagne pas (-0.16)"
+ },
+ {
+  "code": "2J4W9",
+  "id": "p39778",
+  "probleme": "la solution ne gagne pas (-0.01)"
+ },
+ {
+  "code": "8NHIS",
+  "id": "p39785",
+  "probleme": "la solution ne gagne pas (0.15)"
+ },
+ {
+  "code": "LYTCT",
+  "id": "p39906",
+  "probleme": "la solution ne gagne pas (0.02)"
+ },
+ {
+  "code": "N1VFS",
+  "id": "p40250",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "GATJY",
+  "id": "p40856",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "GJ2NB",
+  "id": "p40922",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "TQ2U7",
+  "id": "p41098",
+  "probleme": "la solution ne gagne pas (0.57)"
+ },
+ {
+  "code": "66ERM",
+  "id": "p41272",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "V1SWB",
+  "id": "p42012",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "P7JPY",
+  "id": "p42288",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1MXAF",
+  "id": "p42978",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "ZY6N3",
+  "id": "p44135",
+  "probleme": "la solution ne gagne pas (0.29)"
+ },
+ {
+  "code": "W4TIX",
+  "id": "p44150",
+  "probleme": "la solution ne gagne pas (-3.44)"
+ },
+ {
+  "code": "QBRSQ",
+  "id": "p44669",
+  "probleme": "la solution ne gagne pas (0.83)"
+ },
+ {
+  "code": "VQCCK",
+  "id": "p44886",
+  "probleme": "la solution ne gagne pas (0.94)"
+ },
+ {
+  "code": "T3PWP",
+  "id": "p44923",
+  "probleme": "la solution ne gagne pas (0.98)"
+ },
+ {
+  "code": "S3ZAR",
+  "id": "p45709",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "5ULKA",
+  "id": "p46751",
+  "probleme": "la solution ne gagne pas (-1.63)"
+ },
+ {
+  "code": "AW59X",
+  "id": "p48035",
+  "probleme": "la solution ne gagne pas (0.35)"
+ },
+ {
+  "code": "VKY6A",
+  "id": "p48391",
+  "probleme": "la solution ne gagne pas (-3.81)"
+ },
+ {
+  "code": "3ZD9C",
+  "id": "p48957",
+  "probleme": "la solution ne gagne pas (0.08)"
+ },
+ {
+  "code": "3MSBX",
+  "id": "p49029",
+  "probleme": "la solution ne gagne pas (0.28)"
+ },
+ {
+  "code": "LZSQ6",
+  "id": "p49706",
+  "probleme": "la solution ne gagne pas (-6.23)"
+ },
+ {
+  "code": "DBU88",
+  "id": "p50206",
+  "probleme": "la solution ne gagne pas (0.93)"
+ },
+ {
+  "code": "83QNS",
+  "id": "p50635",
+  "probleme": "la solution ne gagne pas (-0.15)"
+ },
+ {
+  "code": "Y1N8U",
+  "id": "p50790",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "ABVNG",
+  "id": "p51076",
+  "probleme": "la solution ne gagne pas (-1.07)"
+ },
+ {
+  "code": "S4V51",
+  "id": "p51121",
+  "probleme": "la solution ne gagne pas (-2.55)"
+ },
+ {
+  "code": "I48HE",
+  "id": "p51445",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "W4IJF",
+  "id": "p51823",
+  "probleme": "la solution ne gagne pas (-1.18)"
+ },
+ {
+  "code": "XBJKH",
+  "id": "p562",
+  "probleme": "la solution ne gagne pas (-0.48)"
+ },
+ {
+  "code": "J7235",
+  "id": "p1917",
+  "probleme": "la solution ne gagne pas (-3.04)"
+ },
+ {
+  "code": "18J8I",
+  "id": "p3162",
+  "probleme": "la solution ne gagne pas (0.21)"
+ },
+ {
+  "code": "QU08Q",
+  "id": "p3257",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OL67U",
+  "id": "p3434",
+  "probleme": "la solution ne gagne pas (-0.56)"
+ },
+ {
+  "code": "Q3T3W",
+  "id": "p3525",
+  "probleme": "la solution ne gagne pas (0.60)"
+ },
+ {
+  "code": "J7UKV",
+  "id": "p5705",
+  "probleme": "la solution ne gagne pas (-0.88)"
+ },
+ {
+  "code": "4YZPL",
+  "id": "p6184",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "CULP0",
+  "id": "p6606",
+  "probleme": "la solution ne gagne pas (0.97)"
+ },
+ {
+  "code": "4NEKY",
+  "id": "p7100",
+  "probleme": "la solution ne gagne pas (0.74)"
+ },
+ {
+  "code": "IRHR3",
+  "id": "p8976",
+  "probleme": "la solution ne gagne pas (0.42)"
+ },
+ {
+  "code": "IUWEB",
+  "id": "p9759",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "BUNKN",
+  "id": "p10788",
+  "probleme": "la solution ne gagne pas (0.38)"
+ },
+ {
+  "code": "9LEAP",
+  "id": "p11276",
+  "probleme": "la solution ne gagne pas (-2.64)"
+ },
+ {
+  "code": "OI0WV",
+  "id": "p11675",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "WY4EJ",
+  "id": "p11800",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "X403M",
+  "id": "p12665",
+  "probleme": "la solution ne gagne pas (0.87)"
+ },
+ {
+  "code": "VQU4N",
+  "id": "p13736",
+  "probleme": "la solution ne gagne pas (0.99)"
+ },
+ {
+  "code": "CT9OD",
+  "id": "p13796",
+  "probleme": "la solution ne gagne pas (-0.99)"
+ },
+ {
+  "code": "55RK4",
+  "id": "p14358",
+  "probleme": "la solution ne gagne pas (0.37)"
+ },
+ {
+  "code": "K65S1",
+  "id": "p14457",
+  "probleme": "la solution ne gagne pas (0.46)"
+ },
+ {
+  "code": "N36Z2",
+  "id": "p15490",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "GU764",
+  "id": "p15911",
+  "probleme": "la solution ne gagne pas (0.44)"
+ },
+ {
+  "code": "YLZ3J",
+  "id": "p16441",
+  "probleme": "la solution ne gagne pas (-0.07)"
+ },
+ {
+  "code": "WUBLC",
+  "id": "p17018",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "BQZU7",
+  "id": "p19189",
+  "probleme": "la solution ne gagne pas (-0.44)"
+ },
+ {
+  "code": "I8EM8",
+  "id": "p19645",
+  "probleme": "la solution ne gagne pas (0.62)"
+ },
+ {
+  "code": "5XROJ",
+  "id": "p20419",
+  "probleme": "la solution ne gagne pas (-5.88)"
+ },
+ {
+  "code": "RV69V",
+  "id": "p20599",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "CLW5X",
+  "id": "p21157",
+  "probleme": "la solution ne gagne pas (-0.25)"
+ },
+ {
+  "code": "XJAID",
+  "id": "p21544",
+  "probleme": "la solution ne gagne pas (-1.58)"
+ },
+ {
+  "code": "6ORQY",
+  "id": "p22048",
+  "probleme": "la solution ne gagne pas (-6.12)"
+ },
+ {
+  "code": "2VLDX",
+  "id": "p22072",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "P0MXQ",
+  "id": "p22325",
+  "probleme": "la solution ne gagne pas (-2.15)"
+ },
+ {
+  "code": "H935F",
+  "id": "p22722",
+  "probleme": "la solution ne gagne pas (-0.47)"
+ },
+ {
+  "code": "571V1",
+  "id": "p23226",
+  "probleme": "la solution ne gagne pas (-1.55)"
+ },
+ {
+  "code": "33TT3",
+  "id": "p24430",
+  "probleme": "la solution ne gagne pas (-0.93)"
+ },
+ {
+  "code": "U98BX",
+  "id": "p24855",
+  "probleme": "la solution ne gagne pas (0.98)"
+ },
+ {
+  "code": "47W3W",
+  "id": "p25109",
+  "probleme": "la solution ne gagne pas (-1.73)"
+ },
+ {
+  "code": "HXNJV",
+  "id": "p25335",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "733GP",
+  "id": "p25353",
+  "probleme": "la solution ne gagne pas (-4.76)"
+ },
+ {
+  "code": "7LBRY",
+  "id": "p25701",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "VTFSM",
+  "id": "p25789",
+  "probleme": "la solution ne gagne pas (-1.35)"
+ },
+ {
+  "code": "3TKB9",
+  "id": "p27506",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "4TXZ4",
+  "id": "p27862",
+  "probleme": "la solution ne gagne pas (-1.32)"
+ },
+ {
+  "code": "ZHCG0",
+  "id": "p28231",
+  "probleme": "la solution ne gagne pas (-3.47)"
+ },
+ {
+  "code": "8KVU9",
+  "id": "p28545",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OTVIX",
+  "id": "p28783",
+  "probleme": "la solution ne gagne pas (-2.34)"
+ },
+ {
+  "code": "PE79H",
+  "id": "p30698",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "R3QGF",
+  "id": "p31165",
+  "probleme": "la solution ne gagne pas (-0.34)"
+ },
+ {
+  "code": "A1ZG4",
+  "id": "p32252",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "Q4HW2",
+  "id": "p32269",
+  "probleme": "la solution ne gagne pas (0.33)"
+ },
+ {
+  "code": "D0PW3",
+  "id": "p33059",
+  "probleme": "la solution ne gagne pas (-6.47)"
+ },
+ {
+  "code": "L40XJ",
+  "id": "p33215",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "FX5NI",
+  "id": "p33693",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "7PPXV",
+  "id": "p33850",
+  "probleme": "la solution ne gagne pas (-11.15)"
+ },
+ {
+  "code": "C5YB7",
+  "id": "p34166",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "GTXMY",
+  "id": "p34571",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "FNC0D",
+  "id": "p35001",
+  "probleme": "la solution ne gagne pas (-3.69)"
+ },
+ {
+  "code": "TR7BA",
+  "id": "p35758",
+  "probleme": "la solution ne gagne pas (0.26)"
+ },
+ {
+  "code": "AJB3F",
+  "id": "p35814",
+  "probleme": "la solution ne gagne pas (-1.90)"
+ },
+ {
+  "code": "TJZ77",
+  "id": "p36519",
+  "probleme": "la solution ne gagne pas (-0.01)"
+ },
+ {
+  "code": "MDLMK",
+  "id": "p36885",
+  "probleme": "la solution ne gagne pas (0.54)"
+ },
+ {
+  "code": "R37QS",
+  "id": "p37267",
+  "probleme": "la solution ne gagne pas (-14.06)"
+ },
+ {
+  "code": "JRRZI",
+  "id": "p37370",
+  "probleme": "la solution ne gagne pas (-1.65)"
+ },
+ {
+  "code": "XK9VR",
+  "id": "p37636",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "3U2EI",
+  "id": "p38074",
+  "probleme": "la solution ne gagne pas (-0.36)"
+ },
+ {
+  "code": "CTODR",
+  "id": "p39932",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "2MXWK",
+  "id": "p40243",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "R9PCO",
+  "id": "p40414",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "8V3N4",
+  "id": "p40535",
+  "probleme": "la solution ne gagne pas (-1.51)"
+ },
+ {
+  "code": "U6NJ7",
+  "id": "p40917",
+  "probleme": "la solution ne gagne pas (-1.71)"
+ },
+ {
+  "code": "HGY5E",
+  "id": "p41780",
+  "probleme": "la solution ne gagne pas (0.05)"
+ },
+ {
+  "code": "EA5A1",
+  "id": "p41854",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OLAU5",
+  "id": "p42886",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "UN877",
+  "id": "p43619",
+  "probleme": "la solution ne gagne pas (0.77)"
+ },
+ {
+  "code": "8ZD7V",
+  "id": "p43678",
+  "probleme": "la solution ne gagne pas (0.83)"
+ },
+ {
+  "code": "W6LLD",
+  "id": "p43709",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "Z3KPM",
+  "id": "p44305",
+  "probleme": "la solution ne gagne pas (0.65)"
+ },
+ {
+  "code": "U1L7I",
+  "id": "p45523",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "ZL10Y",
+  "id": "p45555",
+  "probleme": "la solution ne gagne pas (0.98)"
+ },
+ {
+  "code": "FJJ7Z",
+  "id": "p45836",
+  "probleme": "la solution ne gagne pas (-0.08)"
+ },
+ {
+  "code": "YF8WL",
+  "id": "p46710",
+  "probleme": "la solution ne gagne pas (-3.82)"
+ },
+ {
+  "code": "G2STX",
+  "id": "p46796",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "58NW9",
+  "id": "p47595",
+  "probleme": "la solution ne gagne pas (-0.04)"
+ },
+ {
+  "code": "US0YX",
+  "id": "p48118",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "QB619",
+  "id": "p48768",
+  "probleme": "la solution ne gagne pas (-3.03)"
+ },
+ {
+  "code": "TVGL5",
+  "id": "p49019",
+  "probleme": "la solution ne gagne pas (-1.07)"
+ },
+ {
+  "code": "CWS36",
+  "id": "p49133",
+  "probleme": "la solution ne gagne pas (-0.06)"
+ },
+ {
+  "code": "SE7GP",
+  "id": "p49156",
+  "probleme": "la solution ne gagne pas (-0.96)"
+ },
+ {
+  "code": "0RSHV",
+  "id": "p49468",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "RI3P1",
+  "id": "p49580",
+  "probleme": "la solution ne gagne pas (0.79)"
+ },
+ {
+  "code": "HULL7",
+  "id": "p49596",
+  "probleme": "la solution ne gagne pas (-0.31)"
+ },
+ {
+  "code": "KQEYR",
+  "id": "p49789",
+  "probleme": "la solution ne gagne pas (0.97)"
+ },
+ {
+  "code": "EGHYS",
+  "id": "p50224",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OV8JP",
+  "id": "p50933",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "J2WTP",
+  "id": "p51499",
+  "probleme": "la solution ne gagne pas (-4.21)"
+ },
+ {
+  "code": "22SDS",
+  "id": "p188",
+  "probleme": "la solution ne gagne pas (-4.26)"
+ },
+ {
+  "code": "F8ODN",
+  "id": "p533",
+  "probleme": "la solution ne gagne pas (0.31)"
+ },
+ {
+  "code": "PZMSG",
+  "id": "p1644",
+  "probleme": "la solution ne gagne pas (0.93)"
+ },
+ {
+  "code": "2VH9C",
+  "id": "p2186",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OX84F",
+  "id": "p2832",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "N93KF",
+  "id": "p3157",
+  "probleme": "la solution ne gagne pas (0.45)"
+ },
+ {
+  "code": "FTL7Z",
+  "id": "p3719",
+  "probleme": "la solution ne gagne pas (0.35)"
+ },
+ {
+  "code": "B99S3",
+  "id": "p3971",
+  "probleme": "la solution ne gagne pas (0.50)"
+ },
+ {
+  "code": "GVC5Y",
+  "id": "p4046",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "FLKCP",
+  "id": "p4940",
+  "probleme": "la solution ne gagne pas (0.49)"
+ },
+ {
+  "code": "QCJDN",
+  "id": "p5004",
+  "probleme": "la solution ne gagne pas (-4.61)"
+ },
+ {
+  "code": "9YGLS",
+  "id": "p5517",
+  "probleme": "la solution ne gagne pas (0.35)"
+ },
+ {
+  "code": "IMVUN",
+  "id": "p5608",
+  "probleme": "la solution ne gagne pas (-2.77)"
+ },
+ {
+  "code": "AQO8O",
+  "id": "p5741",
+  "probleme": "la solution ne gagne pas (0.19)"
+ },
+ {
+  "code": "E3A7C",
+  "id": "p6110",
+  "probleme": "la solution ne gagne pas (0.75)"
+ },
+ {
+  "code": "X40MT",
+  "id": "p6244",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "GJPD5",
+  "id": "p6607",
+  "probleme": "la solution ne gagne pas (-0.31)"
+ },
+ {
+  "code": "6BDCJ",
+  "id": "p7799",
+  "probleme": "la solution ne gagne pas (0.94)"
+ },
+ {
+  "code": "KXULO",
+  "id": "p8257",
+  "probleme": "la solution ne gagne pas (-0.76)"
+ },
+ {
+  "code": "74E77",
+  "id": "p8709",
+  "probleme": "la solution ne gagne pas (-5.63)"
+ },
+ {
+  "code": "0U4TE",
+  "id": "p8802",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "3BF1U",
+  "id": "p8831",
+  "probleme": "la solution ne gagne pas (0.29)"
+ },
+ {
+  "code": "BXOAE",
+  "id": "p8877",
+  "probleme": "la solution ne gagne pas (-4.31)"
+ },
+ {
+  "code": "PR9SM",
+  "id": "p8947",
+  "probleme": "la solution ne gagne pas (0.69)"
+ },
+ {
+  "code": "YKLS6",
+  "id": "p9299",
+  "probleme": "la solution ne gagne pas (0.43)"
+ },
+ {
+  "code": "0MURN",
+  "id": "p9305",
+  "probleme": "la solution ne gagne pas (0.64)"
+ },
+ {
+  "code": "TEM1Z",
+  "id": "p9768",
+  "probleme": "la solution ne gagne pas (0.95)"
+ },
+ {
+  "code": "T6HYB",
+  "id": "p10133",
+  "probleme": "la solution ne gagne pas (-0.64)"
+ },
+ {
+  "code": "JHUHI",
+  "id": "p11374",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "622KE",
+  "id": "p11817",
+  "probleme": "la solution ne gagne pas (0.21)"
+ },
+ {
+  "code": "L2Z2Q",
+  "id": "p11862",
+  "probleme": "la solution ne gagne pas (0.65)"
+ },
+ {
+  "code": "0DASA",
+  "id": "p12046",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "Z4GQG",
+  "id": "p12581",
+  "probleme": "la solution ne gagne pas (-0.12)"
+ },
+ {
+  "code": "6F16R",
+  "id": "p14049",
+  "probleme": "la solution ne gagne pas (0.33)"
+ },
+ {
+  "code": "PBN0D",
+  "id": "p14496",
+  "probleme": "la solution ne gagne pas (-0.19)"
+ },
+ {
+  "code": "5ONJU",
+  "id": "p15544",
+  "probleme": "la solution ne gagne pas (-10.45)"
+ },
+ {
+  "code": "SWEAY",
+  "id": "p15788",
+  "probleme": "la solution ne gagne pas (0.54)"
+ },
+ {
+  "code": "07KWP",
+  "id": "p15944",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "3JRIC",
+  "id": "p16216",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "MC6DQ",
+  "id": "p16419",
+  "probleme": "la solution ne gagne pas (0.96)"
+ },
+ {
+  "code": "8900H",
+  "id": "p16985",
+  "probleme": "la solution ne gagne pas (-0.55)"
+ },
+ {
+  "code": "4W2RG",
+  "id": "p17778",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "18A7H",
+  "id": "p18319",
+  "probleme": "la solution ne gagne pas (0.76)"
+ },
+ {
+  "code": "6HATF",
+  "id": "p18855",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "DHX38",
+  "id": "p19574",
+  "probleme": "la solution ne gagne pas (-0.52)"
+ },
+ {
+  "code": "1F4SX",
+  "id": "p20146",
+  "probleme": "la solution ne gagne pas (-5.88)"
+ },
+ {
+  "code": "G7ZP2",
+  "id": "p20326",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "6EBO1",
+  "id": "p20432",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "5W4L2",
+  "id": "p20600",
+  "probleme": "la solution ne gagne pas (-0.37)"
+ },
+ {
+  "code": "DGMBZ",
+  "id": "p20714",
+  "probleme": "la solution ne gagne pas (-0.84)"
+ },
+ {
+  "code": "YEKZ4",
+  "id": "p20729",
+  "probleme": "la solution ne gagne pas (0.96)"
+ },
+ {
+  "code": "GNHR5",
+  "id": "p21692",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "IURJJ",
+  "id": "p21731",
+  "probleme": "la solution ne gagne pas (0.42)"
+ },
+ {
+  "code": "1002X",
+  "id": "p21748",
+  "probleme": "la solution ne gagne pas (0.87)"
+ },
+ {
+  "code": "I4L68",
+  "id": "p21819",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "TI62F",
+  "id": "p22505",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "G9U6G",
+  "id": "p22998",
+  "probleme": "la solution ne gagne pas (-0.08)"
+ },
+ {
+  "code": "DML4V",
+  "id": "p23038",
+  "probleme": "la solution ne gagne pas (0.47)"
+ },
+ {
+  "code": "DKI10",
+  "id": "p23227",
+  "probleme": "la solution ne gagne pas (-3.32)"
+ },
+ {
+  "code": "MLW37",
+  "id": "p23408",
+  "probleme": "la solution ne gagne pas (0.38)"
+ },
+ {
+  "code": "EOYHF",
+  "id": "p24225",
+  "probleme": "la solution ne gagne pas (-6.47)"
+ },
+ {
+  "code": "LVEZM",
+  "id": "p26025",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "VSGQE",
+  "id": "p26100",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1NT9W",
+  "id": "p26590",
+  "probleme": "la solution ne gagne pas (0.78)"
+ },
+ {
+  "code": "UMWDF",
+  "id": "p26711",
+  "probleme": "la solution ne gagne pas (0.57)"
+ },
+ {
+  "code": "2A6R5",
+  "id": "p27931",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "OA32Y",
+  "id": "p28153",
+  "probleme": "la solution ne gagne pas (0.67)"
+ },
+ {
+  "code": "ONOHY",
+  "id": "p28375",
+  "probleme": "la solution ne gagne pas (0.78)"
+ },
+ {
+  "code": "NPDBZ",
+  "id": "p28513",
+  "probleme": "la solution ne gagne pas (-2.11)"
+ },
+ {
+  "code": "ALOJ8",
+  "id": "p29286",
+  "probleme": "la solution ne gagne pas (0.93)"
+ },
+ {
+  "code": "25M1X",
+  "id": "p30074",
+  "probleme": "la solution ne gagne pas (0.58)"
+ },
+ {
+  "code": "F2Z65",
+  "id": "p30226",
+  "probleme": "la solution ne gagne pas (-5.22)"
+ },
+ {
+  "code": "F7YXW",
+  "id": "p30532",
+  "probleme": "la solution ne gagne pas (-0.05)"
+ },
+ {
+  "code": "FUPOT",
+  "id": "p31594",
+  "probleme": "la solution ne gagne pas (-5.37)"
+ },
+ {
+  "code": "Y0272",
+  "id": "p31852",
+  "probleme": "la solution ne gagne pas (0.36)"
+ },
+ {
+  "code": "1G30G",
+  "id": "p32854",
+  "probleme": "la solution ne gagne pas (-3.92)"
+ },
+ {
+  "code": "Z4IV5",
+  "id": "p33404",
+  "probleme": "la solution ne gagne pas (0.57)"
+ },
+ {
+  "code": "A0KLR",
+  "id": "p33756",
+  "probleme": "la solution ne gagne pas (0.63)"
+ },
+ {
+  "code": "XBCAK",
+  "id": "p35500",
+  "probleme": "la solution ne gagne pas (-3.46)"
+ },
+ {
+  "code": "4YYUJ",
+  "id": "p35563",
+  "probleme": "la solution ne gagne pas (-0.03)"
+ },
+ {
+  "code": "UAN1E",
+  "id": "p36209",
+  "probleme": "la solution ne gagne pas (0.91)"
+ },
+ {
+  "code": "R3N9G",
+  "id": "p36540",
+  "probleme": "la solution ne gagne pas (-0.38)"
+ },
+ {
+  "code": "EN4OK",
+  "id": "p36636",
+  "probleme": "la solution ne gagne pas (0.15)"
+ },
+ {
+  "code": "HI7OB",
+  "id": "p36964",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "Y7I33",
+  "id": "p37458",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "BG0BJ",
+  "id": "p37494",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "CCJXO",
+  "id": "p37646",
+  "probleme": "la solution ne gagne pas (0.97)"
+ },
+ {
+  "code": "5EGQO",
+  "id": "p37854",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "4GURH",
+  "id": "p39197",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "IQWOD",
+  "id": "p39398",
+  "probleme": "la solution ne gagne pas (-3.25)"
+ },
+ {
+  "code": "6UFWN",
+  "id": "p39495",
+  "probleme": "la solution ne gagne pas (-3.94)"
+ },
+ {
+  "code": "6TRKL",
+  "id": "p39872",
+  "probleme": "la solution ne gagne pas (-0.05)"
+ },
+ {
+  "code": "Q1PF4",
+  "id": "p40206",
+  "probleme": "la solution ne gagne pas (0.23)"
+ },
+ {
+  "code": "VO9VU",
+  "id": "p40317",
+  "probleme": "la solution ne gagne pas (-0.44)"
+ },
+ {
+  "code": "USSE3",
+  "id": "p40510",
+  "probleme": "la solution ne gagne pas (0.32)"
+ },
+ {
+  "code": "O57IT",
+  "id": "p41673",
+  "probleme": "la solution ne gagne pas (0.89)"
+ },
+ {
+  "code": "H3HLI",
+  "id": "p41811",
+  "probleme": "la solution ne gagne pas (-1.59)"
+ },
+ {
+  "code": "A4JCP",
+  "id": "p41818",
+  "probleme": "la solution ne gagne pas (-0.95)"
+ },
+ {
+  "code": "CNDA6",
+  "id": "p42614",
+  "probleme": "la solution ne gagne pas (0.54)"
+ },
+ {
+  "code": "JYXLU",
+  "id": "p42844",
+  "probleme": "la solution ne gagne pas (0.49)"
+ },
+ {
+  "code": "8VI1W",
+  "id": "p42992",
+  "probleme": "la solution ne gagne pas (0.83)"
+ },
+ {
+  "code": "6MU9V",
+  "id": "p43225",
+  "probleme": "la solution ne gagne pas (0.91)"
+ },
+ {
+  "code": "AGEWY",
+  "id": "p43333",
+  "probleme": "la solution ne gagne pas (-0.27)"
+ },
+ {
+  "code": "MDI8T",
+  "id": "p45430",
+  "probleme": "la solution ne gagne pas (-7.92)"
+ },
+ {
+  "code": "LU60I",
+  "id": "p46005",
+  "probleme": "la solution ne gagne pas (-1.16)"
+ },
+ {
+  "code": "T91OQ",
+  "id": "p47122",
+  "probleme": "la solution ne gagne pas (-2.92)"
+ },
+ {
+  "code": "E367S",
+  "id": "p47736",
+  "probleme": "la solution ne gagne pas (-1.94)"
+ },
+ {
+  "code": "W4DZH",
+  "id": "p48011",
+  "probleme": "la solution ne gagne pas (-0.19)"
+ },
+ {
+  "code": "G54QM",
+  "id": "p49806",
+  "probleme": "la solution ne gagne pas (-1.30)"
+ },
+ {
+  "code": "5O7GN",
+  "id": "p49866",
+  "probleme": "la solution ne gagne pas (-5.71)"
+ },
+ {
+  "code": "4M4F9",
+  "id": "p50225",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1QAQM",
+  "id": "p50555",
+  "probleme": "la solution ne gagne pas (-1.83)"
+ },
+ {
+  "code": "BCN8N",
+  "id": "p50774",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "2CILW",
+  "id": "p50792",
+  "probleme": "la solution ne gagne pas (0.13)"
+ },
+ {
+  "code": "YR64D",
+  "id": "p50892",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "VC5X0",
+  "id": "p50997",
+  "probleme": "la solution ne gagne pas (-0.50)"
+ },
+ {
+  "code": "CR8DP",
+  "id": "p51254",
+  "probleme": "la solution ne gagne pas (0.07)"
+ },
+ {
+  "code": "UQL8H",
+  "id": "p232",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "1Q8S0",
+  "id": "p1744",
+  "probleme": "la solution ne gagne pas (-1.13)"
+ },
+ {
+  "code": "P7HIV",
+  "id": "p2187",
+  "probleme": "la solution ne gagne pas (0.03)"
+ },
+ {
+  "code": "MOBTJ",
+  "id": "p2317",
+  "probleme": "la solution ne gagne pas (-0.24)"
+ },
+ {
+  "code": "HFW6C",
+  "id": "p2716",
+  "probleme": "la solution ne gagne pas (0.79)"
+ },
+ {
+  "code": "8IX9A",
+  "id": "p3195",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "7YRAF",
+  "id": "p3500",
+  "probleme": "la solution ne gagne pas (-0.26)"
+ },
+ {
+  "code": "H7CI5",
+  "id": "p5046",
+  "probleme": "la solution ne gagne pas (0.96)"
+ },
+ {
+  "code": "NRFR0",
+  "id": "p5247",
+  "probleme": "la solution ne gagne pas (-0.08)"
+ },
+ {
+  "code": "JNSOQ",
+  "id": "p5315",
+  "probleme": "la solution ne gagne pas (-0.22)"
+ },
+ {
+  "code": "QDJH6",
+  "id": "p5496",
+  "probleme": "la solution ne gagne pas (0.84)"
+ },
+ {
+  "code": "E2BEA",
+  "id": "p5630",
+  "probleme": "la solution ne gagne pas (0.95)"
+ },
+ {
+  "code": "5TPMY",
+  "id": "p5721",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "A24DP",
+  "id": "p5804",
+  "probleme": "la solution ne gagne pas (0.93)"
+ },
+ {
+  "code": "DAXYH",
+  "id": "p7757",
+  "probleme": "la solution ne gagne pas (-1.34)"
+ },
+ {
+  "code": "SUH6O",
+  "id": "p8258",
+  "probleme": "la solution ne gagne pas (-0.21)"
+ },
+ {
+  "code": "85MVR",
+  "id": "p9181",
+  "probleme": "la solution ne gagne pas (-0.48)"
+ },
+ {
+  "code": "W85MP",
+  "id": "p9462",
+  "probleme": "la solution ne gagne pas (0.91)"
+ },
+ {
+  "code": "GTJXS",
+  "id": "p9776",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "LTHO5",
+  "id": "p10556",
+  "probleme": "la solution ne gagne pas (0.73)"
+ },
+ {
+  "code": "O3QYR",
+  "id": "p12898",
+  "probleme": "la solution ne gagne pas (-5.91)"
+ },
+ {
+  "code": "OJY9Y",
+  "id": "p13256",
+  "probleme": "la solution ne gagne pas (0.17)"
+ },
+ {
+  "code": "DQP6B",
+  "id": "p13539",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "CB191",
+  "id": "p13614",
+  "probleme": "la solution ne gagne pas (-1.58)"
+ },
+ {
+  "code": "6F0BF",
+  "id": "p13765",
+  "probleme": "la solution ne gagne pas (-2.19)"
+ },
+ {
+  "code": "38AA2",
+  "id": "p13791",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "54I5X",
+  "id": "p14552",
+  "probleme": "la solution ne gagne pas (-4.07)"
+ },
+ {
+  "code": "8BSP8",
+  "id": "p14746",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "DAPJW",
+  "id": "p14871",
+  "probleme": "la solution ne gagne pas (-0.13)"
+ },
+ {
+  "code": "1W3NJ",
+  "id": "p14878",
+  "probleme": "la solution ne gagne pas (0.37)"
+ },
+ {
+  "code": "HUHKD",
+  "id": "p14983",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "3IXBH",
+  "id": "p20911",
+  "probleme": "la solution ne gagne pas (-4.02)"
+ },
+ {
+  "code": "7MQQD",
+  "id": "p21031",
+  "probleme": "la solution ne gagne pas (0.51)"
+ },
+ {
+  "code": "KWJZP",
+  "id": "p21732",
+  "probleme": "la solution ne gagne pas (0.47)"
+ },
+ {
+  "code": "A2XRA",
+  "id": "p24161",
+  "probleme": "la solution ne gagne pas (-0.86)"
+ },
+ {
+  "code": "KOD28",
+  "id": "p24537",
+  "probleme": "la solution ne gagne pas (0.91)"
+ },
+ {
+  "code": "4KC10",
+  "id": "p24713",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "TREY7",
+  "id": "p24733",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "NZYNC",
+  "id": "p25410",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "UYODL",
+  "id": "p25465",
+  "probleme": "la solution ne gagne pas (-3.95)"
+ },
+ {
+  "code": "IGDN7",
+  "id": "p25770",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "2A1A8",
+  "id": "p25940",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "EXNAX",
+  "id": "p27337",
+  "probleme": "la solution ne gagne pas (0.95)"
+ },
+ {
+  "code": "V8TCS",
+  "id": "p28990",
+  "probleme": "la solution ne gagne pas (0.48)"
+ },
+ {
+  "code": "B1KFD",
+  "id": "p29321",
+  "probleme": "la solution ne gagne pas (-0.71)"
+ },
+ {
+  "code": "72PTN",
+  "id": "p30264",
+  "probleme": "la solution ne gagne pas (0.41)"
+ },
+ {
+  "code": "X1ZLZ",
+  "id": "p30460",
+  "probleme": "la solution ne gagne pas (-1.57)"
+ },
+ {
+  "code": "ME0EK",
+  "id": "p30612",
+  "probleme": "la solution ne gagne pas (-2.07)"
+ },
+ {
+  "code": "UGGRO",
+  "id": "p30651",
+  "probleme": "la solution ne gagne pas (-1.65)"
+ },
+ {
+  "code": "YA8ZB",
+  "id": "p31182",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "1H7BY",
+  "id": "p31598",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "IB3FM",
+  "id": "p31955",
+  "probleme": "la solution ne gagne pas (0.55)"
+ },
+ {
+  "code": "X4JHC",
+  "id": "p32006",
+  "probleme": "la solution ne gagne pas (0.04)"
+ },
+ {
+  "code": "2CBOD",
+  "id": "p32210",
+  "probleme": "la solution ne gagne pas (0.20)"
+ },
+ {
+  "code": "VP992",
+  "id": "p32615",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "6W415",
+  "id": "p32815",
+  "probleme": "la solution ne gagne pas (-0.09)"
+ },
+ {
+  "code": "QIFFA",
+  "id": "p33422",
+  "probleme": "la solution ne gagne pas (-0.96)"
+ },
+ {
+  "code": "63EDX",
+  "id": "p34146",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "RQC9M",
+  "id": "p34900",
+  "probleme": "la solution ne gagne pas (0.83)"
+ },
+ {
+  "code": "ST4LF",
+  "id": "p35808",
+  "probleme": "la solution ne gagne pas (0.04)"
+ },
+ {
+  "code": "85YAW",
+  "id": "p36621",
+  "probleme": "la solution ne gagne pas (0.11)"
+ },
+ {
+  "code": "FY9GP",
+  "id": "p36761",
+  "probleme": "la solution ne gagne pas (-0.27)"
+ },
+ {
+  "code": "T1H09",
+  "id": "p38824",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "KZ5RZ",
+  "id": "p39125",
+  "probleme": "la solution ne gagne pas (0.28)"
+ },
+ {
+  "code": "UOVE6",
+  "id": "p39437",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "NUJLP",
+  "id": "p39489",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "6XSCQ",
+  "id": "p39681",
+  "probleme": "la solution ne gagne pas (0.40)"
+ },
+ {
+  "code": "K28YZ",
+  "id": "p39718",
+  "probleme": "la solution ne gagne pas (-1000.00)"
+ },
+ {
+  "code": "676Z8",
+  "id": "p39900",
+  "probleme": "la solution ne gagne pas (-0.82)"
+ },
+ {
+  "code": "U0FZL",
+  "id": "p39917",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "15WYF",
+  "id": "p39958",
+  "probleme": "la solution ne gagne pas (0.70)"
+ },
+ {
+  "code": "TRCHS",
+  "id": "p40760",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "8RR7V",
+  "id": "p41238",
+  "probleme": "la solution ne gagne pas (-3.18)"
+ },
+ {
+  "code": "MTQ5P",
+  "id": "p42966",
+  "probleme": "la solution ne gagne pas (0.29)"
+ },
+ {
+  "code": "R7ALX",
+  "id": "p43652",
+  "probleme": "la solution ne gagne pas (-2.70)"
+ },
+ {
+  "code": "VPLNE",
+  "id": "p44593",
+  "probleme": "la solution ne gagne pas (-1.76)"
+ },
+ {
+  "code": "4DSVV",
+  "id": "p44644",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "IMG0R",
+  "id": "p44697",
+  "probleme": "la solution ne gagne pas (0.53)"
+ },
+ {
+  "code": "2SEGE",
+  "id": "p44751",
+  "probleme": "la solution ne gagne pas (0.77)"
+ },
+ {
+  "code": "DLYGC",
+  "id": "p44970",
+  "probleme": "la solution ne gagne pas (-0.14)"
+ },
+ {
+  "code": "7XTFB",
+  "id": "p46151",
+  "probleme": "la solution ne gagne pas (-5.02)"
+ },
+ {
+  "code": "KV8W3",
+  "id": "p46500",
+  "probleme": "la solution ne gagne pas (0.79)"
+ },
+ {
+  "code": "31N34",
+  "id": "p46878",
+  "probleme": "la solution ne gagne pas (-0.40)"
+ },
+ {
+  "code": "GHGCR",
+  "id": "p47052",
+  "probleme": "la solution ne gagne pas (0.73)"
+ },
+ {
+  "code": "CJP5H",
+  "id": "p47096",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "K9151",
+  "id": "p47103",
+  "probleme": "la solution ne gagne pas (-7.56)"
+ },
+ {
+  "code": "EIPRB",
+  "id": "p48772",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "ILL7I",
+  "id": "p48903",
+  "probleme": "la solution ne gagne pas (0.68)"
+ },
+ {
+  "code": "HHMI1",
+  "id": "p48922",
+  "probleme": "la solution ne gagne pas (0.34)"
+ },
+ {
+  "code": "UL4WM",
+  "id": "p49023",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "JR0D6",
+  "id": "p49076",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "ZI8LU",
+  "id": "p49192",
+  "probleme": "la solution ne gagne pas (0.17)"
+ },
+ {
+  "code": "3MDRB",
+  "id": "p49323",
+  "probleme": "la solution ne gagne pas (0.98)"
+ },
+ {
+  "code": "013QY",
+  "id": "p49728",
+  "probleme": "la solution ne gagne pas (-5.48)"
+ },
+ {
+  "code": "HBQWQ",
+  "id": "p50303",
+  "probleme": "la solution ne gagne pas (0.06)"
+ },
+ {
+  "code": "1WMAJ",
+  "id": "p50509",
+  "probleme": "la solution ne gagne pas (0.16)"
+ },
+ {
+  "code": "7SSO6",
+  "id": "p51022",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "F1FWA",
+  "id": "p51287",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "8YYCN",
+  "id": "p51293",
+  "probleme": "la solution ne gagne pas (0.00)"
+ },
+ {
+  "code": "T3TGZ",
+  "id": "p51709",
+  "probleme": "la solution ne gagne pas (0.14)"
+ },
+ {
+  "code": "C7Z0M",
+  "id": "p52116",
+  "probleme": "la solution ne gagne pas (0.07)"
+ },
+ {
+  "code": "M7N8K",
+  "id": "p52185",
+  "probleme": "la solution ne gagne pas (0.00)"
+ }
+]

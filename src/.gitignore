@@ -1,0 +1,16 @@
+node_modules/
+site/
+puzzles.*.bak.json
+puzzles.retires.*.json
+puzzles.avant-alt.json
+fournee*.json
+fournee*.jsonl
+anciens_gains*.json
+anciens_gains*.jsonl
+audit_*.jsonl
+*.alternatives.json
+*.alternatives.jsonl
+*.filtre.jsonl
+*.rejetes.json
+*.retenus.json
+fix_bank_report.json

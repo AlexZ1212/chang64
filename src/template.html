@@ -255,12 +255,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    minmax(0,...) sur la colonne de texte : sans lui, le contenu impose sa
    largeur minimale et la grille deborde, le meme piege que la barre
    d'onglets. */
-.hero{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(20px,4vw,36px);align-items:center}
-.hero-text{min-width:0;position:relative}
+.hero{display:grid;grid-template-columns:minmax(0,1fr);column-gap:clamp(20px,4vw,36px);row-gap:0;align-items:center}
+.hero-lede,.hero-rest{min-width:0;position:relative}
 .hero-visual{display:none}
 @media(min-width:700px){
   .hero{grid-template-columns:minmax(0,1fr) min(340px,58vh,34%)}
   .hero-visual{display:block;min-width:0;position:relative;justify-self:end}
+  /* L'echiquier n'occupe QUE la premiere rangee, celle de l'accroche : c'est
+     ce qui le centre en hauteur sur le texte d'introduction et non sur tout
+     le hero. La rangee prend la hauteur du plus grand des deux, et
+     align-items:center centre l'autre dedans -- aucune hauteur n'est ecrite
+     en dur, donc rien a retoucher si l'accroche gagne ou perd une ligne. */
+  .hero-lede{grid-column:1;grid-row:1}
+  .hero-rest{grid-column:1;grid-row:2}
+  .hero-visual{grid-column:2;grid-row:1;align-self:center}
   /* Le titre suit la largeur au lieu d'etre fige a 44px : c'est ce qui
      empeche "Travaille la tactique." de passer a la ligne dans une colonne
      retrecie par l'echiquier. Au-dela de 1000px, le plafond de 44px reprend
@@ -320,7 +328,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:20px;
   text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .18s,transform .12s
 }
-.card:hover{border-color:rgba(217,168,63,.42);transform:translateY(-2px)}
+/* Survol : var(--brass) plein, comme les cartes de Resoudre (.solveCard,
+   .motif-tuile). Trois surfaces cliquables portaient un laiton transparent
+   (.42/.45) et, en prime, l'ancienne teinte #D9A83F au lieu du --brass
+   actuel #E0A93B : a epaisseur de trait identique, le contour paraissait
+   plus fin ici que la-bas. Une seule valeur partout, prise a la variable,
+   pour qu'un futur changement de laiton ne puisse plus en oublier une. */
+.card:hover{border-color:var(--brass);transform:translateY(-2px)}
 .card:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .card .ico{display:block;width:40px;height:40px;margin-bottom:12px;flex:none}
 .card .ico svg{width:40px;height:40px;display:block}
@@ -328,7 +342,11 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .card p{color:var(--sage);font-size:13px;line-height:1.5}
 .card .go{color:var(--brass);font-size:12.5px;font-weight:600;margin-top:12px;display:block}
 
-.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+/* Cinq colonnes, parce qu'il y a cinq chiffres : a quatre colonnes le
+   cinquieme tombait seul sur une deuxieme rangee et occupait un quart de
+   largeur pour lui tout seul, ce qui le faisait lire comme un total ou un
+   resume des quatre autres. Les paliers plus bas sont inchanges. */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .startline{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);
   padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;align-items:center;
   justify-content:space-between;gap:8px;font-size:13.5px;color:var(--sage)}
@@ -354,10 +372,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   #pane-puzzles .btnrow{margin-top:8px!important}
   #pane-puzzles hr.rule{margin-top:14px;margin-bottom:10px}
 }
+/* Palier intermediaire : cinq colonnes tiennent sur un ecran de bureau, pas
+   sur une tablette etroite ou le libelle le plus long ("Exercice du jour")
+   passerait sur trois lignes. Trois colonnes puis deux, comme avant. */
+@media(max-width:860px){.strip{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
 .strip .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1.2}
-.strip .stat span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
+.strip .stat span{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
+/* Mention du mode : plus discrete que le libelle, sans italique malgre le
+   <em> (le balisage dit "cette precision compte", la forme n'a pas a crier).
+   Assez contrastee pour rester lisible : var(--sage) a .75 sur --slate tient
+   le rapport de 4,5:1 exige a cette taille. */
+.strip .stat em{display:block;margin-top:3px;font-style:normal;font-size:9.5px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--sage);opacity:.75}
 
 /* ---------- layout ---------- */
 /* Bande d'intro de l'editeur de position : hors de la grille .layout (donc
@@ -889,7 +917,22 @@ header>*{min-width:0}
 .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
   font-size:11px;color:var(--sage);background-color:var(--ink);border-radius:6px;border:1px solid transparent}
 .cal-day.empty{background:none}
-.cal-day.done{background-color:var(--brass);color:var(--ink);font-weight:600;cursor:pointer}
+/* Jour PASSE reussi : la puce de cadence selectionnee, trait pour trait --
+   fond --ink teinte de laiton a 16 %, contour et chiffre en laiton. Le meme
+   vocabulaire sert donc partout a dire "coche, mais pas maintenant", au lieu
+   d'un aplat propre au calendrier. La teinte est calee sur var(--brass)
+   (#E0A93B) et non sur l'ancien #D9A83F encore ecrit sur .chip : meme
+   nettoyage que sur les contours de survol. */
+.cal-day.done{background-color:var(--ink);
+  background-image:linear-gradient(rgba(224,169,63,.16),rgba(224,169,63,.16));
+  border-color:var(--brass);color:var(--brass);font-weight:600;cursor:pointer}
+/* Reussi AUJOURD'HUI : l'aplat de laiton, desormais reserve au seul jour en
+   cours. Avant, les trente jours d'un mois plein sortaient tous dans la meme
+   teinte pleine et le jour du jour ne se distinguait que par son anneau : la
+   case la plus utile du calendrier etait la moins lisible. Le contraste se
+   lit maintenant sur le REMPLISSAGE (plein contre contour), pas sur une
+   nuance -- meme raison qu'ailleurs dans ce bloc (WCAG 1.4.1). */
+.cal-day.done.today{background-color:var(--brass);background-image:none;color:var(--ink)}
 .cal-day.done:hover{filter:brightness(1.1)}
 /* Cinq etats, separes par la FORME autant que par la couleur : fond plein,
    contour pointille, fond releve, anneau, effacement. Une difference de
@@ -912,7 +955,14 @@ header>*{min-width:0}
 /* Halo jade porte a 2px : avec la gouttiere de 3px de la grille, les halos
    de deux jours voisins se rejoignent, et la serie se lit comme une chaine
    continue plutot que comme des cases isolees. */
-.cal-day.streak{box-shadow:0 0 0 2px var(--jade)}
+/* Un seul anneau a la fois. Un jour en serie portait jusqu'ici l'anneau jade
+   ET le contour de son etat (ivoire pour aujourd'hui, laiton pour un jour
+   reussi) : deux cercles concentriques de deux couleurs autour du meme
+   chiffre, que l'oeil lit comme un troisieme etat inexistant. Le contour
+   s'efface donc quand l'anneau est la, et la serie reste la seule chose
+   entouree. La largeur du trait, elle, ne bouge pas : la case garde
+   exactement la meme taille avec ou sans anneau. */
+.cal-day.streak{box-shadow:0 0 0 2px var(--jade);border-color:transparent}
 .cal-day.future{opacity:.3}
 /* Legende : sans elle, cinq etats a deviner. Les pastilles reprennent
    exactement les memes classes que les cases, pour qu'un futur changement de
@@ -1037,7 +1087,7 @@ header>*{min-width:0}
   display:block;text-decoration:none;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;
   padding:11px 12px;color:var(--chalk);font-size:13px;font-weight:600;transition:border-color .16s
 }
-.explore a:hover{border-color:rgba(217,168,63,.45)}
+.explore a:hover{border-color:var(--brass)}
 /* Descriptions des sections ("141 familles, 1758 variantes") : du texte a
    lire, donc au moins 12px. */
 .explore a span{display:block;color:var(--sage);font-size:12.5px;font-weight:400;margin-top:2px}
@@ -1047,7 +1097,7 @@ header>*{min-width:0}
   display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;cursor:pointer;
   background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:9px 11px;color:var(--chalk)
 }
-.history-item:hover{border-color:rgba(224,169,63,.45)}
+.history-item:hover{border-color:var(--brass)}
 .history-item:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .history-item .res{
   font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;flex:none;width:22px;text-align:center;
@@ -1295,10 +1345,19 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   <!-- ================= HOME ================= -->
   <div id="pane-home">
     <section class="hero">
-      <div class="hero-text">
+      <!-- L'accroche est un bloc a part (2026-09-12) : c'est sur ELLE que
+           l'echiquier decoratif se centre en hauteur sur grand ecran, plus
+           sur toute la hauteur du hero. Centre sur l'ensemble, il flottait
+           en face de la cadence et des boutons, c'est-a-dire en face de la
+           zone ou l'on agit ; en face de l'accroche, il illustre ce qu'il
+           doit illustrer et laisse la zone d'action nette. La coupure se
+           fait donc juste avant la cadence. -->
+      <div class="hero-lede">
       <h2>Play chess.<br>Solve tactics.<br>Get better.</h2>
       <p class="promise">No account. No ads. No noise. Just chess.</p>
       <p>Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
+      </div>
+      <div class="hero-rest">
       <div class="tc-block">
         <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl" aria-label="More info">i</button></div>
         <p class="info-tip-pop hide" id="tipTimeControl">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
@@ -1372,18 +1431,27 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
          n'expliquait encore ici meme. -->
     <div class="panel" id="homeProgressPanel">
       <div class="eyebrow">My progress<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipHomeProgress" aria-label="More info">i</button></div>
-      <p class="info-tip-pop hide" id="tipHomeProgress">This reflects classic puzzle solving only, the level ladder in Solve. Puzzle of the day, Chang Sprint and Coordinates each track their own separate record.</p>
+      <p class="info-tip-pop hide" id="tipHomeProgress">Level and rating come from the Puzzles ladder alone. Solved and best streak also count the puzzle of the day. Day streak counts only the puzzle of the day. Chang Sprint and Coordinates keep their own records, on their own cards, and never move these numbers.</p>
       <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
            n'afficherait que des zeros, ce qu'un premier visiteur lit comme
            "le site est vide" alors qu'il s'agit de sa propre progression.
            On lui propose donc de commencer, et la bande apparait des qu'il
            a quelque chose a y voir. -->
+      <!-- Chaque tuile dit a quel mode elle appartient (2026-09-12). Les cinq
+           chiffres venaient de deux sources differentes sans que rien ne le
+           dise : quatre de l'echelle classique (carte "Exercices" de
+           Resoudre), un seul de l'exercice du jour. Rien ne permettait de
+           savoir si "Jours d'affilee" parlait du Sprint, des exercices ou du
+           jour -- l'infobulle le disait, mais en le cherchant. La mention est
+           donc portee par la tuile elle-meme. Le Chang Sprint et les
+           Coordonnees n'apparaissent pas ici du tout : leurs records vivent
+           sur leurs propres cartes, et c'est ce que l'infobulle rappelle. -->
       <div class="strip" id="homeStrip">
-        <div class="stat"><b id="hLevel">1</b><span>Puzzle level</span></div>
-        <div class="stat"><b id="hSolved">0</b><span>Solved</span></div>
-        <div class="stat"><b id="hBest">0</b><span>Best streak</span></div>
-        <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
-        <div class="stat"><b id="hStreak">0</b><span>Day streak</span></div>
+        <div class="stat"><b id="hLevel">1</b><span>Level</span><em>Puzzles</em></div>
+        <div class="stat"><b id="hSolved">0</b><span>Solved</span><em>Puzzles, daily</em></div>
+        <div class="stat"><b id="hBest">0</b><span>Best streak</span><em>Puzzles, daily</em></div>
+        <div class="stat"><b id="hRating">800</b><span>Rating</span><em>Puzzles</em></div>
+        <div class="stat"><b id="hStreak">0</b><span>Day streak</span><em>Puzzle of the day</em></div>
       </div>
       <div class="startline hide" id="homeStart">
         <span>Your progress will show up here.</span>

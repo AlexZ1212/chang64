@@ -1715,7 +1715,12 @@ function renderCalendarLegend(){
   const items=[
     ["cal-day todo today",t("Today, still to do")],
     ["cal-day done today",t("Solved today")],
-    ["cal-day done",t("Solved")],
+    /* "Solved" tout court servait deja de libelle a la bande de progression
+       de l'accueil, ou il compte des exercices et se traduit au pluriel. Le
+       meme mot anglais ne peut pas porter les deux sens : la pastille dit
+       donc de quel jour elle parle, ce qui la distingue aussi de la pastille
+       juste au-dessus ("Solved today"). */
+    ["cal-day done",t("Solved, earlier day")],
     ["cal-day missed",t("Not solved")],
     ["cal-day done streak",t("Current streak")],
     ["cal-day future",t("Upcoming")]

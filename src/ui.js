@@ -1543,7 +1543,30 @@ function currentSolutions(){
      entree du tableau -- correct par construction plutot que par coincidence
      (un coup adverse de la sequence n'est de toute facon jamais legal a mon
      tour, mais autant etre precis que de compter dessus). */
-  if(puzzle.type!=="mate")return game.moves().filter(m=>game.uci(m)===puzzle.sol[puzzleSolPly]);
+  if(puzzle.type!=="mate"){
+    const legaux=game.moves();
+    const sol=legaux.filter(m=>game.uci(m)===puzzle.sol[puzzleSolPly]);
+    /* Coups EQUIVALENTS (champ alt, pose par releve_alternatives.js). Le
+       moteur a mesure a profondeur 18 qu'ils gagnent aussi, et qu'ils ne
+       sont pas plus bas que la solution enregistree de plus de 200 cp --
+       exactement le seuil qui fait rejeter une fournee dans
+       filtre_stockfish.js. Ce que le filtre declare inseparable, le jeu
+       l'accepte : sans ca, un joueur qui trouve un coup aussi gagnant
+       s'entend repondre "Pas tout a fait", ce qui est faux.
+       Deux garde-fous. Seulement au PREMIER coup, et seulement sur un gain
+       a un seul coup : au-dela, la suite enregistree (replique forcee puis
+       coup final) ne s'appliquerait plus a une position differente, et il
+       faudrait recalculer toute la ligne. Et la solution enregistree reste
+       en tete du tableau, parce que l'indice et le bouton Solution lisent
+       currentSolutions()[0] : ils doivent continuer de montrer LA ligne
+       documentee, pas une equivalence.
+       Les mats n'ont jamais eu ce defaut : matingMoves() ci-dessous accepte
+       deja tout coup qui mate en n. */
+    if(puzzleSolPly===0&&puzzle.sol.length===1&&Array.isArray(puzzle.alt))
+      for(const m of legaux)
+        if(puzzle.alt.indexOf(game.uci(m))>=0&&sol.indexOf(m)<0)sol.push(m);
+    return sol;
+  }
   const key=game.fen()+"|"+puzzleN;
   if(!solCache[key])solCache[key]=matingMoves(game,puzzleN);
   return solCache[key];
@@ -1565,6 +1588,18 @@ function handlePuzzleClick(sq){
 function tryPuzzleMove(m){
   const uci=game.uci(m);
   const ok=currentSolutions().some(x=>game.uci(x)===uci);
+  /* Coup equivalent accepte plutot que la solution enregistree : on le dit.
+     L'accepter en silence laisserait croire que c'etait LE coup attendu,
+     alors que l'explication affichee juste apres (explainSentence) decrit
+     le motif de la ligne enregistree, pas celle qui vient d'etre jouee.
+     Le SAN de la solution se lit AVANT de jouer : apres, la position a
+     change et la notation ne serait plus calculable. */
+  const estAlt=ok&&puzzle&&puzzle.type!=="mate"&&uci!==puzzle.sol[puzzleSolPly];
+  let sanEnregistre="";
+  if(estAlt){
+    const mv=game.moves().find(x=>game.uci(x)===puzzle.sol[puzzleSolPly]);
+    if(mv)sanEnregistre=game.san(mv);
+  }
   selected=-1;
   if(!ok){
     puzzleTries++;majBoutonSuivant();
@@ -1593,7 +1628,12 @@ function tryPuzzleMove(m){
      -- invisible tant que mine_puzzles.js ne produisait que des gains a un
      seul coup, redevenu faux depuis la Deviation (coup + reponse forcee +
      coup final, sol.length===3). */
-  if(puzzle.type!=="mate"&&puzzleSolPly>=puzzle.sol.length){finishPuzzle(true,t("{san}: material won. Nicely spotted.",{san:san}));return;}
+  if(puzzle.type!=="mate"&&puzzleSolPly>=puzzle.sol.length){
+    finishPuzzle(true,estAlt&&sanEnregistre
+      ? t("{san} wins too. The line recorded here is {best}.",{san:san,best:sanEnregistre})
+      : t("{san}: material won. Nicely spotted.",{san:san}));
+    return;
+  }
   if(puzzle.type!=="mate"){
     /* La replique adverse est CONNUE d'avance (puzzle.sol), pas a chercher :
        contrairement au mat (matingMoves() doit explorer, l'adversaire ayant

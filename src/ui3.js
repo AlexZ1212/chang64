@@ -794,10 +794,17 @@ function refreshCurrentMode(){
   const ar=$("btnAmiResign");
   if(ar&&!ar.classList.contains("armed"))ar.textContent=t("Resign this game");
   /* Les finales vivent desormais dans l'onglet Exercices : leur rendu doit
-     suivre ce mode-la, pas "train" qui ne contient plus qu'elles nommement. */
-  if(mode==="puzzles"&&puzzle){loadPuzzle();renderEgChips();renderEndgame();}
-  else if(mode==="train"){renderEgChips();renderEndgame();}
-  else if(mode==="friend")showAmi();
+     suivre ce mode-la, pas "train" qui ne contient plus qu'elles nommement.
+     Les deux appels sont sortis de la condition "&&puzzle" (2026-09-12) :
+     l'ecran Finales s'atteint sans qu'aucun exercice ne soit charge, donc
+     puzzle vaut null et la branche entiere etait sautee -- les cinq puces,
+     le descriptif (egBrief) et la ligne d'etat (egStatus) restaient dans la
+     langue de depart. renderEndgame() sort de lui-meme s'il n'y a pas de
+     finale en cours, et renderEgChips() ne fait que reecrire cinq boutons :
+     les appeler des que le mode peut les afficher ne coute rien. */
+  if(mode==="puzzles"&&puzzle)loadPuzzle();
+  if(mode==="puzzles"||mode==="train"){renderEgChips();renderEndgame();}
+  if(mode==="friend")showAmi();
   else if(mode==="play"){refreshGame();}
   else if(mode==="watch")renderChannels();
   else if(mode==="legal")renderLegal();
@@ -813,6 +820,14 @@ function refreshCurrentMode(){
      sans cout reel puisque set() ne touche que des elements deja dans le
      DOM, visibles ou non. */
   if(typeof renderSolveMenu==="function")renderSolveMenu();
+  /* Meme cas pour la grille de "Par motif" (renderMotifsMenu, ui2.js) : nom
+     du motif, decompte d'exercices, decompte de reussites et les deux
+     intertitres sont composes en JS, donc invisibles pour applyI18n. Son
+     seul appel vivait dans showSolveScreen("motifs"), jamais rejoue ici :
+     basculer la langue devant cette grille laissait les douze tuiles
+     entieres dans la langue de depart, intertitres compris, alors que le
+     titre et le chapeau du panneau juste au-dessus se retraduisaient. */
+  if(typeof renderMotifsMenu==="function")renderMotifsMenu();
   shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);
   const n=$("tcNote"); if(n&&TC_NOTES[tcCat])n.textContent=t(TC_NOTES[tcCat]);
   renderDailyChips();

@@ -37,7 +37,7 @@
 const fs = require("fs");
 const path = require("path");
 const { Game } = require(path.join(__dirname, "engine.js"));
-const { classifyBase, verifyFull } = require(path.join(__dirname, "gen_puzzles_v2.js"));
+const { classifyBase, classifyQuiet, isQuiet, verifyFull } = require(path.join(__dirname, "gen_puzzles_v2.js"));
 const { distractorScore } = require(path.join(__dirname, "difficulty_v2.js"));
 
 const crypto = require("crypto");
@@ -141,7 +141,30 @@ for (const f of fichiers) {
       const g = new Game(brut.fen);
       const mv = g.moves().find(m => g.uci(m) === brut.sol[0]);
       if (mv) {
-        const r = classifyBase(g, mv, brut.type === "mate", brut.n || 0);
+        /* Coups silencieux : classifyQuiet, comme le mineur (2026-09-13).
+           Ce bloc ne connaissait que classifyBase, qui ne rend NI "Quiet
+           move" NI "Deflection" -- ces deux motifs n'existent que dans
+           classifyQuiet. Tout exercice silencieux correctement etiquete
+           par le mineur etait donc reetiquete ici en "Winning move" ou
+           voisin, et les deux motifs restaient gelés quoi qu'on fasse en
+           amont. Corriger le mineur sans corriger ce bloc n'aurait servi
+           a rien : c'est le meme defaut que le reste de la session, un
+           controle qui regarde a cote.
+           classifyQuiet a besoin de la LIGNE entiere, pas du seul premier
+           coup : Deflection se reconnait au troisieme demi-coup, celui qui
+           recupere la case que la piece deviee gardait. On rejoue donc la
+           solution recue pour reconstruire les coups complets. */
+        const ligne = [];
+        const gLigne = new Game(brut.fen);
+        for (const u of brut.sol) {
+          const full = gLigne.moves().find(m => gLigne.uci(m) === u);
+          if (!full) break;
+          ligne.push({ mv: full });
+          gLigne.makeMove(full);
+        }
+        const r = (brut.type !== "mate" && ligne.length === brut.sol.length && isQuiet(g, mv))
+          ? classifyQuiet(g, ligne)
+          : classifyBase(g, mv, brut.type === "mate", brut.n || 0);
         if (r) { motif = r.theme; detail = r.detail; }
       }
     } catch (e) { /* rejete juste apres */ }

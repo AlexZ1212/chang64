@@ -37,7 +37,7 @@
 const fs = require("fs");
 const path = require("path");
 const { Game, search, sqName, nameSq, mateIn } = require(path.join(__dirname, "engine.js"));
-const { classifyBase } = require(path.join(__dirname, "gen_puzzles_v2.js"));
+const { classifyBase, classifyQuiet, isQuiet, isClearlyBest } = require(path.join(__dirname, "gen_puzzles_v2.js"));
 const { mateLength } = require(path.join(__dirname, "gen_puzzles.js"));
 const { distractorScore, isTempting, trapDepth } = require(path.join(__dirname, "difficulty_v2.js"));
 
@@ -159,7 +159,11 @@ function extractPuzzleAt(g, opts) {
   const gBefore = g.inCheck && g.inCheck();
   if (gBefore && !isMate) return null; // deja en echec au depart : ambigu pour un "gain"
 
-  const quiet = !g.board[best.mv.to] && !isMate;
+  /* Meme definition que gen_puzzles_v2 plutot qu'une seconde ecrite ici :
+     isQuiet() ecarte en plus les coups qui donnent echec. Un echec n'est
+     pas un coup silencieux, et l'ancien test local (case d'arrivee vide)
+     les laissait passer (2026-09-13). */
+  const quiet = !isMate && isQuiet(g, best.mv);
 
   /* Sequence complete pour les mats (meme correctif que celui applique a
      la banque existante : "Mate in two" a besoin de 3 demi-coups -- nous,
@@ -190,7 +194,58 @@ function extractPuzzleAt(g, opts) {
     if (!solMoves.length) return null;
   }
 
-  const theme = classifyBase(g, best.mv, isMate, mateLen);
+  /* Prolongement des gains SILENCIEUX seulement (2026-09-13).
+
+     Pourquoi ce mineur ne produisait ni Deflection ni Quiet move : il
+     calculait `quiet` puis ne s'en servait jamais, et appelait
+     classifyBase() dans tous les cas. classifyQuiet(), qui seul rend ces
+     deux motifs, n'etait appele que par makePuzzleV2() -- or c'est ce
+     mineur-ci qui alimente les fournees. D'ou 21 exercices "Quiet move"
+     et 439 "Deflection" dans toute la banque, gelés depuis des mois.
+
+     Pourquoi seulement les coups silencieux, et pas tous les gains comme
+     le fait makePuzzleV2. Deflection exige une ligne d'au moins trois
+     demi-coups : deviation, replique forcee, puis recuperation de la case
+     que la piece deviee gardait. Sans prolongement, classifyQuiet ne peut
+     jamais rendre autre chose que "Quiet move". Mais prolonger TOUS les
+     gains couterait deux fois plus cher au minage et, surtout, casserait
+     ce qu'on vient de mettre en place : un gain a plusieurs coups ne peut
+     pas porter de coups equivalents (champ `alt`), puisque la suite
+     enregistree ne s'applique plus apres un premier coup different. On
+     recreerait donc l'injustice reparee le 13 septembre, sur des milliers
+     d'exercices, pour gagner deux motifs. Restreindre aux coups
+     silencieux vise exactement les candidats a Deflection et laisse les
+     prises en un coup, qui sont l'immense majorite.
+
+     Chacun de NOS coups suivants repasse isClearlyBest() : si la garantie
+     d'unicite casse, la ligne est tronquee la plutot que de livrer un
+     coup "probablement bon" comme s'il etait le seul bon. */
+  if (!isMate && quiet) {
+    const g2 = new Game(g.fen());
+    const premier = g2.moves().find(m => m.from === best.mv.from && m.to === best.mv.to && m.promo === best.mv.promo);
+    if (premier) {
+      g2.makeMove(premier);
+      if (g2.moves().length > 0) {
+        const rOpp = search(g2, depth - 1, 3000);
+        const oppFull = rOpp.move && g2.moves().find(m => m.from === rOpp.move.from && m.to === rOpp.move.to && m.promo === rOpp.move.promo);
+        if (oppFull) {
+          g2.makeMove(oppFull);
+          if (g2.moves().length > 0) {
+            const rMine = search(g2, depth - 1, 3000);
+            const mineFull = rMine.move && g2.moves().find(m => m.from === rMine.move.from && m.to === rMine.move.to && m.promo === rMine.move.promo);
+            if (mineFull && isClearlyBest(g2, mineFull, depth - 1)) solMoves = [best.mv, oppFull, mineFull];
+          }
+        }
+      }
+    }
+  }
+
+  /* classifyQuiet a besoin de la ligne entiere, classifyBase du seul
+     premier coup. Un coup silencieux dont la ligne n'a pas pu etre
+     prolongee ressort en "Quiet move", ce qui reste vrai. */
+  const theme = quiet
+    ? classifyQuiet(g, solMoves.map(mv => ({ mv })))
+    : classifyBase(g, best.mv, isMate, mateLen);
 
   const gSan = new Game(g.fen());
   const sanParts = [], uciParts = [];

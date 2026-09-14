@@ -259,15 +259,22 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
   const byLevel = {};
   const puzzleIndex = {};
   const themeCounts = {};
-  /* Niveau ou vit chaque motif (2026-09-07). Depuis le redecoupage par
-     famille, un motif n'est plus reparti sur toute l'echelle : il tient
-     ENTIEREMENT dans un niveau, Pin en 7, Fourchette de cavalier en 6,
-     Mat du couloir en 10. Le filtre par theme ne pouvait donc pas
-     fonctionner sans savoir ou aller chercher : rester au niveau courant
-     revenait a filtrer sur un lot qui n'en contient aucun.
-     On garde le niveau le plus fourni plutot que le premier rencontre : si
-     un motif venait a s'etaler sur deux niveaux, on tomberait sur celui qui
-     en a le plus, et non sur le premier de la boucle. */
+  /* Niveaux ou vit chaque motif (2026-09-07, liste depuis le 2026-09-13).
+     Depuis le redecoupage par famille, un motif n'est plus reparti sur toute
+     Pin en 7, Fourchette de cavalier en 6, Mat du couloir en 10. Le filtre
+     par theme ne pouvait donc pas fonctionner sans savoir ou aller chercher :
+     rester au niveau courant revenait a filtrer sur un lot qui n'en contient
+     aucun.
+     On publie la LISTE des niveaux et non plus le seul plus fourni
+     (2026-09-13). Winning capture ne tient pas dans un niveau : ses 28 499
+     exercices occupent les niveaux 1 a 4. L'ancienne table gardait le plus
+     fourni, le niveau 1, et le mode "Travailler un motif" ne chargeait des
+     morceaux que de celui-la : la tuile annoncait 28 499 exercices, le mode
+     en servait 7 125, tous parmi les plus faciles. Les trois quarts restants
+     etaient inaccessibles par ce chemin, sans que rien ne le signale.
+     La liste reste triee par effectif decroissant : on commence par le
+     niveau le plus fourni, et l'ordre de lecture ne change donc pas pour les
+     douze motifs qui n'ont qu'un niveau. */
   const themeLevels = {}, themeParNiveau = {};
   for (const p of puzzles) {
     (byLevel[p.level] = byLevel[p.level] || []).push(p);
@@ -277,8 +284,9 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
       (themeParNiveau[p.theme][p.level] || 0) + 1;
   }
   for (const th in themeParNiveau) {
-    themeLevels[th] = +Object.keys(themeParNiveau[th])
-      .sort((a, b) => themeParNiveau[th][b] - themeParNiveau[th][a])[0];
+    themeLevels[th] = Object.keys(themeParNiveau[th])
+      .sort((a, b) => themeParNiveau[th][b] - themeParNiveau[th][a])
+      .map(Number);
   }
   /* ---------- Decoupage des shards (2026-09-06) ----------
      Chaque niveau tenait dans un seul fichier : 256 a 428 Ko gzip a

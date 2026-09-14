@@ -47,8 +47,17 @@ function ouvrir(hash,cb){
     Object.keys(levels).length+" motif(s)");
   T("il couvre exactement les memes motifs que les decomptes",
     Object.keys(levels).sort().join("|")===Object.keys(counts).sort().join("|"));
-  T("chaque motif designe un niveau valide",
-    Object.values(levels).every(n=>Number.isInteger(n)&&n>=1&&n<=10),
+  /* La table publie une LISTE de niveaux depuis le 2026-09-13 : un motif trop
+     gros pour un niveau s'etale, et n'en publier qu'un laissait le reste hors
+     d'atteinte dans "Travailler un motif". Le format ancien, un entier seul,
+     est encore accepte ici pour qu'une table servie par un build plus ancien
+     ne fasse pas echouer le test sur un desaccord de forme. */
+  const listeNiveaux=n=>Array.isArray(n)?n:[n];
+  T("chaque motif designe au moins un niveau valide",
+    Object.values(levels).every(n=>{
+      const l=listeNiveaux(n);
+      return l.length>0&&l.every(x=>Number.isInteger(x)&&x>=1&&x<=10);
+    }),
     JSON.stringify(levels));
 
   console.log("\n--- Les pages Apprendre pointent vers des motifs reels ---");
@@ -96,8 +105,11 @@ function ouvrir(hash,cb){
          la personne. */
       T("« "+th+" » ouvre l'aparte sur ce motif",w.eval("motifEnCours")===th,
         JSON.stringify(w.eval("motifEnCours")));
-      T("« "+th+" » vise le niveau qui le contient",w.eval("motifNiveau")===levels[th],
-        "niveau vise "+w.eval("motifNiveau")+", attendu "+levels[th]);
+      /* On puise d'abord dans le premier niveau de la liste, le plus fourni.
+         Les suivants ne sont charges qu'une fois celui-la epuise, ce que
+         check_motif_multi_niveaux.js verifie de son cote. */
+      T("« "+th+" » vise le niveau qui le contient",w.eval("motifNiveau")===listeNiveaux(levels[th])[0],
+        "niveau vise "+w.eval("motifNiveau")+", attendu "+listeNiveaux(levels[th])[0]);
       T("« "+th+" » ne deplace pas la progression",w.eval("prog.level")===1,
         "prog.level="+w.eval("prog.level"));
       res();

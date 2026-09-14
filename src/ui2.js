@@ -1480,7 +1480,12 @@ function startMotif(theme){
        avant, sinon il serait efface aussitot. */
     showSolveScreen("puzzles");
     motifEnCours=theme;
-    motifNiveau=map[theme];
+    /* La table publie desormais une LISTE de niveaux, du plus fourni au
+       moins fourni. On tolere l'ancien format, un nombre seul : une table
+       servie par un build plus ancien ne doit pas casser l'ecran. */
+    const niv=map[theme];
+    motifNiveaux=Array.isArray(niv)?niv.slice():[niv];
+    motifNiveau=motifNiveaux[0];
     if(typeof nextPuzzle==="function")nextPuzzle();
   });
 }

@@ -270,7 +270,14 @@ const MOTIFS_ENTRAINEMENT=[
    mettait a mentir des la premiere montee, en servant un autre motif que
    celui affiche. Ici l'aparte est explicite : on y entre, on en sort, la
    progression retrouve exactement l'etat ou on l'avait laissee. */
-let motifEnCours=null,motifNiveau=1;
+/* motifNiveau est le niveau dans lequel on puise EN CE MOMENT, motifNiveaux
+   la liste complete des niveaux qui hebergent ce motif, du plus fourni au
+   moins fourni. Douze motifs sur treize n'en ont qu'un ; Winning capture en
+   a quatre, ses 28 499 exercices ne tenant pas dans un seul niveau. Quand le
+   niveau courant n'a plus de morceau a donner, nextPuzzle() avance dans
+   cette liste (2026-09-13) : sans ca le mode s'arretait au premier niveau et
+   laissait les trois quarts du motif hors d'atteinte. */
+let motifEnCours=null,motifNiveau=1,motifNiveaux=[1];
 const LEVELS=[
   {n:1,name:"First steps"},
   {n:2,name:"Loose pieces"},
@@ -1412,6 +1419,20 @@ function nextPuzzle(){
     if(k>=0){
       if(!fresh.length){loadLevelChunk(lvl,k,nextPuzzle);return;}
       if(fresh.length<40)loadLevelChunk(lvl,k);
+    }
+    /* Plus un seul morceau a tirer dans ce niveau. En mode motif, ca ne veut
+       pas dire que le motif est epuise : il peut vivre dans plusieurs
+       niveaux. On avance dans motifNiveaux plutot que de tourner en rond sur
+       ce qui est deja charge (2026-09-13). Hors mode motif, rien ne change :
+       l'echelle ne deborde pas d'un niveau sur l'autre toute seule, c'est la
+       progression qui s'en charge. */
+    else if(motifEnCours){
+      const i=motifNiveaux.indexOf(motifNiveau);
+      if(i>=0&&i+1<motifNiveaux.length){
+        motifNiveau=motifNiveaux[i+1];
+        chargerJusquAuMotif(motifNiveau,motifEnCours,()=>{ if(!fresh.length)nextPuzzle(); });
+        if(!fresh.length)return;
+      }
     }
   }
   if(fresh.length){puzzle=fresh[0];}

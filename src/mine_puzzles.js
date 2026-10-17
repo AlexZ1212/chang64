@@ -36,7 +36,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { Game, search, sqName, nameSq, mateIn } = require(path.join(__dirname, "engine.js"));
+const { Game, search, sqName, nameSq, mateIn, VAL, pType, pColor } = require(path.join(__dirname, "engine.js"));
 const { classifyBase, classifyQuiet, isQuiet, isClearlyBest } = require(path.join(__dirname, "gen_puzzles_v2.js"));
 const { mateLength } = require(path.join(__dirname, "gen_puzzles.js"));
 const { distractorScore, isTempting, trapDepth } = require(path.join(__dirname, "difficulty_v2.js"));
@@ -115,6 +115,40 @@ function rankMovesLocal(g, depth, timeMs) {
   return scored;
 }
 
+/* ------------------------------------------------------------------ */
+/* Trivialite du premier coup (2026-09-14).
+
+   Mesure a l'origine de ce filtre : sur toute la banque, 53,9 % des gains a
+   un demi-coup avaient pour solution une prise qu'il n'y a rien a calculer
+   pour trouver. C'est exactement ce qu'on reproche a la bibliotheque.
+
+   Deux formes, toutes les deux purement geometriques, sans moteur :
+     - la piece prise n'est defendue par personne. On regarde APRES le coup
+       si la case d'arrivee est attaquee par l'adversaire : c'est la seule
+       question qui decide, et elle tient compte des defenses qui se
+       decouvrent ou disparaissent en jouant ;
+     - la piece prise vaut strictement plus que celle qui prend. Meme
+       reprise, le compte reste favorable : il n'y a pas de decision.
+
+   Ce qui n'est PAS trivial et doit passer : un sacrifice, une prise d'egale
+   valeur sur case defendue (il faut calculer la suite), tout coup qui ne
+   prend rien. */
+function trivialite(g, mv) {
+  const pris = g.board[mv.to];
+  if (!pris) return null;
+  const qui = g.board[mv.from];
+  if (!qui) return null;
+  if ((VAL[pType(pris)] || 0) > (VAL[pType(qui)] || 0)) return "prend plus cher";
+  const apres = new Game(g.fen());
+  const complet = apres.moves().find(m => m.from === mv.from && m.to === mv.to && m.promo === mv.promo);
+  if (!complet) return null;
+  const nous = pColor(qui);
+  apres.makeMove(complet);
+  if (!apres.attacked(mv.to, nous ^ 1)) return "prise gratuite";
+  return null;
+}
+
+/* ------------------------------------------------------------------ */
 function extractPuzzleAt(g, opts) {
   const depth = opts.depth || 3;
   const MATE = 100000;
@@ -134,6 +168,11 @@ function extractPuzzleAt(g, opts) {
   if (!isMate) {
     if (best.score < 200) return null;
     if (best.score - second.score < 200) return null;
+    /* Filtre de trivialite (2026-09-14). Pose ICI, avant les recherches
+       couteuses qui suivent : une prise evidente est rejetee sans qu'on ait
+       paye le controle robuste ni le prolongement. opts.garderPrisesSimples
+       rend l'ancien comportement, pour comparer deux passes. */
+    if (!opts.garderPrisesSimples && trivialite(g, best.mv)) return null;
   } else if (second.score > MATE - 100) return null;
 
   /* Controle final robuste, budget de recherche genereux et fixe (pas de
@@ -194,49 +233,48 @@ function extractPuzzleAt(g, opts) {
     if (!solMoves.length) return null;
   }
 
-  /* Prolongement des gains SILENCIEUX seulement (2026-09-13).
+  /* Prolongement de TOUS les gains (2026-09-14, etendu depuis les seuls
+     coups silencieux du 2026-09-13).
 
-     Pourquoi ce mineur ne produisait ni Deflection ni Quiet move : il
-     calculait `quiet` puis ne s'en servait jamais, et appelait
-     classifyBase() dans tous les cas. classifyQuiet(), qui seul rend ces
-     deux motifs, n'etait appele que par makePuzzleV2() -- or c'est ce
-     mineur-ci qui alimente les fournees. D'ou 21 exercices "Quiet move"
-     et 439 "Deflection" dans toute la banque, gelés depuis des mois.
+     Le prolongement avait ete restreint aux coups silencieux pour deux
+     raisons. La premiere ne tient plus : "prolonger tous les gains
+     couterait deux fois plus cher". Mesure : 243 ms par position candidate,
+     0,122 candidat par partie, sur 1 152 ms de minage par partie, soit
+     2,6 % de temps en plus. L'estimation se trompait d'un facteur quarante,
+     et elle a coute une banque ou 99,0 % des gains tiennent en un demi-coup.
 
-     Pourquoi seulement les coups silencieux, et pas tous les gains comme
-     le fait makePuzzleV2. Deflection exige une ligne d'au moins trois
-     demi-coups : deviation, replique forcee, puis recuperation de la case
-     que la piece deviee gardait. Sans prolongement, classifyQuiet ne peut
-     jamais rendre autre chose que "Quiet move". Mais prolonger TOUS les
-     gains couterait deux fois plus cher au minage et, surtout, casserait
-     ce qu'on vient de mettre en place : un gain a plusieurs coups ne peut
-     pas porter de coups equivalents (champ `alt`), puisque la suite
-     enregistree ne s'applique plus apres un premier coup different. On
-     recreerait donc l'injustice reparee le 13 septembre, sur des milliers
-     d'exercices, pour gagner deux motifs. Restreindre aux coups
-     silencieux vise exactement les candidats a Deflection et laisse les
-     prises en un coup, qui sont l'immense majorite.
+     La seconde tient, mais n'est plus un conflit : un gain a plusieurs
+     coups ne peut pas porter de coups equivalents (champ `alt`). Les
+     positions ou plusieurs coups gagnaient egalement sont precisement les
+     prises evidentes que le filtre de trivialite ecarte desormais, et ui.js
+     ne consulte `alt` que si sol.length vaut 1.
 
-     Chacun de NOS coups suivants repasse isClearlyBest() : si la garantie
-     d'unicite casse, la ligne est tronquee la plutot que de livrer un
-     coup "probablement bon" comme s'il etait le seul bon. */
-  if (!isMate && quiet) {
+     Chacun de NOS coups repasse isClearlyBest() : si l'unicite casse, la
+     ligne est tronquee la. Mesure sur 400 positions non triviales : 69,8 %
+     tiennent au moins 2 decisions, 19,1 % en tiennent 3 ou 4. Au-dela,
+     plus rien ne passe isClearlyBest, d'ou la limite MAX_PROLONGE.
+
+     ATTENTION : seul le premier coup est valide par filtre_stockfish.js.
+     Les coups suivants ne le sont que par le moteur maison, a faible
+     profondeur. A etendre avant toute mise en ligne. */
+  const MAX_PROLONGE = 3;
+  if (!isMate) {
     const g2 = new Game(g.fen());
-    const premier = g2.moves().find(m => m.from === best.mv.from && m.to === best.mv.to && m.promo === best.mv.promo);
-    if (premier) {
-      g2.makeMove(premier);
-      if (g2.moves().length > 0) {
-        const rOpp = search(g2, depth - 1, 3000);
-        const oppFull = rOpp.move && g2.moves().find(m => m.from === rOpp.move.from && m.to === rOpp.move.to && m.promo === rOpp.move.promo);
-        if (oppFull) {
-          g2.makeMove(oppFull);
-          if (g2.moves().length > 0) {
-            const rMine = search(g2, depth - 1, 3000);
-            const mineFull = rMine.move && g2.moves().find(m => m.from === rMine.move.from && m.to === rMine.move.to && m.promo === rMine.move.promo);
-            if (mineFull && isClearlyBest(g2, mineFull, depth - 1)) solMoves = [best.mv, oppFull, mineFull];
-          }
-        }
-      }
+    let courant = g2.moves().find(m => m.from === best.mv.from && m.to === best.mv.to && m.promo === best.mv.promo);
+    for (let tour = 0; tour < MAX_PROLONGE && courant; tour++) {
+      g2.makeMove(courant);
+      courant = null;
+      if (g2.moves().length === 0) break;
+      const rOpp = search(g2, depth - 1, 3000);
+      const oppFull = rOpp.move && g2.moves().find(m => m.from === rOpp.move.from && m.to === rOpp.move.to && m.promo === rOpp.move.promo);
+      if (!oppFull) break;
+      g2.makeMove(oppFull);
+      if (g2.moves().length === 0) break;
+      const rMine = search(g2, depth - 1, 3000);
+      const mineFull = rMine.move && g2.moves().find(m => m.from === rMine.move.from && m.to === rMine.move.to && m.promo === rMine.move.promo);
+      if (!mineFull || !isClearlyBest(g2, mineFull, depth - 1)) break;
+      solMoves = solMoves.concat([oppFull, mineFull]);
+      courant = mineFull;
     }
   }
 
@@ -372,6 +410,22 @@ function peutDonnerMotif(g, motifs) {
   }
   return false;
 }
+/* Provenance d'un exercice (2026-09-14 : elargie). Le PGN est deja parse
+   en entier, ces en-tetes sont gratuites : les jeter puis vouloir
+   dedoublonner par partie ou par ouverture obligerait a tout re-miner.
+   Site porte l'identifiant de partie Lichess. Les champs absents sont omis
+   plutot qu'ecrits vides. */
+function sourceDe(h, ply) {
+  const s = { event: h.Event || "", white: h.White || "", black: h.Black || "", ply };
+  if (h.Site) s.site = h.Site;
+  if (h.ECO) s.eco = h.ECO;
+  if (h.Opening) s.opening = h.Opening;
+  if (h.UTCDate || h.Date) s.date = h.UTCDate || h.Date;
+  if (h.TimeControl) s.timeControl = h.TimeControl;
+  if (h.WhiteElo && h.BlackElo) s.elo = Math.round((+h.WhiteElo + +h.BlackElo) / 2);
+  return s;
+}
+
 function mineFromPgn(pgnText, opts) {
   opts = opts || {};
   const minPly = opts.minPly || 12;
@@ -444,7 +498,7 @@ function mineFromPgn(pgnText, opts) {
           if (p) {
             const distractor = bestDistractorExplanation(p.fen, p.sol[0]);
             const scored = distractorScore(p.fen, p.sol[0], p.quiet, { timeMsShallow: 60, timeMsDeep: 250, maxCandidates: 10 });
-            found.push({ ...p, diff: scored.score, pedagogy: distractor, source: { event: game.headers.Event || "", white: game.headers.White || "", black: game.headers.Black || "", ply } });
+            found.push({ ...p, diff: scored.score, pedagogy: distractor, source: sourceDe(game.headers, ply) });
             foundThisGame++;
           }
         }
@@ -457,7 +511,7 @@ function mineFromPgn(pgnText, opts) {
   return { found, gamesParsed, gamesSkipped, gamesFiltered };
 }
 
-module.exports = { mineFromPgn, splitGames, tokenizeMovetext, moveFromSan, extractPuzzleAt, bestDistractorExplanation, peutDonnerMotif };
+module.exports = { mineFromPgn, splitGames, tokenizeMovetext, moveFromSan, extractPuzzleAt, bestDistractorExplanation, peutDonnerMotif, extractGameChunk, trivialite, sourceDe };
 
 /* Lecture en flux du fichier PGN source : un dump Lichess decompresse fait
    facilement plusieurs dizaines de Go, bien au-dela de ce qu'un simple
@@ -469,9 +523,17 @@ module.exports = { mineFromPgn, splitGames, tokenizeMovetext, moveFromSan, extra
    garder maxGames apres le filtre minElo (defaut prudent : viser 30 fois
    plus de parties brutes que d'exercices desires, ajuster a la hausse si
    le filtre minElo est tres eleve et rate beaucoup de parties). */
-function extractGameChunk(pgnPath, maxGames, overreadFactor) {
+/* sauter (2026-09-14) : nombre de parties BRUTES a passer avant d'accumuler.
+   Sans lui la lecture repart toujours de la premiere partie, et comme le
+   garde-fou plafonne a 500 000, deux passes sur le meme PGN lisent le meme
+   demi-million de parties : la seconde ne produit que des doublons, que
+   merge_puzzles.js rejette apres des heures de calcul. Compte AVANT le
+   filtre minElo : c'est la seule position reproductible d'une passe a
+   l'autre. */
+function extractGameChunk(pgnPath, maxGames, overreadFactor, sauter) {
   const readline = require("readline");
   const target = Math.min(maxGames * overreadFactor, 500000); // garde-fou absolu
+  const debut = Math.max(0, sauter || 0);
   return new Promise((resolve, reject) => {
     const stream = fs.createReadStream(pgnPath, { encoding: "utf8" });
     const rl = readline.createInterface({ input: stream, crlfDelay: Infinity });
@@ -481,13 +543,16 @@ function extractGameChunk(pgnPath, maxGames, overreadFactor) {
       if (closed) return;
       if (line.startsWith('[Event "')) {
         count++;
-        if (count > target) {
+        if (count > debut + target) {
           closed = true;
           rl.close();
           stream.destroy(); // arrete reellement la lecture disque, pas juste l'iteration
           return;
         }
       }
+      /* Tout ce qui precede la (debut+1)-eme partie est jete, en-tetes
+         comprises : on ne garde pas une moitie de partie sautee. */
+      if (count <= debut) return;
       lines.push(line);
     });
     rl.on("close", () => resolve(lines.join("\n")));
@@ -507,13 +572,17 @@ if (require.main === module) {
      et on aurait paye un test pour rien. */
   const argMotifs = process.argv.find(a => a.startsWith("--motifs="));
   const motifs = argMotifs ? argMotifs.slice("--motifs=".length).split(",").map(x => x.trim()).filter(Boolean) : null;
+  /* --sauter=N : reprend la lecture apres les N premieres parties brutes. */
+  const argSauter = process.argv.find(a => a.startsWith("--sauter="));
+  const sauter = argSauter ? +argSauter.slice("--sauter=".length) || 0 : 0;
   if (!pgnPath) {
-    console.error("Usage: node mine_puzzles.js parties.pgn sortie.json [maxGames=5000] [minElo=1800] [overreadFactor=30] [--motifs=A,B]");
+    console.error("Usage: node mine_puzzles.js parties.pgn sortie.json [maxGames=5000] [minElo=1800] [overreadFactor=30] [--motifs=A,B] [--sauter=N]");
     process.exit(1);
   }
   (async () => {
     console.error("Lecture en flux du fichier (s'arrete des qu'assez de parties brutes sont accumulees, pas besoin de lire le fichier entier)...");
-    const pgnText = await extractGameChunk(pgnPath, maxGames, overreadFactor);
+    if (sauter) console.error(`Saut des ${sauter} premieres parties brutes.`);
+    const pgnText = await extractGameChunk(pgnPath, maxGames, overreadFactor, sauter);
     console.error(`Extrait charge : ${(pgnText.length / 1e6).toFixed(1)} Mo.`);
     const t0 = Date.now();
     const { found, gamesParsed, gamesSkipped, gamesFiltered } = mineFromPgn(pgnText, {

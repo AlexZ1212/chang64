@@ -14,3 +14,5 @@ audit_*.jsonl
 *.rejetes.json
 *.retenus.json
 fix_bank_report.json
+fournees-minage/
+fournees-essai/

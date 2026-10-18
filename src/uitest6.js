@@ -127,7 +127,7 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   T("mid-game change is deferred", /next game/.test(a.$("status").textContent), a.$("status").textContent);
   a.click(a.$("btnNew"));
   await wait(400);
-  T("clocks hidden after new unlimited game", a.$("clockTop").className.includes("hide"));
+  T("no time shown after new unlimited game", a.$("clockTop").className.includes("untimed") || a.$("clockTop").className.includes("hide"));
 
   console.log("\nPUZZLES");
   /* Mis a jour le 2026-09-06 : tab-puzzles ouvre le menu a 5 cartes depuis le

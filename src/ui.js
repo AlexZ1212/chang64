@@ -651,10 +651,17 @@ function rangeePrises(liste,couleur,solde){
   return s+"</span>";
 }
 function renderClocks(){
-  const show=clock.enabled&&mode==="play"&&gameStarted;
+  /* Le bandeau (noms, pieces prises) vaut pour toute partie, avec ou sans
+     pendule. Il etait masque en entier sans pendule : on perdait aussi les
+     noms et les prises. Sans pendule, seul le temps disparait (classe
+     "untimed", voir le gabarit). */
+  const show=mode==="play"&&gameStarted;
   $("clockTop").classList.toggle("hide",!show);
   $("clockBottom").classList.toggle("hide",!show);
   if(!show)return;
+  const sansTemps=!clock.enabled;
+  $("clockTop").classList.toggle("untimed",sansTemps);
+  $("clockBottom").classList.toggle("untimed",sansTemps);
   const topColor=myColor^1,botColor=myColor;
   const snap=(typeof reviewPly!=="undefined"&&reviewPly!==null&&typeof clockHist!=="undefined"&&clockHist[reviewPly])
     ? clockHist[reviewPly] : clock;
@@ -667,12 +674,12 @@ function renderClocks(){
   $("clockBottomName").textContent=t("You");
   $("clockTopSwatch").className=topColor===B?"dark":"";
   $("clockBottomSwatch").className=botColor===B?"dark":"";
-  $("clockTopTime").textContent=fmtTime(val(topColor));
-  $("clockBottomTime").textContent=fmtTime(val(botColor));
+  $("clockTopTime").textContent=sansTemps?"":fmtTime(val(topColor));
+  $("clockBottomTime").textContent=sansTemps?"":fmtTime(val(botColor));
   const set=(el,c)=>{
-    el.classList.toggle("active",clock.active===c&&!isFlagged());
-    el.classList.toggle("low",val(c)<20000&&val(c)>0);
-    el.classList.toggle("flagged",clock.flagged===c);
+    el.classList.toggle("active",!sansTemps&&clock.active===c&&!isFlagged());
+    el.classList.toggle("low",!sansTemps&&val(c)<20000&&val(c)>0);
+    el.classList.toggle("flagged",!sansTemps&&clock.flagged===c);
   };
   set($("clockTop"),topColor);
   set($("clockBottom"),botColor);

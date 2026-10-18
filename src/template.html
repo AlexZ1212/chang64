@@ -545,6 +545,12 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .clock.active time{color:var(--brass)}
 .clock.low time{color:var(--brick)}
 .clock.flagged{border-color:var(--brick)}
+/* Partie sans pendule : le bandeau reste (noms, pieces prises), seul le
+   temps disparait, sans laisser de vide a droite. La ligne garde la hauteur
+   du chronometre (20px, line-height 1) pour que le bandeau ait exactement
+   la meme taille qu'avec pendule. */
+.clock.untimed time{display:none}
+.clock.untimed .clock-line{min-height:20px}
 
 /* ---------- board ---------- */
 /* Garde-fou : sur telephone, l'echiquier debordait a droite et la colonne h

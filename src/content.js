@@ -318,6 +318,17 @@ module.exports = function (H) {
     "deflection": "Deflection",
     "the-quiet-move": "Quiet move"
   };
+  /* Meme seuil que SEUIL_MOTIF dans ui.js (2026-10-18) : sous 50 exercices,
+     le motif n'est plus propose a l'entrainement et la page perd son bouton
+     "Entraine-toi", qui aurait ouvert un mode epuise en quelques minutes.
+     La page reste : la notion s'apprend toujours. */
+  const SEUIL_MOTIF = 50;
+  const nbParTheme = {};
+  for (const p of puzzles) nbParTheme[p.theme] = (nbParTheme[p.theme] || 0) + 1;
+  const themeEntrainable = slugEn => {
+    const th = THEME_DE_LA_PAGE[slugEn];
+    return th && (nbParTheme[th] || 0) >= SEUIL_MOTIF ? th : null;
+  };
     for (const r of RULES) {
       let jeuDeLaPage = null;
       try { jeuDeLaPage = new Game(r.fen); } catch (e) { throw new Error("FEN invalide: " + r.fen); }
@@ -346,13 +357,13 @@ module.exports = function (H) {
           C'est voulu : une page sur les cadences n'a rien a proposer sur un
           echiquier, et lui coller un bouton pour faire comme les autres
           serait pire que de ne rien mettre. */""}
-    ${THEME_DE_LA_PAGE[r.slug.en]
-      ? `<a class="cta" href="/#theme=${encodeURIComponent(THEME_DE_LA_PAGE[r.slug.en])}">${u.train}</a>`
+    ${themeEntrainable(r.slug.en)
+      ? `<a class="cta" href="/#theme=${encodeURIComponent(themeEntrainable(r.slug.en))}">${u.train}</a>`
       : ""}
     ${explorable
-      ? `<a class="cta${THEME_DE_LA_PAGE[r.slug.en] ? " ghost" : ""}" href="/#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
+      ? `<a class="cta${themeEntrainable(r.slug.en) ? " ghost" : ""}" href="/#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
       : ""}
-    ${THEME_DE_LA_PAGE[r.slug.en] || explorable
+    ${themeEntrainable(r.slug.en) || explorable
       ? `<a class="cta ghost" href="/">${u.play}</a>`
       : `<a class="cta" href="/">${u.play}</a>`}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
@@ -675,6 +686,15 @@ module.exports = function (H) {
     const first = sans[0];
     if (p.theme === "Winning capture") {
       const pc = lang === "fr" ? pieceFr(d.piece) : null;
+      /* Depuis le 2026-10-18 il ne reste que des prises a plusieurs coups :
+         "il suffit de la prendre" deviendrait faux. On cite la suite forcee,
+         verifiee par le moteur comme le reste de la sequence. */
+      if (sans.length > 1) {
+        const suite = sans.slice(1).join(" ");
+        return lang === "fr"
+          ? `${sideLabel} jouent ${first}. ${cap(pc.art)} ${pc.w} adverse en ${d.sq} n'était pas suffisamment défendu${pc.suf}, mais la prise ne suffit pas à elle seule : il faut avoir vu la suite forcée, ${suite}, au bout de laquelle le gain de matériel est acquis.`
+          : `${sideLabel} play ${first}. The ${pieceEn(d.piece)} on ${d.sq} wasn't defended enough, but the capture alone isn't the whole story: you need to see the forced follow-up, ${suite}, at the end of which the material gain holds.`;
+      }
       return lang === "fr"
         ? `${sideLabel} jouent ${first}. ${cap(pc.art)} ${pc.w} adverse en ${d.sq} n'était pas suffisamment défendu${pc.suf} : il suffit de ${pc.art} prendre, pour un gain de matériel sans contrepartie.`
         : `${sideLabel} play ${first}. The ${pieceEn(d.piece)} on ${d.sq} wasn't defended enough to survive. It's simply captured, for a clean material gain.`;

@@ -1113,7 +1113,12 @@ function checkBadges(){
 function renderBadges(){
   const el=$("badgeGrid");if(!el)return;
   ensureProgFields();
-  poserHtml(el,BADGES.map(b=>{
+  /* Un badge de motif n'est affiche que si le motif est propose
+     (SEUIL_MOTIF, ui.js), ou s'il a deja ete gagne : un badge acquis ne
+     disparait jamais. Sans les decomptes, on affiche tout et on revient. */
+  if(!THEME_COUNTS)loadThemeCounts(renderBadges);
+  const visibles=BADGES.filter(b=>b.type!=="theme"||!THEME_COUNTS||motifPropose(b.theme)||prog.badges.includes(b.id));
+  poserHtml(el,visibles.map(b=>{
     const unlocked=prog.badges.includes(b.id);
     const label=badgeLabel(b);
     return '<div class="badge'+(unlocked?' unlocked':'')+'">'+label+'</div>';
@@ -1434,8 +1439,13 @@ function renderSolveMenu(){
      quelque chose, "1 847 exercices" ne dit rien sur soi. prog.themeSolved
      existe depuis les badges par theme, on le reutilise plutot que d'ajouter
      un compteur. */
-  const motifsFaits=MOTIFS_ENTRAINEMENT.filter(m=>(prog.themeSolved||{})[m.theme]>0).length;
-  set("subSolveMotifs",t("{n}/{total} patterns started",{n:motifsFaits,total:MOTIFS_ENTRAINEMENT.length}));
+  /* Seuls les motifs proposes comptent (SEUIL_MOTIF, ui.js) : "3/12" ne doit
+     pas compter une tuile qui n'est pas affichee. Tant que les decomptes ne
+     sont pas arrives, on les demande et on revient ici. */
+  if(!THEME_COUNTS)loadThemeCounts(renderSolveMenu);
+  const proposes=THEME_COUNTS?MOTIFS_ENTRAINEMENT.filter(m=>motifPropose(m.theme)):MOTIFS_ENTRAINEMENT;
+  const motifsFaits=proposes.filter(m=>(prog.themeSolved||{})[m.theme]>0).length;
+  set("subSolveMotifs",t("{n}/{total} patterns started",{n:motifsFaits,total:proposes.length}));
 }
 /* Grille des motifs. Les decomptes viennent de THEME_COUNTS, donc du fichier
    reellement produit par le build : une tuile ne peut pas annoncer plus
@@ -1451,7 +1461,7 @@ function renderMotifsMenu(){
   const groupes=[["motifs",t("Tactical patterns")],["mats",t("Checkmates")]];
   let h="";
   for(const [cle,titre] of groupes){
-    const lignes=MOTIFS_ENTRAINEMENT.filter(m=>m.groupe===cle&&THEME_COUNTS[m.theme]>0);
+    const lignes=MOTIFS_ENTRAINEMENT.filter(m=>m.groupe===cle&&motifPropose(m.theme));
     if(!lignes.length)continue;
     h+='<div class="motif-groupe"><div class="eyebrow">'+echappe(titre)+'</div><div class="motif-grille">';
     for(const m of lignes){

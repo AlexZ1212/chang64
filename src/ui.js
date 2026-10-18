@@ -264,6 +264,15 @@ const MOTIFS_ENTRAINEMENT=[
   {groupe:"mats",theme:"Mate in two"},
   {groupe:"mats",theme:"Mate in three"}
 ];
+/* Seuil d'un motif propose (2026-10-18). Un motif trop mince n'est plus un
+   objectif : ni tuile a l'entrainement, ni badge a gagner, ni bouton
+   "S'entrainer" sur sa page Apprendre (meme seuil dans content.js). Cas
+   reels : Winning capture, 30 exercices apres la purge des prises en un
+   coup, et Quiet move, 21, dont le badge a 25 n'a jamais pu etre obtenu.
+   50 garde Mate in three (82). Le seuil lit THEME_COUNTS : quand le minage
+   aura rempli un motif, il reapparait sans rien changer ici. */
+const SEUIL_MOTIF=50;
+function motifPropose(theme){return !!THEME_COUNTS&&(THEME_COUNTS[theme]||0)>=SEUIL_MOTIF;}
 /* Motif en cours d'entrainement, ou null. Tant qu'il est pose, l'echelle des
    niveaux est SUSPENDUE : ni montee apres trois reussites, ni descente apres
    quatre erreurs. C'est le point de tout ce mode. Le filtre par motif de

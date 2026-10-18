@@ -56,7 +56,7 @@ function ouvrir(hash,cb){
   T("chaque motif designe au moins un niveau valide",
     Object.values(levels).every(n=>{
       const l=listeNiveaux(n);
-      return l.length>0&&l.every(x=>Number.isInteger(x)&&x>=1&&x<=10);
+      return l.length>0&&l.every(x=>Number.isInteger(x)&&x>=1&&x<=8);
     }),
     JSON.stringify(levels));
 

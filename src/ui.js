@@ -210,7 +210,8 @@ function loadPuzzleById(id, onReady) {
    profils presque identiques.
    Le decoupage a ete refait dans build_site.js, une famille d'exercices par
    niveau. Chaque nom est desormais verifiable contre les donnees : le niveau
-   6 contient 100% de fourchettes, le niveau 10 100% de mats. Si tu changes
+   3 contient 100% de fourchettes, les niveaux 7 et 8 100% de mats (echelle
+   a huit niveaux depuis le 2026-10-18, voir LEVELS plus bas). Si tu changes
    l'un, change l'autre, ils ne tiennent plus que l'un par l'autre.
    Ancienne note conservee pour memoire :
    Les bandes sont decoupees sur le seul score diff du moteur, et un mat en un
@@ -272,24 +273,36 @@ const MOTIFS_ENTRAINEMENT=[
    progression retrouve exactement l'etat ou on l'avait laissee. */
 /* motifNiveau est le niveau dans lequel on puise EN CE MOMENT, motifNiveaux
    la liste complete des niveaux qui hebergent ce motif, du plus fourni au
-   moins fourni. Douze motifs sur treize n'en ont qu'un ; Winning capture en
-   a quatre, ses 28 499 exercices ne tenant pas dans un seul niveau. Quand le
+   moins fourni. Presque tous les motifs n'en ont qu'un ; Mate in two en a
+   deux depuis le 2026-10-18 (niveaux 7 et 8), Winning capture en avait
+   quatre avant la purge des prises en un coup. Quand le
    niveau courant n'a plus de morceau a donner, nextPuzzle() avance dans
    cette liste (2026-09-13) : sans ca le mode s'arretait au premier niveau et
    laissait les trois quarts du motif hors d'atteinte. */
 let motifEnCours=null,motifNiveau=1,motifNiveaux=[1];
+/* Huit niveaux depuis le 2026-10-18 (voir BANDES dans build_site.js) : les
+   quatre paliers de prises ont disparu avec les prises en un coup. */
 const LEVELS=[
-  {n:1,name:"First steps"},
-  {n:2,name:"Loose pieces"},
-  {n:3,name:"Quieter captures"},
-  {n:4,name:"Well-hidden captures"},
-  {n:5,name:"Mate in one"},
-  {n:6,name:"Forks"},
-  {n:7,name:"Pins and skewers"},
-  {n:8,name:"Double attacks"},
-  {n:9,name:"The winning move"},
-  {n:10,name:"Mate in two"}
+  {n:1,name:"Mate in one"},
+  {n:2,name:"Back-rank mates"},
+  {n:3,name:"Forks"},
+  {n:4,name:"Pins and skewers"},
+  {n:5,name:"Double attacks"},
+  {n:6,name:"The winning move"},
+  {n:7,name:"Mate in two"},
+  {n:8,name:"Deeper mates"}
 ];
+/* Ou retombe un joueur de l'ancienne echelle a dix niveaux (indice = ancien
+   niveau). Sans cette table, quelqu'un au niveau 6 (Fourchettes) se serait
+   retrouve en "Le coup gagnant", et un niveau 9 ou 10 ecrete au 8. Les
+   anciens niveaux 1 a 4 (prises) et 5 (mat en un) repartent au mat en un,
+   chacun des autres retrouve sa famille. Se pose une fois, au chargement,
+   grace au champ echelle de prog. */
+const ECHELLE=2,ANCIENS_NIVEAUX=[1,1,1,1,1,1,3,4,5,6,7];
+function migrerNiveau(p){
+  if(p&&p.echelle!==ECHELLE){p.level=ANCIENS_NIVEAUX[p.level|0]||1;p.echelle=ECHELLE;}
+  return p;
+}
 /* L'indice suivait autrefois le niveau (1 phrase fixe pour les dix), pas
    l'exercice : "cherche la piece mal protegee" s'affichait par exemple sur
    un mat, puisque le niveau 2 promet ca a tous ses exercices sans exception,
@@ -433,7 +446,7 @@ let puzzle=null,puzzleN=0,puzzleTries=0,puzzleDone=false,puzzleSolPly=0,solCache
    avant d'atteindre le code qui lit cette variable pendant un sprint (meme
    garde que pour prog.solved/themeSolved/solveLog). */
 let puzzleStartTs=0;
-let prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[]};
+let prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[],echelle:ECHELLE};
 /* Delta de notation du dernier exercice juge (integration ELO) : mis a
    jour par updateRating() (ui2.js), lu par finishPuzzle() juste apres pour
    l'afficher a cote du verdict. Reinitialise a chaque nouvel exercice
@@ -526,7 +539,7 @@ let lastRatingDelta=null;
 async function saveProg(){try{await window.storage.set("chang64:progress",JSON.stringify(prog));}catch(e){}}
 async function loadProg(){
   try{const r=await window.storage.get("chang64:progress");
-    if(r&&r.value)prog=Object.assign(prog,JSON.parse(r.value));}catch(e){}
+    if(r&&r.value){prog=Object.assign(prog,migrerNiveau(JSON.parse(r.value)));saveProg();}}catch(e){}
 }
 
 /* ==========================================================
@@ -2001,7 +2014,9 @@ function crc(s){let n=0;for(let i=0;i<s.length;i++)n=(n*31+s.charCodeAt(i))%1296
 function makeCode(){
   const seen=(prog.seen||[]).slice(-40).map(x=>parseInt(String(x).replace(/\D/g,""),10))
     .filter(x=>!isNaN(x)).map(x=>x.toString(36));
-  const payload=[prog.level,prog.solved,prog.best,prog.streak,prog.correctRun,prog.wrongRun].join(".")+"|"+seen.join(".");
+  /* Septieme nombre depuis le 2026-10-18 : l'echelle. Un code a six nombres
+     date de l'echelle a dix niveaux et son niveau est migre a la lecture. */
+  const payload=[prog.level,prog.solved,prog.best,prog.streak,prog.correctRun,prog.wrongRun,ECHELLE].join(".")+"|"+seen.join(".");
   const body=b64u(payload);
   return "CH64-"+body+"-"+crc(body);
 }
@@ -2021,8 +2036,9 @@ function readCode(txt){
      : perte silencieuse, sur la fonction meme qui porte la promesse du site
      sans compte. La borne suit desormais la longueur du tableau, pour ne pas
      redevenir fausse le jour ou un onzieme niveau apparait. */
-  return {level:Math.min(LEVELS.length,Math.max(1,nums[0]|0)),solved:Math.max(0,nums[1]|0),best:Math.max(0,nums[2]|0),
-    streak:Math.max(0,nums[3]|0),correctRun:Math.max(0,nums[4]|0),wrongRun:Math.max(0,nums[5]|0),seen:seen};
+  const lu=migrerNiveau({level:nums[0]|0,echelle:nums.length>6?nums[6]:1});
+  return {level:Math.min(LEVELS.length,Math.max(1,lu.level)),solved:Math.max(0,nums[1]|0),best:Math.max(0,nums[2]|0),
+    streak:Math.max(0,nums[3]|0),correctRun:Math.max(0,nums[4]|0),wrongRun:Math.max(0,nums[5]|0),seen:seen,echelle:ECHELLE};
 }
 function showCode(){
   $("codeOut").value=makeCode();
@@ -2697,7 +2713,7 @@ $("btnCodeGen").onclick=showCode;
 $("btnCodeCopy").onclick=()=>{if(!$("codeOut").value)showCode();copyText($("codeOut").value);$("codeMsg").textContent=t("Code copied.");};
 $("btnCodeLoad").onclick=loadCode;
 $("btnReset").onclick=()=>{
-  prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[]};
+  prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[],echelle:ECHELLE};
   saveProg();renderProgress();nextPuzzle();
 };
 /* Choix de couleur pour une partie par correspondance, en overlay (voir

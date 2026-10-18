@@ -34,7 +34,8 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
    banque donne un tableau entierement faux. */
 function niveauxReels() {
   const parMotif = {};
-  for (let lvl = 1; lvl <= 10; lvl++) {
+  /* Autant de niveaux qu'il y a de manifestes (huit depuis le 2026-10-18). */
+  for (let lvl = 1; fs.existsSync(SITE + "/data/level-" + lvl + ".json"); lvl++) {
     const meta = JSON.parse(fs.readFileSync(SITE + "/data/level-" + lvl + ".json", "utf8"));
     for (let k = 0; k < meta.morceaux; k++)
       for (const p of JSON.parse(fs.readFileSync(SITE + "/data/level-" + lvl + "-" + k + ".json", "utf8")))

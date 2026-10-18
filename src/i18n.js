@@ -174,7 +174,7 @@ const FR={
 "Loose pieces":"Pièces en prise","Quieter captures":"Prises plus discrètes",
 "Well-hidden captures":"Prises bien cachées","Mate in one":"Mat en un","Forks":"Fourchettes",
 "Pins and skewers":"Clouages et enfilades","Double attacks":"Attaques doubles",
-"The winning move":"Le coup gagnant","Mate in two":"Mat en deux",
+"The winning move":"Le coup gagnant","Back-rank mates":"Mats du couloir","Deeper mates":"Mats plus profonds","Mate in two":"Mat en deux",
 "Mate in two":"Mats en deux coups",
 "One move is enough.":"Un seul coup suffit.","Look for the loose piece.":"Cherche la pièce mal protégée.",
 "One piece can attack two at once.":"Une pièce peut en attaquer deux à la fois.",

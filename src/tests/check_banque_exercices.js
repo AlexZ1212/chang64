@@ -16,7 +16,7 @@ T("aucun identifiant en double", new Set(P.map(p=>p.id)).size===P.length,
   (P.length-new Set(P.map(p=>p.id)).size)+" doublons");
 T("aucune position en double", new Set(P.map(p=>p.fen.split(" ").slice(0,4).join(" "))).size===P.length,
   (P.length-new Set(P.map(p=>p.fen.split(" ").slice(0,4).join(" "))).size)+" doublons");
-const NLEVELS=10;
+const NLEVELS=8;
 T("tous les champs presents", P.every(p=>p.id&&p.fen&&p.type&&p.sol&&p.sol.length&&p.theme&&p.level));
 T("niveaux entre 1 et "+NLEVELS, P.every(p=>p.level>=1&&p.level<=NLEVELS));
 T("chaque niveau a des exercices", Array.from({length:NLEVELS},(_,i)=>i+1).every(l=>P.some(p=>p.level===l)));

@@ -92,7 +92,7 @@ function boot(lang){
      translated" restent verifies normalement : ils portent sur du texte
      d'interface statique, pas sur le contenu de l'exercice charge. */
   T("theme translated", !/Mate in|Winning|fork/.test($("exTheme").textContent), $("exTheme").textContent);
-  T("level name translated", /pas|confiance|tactiques|calcul/i.test($("lvlName").textContent), $("lvlName").textContent);
+  T("level name translated", /pas|confiance|tactiques|calcul|^Mat /i.test($("lvlName").textContent)&&!/Mate in/.test($("lvlName").textContent), $("lvlName").textContent);
   T("buttons translated", $("btnNext").textContent==="Exercice suivant", $("btnNext").textContent);
 
   console.log("\nENDGAMES IN FRENCH");

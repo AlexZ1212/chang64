@@ -55,7 +55,7 @@ setTimeout(async()=>{
   /* Dix paliers desormais (voir LEVELS dans ui.js) : le nombre affiche doit
      suivre, pas rester fige a l'ancien plafond de cinq. */
   const max_=d.getElementById("lvlMax");
-  T("le plafond affiche est bien 10", max_ && max_.textContent==="10", max_&&max_.textContent);
+  T("le plafond affiche est bien 8", max_ && max_.textContent==="8", max_&&max_.textContent);
   const lab=[...d.querySelectorAll("#pane-puzzles .stat span")].map(s=>s.textContent);
   T("plus aucune trace du record Sprint ici non plus", !lab.includes("Record Sprint")&&!lab.includes("Record Rush"), lab.join(", "));
 

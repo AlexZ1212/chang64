@@ -1,8 +1,8 @@
 {
  "/404.html": {
-  "sceau": "fee543a65d3b1705",
+  "sceau": "d01a16f5fd49e86b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/endgames/": {
   "sceau": "532d874299de94ea",
@@ -130,74 +130,74 @@
   "modifiee": "2026-09-08"
  },
  "/fr/exercices/": {
-  "sceau": "b8f1fe8be1505d9a",
+  "sceau": "0c93963e08ea15cf",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/attaque-double.html": {
-  "sceau": "d36833507cb7245e",
+  "sceau": "86366ab3046c06f2",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/clouage.html": {
-  "sceau": "3aa7cfa400ff7618",
+  "sceau": "0a0a5f811aa31ae3",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/coup-gagnant.html": {
-  "sceau": "09538e5111f3efbd",
+  "sceau": "734c88adb60fafae",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/coup-silencieux.html": {
-  "sceau": "1782cd0acba061e7",
+  "sceau": "ea2845e61808ba50",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/deviation.html": {
-  "sceau": "0ba9cf4df3e9c693",
+  "sceau": "ecad362e2e231a29",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-10"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/enfilade.html": {
-  "sceau": "1a9bf4cfa27cf9ac",
+  "sceau": "bea2211cd3dd4aa5",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/fourchette-de-cavalier.html": {
-  "sceau": "471cad4f0227eed7",
+  "sceau": "a2df258742bf5eca",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/fourchette-de-pion.html": {
-  "sceau": "f0bb040b84c0d430",
+  "sceau": "f032fcdcc2bdf702",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/mat-du-couloir.html": {
-  "sceau": "412d574a52d187aa",
+  "sceau": "0c9008544b942fdd",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/mat-en-deux-coups.html": {
-  "sceau": "8e9e246c53c2437c",
+  "sceau": "2949a4b61a38b0d0",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/mat-en-trois-coups.html": {
-  "sceau": "94ed9c341d1e5b78",
+  "sceau": "e0ab58fd7e823db8",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/mat-en-un-coup.html": {
-  "sceau": "58260907e829ece3",
+  "sceau": "7c2d8a298856814c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/fr/exercices/prise-gagnante.html": {
-  "sceau": "c57ba0f27e13fd00",
+  "sceau": "41d5fbde6f684529",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/finales/": {
   "sceau": "7a3da25335f58a07",
@@ -235,9 +235,9 @@
   "modifiee": "2026-09-13"
  },
  "/fr/lexique/attaque-a-la-decouverte.html": {
-  "sceau": "6e36d6addaef75db",
+  "sceau": "6969767d9fb6059b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-10-18"
  },
  "/fr/lexique/attaque-de-mat.html": {
   "sceau": "67d75a84735116fe",
@@ -245,9 +245,9 @@
   "modifiee": "2026-09-13"
  },
  "/fr/lexique/attaque-double.html": {
-  "sceau": "20630006a7ae3b62",
+  "sceau": "99cbf7b2c8af9c3d",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/lexique/attaque-sur-le-roi.html": {
   "sceau": "4e0ec1962667fa03",
@@ -265,9 +265,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/clouage.html": {
-  "sceau": "6261e913227b2327",
+  "sceau": "4f0f9114e271c363",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-10-18"
  },
  "/fr/lexique/code-eco.html": {
   "sceau": "b2855a6187257834",
@@ -345,14 +345,14 @@
   "modifiee": "2026-09-13"
  },
  "/fr/lexique/gaffe.html": {
-  "sceau": "d1dd855988325408",
+  "sceau": "c052ce70fceee693",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-10-18"
  },
  "/fr/lexique/gain-de-materiel.html": {
-  "sceau": "4eeb34f99cac8f33",
+  "sceau": "3a08a6fbe4a6d10d",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/fr/lexique/gambit.html": {
   "sceau": "5fd121acdccb3239",
@@ -1275,9 +1275,9 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/blunder.html": {
-  "sceau": "676182a59254b7eb",
+  "sceau": "9cba15e603e546f3",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-10-18"
  },
  "/glossary/brilliant-move.html": {
   "sceau": "ced40a16cb4c30e8",
@@ -1305,14 +1305,14 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/discovered-attack.html": {
-  "sceau": "b980490c1b7603b5",
+  "sceau": "c54db19e5a179cb0",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-10-18"
  },
  "/glossary/double-attack.html": {
-  "sceau": "df0ef7b51d8ff910",
+  "sceau": "dc036cb1c2720df0",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/glossary/double-check.html": {
   "sceau": "1b6286b520b805ba",
@@ -1380,9 +1380,9 @@
   "modifiee": "2026-09-13"
  },
  "/glossary/material-gain.html": {
-  "sceau": "f7c9eadee46a2ccc",
+  "sceau": "e7b2514d6bd6fcfd",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/glossary/mating-attack.html": {
   "sceau": "3da174f76f172d48",
@@ -1435,9 +1435,9 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/pin.html": {
-  "sceau": "b3838e8309acbe54",
+  "sceau": "fa0ed89b6fd03e5b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-10-18"
  },
  "/glossary/promotion.html": {
   "sceau": "7a6cec0d96d9d4d7",
@@ -2325,74 +2325,74 @@
   "modifiee": "2026-09-06"
  },
  "/puzzles/": {
-  "sceau": "95aa00956c6ef1b0",
+  "sceau": "029adc2a734054a8",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/back-rank-mate.html": {
-  "sceau": "0462a3b2b01fe743",
+  "sceau": "49e4878f42cefc36",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/deflection.html": {
-  "sceau": "078a58b887954e2a",
+  "sceau": "8092d1934b416959",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-10"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/double-attack.html": {
-  "sceau": "3a5d2508134929da",
+  "sceau": "d1c55faa14115531",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/knight-fork.html": {
-  "sceau": "b92a30fc27ee682c",
+  "sceau": "a0f3c57f9d93f6aa",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/mate-in-one.html": {
-  "sceau": "53118ee775a0ac5d",
+  "sceau": "2a6dad06595457d2",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/mate-in-three.html": {
-  "sceau": "ae3686b2b08ab5f9",
+  "sceau": "a55753e9b09e6cec",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/mate-in-two.html": {
-  "sceau": "6d969350ef3afb43",
+  "sceau": "6585e404c474036c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-12"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/pawn-fork.html": {
-  "sceau": "7723cb974aab90e9",
+  "sceau": "1eb9f432f6c033b7",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/pin.html": {
-  "sceau": "75ff1fbc87312335",
+  "sceau": "ef5a94005e677772",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/quiet-move.html": {
-  "sceau": "9607aa7a2005bf97",
+  "sceau": "6c58a2de2c5b629b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/skewer.html": {
-  "sceau": "eb48190f048e9128",
+  "sceau": "1312f979302c2755",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/winning-capture.html": {
-  "sceau": "d77b15da4b5cbee5",
+  "sceau": "621fb759e47c196a",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/puzzles/winning-move.html": {
-  "sceau": "7f17b49fe5060e9d",
+  "sceau": "30f45fb5e017d879",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-10-18"
  },
  "/traps/": {
   "sceau": "2427f18b5b12486d",

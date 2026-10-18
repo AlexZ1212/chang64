@@ -195,7 +195,7 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
    ui.js et ui2.js) : plus aucun exercice n'est embarque dans index.html,
    chaque fichier ici est charge a la demande cote client, mis en cache par
    le service worker comme le reste des assets statiques.
-   - data/level-N.json (N=1..10) : exercices complets de ce niveau, pour
+   - data/level-N.json (N=1..8) : exercices complets de ce niveau, pour
      Resoudre et la difficulte adaptative.
    - data/puzzle-index.json : { id: niveau } pour tous les exercices, seul
      moyen leger de retrouver le niveau d'un id (lien direct /#puzzle=...,
@@ -227,33 +227,53 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
      coupe pas en morceaux egaux sans redevenir arbitraire. De 3790 a 7512.
      Si tu ajoutes un theme a la banque, ajoute-le ici : ce qui n'est declare
      nulle part atterrit au dernier niveau et la construction le signale.
-     Garde par tests/check_bandes_niveaux.js. */
+     Garde par tests/check_bandes_niveaux.js.
+
+     Refait le 2026-10-18 : HUIT niveaux, plus aucune prise en un coup.
+     Les quatre paliers de "Winning capture" occupaient les niveaux 1 a 4,
+     soit 40 % de la banque. La purge du 18/10 a retire les 28 143 prises
+     triviales, puis, a la demande d'Alexandre, les 5 054 prises en un coup
+     restantes : "je ne veux plus de capture en 1 coup, meme au niveau le
+     plus bas". Il reste 30 Winning capture a plusieurs coups, rangees avec
+     le coup gagnant, dont elles sont une variante.
+     Pourquoi huit et pas dix : les familles restantes en donnent six, et
+     les deux plus grosses (mats en un, mats en deux et plus, pres de 9 000
+     chacune) se coupent en deux. Pour aller jusqu'a dix, il aurait fallu
+     couper des familles sur diff seul, c'est-a-dire revenir a des degres
+     sans contenu, le defaut corrige le 06/09.
+     Les deux coupes suivent un critere qu'on peut nommer : le mat du couloir
+     se separe du mat en un ordinaire (motif a part, avec sa page Apprendre),
+     et les mats en deux se coupent sur diff, les mats en trois rejoignant le
+     palier difficile (cle : longueur de la solution, puis diff).
+     Si tu changes cette liste, change aussi LEVELS (ui.js), la table
+     ANCIENS_NIVEAUX qui y migre la progression des joueurs, et le test. */
   {
     const BANDES = [
-      { paliers: 4, themes: ["Winning capture"] },
       { paliers: 1, themes: ["Mate in one"] },
+      { paliers: 1, themes: ["Back-rank mate"] },
       { paliers: 1, themes: ["Knight fork", "Pawn fork"] },
       { paliers: 1, themes: ["Pin", "Skewer", "Deflection"] },
       { paliers: 1, themes: ["Double attack"] },
-      { paliers: 1, themes: ["Winning move", "Quiet move"] },
-      { paliers: 1, themes: ["Mate in two", "Mate in three", "Back-rank mate"] }
+      { paliers: 1, themes: ["Winning move", "Quiet move", "Winning capture"] },
+      { paliers: 2, themes: ["Mate in two", "Mate in three"] }
     ];
     const declares = new Set(BANDES.flatMap(b => b.themes));
+    const NIVEAUX = BANDES.reduce((n, b) => n + b.paliers, 0);
     const orphelins = [...new Set(puzzles.map(p => p.theme))].filter(t => !declares.has(t));
-    if (orphelins.length) console.log("ATTENTION themes non classes : " + orphelins.join(", ") + " -> derniers niveaux");
+    if (orphelins.length) console.log("ATTENTION themes non classes : " + orphelins.join(", ") + " -> dernier niveau");
     let niveau = 0;
     for (const b of BANDES) {
       const lot = puzzles.filter(p => b.themes.includes(p.theme));
-      lot.sort((x, y) => (x.diff || 0) - (y.diff || 0));
+      lot.sort((x, y) => (x.sol || []).length - (y.sol || []).length || (x.diff || 0) - (y.diff || 0));
       const par = Math.ceil(lot.length / b.paliers);
       for (let i = 0; i < b.paliers; i++) {
         niveau++;
         for (const p of lot.slice(i * par, (i + 1) * par)) p.level = niveau;
       }
     }
-    for (const p of puzzles) if (!declares.has(p.theme)) p.level = 10;
+    for (const p of puzzles) if (!declares.has(p.theme)) p.level = NIVEAUX;
     const tailles = [];
-    for (let l = 1; l <= 10; l++) tailles.push(puzzles.filter(p => p.level === l).length);
+    for (let l = 1; l <= NIVEAUX; l++) tailles.push(puzzles.filter(p => p.level === l).length);
     console.log("Niveaux redecoupes : " + tailles.join(", "));
   }
   const byLevel = {};

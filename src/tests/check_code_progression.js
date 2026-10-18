@@ -35,6 +35,10 @@ const ctx=vm.createContext({
   LEVELS:new Array(NIVEAUX).fill({name:"x"}),
   prog:null, console
 });
+/* La migration de l'ancienne echelle (2026-10-18) vit a cote de LEVELS :
+   readCode s'en sert pour les codes a six nombres. */
+const dm=src.indexOf("const ECHELLE="), fm=src.indexOf("\n}\n",src.indexOf("function migrerNiveau("))+3;
+vm.runInContext(src.slice(dm,fm),ctx);
 vm.runInContext(bloc,ctx);
 
 console.log("\n--- L'echelle ---");
@@ -63,9 +67,20 @@ T("exercices deja vus", r&&r.seen.length===2, r&&r.seen.join(","));
 console.log("\n--- La borne ne doit pas etre un nombre en dur ---");
 /* C'est ainsi que le defaut est apparu : une borne figee a 5, restee en place
    pendant que l'echelle passait a 10. */
-const mB=src.match(/level:Math\.min\(([^,]+),Math\.max\(1,nums\[0\]\|0\)\)/);
+const mB=src.match(/level:Math\.min\(([^,]+),Math\.max\(1,lu\.level\)\)/);
 T("la borne existe", !!mB, mB?mB[1]:"motif introuvable");
 T("la borne suit LEVELS", !!mB && /LEVELS\.length/.test(mB[1]), mB?mB[1]:"");
+
+console.log("\n--- Un code de l'ancienne echelle a dix niveaux est migre ---");
+/* Code a six nombres, fabrique comme avant le 2026-10-18. */
+const ancien=lvl=>{const body=vm.runInContext("b64u",ctx)([lvl,120,14,5,2,0].join(".")+"|");
+  return "CH64-"+body+"-"+vm.runInContext("crc",ctx)(body);};
+for(const [avant,apres,quoi] of [[3,1,"prises"],[5,1,"mat en un"],[6,3,"fourchettes"],[9,6,"coup gagnant"],[10,7,"mat en deux"]]){
+  const rl=vm.runInContext("readCode("+JSON.stringify(ancien(avant))+")",ctx);
+  T("ancien niveau "+avant+" ("+quoi+") -> "+apres, rl&&rl.level===apres, rl&&String(rl.level));
+}
+T("le code relu porte la nouvelle echelle",
+  vm.runInContext("readCode("+JSON.stringify(ancien(6))+")",ctx).echelle===vm.runInContext("ECHELLE",ctx));
 
 console.log("\n--- Un code invalide reste refuse ---");
 for(const mauvais of ["", "CH64", "CH64-abc-zz", "n'importe quoi", "CH64-MS4x-00"])

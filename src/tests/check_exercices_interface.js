@@ -62,7 +62,7 @@ setTimeout(async()=>{
   /* PUZZLES etait un tableau global embarque, remplace depuis la refonte en
      donnees par niveau charge a la demande (LEVEL_CACHE/PUZZLE_CACHE,
      "10 patterns, 3 examples each") : ce nom n'existe plus. On travaille sur
-     p23, verifie present dans puzzles.json et porteur d'un explain.piece.
+     un exercice de puzzles.json porteur d'un explain.piece (voir plus bas).
      Mis a jour le 2026-09-06 : son niveau etait ecrit en dur (4). Le
      redecoupage des niveaux par famille l'a deplace, et le test s'est mis a
      charger un shard qui ne le contenait plus. Le commentaire d'origine
@@ -78,12 +78,19 @@ setTimeout(async()=>{
      son premier morceau, ou p23 n'est pas forcement. loadPuzzleById va
      chercher le bon morceau et c'est la seule bonne facon d'atteindre un
      exercice precis. Le niveau ecrit en dur, puis le niveau lu dans l'index,
-     ont chacun casse a leur tour : ne remets pas de chemin plus court ici. */
-  w.eval('loadPuzzleById("p23", function(){})');
+     ont chacun casse a leur tour : ne remets pas de chemin plus court ici.
+     Mis a jour le 2026-10-18, troisieme fois : p23 (#TAUXL) etait une prise
+     triviale et a ete purge avec les 28 143 autres. L'identifiant est
+     desormais lu dans puzzles.json : le premier exercice porteur d'un
+     explain.piece et d'un explain.sq. Ne remets pas d'identifiant en dur. */
+  const avecDetail=JSON.parse(fs.readFileSync(path.join(__dirname,"..","puzzles.json"),"utf8"))
+    .find(p=>p.explain&&p.explain.piece&&p.explain.sq);
+  const ID=JSON.stringify(avecDetail?avecDetail.id:"");
+  w.eval('loadPuzzleById('+ID+', function(){})');
   await new Promise(r=>setTimeout(r,800));
-  const withExplain=w.eval('PUZZLE_CACHE["p23"]&&PUZZLE_CACHE["p23"].explain&&PUZZLE_CACHE["p23"].explain.piece');
+  const withExplain=w.eval('PUZZLE_CACHE['+ID+']&&PUZZLE_CACHE['+ID+'].explain&&PUZZLE_CACHE['+ID+'].explain.piece');
   T("un exercice avec detail exploitable existe", !!withExplain);
-  w.eval('puzzle=PUZZLE_CACHE["p23"]; loadPuzzle();');
+  w.eval('puzzle=PUZZLE_CACHE['+ID+']; loadPuzzle();');
   T("rien avant resolution", d.getElementById("exExplain").textContent==="");
   w.eval('finishPuzzle(true,"test")');
   T("explication citant la case reelle apres une reussite",

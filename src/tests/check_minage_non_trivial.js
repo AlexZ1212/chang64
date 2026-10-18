@@ -51,6 +51,17 @@ const banque = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "puzzles.js
 const gains = banque.filter(p => p.source && p.type !== "mate" && (p.sol || []).length === 1);
 const pas = Math.max(1, Math.floor(gains.length / 24)), ech = [];
 for (let i = 0; i < gains.length && ech.length < 24; i += pas) ech.push(gains[i]);
+/* Depuis la purge du 2026-10-18, la banque ne contient plus de prise
+   triviale : l'echantillon n'en trouvait plus aucune et le test ne testait
+   plus le rejet. Quatre positions reelles retirees ce jour-la, gardees ici
+   en dur, dont le mineur tire un exercice avec garderPrisesSimples et
+   aucun sans. */
+for (const [fen, uci] of [
+  ["5rk1/3R2bp/p5p1/1p2n3/8/2K4P/Pr4P1/3R4 b - - 3 37", "e5d7"],                       /* #ZNTZE, prend plus cher */
+  ["r4r2/pp1bkp2/n2p2Q1/2pPq3/2P1P3/P1NB4/1P6/1K3R1R b - - 0 27", "f7g6"],              /* #WB713, prend plus cher */
+  ["r1b3kr/ppp3p1/2npPq2/2b3p1/3pN1Q1/8/PPP2PPP/R1B2RK1 w - - 0 13", "e4f6"],           /* #1DP8I, prend plus cher */
+  ["1rbqrbk1/6pp/2p1pn2/3p1p2/3P1N2/P1P1P2P/3Q1PP1/1BKR2NR b - - 0 18", "f8a3"],        /* #BDM7X, prise gratuite */
+]) ech.push({ fen, sol: [uci] });
 
 let triviales = 0, retenus = 0, multi = 0, trivialRetenu = 0, cassees = 0, unTrivial = null;
 for (const p of ech) {

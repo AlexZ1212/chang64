@@ -164,7 +164,12 @@ const pieces = minifyJs(fs.readFileSync(path.join(__dirname, "pieces_browser.js"
    bas, appelee apres la creation de OUT. Seul le compte total reste
    necessaire tout de suite, pour __TOTAL_PUZZLES__ (juste un nombre, pas de
    cout). */
-let ui = minifyJs(fs.readFileSync(path.join(__dirname, "ui.js"), "utf8").replace("__TOTAL_PUZZLES__", String(puzzles.length)), "ui.js");
+/* Decomptes par motif inscrits dans ui.js (2026-10-18), pour SEUIL_MOTIF :
+   memes donnees que data/theme-counts.json, sans requete au demarrage. */
+const comptesMotifs = {};
+for (const p of puzzles) comptesMotifs[p.theme] = (comptesMotifs[p.theme] || 0) + 1;
+let ui = minifyJs(fs.readFileSync(path.join(__dirname, "ui.js"), "utf8").replace("__TOTAL_PUZZLES__", String(puzzles.length))
+  .replace("__COMPTES_MOTIFS__", JSON.stringify(comptesMotifs)), "ui.js");
 let ui2 = minifyJs(fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8"), "ui2.js");
 // la table famille -> adresses de pages est construite plus bas, après le calcul des slugs
 let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8"), "ui3.js");
@@ -1880,6 +1885,21 @@ self.addEventListener("fetch",e=>{
 /* Les jetons de familles et de lignes ne peuvent etre substitues qu'ici :
    ils dependent du livre d'ouvertures, charge apres l'assemblage. */
 app = app.split("__NF__").join(NF).split("__NL__").join(NL);
+/* Date de l'application (2026-10-18). Les pages de contenu portaient
+   "Publiee le ..., mise a jour le ..." en pied de page ; l'application, la
+   page qu'on visite le plus, ne disait rien. Meme registre, cle "/".
+   L'empreinte couvre la page ET la banque d'exercices : une purge ou une
+   fournee fusionnee est une mise a jour, meme quand le gabarit ne bouge pas.
+   Premiere entree : la date de publication reprend la plus ancienne du
+   registre, celle de la mise en ligne du site, pas la date du jour. */
+if (!DATES["/"]) {
+  const premiere = Object.values(DATES).map(d => d.publiee).sort()[0] || BUILD_DATE;
+  DATES["/"] = { sceau: "", publiee: premiere, modifiee: premiere };
+}
+const datesApp = datesDe("/", app + fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
+app = app.split("__APP_PUBLIEE__").join(datesApp.publiee).split("__APP_MODIFIEE__").join(datesApp.modifiee)
+  .split("__APP_DATES_EN__").join("Published " + datesApp.publiee +
+    (datesApp.modifiee !== datesApp.publiee ? ", updated " + datesApp.modifiee : ""));
 fs.writeFileSync(OUT + "/index.html", app);
 fs.writeFileSync(path.join(__dirname, "site-index.html"), app);
 

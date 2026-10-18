@@ -17,7 +17,10 @@ const en=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
 console.log("\n--- Meme pied de page que l'application, meme ordre ---");
 {
   const app=fs.readFileSync(S+"/index.html","utf8");
-  const fa=(app.match(/<footer>([\s\S]*?)<\/footer>/)||[])[1]||"";
+  /* La date de mise a jour (2026-10-18) est retiree de la comparaison :
+     sur les pages de contenu elle vit hors du menu, dans p.pagedate. */
+  const fa=((app.match(/<footer>([\s\S]*?)<\/footer>/)||[])[1]||"")
+    .replace(/<span class="footdate"[^>]*>[^<]*<\/span>/,"");
   const liste=t=>[...t.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim())
     .filter(x=>x&&x!=="&middot;"&&x.length>2);
   const enPage=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");

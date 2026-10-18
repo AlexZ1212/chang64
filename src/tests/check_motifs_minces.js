@@ -21,7 +21,7 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const html=fs.readFileSync(SITE+"/index.html","utf8");
 const counts=JSON.parse(fs.readFileSync(SITE+"/data/theme-counts.json","utf8"));
 const UI=fs.readFileSync(path.join(__dirname,"..","ui.js"),"utf8");
-const SEUIL=+((UI.match(/const SEUIL_MOTIF=(\d+);/)||[])[1]||0);
+const SEUIL=+((UI.match(/const SEUIL_MOTIF=(\d+)[;,]/)||[])[1]||0);
 const minces=Object.keys(counts).filter(th=>counts[th]<SEUIL);
 
 (async()=>{

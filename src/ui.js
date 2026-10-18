@@ -270,9 +270,14 @@ const MOTIFS_ENTRAINEMENT=[
    reels : Winning capture, 30 exercices apres la purge des prises en un
    coup, et Quiet move, 21, dont le badge a 25 n'a jamais pu etre obtenu.
    50 garde Mate in three (82). Le seuil lit THEME_COUNTS : quand le minage
-   aura rempli un motif, il reapparait sans rien changer ici. */
-const SEUIL_MOTIF=50;
-function motifPropose(theme){return !!THEME_COUNTS&&(THEME_COUNTS[theme]||0)>=SEUIL_MOTIF;}
+   aura rempli un motif, il reapparait sans rien changer ici.
+   Les decomptes sont INSCRITS par le build (jeton de COMPTES_MOTIFS, ~200
+   octets) plutot que demandes au reseau : le menu Resoudre et les badges
+   sont dessines au demarrage, et un chargement a ce moment-la affichait
+   "Couldn't load puzzles" a la moindre coupure, sur une page qui n'en
+   charge aucun. */
+const SEUIL_MOTIF=50,COMPTES_MOTIFS=__COMPTES_MOTIFS__;
+function motifPropose(theme){return ((THEME_COUNTS||COMPTES_MOTIFS)[theme]||0)>=SEUIL_MOTIF;}
 /* Motif en cours d'entrainement, ou null. Tant qu'il est pose, l'echelle des
    niveaux est SUSPENDUE : ni montee apres trois reussites, ni descente apres
    quatre erreurs. C'est le point de tout ce mode. Le filtre par motif de

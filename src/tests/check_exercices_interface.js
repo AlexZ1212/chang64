@@ -42,7 +42,12 @@ setTimeout(async()=>{
   d.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,300));
   d.getElementById("cardSolveMotifs").click();
-  await new Promise(r=>setTimeout(r,600));
+  /* La grille attend /data/theme-counts.json. 600 ms fixes suffisaient
+     seul, pas dans run_tests.js pendant que six minages tournent : "0
+     tuiles" deux fois sur cinq (2026-10-18). On attend les tuiles, 5 s au
+     plus, plutot qu'une duree. */
+  for(let i=0;i<50&&!d.querySelector("#motifsGrid button[data-motif]");i++)
+    await new Promise(r=>setTimeout(r,100));
   const tuiles=[...d.querySelectorAll("#motifsGrid button[data-motif]")];
   const noms=tuiles.map(b=>b.dataset.motif);
   T("motifs proposes", tuiles.length>5, tuiles.length+" tuiles");
@@ -294,11 +299,22 @@ setTimeout(async()=>{
         for(let g=0;g<20&&w.eval("busy");g++)await new Promise(x=>setTimeout(x,80));
         const r=w.eval('(function(){var m=currentSolutions()[0];if(!m)return "null";'+
           'var idx=function(sq){for(var i=0;i<64;i++)if(idxToSq(i)===sq)return i;return -1;};'+
-          'return JSON.stringify({a:idx(m.from),b:idx(m.to)});})()');
+          'return JSON.stringify({a:idx(m.from),b:idx(m.to),promo:m.promo||0});})()');
         if(r==="null")break;
         const i=JSON.parse(r);
         cells[i.a].click(); await new Promise(x=>setTimeout(x,160));
-        cells[i.b].click(); await new Promise(x=>setTimeout(x,1200));
+        cells[i.b].click(); await new Promise(x=>setTimeout(x,160));
+        /* Une promotion ouvre le choix de la piece (askPromo, ui.js) et le
+           coup reste en suspens tant qu'on n'a pas choisi. Le test ne le
+           faisait pas : depuis la purge des prises en un coup (2026-10-18),
+           les promotions pesent plus dans le vivier du sprint et le test
+           echouait une fois sur deux, "p62645 -> p62645". */
+        if(i.promo&&d.getElementById("promoModal").classList.contains("on")){
+          const nom={5:"Queen",4:"Rook",3:"Bishop",2:"Knight"}[i.promo];
+          const b=[...d.querySelectorAll("#promoBtns button")].find(x=>x.getAttribute("aria-label")===w.eval("t("+JSON.stringify(nom)+")"));
+          if(b)b.click();
+        }
+        await new Promise(x=>setTimeout(x,1040));
         if(w.eval("puzzle.id")!==depart)break;
       }
     };

@@ -503,6 +503,23 @@ function applyI18n(){
      beneficieraient. */
   const box=document.getElementById("langSwitch");
   if(box)for(const b of box.children)b.setAttribute("aria-pressed",b.dataset.lang===LANG);
+  rendreDateSite();
+}
+/* Date de publication et de mise a jour de l'application (2026-10-18), meme
+   formule que le pied des pages de contenu (shell() dans build_site.js) et
+   meme registre, content-dates.json, sous la cle "/". Les deux dates sont
+   posees par le build dans data-publiee/data-modifiee ; seule la langue se
+   decide ici, la phrase n'etant pas une cle fixe du dictionnaire. */
+const MOIS_FR=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function rendreDateSite(){
+  const el=document.getElementById("footDate");if(!el)return;
+  const p=el.dataset.publiee,m=el.dataset.modifiee;
+  const iso=/^\d{4}-\d\d-\d\d$/;
+  if(!iso.test(p||"")||!iso.test(m||""))return;
+  const fr=iso=>{const [a,mo,j]=iso.split("-");return parseInt(j,10)+" "+MOIS_FR[parseInt(mo,10)-1]+" "+a;};
+  el.textContent=LANG==="fr"
+    ?"Publiée le "+fr(p)+(m!==p?", mise à jour le "+fr(m):"")
+    :"Published "+p+(m!==p?", updated "+m:"");
 }
 async function saveLang(){try{await window.storage.set("chang64:lang",LANG);}catch(e){}}
 async function loadLang(){

@@ -1115,9 +1115,8 @@ function renderBadges(){
   ensureProgFields();
   /* Un badge de motif n'est affiche que si le motif est propose
      (SEUIL_MOTIF, ui.js), ou s'il a deja ete gagne : un badge acquis ne
-     disparait jamais. Sans les decomptes, on affiche tout et on revient. */
-  if(!THEME_COUNTS)loadThemeCounts(renderBadges);
-  const visibles=BADGES.filter(b=>b.type!=="theme"||!THEME_COUNTS||motifPropose(b.theme)||prog.badges.includes(b.id));
+     disparait jamais. */
+  const visibles=BADGES.filter(b=>b.type!=="theme"||motifPropose(b.theme)||prog.badges.includes(b.id));
   poserHtml(el,visibles.map(b=>{
     const unlocked=prog.badges.includes(b.id);
     const label=badgeLabel(b);
@@ -1440,10 +1439,8 @@ function renderSolveMenu(){
      existe depuis les badges par theme, on le reutilise plutot que d'ajouter
      un compteur. */
   /* Seuls les motifs proposes comptent (SEUIL_MOTIF, ui.js) : "3/12" ne doit
-     pas compter une tuile qui n'est pas affichee. Tant que les decomptes ne
-     sont pas arrives, on les demande et on revient ici. */
-  if(!THEME_COUNTS)loadThemeCounts(renderSolveMenu);
-  const proposes=THEME_COUNTS?MOTIFS_ENTRAINEMENT.filter(m=>motifPropose(m.theme)):MOTIFS_ENTRAINEMENT;
+     pas compter une tuile qui n'est pas affichee. */
+  const proposes=MOTIFS_ENTRAINEMENT.filter(m=>motifPropose(m.theme));
   const motifsFaits=proposes.filter(m=>(prog.themeSolved||{})[m.theme]>0).length;
   set("subSolveMotifs",t("{n}/{total} patterns started",{n:motifsFaits,total:proposes.length}));
 }

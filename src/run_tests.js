@@ -32,9 +32,12 @@ const CHECKS = fs.existsSync(path.join(HERE, "tests"))
 
 let totalOk = 0, totalKo = 0, plantages = [];
 
+/* 15 minutes par suite : depuis la fusion du 2026-10-22 (108 868 exercices),
+   check_banque_exercices.js prend a lui seul 7 min 30. A 5 minutes, il etait
+   coupe et compte comme plantage alors qu'il passait. */
 function run(file, cwd) {
   try {
-    return execFileSync("node", [file], { cwd, encoding: "utf8", timeout: 300000, stdio: ["ignore", "pipe", "pipe"] });
+    return execFileSync("node", [file], { cwd, encoding: "utf8", timeout: 900000, stdio: ["ignore", "pipe", "pipe"] });
   } catch (e) {
     return (e.stdout || "") + (e.stderr || "");
   }

@@ -71,12 +71,17 @@ setTimeout(async()=>{
 
   console.log("\n--- Aller et retour : la finale en cours est retrouvee ---");
   const coups=$("egMoves").textContent,nom=$("egName").textContent;
+  /* On compare au plateau laisse, pas a "3 ou 4 pieces" : le coup libre joue
+     plus haut (le premier coup legal venu) peut laisser prendre une piece,
+     et il n'en reste alors que deux. Le test echouait une fois sur deux. */
+  const piecesLaissees=pieces();
   $("cardSolvePuzzles")&&$("tab-puzzles").click(); await wait(400);
   $("cardSolvePuzzles").click(); await wait(1600);
   T("un exercice tactique a bien pris la place", pieces()>4, pieces()+" pieces");
   $("tab-puzzles").click(); await wait(400);
   $("cardSolveEndgames").click(); await wait(600);
-  T("la finale est revenue sur le plateau", pieces()>=3&&pieces()<=4, pieces()+" pieces");
+  T("la finale est revenue sur le plateau", pieces()===piecesLaissees&&pieces()<=4,
+    pieces()+" pieces au lieu de "+piecesLaissees);
   T("c'est la meme finale", $("egName").textContent===nom, $("egName").textContent);
   T("le compteur de coups n'a pas ete perdu", $("egMoves").textContent===coups,
     $("egMoves").textContent+" au lieu de "+coups);

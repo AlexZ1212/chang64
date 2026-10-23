@@ -29,8 +29,11 @@ const minces=Object.keys(counts).filter(th=>counts[th]<SEUIL);
   T("SEUIL_MOTIF est lisible dans ui.js",SEUIL>0,String(SEUIL));
   T("content.js applique le meme seuil",
     new RegExp("const SEUIL_MOTIF = "+SEUIL+";").test(fs.readFileSync(path.join(__dirname,"..","content.js"),"utf8")));
-  T("Winning capture et Quiet move sont sous le seuil",
-    ["Winning capture","Quiet move"].every(th=>minces.includes(th)),minces.join(", "));
+  /* Winning capture et Quiet move etaient sous le seuil le 2026-10-18 ; la
+     fusion du 2026-10-22 les a repeuples (3396 et 4623). Le test suit donc
+     les donnees au lieu de figer quels motifs sont minces. */
+  T("le seuil range chaque motif selon son compte",
+    Object.keys(counts).every(th=>minces.includes(th)===(counts[th]<SEUIL)),minces.join(", ")||"aucun motif mince");
   T("Mate in three reste au-dessus",counts["Mate in three"]>=SEUIL,String(counts["Mate in three"]));
 
   const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,
@@ -46,6 +49,9 @@ const minces=Object.keys(counts).filter(th=>counts[th]<SEUIL);
   const tuiles=[...d.querySelectorAll("#motifsGrid button[data-motif]")].map(b=>b.dataset.motif);
   T("aucune tuile pour un motif mince",tuiles.every(th=>!minces.includes(th)),tuiles.join(", "));
   T("Mate in three garde sa tuile",tuiles.includes("Mate in three"));
+  const repeuples=["Winning capture","Quiet move"].filter(th=>counts[th]>=SEUIL);
+  T("un motif repeuple par le minage retrouve sa tuile",
+    repeuples.every(th=>tuiles.includes(th)),repeuples.join(", ")+" / "+tuiles.join(", "));
   w.eval("renderSolveMenu()"); await wait(300);
   const sous=(d.getElementById("subSolveMotifs")||{}).textContent||"";
   T("le compte des motifs ne compte que les tuiles affichees",
@@ -66,7 +72,10 @@ const minces=Object.keys(counts).filter(th=>counts[th]<SEUIL);
   console.log("\n--- Page Apprendre ---");
   for(const f of ["learn/spotting-a-hanging-piece.html","learn/the-quiet-move.html"]){
     const h=fs.readFileSync(SITE+"/"+f,"utf8");
-    T(f+" : page conservee, sans bouton d'entrainement",!/href="\/#theme=/.test(h));
+    const th=f.includes("hanging")?"Winning capture":"Quiet move";
+    const bouton=/href="\/#theme=/.test(h);
+    T(f+" : page conservee, bouton d'entrainement "+(counts[th]>=SEUIL?"present":"absent")+" ("+counts[th]+" exercices)",
+      bouton===(counts[th]>=SEUIL));
   }
   T("learn/knight-fork.html garde son bouton",
     /href="\/#theme=Knight%20fork"/.test(fs.readFileSync(SITE+"/learn/knight-fork.html","utf8")));

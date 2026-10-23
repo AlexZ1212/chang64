@@ -87,7 +87,7 @@ T("la tuile Explorer decrit les pages de motifs, pas la taille de la banque",
 console.log("\n--- Les pages d'index annoncent le bon compte ---");
 for (const [p, lbl] of [["/puzzles/index.html", "exercices EN"], ["/fr/exercices/index.html", "exercices FR"]]) {
   const h = fs.readFileSync(SITE + p, "utf8");
-  const nb = (h.match(/(\d{3,5})\s*(puzzles|exercices|verified|engine-verified|positions)/) || [])[1];
+  const nb = (h.match(/(\d{3,7})\s*(puzzles|exercices|verified|engine-verified|positions)/) || [])[1];
   T(lbl + " : " + p, String(nb) === String(NP), "annonce " + nb + ", reel " + NP);
 }
 

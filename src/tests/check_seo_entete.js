@@ -32,8 +32,10 @@ const get = (h, rx) => (h.match(rx) || [])[1] || null;
 console.log("\n--- Accueil : les quatre manques sont combles ---");
 T("canonical present", get(home, /rel="canonical" href="([^"]*)"/) === "https://chang64.com/",
   get(home, /rel="canonical" href="([^"]*)"/));
-T("favicon declare", /rel="icon"[^>]*icon-192\.svg/.test(home));
-T("icone pour iOS", /rel="apple-touch-icon"/.test(home));
+/* Nouvelle identite (2026-10-24) : .ico et SVG a la place de icon-192.svg. */
+T("favicon declare (.ico)", /rel="icon" href="\/favicon\.ico"/.test(home));
+T("favicon declare (SVG)", /rel="icon" href="\/favicon\.svg" type="image\/svg\+xml"/.test(home));
+T("icone pour iOS, en PNG plein cadre", /rel="apple-touch-icon" href="\/apple-touch-icon\.png"/.test(home));
 const desc = get(home, /name="description" content="([^"]*)"/);
 T("description sous 160 caracteres : " + (desc || "").length, desc && desc.length <= 160, String((desc || "").length));
 T("description assez riche", desc && desc.length >= 100, String((desc || "").length));
@@ -41,7 +43,7 @@ const hl = [...home.matchAll(/hreflang="([^"]*)"/g)].map(m => m[1]);
 T("hreflang en, fr et x-default", ["en", "fr", "x-default"].every(x => hl.includes(x)), hl.join(", "));
 
 console.log("\n--- Les fichiers d'icone existent vraiment ---");
-for (const f of ["/icon-192.svg", "/icon-512.svg"])
+for (const f of ["/favicon.ico", "/favicon.svg", "/apple-touch-icon.png", "/icon-192.png", "/icon-512.png", "/maskable-192.png", "/maskable-512.png"])
   T(f + " present", fs.existsSync(SITE + f));
 
 console.log("\n--- Chaque page garde SON canonical ---");

@@ -45,8 +45,6 @@ function pieceSVG(t,c,serre){
   }
   return s+'</svg>';
 }
-const MARK_PATHS=["M23 15.4C14 11 3 16.4 3 25.8c0 7.4 5.6 13.6 13 16.4L23 34z","M41 15.4C50 11 61 16.4 61 25.8c0 7.4-5.6 13.6-13 16.4L41 34z","M32 5c-8.6 0-14.4 6-14.4 14.2V36c0 4.4 2.4 7.8 6.4 9.2V30h16v15.2c4-1.4 6.4-4.8 6.4-9.2V19.2C46.4 11 40.6 5 32 5z","M24 38l-3.6.6c-4 5-5.8 11-5.4 17.4 2.6-6 5.4-10.4 9-13.4z","M40 38l3.6.6c4 5 5.8 11 5.4 17.4-2.6-6-5.4-10.4-9-13.4z","M27 30h10v16c0 5.4-2.2 9-2.2 11.8 0 2.8 2.6 4 4.6 2.2-1.4 3.6-6.6 4-9.6 1.2-2.8-2.6-3.8-6.4-3.8-11.4z"];
-function markSVG(fill){
-  return '<svg viewBox="0 0 64 64" aria-hidden="true"><g fill="'+fill+'">'+
-    MARK_PATHS.map(d=>'<path d="'+d+'"/>').join("")+'</g></svg>';
-}
+/* markSVG() et MARK_PATHS (ancienne tete d'elephant) retires le 2026-10-24 :
+   plus aucun appel depuis que build_site.js pose le signe dans le HTML
+   (brandMark, ds/signe.svg). */

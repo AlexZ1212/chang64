@@ -1196,15 +1196,27 @@ const CSS_MIN = minifyCss(CSS);
    l'autre du site. Fonction declaree (donc hoistee) pour ne pas dependre de
    l'ordre des constantes plus bas dans le fichier. */
 let _mark = null;
+/* Nouvelle identite (2026-10-24, design/identite) : un elephant geometrique de
+   profil, a la place de la tete de face qui se lisait comme un champignon a
+   petite taille. ds/signe.svg est le signe principal (24 px et plus) ; son
+   oeil est un trou, d'ou fill-rule evenodd, a conserver sous peine d'un
+   elephant sans oeil. */
+function signe(fichier) {
+  const svg = fs.readFileSync(path.join(__dirname, "ds", fichier), "utf8");
+  return [...svg.matchAll(/<path\b([^>]*)\/?>/g)].map(m => {
+    const d = (m[1].match(/\sd="([^"]+)"/) || [])[1];
+    const regle = (m[1].match(/fill-rule="([^"]+)"/) || [])[1];
+    return { d, regle };
+  }).filter(p => p.d);
+}
 function brandMark() {
   if (_mark === null) {
-    const paths = (fs.readFileSync(path.join(__dirname, "ds/mark-on-dark.svg"), "utf8")
-      .match(/<path d="[^"]+"/g) || []).map(m => m.slice(9, -1));
     /* Pas de width/height en attribut : c'est le CSS qui donne la taille,
        adaptative comme dans l'application (clamp 30 a 40 px). Des attributs
        fixes entreraient en conflit avec elle. */
     _mark = `<svg class="brandmark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">` +
-      `<g fill="currentColor">${paths.map(d => `<path d="${d}"/>`).join("")}</g></svg>`;
+      signe("signe.svg").map(p => `<path fill="currentColor"${p.regle ? ` fill-rule="${p.regle}"` : ""} d="${p.d}"/>`).join("") +
+      `</svg>`;
   }
   return _mark;
 }
@@ -1325,11 +1337,12 @@ function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogIma
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">
 ${noindex ? '<meta name="robots" content="noindex,follow">' : ""}
-<!-- Les icones existaient mais n'etaient declarees nulle part hors du
-     manifeste : invisibles dans l'onglet du navigateur et dans les resultats
-     de recherche. -->
-<link rel="icon" href="/icon-192.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/icon-192.svg">
+<!-- Icones de la nouvelle identite (2026-10-24) : le .ico pour les anciens
+     navigateurs et Safari, le SVG (signe allege) pour les autres, et une
+     image pleine pour l'ecran d'accueil iOS. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 ${alts || ""}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
@@ -1822,19 +1835,23 @@ fs.writeFileSync(OUT + "/manifest.webmanifest", JSON.stringify({
   start_url: "/", scope: "/", display: "standalone",
   background_color: "#101413", theme_color: "#101413", orientation: "any",
   icons: [
-    { src: "/icon-192.svg", sizes: "192x192", type: "image/svg+xml", purpose: "any" },
-    { src: "/icon-512.svg", sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+    { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+    { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+    { src: "/maskable-192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
+    { src: "/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
   ]
 }, null, 2));
 
-const markPaths = (fs.readFileSync(path.join(__dirname, "ds/mark-on-dark.svg"), "utf8").match(/<path d="[^"]+"/g) || [])
-  .map(m => m.slice(9, -1));
-for (const size of [192, 512]) {
-  fs.writeFileSync(`${OUT}/icon-${size}.svg`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">` +
-    `<rect width="64" height="64" rx="14" fill="#191F1D"/>` +
-    `<g fill="#E0A93B">${markPaths.map(d => `<path d="${d}"/>`).join("")}</g></svg>`);
-}
+/* Icones de la nouvelle identite (2026-10-24), livrees toutes faites dans
+   ds/icones (sources dans design/identite). Elles remplacent icon-192.svg et
+   icon-512.svg, generes ici a partir de l'ancien signe :
+   - favicon.ico (16, 32, 48 px) pour les anciens navigateurs et Safari ;
+   - favicon.svg, le signe allege, lisible a 16 px ;
+   - apple-touch-icon.png, plein cadre et sans transparence, pour iOS ;
+   - icon-*.png (any) et maskable-*.png (decoupe par le systeme), separes :
+     une meme image "any maskable" se faisait rogner l'elephant sur Android. */
+for (const f of fs.readdirSync(path.join(__dirname, "ds/icones")))
+  fs.copyFileSync(path.join(__dirname, "ds/icones", f), path.join(OUT, f));
 
 const SW_VERSION = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "");
 fs.writeFileSync(OUT + "/sw.js", `/* chang64 offline cache
@@ -1869,7 +1886,7 @@ let fileDeco=Promise.resolve();
 /* "/index.html" retire de CORE et du repli hors ligne (2026-10-24) : Pages le
    redirige en 308 vers "/", et une reponse redirigee servie a une navigation
    est refusee par le navigateur. Le repli tombait donc en erreur. */
-const CORE=["/","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
+const CORE=["/","/manifest.webmanifest","/favicon.svg","/favicon.ico","/icon-192.png","/icon-512.png","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));
 });

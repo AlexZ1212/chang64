@@ -40,7 +40,7 @@
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
      de zero.
-     Chemins relatifs a la racine ("/fonts/...", pas "https://chang64.com/fonts/...") :
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
      ces pages vivent a des profondeurs variees (/openings/*.html,
      /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
      selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
@@ -56,7 +56,7 @@
 <style>
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
-.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -83,24 +83,24 @@
   <nav class="sitenav"><a href="/openings/">Openings</a><a href="/puzzles/">Patterns</a><span aria-current="page" id="cn">Rules</span><a href="/endgames/">Endgames</a><a href="/traps/">Opening traps</a><a href="/glossary/">Glossary</a></nav>
 </header>
 <main id="contenu">
-<h1>Learn chess: every rule explained</h1><p class="lede">The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.</p><div class="grid"><a class="tile" href="/learn/how-the-pieces-move.html"><b>How the chess pieces move</b></a>
-<a class="tile" href="/learn/castling.html"><b>Castling: the rule and when to use it</b></a>
-<a class="tile" href="/learn/en-passant.html"><b>En passant, the rule everyone forgets</b></a>
-<a class="tile" href="/learn/pawn-promotion.html"><b>Pawn promotion and the underpromotion trick</b></a>
-<a class="tile" href="/learn/check-checkmate-stalemate.html"><b>Check, checkmate and stalemate explained</b></a>
-<a class="tile" href="/learn/how-games-are-drawn.html"><b>Every way a chess game can be drawn</b></a>
-<a class="tile" href="/learn/chess-notation.html"><b>Reading and writing chess notation</b></a>
-<a class="tile" href="/learn/time-controls.html"><b>Time controls: what blitz, rapid and 10+0 mean</b></a>
-<a class="tile" href="/learn/opening-principles.html"><b>The four opening principles that matter</b></a>
-<a class="tile" href="/learn/spotting-a-hanging-piece.html"><b>Spotting a hanging piece</b></a>
-<a class="tile" href="/learn/knight-fork.html"><b>The knight fork</b></a>
-<a class="tile" href="/learn/pawn-fork.html"><b>The pawn fork</b></a>
-<a class="tile" href="/learn/double-attack.html"><b>Double attack: forks that aren't knight moves</b></a>
-<a class="tile" href="/learn/the-pin.html"><b>The pin: a piece that can't move</b></a>
-<a class="tile" href="/learn/the-skewer.html"><b>The skewer: a pin turned around</b></a>
-<a class="tile" href="/learn/back-rank-mate.html"><b>The back-rank mate</b></a>
-<a class="tile" href="/learn/deflection.html"><b>Deflection: one piece, two jobs</b></a>
-<a class="tile" href="/learn/the-quiet-move.html"><b>The quiet move: the hardest kind to find</b></a></div>
+<h1>Learn chess: every rule explained</h1><p class="lede">The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.</p><div class="grid"><a class="tile" href="/learn/how-the-pieces-move"><b>How the chess pieces move</b></a>
+<a class="tile" href="/learn/castling"><b>Castling: the rule and when to use it</b></a>
+<a class="tile" href="/learn/en-passant"><b>En passant, the rule everyone forgets</b></a>
+<a class="tile" href="/learn/pawn-promotion"><b>Pawn promotion and the underpromotion trick</b></a>
+<a class="tile" href="/learn/check-checkmate-stalemate"><b>Check, checkmate and stalemate explained</b></a>
+<a class="tile" href="/learn/how-games-are-drawn"><b>Every way a chess game can be drawn</b></a>
+<a class="tile" href="/learn/chess-notation"><b>Reading and writing chess notation</b></a>
+<a class="tile" href="/learn/time-controls"><b>Time controls: what blitz, rapid and 10+0 mean</b></a>
+<a class="tile" href="/learn/opening-principles"><b>The four opening principles that matter</b></a>
+<a class="tile" href="/learn/spotting-a-hanging-piece"><b>Spotting a hanging piece</b></a>
+<a class="tile" href="/learn/knight-fork"><b>The knight fork</b></a>
+<a class="tile" href="/learn/pawn-fork"><b>The pawn fork</b></a>
+<a class="tile" href="/learn/double-attack"><b>Double attack: forks that aren't knight moves</b></a>
+<a class="tile" href="/learn/the-pin"><b>The pin: a piece that can't move</b></a>
+<a class="tile" href="/learn/the-skewer"><b>The skewer: a pin turned around</b></a>
+<a class="tile" href="/learn/back-rank-mate"><b>The back-rank mate</b></a>
+<a class="tile" href="/learn/deflection"><b>Deflection: one piece, two jobs</b></a>
+<a class="tile" href="/learn/the-quiet-move"><b>The quiet move: the hardest kind to find</b></a></div>
 </main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le

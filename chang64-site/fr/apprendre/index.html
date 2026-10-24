@@ -40,7 +40,7 @@
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
      de zero.
-     Chemins relatifs a la racine ("/fonts/...", pas "https://chang64.com/fonts/...") :
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
      ces pages vivent a des profondeurs variees (/openings/*.html,
      /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
      selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
@@ -56,7 +56,7 @@
 <style>
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
-.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -83,24 +83,24 @@
   <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><a href="/fr/exercices/">Motifs</a><span aria-current="page" id="cn">Apprendre</span><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a></nav>
 </header>
 <main id="contenu">
-<h1>Apprendre les échecs : toutes les règles expliquées</h1><p class="lede">Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous.</p><div class="grid"><a class="tile" href="/fr/apprendre/deplacement-des-pieces.html"><b>Comment se déplacent les pièces d'échecs</b></a>
-<a class="tile" href="/fr/apprendre/le-roque.html"><b>Le roque : la règle et le bon moment</b></a>
-<a class="tile" href="/fr/apprendre/la-prise-en-passant.html"><b>La prise en passant, la règle que tout le monde oublie</b></a>
-<a class="tile" href="/fr/apprendre/la-promotion-du-pion.html"><b>La promotion du pion et la sous-promotion</b></a>
-<a class="tile" href="/fr/apprendre/echec-mat-et-pat.html"><b>Échec, mat et pat : la différence</b></a>
-<a class="tile" href="/fr/apprendre/les-parties-nulles.html"><b>Toutes les façons de faire nulle aux échecs</b></a>
-<a class="tile" href="/fr/apprendre/la-notation-des-coups.html"><b>Lire et écrire la notation des échecs</b></a>
-<a class="tile" href="/fr/apprendre/les-cadences-aux-echecs.html"><b>Les cadences aux échecs : bullet, blitz, rapide, classique</b></a>
-<a class="tile" href="/fr/apprendre/les-principes-d-ouverture.html"><b>Les quatre principes d'ouverture qui comptent</b></a>
-<a class="tile" href="/fr/apprendre/reperer-une-piece-qui-traine.html"><b>Repérer une pièce qui traîne</b></a>
-<a class="tile" href="/fr/apprendre/la-fourchette-de-cavalier.html"><b>La fourchette de cavalier</b></a>
-<a class="tile" href="/fr/apprendre/la-fourchette-de-pion.html"><b>La fourchette de pion</b></a>
-<a class="tile" href="/fr/apprendre/la-double-attaque.html"><b>La double attaque : les fourchettes sans cavalier</b></a>
-<a class="tile" href="/fr/apprendre/le-clouage.html"><b>Le clouage : une pièce qui ne peut pas bouger</b></a>
-<a class="tile" href="/fr/apprendre/l-enfilade.html"><b>L'enfilade : un clouage à l'envers</b></a>
-<a class="tile" href="/fr/apprendre/le-mat-du-couloir.html"><b>Le mat du couloir</b></a>
-<a class="tile" href="/fr/apprendre/la-deviation.html"><b>La déviation : une pièce, deux tâches</b></a>
-<a class="tile" href="/fr/apprendre/le-coup-silencieux.html"><b>Le coup silencieux : le plus dur à trouver</b></a></div>
+<h1>Apprendre les échecs : toutes les règles expliquées</h1><p class="lede">Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous.</p><div class="grid"><a class="tile" href="/fr/apprendre/deplacement-des-pieces"><b>Comment se déplacent les pièces d'échecs</b></a>
+<a class="tile" href="/fr/apprendre/le-roque"><b>Le roque : la règle et le bon moment</b></a>
+<a class="tile" href="/fr/apprendre/la-prise-en-passant"><b>La prise en passant, la règle que tout le monde oublie</b></a>
+<a class="tile" href="/fr/apprendre/la-promotion-du-pion"><b>La promotion du pion et la sous-promotion</b></a>
+<a class="tile" href="/fr/apprendre/echec-mat-et-pat"><b>Échec, mat et pat : la différence</b></a>
+<a class="tile" href="/fr/apprendre/les-parties-nulles"><b>Toutes les façons de faire nulle aux échecs</b></a>
+<a class="tile" href="/fr/apprendre/la-notation-des-coups"><b>Lire et écrire la notation des échecs</b></a>
+<a class="tile" href="/fr/apprendre/les-cadences-aux-echecs"><b>Les cadences aux échecs : bullet, blitz, rapide, classique</b></a>
+<a class="tile" href="/fr/apprendre/les-principes-d-ouverture"><b>Les quatre principes d'ouverture qui comptent</b></a>
+<a class="tile" href="/fr/apprendre/reperer-une-piece-qui-traine"><b>Repérer une pièce qui traîne</b></a>
+<a class="tile" href="/fr/apprendre/la-fourchette-de-cavalier"><b>La fourchette de cavalier</b></a>
+<a class="tile" href="/fr/apprendre/la-fourchette-de-pion"><b>La fourchette de pion</b></a>
+<a class="tile" href="/fr/apprendre/la-double-attaque"><b>La double attaque : les fourchettes sans cavalier</b></a>
+<a class="tile" href="/fr/apprendre/le-clouage"><b>Le clouage : une pièce qui ne peut pas bouger</b></a>
+<a class="tile" href="/fr/apprendre/l-enfilade"><b>L'enfilade : un clouage à l'envers</b></a>
+<a class="tile" href="/fr/apprendre/le-mat-du-couloir"><b>Le mat du couloir</b></a>
+<a class="tile" href="/fr/apprendre/la-deviation"><b>La déviation : une pièce, deux tâches</b></a>
+<a class="tile" href="/fr/apprendre/le-coup-silencieux"><b>Le coup silencieux : le plus dur à trouver</b></a></div>
 </main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le

@@ -40,7 +40,7 @@
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
      de zero.
-     Chemins relatifs a la racine ("/fonts/...", pas "https://chang64.com/fonts/...") :
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
      ces pages vivent a des profondeurs variees (/openings/*.html,
      /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
      selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
@@ -56,7 +56,7 @@
 <style>
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
-.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -83,12 +83,12 @@
   <nav class="sitenav"><a href="/openings/">Openings</a><a href="/puzzles/">Patterns</a><a href="/learn/">Rules</a><a href="/endgames/">Endgames</a><span aria-current="page" id="cn">Opening traps</span><a href="/glossary/">Glossary</a></nav>
 </header>
 <main id="contenu">
-<h1>Opening traps: know them or fall for them</h1><p class="lede">The classic traps that decide fast games, each replayed move by move and verified by the engine.</p><div class="grid"><a class="tile" href="/traps/scholars-mate.html"><b>Scholar's mate, and how to stop it</b><span>1.e4 e5 2.Bc4 Nc6 3.Qh5 Nf6 4.Qxf7#…</span></a>
-<a class="tile" href="/traps/legals-mate.html"><b>Legal's mate: the queen sacrifice</b><span>1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Nc3 g6 5.Nx…</span></a>
-<a class="tile" href="/traps/blackburne-shilling-trap.html"><b>The Blackburne Shilling trap</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 Nd4 4.Nxe5 Qg5 5…</span></a>
-<a class="tile" href="/traps/englund-gambit-trap.html"><b>The Englund Gambit trap</b><span>1.d4 e5 2.dxe5 Nc6 3.Nf3 Qe7 4.Bf4 Qb4+ …</span></a>
-<a class="tile" href="/traps/fried-liver-attack.html"><b>The Fried Liver Attack</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5 d5 5.e…</span></a>
-<a class="tile" href="/traps/damiano-defence-punished.html"><b>Why 2...f6 loses on the spot</b><span>1.e4 e5 2.Nf3 f6 3.Nxe5 fxe5 4.Qh5+ Ke7 …</span></a></div>
+<h1>Opening traps: know them or fall for them</h1><p class="lede">The classic traps that decide fast games, each replayed move by move and verified by the engine.</p><div class="grid"><a class="tile" href="/traps/scholars-mate"><b>Scholar's mate, and how to stop it</b><span>1.e4 e5 2.Bc4 Nc6 3.Qh5 Nf6 4.Qxf7#…</span></a>
+<a class="tile" href="/traps/legals-mate"><b>Legal's mate: the queen sacrifice</b><span>1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Nc3 g6 5.Nx…</span></a>
+<a class="tile" href="/traps/blackburne-shilling-trap"><b>The Blackburne Shilling trap</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 Nd4 4.Nxe5 Qg5 5…</span></a>
+<a class="tile" href="/traps/englund-gambit-trap"><b>The Englund Gambit trap</b><span>1.d4 e5 2.dxe5 Nc6 3.Nf3 Qe7 4.Bf4 Qb4+ …</span></a>
+<a class="tile" href="/traps/fried-liver-attack"><b>The Fried Liver Attack</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5 d5 5.e…</span></a>
+<a class="tile" href="/traps/damiano-defence-punished"><b>Why 2...f6 loses on the spot</b><span>1.e4 e5 2.Nf3 f6 3.Nxe5 fxe5 4.Qh5+ Ke7 …</span></a></div>
 </main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le

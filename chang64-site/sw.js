@@ -12,8 +12,8 @@
  * La version du cache est calculee a la construction : chaque build invalide
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-202610230452";
-const DATA_CACHE="chang64-data-202610230452";
+const CACHE="chang64-202610241024";
+const DATA_CACHE="chang64-data-202610241024";
 /* Trois entrees au maximum dans le cache de donnees (2026-09-06). Un shard
    de niveau pese 1 a 2 Mo : trois plafonnent l'occupation autour de 5 Mo,
    loin des 17 Mo qui avaient fait sauter le quota iOS et evince le cache
@@ -27,7 +27,10 @@ const DATA_MAX=3;
    plafond ne tenait pas du tout. Ne pas remplacer cette chaine par des
    appels paralleles. */
 let fileDeco=Promise.resolve();
-const CORE=["/","/index.html","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
+/* "/index.html" retire de CORE et du repli hors ligne (2026-10-24) : Pages le
+   redirige en 308 vers "/", et une reponse redirigee servie a une navigation
+   est refusee par le navigateur. Le repli tombait donc en erreur. */
+const CORE=["/","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));
 });
@@ -77,11 +80,21 @@ self.addEventListener("fetch",e=>{
     );
     return;
   }
+  /* Pages HTML rangees sous leur seul chemin (2026-10-24). La cle etait la
+     requete entiere, chaine de requete comprise : "/", "/?fbclid=..." et
+     "/?utm_source=..." faisaient chacune une entree de la coquille, sans
+     plafond, a chaque lien partage sur un reseau social. C'est exactement le
+     gonflement qui fait sauter le quota iOS (voir DATA_MAX plus haut). Aucune
+     page ne lit sa chaine de requete cote serveur : le HTML est le meme, une
+     seule entree suffit. Le reseau recoit toujours l'adresse complete. Les
+     autres fichiers gardent leur requete pour cle. */
+  const page=r.mode==="navigate"||(r.headers.get("accept")||"").includes("text/html");
+  const cle=page?url.origin+url.pathname:r;
   e.respondWith(
-    caches.match(r).then(hit=>hit||fetch(r).then(resp=>{
+    caches.match(cle).then(hit=>hit||fetch(r).then(resp=>{
       const copy=resp.clone();
-      caches.open(CACHE).then(c=>c.put(r,copy)).catch(()=>{});
+      caches.open(CACHE).then(c=>c.put(cle,copy)).catch(()=>{});
       return resp;
-    }).catch(()=>caches.match("/index.html")))
+    }).catch(()=>caches.match("/")))
   );
 });

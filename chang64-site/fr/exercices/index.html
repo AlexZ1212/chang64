@@ -40,7 +40,7 @@
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
      de zero.
-     Chemins relatifs a la racine ("/fonts/...", pas "https://chang64.com/fonts/...") :
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
      ces pages vivent a des profondeurs variees (/openings/*.html,
      /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
      selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
@@ -56,7 +56,7 @@
 <style>
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
-.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -83,7 +83,7 @@
   <nav class="sitenav"><a href="/fr/ouvertures/">Ouvertures</a><span aria-current="page" id="cn">Motifs</span><a href="/fr/apprendre/">Apprendre</a><a href="/fr/finales/">Finales</a><a href="/fr/pieges/">Pièges d'ouverture</a><a href="/fr/lexique/">Lexique</a></nav>
 </header>
 <main id="contenu">
-<h1>Bibliothèque d'exemples tactiques</h1><p class="lede">Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de 108868 positions vérifiées par le moteur.</p><div class="grid"><a class="tile" href="/fr/exercices/prise-gagnante.html"><b>Prise gagnante</b></a><a class="tile" href="/fr/exercices/attaque-double.html"><b>Attaque double</b></a><a class="tile" href="/fr/exercices/enfilade.html"><b>Enfilade</b></a><a class="tile" href="/fr/exercices/mat-en-deux-coups.html"><b>Mat en deux coups</b></a><a class="tile" href="/fr/exercices/coup-gagnant.html"><b>Coup gagnant</b></a><a class="tile" href="/fr/exercices/fourchette-de-cavalier.html"><b>Fourchette de cavalier</b></a><a class="tile" href="/fr/exercices/mat-en-un-coup.html"><b>Mat en un coup</b></a><a class="tile" href="/fr/exercices/mat-du-couloir.html"><b>Mat du couloir</b></a><a class="tile" href="/fr/exercices/clouage.html"><b>Clouage</b></a><a class="tile" href="/fr/exercices/fourchette-de-pion.html"><b>Fourchette de pion</b></a><a class="tile" href="/fr/exercices/deviation.html"><b>Déviation</b></a><a class="tile" href="/fr/exercices/coup-silencieux.html"><b>Coup silencieux</b></a><a class="tile" href="/fr/exercices/mat-en-trois-coups.html"><b>Mat en trois coups</b></a></div>
+<h1>Bibliothèque d'exemples tactiques</h1><p class="lede">Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de 108868 positions vérifiées par le moteur.</p><div class="grid"><a class="tile" href="/fr/exercices/prise-gagnante"><b>Prise gagnante</b></a><a class="tile" href="/fr/exercices/attaque-double"><b>Attaque double</b></a><a class="tile" href="/fr/exercices/enfilade"><b>Enfilade</b></a><a class="tile" href="/fr/exercices/mat-en-deux-coups"><b>Mat en deux coups</b></a><a class="tile" href="/fr/exercices/coup-gagnant"><b>Coup gagnant</b></a><a class="tile" href="/fr/exercices/fourchette-de-cavalier"><b>Fourchette de cavalier</b></a><a class="tile" href="/fr/exercices/mat-en-un-coup"><b>Mat en un coup</b></a><a class="tile" href="/fr/exercices/mat-du-couloir"><b>Mat du couloir</b></a><a class="tile" href="/fr/exercices/clouage"><b>Clouage</b></a><a class="tile" href="/fr/exercices/fourchette-de-pion"><b>Fourchette de pion</b></a><a class="tile" href="/fr/exercices/deviation"><b>Déviation</b></a><a class="tile" href="/fr/exercices/coup-silencieux"><b>Coup silencieux</b></a><a class="tile" href="/fr/exercices/mat-en-trois-coups"><b>Mat en trois coups</b></a></div>
 </main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le

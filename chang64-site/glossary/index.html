@@ -40,7 +40,7 @@
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
      de zero.
-     Chemins relatifs a la racine ("/fonts/...", pas "https://chang64.com/fonts/...") :
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
      ces pages vivent a des profondeurs variees (/openings/*.html,
      /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
      selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
@@ -56,7 +56,7 @@
 <style>
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
-.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -83,59 +83,59 @@
   <nav class="sitenav"><a href="/openings/">Openings</a><a href="/puzzles/">Patterns</a><a href="/learn/">Rules</a><a href="/endgames/">Endgames</a><a href="/traps/">Opening traps</a><span aria-current="page" id="cn">Glossary</span></nav>
 </header>
 <main id="contenu">
-<h1>Chess glossary: the terms that matter</h1><p class="lede">53 ideas explained in two sentences, each with a verified position and a puzzle to practise it.</p><div class="grid"><a class="tile" href="/glossary/attraction.html"><b>Attraction</b><span>The opposite of a deflection: instead of driving a defender …</span></a>
-<a class="tile" href="/glossary/back-rank-mate.html"><b>Back-rank mate</b><span>A rook or queen mates a castled king trapped behind its own …</span></a>
-<a class="tile" href="/glossary/backward-pawn.html"><b>Backward pawn</b><span>A pawn that has fallen behind its neighbours and can no long…</span></a>
-<a class="tile" href="/glossary/best-move.html"><b>Best move</b><span>The move an engine ranks above every alternative in a given …</span></a>
-<a class="tile" href="/glossary/bishop-pair.html"><b>Bishop pair</b><span>Owning both bishops while the opponent has traded one of the…</span></a>
-<a class="tile" href="/glossary/blunder.html"><b>Blunder</b><span>A move that loses material or the game outright, usually bec…</span></a>
-<a class="tile" href="/glossary/brilliant-move.html"><b>Brilliant move</b><span>A move that gives up material yet turns out to be objectivel…</span></a>
-<a class="tile" href="/glossary/clearance.html"><b>Clearance</b><span>A move whose point is to empty a square or a line for anothe…</span></a>
-<a class="tile" href="/glossary/combination.html"><b>Combination</b><span>A forced sequence of moves, usually beginning with a sacrifi…</span></a>
-<a class="tile" href="/glossary/deflection.html"><b>Deflection</b><span>Forcing a defending piece away from the square or line it wa…</span></a>
-<a class="tile" href="/glossary/development.html"><b>Development</b><span>Bringing pieces from their starting squares to useful ones. …</span></a>
-<a class="tile" href="/glossary/discovered-attack.html"><b>Discovered attack</b><span>Moving one piece uncovers an attack from another behind it. …</span></a>
-<a class="tile" href="/glossary/double-attack.html"><b>Double attack</b><span>One move creates two threats at once, and the defender can o…</span></a>
-<a class="tile" href="/glossary/double-check.html"><b>Double check</b><span>Two pieces give check at once. Neither can be captured nor b…</span></a>
-<a class="tile" href="/glossary/doubled-pawns.html"><b>Doubled pawns</b><span>Two pawns of the same colour stacked on one file, usually th…</span></a>
-<a class="tile" href="/glossary/eco-code.html"><b>ECO code</b><span>Short for Encyclopaedia of Chess Openings, the letter-and-tw…</span></a>
-<a class="tile" href="/glossary/fianchetto.html"><b>Fianchetto</b><span>Developing a bishop to b2, g2, b7 or g7 after moving the kni…</span></a>
-<a class="tile" href="/glossary/fifty-move-rule.html"><b>Fifty-move rule</b><span>Either player can claim a draw if 50 moves pass, by both sid…</span></a>
-<a class="tile" href="/glossary/fork.html"><b>Fork</b><span>One piece attacks two or more enemy pieces at the same time.…</span></a>
-<a class="tile" href="/glossary/gambit.html"><b>Gambit</b><span>Offering material, usually a pawn, to gain time, space or op…</span></a>
-<a class="tile" href="/glossary/hanging-piece.html"><b>Hanging piece</b><span>A piece that is attacked and not defended. Scanning for hang…</span></a>
-<a class="tile" href="/glossary/inaccuracy.html"><b>Inaccuracy</b><span>A move that is not the best available and quietly gives some…</span></a>
-<a class="tile" href="/glossary/interference.html"><b>Interference</b><span>A piece is placed on the line between two enemy pieces, bloc…</span></a>
-<a class="tile" href="/glossary/isolated-pawn.html"><b>Isolated pawn</b><span>A pawn with no friendly pawn on either neighbouring file to …</span></a>
-<a class="tile" href="/glossary/king-attack.html"><b>King attack</b><span>Pressure aimed at the squares around the enemy king, usually…</span></a>
-<a class="tile" href="/glossary/material-gain.html"><b>Material gain</b><span>Coming out of a sequence with more force on the board than t…</span></a>
-<a class="tile" href="/glossary/mating-attack.html"><b>Mating attack</b><span>An assault whose object is the king itself, not material: ev…</span></a>
-<a class="tile" href="/glossary/mistake.html"><b>Mistake</b><span>A move that makes the position clearly worse without losing …</span></a>
-<a class="tile" href="/glossary/only-move.html"><b>Only move</b><span>A position where every other legal move loses, often by forc…</span></a>
-<a class="tile" href="/glossary/open-file.html"><b>Open file</b><span>A file with no pawns on it. Rooks belong there: an open file…</span></a>
-<a class="tile" href="/glossary/opposition.html"><b>Opposition</b><span>Two kings face each other with one square between them. The …</span></a>
-<a class="tile" href="/glossary/outpost.html"><b>Outpost</b><span>A square, usually in enemy territory, that can never be atta…</span></a>
-<a class="tile" href="/glossary/overloading.html"><b>Overloading</b><span>A piece is asked to guard two things at once and cannot cove…</span></a>
-<a class="tile" href="/glossary/passed-pawn.html"><b>Passed pawn</b><span>A pawn with no enemy pawn ahead of it on its own file or the…</span></a>
-<a class="tile" href="/glossary/pawn-majority.html"><b>Pawn majority</b><span>More pawns than the opponent on one side of the board, for e…</span></a>
-<a class="tile" href="/glossary/perpetual-check.html"><b>Perpetual check</b><span>An unending series of checks the defender cannot escape. The…</span></a>
-<a class="tile" href="/glossary/pin.html"><b>Pin</b><span>A piece cannot move without exposing a more valuable piece b…</span></a>
-<a class="tile" href="/glossary/promotion.html"><b>Promotion</b><span>A pawn reaching the last rank is replaced at once by a queen…</span></a>
-<a class="tile" href="/glossary/prophylaxis.html"><b>Prophylaxis</b><span>A move made to prevent an opponent's plan before it starts, …</span></a>
-<a class="tile" href="/glossary/removing-the-defender.html"><b>Removing the defender</b><span>Capturing or trading off the piece that guards a key square …</span></a>
-<a class="tile" href="/glossary/sacrifice.html"><b>Sacrifice</b><span>Giving up material on purpose for something worth more: mate…</span></a>
-<a class="tile" href="/glossary/seventh-rank.html"><b>Seventh rank</b><span>A rook on the opponent's seventh rank attacks the pawns stil…</span></a>
-<a class="tile" href="/glossary/skewer.html"><b>Skewer</b><span>The reverse of a pin: the valuable piece is in front and mus…</span></a>
-<a class="tile" href="/glossary/smothered-mate.html"><b>Smothered mate</b><span>A knight mates a king hemmed in entirely by its own pieces. …</span></a>
-<a class="tile" href="/glossary/stalemate.html"><b>Stalemate</b><span>The player to move has no legal move and is not in check. Th…</span></a>
-<a class="tile" href="/glossary/tempo.html"><b>Tempo</b><span>A single move seen as a unit of time. Attacking a piece that…</span></a>
-<a class="tile" href="/glossary/elo-rating.html"><b>The Elo rating: what your number means</b><span>An Elo rating is a running estimate of skill built from one …</span></a>
-<a class="tile" href="/glossary/threefold-repetition.html"><b>Threefold repetition</b><span>A draw can be claimed if the same position, with the same pl…</span></a>
-<a class="tile" href="/glossary/trapped-piece.html"><b>Trapped piece</b><span>A piece that has no safe square left, usually after venturin…</span></a>
-<a class="tile" href="/glossary/underpromotion.html"><b>Underpromotion</b><span>Promoting to anything other than a queen, which is right far…</span></a>
-<a class="tile" href="/glossary/windmill.html"><b>Windmill</b><span>A repeating sequence of discovered check followed by a captu…</span></a>
-<a class="tile" href="/glossary/zugzwang.html"><b>Zugzwang</b><span>A position where any move makes things worse, but passing is…</span></a>
-<a class="tile" href="/glossary/zwischenzug.html"><b>Zwischenzug (in-between move)</b><span>A forcing move played before the expected reply to a threat,…</span></a></div>
+<h1>Chess glossary: the terms that matter</h1><p class="lede">53 ideas explained in two sentences, each with a verified position and a puzzle to practise it.</p><div class="grid"><a class="tile" href="/glossary/attraction"><b>Attraction</b><span>The opposite of a deflection: instead of driving a defender …</span></a>
+<a class="tile" href="/glossary/back-rank-mate"><b>Back-rank mate</b><span>A rook or queen mates a castled king trapped behind its own …</span></a>
+<a class="tile" href="/glossary/backward-pawn"><b>Backward pawn</b><span>A pawn that has fallen behind its neighbours and can no long…</span></a>
+<a class="tile" href="/glossary/best-move"><b>Best move</b><span>The move an engine ranks above every alternative in a given …</span></a>
+<a class="tile" href="/glossary/bishop-pair"><b>Bishop pair</b><span>Owning both bishops while the opponent has traded one of the…</span></a>
+<a class="tile" href="/glossary/blunder"><b>Blunder</b><span>A move that loses material or the game outright, usually bec…</span></a>
+<a class="tile" href="/glossary/brilliant-move"><b>Brilliant move</b><span>A move that gives up material yet turns out to be objectivel…</span></a>
+<a class="tile" href="/glossary/clearance"><b>Clearance</b><span>A move whose point is to empty a square or a line for anothe…</span></a>
+<a class="tile" href="/glossary/combination"><b>Combination</b><span>A forced sequence of moves, usually beginning with a sacrifi…</span></a>
+<a class="tile" href="/glossary/deflection"><b>Deflection</b><span>Forcing a defending piece away from the square or line it wa…</span></a>
+<a class="tile" href="/glossary/development"><b>Development</b><span>Bringing pieces from their starting squares to useful ones. …</span></a>
+<a class="tile" href="/glossary/discovered-attack"><b>Discovered attack</b><span>Moving one piece uncovers an attack from another behind it. …</span></a>
+<a class="tile" href="/glossary/double-attack"><b>Double attack</b><span>One move creates two threats at once, and the defender can o…</span></a>
+<a class="tile" href="/glossary/double-check"><b>Double check</b><span>Two pieces give check at once. Neither can be captured nor b…</span></a>
+<a class="tile" href="/glossary/doubled-pawns"><b>Doubled pawns</b><span>Two pawns of the same colour stacked on one file, usually th…</span></a>
+<a class="tile" href="/glossary/eco-code"><b>ECO code</b><span>Short for Encyclopaedia of Chess Openings, the letter-and-tw…</span></a>
+<a class="tile" href="/glossary/fianchetto"><b>Fianchetto</b><span>Developing a bishop to b2, g2, b7 or g7 after moving the kni…</span></a>
+<a class="tile" href="/glossary/fifty-move-rule"><b>Fifty-move rule</b><span>Either player can claim a draw if 50 moves pass, by both sid…</span></a>
+<a class="tile" href="/glossary/fork"><b>Fork</b><span>One piece attacks two or more enemy pieces at the same time.…</span></a>
+<a class="tile" href="/glossary/gambit"><b>Gambit</b><span>Offering material, usually a pawn, to gain time, space or op…</span></a>
+<a class="tile" href="/glossary/hanging-piece"><b>Hanging piece</b><span>A piece that is attacked and not defended. Scanning for hang…</span></a>
+<a class="tile" href="/glossary/inaccuracy"><b>Inaccuracy</b><span>A move that is not the best available and quietly gives some…</span></a>
+<a class="tile" href="/glossary/interference"><b>Interference</b><span>A piece is placed on the line between two enemy pieces, bloc…</span></a>
+<a class="tile" href="/glossary/isolated-pawn"><b>Isolated pawn</b><span>A pawn with no friendly pawn on either neighbouring file to …</span></a>
+<a class="tile" href="/glossary/king-attack"><b>King attack</b><span>Pressure aimed at the squares around the enemy king, usually…</span></a>
+<a class="tile" href="/glossary/material-gain"><b>Material gain</b><span>Coming out of a sequence with more force on the board than t…</span></a>
+<a class="tile" href="/glossary/mating-attack"><b>Mating attack</b><span>An assault whose object is the king itself, not material: ev…</span></a>
+<a class="tile" href="/glossary/mistake"><b>Mistake</b><span>A move that makes the position clearly worse without losing …</span></a>
+<a class="tile" href="/glossary/only-move"><b>Only move</b><span>A position where every other legal move loses, often by forc…</span></a>
+<a class="tile" href="/glossary/open-file"><b>Open file</b><span>A file with no pawns on it. Rooks belong there: an open file…</span></a>
+<a class="tile" href="/glossary/opposition"><b>Opposition</b><span>Two kings face each other with one square between them. The …</span></a>
+<a class="tile" href="/glossary/outpost"><b>Outpost</b><span>A square, usually in enemy territory, that can never be atta…</span></a>
+<a class="tile" href="/glossary/overloading"><b>Overloading</b><span>A piece is asked to guard two things at once and cannot cove…</span></a>
+<a class="tile" href="/glossary/passed-pawn"><b>Passed pawn</b><span>A pawn with no enemy pawn ahead of it on its own file or the…</span></a>
+<a class="tile" href="/glossary/pawn-majority"><b>Pawn majority</b><span>More pawns than the opponent on one side of the board, for e…</span></a>
+<a class="tile" href="/glossary/perpetual-check"><b>Perpetual check</b><span>An unending series of checks the defender cannot escape. The…</span></a>
+<a class="tile" href="/glossary/pin"><b>Pin</b><span>A piece cannot move without exposing a more valuable piece b…</span></a>
+<a class="tile" href="/glossary/promotion"><b>Promotion</b><span>A pawn reaching the last rank is replaced at once by a queen…</span></a>
+<a class="tile" href="/glossary/prophylaxis"><b>Prophylaxis</b><span>A move made to prevent an opponent's plan before it starts, …</span></a>
+<a class="tile" href="/glossary/removing-the-defender"><b>Removing the defender</b><span>Capturing or trading off the piece that guards a key square …</span></a>
+<a class="tile" href="/glossary/sacrifice"><b>Sacrifice</b><span>Giving up material on purpose for something worth more: mate…</span></a>
+<a class="tile" href="/glossary/seventh-rank"><b>Seventh rank</b><span>A rook on the opponent's seventh rank attacks the pawns stil…</span></a>
+<a class="tile" href="/glossary/skewer"><b>Skewer</b><span>The reverse of a pin: the valuable piece is in front and mus…</span></a>
+<a class="tile" href="/glossary/smothered-mate"><b>Smothered mate</b><span>A knight mates a king hemmed in entirely by its own pieces. …</span></a>
+<a class="tile" href="/glossary/stalemate"><b>Stalemate</b><span>The player to move has no legal move and is not in check. Th…</span></a>
+<a class="tile" href="/glossary/tempo"><b>Tempo</b><span>A single move seen as a unit of time. Attacking a piece that…</span></a>
+<a class="tile" href="/glossary/elo-rating"><b>The Elo rating: what your number means</b><span>An Elo rating is a running estimate of skill built from one …</span></a>
+<a class="tile" href="/glossary/threefold-repetition"><b>Threefold repetition</b><span>A draw can be claimed if the same position, with the same pl…</span></a>
+<a class="tile" href="/glossary/trapped-piece"><b>Trapped piece</b><span>A piece that has no safe square left, usually after venturin…</span></a>
+<a class="tile" href="/glossary/underpromotion"><b>Underpromotion</b><span>Promoting to anything other than a queen, which is right far…</span></a>
+<a class="tile" href="/glossary/windmill"><b>Windmill</b><span>A repeating sequence of discovered check followed by a captu…</span></a>
+<a class="tile" href="/glossary/zugzwang"><b>Zugzwang</b><span>A position where any move makes things worse, but passing is…</span></a>
+<a class="tile" href="/glossary/zwischenzug"><b>Zwischenzug (in-between move)</b><span>A forcing move played before the expected reply to a threat,…</span></a></div>
 </main>
 <footer>
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le

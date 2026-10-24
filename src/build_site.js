@@ -378,7 +378,51 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
       JSON.stringify({ total: lot.length, taille: TAILLE_MORCEAU, morceaux: morceaux }));
   }
   console.log("Morceaux d'exercices : " + morceauxEcrits + " fichiers de " + TAILLE_MORCEAU + " exercices");
-  fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
+  /* puzzle-index.json (tout l'index id -> [niveau, morceau] en un fichier)
+     est remplace le 2026-10-24 par deux choses plus legeres. Il pesait
+     1,7 Mo et serait passe vers 3,6 Mo avec la banque de fin de minage, alors
+     que chaque lien direct et chaque exercice du jour le chargeait en entier.
+
+     1. data/ids/<k>.json : l'index par tranche de 10 000 identifiants
+        (p0-p9999 dans 0.json...). Un lien direct ne lit que sa tranche. */
+  const TRANCHE_IDS = 10000;
+  const tranchesIds = {};
+  for (const id in puzzleIndex) {
+    const k = Math.floor(+id.slice(1) / TRANCHE_IDS);
+    (tranchesIds[k] = tranchesIds[k] || {})[id] = puzzleIndex[id];
+  }
+  fs.mkdirSync(OUT + "/data/ids", { recursive: true });
+  for (const k in tranchesIds) fs.writeFileSync(OUT + "/data/ids/" + k + ".json", JSON.stringify(tranchesIds[k]));
+
+  /* 2. data/jour.json : l'exercice du jour, deja tire, jour par jour.
+     Formule d'origine inchangee (ids[n % ids.length], n = jour depuis
+     1970, ids = l'index dans cet ordre), mais elle dependait du nombre
+     d'exercices : chaque fusion changeait les exercices du jour PASSES, et
+     le calendrier montrait un autre exercice que celui resolu ce jour-la.
+     Les jours ecoules sont donc figes dans exercices-du-jour.json (versionne,
+     comme content-dates.json) ; seuls les jours a venir suivent la banque.
+     Le fichier publie couvre du premier jour du site a 60 jours apres la
+     construction ; au-dela, ui.js reprend la liste en boucle. */
+  const REGISTRE_JOURS = path.join(__dirname, "exercices-du-jour.json");
+  const ordreIds = Object.keys(puzzleIndex);
+  const jourDe = iso => Math.floor(Date.parse(iso + "T00:00:00Z") / 86400000);
+  const registre = fs.existsSync(REGISTRE_JOURS) ? JSON.parse(fs.readFileSync(REGISTRE_JOURS, "utf8")) : {};
+  const aujourdHui = jourDe(BUILD_DATE);
+  const premierJour = Math.min(jourDe((DATES["/"] && DATES["/"].publiee) || BUILD_DATE),
+    ...Object.keys(registre).map(Number));
+  const tirage = n => ordreIds[n % ordreIds.length];
+  let joursFiges = 0;
+  for (let n = premierJour; n <= aujourdHui; n++) {
+    /* Un exercice fige qui a quitte la banque (purge) est retire du
+       registre : il ne pourrait plus s'afficher. */
+    if (registre[n] && !puzzleIndex[registre[n]]) delete registre[n];
+    if (!registre[n]) { registre[n] = tirage(n); joursFiges++; }
+  }
+  fs.writeFileSync(REGISTRE_JOURS, JSON.stringify(registre, null, 1) + "\n");
+  const joursPublies = [];
+  for (let n = premierJour; n <= aujourdHui + 60; n++) joursPublies.push(registre[n] || tirage(n));
+  fs.writeFileSync(OUT + "/data/jour.json", JSON.stringify({ debut: premierJour, ids: joursPublies }));
+  console.log("Exercices du jour  : " + joursPublies.length + " jours publies, " + joursFiges + " nouveau(x) jour(s) fige(s)");
   /* Code affiche -> identifiant (2026-10-24). Le badge montre le code
      (#50C7L), mais #puzzle= n'acceptait que l'identifiant interne : un code
      partage ouvrait un autre exercice, sans message. Le code est une

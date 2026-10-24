@@ -117,7 +117,10 @@ T("aucun morceau ne depasse la taille annoncee",
 
 console.log("\n--- Rien n'a ete perdu ni oublie ---");
 const total=Object.values(N).reduce((n,a)=>n+a.length,0);
-const idx=JSON.parse(fs.readFileSync(SITE+"/data/puzzle-index.json","utf8"));
+/* L'index est decoupe en tranches de 10 000 identifiants depuis le
+   2026-10-24 (data/ids/<k>.json) : on les reunit pour le controler. */
+const idx={};
+for(const f of fs.readdirSync(SITE+"/data/ids"))Object.assign(idx,JSON.parse(fs.readFileSync(SITE+"/data/ids/"+f,"utf8")));
 T("l'index couvre exactement la banque", Object.keys(idx).length===total,
   Object.keys(idx).length+" dans l'index pour "+total+" exercices");
 let mauvais=0;

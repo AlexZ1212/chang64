@@ -1261,8 +1261,7 @@ function calDateKey(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d
 function dateToDailyId(key){
   const [y,m,d]=key.split("-").map(Number);
   const n=Math.floor(Date.UTC(y,m-1,d)/86400000);
-  const ids=Object.keys(PUZZLE_INDEX);
-  return ids[n%ids.length];
+  return idDuJour(n);
 }
 /* Duel du jour (item 6) : le lien pointe vers #puzzle=<id du jour>, deja
    compris par applyDeepLink() (ui.js) -- l'ami qui l'ouvre tombe
@@ -1538,12 +1537,12 @@ if($("cardSolveCoord"))$("cardSolveCoord").onclick=()=>{
    affichee (mode consultation) -- reutilise loadAndRevealSolution(), deja
    ecrit pour la revision des erreurs de Sprint, meme mecanique. */
 function viewDailyArchive(key){
-  if(!PUZZLE_INDEX){loadPuzzleIndex(()=>viewDailyArchive(key));return;}
+  if(!JOUR){loadJour(()=>viewDailyArchive(key));return;}
   const id=dateToDailyId(key);
-  if(!PUZZLE_INDEX[id])return;
+  if(!id)return;
   /* Depuis le decoupage en morceaux, LEVEL_CACHE[lvl] ne garantit plus que
      CET exercice est charge : loadPuzzleById va chercher le bon morceau. */
-  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,()=>viewDailyArchive(key));return;}
+  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,p=>{if(p)viewDailyArchive(key);});return;}
   const p=PUZZLE_CACHE[id];
   if(!p)return;
   /* Voir solveScreenSuppressAutoload plus haut : sans ce drapeau,
@@ -1571,12 +1570,12 @@ function viewDailyArchive(key){
    (pas aujourd'hui), de ne pas faire avancer la serie, et de ne pas
    reveler "Defier un ami" (qui affirme resoudre le puzzle du jour ACTUEL). */
 function attemptDailyArchive(key){
-  if(!PUZZLE_INDEX){loadPuzzleIndex(()=>attemptDailyArchive(key));return;}
+  if(!JOUR){loadJour(()=>attemptDailyArchive(key));return;}
   const id=dateToDailyId(key);
-  if(!PUZZLE_INDEX[id])return;
+  if(!id)return;
   /* Depuis le decoupage en morceaux, LEVEL_CACHE[lvl] ne garantit plus que
      CET exercice est charge : loadPuzzleById va chercher le bon morceau. */
-  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,()=>attemptDailyArchive(key));return;}
+  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,p=>{if(p)attemptDailyArchive(key);});return;}
   const p=PUZZLE_CACHE[id];
   if(!p)return;
   solveScreenSuppressAutoload=true;

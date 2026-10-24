@@ -20,7 +20,11 @@
 const TOTAL_PUZZLES = __TOTAL_PUZZLES__;
 const LEVEL_CACHE = {}, LEVEL_PENDING = {};
 const PUZZLE_CACHE = {};
-let PUZZLE_INDEX = null, PUZZLE_INDEX_PENDING = false;
+/* Plus de puzzle-index.json (2026-10-24, voir build_site.js) : les liens
+   directs lisent la tranche de 10 000 identifiants de leur exercice
+   (data/ids/<k>.json), l'exercice du jour lit data/jour.json. */
+let JOUR = null, JOUR_PENDING = false;
+const ID_TRANCHES = {}, ID_TRANCHES_ATTENTE = {};
 let THEME_COUNTS = null, THEME_COUNTS_PENDING = false;
 
 function fetchJSON(url, done, fail) {
@@ -127,15 +131,38 @@ function loadLevel(lvl, onReady) {
 function fileDAttente(){ return { liste: [], ajoute(f){ if(f)this.liste.push(f); },
   sert(d){ const l=this.liste; this.liste=[]; for(const f of l)f(d); },
   vide(){ this.liste=[]; } }; }
-const ATTENTE_INDEX = fileDAttente(), ATTENTE_THEMES = fileDAttente(), ATTENTE_RUSH = fileDAttente();
-function loadPuzzleIndex(onReady) {
-  if (PUZZLE_INDEX) { onReady && onReady(PUZZLE_INDEX); return; }
-  ATTENTE_INDEX.ajoute(onReady);
-  if (PUZZLE_INDEX_PENDING) return;
-  PUZZLE_INDEX_PENDING = true;
-  fetchJSON("/data/puzzle-index.json",
-    data => { PUZZLE_INDEX = data; PUZZLE_INDEX_PENDING = false; ATTENTE_INDEX.sert(data); },
-    () => { PUZZLE_INDEX_PENDING = false; ATTENTE_INDEX.vide(); puzzleDataError(); });
+const ATTENTE_JOUR = fileDAttente(), ATTENTE_THEMES = fileDAttente(), ATTENTE_RUSH = fileDAttente();
+/* Exercices du jour, deja tires a la construction : { debut, ids }, ids[0]
+   etant le jour "debut" (jours depuis 1970). Les jours passes y sont figes,
+   une fusion ne les change plus. */
+function loadJour(onReady) {
+  if (JOUR) { onReady && onReady(JOUR); return; }
+  ATTENTE_JOUR.ajoute(onReady);
+  if (JOUR_PENDING) return;
+  JOUR_PENDING = true;
+  fetchJSON("/data/jour.json",
+    data => { JOUR = data; JOUR_PENDING = false; ATTENTE_JOUR.sert(data); },
+    () => { JOUR_PENDING = false; ATTENTE_JOUR.vide(); puzzleDataError(); });
+}
+/* Identifiant de l'exercice du jour n (jours depuis 1970). Au-dela de la
+   periode publiee (site pas reconstruit depuis 60 jours), la liste reprend
+   en boucle plutot que de laisser un jour sans exercice. */
+function idDuJour(n) {
+  const l = JOUR.ids, i = n - JOUR.debut;
+  return l[((i % l.length) + l.length) % l.length];
+}
+/* Tranche de l'index (id -> [niveau, morceau]) qui contient cet identifiant.
+   Rend null si la tranche n'existe pas ou ne se charge pas. */
+function loadIdTranche(id, onReady) {
+  const k = Math.floor(+String(id).slice(1) / 10000);
+  if (ID_TRANCHES[k]) { onReady(ID_TRANCHES[k]); return; }
+  const attente = ID_TRANCHES_ATTENTE[k] || (ID_TRANCHES_ATTENTE[k] = fileDAttente());
+  const dejaEnVol = attente.liste.length > 0;
+  attente.ajoute(onReady);
+  if (dejaEnVol) return;
+  fetchJSON("/data/ids/" + k + ".json",
+    data => { ID_TRANCHES[k] = data; attente.sert(data); },
+    () => { const l = attente.liste; attente.vide(); for (const f of l) f(null); });
 }
 function loadThemeCounts(onReady) {
   if (THEME_COUNTS) { onReady && onReady(THEME_COUNTS); return; }
@@ -196,10 +223,11 @@ function loadPuzzleById(id, onReady) {
     return;
   }
   if (PUZZLE_CACHE[id]) { onReady && onReady(PUZZLE_CACHE[id]); return; }
-  loadPuzzleIndex(idx => {
+  if (!/^p\d+$/.test(id)) { onReady && onReady(null); return; }
+  loadIdTranche(id, idx => {
     /* L'index porte [niveau, morceau] depuis le decoupage : un lien direct
        vers un exercice ne charge que son morceau, pas tout le niveau. */
-    const e = idx[id];
+    const e = idx && idx[id];
     if (!e) { onReady && onReady(null); return; }
     const lvl = Array.isArray(e) ? e[0] : e, k = Array.isArray(e) ? e[1] : 0;
     loadLevelMeta(lvl, () => loadLevelChunk(lvl, k, () => onReady && onReady(PUZZLE_CACHE[id] || null)));
@@ -1526,25 +1554,23 @@ function nextPuzzle(){
   loadPuzzle();
 }
 /* Exercice du jour : meme rotation globale qu'avant (index du jour modulo
-   la taille de la banque), mais resolue via l'index leger id->niveau
-   plutot qu'en indexant un tableau complet embarque -- l'ordre des cles de
-   PUZZLE_INDEX correspond a l'ordre d'origine de puzzles.json (chaine non
-   numerique, ordre d'insertion garanti par la specification JS), donc la
-   formule et le resultat pour un jour donne restent identiques a avant. */
+   la taille de la banque), mais tiree a la construction (build_site.js)
+   et lue dans data/jour.json : plus besoin de charger tout l'index pour
+   connaitre un seul identifiant, et les jours passes y sont figes. */
 function dailyPuzzle(){
-  if(!PUZZLE_INDEX){
+  if(!JOUR){
     afficherChargementExercice();
-    loadPuzzleIndex(dailyPuzzle);
+    loadJour(dailyPuzzle);
     return;
   }
   const d=new Date();
   const n=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);
-  const ids=Object.keys(PUZZLE_INDEX);
-  const id=ids[n%ids.length];
+  const id=idDuJour(n);
   /* Passe par loadPuzzleById depuis le decoupage en morceaux : tester
      LEVEL_CACHE[lvl] ne dit plus que l'exercice voulu est charge, seulement
-     qu'une partie du niveau l'est. */
-  if(!PUZZLE_CACHE[id]){afficherChargementExercice();loadPuzzleById(id,()=>dailyPuzzle());return;}
+     qu'une partie du niveau l'est. Un exercice introuvable ne relance pas
+     la boucle : on s'arrete sur le message d'erreur. */
+  if(!PUZZLE_CACHE[id]){afficherChargementExercice();loadPuzzleById(id,p=>{if(p)dailyPuzzle();else puzzleDataError();});return;}
   puzzle=PUZZLE_CACHE[id];
   puzzle.daily=true;puzzle.dailyCatchupKey=null; /* le vrai puzzle du jour, pas un rattrapage */
   loadPuzzle();

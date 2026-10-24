@@ -3,7 +3,16 @@
    chacune coute des allers-retours.
 
    Usage :
-     node merge_puzzles.js fournee1.json [fournee2.json ...] [--dry]
+     node merge_puzzles.js fournee1.json [fournee2.json ...] [--dry] [--travailleurs=N]
+
+   Examen en parallele (2026-10-24) : verification, reclassification et
+   difficulte prennent 0,3 s par candidat, soit 5 a 10 h pour la fusion de
+   fin de minage. Ce travail ne depend que du candidat : il est reparti sur
+   --travailleurs fils (par defaut : coeurs - 1). Doublons, identifiants et
+   codes restent attribues ensuite, un par un, dans l'ordre des fournees :
+   le resultat ne depend pas du nombre de fils. Seule la difficulte peut
+   bouger d'un passage a l'autre, comme avant : ses recherches s'arretent au
+   bout d'un temps fixe, et la charge de la machine les fait varier.
 
    Ce que le script fait, dans cet ordre, et pourquoi :
 
@@ -36,6 +45,8 @@
 
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
+const { Worker, isMainThread, parentPort, workerData } = require("worker_threads");
 const { Game } = require(path.join(__dirname, "engine.js"));
 const { classifyBase, classifyQuiet, isQuiet, verifyFull } = require(path.join(__dirname, "gen_puzzles_v2.js"));
 const { distractorScore } = require(path.join(__dirname, "difficulty_v2.js"));
@@ -72,6 +83,70 @@ function codeDerive(p, pris) {
    L'ancienne cle, fen complete + premier coup, laissait passer les deux cas :
    22 doublons sur la premiere vraie fournee. */
 function cle(p) { return p.fen.split(" ").slice(0, 4).join(" "); }
+
+/* Etapes 3 a 5 pour un candidat : verification, reclassification,
+   difficulte. Ne depend que du candidat (et de la table motif -> niveau),
+   d'ou l'examen en parallele. Rend { rejet } ou { motif, detail, diff }. */
+function examiner(brut, niveauDuMotif) {
+  /* 3. Verification, identique a la generation. */
+  if (!verifyFull(brut)) return { rejet: "verification" };
+
+  /* 4. Reclassification. On ne fait pas confiance a l'etiquette recue.
+     Ni a l'explication recue (correctif 2026-09-09) : mine_puzzles.js
+     ecrit explain = detail de SON classifyBase, au moment du minage. Tant
+     que les deux bouts tournent avec le meme classificateur, garder l'un
+     ou l'autre revient au meme -- mais une passe de minage dure des jours,
+     et le classificateur peut changer entre-temps. On se retrouvait alors
+     avec un motif recalcule ici et une explication d'avant : explainSentence()
+     cherche les champs du nouveau motif, ne les trouve pas, et rend une
+     chaine vide. Aucune erreur, aucune phrase, personne ne le voit. Le
+     detail suit donc le motif, ils viennent du meme calcul. */
+  let motif = null, detail = null;
+  try {
+    const g = new Game(brut.fen);
+    const mv = g.moves().find(m => g.uci(m) === brut.sol[0]);
+    if (mv) {
+      /* Coups silencieux : classifyQuiet, comme le mineur (2026-09-13).
+         Ce bloc ne connaissait que classifyBase, qui ne rend NI "Quiet
+         move" NI "Deflection" -- ces deux motifs n'existent que dans
+         classifyQuiet. Tout exercice silencieux correctement etiquete
+         par le mineur etait donc reetiquete ici en "Winning move" ou
+         voisin, et les deux motifs restaient gelés quoi qu'on fasse en
+         amont. Corriger le mineur sans corriger ce bloc n'aurait servi
+         a rien : c'est le meme defaut que le reste de la session, un
+         controle qui regarde a cote.
+         classifyQuiet a besoin de la LIGNE entiere, pas du seul premier
+         coup : Deflection se reconnait au troisieme demi-coup, celui qui
+         recupere la case que la piece deviee gardait. On rejoue donc la
+         solution recue pour reconstruire les coups complets. */
+      const ligne = [];
+      const gLigne = new Game(brut.fen);
+      for (const u of brut.sol) {
+        const full = gLigne.moves().find(m => gLigne.uci(m) === u);
+        if (!full) break;
+        ligne.push({ mv: full });
+        gLigne.makeMove(full);
+      }
+      const r = (brut.type !== "mate" && ligne.length === brut.sol.length && isQuiet(g, mv))
+        ? classifyQuiet(g, ligne)
+        : classifyBase(g, mv, brut.type === "mate", brut.n || 0);
+      if (r) { motif = r.theme; detail = r.detail; }
+    }
+  } catch (e) { /* rejete juste apres */ }
+  if (!motif) return { rejet: "motif" };
+  if (!(motif in niveauDuMotif)) return { rejet: "motifInconnu" };
+
+  /* 5. Difficulte, meme formule que le reste de la banque. */
+  let diff = brut.diff;
+  try { diff = distractorScore(brut.fen, brut.sol[0], brut.quiet).score; } catch (e) { /* garde la valeur recue */ }
+  return { motif, detail, diff };
+}
+
+if (!isMainThread) {
+  const { lot, niveauDuMotif } = workerData;
+  parentPort.postMessage(lot.map(brut => { try { return examiner(brut, niveauDuMotif); } catch (e) { return { rejet: "motif" }; } }));
+  return;
+}
 
 const fichiers = process.argv.slice(2).filter(a => !a.startsWith("--"));
 const dry = process.argv.includes("--dry");
@@ -112,71 +187,67 @@ for (const p of banque) avant[p.theme] = (avant[p.theme] || 0) + 1;
 const rejets = { doublon: 0, verification: 0, motif: 0, motifInconnu: 0, illisible: 0, collision: 0 };
 const ajoutes = [];
 
+/* Lecture de toutes les fournees, dans l'ordre. */
+const candidats = [];
 for (const f of fichiers) {
   const lot = JSON.parse(fs.readFileSync(f, "utf8"));
   console.log("Fournee            :", path.basename(f), "-", lot.length, "candidats");
-  let i = 0;
-  for (const brut of lot) {
-    if (++i % 200 === 0) process.stderr.write("\r  " + i + "/" + lot.length);
-    if (!brut || !brut.fen || !brut.sol || !brut.sol.length) { rejets.illisible++; continue; }
-    if (vues.has(cle(brut))) { rejets.doublon++; continue; }
+  for (const brut of lot) candidats.push(brut);
+}
 
-    /* 3. Verification, identique a la generation. */
-    if (!verifyFull(brut)) { rejets.verification++; continue; }
+/* Examen. Les entrees illisibles et les positions deja en banque n'ont pas
+   besoin d'etre examinees ; les doublons ENTRE fournees, si : le premier
+   peut etre rejete et le suivant retenu, comme dans la boucle d'origine. */
+const lisible = brut => brut && brut.fen && brut.sol && brut.sol.length;
+const aExaminer = [];
+candidats.forEach((brut, i) => { if (lisible(brut) && !vues.has(cle(brut))) aExaminer.push(i); });
+const argT = process.argv.find(x => x.startsWith("--travailleurs="));
+const TRAVAILLEURS = Math.max(1, argT ? +argT.split("=")[1] || 1 : os.cpus().length - 1);
 
-    /* 4. Reclassification. On ne fait pas confiance a l'etiquette recue.
-       Ni a l'explication recue (correctif 2026-09-09) : mine_puzzles.js
-       ecrit explain = detail de SON classifyBase, au moment du minage. Tant
-       que les deux bouts tournent avec le meme classificateur, garder l'un
-       ou l'autre revient au meme -- mais une passe de minage dure des jours,
-       et le classificateur peut changer entre-temps. On se retrouvait alors
-       avec un motif recalcule ici et une explication d'avant : explainSentence()
-       cherche les champs du nouveau motif, ne les trouve pas, et rend une
-       chaine vide. Aucune erreur, aucune phrase, personne ne le voit. Le
-       detail suit donc le motif, ils viennent du meme calcul. */
-    let motif = null, detail = null;
-    try {
-      const g = new Game(brut.fen);
-      const mv = g.moves().find(m => g.uci(m) === brut.sol[0]);
-      if (mv) {
-        /* Coups silencieux : classifyQuiet, comme le mineur (2026-09-13).
-           Ce bloc ne connaissait que classifyBase, qui ne rend NI "Quiet
-           move" NI "Deflection" -- ces deux motifs n'existent que dans
-           classifyQuiet. Tout exercice silencieux correctement etiquete
-           par le mineur etait donc reetiquete ici en "Winning move" ou
-           voisin, et les deux motifs restaient gelés quoi qu'on fasse en
-           amont. Corriger le mineur sans corriger ce bloc n'aurait servi
-           a rien : c'est le meme defaut que le reste de la session, un
-           controle qui regarde a cote.
-           classifyQuiet a besoin de la LIGNE entiere, pas du seul premier
-           coup : Deflection se reconnait au troisieme demi-coup, celui qui
-           recupere la case que la piece deviee gardait. On rejoue donc la
-           solution recue pour reconstruire les coups complets. */
-        const ligne = [];
-        const gLigne = new Game(brut.fen);
-        for (const u of brut.sol) {
-          const full = gLigne.moves().find(m => gLigne.uci(m) === u);
-          if (!full) break;
-          ligne.push({ mv: full });
-          gLigne.makeMove(full);
-        }
-        const r = (brut.type !== "mate" && ligne.length === brut.sol.length && isQuiet(g, mv))
-          ? classifyQuiet(g, ligne)
-          : classifyBase(g, mv, brut.type === "mate", brut.n || 0);
-        if (r) { motif = r.theme; detail = r.detail; }
-      }
-    } catch (e) { /* rejete juste apres */ }
-    if (!motif) { rejets.motif++; continue; }
-    if (!(motif in niveauDuMotif)) { rejets.motifInconnu++; continue; }
+function examinerTout() {
+  const resultats = new Array(candidats.length);
+  if (TRAVAILLEURS === 1 || aExaminer.length < 200) {
+    aExaminer.forEach((i, k) => {
+      if (k % 200 === 0) process.stderr.write("\r  examen " + k + "/" + aExaminer.length);
+      try { resultats[i] = examiner(candidats[i], niveauDuMotif); } catch (e) { resultats[i] = { rejet: "motif" }; }
+    });
+    process.stderr.write("\r");
+    return Promise.resolve(resultats);
+  }
+  /* Lots entrelaces (i, i+N, i+2N...) : chaque fil recoit le meme melange de
+     fournees, donc a peu pres la meme charge. */
+  const lots = Array.from({ length: TRAVAILLEURS }, (_, t) => aExaminer.filter((_, k) => k % TRAVAILLEURS === t));
+  let finis = 0;
+  return Promise.all(lots.map(indices => new Promise((resoudre, rejeter) => {
+    const w = new Worker(__filename, { workerData: { lot: indices.map(i => candidats[i]), niveauDuMotif } });
+    w.once("message", res => {
+      indices.forEach((i, k) => { resultats[i] = res[k]; });
+      process.stderr.write("\r  examen : " + (++finis) + "/" + lots.length + " fils termines");
+    });
+    w.once("error", rejeter);
+    w.once("exit", code => code === 0 ? resoudre() : rejeter(new Error("fil sorti avec le code " + code)));
+  }))).then(() => { process.stderr.write("\r"); return resultats; });
+}
 
-    /* 5. Difficulte, meme formule que le reste de la banque. */
-    let diff = brut.diff;
-    try { diff = distractorScore(brut.fen, brut.sol[0], brut.quiet).score; } catch (e) { /* garde la valeur recue */ }
+(async () => {
+const t0 = Date.now();
+console.log("Examen             :", aExaminer.length, "candidats sur", TRAVAILLEURS, TRAVAILLEURS > 1 ? "fils" : "fil");
+const examens = await examinerTout();
+console.log("Examen termine en  :", Math.round((Date.now() - t0) / 1000), "s");
+
+/* Attribution, un par un, dans l'ordre des fournees : identique a la boucle
+   d'origine, seul l'examen a ete fait a l'avance. */
+candidats.forEach((brut, i) => {
+    if (!lisible(brut)) { rejets.illisible++; return; }
+    if (vues.has(cle(brut))) { rejets.doublon++; return; }
+    const ex = examens[i];
+    if (ex.rejet) { rejets[ex.rejet]++; return; }
+    const { motif, detail, diff } = ex;
 
     /* 7. Identifiant et code neufs. Le tirage est verifie contre TOUS les
        codes, anciens et deja attribues dans cette passe. */
     const code = codeDerive(brut, codes);
-    if (!code) { rejets.collision++; continue; }
+    if (!code) { rejets.collision++; return; }
     codes.add(code);
 
     const p = {
@@ -196,9 +267,7 @@ for (const f of fichiers) {
     if (brut.source) p.source = BQ.sourceCompacte(brut.source);
     ajoutes.push(p);
     vues.add(cle(p));
-  }
-  process.stderr.write("\r");
-}
+});
 
 const fusion = banque.concat(ajoutes);
 const apres = {};
@@ -239,3 +308,4 @@ if (dry) {
   BQ.ecrire(fusion);
   console.log("\nbanque/ ecrite. Etape suivante : node build_site.js");
 }
+})().catch(e => { console.error("Fusion ABANDONNEE :", e.message); process.exit(1); });

@@ -1958,7 +1958,9 @@ function startRush(){
      rappelle soi-meme, meme mecanique que nextPuzzle/dailyPuzzle (ui.js). */
   if(!RUSH_POOL){
     const s=$("exStatus"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
-    loadRushPool(startRush);
+    /* Le pool peut arriver apres qu'on a quitte Defis : le sprint
+       demarrerait alors, pendule comprise, sur un autre onglet. */
+    loadRushPool(()=>{if(mode==="train")startRush();});
     return;
   }
   rush={score:0,strikes:0,endsAt:Date.now()+180000,queue:[],history:[]};
@@ -2120,6 +2122,9 @@ if($("solNext"))$("solNext").onclick=()=>montreSolutionPly(solPly+1);
 /* Charge un exercice deja joue avec sa solution disponible sur l'echiquier
    et l'explication affichee, sans repasser par une tentative. */
 function loadAndRevealSolution(p){
+  /* Meme garde que loadPuzzle() : appelee depuis un rappel de chargement,
+     la suite rejouerait la solution sur la partie de l'onglet Jouer. */
+  if(!ecranExercice())return;
   puzzle=p;puzzle.daily=false;
   loadPuzzle();
   /* loadPuzzle() vient d'effacer cette classe (chargement normal) : on la

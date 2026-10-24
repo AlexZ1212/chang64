@@ -89,6 +89,10 @@ function niveauxReels() {
   const w = dom.window;
   await wait(3400);
 
+  /* Depuis l'onglet Exercices, comme les vrais points d'entree (boutons de
+     l'ecran "Par motif", lien #theme=) : hors de cet onglet, loadPuzzle()
+     ne pose plus rien (voir check_chargement_tardif.js). */
+  w.document.getElementById("tab-puzzles").click(); await wait(300);
   w.eval("startMotif(" + JSON.stringify(etale) + ")");
   await wait(1500);
   T("le motif est lance", w.eval("motifEnCours") === etale, w.eval("motifEnCours"));

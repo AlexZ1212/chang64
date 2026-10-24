@@ -1549,7 +1549,19 @@ function dailyPuzzle(){
   puzzle.daily=true;puzzle.dailyCatchupKey=null; /* le vrai puzzle du jour, pas un rattrapage */
   loadPuzzle();
 }
+/* Onglets qui affichent un exercice sur l'echiquier partage : Exercices, et
+   Defis pour le Sprint. */
+function ecranExercice(){return mode==="puzzles"||mode==="train";}
 function loadPuzzle(){
+  /* Les rappels de chargement (niveau, morceau, exercice du jour, lien
+     profond) arrivent quand le reseau le veut. Si on est revenu dans Jouer
+     entre-temps, poser l'exercice remplacait la partie en cours, puis la
+     perdait : setMode() range game dans mainGame au changement d'onglet
+     suivant. Meme garde que afficherChargementExercice(). Hors de ces
+     onglets, on oublie l'exercice designe par l'appelant : il n'a jamais
+     ete pose, et l'apercu de Defis ne recharge qu'en l'absence d'exercice
+     (sinon il montrait la partie de Jouer au retour). */
+  if(!ecranExercice()){puzzle=null;return;}
   solCache={};
   puzzleStartTs=Date.now();
   game=new Game(puzzle.fen);

@@ -15,15 +15,34 @@ const fs=require("fs"),jd=require("jsdom");
 const html=fs.readFileSync(require("path").join(__dirname,"..","site","index.html"),"utf8");
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
-const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/",virtualConsole:new jd.VirtualConsole()});
+/* Aucune requete n'aboutit : fetch reste en attente pour toujours. Le
+   passage par Exercices et Defis lance le chargement des exercices
+   (/data/level-1.json puis ses morceaux, /data/rush-pool.json), qui partait
+   reellement vers chang64.com. Selon la latence, la reponse arrivait apres
+   le retour dans Jouer et son rappel (nextPuzzle -> loadPuzzle) remplacait
+   la partie par un exercice entre l'injection de l'historique et sa
+   relecture : prises() vide, ou aucune piece affichee. Ce test ne lit
+   aucun exercice, il n'a donc besoin d'aucune donnee. */
+const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/",virtualConsole:new jd.VirtualConsole(),
+  beforeParse(win){win.fetch=()=>new Promise(()=>{});}});
 const w=dom.window,d=w.document;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const seg=id=>[...d.getElementById(id).children];
+/* Attend que le moteur ait joue : tant que ce n'est pas au joueur, un
+   botMove est programme et remplacerait l'etat qu'on s'apprete a poser. */
+const traitAuJoueur=async()=>{
+  for(let i=0;i<100&&!w.eval("game.turn===myColor");i++)await wait(100);
+  return w.eval("game.turn===myColor");
+};
 const lancer2=async()=>{
   d.getElementById("btnNew").click(); await wait(430);
   const rb=d.getElementById("readyBanner");
   if(rb.classList.contains("hide")){d.getElementById("btnNew").click(); await wait(430);}
-  d.getElementById("readyStart").click(); await wait(400);
+  /* Seulement si le bandeau est affiche : une partie deja en cours laisse
+     "Nouvelle partie" verrouille, et le bouton cache garde alors l'action
+     posee par le dernier ecran qui l'a utilise (startRush, venu de Defis),
+     ce qui lancait un sprint par-dessus la partie. */
+  if(!rb.classList.contains("hide")){d.getElementById("readyStart").click(); await wait(400);}
 };
 setTimeout(async()=>{
   console.log("\n--- Bug 1 : Changer les reglages libere bien les reglages ---");
@@ -116,6 +135,7 @@ setTimeout(async()=>{
      Contrainte : ne pas faire grandir la pendule. */
   d.getElementById("tab-play").click(); await wait(350);
   await lancer2();
+  T("partie en cours, au joueur de jouer", await traitAuJoueur());
   {
     const bas=d.getElementById("takenBottom"), haut=d.getElementById("takenTop");
     /* La rangee est desormais toujours presente (voir rangeePrises dans

@@ -421,6 +421,50 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .layout.solo{grid-template-columns:minmax(0,1fr);max-width:760px;margin-left:auto;margin-right:auto}
 .layout.solo .board-side{display:none}
 .board-side{display:flex;flex-direction:column;gap:10px;min-width:0}
+/* ---------- ecran d'exercice : echiquier a la hauteur, actions a portee ----------
+   Audit UX du 2026-10-24, mesure a six tailles d'ecran. L'echiquier prenait
+   toute la largeur de sa colonne sans regarder la hauteur :
+   - 1366x768 : il finissait a 770 px, sous le bas de l'ecran ;
+   - iPad portrait : 718 px de plateau, enonce a peine visible, boutons a
+     1104-1198 px pour un ecran de 1024 ;
+   - iPhone SE : "Exercice suivant", "Indice", "Recommencer" a 688-778 px
+     pour un ecran de 667.
+   Et la hauteur reellement visible est plus petite encore une fois les
+   barres du navigateur deduites (svh, avec vh en repli).
+   Reserve a l'ecran Resoudre (data-mode, pose par setMode dans ui.js) : la
+   partie et l'analyse ont leurs pendules et leurs outils autour du plateau,
+   a traiter a part. */
+@media(min-width:861px){
+  /* Deux colonnes : 200 px = haut du plateau (183) et une marge. */
+  #appLayout[data-mode="puzzles"] .board-frame{max-width:calc(100vh - 200px);max-width:calc(100svh - 200px);margin-inline:auto}
+}
+@media(max-width:860px){
+  /* Une colonne : le plateau ne se reduit que sur les ecrans courts, assez
+     pour laisser l'enonce visible au-dessus de la barre d'actions. Il garde
+     260 px au minimum, en deca les cases deviennent trop petites au doigt. */
+  #appLayout[data-mode="puzzles"] .board-frame{max-width:max(260px,calc(100vh - 350px));max-width:max(260px,calc(100svh - 350px));margin-inline:auto}
+  /* Barre d'actions fixee en bas, a portee de pouce, sur une seule ligne :
+     Indice, Recommencer, puis l'action principale a droite. 44 px de haut
+     au minimum (recommandation Apple, WCAG 2.5.5). */
+  #appLayout[data-mode="puzzles"] .ex-actions{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:8px;
+    padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+    background-color:var(--slate);border-top:1px solid var(--rule);box-shadow:0 -8px 24px rgba(0,0,0,.35)}
+  #appLayout[data-mode="puzzles"] .ex-actions .btnrow{display:contents}
+  #appLayout[data-mode="puzzles"] .ex-actions .btn{flex:1 1 0;min-width:0;min-height:44px;margin:0;padding:8px 6px;font-size:14px;line-height:1.15}
+  #appLayout[data-mode="puzzles"] .ex-actions #btnNext{order:3}
+  /* La barre couvre le bas de la page : on reserve sa hauteur. Et l'ecart
+     entre le plateau et l'enonce passe de 37 a 12 px : sur un iPhone SE,
+     c'est ce qui laisse la consigne visible au-dessus de la barre. */
+  #appLayout[data-mode="puzzles"]{padding-bottom:76px;row-gap:12px}
+}
+@media(min-width:600px) and (max-width:860px){
+  /* Tablette en portrait : le plateau large de 718 px repoussait tout. */
+  #appLayout[data-mode="puzzles"] .board-frame{max-width:calc(100vh - 440px);max-width:calc(100svh - 440px)}
+}
+/* La barre suit les rangees qu'elle contient : absente en Sprint et pendant
+   la revue d'un Sprint. Sans ces regles, le display:flex ci-dessus, plus
+   specifique, l'emporterait sur .rush-on .hors-sprint. */
+.rush-on .ex-actions.hors-sprint,.reviewing-rush .ex-actions.review-hide{display:none!important}
 
 /* ---------- clocks ---------- */
 .board-frame{position:relative}
@@ -1934,6 +1978,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                Puzzle du jour avait laisse Indice puis Recommencer seuls,
                chacun pleine largeur, empiles sans lien visuel alors que ce
                sont deux aides sur le meme exercice. -->
+          <!-- Barre d'actions (audit UX du 2026-10-24) : sur une colonne
+               (telephone, tablette), elle est fixee en bas de l'ecran, voir
+               .ex-actions dans le CSS. Les boutons restaient sinon sous la
+               ligne de flottaison : 688 px de haut sur un ecran de 667
+               (iPhone SE), 1104 sur 1024 (iPad). Memes classes que les
+               rangees pour disparaitre avec elles en Sprint et en revue. -->
+          <div class="ex-actions hors-sprint review-hide" id="exActions">
           <div class="btnrow hors-sprint review-hide" style="margin-top:12px">
             <button class="btn primary" id="btnNext">Next puzzle</button>
           </div>
@@ -1945,6 +1996,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                  avant d'obtenir la reponse. -->
             <button class="btn" id="btnHintEx">Hint</button>
             <button class="btn" id="btnRetry">Restart puzzle</button>
+          </div>
           </div>
           <!-- Duel du jour (item 6, dernier de la liste "pour plus tard") :
                reutilise integralement le mecanisme de lien deja en place

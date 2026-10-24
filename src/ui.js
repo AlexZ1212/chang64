@@ -184,6 +184,17 @@ function loadRushPool(onReady) {
    d'abord le cache, sinon l'index (leger, toujours charge en un coup), puis
    le niveau concerne. */
 function loadPuzzleById(id, onReady) {
+  /* Un code affiche (#50C7L, cinq caracteres, voir build_site.js) plutot
+     qu'un identifiant interne (p76452) : on passe par la table de son
+     initiale, puis par le chemin ordinaire. Code inconnu : meme repli
+     qu'un identifiant introuvable. */
+  if (/^[0-9a-z]{5}$/i.test(id) && !/^p\d+$/.test(id)) {
+    const code = id.toUpperCase();
+    fetchJSON("/data/codes/" + code[0] + ".json",
+      table => table[code] ? loadPuzzleById(table[code], onReady) : (onReady && onReady(null)),
+      () => onReady && onReady(null));
+    return;
+  }
   if (PUZZLE_CACHE[id]) { onReady && onReady(PUZZLE_CACHE[id]); return; }
   loadPuzzleIndex(idx => {
     /* L'index porte [niveau, morceau] depuis le decoupage : un lien direct
@@ -1831,9 +1842,92 @@ function explainSentence(p){
         {deflected:nounPhrase(ex.deflected.piece,ex.deflected.sq,true)});
     case "Smothered mate":
       return ex.king?t("The king on {sq} was boxed in by its own pieces.",{sq:ex.king}):"";
+    case "Winning move":
+    case "Quiet move":
+      return phraseLigne(p);
     default:
       return "";
   }
+}
+/* "Winning move" et "Quiet move" n'ont aucun detail dans p.explain (17 790
+   exercices au 24/10, question ouverte du handoff 10). La phrase est donc
+   tiree de la solution elle-meme, rejouee : ce qu'elle gagne en materiel,
+   si elle promeut, si elle finit par un mat. Rien d'invente : une ligne qui
+   ne gagne rien de mesurable a la fin de la solution (gain d'un seul coup,
+   sans prise) garde le silence, comme les autres motifs sans detail. */
+function bilanLigne(p){
+  if(!p||!p.fen||!p.sol||!p.sol.length)return null;
+  const compte=fen=>{const c={w:{},b:{}};for(const ch of fen.split(" ")[0]){if(!/[pnbrq]/i.test(ch))continue;const s=ch===ch.toUpperCase()?"w":"b",k=ch.toLowerCase();c[s][k]=(c[s][k]||0)+1;}return c;};
+  try{
+    const g=new Game(p.fen),nous=p.fen.split(" ")[1],eux=nous==="w"?"b":"w";
+    const avant=compte(p.fen),san=[];
+    for(const u of p.sol){const m=g.moves().find(x=>g.uci(x)===u);if(!m)return null;san.push(g.san(m));g.makeMove(m);}
+    const apres=compte(g.fen()),K="pnbrq";
+    const gagne={},perdu={};
+    for(const k of K){
+      const a=(avant[eux][k]||0)-(apres[eux][k]||0);if(a>0)gagne[k]=a;
+      const b=(avant[nous][k]||0)-(apres[nous][k]||0);if(b>0)perdu[k]=b;
+    }
+    /* Promotion : un pion de moins et une dame (ou autre) de plus du meme
+       camp. On l'annonce a part, et le pion promu ne compte pas comme perdu. */
+    let promo=0;
+    for(const k of "qrbn"){const plus=(apres[nous][k]||0)-(avant[nous][k]||0);if(plus>0)promo+=plus;}
+    if(promo&&perdu.p){const r=Math.min(promo,perdu.p);perdu.p-=r;if(!perdu.p)delete perdu.p;}
+    /* Les echanges a l'identique s'annulent : une tour contre une tour ne
+       gagne rien. */
+    for(const k of K)if(gagne[k]&&perdu[k]){const m=Math.min(gagne[k],perdu[k]);gagne[k]-=m;perdu[k]-=m;if(!gagne[k])delete gagne[k];if(!perdu[k])delete perdu[k];}
+    return {san,gagne,perdu,promo:promo>0,mat:g.moves().length===0&&g.inCheck()};
+  }catch(e){return null;}
+}
+/* "un cavalier", "deux pions", "la dame" / "a knight", "two pawns", "the
+   queen". Deux sortes de pieces au plus, au-dela la phrase ne se lit plus :
+   on se rabat sur "du materiel". */
+function lotDePieces(lot){
+  const ks="qrbnp".split("").filter(k=>lot[k]);
+  if(!ks.length||ks.length>2)return ks.length?(LANG==="fr"?"du matériel":"material"):"";
+  const nb=[,"",LANG==="fr"?"deux":"two",LANG==="fr"?"trois":"three",LANG==="fr"?"quatre":"four"];
+  const un=k=>{
+    const n=lot[k],mot=pieceWord(k);
+    if(n>4)return LANG==="fr"?"du matériel":"material";
+    if(n>1)return nb[n]+" "+mot+(mot.endsWith("s")?"":"s");
+    if(k==="q")return LANG==="fr"?"la dame":"the queen";
+    return LANG==="fr"?((PIECES_FEM[k]?"une ":"un ")+mot):("a "+mot);
+  };
+  return ks.map(un).join(LANG==="fr"?" et ":" and ");
+}
+function phraseGain(b){
+  /* Une ligne peut gagner par la position et finir avec MOINS de materiel :
+     ne jamais ecrire "gagne une tour contre la dame" dans ce cas. */
+  const v={p:1,n:3,b:3,r:5,q:9},somme=l=>Object.keys(l).reduce((s,k)=>s+v[k]*l[k],0);
+  if(somme(b.gagne)<=somme(b.perdu))return "";
+  const g=lotDePieces(b.gagne);
+  if(!g)return "";
+  const p=lotDePieces(b.perdu);
+  /* Tour contre piece mineure : "la qualite" / "the exchange". */
+  if(b.gagne.r===1&&Object.keys(b.gagne).length===1&&Object.keys(b.perdu).length===1&&(b.perdu.b===1||b.perdu.n===1))
+    return LANG==="fr"?"la qualité":"the exchange";
+  return p?(LANG==="fr"?g+" contre "+p:g+" for "+p):g;
+}
+function phraseLigne(p){
+  const b=bilanLigne(p);
+  if(!b)return "";
+  const gain=phraseGain(b),premier=b.san[0],dernier=b.san[b.san.length-1],plusieurs=b.san.length>1;
+  if(p.theme==="Quiet move"){
+    const base=t("{move} captures nothing and gives no check.",{move:premier});
+    if(b.mat)return base+" "+t("It prepares checkmate.");
+    if(gain&&plusieurs)return base+" "+t("It prepares {last}, which wins {gain}.",{last:dernier,gain:gain});
+    if(gain)return base+" "+t("Yet it wins {gain}.",{gain:gain});
+    return base+" "+t("Yet it is the strongest move on the board.");
+  }
+  const parts=[];
+  if(b.promo)parts.push(t("The pawn promotes."));
+  if(b.mat)parts.push(t("The line ends in checkmate."));
+  else if(gain)parts.push(plusieurs?t("This sequence wins {gain}.",{gain:gain}):t("{move} wins {gain}.",{move:premier,gain:gain}));
+  /* Un seul coup, un echec, rien de pris dans la solution (7 498 exercices) :
+     le gain vient apres, hors de la ligne. La seule chose sure a en dire est
+     que l'echec doit etre pare avant tout le reste. */
+  if(!parts.length&&/\+$/.test(premier))parts.push(t("{move} gives check: the opponent must answer it before anything else.",{move:premier}));
+  return parts.join(" ");
 }
 /* Pedagogie coup juste / coup faute (exercices mines depuis de vraies
    parties via mine_puzzles.js -- absent sur les exercices generes par
@@ -2632,6 +2726,9 @@ function setMode(m,opts){
   for(const k in tabs)markTab($(tabs[k]),k===m);
   $("pane-home").classList.toggle("hide",m!=="home");
   $("appLayout").classList.toggle("hide",m==="home");
+  /* Le CSS dimensionne l'echiquier et place la barre d'actions selon
+     l'ecran (audit UX du 2026-10-24) : il lui faut savoir lequel. */
+  $("appLayout").dataset.mode=m;
   $("pane-play").classList.toggle("hide",m!=="play");
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");

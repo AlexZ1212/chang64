@@ -374,6 +374,20 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
   }
   console.log("Morceaux d'exercices : " + morceauxEcrits + " fichiers de " + TAILLE_MORCEAU + " exercices");
   fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
+  /* Code affiche -> identifiant (2026-10-24). Le badge montre le code
+     (#50C7L), mais #puzzle= n'acceptait que l'identifiant interne : un code
+     partage ouvrait un autre exercice, sans message. Le code est une
+     empreinte de la position, on ne peut pas en deduire l'id : il faut une
+     table. Pas dans puzzle-index.json, que tout lien direct charge et qui
+     grossit avec la banque : 36 petits fichiers, un par premier caractere
+     du code, lus seulement quand un lien porte un code. */
+  const parInitiale = {};
+  for (const p of puzzles) {
+    if (!p.code || !puzzleIndex[p.id]) continue;
+    (parInitiale[p.code[0]] = parInitiale[p.code[0]] || {})[p.code] = p.id;
+  }
+  fs.mkdirSync(OUT + "/data/codes", { recursive: true });
+  for (const c in parInitiale) fs.writeFileSync(OUT + "/data/codes/" + c + ".json", JSON.stringify(parInitiale[c]));
   fs.writeFileSync(OUT + "/data/theme-counts.json", JSON.stringify(themeCounts));
   fs.writeFileSync(OUT + "/data/theme-levels.json", JSON.stringify(themeLevels));
 

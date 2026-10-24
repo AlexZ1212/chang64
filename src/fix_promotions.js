@@ -93,12 +93,13 @@ function meilleurePromotion(fen, uci) {
 
 const dry = process.argv.includes("--dry");
 const fichiers = process.argv.slice(2).filter(a => !a.startsWith("--"));
-if (!fichiers.length) fichiers.push(path.join(__dirname, "puzzles.json"));
+const BQ = require(path.join(__dirname, "banque.js"));
+if (!fichiers.length) fichiers.push(null); /* null = la banque, via banque.js */
 
 const ECHANGE = { q: "n", n: "q", r: "b", b: "r" };
 
 for (const f of fichiers) {
-  const lot = JSON.parse(fs.readFileSync(f, "utf8"));
+  const lot = f ? JSON.parse(fs.readFileSync(f, "utf8")) : BQ.charger();
   console.log("\nFichier            :", path.basename(f), "-", lot.length, "exercices");
 
   const avecPromo = lot.filter(p => (p.sol || []).some(s => s.length === 5));
@@ -182,7 +183,7 @@ for (const f of fichiers) {
 
   if (dry) { console.log("--dry : rien n'a ete ecrit."); continue; }
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-  fs.copyFileSync(f, f.replace(/\.json$/, "." + stamp + ".bak.json"));
-  fs.writeFileSync(f, JSON.stringify(lot));
+  if (f) fs.copyFileSync(f, f.replace(/\.json$/, "." + stamp + ".bak.json")); else BQ.sauvegarder();
+  if (f) fs.writeFileSync(f, JSON.stringify(lot)); else BQ.ecrire(lot);
   console.log("Ecrit, sauvegarde horodatee a cote.");
 }

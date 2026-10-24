@@ -6,7 +6,8 @@ const SITE = path.join(__dirname, "..", "site");
 const BASE = process.env.CHANG64_BASELINE || "";   /* site deja en ligne, facultatif */
 const fs=require("fs"),jd=require("jsdom");
 const html=fs.readFileSync(""+SITE+"/index.html","utf8");
-const NPUZ=JSON.parse(fs.readFileSync(require("path").join(__dirname,"..","puzzles.json"),"utf8")).length;
+const BANQUE=require(require("path").join(__dirname,"..","banque.js")).charger();
+const NPUZ=BANQUE.length;
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 /* fetchJSON (ui.js) fait un vrai fetch("/data/level-N.json") resolu contre
@@ -90,7 +91,7 @@ setTimeout(async()=>{
      triviale et a ete purge avec les 28 143 autres. L'identifiant est
      desormais lu dans puzzles.json : le premier exercice porteur d'un
      explain.piece et d'un explain.sq. Ne remets pas d'identifiant en dur. */
-  const avecDetail=JSON.parse(fs.readFileSync(path.join(__dirname,"..","puzzles.json"),"utf8"))
+  const avecDetail=BANQUE
     .find(p=>p.explain&&p.explain.piece&&p.explain.sq);
   const ID=JSON.stringify(avecDetail?avecDetail.id:"");
   w.eval('loadPuzzleById('+ID+', function(){})');

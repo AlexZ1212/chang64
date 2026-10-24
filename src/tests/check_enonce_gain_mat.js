@@ -15,7 +15,7 @@ const fs = require("fs"), jd = require("jsdom");
 const SITE = path.join(__dirname, "..", "site");
 const html = fs.readFileSync(SITE + "/index.html", "utf8");
 const { Game } = require(path.join(__dirname, "..", "engine.js"));
-const banque = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "puzzles.json"), "utf8"));
+const banque = require(path.join(__dirname, "..", "banque.js")).charger();
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d ? "  -> " + d : "")); } };
 const attendre = ms => new Promise(r => setTimeout(r, ms));

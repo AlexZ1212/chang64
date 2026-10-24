@@ -25,8 +25,8 @@ const path = require("path");
 const { Game, sqName, pType, pColor, W, B, K } = require(path.join(__dirname, "engine.js"));
 const { mateIn } = require(path.join(__dirname, "engine.js"));
 
-const BANQUE = process.argv[2] || path.join(__dirname, "puzzles.json");
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const BANQUE = process.argv[2] || "banque/";
+const banque = require(path.join(__dirname, "banque.js")).charger(process.argv[2]);
 console.log("Banque :", banque.length, "exercices\n");
 
 const LETTRE = { 1: "p", 2: "n", 3: "b", 4: "r", 5: "q", 6: "k" };

@@ -176,7 +176,7 @@ const PUBLISHER = { name: "AlexZ1212" };
 
 /* ---------- 1. application ---------- */
 const THEMES = JSON.parse(fs.readFileSync(path.join(__dirname, "themes.json"), "utf8"));
-const puzzles = JSON.parse(fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
+const puzzles = require(path.join(__dirname, "banque.js")).charger();
 for (const p of puzzles) if (THEMES[p.theme]) p.theme = THEMES[p.theme];
 
 const engine = minifyJs(fs.readFileSync(path.join(__dirname, "engine_browser.js"), "utf8"), "engine_browser.js");
@@ -1970,7 +1970,7 @@ if (!DATES["/"]) {
   const premiere = Object.values(DATES).map(d => d.publiee).sort()[0] || BUILD_DATE;
   DATES["/"] = { sceau: "", publiee: premiere, modifiee: premiere };
 }
-const datesApp = datesDe("/", app + fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
+const datesApp = datesDe("/", app + require(path.join(__dirname, "banque.js")).texte());
 app = app.split("__APP_PUBLIEE__").join(datesApp.publiee).split("__APP_MODIFIEE__").join(datesApp.modifiee)
   .split("__APP_DATES_EN__").join("Published " + datesApp.publiee +
     (datesApp.modifiee !== datesApp.publiee ? ", updated " + datesApp.modifiee : ""));

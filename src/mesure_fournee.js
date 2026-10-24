@@ -88,7 +88,7 @@ const sites = new Map();
 let sansSite = 0;
 for (const p of ex) { const s = p.source && p.source.site; if (!s) { sansSite++; continue; } sites.set(s, (sites.get(s) || 0) + 1); }
 console.log(`  parties d'origine distinctes : ${sites.size}` + (sansSite ? `, ${sansSite} exercices sans site <-- sourceDe` : ""));
-const banque = JSON.parse(fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
+const banque = require(path.join(__dirname, "banque.js")).charger();
 const fensBanque = new Set(banque.map(p => cleFen(p.fen)));
 const dejaEnBanque = [...fens.keys()].filter(f => fensBanque.has(f)).length;
 console.log(`  positions deja en banque : ${dejaEnBanque}`);

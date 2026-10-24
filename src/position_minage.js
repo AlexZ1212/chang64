@@ -28,7 +28,7 @@ const TRANCHE = +process.env.CHANG64_TRANCHE || 50000;
 if (!PGN) { console.error("Usage : node position_minage.js <parties.pgn> [limite=1500000]"); process.exit(1); }
 if (!fs.existsSync(PGN)) { console.error("Fichier introuvable : " + PGN); process.exit(1); }
 
-const banque = JSON.parse(fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
+const banque = require(path.join(__dirname, "banque.js")).charger();
 const empreintes = new Set();
 for (const p of banque) if (p.source && p.source.white && p.source.black) empreintes.add(p.source.white + "|" + p.source.black);
 console.log("Parties d'origine connues en banque : " + empreintes.size

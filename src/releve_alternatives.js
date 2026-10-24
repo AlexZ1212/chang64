@@ -89,12 +89,12 @@ const FRONTIERE = +(arg("frontiere") || 52306);
 const REPRENDRE = a_("reprendre");
 const DRY = a_("dry");
 
-const F_BANQUE = path.join(__dirname, "puzzles.json");
+const BQ = require(path.join(__dirname, "banque.js"));
 const numId = p => +String(p.id).slice(1);
 
 /* ================= MODE 1 : extraction du lot a examiner ================= */
 if (a_("extraire")) {
-  const banque = JSON.parse(fs.readFileSync(F_BANQUE, "utf8"));
+  const banque = BQ.charger();
   const tout = a_("tout");
   const lot = banque.filter(p =>
     p.type === "gain" && p.sol.length === 1 && (tout || numId(p) <= FRONTIERE));
@@ -125,7 +125,7 @@ if (a_("appliquer")) {
      plafond, au contraire, il reste une idee a trouver et plusieurs facons
      de l'executer : la c'est bien le refus qui est le defaut. */
   const MAXALT = +(arg("max-alt") || 2);
-  const banque = JSON.parse(fs.readFileSync(F_BANQUE, "utf8"));
+  const banque = BQ.charger();
   const parCode = new Map(banque.map(p => [p.code, p]));
   let vus = 0, avecAlt = 0, totalAlt = 0, absents = 0;
   const nonGagnants = [], trop = [], distrib = {};
@@ -160,9 +160,9 @@ if (a_("appliquer")) {
     console.log("\nCes deux listes sont ECRITES, pas appliquees : aucun exercice");
     console.log("n'est retire ici. La purge passe par purge_puzzles.js, apres relecture.");
   }
-  if (DRY) { console.log("\n--dry : puzzles.json n'a pas ete touche."); process.exit(0); }
-  fs.writeFileSync(F_BANQUE, JSON.stringify(banque));
-  console.log("puzzles.json reecrit. Ensuite : node build_site.js puis node run_tests.js");
+  if (DRY) { console.log("\n--dry : la banque n'a pas ete touchee."); process.exit(0); }
+  BQ.ecrire(banque);
+  console.log("banque/ reecrite. Ensuite : node build_site.js puis node run_tests.js");
   process.exit(0);
 }
 

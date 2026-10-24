@@ -42,7 +42,7 @@ const TOUS = process.argv.includes("--tous");
 const N = +(arg("n") || 300);
 const PROF = +(arg("profondeur") || 14);
 const MARGE = +(arg("marge") || 200);
-const BANQUE = arg("banque") || path.join(__dirname, "puzzles.json");
+const BANQUE = arg("banque") || null;
 const SORTIE = arg("sortie") || path.join(__dirname, "audit_moteur_resultats.jsonl");
 const REPRENDRE = process.argv.includes("--reprendre");
 
@@ -58,7 +58,7 @@ if (REPRENDRE && fs.existsSync(SORTIE)) {
   }
 }
 
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const banque = require(path.join(__dirname, "banque.js")).charger(BANQUE || undefined);
 const gains = banque.filter(p => p.type !== "mate" && p.sol && p.sol.length);
 const lot = [];
 if (TOUS) lot.push(...gains);

@@ -47,7 +47,7 @@ T("elo moyen", s.elo === 2000);
 T("champs absents omis", !("site" in sourceDe({ Event: "x", White: "a", Black: "b" }, 1)));
 
 console.log("\n--- Sur de vraies positions minees ---");
-const banque = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "puzzles.json"), "utf8"));
+const banque = require(path.join(__dirname, "..", "banque.js")).charger();
 const gains = banque.filter(p => p.source && p.type !== "mate" && (p.sol || []).length === 1);
 const pas = Math.max(1, Math.floor(gains.length / 24)), ech = [];
 for (let i = 0; i < gains.length && ech.length < 24; i += pas) ech.push(gains[i]);

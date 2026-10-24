@@ -42,7 +42,7 @@ const path = require("path");
 const { Game } = require(path.join(__dirname, "engine.js"));
 const { classifyBase, verifyFull } = require(path.join(__dirname, "gen_puzzles_v2.js"));
 
-const BANQUE = path.join(__dirname, "puzzles.json");
+const BQ = require(path.join(__dirname, "banque.js"));
 const dry = process.argv.includes("--dry");
 
 /* Motifs produits par classifyQuiet() et non par classifyBase(). Cette liste
@@ -54,14 +54,12 @@ const seulement = argSeul
   ? new Set(argSeul.slice("--seulement=".length).split(",").map(s => s.trim()).filter(Boolean))
   : null;
 
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const banque = BQ.charger();
 console.log("Banque             :", banque.length, "exercices");
 if (seulement) console.log("Portee limitee a   :", [...seulement].join(", "));
 
 if (!dry) {
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-  const copie = BANQUE.replace(/\.json$/, "." + stamp + ".bak.json");
-  fs.copyFileSync(BANQUE, copie);
+  const copie = BQ.sauvegarder();
   console.log("Sauvegarde         :", path.basename(copie));
 }
 
@@ -153,7 +151,7 @@ if (inconnus.length) console.log("\nATTENTION motifs non declares dans BANDES :"
 if (dry) {
   console.log("\n--dry : rien n'a ete ecrit.");
 } else {
-  fs.writeFileSync(BANQUE, JSON.stringify(banque));
-  console.log("\nEcrit :", path.basename(BANQUE));
+  BQ.ecrire(banque);
+  console.log("\nEcrit : banque/");
   console.log("Enchaine avec : node build_site.js && node run_tests.js");
 }

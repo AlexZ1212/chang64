@@ -7,7 +7,7 @@ const fs=require("fs");
 const S=SITE;
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
-const P=JSON.parse(fs.readFileSync(require("path").join(__dirname,"..","puzzles.json"),"utf8"));
+const P=require(require("path").join(__dirname,"..","banque.js")).charger();
 
 const en=fs.readdirSync(S+"/puzzles").filter(f=>f.endsWith(".html")&&f!=="index.html");
 const fr=fs.readdirSync(S+"/fr/exercices").filter(f=>f.endsWith(".html")&&f!=="index.html");

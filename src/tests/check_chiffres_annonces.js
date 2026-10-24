@@ -21,7 +21,7 @@ const SRC = path.join(__dirname, "..");
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d ? "  -> " + d : "")); } };
 
-const puzzles = JSON.parse(fs.readFileSync(path.join(SRC, "puzzles.json"), "utf8"));
+const puzzles = require(path.join(SRC, "banque.js")).charger();
 const OP = JSON.parse(fs.readFileSync(path.join(SRC, "openings.json"), "utf8"));
 const NP = puzzles.length;
 const NF = OP.f.length;

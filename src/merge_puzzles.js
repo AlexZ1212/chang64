@@ -43,7 +43,7 @@ const { distractorScore } = require(path.join(__dirname, "difficulty_v2.js"));
 const crypto = require("crypto");
 const { puzzleCode } = require(path.join(__dirname, "gen_puzzles.js"));
 
-const BANQUE = path.join(__dirname, "puzzles.json");
+const BQ = require(path.join(__dirname, "banque.js"));
 
 /* Le code DERIVE du contenu, il n'est pas tire au sort (correctif
    2026-09-12). gen_puzzles.js explique pourquoi : un identifiant qui ne
@@ -80,14 +80,12 @@ if (!fichiers.length) {
   process.exit(1);
 }
 
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const banque = BQ.charger();
 console.log("Banque actuelle    :", banque.length, "exercices");
 
 /* 1. Sauvegarde */
 if (!dry) {
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-  const copie = BANQUE.replace(/\.json$/, "." + stamp + ".bak.json");
-  fs.copyFileSync(BANQUE, copie);
+  const copie = BQ.sauvegarder();
   console.log("Sauvegarde         :", path.basename(copie));
 }
 
@@ -237,6 +235,6 @@ if (dupIds.length || dupCodes.length) {
 if (dry) {
   console.log("\n--dry : rien n'a ete ecrit.");
 } else {
-  fs.writeFileSync(BANQUE, JSON.stringify(fusion));
-  console.log("\npuzzles.json ecrit. Etape suivante : node build_site.js");
+  BQ.ecrire(fusion);
+  console.log("\nbanque/ ecrite. Etape suivante : node build_site.js");
 }

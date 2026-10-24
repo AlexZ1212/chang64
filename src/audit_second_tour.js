@@ -32,12 +32,12 @@ if (!JSONL || JSONL.startsWith("--")) { console.error("Usage : node audit_second
 const PROF = +(arg("profondeur") || 16);
 const SORTIE = arg("sortie") || JSONL.replace(/\.jsonl$/, "") + "_second_tour.jsonl";
 const REPRENDRE = process.argv.includes("--reprendre");
-const BANQUE = arg("banque") || path.join(__dirname, "puzzles.json");
+const BANQUE = arg("banque") || null;
 /* En dessous de ce seuil, le coup stocke ne gagne plus assez pour qu'un
    exercice le promette. Reglable. */
 const SEUIL = +(arg("seuil") || 100);
 
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const banque = require(path.join(__dirname, "banque.js")).charger(BANQUE || undefined);
 const parCode = new Map(banque.map(p => [p.code, p]));
 
 const aRevoir = [];

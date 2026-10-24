@@ -449,7 +449,7 @@ if (require.main === module) {
 const WANT = +process.argv[2] || 120;
 const OUT = process.argv[3] || "/tmp/new_puzzles.json";
 const SECONDS = +process.argv[4] || 240;
-const existing = JSON.parse(fs.readFileSync(path.join(__dirname, "puzzles.json"), "utf8"));
+const existing = require(path.join(__dirname, "banque.js")).charger();
 const already = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, "utf8")) : [];
 const seen = new Set(existing.concat(already).map(p => p.fen.split(" ").slice(0, 4).join(" ")));
 

@@ -30,14 +30,15 @@ if (!LISTE || LISTE.startsWith("--")) {
   process.exit(1);
 }
 const argB = process.argv.find(a => a.startsWith("--banque="));
-const BANQUE = argB ? argB.split("=")[1] : path.join(__dirname, "puzzles.json");
+const BQ = require(path.join(__dirname, "banque.js"));
+const BANQUE = argB ? argB.split("=")[1] : null;
 
 const codes = fs.readFileSync(LISTE, "utf8").split("\n").map(s => s.trim()).filter(Boolean);
 const aRetirer = new Set(codes);
 console.log("Codes lus          :", codes.length, "| uniques :", aRetirer.size);
 if (codes.length !== aRetirer.size) console.log("  (des doublons dans la liste, sans consequence)");
 
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const banque = BQ.charger(BANQUE || undefined);
 console.log("Banque             :", banque.length, "exercices");
 
 const presents = new Set(banque.map(p => p.code));
@@ -78,10 +79,10 @@ if (vides.length) console.log("\nATTENTION : niveau(x) vides apres retrait :", v
 if (dry) { console.log("\n--dry : rien n'a ete ecrit."); process.exit(0); }
 
 const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-fs.copyFileSync(BANQUE, BANQUE.replace(/\.json$/, "." + stamp + ".bak.json"));
+if (BANQUE) fs.copyFileSync(BANQUE, BANQUE.replace(/\.json$/, "." + stamp + ".bak.json")); else BQ.sauvegarder();
 /* Les retires sont conserves a part : si on decouvre plus tard qu'un motif
    etait bon, on le retrouve sans rejouer tout l'audit. */
-fs.writeFileSync(BANQUE.replace(/\.json$/, ".retires." + stamp + ".json"), JSON.stringify(retires, null, 1));
-fs.writeFileSync(BANQUE, JSON.stringify(garde));
+fs.writeFileSync(BANQUE ? BANQUE.replace(/\.json$/, ".retires." + stamp + ".json") : path.join(__dirname, "puzzles.retires." + stamp + ".json"), JSON.stringify(retires, null, 1));
+BQ.ecrire(garde, BANQUE || undefined);
 console.log("\nEcrit. Sauvegarde et fichier des retires horodates a cote.");
 console.log("Enchaine avec : node audit_banque.js && node build_site.js && node run_tests.js");

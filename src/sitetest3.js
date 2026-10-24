@@ -2,7 +2,7 @@ const fs=require("fs"),path=require("path");
 const {Game}=require("./engine.js");
 const OUT="./site";
 const THEMES=JSON.parse(fs.readFileSync(require("path").join(__dirname,"themes.json"),"utf8"));
-const puzzles=JSON.parse(fs.readFileSync(require("path").join(__dirname,"puzzles.json"),"utf8"));
+const puzzles=require(require("path").join(__dirname,"banque.js")).charger();
 for(const p of puzzles) if(THEMES[p.theme]) p.theme=THEMES[p.theme];
 const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
 const read=p=>fs.readFileSync(OUT+"/"+p,"utf8");

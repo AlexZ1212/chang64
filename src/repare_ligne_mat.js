@@ -57,7 +57,7 @@ function codeDerive(p, pris) {
 }
 
 const DRY = process.argv.includes("--dry");
-const BANQUE = path.join(__dirname, "puzzles.json");
+const BQ = require(path.join(__dirname, "banque.js"));
 const MAX_N = 6;
 
 const NOM_MOTIF = { 1: "Mate in one", 2: "Mate in two", 3: "Mate in three" };
@@ -107,7 +107,7 @@ function reconstruire(p) {
   return { n: n, sol: uci };
 }
 
-const banque = JSON.parse(fs.readFileSync(BANQUE, "utf8"));
+const banque = BQ.charger();
 /* Le niveau d'un motif est lu dans la banque, jamais ecrit ici. */
 const niveauDuMotif = {};
 for (const p of banque) if (p.theme && p.level) niveauDuMotif[p.theme] = p.level;
@@ -154,11 +154,11 @@ for (const p of casses) {
 
 console.log("\nReparables          :", repares);
 console.log("Laisses tels quels  :", echecs);
-if (DRY) { console.log("\n--dry : puzzles.json n'a pas ete touche."); process.exit(0); }
+if (DRY) { console.log("\n--dry : la banque n'a pas ete touchee."); process.exit(0); }
 if (repares) {
   const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-  fs.copyFileSync(BANQUE, BANQUE.replace(/\.json$/, "." + stamp + ".bak.json"));
-  fs.writeFileSync(BANQUE, JSON.stringify(banque));
-  console.log("puzzles.json reecrit, sauvegarde horodatee a cote.");
+  BQ.sauvegarder();
+  BQ.ecrire(banque);
+  console.log("banque/ reecrite, sauvegarde horodatee a cote.");
   console.log("Ensuite : node audit_banque.js && node build_site.js && node run_tests.js");
 } else console.log("Rien a ecrire.");

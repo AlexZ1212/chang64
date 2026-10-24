@@ -3,7 +3,7 @@ const { JSDOM } = require("jsdom");
 const Engine = require("./engine.js");
 
 const html = fs.readFileSync(require("path").join(__dirname,"site-index.html"), "utf8");
-const PUZZLES = JSON.parse(fs.readFileSync(require("path").join(__dirname,"puzzles.json"), "utf8"));
+const PUZZLES = require(require("path").join(__dirname,"banque.js")).charger();
 const errors = [];
 const dom = new JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true });
 const w = dom.window;

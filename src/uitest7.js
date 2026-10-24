@@ -3,7 +3,7 @@ const { JSDOM } = require("jsdom");
 const Engine = require("./engine.js");
 
 const html = fs.readFileSync(require("path").join(__dirname,"site-index.html"), "utf8");
-const PUZZLES = JSON.parse(fs.readFileSync(require("path").join(__dirname,"puzzles.json"), "utf8"));
+const PUZZLES = require(require("path").join(__dirname,"banque.js")).charger();
 const wait = ms => new Promise(r => setTimeout(r, ms));
 const T = (l, ok, x) => console.log((ok ? "  ok  " : " FAIL ") + l + (x ? " — " + x : ""));
 

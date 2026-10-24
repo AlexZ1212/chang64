@@ -43,9 +43,11 @@ for(const f of contenu){
   const h=fs.readFileSync(f,"utf8");
   /* Le registre est indexe sur le canonique : /openings/ et non
      /openings/index.html. Chercher le chemin de fichier tel quel donnait
-     douze fausses discordances, toutes des pages d'index. */
+     douze fausses discordances, toutes des pages d'index. Depuis le
+     2026-10-24 le canonique perd aussi son .html (forme servie par Pages) :
+     /openings/ruy-lopez et non /openings/ruy-lopez.html. */
   const brut="/"+path.relative(SITE,f).replace(/\\/g,"/");
-  const url=D[brut]?brut:brut.replace(/index\.html$/,"");
+  const url=brut.replace(/index\.html$/,"").replace(/\.html$/,"");
   const e=D[url];
   const pub=(h.match(/"datePublished":"(\d{4}-\d{2}-\d{2})"/)||[])[1];
   const mod=(h.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/)||[])[1];

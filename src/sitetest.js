@@ -56,7 +56,8 @@ T("diagrams match the announced moves", wrong===0, checked+" pages checked, "+wr
 
 // index, sitemap, robots, manifest, sw
 const idx=fs.readFileSync(OUT+"/openings/index.html","utf8");
-T("opening index links every page", files.filter(f=>f!=="index.html").every(f=>idx.includes("/openings/"+f)));
+// lien sans .html, forme servie par Pages (2026-10-24)
+T("opening index links every page", files.filter(f=>f!=="index.html").every(f=>idx.includes('href="/openings/'+f.replace(/\.html$/,"")+'"')));
 const sm=fs.readFileSync(OUT+"/sitemap.xml","utf8");
 const locs=[...sm.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
 /* Comparer le sitemap au seul dossier des ouvertures n'avait de sens que
@@ -69,11 +70,12 @@ const locs=[...sm.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
      volontairement hors du sitemap. Declarer une page en noindex au sitemap
      serait la vraie faute. On verifie desormais la regle exacte : toute page
      indexable y figure, aucune page noindex n'y figure. */
-  const url=f=>"https://chang64.com/openings/"+f;
+  // URL servie par Pages, sans .html (2026-10-24)
+  const url=f=>"https://chang64.com/openings/"+f.replace(/\.html$/,"");
   const noindex=f=>/noindex/.test(fs.readFileSync(OUT+"/openings/"+f,"utf8"));
   const pages=files.filter(f=>f!=="index.html");
   const absente=pages.filter(f=>!noindex(f)&&!locs.includes(url(f)));
-  const enTrop=pages.filter(f=>noindex(f)&&locs.includes(url(f)));
+  const enTrop=pages.filter(f=>noindex(f)&&(locs.includes(url(f))||locs.includes("https://chang64.com/openings/"+f)));
   T("sitemap lists every indexable opening page", absente.length===0, absente.slice(0,3).join(", "));
   T("sitemap excludes every noindex opening page", enTrop.length===0, enTrop.slice(0,3).join(", "));
   T("sitemap covers the whole site", locs.length>=files.length, locs.length+" urls pour "+files.length+" ouvertures");

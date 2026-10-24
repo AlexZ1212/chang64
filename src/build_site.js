@@ -72,6 +72,28 @@ if (!fs.existsSync(DATES_PATH) && fs.existsSync(path.join(__dirname, "site", "op
   console.log("!".repeat(58) + "\n");
 }
 let datesNouvelles = 0, datesModifiees = 0;
+/* Passage aux URL sans extension (2026-10-24). Cloudflare Pages redirige en
+   308 toute URL en .html vers sa forme sans extension : les canoniques, le
+   sitemap et les hreflang pointaient donc tous vers des redirections. Le
+   registre est indexe par le chemin public, il change donc de cle :
+   "/openings/ruy-lopez.html" devient "/openings/ruy-lopez".
+   La migration se fait ici, au chargement, et l'historique suit sa page.
+   Le meme changement modifie aussi le corps des pages (leurs liens internes
+   perdent l'extension), donc leur empreinte : sans precaution, les 466 pages
+   seraient toutes datees "mise a jour aujourd'hui" pour un simple changement
+   d'adresse, exactement le faux signal que ce registre existe pour eviter.
+   Tant que la migration est en cours, une empreinte qui change est donc
+   reprise sans toucher a la date. La migration ne joue qu'une fois : des que
+   le registre est reecrit, plus aucune cle ne finit en .html. */
+const MIGRATION_SANS_HTML = Object.keys(DATES).some(k => k.endsWith(".html"));
+if (MIGRATION_SANS_HTML) {
+  for (const k of Object.keys(DATES)) {
+    if (!k.endsWith(".html")) continue;
+    const neuve = k.replace(/\.html$/, "");
+    if (!DATES[neuve]) DATES[neuve] = DATES[k];
+    delete DATES[k];
+  }
+}
 function datesDe(cheminPublic, contenu) {
   /* L'empreinte porte sur le CORPS de la page, pas sur le document entier :
      l'entete, le pied et le JSON-LD contiennent la date elle-meme et des
@@ -80,7 +102,10 @@ function datesDe(cheminPublic, contenu) {
   const sceau = require("crypto").createHash("sha1").update(contenu, "utf8").digest("hex").slice(0, 16);
   const connu = DATES[cheminPublic];
   if (!connu) { DATES[cheminPublic] = { sceau, publiee: BUILD_DATE, modifiee: BUILD_DATE }; datesNouvelles++; }
-  else if (connu.sceau !== sceau) { connu.sceau = sceau; connu.modifiee = BUILD_DATE; datesModifiees++; }
+  else if (connu.sceau !== sceau) {
+    connu.sceau = sceau;
+    if (!MIGRATION_SANS_HTML) { connu.modifiee = BUILD_DATE; datesModifiees++; }
+  }
   return DATES[cheminPublic];
 }
 const MOIS_FR = ["janvier","février","mars","avril","mai","juin","juillet",
@@ -1312,7 +1337,7 @@ ${alts || ""}
      largeur entre les deux polices (mesure : jusqu'a 40px sur les six
      entrees) se voyait comme un reflow du menu, comme si la page repartait
      de zero.
-     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
+     Chemins relatifs a la racine ("/fonts/...", pas "${'${SITE}'}/fonts/...") :
      ces pages vivent a des profondeurs variees (/openings/*.html,
      /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
      selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
@@ -1637,7 +1662,7 @@ const L = {
         idxDesc: (a, b) => `Index complet de ${a} familles d'ouvertures d'échecs et ${b} variantes répertoriées, chacune avec ses coups, son code ECO et un échiquier jouable.`,
         foot: "chang64 : échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings." }
 };
-function urlFor(lang, p) { return `${SITE}/${L[lang].dir}/${lang === "fr" ? p.slugFr : p.slugEn}.html`; }
+function urlFor(lang, p) { return `${SITE}/${L[lang].dir}/${lang === "fr" ? p.slugFr : p.slugEn}`; }
 function altLinks(p) {
   return `<link rel="alternate" hreflang="en" href="${urlFor("en", p)}">\n` +
          `<link rel="alternate" hreflang="fr" href="${urlFor("fr", p)}">\n` +
@@ -1760,7 +1785,7 @@ ${pages.map(p => {
     numbered(p.main.moves),
     p.ecos.join(" ")
   ].join(" "));
-  return `<a class="tile" data-cle="${esc(cle)}" data-side="${p.side}" href="${d.index}${lang === "fr" ? p.slugFr : p.slugEn}.html"><b>${esc(lang === "fr" ? p.nameFr : p.family)}</b><span>${esc(numbered(p.main.moves))} · ${esc(p.ecos.join(" "))}</span></a>`;
+  return `<a class="tile" data-cle="${esc(cle)}" data-side="${p.side}" href="${d.index}${lang === "fr" ? p.slugFr : p.slugEn}"><b>${esc(lang === "fr" ? p.nameFr : p.family)}</b><span>${esc(numbered(p.main.moves))} · ${esc(p.ecos.join(" "))}</span></a>`;
 }).join("\n")}
 </div>`;
   const idxAlt = `<link rel="alternate" hreflang="en" href="${SITE}/openings/">\n<link rel="alternate" hreflang="fr" href="${SITE}/fr/ouvertures/">\n<link rel="alternate" hreflang="x-default" href="${SITE}/openings/">`;
@@ -1822,7 +1847,10 @@ const DATA_MAX=3;
    plafond ne tenait pas du tout. Ne pas remplacer cette chaine par des
    appels paralleles. */
 let fileDeco=Promise.resolve();
-const CORE=["/","/index.html","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
+/* "/index.html" retire de CORE et du repli hors ligne (2026-10-24) : Pages le
+   redirige en 308 vers "/", et une reponse redirigee servie a une navigation
+   est refusee par le navigateur. Le repli tombait donc en erreur. */
+const CORE=["/","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));
 });
@@ -1877,7 +1905,7 @@ self.addEventListener("fetch",e=>{
       const copy=resp.clone();
       caches.open(CACHE).then(c=>c.put(r,copy)).catch(()=>{});
       return resp;
-    }).catch(()=>caches.match("/index.html")))
+    }).catch(()=>caches.match("/")))
   );
 });
 `);
@@ -1950,7 +1978,10 @@ function queueOg(name, title, subtitle, fen) {
    si Cloudflare Web Analytics venait a etre active par inadvertance dans le
    tableau de bord -- le script serait alors bloque, avec une erreur en
    console et aucune donnee envoyee. A desactiver aussi cote tableau de bord
-   si jamais il tourne, la CSP n'etant qu'un filet de securite. */
+   si jamais il tourne, la CSP n'etant qu'un filet de securite.
+   La regle sans cache de l'application vise "/" et non plus "/index.html"
+   (2026-10-24) : _headers s'applique au chemin demande, et Pages redirige
+   "/index.html" vers "/". La regle ne touchait donc jamais la page servie. */
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
@@ -1982,7 +2013,7 @@ fs.writeFileSync(OUT + "/_headers", `/*
 /engine/*.js
   Content-Type: text/javascript
 
-/index.html
+/
   Cache-Control: public, max-age=0, must-revalidate
 
 /sw.js
@@ -2007,13 +2038,18 @@ fs.writeFileSync(OUT + "/_headers", `/*
    /fr/ouvertures/gambit-de-lelephant.html. Ces URL sont indexees par Google,
    d'ou une 301 pour chaque famille dont le slug francais differe du slug
    anglais. On saute les cas ou l'ancienne URL est aussi une URL actuelle,
-   qui creeraient une boucle. */
+   qui creeraient une boucle.
+   La cible est la forme sans extension (2026-10-24) : Pages redirige en 308
+   toute URL en .html, une cible en .html faisait donc une chaine 301 puis
+   308. L'ancienne adresse est couverte sous ses deux formes, avec et sans
+   .html, pour que chacune arrive en un seul saut. */
 const frSlugs = new Set(pages.map(p => p.slugFr));
 const oldFrRedirects = pages
   .filter(p => p.slugFr !== p.slugEn && !frSlugs.has(p.slugEn))
-  .map(p => `/fr/ouvertures/${p.slugEn}.html  /fr/ouvertures/${p.slugFr}.html  301`)
+  .map(p => `/fr/ouvertures/${p.slugEn}.html  /fr/ouvertures/${p.slugFr}  301\n` +
+            `/fr/ouvertures/${p.slugEn}  /fr/ouvertures/${p.slugFr}  301`)
   .join("\n");
-console.log("Redirections FR    :", oldFrRedirects ? oldFrRedirects.split("\n").length : 0);
+console.log("Redirections FR    :", oldFrRedirects ? oldFrRedirects.split("\n").length / 2 : 0);
 
 fs.writeFileSync(OUT + "/_redirects", `/fr            /fr/ouvertures/       301
 /openings      /openings/            301
@@ -2036,7 +2072,7 @@ ${oldFrRedirects}
   <a class="tile" href="/puzzles/"><b>Puzzles</b><span>${puzzles.length} positions</span></a>
 </div>`;
   fs.writeFileSync(OUT + "/404.html",
-    shell("Page not found | chang64", "This page does not exist on chang64.", SITE + "/404.html", body, null, "en", '<meta name="robots" content="noindex">', null));
+    shell("Page not found | chang64", "This page does not exist on chang64.", SITE + "/404", body, null, "en", '<meta name="robots" content="noindex">', null));
 }
 
 fs.writeFileSync(OUT + "/robots.txt", `User-agent: *\nAllow: /\nDisallow: /engine/\n\nSitemap: ${SITE}/sitemap.xml\n`);

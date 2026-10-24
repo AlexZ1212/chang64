@@ -40,6 +40,15 @@ const all=d=>{
   return o;
 };
 
+/* URL publique <-> fichier (2026-10-24). Cloudflare Pages sert
+   /openings/x.html sous /openings/x (et redirige en 308 la forme en .html),
+   /openings/index.html sous /openings/. Le site emet donc ces formes-la dans
+   le sitemap et les redirections, et chaque comparaison passe par ces deux
+   fonctions plutot que par une egalite de chaines. Une URL en .html (vieux
+   sitemap de reference) designe toujours son fichier tel quel. */
+const fichierDe=u=>u.endsWith("/")?u+"index.html":u.endsWith(".html")?u:u+".html";
+const urlDe=f=>f.replace(/index\.html$/,"").replace(/\.html$/,"");
+
 console.log("\n--- Aucune regression par rapport au site en ligne ---");
 const gen=new Set(all(G)), live=all(L);
 const redir=new Map();
@@ -52,8 +61,8 @@ for(const l of fs.readFileSync(G+"/_redirects","utf8").trim().split("\n")){
    disparait sans redirection. */
 const perdus=live.filter(f=>{
   if(gen.has(f)||f==="/.htaccess")return false;
-  const c=redir.get(f); if(!c)return true;
-  return !gen.has(c.endsWith("/")?c+"index.html":c);
+  const c=redir.get(f)||redir.get(urlDe(f)); if(!c)return true;
+  return !gen.has(fichierDe(c));
 });
 const renommes=live.filter(f=>!gen.has(f)&&f!=="/.htaccess").length;
 T("aucun fichier perdu sans redirection", perdus.length===0, perdus.slice(0,5).join(", "));
@@ -75,10 +84,9 @@ for(const l of fs.readFileSync(G+"/_redirects","utf8").trim().split("\n")){
   const p=l.trim().split(/\s+/); if(p.length>=2)red.set(p[0],p[1]);
 }
 const casse=oldLocs.filter(u=>{
-  const f=u.endsWith("/")?u+"index.html":u;
-  if(gen.has(f))return false;
+  if(gen.has(fichierDe(u)))return false;
   const c=red.get(u); if(!c)return true;
-  return !gen.has(c.endsWith("/")?c+"index.html":c);
+  return !gen.has(fichierDe(c));
 });
 T(oldLocs.length+" URL indexees, aucune perdue", casse.length===0, casse.slice(0,5).join(", "));
 
@@ -101,12 +109,16 @@ const publiables=html.filter(u=>!u.startsWith("/players/")&&u!=="/404.html");
    signal contradictoire que la Search Console remonte comme une erreur. */
 const estNoindex=u=>/name="robots" content="noindex/.test(fs.readFileSync(G+u,"utf8"));
 const indexables=publiables.filter(u=>!estNoindex(u));
-const abs=indexables.filter(u=>!locs.has(u)&&!locs.has(u.replace(/index\.html$/,"")));
+const abs=indexables.filter(u=>!locs.has(urlDe(u)));
 T(indexables.length+" pages indexables, toutes au sitemap", abs.length===0, abs.slice(0,4).join(", "));
-const enTrop=publiables.filter(u=>estNoindex(u)&&(locs.has(u)||locs.has(u.replace(/index\.html$/,""))));
+const enTrop=publiables.filter(u=>estNoindex(u)&&(locs.has(u)||locs.has(urlDe(u))));
 T("aucune page en noindex declaree au sitemap", enTrop.length===0, enTrop.slice(0,4).join(", "));
 T("profil exclu du sitemap", ![...locs].some(u=>u.startsWith("/players/")));
-T("404 exclue du sitemap", !locs.has("/404.html"));
+T("404 exclue du sitemap", !locs.has("/404")&&!locs.has("/404.html"));
+/* Pages redirige en 308 toute URL en .html : une seule au sitemap serait une
+   redirection declaree comme page a indexer. */
+const enHtml=[...locs].filter(u=>u.endsWith(".html"));
+T("aucune URL en .html au sitemap", enHtml.length===0, enHtml.slice(0,4).join(", "));
 T("robots autorise l'exploration", /Allow: \//.test(fs.readFileSync(G+"/robots.txt","utf8")));
 T("engine bloque au robots", /Disallow: \/engine\//.test(fs.readFileSync(G+"/robots.txt","utf8")));
 

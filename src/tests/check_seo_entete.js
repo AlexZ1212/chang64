@@ -156,6 +156,88 @@ console.log("\n--- Pas de pages en double ---");
     partages.slice(0, 2).map(([k, v]) => k + " x" + v.length).join(" | "));
 }
 
+console.log("\n--- Adresses dans la forme servie par Cloudflare Pages ---");
+{
+  /* Constat du 2026-10-24 sur chang64.com : Pages redirige en 308 toute URL
+     en .html vers sa forme sans extension (/openings/ruy-lopez.html ->
+     /openings/ruy-lopez), et /dossier/index.html vers /dossier/. Le site
+     publiait pourtant la forme en .html partout : canoniques, hreflang,
+     sitemap, cibles de _redirects (chaines 301 puis 308). Google voyait donc
+     des canoniques pointant vers des redirections.
+     La forme attendue est deduite du fichier : /a/b.html -> /a/b,
+     /a/index.html -> /a/. Chaque adresse emise doit avoir cette forme ET
+     designer un fichier qui existe, sans quoi on aurait troque une
+     redirection contre une 404. */
+  const ORIG = "https://chang64.com";
+  const fichierDe = u => u.endsWith("/") ? u + "index.html" : u.endsWith(".html") ? u : u + ".html";
+  const urlDe = f => f.replace(/index\.html$/, "").replace(/\.html$/, "");
+  const existe = u => fs.existsSync(SITE + u) && fs.statSync(SITE + u).isFile() || fs.existsSync(SITE + fichierDe(u));
+  const walk = (p, out) => {
+    for (const f of fs.readdirSync(p)) {
+      const q = path.join(p, f);
+      if (fs.statSync(q).isDirectory()) walk(q, out);
+      else if (f.endsWith(".html")) out.push(q);
+    }
+    return out;
+  };
+  const pages = walk(SITE, []).map(q => q.slice(SITE.length).split(path.sep).join("/"));
+  let canonFaux = [], absoluesHtml = [], absoluesMortes = [], liensHtml = [], liensMorts = [], nAbs = 0, nLiens = 0;
+  for (const f of pages) {
+    const h = fs.readFileSync(SITE + f, "utf8");
+    const c = get(h, /rel="canonical" href="([^"]*)"/);
+    /* L'application ("/") n'a pas de fichier propre a son URL : on la laisse
+       au controle d'accueil plus haut. */
+    if (c && f !== "/index.html" && c !== ORIG + urlDe(f)) canonFaux.push(f + " -> " + c);
+    /* Toute adresse absolue du site : canonical, og:url, hreflang, JSON-LD. */
+    for (const m of h.matchAll(/https:\/\/chang64\.com(\/[^"'\s<>\\]*)/g)) {
+      const u = m[1].replace(/[#?].*$/, "");
+      if (/\.(png|svg|json|xml|txt|woff2|webmanifest)$/.test(u)) continue;
+      nAbs++;
+      if (u.endsWith(".html")) absoluesHtml.push(f + " : " + u);
+      else if (!existe(u)) absoluesMortes.push(f + " : " + u);
+    }
+    /* Liens internes relatifs a la racine. */
+    for (const m of h.matchAll(/href="(\/[^"]*)"/g)) {
+      const u = m[1].replace(/[#?].*$/, "");
+      if (!u || u.startsWith("//")) continue;
+      nLiens++;
+      if (u.endsWith(".html")) liensHtml.push(f + " : " + u);
+      else if (!existe(u)) liensMorts.push(f + " : " + u);
+    }
+  }
+  T(pages.length + " pages, canonical = forme sans extension de leur fichier", canonFaux.length === 0,
+    canonFaux.slice(0, 3).join(" | "));
+  T(nAbs + " adresses absolues (canonical, og:url, hreflang, JSON-LD), aucune en .html",
+    absoluesHtml.length === 0, absoluesHtml.length + " : " + absoluesHtml.slice(0, 3).join(" | "));
+  T("chaque adresse absolue designe un fichier existant", absoluesMortes.length === 0,
+    absoluesMortes.length + " : " + absoluesMortes.slice(0, 3).join(" | "));
+  T(nLiens + " liens internes, aucun en .html", liensHtml.length === 0,
+    liensHtml.length + " : " + liensHtml.slice(0, 3).join(" | "));
+  T("chaque lien interne designe un fichier existant", liensMorts.length === 0,
+    liensMorts.length + " : " + liensMorts.slice(0, 3).join(" | "));
+
+  const sm = fs.readFileSync(SITE + "/sitemap.xml", "utf8");
+  const smUrls = [...sm.matchAll(/(?:<loc>|href=")https:\/\/chang64\.com([^<"]*)/g)].map(m => m[1]);
+  const smHtml = smUrls.filter(u => u.endsWith(".html"));
+  const smMortes = smUrls.filter(u => !existe(u));
+  T(smUrls.length + " adresses au sitemap (pages et hreflang), aucune en .html", smHtml.length === 0,
+    smHtml.length + " : " + smHtml.slice(0, 3).join(", "));
+  T("chaque adresse du sitemap designe un fichier existant", smMortes.length === 0,
+    smMortes.slice(0, 3).join(", "));
+
+  const cibles = fs.readFileSync(SITE + "/_redirects", "utf8").trim().split("\n")
+    .map(l => l.trim().split(/\s+/)).filter(p => p.length >= 2).map(p => p[1]);
+  T(cibles.length + " cibles de redirection, aucune en .html (pas de chaine 301 puis 308)",
+    cibles.every(t => !t.endsWith(".html")), cibles.filter(t => t.endsWith(".html")).slice(0, 3).join(", "));
+
+  /* L'application construit elle-meme le lien vers la page d'ouverture de la
+     partie en cours : il n'apparait dans aucun fichier genere, on le lit dans
+     la source. */
+  const ui2 = fs.readFileSync(path.join(__dirname, "..", "ui2.js"), "utf8");
+  const oh = (ui2.match(/function openingHref[\s\S]*?\n\}/) || [""])[0];
+  T("lien d'ouverture de l'application sans .html", !!oh && !oh.includes(".html"), oh.slice(0, 120));
+}
+
 console.log("\n--- En-tetes de securite ---");
 /* Le site ne collecte rien, donc l'enjeu est faible, mais ces deux en-tetes
    ne coutent que deux lignes. Attention : une politique trop stricte casse le

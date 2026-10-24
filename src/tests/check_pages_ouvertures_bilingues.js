@@ -21,12 +21,13 @@ let bad=[],badFr=[];
 for(const f of en){
   const h=fs.readFileSync(S+"/openings/"+f,"utf8");
   const m=h.match(/hreflang="fr" href="https:\/\/chang64\.com(\/fr\/ouvertures\/[^"]+)"/);
-  if(!m||!fs.existsSync(S+m[1]))bad.push(f);
+  /* Forme servie par Pages (2026-10-24) : sans .html, et le fichier existe. */
+  if(!m||m[1].endsWith(".html")||!fs.existsSync(S+m[1]+".html"))bad.push(f);
 }
 for(const f of fr){
   const h=fs.readFileSync(S+"/fr/ouvertures/"+f,"utf8");
   const m=h.match(/hreflang="en" href="https:\/\/chang64\.com(\/openings\/[^"]+)"/);
-  if(!m||!fs.existsSync(S+m[1]))badFr.push(f);
+  if(!m||m[1].endsWith(".html")||!fs.existsSync(S+m[1]+".html"))badFr.push(f);
 }
 T("chaque page EN pointe vers une page FR existante", bad.length===0, bad.slice(0,5).join(", "));
 T("chaque page FR pointe vers une page EN existante", badFr.length===0, badFr.slice(0,5).join(", "));
@@ -42,14 +43,18 @@ const sm=fs.readFileSync(S+"/sitemap.xml","utf8");
 const locs=new Set([...sm.matchAll(/<loc>https:\/\/chang64\.com([^<]*)<\/loc>/g)].map(m=>m[1]));
 const indexable=fr.filter(f=>!/name="robots" content="noindex/.test(fs.readFileSync(S+"/fr/ouvertures/"+f,"utf8")));
 const nonIndexable=fr.filter(f=>!indexable.includes(f));
-const missing=indexable.filter(f=>!locs.has("/fr/ouvertures/"+f));
-const enTrop=nonIndexable.filter(f=>locs.has("/fr/ouvertures/"+f));
+/* Le sitemap porte l'URL servie, sans .html (2026-10-24). On teste les deux
+   formes pour "en trop" : sans quoi une page noindex declaree en .html
+   passerait inapercue. */
+const urlFr=f=>"/fr/ouvertures/"+f.replace(/\.html$/,"");
+const missing=indexable.filter(f=>!locs.has(urlFr(f)));
+const enTrop=nonIndexable.filter(f=>locs.has(urlFr(f))||locs.has("/fr/ouvertures/"+f));
 T("chaque page FR indexable est au sitemap", missing.length===0, missing.slice(0,5).join(", "));
 T("aucune page FR en noindex n'est au sitemap", enTrop.length===0, enTrop.slice(0,5).join(", "));
 
 console.log("\n--- Index des ouvertures ---");
 const idxFr=fs.readFileSync(S+"/fr/ouvertures/index.html","utf8");
-const orph=fr.filter(f=>!idxFr.includes(f));
+const orph=fr.filter(f=>!idxFr.includes('href="/fr/ouvertures/'+f.replace(/\.html$/,"")+'"'));
 T("l'index FR liste toutes les pages", orph.length===0, orph.slice(0,5).join(", "));
 
 console.log("\n--- Qualite des noms ---");

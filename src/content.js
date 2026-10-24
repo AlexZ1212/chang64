@@ -337,8 +337,8 @@ module.exports = function (H) {
          cul-de-sac. Elle n'obtient donc pas le bouton, au meme titre que les
          pages illustrees par le plateau de depart. */
       const explorable = r.fen !== FEN_DEPART && jeuDeLaPage.moves().length > 0;
-      const canonical = `${SITE}/${dir}/${r.slug[lang]}.html`;
-      const alt = `${SITE}/${DIRS.learn[lang === "en" ? "fr" : "en"]}/${r.slug[lang === "en" ? "fr" : "en"]}.html`;
+      const canonical = `${SITE}/${dir}/${r.slug[lang]}`;
+      const alt = `${SITE}/${DIRS.learn[lang === "en" ? "fr" : "en"]}/${r.slug[lang === "en" ? "fr" : "en"]}`;
       const body = `
 <h1>${esc(r.title[lang])}</h1>
 <div class="cols">
@@ -379,7 +379,7 @@ module.exports = function (H) {
       ? "Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous."
       : "The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.";
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      RULES.map(r => `<a class="tile" href="/${dir}/${r.slug[lang]}.html"><b>${esc(r.title[lang])}</b></a>`).join("\n") + `</div>`;
+      RULES.map(r => `<a class="tile" href="/${dir}/${r.slug[lang]}"><b>${esc(r.title[lang])}</b></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.learn[lang === "en" ? "fr" : "en"]}/`, idxUrl);
@@ -799,13 +799,13 @@ module.exports = function (H) {
          legende et orientation ne peuvent pas se contredire. */
       const sampleSide = sample ? (sample.fen.split(" ")[1] === "b" ? "b" : "w") : "w";
       const sampleLabel = sampleSide === "b" ? u.black : u.white;
-      const canonical = `${SITE}/${dir}/${sl}.html`;
-      const alt = `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/${lang === "en" ? sFr : sEn}.html`;
+      const canonical = `${SITE}/${dir}/${sl}`;
+      const alt = `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/${lang === "en" ? sFr : sEn}`;
       const pz = sample ? `
   ${diagram(sample.fen, (lang === "fr" ? "Exemple : " : "Example: ") + themeOf(sample.theme, lang) + " \u00b7 " + u.sideToMove(sampleLabel), sampleSide === "b")}
   <div><p>${lang === "fr" ? "Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée." : "The diagram shows an example, taken from the chang64 puzzle set. Every position there is proved by the engine before it is offered."}</p>
     <a class="cta" href="/#puzzle=${sample.id}">${lang === "fr" ? "Résoudre cet exercice" : "Solve this puzzle"}</a>
-    ${THEME10.includes(theme) ? `<a class="cta ghost" href="/${DIRS.puzzles[lang]}/${categorySlug(theme, lang)}.html">${lang === "fr" ? "Voir des exemples expliqués" : "See worked examples"}</a>` : ""}
+    ${THEME10.includes(theme) ? `<a class="cta ghost" href="/${DIRS.puzzles[lang]}/${categorySlug(theme, lang)}">${lang === "fr" ? "Voir des exemples expliqués" : "See worked examples"}</a>` : ""}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>` : `<div>
     <p>${lang === "fr" ? "Aucun exercice de la banque ne porte précisément sur cette notion : elle se rencontre en partie plutôt que dans un exercice isolé." : "No puzzle in the set targets this idea on its own: it comes up in games rather than in a single isolated position."}</p>
@@ -850,7 +850,7 @@ module.exports = function (H) {
     const sortedTerms = TERMS.slice().sort((a, b) =>
       (lang === "fr" ? a[3] : a[2]).localeCompare(lang === "fr" ? b[3] : b[2], lang));
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      sortedTerms.map(x => `<a class="tile" href="/${dir}/${lang === "fr" ? x[1] : x[0]}.html"><b>${esc(lang === "fr" ? x[3] : x[2])}</b><span>${esc((lang === "fr" ? x[5] : x[4]).slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
+      sortedTerms.map(x => `<a class="tile" href="/${dir}/${lang === "fr" ? x[1] : x[0]}"><b>${esc(lang === "fr" ? x[3] : x[2])}</b><span>${esc((lang === "fr" ? x[5] : x[4]).slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
@@ -904,8 +904,8 @@ module.exports = function (H) {
     const dir = DIRS.endgames[lang], u = UI[lang];
     for (const e of ENDS) {
       try { new Game(e.fen); } catch (err) { throw new Error("FEN finale invalide"); }
-      const canonical = `${SITE}/${dir}/${e.slug[lang]}.html`;
-      const alt = `${SITE}/${DIRS.endgames[lang === "en" ? "fr" : "en"]}/${e.slug[lang === "en" ? "fr" : "en"]}.html`;
+      const canonical = `${SITE}/${dir}/${e.slug[lang]}`;
+      const alt = `${SITE}/${DIRS.endgames[lang === "en" ? "fr" : "en"]}/${e.slug[lang === "en" ? "fr" : "en"]}`;
       const body = `<h1>${esc(e.title[lang])}</h1>
 <div class="cols">${diagram(e.fen, "")}
 <div>${e.body[lang].map(p => `<p>${p}</p>`).join("\n")}
@@ -920,7 +920,7 @@ module.exports = function (H) {
       ? "Cinq finales à connaître par cœur, chacune avec sa méthode et un entraîneur pour la répéter contre le moteur."
       : "Five endgames worth knowing by heart, each with its method and a trainer to drill it against the engine.";
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      ENDS.map(e => `<a class="tile" href="/${dir}/${e.slug[lang]}.html"><b>${esc(e.title[lang])}</b></a>`).join("\n") + `</div>`;
+      ENDS.map(e => `<a class="tile" href="/${dir}/${e.slug[lang]}"><b>${esc(e.title[lang])}</b></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.endgames[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
@@ -970,8 +970,8 @@ module.exports = function (H) {
   for (const lang of ["en", "fr"]) {
     const dir = DIRS.traps[lang], u = UI[lang];
     for (const tr of validTraps) {
-      const canonical = `${SITE}/${dir}/${tr.slug[lang]}.html`;
-      const alt = `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/${tr.slug[lang === "en" ? "fr" : "en"]}.html`;
+      const canonical = `${SITE}/${dir}/${tr.slug[lang]}`;
+      const alt = `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/${tr.slug[lang === "en" ? "fr" : "en"]}`;
       /* La description sert la balise meta et le referencement. Elle ne doit
          pas etre reprise en chapo : c'etait les 280 premiers caracteres du
          texte affiche juste en dessous, donc le lecteur lisait deux fois le
@@ -1008,7 +1008,7 @@ module.exports = function (H) {
       ? "Les pièges classiques qui décident des parties rapides, chacun rejoué coup par coup et vérifié par le moteur."
       : "The classic traps that decide fast games, each replayed move by move and verified by the engine.";
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      validTraps.map(tr => `<a class="tile" href="/${dir}/${tr.slug[lang]}.html"><b>${esc(tr.title[lang])}</b><span>${esc(numberLine(tr.line.san).slice(0, 40))}…</span></a>`).join("\n") + `</div>`;
+      validTraps.map(tr => `<a class="tile" href="/${dir}/${tr.slug[lang]}"><b>${esc(tr.title[lang])}</b><span>${esc(numberLine(tr.line.san).slice(0, 40))}…</span></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
@@ -1026,8 +1026,8 @@ module.exports = function (H) {
       const desc = metaDesc(lang === "fr"
         ? `${thLabel} aux échecs : la définition, et trois positions réelles expliquées coup par coup, vérifiées par le moteur.`
         : `${thLabel} in chess: the definition, and three real positions explained move by move, engine-verified.`);
-      const canonical = `${SITE}/${dir}/${categorySlug(th, lang)}.html`;
-      const alt = `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/${categorySlug(th, lang === "en" ? "fr" : "en")}.html`;
+      const canonical = `${SITE}/${dir}/${categorySlug(th, lang)}`;
+      const alt = `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/${categorySlug(th, lang === "en" ? "fr" : "en")}`;
       const blocks = examples.map((p, i) => {
         const { side, sans } = replaySolution(p);
         const sideLabel = lang === "fr" ? (side === "w" ? "Blancs" : "Noirs") : (side === "w" ? "White" : "Black");
@@ -1068,7 +1068,7 @@ ${blocks}
          suffit ici, contrairement aux tuiles de Finales ou Ouvertures dont
          le sous-titre change reellement d'une tuile a l'autre. */
       THEME10.filter(th => examplesByTheme[th].length).map(th =>
-        `<a class="tile" href="/${dir}/${categorySlug(th, lang)}.html"><b>${esc(themeOf(th, lang))}</b></a>`
+        `<a class="tile" href="/${dir}/${categorySlug(th, lang)}"><b>${esc(themeOf(th, lang))}</b></a>`
       ).join("") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },

@@ -31,8 +31,10 @@ for (const [dir, lang] of [["puzzles", "en"], ["fr/exercices", "fr"]]) {
   console.log(`\n--- Chaque tuile mene a une page qui tient sa promesse (${lang}) ---`);
   let manquantes = 0, sansTroisExemples = 0, sansRetour = 0;
   for (const [, href] of tiles) {
-    const p = path.join(SITE, href.replace(/^\//, ""));
-    if (!fs.existsSync(p)) { manquantes++; continue; }
+    /* Lien sans .html, forme servie par Cloudflare Pages (2026-10-24) : le
+       fichier vise porte l'extension, le lien non. */
+    const p = path.join(SITE, href.replace(/^\//, "") + ".html");
+    if (href.endsWith(".html") || !fs.existsSync(p)) { manquantes++; continue; }
     const page = fs.readFileSync(p, "utf8");
     const exemples = (page.match(/<h2>(?:Exemple|Example) \d/g) || []).length;
     if (exemples !== 3) sansTroisExemples++;

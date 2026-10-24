@@ -19,18 +19,20 @@ T("une page par theme en anglais", en.length===13, en.length+" pour 13 themes");
 T("une page par theme en francais", fr.length===13, fr.length+" pour 13 themes");
 
 console.log("\n--- Liens croises EN <-> FR ---");
+/* Forme servie par Pages (2026-10-24) : URL sans .html, fichier en .html. */
+const vise=u=>!u.endsWith(".html")&&fs.existsSync(S+u+".html");
 let bad=[];
 for(const f of en.slice(0,150)){
   const h=fs.readFileSync(S+"/puzzles/"+f,"utf8");
   const m=h.match(/hreflang="fr" href="https:\/\/chang64\.com([^"]+)"/);
-  if(!m||!fs.existsSync(S+m[1]))bad.push(f);
+  if(!m||!vise(m[1]))bad.push(f);
 }
 T("150 pages EN pointent vers une page FR existante", bad.length===0, bad.slice(0,3).join(", "));
 bad=[];
 for(const f of fr.slice(0,150)){
   const h=fs.readFileSync(S+"/fr/exercices/"+f,"utf8");
   const m=h.match(/hreflang="en" href="https:\/\/chang64\.com([^"]+)"/);
-  if(!m||!fs.existsSync(S+m[1]))bad.push(f);
+  if(!m||!vise(m[1]))bad.push(f);
 }
 T("150 pages FR pointent vers une page EN existante", bad.length===0, bad.slice(0,3).join(", "));
 
@@ -61,12 +63,14 @@ T("moyenne sous 70 Ko", tot/en.length<71680, Math.round(tot/en.length/1024)+" Ko
 console.log("\n--- Toutes au sitemap ---");
 const sm=fs.readFileSync(S+"/sitemap.xml","utf8");
 const locs=new Set([...sm.matchAll(/<loc>https:\/\/chang64\.com([^<]*)<\/loc>/g)].map(m=>m[1]));
-const abs=en.filter(f=>!locs.has("/puzzles/"+f)).concat(fr.filter(f=>!locs.has("/fr/exercices/"+f)));
+/* URL servie par Pages, sans .html (2026-10-24). */
+const sansExt=f=>f.replace(/\.html$/,"");
+const abs=en.filter(f=>!locs.has("/puzzles/"+sansExt(f))).concat(fr.filter(f=>!locs.has("/fr/exercices/"+sansExt(f))));
 T("aucune page d'exercice absente du sitemap", abs.length===0, abs.length+" absentes");
 
 console.log("\n--- Index des exercices ---");
 const idxEn=fs.readFileSync(S+"/puzzles/index.html","utf8");
-const orph=en.filter(f=>!idxEn.includes(f));
+const orph=en.filter(f=>!idxEn.includes('href="/puzzles/'+f.replace(/\.html$/,"")+'"'));
 T("l'index EN liste toutes les pages", orph.length===0, orph.length+" orphelines");
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

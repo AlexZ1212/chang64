@@ -1,2325 +1,2325 @@
 {
  "/": {
-  "sceau": "c7f2415bf1aebb57",
+  "sceau": "1690abd3eae27e75",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/404.html": {
+ "/404": {
   "sceau": "916679c4cb603941",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
  "/endgames/": {
-  "sceau": "532d874299de94ea",
+  "sceau": "39952f561b3c63bd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/endgames/bishop-and-knight-mate.html": {
+ "/endgames/bishop-and-knight-mate": {
   "sceau": "ee530202cfa5d9e3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/endgames/king-and-pawn-vs-king.html": {
+ "/endgames/king-and-pawn-vs-king": {
   "sceau": "1829bc382e72f5a1",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/endgames/queen-vs-king.html": {
+ "/endgames/queen-vs-king": {
   "sceau": "b0b258b31dc7520a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/endgames/rook-vs-king.html": {
+ "/endgames/rook-vs-king": {
   "sceau": "a0b1613a02b5d56d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/endgames/two-rooks-vs-king.html": {
+ "/endgames/two-rooks-vs-king": {
   "sceau": "311dcd95408c61a4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
  "/fr/apprendre/": {
-  "sceau": "feb68bbd9497e2ea",
+  "sceau": "098002658a3d13f7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/apprendre/deplacement-des-pieces.html": {
+ "/fr/apprendre/deplacement-des-pieces": {
   "sceau": "ab4930bc8137d7e6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/echec-mat-et-pat.html": {
+ "/fr/apprendre/echec-mat-et-pat": {
   "sceau": "6c6812456474c6e9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/l-enfilade.html": {
+ "/fr/apprendre/l-enfilade": {
   "sceau": "f40d6afd87dbcb12",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-deviation.html": {
+ "/fr/apprendre/la-deviation": {
   "sceau": "e4a3f6fee95f5080",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-double-attaque.html": {
+ "/fr/apprendre/la-double-attaque": {
   "sceau": "8a894e2877667741",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-fourchette-de-cavalier.html": {
+ "/fr/apprendre/la-fourchette-de-cavalier": {
   "sceau": "f86a89a7717c9d04",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-fourchette-de-pion.html": {
+ "/fr/apprendre/la-fourchette-de-pion": {
   "sceau": "02afae69c98c286c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-notation-des-coups.html": {
+ "/fr/apprendre/la-notation-des-coups": {
   "sceau": "fe01ffedb0fe5844",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-prise-en-passant.html": {
+ "/fr/apprendre/la-prise-en-passant": {
   "sceau": "00191d2219e5d0b5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/la-promotion-du-pion.html": {
+ "/fr/apprendre/la-promotion-du-pion": {
   "sceau": "0766924b1bf009ea",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/le-clouage.html": {
+ "/fr/apprendre/le-clouage": {
   "sceau": "53b86f7a84ee13ee",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/le-coup-silencieux.html": {
+ "/fr/apprendre/le-coup-silencieux": {
   "sceau": "36f938db2a087cd0",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/apprendre/le-mat-du-couloir.html": {
+ "/fr/apprendre/le-mat-du-couloir": {
   "sceau": "aeccdba6854c8ace",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/le-roque.html": {
+ "/fr/apprendre/le-roque": {
   "sceau": "efc5911b21645abd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/les-cadences-aux-echecs.html": {
+ "/fr/apprendre/les-cadences-aux-echecs": {
   "sceau": "2ae2af0b4fbcbbfe",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/les-parties-nulles.html": {
+ "/fr/apprendre/les-parties-nulles": {
   "sceau": "49dda3930c14850c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/les-principes-d-ouverture.html": {
+ "/fr/apprendre/les-principes-d-ouverture": {
   "sceau": "03afc93cd655b7d1",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/fr/apprendre/reperer-une-piece-qui-traine.html": {
+ "/fr/apprendre/reperer-une-piece-qui-traine": {
   "sceau": "59ab4e1ec9e5e3b0",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
  "/fr/exercices/": {
-  "sceau": "58a1c1d00aeb3be7",
+  "sceau": "39cedca9e04614b0",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/attaque-double.html": {
+ "/fr/exercices/attaque-double": {
   "sceau": "322e82df53d0d208",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/clouage.html": {
+ "/fr/exercices/clouage": {
   "sceau": "15dedf3484c79132",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/coup-gagnant.html": {
+ "/fr/exercices/coup-gagnant": {
   "sceau": "c704e98f42bcd5f4",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/coup-silencieux.html": {
+ "/fr/exercices/coup-silencieux": {
   "sceau": "dac0084421cc7da6",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/deviation.html": {
+ "/fr/exercices/deviation": {
   "sceau": "7f04bda14b71124a",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/enfilade.html": {
+ "/fr/exercices/enfilade": {
   "sceau": "46f1bd85669fd2cf",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/fourchette-de-cavalier.html": {
+ "/fr/exercices/fourchette-de-cavalier": {
   "sceau": "c3920f042ffea0b7",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/fourchette-de-pion.html": {
+ "/fr/exercices/fourchette-de-pion": {
   "sceau": "a5ead413de325853",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/mat-du-couloir.html": {
+ "/fr/exercices/mat-du-couloir": {
   "sceau": "9e517cedc0a35485",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/mat-en-deux-coups.html": {
+ "/fr/exercices/mat-en-deux-coups": {
   "sceau": "c05b250d5ed22e49",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/mat-en-trois-coups.html": {
+ "/fr/exercices/mat-en-trois-coups": {
   "sceau": "fab3ca9223020b36",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/mat-en-un-coup.html": {
+ "/fr/exercices/mat-en-un-coup": {
   "sceau": "2a7bf712fa0e6b32",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/fr/exercices/prise-gagnante.html": {
+ "/fr/exercices/prise-gagnante": {
   "sceau": "2b54016f64291d74",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
  "/fr/finales/": {
-  "sceau": "7a3da25335f58a07",
+  "sceau": "4dab4fef4bc87bb9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/finales/dame-contre-roi.html": {
+ "/fr/finales/dame-contre-roi": {
   "sceau": "3776bcd44ee9c2f8",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/finales/deux-tours-contre-roi.html": {
+ "/fr/finales/deux-tours-contre-roi": {
   "sceau": "2a25af780ad27430",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/finales/mat-fou-et-cavalier.html": {
+ "/fr/finales/mat-fou-et-cavalier": {
   "sceau": "4b1d2359a89e67b5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/finales/roi-et-pion-contre-roi.html": {
+ "/fr/finales/roi-et-pion-contre-roi": {
   "sceau": "af35bdd0e0aa9fe9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/finales/tour-contre-roi.html": {
+ "/fr/finales/tour-contre-roi": {
   "sceau": "dc12954875695e68",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/": {
-  "sceau": "b6a42861b2f058fd",
+  "sceau": "7785028b42fc65f1",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/attaque-a-la-decouverte.html": {
-  "sceau": "6969767d9fb6059b",
+ "/fr/lexique/attaque-a-la-decouverte": {
+  "sceau": "18d2b92b8a2a6293",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-18"
  },
- "/fr/lexique/attaque-de-mat.html": {
+ "/fr/lexique/attaque-de-mat": {
   "sceau": "67d75a84735116fe",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/attaque-double.html": {
-  "sceau": "99cbf7b2c8af9c3d",
+ "/fr/lexique/attaque-double": {
+  "sceau": "0c62e75f788e046f",
   "publiee": "2026-09-13",
   "modifiee": "2026-10-18"
  },
- "/fr/lexique/attaque-sur-le-roi.html": {
+ "/fr/lexique/attaque-sur-le-roi": {
   "sceau": "4e0ec1962667fa03",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/attraction.html": {
+ "/fr/lexique/attraction": {
   "sceau": "d76a56bb7647bfd1",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/avant-poste.html": {
+ "/fr/lexique/avant-poste": {
   "sceau": "645b24ed61d3044d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/clouage.html": {
-  "sceau": "4f0f9114e271c363",
+ "/fr/lexique/clouage": {
+  "sceau": "d189aab413401b64",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-18"
  },
- "/fr/lexique/code-eco.html": {
+ "/fr/lexique/code-eco": {
   "sceau": "b2855a6187257834",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/colonne-ouverte.html": {
+ "/fr/lexique/colonne-ouverte": {
   "sceau": "496f006a75d2757d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/combinaison.html": {
+ "/fr/lexique/combinaison": {
   "sceau": "54bb89556fcf7502",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/coup-brillant.html": {
-  "sceau": "2f97a7ade5a213bb",
+ "/fr/lexique/coup-brillant": {
+  "sceau": "06a253283768dd51",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/coup-intermediaire.html": {
+ "/fr/lexique/coup-intermediaire": {
   "sceau": "8608ef320e6d89bc",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/degagement.html": {
+ "/fr/lexique/degagement": {
   "sceau": "5135de5d6d9a73e4",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/developpement.html": {
+ "/fr/lexique/developpement": {
   "sceau": "43a85214a7900bf5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/deviation.html": {
-  "sceau": "0e929a4067c2e228",
+ "/fr/lexique/deviation": {
+  "sceau": "ef034beebf704dda",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/echec-double.html": {
+ "/fr/lexique/echec-double": {
   "sceau": "0cc43e51dc5aee36",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/echec-perpetuel.html": {
+ "/fr/lexique/echec-perpetuel": {
   "sceau": "7643225167a15cb6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/elimination-du-defenseur.html": {
+ "/fr/lexique/elimination-du-defenseur": {
   "sceau": "636d45e6b69a0c90",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/enfilade.html": {
-  "sceau": "c5ef717281ddaaf2",
+ "/fr/lexique/enfilade": {
+  "sceau": "9d20cd760479897c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/erreur.html": {
-  "sceau": "3f51939b20b71a65",
+ "/fr/lexique/erreur": {
+  "sceau": "855259f23ae11e64",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/fianchetto.html": {
+ "/fr/lexique/fianchetto": {
   "sceau": "c0319bc47662e27b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/fourchette.html": {
-  "sceau": "de31f0777a5b5433",
+ "/fr/lexique/fourchette": {
+  "sceau": "543fab98746abdd3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/gaffe.html": {
-  "sceau": "c052ce70fceee693",
+ "/fr/lexique/gaffe": {
+  "sceau": "9cc1aa565135b552",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-18"
  },
- "/fr/lexique/gain-de-materiel.html": {
-  "sceau": "3a08a6fbe4a6d10d",
+ "/fr/lexique/gain-de-materiel": {
+  "sceau": "1492cf2ace0d345e",
   "publiee": "2026-09-13",
   "modifiee": "2026-10-18"
  },
- "/fr/lexique/gambit.html": {
+ "/fr/lexique/gambit": {
   "sceau": "5fd121acdccb3239",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/imprecision.html": {
+ "/fr/lexique/imprecision": {
   "sceau": "4b34cd0685199a64",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/interference.html": {
+ "/fr/lexique/interference": {
   "sceau": "690a09f94f073af7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/le-classement-elo.html": {
+ "/fr/lexique/le-classement-elo": {
   "sceau": "1e4da5807406331d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/majorite-de-pions.html": {
+ "/fr/lexique/majorite-de-pions": {
   "sceau": "025848afc0de225c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/mat-du-couloir.html": {
-  "sceau": "ecf4236e999d30bb",
+ "/fr/lexique/mat-du-couloir": {
+  "sceau": "fdec324cbd1c12b6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/mat-etouffe.html": {
+ "/fr/lexique/mat-etouffe": {
   "sceau": "2e07baa0a7a92ece",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/meilleur-coup.html": {
+ "/fr/lexique/meilleur-coup": {
   "sceau": "594d6016fa9f89c7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/moulin.html": {
+ "/fr/lexique/moulin": {
   "sceau": "83f5603e973967f3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/opposition.html": {
+ "/fr/lexique/opposition": {
   "sceau": "5080e055c70e90aa",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/paire-de-fous.html": {
+ "/fr/lexique/paire-de-fous": {
   "sceau": "e94c13d77ee50be4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/pat.html": {
+ "/fr/lexique/pat": {
   "sceau": "273cbacac17e69a9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/piece-en-prise.html": {
+ "/fr/lexique/piece-en-prise": {
   "sceau": "275fcf4d4d4f494d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/piece-piegee.html": {
+ "/fr/lexique/piece-piegee": {
   "sceau": "88f431df0c0aad2d",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/pion-arriere.html": {
+ "/fr/lexique/pion-arriere": {
   "sceau": "e1f559a01320b44d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/pion-isole.html": {
+ "/fr/lexique/pion-isole": {
   "sceau": "7e44dec096bd4601",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/pion-passe.html": {
+ "/fr/lexique/pion-passe": {
   "sceau": "489bd06768641891",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/pions-doubles.html": {
+ "/fr/lexique/pions-doubles": {
   "sceau": "a25b756fd9d6f6e3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/promotion.html": {
+ "/fr/lexique/promotion": {
   "sceau": "278adfa1de338b43",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/prophylaxie.html": {
+ "/fr/lexique/prophylaxie": {
   "sceau": "8f159dbfbe56e54a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/regle-des-50-coups.html": {
+ "/fr/lexique/regle-des-50-coups": {
   "sceau": "b8222990e544c3d9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/sacrifice.html": {
+ "/fr/lexique/sacrifice": {
   "sceau": "2bf98d391cc41dcf",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/septieme-rangee.html": {
+ "/fr/lexique/septieme-rangee": {
   "sceau": "e8c546684937dbd7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/seul-coup.html": {
+ "/fr/lexique/seul-coup": {
   "sceau": "05ec3f677bdf054d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/sous-promotion.html": {
+ "/fr/lexique/sous-promotion": {
   "sceau": "23357ce14dd573b3",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/surcharge.html": {
+ "/fr/lexique/surcharge": {
   "sceau": "ce9ee79481ad783f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/tempo.html": {
-  "sceau": "9432d58d45faba70",
+ "/fr/lexique/tempo": {
+  "sceau": "39ef7a4e1636265d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/fr/lexique/triple-repetition.html": {
+ "/fr/lexique/triple-repetition": {
   "sceau": "650f80adaf50dccb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/lexique/zugzwang.html": {
+ "/fr/lexique/zugzwang": {
   "sceau": "9c1f6a6487cf3a50",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
  "/fr/ouvertures/": {
-  "sceau": "04f5ce4fc8646ed7",
+  "sceau": "3fefa5611b3e3093",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ancienne-defense-indienne.html": {
+ "/fr/ouvertures/ancienne-defense-indienne": {
   "sceau": "71f588664bde4baf",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-bongcloud.html": {
+ "/fr/ouvertures/attaque-bongcloud": {
   "sceau": "23e6c02a3efb0cee",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-damsterdam.html": {
+ "/fr/ouvertures/attaque-damsterdam": {
   "sceau": "c37e7c22c8292d44",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-de-lamazone.html": {
+ "/fr/ouvertures/attaque-de-lamazone": {
   "sceau": "21725a8fe6ebdd2d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-du-sodium.html": {
+ "/fr/ouvertures/attaque-du-sodium": {
   "sceau": "833b9ec19b03902f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-est-indienne-avec-bf5.html": {
-  "sceau": "ad3fffb160fbdbd6",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/attaque-est-indienne-avec-e6.html": {
-  "sceau": "979b1781a8017d4b",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/attaque-est-indienne.html": {
+ "/fr/ouvertures/attaque-est-indienne": {
   "sceau": "dd54bbbfb11e8bd2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-nimzo-larsen.html": {
+ "/fr/ouvertures/attaque-est-indienne-avec-bf5": {
+  "sceau": "ad3fffb160fbdbd6",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/attaque-est-indienne-avec-e6": {
+  "sceau": "979b1781a8017d4b",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/attaque-nimzo-larsen": {
   "sceau": "c6a25d3c1979e1da",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-paleface.html": {
+ "/fr/ouvertures/attaque-paleface": {
   "sceau": "66dd8a6a1c3d6260",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-richter-veresov.html": {
+ "/fr/ouvertures/attaque-richter-veresov": {
   "sceau": "7da7ab1640aa041f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-torre.html": {
+ "/fr/ouvertures/attaque-torre": {
   "sceau": "b010d7dd9e29d7db",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/attaque-trompowsky.html": {
+ "/fr/ouvertures/attaque-trompowsky": {
   "sceau": "7b5e026a1a76fb79",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/contre-gambit-blumenfeld.html": {
+ "/fr/ouvertures/contre-gambit-blumenfeld": {
   "sceau": "26eaf8baa9317f67",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-alekhine.html": {
+ "/fr/ouvertures/defense-alekhine": {
   "sceau": "a5a34cfa2bb7d82f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-anglaise.html": {
+ "/fr/ouvertures/defense-anglaise": {
   "sceau": "ac8e1b58f6b162e5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-australienne.html": {
+ "/fr/ouvertures/defense-australienne": {
   "sceau": "d02526ffdcf21564",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-barnes.html": {
+ "/fr/ouvertures/defense-barnes": {
   "sceau": "43ee8faf82cbbd3e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-benoni.html": {
+ "/fr/ouvertures/defense-benoni": {
   "sceau": "99f4b4580dc3ef11",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-bogo-indienne.html": {
+ "/fr/ouvertures/defense-bogo-indienne": {
   "sceau": "c7a5e0a5806eb62e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-borg.html": {
+ "/fr/ouvertures/defense-borg": {
   "sceau": "8e82352e781f9ce3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-caro-kann.html": {
+ "/fr/ouvertures/defense-caro-kann": {
   "sceau": "3c5e7a2696429622",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-carr.html": {
+ "/fr/ouvertures/defense-carr": {
   "sceau": "37f2aa543a9eece7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-dory.html": {
+ "/fr/ouvertures/defense-dory": {
   "sceau": "a3cd23d424053c86",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-du-lion.html": {
+ "/fr/ouvertures/defense-du-lion": {
   "sceau": "d1a05b51bf4823fe",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-du-rat.html": {
+ "/fr/ouvertures/defense-du-rat": {
   "sceau": "99f8b6f7fc61ed93",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-du-vautour.html": {
+ "/fr/ouvertures/defense-du-vautour": {
   "sceau": "3383b1c2964be03c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-est-indienne.html": {
+ "/fr/ouvertures/defense-est-indienne": {
   "sceau": "4693571d7a8d6f8d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-francaise.html": {
+ "/fr/ouvertures/defense-francaise": {
   "sceau": "d52cd5010963760e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-fried-fox.html": {
+ "/fr/ouvertures/defense-fried-fox": {
   "sceau": "d0e6ffc1cb22de0e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-goldsmith.html": {
+ "/fr/ouvertures/defense-goldsmith": {
   "sceau": "9501fdb4e8a3dcae",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-grunfeld.html": {
+ "/fr/ouvertures/defense-grunfeld": {
   "sceau": "11dad97657a2a8f9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-gunderam.html": {
+ "/fr/ouvertures/defense-gunderam": {
   "sceau": "9c16f19b25219c33",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-hippopotame.html": {
+ "/fr/ouvertures/defense-hippopotame": {
   "sceau": "eb50959c1792e2b4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-hollandaise.html": {
+ "/fr/ouvertures/defense-hollandaise": {
   "sceau": "a8985ef768d06545",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-horwitz.html": {
+ "/fr/ouvertures/defense-horwitz": {
   "sceau": "2ec98ab8ebffde2b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-indienne-orientale.html": {
-  "sceau": "bfbbfcf9be65f3bb",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/defense-indienne.html": {
+ "/fr/ouvertures/defense-indienne": {
   "sceau": "0394c2a39d96039b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-kangourou.html": {
+ "/fr/ouvertures/defense-indienne-orientale": {
+  "sceau": "bfbbfcf9be65f3bb",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/defense-kangourou": {
   "sceau": "9db5ae10e69da5c0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-lemming.html": {
+ "/fr/ouvertures/defense-lemming": {
   "sceau": "3af2f910864983c6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-mexicaine.html": {
+ "/fr/ouvertures/defense-mexicaine": {
   "sceau": "22614e82e0a4159a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-mikenas.html": {
+ "/fr/ouvertures/defense-mikenas": {
   "sceau": "ef7cfa50553b1292",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-moderne.html": {
+ "/fr/ouvertures/defense-moderne": {
   "sceau": "d9a490d3090d7c36",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-montevideo.html": {
+ "/fr/ouvertures/defense-montevideo": {
   "sceau": "6bf48c2c5e92ea92",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-neo-grunfeld.html": {
+ "/fr/ouvertures/defense-neo-grunfeld": {
   "sceau": "d94d5fff32abc6fa",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-nimzo-indienne.html": {
+ "/fr/ouvertures/defense-nimzo-indienne": {
   "sceau": "37bcc431546d22a4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-nimzowitsch.html": {
+ "/fr/ouvertures/defense-nimzowitsch": {
   "sceau": "4a12bf12c8126911",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-ouest-indienne.html": {
+ "/fr/ouvertures/defense-ouest-indienne": {
   "sceau": "05e77b1037f0c98f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-owen.html": {
+ "/fr/ouvertures/defense-owen": {
   "sceau": "625326be3dc58bde",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-philidor.html": {
+ "/fr/ouvertures/defense-philidor": {
   "sceau": "ace9cde3da1fe0fa",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-pirc.html": {
+ "/fr/ouvertures/defense-pirc": {
   "sceau": "05b9b92bee7321e3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-polonaise.html": {
+ "/fr/ouvertures/defense-polonaise": {
   "sceau": "a16925d96820e217",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-pterodactyle.html": {
+ "/fr/ouvertures/defense-pterodactyle": {
   "sceau": "16612488ce9eb393",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-robatsch.html": {
+ "/fr/ouvertures/defense-robatsch": {
   "sceau": "ec518d83de1da51f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-russe.html": {
+ "/fr/ouvertures/defense-russe": {
   "sceau": "1f3beb50677aee01",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-saint-georges.html": {
+ "/fr/ouvertures/defense-saint-georges": {
   "sceau": "ceabceef19cca4e8",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-scandinave.html": {
+ "/fr/ouvertures/defense-scandinave": {
   "sceau": "03b01125c9b04579",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-semi-slave.html": {
+ "/fr/ouvertures/defense-semi-slave": {
   "sceau": "2d163f8bc86aee34",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-sicilienne.html": {
+ "/fr/ouvertures/defense-sicilienne": {
   "sceau": "b2bdcb5d28ddb652",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-slave.html": {
+ "/fr/ouvertures/defense-slave": {
   "sceau": "973075aebbc6026b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-tarrasch.html": {
+ "/fr/ouvertures/defense-tarrasch": {
   "sceau": "d562f28586c282f3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-tcheque.html": {
+ "/fr/ouvertures/defense-tcheque": {
   "sceau": "5bf1ed6a7a1f77bc",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-wade.html": {
+ "/fr/ouvertures/defense-wade": {
   "sceau": "1e22eed3eab3f6b1",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-ware.html": {
+ "/fr/ouvertures/defense-ware": {
   "sceau": "cac386aa1b5d777d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-zairoise.html": {
+ "/fr/ouvertures/defense-zairoise": {
   "sceau": "eed06e399c7f1d5d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/defense-zukertort.html": {
+ "/fr/ouvertures/defense-zukertort": {
   "sceau": "3d256bb7742b14c5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/formation-creepy-crawly.html": {
+ "/fr/ouvertures/formation-creepy-crawly": {
   "sceau": "7f63a811623effe6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-benko-accepte.html": {
-  "sceau": "f06ea42ae4b5e7fd",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/gambit-benko-refuse.html": {
-  "sceau": "763624e7dbdbc873",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/gambit-benko.html": {
+ "/fr/ouvertures/gambit-benko": {
   "sceau": "4a23b62d339ff14a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-blackmar-diemer-accepte.html": {
-  "sceau": "2e41984b7ba4e7d3",
+ "/fr/ouvertures/gambit-benko-accepte": {
+  "sceau": "f06ea42ae4b5e7fd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-blackmar-diemer-refuse.html": {
-  "sceau": "5f172df20d0e3602",
+ "/fr/ouvertures/gambit-benko-refuse": {
+  "sceau": "763624e7dbdbc873",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-blackmar-diemer.html": {
+ "/fr/ouvertures/gambit-blackmar-diemer": {
   "sceau": "95a835a6c2398629",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-dame-accepte.html": {
-  "sceau": "d8cb572818661175",
+ "/fr/ouvertures/gambit-blackmar-diemer-accepte": {
+  "sceau": "2e41984b7ba4e7d3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-dame-refuse.html": {
-  "sceau": "20f195daad4e30ed",
+ "/fr/ouvertures/gambit-blackmar-diemer-refuse": {
+  "sceau": "5f172df20d0e3602",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-dame.html": {
+ "/fr/ouvertures/gambit-dame": {
   "sceau": "2fe208b24ccc8ab2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-danois-accepte.html": {
-  "sceau": "9fb4969cd98074a3",
+ "/fr/ouvertures/gambit-dame-accepte": {
+  "sceau": "d8cb572818661175",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-danois-refuse.html": {
-  "sceau": "88517c492ddb5356",
+ "/fr/ouvertures/gambit-dame-refuse": {
+  "sceau": "20f195daad4e30ed",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-danois.html": {
+ "/fr/ouvertures/gambit-danois": {
   "sceau": "2ecaad0c7715d039",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-de-lelephant.html": {
+ "/fr/ouvertures/gambit-danois-accepte": {
+  "sceau": "9fb4969cd98074a3",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/gambit-danois-refuse": {
+  "sceau": "88517c492ddb5356",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/gambit-de-lelephant": {
   "sceau": "3b02da67a62163d5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-du-roi-accepte.html": {
-  "sceau": "07aa5faa1cce65d4",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/gambit-du-roi-refuse.html": {
-  "sceau": "b0cee7ed1262e9b2",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/gambit-du-roi.html": {
+ "/fr/ouvertures/gambit-du-roi": {
   "sceau": "a91dcce1c07a8428",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-duras.html": {
+ "/fr/ouvertures/gambit-du-roi-accepte": {
+  "sceau": "07aa5faa1cce65d4",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/gambit-du-roi-refuse": {
+  "sceau": "b0cee7ed1262e9b2",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/gambit-duras": {
   "sceau": "3ea8555dc579365c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-englund-refuse.html": {
-  "sceau": "2f7e5448fa912f23",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/gambit-englund.html": {
+ "/fr/ouvertures/gambit-englund": {
   "sceau": "8041d4079fbf4422",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-irlandais.html": {
+ "/fr/ouvertures/gambit-englund-refuse": {
+  "sceau": "2f7e5448fa912f23",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/gambit-irlandais": {
   "sceau": "32665af241792dad",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-letton-accepte.html": {
-  "sceau": "7b93e7ccc591ce92",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/gambit-letton.html": {
+ "/fr/ouvertures/gambit-letton": {
   "sceau": "5d3b34e4eaa809dc",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/gambit-viennois-avec-la-defense-max-lange.html": {
+ "/fr/ouvertures/gambit-letton-accepte": {
+  "sceau": "7b93e7ccc591ce92",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/gambit-viennois-avec-la-defense-max-lange": {
   "sceau": "0b2c83729cd4d4a6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/orang-outan-anglais.html": {
+ "/fr/ouvertures/orang-outan-anglais": {
   "sceau": "1360add0e6dd3bbb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouest-indienne-acceleree.html": {
+ "/fr/ouvertures/ouest-indienne-acceleree": {
   "sceau": "72fc91dbc7755698",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-amar.html": {
+ "/fr/ouvertures/ouverture-amar": {
   "sceau": "de8a0e01a0745991",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-anderssen.html": {
+ "/fr/ouvertures/ouverture-anderssen": {
   "sceau": "e20ecc22ec4df7cc",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-barnes.html": {
+ "/fr/ouvertures/ouverture-barnes": {
   "sceau": "dd9e33263f0899ae",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-basque.html": {
+ "/fr/ouvertures/ouverture-basque": {
   "sceau": "10b6cdc3eb7a5619",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-bird.html": {
+ "/fr/ouvertures/ouverture-bird": {
   "sceau": "072c059053932f59",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-canard.html": {
+ "/fr/ouvertures/ouverture-canard": {
   "sceau": "b9789ea86cc84269",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-catalane.html": {
+ "/fr/ouvertures/ouverture-catalane": {
   "sceau": "6a7fd0f261f47d39",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-clemenz.html": {
+ "/fr/ouvertures/ouverture-clemenz": {
   "sceau": "db682f085371d165",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-de-dresde.html": {
+ "/fr/ouvertures/ouverture-de-dresde": {
   "sceau": "e900b5f246d676dd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-de-saragosse.html": {
+ "/fr/ouvertures/ouverture-de-saragosse": {
   "sceau": "7389de1bb51f6caf",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-de-valence.html": {
+ "/fr/ouvertures/ouverture-de-valence": {
   "sceau": "2c9c1286302bb562",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-du-cavalier-roi.html": {
+ "/fr/ouvertures/ouverture-du-cavalier-roi": {
   "sceau": "10c1e3280c6399b3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-du-fou.html": {
+ "/fr/ouvertures/ouverture-du-fou": {
   "sceau": "826e5454b12d505d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-du-pion-roi.html": {
+ "/fr/ouvertures/ouverture-du-pion-roi": {
   "sceau": "ea0f651591d01d86",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-globale.html": {
+ "/fr/ouvertures/ouverture-globale": {
   "sceau": "85d1dbfa6382ab04",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-grob.html": {
+ "/fr/ouvertures/ouverture-grob": {
   "sceau": "9abdac52af872215",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-hongroise.html": {
+ "/fr/ouvertures/ouverture-hongroise": {
   "sceau": "d109b71fc95a4c9e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-kadas.html": {
+ "/fr/ouvertures/ouverture-kadas": {
   "sceau": "ceae15d6b5923ced",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-mieses.html": {
+ "/fr/ouvertures/ouverture-mieses": {
   "sceau": "19a292cc7834ab86",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-polonaise-avec-d5.html": {
-  "sceau": "523ee9db4e405ffe",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/ouverture-polonaise.html": {
+ "/fr/ouvertures/ouverture-polonaise": {
   "sceau": "cb1b6628b716366d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-ponziani.html": {
+ "/fr/ouvertures/ouverture-polonaise-avec-d5": {
+  "sceau": "523ee9db4e405ffe",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/ouverture-ponziani": {
   "sceau": "b7bc0da551a8d503",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-portugaise.html": {
+ "/fr/ouvertures/ouverture-portugaise": {
   "sceau": "99781cd69ab6d7af",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-reti.html": {
+ "/fr/ouvertures/ouverture-reti": {
   "sceau": "4315e641054b373d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-van-geet.html": {
+ "/fr/ouvertures/ouverture-van-geet": {
   "sceau": "2926fef807413fa7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-vant-kruijs.html": {
+ "/fr/ouvertures/ouverture-vant-kruijs": {
   "sceau": "acac8a93e358a885",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-ware.html": {
+ "/fr/ouvertures/ouverture-ware": {
   "sceau": "744105ad84c3b9fb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/ouverture-zukertort.html": {
+ "/fr/ouvertures/ouverture-zukertort": {
   "sceau": "1a485186eb1c629e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-anglaise.html": {
+ "/fr/ouvertures/partie-anglaise": {
   "sceau": "9fc621687838981d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-des-quatre-cavaliers.html": {
+ "/fr/ouvertures/partie-des-quatre-cavaliers": {
   "sceau": "da352cc288a2b228",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-des-trois-cavaliers.html": {
+ "/fr/ouvertures/partie-des-trois-cavaliers": {
   "sceau": "683dde3066df7079",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-du-centre-acceptee.html": {
-  "sceau": "680a3e64cb570c18",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/partie-du-centre.html": {
+ "/fr/ouvertures/partie-du-centre": {
   "sceau": "79f8972d9d1963f5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-du-pion-dame.html": {
+ "/fr/ouvertures/partie-du-centre-acceptee": {
+  "sceau": "680a3e64cb570c18",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/partie-du-pion-dame": {
   "sceau": "c4fddf456459473d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-du-pion-roi.html": {
+ "/fr/ouvertures/partie-du-pion-roi": {
   "sceau": "c17392e201ca1f68",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-ecossaise.html": {
+ "/fr/ouvertures/partie-ecossaise": {
   "sceau": "d79bd5843f70c438",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-espagnole.html": {
+ "/fr/ouvertures/partie-espagnole": {
   "sceau": "67ff4717d8d1a7b9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-italienne.html": {
+ "/fr/ouvertures/partie-italienne": {
   "sceau": "c7e6218187e4c568",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/partie-viennoise.html": {
+ "/fr/ouvertures/partie-viennoise": {
   "sceau": "b84ddb95f76aac05",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/pion-dame-attaque-mengarini.html": {
+ "/fr/ouvertures/pion-dame-attaque-mengarini": {
   "sceau": "d160cb3c4cffaae7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/pseudo-defense-ouest-indienne.html": {
+ "/fr/ouvertures/pseudo-defense-ouest-indienne": {
   "sceau": "70c9a44c82302aba",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/slave-indienne.html": {
+ "/fr/ouvertures/slave-indienne": {
   "sceau": "e7390b8957e709dd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/speciale-de-simultanee-lasker.html": {
+ "/fr/ouvertures/speciale-de-simultanee-lasker": {
   "sceau": "6c3ba03128987db4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/systeme-colle.html": {
+ "/fr/ouvertures/systeme-colle": {
   "sceau": "3f4487a5a343a1d0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/systeme-de-londres.html": {
+ "/fr/ouvertures/systeme-de-londres": {
   "sceau": "db004090c098d50c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/systeme-de-marienbad.html": {
+ "/fr/ouvertures/systeme-de-marienbad": {
   "sceau": "f1a8fa7898e1f9dc",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/systeme-rapport-jobava-avec-e6.html": {
-  "sceau": "d80300a4d366c324",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/fr/ouvertures/systeme-rapport-jobava.html": {
+ "/fr/ouvertures/systeme-rapport-jobava": {
   "sceau": "96a80af9eabd909e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/ouvertures/systeme-yusupov-rubinstein.html": {
+ "/fr/ouvertures/systeme-rapport-jobava-avec-e6": {
+  "sceau": "d80300a4d366c324",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/fr/ouvertures/systeme-yusupov-rubinstein": {
   "sceau": "7031878d3eb9d5e7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
  "/fr/pieges/": {
-  "sceau": "811653210fb0a539",
+  "sceau": "e9d118b71a2280a6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/pieges/attaque-fegatello.html": {
+ "/fr/pieges/attaque-fegatello": {
   "sceau": "d782c8c81a1746af",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/pieges/defense-damiano-punie.html": {
+ "/fr/pieges/defense-damiano-punie": {
   "sceau": "19bf3e0a919a4851",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/pieges/mat-de-legal.html": {
+ "/fr/pieges/mat-de-legal": {
   "sceau": "9369b91f9aabfc29",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/pieges/mat-du-berger.html": {
+ "/fr/pieges/mat-du-berger": {
   "sceau": "7be11393ad9f4cae",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/pieges/piege-du-gambit-englund.html": {
+ "/fr/pieges/piege-du-gambit-englund": {
   "sceau": "190cd47b021cad74",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/fr/pieges/piege-du-shilling.html": {
+ "/fr/pieges/piege-du-shilling": {
   "sceau": "0f0601d8533a378d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
  "/glossary/": {
-  "sceau": "acd73487741b78fc",
+  "sceau": "888cc5c32e1796b5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/glossary/attraction.html": {
+ "/glossary/attraction": {
   "sceau": "cecc22353e4281f6",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/back-rank-mate.html": {
-  "sceau": "9d80558d41625e39",
+ "/glossary/back-rank-mate": {
+  "sceau": "2fb4d93042bb76d4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/backward-pawn.html": {
+ "/glossary/backward-pawn": {
   "sceau": "54378420c5a0a558",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/best-move.html": {
+ "/glossary/best-move": {
   "sceau": "5187625066411dba",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/bishop-pair.html": {
+ "/glossary/bishop-pair": {
   "sceau": "ff1ce88f4820d60d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/blunder.html": {
-  "sceau": "9cba15e603e546f3",
+ "/glossary/blunder": {
+  "sceau": "b869b9ec501f3cd0",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-18"
  },
- "/glossary/brilliant-move.html": {
-  "sceau": "ced40a16cb4c30e8",
+ "/glossary/brilliant-move": {
+  "sceau": "39e5aed4a1cdea35",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/clearance.html": {
+ "/glossary/clearance": {
   "sceau": "c10146f4712e1046",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/combination.html": {
+ "/glossary/combination": {
   "sceau": "e4651629385e3143",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/deflection.html": {
-  "sceau": "373a4ebd332c6ea7",
+ "/glossary/deflection": {
+  "sceau": "3a521eeb96db6199",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/development.html": {
+ "/glossary/development": {
   "sceau": "ed6d95f9d7b41d49",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/discovered-attack.html": {
-  "sceau": "c54db19e5a179cb0",
+ "/glossary/discovered-attack": {
+  "sceau": "13b4e4dcf08a9bd2",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-18"
  },
- "/glossary/double-attack.html": {
-  "sceau": "dc036cb1c2720df0",
+ "/glossary/double-attack": {
+  "sceau": "f2a868c6cff197d0",
   "publiee": "2026-09-13",
   "modifiee": "2026-10-18"
  },
- "/glossary/double-check.html": {
+ "/glossary/double-check": {
   "sceau": "1b6286b520b805ba",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/doubled-pawns.html": {
+ "/glossary/doubled-pawns": {
   "sceau": "420377833f74392d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/eco-code.html": {
+ "/glossary/eco-code": {
   "sceau": "e1dc081bbde2d87d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/elo-rating.html": {
+ "/glossary/elo-rating": {
   "sceau": "8c9d442a644dba28",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/fianchetto.html": {
+ "/glossary/fianchetto": {
   "sceau": "535601cc778e48a4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/fifty-move-rule.html": {
+ "/glossary/fifty-move-rule": {
   "sceau": "c6626018a9d50522",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/fork.html": {
-  "sceau": "9f65c4df65740f0e",
+ "/glossary/fork": {
+  "sceau": "385cfeb98c80ca56",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/glossary/gambit.html": {
+ "/glossary/gambit": {
   "sceau": "f088ed8b9fd2d73e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/hanging-piece.html": {
+ "/glossary/hanging-piece": {
   "sceau": "9ae79b26af70f7a2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/inaccuracy.html": {
+ "/glossary/inaccuracy": {
   "sceau": "92df1043c538b92f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/interference.html": {
+ "/glossary/interference": {
   "sceau": "8e6a2b9dfb2e93b2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/isolated-pawn.html": {
+ "/glossary/isolated-pawn": {
   "sceau": "78deea89379305f3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/king-attack.html": {
+ "/glossary/king-attack": {
   "sceau": "5734e42b79b0390b",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/material-gain.html": {
-  "sceau": "e7b2514d6bd6fcfd",
+ "/glossary/material-gain": {
+  "sceau": "b209cd846d1ccc81",
   "publiee": "2026-09-13",
   "modifiee": "2026-10-18"
  },
- "/glossary/mating-attack.html": {
+ "/glossary/mating-attack": {
   "sceau": "3da174f76f172d48",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/mistake.html": {
-  "sceau": "20e2d31c0341a8a6",
+ "/glossary/mistake": {
+  "sceau": "b03ab37cd251c755",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/glossary/only-move.html": {
+ "/glossary/only-move": {
   "sceau": "afa11958149dc4ff",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/open-file.html": {
+ "/glossary/open-file": {
   "sceau": "fd0c58504affa558",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/opposition.html": {
+ "/glossary/opposition": {
   "sceau": "c713bcdad117d5d8",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/outpost.html": {
+ "/glossary/outpost": {
   "sceau": "d18cd796156a412b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/overloading.html": {
+ "/glossary/overloading": {
   "sceau": "e384abb8cbefb9f3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/passed-pawn.html": {
+ "/glossary/passed-pawn": {
   "sceau": "547f62691209fd88",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/pawn-majority.html": {
+ "/glossary/pawn-majority": {
   "sceau": "6732c704fbf53e36",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/perpetual-check.html": {
+ "/glossary/perpetual-check": {
   "sceau": "1302ae103dc173bb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/pin.html": {
-  "sceau": "fa0ed89b6fd03e5b",
+ "/glossary/pin": {
+  "sceau": "1f21100a86b81e33",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-18"
  },
- "/glossary/promotion.html": {
+ "/glossary/promotion": {
   "sceau": "7a6cec0d96d9d4d7",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/prophylaxis.html": {
+ "/glossary/prophylaxis": {
   "sceau": "0aac3421669f3f2e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/removing-the-defender.html": {
+ "/glossary/removing-the-defender": {
   "sceau": "767321036cb90af0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/sacrifice.html": {
+ "/glossary/sacrifice": {
   "sceau": "8ddfb3e82e62477f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/seventh-rank.html": {
+ "/glossary/seventh-rank": {
   "sceau": "e913057f46c1db39",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/skewer.html": {
-  "sceau": "9d1e84ea29b9c7b8",
+ "/glossary/skewer": {
+  "sceau": "0981f5a0b0b46d85",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/smothered-mate.html": {
+ "/glossary/smothered-mate": {
   "sceau": "775a7537cebf3132",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/stalemate.html": {
+ "/glossary/stalemate": {
   "sceau": "c175e42d14658dad",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/tempo.html": {
-  "sceau": "aef2c92d684fe185",
+ "/glossary/tempo": {
+  "sceau": "98a925ba875b32f0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-13"
  },
- "/glossary/threefold-repetition.html": {
+ "/glossary/threefold-repetition": {
   "sceau": "66abf221c5192613",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/trapped-piece.html": {
+ "/glossary/trapped-piece": {
   "sceau": "db79a9a5f3beb6dd",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/underpromotion.html": {
+ "/glossary/underpromotion": {
   "sceau": "58f992119dde02f5",
   "publiee": "2026-09-13",
   "modifiee": "2026-09-13"
  },
- "/glossary/windmill.html": {
+ "/glossary/windmill": {
   "sceau": "77c43207bfebee84",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/zugzwang.html": {
+ "/glossary/zugzwang": {
   "sceau": "fe9b067d106fb59d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/glossary/zwischenzug.html": {
+ "/glossary/zwischenzug": {
   "sceau": "6ffbcf3ab3c901dd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
  "/learn/": {
-  "sceau": "fc5bd46f2947a209",
+  "sceau": "5e6c3aaac98b42aa",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/learn/back-rank-mate.html": {
+ "/learn/back-rank-mate": {
   "sceau": "f720111f750e2899",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/castling.html": {
+ "/learn/castling": {
   "sceau": "9599931719c6bd8a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/check-checkmate-stalemate.html": {
+ "/learn/check-checkmate-stalemate": {
   "sceau": "097c9c53334604eb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/chess-notation.html": {
+ "/learn/chess-notation": {
   "sceau": "8689aedefce862cf",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/deflection.html": {
+ "/learn/deflection": {
   "sceau": "daa11f19c625353b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/double-attack.html": {
+ "/learn/double-attack": {
   "sceau": "e8aa5eaaff865760",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/en-passant.html": {
+ "/learn/en-passant": {
   "sceau": "d0b4bc11bfd8757b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/how-games-are-drawn.html": {
+ "/learn/how-games-are-drawn": {
   "sceau": "59f5902cf3aa456c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/how-the-pieces-move.html": {
+ "/learn/how-the-pieces-move": {
   "sceau": "cafbb627e5c82d83",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/knight-fork.html": {
+ "/learn/knight-fork": {
   "sceau": "a84d35f85868b7a8",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/opening-principles.html": {
+ "/learn/opening-principles": {
   "sceau": "d89006e5a9067a5c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/pawn-fork.html": {
+ "/learn/pawn-fork": {
   "sceau": "93b8dd8ab4011a02",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/pawn-promotion.html": {
+ "/learn/pawn-promotion": {
   "sceau": "ce67b3a670a9757c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/spotting-a-hanging-piece.html": {
+ "/learn/spotting-a-hanging-piece": {
   "sceau": "3a457dce0d5ee935",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/learn/the-pin.html": {
+ "/learn/the-pin": {
   "sceau": "ea3fff16c7ae4d03",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/the-quiet-move.html": {
+ "/learn/the-quiet-move": {
   "sceau": "d8cc4bbf2e0817db",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/learn/the-skewer.html": {
+ "/learn/the-skewer": {
   "sceau": "e5339ee6a94f17f2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
- "/learn/time-controls.html": {
+ "/learn/time-controls": {
   "sceau": "9296e2cd32f6a6de",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-08"
  },
  "/openings/": {
-  "sceau": "065b5b8cdbabc0ec",
+  "sceau": "c9a3907749fd396f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/alekhine-defense.html": {
+ "/openings/alekhine-defense": {
   "sceau": "5d96b84ca38fc739",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/amar-opening.html": {
+ "/openings/amar-opening": {
   "sceau": "7a3f378342773ac6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/amazon-attack.html": {
+ "/openings/amazon-attack": {
   "sceau": "aeb7117d5dd0919b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/amsterdam-attack.html": {
+ "/openings/amsterdam-attack": {
   "sceau": "d1de3c1b50b60233",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/anderssens-opening.html": {
+ "/openings/anderssens-opening": {
   "sceau": "fc8bdccf7664e401",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/australian-defense.html": {
+ "/openings/australian-defense": {
   "sceau": "02672e7682a897cd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/barnes-defense.html": {
+ "/openings/barnes-defense": {
   "sceau": "526804a0e11c723d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/barnes-opening.html": {
+ "/openings/barnes-opening": {
   "sceau": "e540c11028c0bb1e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/basque-opening.html": {
+ "/openings/basque-opening": {
   "sceau": "0f11935f305e43b7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/benko-gambit-accepted.html": {
-  "sceau": "09533cd80d3c3bac",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/benko-gambit-declined.html": {
-  "sceau": "e2b63ecbfcbbce3c",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/benko-gambit.html": {
+ "/openings/benko-gambit": {
   "sceau": "477950ecf1315e29",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/benoni-defense.html": {
+ "/openings/benko-gambit-accepted": {
+  "sceau": "09533cd80d3c3bac",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/benko-gambit-declined": {
+  "sceau": "e2b63ecbfcbbce3c",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/benoni-defense": {
   "sceau": "90a8339e904f36ad",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/bird-opening.html": {
+ "/openings/bird-opening": {
   "sceau": "247926b1796e66b9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/bishops-opening.html": {
+ "/openings/bishops-opening": {
   "sceau": "1291e43ee5394b89",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/blackmar-diemer-gambit-accepted.html": {
-  "sceau": "67106691912dcaad",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/blackmar-diemer-gambit-declined.html": {
-  "sceau": "7933193917b5d9da",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/blackmar-diemer-gambit.html": {
+ "/openings/blackmar-diemer-gambit": {
   "sceau": "5bd2fd63df4aad93",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/blumenfeld-countergambit.html": {
+ "/openings/blackmar-diemer-gambit-accepted": {
+  "sceau": "67106691912dcaad",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/blackmar-diemer-gambit-declined": {
+  "sceau": "7933193917b5d9da",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/blumenfeld-countergambit": {
   "sceau": "24289289520b2296",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/bogo-indian-defense.html": {
+ "/openings/bogo-indian-defense": {
   "sceau": "5a91a8a0c1088e1a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/bongcloud-attack.html": {
+ "/openings/bongcloud-attack": {
   "sceau": "d4c45d356b224c88",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/borg-defense.html": {
+ "/openings/borg-defense": {
   "sceau": "37ebbfd3a13d6e49",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/canard-opening.html": {
+ "/openings/canard-opening": {
   "sceau": "f96051eeafc11bbb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/caro-kann-defense.html": {
+ "/openings/caro-kann-defense": {
   "sceau": "6e30702043200ab4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/carr-defense.html": {
+ "/openings/carr-defense": {
   "sceau": "9389ade6bcafc14e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/catalan-opening.html": {
+ "/openings/catalan-opening": {
   "sceau": "52c83faa00809ad0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/center-game-accepted.html": {
-  "sceau": "20b107a2db8902ed",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/center-game.html": {
+ "/openings/center-game": {
   "sceau": "62c4ceea61bd960e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/clemenz-opening.html": {
+ "/openings/center-game-accepted": {
+  "sceau": "20b107a2db8902ed",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/clemenz-opening": {
   "sceau": "486e19b4c7a80fbd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/colle-system.html": {
+ "/openings/colle-system": {
   "sceau": "f9390a85cd53c841",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/creepy-crawly-formation.html": {
+ "/openings/creepy-crawly-formation": {
   "sceau": "3994917f721cfbf7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/czech-defense.html": {
+ "/openings/czech-defense": {
   "sceau": "3bf1ce60f8b78d9e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/danish-gambit-accepted.html": {
-  "sceau": "db229d3e403c8b06",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/danish-gambit-declined.html": {
-  "sceau": "aeefb3f597a356b9",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/danish-gambit.html": {
+ "/openings/danish-gambit": {
   "sceau": "210e39182742cc32",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/dory-defense.html": {
+ "/openings/danish-gambit-accepted": {
+  "sceau": "db229d3e403c8b06",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/danish-gambit-declined": {
+  "sceau": "aeefb3f597a356b9",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/dory-defense": {
   "sceau": "04a4afa742733c90",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/dresden-opening.html": {
+ "/openings/dresden-opening": {
   "sceau": "ecdf4512a0e1e145",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/duras-gambit.html": {
+ "/openings/duras-gambit": {
   "sceau": "dde325a536e71be2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/dutch-defense.html": {
+ "/openings/dutch-defense": {
   "sceau": "fbcd3f2fe3715be0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/east-indian-defense.html": {
+ "/openings/east-indian-defense": {
   "sceau": "c26078bda4e9ce15",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/elephant-gambit.html": {
+ "/openings/elephant-gambit": {
   "sceau": "bc5757dbf7345183",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/english-defense.html": {
+ "/openings/english-defense": {
   "sceau": "2b382880b2cac610",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/english-opening.html": {
+ "/openings/english-opening": {
   "sceau": "99dfc992afcee928",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/english-orangutan.html": {
+ "/openings/english-orangutan": {
   "sceau": "dacaca5700246add",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/englund-gambit-declined.html": {
-  "sceau": "7106d5fe27f74c32",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/englund-gambit.html": {
+ "/openings/englund-gambit": {
   "sceau": "01f57a3d3021ae61",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/four-knights-game.html": {
+ "/openings/englund-gambit-declined": {
+  "sceau": "7106d5fe27f74c32",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/four-knights-game": {
   "sceau": "7e89279961338bfb",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/french-defense.html": {
+ "/openings/french-defense": {
   "sceau": "2efb707fc90f862a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/fried-fox-defense.html": {
+ "/openings/fried-fox-defense": {
   "sceau": "2ea4aea6ac6ba5a4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/global-opening.html": {
+ "/openings/global-opening": {
   "sceau": "5c1c4eb57309affc",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/goldsmith-defense.html": {
+ "/openings/goldsmith-defense": {
   "sceau": "1560eca8e10f2405",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/grob-opening.html": {
+ "/openings/grob-opening": {
   "sceau": "2e2f2cf1d77f220f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/grunfeld-defense.html": {
+ "/openings/grunfeld-defense": {
   "sceau": "558372b7fcb04655",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/gunderam-defense.html": {
+ "/openings/gunderam-defense": {
   "sceau": "8dd01c84726c09b4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/hippopotamus-defense.html": {
+ "/openings/hippopotamus-defense": {
   "sceau": "c34f65472a9eb97d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/horwitz-defense.html": {
+ "/openings/horwitz-defense": {
   "sceau": "f7bf29938fa2f568",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/hungarian-opening.html": {
+ "/openings/hungarian-opening": {
   "sceau": "a0b658222dd59bf9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/indian-defense.html": {
+ "/openings/indian-defense": {
   "sceau": "76c68d61e96fcff5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/irish-gambit.html": {
+ "/openings/irish-gambit": {
   "sceau": "aa1542c67df4277e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/italian-game.html": {
+ "/openings/italian-game": {
   "sceau": "3739f8be75be4d60",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kadas-opening.html": {
+ "/openings/kadas-opening": {
   "sceau": "64ac2b53fca04159",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kangaroo-defense.html": {
+ "/openings/kangaroo-defense": {
   "sceau": "afce9f9b96432663",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-gambit-accepted.html": {
-  "sceau": "49e1555a6d863476",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/kings-gambit-declined.html": {
-  "sceau": "6c079718982fa04d",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/kings-gambit.html": {
+ "/openings/kings-gambit": {
   "sceau": "2e06c39eb84c799b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-indian-attack-with-bf5.html": {
-  "sceau": "add8cfd0886c20dc",
+ "/openings/kings-gambit-accepted": {
+  "sceau": "49e1555a6d863476",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-indian-attack-with-e6.html": {
-  "sceau": "b8156d5c3f4deb1f",
+ "/openings/kings-gambit-declined": {
+  "sceau": "6c079718982fa04d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-indian-attack.html": {
+ "/openings/kings-indian-attack": {
   "sceau": "6bb28951d9f0920a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-indian-defense.html": {
+ "/openings/kings-indian-attack-with-bf5": {
+  "sceau": "add8cfd0886c20dc",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/kings-indian-attack-with-e6": {
+  "sceau": "b8156d5c3f4deb1f",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/kings-indian-defense": {
   "sceau": "111d1b5eec04dd49",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-knight-opening.html": {
+ "/openings/kings-knight-opening": {
   "sceau": "fb02b6b69f17d552",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-pawn-game.html": {
+ "/openings/kings-pawn-game": {
   "sceau": "385a0bca893ae016",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/kings-pawn-opening.html": {
+ "/openings/kings-pawn-opening": {
   "sceau": "4fe168061722f4a2",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/lasker-simul-special.html": {
+ "/openings/lasker-simul-special": {
   "sceau": "292ba25203c32d06",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/latvian-gambit-accepted.html": {
-  "sceau": "4cd5fd72a42e58b6",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/latvian-gambit.html": {
+ "/openings/latvian-gambit": {
   "sceau": "8866e0d5fbdc1d33",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/lemming-defense.html": {
+ "/openings/latvian-gambit-accepted": {
+  "sceau": "4cd5fd72a42e58b6",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/lemming-defense": {
   "sceau": "2010a0beb2934a20",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/lion-defense.html": {
+ "/openings/lion-defense": {
   "sceau": "2d5978ab2b1ec20a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/london-system.html": {
+ "/openings/london-system": {
   "sceau": "99b68fadc74569f7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/marienbad-system.html": {
+ "/openings/marienbad-system": {
   "sceau": "6f3f0fd9059190df",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/mexican-defense.html": {
+ "/openings/mexican-defense": {
   "sceau": "3b56b987a7ea3a3b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/mieses-opening.html": {
+ "/openings/mieses-opening": {
   "sceau": "9174fc95d22b2d06",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/mikenas-defense.html": {
+ "/openings/mikenas-defense": {
   "sceau": "38d7fe1b6e4515c9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/modern-defense.html": {
+ "/openings/modern-defense": {
   "sceau": "29e1ac98aef1edb6",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/montevideo-defense.html": {
+ "/openings/montevideo-defense": {
   "sceau": "6f8b12f6697b0c7c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/neo-grunfeld-defense.html": {
+ "/openings/neo-grunfeld-defense": {
   "sceau": "1463a9515341e7e5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/nimzo-indian-defense.html": {
+ "/openings/nimzo-indian-defense": {
   "sceau": "e32ef6dc5b4f9900",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/nimzo-larsen-attack.html": {
+ "/openings/nimzo-larsen-attack": {
   "sceau": "07685a3ed371fd7d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/nimzowitsch-defense.html": {
+ "/openings/nimzowitsch-defense": {
   "sceau": "b8879c3361765040",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/old-indian-defense.html": {
+ "/openings/old-indian-defense": {
   "sceau": "852095b2146a4e9f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/owen-defense.html": {
+ "/openings/owen-defense": {
   "sceau": "e93a4d2e0c8c58ec",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/paleface-attack.html": {
+ "/openings/paleface-attack": {
   "sceau": "83f0502e3a2b13b0",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/petrovs-defense.html": {
+ "/openings/petrovs-defense": {
   "sceau": "c0dcc8ec586b66c3",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/philidor-defense.html": {
+ "/openings/philidor-defense": {
   "sceau": "c0a82580234b7a3e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/pirc-defense.html": {
+ "/openings/pirc-defense": {
   "sceau": "38779e4d6629491d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/polish-defense.html": {
+ "/openings/polish-defense": {
   "sceau": "bee49218035e5eaa",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/polish-opening-with-d5.html": {
-  "sceau": "b51ce10d151652aa",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/polish-opening.html": {
+ "/openings/polish-opening": {
   "sceau": "c4a08af42e74d872",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/ponziani-opening.html": {
+ "/openings/polish-opening-with-d5": {
+  "sceau": "b51ce10d151652aa",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/ponziani-opening": {
   "sceau": "db60c43cb74d0652",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/portuguese-opening.html": {
+ "/openings/portuguese-opening": {
   "sceau": "34fe88050148373f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/pseudo-queens-indian-defense.html": {
+ "/openings/pseudo-queens-indian-defense": {
   "sceau": "d7a5f1b13c13daaa",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/pterodactyl-defense.html": {
+ "/openings/pterodactyl-defense": {
   "sceau": "d354101fb2b1a981",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/queens-gambit-accepted.html": {
-  "sceau": "ed81ce75ef778a55",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/queens-gambit-declined.html": {
-  "sceau": "4e574ae1f28a73d1",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/queens-gambit.html": {
+ "/openings/queens-gambit": {
   "sceau": "7eaa12f0cf1920e9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/queens-indian-accelerated.html": {
+ "/openings/queens-gambit-accepted": {
+  "sceau": "ed81ce75ef778a55",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/queens-gambit-declined": {
+  "sceau": "4e574ae1f28a73d1",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/queens-indian-accelerated": {
   "sceau": "80f207d7f851e505",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/queens-indian-defense.html": {
+ "/openings/queens-indian-defense": {
   "sceau": "6c5c60054f12739f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/queens-pawn-game.html": {
+ "/openings/queens-pawn-game": {
   "sceau": "9ef9e6c362760664",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/queens-pawn-mengarini-attack.html": {
+ "/openings/queens-pawn-mengarini-attack": {
   "sceau": "a57a2bbbe6dbd921",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/rapport-jobava-system-with-e6.html": {
-  "sceau": "a9758ada211b20b4",
-  "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
- },
- "/openings/rapport-jobava-system.html": {
+ "/openings/rapport-jobava-system": {
   "sceau": "ddeddb03ca02f6dd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/rat-defense.html": {
+ "/openings/rapport-jobava-system-with-e6": {
+  "sceau": "a9758ada211b20b4",
+  "publiee": "2026-09-06",
+  "modifiee": "2026-09-06"
+ },
+ "/openings/rat-defense": {
   "sceau": "c523edbf90e40496",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/reti-opening.html": {
+ "/openings/reti-opening": {
   "sceau": "b686d3440b5ced40",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/richter-veresov-attack.html": {
+ "/openings/richter-veresov-attack": {
   "sceau": "75320412ae21087d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/robatsch-defense.html": {
+ "/openings/robatsch-defense": {
   "sceau": "8ae64fb1fab76d1f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/ruy-lopez.html": {
+ "/openings/ruy-lopez": {
   "sceau": "a3c0ebcfe9183364",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/saragossa-opening.html": {
+ "/openings/saragossa-opening": {
   "sceau": "d1163df2b381f6a5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/scandinavian-defense.html": {
+ "/openings/scandinavian-defense": {
   "sceau": "fc9b544a9294f512",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/scotch-game.html": {
+ "/openings/scotch-game": {
   "sceau": "5099e45037f697b7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/semi-slav-defense.html": {
+ "/openings/semi-slav-defense": {
   "sceau": "48e8dc0f9c455fc4",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/sicilian-defense.html": {
+ "/openings/sicilian-defense": {
   "sceau": "91be8ecf2693806a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/slav-defense.html": {
+ "/openings/slav-defense": {
   "sceau": "f1b48d9b713c6595",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/slav-indian.html": {
+ "/openings/slav-indian": {
   "sceau": "0dfab91b8a48eb9d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/sodium-attack.html": {
+ "/openings/sodium-attack": {
   "sceau": "8fbd0efd491ca2db",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/st-george-defense.html": {
+ "/openings/st-george-defense": {
   "sceau": "557373c316124776",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/tarrasch-defense.html": {
+ "/openings/tarrasch-defense": {
   "sceau": "a6139bf106253a29",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/three-knights-opening.html": {
+ "/openings/three-knights-opening": {
   "sceau": "044f5c209847682c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/torre-attack.html": {
+ "/openings/torre-attack": {
   "sceau": "2eeaf75935f4c84d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/trompowsky-attack.html": {
+ "/openings/trompowsky-attack": {
   "sceau": "fe2e62a76f43d3c9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/valencia-opening.html": {
+ "/openings/valencia-opening": {
   "sceau": "606fd62f4799a96e",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/van-geet-opening.html": {
+ "/openings/van-geet-opening": {
   "sceau": "790dd9ee244b5d07",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/vant-kruijs-opening.html": {
+ "/openings/vant-kruijs-opening": {
   "sceau": "b57e26f9fe5587c7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/vienna-gambit-with-max-lange-defense.html": {
+ "/openings/vienna-gambit-with-max-lange-defense": {
   "sceau": "9c135917fa5988dd",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/vienna-game.html": {
+ "/openings/vienna-game": {
   "sceau": "cc8debfd7fbf7a96",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/vulture-defense.html": {
+ "/openings/vulture-defense": {
   "sceau": "3b72840800be5cd5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/wade-defense.html": {
+ "/openings/wade-defense": {
   "sceau": "77608bc23bc0c5e9",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/ware-defense.html": {
+ "/openings/ware-defense": {
   "sceau": "3308927a1b31bac5",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/ware-opening.html": {
+ "/openings/ware-opening": {
   "sceau": "61d0466a0630f35a",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/yusupov-rubinstein-system.html": {
+ "/openings/yusupov-rubinstein-system": {
   "sceau": "a09ac4f7fc5f5560",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/zaire-defense.html": {
+ "/openings/zaire-defense": {
   "sceau": "709f9a8c3b786a0d",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/zukertort-defense.html": {
+ "/openings/zukertort-defense": {
   "sceau": "08331b2cca966a75",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/openings/zukertort-opening.html": {
+ "/openings/zukertort-opening": {
   "sceau": "647624de03aecf87",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
@@ -2330,106 +2330,106 @@
   "modifiee": "2026-09-06"
  },
  "/puzzles/": {
-  "sceau": "d2469c4632991946",
+  "sceau": "a8d6d8c5d3b21cf8",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/back-rank-mate.html": {
+ "/puzzles/back-rank-mate": {
   "sceau": "5e4a6efc74353b9c",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/deflection.html": {
+ "/puzzles/deflection": {
   "sceau": "e64d5de42842ec26",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/double-attack.html": {
+ "/puzzles/double-attack": {
   "sceau": "42547c0bb4773b54",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/knight-fork.html": {
+ "/puzzles/knight-fork": {
   "sceau": "251bae7c563e3c95",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/mate-in-one.html": {
+ "/puzzles/mate-in-one": {
   "sceau": "c571e2518b51850a",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/mate-in-three.html": {
+ "/puzzles/mate-in-three": {
   "sceau": "5220fb522e83c131",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/mate-in-two.html": {
+ "/puzzles/mate-in-two": {
   "sceau": "ab99d3dcf4fa6e8e",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/pawn-fork.html": {
+ "/puzzles/pawn-fork": {
   "sceau": "da5a8020166292bb",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/pin.html": {
+ "/puzzles/pin": {
   "sceau": "fd8456b7fc6e3581",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/quiet-move.html": {
+ "/puzzles/quiet-move": {
   "sceau": "a6445e50bdee7b1d",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/skewer.html": {
+ "/puzzles/skewer": {
   "sceau": "4a2d0b332b488551",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/winning-capture.html": {
+ "/puzzles/winning-capture": {
   "sceau": "ff32d6bb4acac6fc",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
- "/puzzles/winning-move.html": {
+ "/puzzles/winning-move": {
   "sceau": "a0ba9ba2d5df3742",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-23"
  },
  "/traps/": {
-  "sceau": "2427f18b5b12486d",
+  "sceau": "daa469afc01cad74",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/traps/blackburne-shilling-trap.html": {
+ "/traps/blackburne-shilling-trap": {
   "sceau": "accbfc135e0d59ac",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/traps/damiano-defence-punished.html": {
+ "/traps/damiano-defence-punished": {
   "sceau": "41e9f8da299e5a6c",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/traps/englund-gambit-trap.html": {
+ "/traps/englund-gambit-trap": {
   "sceau": "71a4b458fdbce447",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/traps/fried-liver-attack.html": {
+ "/traps/fried-liver-attack": {
   "sceau": "d3bb480781f6d89f",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/traps/legals-mate.html": {
+ "/traps/legals-mate": {
   "sceau": "1cb3f70eaef0e4e7",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
- "/traps/scholars-mate.html": {
+ "/traps/scholars-mate": {
   "sceau": "84f1f75510c16d8b",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"

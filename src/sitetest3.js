@@ -57,9 +57,12 @@ for(const [en,fr] of SEC.map(s=>[s[0],s[1]]))
    const h=read(`${en}/${f}`);
    const m=h.match(/hreflang="fr" href="https:\/\/chang64\.com\/([^"]+)"/);
    if(!m){broken++;continue;}
-   const target=m[1].replace(/\/$/,"/index.html");
+   /* Forme servie par Pages (2026-10-24) : /x/ -> x/index.html, /x/y -> x/y.html. */
+   if(m[1].endsWith(".html")){broken++;console.log("     hreflang en .html:",m[1]);continue;}
+   const target=m[1].endsWith("/")?m[1]+"index.html":m[1]+".html";
    if(!fs.existsSync(OUT+"/"+target)){broken++;console.log("     cible manquante:",target);continue;}
-   if(!read(target).includes(`href="https://chang64.com/${en}/${f}"`)&&!read(target).includes(`href="https://chang64.com/${en}/"`))broken++;
+   const retour=f==="index.html"?`${en}/`:`${en}/${f.replace(/\.html$/,"")}`;
+   if(!read(target).includes(`href="https://chang64.com/${retour}"`)&&!read(target).includes(`href="https://chang64.com/${en}/"`))broken++;
  }
 T("language links reciprocal and resolving", broken===0, broken+" broken");
 
@@ -91,14 +94,15 @@ let glossBad=0;
 for(const f of list("glossary")){
   const h=read(`glossary/${f}`);
   for(const m of h.matchAll(/href="\/(puzzles\/[^"]+)"/g))
-    if(!fs.existsSync(OUT+"/"+m[1]))glossBad++;
+    // lien sans .html, forme servie par Pages (2026-10-24)
+    if(m[1].endsWith(".html")||!fs.existsSync(OUT+"/"+m[1]+".html"))glossBad++;
 }
 T("glossary links to real puzzle pages", glossBad===0, glossBad);
 
 // index de section listant toutes ses pages
 for(const [en,fr] of SEC.map(s=>[s[0],s[1]])){
   const idx=read(`${en}/index.html`);
-  const missing=list(en).filter(f=>f!=="index.html"&&!idx.includes(`/${en}/${f}`)).length;
+  const missing=list(en).filter(f=>f!=="index.html"&&!idx.includes(`href="/${en}/${f.replace(/\.html$/,"")}"`)).length;
   T(`${en} index links every page`, missing===0, missing+" missing");
 }
 
@@ -127,9 +131,13 @@ T("sitemap covers the new sections", ["/learn/","/glossary/","/endgames/","/trap
   const publiables=html.filter(u=>!u.startsWith("/players/")&&!u.endsWith("/404.html"));
   const indexables=publiables.filter(u=>!estNoindex(u));
   const locs=new Set([...sm.matchAll(/<loc>https:\/\/chang64\.com([^<]*)<\/loc>/g)].map(m=>m[1]));
-  const dansLeSitemap=u=>locs.has(u)||locs.has(u.replace(/index\.html$/,""));
+  /* Le sitemap porte l'URL servie par Pages (2026-10-24) : /x/ pour
+     /x/index.html, /x/y pour /x/y.html. La forme en .html compte aussi pour
+     "en trop", sans quoi une page noindex declaree ainsi passerait. */
+  const urlDe=u=>u.replace(/index\.html$/,"").replace(/\.html$/,"");
+  const dansLeSitemap=u=>locs.has(urlDe(u));
   const absentes=indexables.filter(u=>!dansLeSitemap(u));
-  const enTrop=publiables.filter(u=>estNoindex(u)&&dansLeSitemap(u));
+  const enTrop=publiables.filter(u=>estNoindex(u)&&(dansLeSitemap(u)||locs.has(u)));
   T("sitemap couvre toutes les pages indexables", absentes.length===0,
     absentes.length+" absentes : "+absentes.slice(0,3).join(", "));
   T("aucune page noindex au sitemap", enTrop.length===0,

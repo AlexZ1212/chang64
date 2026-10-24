@@ -64,7 +64,7 @@ function detectOpening(list){
 function openingHref(family){
   const e=OPENING_SLUGS[family];
   if(!e)return null;
-  return LANG==="fr"?"/fr/ouvertures/"+e.fr+".html":"/openings/"+e.en+".html";
+  return LANG==="fr"?"/fr/ouvertures/"+e.fr:"/openings/"+e.en;
 }
 function renderOpening(){
   const el=$("opening"); if(!el)return;

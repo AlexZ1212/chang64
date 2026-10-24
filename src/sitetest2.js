@@ -39,10 +39,12 @@ for(const f of en.filter(f=>f!=="index.html")){
   const h=fs.readFileSync(`${OUT}/openings/${f}`,"utf8");
   const m=h.match(/hreflang="fr" href="https:\/\/chang64\.com\/fr\/ouvertures\/(.*?)"/);
   if(!m){bad++;continue;}
-  const target=`${OUT}/fr/ouvertures/${m[1]}`;
+  // URL servie par Pages, sans .html (2026-10-24) : le fichier, lui, la garde
+  if(m[1].endsWith(".html")){bad++;continue;}
+  const target=`${OUT}/fr/ouvertures/${m[1]}.html`;
   if(!fs.existsSync(target)){bad++;continue;}
   const back=fs.readFileSync(target,"utf8");
-  if(!back.includes(`hreflang="en" href="https://chang64.com/openings/${f}"`))bad++;
+  if(!back.includes(`hreflang="en" href="https://chang64.com/openings/${f.replace(/\.html$/,"")}"`))bad++;
 }
 T("hreflang links are reciprocal and resolve", bad===0, bad+" broken");
 

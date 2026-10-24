@@ -204,6 +204,8 @@ const FR={
 "Black to play and mate in {n} moves.":"Les Noirs jouent et matent en {n} coups.",
 "White to play and win material.":"Les Blancs jouent et gagnent du matériel.",
 "Black to play and win material.":"Les Noirs jouent et gagnent du matériel.",
+"White to play and win.":"Les Blancs jouent et gagnent.",
+"Black to play and win.":"Les Noirs jouent et gagnent.",
 "Your move. {hint}":"À toi. {hint}",
 "Not quite. Look at the enemy king and its escape squares.":"Pas tout à fait. Regarde le roi adverse et ses cases de fuite.",
 "Still not it. A hint or the solution can help.":"Toujours pas. Un indice ou la solution peuvent aider.",

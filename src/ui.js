@@ -677,6 +677,21 @@ function rangeePrises(liste,couleur,solde){
   if(solde)s+='<b class="adv">'+(solde>0?"+":"\u2212")+Math.abs(solde)+"</b>";
   return s+"</span>";
 }
+/* Un gain prolonge (mineur du 2026-10-17) peut finir sur un mat : sa ligne,
+   validee coup par coup par Stockfish, aboutit au mat sans que ce soit un
+   "mat en n" prouve exhaustivement comme les exercices de type "mate".
+   L'annoncer "gagnent du materiel" etait faux (544 exercices au 24/10) ;
+   "matent en n" promettrait une longueur que rien ne garantit. D'ou un
+   enonce neutre, "jouent et gagnent". On rejoue la solution (sept
+   demi-coups au plus) plutot que d'ajouter un champ aux donnees. */
+function gainFinitParMat(p){
+  if(!p||p.type!=="gain"||!p.sol||p.sol.length<3)return false;
+  try{
+    const g=new Game(p.fen);
+    for(const u of p.sol){const m=g.moves().find(x=>g.uci(x)===u);if(!m)return false;g.makeMove(m);}
+    return g.moves().length===0&&g.inCheck();
+  }catch(e){return false;}
+}
 function renderClocks(){
   /* Le bandeau (noms, pieces prises) vaut pour toute partie, avec ou sans
      pendule. Il etait masque en entier sans pendule : on perdait aussi les
@@ -1591,6 +1606,7 @@ function loadPuzzle(){
   if(typeof closeAllInfoTips==="function")closeAllInfoTips();
   $("exQuest").textContent=puzzle.type==="mate"
     ? t(side+" to play and mate in {n} "+(puzzle.n>1?"moves.":"move."),{n:puzzle.n})
+    : gainFinitParMat(puzzle) ? t(side+" to play and win.")
     : t(side+" to play and win material.");
   const st=$("exStatus");st.className="status";
   st.textContent=t("Your move. {hint}",{hint:t(THEME_HINTS[puzzle.theme]||THEME_HINTS["Winning move"])});

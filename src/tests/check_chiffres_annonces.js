@@ -58,7 +58,7 @@ const jetons = [];
     const q = path.join(p, f);
     if (fs.statSync(q).isDirectory()) walk(q);
     else if (/\.(html|json|webmanifest)$/.test(f)) {
-      if (/__NP__|__NF__|__NL__|__PUZZLES__|__OPENINGS__|__I18N__|__BRANDMARK__/.test(fs.readFileSync(q, "utf8")))
+      if (/__NP__|__NP_EN__|__NP_FR__|__NF__|__NL__|__PUZZLES__|__OPENINGS__|__I18N__|__BRANDMARK__/.test(fs.readFileSync(q, "utf8")))
         jetons.push(q.replace(SITE, ""));
     }
   }
@@ -66,15 +66,20 @@ const jetons = [];
 T("aucun jeton non substitue", jetons.length === 0, jetons.slice(0, 5).join(", "));
 
 console.log("\n--- Le nombre d'exercices est juste partout ---");
-T("compteur de la page d'accueil", new RegExp('id="hCount">' + NP + '<').test(idx),
-  (idx.match(/id="hCount">(\d+)</) || [])[1]);
+/* Depuis le 2026-10-24, le nombre affiche est groupe selon la langue
+   (108,868 / 108 868, voir fmtEntier dans i18n.js) : hCount porte la valeur
+   brute dans data-nombre et l'anglais groupe dans son texte. Le rendu en
+   francais est verifie par check_titre_et_nombres.js. */
+const NP_EN = NP.toLocaleString("en-US"), NP_FR = NP.toLocaleString("fr-FR");
+T("compteur de la page d'accueil", idx.includes('id="hCount" data-nombre="' + NP + '">' + NP_EN + '<'),
+  (idx.match(/id="hCount"[^>]*>[^<]+</) || [])[0]);
 T("meta description", new RegExp('name="description"[^>]*' + NP + ' ').test(idx),
   (idx.match(/name="description" content="([^"]{0,120})/) || [])[1]);
 T("image de partage (og:description)", new RegExp('og:description"[^>]*' + NP + ' ').test(idx),
   (idx.match(/og:description" content="([^"]{0,120})/) || [])[1]);
 T("donnees structurees", new RegExp('featureList[^\\]]*' + NP + ' ').test(idx));
-T("texte de presentation anglais", new RegExp(NP + ' puzzles verified move by move').test(idx));
-T("texte de presentation francais", new RegExp(NP + ' exercices v').test(idx));
+T("texte de presentation anglais", idx.includes(NP_EN + ' puzzles verified move by move'));
+T("texte de presentation francais", idx.includes(NP_FR + ' exercices v'));
 /* "tuile de navigation" retiree le 2026-09-05. Elle exigeait que la tuile
    Explorer annonce "51619 verified positions". Ce sous-titre a ete change
    volontairement (session du 2026-09-04) en "10 patterns, 3 examples each" :

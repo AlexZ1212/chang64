@@ -61,7 +61,7 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
 
   console.log("HOME");
   T("landing shown, board hidden", !a.$("pane-home").className.includes("hide") && a.$("appLayout").className.includes("hide"));
-  T("puzzle count on home", a.$("hCount").textContent === String(PUZZLES.length), a.$("hCount").textContent);
+  T("puzzle count on home", a.$("hCount").textContent === PUZZLES.length.toLocaleString("en-US"), a.$("hCount").textContent);
   const cats = Array.from(a.$("tcCats").children).map(b => b.textContent);
   /* Mis a jour le 2026-09-06 : la pastille "No clock" a ete retiree de la
      rangee d'accueil le 05/09 (une cadence sans pendule n'est pas une

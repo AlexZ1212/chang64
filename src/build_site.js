@@ -185,6 +185,11 @@ app = app
   .replace("/*__I18N__*/", i18n)
   .replace("/*__ENGINE__*/", engine).replace("/*__PIECES__*/", pieces)
   .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3)
+  /* Texte de presentation de l'accueil : le nombre y est groupe selon la
+     langue (108,868 / 108 868), meme Intl que fmtEntier dans i18n.js. Les
+     meta et donnees structurees gardent __NP__, le nombre brut. */
+  .split("__NP_EN__").join(Number(NP).toLocaleString("en-US"))
+  .split("__NP_FR__").join(Number(NP).toLocaleString("fr-FR"))
   .split("__NP__").join(NP);
 
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -1328,7 +1333,7 @@ ${alts || ""}
 <style>
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
-.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage);opacity:.85}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
@@ -1872,10 +1877,20 @@ self.addEventListener("fetch",e=>{
     );
     return;
   }
+  /* Pages HTML rangees sous leur seul chemin (2026-10-24). La cle etait la
+     requete entiere, chaine de requete comprise : "/", "/?fbclid=..." et
+     "/?utm_source=..." faisaient chacune une entree de la coquille, sans
+     plafond, a chaque lien partage sur un reseau social. C'est exactement le
+     gonflement qui fait sauter le quota iOS (voir DATA_MAX plus haut). Aucune
+     page ne lit sa chaine de requete cote serveur : le HTML est le meme, une
+     seule entree suffit. Le reseau recoit toujours l'adresse complete. Les
+     autres fichiers gardent leur requete pour cle. */
+  const page=r.mode==="navigate"||(r.headers.get("accept")||"").includes("text/html");
+  const cle=page?url.origin+url.pathname:r;
   e.respondWith(
-    caches.match(r).then(hit=>hit||fetch(r).then(resp=>{
+    caches.match(cle).then(hit=>hit||fetch(r).then(resp=>{
       const copy=resp.clone();
-      caches.open(CACHE).then(c=>c.put(r,copy)).catch(()=>{});
+      caches.open(CACHE).then(c=>c.put(cle,copy)).catch(()=>{});
       return resp;
     }).catch(()=>caches.match("/index.html")))
   );

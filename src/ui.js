@@ -1409,6 +1409,31 @@ function levelPool(lvl){
   if(motifEnCours)return allLoadedPuzzles().filter(p=>p.theme===motifEnCours);
   return bank;
 }
+/* Etat d'attente neutre pendant qu'un morceau d'exercices arrive (audit du
+   2026-10-24). Pendant les 3 a 5 s du premier chargement, l'echiquier
+   partage gardait la position de la partie precedente et le panneau son
+   ancien contenu : le "Back-rank mate" du gabarit, traduit "Mat du couloir",
+   ou le motif de l'exercice d'avant. Le message de chargement partait en
+   outre dans #status, le statut de l'onglet Jouer, invisible ici.
+   On vide donc le plateau et le panneau. Rien a sauvegarder : setMode() a
+   deja range la partie dans mainGame en quittant Jouer, et loadPuzzle()
+   remplace game de toute facon. Limite a l'onglet Resoudre : appele
+   ailleurs, vider game effacerait une partie affichee. */
+function afficherChargementExercice(){
+  if(mode!=="puzzles")return;
+  game=new Game("8/8/8/8/8/8/8/8 w - - 0 1");
+  selected=-1;marks={};lastMove=null;legalCache=[];
+  const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
+  set("exTheme","…");
+  set("exCode","");
+  const ec=$("exCode");if(ec)ec.removeAttribute("aria-label");
+  set("exQuest",t("Loading…"));
+  set("exExplain","");
+  set("exPedagogy","");
+  const st=$("exStatus");if(st){st.className="status";st.textContent=t("Loading puzzles…");}
+  if(typeof closeAllInfoTips==="function")closeAllInfoTips();
+  render();
+}
 function nextPuzzle(){
   /* Niveau pas encore en cache : on le charge puis on se rappelle soi-meme,
      meme mecanique que loadOpeningBook/openingMap. Le statut affiche un
@@ -1420,7 +1445,7 @@ function nextPuzzle(){
      sortant de l'aparte. D'ou une variable locale plutot qu'une ecriture. */
   const lvl=motifEnCours?motifNiveau:prog.level;
   if(!LEVEL_CACHE[lvl]){
-    const s=$("status"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
+    afficherChargementExercice();
     loadLevel(lvl,nextPuzzle);
     return;
   }
@@ -1451,7 +1476,7 @@ function nextPuzzle(){
   {
     const k=morceauSuivant(lvl);
     if(k>=0){
-      if(!fresh.length){loadLevelChunk(lvl,k,nextPuzzle);return;}
+      if(!fresh.length){afficherChargementExercice();loadLevelChunk(lvl,k,nextPuzzle);return;}
       if(fresh.length<40)loadLevelChunk(lvl,k);
     }
     /* Plus un seul morceau a tirer dans ce niveau. En mode motif, ca ne veut
@@ -1465,7 +1490,7 @@ function nextPuzzle(){
       if(i>=0&&i+1<motifNiveaux.length){
         motifNiveau=motifNiveaux[i+1];
         chargerJusquAuMotif(motifNiveau,motifEnCours,()=>{ if(!fresh.length)nextPuzzle(); });
-        if(!fresh.length)return;
+        if(!fresh.length){afficherChargementExercice();return;}
       }
     }
   }
@@ -1482,7 +1507,7 @@ function nextPuzzle(){
    formule et le resultat pour un jour donne restent identiques a avant. */
 function dailyPuzzle(){
   if(!PUZZLE_INDEX){
-    const s=$("status"); if(s){s.className="status";s.textContent=t("Loading puzzles…");}
+    afficherChargementExercice();
     loadPuzzleIndex(dailyPuzzle);
     return;
   }
@@ -1493,7 +1518,7 @@ function dailyPuzzle(){
   /* Passe par loadPuzzleById depuis le decoupage en morceaux : tester
      LEVEL_CACHE[lvl] ne dit plus que l'exercice voulu est charge, seulement
      qu'une partie du niveau l'est. */
-  if(!PUZZLE_CACHE[id]){loadPuzzleById(id,()=>dailyPuzzle());return;}
+  if(!PUZZLE_CACHE[id]){afficherChargementExercice();loadPuzzleById(id,()=>dailyPuzzle());return;}
   puzzle=PUZZLE_CACHE[id];
   puzzle.daily=true;puzzle.dailyCatchupKey=null; /* le vrai puzzle du jour, pas un rattrapage */
   loadPuzzle();
@@ -2813,7 +2838,9 @@ const icoBrass=t=>{
 poserHtml($("icoPlay"),icoBrass("n"));
 poserHtml($("icoPuzzles"),icoBrass("q"));
 poserHtml($("icoFriend"),icoBrass("p"));
-const _hc=$("hCount"); if(_hc)_hc.textContent=TOTAL_PUZZLES;
+/* hCount n'est plus rempli ici (2026-10-24) : il porte sa valeur dans
+   data-nombre et applyI18n (i18n.js) l'affiche avec le separateur de
+   milliers de la langue, a chaque bascule. */
 
 buildBoard();
 Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAmiHistory()]).then(()=>{

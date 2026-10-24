@@ -70,9 +70,10 @@ const FR={
 "Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Play Chang Sprint again":"Relancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Regarder","Solve":"Résoudre","Invite":"Inviter",
 "Loading puzzles…":"Chargement des exercices…","Couldn't load puzzles. Check your connection and try again.":"Impossible de charger les exercices. Vérifie ta connexion et réessaie.",
 "Quiet move":"Coup silencieux","Mate in three":"Mat en trois coups",
+"chang64 · play chess, solve tactics":"chang64 · joue aux échecs, travaille la tactique",
 "Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.",
-"Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
- "Du bullet au jeu par correspondance contre un moteur intégré, __NP__ exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",
+"Bullet to daily time controls against a built-in engine, __NP_EN__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.":
+ "Du bullet au jeu par correspondance contre un moteur intégré, __NP_FR__ exercices vérifiés coup par coup, et des parties entre amis par simple lien. Sans compte, sans inscription.",
 "Play now":"Jouer maintenant","Puzzle of the day":"Exercice du jour","Install the app":"Installer l'application",
 "Time control":"Cadence","Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.":"Bullet, blitz, rapide, classique : ce sont juste des tranches selon le temps de départ. Les chiffres (comme 10+0) donnent les minutes, puis les secondes rendues après chaque coup. Plus c'est lent, plus tu as le temps de réfléchir.","Play the computer":"Jouer contre l'ordinateur",
 "Start a game →":"Commencer une partie →","Tactics trainer":"Entraînement tactique",
@@ -503,7 +504,21 @@ function applyI18n(){
      beneficieraient. */
   const box=document.getElementById("langSwitch");
   if(box)for(const b of box.children)b.setAttribute("aria-pressed",b.dataset.lang===LANG);
+  /* Le titre de l'onglet restait en anglais en francais (audit du
+     2026-10-24) : il vit dans <head>, hors de la marche de collectI18n. */
+  if(titreEn===null)titreEn=document.title;
+  document.title=t(titreEn);
+  for(const el of document.querySelectorAll("[data-nombre]"))el.textContent=fmtEntier(el.dataset.nombre);
   rendreDateSite();
+}
+let titreEn=null;
+/* Separateur des milliers selon la langue (2026-10-24) : "108868 exercices"
+   s'affichait sans espace en francais. Intl donne l'espace fine insecable du
+   francais et la virgule de l'anglais ; build_site.js passe par la meme
+   fonction d'Intl pour le texte de presentation, donc les deux concordent.
+   Les compteurs a formater portent leur valeur brute dans data-nombre. */
+function fmtEntier(n){
+  return Number(n).toLocaleString(LANG==="fr"?"fr-FR":"en-US");
 }
 /* Date de publication et de mise a jour de l'application (2026-10-18), meme
    formule que le pied des pages de contenu (shell() dans build_site.js) et

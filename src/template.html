@@ -1366,15 +1366,24 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <div class="hero-lede">
       <h2>Play chess.<br>Solve tactics.<br>Get better.</h2>
       <p class="promise">No account. No ads. No noise. Just chess.</p>
-      <p>Bullet to daily time controls against a built-in engine, __NP__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
+      <p>Bullet to daily time controls against a built-in engine, __NP_EN__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
       </div>
       <div class="hero-rest">
       <div class="tc-block">
         <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl" aria-label="More info">i</button></div>
         <p class="info-tip-pop hide" id="tipTimeControl">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
-        <div class="tc-cats" id="tcCats"></div>
-        <div class="tc-chips" id="tcChips"></div>
-        <p class="tc-note" id="tcNote"></p>
+        <!-- Etat par defaut ecrit en dur (2026-10-24), le meme que renderTC()
+             (ui.js) produit pour un premier visiteur : Rapid, 10+0. Vides,
+             ces trois blocs ne pesaient que 10px au premier rendu et
+             130px une fois remplis par le script : tout ce qui suit dans
+             .hero-rest (les boutons) et les cartes en dessous descendait
+             d'autant. C'etait l'essentiel du CLS de 0,164 mesure par
+             Lighthouse sur mobile. renderTC() remplace ce contenu tel quel ;
+             check_decalage_accueil.js verifie qu'il reste identique a ce
+             qu'il produit. -->
+        <div class="tc-cats" id="tcCats"><button aria-pressed="false">Bullet</button><button aria-pressed="false">Blitz</button><button aria-pressed="true">Rapid</button><button aria-pressed="false">Classical</button><button aria-pressed="false">Daily</button></div>
+        <div class="tc-chips" id="tcChips"><button class="chip" aria-pressed="true">10+0</button><button class="chip" aria-pressed="false">10+5</button><button class="chip" aria-pressed="false">15+10</button></div>
+        <p class="tc-note" id="tcNote">Rapid: enough time to actually think. A good default.</p>
       </div>
 
       <div class="cta">
@@ -1409,7 +1418,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <button class="card" id="cardPuzzles">
         <span class="ico" id="icoPuzzles"></span>
         <h3>Tactics trainer</h3>
-        <p><span id="hCount">__NP__</span> puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.</p>
+        <p><span id="hCount" data-nombre="__NP__">__NP_EN__</span> puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.</p>
         <span class="go">Solve a puzzle &rarr;</span>
       </button>
       <button class="card" id="cardFriend">

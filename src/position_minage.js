@@ -29,17 +29,27 @@ if (!PGN) { console.error("Usage : node position_minage.js <parties.pgn> [limite
 if (!fs.existsSync(PGN)) { console.error("Fichier introuvable : " + PGN); process.exit(1); }
 
 const banque = require(path.join(__dirname, "banque.js")).charger();
-const empreintes = new Set();
-for (const p of banque) if (p.source && p.source.white && p.source.black) empreintes.add(p.source.white + "|" + p.source.black);
-console.log("Parties d'origine connues en banque : " + empreintes.size
+/* Deux formes de source (banque.js, sourceCompacte) : l'identifiant Lichess
+   de la partie (g), le plus sur, ou, pour les sources anciennes qui n'en
+   ont pas, les deux pseudos (w, b ; white, black avant le compactage). */
+const empreintes = new Set(), parties = new Set();
+for (const p of banque) {
+  const s = p.source;
+  if (!s) continue;
+  const g = s.g || ((/lichess\.org\/(\w{8})/.exec(s.site || "") || [])[1]);
+  if (g) parties.add(g);
+  const w = s.w || s.white, b = s.b || s.black;
+  if (w && b) empreintes.add(w + "|" + b);
+}
+console.log("Parties d'origine connues en banque : " + (empreintes.size + parties.size)
   + " (pour " + banque.filter(p => p.source).length + " exercices mines)\n");
 
 const parTranche = new Map();
-let rang = 0, dernier = 0, touches = 0, blanc = null, noir = null, vu = false;
+let rang = 0, dernier = 0, touches = 0, blanc = null, noir = null, partie = null, vu = false;
 
 function cloture() {
-  if (!rang || vu || !blanc || !noir) return;
-  if (empreintes.has(blanc + "|" + noir)) {
+  if (!rang || vu) return;
+  if ((partie && parties.has(partie)) || (blanc && noir && empreintes.has(blanc + "|" + noir))) {
     touches++; dernier = rang;
     const t = Math.floor((rang - 1) / TRANCHE);
     parTranche.set(t, (parTranche.get(t) || 0) + 1);
@@ -55,13 +65,14 @@ rl.on("line", (line) => {
   if (arrete) return;
   if (line.startsWith('[Event "')) {
     cloture();
-    rang++; blanc = noir = null; vu = false;
+    rang++; blanc = noir = partie = null; vu = false;
     if (rang % 100000 === 0) process.stderr.write("\r  " + rang + " parties lues, " + touches + " correspondances");
     if (rang > LIMITE) { arrete = true; rl.close(); stream.destroy(); }
     return;
   }
   if (!blanc && line.startsWith('[White "')) blanc = line.slice(8, -2);
   else if (!noir && line.startsWith('[Black "')) noir = line.slice(8, -2);
+  else if (!partie && line.startsWith('[Site "')) partie = (/lichess\.org\/(\w{8})/.exec(line) || [])[1] || null;
 });
 
 rl.on("close", () => {

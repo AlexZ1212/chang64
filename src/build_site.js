@@ -359,6 +359,11 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
      porte desormais [niveau, morceau] pour qu'un lien direct vers un exercice
      ne charge que son morceau. */
   const TAILLE_MORCEAU = 500;
+  /* Ce qui part vers le navigateur, sans la source (2026-10-24) : le site
+     n'en affiche rien, et elle pesait 36 a 44 % des donnees d'exercices, en
+     publiant au passage les pseudos de milliers de joueurs. La source reste
+     dans la banque, pour retrouver la partie d'origine. */
+  const pourLeSite = lot => lot.map(p => { if (!p.source) return p; const q = Object.assign({}, p); delete q.source; return q; });
   let morceauxEcrits = 0;
   for (const lvl in byLevel) {
     const lot = byLevel[lvl].slice().sort((a, b) => (a.diff || 0) - (b.diff || 0));
@@ -366,7 +371,7 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
     for (let k = 0; k < morceaux; k++) {
       const tranche = lot.slice(k * TAILLE_MORCEAU, (k + 1) * TAILLE_MORCEAU);
       for (const p of tranche) puzzleIndex[p.id] = [+lvl, k];
-      fs.writeFileSync(OUT + "/data/level-" + lvl + "-" + k + ".json", JSON.stringify(tranche));
+      fs.writeFileSync(OUT + "/data/level-" + lvl + "-" + k + ".json", JSON.stringify(pourLeSite(tranche)));
       morceauxEcrits++;
     }
     fs.writeFileSync(OUT + "/data/level-" + lvl + ".json",
@@ -411,7 +416,7 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
     }
     rushPool.push(...list.slice(0, RUSH_CAP_PER_THEME));
   }
-  fs.writeFileSync(OUT + "/data/rush-pool.json", JSON.stringify(rushPool));
+  fs.writeFileSync(OUT + "/data/rush-pool.json", JSON.stringify(pourLeSite(rushPool)));
   console.log("Donnees d'exercices  :", Object.keys(byLevel).length, "niveaux,", rushPool.length, "dans le pool Sprint");
 })();
 const ogJobs = [];

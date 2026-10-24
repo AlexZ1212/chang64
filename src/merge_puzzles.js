@@ -192,7 +192,8 @@ for (const f of fichiers) {
       explain: detail || brut.explain || {}
     };
     if (brut.pedagogy) p.pedagogy = brut.pedagogy;
-    if (brut.source) p.source = brut.source;
+    /* Source compacte : voir sourceCompacte() dans banque.js. */
+    if (brut.source) p.source = BQ.sourceCompacte(brut.source);
     ajoutes.push(p);
     vues.add(cle(p));
   }

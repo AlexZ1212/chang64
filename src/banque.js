@@ -86,4 +86,31 @@ function texte() {
   return fichiersTranches().map(f => fs.readFileSync(path.join(DOSSIER, f), "utf8")).join("");
 }
 
-module.exports = { DOSSIER, TRANCHE, charger, ecrire, sauvegarder, texte, trancheDe };
+/* Source compacte (2026-10-24). La source brute que sourceDe()
+   (mine_puzzles.js) recopie des en-tetes PGN pesait 40 % de chaque exercice
+   neuf : pseudos des deux joueurs, nom d'ouverture, date, type de partie,
+   URL complete. Le site n'en affiche rien. On garde ce qui sert :
+   - g : l'identifiant Lichess de la partie (retrouver la partie, dedoublonner) ;
+   - ply, eco (le nom d'ouverture s'en deduit), tc (cadence), elo (moyen).
+   Sans identifiant Lichess (premier minage, FICS), on garde les pseudos
+   (w, b) et le type de partie (ev) : sans eux, l'exercice ne se rattache
+   plus a rien. Une source deja compacte est rendue telle quelle. */
+function sourceCompacte(s) {
+  if (!s || typeof s !== "object") return s;
+  if ("g" in s || "w" in s) return s;
+  const o = {};
+  const m = /lichess\.org\/(\w{8})/.exec(s.site || "");
+  if (m) o.g = m[1];
+  else {
+    if (s.white) o.w = s.white;
+    if (s.black) o.b = s.black;
+    if (s.event) o.ev = s.event;
+  }
+  if (s.ply != null) o.ply = s.ply;
+  if (s.eco) o.eco = s.eco;
+  if (s.timeControl) o.tc = s.timeControl;
+  if (s.elo) o.elo = s.elo;
+  return o;
+}
+
+module.exports = { DOSSIER, TRANCHE, charger, ecrire, sauvegarder, texte, trancheDe, sourceCompacte };

@@ -29,7 +29,9 @@ stubFetch(w);
 setTimeout(async()=>{
   console.log("\n--- La banque est bien chargee ---");
   const hc=d.getElementById("hCount");
-  T("compteur d'exercices en page d'accueil", hc && +hc.textContent===NPUZ, hc&&hc.textContent);
+  /* Affiche groupe selon la langue depuis le 2026-10-24 (108,868) : on
+     compare les chiffres seuls. */
+  T("compteur d'exercices en page d'accueil", hc && +hc.textContent.replace(/\D/g,"")===NPUZ, hc&&hc.textContent);
 
   console.log("\n--- Les motifs sont proposes a l'entrainement ---");
   /* tab-train et son "Defis" ont disparu le 2026-09-03 (menu a 5 cartes).

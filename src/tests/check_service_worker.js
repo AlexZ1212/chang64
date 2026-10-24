@@ -54,5 +54,74 @@ console.log("\n--- Les en-tetes des donnees sont explicites ---");
 const h=fs.readFileSync(SITE+"/_headers","utf8");
 T("/data/ a une regle de cache declaree", /\/data\/\*/.test(h)&&/Cache-Control/.test(h.split("/data/*")[1]||""));
 
-console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
-process.exit(ko?1:0);
+/* Ajoute le 2026-10-24 (audit) : la coquille rangeait chaque page sous sa
+   requete entiere, donc "/", "/?fbclid=..." et "/?utm_source=..." faisaient
+   trois entrees, sans plafond. Cette partie-ci execute vraiment sw.js, dans
+   un bac a sable avec un faux Cache API qui, comme le vrai, distingue les
+   cles par adresse complete. On compte ce qui atterrit dans chaque cache. */
+console.log("\n--- Les pages HTML ignorent la chaine de requete ---");
+(async()=>{
+  const vm=require("vm");
+  const ORIGINE="https://chang64.com";
+  const magasins=new Map();
+  const cleDe=k=>typeof k==="string"?new URL(k,ORIGINE).href:k.url;
+  const ouvrir=nom=>{
+    if(!magasins.has(nom)){
+      const m=new Map();
+      magasins.set(nom,{
+        m,
+        match:k=>Promise.resolve(m.get(cleDe(k))),
+        put:(k,v)=>{m.set(cleDe(k),v);return Promise.resolve();},
+        keys:()=>Promise.resolve([...m.keys()].map(u=>({url:u}))),
+        delete:k=>Promise.resolve(m.delete(cleDe(k))),
+        addAll:()=>Promise.resolve()
+      });
+    }
+    return Promise.resolve(magasins.get(nom));
+  };
+  const caches={
+    open:ouvrir,
+    keys:()=>Promise.resolve([...magasins.keys()]),
+    delete:n=>Promise.resolve(magasins.delete(n)),
+    match:async k=>{for(const c of magasins.values()){const v=c.m.get(cleDe(k));if(v)return v;}}
+  };
+  const ecouteurs={};
+  const reponse=()=>({ok:true,clone(){return reponse();}});
+  const bac={
+    caches,URL,Promise,console,location:{origin:ORIGINE},
+    fetch:()=>Promise.resolve(reponse()),
+    self:{addEventListener:(t,f)=>{ecouteurs[t]=f;},skipWaiting(){},clients:{claim(){}}}
+  };
+  vm.runInNewContext(sw,bac);
+  const requete=(chemin,html)=>({method:"GET",url:ORIGINE+chemin,mode:html?"navigate":"cors",
+    headers:{get:n=>n==="accept"?(html?"text/html,application/xhtml+xml":"*/*"):null}});
+  const servir=async(chemin,html)=>{
+    let p=null;
+    ecouteurs.fetch({request:requete(chemin,html),respondWith:x=>{p=x;}});
+    if(p)await p;
+    await new Promise(r=>setTimeout(r,20));   // les put() partent apres la reponse
+    return !!p;
+  };
+  const coquille=()=>{const n=[...magasins.keys()].find(k=>/^chang64-\d+$/.test(k));return n?[...magasins.get(n).m.keys()]:[];};
+  const donnees=()=>{const n=[...magasins.keys()].find(k=>/^chang64-data-/.test(k));return n?[...magasins.get(n).m.keys()]:[];};
+
+  for(const q of ["/","/?fbclid=IwAR0abc","/?utm_source=twitter&utm_medium=social"])await servir(q,true);
+  const accueil=coquille().filter(u=>new URL(u).pathname==="/");
+  T("trois visites de l'accueil, une seule entree", accueil.length===1, accueil.join(" | "));
+  T("l'entree est rangee sans chaine de requete", accueil[0]===ORIGINE+"/", accueil[0]);
+  for(const q of ["/openings/?ref=a","/openings/?ref=b"])await servir(q,true);
+  T("idem pour une autre page", coquille().filter(u=>u.includes("/openings/")).length===1,
+    coquille().filter(u=>u.includes("/openings/")).join(" | "));
+
+  /* Ce qui ne doit pas bouger : /data/ garde sa propre cle et son cache,
+     /engine/ n'est jamais intercepte. */
+  await servir("/data/level-3.json?v=1",false);
+  T("/data/ va toujours dans le cache de donnees", donnees().some(u=>u.endsWith("/data/level-3.json?v=1")), donnees().join(" | "));
+  T("/data/ ne passe pas par la coquille", !coquille().some(u=>u.includes("/data/")));
+  T("/engine/ n'est toujours pas intercepte", (await servir("/engine/stockfish.wasm",false))===false);
+  await servir("/manifest.webmanifest?v=2",false);
+  T("un fichier non HTML garde sa requete pour cle", coquille().includes(ORIGINE+"/manifest.webmanifest?v=2"));
+})().catch(e=>{ko++;console.log("  FAIL execution de sw.js  -> "+e.message);}).then(()=>{
+  console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
+  process.exit(ko?1:0);
+});

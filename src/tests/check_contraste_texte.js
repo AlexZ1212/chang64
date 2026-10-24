@@ -69,6 +69,31 @@ for (const [nom, couleur, fond, seuil] of [
   T(nom + " : " + r.toFixed(2) + ":1", r >= seuil, couleur + " sur " + fond);
 }
 
+console.log("\n--- La date de pied de page reste lisible ---");
+/* Audit Lighthouse du 2026-10-24 : p.pagedate etait en var(--sage) avec
+   opacity:.85, soit #707b73 effectif sur #ede4d2, 3,48:1 a 12px, sous les
+   4,5:1 requis. Le jeton seul passe (4,63:1) : c'est l'opacite qui le
+   faisait tomber. On mesure donc la couleur REELLEMENT peinte, opacite
+   melangee au fond, et non le jeton. */
+const melange = (hex, fond, a) => "#" + [0, 2, 4].map(i => {
+  const c = parseInt(hex.slice(1 + i, 3 + i), 16), f = parseInt(fond.slice(1 + i, 3 + i), 16);
+  return Math.round(c * a + f * (1 - a)).toString(16).padStart(2, "0");
+}).join("");
+for (const f of ["/puzzles/index.html", "/openings/index.html", "/fr/ouvertures/defense-sicilienne.html", "/learn/index.html"]) {
+  if (!fs.existsSync(SITE + f)) { T(f + " existe", false); continue; }
+  const h = fs.readFileSync(SITE + f, "utf8");
+  if (!/<p class="pagedate">/.test(h)) { T(f + " porte une date de pied de page", false); continue; }
+  const regles = [...h.matchAll(/\.pagedate\{([^}]*)\}/g)].map(m => m[1]).join(";");
+  const couleur = (regles.match(/color:\s*var\(--(\w+)\)/) || [])[1];
+  const opacite = +((regles.match(/opacity:\s*([\d.]+)/) || [])[1] || 1);
+  const jeton = couleur && (h.match(new RegExp("--" + couleur + ":\\s*(#[0-9A-Fa-f]{6})")) || [])[1];
+  const fondPage = (h.match(/--ink:\s*(#[0-9A-Fa-f]{6})/) || [])[1];
+  if (!jeton || !fondPage) { T(f + " : couleur de la date lisible dans la page", false, regles); continue; }
+  const peinte = melange(jeton, fondPage, opacite);
+  const r = ratio(peinte, fondPage);
+  T(f + " : date " + peinte + " a " + r.toFixed(2) + ":1", r >= 4.5, "opacite " + opacite);
+}
+
 console.log("\n--- Le bouton d'action reste lisible ---");
 const rCta = ratio("#ffffff", BRASS);
 T("texte blanc sur laiton : " + rCta.toFixed(2) + ":1", rCta >= 4.5);

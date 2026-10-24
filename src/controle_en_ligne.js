@@ -146,7 +146,11 @@ const correspond = (motif, u) => new RegExp("^" + motif.split("*").map(s => s.re
   a = etat();
   const toutes = fichiersPublies();
   for (const { motif, entetes } of reglesEntetes()) {
-    const rel = toutes.find(r => correspond(motif, "/" + r.split(path.sep).join("/")));
+    /* _headers s'applique au chemin DEMANDE : la regle "/" vise l'URL servie
+       de index.html, qu'aucun chemin de fichier ne reproduit. On essaie donc
+       l'URL servie, puis le chemin du fichier. */
+    const rel = toutes.find(r => correspond(motif, urlDe(r)))
+             || toutes.find(r => correspond(motif, "/" + r.split(path.sep).join("/")));
     if (!rel) { T(motif, false, "aucun fichier publie ne correspond a cette regle"); continue; }
     const u = urlDe(rel);
     const r = await lire(BASE + u, { method: "HEAD" });

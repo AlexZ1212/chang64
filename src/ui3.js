@@ -456,7 +456,9 @@ boardEl.addEventListener("pointercancel",()=>{
 /* ==========================================================
    18. STOCKFISH (optional, GPL v3)
    ========================================================== */
-const SF_PATH="engine/stockfish-18-lite-single.js";
+/* Chemin depuis la racine (2026-10-25) : relatif, il pointait vers
+   /fr/engine/... depuis la page francaise, qui n'existe pas. */
+const SF_PATH="/engine/stockfish-18-lite-single.js";
 let sf={worker:null,ready:false,busy:false};
 function sfStatus(msg){const el=$("sfStatus");if(el)el.textContent=msg;}
 /* Charge Stockfish si besoin et renvoie une promesse resolue a true (pret)
@@ -630,7 +632,10 @@ if(bi)bi.onclick=async()=>{
 };
 if("serviceWorker" in navigator&&location.protocol==="https:"){
   window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
+    /* "/sw.js" et non "sw.js" (2026-10-25) : depuis /fr/, le chemin relatif
+       visait /fr/sw.js, introuvable, et la page francaise restait sans
+       cache hors ligne. */
+    navigator.serviceWorker.register("/sw.js").catch(()=>{});
   });
 }
 
@@ -787,74 +792,30 @@ function renderCoordHud(){
   set("chudLabel","Find");set("chudTimeLabel","Seconds");
   set("chudScoreLabel","Correct");set("chudMissLabel","Missed");
 }
-function refreshCurrentMode(){
-  applyI18n();
-  renderCoordHud();
-  if(typeof disarmResign==="function"&&resigned===null)disarmResign();
-  const ar=$("btnAmiResign");
-  if(ar&&!ar.classList.contains("armed"))ar.textContent=t("Resign this game");
-  /* Les finales vivent desormais dans l'onglet Exercices : leur rendu doit
-     suivre ce mode-la, pas "train" qui ne contient plus qu'elles nommement.
-     Les deux appels sont sortis de la condition "&&puzzle" (2026-09-12) :
-     l'ecran Finales s'atteint sans qu'aucun exercice ne soit charge, donc
-     puzzle vaut null et la branche entiere etait sautee -- les cinq puces,
-     le descriptif (egBrief) et la ligne d'etat (egStatus) restaient dans la
-     langue de depart. renderEndgame() sort de lui-meme s'il n'y a pas de
-     finale en cours, et renderEgChips() ne fait que reecrire cinq boutons :
-     les appeler des que le mode peut les afficher ne coute rien. */
-  if(mode==="puzzles"&&puzzle)loadPuzzle();
-  if(mode==="puzzles"||mode==="train"){renderEgChips();renderEndgame();}
-  if(mode==="friend")showAmi();
-  else if(mode==="play"){refreshGame();}
-  else if(mode==="legal")renderLegal();
-  syncTC();renderExplore();renderHistory();
-  renderProgress();renderExtraStats();
-  /* Sous-titres des 5 tuiles du menu Resoudre (Niveau, À faire, Record...) :
-     composes en JS par renderSolveMenu() (ui2.js), donc hors d'applyI18n
-     qui ne retraduit que le texte statique du HTML. Sans cet appel, basculer
-     la langue pendant que ce menu est affiche laissait ces sous-titres dans
-     l'ancienne langue -- le seul appel existant a renderSolveMenu() se
-     trouve dans showSolveScreen("menu"), jamais rejoue ici. Appel
-     inconditionnel comme les autres lignes ci-dessus (renderHistory etc.) :
-     sans cout reel puisque set() ne touche que des elements deja dans le
-     DOM, visibles ou non. */
-  if(typeof renderSolveMenu==="function")renderSolveMenu();
-  /* Meme cas pour la grille de "Par motif" (renderMotifsMenu, ui2.js) : nom
-     du motif, decompte d'exercices, decompte de reussites et les deux
-     intertitres sont composes en JS, donc invisibles pour applyI18n. Son
-     seul appel vivait dans showSolveScreen("motifs"), jamais rejoue ici :
-     basculer la langue devant cette grille laissait les douze tuiles
-     entieres dans la langue de depart, intertitres compris, alors que le
-     titre et le chapeau du panneau juste au-dessus se retraduisaient. */
-  if(typeof renderMotifsMenu==="function")renderMotifsMenu();
-  shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);
-  const n=$("tcNote"); if(n&&TC_NOTES[tcCat])n.textContent=t(TC_NOTES[tcCat]);
-  renderDailyChips();
-}
+/* Changer de langue = aller sur la page de cette langue (2026-10-25).
+   Chaque langue a sa page d'accueil (/, /fr/, /es/...) ; le selecteur est une
+   liste de liens posee par le build. La bascule en direct qui vivait ici
+   (refreshCurrentMode) devait redessiner chaque ecran compose en JavaScript,
+   et chaque oubli laissait un bloc dans l'ancienne langue : une famille de
+   defauts documentee de septembre a octobre. Une navigation n'en a aucun.
+   La partie en cours est deja enregistree (loadPlaySave), et le # suit le
+   lien : un lien vers un exercice ou une partie entre amis reste ouvert.
+   La langue choisie est notee avant de partir : sans cela, la page anglaise
+   "/" relirait l'ancienne langue et renverrait aussitot vers elle. */
 $("langSwitch").addEventListener("click",e=>{
-  const b=e.target.closest("button"); if(!b)return;
-  if(LANG===b.dataset.lang)return;
-  LANG=b.dataset.lang;
-  saveLang();
-  refreshCurrentMode();
-  /* le panneau de preferences est construit en JS : il ne passe pas par
-     applyI18n et doit donc etre redessine a la bascule de langue */
-  if(typeof renderPrefs==="function"&&mode==="prefs")renderPrefs();
-  if(typeof renderFullCalendar==="function"&&mode==="calendar")renderFullCalendar();
-  /* Le nom de l'adversaire porte la force ("Chang · Coriace"), composee en
-     JavaScript : elle ne passe pas par applyI18n et resterait en anglais
-     apres un changement de langue. */
-  if(typeof renderClocks==="function")renderClocks();
-  /* L'overlay de preparation est compose en JavaScript : il ne passe pas par
-     applyI18n et restait dans l'ancienne langue s'il etait affiche au moment
-     de la bascule. */
-  const rb=$("readyBanner");
-  if(rb&&!rb.classList.contains("hide")&&typeof showReady==="function"){
-    try{
-      const {cat,item}=tcCurrent();
-      showReady(cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1)));
-    }catch(e){}
-  }
+  const lien=e.target.closest("a[data-lang]");if(!lien)return;
+  try{window.storage.set("chang64:lang",lien.dataset.lang);}catch(err){}
+  lien.setAttribute("href",lien.getAttribute("href").split("#")[0]+location.hash);
+});
+/* Le menu se referme quand on clique ailleurs ou qu'on appuie sur Echap,
+   comme une liste deroulante. */
+document.addEventListener("click",e=>{
+  const m=$("langSwitch");
+  if(m&&m.open&&!m.contains(e.target))m.open=false;
+});
+document.addEventListener("keydown",e=>{
+  const m=$("langSwitch");
+  if(e.key==="Escape"&&m&&m.open){m.open=false;const s=m.querySelector("summary");if(s)s.focus();}
 });
 
 /* ==========================================================
@@ -1037,24 +998,14 @@ const SQ_NAMES=(()=>{
   return o;
 })();
 function sqName(s){return SQ_NAMES[s]||"";}
-const PIECE_WORDS={
-  en:{p:"pawn",n:"knight",b:"bishop",r:"rook",q:"queen",k:"king"},
-  fr:{p:"pion",n:"cavalier",b:"fou",r:"tour",q:"dame",k:"roi"}
-};
-function pieceWord(ch){
-  const k=(ch||"").toLowerCase();
-  return (PIECE_WORDS[LANG==="fr"?"fr":"en"][k])||"";
-}
+/* Noms des pieces de chaque langue : GRAMMAIRE (grammaire.js), depuis le
+   2026-10-25. */
+function pieceWord(ch){return GRAMMAIRE.mot(LANG,ch);}
 /* "tour" et "dame" sont feminins, les quatre autres pieces masculines : sans
    cet accord, une annonce disait "tour blanc en h1" et "dame noir en d8"
    (2026-09-05). Ce n'est pas un detail de style pour un lecteur d'ecran,
    c'est la seule information qu'il prononce a voix haute. */
-const PIECES_FEM={r:true,q:true};
-function sideWord(ch,isWhite){
-  if(LANG!=="fr")return isWhite?"white":"black";
-  const fem=PIECES_FEM[(ch||"").toLowerCase()];
-  return isWhite?(fem?"blanche":"blanc"):(fem?"noire":"noir");
-}
+function sideWord(ch,isWhite){return GRAMMAIRE.couleur(LANG,ch,isWhite);}
 
 /* ---------- navigation clavier sur l'echiquier ----------
    Une seule case est atteignable a la tabulation (tabindex roulant) :
@@ -1112,7 +1063,7 @@ if(typeof boardEl!=="undefined"&&boardEl){
           e.preventDefault();
           selected=-1;
           try{render();}catch(err){}
-          announce(LANG==="fr"?"selection annulee":"selection cleared","cell");
+          announce(t("selection cleared"),"cell");
         }
         return;
       default: return;
@@ -1157,7 +1108,7 @@ if(typeof playUser==="function"){
     basePlayUser3(m);
     try{
       const san=sanList&&sanList.length?sanList[sanList.length-1]:"";
-      if(san)announce((LANG==="fr"?"Toi : ":"You: ")+san,"move");
+      if(san)announce(t("You: {move}",{move:san}),"move");
     }catch(e){}
   };
 }
@@ -1169,10 +1120,10 @@ if(typeof botMove==="function"){
     try{
       if(sanList&&sanList.length>before){
         const san=sanList[sanList.length-1];
-        announce((LANG==="fr"?"Adversaire : ":"Opponent: ")+san,"move");
+        announce(t("Opponent: {move}",{move:san}),"move");
         const g=viewGame();
-        if(g.isCheckmate())announce(LANG==="fr"?"Echec et mat":"Checkmate","status");
-        else if(g.inCheck())announce(LANG==="fr"?"Echec":"Check","status");
+        if(g.isCheckmate())announce(t("Checkmate"),"status");
+        else if(g.inCheck())announce(t("Check"),"status");
       }
     }catch(e){}
   };
@@ -1180,21 +1131,17 @@ if(typeof botMove==="function"){
 
 /* ---------- interface des preferences ---------- */
 function renderPrefs(){
-  const fr=LANG==="fr";
   const set=(id,txt)=>{const e=$(id);if(e)e.textContent=txt;};
-  set("prefsTitle",fr?"Préférences":"Preferences");
-  set("prefsSub",fr?"Enregistrées sur cet appareil. Rien n'est envoyé ailleurs."
-                  :"Kept on this device. Nothing is sent anywhere.");
-  set("prefsBoardLabel",fr?"Couleurs de l'échiquier":"Board colours");
-  set("accessibilite",fr?"Accessibilité":"Accessibility");
-  set("prefsA11yIntro",fr?"Deux réglages pour jouer sans souris et pour faire lire la partie à voix haute."
-                        :"Two settings, to play without a mouse and to have the game read aloud.");
-  set("prefsA11yLabel",fr?"Annonces aux lecteurs d'écran":"Screen reader announcements");
-  set("prefsA11yNote",fr?"Désactivées par défaut. Une fois activées, les coups joués et l'état de la partie sont annoncés à voix haute par ton lecteur d'écran."
-                       :"Off by default. Once on, moves and game state are read aloud by your screen reader.");
-  set("prefsKbdLabel",fr?"Clavier":"Keyboard");
-  set("footAccess",fr?"Accessibilité":"Accessibility");
-  set("footPrefs",fr?"Préférences":"Preferences");
+  set("prefsTitle",t("Preferences"));
+  set("prefsSub",t("Kept on this device. Nothing is sent anywhere."));
+  set("prefsBoardLabel",t("Board colours"));
+  set("accessibilite",t("Accessibility"));
+  set("prefsA11yIntro",t("Two settings, to play without a mouse and to have the game read aloud."));
+  set("prefsA11yLabel",t("Screen reader announcements"));
+  set("prefsA11yNote",t("Off by default. Once on, moves and game state are read aloud by your screen reader."));
+  set("prefsKbdLabel",t("Keyboard"));
+  set("footAccess",t("Accessibility"));
+  set("footPrefs",t("Preferences"));
 
   const box=$("boardThemes");
   if(box){
@@ -1209,10 +1156,10 @@ function renderPrefs(){
          .chip[aria-checked] dans la feuille), donc plus rien n'oblige a
          porter le doublon. */
       b.setAttribute("aria-checked",String(th.id===prefBoard));
-      b.textContent=fr?th.fr:th.en;
+      b.textContent=t(th.en);
       b.onclick=()=>{
         prefBoard=th.id;applyBoardTheme();savePrefs();renderPrefs();
-        announce((fr?"Échiquier ":"Board ")+(fr?th.fr:th.en),"cell");
+        announce(t("Board {name}",{name:t(th.en)}),"cell");
       };
       box.appendChild(b);
     }
@@ -1227,7 +1174,7 @@ function renderPrefs(){
   }
   const segA=$("segAnim");
   if(segA){
-    const lab=fr?{on:"Activée",off:"Désactivée"}:{on:"On",off:"Off"};
+    const lab={on:t("On"),off:t("Off")};
     poserHtml(segA,"");
     for(const v of ["on","off"]){
       const b=document.createElement("button");
@@ -1244,8 +1191,9 @@ function renderPrefs(){
   }
   const seg=$("segAnnounce");
   if(seg){
-    const labels=fr?{off:"Aucune",moves:"Les coups",full:"Coups et état"}
-                  :{off:"Off",moves:"Moves",full:"Moves and status"};
+    /* "Off" vaut ici "Aucune" en francais, pas "Desactivee" comme pour
+       l'animation : cle a part, avec son contexte. */
+    const labels={off:t("Off (announcements)"),moves:t("Moves"),full:t("Moves and status")};
     poserHtml(seg,"");
     for(const v of ["off","moves","full"]){
       const b=document.createElement("button");
@@ -1261,16 +1209,14 @@ function renderPrefs(){
       b.textContent=labels[v];
       b.onclick=()=>{
         prefAnnounce=v;savePrefs();renderPrefs();
-        if(v!=="off")announce(fr?"Annonces activées":"Announcements on","cell");
+        if(v!=="off")announce(t("Announcements on"),"cell");
       };
       seg.appendChild(b);
     }
   }
   const help=$("kbdHelp");
   if(help){
-    poserHtml(help,fr
-      ? "<p>Sur l'échiquier : les <b>flèches</b> déplacent le curseur, <b>Entrée</b> ou <b>Espace</b> sélectionne une pièce puis sa case d'arrivée, <b>Échap</b> annule la sélection. <b>Origine</b> et <b>Fin</b> vont au bord de la rangée, <b>Page haut</b> et <b>Page bas</b> aux extrémités de la colonne.</p>"
-      : "<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>");
+    poserHtml(help,DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>");
   }
 }
 if($("homeStartBtn"))$("homeStartBtn").onclick=()=>setMode("puzzles");

@@ -1,18 +1,35 @@
-/* Génération des pages de contenu bilingues */
+/* Génération des pages de contenu, dans chaque langue du registre.
+   Anglais et francais rediges ici cote a cote ; les autres langues traduites
+   depuis l'anglais par langues/traduire.js (2026-10-25). */
 module.exports = function (H) {
   const { fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc } = H;
+  const { LANGUES, PAR_CODE } = require("./langues/registre.js");
+  const TRAD = require("./langues/traduire.js");
+  const { tr, T, choix, GRAMMAIRE } = TRAD;
+  const LANGS = LANGUES.map(l => l.code);
   const urls = [];
   const mk = d => fs.mkdirSync(OUT + "/" + d, { recursive: true });
 
-  const DIRS = {
-    learn:   { en: "learn",     fr: "fr/apprendre" },
-    glossary:{ en: "glossary",  fr: "fr/lexique" },
-    endgames:{ en: "endgames",  fr: "fr/finales" },
-    puzzles: { en: "puzzles",   fr: "fr/exercices" },
-    traps:   { en: "traps",     fr: "fr/pieges" }
-  };
-  for (const k in DIRS) for (const lang of ["en", "fr"]) mk(DIRS[k][lang]);
+  const DIRS = {};
+  for (const k of ["learn", "glossary", "endgames", "puzzles", "traps"])
+    DIRS[k] = Object.fromEntries(LANGUES.map(l => [l.code, l.dirs[k]]));
+  for (const k in DIRS) for (const lang of LANGS) mk(DIRS[k][lang]);
   mk("players");
+  /* Adresse de l'application dans la langue de la page : les boutons
+     "Jouer", "Entraine-toi"... y menent avec leur # (theme, position...). */
+  const accueil = lang => PAR_CODE[lang].accueil;
+  /* Slug d'une page dans une langue : redige pour l'anglais et le francais,
+     anglais pour le russe (pas d'URL en cyrillique), sinon pris dans la table
+     "slugs" de la langue (cle "rubrique:slug anglais", un meme slug anglais
+     pouvant servir dans deux rubriques) ou tire du titre traduit. */
+  function slugDe(lang, slugs, titre, rub) {
+    if (slugs[lang]) return slugs[lang];
+    if (PAR_CODE[lang].slugsAnglais) return slugs.en;
+    return TRAD.table(lang, "slugs", rub + ":" + slugs.en, true) || slug(TRAD.translit(lang, titre));
+  }
+  /* Adresses d'une page dans toutes les langues, pour hreflang et selecteur. */
+  const urlsDe = (rub, slugPar) => Object.fromEntries(LANGS.map(l => [l, `${SITE}/${DIRS[rub][l]}/${slugPar(l)}`]));
+  const urlsIndex = rub => Object.fromEntries(LANGS.map(l => [l, `${SITE}/${DIRS[rub][l]}/`]));
 
   const UI = {
     /* Dix niveaux desormais (voir LEVELS dans ui.js) : ce descriptif de
@@ -33,6 +50,17 @@ module.exports = function (H) {
           levels: ["Très facile", "Facile", "Assez facile", "Moyen", "Assez difficile",
                    "Difficile", "Corsé", "Très difficile", "Expert", "Maître"] }
   };
+  /* Autres langues : memes libelles, traduits depuis l'anglais. "Trait aux
+     Blancs" se dit differemment selon la langue ("Juegan las blancas") : deux
+     cles entieres plutot qu'un gabarit sur le mot Blancs. */
+  for (const lang of LANGS) {
+    if (UI[lang]) continue;
+    const x = s => tr(lang, s), e = UI.en;
+    const u = UI[lang] = {};
+    for (const k of ["play", "back", "solution", "train", "explore", "moves", "diagram", "related", "difficulty", "theme", "white", "black"]) u[k] = x(e[k]);
+    u.levels = e.levels.map(x);
+    u.sideToMove = s => s === u.white ? x("White to move") : x("Black to move");
+  }
 
   const THEME_FR = {
     "Mate in one": "Mat en un coup", "Mate in two": "Mat en deux coups", "Winning capture": "Prise gagnante",
@@ -49,17 +77,15 @@ module.exports = function (H) {
     "Scholar's mate": "Mat du berger", "Black to move": "Trait aux Noirs",
     "Quiet move": "Coup silencieux", "Mate in three": "Mat en trois coups"
   };
-  const themeOf = (th, lang) => lang === "fr" ? (THEME_FR[th] || th) : th;
+  const themeOf = (th, lang) => lang === "fr" ? (THEME_FR[th] || th) : lang === "en" ? th : tr(lang, th);
 
   /* ---------- helpers ---------- */
-  function page(lang, dir, file, title, desc, body, jsonld, altUrl, canonical) {
-    const alts = altUrl
-      ? `<link rel="alternate" hreflang="en" href="${lang === "en" ? canonical : altUrl}">\n` +
-        `<link rel="alternate" hreflang="fr" href="${lang === "fr" ? canonical : altUrl}">\n` +
-        `<link rel="alternate" hreflang="x-default" href="${lang === "en" ? canonical : altUrl}">`
-      : "";
-    fs.writeFileSync(`${OUT}/${dir}/${file}`, shell(title, desc, canonical, body, jsonld, lang, alts, altUrl));
-    urls.push({ loc: canonical, pri: "0.6", alt: altUrl, lang });
+  /* urlsLang : adresse de la page dans chaque langue (hreflang, selecteur et
+     alternatives du sitemap), depuis le 2026-10-25. */
+  function page(lang, dir, file, title, desc, body, jsonld, urlsLang, canonical) {
+    if (jsonld && jsonld.inLanguage) jsonld.inLanguage = PAR_CODE[lang].html;
+    fs.writeFileSync(`${OUT}/${dir}/${file}`, shell(title, desc, canonical, body, jsonld, lang, "", urlsLang));
+    urls.push({ loc: canonical, pri: "0.6", alts: urlsLang });
   }
   function diagram(fen, caption, flipped) {
     return `<div class="diagram">${boardSvg(fen, 300, flipped)}${caption ? `<p style="font-size:12px;color:var(--sage);margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
@@ -283,7 +309,12 @@ module.exports = function (H) {
            "Aucun diagramme n'enseigne vraiment celui-là comme on peut montrer une fourchette ou un clouage sur une position figée : tout l'enjeu, c'est que rien de spectaculaire ne se passe encore. Le seul vrai entraînement, c'est le réflexe lui-même : une fois les prises et les échecs évidents examinés puis écartés, force-toi à regarder aussi les coups qui ne font ni l'un ni l'autre, avant de conclure qu'aucun ne fonctionne."] } }
   ];
 
-  for (const lang of ["en", "fr"]) {
+  /* Titre, paragraphes et slug d'une page Apprendre dans une langue. */
+  const regle = (r, lang, rub) => {
+    const title = choix(lang, r.title);
+    return { title, body: r.body[lang] || r.body.en.map(p => tr(lang, p)), slug: slugDe(lang, r.slug, title, rub || "learn") };
+  };
+  for (const lang of LANGS) {
     const dir = DIRS.learn[lang], u = UI[lang];
     const idxUrl = `${SITE}/${dir}/`;
   /* Motif de la banque d'exercices correspondant a une page Apprendre
@@ -337,13 +368,14 @@ module.exports = function (H) {
          cul-de-sac. Elle n'obtient donc pas le bouton, au meme titre que les
          pages illustrees par le plateau de depart. */
       const explorable = r.fen !== FEN_DEPART && jeuDeLaPage.moves().length > 0;
-      const canonical = `${SITE}/${dir}/${r.slug[lang]}`;
-      const alt = `${SITE}/${DIRS.learn[lang === "en" ? "fr" : "en"]}/${r.slug[lang === "en" ? "fr" : "en"]}`;
+      const R = regle(r, lang);
+      const canonical = `${SITE}/${dir}/${R.slug}`;
+      const alt = urlsDe("learn", l => regle(r, l).slug);
       const body = `
-<h1>${esc(r.title[lang])}</h1>
+<h1>${esc(R.title)}</h1>
 <div class="cols">
   ${diagram(r.fen, "")}
-  <div>${r.body[lang].map(p => `<p>${p}</p>`).join("\n")}
+  <div>${R.body.map(p => `<p>${p}</p>`).join("\n")}
     ${/* Trois boutons possibles, jamais tous les trois par hasard.
           "Entraine-toi" quand la banque connait le motif : apres avoir lu ce
           qu'est un clouage, s'exercer sur mille clouages vaut mieux que
@@ -358,31 +390,30 @@ module.exports = function (H) {
           echiquier, et lui coller un bouton pour faire comme les autres
           serait pire que de ne rien mettre. */""}
     ${themeEntrainable(r.slug.en)
-      ? `<a class="cta" href="/#theme=${encodeURIComponent(themeEntrainable(r.slug.en))}">${u.train}</a>`
+      ? `<a class="cta" href="${accueil(lang)}#theme=${encodeURIComponent(themeEntrainable(r.slug.en))}">${u.train}</a>`
       : ""}
     ${explorable
-      ? `<a class="cta${themeEntrainable(r.slug.en) ? " ghost" : ""}" href="/#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
+      ? `<a class="cta${themeEntrainable(r.slug.en) ? " ghost" : ""}" href="${accueil(lang)}#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
       : ""}
     ${themeEntrainable(r.slug.en) || explorable
-      ? `<a class="cta ghost" href="/">${u.play}</a>`
-      : `<a class="cta" href="/">${u.play}</a>`}
+      ? `<a class="cta ghost" href="${accueil(lang)}">${u.play}</a>`
+      : `<a class="cta" href="${accueil(lang)}">${u.play}</a>`}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>
 </div>`;
-      page(lang, dir, r.slug[lang] + ".html", r.title[lang] + " | chang64",
-        metaDesc(r.body[lang][0]), body,
-        { "@context": "https://schema.org", "@type": "Article", headline: r.title[lang], inLanguage: lang },
+      page(lang, dir, R.slug + ".html", R.title + " | chang64",
+        metaDesc(R.body[0]), body,
+        { "@context": "https://schema.org", "@type": "Article", headline: R.title, inLanguage: lang },
         alt, canonical);
     }
-    const t = lang === "fr" ? "Apprendre les échecs : toutes les règles expliquées" : "Learn chess: every rule explained";
-    const lede = lang === "fr"
-      ? "Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous."
-      : "The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.";
+    const t = T(lang, "Learn chess: every rule explained", "Apprendre les échecs : toutes les règles expliquées");
+    const lede = T(lang, "The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.",
+      "Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous.");
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      RULES.map(r => `<a class="tile" href="/${dir}/${r.slug[lang]}"><b>${esc(r.title[lang])}</b></a>`).join("\n") + `</div>`;
+      RULES.map(r => { const R = regle(r, lang); return `<a class="tile" href="/${dir}/${R.slug}"><b>${esc(R.title)}</b></a>`; }).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
-      `${SITE}/${DIRS.learn[lang === "en" ? "fr" : "en"]}/`, idxUrl);
+      urlsIndex("learn"), idxUrl);
   }
 
   /* ================= 2. GLOSSARY ================= */
@@ -597,7 +628,9 @@ module.exports = function (H) {
                     "Knight fork", "Mate in one", "Back-rank mate", "Pin", "Pawn fork",
                     "Deflection", "Quiet move", "Mate in three"];
 
-  function categorySlug(theme, lang) { return slug(themeOf(theme, lang)); }
+  /* Le russe garde le slug anglais : slug() ne garde que a-z et 0-9, un nom
+     de motif en cyrillique donnerait une adresse vide. */
+  function categorySlug(theme, lang) { return PAR_CODE[lang].slugsAnglais ? slug(theme) : slug(TRAD.translit(lang, themeOf(theme, lang))); }
 
   /* 3 exemples par categorie, choisis a des percentiles de difficulte fixes (15/50/85) sur le
      champ diff deja calcule par difficulty_v2.js -- un facile, un moyen, un plus dur, plutot
@@ -680,7 +713,68 @@ module.exports = function (H) {
   /* Explication specifique par theme, batie UNIQUEMENT sur des donnees reellement calculees
      par classify()/classifyBase() (champ p.explain) et sur le SAN rejoue ci-dessus -- jamais
      une affirmation tactique inventee au-dela de ce que ces deux sources etablissent. */
+  /* Explications des langues traduites (2026-10-25). Memes faits que la
+     version anglaise ci-dessous, tires des memes donnees (p.explain et la
+     solution rejouee), mais par gabarits : la piece est un groupe nominal
+     construit par GRAMMAIRE.groupe, avec son genre et ses cas, et la phrase
+     traduite choisit la forme ({x:acc}) et accorde ce qui doit l'etre. Les
+     cles sont des phrases anglaises a variables, propres a ces gabarits. */
+  function explicationTraduite(lang, p, side, sans) {
+    const d = p.explain || {};
+    const g = (pc, sq) => GRAMMAIRE.groupe(lang, pc, sq);
+    const v = { side: tr(lang, side === "w" ? "White (subject)" : "Black (subject)"), first: sans[0] };
+    const ligne = sans.map((x, i) => (i % 2 === 0 ? `${Math.floor(i / 2) + 1}.` : "") + x).join(" ");
+    const x = (cle, plus) => tr(lang, cle, Object.assign({}, v, plus || {}));
+    switch (p.theme) {
+      case "Winning capture":
+        if (!d.piece) return "";
+        return sans.length > 1
+          ? x("{side} play {first}. {target} wasn't defended enough, but the capture alone isn't the whole story: you need to see the forced follow-up, {line}, at the end of which the material gain holds.",
+              { target: g(d.piece, d.sq), line: sans.slice(1).join(" ") })
+          : x("{side} play {first}. {target} wasn't defended enough to survive. It's simply captured, for a clean material gain.", { target: g(d.piece, d.sq) });
+      case "Double attack": case "Knight fork": case "Pawn fork": {
+        const [t1, t2] = d.targets || [];
+        if (!t1 || !t2) return "";
+        const cibles = { t1: g(t1.piece, t1.sq), t2: g(t2.piece, t2.sq) };
+        if (p.theme === "Double attack")
+          return x("{side} play {first}. From {from}, the piece attacks both {t1} and {t2} at once. There's no single move that saves both.", Object.assign({ from: d.from }, cibles));
+        return x("{side} play {first}. {attacker} attacks both {t1} and {t2} at once. There's no single move that saves both.",
+          Object.assign({ attacker: g(p.theme === "Knight fork" ? "n" : "p", d.from) }, cibles));
+      }
+      case "Pin": case "Skewer": {
+        const pin = d.pinned, beh = d.behind;
+        if (!pin || !beh) return "";
+        if (d.captured)
+          return x("{side} play {first}. {caught} was only defended by {pinned}, but that piece is pinned to its king and can't legally recapture: the capture is completely safe.",
+            { caught: g(d.captured.piece, d.captured.sq), pinned: g(pin.piece, pin.sq) });
+        return p.theme === "Pin"
+          ? x("{side} play {first}. {pinned} can't move without exposing {behind}, right behind it. It's pinned.", { pinned: g(pin.piece, pin.sq), behind: g(beh.piece, beh.sq) })
+          : x("{side} play {first}. {pinned} has to move to avoid capture, which abandons {behind}, standing right behind it.", { pinned: g(pin.piece, pin.sq), behind: g(beh.piece, beh.sq) });
+      }
+      case "Back-rank mate":
+        return x("{side} play {first} and deliver mate. The enemy king on {king} is trapped on the back rank by its own pawns: no escape square, immediate mate.", { king: d.king });
+      case "Mate in one":
+        return x("{side} play {first} for immediate mate: the enemy king has no legal escape square, and no piece can block or capture the attacker.");
+      case "Mate in two":
+        return x("{side} play {first}. Whatever the defender tries, mate follows exactly two moves later (full line: {line}). Every possible defence has been checked by the engine.", { line: ligne });
+      case "Mate in three":
+        return x("{side} play {first}. Whatever the defender tries, mate follows exactly three moves later (full line: {line}). Every possible defence, at every step, has been checked by the engine.", { line: ligne });
+      case "Winning move":
+        return x("{side} play {first}. This move doesn't fit one single named pattern, but it's objectively the strongest: the engine ranks it clearly above every alternative.");
+      case "Deflection": {
+        const df = d.deflected, gn = d.gained;
+        if (!df) return "";
+        const gain = gn ? " " + tr(lang, "Once deflected, it no longer guards {sq}, which falls on the next move.", { sq: gn.sq }) : "";
+        return x("{side} play {first}. This move attacks {deflected} directly (the one piece guarding something else). Forced to deal with it, that piece abandons its post.", { deflected: g(df.piece, df.sq) })
+          + gain + " (" + x("full line: {line}", { line: ligne }) + ")";
+      }
+      case "Quiet move":
+        return x("{side} play {first}. This move captures nothing and gives no check (nothing about it stands out at first glance), yet it's the strongest move on the board, and it wins material.");
+    }
+    return "";
+  }
   function exampleExplanation(lang, p, side, sans) {
+    if (lang !== "en" && lang !== "fr") return explicationTraduite(lang, p, side, sans);
     const d = p.explain || {};
     const sideLabel = lang === "fr" ? (side === "w" ? "Les Blancs" : "Les Noirs") : (side === "w" ? "White" : "Black");
     const first = sans[0];
@@ -785,10 +879,17 @@ module.exports = function (H) {
     return "";
   }
 
-  for (const lang of ["en", "fr"]) {
+  /* Titre, definition et slug d'une entree du lexique dans une langue. */
+  const terme = (x, lang) => {
+    const [sEn, sFr, tEn, tFr, dEn, dFr] = x;
+    const title = T(lang, tEn, tFr), def = T(lang, dEn, dFr);
+    return { title, def, slug: slugDe(lang, { en: sEn, fr: sFr }, title, "glossary") };
+  };
+  for (const lang of LANGS) {
     const dir = DIRS.glossary[lang], u = UI[lang];
-    for (const [sEn, sFr, tEn, tFr, dEn, dFr, theme] of TERMS) {
-      const sl = lang === "fr" ? sFr : sEn, title = lang === "fr" ? tFr : tEn, def = lang === "fr" ? dFr : dEn;
+    for (const x of TERMS) {
+      const [sEn, sFr, tEn, tFr, dEn, dFr, theme] = x;
+      const { slug: sl, title, def } = terme(x, lang);
       const sample = (byTheme[theme] || [])[0];
       /* Orientation du diagramme (2026-09-05, dette signalee le 04). Les
          pages Motifs retournent deja l'echiquier quand le trait est aux
@@ -800,17 +901,17 @@ module.exports = function (H) {
       const sampleSide = sample ? (sample.fen.split(" ")[1] === "b" ? "b" : "w") : "w";
       const sampleLabel = sampleSide === "b" ? u.black : u.white;
       const canonical = `${SITE}/${dir}/${sl}`;
-      const alt = `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/${lang === "en" ? sFr : sEn}`;
+      const alt = urlsDe("glossary", l => terme(x, l).slug);
       const pz = sample ? `
-  ${diagram(sample.fen, (lang === "fr" ? "Exemple : " : "Example: ") + themeOf(sample.theme, lang) + " \u00b7 " + u.sideToMove(sampleLabel), sampleSide === "b")}
-  <div><p>${lang === "fr" ? "Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée." : "The diagram shows an example, taken from the chang64 puzzle set. Every position there is proved by the engine before it is offered."}</p>
-    <a class="cta" href="/#puzzle=${sample.id}">${lang === "fr" ? "Résoudre cet exercice" : "Solve this puzzle"}</a>
-    ${THEME10.includes(theme) ? `<a class="cta ghost" href="/${DIRS.puzzles[lang]}/${categorySlug(theme, lang)}">${lang === "fr" ? "Voir des exemples expliqués" : "See worked examples"}</a>` : ""}
+  ${diagram(sample.fen, T(lang, "Example: {theme}", "Exemple : {theme}", { theme: themeOf(sample.theme, lang) }) + " \u00b7 " + u.sideToMove(sampleLabel), sampleSide === "b")}
+  <div><p>${T(lang, "The diagram shows an example, taken from the chang64 puzzle set. Every position there is proved by the engine before it is offered.", "Le diagramme ci-contre en montre un exemple, tiré de la banque d'exercices de chang64. Chaque position y est démontrée par le moteur avant d'être proposée.")}</p>
+    <a class="cta" href="${accueil(lang)}#puzzle=${sample.id}">${T(lang, "Solve this puzzle", "Résoudre cet exercice")}</a>
+    ${THEME10.includes(theme) ? `<a class="cta ghost" href="/${DIRS.puzzles[lang]}/${categorySlug(theme, lang)}">${T(lang, "See worked examples", "Voir des exemples expliqués")}</a>` : ""}
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>` : `<div>
-    <p>${lang === "fr" ? "Aucun exercice de la banque ne porte précisément sur cette notion : elle se rencontre en partie plutôt que dans un exercice isolé." : "No puzzle in the set targets this idea on its own: it comes up in games rather than in a single isolated position."}</p>
-    <a class="cta" href="/">${u.play}</a>
-    <a class="cta ghost" href="/${DIRS.puzzles[lang]}/">${lang === "fr" ? "Les motifs tactiques" : "Tactical patterns"}</a>
+    <p>${T(lang, "No puzzle in the set targets this idea on its own: it comes up in games rather than in a single isolated position.", "Aucun exercice de la banque ne porte précisément sur cette notion : elle se rencontre en partie plutôt que dans un exercice isolé.")}</p>
+    <a class="cta" href="${accueil(lang)}">${u.play}</a>
+    <a class="cta ghost" href="/${DIRS.puzzles[lang]}/">${T(lang, "Tactical patterns", "Les motifs tactiques")}</a>
     <a class="cta ghost" href="/${dir}/">${u.back}</a>
   </div>`;
       /* H1 suffixe le 2026-09-05. Quatre entrees du Lexique (clouage,
@@ -825,21 +926,20 @@ module.exports = function (H) {
          verrait, et les futures collisions sont couvertes d'avance.
          Le nom nu reste dans le JSON-LD DefinedTerm, ou il est la valeur
          attendue, et dans la grille d'index. */
-      const h1 = lang === "fr" ? `${title} : définition` : `${title}: definition`;
+      const h1 = T(lang, "{title}: definition", "{title} : définition", { title });
       const body = `<h1>${esc(h1)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
-      page(lang, dir, sl + ".html", `${title} \u00b7 ${lang === "fr" ? "définition et exemple" : "chess term explained"} | chang64`,
+      page(lang, dir, sl + ".html", `${title} \u00b7 ${T(lang, "chess term explained", "définition et exemple")} | chang64`,
         metaDesc(def), body,
         { "@context": "https://schema.org", "@type": "DefinedTerm", name: title, description: def, inLanguage: lang },
         alt, canonical);
     }
-    const t = lang === "fr" ? "Lexique des échecs : les termes qui comptent" : "Chess glossary: the terms that matter";
+    const t = T(lang, "Chess glossary: the terms that matter", "Lexique des échecs : les termes qui comptent");
     /* Nombre calcule plutot qu'ecrit en dur (2026-09-04) : "Vingt" ne
        correspondait deja plus au compte reel (27, avant l'ajout du code ECO
        ci-dessus) -- se resynchronise tout seul a chaque ajout ou retrait
        d'entree, plutot que de se decaler silencieusement comme ici. */
-    const lede = lang === "fr"
-      ? `${TERMS.length} notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.`
-      : `${TERMS.length} ideas explained in two sentences, each with a verified position and a puzzle to practise it.`;
+    const lede = T(lang, "{n} ideas explained in two sentences, each with a verified position and a puzzle to practise it.",
+      "{n} notions expliquées en deux phrases, chacune avec une position vérifiée et un exercice pour la mettre en pratique.", { n: TERMS.length });
     /* Tri alphabetique par la langue de LA PAGE (2026-09-04, demande
        d'Alexandre), pas par l'ordre de TERMS lui-meme : les titres FR et EN
        ne partagent pas le meme ordre alphabetique (ex. "Pin" vs "Clouage"),
@@ -847,13 +947,12 @@ module.exports = function (H) {
        langues a la fois. On trie une COPIE juste avant l'affichage de cette
        grille -- l'ordre de TERMS dans le fichier source, lui, reste libre
        (les pages individuelles de chaque terme n'en dependent pas). */
-    const sortedTerms = TERMS.slice().sort((a, b) =>
-      (lang === "fr" ? a[3] : a[2]).localeCompare(lang === "fr" ? b[3] : b[2], lang));
+    const sortedTerms = TERMS.map(x => terme(x, lang)).sort((a, b) => a.title.localeCompare(b.title, PAR_CODE[lang].intl));
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      sortedTerms.map(x => `<a class="tile" href="/${dir}/${lang === "fr" ? x[1] : x[0]}"><b>${esc(lang === "fr" ? x[3] : x[2])}</b><span>${esc((lang === "fr" ? x[5] : x[4]).slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
+      sortedTerms.map(x => `<a class="tile" href="/${dir}/${x.slug}"><b>${esc(x.title)}</b><span>${esc(x.def.slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
-      `${SITE}/${DIRS.glossary[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
+      urlsIndex("glossary"), `${SITE}/${dir}/`);
   }
 
   /* ================= 3. ENDGAMES ================= */
@@ -900,30 +999,31 @@ module.exports = function (H) {
                    "Les pions tour font exception : un pion a ou h, avec un roi défenseur capable d'atteindre le coin, est toujours nul, quelle que soit ton avance."] } }
   ];
 
-  for (const lang of ["en", "fr"]) {
+  /* Meme forme qu'une page Apprendre : titre, paragraphes, slug. */
+  for (const lang of LANGS) {
     const dir = DIRS.endgames[lang], u = UI[lang];
     for (const e of ENDS) {
       try { new Game(e.fen); } catch (err) { throw new Error("FEN finale invalide"); }
-      const canonical = `${SITE}/${dir}/${e.slug[lang]}`;
-      const alt = `${SITE}/${DIRS.endgames[lang === "en" ? "fr" : "en"]}/${e.slug[lang === "en" ? "fr" : "en"]}`;
-      const body = `<h1>${esc(e.title[lang])}</h1>
+      const E = regle(e, lang, "endgames");
+      const canonical = `${SITE}/${dir}/${E.slug}`;
+      const alt = urlsDe("endgames", l => regle(e, l, "endgames").slug);
+      const body = `<h1>${esc(E.title)}</h1>
 <div class="cols">${diagram(e.fen, "")}
-<div>${e.body[lang].map(p => `<p>${p}</p>`).join("\n")}
-<a class="cta" href="/#train=${e.id}">${lang === "fr" ? "S'entraîner sur cette finale" : "Train this endgame"}</a>
+<div>${E.body.map(p => `<p>${p}</p>`).join("\n")}
+<a class="cta" href="${accueil(lang)}#train=${e.id}">${T(lang, "Train this endgame", "S'entraîner sur cette finale")}</a>
 <a class="cta ghost" href="/${dir}/">${u.back}</a></div></div>`;
-      page(lang, dir, e.slug[lang] + ".html", e.title[lang] + " | chang64",
-        metaDesc(e.body[lang][0]), body,
-        { "@context": "https://schema.org", "@type": "Article", headline: e.title[lang], inLanguage: lang }, alt, canonical);
+      page(lang, dir, E.slug + ".html", E.title + " | chang64",
+        metaDesc(E.body[0]), body,
+        { "@context": "https://schema.org", "@type": "Article", headline: E.title, inLanguage: lang }, alt, canonical);
     }
-    const t = lang === "fr" ? "Les finales élémentaires expliquées" : "The elementary chess endgames";
-    const lede = lang === "fr"
-      ? "Cinq finales à connaître par cœur, chacune avec sa méthode et un entraîneur pour la répéter contre le moteur."
-      : "Five endgames worth knowing by heart, each with its method and a trainer to drill it against the engine.";
+    const t = T(lang, "The elementary chess endgames", "Les finales élémentaires expliquées");
+    const lede = T(lang, "Five endgames worth knowing by heart, each with its method and a trainer to drill it against the engine.",
+      "Cinq finales à connaître par cœur, chacune avec sa méthode et un entraîneur pour la répéter contre le moteur.");
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      ENDS.map(e => `<a class="tile" href="/${dir}/${e.slug[lang]}"><b>${esc(e.title[lang])}</b></a>`).join("\n") + `</div>`;
+      ENDS.map(e => { const E = regle(e, lang, "endgames"); return `<a class="tile" href="/${dir}/${E.slug}"><b>${esc(E.title)}</b></a>`; }).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
-      `${SITE}/${DIRS.endgames[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
+      urlsIndex("endgames"), `${SITE}/${dir}/`);
   }
 
   /* ================= 4. TRAPS ================= */
@@ -967,19 +1067,24 @@ module.exports = function (H) {
     validTraps.push({ ...tr, line });
   }
 
-  for (const lang of ["en", "fr"]) {
+  /* Titre, texte et slug d'un piege dans une langue. */
+  const piege = (p, lang) => {
+    const title = choix(lang, p.title);
+    return { title, body: choix(lang, p.body), slug: slugDe(lang, p.slug, title, "traps") };
+  };
+  for (const lang of LANGS) {
     const dir = DIRS.traps[lang], u = UI[lang];
-    for (const tr of validTraps) {
-      const canonical = `${SITE}/${dir}/${tr.slug[lang]}`;
-      const alt = `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/${tr.slug[lang === "en" ? "fr" : "en"]}`;
+    for (const trap of validTraps) {
+      const P = piege(trap, lang);
+      const canonical = `${SITE}/${dir}/${P.slug}`;
+      const alt = urlsDe("traps", l => piege(trap, l).slug);
       /* La description sert la balise meta et le referencement. Elle ne doit
          pas etre reprise en chapo : c'etait les 280 premiers caracteres du
          texte affiche juste en dessous, donc le lecteur lisait deux fois le
          meme debut. */
-      const desc = metaDesc(tr.body[lang]);
-      const chapo = lang === "fr"
-        ? `Le piège en ${tr.line.san.length} demi-coups, rejoué par le moteur, avec la position finale et l'explication.`
-        : `The trap in ${tr.line.san.length} half-moves, replayed by the engine, with the final position and the explanation.`;
+      const desc = metaDesc(P.body);
+      const chapo = T(lang, "The trap in {n} half-moves, replayed by the engine, with the final position and the explanation.",
+        "Le piège en {n} demi-coups, rejoué par le moteur, avec la position finale et l'explication.", { n: trap.line.san.length });
       /* Lien profond vers l'application (2026-09-05). Les pages Pieges
          renvoyaient vers l'accueil nu, alors que la route #line= existe
          deja (ui.js, applyDeepLink) et rejoue une suite de coups SAN avant
@@ -990,57 +1095,56 @@ module.exports = function (H) {
          alors que lui laisser porter le coup decisif lui-meme est le seul
          moment ou la page devient un exercice. Pour les pieges qui ne
          matent pas, la ligne entiere est rejouee. */
-      const ctaMoves = tr.line.mate ? tr.line.san.slice(0, -1) : tr.line.san;
-      const ctaLabel = tr.line.mate
-        ? (lang === "fr" ? "À toi de porter le coup décisif" : "Now find the finishing move")
-        : (lang === "fr" ? "Rejouer ce piège sur l'échiquier" : "Play this trap out on the board");
-      const body = `<h1>${esc(tr.title[lang])}</h1><p class="lede">${esc(chapo)}</p>
-<div class="cols">${diagram(tr.line.fen, (lang === "fr" ? "Position finale après " : "Final position after ") + numberLine(tr.line.san))}
-<div><div class="moves">${esc(numberLine(tr.line.san))}${tr.line.mate ? "" : ""}</div>
-<p>${esc(tr.body[lang])}</p>
-<p>${lang === "fr" ? "Toute la séquence a été rejouée par le moteur de chang64 : chaque coup est légal et la position finale est celle du diagramme." : "The whole sequence was replayed by the chang64 engine: every move is legal and the final position is the one in the diagram."}${tr.line.mate ? (lang === "fr" ? " La position finale est un échec et mat." : " The final position is checkmate.") : ""}</p>
-<a class="cta" href="/#line=${encodeURIComponent(ctaMoves.join("_"))}">${ctaLabel}</a><a class="cta ghost" href="/${dir}/">${u.back}</a></div></div>`;
-      page(lang, dir, tr.slug[lang] + ".html", tr.title[lang] + " | chang64", desc, body,
-        { "@context": "https://schema.org", "@type": "Article", headline: tr.title[lang], inLanguage: lang }, alt, canonical);
+      const ctaMoves = trap.line.mate ? trap.line.san.slice(0, -1) : trap.line.san;
+      const ctaLabel = trap.line.mate
+        ? T(lang, "Now find the finishing move", "À toi de porter le coup décisif")
+        : T(lang, "Play this trap out on the board", "Rejouer ce piège sur l'échiquier");
+      const body = `<h1>${esc(P.title)}</h1><p class="lede">${esc(chapo)}</p>
+<div class="cols">${diagram(trap.line.fen, T(lang, "Final position after {moves}", "Position finale après {moves}", { moves: numberLine(trap.line.san) }))}
+<div><div class="moves">${esc(numberLine(trap.line.san))}</div>
+<p>${esc(P.body)}</p>
+<p>${T(lang, "The whole sequence was replayed by the chang64 engine: every move is legal and the final position is the one in the diagram.", "Toute la séquence a été rejouée par le moteur de chang64 : chaque coup est légal et la position finale est celle du diagramme.")}${trap.line.mate ? " " + T(lang, "The final position is checkmate.", "La position finale est un échec et mat.") : ""}</p>
+<a class="cta" href="${accueil(lang)}#line=${encodeURIComponent(ctaMoves.join("_"))}">${ctaLabel}</a><a class="cta ghost" href="/${dir}/">${u.back}</a></div></div>`;
+      page(lang, dir, P.slug + ".html", P.title + " | chang64", desc, body,
+        { "@context": "https://schema.org", "@type": "Article", headline: P.title, inLanguage: lang }, alt, canonical);
     }
-    const t = lang === "fr" ? "Pièges d'ouverture : les connaître, ou les subir" : "Opening traps: know them or fall for them";
-    const lede = lang === "fr"
-      ? "Les pièges classiques qui décident des parties rapides, chacun rejoué coup par coup et vérifié par le moteur."
-      : "The classic traps that decide fast games, each replayed move by move and verified by the engine.";
+    const t = T(lang, "Opening traps: know them or fall for them", "Pièges d'ouverture : les connaître, ou les subir");
+    const lede = T(lang, "The classic traps that decide fast games, each replayed move by move and verified by the engine.",
+      "Les pièges classiques qui décident des parties rapides, chacun rejoué coup par coup et vérifié par le moteur.");
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      validTraps.map(tr => `<a class="tile" href="/${dir}/${tr.slug[lang]}"><b>${esc(tr.title[lang])}</b><span>${esc(numberLine(tr.line.san).slice(0, 40))}…</span></a>`).join("\n") + `</div>`;
+      validTraps.map(trap => { const P = piege(trap, lang); return `<a class="tile" href="/${dir}/${P.slug}"><b>${esc(P.title)}</b><span>${esc(numberLine(trap.line.san).slice(0, 40))}…</span></a>`; }).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
-      `${SITE}/${DIRS.traps[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
+      urlsIndex("traps"), `${SITE}/${dir}/`);
   }
 
   /* ================= 5. CATEGORY EXAMPLE PAGES (10 x 2 langues, remplace 1 page/exercice) ================= */
-  for (const lang of ["en", "fr"]) {
+  for (const lang of LANGS) {
     const dir = DIRS.puzzles[lang], u = UI[lang];
     for (const th of THEME10) {
       const examples = examplesByTheme[th];
       if (!examples.length) continue;
       const thLabel = themeOf(th, lang);
-      const def = THEME_DEFS[th][lang];
-      const title = lang === "fr" ? `${thLabel} : 3 exemples expliqués | chang64` : `${thLabel}: 3 worked examples | chang64`;
-      const desc = metaDesc(lang === "fr"
-        ? `${thLabel} aux échecs : la définition, et trois positions réelles expliquées coup par coup, vérifiées par le moteur.`
-        : `${thLabel} in chess: the definition, and three real positions explained move by move, engine-verified.`);
+      const def = choix(lang, THEME_DEFS[th]);
+      const title = lang === "fr" ? `${thLabel} : 3 exemples expliqués | chang64` : lang === "en" ? `${thLabel}: 3 worked examples | chang64`
+        : `${thLabel}: ${tr(lang, "3 worked examples")} | chang64`;
+      const desc = metaDesc(T(lang, "{theme} in chess: the definition, and three real positions explained move by move, engine-verified.",
+        "{theme} aux échecs : la définition, et trois positions réelles expliquées coup par coup, vérifiées par le moteur.", { theme: thLabel }));
       const canonical = `${SITE}/${dir}/${categorySlug(th, lang)}`;
-      const alt = `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/${categorySlug(th, lang === "en" ? "fr" : "en")}`;
+      const alt = urlsDe("puzzles", l => categorySlug(th, l));
       const blocks = examples.map((p, i) => {
         const { side, sans } = replaySolution(p);
-        const sideLabel = lang === "fr" ? (side === "w" ? "Blancs" : "Noirs") : (side === "w" ? "White" : "Black");
+        const sideLabel = side === "w" ? u.white : u.black;
         const expl = exampleExplanation(lang, p, side, sans);
         const levelLabel = u.levels[p.level - 1];
         return `<section class="theme-bloc">
-  <h2>${lang === "fr" ? "Exemple" : "Example"} ${i + 1} <span style="color:var(--sage);font-size:13px">(${esc(levelLabel)})</span></h2>
+  <h2>${T(lang, "Example", "Exemple")} ${i + 1} <span style="color:var(--sage);font-size:13px">(${esc(levelLabel)})</span></h2>
   <div class="cols">${diagram(p.fen, u.sideToMove(sideLabel), side === "b")}
   <div>
     <p>${esc(expl)}</p>
     <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">${u.solution}</summary>
       <div class="moves" style="margin-top:10px">${esc(sans.join(" "))}</div></details>
-    <a class="cta" href="/#puzzle=${p.id}">${lang === "fr" ? "Tester sur l'échiquier" : "Try it on the board"}</a>
+    <a class="cta" href="${accueil(lang)}#puzzle=${p.id}">${T(lang, "Try it on the board", "Tester sur l'échiquier")}</a>
   </div></div>
 </section>`;
       }).join("\n");
@@ -1056,10 +1160,9 @@ ${blocks}
     /* Index leger : 10 tuiles vers les pages de categorie, plutot que la grille complete des
        51638 exercices (l'ancienne approche, intenable a cette echelle -- voir la note en tete
        de section). D'autres categories/pages viendront s'y ajouter au fil du temps. */
-    const t = lang === "fr" ? "Bibliothèque d'exemples tactiques" : "Tactics example library";
-    const lede = lang === "fr"
-      ? `Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de ${puzzles.length} positions vérifiées par le moteur.`
-      : `Ten tactical patterns, three worked examples for each, drawn from a bank of ${puzzles.length} engine-verified positions.`;
+    const t = T(lang, "Tactics example library", "Bibliothèque d'exemples tactiques");
+    const lede = T(lang, "Ten tactical patterns, three worked examples for each, drawn from a bank of {n} engine-verified positions.",
+      "Dix motifs tactiques, trois exemples expliqués pour chacun, tirés d'une banque de {n} positions vérifiées par le moteur.", { n: puzzles.length });
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
       /* Plus de "3 exemples" repete sous chaque tuile (2026-09-04, remarque
          d'Alexandre) : identique sur les 10, ca ne faisait que redire ce que
@@ -1072,7 +1175,7 @@ ${blocks}
       ).join("") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
-      `${SITE}/${DIRS.puzzles[lang === "en" ? "fr" : "en"]}/`, `${SITE}/${dir}/`);
+      urlsIndex("puzzles"), `${SITE}/${dir}/`);
   }
 
   /* ================= 6. PUBLIC PROFILE TEMPLATE ================= */

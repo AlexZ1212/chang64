@@ -71,7 +71,9 @@ const attendus=new Set(), pagesSansCouverture=[];
   for(const m of src.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)){
     const at=m[1]||"";
     if(/\ssrc=/.test(at))continue;
-    if(/type\s*=\s*"application\/ld\+json"/.test(at))continue;   /* bloc de donnees, hors script-src */
+    /* blocs de donnees (JSON-LD, et depuis le 2026-10-25 le bloc de langue
+       de l'application), hors script-src */
+    if(/type\s*=\s*"application\/(ld\+)?json"/.test(at))continue;
     const s="'sha256-"+crypto.createHash("sha256").update(m[2],"utf8").digest("base64")+"'";
     attendus.add(s);
     if(!hachages.includes(s))pagesSansCouverture.push("/"+path2.relative(SITE,p));

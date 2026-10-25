@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
-<link rel="manifest" href="manifest.webmanifest">
+<!--__REDIRECTION_LANGUE__-->
+<link rel="manifest" href="/manifest.webmanifest">
 <!-- Canonical : l'accueil est atteignable avec ou sans barre oblique, avec ou
      sans www. Sans cette declaration, Google choisit lui-meme la version a
      indexer et disperse les signaux entre les variantes. -->
-<link rel="canonical" href="https://chang64.com/">
+<link rel="canonical" href="__CANONICAL__">
 <!-- Icones de la nouvelle identite (2026-10-24) : le .ico pour les anciens
      navigateurs et Safari, le SVG (signe allege) pour les autres, et une
      image pleine pour l'ecran d'accueil iOS. -->
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<!-- Les deux langues partagent la meme adresse : la bascule se fait cote
-     client. On l'annonce pour que Google sache que la page sert les deux,
-     avec x-default comme version par defaut. -->
-<link rel="alternate" hreflang="en" href="https://chang64.com/">
-<link rel="alternate" hreflang="fr" href="https://chang64.com/">
-<link rel="alternate" hreflang="x-default" href="https://chang64.com/">
+<!-- Une page d'accueil par langue depuis le 2026-10-25 (/, /fr/, /es/...) :
+     chacune annonce toutes les autres, et "/" (l'anglais) comme x-default.
+     Avant, les hreflang en et fr pointaient tous deux vers "/", et Google ne
+     voyait jamais l'application en francais. Pose par build_site.js. -->
+<!--__HREFLANG__-->
 <meta name="theme-color" content="#101413">
 <title>chang64 · play chess, solve tactics</title>
 <!-- 174 caracteres a l'origine : tronquee dans les resultats de recherche,
@@ -29,7 +29,8 @@
 <meta property="og:title" content="chang64 · play chess, solve tactics">
 <meta property="og:description" content="Bullet, blitz, rapid and daily chess. __NP__ verified puzzles with adaptive difficulty. Challenge a friend with a link.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://chang64.com/">
+<meta property="og:url" content="__CANONICAL__">
+<meta property="og:locale" content="__OG_LOCALE__">
 <meta property="og:image" content="https://chang64.com/og/home.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -970,8 +971,21 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 /* L'entete elle-meme ne doit pas pouvoir etre elargie par un de ses enfants. */
 header{min-width:0}
 header>*{min-width:0}
-.langswitch{flex:none;padding:3px}
-.langswitch button{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;flex:none}
+/* Selecteur de langue replie (2026-10-25) : meme pastille qu'avant (fond
+   ink, filet, rayon 8px) pour la langue courante, et la liste des langues
+   en surimpression a l'ouverture. Les noms sont ecrits dans leur propre
+   langue, comme le veut l'usage. */
+.langswitch{flex:none;padding:3px;position:relative;background-color:var(--ink);border-radius:8px;border:1px solid var(--rule)}
+.langswitch summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:6px;background-color:var(--raise);color:var(--chalk);white-space:nowrap}
+.langswitch summary::-webkit-details-marker{display:none}
+.langswitch summary::after{content:"";display:inline-block;width:5px;height:5px;margin:0 0 2px 7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.langswitch[open] summary::after{transform:rotate(-135deg);margin-bottom:-1px}
+.langswitch summary:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:6px;white-space:nowrap}
+.langmenu a:hover,.langmenu a:focus-visible{color:var(--chalk);background-color:var(--slate)}
+.langmenu a:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
+.langmenu a[aria-current="true"]{color:var(--chalk);font-weight:600;background-color:var(--raise)}
 /* align-items:stretch et une disposition en colonne alignent les chiffres
    entre eux et poussent les libelles en bas : sans cela, une tuile dont le
    libelle tient sur deux lignes decalait le chiffre de ses voisines. */
@@ -1378,9 +1392,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    centree sur chacun : le doigt les atteint, la mise en page ne bouge pas
    d'un pixel (l'espace vertical gagne pour l'echiquier reste gagne). */
 @media(pointer:coarse){
-  .tabs button,.tc-cats button,.chip,.langswitch button,.seg button,.info-tip{position:relative}
+  .tabs button,.tc-cats button,.chip,.langswitch summary,.seg button,.info-tip{position:relative}
   .tabs button::after,.tc-cats button::after,.seg button::after,.chip::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
-  .langswitch button::after,.info-tip::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+  .info-tip::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
   #calFullLink{display:inline-block;padding:15px 0}
 }
 .hide{display:none!important}
@@ -1413,10 +1427,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
        enclin a bloquer des scripts, il merite qu'on le lui dise. Les pages
        de contenu, elles, fonctionnent sans JavaScript et n'ont pas besoin de
        ce message. -->
+  <!-- Texte dans la langue de la page depuis le 2026-10-25 (il etait en
+       francais puis en anglais sur l'unique page), pose par build_site.js. -->
   <noscript>
-    <p class="nojs">chang64 a besoin de JavaScript pour jouer, résoudre des exercices et analyser des parties. Sans lui, rien sur cette page ne répondra.<br>
-    Les pages de contenu fonctionnent sans JavaScript : <a href="/openings/">ouvertures</a>, <a href="/learn/">règles</a>, <a href="/glossary/">lexique</a>, <a href="/endgames/">finales</a>.<br>
-    <span lang="en">chang64 needs JavaScript to play, solve puzzles and analyse games. The content pages above work without it.</span></p>
+    <p class="nojs"><!--__NOSCRIPT__--></p>
   </noscript>
   <header>
     <button class="brand" id="brand" aria-label="chang64 home">
@@ -1426,10 +1440,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         <span class="tagline">The elephant on 64 squares</span>
       </span>
     </button>
-    <div class="seg langswitch" id="langSwitch">
-      <button data-lang="en" aria-pressed="true">EN</button>
-      <button data-lang="fr" aria-pressed="false">FR</button>
-    </div>
+    <!-- Selecteur de langue (2026-10-25) : une liste de liens vers la page
+         d'accueil de chaque langue, repliee derriere le code de la langue
+         courante. Deux boutons tenaient dans l'entete, six non. Pose par
+         build_site.js ; le # suit le lien (voir ui3.js). -->
+    <!--__LANGSWITCH__-->
     <!-- Barre passee du patron "onglets" au patron "navigation" le
          2026-09-05. Un role="tablist" promet a un lecteur d'ecran des
          panneaux autonomes (role="tabpanel"), chacun contenant tout le
@@ -2460,6 +2475,10 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   </footer>
 </div>
 
+<!-- Langue de la page, son dictionnaire et ses adresses (2026-10-25), lus
+     par i18n.js. Bloc de donnees, jamais execute : le script qui suit reste
+     le meme dans toutes les langues. Pose par build_site.js. -->
+<script type="application/json" id="langue">__LANGUE_JSON__</script>
 <script>
 /* ==========================================================
    chang64 - a free chess website
@@ -2480,6 +2499,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    with this program. If not, see <https://www.gnu.org/licenses/>.
    A copy is served at https://chang64.com/LICENSE
    ========================================================== */
+/*__GRAMMAIRE__*/
+
 /*__I18N__*/
 
 /*__ENGINE__*/

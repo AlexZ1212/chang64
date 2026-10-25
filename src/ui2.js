@@ -8,7 +8,12 @@
    Tant qu'il n'est pas arrive, detectOpening renvoie null et le libelle
    reste vide : aucun blocage, aucune attente. */
 let OPENING_DATA=null,OPENING_PENDING=false;
-const OPENING_SLUGS=__OPENING_SLUGS__;
+/* Adresse de la page de chaque famille, dans la langue de la page : posee
+   par le build dans le bloc de langue (PAGE_LANGUE, i18n.js) depuis le
+   2026-10-25. Avant, une table anglais/francais vivait dans le script, que
+   chaque langue de plus aurait alourdi pour tous les visiteurs. */
+const OPENING_SLUGS=PAGE_LANGUE.ouvertures||{};
+const RUBRIQUES=PAGE_LANGUE.dirs||{openings:"openings",learn:"learn",glossary:"glossary",endgames:"endgames",puzzles:"puzzles",traps:"traps"};
 let OPENINGS=null;
 function loadOpeningBook(){
   if(OPENING_DATA||OPENING_PENDING)return;
@@ -64,7 +69,7 @@ function detectOpening(list){
 function openingHref(family){
   const e=OPENING_SLUGS[family];
   if(!e)return null;
-  return LANG==="fr"?"/fr/ouvertures/"+e.fr:"/openings/"+e.en;
+  return "/"+RUBRIQUES.openings+"/"+e;
 }
 function renderOpening(){
   const el=$("opening"); if(!el)return;
@@ -77,12 +82,15 @@ function renderOpening(){
     ? '<a href="'+href+'">'+label.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</a>'
     : label.replace(/&/g,"&amp;").replace(/</g,"&lt;"));
 }
+/* Rubrique, titre et sous-titre de chaque tuile. Titres et sous-titres
+   passent par t() depuis le 2026-10-25, et le dossier vient de RUBRIQUES :
+   une langue de plus n'a rien a ajouter ici. */
 const EXPLORE=[
-  {en:["/openings/","Openings","__NF__ families, __NL__ named lines"],fr:["/fr/ouvertures/","Ouvertures","__NF__ familles, __NL__ variantes"]},
-  {en:["/learn/","Learn the rules","Castling, en passant, notation"],fr:["/fr/apprendre/","Apprendre les règles","Roque, prise en passant, notation"]},
-  {en:["/glossary/","Glossary","Forks, pins, zugzwang"],fr:["/fr/lexique/","Lexique","Fourchettes, clouages, zugzwang"]},
-  {en:["/endgames/","Endgames","The five you must know"],fr:["/fr/finales/","Finales","Les cinq à connaître"]},
-  {en:["/traps/","Opening traps","Scholar's, Legal's, Fried Liver"],fr:["/fr/pieges/","Pièges d'ouverture","Berger, Légal, Fegatello"]},
+  ["openings","Openings","{nf} families, {nl} named lines"],
+  ["learn","Learn the rules","Castling, en passant, notation"],
+  ["glossary","Glossary","Forks, pins, zugzwang"],
+  ["endgames","Endgames","The five you must know"],
+  ["traps","Opening traps","Scholar's, Legal's, Fried Liver"],
   /* "10 motifs, 3 exemples chacun" plutot que "__NP__ positions verifiees"
      (2026-09-04) : cette tuile ne mene PAS a un parcours des 51619
      positions de la banque (approche abandonnee a cette echelle, voir la
@@ -101,16 +109,15 @@ const EXPLORE=[
      content.js) -- meme mot ("exercices") que celui qu'on vient de retirer
      du menu de navigation, pour la meme raison : ce n'est pas une liste
      d'exercices a resoudre. */
-  {en:["/puzzles/","Tactics example library","10 patterns, 3 examples each"],fr:["/fr/exercices/","Bibliothèque d'exemples tactiques","10 motifs, 3 exemples chacun"]}
+  ["puzzles","Tactics example library","10 patterns, 3 examples each"]
 ];
 function renderExplore(){
   const box=$("exploreLinks"); if(!box)return;
   $("exploreTitle").textContent=t("Explore");
   $("exploreNote").textContent=t("Every page below is built from the same engine that runs the board.");
-  poserHtml(box,EXPLORE.map(e=>{
-    const [href,title,sub]=LANG==="fr"?e.fr:e.en;
-    return '<a href="'+href+'">'+title+'<span>'+sub+'</span></a>';
-  }).join(""));
+  poserHtml(box,EXPLORE.map(([rub,title,sub])=>
+    '<a href="/'+RUBRIQUES[rub]+'/">'+t(title)+'<span>'+t(sub,{nf:"__NF__",nl:"__NL__"})+'</span></a>'
+  ).join(""));
 }
 
 /* ==========================================================
@@ -703,7 +710,9 @@ function drawRatingGraph(){
      partout sans jamais vraiment adapter l'ordre a la langue active. */
   const fmtDate=ts=>{
     const d=new Date(ts),mo=String(d.getMonth()+1).padStart(2,"0"),da=String(d.getDate()).padStart(2,"0");
-    return LANG==="fr"?da+"/"+mo:mo+"/"+da;
+    /* Jour avant le mois partout sauf en anglais ; point en allemand et en
+       russe, ou c'est l'usage (25.10). */
+    return LANG==="en"?mo+"/"+da:(LANG==="de"||LANG==="ru")?da+"."+mo:da+"/"+mo;
   };
   const dateSvg='<text x="'+padL+'" y="'+(h-3)+'" text-anchor="start" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[0].t)+'</text>'+
     '<text x="'+(w-padR)+'" y="'+(h-3)+'" text-anchor="end" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[hist.length-1].t)+'</text>';
@@ -840,7 +849,7 @@ function fmtDate(ts){
   const d=new Date(ts);
   const day=String(d.getDate()).padStart(2,"0"),mon=String(d.getMonth()+1).padStart(2,"0");
   const hh=String(d.getHours()).padStart(2,"0"),mm=String(d.getMinutes()).padStart(2,"0");
-  return LANG==="fr"?`${day}/${mon} ${hh}:${mm}`:`${day}/${mon} ${hh}:${mm}`;
+  return `${day}/${mon} ${hh}:${mm}`;
 }
 const RES_LABEL={win:"W",loss:"L",draw:"D"};
 function renderHistory(){
@@ -1161,16 +1170,11 @@ function renderBadgeSummary(){
   const sum=$("badgeSummary"),recent=$("badgeRecentGrid");
   if(!sum||!recent)return;
   ensureProgFields();
-  /* Accord singulier/pluriel de "debloque(s)" (mise en page/texte) : le
-     francais exige l'accord ("1/43 debloque" vs "2/43 debloques"), chose
-     dont l'anglais n'a pas besoin ("1/43 unlocked" est deja correct quel
-     que soit n) -- passer par LANG directement plutot que par deux cles
-     t() distinctes, qui auraient du texte anglais identique pour un
-     resultat francais different (impossible avec un dictionnaire a cle
-     unique comme t()). */
-  sum.textContent=LANG==="fr"
-    ? prog.badges.length+"/"+BADGES.length+" débloqué"+(prog.badges.length===1?"":"s")
-    : prog.badges.length+"/"+BADGES.length+" unlocked";
+  /* Accord singulier/pluriel de "debloque(s)" : le francais exige l'accord
+     ("1/43 debloque" vs "2/43 debloques"), que l'anglais n'a pas. Depuis
+     le 2026-10-25, la traduction porte ses formes plurielles (voir
+     formePlurielle, i18n.js), choisies sur n. */
+  sum.textContent=t("{n}/{total} unlocked",{n:prog.badges.length,total:BADGES.length});
   const ids=prog.badges.slice().sort((a,b)=>(prog.badgeDates[b]||0)-(prog.badgeDates[a]||0)).slice(0,4);
   poserHtml(recent,ids.map(id=>{
     const b=BADGES.find(x=>x.id===id); if(!b)return "";
@@ -1263,9 +1267,16 @@ function bumpStreak(){
    navigateur. */
 const MONTH_NAMES={
   en:["January","February","March","April","May","June","July","August","September","October","November","December"],
-  fr:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]
+  fr:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],
+  es:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
+  pt:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
+  de:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+  /* Nominatif : le mois s'affiche seul, en titre du calendrier. */
+  ru:["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]
 };
-const WEEKDAY_SHORT={en:["Mo","Tu","We","Th","Fr","Sa","Su"],fr:["L","M","M","J","V","S","D"]};
+const WEEKDAY_SHORT={en:["Mo","Tu","We","Th","Fr","Sa","Su"],fr:["L","M","M","J","V","S","D"],
+  es:["L","M","X","J","V","S","D"],pt:["S","T","Q","Q","S","S","D"],de:["Mo","Di","Mi","Do","Fr","Sa","So"],
+  ru:["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]};
 function calDateKey(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
 /* Meme formule que dailyPuzzle() (ui.js), mais pour une date donnee plutot
    que "aujourd'hui" -- doit rester EXACTEMENT synchronisee avec elle (meme
@@ -2322,90 +2333,18 @@ function onPuzzleWrong(){
 const PUBLISHER={name:"AlexZ1212",email:"contact@chang64.com"};
 const HOST={name:"Cloudflare, Inc.",address:"101 Townsend Street, San Francisco, CA 94107, United States",site:"cloudflare.com"};
 const REGISTRAR={name:"OVH SAS",address:"2 rue Kellermann, 59100 Roubaix, France"};
+/* Textes legaux (2026-10-25) : gabarits a variables, pour que chaque langue
+   n'ait qu'a traduire le texte sans toucher a l'identite de l'editeur ni de
+   l'hebergeur, qui restent definis ici une seule fois. L'anglais est dans le
+   code ; les autres langues dans leur dictionnaire, sous les cles "@legal"
+   et "@privacy" (langues/<code>/app.js). */
+const LEGAL_EN="<h4>Publisher</h4><p><strong>{name}</strong><br>Publication director: {name}<br>Contact: {email}</p><p>chang64 is published by a private individual, on a non-professional basis. Under article 1-1, II of the French Digital Economy Act, the publisher has chosen not to make their name and address public. That information is held by the host and will be disclosed to the judicial authority on request.</p><h4>Hosting</h4><p><strong>{host}</strong><br>{hostAddress}<br>{hostSite}</p><h4>Domain name</h4><p>Registered through <strong>{registrar}</strong>, {registrarAddress}.</p><h4>Code licence</h4><p>The source code of chang64 is released under the <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\" rel=\"license noopener\" target=\"_blank\">GNU General Public License version 3</a> or later. You are free to study, modify and redistribute it under the terms of that licence, from <a href=\"https://github.com/AlexZ1212/chang64\" rel=\"noopener\" target=\"_blank\">the project's public repository</a>. The licence text is also served at <a href=\"/LICENSE\">/LICENSE</a>.</p><h4>Intellectual property</h4><p>The licence above covers the program. It does not cover the editorial content: the written pages on openings, rules, endgames and traps, the puzzle collection as a curated set, and the site's visual identity. Those remain protected by copyright and may not be reproduced without permission. The exact scope is set out in <a href=\"/COPYING.CONTENT\">COPYING.CONTENT</a>.</p><p>Opening names come from the lichess-org/chess-openings project, published under a free licence.</p><h4>Stockfish</h4><p>Deeper analysis is powered by <a href=\"https://stockfishchess.org\" rel=\"noopener\" target=\"_blank\">Stockfish</a>, a free and open source chess engine developed by the Stockfish contributors and distributed under the GNU GPL v3. Its source code is available at <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, and its licence text ships alongside the engine. It is because chang64 distributes Stockfish that its own code is released under the same licence. Stockfish is optional: it is only loaded when you analyse a finished game, never while you play.</p><h4>Reporting</h4><p>Any request concerning the content of this site can be sent to {email}.</p>";
+const PRIVACY_EN="<h4>The short version</h4><p>chang64 has no accounts, no sign-up and no advertising. It never asks for your name, your email address or any other personal detail.</p><h4>What is stored, and where</h4><p>Your puzzle progress, your rating, your day streak and your current friend game are saved <strong>in your own browser</strong> and never leave it. Clearing your browser data erases them, which is why the transfer code exists.</p><h4>Measuring puzzle difficulty</h4><p>When you finish or miss a puzzle, the site sends its number and a single fact: solved on the first try, or not. Nothing else goes out: no identifier, no progress, no cookie. The server only keeps two counters per puzzle (attempts and successes), with no date, no IP address and no link between two reports. They are used for one thing only: ranking puzzles by difficulty more accurately. Chang Sprint sends nothing.</p><h4>Cookies</h4><p>chang64 sets no cookies and uses no tracker, so there is no consent banner to click through.</p><h4>Server logs</h4><p>The host keeps connection logs, including IP addresses, for security and abuse prevention. Those logs fall under its own privacy policy and chang64 has no access to them.</p><h4>Games played by link</h4><p>A friend game lives entirely inside the link you share. The moves travel through whichever messaging app you choose; no copy is kept on this site.</p><h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any question can go to {email}.</p><h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live, as it was for difficulty measurement.</p>";
 function renderLegal(){
-  const fr=LANG==="fr";
-  poserHtml($("legalBody"),fr
-    ? "<h4>Éditeur</h4><p><strong>"+PUBLISHER.name+"</strong><br>Directeur de la publication : "+PUBLISHER.name+
-      "<br>Contact : "+PUBLISHER.email+"</p>"+
-      "<p>chang64 est édité par un particulier, à titre non professionnel. Conformément à l'article 1-1, II de la loi pour la confiance dans l'économie numérique, "+
-      "l'éditeur a choisi de ne pas rendre publics son nom et son adresse. Ces informations sont détenues par l'hébergeur, qui les communiquera à l'autorité judiciaire sur requête.</p>"+
-      "<h4>Hébergement</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
-      "<h4>Nom de domaine</h4><p>Enregistré auprès de <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
-      "<h4>Licence du code</h4><p>Le code source de chang64 est publié sous licence "+
-      "<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\" rel=\"license noopener\" target=\"_blank\">GNU General Public License version 3</a> "+
-      "ou ultérieure. Il peut être étudié, modifié et redistribué dans les conditions de cette licence, depuis "+
-      "<a href=\"https://github.com/AlexZ1212/chang64\" rel=\"noopener\" target=\"_blank\">le dépôt public du projet</a>. "+
-      "Le texte de la licence est également servi à l'adresse <a href=\"/LICENSE\">/LICENSE</a>.</p>"+
-      "<h4>Propriété intellectuelle</h4><p>La licence ci-dessus couvre le programme. Elle ne couvre pas le contenu éditorial : "+
-      "les textes des pages d'ouvertures, de règles, de finales et de pièges, la collection d'exercices en tant qu'ensemble constitué, "+
-      "ainsi que l'identité visuelle du site. Ces éléments restent protégés par le droit d'auteur et leur reproduction nécessite une autorisation. "+
-      "Le détail figure dans le fichier <a href=\"/COPYING.CONTENT\">COPYING.CONTENT</a>.</p>"+
-      "<p>Les noms d'ouvertures proviennent du projet lichess-org/chess-openings, publié sous licence libre.</p>"+
-      "<h4>Stockfish</h4><p>L'analyse renforcée utilise <a href=\"https://stockfishchess.org\" rel=\"noopener\" target=\"_blank\">Stockfish</a>, "+
-      "moteur d'échecs libre développé par les contributeurs du projet Stockfish et distribué sous licence GNU GPL v3. "+
-      "Son code source est disponible sur <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
-      "et le texte de sa licence accompagne le moteur. C'est parce que chang64 distribue Stockfish que son propre code est publié sous la même licence. "+
-      "Stockfish est optionnel : il n'est chargé qu'au moment où tu analyses une partie terminée, jamais pendant que tu joues.</p>"+
-      "<h4>Signalement</h4><p>Toute demande relative au contenu du site peut être adressée à "+PUBLISHER.email+".</p>"
-    : "<h4>Publisher</h4><p><strong>"+PUBLISHER.name+"</strong><br>Publication director: "+PUBLISHER.name+
-      "<br>Contact: "+PUBLISHER.email+"</p>"+
-      "<p>chang64 is published by a private individual, on a non-professional basis. Under article 1-1, II of the French Digital Economy Act, "+
-      "the publisher has chosen not to make their name and address public. That information is held by the host and will be disclosed to the judicial authority on request.</p>"+
-      "<h4>Hosting</h4><p><strong>"+HOST.name+"</strong><br>"+HOST.address+"<br>"+HOST.site+"</p>"+
-      "<h4>Domain name</h4><p>Registered through <strong>"+REGISTRAR.name+"</strong>, "+REGISTRAR.address+".</p>"+
-      "<h4>Code licence</h4><p>The source code of chang64 is released under the "+
-      "<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\" rel=\"license noopener\" target=\"_blank\">GNU General Public License version 3</a> "+
-      "or later. You are free to study, modify and redistribute it under the terms of that licence, from "+
-      "<a href=\"https://github.com/AlexZ1212/chang64\" rel=\"noopener\" target=\"_blank\">the project's public repository</a>. "+
-      "The licence text is also served at <a href=\"/LICENSE\">/LICENSE</a>.</p>"+
-      "<h4>Intellectual property</h4><p>The licence above covers the program. It does not cover the editorial content: "+
-      "the written pages on openings, rules, endgames and traps, the puzzle collection as a curated set, "+
-      "and the site's visual identity. Those remain protected by copyright and may not be reproduced without permission. "+
-      "The exact scope is set out in <a href=\"/COPYING.CONTENT\">COPYING.CONTENT</a>.</p>"+
-      "<p>Opening names come from the lichess-org/chess-openings project, published under a free licence.</p>"+
-      "<h4>Stockfish</h4><p>Deeper analysis is powered by <a href=\"https://stockfishchess.org\" rel=\"noopener\" target=\"_blank\">Stockfish</a>, "+
-      "a free and open source chess engine developed by the Stockfish contributors and distributed under the GNU GPL v3. "+
-      "Its source code is available at <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
-      "and its licence text ships alongside the engine. It is because chang64 distributes Stockfish that its own code is released under the same licence. "+
-      "Stockfish is optional: it is only loaded when you analyse a finished game, never while you play.</p>"+
-      "<h4>Reporting</h4><p>Any request concerning the content of this site can be sent to "+PUBLISHER.email+".</p>");
-  poserHtml($("privacyBody"),fr
-    ? "<h4>En bref</h4><p>chang64 n'a ni compte, ni inscription, ni publicité. Le site ne demande jamais ton nom, "+
-      "ton adresse électronique ni aucune autre donnée personnelle.</p>"+
-      "<h4>Ce qui est enregistré, et où</h4><p>Ta progression, ton classement, ta série de jours et ta partie entre amis en cours sont "+
-      "enregistrés <strong>dans ton propre navigateur</strong> et n'en sortent pas. Effacer les données du navigateur les supprime, "+
-      "d'où l'existence du code de reprise.</p>"+
-      "<h4>Mesure de la difficulté des exercices</h4><p>Quand tu termines ou rates un exercice, le site envoie son numéro et un seul "+
-      "renseignement : réussi du premier coup, ou non. Rien d'autre ne part : ni identifiant, ni progression, ni cookie. Le serveur n'en "+
-      "garde que deux compteurs par exercice (nombre d'essais, nombre de réussites), sans date, sans adresse IP et sans lien entre deux "+
-      "envois. Ces compteurs servent uniquement à mieux classer les exercices par difficulté. Le Chang Sprint n'envoie rien.</p>"+
-      "<h4>Cookies</h4><p>chang64 ne dépose aucun cookie et n'utilise aucun traqueur : il n'y a donc pas de bandeau de consentement.</p>"+
-      "<h4>Journaux techniques</h4><p>L'hébergeur conserve des journaux de connexion, dont les adresses IP, à des fins de sécurité et de "+
-      "lutte contre les attaques. Ces journaux relèvent de sa propre politique de confidentialité et chang64 n'y a pas accès.</p>"+
-      "<h4>Parties par lien</h4><p>Une partie entre amis tient entièrement dans le lien que tu partages. Les coups transitent par la "+
-      "messagerie de ton choix ; aucune copie n'est conservée sur ce site.</p>"+
-      "<h4>Tes droits</h4><p>Aucune donnée personnelle n'étant collectée par le site, il n'y a rien à consulter, corriger ou supprimer. "+
-      "Toute question peut être adressée à "+PUBLISHER.email+".</p>"+
-      "<h4>Évolutions</h4><p>Si des comptes ou une mesure d'audience étaient ajoutés un jour, cette page serait mise à jour avant leur mise en service, "+
-      "comme elle l'a été pour la mesure de la difficulté.</p>"
-    : "<h4>The short version</h4><p>chang64 has no accounts, no sign-up and no advertising. It never asks for your name, "+
-      "your email address or any other personal detail.</p>"+
-      "<h4>What is stored, and where</h4><p>Your puzzle progress, your rating, your day streak and your current friend game are saved "+
-      "<strong>in your own browser</strong> and never leave it. Clearing your browser data erases them, which is why the "+
-      "transfer code exists.</p>"+
-      "<h4>Measuring puzzle difficulty</h4><p>When you finish or miss a puzzle, the site sends its number and a single fact: solved "+
-      "on the first try, or not. Nothing else goes out: no identifier, no progress, no cookie. The server only keeps two counters per "+
-      "puzzle (attempts and successes), with no date, no IP address and no link between two reports. They are used for one thing only: "+
-      "ranking puzzles by difficulty more accurately. Chang Sprint sends nothing.</p>"+
-      "<h4>Cookies</h4><p>chang64 sets no cookies and uses no tracker, so there is no consent banner to click through.</p>"+
-      "<h4>Server logs</h4><p>The host keeps connection logs, including IP addresses, for security and abuse prevention. Those logs fall "+
-      "under its own privacy policy and chang64 has no access to them.</p>"+
-      "<h4>Games played by link</h4><p>A friend game lives entirely inside the link you share. The moves travel through whichever "+
-      "messaging app you choose; no copy is kept on this site.</p>"+
-      "<h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any "+
-      "question can go to "+PUBLISHER.email+".</p>"+
-      "<h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live, "+
-      "as it was for difficulty measurement.</p>");
+  const v={name:PUBLISHER.name,email:PUBLISHER.email,host:HOST.name,hostAddress:HOST.address,hostSite:HOST.site,
+    registrar:REGISTRAR.name,registrarAddress:REGISTRAR.address};
+  poserHtml($("legalBody"),rendreGabarit(DICT["@legal"]||LEGAL_EN,v));
+  poserHtml($("privacyBody"),rendreGabarit(DICT["@privacy"]||PRIVACY_EN,v));
 }
 
 let isReviewGame=false;
@@ -2708,7 +2647,8 @@ applyEvalPref();
    deux conventions dans la meme phrase. */
 function fmtNum(x){
   const s=Number(x).toFixed(1);
-  return (typeof LANG!=="undefined"&&LANG==="fr")?s.replace(".",","):s;
+  /* Virgule decimale dans toutes les langues du site sauf l'anglais. */
+  return (typeof LANG!=="undefined"&&LANG!=="en")?s.replace(".",","):s;
 }
 /* Overlay generique : sert aux parties chronometrees, a Chang Sprint et aux
    coordonnees. Les trois partagent le meme besoin, rien ne doit demarrer

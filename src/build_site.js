@@ -1,6 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 const { Game, pType, pColor } = require("./engine.js");
+/* Langues du site (2026-10-25) : registre unique, et traduction des pages
+   pour les langues autres que l'anglais et le francais. Voir
+   langues/registre.js et langues/traduire.js. */
+const { LANGUES, CODES, PAR_CODE } = require("./langues/registre.js");
+const TRAD = require("./langues/traduire.js");
+const { tr, T, choix } = TRAD;
 /* Minification a la livraison (session du 29/08) : PageSpeed Insights
    relevait ~30 Ko d'economie possible (CSS+JS) sur l'app. Le code source
    reste intact et commente -- terser/le minifieur maison ne s'appliquent
@@ -94,6 +100,13 @@ if (MIGRATION_SANS_HTML) {
     delete DATES[k];
   }
 }
+/* Meme precaution pour le passage a six langues (2026-10-25) : les pages
+   francaises pointent desormais vers /fr/ et non plus vers "/" (logo,
+   boutons, pied de page), et l'index des ouvertures porte les messages de sa
+   recherche. Leur corps change donc, sans un mot de contenu de plus : le
+   premier build qui cree les pages des nouvelles langues reprend ces
+   empreintes sans toucher aux dates. */
+const MIGRATION_LANGUES = !Object.keys(DATES).some(k => k.startsWith("/es/"));
 function datesDe(cheminPublic, contenu) {
   /* L'empreinte porte sur le CORPS de la page, pas sur le document entier :
      l'entete, le pied et le JSON-LD contiennent la date elle-meme et des
@@ -104,7 +117,7 @@ function datesDe(cheminPublic, contenu) {
   if (!connu) { DATES[cheminPublic] = { sceau, publiee: BUILD_DATE, modifiee: BUILD_DATE }; datesNouvelles++; }
   else if (connu.sceau !== sceau) {
     connu.sceau = sceau;
-    if (!MIGRATION_SANS_HTML) { connu.modifiee = BUILD_DATE; datesModifiees++; }
+    if (!MIGRATION_SANS_HTML && !(MIGRATION_LANGUES && cheminPublic !== "/")) { connu.modifiee = BUILD_DATE; datesModifiees++; }
   }
   return DATES[cheminPublic];
 }
@@ -116,6 +129,23 @@ const MOIS_FR = ["janvier","février","mars","avril","mai","juin","juillet",
 function frDate(iso) {
   const [a, m, j] = iso.split("-");
   return parseInt(j, 10) + " " + MOIS_FR[parseInt(m, 10) - 1] + " " + a;
+}
+/* Autres langues (2026-10-25) : Intl avec la locale explicite et le fuseau
+   UTC, donc le meme resultat quelle que soit la machine de construction (le
+   piege que frDate evite ci-dessus vient de toLocaleDateString sans
+   locale). L'anglais garde la date ISO. */
+function dateLongue(lang, iso) {
+  if (lang === "en") return iso;
+  if (lang === "fr") return frDate(iso);
+  return new Intl.DateTimeFormat(PAR_CODE[lang].intl, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+    .format(new Date(iso + "T12:00:00Z"));
+}
+/* "Publiee le ..., mise a jour le ..." du pied des pages de contenu. */
+function datesPied(lang, dates) {
+  const p = dateLongue(lang, dates.publiee), m = dateLongue(lang, dates.modifiee);
+  return dates.modifiee !== dates.publiee
+    ? T(lang, "Published {p}, updated {m}", "Publiée le {p}, mise à jour le {m}", { p, m })
+    : T(lang, "Published {p}", "Publiée le {p}", { p });
 }
 /* ---------- hachages de la CSP (2026-09-06) ----------
    script-src portait 'unsafe-inline', ce qui annulait la protection XSS que
@@ -149,7 +179,7 @@ function poserHachagesCSP() {
       for (const m of h.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
         const attrs = m[1] || "";
         if (/\ssrc=/.test(attrs)) continue;                                  /* script externe : couvert par 'self' */
-        if (/type\s*=\s*"application\/ld\+json"/.test(attrs)) continue;      /* bloc de donnees, non execute */
+        if (/type\s*=\s*"application\/(ld\+)?json"/.test(attrs)) continue;   /* bloc de donnees (JSON-LD, langue de la page), non execute */
         vus.add("'sha256-" + crypto.createHash("sha256").update(m[2], "utf8").digest("base64") + "'");
       }
     }
@@ -199,6 +229,7 @@ let ui2 = minifyJs(fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8"), "ui2
 // la table famille -> adresses de pages est construite plus bas, après le calcul des slugs
 let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8"), "ui3.js");
 const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), "i18n.js");
+const grammaire = minifyJs(fs.readFileSync(path.join(__dirname, "grammaire.js"), "utf8"), "grammaire.js");
 /* Le nombre d'exercices etait ecrit en dur a neuf endroits : accueil, meta
    description, image de partage, donnees structurees, tuiles de navigation,
    dans les deux langues. Il devenait faux des qu'on enrichissait la banque.
@@ -206,16 +237,15 @@ const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), 
 const NP = String(puzzles.length);
 let app = fs.readFileSync(path.join(__dirname, "template.html"), "utf8");
 app = app.replace(/<style>[\s\S]*?<\/style>/, m => "<style>" + minifyCss(m.slice("<style>".length, -"</style>".length)) + "</style>");
+/* Les jetons du nombre d'exercices (__NP__, __NP_EN__...) ne sont plus
+   remplaces ici mais page par page, dans pageApplication() : depuis le
+   2026-10-25 le dictionnaire de chaque langue est pose dans la page, et ses
+   phrases portent le meme jeton (__NP_LOC__, groupe selon la langue). */
 app = app
+  .replace("/*__GRAMMAIRE__*/", grammaire)
   .replace("/*__I18N__*/", i18n)
   .replace("/*__ENGINE__*/", engine).replace("/*__PIECES__*/", pieces)
-  .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3)
-  /* Texte de presentation de l'accueil : le nombre y est groupe selon la
-     langue (108,868 / 108 868), meme Intl que fmtEntier dans i18n.js. Les
-     meta et donnees structurees gardent __NP__, le nombre brut. */
-  .split("__NP_EN__").join(Number(NP).toLocaleString("en-US"))
-  .split("__NP_FR__").join(Number(NP).toLocaleString("fr-FR"))
-  .split("__NP__").join(NP);
+  .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3);
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT + "/openings", { recursive: true });
@@ -946,14 +976,32 @@ for (const [family, list] of families) {
   const ecos = [...new Set(list.map(l => l.eco))].sort();
   const variations = list.slice().sort((a, b) => a.moves.length - b.moves.length).slice(0, 40);
   const nameFr = FAMILY_FR[family] || family;
-  pages.push({ family, nameFr, slugEn: slug(family), slugFr: slug(nameFr),
+  /* Nom, adresse et note dans chaque langue (2026-10-25). Anglais et
+     francais comme avant ; les autres langues lisent leur table de noms
+     (langues/<code>/pages.js, "familles") et de notes. Une famille sans nom
+     traduit garde son nom anglais, comme le francais le fait deja pour les
+     ouvertures fantaisistes (Bongcloud, Fried Fox...). Le russe garde le
+     slug anglais : pas d'URL en cyrillique. */
+  const noms = { en: family, fr: nameFr }, notes = { en: FAMILY_NOTES[family] || null, fr: NOTES_FR[family] || null };
+  for (const l of LANGUES) {
+    if (noms[l.code]) continue;
+    noms[l.code] = TRAD.table(l.code, "familles", family) || family;
+    notes[l.code] = notes.en ? (TRAD.table(l.code, "notes", family) || null) : null;
+  }
+  const slugs = {};
+  for (const l of LANGUES) slugs[l.code] = l.slugsAnglais ? slug(family) : slug(TRAD.translit(l.code, noms[l.code]));
+  pages.push({ family, nameFr, slugEn: slugs.en, slugFr: slugs.fr, noms, notes, slugs,
     main, fen, ecos, variations, count: list.length, side: sideOf(family, main.moves),
-    note: FAMILY_NOTES[family] || null, noteFr: NOTES_FR[family] || null });
+    note: notes.en, noteFr: notes.fr });
 }
 pages.sort((a, b) => b.count - a.count || a.family.localeCompare(b.family));
 {
-  const seen = new Set();
-  for (const p of pages) { while (seen.has(p.slugFr)) p.slugFr += "-2"; seen.add(p.slugFr); }
+  for (const l of LANGUES) {
+    if (l.code === "en") continue;
+    const seen = new Set();
+    for (const p of pages) { while (seen.has(p.slugs[l.code])) p.slugs[l.code] += "-2"; seen.add(p.slugs[l.code]); }
+  }
+  for (const p of pages) p.slugFr = p.slugs.fr;
 }
 
 const VAR_FR = [
@@ -1192,18 +1240,25 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
 /* Bascule de langue : meme pastille que dans l'application, avec le meme
    rayon et le meme fond. Ici ce sont deux liens, chaque langue etant une page
    distincte. */
-.langsw{display:flex;gap:3px;background-color:var(--ink);padding:3px;
+.langsw{background-color:var(--ink);padding:3px;position:relative;
   border-radius:8px;border:1px solid var(--rule);flex:none}
-/* Reprise exacte de .langswitch button dans l'application : JetBrains Mono
-   en 600, corps 11.5px, marges 7px 10px, flex:none. Ce n'est pas la police du
-   corps de texte, c'est celle du "64" de la marque : le selecteur de langue
-   appartient a la meme famille visuelle. */
-.langsw a{flex:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;
-  font-weight:600;text-align:center;text-decoration:none;color:var(--sage);
-  padding:7px 10px;border-radius:6px;white-space:nowrap;
-  transition:background .18s,color .18s}
-.langsw a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
-.langsw a:hover{color:var(--chalk)}
+/* Reprise exacte de .langswitch summary dans l'application : JetBrains Mono
+   en 600, corps 11.5px, marges 7px 10px. Ce n'est pas la police du corps de
+   texte, c'est celle du "64" de la marque : le selecteur de langue appartient
+   a la meme famille visuelle. Depuis le 2026-10-25, la langue courante est
+   affichee seule et la liste des six langues s'ouvre dessous. */
+.langsw summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:6px;
+  background-color:var(--raise);color:var(--chalk);white-space:nowrap}
+.langsw summary::-webkit-details-marker{display:none}
+.langsw summary::after{content:"";display:inline-block;width:5px;height:5px;margin:0 0 2px 7px;
+  border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
+.langsw[open] summary::after{transform:rotate(-135deg);margin-bottom:-1px}
+.langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;
+  min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px}
+.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:6px;white-space:nowrap}
+.langmenu a:hover{color:var(--chalk)}
+.langmenu a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 
 /* Meme construction que le pied de page de l'application : des liens en
    ligne separes par des points medians, et non une rangee flex a
@@ -1328,6 +1383,13 @@ const SUFFIXES_FIL = [
   " : coups, variantes et codes ECO", " : moves, variations and ECO codes",
   " : 3 exemples expliqués", ": 3 worked examples"
 ];
+/* Memes suffixes dans les autres langues (2026-10-25), traduits par les cles
+   que content.js et la boucle des ouvertures emploient pour les titres. */
+for (const l of LANGUES) {
+  if (l.code === "en" || l.code === "fr") continue;
+  SUFFIXES_FIL.push(" · " + tr(l.code, "chess term explained"), " : " + tr(l.code, "moves, variations and ECO codes"),
+    ": " + tr(l.code, "3 worked examples"));
+}
 /* Le prefixe de section n'est jamais ajoute ici : le fil porte deja la
    section a son deuxieme niveau, et une feuille "Lexique · Moulin"
    afficherait "chang64 > Lexique > Lexique · Moulin". */
@@ -1346,12 +1408,22 @@ const SECTIONS = {
     ["/fr/finales/", "Finales"], ["/fr/pieges/", "Pièges d'ouverture"], ["/fr/lexique/", "Lexique"]
   ]
 };
+/* Autres langues (2026-10-25) : memes six rubriques, dossiers du registre,
+   libelles anglais traduits. */
+for (const l of LANGUES) {
+  if (SECTIONS[l.code]) continue;
+  const RUB = ["openings", "puzzles", "learn", "endgames", "traps", "glossary"];
+  SECTIONS[l.code] = SECTIONS.en.map(([, nom], i) => ["/" + l.dirs[RUB[i]] + "/", tr(l.code, nom)]);
+}
 /* Retire accents, ponctuation et majuscules : la recherche doit trouver
    "Defense sicilienne" quand on tape "defense sicilien", et "1.e4 c5" quand
    on tape "e4c5". */
+/* Lettres de toute ecriture (2026-10-25) : [^a-z0-9] effacait le cyrillique,
+   et la recherche des pages russes n'aurait rien trouve. NFD ramene aussi
+   \u0451 a \u0435 et \u0439 a \u0438, comme e accent a e. */
 function sansAccent(t) {
   return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    .toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 }
 
 function sectionLinks(lang, canonical) {
@@ -1363,7 +1435,7 @@ function sectionLinks(lang, canonical) {
      Le lien reste cliquable sur une page de detail : il ramene a l'index, ce
      qui est utile. Seul l'index lui-meme devient un simple texte, puisqu'il
      pointerait sur la page courante. */
-  return SECTIONS[lang === "fr" ? "fr" : "en"].map(([href, nom]) => {
+  return (SECTIONS[lang] || SECTIONS.en).map(([href, nom]) => {
     if (ici === href) return `<span aria-current="page" id="cn">${nom}</span>`;
     if (ici.startsWith(href)) return `<a href="${href}" aria-current="page" id="cn">${nom}</a>`;
     return `<a href="${href}">${nom}</a>`;
@@ -1381,7 +1453,30 @@ function sectionLinks(lang, canonical) {
    HTML ne conserve pas la position de defilement d'un element interne comme
    le navigateur le fait pour la page entiere. block:"nearest" dans l'appel
    evite tout defilement vertical de la page elle-meme. */
-function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogImage, noindex) {
+/* Liens hreflang d'une page (2026-10-25) : une entree par langue ou la page
+   existe, dans l'ordre du registre, et x-default sur l'anglais. Avant, chaque
+   generateur ecrivait ses trois lignes en/fr/x-default a la main. */
+function lignesHreflang(urls) {
+  if (!urls) return "";
+  const out = LANGUES.filter(l => urls[l.code]).map(l =>
+    `<link rel="alternate" hreflang="${l.hreflang}" href="${urls[l.code]}">`);
+  if (urls.en) out.push(`<link rel="alternate" hreflang="x-default" href="${urls.en}">`);
+  return out.join("\n");
+}
+/* Selecteur de langue des pages statiques (2026-10-25) : meme forme que dans
+   l'application, une liste repliee derriere le code de la langue courante.
+   Liens ordinaires, qui marchent sans JavaScript. */
+function selecteurLangue(lang, urls) {
+  const ici = PAR_CODE[lang];
+  return `<details class="langsw"><summary aria-label="${esc(T(lang, "Language: {name}", "Langue : {name}", { name: ici.nom }))}">${lang.toUpperCase()}</summary><div class="langmenu">` +
+    LANGUES.filter(l => urls[l.code]).map(l =>
+      `<a href="${String(urls[l.code]).replace(SITE, "")}" hreflang="${l.hreflang}" lang="${l.html}" rel="alternate"${l.code === lang ? ' aria-current="true"' : ""}>${l.nom}</a>`).join("") +
+    `</div></details>`;
+}
+/* langUrls : adresse de la page dans chaque langue ou elle existe,
+   {en: ..., fr: ..., es: ...}. Sert aux hreflang et au selecteur de langue.
+   null pour une page sans equivalent (404, profils). */
+function shell(title, desc, canonical, body, jsonld, lang, alts, langUrls, ogImage, noindex) {
   const dates = datesDe(canonical.replace(SITE, ""), body);
   /* Une page non indexable n'est pas du contenu : 404 et le profil ne portent
      donc pas de date. On teste aussi alts, parce que plusieurs appelants
@@ -1390,10 +1485,10 @@ function shell(title, desc, canonical, body, jsonld, lang, alts, otherUrl, ogIma
      une date sur des pages qui n'en veulent pas. */
   const horsContenu = !!noindex || /noindex/.test(String(alts || ""));
   lang = lang || "en";
-  const d = L[lang];
-  const other = lang === "fr" ? "en" : "fr";
+  const d = libellesOuvertures(lang);
+  const accueil = PAR_CODE[lang].accueil;
   return `<!DOCTYPE html>
-<html lang="${lang}">
+<html lang="${PAR_CODE[lang].html}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1407,12 +1502,13 @@ ${noindex ? '<meta name="robots" content="noindex,follow">' : ""}
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+${lignesHreflang(langUrls)}
 ${alts || ""}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${canonical}">
-<meta property="og:locale" content="${lang === "fr" ? "fr_FR" : "en_GB"}">
+<meta property="og:locale" content="${PAR_CODE[lang].og}">
 <meta property="og:image" content="${ogImage || SITE + "/og/home.png"}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -1525,26 +1621,15 @@ ${/* Lien d'evitement ajoute le 2026-09-06. L'application en avait un, ces
      essai avait alourdi le site de 400 Ko pour trois phrases.
      La cible est le <main id="contenu"> pose plus bas, qui sert aussi de
      repere de region principale. Aucune regle CSS ne vise main dans ces
-     pages, l'ajout ne change donc rien a la mise en page. */""}<a class="skiplink" href="#contenu">${lang === "fr" ? "Aller au contenu" : "Skip to main content"}</a>
+     pages, l'ajout ne change donc rien a la mise en page. */""}<a class="skiplink" href="#contenu">${T(lang, "Skip to main content", "Aller au contenu")}</a>
 <div class="wrap">
 <header>
-  <a class="brand" href="/">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${lang === "fr" ? "L'éléphant sur 64 cases" : "The elephant on 64 squares"}</span></span></a>
+  <a class="brand" href="${accueil}">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${T(lang, "The elephant on 64 squares", "L'éléphant sur 64 cases")}</span></span></a>
   <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
        le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
        place du contenu. Sur ecran etroit la rangee defile horizontalement,
        comme les onglets de l'application. -->
-  ${otherUrl ? (() => {
-    /* Chaque langue est une page distincte : la pastille pointe vers la page
-       courante pour la langue active, et vers son equivalent pour l'autre. */
-    const ici = canonical.replace(SITE, "");
-    const la = String(otherUrl).replace(SITE, "");
-    const urlEn = lang === "en" ? ici : la;
-    const urlFr = lang === "fr" ? ici : la;
-    return `<div class="langsw" role="group" aria-label="${lang === "fr" ? "Langue" : "Language"}">
-    <a href="${urlEn}" hreflang="en" rel="alternate"${lang === "en" ? ' aria-current="true"' : ""}>EN</a>
-    <a href="${urlFr}" hreflang="fr" rel="alternate"${lang === "fr" ? ' aria-current="true"' : ""}>FR</a>
-  </div>`;
-  })() : ""}
+  ${langUrls ? selecteurLangue(lang, langUrls) : ""}
   <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
 </header>
 <main id="contenu">
@@ -1554,17 +1639,15 @@ ${body}
   <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
        repeter en bas etait un doublon. Le pied de page garde son role
        classique, les liens legaux. -->
-  <nav class="footnav" aria-label="${lang === "fr" ? "Informations légales" : "Legal information"}">
-    <a href="/">${lang === "fr" ? "Accueil" : "Home"}</a> &middot;
-    <a href="/#legal">${lang === "fr" ? "Mentions légales" : "Legal notice"}</a> &middot;
-    <a href="/#privacy">${lang === "fr" ? "Confidentialité" : "Privacy"}</a> &middot;
-    <span class="foot-pair"><a href="/#prefs">${lang === "fr" ? "Préférences" : "Preferences"}</a> &middot;
-    <a href="/#accessibilite">${lang === "fr" ? "Accessibilité" : "Accessibility"}</a></span>
+  <nav class="footnav" aria-label="${T(lang, "Legal information", "Informations légales")}">
+    <a href="${accueil}">${T(lang, "Home", "Accueil")}</a> &middot;
+    <a href="${accueil}#legal">${T(lang, "Legal notice", "Mentions légales")}</a> &middot;
+    <a href="${accueil}#privacy">${T(lang, "Privacy", "Confidentialité")}</a> &middot;
+    <span class="foot-pair"><a href="${accueil}#prefs">${T(lang, "Preferences", "Préférences")}</a> &middot;
+    <a href="${accueil}#accessibilite">${T(lang, "Accessibility", "Accessibilité")}</a></span>
   </nav>
   <p class="footnote">${d.foot}</p>
-  ${horsContenu ? "" : `<p class="pagedate">${lang === "fr"
-      ? "Publiée le " + frDate(dates.publiee) + (dates.modifiee !== dates.publiee ? ", mise à jour le " + frDate(dates.modifiee) : "")
-      : "Published " + dates.publiee + (dates.modifiee !== dates.publiee ? ", updated " + dates.modifiee : "")}</p>`}
+  ${horsContenu ? "" : `<p class="pagedate">${datesPied(lang, dates)}</p>`}
 </footer>
 </div>
 <script>
@@ -1591,7 +1674,9 @@ ${!/id="grille"/.test(body) ? "" : `
   if(tuiles.length<20)return;          /* inutile sur une liste courte */
   bloc.classList.remove("hide");
   var etat=document.getElementById("filtreEtat");
-  var fr=document.documentElement.lang==="fr";
+  /* Messages dans la langue de la page, poses par le build sur #filtreEtat
+     (2026-10-25) : le script reste le meme d'une langue a l'autre. */
+  var aucun=etat.getAttribute("data-aucun")||"No match.",sur=etat.getAttribute("data-sur")||"{a} of {b}";
   var total=tuiles.length;
   /* Bascule Blancs/Noirs/Les deux : absente des pages plus courtes que le
      seuil ci-dessus tout comme le champ de recherche, puisqu'elle partage
@@ -1613,7 +1698,7 @@ ${!/id="grille"/.test(body) ? "" : `
 
   function normalise(t){
     return String(t).normalize?String(t).normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-      .toLowerCase().replace(/[^a-z0-9]+/g," ").trim()
+      .toLowerCase().replace(/[^\\p{L}\\p{N}]+/gu," ").trim()
       :String(t).toLowerCase();
   }
   function correspondCote(tuile){
@@ -1654,9 +1739,7 @@ ${!/id="grille"/.test(body) ? "" : `
     }
     var toc=grille.querySelector(".toc");
     if(toc)toc.hidden=true;
-    etat.textContent = vus===0
-      ? (fr?"Aucun résultat.":"No match.")
-      : (fr?vus+" sur "+total:vus+" of "+total);
+    etat.textContent = vus===0 ? aucun : sur.replace("{a}",vus).replace("{b}",total);
   }
   champ.addEventListener("input",filtrer);
   /* Echap vide le champ, geste attendu sur un champ de recherche. */
@@ -1729,13 +1812,6 @@ ${!/id="grille"/.test(body) ? "" : `
 </html>`;
 }
 
-{
-  const map = {};
-  for (const p of pages) map[p.family] = { en: p.slugEn, fr: p.slugFr };
-  ui2 = ui2.replace("__OPENING_SLUGS__", JSON.stringify(map));
-  app = app.replace("__OPENING_SLUGS__", JSON.stringify(map));
-}
-
 const L = {
   en: { dir: "openings", index: "/openings/", label: "English",
         nav: ["Play", "Openings", "Patterns"], all: "All openings", play: "Play this opening",
@@ -1758,60 +1834,95 @@ const L = {
         idxDesc: (a, b) => `Index complet de ${a} familles d'ouvertures d'échecs et ${b} variantes répertoriées, chacune avec ses coups, son code ECO et un échiquier jouable.`,
         foot: "chang64 : échecs gratuits, sans compte. Données d'ouvertures issues du projet lichess-org/chess-openings." }
 };
-function urlFor(lang, p) { return `${SITE}/${L[lang].dir}/${lang === "fr" ? p.slugFr : p.slugEn}`; }
-function altLinks(p) {
-  return `<link rel="alternate" hreflang="en" href="${urlFor("en", p)}">\n` +
-         `<link rel="alternate" hreflang="fr" href="${urlFor("fr", p)}">\n` +
-         `<link rel="alternate" hreflang="x-default" href="${urlFor("en", p)}">`;
+/* Libelles des pages d'ouvertures dans les autres langues (2026-10-25),
+   traduits depuis les gabarits anglais ci-dessous. Les pluriels passent par
+   les formes plurielles de la traduction (variable n), pas par un "s" colle
+   comme en anglais. Le nom de la famille est cite apres "l'ouverture" pour
+   ne pas avoir a l'accorder ("la Defensa siciliana", "el Gambito de dama").
+   Attention : ces gabarits sont des cles. Changer le texte anglais de L.en
+   sans les changer ici laisserait les autres langues sur l'ancien sens. */
+function libellesOuvertures(lang) {
+  if (L[lang]) return L[lang];
+  const x = (en, v) => tr(lang, en, v);
+  const dir = PAR_CODE[lang].dirs.openings;
+  return (L[lang] = {
+    dir, index: "/" + dir + "/", label: PAR_CODE[lang].nom,
+    nav: [x("Play"), x("Openings"), x("Patterns")], all: x("All openings"), play: x("Play this opening"),
+    namedLines: x("Named lines"), variation: x("Variation"), movesHead: x("Moves"),
+    posAfter: x("Position after"),
+    showing: (a, b) => x("Showing the {a} shortest of {b} known lines.", { a, b }),
+    listIntro: (n, f) => x("This page lists {n} named lines of the opening {f}, taken from the open Lichess opening database. You can play any of them against the built-in engine and have the game reviewed move by move afterwards.", { n, f }),
+    idxTitle: x("Chess openings: every named line with moves and ECO codes") + " | chang64",
+    idxH1: x("Chess openings"),
+    idxLede: (a, b) => x("Every named opening family, with its moves and variations. Open one to see the position, replay the line move by move, or play it yourself against the engine. {a} families, {b} named lines.", { a, b }),
+    idxDesc: (a, b) => x("A complete index of {a} chess opening families and {b} named lines, each with its moves, ECO code and a playable board.", { a, b }),
+    foot: x("chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.")
+  });
 }
-fs.mkdirSync(OUT + "/fr/ouvertures", { recursive: true });
+function urlFor(lang, p) { return `${SITE}/${libellesOuvertures(lang).dir}/${p.slugs[lang]}`; }
+/* Adresses d'une famille dans chaque langue, pour hreflang et selecteur. */
+function urlsOuverture(p) { return Object.fromEntries(CODES.map(c => [c, urlFor(c, p)])); }
+for (const l of LANGUES) fs.mkdirSync(OUT + "/" + l.dirs.openings, { recursive: true });
 
-for (const lang of ["en", "fr"]) {
-  const d = L[lang];
+/* Une passe par langue du registre (2026-10-25). L'anglais et le francais
+   gardent leurs phrases redigees ; les autres langues passent par tr(), avec
+   des gabarits qui citent la famille apres "l'ouverture" plutot qu'avec un
+   article a accorder. Les noms de variantes (Najdorf Variation, English
+   Attack...) restent en anglais hors du francais, comme sur Lichess : une
+   substitution mot a mot comme VAR_FR ne se transpose ni a l'allemand ni au
+   russe. */
+for (const { code: lang } of LANGUES) {
+  const d = libellesOuvertures(lang);
+  const accueil = PAR_CODE[lang].accueil;
+  const autre = lang !== "en" && lang !== "fr";
   for (const p of pages) {
-    const name = lang === "fr" ? p.nameFr : p.family;
-    const note = lang === "fr" ? p.noteFr : p.note;
-    const ecoRange = p.ecos[0] + (p.ecos.length > 1 ? "\u2013" + p.ecos[p.ecos.length - 1] : "");
+    const name = p.noms[lang];
+    const note = p.notes[lang];
+    const moves = numbered(p.main.moves);
+    const ecoRange = p.ecos[0] + (p.ecos.length > 1 ? "–" + p.ecos[p.ecos.length - 1] : "");
     const fallback = lang === "fr"
-      ? `La ${name} commence par ${numbered(p.main.moves)} (ECO ${ecoRange}). Cette page recense ses ${p.count} variante${p.count > 1 ? "s" : ""} répertoriée${p.count > 1 ? "s" : ""} avec leurs coups et leurs codes ECO, sur un échiquier depuis lequel tu peux jouer contre le moteur.`
-      : `The ${name} begins ${numbered(p.main.moves)} (ECO ${ecoRange}). This page lists its ${p.count} named variation${p.count > 1 ? "s" : ""} with their moves and ECO codes, on a board you can play from against the engine.`;
-    const desc = metaDesc(note ? note + (lang === "fr" ? ` La ${name} couvre les codes ECO ${ecoRange}.` : ` The ${name} covers ECO ${ecoRange}.`) : fallback);
-    const alsoKnown = (lang === "fr" && p.nameFr !== p.family)
-      ? `<p style="font-size:13px;color:var(--sage)">Nom anglais couramment utilisé : <strong>${esc(p.family)}</strong>.</p>` : "";
+      ? `La ${name} commence par ${moves} (ECO ${ecoRange}). Cette page recense ses ${p.count} variante${p.count > 1 ? "s" : ""} répertoriée${p.count > 1 ? "s" : ""} avec leurs coups et leurs codes ECO, sur un échiquier depuis lequel tu peux jouer contre le moteur.`
+      : lang === "en"
+      ? `The ${name} begins ${moves} (ECO ${ecoRange}). This page lists its ${p.count} named variation${p.count > 1 ? "s" : ""} with their moves and ECO codes, on a board you can play from against the engine.`
+      : tr(lang, "The opening {name} begins {moves} (ECO {eco}). This page lists its {n} named variations with their moves and ECO codes, on a board you can play from against the engine.", { name, moves, eco: ecoRange, n: p.count });
+    const desc = metaDesc(note ? note + " " + (lang === "fr" ? `La ${name} couvre les codes ECO ${ecoRange}.` : lang === "en" ? `The ${name} covers ECO ${ecoRange}.`
+      : tr(lang, "The opening {name} covers ECO {eco}.", { name, eco: ecoRange })) : fallback);
+    const alsoKnown = (lang !== "en" && name !== p.family)
+      ? `<p style="font-size:13px;color:var(--sage)">${T(lang, "Commonly used English name: {name}.", "Nom anglais couramment utilisé : {name}.", { name: `<strong>${esc(p.family)}</strong>` })}</p>` : "";
     const rows = p.variations.map(v =>
-      `<tr><td>${esc(v.variation ? (lang === "fr" ? varFr(v.variation) : v.variation) : (lang === "fr" ? "Ligne principale" : "Main line"))}</td><td class="mono">${esc(numbered(v.moves))}</td><td class="mono">${v.eco}</td></tr>`).join("");
-    const other = lang === "fr" ? "en" : "fr";
+      `<tr><td>${esc(v.variation ? (lang === "fr" ? varFr(v.variation) : v.variation) : T(lang, "Main line", "Ligne principale"))}</td><td class="mono">${esc(numbered(v.moves))}</td><td class="mono">${v.eco}</td></tr>`).join("");
     /* desc sert la balise meta et le referencement : elle contient la note
        d'ouverture, laquelle est aussi affichee dans le corps. La reprendre
        en chapo faisait relire la meme phrase deux fois de suite. Le chapo
        annonce donc ce que contient la page, la note reste a sa place. */
     const chapo = lang === "fr"
-      ? `${numbered(p.main.moves)} · ${p.ecos.join(", ")} · ${p.count} ligne${p.count > 1 ? "s" : ""} répertoriée${p.count > 1 ? "s" : ""}, avec un échiquier pour les jouer.`
-      : `${numbered(p.main.moves)} · ${p.ecos.join(", ")} · ${p.count} named line${p.count > 1 ? "s" : ""}, with a board to play them from.`;
+      ? `${moves} · ${p.ecos.join(", ")} · ${p.count} ligne${p.count > 1 ? "s" : ""} répertoriée${p.count > 1 ? "s" : ""}, avec un échiquier pour les jouer.`
+      : lang === "en"
+      ? `${moves} · ${p.ecos.join(", ")} · ${p.count} named line${p.count > 1 ? "s" : ""}, with a board to play them from.`
+      : `${moves} · ${p.ecos.join(", ")} · ` + tr(lang, "{n} named lines, with a board to play them from.", { n: p.count });
     const body = `
 <h1>${esc(name)}</h1>
 <p class="lede">${esc(chapo)}</p>
 <div class="cols">
   <div class="diagram">${animBoard(p.main.moves, 300, {
-      start: lang === "fr" ? "Position de départ" : "Starting position",
-      aria:  lang === "fr" ? `Échiquier : ${name} après ${numbered(p.main.moves)}`
-                           : `Chessboard: ${name} after ${numbered(p.main.moves)}`,
-      prev:  lang === "fr" ? "Coup précédent" : "Previous move",
-      play:  lang === "fr" ? "Rejouer la ligne" : "Replay the line",
-      next:  lang === "fr" ? "Coup suivant" : "Next move"
+      start: T(lang, "Starting position", "Position de départ"),
+      aria:  T(lang, "Chessboard: {name} after {moves}", "Échiquier : {name} après {moves}", { name, moves }),
+      prev:  T(lang, "Previous move", "Coup précédent"),
+      play:  T(lang, "Replay the line", "Rejouer la ligne"),
+      next:  T(lang, "Next move", "Coup suivant")
     }) || boardSvg(p.fen, 300)}
-    <p style="font-size:12px;color:var(--sage);margin:8px 0 0">${d.posAfter} ${esc(numbered(p.main.moves))}</p>
-    <p style="font-size:12px;color:var(--sage);margin:4px 0 0">${lang === "fr"
-      ? "Les flèches ci-dessus rejouent cette ligne, coup par coup. Pour l'affronter toi-même, utilise le bouton à droite."
-      : "The arrows above replay this line, move by move. To try it yourself, use the button on the right."}</p>
+    <p style="font-size:12px;color:var(--sage);margin:8px 0 0">${d.posAfter} ${esc(moves)}</p>
+    <p style="font-size:12px;color:var(--sage);margin:4px 0 0">${T(lang,
+      "The arrows above replay this line, move by move. To try it yourself, use the button on the right.",
+      "Les flèches ci-dessus rejouent cette ligne, coup par coup. Pour l'affronter toi-même, utilise le bouton à droite.")}</p>
   </div>
   <div>
-    <div class="moves">${esc(numbered(p.main.moves))}</div>
+    <div class="moves">${esc(moves)}</div>
     <div>${p.ecos.map(e => `<span class="eco">${e}</span>`).join("")}</div>
     ${alsoKnown}
     ${note ? `<p>${esc(note)}</p>` : ""}
     <p>${esc(d.listIntro(p.count, name))}</p>
-    <a class="cta" href="/#line=${encodeURIComponent(p.main.moves.split(" ").join("_"))}">${d.play}</a>
+    <a class="cta" href="${accueil}#line=${encodeURIComponent(p.main.moves.split(" ").join("_"))}">${d.play}</a>
     <a class="cta ghost" href="${d.index}">${d.all}</a>
   </div>
 </div>
@@ -1820,17 +1931,18 @@ for (const lang of ["en", "fr"]) {
 ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.count))}</p>` : ""}
 `;
     const jsonld = { "@context": "https://schema.org", "@type": "Article",
-      headline: name + (lang === "fr" ? " : ouverture d'échecs" : " chess opening"),
-      description: desc, inLanguage: lang,
+      headline: lang === "fr" ? name + " : ouverture d'échecs" : lang === "en" ? name + " chess opening" : tr(lang, "{name} chess opening", { name }),
+      description: desc, inLanguage: PAR_CODE[lang].html,
       about: { "@type": "Thing", name: name },
       isPartOf: { "@type": "WebSite", name: "chang64", url: SITE } };
     let title = lang === "fr"
       ? `${name} : coups, variantes et codes ECO | chang64`
-      : `${name} : moves, variations and ECO codes | chang64`;
-    if (title.length > 70) title = `${name} : ${lang === "fr" ? "coups et variantes" : "moves and variations"} | chang64`;
+      : lang === "en" ? `${name} : moves, variations and ECO codes | chang64`
+      : `${name} : ${tr(lang, "moves, variations and ECO codes")} | chang64`;
+    if (title.length > 70) title = `${name} : ${T(lang, "moves and variations", "coups et variantes")} | chang64`;
     if (title.length > 70) title = `${name} | chang64`;
     const ogName = "op-" + p.slugEn;
-    if (lang === "en") queueOg(ogName, p.family, numbered(p.main.moves) + "  \u00b7  ECO " + ecoRange, p.fen);
+    if (lang === "en") queueOg(ogName, p.family, moves + "  ·  ECO " + ecoRange, p.fen);
     /* noindex,follow sur les familles sans note redigee (2026-09-05).
        Mesure avant decision : similarite Jaccard de 0,67 a 0,88 entre ces
        pages, 150 a 240 mots dont l'essentiel est du texte de gabarit
@@ -1843,8 +1955,8 @@ ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.cou
        note retire sa page du noindex et la remet au sitemap au build
        suivant, sans toucher a ce fichier. */
     const sansNote = !note;
-    fs.writeFileSync(`${OUT}/${d.dir}/${lang === "fr" ? p.slugFr : p.slugEn}.html`,
-      shell(title, desc, urlFor(lang, p), body, jsonld, lang, altLinks(p), urlFor(other, p), `${SITE}/og/${ogName}.png`, sansNote));
+    fs.writeFileSync(`${OUT}/${d.dir}/${p.slugs[lang]}.html`,
+      shell(title, desc, urlFor(lang, p), body, jsonld, lang, "", urlsOuverture(p), `${SITE}/og/${ogName}.png`, sansNote));
   }
   const idxBody = `
 <h1>${d.idxH1}</h1>
@@ -1855,41 +1967,42 @@ ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.cou
      seule page ne se parcourent pas a l'oeil. -->
 <div class="filtre hide" id="filtreBloc">
   <input type="search" id="filtre" autocomplete="off"
-         placeholder="${lang === "fr" ? "Chercher : nom, coups ou code ECO" : "Search: name, moves or ECO code"}"
-         aria-label="${lang === "fr" ? "Filtrer les ouvertures" : "Filter openings"}"
+         placeholder="${esc(T(lang, "Search: name, moves or ECO code", "Chercher : nom, coups ou code ECO"))}"
+         aria-label="${esc(T(lang, "Filter openings", "Filtrer les ouvertures"))}"
          aria-controls="grille">
   <!-- Une ouverture implique toujours les deux camps : le classement
        Blancs/Noirs suit la tradition (qui choisit cette ouverture pour son
        repertoire), pas une propriete stricte de la position. Absent par
        defaut ("Toutes"), pour ne pas presenter un jugement comme un fait
        la ou une seule case le distinguerait mal. -->
-  <div class="cotefiltre" id="coteFiltre" role="group" aria-label="${lang === "fr" ? "Filtrer par camp" : "Filter by side"}">
-    <button type="button" data-side="all" aria-pressed="true">${lang === "fr" ? "Toutes" : "All"}</button>
-    <button type="button" data-side="w" aria-pressed="false">${lang === "fr" ? "Blancs" : "White"}</button>
-    <button type="button" data-side="b" aria-pressed="false">${lang === "fr" ? "Noirs" : "Black"}</button>
+  <div class="cotefiltre" id="coteFiltre" role="group" aria-label="${esc(T(lang, "Filter by side", "Filtrer par camp"))}">
+    <button type="button" data-side="all" aria-pressed="true">${T(lang, "All", "Toutes")}</button>
+    <button type="button" data-side="w" aria-pressed="false">${T(lang, "White", "Blancs")}</button>
+    <button type="button" data-side="b" aria-pressed="false">${T(lang, "Black", "Noirs")}</button>
   </div>
-  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite"></p>
+  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite" data-aucun="${esc(T(lang, "No match.", "Aucun résultat."))}" data-sur="${esc(T(lang, "{a} of {b}", "{a} sur {b}"))}"></p>
 </div>
 <div class="grid" id="grille">
 ${pages.map(p => {
-  /* data-cle porte tout ce sur quoi on peut chercher : le nom dans les deux
-     langues, les coups et les codes ECO. Sans accents ni ponctuation, pour
-     que "defense" trouve "Défense" et "e4c5" trouve "1.e4 c5". */
+  /* data-cle porte tout ce sur quoi on peut chercher : le nom dans la langue
+     de la page et en anglais (et en francais sur la page francaise), les
+     coups et les codes ECO. Sans accents ni ponctuation, pour que "defense"
+     trouve "Défense" et "e4c5" trouve "1.e4 c5". */
   const cle = sansAccent([
-    lang === "fr" ? p.nameFr : p.family,
-    lang === "fr" ? p.family : p.nameFr,
+    p.noms[lang],
+    lang === "fr" ? p.family : lang === "en" ? p.nameFr : p.family,
     numbered(p.main.moves),
     p.ecos.join(" ")
   ].join(" "));
-  return `<a class="tile" data-cle="${esc(cle)}" data-side="${p.side}" href="${d.index}${lang === "fr" ? p.slugFr : p.slugEn}"><b>${esc(lang === "fr" ? p.nameFr : p.family)}</b><span>${esc(numbered(p.main.moves))} · ${esc(p.ecos.join(" "))}</span></a>`;
+  return `<a class="tile" data-cle="${esc(cle)}" data-side="${p.side}" href="${d.index}${p.slugs[lang]}"><b>${esc(p.noms[lang])}</b><span>${esc(numbered(p.main.moves))} · ${esc(p.ecos.join(" "))}</span></a>`;
 }).join("\n")}
 </div>`;
-  const idxAlt = `<link rel="alternate" hreflang="en" href="${SITE}/openings/">\n<link rel="alternate" hreflang="fr" href="${SITE}/fr/ouvertures/">\n<link rel="alternate" hreflang="x-default" href="${SITE}/openings/">`;
+  if (autre) queueOg("openings-" + lang, d.idxH1, tr(lang, "{a} families · {b} named lines", { a: pages.length, b: lines.length }), "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1");
   fs.writeFileSync(`${OUT}/${d.dir}/index.html`,
     shell(d.idxTitle, d.idxDesc(pages.length, lines.length), SITE + d.index, idxBody,
-      { "@context": "https://schema.org", "@type": "CollectionPage", name: d.idxH1, url: SITE + d.index, inLanguage: lang },
-      lang, idxAlt, SITE + (lang === "fr" ? "/openings/" : "/fr/ouvertures/"),
-      SITE + "/og/" + (lang === "fr" ? "ouvertures" : "openings") + ".png"));
+      { "@context": "https://schema.org", "@type": "CollectionPage", name: d.idxH1, url: SITE + d.index, inLanguage: PAR_CODE[lang].html },
+      lang, "", Object.fromEntries(LANGUES.map(l => [l.code, SITE + "/" + l.dirs.openings + "/"])),
+      SITE + "/og/" + (lang === "fr" ? "ouvertures" : lang === "en" ? "openings" : "openings-" + lang) + ".png"));
 }
 
 /* ---------- 4. manifest, service worker, robots, sitemap ---------- */
@@ -2046,36 +2159,106 @@ self.addEventListener("fetch",e=>{
      autres fichiers gardent leur requete pour cle. */
   const page=r.mode==="navigate"||(r.headers.get("accept")||"").includes("text/html");
   const cle=page?url.origin+url.pathname:r;
+  /* Repli hors ligne dans la langue de la page demandee (2026-10-25) :
+     l'accueil de cette langue s'il a deja ete visite, sinon "/". */
+  const langue=/^\\/(${LANGUES.filter(l => l.code !== "en").map(l => l.code).join("|")})\\//.exec(url.pathname);
   e.respondWith(
     caches.match(cle).then(hit=>hit||fetch(r).then(resp=>{
       const copy=resp.clone();
       caches.open(CACHE).then(c=>c.put(cle,copy)).catch(()=>{});
       return resp;
-    }).catch(()=>caches.match("/")))
+    }).catch(()=>(langue?caches.match("/"+langue[1]+"/"):Promise.resolve()).then(h=>h||caches.match("/"))))
   );
 });
 `);
 
-/* Les jetons de familles et de lignes ne peuvent etre substitues qu'ici :
-   ils dependent du livre d'ouvertures, charge apres l'assemblage. */
-app = app.split("__NF__").join(NF).split("__NL__").join(NL);
 /* Date de l'application (2026-10-18). Les pages de contenu portaient
    "Publiee le ..., mise a jour le ..." en pied de page ; l'application, la
    page qu'on visite le plus, ne disait rien. Meme registre, cle "/".
    L'empreinte couvre la page ET la banque d'exercices : une purge ou une
    fournee fusionnee est une mise a jour, meme quand le gabarit ne bouge pas.
    Premiere entree : la date de publication reprend la plus ancienne du
-   registre, celle de la mise en ligne du site, pas la date du jour. */
+   registre, celle de la mise en ligne du site, pas la date du jour.
+   Une seule date pour toutes les langues : c'est la meme application. */
 if (!DATES["/"]) {
   const premiere = Object.values(DATES).map(d => d.publiee).sort()[0] || BUILD_DATE;
   DATES["/"] = { sceau: "", publiee: premiere, modifiee: premiere };
 }
 const datesApp = datesDe("/", app + require(path.join(__dirname, "banque.js")).texte());
-app = app.split("__APP_PUBLIEE__").join(datesApp.publiee).split("__APP_MODIFIEE__").join(datesApp.modifiee)
-  .split("__APP_DATES_EN__").join("Published " + datesApp.publiee +
-    (datesApp.modifiee !== datesApp.publiee ? ", updated " + datesApp.modifiee : ""));
-fs.writeFileSync(OUT + "/index.html", app);
-fs.writeFileSync(path.join(__dirname, "site-index.html"), app);
+
+/* ---------- 4bis. une page d'accueil de l'application par langue ----------
+   Decision d'Alexandre du 25/10 : "/" reste l'anglais, et chaque autre langue
+   a sa page (/fr/, /es/...). Meme gabarit, meme script ; ce qui change d'une
+   page a l'autre est pose ici :
+   - l'entete : lang, canonical, hreflang, og:locale, titre et descriptions
+     traduits (le texte du corps est traduit au chargement par applyI18n,
+     comme le francais l'etait deja) ;
+   - le bloc de langue (id="langue") : code, locale, dictionnaire de la langue
+     et adresses de ses pages d'ouvertures. Seule cette langue y est : un
+     visiteur ne telecharge pas les dictionnaires des autres ;
+   - le selecteur de langue et le texte sans JavaScript ;
+   - sur la page anglaise seulement, un court script en tete qui renvoie vers
+     la langue retenue (choix deja fait sur le site, sinon langue du
+     navigateur). Googlebot, en anglais et sans stockage, reste sur "/". */
+const URLS_APP = Object.fromEntries(LANGUES.map(l => [l.code, SITE + l.accueil]));
+function dictApp(lang) {
+  if (lang === "en") return {};
+  try { return require(path.join(__dirname, "langues", lang, "app.js")); }
+  catch (e) { if (e.code !== "MODULE_NOT_FOUND") throw e; return {}; }
+}
+const NOSCRIPT_EN = "chang64 needs JavaScript to play, solve puzzles and analyse games. Without it, nothing on this page will respond.<br>" +
+  "The content pages work without JavaScript: <a href=\"/{openings}/\">openings</a>, <a href=\"/{learn}/\">rules</a>, <a href=\"/{glossary}/\">glossary</a>, <a href=\"/{endgames}/\">endgames</a>.";
+function pageApplication(lang) {
+  const L_ = PAR_CODE[lang], dict = dictApp(lang);
+  const tx = s => typeof dict[s] === "string" ? dict[s] : s;
+  const attr = s => String(s).replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
+  let h = app.replace('<html lang="en">', `<html lang="${L_.html}">`);
+  h = h.replace(/<title>([^<]*)<\/title>/, (m, x) => `<title>${esc(tx(x))}</title>`)
+    .replace(/(<meta (?:name="description"|property="og:title"|property="og:description") content=")([^"]*)(")/g,
+      (m, a, x, b) => a + esc(tx(attr(x))) + b)
+    .replace(/("@type":"WebApplication"[\s\S]*?"description":)("(?:[^"\\]|\\.)*")/, (m, a, x) => a + JSON.stringify(tx(JSON.parse(x))));
+  const ouvertures = {};
+  for (const p of pages) ouvertures[p.family] = p.slugs[lang];
+  const bloc = JSON.stringify({ lang, html: L_.html, intl: L_.intl, dirs: L_.dirs, ouvertures, dict })
+    .replace(/</g, "\\u003c");
+  const selecteur = `<details class="langswitch" id="langSwitch"><summary aria-label="${esc(T(lang, "Language: {name}", "Langue : {name}", { name: L_.nom }))}">${lang.toUpperCase()}</summary><div class="langmenu">` +
+    LANGUES.map(l => `<a href="${l.accueil}" hreflang="${l.hreflang}" lang="${l.html}" data-lang="${l.code}"${l.code === lang ? ' aria-current="true"' : ""}>${l.nom}</a>`).join("") +
+    `</div></details>`;
+  const autres = LANGUES.filter(l => l.code !== "en").map(l => l.code);
+  const redirection = lang !== "en" ? "" :
+    `<script>try{var A=${JSON.stringify(autres)},l=localStorage.getItem("chang64:lang")||"";if(!l){var n=(navigator.language||"").toLowerCase();for(var i=0;i<A.length;i++)if(n.indexOf(A[i])===0)l=A[i];}if(A.indexOf(l)>=0)location.replace("/"+l+"/"+location.search+location.hash);}catch(e){}</script>`;
+  h = h.split("__CANONICAL__").join(URLS_APP[lang])
+    .replace("__OG_LOCALE__", L_.og)
+    .replace("<!--__HREFLANG__-->", lignesHreflang(URLS_APP))
+    .replace("<!--__REDIRECTION_LANGUE__-->", redirection)
+    .replace("<!--__NOSCRIPT__-->", GRAMMAIRE_GABARIT(dict["@noscript"] || NOSCRIPT_EN, L_.dirs))
+    .replace("<!--__LANGSWITCH__-->", selecteur)
+    .replace("__LANGUE_JSON__", () => bloc);
+  /* Jetons du nombre d'exercices, apres la pose du dictionnaire dont les
+     phrases les portent aussi : groupe a l'anglaise (__NP_EN__), a la
+     francaise (__NP_FR__, phrases deja redigees ainsi) ou dans la langue de
+     la page (__NP_LOC__). Le texte de presentation de l'accueil groupe le
+     nombre selon la langue (108,868 / 108 868), meme Intl que fmtEntier dans
+     i18n.js. Les meta et donnees structurees gardent __NP__, le nombre brut.
+     Les jetons de familles et de lignes dependent du livre d'ouvertures,
+     charge apres l'assemblage. */
+  h = h.split("__NP_EN__").join(Number(NP).toLocaleString("en-US"))
+    .split("__NP_FR__").join(Number(NP).toLocaleString("fr-FR"))
+    .split("__NP_LOC__").join(Number(NP).toLocaleString(L_.intl))
+    .split("__NP__").join(NP)
+    .split("__NF__").join(NF).split("__NL__").join(NL);
+  return h.split("__APP_PUBLIEE__").join(datesApp.publiee).split("__APP_MODIFIEE__").join(datesApp.modifiee)
+    .split("__APP_DATES_EN__").join(lang === "en"
+      ? "Published " + datesApp.publiee + (datesApp.modifiee !== datesApp.publiee ? ", updated " + datesApp.modifiee : "")
+      : datesPied(lang, datesApp));
+}
+const GRAMMAIRE_GABARIT = TRAD.GRAMMAIRE.gabarit;
+for (const l of LANGUES) {
+  const h = pageApplication(l.code);
+  fs.mkdirSync(path.join(OUT, l.accueil), { recursive: true });
+  fs.writeFileSync(path.join(OUT, l.accueil, "index.html"), h);
+  if (l.code === "en") fs.writeFileSync(path.join(__dirname, "site-index.html"), h);
+}
 
 /* ---------- images de partage (Open Graph) ---------- */
 function ogSvg(title, subtitle, fen) {
@@ -2213,7 +2396,9 @@ console.log("Redirections FR    :", oldFrRedirects ? oldFrRedirects.split("\n").
 fs.cpSync(path.join(__dirname, "functions"), path.join(OUT, "functions"), { recursive: true });
 fs.writeFileSync(OUT + "/_routes.json", JSON.stringify({ version: 1, include: ["/api/*"], exclude: [] }, null, 2) + "\n");
 
-fs.writeFileSync(OUT + "/_redirects", `/fr            /fr/ouvertures/       301
+/* "/fr" menait aux ouvertures francaises ; depuis le 2026-10-25 il mene a
+   l'application en francais (/fr/), comme "/es" a l'espagnol, etc. */
+fs.writeFileSync(OUT + "/_redirects", `${LANGUES.filter(l => l.code !== "en").map(l => `/${l.code}            /${l.code}/                   301`).join("\n")}
 /openings      /openings/            301
 /puzzles       /puzzles/             301
 /learn         /learn/               301
@@ -2226,12 +2411,14 @@ ${oldFrRedirects}
 {
   const body = `
 <h1>404</h1>
-<p class="lede">This page does not exist. Cette page n'existe pas.</p>
+<p class="lede">This page does not exist. Cette page n'existe pas.${LANGUES.filter(l => l.code !== "en" && l.code !== "fr").map(l => " " + tr(l.code, "This page does not exist.")).join("")}</p>
 <div class="grid">
   <a class="tile" href="/"><b>Play chess</b><span>chang64.com</span></a>
   <a class="tile" href="/openings/"><b>Openings</b><span>${NF} families</span></a>
   <a class="tile" href="/fr/ouvertures/"><b>Ouvertures</b><span>${NF} familles</span></a>
   <a class="tile" href="/puzzles/"><b>Puzzles</b><span>${puzzles.length} positions</span></a>
+${/* Une tuile par autre langue (2026-10-25), vers son application. */
+  LANGUES.filter(l => l.code !== "en").map(l => `  <a class="tile" href="${l.accueil}" lang="${l.html}"><b>${l.nom}</b><span>${esc(T(l.code, "Play chess", "Jouer aux échecs"))}</span></a>`).join("\n")}
 </div>`;
   fs.writeFileSync(OUT + "/404.html",
     shell("Page not found | chang64", "This page does not exist on chang64.", SITE + "/404", body, null, "en", '<meta name="robots" content="noindex">', null));
@@ -2279,24 +2466,25 @@ else {
    sitemap une page qu'on demande par ailleurs de ne pas indexer est un
    signal contradictoire que la Search Console remonte comme une erreur.
    Meme condition des deux cotes, meme source (FAMILY_NOTES/NOTES_FR). */
-const pagesIndexables = pages.filter(p => p.note || p.noteFr);
+/* Une entree par page et par langue, chacune avec toutes ses versions
+   (2026-10-25) : Google attend des hreflang reciproques, donc la liste
+   complete sous chaque adresse. Une version en noindex (famille sans note
+   dans cette langue) n'est ni declaree ni citee en alternative. */
+const altsOuverture = p => Object.fromEntries(LANGUES.filter(l => p.notes[l.code]).map(l => [l.code, urlFor(l.code, p)]));
+const IDX_OUV = Object.fromEntries(LANGUES.map(l => [l.code, SITE + "/" + l.dirs.openings + "/"]));
 const urls = [
-  { loc: SITE + "/", pri: "1.0", alt: null },
-  { loc: SITE + "/openings/", pri: "0.9", alt: SITE + "/fr/ouvertures/", lang: "en" },
-  { loc: SITE + "/fr/ouvertures/", pri: "0.9", alt: SITE + "/openings/", lang: "fr" },
-  ...pagesIndexables.map(p => ({ loc: urlFor("en", p), pri: "0.7", alt: urlFor("fr", p), lang: "en" })),
-  ...pagesIndexables.map(p => ({ loc: urlFor("fr", p), pri: "0.7", alt: urlFor("en", p), lang: "fr" })),
+  ...LANGUES.map(l => ({ loc: URLS_APP[l.code], pri: "1.0", alts: URLS_APP })),
+  ...LANGUES.map(l => ({ loc: IDX_OUV[l.code], pri: "0.9", alts: IDX_OUV })),
+  ...LANGUES.flatMap(l => pages.filter(p => p.notes[l.code]).map(p => ({ loc: urlFor(l.code, p), pri: "0.7", alts: altsOuverture(p) }))),
   ...extraUrls
 ];
 fs.writeFileSync(OUT + "/sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
   urls.map(u => {
-    const other = u.lang === "fr" ? "en" : "fr";
-    const alts = u.alt
-      ? `\n    <xhtml:link rel="alternate" hreflang="${u.lang}" href="${u.loc}"/>` +
-        `\n    <xhtml:link rel="alternate" hreflang="${other}" href="${u.alt}"/>` +
-        `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${u.lang === "en" ? u.loc : u.alt}"/>`
-      : "";
+    const v = u.alts || {};
+    const alts = LANGUES.filter(l => v[l.code]).map(l =>
+      `\n    <xhtml:link rel="alternate" hreflang="${l.hreflang}" href="${v[l.code]}"/>`).join("") +
+      (v.en ? `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${v.en}"/>` : "");
     return `  <url><loc>${u.loc}</loc><lastmod>${today}</lastmod><priority>${u.pri}</priority>${alts}\n  </url>`;
   }).join("\n") + `\n</urlset>\n`);
 
@@ -2330,3 +2518,14 @@ let total = 0;
 poserHachagesCSP();
 ecrireRegistreDates();
 console.log("Poids du site      :", (total / 1048576).toFixed(1), "Mo");
+/* Phrases des pages restees sans traduction, par langue (2026-10-25) : la
+   page retombe alors sur l'anglais. Liste ecrite hors du site, dans
+   langues/manquants.json (ignore par git), que lit check_traductions.js. */
+{
+  const manq = TRAD.rapport();
+  fs.writeFileSync(path.join(__dirname, "langues", "manquants.json"), JSON.stringify(manq, null, 1) + "\n");
+  for (const l of LANGUES) {
+    if (l.code === "en" || l.code === "fr") continue;
+    console.log(("Traductions " + l.code).padEnd(19) + ": " + ((manq[l.code] || []).length ? (manq[l.code] || []).length + " phrase(s) manquante(s)" : "complete"));
+  }
+}

@@ -856,23 +856,17 @@ function idxToSq(i){
    mise en mots. La region live de ui3.js n'annonce plus les cases, le lecteur
    d'ecran lisant deja ce nom au focus ; deux formulations concurrentes
    avaient fini par se contredire sur les 64 cases.
-   pieceWord() vit dans ui3.js et lit PIECE_WORDS, une const : au tout
-   premier render() de l'initialisation, ui3.js n'a pas encore ete evalue
-   et cette const est en zone morte temporelle (piege deja rencontre sur
-   ce projet). D'ou le try : en cas d'echec on retombe sur le seul nom de
-   la case, ce qui reste un nom accessible valide, et les rendus suivants
-   auront la version complete. */
+   Les mots viennent de GRAMMAIRE (grammaire.js), evalue avant ui.js depuis
+   le 2026-10-25 : il n'y a plus de zone morte au premier render(), ou
+   pieceWord (ui3.js) n'existait pas encore. Le try reste : en cas d'echec
+   on retombe sur le seul nom de la case, qui reste un nom accessible. */
 function sqLabel(sq,p){
   const name="abcdefgh"[fOf(sq)]+(8-rOf(sq));
   if(!p)return name;
   try{
-    const fr=(typeof LANG!=="undefined"&&LANG==="fr");
-    const ch=SYM[pT(p)];
-    const word=(typeof pieceWord==="function")?pieceWord(ch):"";
-    const side=(typeof sideWord==="function")
-      ? sideWord(ch,pC(p)===W)
-      : (pC(p)===W?(fr?"blanc":"white"):(fr?"noir":"black"));
-    if(word)return fr?(word+" "+side+" en "+name):(side+" "+word+" on "+name);
+    /* Ordre des mots, accord de la couleur et preposition propres a chaque
+       langue : voir GRAMMAIRE.caseOccupee (grammaire.js). */
+    return GRAMMAIRE.caseOccupee(LANG,SYM[pT(p)],pC(p)===W,name);
   }catch(e){}
   return name;
 }
@@ -1820,15 +1814,14 @@ function tryPuzzleMove(m){
    piece variable : en francais, "dame" et "tour" sont feminines, les
    quatre autres pieces masculines. Un article fige dans le gabarit serait
    donc faux une fois sur deux ("Le dame", "Le tour"). */
+/* Depuis le 2026-10-25, le groupe est construit par GRAMMAIRE.groupe, avec
+   ses cas et son genre (allemand, russe...). groupe() rend l'objet complet,
+   a passer tel quel a t() : le gabarit choisit la forme ({x:acc}) et accorde
+   ce qui doit l'etre ({x?masculin|feminin}). nounPhrase() garde la forme
+   simple, au nominatif. */
+function groupe(ch,sq){return GRAMMAIRE.groupe(LANG,ch,sq);}
 function nounPhrase(ch,sq,cap){
-  const pw=typeof pieceWord==="function"?pieceWord:x=>x;
-  let s;
-  if(LANG==="fr"){
-    const fem=ch&&"qr".includes(ch.toLowerCase());
-    s=(fem?"la ":"le ")+pw(ch)+" en "+sq;
-  }else{
-    s="the "+pw(ch)+" on "+sq;
-  }
+  const s=groupe(ch,sq).nom;
   return cap?s.charAt(0).toUpperCase()+s.slice(1):s;
 }
 /* Construit la phrase d'explication a partir de puzzle.explain (cases et
@@ -1841,44 +1834,35 @@ function explainSentence(p){
   const ex=p.explain||{};
   switch(p.theme){
     case "Winning capture":
-      return ex.piece?t("Nothing defends {piece}.",{piece:nounPhrase(ex.piece,ex.sq,false)}):"";
+      return ex.piece?t("Nothing defends {piece}.",{piece:groupe(ex.piece,ex.sq)}):"";
     case "Knight fork":
     case "Pawn fork":
     case "Double attack": {
       if(!ex.targets||ex.targets.length<2)return "";
       const [a,b]=ex.targets;
       return t("The piece on {from} attacks both {p1} and {p2} at once.",
-        {from:ex.from,p1:nounPhrase(a.piece,a.sq,false),p2:nounPhrase(b.piece,b.sq,false)});
+        {from:ex.from,p1:groupe(a.piece,a.sq),p2:groupe(b.piece,b.sq)});
     }
     case "Pin":
     case "Skewer":
       if(ex.captured&&ex.pinned){
         /* Accord de genre : {pinned} peut etre n'importe quelle piece (dame,
-           tour = feminin ; les quatre autres = masculin), donc un seul
-           gabarit traduit avec "defendu"/"cloue" fixes serait faux une fois
-           sur deux ("la dame... defendu"). Compose directement plutot que
-           de passer par un seul t() a un seul genre. */
-        const fem=ex.pinned.piece&&"qr".includes(ex.pinned.piece.toLowerCase());
-        if(LANG==="fr"){
-          return nounPhrase(ex.captured.piece,ex.captured.sq,true)+" n'était défendu"+(fem?"e":"")+" que par "+
-            nounPhrase(ex.pinned.piece,ex.pinned.sq,false)+", qui est cloué"+(fem?"e":"")+" et ne peut pas reprendre.";
-        }
+           tour = feminin ; les quatre autres = masculin), donc un gabarit
+           avec "defendu"/"cloue" fixes serait faux une fois sur deux ("la
+           dame... defendu"). Depuis le 2026-10-25, l'accord est dans le
+           gabarit lui-meme ("défendu{captured?|e}"), pour toutes les
+           langues. */
         return t("{captured} was only defended by {pinned}, which is pinned and can't recapture.",
-          {captured:nounPhrase(ex.captured.piece,ex.captured.sq,true),pinned:nounPhrase(ex.pinned.piece,ex.pinned.sq,false)});
+          {captured:groupe(ex.captured.piece,ex.captured.sq),pinned:groupe(ex.pinned.piece,ex.pinned.sq)});
       }
       return (ex.pinned&&ex.behind)?t("{pinned} can't move without exposing {behind}.",
-        {pinned:nounPhrase(ex.pinned.piece,ex.pinned.sq,true),behind:nounPhrase(ex.behind.piece,ex.behind.sq,false)}):"";
+        {pinned:groupe(ex.pinned.piece,ex.pinned.sq),behind:groupe(ex.behind.piece,ex.behind.sq)}):"";
     case "Back-rank mate":
       return ex.king?t("The king on {sq} had no square to escape to.",{sq:ex.king}):"";
     case "Deflection":
       if(!ex.deflected)return "";
-      if(LANG==="fr"){
-        const fem=ex.deflected.piece&&"qr".includes(ex.deflected.piece.toLowerCase());
-        return nounPhrase(ex.deflected.piece,ex.deflected.sq,true)+" était l'unique défenseur"+
-          ". Forcé"+(fem?"e":"")+" de s'écarter, "+(fem?"elle":"il")+" ne peut plus aider.";
-      }
       return t("{deflected} was the only defender. Forced away, it can no longer help.",
-        {deflected:nounPhrase(ex.deflected.piece,ex.deflected.sq,true)});
+        {deflected:groupe(ex.deflected.piece,ex.deflected.sq)});
     case "Smothered mate":
       return ex.king?t("The king on {sq} was boxed in by its own pieces.",{sq:ex.king}):"";
     case "Winning move":
@@ -1926,20 +1910,9 @@ function bilanLigne(p){
 }
 /* "un cavalier", "deux pions", "la dame" / "a knight", "two pawns", "the
    queen". Deux sortes de pieces au plus, au-dela la phrase ne se lit plus :
-   on se rabat sur "du materiel". */
-function lotDePieces(lot){
-  const ks="qrbnp".split("").filter(k=>lot[k]);
-  if(!ks.length||ks.length>2)return ks.length?(LANG==="fr"?"du matériel":"material"):"";
-  const nb=[,"",LANG==="fr"?"deux":"two",LANG==="fr"?"trois":"three",LANG==="fr"?"quatre":"four"];
-  const un=k=>{
-    const n=lot[k],mot=pieceWord(k);
-    if(n>4)return LANG==="fr"?"du matériel":"material";
-    if(n>1)return nb[n]+" "+mot+(mot.endsWith("s")?"":"s");
-    if(k==="q")return LANG==="fr"?"la dame":"the queen";
-    return LANG==="fr"?((PIECES_FEM[k]?"une ":"un ")+mot):("a "+mot);
-  };
-  return ks.map(un).join(LANG==="fr"?" et ":" and ");
-}
+   on se rabat sur "du materiel". Construit par GRAMMAIRE.lot (grammaire.js)
+   depuis le 2026-10-25, pour les accords et les cas de chaque langue. */
+function lotDePieces(lot){return GRAMMAIRE.lot(LANG,lot);}
 function phraseGain(b){
   /* Une ligne peut gagner par la position et finir avec MOINS de materiel :
      ne jamais ecrire "gagne une tour contre la dame" dans ce cas. */
@@ -1950,8 +1923,8 @@ function phraseGain(b){
   const p=lotDePieces(b.perdu);
   /* Tour contre piece mineure : "la qualite" / "the exchange". */
   if(b.gagne.r===1&&Object.keys(b.gagne).length===1&&Object.keys(b.perdu).length===1&&(b.perdu.b===1||b.perdu.n===1))
-    return LANG==="fr"?"la qualité":"the exchange";
-  return p?(LANG==="fr"?g+" contre "+p:g+" for "+p):g;
+    return GRAMMAIRE.qualite(LANG);
+  return p?GRAMMAIRE.contre(LANG,g,p):g;
 }
 function phraseLigne(p){
   const b=bilanLigne(p);
@@ -1982,7 +1955,7 @@ function phraseLigne(p){
   if(me&&me.san){
     if(me.mat===1)parts.push(t("{move} threatens {threat}, checkmate.",{move:premier,threat:me.san}));
     else if(me.mat)parts.push(t("{move} threatens mate in {n}, starting with {threat}.",{move:premier,n:me.mat,threat:me.san}));
-    else if(me.piece&&me.sq)parts.push(t("{move} threatens to take {piece} with {threat}.",{move:premier,piece:nounPhrase(me.piece,me.sq,false),threat:me.san}));
+    else if(me.piece&&me.sq)parts.push(t("{move} threatens to take {piece} with {threat}.",{move:premier,piece:groupe(me.piece,me.sq),threat:me.san}));
     else parts.push(t("{move} threatens {threat}.",{move:premier,threat:me.san}));
   }
   return parts.join(" ");
@@ -2283,7 +2256,10 @@ function decMoves(code){
   }
   return out;
 }
-function baseUrl(){return location.origin+location.pathname;}
+/* Racine du site, quelle que soit la langue de la page (2026-10-25) : un
+   lien partage depuis /fr/ ouvre "/", qui renvoie chacun vers sa propre
+   langue. */
+function baseUrl(){return location.origin+"/";}
 let amiResigned=null;
 function amiUrl(){return baseUrl()+"#p="+amiMoves.map(encMove).join("")+(amiResigned!==null?"&r="+(amiResigned===W?"w":"b"):"");}
 function isLocalFile(){return location.protocol==="file:";}

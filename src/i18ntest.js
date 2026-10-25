@@ -1,22 +1,21 @@
 const fs=require("fs");const {JSDOM}=require("jsdom");
-const html=fs.readFileSync("./site/index.html","utf8");
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
-function boot(lang){
-  const errors=[];
-  const dom=new JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/"});
-  Object.defineProperty(dom.window.navigator,"language",{value:lang,configurable:true});
-  return {dom,w:dom.window,errors};
+/* Une page par langue depuis le 2026-10-25 (/, /fr/, /es/...) : on ouvre
+   directement la page de la langue a verifier, au lieu de cliquer sur un
+   bouton FR dans la page anglaise. */
+function ouvrir(rep){
+  const html=fs.readFileSync("./site/"+rep+"index.html","utf8");
+  return new JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/"+rep});
 }
 (async()=>{
   const errors=[];
-  const dom=new JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/"});
-  const w=dom.window; w.addEventListener("error",e=>errors.push(e.message));
   /* Les libelles francais portent des espaces insecables : une regle
      typographique lie les articles au mot suivant pour qu'ils ne restent pas
      seuls en fin de ligne dans un bouton. Le test compare du texte, pas de la
      mise en page : on neutralise ce caractere a la lecture. */
-  const nb=t=>String(t==null?"":t).replace(/\u00a0/g," ");
+  const nb=t=>String(t==null?"":t).replace(/ /g," ");
+  let w;
   const $=id=>{
     const e=w.document.getElementById(id);
     if(!e||e.__nbsp)return e;
@@ -31,7 +30,9 @@ function boot(lang){
   };
   const click=el=>el.dispatchEvent(new w.MouseEvent("click",{bubbles:true}));
   const cells=()=>$("board").children;
-  await wait(700);
+  const boot=async rep=>{const dom=ouvrir(rep);w=dom.window;w.addEventListener("error",e=>errors.push(e.message));await wait(700);};
+
+  await boot("");
   /* Depuis l'ajout de l'overlay de preparation, une partie chronometree
      attend le feu vert du joueur avant que la pendule ne parte. Les tests
      doivent donc appuyer sur "Commencer", comme un vrai joueur. */
@@ -39,18 +40,17 @@ function boot(lang){
     const b=$("readyBanner");
     if(b&&!b.classList.contains("hide")){click($("readyStart"));await wait(250);}
   };
-  const startGame=async(ms)=>{ if(/Start game|Lancer la partie/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} await pressReady(); };
-  /* L'attente doit venir APRES le feu vert : la pendule ne demarre plus
-     au lancement de la partie mais au clic sur "Commencer". */
-  const restart=async(ms)=>{ click($("btnNew")); await wait(300); await startGame(); await pressReady(); await wait(ms||700); };
+  const startGame=async(ms)=>{ if(/Start game|Lancer la partie|Empezar la partida/.test($("btnNew").textContent)){click($("btnNew"));await wait(ms||700);} await pressReady(); };
   console.log("ENGLISH BY DEFAULT");
   T("html lang", w.document.documentElement.lang==="en", w.document.documentElement.lang);
   T("hero in english", /Play chess/.test($("pane-home").textContent));
-  T("switcher present", !!$("langSwitch") && $("langSwitch").children.length===2);
+  T("switcher present", !!$("langSwitch") && $("langSwitch").querySelectorAll("a[data-lang]").length===6);
+  click($("footLegal")); await wait(500);
+  T("legal in english", /Publisher/.test($("legalBody").textContent));
 
-  console.log("\nSWITCH TO FRENCH");
-  click($("langSwitch").children[1]); await wait(500);
-  T("html lang updated", w.document.documentElement.lang==="fr", w.document.documentElement.lang);
+  console.log("\nFRENCH PAGE");
+  await boot("fr/");
+  T("html lang", w.document.documentElement.lang==="fr", w.document.documentElement.lang);
   T("tabs translated", $("tab-play").textContent==="Jouer" && $("tab-puzzles").textContent==="Résoudre",
      $("tab-play").textContent+"/"+$("tab-puzzles").textContent);
   T("hero translated", /Joue aux échecs/.test($("pane-home").textContent));
@@ -102,40 +102,27 @@ function boot(lang){
   T("endgame brief translated", /dame/i.test($("egBrief").textContent), $("egBrief").textContent.slice(0,50));
   T("endgame status translated", /Blancs/i.test($("egStatus").textContent), $("egStatus").textContent);
 
-  console.log("\nTRAIN + FRIENDS + LEGAL IN FRENCH");
-  /* Mis a jour le 2026-09-06 : l'onglet "S'entrainer" (tab-train) a ete
-     supprime le 03/09 au profit du menu a 5 cartes de Resoudre. Le clic sur
-     $("tab-train") rendait null et plantait la suite, ce qui a laisse sans
-     surveillance tout ce qui suit : Entre amis en francais, mentions
-     legales, confidentialite, et surtout le retour a l'anglais teste plus
-     bas, qui garde un bug rapporte. On passe par tab-puzzles, qui est
-     l'onglet reel, et le trajet reste le meme : un detour avant Entre amis. */
+  console.log("\nFRIENDS + LEGAL IN FRENCH");
   click($("tab-puzzles")); await wait(700);
   click($("tab-friend")); await wait(600);
   T("friend status translated", /partie|jouer|lien/i.test($("amiStatus").textContent), $("amiStatus").textContent);
-  T("share buttons translated", Array.from($("amiShare").children||[]).some(b=>b.textContent==="Copier")||true);
   click($("footLegal")); await wait(500);
   T("legal in french", /Éditeur/.test($("legalBody").textContent));
   T("privacy in french", /aucun cookie/.test($("privacyBody").textContent));
 
-  console.log("\nBACK TO ENGLISH");
-  click($("langSwitch").children[0]); await wait(600);
-  T("legal back to english", /Publisher/.test($("legalBody").textContent));
-  /* Le bug rapporte : changer de langue pendant qu'on est ailleurs (ici sur
-     Mentions legales, pas Exercices), puis revenir sur les finales. Le
-     statut et le descriptif restaient dans l'ancienne langue jusqu'a la
-     prochaine tentative, faute d'un rafraichissement au retour sur l'onglet. */
-  click($("tab-puzzles")); await wait(700);
-  T("endgame status back to english after navigating away then back", /White to move/.test($("egStatus").textContent), $("egStatus").textContent);
-  T("endgame brief back to english after navigating away then back", /queen/i.test($("egBrief").textContent), $("egBrief").textContent.slice(0,50));
-  click($("tab-play")); await wait(600);
-  /* #turnline retire : verifie desormais la meme chose (retraduction
-     dynamique au retour sur l'onglet) sur #navNote, recalcule par le meme
-     refreshGame() que turnline auparavant. #status ne convient pas : il
-     peut retenir un message plus ancien (un indice, par exemple) jamais
-     recalcule par le seul fait de changer d'onglet. */
-  T("nav note back to english", /arrow keys/i.test($("navNote").textContent), $("navNote").textContent);
-  T("game preserved through language switches", $("sheet").textContent.includes("e4"), $("sheet").textContent.replace(/\s+/g," ").trim().slice(0,24));
+  console.log("\nSPANISH PAGE");
+  await boot("es/");
+  T("html lang", w.document.documentElement.lang==="es", w.document.documentElement.lang);
+  T("tabs translated", $("tab-play").textContent==="Jugar", $("tab-play").textContent);
+  T("hero translated", /Juega al ajedrez/.test($("pane-home").textContent));
+  click($("tab-play")); await wait(700);
+  await startGame();
+  T("new game status", /Nueva partida/.test($("status").textContent), $("status").textContent);
+  T("time controls translated", Array.from($("tcCats2").children).map(b=>b.textContent).join(",").includes("Rápidas"),
+     Array.from($("tcCats2").children).map(b=>b.textContent).join(","));
+  click($("footLegal")); await wait(500);
+  T("legal in spanish", /Editor/.test($("legalBody").textContent)&&!/Publisher/.test($("legalBody").textContent));
+  T("privacy in spanish", /cookies/.test($("privacyBody").textContent)&&/dificultad/.test($("privacyBody").textContent));
 
   console.log("\nJS errors:", errors.join(" | ")||"none");
   process.exit(0);

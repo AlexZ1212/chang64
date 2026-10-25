@@ -43,10 +43,11 @@ T("barre de defilement masquee", /scrollbar-width:none/.test(html));
 
 /* Largeur minimale reelle de la rangee, dans les deux langues. C'est ce
    calcul qui explique pourquoi seul le francais etait touche. */
-const i18n = fs.readFileSync(path.join(SRC, "i18n.js"), "utf8");
-const tr = k => { const m = i18n.match(new RegExp('"' + k + '":"([^"]*)"')); return m ? m[1] : k; };
+/* Dictionnaires par langue dans langues/<code>/app.js depuis le 2026-10-25. */
+const dico = l => require(path.join(SRC, "langues", l, "app.js"));
+const tr = (k, l) => { const v = dico(l || "fr")[k]; return typeof v === "string" ? v : k; };
 const EN = ["Play", "Solve", "Train", "Analyse", "Invite", "Watch", "Explore"];
-const FR = EN.map(tr);
+const FR = EN.map(k => tr(k));
 const largeur = l => Math.round(l.reduce((s, m) => s + m.length * 6.8 + 22, 0) + (l.length - 1) * 3 + 8);
 const dispo = 390 - 28;
 
@@ -58,6 +59,12 @@ T("le francais depasse bien la place disponible", largeur(FR) > dispo,
   "c'est pourquoi min-width:0 est indispensable, pas cosmetique");
 T("les libelles francais sont plus longs", largeur(FR) > largeur(EN),
   largeur(FR) + " vs " + largeur(EN));
+/* Les autres langues, pour memoire : la rangee defile, quelle que soit leur
+   longueur (l'allemand est la plus longue). */
+for (const l of ["es", "pt", "de", "ru"]) {
+  const L = EN.map(k => tr(k, l));
+  console.log("  " + l + " : " + largeur(L) + " px   (" + L.join(", ") + ")");
+}
 
 console.log("\n--- Aucune largeur fixe ne peut forcer la page ---");
 const fixes = [...html.matchAll(/([.#][\w-]+)\{[^}]*(?<!max-)(?<!min-)width:\s*(\d{3,})px/g)]

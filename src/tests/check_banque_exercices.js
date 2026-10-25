@@ -165,9 +165,10 @@ console.log("\n--- Les themes ont tous une traduction francaise ---");
    verification exhaustive des 11455 mats, depassait les 300 s du lanceur :
    ce fichier n'atteignait jamais cette ligne. Un test qui ne tourne pas ne
    garde rien, et il peut mentir longtemps.
-   On lit maintenant i18n.js, le vrai chemin : exTheme affiche t(puzzle.theme). */
-const I18N=fs.readFileSync(require("path").join(__dirname,"..","i18n.js"),"utf8");
-const sansTrad=Object.keys(byTheme).filter(th=>!new RegExp('"'+th.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+'"\\s*:\\s*"[^"]+"').test(I18N));
+   On lit le dictionnaire francais, le vrai chemin : exTheme affiche
+   t(puzzle.theme). Il vit dans langues/fr/app.js depuis le 2026-10-25. */
+const FRD=require("../langues/fr/app.js");
+const sansTrad=Object.keys(byTheme).filter(th=>!(typeof FRD[th]==="string"&&FRD[th]));
 T("aucun theme sans traduction francaise", sansTrad.length===0, sansTrad.join(", "));
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

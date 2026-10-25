@@ -32,11 +32,13 @@ const sansMat = gainsMulti.find(p => !finitParMat(p));
 const unCoup = banque.find(p => p.type === "gain" && p.sol.length === 1);
 const blancs = avecMat.find(p => p.fen.split(" ")[1] === "w");
 
+/* Une page par langue depuis le 2026-10-25 : le francais vit sous /fr/. */
 function ouvrir(langue, id) {
-  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/#puzzle=" + id,
+  const rep = /^fr/.test(langue) ? "fr/" : "";
+  const dom = new jd.JSDOM(rep ? fs.readFileSync(SITE + "/fr/index.html", "utf8") : html, { runScripts: "dangerously", pretendToBeVisual: true,
+    url: "https://chang64.com/" + rep + "#puzzle=" + id,
     virtualConsole: new jd.VirtualConsole(),
     beforeParse(w) {
-      Object.defineProperty(w.navigator, "language", { value: langue, configurable: true });
       w.fetch = url => {
         const p = path.join(SITE, String(url).replace(/^https?:\/\/[^/]+/, "").split("?")[0]);
         try { const data = JSON.parse(fs.readFileSync(p, "utf8")); return Promise.resolve({ ok: true, json: () => Promise.resolve(data) }); }

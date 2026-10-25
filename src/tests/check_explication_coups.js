@@ -21,11 +21,13 @@ const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko+
 const attendre = ms => new Promise(r => setTimeout(r, ms));
 const nbsp = s => String(s).replace(/ /g, " ");
 
+/* Une page par langue depuis le 2026-10-25 : le francais vit sous /fr/. */
 function ouvrir(langue) {
-  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/",
+  const rep = /^fr/.test(langue) ? "fr/" : "";
+  const dom = new jd.JSDOM(rep ? fs.readFileSync(SITE + "/fr/index.html", "utf8") : html, { runScripts: "dangerously", pretendToBeVisual: true,
+    url: "https://chang64.com/" + rep,
     virtualConsole: new jd.VirtualConsole(),
     beforeParse(w) {
-      Object.defineProperty(w.navigator, "language", { value: langue, configurable: true });
       w.fetch = () => Promise.resolve({ ok: false, status: 404, json: () => Promise.reject(new Error("hors test")) });
     } });
   return dom.window;

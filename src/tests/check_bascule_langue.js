@@ -44,7 +44,7 @@ function visibles(w) {
     if (!p || /^(SCRIPT|STYLE|NOSCRIPT)$/.test(p.nodeName)) continue;
     let cache = false;
     for (let x = n.parentElement; x && x !== d.body; x = x.parentElement)
-      if (x.classList && x.classList.contains("hide")) { cache = true; break; }
+      if ((x.classList && x.classList.contains("hide")) || x.id === "kbdHelp") { cache = true; break; }
     if (cache) continue;
     const v = n.nodeValue.trim();
     if (v) out.push({ txt: v, ou: n.parentElement.id ? "#" + n.parentElement.id : (n.parentElement.className || n.parentElement.nodeName) });
@@ -72,12 +72,16 @@ const ECRANS = [
   for (const l of LANGUES.filter(x => x.code !== "en")) {
     const D = require(PATH.join(__dirname, "..", "langues", l.code, "app.js"));
     const liste = motifs(D);
+    /* Un texte qui est aussi une traduction de cette langue n'est pas un
+       reste : "Start" est l'allemand de "Home". L'aide du clavier, ecartee
+       par visibles(), cite les touches par leur nom (Home, End). */
+    const valeurs = new Set(Object.values(D).filter(v => typeof v === "string"));
     console.log("\n--- chaque ecran ouvert en " + l.code + " ---");
     for (const [nom, code] of ECRANS) {
       const w = await ouvrir(l.code, { fetch: true, attente: 2400 });
       try { w.eval(code); } catch (e) { T(nom, false, "erreur " + e.message); w.close(); continue; }
       await wait(900);
-      const restes = [...new Set(visibles(w).filter(x => restant(x.txt, liste)).map(x => x.ou + " :: " + x.txt.slice(0, 60)))];
+      const restes = [...new Set(visibles(w).filter(x => !valeurs.has(x.txt) && restant(x.txt, liste)).map(x => x.ou + " :: " + x.txt.slice(0, 60)))];
       T(nom, restes.length === 0, restes.slice(0, 6).join(" | "));
       w.close();
     }

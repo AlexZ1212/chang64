@@ -31,18 +31,19 @@ setTimeout(async()=>{
   T("themes avant le titre (hors accessibilite)", pos('id="boardThemes"')<pos('id="accessibilite"'));
 
   console.log("\n--- En francais ---");
-  [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
+  /* La page francaise /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:800}),df=wf.document;
+  df.getElementById("footAccess").click();
   await new Promise(r=>setTimeout(r,200));
-  d.getElementById("footAccess").click();
-  await new Promise(r=>setTimeout(r,200));
-  T("lien traduit", (d.getElementById("footAccess").textContent||"").trim()==="Accessibilité",
-     d.getElementById("footAccess").textContent);
-  T("titre traduit", (d.getElementById("accessibilite").textContent||"").trim()==="Accessibilité",
-     d.getElementById("accessibilite").textContent);
-  T("intro traduite", (d.getElementById("prefsA11yIntro").textContent||"").includes("sans souris"),
-     d.getElementById("prefsA11yIntro").textContent);
-  T("Preferences traduit aussi", (d.getElementById("footPrefs").textContent||"").trim()==="Préférences",
-     d.getElementById("footPrefs").textContent);
+  T("lien traduit", (df.getElementById("footAccess").textContent||"").trim()==="Accessibilité",
+     df.getElementById("footAccess").textContent);
+  T("titre traduit", (df.getElementById("accessibilite").textContent||"").trim()==="Accessibilité",
+     df.getElementById("accessibilite").textContent);
+  T("intro traduite", (df.getElementById("prefsA11yIntro").textContent||"").includes("sans souris"),
+     df.getElementById("prefsA11yIntro").textContent);
+  T("Preferences traduit aussi", (df.getElementById("footPrefs").textContent||"").trim()==="Préférences",
+     df.getElementById("footPrefs").textContent);
+  wf.close();
 
   console.log("\n--- Reperes de structure pour les lecteurs d'ecran ---");
 /* Un lecteur d'ecran permet de sauter directement au contenu si la page

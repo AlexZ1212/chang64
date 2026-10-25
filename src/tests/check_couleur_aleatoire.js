@@ -191,10 +191,12 @@ setTimeout(async () => {
   }
 
   console.log("\n--- En francais ---");
-  [...d.getElementById("langSwitch").children].find(b => b.dataset.lang === "fr").click();
-  await wait(500);
-  T("libelle traduit", /hasard/i.test(seg().find(b => b.dataset.v === "r").textContent),
-    seg().find(b => b.dataset.v === "r").textContent);
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf = await require("./outils/page_langue.js").ouvrir("fr", { attente: 1000 });
+  const segFr = [...wf.document.getElementById("segColor").children];
+  T("libelle traduit", /hasard/i.test(segFr.find(b => b.dataset.v === "r").textContent),
+    segFr.find(b => b.dataset.v === "r").textContent);
+  wf.close();
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

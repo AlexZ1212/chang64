@@ -381,7 +381,9 @@ module.exports = {
   "Castling": "Rochade",
   "Doubled rooks": "Verdoppelte Türme",
   "Opera Game finish": "Finale der Opernpartie",
-  "Scholar's mate": "Schäfermatt"
+  "Scholar's mate": "Schäfermatt",
+  "The opening {name} covers ECO {eco}.": "Die Eröffnung {name} umfasst die ECO-Codes {eco}.",
+  "Commonly used English name: {name}.": "Gängiger englischer Name: {name}."
  },
  familles: {
   "Amar Opening": "Amar-Eröffnung",

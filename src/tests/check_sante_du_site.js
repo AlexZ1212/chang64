@@ -22,7 +22,10 @@ console.log("  "+all.length+" fichiers, dont "+html.length+" pages HTML");
    pas une regression. Le plancher reste utile pour detecter un build
    casse qui ne produirait presque rien. */
 T("plus de 400 pages", html.length>=400, html.length);
-T("147 images de partage", fs.readdirSync(S+"/og").filter(f=>f.endsWith(".png")).length===147);
+/* 147, plus une image d'index des ouvertures par langue traduite depuis
+   l'anglais (2026-10-25 : es, pt, de, ru). */
+const NB_OG=147+require("../langues/registre.js").LANGUES.filter(l=>l.code!=="en"&&l.code!=="fr").length;
+T(NB_OG+" images de partage", fs.readdirSync(S+"/og").filter(f=>f.endsWith(".png")).length===NB_OG);
 
 console.log("\n--- Aucune page vide ou tronquee ---");
 const petites=html.filter(f=>fs.statSync(f).size<1500).map(f=>f.replace(S,""));
@@ -54,7 +57,10 @@ T("toutes avec une canonique", sansCanon.length===0, sansCanon.slice(0,3).map(f=
 
 console.log("\n--- Le JavaScript principal s'execute ---");
 const idx=fs.readFileSync(S+"/index.html","utf8");
-const m=idx.match(/<script>([\s\S]*)<\/script>/);
+/* Le plus long bloc <script> sans attribut : depuis le 2026-10-25, la page
+   anglaise porte aussi en tete un court script de renvoi vers la langue
+   retenue, et un bloc de donnees de langue precede le script principal. */
+const m=[...idx.matchAll(/<script>([\s\S]*?)<\/script>/g)].sort((a,b)=>b[1].length-a[1].length)[0];
 let err=null; try{new (require("vm").Script)(m[1]);}catch(e){err=e.message;}
 T("le script se parse", err===null, err);
 T("taille raisonnable", m[1].length<600000, Math.round(m[1].length/1024)+" Ko");

@@ -31,6 +31,8 @@ console.log("\n--- Donnees reelles ---");
 console.log("  exercices : " + NP + "   familles : " + NF + "   lignes : " + NL);
 
 const idx = fs.readFileSync(SITE + "/index.html", "utf8");
+/* Le dictionnaire francais vit dans la page /fr/ depuis le 2026-10-25. */
+const idxFr = fs.readFileSync(SITE + "/fr/index.html", "utf8");
 
 console.log("\n--- Aucun chiffre perime ne subsiste ---");
 /* 489 etait le nombre d'exercices avant le premier enrichissement (a 777) ;
@@ -79,7 +81,7 @@ T("image de partage (og:description)", new RegExp('og:description"[^>]*' + NP + 
   (idx.match(/og:description" content="([^"]{0,120})/) || [])[1]);
 T("donnees structurees", new RegExp('featureList[^\\]]*' + NP + ' ').test(idx));
 T("texte de presentation anglais", idx.includes(NP_EN + ' puzzles verified move by move'));
-T("texte de presentation francais", idx.includes(NP_FR + ' exercices v'));
+T("texte de presentation francais", idxFr.includes(NP_FR + ' exercices v'));
 /* "tuile de navigation" retiree le 2026-09-05. Elle exigeait que la tuile
    Explorer annonce "51619 verified positions". Ce sous-titre a ete change
    volontairement (session du 2026-09-04) en "10 patterns, 3 examples each" :
@@ -111,10 +113,12 @@ for (const [p, lbl] of [["/index.html", "accueil"], ["/puzzles/index.html", "exe
 }
 
 console.log("\n--- Ouvertures : familles et lignes ---");
-T("nombre de familles", new RegExp(NF + ' (families|familles)').test(idx),
-  (idx.match(/(\d+) (?:families|familles)/) || [])[1]);
-T("nombre de lignes nommees", new RegExp(NL + ' (named lines|variantes)').test(idx),
-  (idx.match(/(\d+) (?:named lines|variantes)/) || [])[1]);
+/* La tuile Explorer compose "{nf} families, {nl} named lines" par t()
+   depuis le 2026-10-25 : les deux nombres sont des valeurs du script. */
+T("nombre de familles", idx.includes('{nf} families, {nl} named lines') && new RegExp('nf:"' + NF + '"').test(idx),
+  (idx.match(/nf:"(\d+)"/) || [])[1]);
+T("nombre de lignes nommees", new RegExp('nl:"' + NL + '"').test(idx),
+  (idx.match(/nl:"(\d+)"/) || [])[1]);
 
 console.log("\n--- Les pages reellement produites correspondent ---");
 const pagesEn = fs.readdirSync(SITE + "/openings").filter(f => f.endsWith(".html") && f !== "index.html").length;
@@ -159,7 +163,7 @@ const empruntes = [];
 T("aucun nom de fonctionnalite emprunte", empruntes.length === 0, empruntes.slice(0, 5).join(", "));
 T("Chang Sprint present dans l'interface", /Chang Sprint/.test(idx));
 T("le bouton porte le nouveau nom", /id="btnGoRush">Start Chang Sprint</.test(idx));
-T("traduction francaise en place", /"Chang Sprint":"Chang Sprint"/.test(idx));
+T("traduction francaise en place", /"Chang Sprint":"Chang Sprint"/.test(idxFr));
 T("donnees structurees a jour", /"Chang Sprint"/.test(idx.match(/featureList[^\]]*\]/)?.[0] || ""));
 T("cle de progression inchangee (rushBest)", /rushBest/.test(idx),
   "renommer cette cle effacerait le record des visiteurs");

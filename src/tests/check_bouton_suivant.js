@@ -53,10 +53,16 @@ setTimeout(async()=>{
   T("l'explication revient", !$("nextLock").classList.contains("hide"));
 
   console.log("\n--- En francais ---");
-  [...$("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
-  await wait(500);
-  T("l'explication est traduite", /indice/.test($("nextLock").textContent||""), $("nextLock").textContent);
-  T("tutoiement respecte", !/vous|votre/i.test($("nextLock").textContent||""), $("nextLock").textContent);
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue) : on y refait le
+     meme trajet jusqu'a un exercice. */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{fetch:true,attente:1500});
+  const f=id=>wf.document.getElementById(id);
+  f("homeStartBtn").click(); await wait(400);
+  f("tab-puzzles").click(); await wait(400);
+  f("cardSolvePuzzles").click(); await wait(1500);
+  T("l'explication est traduite", /indice/.test(f("nextLock").textContent||""), f("nextLock").textContent);
+  T("tutoiement respecte", !/vous|votre/i.test(f("nextLock").textContent||""), f("nextLock").textContent);
+  wf.close();
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

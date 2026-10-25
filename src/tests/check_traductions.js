@@ -56,8 +56,9 @@ for (const l of AUTRES) {
   const enTrop = Object.keys(D).filter(k => !(k in FR));
   T("aucune cle inconnue du francais", enTrop.length === 0, enTrop.slice(0, 5).join(" | "));
   /* La forme "one" d'un pluriel peut taire n ("su unica variante"). */
+  /* Les textes longs ("@legal"...) se comparent au francais, pas a leur cle. */
   const varsKo = Object.entries(D).filter(([k, v]) => formes(v).some(([cat, f]) => {
-    const a = vars(k).split(",").filter(x => cat !== "one" || x !== "n").join(",");
+    const a = vars(k.startsWith("@") ? FR[k] : k).split(",").filter(x => cat !== "one" || x !== "n").join(",");
     const b = vars(f).split(",").filter(x => cat !== "one" || x !== "n").join(",");
     return a !== b;
   }));
@@ -102,7 +103,7 @@ function collecter(d, vus) {
   while (n = walk.nextNode()) {
     const t = (n.nodeValue || "").trim();
     const p = n.parentElement;
-    if (t.length < 4 || !p || ["SCRIPT", "STYLE"].includes(p.tagName) || p.closest(".hide") || p.closest("#langSwitch")) continue;
+    if (t.length < 4 || !p || ["SCRIPT", "STYLE"].includes(p.tagName) || p.closest(".hide") || p.closest("#langSwitch") || p.closest("#kbdHelp")) continue;
     vus.add(t);
   }
 }
@@ -136,7 +137,11 @@ async function parcourir(w) {
     const ech = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const motifs = Object.entries(D).filter(([k, v]) => typeof v === "string" && k !== v && k.length > 3 && !k.startsWith("@"))
       .map(([k]) => k.includes("{") ? new RegExp("^" + ech(k).replace(/\\\{[a-z]+\\\}/gi, "[^ ]{1,20}") + "$") : k);
-    const restes = [...vus].filter(t => motifs.some(m => typeof m === "string" ? m === t : m.test(t)));
+    /* Un texte qui est aussi une traduction de cette langue n'est pas un
+       reste ("Start" est l'allemand de "Home"). L'aide du clavier, ecartee
+       plus haut, cite les touches par leur nom (Home, End). */
+    const valeurs = new Set(Object.values(D).filter(v => typeof v === "string"));
+    const restes = [...vus].filter(t => !valeurs.has(t) && motifs.some(m => typeof m === "string" ? m === t : m.test(t)));
     T("aucune phrase anglaise du dictionnaire a l'ecran", restes.length === 0, restes.slice(0, 4).join(" | "));
     if (l === "fr") {
       /* Le francais garde en plus son controle d'origine : un texte est

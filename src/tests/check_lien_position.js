@@ -39,7 +39,8 @@ function liensDe(dir){
   const out={};
   for(const f of fs.readdirSync(SITE+"/"+dir).filter(x=>x.endsWith(".html")&&x!=="index.html")){
     const s=fs.readFileSync(SITE+"/"+dir+"/"+f,"utf8");
-    const m=s.match(/href="\/#fen=([^"]+)"/);
+    /* Les pages francaises menent a /fr/#fen= depuis le 2026-10-25. */
+    const m=s.match(/href="(?:\/[a-z]{2})?\/#fen=([^"]+)"/);
     if(m)out[f]=decodeURIComponent(m[1]);
   }
   return out;

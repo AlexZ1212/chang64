@@ -54,8 +54,9 @@ console.log("\n--- Le francais est bien le cas le plus contraignant ---");
 /* C'est ce qui explique que le defaut soit apparu dans une seule langue :
    les onglets francais reclament plus de place que la largeur d'un
    telephone, les anglais tiennent de justesse. */
-const i18n = fs.readFileSync(path.join(SRC, "i18n.js"), "utf8");
-const tr = k => { const m = i18n.match(new RegExp('"' + k + '":"([^"]*)"')); return m ? m[1] : k; };
+/* Dictionnaire francais dans langues/fr/app.js depuis le 2026-10-25. */
+const FRD = require(path.join(SRC, "langues", "fr", "app.js"));
+const tr = k => typeof FRD[k] === "string" ? FRD[k] : k;
 const EN = ["Play", "Solve", "Train", "Analyse", "Invite", "Watch", "Explore"];
 const FR = EN.map(tr);
 const largeur = l => Math.round(l.reduce((s, m) => s + m.length * 6.8 + 22, 0) + (l.length - 1) * 3 + 8);

@@ -17,9 +17,12 @@ let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
-function ouvrir(localStorageCasse){
-  const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,
-    url:"https://chang64.com/",virtualConsole:new jd.VirtualConsole(),
+/* rep : "" pour l'anglais, "fr/" pour la page francaise (une page par
+   langue depuis le 2026-10-25). */
+function ouvrir(localStorageCasse,rep){
+  rep=rep||"";
+  const dom=new jd.JSDOM(rep?fs.readFileSync(SITE+"/"+rep+"index.html","utf8"):html,{runScripts:"dangerously",pretendToBeVisual:true,
+    url:"https://chang64.com/"+rep,virtualConsole:new jd.VirtualConsole(),
     beforeParse(w){
       if(!localStorageCasse)return;
       /* Refus pur et simple, comme Safari en navigation privee. */
@@ -49,11 +52,10 @@ function ouvrir(localStorageCasse){
     T("c'est une region de statut", el&&el.getAttribute("role")==="status", el&&el.getAttribute("role"));
 
     console.log("\n--- Et il suit la langue ---");
-    const sw=w.document.getElementById("langSwitch");
-    [...sw.children].find(b=>b.dataset.lang==="fr").click();
-    await wait(500);
-    T("traduit en francais", /onglet/.test(el.textContent||""), (el.textContent||"").slice(0,60));
-    T("tutoiement respecte", !/vous|votre/i.test(el.textContent||""), el.textContent);
+    const wf=ouvrir(true,"fr/"); await wait(1200);
+    const ef=wf.document.getElementById("storageWarn");
+    T("traduit en francais", /onglet/.test(ef.textContent||""), (ef.textContent||"").slice(0,60));
+    T("tutoiement respecte", !/vous|votre/i.test(ef.textContent||""), ef.textContent);
   }
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

@@ -52,12 +52,14 @@ setTimeout(async()=>{
   T("le texte precise qu'il n'aide pas a jouer", /never helps you while you play/i.test(note), note.slice(0,80));
 
   console.log("\n--- En francais ---");
-  [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
-  await wait(400);
-  T("bouton traduit", /analyse/i.test(d.getElementById("btnAnalyse").textContent),
-     d.getElementById("btnAnalyse").textContent);
-  T("note traduite", /ne t'aide jamais pendant que tu joues/.test(d.getElementById("sfStatus").textContent),
-     d.getElementById("sfStatus").textContent.slice(0,90));
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:1000}),df=wf.document;
+  df.getElementById("tab-play").click(); await wait(400);
+  T("bouton traduit", /analyse/i.test(df.getElementById("btnAnalyse").textContent),
+     df.getElementById("btnAnalyse").textContent);
+  T("note traduite", /ne t'aide jamais pendant que tu joues/.test(df.getElementById("sfStatus").textContent),
+     df.getElementById("sfStatus").textContent.slice(0,90));
+  wf.close();
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

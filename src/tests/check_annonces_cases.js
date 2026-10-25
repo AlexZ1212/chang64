@@ -73,15 +73,25 @@ setTimeout(async()=>{
     nom(52)+" / "+nom(36));
 
   console.log("\n--- En francais ---");
-  [...$("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
-  await wait(400);
-  T("le nom accessible passe au francais", / en [a-h][1-8]$/.test(nom(52)), nom(52));
-  T("accord en genre conserve", !/tour blanc en|dame blanc en|tour noir en|dame noir en/.test(nom(56)+" "+nom(59)), nom(56)+" / "+nom(59));
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:1200}),df=wf.document;
+  df.getElementById("tab-play").click(); await wait(800);
+  const nomFr=i=>(df.getElementById("board").children[i].getAttribute("aria-label")||"").trim();
+  T("le nom accessible est en francais", / en [a-h][1-8]$/.test(nomFr(52)), nomFr(52));
+  T("accord en genre conserve", !/tour blanc en|dame blanc en|tour noir en|dame noir en/.test(nomFr(56)+" "+nomFr(59)), nomFr(56)+" / "+nomFr(59));
   T("la region live reste muette en francais aussi", (() => {
-    const live=$("srAnnounce"); live.textContent="";
-    $("board").children[52].dispatchEvent(new w.KeyboardEvent("keydown",{key:"ArrowUp",bubbles:true}));
+    const live=df.getElementById("srAnnounce"); live.textContent="";
+    df.getElementById("board").children[52].dispatchEvent(new wf.KeyboardEvent("keydown",{key:"ArrowUp",bubbles:true}));
     return !(live.textContent||"").trim();
-  })(), $("srAnnounce").textContent);
+  })(), df.getElementById("srAnnounce").textContent);
+  /* Les autres langues accordent aussi la couleur a la piece (2026-10-25). */
+  for(const [l,re] of [["es",/^torre blanca en a1$/],["pt",/^torre branca em a1$/],["de",/^weißer Turm auf a1$/],["ru",/^белая ладья на a1$/]]){
+    const wl=await require("./outils/page_langue.js").ouvrir(l,{attente:1200});
+    wl.document.getElementById("tab-play").click(); await wait(800);
+    const n=(wl.document.getElementById("board").children[56].getAttribute("aria-label")||"").trim();
+    T(l+" : nom accessible accorde ("+n+")", re.test(n), n);
+    wl.close();
+  }
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

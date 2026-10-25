@@ -47,16 +47,16 @@ setTimeout(async()=>{
      donc une partie reellement en cours pour verifier le nom affiche. */
   /* On repart d'une partie chronometree franchement demarree, sinon les
      pendules restent masquees et le nom n'est jamais recalcule. */
-  if(!d.getElementById("btnNew").disabled){
-    d.getElementById("btnNew").click(); await wait(500);
-    const rb2=d.getElementById("readyBanner");
-    if(rb2&&!rb2.classList.contains("hide")){d.getElementById("readyStart").click();await wait(300);}
-  }
-  [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
-  await wait(600);
-  T("les pendules sont visibles", !d.getElementById("clockTop").classList.contains("hide"));
-  T("la force est traduite", /Coriace|Tranquille|Sérieux|Débutant/.test(nom()), nom());
-  T("Chang reste en l'etat", /^Chang /.test(nom()), nom());
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue) : on y lance une
+     partie de la meme facon. */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:1500}),df=wf.document;
+  df.getElementById("heroPlay").click(); await wait(600);
+  df.getElementById("readyStart").click(); await wait(300);
+  const nomFr=()=>df.getElementById("clockTopName").textContent.trim();
+  T("les pendules sont visibles", !df.getElementById("clockTop").classList.contains("hide"));
+  T("la force est traduite", /Coriace|Tranquille|Sérieux|Débutant/.test(nomFr()), nomFr());
+  T("Chang reste en l'etat", /^Chang /.test(nomFr()), nomFr());
+  wf.close();
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

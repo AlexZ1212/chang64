@@ -69,10 +69,11 @@ setTimeout(async () => {
   T("Analyser la partie actif", !d.getElementById("btnAnalyse").disabled);
 
   console.log("\n--- En francais ---");
-  [...d.getElementById("langSwitch").children].find(b => b.dataset.lang === "fr").click();
-  await wait(500);
-  T("libelle traduit", /meilleur coup/i.test(d.getElementById("btnHint").textContent),
-    d.getElementById("btnHint").textContent);
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf = await require("./outils/page_langue.js").ouvrir("fr", { attente: 1000 });
+  T("libelle traduit", /meilleur coup/i.test(wf.document.getElementById("btnHint").textContent),
+    wf.document.getElementById("btnHint").textContent);
+  wf.close();
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

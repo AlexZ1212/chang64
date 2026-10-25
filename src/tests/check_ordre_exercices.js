@@ -46,17 +46,17 @@ setTimeout(async()=>{
      d.getElementById("lvlOf")&&d.getElementById("lvlOf").textContent);
 
   console.log("\n--- En francais ---");
-  [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:1000}),df=wf.document;
+  df.getElementById("tab-puzzles").click();
   await new Promise(r=>setTimeout(r,400));
-  d.getElementById("tab-puzzles").click();
-  await new Promise(r=>setTimeout(r,400));
-  const of_=d.getElementById("lvlOf");
+  const of_=df.getElementById("lvlOf");
   T("Niveau 1 sur X, plus 'of'", of_ && of_.textContent==="sur", of_&&of_.textContent);
   /* Dix paliers desormais (voir LEVELS dans ui.js) : le nombre affiche doit
      suivre, pas rester fige a l'ancien plafond de cinq. */
-  const max_=d.getElementById("lvlMax");
+  const max_=df.getElementById("lvlMax");
   T("le plafond affiche est bien 8", max_ && max_.textContent==="8", max_&&max_.textContent);
-  const lab=[...d.querySelectorAll("#pane-puzzles .stat span")].map(s=>s.textContent);
+  const lab=[...df.querySelectorAll("#pane-puzzles .stat span")].map(s=>s.textContent);
   T("plus aucune trace du record Sprint ici non plus", !lab.includes("Record Sprint")&&!lab.includes("Record Rush"), lab.join(", "));
 
   console.log("\n--- Rien n'a disparu ---");

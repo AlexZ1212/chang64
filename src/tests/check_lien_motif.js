@@ -68,7 +68,8 @@ function ouvrir(hash,cb){
   for(const dir of ["fr/apprendre","learn"]){
     for(const f of fs.readdirSync(SITE+"/"+dir).filter(x=>x.endsWith(".html")&&x!=="index.html")){
       const s=fs.readFileSync(SITE+"/"+dir+"/"+f,"utf8");
-      const m=s.match(/href="\/#theme=([^"]+)"/);
+      /* Les pages francaises menent a /fr/#theme= depuis le 2026-10-25. */
+      const m=s.match(/href="(?:\/[a-z]{2})?\/#theme=([^"]+)"/);
       if(m)liens.add(decodeURIComponent(m[1]));
     }
   }
@@ -80,13 +81,13 @@ function ouvrir(hash,cb){
      les cadences n'a rien a faire reproduire sur un echiquier. */
   const sansLien=fs.readdirSync(SITE+"/fr/apprendre")
     .filter(x=>x.endsWith(".html")&&x!=="index.html")
-    .filter(f=>!/href="\/#theme=/.test(fs.readFileSync(SITE+"/fr/apprendre/"+f,"utf8")));
+    .filter(f=>!/href="(?:\/[a-z]{2})?\/#theme=/.test(fs.readFileSync(SITE+"/fr/apprendre/"+f,"utf8")));
   T("les pages sans motif n'ont pas de bouton d'entrainement",sansLien.length>0,
     sansLien.length+" page(s) sans lien, ce qui est attendu");
   T("les deux langues portent le meme nombre de liens",
     ["fr/apprendre","learn"].map(d=>fs.readdirSync(SITE+"/"+d)
       .filter(x=>x.endsWith(".html")&&x!=="index.html")
-      .filter(f=>/href="\/#theme=/.test(fs.readFileSync(SITE+"/"+d+"/"+f,"utf8"))).length)
+      .filter(f=>/href="(?:\/[a-z]{2})?\/#theme=/.test(fs.readFileSync(SITE+"/"+d+"/"+f,"utf8"))).length)
       .reduce((a,b)=>a===b?a:-1)>0);
 
   console.log("\n--- Chaque lien sert bien le motif qu'il annonce ---");

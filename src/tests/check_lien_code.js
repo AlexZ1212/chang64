@@ -13,17 +13,17 @@
 const path = require("path");
 const fs = require("fs"), jd = require("jsdom");
 const SITE = path.join(__dirname, "..", "site");
-const html = fs.readFileSync(SITE + "/index.html", "utf8");
+const html = fs.readFileSync(SITE + "/fr/index.html", "utf8");
 const banque = require(path.join(__dirname, "..", "banque.js")).charger();
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d ? "  -> " + d : "")); } };
 const attendre = ms => new Promise(r => setTimeout(r, ms));
 
 function ouvrir(hash) {
-  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/" + hash,
+  /* Page francaise : une page par langue depuis le 2026-10-25. */
+  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/fr/" + hash,
     virtualConsole: new jd.VirtualConsole(),
     beforeParse(w) {
-      Object.defineProperty(w.navigator, "language", { value: "fr-FR", configurable: true });
       w.fetch = url => {
         const p = path.join(SITE, String(url).replace(/^https?:\/\/[^/]+/, "").split("?")[0]);
         try { const data = JSON.parse(fs.readFileSync(p, "utf8")); return Promise.resolve({ ok: true, json: () => Promise.resolve(data) }); }

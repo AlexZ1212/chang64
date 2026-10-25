@@ -70,15 +70,18 @@ setTimeout(async()=>{
   const raw=w.localStorage.getItem("chang64:prefs");
   T("preferences ecrites dans localStorage", !!raw, raw);
 
-  console.log("\n--- Bascule de langue ---");
-  const fr=[...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr");
-  fr.click();
-  await new Promise(r=>setTimeout(r,150));
-  d.getElementById("footPrefs").click();
-  await new Promise(r=>setTimeout(r,120));
-  T("panneau traduit en francais", (d.getElementById("prefsTitle").textContent||"").includes("Préférences"),
-     d.getElementById("prefsTitle").textContent);
-  T("noms de themes traduits", [...d.getElementById("boardThemes").children].some(c=>c.textContent==="Noyer"));
+  console.log("\n--- Dans les autres langues ---");
+  /* Une page par langue depuis le 2026-10-25 : le panneau, compose en
+     JavaScript, passe par t() dans chacune. */
+  for(const [l,titre,noyer] of [["fr","Préférences","Noyer"],["es","Preferencias","Nogal"],["de","Einstellungen","Walnuss"],["ru","Настройки","Орех"]]){
+    const wl=await require("./outils/page_langue.js").ouvrir(l,{attente:1000}),dl=wl.document;
+    dl.getElementById("footPrefs").click();
+    await new Promise(r=>setTimeout(r,150));
+    T(l+" : panneau traduit", (dl.getElementById("prefsTitle").textContent||"").includes(titre),
+       dl.getElementById("prefsTitle").textContent);
+    T(l+" : noms de themes traduits", [...dl.getElementById("boardThemes").children].some(c=>c.textContent===noyer));
+    wl.close();
+  }
 
   console.log("\n--- Animation des deplacements ---");
 /* La piece glisse de sa case de depart vers son arrivee. render() recree

@@ -14,17 +14,17 @@
 const path = require("path");
 const fs = require("fs"), jd = require("jsdom");
 const SITE = path.join(__dirname, "..", "site");
-const html = fs.readFileSync(SITE + "/index.html", "utf8");
+/* Page francaise : chaque langue a sa page depuis le 2026-10-25. */
+const html = fs.readFileSync(SITE + "/fr/index.html", "utf8");
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d ? "  -> " + d : "")); } };
 const attendre = ms => new Promise(r => setTimeout(r, ms));
 const DELAI = 1500;
 
 function ouvrir() {
-  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/",
+  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/fr/",
     virtualConsole: new jd.VirtualConsole(),
     beforeParse(w) {
-      Object.defineProperty(w.navigator, "language", { value: "fr-FR", configurable: true });
       /* /data/ servi depuis le build local, avec un retard qui laisse le
          temps de regarder l'etat d'attente. */
       w.fetch = url => new Promise(res => setTimeout(() => {

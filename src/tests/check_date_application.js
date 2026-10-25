@@ -4,10 +4,15 @@
 
    Ce que ce test garde (2026-10-18) : l'application affiche, comme les pages
    de contenu, sa date de publication et de derniere mise a jour, tiree du
-   registre content-dates.json (cle "/"), dans la langue choisie. */
+   registre content-dates.json (cle "/"), dans la langue de la page. Depuis
+   le 2026-10-25, chaque langue a sa page (/, /fr/, /es/...) : on les ouvre
+   toutes, et on verifie aussi le texte pose par le build, celui qu'on lit
+   sans JavaScript. */
 const path=require("path");
 const SITE=path.join(__dirname,"..","site");
-const fs=require("fs"),jd=require("jsdom");
+const fs=require("fs");
+const {ouvrir}=require("./outils/page_langue.js");
+const {LANGUES}=require("../langues/registre.js");
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 
@@ -21,24 +26,29 @@ T("les dates servies sont celles du registre",
   html.includes('data-publiee="'+reg.publiee+'"')&&html.includes('data-modifiee="'+reg.modifiee+'"'));
 T("la date de publication n'est pas posterieure a la mise a jour",reg.publiee<=reg.modifiee);
 
-const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,
-  url:"https://chang64.com/",virtualConsole:new jd.VirtualConsole(),
-  beforeParse(w){w.fetch=u=>{const p=SITE+String(u).replace(/^https?:\/\/[^/]+/,"");
-    return fs.existsSync(p)?Promise.resolve({ok:true,status:200,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(p,"utf8")))})
-                           :Promise.resolve({ok:false,status:404});};}});
-setTimeout(()=>{
-  const w=dom.window,d=w.document;
-  console.log("\n--- Dans les deux langues ---");
-  w.eval("LANG='en';applyI18n()");
-  const en=d.getElementById("footDate").textContent;
-  T("en anglais",en.startsWith("Published "+reg.publiee),en);
-  w.eval("LANG='fr';applyI18n()");
-  const fr=d.getElementById("footDate").textContent;
-  T("en francais, date en toutes lettres",/^Publiée le \d{1,2} [a-zéû]+ \d{4}/.test(fr),fr);
-  T("la mise a jour est mentionnee quand elle differe",
-    reg.modifiee===reg.publiee||/mise à jour le/.test(fr),fr);
-  w.eval("LANG='en';applyI18n()");
-  T("retour a l'anglais",d.getElementById("footDate").textContent===en);
+/* Debut attendu, et mention de la mise a jour quand les dates different. */
+const FORME={
+  en:[new RegExp("^Published "+reg.publiee),/updated \d{4}-\d\d-\d\d/],
+  fr:[/^Publiée le \d{1,2} [a-zéû]+ \d{4}/,/mise à jour le/],
+  es:[/^Publicada el \d{1,2} de [a-z]+ de \d{4}/,/actualizada el/],
+  pt:[/^Publicada em \d{1,2} de [a-zç]+ de \d{4}/,/atualizada em/],
+  de:[/^Veröffentlicht am \d{1,2}\. [A-Za-zä]+ \d{4}/,/aktualisiert am/],
+  ru:[/^Опубликовано \d{1,2} [а-я]+ \d{4}/,/обновлено/]
+};
+const nb=s=>String(s).replace(/ /g," ");
+
+(async()=>{
+  for(const l of LANGUES){
+    console.log("\n--- "+l.accueil+" ---");
+    const page=fs.readFileSync(path.join(SITE,l.code==="en"?"":l.code,"index.html"),"utf8");
+    const statique=nb((page.match(/id="footDate"[^>]*>([^<]*)</)||[])[1]||"");
+    T("sans JavaScript, date dans la langue",FORME[l.code][0].test(statique),statique);
+    const w=await ouvrir(l.code,{fetch:true,attente:2500});
+    const txt=nb(w.document.getElementById("footDate").textContent);
+    T("date dans la langue",FORME[l.code][0].test(txt),txt);
+    T("la mise a jour est mentionnee quand elle differe",reg.modifiee===reg.publiee||FORME[l.code][1].test(txt),txt);
+    w.close();
+  }
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);
-},4000);
+})();

@@ -148,11 +148,18 @@ function fausseBase() {
   w.close();
 
   console.log("\n--- Page Confidentialite ---");
-  for (const [langue, motif] of [["fr-FR", /Mesure de la difficulté des exercices[\s\S]*réussi du premier coup[\s\S]*sans adresse IP/],
-    ["en-US", /Measuring puzzle difficulty[\s\S]*solved on the first try[\s\S]*no IP address/]]) {
-    const dom2 = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/",
-      virtualConsole: new jd.VirtualConsole(),
-      beforeParse(w2) { Object.defineProperty(w2.navigator, "language", { value: langue, configurable: true }); w2.fetch = () => new Promise(() => {}); } });
+  /* Une page par langue depuis le 2026-10-25 : chacune decrit la collecte
+     dans sa langue. */
+  for (const [langue, motif] of [["fr", /Mesure de la difficulté des exercices[\s\S]*réussi du premier coup[\s\S]*sans adresse IP/],
+    ["en", /Measuring puzzle difficulty[\s\S]*solved on the first try[\s\S]*no IP address/],
+    ["es", /Medir la dificultad de los ejercicios[\s\S]*resuelto al primer intento[\s\S]*sin dirección IP/],
+    ["pt", /Medir a dificuldade dos exercícios[\s\S]*resolvido na primeira tentativa[\s\S]*sem endereço IP/],
+    ["de", /Messung der Aufgabenschwierigkeit[\s\S]*im ersten Versuch gelöst[\s\S]*ohne IP-Adresse/],
+    ["ru", /Измерение сложности задач[\s\S]*решена с первой попытки[\s\S]*без IP-адреса/]]) {
+    const rep = langue === "en" ? "" : langue + "/";
+    const dom2 = new jd.JSDOM(fs.readFileSync(path.join(SITE, rep, "index.html"), "utf8"), { runScripts: "dangerously", pretendToBeVisual: true,
+      url: "https://chang64.com/" + rep, virtualConsole: new jd.VirtualConsole(),
+      beforeParse(w2) { w2.fetch = () => new Promise(() => {}); } });
     await attendre(800);
     dom2.window.document.getElementById("footPrivacy").dispatchEvent(new dom2.window.MouseEvent("click", { bubbles: true }));
     await attendre(300);

@@ -115,8 +115,11 @@ function renderExplore(){
   const box=$("exploreLinks"); if(!box)return;
   $("exploreTitle").textContent=t("Explore");
   $("exploreNote").textContent=t("Every page below is built from the same engine that runs the board.");
+  /* Adresse assemblee par join : un litteral href="/'+... dans le script
+     livre passait pour un lien casse aupres du controle des liens internes
+     (check_seo_entete.js), qui lit aussi le HTML compose en JavaScript. */
   poserHtml(box,EXPLORE.map(([rub,title,sub])=>
-    '<a href="/'+RUBRIQUES[rub]+'/">'+t(title)+'<span>'+t(sub,{nf:"__NF__",nl:"__NL__"})+'</span></a>'
+    '<a href="'+["",RUBRIQUES[rub],""].join("/")+'">'+t(title)+'<span>'+t(sub,{nf:"__NF__",nl:"__NL__"})+'</span></a>'
   ).join(""));
 }
 

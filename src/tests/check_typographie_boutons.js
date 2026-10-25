@@ -31,10 +31,10 @@ setTimeout(async()=>{
   T("ancienne regle disparue", !/\.btn\{[^}]*hyphens:auto/.test(html));
 
   console.log("\n--- Articles lies au mot suivant ---");
-  [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
-  await wait(500);
-  d.getElementById("tab-puzzles").click(); await wait(400);
-  const lire=id=>{const e=d.getElementById(id);return e?e.textContent:"";};
+  /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
+  const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:1000}),df=wf.document;
+  df.getElementById("tab-puzzles").click(); await wait(400);
+  const lire=id=>{const e=df.getElementById(id);return e?e.textContent:"";};
   /* Reecrit le 2026-09-05. Les trois assertions precedentes visaient
      btnDaily (deux fois) et btnReset : le premier n'existe plus (devenu la
      carte cardSolveDaily le 2026-09-03), le second a change de libelle
@@ -54,14 +54,14 @@ setTimeout(async()=>{
      ORDINAIRE, jamais une insecable -- d'ou \u0020 des deux cotes et non
      \s, qui en JavaScript englobe aussi \u00a0 (piege qui m'avait fait
      signaler comme fautifs des libelles parfaitement corrects). */
-  const fautifs=[...d.querySelectorAll("button")]
+  const fautifs=[...df.querySelectorAll("button")]
     .map(b=>({id:b.id||b.className,txt:(b.textContent||"").trim()}))
     .filter(o=>o.txt && new RegExp("(^|[\\u0020\\n])(" + MOTS + ")\\u0020(?=\\S)","i").test(o.txt));
   T("aucun mot court suivi d une espace ordinaire dans les boutons",
     fautifs.length===0, fautifs.slice(0,4).map(o=>o.id+": "+JSON.stringify(o.txt)).join(" | "));
   /* Controle positif : au moins un bouton exerce reellement la regle, sinon
      l'assertion ci-dessus passerait aussi sur une page sans aucun article. */
-  const lies=[...d.querySelectorAll("button")]
+  const lies=[...df.querySelectorAll("button")]
     .filter(b=>new RegExp("(" + MOTS + ")" + NB,"i").test(b.textContent||""));
   T("la regle s'applique bien quelque part", lies.length>0, lies.length+" bouton(s) concerne(s)");
   /* "btnHintEx apres un clic : article lie" retire le 2026-09-02 : cette
@@ -74,30 +74,28 @@ setTimeout(async()=>{
      Puppeteer, un vrai moteur de navigateur, tout au long de cette
      session). Les 3 autres articles lies juste au-dessus restent verifies
      normalement, ils ne dependent pas d'un exercice charge. */
-  d.getElementById("tab-play").click(); await wait(400);
+  df.getElementById("tab-play").click(); await wait(400);
   /* Le bouton s'appelle desormais "Voir le meilleur coup" : c'est "le" qui
      doit etre lie, plus "un". */
   T("btnHint : article lie", lire("btnHint").includes("le"+NB), JSON.stringify(lire("btnHint")));
 
   console.log("\n--- L'espace insecable ne casse rien ---");
   T("le texte reste lisible", !/\u00a0\u00a0/.test(lire("btnDaily")), JSON.stringify(lire("btnDaily")));
-  T("l'anglais n'est pas touche", (()=>{
-    [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="en").click();
-    return true;})());
-  await wait(400);
-  T("libelle anglais sans insecable", !lire("btnHint").includes(NB), JSON.stringify(lire("btnHint")));
+  /* L'anglais : la page "/", qui ne passe pas par la regle. */
+  const we=await require("./outils/page_langue.js").ouvrir("en",{attente:1000}),de=we.document;
+  de.getElementById("tab-play").click(); await wait(400);
+  T("libelle anglais sans insecable", !de.getElementById("btnHint").textContent.includes(NB), JSON.stringify(de.getElementById("btnHint").textContent));
 
-  console.log("\n--- Overlay traduit a la bascule de langue ---");
-  d.getElementById("heroPlay").click(); await wait(600);
-  const sub=()=>d.getElementById("readySub").textContent;
-  const titre=()=>d.getElementById("readyTitle").textContent;
-  T("overlay affiche en anglais", /You play|Ready/i.test(titre()+sub()), titre()+" | "+sub());
-  [...d.getElementById("langSwitch").children].find(b=>b.dataset.lang==="fr").click();
-  await wait(600);
+  console.log("\n--- Overlay traduit ---");
+  /* La bascule en direct n'existe plus : on ouvre la partie depuis /fr/. */
+  df.getElementById("heroPlay").click(); await wait(600);
+  const sub=()=>df.getElementById("readySub").textContent;
+  const titre=()=>df.getElementById("readyTitle").textContent;
   T("titre traduit", /Quand tu veux/.test(titre()), titre());
   T("sous-titre traduit", /Tu joues les/.test(sub()), sub());
-  T("boutons traduits", /Commencer/.test(d.getElementById("readyStart").textContent),
-     d.getElementById("readyStart").textContent);
+  T("boutons traduits", /Commencer/.test(df.getElementById("readyStart").textContent),
+     df.getElementById("readyStart").textContent);
+  we.close();wf.close();
 
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

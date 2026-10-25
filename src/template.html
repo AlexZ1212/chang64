@@ -292,7 +292,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .hero-board .piece.slide{transition:transform .34s cubic-bezier(.22,.7,.3,1)}
 .hero h2{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,7vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:12px;position:relative}
 .hero p{color:var(--sage);font-size:clamp(14px,2.6vw,16.5px);max-width:46ch;margin-bottom:24px;position:relative}
-.hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative;margin-bottom:22px} /* avant la cadence depuis le 2026-10-24 : l'ecart vient d'ici */
 .hero .cta .btn{font-size:14.5px;padding:12px 22px}
 /* "Jouer maintenant" + "Puzzle du jour" resserres sur mobile (mise en page) :
    au-dela de 22px de rembourrage chacun, les deux libelles ne tenaient plus
@@ -300,7 +300,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    long, passait seul a la ligne suivante. Rembourrage/police ramenes pres
    de la taille par defaut de .btn (10px 14px) sous ce seuil, assez pour
    que les deux restent sur la meme ligne sans perdre en lisibilite. */
-@media(max-width:480px){.hero .cta .btn{font-size:13px;padding:10px 14px}}
+@media(max-width:480px){.hero .cta .btn{font-size:13px;padding:10px 14px;min-height:44px}}
 
 .tc-block{margin-bottom:22px;position:relative}
 .tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:9px;border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto}
@@ -461,6 +461,21 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(min-width:600px) and (max-width:860px){
   /* Tablette en portrait : le plateau large de 718 px repoussait tout. */
   #appLayout[data-mode="puzzles"] .board-frame{max-width:calc(100vh - 440px);max-width:calc(100svh - 440px)}
+}
+/* Jouer et Inviter (suite de l'audit UX, 2026-10-24) : meme probleme que
+   Resoudre, avec en plus une pendule au-dessus et une au-dessous du
+   plateau. Sur iPad, plateau de 718 px de 249 a 967 : la pendule du joueur,
+   la sienne, passait sous le bas de l'ecran ; en 1366x768, le plateau
+   finissait lui-meme sous le bas. 360 px = haut du plateau (~249), barre
+   des coups et pendule du bas. Pas sur telephone (moins de 600 px de
+   large) : la pendule y restait visible, et le plateau y compte plus que
+   tout pour jouer au doigt (mesure : 325 -> 285 px sur iPhone SE pour
+   rien). Jamais moins de 300 px de plateau. */
+@media(min-width:861px){
+  #appLayout[data-mode="play"] .board-frame,#appLayout[data-mode="friend"] .board-frame{max-width:calc(100vh - 360px);max-width:calc(100svh - 360px)}
+}
+@media(min-width:600px) and (max-width:860px){
+  #appLayout[data-mode="play"] .board-frame,#appLayout[data-mode="friend"] .board-frame{max-width:max(300px,calc(100vh - 360px));max-width:max(300px,calc(100svh - 360px));margin-inline:auto}
 }
 /* La barre suit les rangees qu'elle contient : absente en Sprint et pendant
    la revue d'un Sprint. Sans ces regles, le display:flex ci-dessus, plus
@@ -1329,6 +1344,18 @@ textarea.select{
 .linkbox{resize:vertical;font-size:11px;line-height:1.4}
 footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;letter-spacing:.03em;line-height:1.7}
 .footdate{opacity:.85}
+/* Cibles tactiles (audit UX du 2026-10-24) : onglets et cadences a 35 px,
+   pastilles a 41, EN/FR a 33 x 28, boutons d'info a 24 x 24 et "Voir le
+   calendrier complet" a 14 px de haut, sous les 44 px recommandes (Apple,
+   WCAG 2.5.5). Sur ecran tactile seulement, une zone invisible de 44 px est
+   centree sur chacun : le doigt les atteint, la mise en page ne bouge pas
+   d'un pixel (l'espace vertical gagne pour l'echiquier reste gagne). */
+@media(pointer:coarse){
+  .tabs button,.tc-cats button,.chip,.langswitch button,.seg button,.info-tip{position:relative}
+  .tabs button::after,.tc-cats button::after,.seg button::after,.chip::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
+  .langswitch button::after,.info-tip::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+  #calFullLink{display:inline-block;padding:15px 0}
+}
 .hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
 .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}
@@ -1414,6 +1441,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <p>Bullet to daily time controls against a built-in engine, __NP_EN__ puzzles verified move by move, and games against friends over a plain link. No account, no sign-up.</p>
       </div>
       <div class="hero-rest">
+      <!-- Boutons d'action AVANT la cadence (audit UX du 2026-10-24) : apres
+           elle, "Play now" tombait sous la ligne de flottaison, a 724 px sur
+           un iPhone SE (667 px de haut) et a 789 px sur un portable 1366x768.
+           La cadence devient le reglage juste en dessous ; "Play now" lance
+           toujours celle qui est choisie (10+0 par defaut). -->
+      <div class="cta">
+        <button class="btn primary" id="heroPlay">Play now</button>
+        <button class="btn" id="heroPuzzle">Puzzle of the day</button>
+        <button class="btn hide" id="btnInstall">Install the app</button>
+      </div>
       <div class="tc-block">
         <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl" aria-label="More info">i</button></div>
         <p class="info-tip-pop hide" id="tipTimeControl">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>
@@ -1431,11 +1468,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         <p class="tc-note" id="tcNote">Rapid: enough time to actually think. A good default.</p>
       </div>
 
-      <div class="cta">
-        <button class="btn primary" id="heroPlay">Play now</button>
-        <button class="btn" id="heroPuzzle">Puzzle of the day</button>
-        <button class="btn hide" id="btnInstall">Install the app</button>
-      </div>
       </div>
       <!-- Apercu anime : montrer l'echiquier reel du site des la premiere
            page, avec le theme de couleurs choisi par la personne (les cases

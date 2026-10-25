@@ -1,1303 +1,1303 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url><loc>https://chang64.com/</loc><lastmod>2026-10-24</lastmod><priority>1.0</priority>
+  <url><loc>https://chang64.com/</loc><lastmod>2026-10-25</lastmod><priority>1.0</priority>
   </url>
-  <url><loc>https://chang64.com/openings/</loc><lastmod>2026-10-24</lastmod><priority>0.9</priority>
+  <url><loc>https://chang64.com/openings/</loc><lastmod>2026-10-25</lastmod><priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/</loc><lastmod>2026-10-24</lastmod><priority>0.9</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/</loc><lastmod>2026-10-25</lastmod><priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/"/>
   </url>
-  <url><loc>https://chang64.com/openings/sicilian-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/sicilian-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/sicilian-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-sicilienne"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/sicilian-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/english-opening</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/english-opening</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/english-opening"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-anglaise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/english-opening"/>
   </url>
-  <url><loc>https://chang64.com/openings/french-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/french-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/french-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-francaise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/french-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/caro-kann-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/caro-kann-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/caro-kann-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-caro-kann"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/caro-kann-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/ruy-lopez</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/ruy-lopez</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/ruy-lopez"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-espagnole"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/ruy-lopez"/>
   </url>
-  <url><loc>https://chang64.com/openings/queens-gambit-declined</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/queens-gambit-declined</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/queens-gambit-declined"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/gambit-dame-refuse"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/queens-gambit-declined"/>
   </url>
-  <url><loc>https://chang64.com/openings/dutch-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/dutch-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/dutch-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-hollandaise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/dutch-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/alekhine-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/alekhine-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/alekhine-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-alekhine"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/alekhine-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/bishops-opening</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/bishops-opening</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/bishops-opening"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-du-fou"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/bishops-opening"/>
   </url>
-  <url><loc>https://chang64.com/openings/modern-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/modern-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/modern-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-moderne"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/modern-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/scandinavian-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/scandinavian-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/scandinavian-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-scandinave"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/scandinavian-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/italian-game</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/italian-game</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/italian-game"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-italienne"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/italian-game"/>
   </url>
-  <url><loc>https://chang64.com/openings/bird-opening</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/bird-opening</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/bird-opening"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-bird"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/bird-opening"/>
   </url>
-  <url><loc>https://chang64.com/openings/reti-opening</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/reti-opening</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/reti-opening"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-reti"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/reti-opening"/>
   </url>
-  <url><loc>https://chang64.com/openings/benoni-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/benoni-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/benoni-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-benoni"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/benoni-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/philidor-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/philidor-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/philidor-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-philidor"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/philidor-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/vienna-game</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/vienna-game</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/vienna-game"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-viennoise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/vienna-game"/>
   </url>
-  <url><loc>https://chang64.com/openings/petrovs-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/petrovs-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/petrovs-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-russe"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/petrovs-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/slav-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/slav-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/slav-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-slave"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/slav-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/nimzo-indian-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/nimzo-indian-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/nimzo-indian-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-nimzo-indienne"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/nimzo-indian-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/scotch-game</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/scotch-game</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/scotch-game"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-ecossaise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/scotch-game"/>
   </url>
-  <url><loc>https://chang64.com/openings/four-knights-game</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/four-knights-game</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/four-knights-game"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-des-quatre-cavaliers"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/four-knights-game"/>
   </url>
-  <url><loc>https://chang64.com/openings/grunfeld-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/grunfeld-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/grunfeld-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-grunfeld"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/grunfeld-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/pirc-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/pirc-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/pirc-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-pirc"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/pirc-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/kings-indian-defense</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/kings-indian-defense</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/kings-indian-defense"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-est-indienne"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/kings-indian-defense"/>
   </url>
-  <url><loc>https://chang64.com/openings/catalan-opening</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/catalan-opening</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/catalan-opening"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-catalane"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/catalan-opening"/>
   </url>
-  <url><loc>https://chang64.com/openings/london-system</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/london-system</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/london-system"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/systeme-de-londres"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/london-system"/>
   </url>
-  <url><loc>https://chang64.com/openings/kings-gambit</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/kings-gambit</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/kings-gambit"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/gambit-du-roi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/kings-gambit"/>
   </url>
-  <url><loc>https://chang64.com/openings/queens-gambit</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/openings/queens-gambit</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/queens-gambit"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/gambit-dame"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/queens-gambit"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-sicilienne</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-sicilienne</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-sicilienne"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/sicilian-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/sicilian-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/partie-anglaise</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/partie-anglaise</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-anglaise"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/english-opening"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/english-opening"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-francaise</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-francaise</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-francaise"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/french-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/french-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-caro-kann</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-caro-kann</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-caro-kann"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/caro-kann-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/caro-kann-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/partie-espagnole</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/partie-espagnole</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-espagnole"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/ruy-lopez"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/ruy-lopez"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/gambit-dame-refuse</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/gambit-dame-refuse</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/gambit-dame-refuse"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/queens-gambit-declined"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/queens-gambit-declined"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-hollandaise</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-hollandaise</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-hollandaise"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/dutch-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/dutch-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-alekhine</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-alekhine</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-alekhine"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/alekhine-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/alekhine-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/ouverture-du-fou</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/ouverture-du-fou</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-du-fou"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/bishops-opening"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/bishops-opening"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-moderne</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-moderne</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-moderne"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/modern-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/modern-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-scandinave</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-scandinave</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-scandinave"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/scandinavian-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/scandinavian-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/partie-italienne</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/partie-italienne</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-italienne"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/italian-game"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/italian-game"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/ouverture-bird</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/ouverture-bird</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-bird"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/bird-opening"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/bird-opening"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/ouverture-reti</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/ouverture-reti</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-reti"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/reti-opening"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/reti-opening"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-benoni</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-benoni</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-benoni"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/benoni-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/benoni-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-philidor</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-philidor</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-philidor"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/philidor-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/philidor-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/partie-viennoise</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/partie-viennoise</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-viennoise"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/vienna-game"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/vienna-game"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-russe</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-russe</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-russe"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/petrovs-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/petrovs-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-slave</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-slave</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-slave"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/slav-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/slav-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-nimzo-indienne</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-nimzo-indienne</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-nimzo-indienne"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/nimzo-indian-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/nimzo-indian-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/partie-ecossaise</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/partie-ecossaise</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-ecossaise"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/scotch-game"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/scotch-game"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/partie-des-quatre-cavaliers</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/partie-des-quatre-cavaliers</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/partie-des-quatre-cavaliers"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/four-knights-game"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/four-knights-game"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-grunfeld</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-grunfeld</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-grunfeld"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/grunfeld-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/grunfeld-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-pirc</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-pirc</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-pirc"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/pirc-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/pirc-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/defense-est-indienne</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/defense-est-indienne</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/defense-est-indienne"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/kings-indian-defense"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/kings-indian-defense"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/ouverture-catalane</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/ouverture-catalane</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/ouverture-catalane"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/catalan-opening"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/catalan-opening"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/systeme-de-londres</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/systeme-de-londres</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/systeme-de-londres"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/london-system"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/london-system"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/gambit-du-roi</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/gambit-du-roi</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/gambit-du-roi"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/kings-gambit"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/kings-gambit"/>
   </url>
-  <url><loc>https://chang64.com/fr/ouvertures/gambit-dame</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority>
+  <url><loc>https://chang64.com/fr/ouvertures/gambit-dame</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/gambit-dame"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/openings/queens-gambit"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/queens-gambit"/>
   </url>
-  <url><loc>https://chang64.com/learn/how-the-pieces-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/how-the-pieces-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/how-the-pieces-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/deplacement-des-pieces"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/how-the-pieces-move"/>
   </url>
-  <url><loc>https://chang64.com/learn/castling</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/castling</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/castling"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-roque"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/castling"/>
   </url>
-  <url><loc>https://chang64.com/learn/en-passant</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/en-passant</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/en-passant"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-prise-en-passant"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/en-passant"/>
   </url>
-  <url><loc>https://chang64.com/learn/pawn-promotion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/pawn-promotion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/pawn-promotion"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-promotion-du-pion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/pawn-promotion"/>
   </url>
-  <url><loc>https://chang64.com/learn/check-checkmate-stalemate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/check-checkmate-stalemate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/check-checkmate-stalemate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/echec-mat-et-pat"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/check-checkmate-stalemate"/>
   </url>
-  <url><loc>https://chang64.com/learn/how-games-are-drawn</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/how-games-are-drawn</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/how-games-are-drawn"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/les-parties-nulles"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/how-games-are-drawn"/>
   </url>
-  <url><loc>https://chang64.com/learn/chess-notation</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/chess-notation</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/chess-notation"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-notation-des-coups"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/chess-notation"/>
   </url>
-  <url><loc>https://chang64.com/learn/time-controls</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/time-controls</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/time-controls"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/les-cadences-aux-echecs"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/time-controls"/>
   </url>
-  <url><loc>https://chang64.com/learn/opening-principles</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/opening-principles</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/opening-principles"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/les-principes-d-ouverture"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/opening-principles"/>
   </url>
-  <url><loc>https://chang64.com/learn/spotting-a-hanging-piece</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/spotting-a-hanging-piece</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/spotting-a-hanging-piece"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/reperer-une-piece-qui-traine"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/spotting-a-hanging-piece"/>
   </url>
-  <url><loc>https://chang64.com/learn/knight-fork</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/knight-fork</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/knight-fork"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-fourchette-de-cavalier"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/knight-fork"/>
   </url>
-  <url><loc>https://chang64.com/learn/pawn-fork</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/pawn-fork</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/pawn-fork"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-fourchette-de-pion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/pawn-fork"/>
   </url>
-  <url><loc>https://chang64.com/learn/double-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/double-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/double-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-double-attaque"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/double-attack"/>
   </url>
-  <url><loc>https://chang64.com/learn/the-pin</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/the-pin</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/the-pin"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-clouage"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/the-pin"/>
   </url>
-  <url><loc>https://chang64.com/learn/the-skewer</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/the-skewer</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/the-skewer"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/l-enfilade"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/the-skewer"/>
   </url>
-  <url><loc>https://chang64.com/learn/back-rank-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/back-rank-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/back-rank-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-mat-du-couloir"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/back-rank-mate"/>
   </url>
-  <url><loc>https://chang64.com/learn/deflection</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/deflection</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/deflection"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-deviation"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/deflection"/>
   </url>
-  <url><loc>https://chang64.com/learn/the-quiet-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/the-quiet-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/the-quiet-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-coup-silencieux"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/the-quiet-move"/>
   </url>
-  <url><loc>https://chang64.com/learn/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/learn/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/deplacement-des-pieces</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/deplacement-des-pieces</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/deplacement-des-pieces"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/how-the-pieces-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/how-the-pieces-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/le-roque</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/le-roque</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-roque"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/castling"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/castling"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-prise-en-passant</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-prise-en-passant</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-prise-en-passant"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/en-passant"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/en-passant"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-promotion-du-pion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-promotion-du-pion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-promotion-du-pion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/pawn-promotion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/pawn-promotion"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/echec-mat-et-pat</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/echec-mat-et-pat</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/echec-mat-et-pat"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/check-checkmate-stalemate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/check-checkmate-stalemate"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/les-parties-nulles</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/les-parties-nulles</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/les-parties-nulles"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/how-games-are-drawn"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/how-games-are-drawn"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-notation-des-coups</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-notation-des-coups</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-notation-des-coups"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/chess-notation"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/chess-notation"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/les-cadences-aux-echecs</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/les-cadences-aux-echecs</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/les-cadences-aux-echecs"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/time-controls"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/time-controls"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/les-principes-d-ouverture</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/les-principes-d-ouverture</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/les-principes-d-ouverture"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/opening-principles"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/opening-principles"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/reperer-une-piece-qui-traine</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/reperer-une-piece-qui-traine</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/reperer-une-piece-qui-traine"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/spotting-a-hanging-piece"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/spotting-a-hanging-piece"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-fourchette-de-cavalier</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-fourchette-de-cavalier</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-fourchette-de-cavalier"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/knight-fork"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/knight-fork"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-fourchette-de-pion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-fourchette-de-pion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-fourchette-de-pion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/pawn-fork"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/pawn-fork"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-double-attaque</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-double-attaque</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-double-attaque"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/double-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/double-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/le-clouage</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/le-clouage</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-clouage"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/the-pin"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/the-pin"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/l-enfilade</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/l-enfilade</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/l-enfilade"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/the-skewer"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/the-skewer"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/le-mat-du-couloir</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/le-mat-du-couloir</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-mat-du-couloir"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/back-rank-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/back-rank-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/la-deviation</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/la-deviation</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/la-deviation"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/deflection"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/deflection"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/le-coup-silencieux</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/le-coup-silencieux</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/le-coup-silencieux"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/the-quiet-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/the-quiet-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/apprendre/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/apprendre/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/apprendre/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/learn/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/learn/"/>
   </url>
-  <url><loc>https://chang64.com/glossary/fork</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/fork</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/fork"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/fourchette"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/fork"/>
   </url>
-  <url><loc>https://chang64.com/glossary/pin</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/pin</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/pin"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/clouage"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/pin"/>
   </url>
-  <url><loc>https://chang64.com/glossary/skewer</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/skewer</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/skewer"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/enfilade"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/skewer"/>
   </url>
-  <url><loc>https://chang64.com/glossary/discovered-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/discovered-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/discovered-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-a-la-decouverte"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/discovered-attack"/>
   </url>
-  <url><loc>https://chang64.com/glossary/double-check</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/double-check</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/double-check"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/echec-double"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/double-check"/>
   </url>
-  <url><loc>https://chang64.com/glossary/back-rank-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/back-rank-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/back-rank-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/mat-du-couloir"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/back-rank-mate"/>
   </url>
-  <url><loc>https://chang64.com/glossary/smothered-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/smothered-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/smothered-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/mat-etouffe"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/smothered-mate"/>
   </url>
-  <url><loc>https://chang64.com/glossary/deflection</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/deflection</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/deflection"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/deviation"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/deflection"/>
   </url>
-  <url><loc>https://chang64.com/glossary/zugzwang</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/zugzwang</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/zugzwang"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/zugzwang"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/zugzwang"/>
   </url>
-  <url><loc>https://chang64.com/glossary/opposition</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/opposition</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/opposition"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/opposition"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/opposition"/>
   </url>
-  <url><loc>https://chang64.com/glossary/fianchetto</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/fianchetto</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/fianchetto"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/fianchetto"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/fianchetto"/>
   </url>
-  <url><loc>https://chang64.com/glossary/gambit</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/gambit</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/gambit"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/gambit"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/gambit"/>
   </url>
-  <url><loc>https://chang64.com/glossary/tempo</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/tempo</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/tempo"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/tempo"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/tempo"/>
   </url>
-  <url><loc>https://chang64.com/glossary/development</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/development</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/development"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/developpement"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/development"/>
   </url>
-  <url><loc>https://chang64.com/glossary/open-file</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/open-file</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/open-file"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/colonne-ouverte"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/open-file"/>
   </url>
-  <url><loc>https://chang64.com/glossary/seventh-rank</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/seventh-rank</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/seventh-rank"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/septieme-rangee"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/seventh-rank"/>
   </url>
-  <url><loc>https://chang64.com/glossary/passed-pawn</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/passed-pawn</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/passed-pawn"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pion-passe"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/passed-pawn"/>
   </url>
-  <url><loc>https://chang64.com/glossary/hanging-piece</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/hanging-piece</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/hanging-piece"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/piece-en-prise"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/hanging-piece"/>
   </url>
-  <url><loc>https://chang64.com/glossary/sacrifice</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/sacrifice</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/sacrifice"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/sacrifice"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/sacrifice"/>
   </url>
-  <url><loc>https://chang64.com/glossary/perpetual-check</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/perpetual-check</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/perpetual-check"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/echec-perpetuel"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/perpetual-check"/>
   </url>
-  <url><loc>https://chang64.com/glossary/blunder</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/blunder</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/blunder"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/gaffe"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/blunder"/>
   </url>
-  <url><loc>https://chang64.com/glossary/mistake</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/mistake</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/mistake"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/erreur"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/mistake"/>
   </url>
-  <url><loc>https://chang64.com/glossary/inaccuracy</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/inaccuracy</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/inaccuracy"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/imprecision"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/inaccuracy"/>
   </url>
-  <url><loc>https://chang64.com/glossary/best-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/best-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/best-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/meilleur-coup"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/best-move"/>
   </url>
-  <url><loc>https://chang64.com/glossary/only-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/only-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/only-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/seul-coup"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/only-move"/>
   </url>
-  <url><loc>https://chang64.com/glossary/brilliant-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/brilliant-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/brilliant-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/coup-brillant"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/brilliant-move"/>
   </url>
-  <url><loc>https://chang64.com/glossary/elo-rating</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/elo-rating</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/elo-rating"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/le-classement-elo"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/elo-rating"/>
   </url>
-  <url><loc>https://chang64.com/glossary/eco-code</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/eco-code</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/eco-code"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/code-eco"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/eco-code"/>
   </url>
-  <url><loc>https://chang64.com/glossary/zwischenzug</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/zwischenzug</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/zwischenzug"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/coup-intermediaire"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/zwischenzug"/>
   </url>
-  <url><loc>https://chang64.com/glossary/overloading</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/overloading</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/overloading"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/surcharge"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/overloading"/>
   </url>
-  <url><loc>https://chang64.com/glossary/removing-the-defender</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/removing-the-defender</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/removing-the-defender"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/elimination-du-defenseur"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/removing-the-defender"/>
   </url>
-  <url><loc>https://chang64.com/glossary/interference</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/interference</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/interference"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/interference"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/interference"/>
   </url>
-  <url><loc>https://chang64.com/glossary/windmill</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/windmill</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/windmill"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/moulin"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/windmill"/>
   </url>
-  <url><loc>https://chang64.com/glossary/isolated-pawn</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/isolated-pawn</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/isolated-pawn"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pion-isole"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/isolated-pawn"/>
   </url>
-  <url><loc>https://chang64.com/glossary/doubled-pawns</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/doubled-pawns</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/doubled-pawns"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pions-doubles"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/doubled-pawns"/>
   </url>
-  <url><loc>https://chang64.com/glossary/backward-pawn</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/backward-pawn</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/backward-pawn"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pion-arriere"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/backward-pawn"/>
   </url>
-  <url><loc>https://chang64.com/glossary/pawn-majority</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/pawn-majority</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/pawn-majority"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/majorite-de-pions"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/pawn-majority"/>
   </url>
-  <url><loc>https://chang64.com/glossary/outpost</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/outpost</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/outpost"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/avant-poste"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/outpost"/>
   </url>
-  <url><loc>https://chang64.com/glossary/bishop-pair</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/bishop-pair</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/bishop-pair"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/paire-de-fous"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/bishop-pair"/>
   </url>
-  <url><loc>https://chang64.com/glossary/prophylaxis</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/prophylaxis</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/prophylaxis"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/prophylaxie"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/prophylaxis"/>
   </url>
-  <url><loc>https://chang64.com/glossary/stalemate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/stalemate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/stalemate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pat"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/stalemate"/>
   </url>
-  <url><loc>https://chang64.com/glossary/fifty-move-rule</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/fifty-move-rule</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/fifty-move-rule"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/regle-des-50-coups"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/fifty-move-rule"/>
   </url>
-  <url><loc>https://chang64.com/glossary/threefold-repetition</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/threefold-repetition</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/threefold-repetition"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/triple-repetition"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/threefold-repetition"/>
   </url>
-  <url><loc>https://chang64.com/glossary/double-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/double-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/double-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-double"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/double-attack"/>
   </url>
-  <url><loc>https://chang64.com/glossary/attraction</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/attraction</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/attraction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attraction"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/attraction"/>
   </url>
-  <url><loc>https://chang64.com/glossary/clearance</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/clearance</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/clearance"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/degagement"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/clearance"/>
   </url>
-  <url><loc>https://chang64.com/glossary/trapped-piece</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/trapped-piece</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/trapped-piece"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/piece-piegee"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/trapped-piece"/>
   </url>
-  <url><loc>https://chang64.com/glossary/promotion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/promotion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/promotion"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/promotion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/promotion"/>
   </url>
-  <url><loc>https://chang64.com/glossary/underpromotion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/underpromotion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/underpromotion"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/sous-promotion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/underpromotion"/>
   </url>
-  <url><loc>https://chang64.com/glossary/mating-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/mating-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/mating-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-de-mat"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/mating-attack"/>
   </url>
-  <url><loc>https://chang64.com/glossary/king-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/king-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/king-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-sur-le-roi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/king-attack"/>
   </url>
-  <url><loc>https://chang64.com/glossary/material-gain</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/material-gain</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/material-gain"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/gain-de-materiel"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/material-gain"/>
   </url>
-  <url><loc>https://chang64.com/glossary/combination</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/combination</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/combination"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/combinaison"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/combination"/>
   </url>
-  <url><loc>https://chang64.com/glossary/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/glossary/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/fourchette</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/fourchette</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/fourchette"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/fork"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/fork"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/clouage</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/clouage</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/clouage"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/pin"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/pin"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/enfilade</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/enfilade</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/enfilade"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/skewer"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/skewer"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/attaque-a-la-decouverte</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/attaque-a-la-decouverte</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-a-la-decouverte"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/discovered-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/discovered-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/echec-double</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/echec-double</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/echec-double"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/double-check"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/double-check"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/mat-du-couloir</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/mat-du-couloir</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/mat-du-couloir"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/back-rank-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/back-rank-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/mat-etouffe</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/mat-etouffe</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/mat-etouffe"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/smothered-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/smothered-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/deviation</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/deviation</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/deviation"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/deflection"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/deflection"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/zugzwang</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/zugzwang</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/zugzwang"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/zugzwang"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/zugzwang"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/opposition</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/opposition</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/opposition"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/opposition"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/opposition"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/fianchetto</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/fianchetto</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/fianchetto"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/fianchetto"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/fianchetto"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/gambit</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/gambit</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/gambit"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/gambit"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/gambit"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/tempo</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/tempo</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/tempo"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/tempo"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/tempo"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/developpement</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/developpement</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/developpement"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/development"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/development"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/colonne-ouverte</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/colonne-ouverte</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/colonne-ouverte"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/open-file"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/open-file"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/septieme-rangee</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/septieme-rangee</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/septieme-rangee"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/seventh-rank"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/seventh-rank"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/pion-passe</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/pion-passe</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pion-passe"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/passed-pawn"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/passed-pawn"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/piece-en-prise</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/piece-en-prise</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/piece-en-prise"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/hanging-piece"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/hanging-piece"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/sacrifice</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/sacrifice</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/sacrifice"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/sacrifice"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/sacrifice"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/echec-perpetuel</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/echec-perpetuel</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/echec-perpetuel"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/perpetual-check"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/perpetual-check"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/gaffe</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/gaffe</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/gaffe"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/blunder"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/blunder"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/erreur</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/erreur</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/erreur"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/mistake"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/mistake"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/imprecision</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/imprecision</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/imprecision"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/inaccuracy"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/inaccuracy"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/meilleur-coup</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/meilleur-coup</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/meilleur-coup"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/best-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/best-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/seul-coup</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/seul-coup</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/seul-coup"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/only-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/only-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/coup-brillant</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/coup-brillant</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/coup-brillant"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/brilliant-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/brilliant-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/le-classement-elo</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/le-classement-elo</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/le-classement-elo"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/elo-rating"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/elo-rating"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/code-eco</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/code-eco</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/code-eco"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/eco-code"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/eco-code"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/coup-intermediaire</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/coup-intermediaire</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/coup-intermediaire"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/zwischenzug"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/zwischenzug"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/surcharge</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/surcharge</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/surcharge"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/overloading"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/overloading"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/elimination-du-defenseur</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/elimination-du-defenseur</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/elimination-du-defenseur"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/removing-the-defender"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/removing-the-defender"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/interference</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/interference</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/interference"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/interference"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/interference"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/moulin</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/moulin</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/moulin"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/windmill"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/windmill"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/pion-isole</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/pion-isole</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pion-isole"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/isolated-pawn"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/isolated-pawn"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/pions-doubles</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/pions-doubles</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pions-doubles"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/doubled-pawns"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/doubled-pawns"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/pion-arriere</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/pion-arriere</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pion-arriere"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/backward-pawn"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/backward-pawn"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/majorite-de-pions</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/majorite-de-pions</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/majorite-de-pions"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/pawn-majority"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/pawn-majority"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/avant-poste</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/avant-poste</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/avant-poste"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/outpost"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/outpost"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/paire-de-fous</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/paire-de-fous</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/paire-de-fous"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/bishop-pair"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/bishop-pair"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/prophylaxie</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/prophylaxie</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/prophylaxie"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/prophylaxis"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/prophylaxis"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/pat</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/pat</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/pat"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/stalemate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/stalemate"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/regle-des-50-coups</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/regle-des-50-coups</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/regle-des-50-coups"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/fifty-move-rule"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/fifty-move-rule"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/triple-repetition</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/triple-repetition</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/triple-repetition"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/threefold-repetition"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/threefold-repetition"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/attaque-double</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/attaque-double</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-double"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/double-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/double-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/attraction</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/attraction</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attraction"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/attraction"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/attraction"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/degagement</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/degagement</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/degagement"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/clearance"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/clearance"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/piece-piegee</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/piece-piegee</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/piece-piegee"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/trapped-piece"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/trapped-piece"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/promotion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/promotion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/promotion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/promotion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/promotion"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/sous-promotion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/sous-promotion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/sous-promotion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/underpromotion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/underpromotion"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/attaque-de-mat</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/attaque-de-mat</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-de-mat"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/mating-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/mating-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/attaque-sur-le-roi</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/attaque-sur-le-roi</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/attaque-sur-le-roi"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/king-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/king-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/gain-de-materiel</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/gain-de-materiel</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/gain-de-materiel"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/material-gain"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/material-gain"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/combinaison</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/combinaison</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/combinaison"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/combination"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/combination"/>
   </url>
-  <url><loc>https://chang64.com/fr/lexique/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/lexique/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/lexique/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/glossary/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/glossary/"/>
   </url>
-  <url><loc>https://chang64.com/endgames/queen-vs-king</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/endgames/queen-vs-king</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/queen-vs-king"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/dame-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/queen-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/endgames/rook-vs-king</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/endgames/rook-vs-king</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/rook-vs-king"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/tour-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/rook-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/endgames/two-rooks-vs-king</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/endgames/two-rooks-vs-king</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/two-rooks-vs-king"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/deux-tours-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/two-rooks-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/endgames/bishop-and-knight-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/endgames/bishop-and-knight-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/bishop-and-knight-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/mat-fou-et-cavalier"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/bishop-and-knight-mate"/>
   </url>
-  <url><loc>https://chang64.com/endgames/king-and-pawn-vs-king</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/endgames/king-and-pawn-vs-king</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/king-and-pawn-vs-king"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/roi-et-pion-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/king-and-pawn-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/endgames/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/endgames/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/"/>
   </url>
-  <url><loc>https://chang64.com/fr/finales/dame-contre-roi</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/finales/dame-contre-roi</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/dame-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/queen-vs-king"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/queen-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/fr/finales/tour-contre-roi</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/finales/tour-contre-roi</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/tour-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/rook-vs-king"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/rook-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/fr/finales/deux-tours-contre-roi</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/finales/deux-tours-contre-roi</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/deux-tours-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/two-rooks-vs-king"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/two-rooks-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/fr/finales/mat-fou-et-cavalier</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/finales/mat-fou-et-cavalier</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/mat-fou-et-cavalier"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/bishop-and-knight-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/bishop-and-knight-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/finales/roi-et-pion-contre-roi</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/finales/roi-et-pion-contre-roi</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/roi-et-pion-contre-roi"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/king-and-pawn-vs-king"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/king-and-pawn-vs-king"/>
   </url>
-  <url><loc>https://chang64.com/fr/finales/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/finales/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/finales/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/endgames/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/endgames/"/>
   </url>
-  <url><loc>https://chang64.com/traps/scholars-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/scholars-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/scholars-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/mat-du-berger"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/scholars-mate"/>
   </url>
-  <url><loc>https://chang64.com/traps/legals-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/legals-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/legals-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/mat-de-legal"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/legals-mate"/>
   </url>
-  <url><loc>https://chang64.com/traps/blackburne-shilling-trap</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/blackburne-shilling-trap</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/blackburne-shilling-trap"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/piege-du-shilling"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/blackburne-shilling-trap"/>
   </url>
-  <url><loc>https://chang64.com/traps/englund-gambit-trap</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/englund-gambit-trap</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/englund-gambit-trap"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/piege-du-gambit-englund"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/englund-gambit-trap"/>
   </url>
-  <url><loc>https://chang64.com/traps/fried-liver-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/fried-liver-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/fried-liver-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/attaque-fegatello"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/fried-liver-attack"/>
   </url>
-  <url><loc>https://chang64.com/traps/damiano-defence-punished</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/damiano-defence-punished</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/damiano-defence-punished"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/defense-damiano-punie"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/damiano-defence-punished"/>
   </url>
-  <url><loc>https://chang64.com/traps/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/traps/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/mat-du-berger</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/mat-du-berger</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/mat-du-berger"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/scholars-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/scholars-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/mat-de-legal</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/mat-de-legal</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/mat-de-legal"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/legals-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/legals-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/piege-du-shilling</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/piege-du-shilling</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/piege-du-shilling"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/blackburne-shilling-trap"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/blackburne-shilling-trap"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/piege-du-gambit-englund</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/piege-du-gambit-englund</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/piege-du-gambit-englund"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/englund-gambit-trap"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/englund-gambit-trap"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/attaque-fegatello</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/attaque-fegatello</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/attaque-fegatello"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/fried-liver-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/fried-liver-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/defense-damiano-punie</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/defense-damiano-punie</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/defense-damiano-punie"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/damiano-defence-punished"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/damiano-defence-punished"/>
   </url>
-  <url><loc>https://chang64.com/fr/pieges/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/pieges/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/pieges/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/traps/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/traps/"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/winning-capture</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/winning-capture</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/winning-capture"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/prise-gagnante"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/winning-capture"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/double-attack</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/double-attack</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/double-attack"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/attaque-double"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/double-attack"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/skewer</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/skewer</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/skewer"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/enfilade"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/skewer"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/mate-in-two</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/mate-in-two</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/mate-in-two"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-en-deux-coups"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/mate-in-two"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/winning-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/winning-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/winning-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/coup-gagnant"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/winning-move"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/knight-fork</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/knight-fork</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/knight-fork"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/fourchette-de-cavalier"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/knight-fork"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/mate-in-one</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/mate-in-one</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/mate-in-one"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-en-un-coup"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/mate-in-one"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/back-rank-mate</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/back-rank-mate</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/back-rank-mate"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-du-couloir"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/back-rank-mate"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/pin</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/pin</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/pin"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/clouage"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/pin"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/pawn-fork</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/pawn-fork</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/pawn-fork"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/fourchette-de-pion"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/pawn-fork"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/deflection</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/deflection</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/deflection"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/deviation"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/deflection"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/quiet-move</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/quiet-move</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/quiet-move"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/coup-silencieux"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/quiet-move"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/mate-in-three</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/mate-in-three</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/mate-in-three"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-en-trois-coups"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/mate-in-three"/>
   </url>
-  <url><loc>https://chang64.com/puzzles/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/puzzles/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/prise-gagnante</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/prise-gagnante</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/prise-gagnante"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/winning-capture"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/winning-capture"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/attaque-double</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/attaque-double</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/attaque-double"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/double-attack"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/double-attack"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/enfilade</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/enfilade</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/enfilade"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/skewer"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/skewer"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/mat-en-deux-coups</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/mat-en-deux-coups</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-en-deux-coups"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/mate-in-two"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/mate-in-two"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/coup-gagnant</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/coup-gagnant</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/coup-gagnant"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/winning-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/winning-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/fourchette-de-cavalier</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/fourchette-de-cavalier</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/fourchette-de-cavalier"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/knight-fork"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/knight-fork"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/mat-en-un-coup</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/mat-en-un-coup</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-en-un-coup"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/mate-in-one"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/mate-in-one"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/mat-du-couloir</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/mat-du-couloir</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-du-couloir"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/back-rank-mate"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/back-rank-mate"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/clouage</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/clouage</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/clouage"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/pin"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/pin"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/fourchette-de-pion</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/fourchette-de-pion</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/fourchette-de-pion"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/pawn-fork"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/pawn-fork"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/deviation</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/deviation</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/deviation"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/deflection"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/deflection"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/coup-silencieux</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/coup-silencieux</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/coup-silencieux"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/quiet-move"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/quiet-move"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/mat-en-trois-coups</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/mat-en-trois-coups</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/mat-en-trois-coups"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/mate-in-three"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/mate-in-three"/>
   </url>
-  <url><loc>https://chang64.com/fr/exercices/</loc><lastmod>2026-10-24</lastmod><priority>0.6</priority>
+  <url><loc>https://chang64.com/fr/exercices/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://chang64.com/fr/exercices/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://chang64.com/puzzles/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://chang64.com/puzzles/"/>

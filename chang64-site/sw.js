@@ -12,8 +12,8 @@
  * La version du cache est calculee a la construction : chaque build invalide
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-202610241024";
-const DATA_CACHE="chang64-data-202610241024";
+const CACHE="chang64-202610250144";
+const DATA_CACHE="chang64-data-202610250144";
 /* Trois entrees au maximum dans le cache de donnees (2026-09-06). Un shard
    de niveau pese 1 a 2 Mo : trois plafonnent l'occupation autour de 5 Mo,
    loin des 17 Mo qui avaient fait sauter le quota iOS et evince le cache
@@ -30,7 +30,7 @@ let fileDeco=Promise.resolve();
 /* "/index.html" retire de CORE et du repli hors ligne (2026-10-24) : Pages le
    redirige en 308 vers "/", et une reponse redirigee servie a une navigation
    est refusee par le navigateur. Le repli tombait donc en erreur. */
-const CORE=["/","/manifest.webmanifest","/icon-192.svg","/icon-512.svg","/openings/"];
+const CORE=["/","/manifest.webmanifest","/favicon.svg","/favicon.ico","/icon-192.png","/icon-512.png","/openings/"];
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()).catch(()=>{}));
 });

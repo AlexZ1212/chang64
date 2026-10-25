@@ -1,6 +1,8 @@
 # chang64 — fichiers d'identité
 
 Le signe (l'éléphant) et le damier 4 × 4 ardoise et nuit.
+
+**Orientation (25/10/2026) : l'éléphant regarde à droite.** La livraison d'origine le tournait vers la gauche ; placé à gauche du logotype, il tournait le dos au nom « chang64 ». Tous les tracés de l'éléphant ont été retournés (x → 64 − x, sens des arcs inversé ; 108 pour Android), les fonds et le damier sont inchangés, et les PNG, le `.ico` et l'image de partage ont été régénérés depuis les sources SVG. Seule `planche-livrables.png`, capture de présentation, montre encore l'orientation d'origine.
 Couleurs : laiton `#E0A93B`, encre `#101413`, nuit `#191F1D`, ardoise `#232B28`.
 
 ## À mettre à la racine du site

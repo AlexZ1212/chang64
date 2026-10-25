@@ -1920,6 +1920,25 @@ for (const f of fs.readdirSync(path.join(__dirname, "ds/icones")))
   fs.copyFileSync(path.join(__dirname, "ds/icones", f), path.join(OUT, f));
 
 const SW_VERSION = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "");
+/* Version du cache de donnees tiree du CONTENU de data/ (2026-10-25), et non
+   plus de l'heure du build : une publication qui ne touche que le code ne
+   vide plus les exercices gardes hors ligne. Avant, chaque mise en ligne les
+   effacait et un joueur passe en mode avion sans avoir rouvert les exercices
+   entre-temps n'en avait plus aucun. Tout changement de donnees (banque,
+   jour.json...) change l'empreinte, donc le cache repart a neuf, comme avant :
+   pas de melange entre un ancien index de niveau et de nouveaux morceaux. */
+const DATA_VERSION = (() => {
+  const h = require("crypto").createHash("sha1");
+  const parcourir = dossier => {
+    for (const nom of fs.readdirSync(dossier).sort()) {
+      const f = path.join(dossier, nom);
+      if (fs.statSync(f).isDirectory()) parcourir(f);
+      else h.update(path.relative(OUT, f).replace(/\\/g, "/") + "\n").update(fs.readFileSync(f));
+    }
+  };
+  parcourir(path.join(OUT, "data"));
+  return h.digest("hex").slice(0, 12);
+})();
 fs.writeFileSync(OUT + "/sw.js", `/* chang64 offline cache
  *
  * chang64 - a free chess website
@@ -1935,13 +1954,17 @@ fs.writeFileSync(OUT + "/sw.js", `/* chang64 offline cache
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
 const CACHE="chang64-${SW_VERSION}";
-const DATA_CACHE="chang64-data-${SW_VERSION}";
-/* Trois entrees au maximum dans le cache de donnees (2026-09-06). Un shard
-   de niveau pese 1 a 2 Mo : trois plafonnent l'occupation autour de 5 Mo,
-   loin des 17 Mo qui avaient fait sauter le quota iOS et evince le cache
-   ENTIER, coquille de l'application comprise. En pratique un joueur reste
-   sur son niveau et le suivant, donc trois suffisent presque toujours. */
-const DATA_MAX=3;
+const DATA_CACHE="chang64-data-${DATA_VERSION}";
+/* Plafond du cache de donnees en OCTETS (2026-10-25), et non plus en nombre
+   d'entrees. Les trois entrees du 2026-09-06 visaient des shards de 1 a 2 Mo,
+   soit environ 5 Mo, loin des 17 Mo qui avaient fait sauter le quota iOS et
+   evince le cache ENTIER, coquille de l'application comprise. Depuis le
+   decoupage de la banque, les fichiers pesent 3 Ko a 1,2 Mo et une seance
+   ordinaire en demande neuf (index et morceau du niveau, jour.json, ids/,
+   theme-counts, rush-pool...) : les trois derniers chassaient ceux du niveau
+   et, en mode avion, les exercices ne se chargeaient plus. On garde donc
+   l'enveloppe de 5 Mo, mesuree fichier par fichier. */
+const DATA_PLAFOND=5*1024*1024;
 /* Les ecritures du cache de donnees sont mises a la queue leu leu. Mesure
    avant serialisation : cinq shards demandes en meme temps laissaient six
    entrees au lieu de trois, chaque requete lisant keys() avant qu'aucune
@@ -1949,6 +1972,26 @@ const DATA_MAX=3;
    plafond ne tenait pas du tout. Ne pas remplacer cette chaine par des
    appels paralleles. */
 let fileDeco=Promise.resolve();
+/* Range une reponse en fin de file, puis evince par le debut tant que le
+   total depasse le plafond. keys() rend les entrees dans leur ordre
+   d'insertion : la premiere est la moins recemment utilisee, parce qu'une
+   lecture dans le cache repasse aussi par ici (sinon l'index d'un niveau,
+   charge une fois puis toujours lu depuis le cache, restait en tete et
+   partait le premier). La taille est notee dans un en-tete a l'ecriture,
+   pour ne pas relire chaque corps a chaque eviction. L'entree qu'on vient
+   de ranger n'est jamais evincee. */
+function ranger(c,r,resp){
+  fileDeco=fileDeco.then(()=>resp.blob()).then(b=>{
+    const h=new Headers(resp.headers);
+    h.set("x-chang64-octets",String(b.size));
+    return c.delete(r).then(()=>c.put(r,new Response(b,{status:resp.status,statusText:resp.statusText,headers:h})));
+  }).then(()=>c.keys()).then(ks=>Promise.all(ks.map(k=>c.match(k).then(x=>x&&+x.headers.get("x-chang64-octets")||0))).then(tailles=>{
+    let total=tailles.reduce((a,t)=>a+t,0);
+    const vieux=[];
+    for(let i=0;i<ks.length-1&&total>DATA_PLAFOND;i++){total-=tailles[i];vieux.push(c.delete(ks[i]));}
+    return Promise.all(vieux);
+  })).catch(()=>{});
+}
 /* "/index.html" retire de CORE et du repli hors ligne (2026-10-24) : Pages le
    redirige en 308 vers "/", et une reponse redirigee servie a une navigation
    est refusee par le navigateur. Le repli tombait donc en erreur. */
@@ -1975,28 +2018,20 @@ self.addEventListener("fetch",e=>{
      Un utilisateur en avion perdait donc les exercices, c'est-a-dire la
      moitie du site. Mesure faite en bloquant /data/ : l'echiquier restait
      affiche, vide, sous un message d'erreur.
-     Depuis le 2026-09-06 ils reviennent dans un cache A PART, plafonne a
-     DATA_MAX entrees. Le cache separe et le plafond traitent la vraie cause
-     du probleme iOS, qui etait le volume, pas la mise en cache elle-meme :
-     trois shards pesent environ 5 Mo la ou la banque entiere en pesait 17.
+     Depuis le 2026-09-06 ils reviennent dans un cache A PART, plafonne
+     (DATA_PLAFOND). Le cache separe et le plafond traitent la vraie cause
+     du probleme iOS, qui etait le volume, pas la mise en cache elle-meme.
      Ne pas remettre ces fichiers dans CACHE : c'est ce melange qui faisait
      tomber la coquille avec les donnees. */
   if(url.pathname.startsWith("/data/")){
     e.respondWith(
-      caches.open(DATA_CACHE).then(c=>c.match(r).then(hit=>hit||fetch(r).then(resp=>{
-        if(resp&&resp.ok){
-          const copy=resp.clone();
-          /* Plafond applique a l'ecriture, une ecriture a la fois : on evince
-             la plus ancienne entree plutot que de laisser le cache grossir.
-             keys() rend les entrees dans leur ordre d'insertion, la premiere
-             est donc la plus vieille. */
-          fileDeco=fileDeco.then(()=>c.keys().then(ks=>{
-            const trop=ks.length-(DATA_MAX-1);
-            return trop>0?Promise.all(ks.slice(0,trop).map(k=>c.delete(k))):null;
-          }).then(()=>c.put(r,copy))).catch(()=>{});
-        }
-        return resp;
-      })))
+      caches.open(DATA_CACHE).then(c=>c.match(r).then(hit=>{
+        if(hit){ranger(c,r,hit.clone());return hit;}
+        return fetch(r).then(resp=>{
+          if(resp&&resp.ok)ranger(c,r,resp.clone());
+          return resp;
+        });
+      }))
       /* Hors ligne et jamais mis en cache : on laisse l'echec remonter tel
          quel, fetchJSON le traduit en message lisible (puzzleDataError). */
     );
@@ -2006,7 +2041,7 @@ self.addEventListener("fetch",e=>{
      requete entiere, chaine de requete comprise : "/", "/?fbclid=..." et
      "/?utm_source=..." faisaient chacune une entree de la coquille, sans
      plafond, a chaque lien partage sur un reseau social. C'est exactement le
-     gonflement qui fait sauter le quota iOS (voir DATA_MAX plus haut). Aucune
+     gonflement qui fait sauter le quota iOS (voir DATA_PLAFOND plus haut). Aucune
      page ne lit sa chaine de requete cote serveur : le HTML est le meme, une
      seule entree suffit. Le reseau recoit toujours l'adresse complete. Les
      autres fichiers gardent leur requete pour cle. */

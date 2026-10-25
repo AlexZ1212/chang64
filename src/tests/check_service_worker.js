@@ -25,9 +25,21 @@ const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  F
 
 console.log("\n--- Deux caches distincts ---");
 T("cache de la coquille", /const CACHE="chang64-\d+"/.test(sw));
-T("cache de donnees separe", /const DATA_CACHE="chang64-data-\d+"/.test(sw));
+/* Depuis le 2026-10-25, la version du cache de donnees est une empreinte
+   du contenu de data/ (hexadecimale), plus l'heure du build. */
+T("cache de donnees separe", /const DATA_CACHE="chang64-data-[0-9a-f]{12}"/.test(sw));
 T("les deux versionnes par la construction",
-  (sw.match(/chang64-\d+/)||[])[0]&&(sw.match(/chang64-data-\d+/)||[])[0]);
+  (sw.match(/chang64-\d+/)||[])[0]&&(sw.match(/chang64-data-[0-9a-f]+/)||[])[0]);
+{
+  /* L'empreinte suit les donnees : on la recalcule ici sur site/data. */
+  const h=require("crypto").createHash("sha1"), path=require("path");
+  const parcourir=d=>{for(const n of fs.readdirSync(d).sort()){const f=path.join(d,n);
+    if(fs.statSync(f).isDirectory())parcourir(f);
+    else h.update(path.relative(SITE,f).replace(/\\/g,"/")+"\n").update(fs.readFileSync(f));}};
+  parcourir(path.join(SITE,"data"));
+  const attendue=h.digest("hex").slice(0,12), lue=(sw.match(/chang64-data-([0-9a-f]+)/)||[])[1];
+  T("version des donnees = empreinte de data/", lue===attendue, lue+" / "+attendue);
+}
 T("les shards ne vont pas dans le cache de la coquille",
   !/\/data\/[\s\S]{0,400}caches\.open\(CACHE\)/.test(sw));
 
@@ -36,10 +48,12 @@ T("plus de sortie seche sur /data/", !/startsWith\("\/data\/"\)\)return;/.test(s
 T("/data/ passe par le cache de donnees", /startsWith\("\/data\/"\)[\s\S]{0,200}DATA_CACHE/.test(sw));
 
 console.log("\n--- Le plafond ---");
-const max=(sw.match(/const DATA_MAX=(\d+)/)||[])[1];
-T("un plafond est defini", !!max, max);
-T("plafond raisonnable (1 a 5 shards)", max&&+max>=1&&+max<=5, max);
-T("l'eviction retire les plus anciennes", /ks\.slice\(0,trop\)/.test(sw));
+/* Plafond en octets depuis le 2026-10-25 (trois entrees ne gardaient plus
+   les fichiers du niveau, voir le scenario de seance plus bas). */
+const plafond=(sw.match(/const DATA_PLAFOND=([\d*]+);/)||[])[1];
+const octets=plafond?plafond.split("*").reduce((a,x)=>a*+x,1):0;
+T("un plafond en octets est defini", !!plafond, plafond);
+T("plafond raisonnable (2 a 6 Mo)", octets>=2*1048576&&octets<=6*1048576, octets);
 T("les ecritures sont serialisees", /fileDeco=fileDeco\.then/.test(sw),
   "sans file d'attente le plafond ne tient pas");
 
@@ -86,10 +100,13 @@ console.log("\n--- Les pages HTML ignorent la chaine de requete ---");
     match:async k=>{for(const c of magasins.values()){const v=c.m.get(cleDe(k));if(v)return v;}}
   };
   const ecouteurs={};
-  const reponse=()=>({ok:true,clone(){return reponse();}});
+  /* Vraies Response de Node : sw.js lit blob() et les en-tetes pour peser
+     les entrees. Le corps a la taille du fichier publie s'il existe. */
+  let reseau=true;
+  const taille=u=>{const f=SITE+new URL(u).pathname;return fs.existsSync(f)&&fs.statSync(f).isFile()?fs.statSync(f).size:10;};
   const bac={
-    caches,URL,Promise,console,location:{origin:ORIGINE},
-    fetch:()=>Promise.resolve(reponse()),
+    caches,URL,Promise,console,location:{origin:ORIGINE},Response,Headers,
+    fetch:r=>reseau?Promise.resolve(new Response(new Uint8Array(taille(r.url)),{status:200})):Promise.reject(new TypeError("hors ligne")),
     self:{addEventListener:(t,f)=>{ecouteurs[t]=f;},skipWaiting(){},clients:{claim(){}}}
   };
   vm.runInNewContext(sw,bac);
@@ -121,6 +138,40 @@ console.log("\n--- Les pages HTML ignorent la chaine de requete ---");
   T("/engine/ n'est toujours pas intercepte", (await servir("/engine/stockfish.wasm",false))===false);
   await servir("/manifest.webmanifest?v=2",false);
   T("un fichier non HTML garde sa requete pour cle", coquille().includes(ORIGINE+"/manifest.webmanifest?v=2"));
+
+  /* Ajoute le 2026-10-25 : en mode avion sur iPhone, les exercices ne se
+     chargeaient plus. Une seance ordinaire demande neuf fichiers (mesure
+     dans jsdom : exercices, exercice du jour, motifs, Sprint) et les trois
+     places du cache ne gardaient que les derniers. On rejoue cette seance
+     avec les tailles reelles, puis on coupe le reseau. */
+  console.log("\n--- Une seance, puis le mode avion ---");
+  const nomDonnees=[...magasins.keys()].find(k=>/^chang64-data-/.test(k));
+  magasins.get(nomDonnees).m.clear();
+  const seance=["/data/level-1.json","/data/level-1-0.json","/data/jour.json","/data/ids/12.json",
+    "/data/level-2.json","/data/level-2-2.json","/data/theme-counts.json","/data/rush-pool.json"];
+  for(const f of seance)await servir(f,false);
+  await new Promise(r=>setTimeout(r,50));
+  T("toute la seance tient dans le cache", seance.every(f=>donnees().includes(ORIGINE+f)),
+    seance.filter(f=>!donnees().includes(ORIGINE+f)).join(" "));
+  reseau=false;
+  const horsLigne=async chemin=>{let p=null;
+    ecouteurs.fetch({request:requete(chemin,false),respondWith:x=>{p=x;}});
+    try{const rep=await p;return !!(rep&&rep.ok!==false);}catch(e){return false;}};
+  T("hors ligne : index du niveau servi", await horsLigne("/data/level-1.json"));
+  T("hors ligne : morceau du niveau servi", await horsLigne("/data/level-1-0.json"));
+
+  /* Plafond : on enchaine des morceaux jusqu'a depasser 5 Mo. Le total doit
+     rester sous le plafond, et l'index du niveau, relu a chaque seance, doit
+     survivre a l'eviction. */
+  reseau=true;
+  const morceaux=fs.readdirSync(SITE+"/data").filter(n=>/^level-[3-9]-\d+\.json$/.test(n)).slice(0,40);
+  for(const n of morceaux){await servir("/data/"+n,false);await servir("/data/level-1.json",false);}
+  await new Promise(r=>setTimeout(r,100));
+  const magasin=magasins.get(nomDonnees).m;
+  let total=0;for(const v of magasin.values())total+=+v.headers.get("x-chang64-octets")||0;
+  T("le cache reste sous le plafond", total<=octets, total+" octets pour "+magasin.size+" entrees");
+  T("des entrees ont bien ete evincees", !donnees().includes(ORIGINE+"/data/rush-pool.json"));
+  T("l'index relu survit a l'eviction", donnees().includes(ORIGINE+"/data/level-1.json"));
 })().catch(e=>{ko++;console.log("  FAIL execution de sw.js  -> "+e.message);}).then(()=>{
   console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

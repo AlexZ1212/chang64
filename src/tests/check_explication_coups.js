@@ -46,9 +46,9 @@ function reference(p) {
 (async () => {
   for (const [langue, att] of [
     ["fr-FR", { qualite: "la qualité", cp: "un cavalier contre un pion", deux: "deux pions", tour: "une tour", fou: "un fou",
-      dame: "la dame contre une tour", trois: "du matériel", gagne: /gagne|prépare le mat/, mat: /mat/ }],
+      dame: "la dame contre une tour", trois: "du matériel", gagne: /gagne|prépare le mat/, mat: /mat/, menace: /menace/ }],
     ["en-US", { qualite: "the exchange", cp: "a knight for a pawn", deux: "two pawns", tour: "a rook", fou: "a bishop",
-      dame: "the queen for a rook", trois: "material", gagne: /wins|prepares checkmate/, mat: /checkmate/ }]]) {
+      dame: "the queen for a rook", trois: "material", gagne: /wins|prepares checkmate/, mat: /checkmate|mate in/, menace: /threatens/ }]]) {
     const w = ouvrir(langue); await attendre(1500);
     console.log("\n--- " + langue + " : tournures ---");
     T("fonctions presentes", typeof w.phraseGain === "function" && typeof w.explainSentence === "function");
@@ -82,14 +82,27 @@ function reference(p) {
        promotion. Rien d'exact a en dire sans relancer le moteur. Le gain se
        juge au bilan et non a la case d'arrivee : une prise en passant arrive
        sur une case vide (19 exercices au 24/10). */
+    /* Depuis le 2026-10-25, ceux dont Stockfish a releve une menace concrete
+       (explain.menace, menaces_coups_gagnants.js) ont leur phrase : seuls
+       restent muets les coups de position sans menace. */
     const muetsAttendus = banque.filter(p => {
       if (p.theme !== "Winning move" || p.sol.length !== 1 || reference(p).net > 0) return false;
+      if (p.explain && p.explain.menace) return false;
       const g = new Game(p.fen), m = g.moves().find(x => g.uci(x) === p.sol[0]);
       if (m.promo) return false;
       g.makeMove(m); return !g.inCheck();
     }).length;
-    T("Winning move sans phrase : seulement les coups uniques sans prise, echec ni promotion (" + muetsAttendus + ")",
+    T("Winning move sans phrase : seulement les coups sans prise, echec, promotion ni menace (" + muetsAttendus + ")",
       vides["Winning move"] === muetsAttendus, vides["Winning move"]);
+    const avecMenace = banque.filter(p => p.explain && p.explain.menace);
+    const malDites = avecMenace.filter(p => {
+      const s = nbsp(w.explainSentence(p)), me = p.explain.menace;
+      return !s.includes(me.san) || !att.menace.test(s) || (me.mat && !att.mat.test(s));
+    });
+    T("chaque menace relevee est dite (" + avecMenace.length + ")", avecMenace.length > 0 && !malDites.length,
+      malDites.slice(0, 3).map(p => p.code + " " + nbsp(w.explainSentence(p))).join(" | "));
+    const ex = avecMenace.find(p => p.explain.menace.piece);
+    if (ex) console.log("  exemple : " + nbsp(w.explainSentence(ex)));
     w.close();
   }
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");

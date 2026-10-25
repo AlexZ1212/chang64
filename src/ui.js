@@ -1971,6 +1971,19 @@ function phraseLigne(p){
      le gain vient apres, hors de la ligne. La seule chose sure a en dire est
      que l'echec doit etre pare avant tout le reste. */
   if(!parts.length&&/\+$/.test(premier))parts.push(t("{move} gives check: the opponent must answer it before anything else.",{move:premier}));
+  /* Ni prise, ni echec, ni promotion, ni mat (1 037 exercices au 25/10) :
+     la solution seule ne dit rien. La phrase vient alors de la menace du
+     premier coup, relevee hors ligne par Stockfish (menaces_coups_gagnants.js) :
+     ce que le joueur jouerait si l'adversaire passait son tour. Elle n'est
+     posee que si c'est un mat court, ou une prise ou une promotion que
+     l'adversaire ne peut pas laisser faire. Sans elle, silence, comme avant. */
+  const me=!parts.length&&p.explain&&p.explain.menace;
+  if(me&&me.san){
+    if(me.mat===1)parts.push(t("{move} threatens {threat}, checkmate.",{move:premier,threat:me.san}));
+    else if(me.mat)parts.push(t("{move} threatens mate in {n}, starting with {threat}.",{move:premier,n:me.mat,threat:me.san}));
+    else if(me.piece&&me.sq)parts.push(t("{move} threatens to take {piece} with {threat}.",{move:premier,piece:nounPhrase(me.piece,me.sq,false),threat:me.san}));
+    else parts.push(t("{move} threatens {threat}.",{move:premier,threat:me.san}));
+  }
   return parts.join(" ");
 }
 /* Pedagogie coup juste / coup faute (exercices mines depuis de vraies

@@ -413,6 +413,13 @@ function renderResult(show){
     else if(mode==="friend"&&typeof saveFinishedAmiGame==="function")saveFinishedAmiGame();
   }
   if(!show||!resultInfo||resultDismissed){b.className="result hide";return;}
+  /* Le bandeau est partage avec le bilan de Chang Sprint (showFin) : sans ce
+     menage, une fin de partie jouee apres un sprint affichait encore ses
+     pastilles et "Touche un ✓ ou un ✗..." (signale le 2026-10-25, capture
+     d'Alexandre : defaite au temps en blitz). Et une fin de partie ne doit
+     jamais declencher l'action laissee par un bilan (relancer un sprint). */
+  effacerBilanSprint();
+  finAction=null;finWasRushSprint=false;
   b.className="result "+resultInfo.kind;
   $("resultTitle").textContent=resultInfo.title;
   $("resultSub").textContent=resultInfo.sub;
@@ -460,6 +467,12 @@ $("resultClose").onclick=()=>{
    bloc repartait aussitot dans l'onglet Exercices : on se retrouvait ailleurs
    sans comprendre ce qui venait de se passer. */
 let finAction=null;
+/* Retire la rangee de bilan du sprint ET sa consigne. Seule la rangee etait
+   videe dans showFin(), la consigne "Touche un ✓ ou un ✗..." restait. */
+function effacerBilanSprint(){
+  const rh=$("rushHistory"); if(rh){poserHtml(rh,"");rh.classList.add("hide");}
+  const no=$("rushHistoryNote"); if(no)no.classList.add("hide");
+}
 function showFin(titre,sousTitre,libelleRejouer,action){
   const b=$("resultBanner"); if(!b)return;
   finAction=action||null;
@@ -474,7 +487,7 @@ function showFin(titre,sousTitre,libelleRejouer,action){
   $("resultSub").textContent=sousTitre;
   /* Generique aux fins de partie normales : la rangee de bilan du sprint
      n'a de sens que pour rushEnd(), qui la remplit juste apres cet appel. */
-  const rh=$("rushHistory"); if(rh){poserHtml(rh,"");rh.classList.add("hide");}
+  effacerBilanSprint();
   $("resultNew").textContent=libelleRejouer;
   /* "Revoir la partie" n'a pas de sens pour une epreuve. */
   const an=$("resultAnalyse"); if(an)an.classList.toggle("hide",!!action);

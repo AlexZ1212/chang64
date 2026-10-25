@@ -1748,6 +1748,7 @@ function tryPuzzleMove(m){
   selected=-1;
   if(!ok){
     puzzleTries++;majBoutonSuivant();
+    if(typeof noterPremierEssai==="function")noterPremierEssai(false);
     marks={};marks[m.to]="bad";render();
     boardEl.classList.add("shake");
     setTimeout(()=>boardEl.classList.remove("shake"),340);
@@ -2200,6 +2201,7 @@ function hintPuzzle(){
   st.textContent=t("The piece to move is highlighted.");
   if(puzzleTries===0)puzzleTries=1;
   majBoutonSuivant();
+  if(typeof noterPremierEssai==="function")noterPremierEssai(false);
   hintShown=true;
   syncHintBtn();
 }
@@ -2209,6 +2211,7 @@ function solvePuzzle(){
   const san=game.san(mv);
   marks={};marks[mv.from]="hint";marks[mv.to]="hint";render();
   puzzleTries=Math.max(puzzleTries,1);majBoutonSuivant();
+  if(typeof noterPremierEssai==="function")noterPremierEssai(false);
   const st=$("exStatus");st.className="status";
   st.textContent=t("The answer is {san}. Play it to continue.",{san:san});
 }

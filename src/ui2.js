@@ -2279,8 +2279,33 @@ function onPuzzleResult(won){
      sans jamais toucher a l'echelle de niveaux -- incoherent avec
      l'affichage "Niveau {n}" juste a cote, qui ne bougeait pas lui. */
   if(!puzzle.daily)updateRating(puzzle.level,won&&puzzleTries===0);
+  noterPremierEssai(won&&puzzleTries===0);
   saveProg();renderExtraStats();
   return false;
+}
+/* Mesure de la difficulte reelle (2026-10-25, accord d'Alexandre). La
+   difficulte d'un exercice etait estimee a la generation, sans jamais etre
+   confrontee aux joueurs. Chaque exercice termine envoie desormais son
+   numero et un seul renseignement : reussi du premier coup, ou non. Rien
+   d'autre ne part (ni identifiant, ni progression, ni cookie), et le
+   serveur (functions/api/resultat.js) n'en garde que deux compteurs par
+   exercice. La page Confidentialite le dit.
+   L'issue est tranchee des la premiere erreur, le premier indice ou la
+   solution affichee : on envoie alors l'echec tout de suite, sans attendre
+   la fin. Un joueur qui abandonne apres avoir rate compte ainsi comme un
+   echec ; sans cela les exercices durs, plus souvent abandonnes, auraient
+   paru plus faciles qu'ils ne sont. Un exercice ne part qu'une fois par
+   chargement de page. Le Sprint est exclu : on y joue contre la montre,
+   ce n'est pas la meme mesure. */
+const PREMIERS_ESSAIS_NOTES=new Set();
+function noterPremierEssai(reussi){
+  if(rush||!puzzle||!/^p\d+$/.test(String(puzzle.id||""))||PREMIERS_ESSAIS_NOTES.has(puzzle.id))return;
+  PREMIERS_ESSAIS_NOTES.add(puzzle.id);
+  const corps=JSON.stringify({id:puzzle.id,ok:reussi?1:0});
+  try{
+    if(navigator.sendBeacon&&navigator.sendBeacon("/api/resultat",new Blob([corps],{type:"application/json"})))return;
+    if(typeof fetch==="function")fetch("/api/resultat",{method:"POST",body:corps,headers:{"Content-Type":"application/json"},keepalive:true}).catch(()=>{});
+  }catch(e){}
 }
 function onPuzzleWrong(){
   ensureProgFields();
@@ -2348,8 +2373,12 @@ function renderLegal(){
     ? "<h4>En bref</h4><p>chang64 n'a ni compte, ni inscription, ni publicité. Le site ne demande jamais ton nom, "+
       "ton adresse électronique ni aucune autre donnée personnelle.</p>"+
       "<h4>Ce qui est enregistré, et où</h4><p>Ta progression, ton classement, ta série de jours et ta partie entre amis en cours sont "+
-      "enregistrés <strong>dans ton propre navigateur</strong>. Rien n'est envoyé ailleurs. Effacer les données du navigateur les supprime, "+
+      "enregistrés <strong>dans ton propre navigateur</strong> et n'en sortent pas. Effacer les données du navigateur les supprime, "+
       "d'où l'existence du code de reprise.</p>"+
+      "<h4>Mesure de la difficulté des exercices</h4><p>Quand tu termines ou rates un exercice, le site envoie son numéro et un seul "+
+      "renseignement : réussi du premier coup, ou non. Rien d'autre ne part : ni identifiant, ni progression, ni cookie. Le serveur n'en "+
+      "garde que deux compteurs par exercice (nombre d'essais, nombre de réussites), sans date, sans adresse IP et sans lien entre deux "+
+      "envois. Ces compteurs servent uniquement à mieux classer les exercices par difficulté. Le Chang Sprint n'envoie rien.</p>"+
       "<h4>Cookies</h4><p>chang64 ne dépose aucun cookie et n'utilise aucun traqueur : il n'y a donc pas de bandeau de consentement.</p>"+
       "<h4>Journaux techniques</h4><p>L'hébergeur conserve des journaux de connexion, dont les adresses IP, à des fins de sécurité et de "+
       "lutte contre les attaques. Ces journaux relèvent de sa propre politique de confidentialité et chang64 n'y a pas accès.</p>"+
@@ -2357,12 +2386,17 @@ function renderLegal(){
       "messagerie de ton choix ; aucune copie n'est conservée sur ce site.</p>"+
       "<h4>Tes droits</h4><p>Aucune donnée personnelle n'étant collectée par le site, il n'y a rien à consulter, corriger ou supprimer. "+
       "Toute question peut être adressée à "+PUBLISHER.email+".</p>"+
-      "<h4>Évolutions</h4><p>Si des comptes ou une mesure d'audience étaient ajoutés un jour, cette page serait mise à jour avant leur mise en service.</p>"
+      "<h4>Évolutions</h4><p>Si des comptes ou une mesure d'audience étaient ajoutés un jour, cette page serait mise à jour avant leur mise en service, "+
+      "comme elle l'a été pour la mesure de la difficulté.</p>"
     : "<h4>The short version</h4><p>chang64 has no accounts, no sign-up and no advertising. It never asks for your name, "+
       "your email address or any other personal detail.</p>"+
       "<h4>What is stored, and where</h4><p>Your puzzle progress, your rating, your day streak and your current friend game are saved "+
-      "<strong>in your own browser</strong>. They are never sent anywhere. Clearing your browser data erases them, which is why the "+
+      "<strong>in your own browser</strong> and never leave it. Clearing your browser data erases them, which is why the "+
       "transfer code exists.</p>"+
+      "<h4>Measuring puzzle difficulty</h4><p>When you finish or miss a puzzle, the site sends its number and a single fact: solved "+
+      "on the first try, or not. Nothing else goes out: no identifier, no progress, no cookie. The server only keeps two counters per "+
+      "puzzle (attempts and successes), with no date, no IP address and no link between two reports. They are used for one thing only: "+
+      "ranking puzzles by difficulty more accurately. Chang Sprint sends nothing.</p>"+
       "<h4>Cookies</h4><p>chang64 sets no cookies and uses no tracker, so there is no consent banner to click through.</p>"+
       "<h4>Server logs</h4><p>The host keeps connection logs, including IP addresses, for security and abuse prevention. Those logs fall "+
       "under its own privacy policy and chang64 has no access to them.</p>"+
@@ -2370,7 +2404,8 @@ function renderLegal(){
       "messaging app you choose; no copy is kept on this site.</p>"+
       "<h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any "+
       "question can go to "+PUBLISHER.email+".</p>"+
-      "<h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live.</p>");
+      "<h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live, "+
+      "as it was for difficulty measurement.</p>");
 }
 
 let isReviewGame=false;

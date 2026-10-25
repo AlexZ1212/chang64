@@ -2006,6 +2006,7 @@ self.addEventListener("fetch",e=>{
   const url=new URL(r.url);
   if(url.origin!==location.origin)return;
   if(url.pathname.startsWith("/engine/"))return;   // 7 MB engine stays out of the cache
+  if(url.pathname.startsWith("/api/"))return;      // compteurs du serveur : jamais en cache
   /* Les shards d'exercices (17 Mo au total : level-1..10, rush-pool,
      puzzle-index) etaient mis en cache sans plafond. Sur iOS le quota par
      origine est etroit et son depassement evince le cache ENTIER, coquille
@@ -2201,6 +2202,16 @@ const oldFrRedirects = pages
             `/fr/ouvertures/${p.slugEn}  /fr/ouvertures/${p.slugFr}  301`)
   .join("\n");
 console.log("Redirections FR    :", oldFrRedirects ? oldFrRedirects.split("\n").length / 2 : 0);
+
+/* Pages Functions (2026-10-25) : mesure de la difficulte reelle, voir
+   functions/api/resultat.js. Le projet Pages a chang64-site pour racine et
+   pour sortie, et y cherche donc functions/ : on la recopie dans OUT, sinon
+   la recopie miroir (robocopy /MIR) l'effacerait a chaque publication.
+   _routes.json reserve les fonctions a /api/* : sans lui, chaque page et
+   chaque fichier statique passerait par elles et compterait dans le quota
+   gratuit de 100 000 appels par jour. */
+fs.cpSync(path.join(__dirname, "functions"), path.join(OUT, "functions"), { recursive: true });
+fs.writeFileSync(OUT + "/_routes.json", JSON.stringify({ version: 1, include: ["/api/*"], exclude: [] }, null, 2) + "\n");
 
 fs.writeFileSync(OUT + "/_redirects", `/fr            /fr/ouvertures/       301
 /openings      /openings/            301

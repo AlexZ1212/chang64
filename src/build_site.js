@@ -385,6 +385,14 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
 
      1. data/ids/<k>.json : l'index par tranche de 10 000 identifiants
         (p0-p9999 dans 0.json...). Un lien direct ne lit que sa tranche. */
+  /* Transition (2026-10-25) : le nouveau code ne lit plus ce fichier, mais
+     un visiteur deja venu lance encore l'ancien pendant sa premiere visite
+     apres la mise en ligne (le service worker sert l'application depuis son
+     cache et ne la remplace qu'ensuite). Sans lui, cet ancien code
+     tomberait en erreur sur l'exercice du jour et les liens directs. Calcule
+     sur la banque courante, il reste coherent avec les morceaux publies. A
+     retirer apres une publication ou deux. */
+  fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
   const TRANCHE_IDS = 10000;
   const tranchesIds = {};
   for (const id in puzzleIndex) {

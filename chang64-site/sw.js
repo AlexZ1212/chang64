@@ -12,8 +12,8 @@
  * La version du cache est calculee a la construction : chaque build invalide
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-202610251410";
-const DATA_CACHE="chang64-data-e52e836763ff";
+const CACHE="chang64-202610251956";
+const DATA_CACHE="chang64-data-41ca39886a62";
 /* Plafond du cache de donnees en OCTETS (2026-10-25), et non plus en nombre
    d'entrees. Les trois entrees du 2026-09-06 visaient des shards de 1 a 2 Mo,
    soit environ 5 Mo, loin des 17 Mo qui avaient fait sauter le quota iOS et
@@ -107,11 +107,14 @@ self.addEventListener("fetch",e=>{
      autres fichiers gardent leur requete pour cle. */
   const page=r.mode==="navigate"||(r.headers.get("accept")||"").includes("text/html");
   const cle=page?url.origin+url.pathname:r;
+  /* Repli hors ligne dans la langue de la page demandee (2026-10-25) :
+     l'accueil de cette langue s'il a deja ete visite, sinon "/". */
+  const langue=/^\/(fr|es|pt|de|ru)\//.exec(url.pathname);
   e.respondWith(
     caches.match(cle).then(hit=>hit||fetch(r).then(resp=>{
       const copy=resp.clone();
       caches.open(CACHE).then(c=>c.put(cle,copy)).catch(()=>{});
       return resp;
-    }).catch(()=>caches.match("/")))
+    }).catch(()=>(langue?caches.match("/"+langue[1]+"/"):Promise.resolve()).then(h=>h||caches.match("/"))))
   );
 });

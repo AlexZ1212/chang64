@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperturas de ajedrez: todas las variantes con sus jugadas y códigos ECO | chang64</title>
+<meta name="description" content="Índice completo de 141 familias de aperturas de ajedrez y 1758 variantes catalogadas, cada una con sus jugadas, su código ECO y un tablero jugable.">
+<link rel="canonical" href="https://chang64.com/es/aperturas/">
+
+<!-- Icones de la nouvelle identite (2026-10-24) : le .ico pour les anciens
+     navigateurs et Safari, le SVG (signe allege) pour les autres, et une
+     image pleine pour l'ecran d'accueil iOS. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://chang64.com/openings/">
+<link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/">
+<link rel="alternate" hreflang="es" href="https://chang64.com/es/aperturas/">
+<link rel="alternate" hreflang="pt" href="https://chang64.com/pt/aberturas/">
+<link rel="alternate" hreflang="de" href="https://chang64.com/de/eroeffnungen/">
+<link rel="alternate" hreflang="ru" href="https://chang64.com/ru/openings/">
+<link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/">
+
+<meta property="og:title" content="Aperturas de ajedrez: todas las variantes con sus jugadas y códigos ECO | chang64">
+<meta property="og:description" content="Índice completo de 141 familias de aperturas de ajedrez y 1758 variantes catalogadas, cada una con sus jugadas, su código ECO y un tablero jugable.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chang64.com/es/aperturas/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:image" content="https://chang64.com/og/openings-es.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Auto-heberge depuis le 2026-09-05 (voir audit : la promesse "aucun
+     traqueur" de la page Confidentialite etait fausse tant que Google
+     Fonts recevait IP et user-agent de chaque visiteur). Le raisonnement
+     display=optional ci-dessous reste identique et s'applique de la meme
+     facon a des fichiers locaux : optional laisse un tres court delai
+     (largement tenu ici, les fichiers etant sur la meme origine que la
+     page) puis, s'il n'est pas tenu, garde la police de secours pour toute
+     la vue sans jamais la remplacer plus tard.
+     display=swap montrait d'abord la police de secours puis la remplacait
+     par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
+     navigation recharge le document (ce ne sont pas des pages d'application
+     a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
+     menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
+     largeur entre les deux polices (mesure : jusqu'a 40px sur les six
+     entrees) se voyait comme un reflow du menu, comme si la page repartait
+     de zero.
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
+     ces pages vivent a des profondeurs variees (/openings/*.html,
+     /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
+     selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
+     partout tel quel. Fige sur le domaine de production aurait aussi rate
+     tout apercu servi ailleurs (previsualisation de branche Cloudflare
+     Pages, environnement local) -- constate en testant ce correctif : les
+     six polices tombaient en erreur reseau des qu'on sortait de
+     production.
+     Regroupe dans le MEME <style> que ${CSS} depuis ce correctif : une
+     balise separee decalait ce que plusieurs tests/check_*.js lisent comme
+     "le premier bloc <style>", casse constatee sur check_pied_de_page.js
+     (11 echecs, regles .sitenav/.tabs cherchees dans le mauvais bloc). -->
+<style>
+.skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
+.skiplink:focus{left:0}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v15-cyrillic-600.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:optional;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500 700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+*{box-sizing:border-box;margin:0;padding:0}:root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;--bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;--rule:rgba(21,32,28,.14);--r:8px}body{background:var(--ink);color:var(--chalk);font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}.wrap{max-width:880px;margin:0 auto}a{color:var(--brass)}header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:14px;position:sticky;top:0;z-index:30;background-color:var(--ink);padding-top:10px;box-shadow:0 14px 14px -6px var(--ink)}.brand{display:flex;align-items:baseline;gap:calc(clamp(30px,6vw,40px) * .15);text-decoration:none;color:var(--chalk)}.brandmark{width:clamp(30px,6vw,40px);height:calc(clamp(30px,6vw,40px) * 54 / 64);display:block;flex:none;color:var(--brass)}.brand .names{display:flex;flex-direction:column;gap:2px}.brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}.brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}.brand .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}@media(max-width:620px){.brand .tagline{display:none}}.brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}header nav:not(.sitenav){display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}nav a{font-size:13px;text-decoration:none;color:var(--sage)}nav a:hover{color:var(--brass)}h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}p{margin-bottom:12px;max-width:66ch}.lede{font-size:17px;color:var(--sage);margin-bottom:24px}.cols{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}@media(max-width:700px){.cols{grid-template-columns:1fr}}.diagram{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:10px}.anim svg{display:block;width:100%;height:auto;border-radius:6px}.anim g[data-ply][hidden]{display:none}[hidden],.tile[hidden],[data-theme][hidden],.toc[hidden]{display:none!important}.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}.animctl button:hover{background:var(--board);color:var(--slate)}.animctl button:disabled{opacity:.38;cursor:default}.animctl button:disabled:hover{background:var(--slate);color:var(--board)}.animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}.animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}.diagram svg{width:100%;height:auto;display:block;border-radius:2px}.moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}.theme-bloc{padding-top:20px;margin-top:20px;border-top:1px solid var(--rule)}.theme-bloc:first-of-type{padding-top:0;margin-top:0;border-top:none}.theme-bloc h2{margin-top:0}.eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--sage);border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0;user-select:all}table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px}.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:14px}.tablewrap table{margin-bottom:0;width:auto;min-width:100%}th{text-align:left;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);padding:8px;border-bottom:1px solid var(--rule)}td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk);white-space:nowrap}.cta{display:inline-block;background:var(--brass);color:#FFF;font-weight:600;font-size:14px;text-decoration:none;padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}.cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);border:1px solid var(--rule);border-radius:12px}.toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;color:var(--chalk);background:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 12px}.toc a:hover{border-color:var(--brass);color:var(--brass)}.toc a b{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--sage);font-size:12px}html{scroll-padding-top:150px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.tile{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:14px;text-decoration:none;display:block}.tile:hover{border-color:var(--brass)}.tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}.tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:12.5px;letter-spacing:.03em;line-height:1.7;text-align:center}.filtre{margin-bottom:18px}.filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;padding:11px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--slate);color:var(--chalk)}.filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}.filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}.cotefiltre{display:flex;gap:3px;background-color:var(--slate);padding:4px;border-radius:999px;border:1px solid var(--rule);width:fit-content;margin-top:10px}.cotefiltre button{font:inherit;font-size:13px;font-weight:500;color:var(--sage);background:none;border:0;cursor:pointer;padding:7px 14px;border-radius:999px;white-space:nowrap;transition:background .18s,color .18s}.cotefiltre button:hover{color:var(--chalk)}.cotefiltre button[aria-pressed="true"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}.sitenav{display:flex;gap:3px;background-color:var(--slate);padding:4px;border-radius:999px;border:1px solid var(--rule);overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}.sitenav::-webkit-scrollbar{display:none}.sitenav::before,.sitenav::after{content:"";position:sticky;width:22px;flex:none;pointer-events:none;z-index:2;opacity:0;display:flex;align-items:center;font-size:13px;color:var(--sage)}.sitenav::before{left:-4px;order:-1;margin-right:-22px;border-radius:999px 0 0 999px;background:linear-gradient(to right,var(--slate) 38%,transparent);content:"‹";padding-left:6px}.sitenav::after{right:-4px;order:999;margin-left:-22px;border-radius:0 999px 999px 0;background:linear-gradient(to left,var(--slate) 38%,transparent);content:"›";justify-content:flex-end;padding-right:6px}.sitenav.sl::before,.sitenav.sr::after{opacity:1}.sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;transition:background .18s,color .18s}.sitenav a:hover{color:var(--chalk)}.sitenav [aria-current="page"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}@media(max-width:520px){.sitenav a,.sitenav span{padding:8px 11px;font-size:12.5px}}.langsw{background-color:var(--ink);padding:3px;position:relative;border-radius:8px;border:1px solid var(--rule);flex:none}.langsw summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:6px;background-color:var(--raise);color:var(--chalk);white-space:nowrap}.langsw summary::-webkit-details-marker{display:none}.langsw summary::after{content:"";display:inline-block;width:5px;height:5px;margin:0 0 2px 7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}.langsw[open] summary::after{transform:rotate(-135deg);margin-bottom:-1px}.langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px}.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:6px;white-space:nowrap}.langmenu a:hover{color:var(--chalk)}.langmenu a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}.footnav{margin-bottom:14px}.foot-pair{white-space:nowrap}.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:6px 2px}.footnav a:hover{color:var(--brass)}.footnav [aria-current="page"]{color:var(--sage);font-weight:600}.footnote,.pagedate{margin-left:auto;margin-right:auto}.footnote{margin-top:0;margin-bottom:0}</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Aperturas de ajedrez","url":"https://chang64.com/es/aperturas/","inLanguage":"es","author":{"@type":"Person","name":"AlexZ1212"},"publisher":{"@type":"Organization","name":"chang64","url":"https://chang64.com"},"datePublished":"2026-10-25","dateModified":"2026-10-25","mainEntityOfPage":{"@type":"WebPage","@id":"https://chang64.com/es/aperturas/"},"image":"https://chang64.com/og/openings-es.png","isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"chang64","item":"https://chang64.com/"},{"@type":"ListItem","position":2,"name":"Aperturas","item":"https://chang64.com/es/aperturas/"}]}</script>
+</head>
+<body>
+<a class="skiplink" href="#contenu">Saltar al contenido principal</a>
+<div class="wrap">
+<header>
+  <a class="brand" href="/es/"><svg class="brandmark" viewBox="0 0 64 54" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z"/></svg><span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">El elefante en 64 casillas</span></span></a>
+  <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
+       le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
+       place du contenu. Sur ecran etroit la rangee defile horizontalement,
+       comme les onglets de l'application. -->
+  <details class="langsw"><summary aria-label="Idioma: Español">ES</summary><div class="langmenu"><a href="/openings/" hreflang="en" lang="en" rel="alternate">English</a><a href="/fr/ouvertures/" hreflang="fr" lang="fr" rel="alternate">Français</a><a href="/es/aperturas/" hreflang="es" lang="es" rel="alternate" aria-current="true">Español</a><a href="/pt/aberturas/" hreflang="pt" lang="pt-BR" rel="alternate">Português</a><a href="/de/eroeffnungen/" hreflang="de" lang="de" rel="alternate">Deutsch</a><a href="/ru/openings/" hreflang="ru" lang="ru" rel="alternate">Русский</a></div></details>
+  <nav class="sitenav"><span aria-current="page" id="cn">Aperturas</span><a href="/es/motivos/">Motivos</a><a href="/es/aprender/">Reglas</a><a href="/es/finales/">Finales</a><a href="/es/trampas/">Trampas de apertura</a><a href="/es/glosario/">Glosario</a></nav>
+</header>
+<main id="contenu">
+
+<h1>Aperturas de ajedrez</h1>
+<p class="lede">Todas las familias de aperturas con nombre, con sus jugadas y sus variantes. Abre una para ver la posición, repetir la línea jugada a jugada o jugarla tú mismo contra el motor. 141 familias, 1758 variantes catalogadas.</p>
+<!-- Champ de recherche. Masque par defaut et revele par le script : sans
+     JavaScript la page reste exactement ce qu'elle etait, et personne ne se
+     retrouve devant un champ inerte. Cent quarante et une entrees sur une
+     seule page ne se parcourent pas a l'oeil. -->
+<div class="filtre hide" id="filtreBloc">
+  <input type="search" id="filtre" autocomplete="off"
+         placeholder="Buscar: nombre, jugadas o código ECO"
+         aria-label="Filtrar las aperturas"
+         aria-controls="grille">
+  <!-- Une ouverture implique toujours les deux camps : le classement
+       Blancs/Noirs suit la tradition (qui choisit cette ouverture pour son
+       repertoire), pas une propriete stricte de la position. Absent par
+       defaut ("Toutes"), pour ne pas presenter un jugement comme un fait
+       la ou une seule case le distinguerait mal. -->
+  <div class="cotefiltre" id="coteFiltre" role="group" aria-label="Filtrar por bando">
+    <button type="button" data-side="all" aria-pressed="true">Todas</button>
+    <button type="button" data-side="w" aria-pressed="false">Blancas</button>
+    <button type="button" data-side="b" aria-pressed="false">Negras</button>
+  </div>
+  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite" data-aucun="Ningún resultado." data-sur="{a} de {b}"></p>
+</div>
+<div class="grid" id="grille">
+<a class="tile" data-cle="defensa siciliana sicilian defense 1 e4 c5 b20 b21 b22 b23 b24 b27 b28 b29 b30 b31 b32 b33 b40 b41 b44 b50 b51 b52 b53 b54" data-side="b" href="/es/aperturas/defensa-siciliana"><b>Defensa siciliana</b><span>1.e4 c5 · B20 B21 B22 B23 B24 B27 B28 B29 B30 B31 B32 B33 B40 B41 B44 B50 B51 B52 B53 B54</span></a>
+<a class="tile" data-cle="apertura inglesa english opening 1 c4 a10 a11 a13 a15 a16 a17 a18 a19 a20 a21 a22 a23 a24 a25 a27 a28 a29 a30 a31 a32 a34 a35 a36 c20" data-side="w" href="/es/aperturas/apertura-inglesa"><b>Apertura inglesa</b><span>1.c4 · A10 A11 A13 A15 A16 A17 A18 A19 A20 A21 A22 A23 A24 A25 A27 A28 A29 A30 A31 A32 A34 A35 A36 C20</span></a>
+<a class="tile" data-cle="defensa francesa french defense 1 e4 e6 c00 c01 c02 c03 c04 c05 c07 c08 c10 c11 c12 c13 c15 c16 c17" data-side="b" href="/es/aperturas/defensa-francesa"><b>Defensa francesa</b><span>1.e4 e6 · C00 C01 C02 C03 C04 C05 C07 C08 C10 C11 C12 C13 C15 C16 C17</span></a>
+<a class="tile" data-cle="defensa caro kann caro kann defense 1 e4 c6 b10 b11 b12 b13 b15 b16 b17 b18" data-side="b" href="/es/aperturas/defensa-caro-kann"><b>Defensa Caro-Kann</b><span>1.e4 c6 · B10 B11 B12 B13 B15 B16 B17 B18</span></a>
+<a class="tile" data-cle="partida de peon de dama queen s pawn game 1 d4 a40 a41 a43 a45 a46 a48 a80 d00 d02 d03 d04 d05" data-side="w" href="/es/aperturas/partida-de-peon-de-dama"><b>Partida de peón de dama</b><span>1.d4 · A40 A41 A43 A45 A46 A48 A80 D00 D02 D03 D04 D05</span></a>
+<a class="tile" data-cle="gambito de rey aceptado king s gambit accepted 1 e4 e5 2 f4 exf4 c33 c34 c35 c36 c37 c38 c39" data-side="w" href="/es/aperturas/gambito-de-rey-aceptado"><b>Gambito de rey aceptado</b><span>1.e4 e5 2.f4 exf4 · C33 C34 C35 C36 C37 C38 C39</span></a>
+<a class="tile" data-cle="defensa india indian defense 1 d4 nf6 a43 a45 a46 a47 a48 a49 a50 a51 a52 e00 e10 e60" data-side="b" href="/es/aperturas/defensa-india"><b>Defensa india</b><span>1.d4 Nf6 · A43 A45 A46 A47 A48 A49 A50 A51 A52 E00 E10 E60</span></a>
+<a class="tile" data-cle="apertura espanola ruy lopez 1 e4 e5 2 nf3 nc6 3 bb5 c60 c61 c62 c63 c64 c65 c66 c67 c68 c70 c71" data-side="w" href="/es/aperturas/apertura-espanola"><b>Apertura española</b><span>1.e4 e5 2.Nf3 Nc6 3.Bb5 · C60 C61 C62 C63 C64 C65 C66 C67 C68 C70 C71</span></a>
+<a class="tile" data-cle="gambito de dama rehusado queen s gambit declined 1 d4 d5 2 c4 c5 d02 d06 d07 d08 d30 d31 d32 d35 d37 d38 d40 d50 d51 d53" data-side="w" href="/es/aperturas/gambito-de-dama-rehusado"><b>Gambito de dama rehusado</b><span>1.d4 d5 2.c4 c5 · D02 D06 D07 D08 D30 D31 D32 D35 D37 D38 D40 D50 D51 D53</span></a>
+<a class="tile" data-cle="defensa holandesa dutch defense 1 d4 f5 a80 a81 a82 a83 a84 a85 a86 a90 a91" data-side="b" href="/es/aperturas/defensa-holandesa"><b>Defensa holandesa</b><span>1.d4 f5 · A80 A81 A82 A83 A84 A85 A86 A90 A91</span></a>
+<a class="tile" data-cle="apertura zukertort zukertort opening 1 nf3 a04 a05 a06 a08 a41" data-side="w" href="/es/aperturas/apertura-zukertort"><b>Apertura Zukertort</b><span>1.Nf3 · A04 A05 A06 A08 A41</span></a>
+<a class="tile" data-cle="defensa nimzowitsch nimzowitsch defense 1 e4 nc6 b00" data-side="b" href="/es/aperturas/defensa-nimzowitsch"><b>Defensa Nimzowitsch</b><span>1.e4 Nc6 · B00</span></a>
+<a class="tile" data-cle="gambito de rey rehusado king s gambit declined 1 e4 e5 2 f4 bc5 c30 c31" data-side="w" href="/es/aperturas/gambito-de-rey-rehusado"><b>Gambito de rey rehusado</b><span>1.e4 e5 2.f4 Bc5 · C30 C31</span></a>
+<a class="tile" data-cle="partida de peon de rey king s pawn game 1 e4 b00 b07 c20 c40 c44" data-side="w" href="/es/aperturas/partida-de-peon-de-rey"><b>Partida de peón de rey</b><span>1.e4 · B00 B07 C20 C40 C44</span></a>
+<a class="tile" data-cle="defensa alekhine alekhine defense 1 e4 nf6 b02 b03 b04 b05" data-side="b" href="/es/aperturas/defensa-alekhine"><b>Defensa Alekhine</b><span>1.e4 Nf6 · B02 B03 B04 B05</span></a>
+<a class="tile" data-cle="apertura de alfil bishop s opening 1 e4 e5 2 bc4 c23 c24 c26 c27 c43" data-side="w" href="/es/aperturas/apertura-de-alfil"><b>Apertura de alfil</b><span>1.e4 e5 2.Bc4 · C23 C24 C26 C27 C43</span></a>
+<a class="tile" data-cle="apertura van geet van geet opening 1 nc3 a00 b00 b01 c31" data-side="w" href="/es/aperturas/apertura-van-geet"><b>Apertura Van Geet</b><span>1.Nc3 · A00 B00 B01 C31</span></a>
+<a class="tile" data-cle="defensa moderna modern defense 1 e4 g6 a04 a40 a41 a42 b06 b07 b27" data-side="b" href="/es/aperturas/defensa-moderna"><b>Defensa moderna</b><span>1.e4 g6 · A04 A40 A41 A42 B06 B07 B27</span></a>
+<a class="tile" data-cle="defensa escandinava scandinavian defense 1 e4 d5 b01" data-side="b" href="/es/aperturas/defensa-escandinava"><b>Defensa escandinava</b><span>1.e4 d5 · B01</span></a>
+<a class="tile" data-cle="apertura italiana italian game 1 e4 e5 2 nf3 nc6 3 bc4 c50 c51 c53 c54 c55 c56 c57" data-side="w" href="/es/aperturas/apertura-italiana"><b>Apertura italiana</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 · C50 C51 C53 C54 C55 C56 C57</span></a>
+<a class="tile" data-cle="gambito de dama aceptado queen s gambit accepted 1 d4 d5 2 c4 dxc4 d20 d21 d22 d23 d24 d25 d26" data-side="w" href="/es/aperturas/gambito-de-dama-aceptado"><b>Gambito de dama aceptado</b><span>1.d4 d5 2.c4 dxc4 · D20 D21 D22 D23 D24 D25 D26</span></a>
+<a class="tile" data-cle="apertura bird bird opening 1 f4 a02 a03 b21" data-side="w" href="/es/aperturas/apertura-bird"><b>Apertura Bird</b><span>1.f4 · A02 A03 B21</span></a>
+<a class="tile" data-cle="apertura reti reti opening 1 nf3 d5 2 c4 a09 a11 a12" data-side="w" href="/es/aperturas/apertura-reti"><b>Apertura Réti</b><span>1.Nf3 d5 2.c4 · A09 A11 A12</span></a>
+<a class="tile" data-cle="defensa benoni benoni defense 1 d4 c5 a43 a44 a56 a60" data-side="b" href="/es/aperturas/defensa-benoni"><b>Defensa Benoni</b><span>1.d4 c5 · A43 A44 A56 A60</span></a>
+<a class="tile" data-cle="defensa philidor philidor defense 1 e4 e5 2 nf3 d6 c41" data-side="b" href="/es/aperturas/defensa-philidor"><b>Defensa Philidor</b><span>1.e4 e5 2.Nf3 d6 · C41</span></a>
+<a class="tile" data-cle="apertura polaca polish opening 1 b4 a00 a05" data-side="w" href="/es/aperturas/apertura-polaca"><b>Apertura polaca</b><span>1.b4 · A00 A05</span></a>
+<a class="tile" data-cle="apertura vienesa vienna game 1 e4 e5 2 nc3 c25 c26 c27 c28 c29" data-side="w" href="/es/aperturas/apertura-vienesa"><b>Apertura vienesa</b><span>1.e4 e5 2.Nc3 · C25 C26 C27 C28 C29</span></a>
+<a class="tile" data-cle="defensa petrov petrov s defense 1 e4 e5 2 nf3 nf6 c42 c43" data-side="b" href="/es/aperturas/defensa-petrov"><b>Defensa Petrov</b><span>1.e4 e5 2.Nf3 Nf6 · C42 C43</span></a>
+<a class="tile" data-cle="defensa eslava slav defense 1 d4 d5 2 c4 c6 d10 d11 d12 d13 d15" data-side="b" href="/es/aperturas/defensa-eslava"><b>Defensa eslava</b><span>1.d4 d5 2.c4 c6 · D10 D11 D12 D13 D15</span></a>
+<a class="tile" data-cle="apertura grob grob opening 1 g4 a00" data-side="w" href="/es/aperturas/apertura-grob"><b>Apertura Grob</b><span>1.g4 · A00</span></a>
+<a class="tile" data-cle="defensa nimzoindia nimzo indian defense 1 d4 nf6 2 c4 e6 3 nc3 bb4 e20 e21 e22 e24 e30 e32 e33 e34 e38 e40 e41 e43 e46" data-side="b" href="/es/aperturas/defensa-nimzoindia"><b>Defensa Nimzoindia</b><span>1.d4 Nf6 2.c4 e6 3.Nc3 Bb4 · E20 E21 E22 E24 E30 E32 E33 E34 E38 E40 E41 E43 E46</span></a>
+<a class="tile" data-cle="ataque nimzo larsen nimzo larsen attack 1 b3 a01 a06" data-side="w" href="/es/aperturas/ataque-nimzo-larsen"><b>Ataque Nimzo-Larsen</b><span>1.b3 · A01 A06</span></a>
+<a class="tile" data-cle="apertura hungara hungarian opening 1 g3 a00 a07" data-side="w" href="/es/aperturas/apertura-hungara"><b>Apertura húngara</b><span>1.g3 · A00 A07</span></a>
+<a class="tile" data-cle="gambito blackmar diemer blackmar diemer gambit 1 d4 d5 2 e4 d00" data-side="w" href="/es/aperturas/gambito-blackmar-diemer"><b>Gambito Blackmar-Diemer</b><span>1.d4 d5 2.e4 · D00</span></a>
+<a class="tile" data-cle="defensa pterodactilo pterodactyl defense 1 d4 g6 2 c4 bg7 3 nc3 c5 4 e3 a40 b06 b27" data-side="b" href="/es/aperturas/defensa-pterodactilo"><b>Defensa pterodáctilo</b><span>1.d4 g6 2.c4 Bg7 3.Nc3 c5 4.e3 · A40 B06 B27</span></a>
+<a class="tile" data-cle="apertura escocesa scotch game 1 e4 e5 2 nf3 nc6 3 d4 c44 c45" data-side="w" href="/es/aperturas/apertura-escocesa"><b>Apertura escocesa</b><span>1.e4 e5 2.Nf3 Nc6 3.d4 · C44 C45</span></a>
+<a class="tile" data-cle="apertura del centro center game 1 e4 e5 2 d4 c20 c21 c22" data-side="w" href="/es/aperturas/apertura-del-centro"><b>Apertura del centro</b><span>1.e4 e5 2.d4 · C20 C21 C22</span></a>
+<a class="tile" data-cle="ataque indio de rey king s indian attack 1 nf3 d5 2 g3 a05 a07 a08" data-side="w" href="/es/aperturas/ataque-indio-de-rey"><b>Ataque indio de rey</b><span>1.Nf3 d5 2.g3 · A05 A07 A08</span></a>
+<a class="tile" data-cle="gambito leton latvian gambit 1 e4 e5 2 nf3 f5 c40 c44" data-side="b" href="/es/aperturas/gambito-leton"><b>Gambito letón</b><span>1.e4 e5 2.Nf3 f5 · C40 C44</span></a>
+<a class="tile" data-cle="apertura de los cuatro caballos four knights game 1 e4 e5 2 nf3 nc6 3 nc3 nf6 c47 c48 c49 c50" data-side="both" href="/es/aperturas/apertura-de-los-cuatro-caballos"><b>Apertura de los cuatro caballos</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 · C47 C48 C49 C50</span></a>
+<a class="tile" data-cle="defensa india antigua old indian defense 1 d4 d6 2 c4 a41 a53 a54" data-side="b" href="/es/aperturas/defensa-india-antigua"><b>Defensa india antigua</b><span>1.d4 d6 2.c4 · A41 A53 A54</span></a>
+<a class="tile" data-cle="apertura ponziani ponziani opening 1 e4 e5 2 nf3 nc6 3 c3 c44" data-side="w" href="/es/aperturas/apertura-ponziani"><b>Apertura Ponziani</b><span>1.e4 e5 2.Nf3 Nc6 3.c3 · C44</span></a>
+<a class="tile" data-cle="defensa grunfeld grunfeld defense 1 d4 nf6 2 c4 g6 3 nc3 d5 d80 d81 d82 d85 d90 e60" data-side="b" href="/es/aperturas/defensa-grunfeld"><b>Defensa Grünfeld</b><span>1.d4 Nf6 2.c4 g6 3.Nc3 d5 · D80 D81 D82 D85 D90 E60</span></a>
+<a class="tile" data-cle="defensa pirc pirc defense 1 e4 d6 b00 b07 b08 b09" data-side="b" href="/es/aperturas/defensa-pirc"><b>Defensa Pirc</b><span>1.e4 d6 · B00 B07 B08 B09</span></a>
+<a class="tile" data-cle="defensa de la rata rat defense 1 e4 d6 2 f4 a41 a82 b00 b06 c00" data-side="b" href="/es/aperturas/defensa-de-la-rata"><b>Defensa de la rata</b><span>1.e4 d6 2.f4 · A41 A82 B00 B06 C00</span></a>
+<a class="tile" data-cle="defensa bogoindia bogo indian defense 1 d4 nf6 2 c4 e6 3 nf3 bb4 e11" data-side="b" href="/es/aperturas/defensa-bogoindia"><b>Defensa Bogoindia</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 Bb4 · E11</span></a>
+<a class="tile" data-cle="gambito englund englund gambit 1 d4 e5 a40" data-side="b" href="/es/aperturas/gambito-englund"><b>Gambito Englund</b><span>1.d4 e5 · A40</span></a>
+<a class="tile" data-cle="apertura kadas kadas opening 1 h4 a00" data-side="w" href="/es/aperturas/apertura-kadas"><b>Apertura Kádas</b><span>1.h4 · A00</span></a>
+<a class="tile" data-cle="defensa india de dama queen s indian defense 1 d4 nf6 2 c4 e6 3 nf3 b6 e12 e14 e15" data-side="b" href="/es/aperturas/defensa-india-de-dama"><b>Defensa india de dama</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 b6 · E12 E14 E15</span></a>
+<a class="tile" data-cle="gambito blackmar diemer rehusado blackmar diemer gambit declined 1 d4 d5 2 e4 dxe4 3 nc3 nf6 4 f3 c5 d00" data-side="w" href="/es/aperturas/gambito-blackmar-diemer-rehusado"><b>Gambito Blackmar-Diemer rehusado</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 c5 · D00</span></a>
+<a class="tile" data-cle="ataque trompowsky trompowsky attack 1 d4 nf6 2 bg5 a45" data-side="w" href="/es/aperturas/ataque-trompowsky"><b>Ataque Trompowsky</b><span>1.d4 Nf6 2.Bg5 · A45</span></a>
+<a class="tile" data-cle="gambito englund rehusado englund gambit declined 1 d4 e5 2 d5 a40" data-side="b" href="/es/aperturas/gambito-englund-rehusado"><b>Gambito Englund rehusado</b><span>1.d4 e5 2.d5 · A40</span></a>
+<a class="tile" data-cle="defensa india de rey king s indian defense 1 d4 nf6 2 c4 g6 3 g3 e60 e61 e70" data-side="b" href="/es/aperturas/defensa-india-de-rey"><b>Defensa india de rey</b><span>1.d4 Nf6 2.c4 g6 3.g3 · E60 E61 E70</span></a>
+<a class="tile" data-cle="defensa owen owen defense 1 e4 b6 b00" data-side="b" href="/es/aperturas/defensa-owen"><b>Defensa Owen</b><span>1.e4 b6 · B00</span></a>
+<a class="tile" data-cle="ataque richter veresov richter veresov attack 1 d4 nf6 2 nc3 d5 3 bg5 d01" data-side="w" href="/es/aperturas/ataque-richter-veresov"><b>Ataque Richter-Veresov</b><span>1.d4 Nf6 2.Nc3 d5 3.Bg5 · D01</span></a>
+<a class="tile" data-cle="apertura ware ware opening 1 a4 a00" data-side="w" href="/es/aperturas/apertura-ware"><b>Apertura Ware</b><span>1.a4 · A00</span></a>
+<a class="tile" data-cle="apertura barnes barnes opening 1 f3 a00 c20" data-side="w" href="/es/aperturas/apertura-barnes"><b>Apertura Barnes</b><span>1.f3 · A00 C20</span></a>
+<a class="tile" data-cle="gambito benko rehusado benko gambit declined 1 d4 nf6 2 c4 c5 3 d5 b5 4 bg5 a57" data-side="b" href="/es/aperturas/gambito-benko-rehusado"><b>Gambito Benko rehusado</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.Bg5 · A57</span></a>
+<a class="tile" data-cle="defensa borg borg defense 1 d4 g5 a40 b00" data-side="b" href="/es/aperturas/defensa-borg"><b>Defensa Borg</b><span>1.d4 g5 · A40 B00</span></a>
+<a class="tile" data-cle="apertura catalana catalan opening 1 d4 nf6 2 c4 e6 3 g3 e00 e01 e02" data-side="w" href="/es/aperturas/apertura-catalana"><b>Apertura catalana</b><span>1.d4 Nf6 2.c4 e6 3.g3 · E00 E01 E02</span></a>
+<a class="tile" data-cle="defensa del leon lion defense 1 e4 d6 2 d4 nf6 3 f3 b00 b07" data-side="b" href="/es/aperturas/defensa-del-leon"><b>Defensa del león</b><span>1.e4 d6 2.d4 Nf6 3.f3 · B00 B07</span></a>
+<a class="tile" data-cle="defensa semieslava semi slav defense 1 d4 d5 2 c4 e6 3 nc3 c6 d31 d43" data-side="b" href="/es/aperturas/defensa-semieslava"><b>Defensa semieslava</b><span>1.d4 d5 2.c4 e6 3.Nc3 c6 · D31 D43</span></a>
+<a class="tile" data-cle="apertura de los tres caballos three knights opening 1 e4 e5 2 nf3 nc6 3 nc3 c46" data-side="w" href="/es/aperturas/apertura-de-los-tres-caballos"><b>Apertura de los tres caballos</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 · C46</span></a>
+<a class="tile" data-cle="ataque torre torre attack 1 d4 nf6 2 nf3 e6 3 bg5 a46 a48" data-side="w" href="/es/aperturas/ataque-torre"><b>Ataque Torre</b><span>1.d4 Nf6 2.Nf3 e6 3.Bg5 · A46 A48</span></a>
+<a class="tile" data-cle="apertura van t kruijs van t kruijs opening 1 e3 a00" data-side="w" href="/es/aperturas/apertura-vant-kruijs"><b>Apertura Van't Kruijs</b><span>1.e3 · A00</span></a>
+<a class="tile" data-cle="gambito vienes con la defensa max lange vienna gambit with max lange defense 1 e4 e5 2 nc3 nc6 3 f4 c25" data-side="w" href="/es/aperturas/gambito-vienes-con-la-defensa-max-lange"><b>Gambito vienés, con la defensa Max Lange</b><span>1.e4 e5 2.Nc3 Nc6 3.f4 · C25</span></a>
+<a class="tile" data-cle="gambito del elefante elephant gambit 1 e4 e5 2 nf3 d5 c40" data-side="b" href="/es/aperturas/gambito-del-elefante"><b>Gambito del elefante</b><span>1.e4 e5 2.Nf3 d5 · C40</span></a>
+<a class="tile" data-cle="defensa inglesa english defense 1 d4 b6 a40" data-side="b" href="/es/aperturas/defensa-inglesa"><b>Defensa inglesa</b><span>1.d4 b6 · A40</span></a>
+<a class="tile" data-cle="apertura mieses mieses opening 1 d3 a00" data-side="w" href="/es/aperturas/apertura-mieses"><b>Apertura Mieses</b><span>1.d3 · A00</span></a>
+<a class="tile" data-cle="defensa mikenas mikenas defense 1 d4 nc6 a40" data-side="b" href="/es/aperturas/defensa-mikenas"><b>Defensa Mikenas</b><span>1.d4 Nc6 · A40</span></a>
+<a class="tile" data-cle="apertura de caballo de rey king s knight opening 1 e4 e5 2 nf3 c40 c44" data-side="w" href="/es/aperturas/apertura-de-caballo-de-rey"><b>Apertura de caballo de rey</b><span>1.e4 e5 2.Nf3 · C40 C44</span></a>
+<a class="tile" data-cle="gambito leton aceptado latvian gambit accepted 1 e4 e5 2 nf3 f5 3 exf5 c40" data-side="b" href="/es/aperturas/gambito-leton-aceptado"><b>Gambito letón aceptado</b><span>1.e4 e5 2.Nf3 f5 3.exf5 · C40</span></a>
+<a class="tile" data-cle="sistema londres london system 1 d4 nf6 2 nf3 g6 3 bf4 a48" data-side="w" href="/es/aperturas/sistema-londres"><b>Sistema Londres</b><span>1.d4 Nf6 2.Nf3 g6 3.Bf4 · A48</span></a>
+<a class="tile" data-cle="defensa neo grunfeld neo grunfeld defense 1 d4 nf6 2 c4 g6 3 f3 d5 d70" data-side="b" href="/es/aperturas/defensa-neo-grunfeld"><b>Defensa Neo-Grünfeld</b><span>1.d4 Nf6 2.c4 g6 3.f3 d5 · D70</span></a>
+<a class="tile" data-cle="apertura portuguesa portuguese opening 1 e4 e5 2 bb5 c20" data-side="w" href="/es/aperturas/apertura-portuguesa"><b>Apertura portuguesa</b><span>1.e4 e5 2.Bb5 · C20</span></a>
+<a class="tile" data-cle="sistema rapport jobava rapport jobava system 1 d4 d5 2 nc3 nf6 3 bf4 d01" data-side="w" href="/es/aperturas/sistema-rapport-jobava"><b>Sistema Rapport-Jobava</b><span>1.d4 d5 2.Nc3 Nf6 3.Bf4 · D01</span></a>
+<a class="tile" data-cle="ataque sodio sodium attack 1 na3 a00" data-side="w" href="/es/aperturas/ataque-sodio"><b>Ataque Sodio</b><span>1.Na3 · A00</span></a>
+<a class="tile" data-cle="defensa san jorge st george defense 1 e4 a6 b00" data-side="b" href="/es/aperturas/defensa-san-jorge"><b>Defensa San Jorge</b><span>1.e4 a6 · B00</span></a>
+<a class="tile" data-cle="apertura amar amar opening 1 nh3 a00" data-side="w" href="/es/aperturas/apertura-amar"><b>Apertura Amar</b><span>1.Nh3 · A00</span></a>
+<a class="tile" data-cle="ataque amazona amazon attack 1 d4 d5 2 qd3 a45 d00" data-side="w" href="/es/aperturas/ataque-amazona"><b>Ataque amazona</b><span>1.d4 d5 2.Qd3 · A45 D00</span></a>
+<a class="tile" data-cle="apertura anderssen anderssen s opening 1 a3 a00" data-side="w" href="/es/aperturas/apertura-anderssen"><b>Apertura Anderssen</b><span>1.a3 · A00</span></a>
+<a class="tile" data-cle="gambito benko benko gambit 1 d4 nf6 2 c4 c5 3 d5 b5 a57" data-side="b" href="/es/aperturas/gambito-benko"><b>Gambito Benko</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 · A57</span></a>
+<a class="tile" data-cle="defensa carr carr defense 1 e4 h6 b00" data-side="b" href="/es/aperturas/defensa-carr"><b>Defensa Carr</b><span>1.e4 h6 · B00</span></a>
+<a class="tile" data-cle="apertura clemenz clemenz opening 1 h3 a00" data-side="w" href="/es/aperturas/apertura-clemenz"><b>Apertura Clemenz</b><span>1.h3 · A00</span></a>
+<a class="tile" data-cle="sistema colle colle system 1 nf3 c5 2 e3 g6 3 d4 bg7 4 dxc5 qa5 a04 a40" data-side="w" href="/es/aperturas/sistema-colle"><b>Sistema Colle</b><span>1.Nf3 c5 2.e3 g6 3.d4 Bg7 4.dxc5 Qa5 · A04 A40</span></a>
+<a class="tile" data-cle="gambito danes aceptado danish gambit accepted 1 e4 e5 2 d4 exd4 3 c3 dxc3 c21" data-side="w" href="/es/aperturas/gambito-danes-aceptado"><b>Gambito danés aceptado</b><span>1.e4 e5 2.d4 exd4 3.c3 dxc3 · C21</span></a>
+<a class="tile" data-cle="orangutan ingles english orangutan 1 c4 nf6 2 b4 a15" data-side="w" href="/es/aperturas/orangutan-ingles"><b>Orangután inglés</b><span>1.c4 Nf6 2.b4 · A15</span></a>
+<a class="tile" data-cle="defensa goldsmith goldsmith defense 1 e4 h5 b00" data-side="b" href="/es/aperturas/defensa-goldsmith"><b>Defensa Goldsmith</b><span>1.e4 h5 · B00</span></a>
+<a class="tile" data-cle="defensa hipopotamo hippopotamus defense 1 e4 nh6 b00" data-side="b" href="/es/aperturas/defensa-hipopotamo"><b>Defensa hipopótamo</b><span>1.e4 Nh6 · B00</span></a>
+<a class="tile" data-cle="defensa horwitz horwitz defense 1 d4 e6 a40" data-side="b" href="/es/aperturas/defensa-horwitz"><b>Defensa Horwitz</b><span>1.d4 e6 · A40</span></a>
+<a class="tile" data-cle="defensa canguro kangaroo defense 1 d4 e6 2 c4 bb4 a40" data-side="b" href="/es/aperturas/defensa-canguro"><b>Defensa canguro</b><span>1.d4 e6 2.c4 Bb4 · A40</span></a>
+<a class="tile" data-cle="ataque indio de rey con e6 king s indian attack with e6 1 nf3 nf6 2 g3 d5 3 bg2 e6 a07" data-side="w" href="/es/aperturas/ataque-indio-de-rey-con-e6"><b>Ataque indio de rey, con e6</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 e6 · A07</span></a>
+<a class="tile" data-cle="apertura de peon de rey king s pawn opening 1 e4 e5 2 b3 c20" data-side="w" href="/es/aperturas/apertura-de-peon-de-rey"><b>Apertura de peón de rey</b><span>1.e4 e5 2.b3 · C20</span></a>
+<a class="tile" data-cle="defensa mexicana mexican defense 1 d4 nf6 2 c4 nc6 a50" data-side="b" href="/es/aperturas/defensa-mexicana"><b>Defensa mexicana</b><span>1.d4 Nf6 2.c4 Nc6 · A50</span></a>
+<a class="tile" data-cle="defensa polaca polish defense 1 d4 b5 a40" data-side="b" href="/es/aperturas/defensa-polaca"><b>Defensa polaca</b><span>1.d4 b5 · A40</span></a>
+<a class="tile" data-cle="apertura polaca con d5 polish opening with d5 1 b4 d5 a00" data-side="w" href="/es/aperturas/apertura-polaca-con-d5"><b>Apertura polaca, con d5</b><span>1.b4 d5 · A00</span></a>
+<a class="tile" data-cle="india eslava slav indian 1 d4 nf6 2 c4 c6 a40 a50" data-side="b" href="/es/aperturas/india-eslava"><b>India eslava</b><span>1.d4 Nf6 2.c4 c6 · A40 A50</span></a>
+<a class="tile" data-cle="defensa tarrasch tarrasch defense 1 d4 d5 2 c4 e6 3 nc3 c5 d32" data-side="b" href="/es/aperturas/defensa-tarrasch"><b>Defensa Tarrasch</b><span>1.d4 d5 2.c4 e6 3.Nc3 c5 · D32</span></a>
+<a class="tile" data-cle="defensa ware ware defense 1 e4 a5 b00" data-side="b" href="/es/aperturas/defensa-ware"><b>Defensa Ware</b><span>1.e4 a5 · B00</span></a>
+<a class="tile" data-cle="defensa zukertort zukertort defense 1 nf3 nh6 2 d4 g6 a04" data-side="b" href="/es/aperturas/defensa-zukertort"><b>Defensa Zukertort</b><span>1.Nf3 Nh6 2.d4 g6 · A04</span></a>
+<a class="tile" data-cle="ataque amsterdam amsterdam attack 1 e3 e5 2 c4 d6 3 nc3 nc6 4 b3 nf6 a00" data-side="w" href="/es/aperturas/ataque-amsterdam"><b>Ataque Ámsterdam</b><span>1.e3 e5 2.c4 d6 3.Nc3 Nc6 4.b3 Nf6 · A00</span></a>
+<a class="tile" data-cle="defensa australiana australian defense 1 d4 na6 a40" data-side="b" href="/es/aperturas/defensa-australiana"><b>Defensa australiana</b><span>1.d4 Na6 · A40</span></a>
+<a class="tile" data-cle="defensa barnes barnes defense 1 e4 f6 b00" data-side="b" href="/es/aperturas/defensa-barnes"><b>Defensa Barnes</b><span>1.e4 f6 · B00</span></a>
+<a class="tile" data-cle="apertura vasca basque opening 1 d4 nf6 2 b3 a45" data-side="w" href="/es/aperturas/apertura-vasca"><b>Apertura vasca</b><span>1.d4 Nf6 2.b3 · A45</span></a>
+<a class="tile" data-cle="gambito benko aceptado benko gambit accepted 1 d4 nf6 2 c4 c5 3 d5 b5 4 cxb5 a6 a57" data-side="b" href="/es/aperturas/gambito-benko-aceptado"><b>Gambito Benko aceptado</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.cxb5 a6 · A57</span></a>
+<a class="tile" data-cle="gambito blackmar diemer aceptado blackmar diemer gambit accepted 1 d4 d5 2 e4 dxe4 3 nc3 nf6 4 f3 exf3 d00" data-side="w" href="/es/aperturas/gambito-blackmar-diemer-aceptado"><b>Gambito Blackmar-Diemer aceptado</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 exf3 · D00</span></a>
+<a class="tile" data-cle="contragambito blumenfeld blumenfeld countergambit 1 d4 nf6 2 c4 e6 3 nf3 c5 4 d5 b5 e10" data-side="b" href="/es/aperturas/contragambito-blumenfeld"><b>Contragambito Blumenfeld</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 c5 4.d5 b5 · E10</span></a>
+<a class="tile" data-cle="ataque bongcloud bongcloud attack 1 e4 e5 2 ke2 c20" data-side="w" href="/es/aperturas/ataque-bongcloud"><b>Ataque Bongcloud</b><span>1.e4 e5 2.Ke2 · C20</span></a>
+<a class="tile" data-cle="apertura canard canard opening 1 d4 nf6 2 f4 a45" data-side="w" href="/es/aperturas/apertura-canard"><b>Apertura Canard</b><span>1.d4 Nf6 2.f4 · A45</span></a>
+<a class="tile" data-cle="apertura del centro aceptada center game accepted 1 e4 e5 2 d4 exd4 c21" data-side="w" href="/es/aperturas/apertura-del-centro-aceptada"><b>Apertura del centro aceptada</b><span>1.e4 e5 2.d4 exd4 · C21</span></a>
+<a class="tile" data-cle="formacion creepy crawly creepy crawly formation 1 h3 d5 2 a3 e5 a00" data-side="w" href="/es/aperturas/formacion-creepy-crawly"><b>Formación Creepy Crawly</b><span>1.h3 d5 2.a3 e5 · A00</span></a>
+<a class="tile" data-cle="defensa checa czech defense 1 e4 d6 2 d4 nf6 3 nc3 c6 b07" data-side="b" href="/es/aperturas/defensa-checa"><b>Defensa checa</b><span>1.e4 d6 2.d4 Nf6 3.Nc3 c6 · B07</span></a>
+<a class="tile" data-cle="gambito danes danish gambit 1 e4 e5 2 d4 exd4 3 c3 c21" data-side="w" href="/es/aperturas/gambito-danes"><b>Gambito danés</b><span>1.e4 e5 2.d4 exd4 3.c3 · C21</span></a>
+<a class="tile" data-cle="gambito danes rehusado danish gambit declined 1 e4 e5 2 d4 exd4 3 c3 d5 c21" data-side="w" href="/es/aperturas/gambito-danes-rehusado"><b>Gambito danés rehusado</b><span>1.e4 e5 2.d4 exd4 3.c3 d5 · C21</span></a>
+<a class="tile" data-cle="defensa dory dory defense 1 d4 nf6 2 nf3 ne4 a46" data-side="b" href="/es/aperturas/defensa-dory"><b>Defensa Döry</b><span>1.d4 Nf6 2.Nf3 Ne4 · A46</span></a>
+<a class="tile" data-cle="apertura dresde dresden opening 1 e4 e5 2 nf3 nc6 3 c4 nf6 4 nxe5 c44" data-side="w" href="/es/aperturas/apertura-dresde"><b>Apertura Dresde</b><span>1.e4 e5 2.Nf3 Nc6 3.c4 Nf6 4.Nxe5 · C44</span></a>
+<a class="tile" data-cle="gambito duras duras gambit 1 e4 f5 b00" data-side="b" href="/es/aperturas/gambito-duras"><b>Gambito Duras</b><span>1.e4 f5 · B00</span></a>
+<a class="tile" data-cle="defensa india oriental east indian defense 1 d4 nf6 2 nf3 g6 a48" data-side="b" href="/es/aperturas/defensa-india-oriental"><b>Defensa india oriental</b><span>1.d4 Nf6 2.Nf3 g6 · A48</span></a>
+<a class="tile" data-cle="defensa fried fox fried fox defense 1 e4 f6 2 d4 kf7 b00" data-side="b" href="/es/aperturas/defensa-fried-fox"><b>Defensa Fried Fox</b><span>1.e4 f6 2.d4 Kf7 · B00</span></a>
+<a class="tile" data-cle="apertura global global opening 1 h3 e5 2 a3 a00" data-side="w" href="/es/aperturas/apertura-global"><b>Apertura global</b><span>1.h3 e5 2.a3 · A00</span></a>
+<a class="tile" data-cle="defensa gunderam gunderam defense 1 e4 e5 2 nf3 qe7 c40" data-side="b" href="/es/aperturas/defensa-gunderam"><b>Defensa Gunderam</b><span>1.e4 e5 2.Nf3 Qe7 · C40</span></a>
+<a class="tile" data-cle="gambito irlandes irish gambit 1 e4 e5 2 nf3 nc6 3 nxe5 c44" data-side="w" href="/es/aperturas/gambito-irlandes"><b>Gambito irlandés</b><span>1.e4 e5 2.Nf3 Nc6 3.Nxe5 · C44</span></a>
+<a class="tile" data-cle="gambito de rey king s gambit 1 e4 e5 2 f4 c30" data-side="w" href="/es/aperturas/gambito-de-rey"><b>Gambito de rey</b><span>1.e4 e5 2.f4 · C30</span></a>
+<a class="tile" data-cle="ataque indio de rey con bf5 king s indian attack with bf5 1 nf3 nf6 2 g3 d5 3 bg2 c6 4 o o bf5 a07" data-side="w" href="/es/aperturas/ataque-indio-de-rey-con-bf5"><b>Ataque indio de rey, con Bf5</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 c6 4.O-O Bf5 · A07</span></a>
+<a class="tile" data-cle="especial de simultaneas lasker lasker simul special 1 g3 h5 a00" data-side="b" href="/es/aperturas/especial-de-simultaneas-lasker"><b>Especial de simultáneas Lasker</b><span>1.g3 h5 · A00</span></a>
+<a class="tile" data-cle="defensa lemming lemming defense 1 e4 na6 b00" data-side="b" href="/es/aperturas/defensa-lemming"><b>Defensa Lemming</b><span>1.e4 Na6 · B00</span></a>
+<a class="tile" data-cle="sistema marienbad marienbad system 1 d4 nf6 2 nf3 b6 3 g3 bb7 4 bg2 c5 a47" data-side="b" href="/es/aperturas/sistema-marienbad"><b>Sistema Marienbad</b><span>1.d4 Nf6 2.Nf3 b6 3.g3 Bb7 4.Bg2 c5 · A47</span></a>
+<a class="tile" data-cle="defensa montevideo montevideo defense 1 d4 nc6 2 d5 nb8 a40" data-side="b" href="/es/aperturas/defensa-montevideo"><b>Defensa Montevideo</b><span>1.d4 Nc6 2.d5 Nb8 · A40</span></a>
+<a class="tile" data-cle="ataque paleface paleface attack 1 d4 nf6 2 f3 a45" data-side="w" href="/es/aperturas/ataque-paleface"><b>Ataque Paleface</b><span>1.d4 Nf6 2.f3 · A45</span></a>
+<a class="tile" data-cle="pseudodefensa india de dama pseudo queen s indian defense 1 d4 nf6 2 nf3 b6 a47" data-side="b" href="/es/aperturas/pseudodefensa-india-de-dama"><b>Pseudodefensa india de dama</b><span>1.d4 Nf6 2.Nf3 b6 · A47</span></a>
+<a class="tile" data-cle="gambito de dama queen s gambit 1 d4 d5 2 c4 d06" data-side="w" href="/es/aperturas/gambito-de-dama"><b>Gambito de dama</b><span>1.d4 d5 2.c4 · D06</span></a>
+<a class="tile" data-cle="india de dama acelerada queen s indian accelerated 1 d4 nf6 2 c4 b6 a50" data-side="b" href="/es/aperturas/india-de-dama-acelerada"><b>India de dama acelerada</b><span>1.d4 Nf6 2.c4 b6 · A50</span></a>
+<a class="tile" data-cle="peon de dama ataque mengarini queen s pawn mengarini attack 1 d4 nf6 2 c4 g6 3 qc2 e60" data-side="w" href="/es/aperturas/peon-de-dama-ataque-mengarini"><b>Peón de dama, ataque Mengarini</b><span>1.d4 Nf6 2.c4 g6 3.Qc2 · E60</span></a>
+<a class="tile" data-cle="sistema rapport jobava con e6 rapport jobava system with e6 1 d4 d5 2 nc3 e6 3 bf4 d01" data-side="w" href="/es/aperturas/sistema-rapport-jobava-con-e6"><b>Sistema Rapport-Jobava, con e6</b><span>1.d4 d5 2.Nc3 e6 3.Bf4 · D01</span></a>
+<a class="tile" data-cle="defensa robatsch robatsch defense 1 d4 d6 2 nf3 g6 3 c4 bg7 4 e4 bg4 a41" data-side="b" href="/es/aperturas/defensa-robatsch"><b>Defensa Robatsch</b><span>1.d4 d6 2.Nf3 g6 3.c4 Bg7 4.e4 Bg4 · A41</span></a>
+<a class="tile" data-cle="apertura zaragoza saragossa opening 1 c3 a00" data-side="w" href="/es/aperturas/apertura-zaragoza"><b>Apertura Zaragoza</b><span>1.c3 · A00</span></a>
+<a class="tile" data-cle="apertura valencia valencia opening 1 d3 e5 2 nd2 a00" data-side="w" href="/es/aperturas/apertura-valencia"><b>Apertura Valencia</b><span>1.d3 e5 2.Nd2 · A00</span></a>
+<a class="tile" data-cle="defensa del buitre vulture defense 1 d4 nf6 2 c4 c5 3 d5 ne4 a56" data-side="b" href="/es/aperturas/defensa-del-buitre"><b>Defensa del buitre</b><span>1.d4 Nf6 2.c4 c5 3.d5 Ne4 · A56</span></a>
+<a class="tile" data-cle="defensa wade wade defense 1 d4 d6 2 nf3 bg4 a41" data-side="b" href="/es/aperturas/defensa-wade"><b>Defensa Wade</b><span>1.d4 d6 2.Nf3 Bg4 · A41</span></a>
+<a class="tile" data-cle="sistema yusupov rubinstein yusupov rubinstein system 1 d4 nf6 2 nf3 e6 3 e3 a46" data-side="w" href="/es/aperturas/sistema-yusupov-rubinstein"><b>Sistema Yusupov-Rubinstein</b><span>1.d4 Nf6 2.Nf3 e6 3.e3 · A46</span></a>
+<a class="tile" data-cle="defensa zairena zaire defense 1 d4 nc6 2 d5 nb8 3 e4 nf6 4 e5 ng8 a40" data-side="b" href="/es/aperturas/defensa-zairena"><b>Defensa zaireña</b><span>1.d4 Nc6 2.d5 Nb8 3.e4 Nf6 4.e5 Ng8 · A40</span></a>
+</div>
+</main>
+<footer>
+  <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
+       repeter en bas etait un doublon. Le pied de page garde son role
+       classique, les liens legaux. -->
+  <nav class="footnav" aria-label="Información legal">
+    <a href="/es/">Inicio</a> &middot;
+    <a href="/es/#legal">Aviso legal</a> &middot;
+    <a href="/es/#privacy">Privacidad</a> &middot;
+    <span class="foot-pair"><a href="/es/#prefs">Preferencias</a> &middot;
+    <a href="/es/#accessibilite">Accesibilidad</a></span>
+  </nav>
+  <p class="footnote">chang64: ajedrez gratis, sin cuenta. Datos de aperturas del proyecto lichess-org/chess-openings.</p>
+  <p class="pagedate">Publicada el 25 de octubre de 2026</p>
+</footer>
+</div>
+<script>
+/* L'application (accessible via le logo ou "Accueil") partage le meme
+   stockage que ces pages, sous la cle "chang64:lang" (voir window.storage et
+   loadLang dans i18n.js), mais ne le lisait jamais depuis ici : choisir
+   l'anglais sur une page claire, puis revenir a l'accueil, retombait sur la
+   langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
+   chaque visite d'une page claire, dans le meme format qu'attend loadLang
+   (chaine "fr" ou "en", pas de JSON). */
+try{localStorage.setItem("chang64:lang","es");var c=document.getElementById("cn"),sn=c.parentElement;c.scrollIntoView({block:"nearest"});var u=function(){sn.classList.toggle("sl",sn.scrollLeft>2);sn.classList.toggle("sr",sn.scrollLeft<sn.scrollWidth-sn.clientWidth-2);};u();sn.onscroll=u;}catch(e){}
+
+/* Filtrage de la liste des ouvertures.
+   Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page
+   se comporte comme avant. On compare sur une cle sans accents ni
+   ponctuation, ce qui permet de trouver "Defense sicilienne" en tapant
+   "defense sicilien", et "1.e4 c5" en tapant "e4c5". */
+(function(){
+  var bloc=document.getElementById("filtreBloc");
+  var champ=document.getElementById("filtre");
+  var grille=document.getElementById("grille");
+  if(!bloc||!champ||!grille)return;
+  var tuiles=[].slice.call(grille.querySelectorAll("[data-cle]"));
+  if(tuiles.length<20)return;          /* inutile sur une liste courte */
+  bloc.classList.remove("hide");
+  var etat=document.getElementById("filtreEtat");
+  /* Messages dans la langue de la page, poses par le build sur #filtreEtat
+     (2026-10-25) : le script reste le meme d'une langue a l'autre. */
+  var aucun=etat.getAttribute("data-aucun")||"No match.",sur=etat.getAttribute("data-sur")||"{a} of {b}";
+  var total=tuiles.length;
+  /* Bascule Blancs/Noirs/Les deux : absente des pages plus courtes que le
+     seuil ci-dessus tout comme le champ de recherche, puisqu'elle partage
+     le meme bloc masque par defaut. "both" (une seule ouverture reellement
+     symetrique) reste visible quel que soit le camp choisi : elle n'est
+     ni plus blanche ni plus noire que l'autre. */
+  var coteFiltre=document.getElementById("coteFiltre");
+  var coteActif="all";
+  if(coteFiltre){
+    var boutons=[].slice.call(coteFiltre.querySelectorAll("button"));
+    for(var c=0;c<boutons.length;c++){
+      boutons[c].addEventListener("click",function(){
+        coteActif=this.getAttribute("data-side");
+        for(var j=0;j<boutons.length;j++)boutons[j].setAttribute("aria-pressed",boutons[j]===this?"true":"false");
+        filtrer();
+      });
+    }
+  }
+
+  function normalise(t){
+    return String(t).normalize?String(t).normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .toLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim()
+      :String(t).toLowerCase();
+  }
+  function correspondCote(tuile){
+    if(coteActif==="all")return true;
+    var cote=tuile.getAttribute("data-side");
+    return cote===coteActif||cote==="both";
+  }
+  function filtrer(){
+    var q=normalise(champ.value);
+    if(!q&&coteActif==="all"){
+      for(var i=0;i<total;i++)tuiles[i].hidden=false;
+      var tousBlocs=grille.querySelectorAll("[data-theme]");
+      for(var b=0;b<tousBlocs.length;b++)tousBlocs[b].hidden=false;
+      var toc0=grille.querySelector(".toc");
+      if(toc0)toc0.hidden=false;
+      etat.textContent="";
+      return;
+    }
+    /* Chaque mot tape doit se retrouver, dans n'importe quel ordre :
+       "sicilienne e4" fonctionne comme "e4 sicilienne". */
+    var mots=q.split(" ").filter(Boolean);
+    var vus=0;
+    for(var i=0;i<total;i++){
+      var cle=tuiles[i].getAttribute("data-cle")||"";
+      var ok=correspondCote(tuiles[i]);
+      for(var k=0;k<mots.length;k++){if(cle.indexOf(mots[k])<0){ok=false;break;}}
+      tuiles[i].hidden=!ok;
+      if(ok)vus++;
+    }
+    /* Les exercices sont groupes par theme : un titre de section dont plus
+       aucune tuile ne correspond doit disparaitre aussi, sinon la page se
+       remplit d'intitules suivis de vide. Le sommaire des themes est masque
+       pendant une recherche, il ne mene plus nulle part. */
+    var blocs=grille.querySelectorAll("[data-theme]");
+    for(var b=0;b<blocs.length;b++){
+      var reste=blocs[b].querySelectorAll("[data-cle]:not([hidden])").length;
+      blocs[b].hidden=(reste===0);
+    }
+    var toc=grille.querySelector(".toc");
+    if(toc)toc.hidden=true;
+    etat.textContent = vus===0 ? aucun : sur.replace("{a}",vus).replace("{b}",total);
+  }
+  champ.addEventListener("input",filtrer);
+  /* Echap vide le champ, geste attendu sur un champ de recherche. */
+  champ.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&champ.value){champ.value="";filtrer();}
+  });
+})();
+
+/* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
+   repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
+   servent. */
+
+/* Pilote l'echiquier anime des pages d'ouverture.
+   Sans ce script, la position finale reste affichee et les commandes sont
+   masquees : la page fonctionne exactement comme avant. */
+(function(){
+  var box=document.querySelector(".anim"); if(!box)return;
+  var plies=[]; try{plies=JSON.parse(box.getAttribute("data-plies"))||[];}catch(e){}
+  var groups=box.querySelectorAll("svg > g[data-ply]");
+  if(groups.length<2)return;
+  var ctl=box.querySelector(".animctl"), lab=box.querySelector(".animply");
+  var btn={}; if(ctl){ctl.hidden=false;
+    ctl.querySelectorAll("button").forEach(function(b){btn[b.dataset.act]=b;});}
+  var i=groups.length-1, timer=null;
+  function show(n){
+    i=Math.max(0,Math.min(groups.length-1,n));
+    /* .hidden est une propriete de HTMLElement, pas de SVGElement : sur un
+       <g> il faut passer par l'attribut, sinon rien ne se passe. */
+    for(var k=0;k<groups.length;k++){
+      if(k===i)groups[k].removeAttribute("hidden");
+      else groups[k].setAttribute("hidden","");
+    }
+    if(lab)lab.textContent=plies[i]||"";
+    if(btn.prev)btn.prev.disabled=(i===0);
+    if(btn.next)btn.next.disabled=(i===groups.length-1);
+  }
+  var pp=btn.play&&btn.play.querySelectorAll("path");
+  function tog(k){pp[k].style.display="";pp[1-k].style.display="none";}
+  function stop(){if(timer){clearInterval(timer);timer=null;}
+    if(pp)tog(0);}
+  function playFrom(n){
+    stop(); show(n);
+    if(pp)tog(1);
+    timer=setInterval(function(){
+      if(i>=groups.length-1){stop();return;}
+      show(i+1);
+    },850);
+  }
+  if(btn.prev)btn.prev.onclick=function(){stop();show(i-1);};
+  if(btn.next)btn.next.onclick=function(){stop();show(i+1);};
+  if(btn.play)btn.play.onclick=function(){
+    if(timer)stop(); else playFrom(i>=groups.length-1?0:i);
+  };
+  /* Une personne qui a demande moins d'animation garde la position finale
+     et pilote elle-meme. Les autres voient la ligne se jouer une fois. */
+  var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(calm){show(groups.length-1);return;}
+  show(0);
+  var started=false;
+  function go(){if(started)return;started=true;playFrom(0);}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){go();io.disconnect();}});
+    },{threshold:.35});
+    io.observe(box);
+  }else go();
+})();
+</script>
+</body>
+</html>

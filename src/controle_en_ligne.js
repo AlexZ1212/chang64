@@ -67,8 +67,10 @@ function fichiersPublies() {
   const out = [];
   const tour = d => { for (const f of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, f.name); if (f.isDirectory()) tour(p); else out.push(path.relative(REF, p)); } };
   tour(REF);
-  /* Fichiers de configuration de Pages, jamais servis tels quels. */
-  return out.filter(r => !["_headers", "_redirects"].includes(r));
+  /* Fichiers de configuration de Pages, jamais servis tels quels. Depuis le
+     2026-10-25, _routes.json et functions/ (les Pages Functions, compilees
+     par Cloudflare) aussi : la section 8 verifie qu'elles repondent. */
+  return out.filter(r => !["_headers", "_redirects", "_routes.json"].includes(r) && !r.startsWith("functions" + path.sep));
 }
 
 /* Regles de _headers : chemin (avec * ) -> { en-tete: valeur }. */
@@ -193,6 +195,21 @@ const correspond = (motif, u) => new RegExp("^" + motif.split("*").map(s => s.re
       } catch (e) { T(u, false, "erreur reseau : " + e.message); }
     }
   } else console.log("  (seulement pour https://chang64.com)");
+  bilan(a);
+
+  /* 8. Mesure de la difficulte (functions/api). On n'envoie jamais de
+     resultat valide ici : il s'ajouterait aux vrais compteurs. */
+  section("8. API de mesure de la difficulte");
+  a = etat();
+  try {
+    const rs = await lire(BASE + "/api/stats");
+    let json = null; try { json = await rs.json(); } catch (e) {}
+    T("/api/stats repond en JSON", rs.status === 200 && json && typeof json === "object", "statut " + rs.status);
+    const rp = await lire(BASE + "/api/resultat", { method: "POST", body: '{"id":"controle","ok":1}', headers: { "Content-Type": "application/json", "User-Agent": "chang64-controle" } });
+    T("/api/resultat refuse un envoi mal forme", rp.status === 400, "statut " + rp.status);
+    const rf = await lire(BASE + "/functions/api/resultat.js");
+    T("les sources des fonctions ne sont pas servies", rf.status === 404, "statut " + rf.status);
+  } catch (e) { T("API joignable", false, "erreur reseau : " + e.message); }
   bilan(a);
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");

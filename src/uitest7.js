@@ -198,7 +198,21 @@ const H = w => {
   T("three strikes shown", a.$("rushStrikes").textContent === "✗✗✗", a.$("rushStrikes").textContent);
   const pz = a.cur();
   if (pz) {
-    await a.play(pz.sol[0].slice(0, 2), pz.sol[0].slice(2, 4));
+    /* Mis a jour le 2026-10-25 : on ne jouait que pz.sol[0], le defaut deja
+       corrige le 06/09 dans la boucle des exercices ci-dessus. Avec la banque
+       a 229 172 exercices, le Sprint tire souvent un exercice a plusieurs
+       coups : le score restait a 0, une fois sur trois environ. On joue tous
+       les demi-coups du joueur ; le Sprint passant aussitot a l'exercice
+       suivant, on s'arrete des que le score bouge. */
+    for (let k = 0; k < pz.sol.length && a.$("rushScore").textContent === "0"; k += 2) {
+      await a.play(pz.sol[k].slice(0, 2), pz.sol[k].slice(2, 4));
+      if (a.$("promoModal").className.includes("on")) { a.click(a.$("promoBtns").children[0]); await wait(400); }
+    }
+    if (pz.type === "mate" && a.$("rushScore").textContent === "0" && a.$("exStatus").textContent.includes("mate in")) {
+      const g2 = new Engine.Game(a.placement() + " " + pz.fen.split(" ")[1] + " - - 0 1");
+      const mm = Engine.allMatingMoves(g2, 1);
+      if (mm.length) { const u = g2.uci(mm[0]); await a.play(u.slice(0, 2), u.slice(2, 4)); }
+    }
     await wait(900);
     T("rush score increments", a.$("rushScore").textContent === "1", a.$("rushScore").textContent);
   }

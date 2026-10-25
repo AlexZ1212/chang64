@@ -74,10 +74,16 @@ const codeDerive=P.filter(p=>!codeAdmissible(p));
 T("le code derive du contenu (directement ou par variante anti-collision)", codeDerive.length===0,
   codeDerive.length+" hors schema : "+codeDerive.slice(0,4).map(p=>p.id).join(", "));
 /* Garde-fou : le salage ne doit rester qu'une exception rare. S'il explosait,
-   ce serait le signe que la derivation elle-meme a un probleme. */
+   ce serait le signe que la derivation elle-meme a un probleme.
+   Seuil revu le 2026-10-25 : un plafond fixe de 0,1 % ne tenait plus a
+   229 172 exercices. Avec n codes tires parmi 36^5, le paradoxe des
+   anniversaires prevoit environ n^2 / (2 x 36^5) collisions, soit ~434 ici
+   pour 387 observees : le hasard, pas un defaut. On compare donc au nombre
+   attendu, avec une marge de deux. */
 const sales=P.filter(p=>!contenus(p).some(sol=>p.code===puzzleCode(p.fen,sol.split(" "))));
-T("les variantes salees restent marginales (< 0,1% de la banque)",
-  sales.length < P.length*0.001, sales.length+" sur "+P.length);
+const attendus=Math.round(P.length*P.length/(2*Math.pow(36,5)));
+T("les variantes salees restent dans ce que le hasard explique (au plus 2 x "+attendus+" attendues)",
+  sales.length <= Math.max(10, 2*attendus), sales.length+" sur "+P.length);
 
 console.log("\n--- Chaque FEN se charge et chaque solution est legale ---");
 let badFen=[],badMove=[],illegalStart=[],badKingCount=[];

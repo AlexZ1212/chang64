@@ -1911,6 +1911,12 @@ function bilanLigne(p){
     let promo=0;
     for(const k of "qrbn"){const plus=(apres[nous][k]||0)-(avant[nous][k]||0);if(plus>0)promo+=plus;}
     if(promo&&perdu.p){const r=Math.min(promo,perdu.p);perdu.p-=r;if(!perdu.p)delete perdu.p;}
+    /* Meme chose en face (2026-10-25, exercice #KVM73 : f8=Q a1=Q Rb3+) : un
+       pion adverse qui va a dame n'a pas ete pris, il ne compte pas comme
+       gagne. Sans ce retrait, la phrase annoncait "gagne un pion". */
+    let promoEux=0;
+    for(const k of "qrbn"){const plus=(apres[eux][k]||0)-(avant[eux][k]||0);if(plus>0)promoEux+=plus;}
+    if(promoEux&&gagne.p){const r=Math.min(promoEux,gagne.p);gagne.p-=r;if(!gagne.p)delete gagne.p;}
     /* Les echanges a l'identique s'annulent : une tour contre une tour ne
        gagne rien. */
     for(const k of K)if(gagne[k]&&perdu[k]){const m=Math.min(gagne[k],perdu[k]);gagne[k]-=m;perdu[k]-=m;if(!gagne[k])delete gagne[k];if(!perdu[k])delete perdu[k];}

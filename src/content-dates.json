@@ -1,13 +1,13 @@
 {
  "/": {
-  "sceau": "7805968c3adc24f5",
+  "sceau": "dd94410f9f5f5ad5",
   "publiee": "2026-09-06",
   "modifiee": "2026-10-25"
  },
  "/404": {
-  "sceau": "916679c4cb603941",
+  "sceau": "e2ae586da4713080",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/endgames/": {
   "sceau": "39952f561b3c63bd",
@@ -135,64 +135,64 @@
   "modifiee": "2026-10-23"
  },
  "/fr/exercices/": {
-  "sceau": "39cedca9e04614b0",
+  "sceau": "cacae771855da42b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/attaque-double": {
-  "sceau": "322e82df53d0d208",
+  "sceau": "57938679ba241d75",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/clouage": {
-  "sceau": "15dedf3484c79132",
+  "sceau": "978ada1df21b421b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/coup-gagnant": {
-  "sceau": "c704e98f42bcd5f4",
+  "sceau": "69a546f831e35c05",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/coup-silencieux": {
-  "sceau": "dac0084421cc7da6",
+  "sceau": "d6230fd35292f44f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/deviation": {
-  "sceau": "7f04bda14b71124a",
+  "sceau": "e65f26e237c4ae58",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/enfilade": {
-  "sceau": "46f1bd85669fd2cf",
+  "sceau": "a3213d26ae907708",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/fourchette-de-cavalier": {
-  "sceau": "c3920f042ffea0b7",
+  "sceau": "f9f5dd3355474d44",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/fourchette-de-pion": {
-  "sceau": "a5ead413de325853",
+  "sceau": "379dec12fa11e172",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/mat-du-couloir": {
-  "sceau": "9e517cedc0a35485",
+  "sceau": "456eef7125c67a19",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/mat-en-deux-coups": {
-  "sceau": "c05b250d5ed22e49",
+  "sceau": "49e7600c59383202",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/mat-en-trois-coups": {
-  "sceau": "fab3ca9223020b36",
+  "sceau": "e301e71535885b88",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/exercices/mat-en-un-coup": {
   "sceau": "2a7bf712fa0e6b32",
@@ -200,9 +200,9 @@
   "modifiee": "2026-10-23"
  },
  "/fr/exercices/prise-gagnante": {
-  "sceau": "2b54016f64291d74",
+  "sceau": "b7729841b091f0ee",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/fr/finales/": {
   "sceau": "4dab4fef4bc87bb9",
@@ -2330,29 +2330,29 @@
   "modifiee": "2026-09-06"
  },
  "/puzzles/": {
-  "sceau": "a8d6d8c5d3b21cf8",
+  "sceau": "b62b375b97ba4c85",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/back-rank-mate": {
-  "sceau": "5e4a6efc74353b9c",
+  "sceau": "edc1d3a2aab50401",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/deflection": {
-  "sceau": "e64d5de42842ec26",
+  "sceau": "854e55172c8e89b5",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/double-attack": {
-  "sceau": "42547c0bb4773b54",
+  "sceau": "c98ba85cc6e9ff77",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/knight-fork": {
-  "sceau": "251bae7c563e3c95",
+  "sceau": "d4785ffe6597735c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/mate-in-one": {
   "sceau": "c571e2518b51850a",
@@ -2360,44 +2360,44 @@
   "modifiee": "2026-10-23"
  },
  "/puzzles/mate-in-three": {
-  "sceau": "5220fb522e83c131",
+  "sceau": "f178432237ad8884",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/mate-in-two": {
-  "sceau": "ab99d3dcf4fa6e8e",
+  "sceau": "e70b6e611b629a68",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/pawn-fork": {
-  "sceau": "da5a8020166292bb",
+  "sceau": "55e625eabd1ae28f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/pin": {
-  "sceau": "fd8456b7fc6e3581",
+  "sceau": "d5282edba3fcd20d",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/quiet-move": {
-  "sceau": "a6445e50bdee7b1d",
+  "sceau": "bfce007af4e8c38a",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/skewer": {
-  "sceau": "4a2d0b332b488551",
+  "sceau": "acf8416c5f110786",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/winning-capture": {
-  "sceau": "ff32d6bb4acac6fc",
+  "sceau": "cc936e51348ed9b0",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/puzzles/winning-move": {
-  "sceau": "a0ba9ba2d5df3742",
+  "sceau": "4fa76d98efa560a2",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-23"
+  "modifiee": "2026-10-25"
  },
  "/traps/": {
   "sceau": "daa469afc01cad74",

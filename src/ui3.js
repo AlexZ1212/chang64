@@ -806,7 +806,6 @@ function refreshCurrentMode(){
   if(mode==="puzzles"||mode==="train"){renderEgChips();renderEndgame();}
   if(mode==="friend")showAmi();
   else if(mode==="play"){refreshGame();}
-  else if(mode==="watch")renderChannels();
   else if(mode==="legal")renderLegal();
   syncTC();renderExplore();renderHistory();
   renderProgress();renderExtraStats();
@@ -873,7 +872,7 @@ setMode=function(m,opts){
   if(m==="train"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="train";
-    const tabs={play:"tab-play",puzzles:"tab-puzzles",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",edit:"tab-edit",friend:"tab-friend",explore:"tab-explore"};
     /* "Resoudre" reste surligne pendant Chang Sprint/Coordonnees (bug
        trouve en verifiant les autres endroits touches par la disparition
        de l'onglet "S'entrainer") : ce tableau ne referencait plus "train"
@@ -887,7 +886,7 @@ setMode=function(m,opts){
        m==="puzzles" a la lettre. */
     for(const k in tabs)markTab($(tabs[k]),k==="puzzles"?(m===k||m==="train"):k===m);
     $("pane-home").classList.add("hide");
-    $("pane-watch").classList.add("hide");
+    
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
     { const pcal=$("pane-calendar"); if(pcal)pcal.classList.add("hide"); }
     $("pane-legal").classList.add("hide");
@@ -1469,10 +1468,10 @@ setMode=function(m,opts){
   if(m==="edit"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="edit";busy=false;
-    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",explore:"tab-explore"};
     for(const k in tabs)markTab($(tabs[k]),k===m);
     $("pane-home").classList.add("hide");
-    $("pane-watch").classList.add("hide");
+    
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
     { const pcal=$("pane-calendar"); if(pcal)pcal.classList.add("hide"); }
     const pl=$("pane-legal"); if(pl)pl.classList.add("hide");
@@ -1673,10 +1672,10 @@ setMode=function(m,opts){
   if(m==="analyse"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="analyse";busy=false;
-    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",explore:"tab-explore"};
     for(const k in tabs)markTab($(tabs[k]),k==="edit");
     $("pane-home").classList.add("hide");
-    $("pane-watch").classList.add("hide");
+    
     { const pex=$("pane-explore"); if(pex)pex.classList.add("hide"); }
     { const pcal=$("pane-calendar"); if(pcal)pcal.classList.add("hide"); }
     const pl=$("pane-legal"); if(pl)pl.classList.add("hide");

@@ -215,7 +215,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 }
 .tabs button[aria-current="page"]{background-color:var(--brass);color:#1b1508;font-weight:600}
 .tabs button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-@media(max-width:520px){.tabs button{padding:8px 11px;font-size:12.5px}}
+/* 8 px au lieu de 11 depuis le retrait de Regarder (2026-10-25) : les cinq
+   onglets restants tiennent alors sans defiler jusqu'a 360 px de large
+   (331 px de libelles mesures sur iPhone SE a 11 px, 301 a 8). */
+@media(max-width:520px){.tabs button{padding:8px 8px;font-size:12.5px}}
 
 /* ---------- home ---------- */
 .hero{
@@ -1314,13 +1317,6 @@ header>*{min-width:0}
 .rushitem{flex:1;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 4px;text-align:center}
 .rushitem b{display:block;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600}
 .rushitem span{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage)}
-.channels{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
-@media(max-width:620px){.channels{grid-template-columns:1fr}}
-.chan{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:16px;overflow:hidden}
-.chanEmbed{position:relative;padding-top:56.25%;margin:-16px -16px 12px;background:#000;overflow:hidden}
-.chanEmbed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.chan h3{font-family:'Source Serif 4',Georgia,serif;font-size:16px;font-weight:600;margin-bottom:4px}
-.chan p{color:var(--sage);font-size:12.5px;margin-bottom:10px}
 .prose{font-size:13.5px;line-height:1.7;color:var(--chalk)}
 .prose h4{font-family:'Source Serif 4',Georgia,serif;font-size:15px;margin:16px 0 4px}
 .prose p{margin-bottom:8px;color:var(--sage)}
@@ -1344,6 +1340,24 @@ textarea.select{
 .linkbox{resize:vertical;font-size:11px;line-height:1.4}
 footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;letter-spacing:.03em;line-height:1.7}
 .footdate{opacity:.85}
+/* En-tete compact pendant une partie, sur petit telephone (2026-10-25).
+   iPhone SE dans Safari : ~548 px visibles, dont ~140 pour l'en-tete (logo,
+   langue, onglets) au-dessus de la pendule adverse ; la pendule du joueur,
+   sous le plateau, sortait de l'ecran. Dans Jouer et Inviter, sur moins de
+   600 px de large ET moins de 700 px de haut seulement, la ligne du logo et
+   de la langue s'efface ; la barre d'onglets reste, pour quitter la partie.
+   body[data-mode] est pose par setMode (ui.js et ui2.js). */
+@media(max-width:599px) and (max-height:700px){
+  body[data-mode="play"] header>.brand,body[data-mode="play"] header>.langswitch,
+  body[data-mode="friend"] header>.brand,body[data-mode="friend"] header>.langswitch{display:none}
+  body[data-mode="play"] header,body[data-mode="friend"] header{margin-bottom:8px;padding:6px 0}
+  /* Le logo masque ne suffisait pas (pendule du joueur a 546 px pour 548) :
+     la ligne des coups passe apres la pendule du joueur, qui suit donc
+     directement le plateau, et pendules et ecarts se resserrent un peu. */
+  body[data-mode="play"] .board-side,body[data-mode="friend"] .board-side{gap:6px}
+  body[data-mode="play"] #boardTools,body[data-mode="friend"] #boardTools{order:1}
+  body[data-mode="play"] .clock,body[data-mode="friend"] .clock{padding-top:3px;padding-bottom:3px}
+}
 /* Cibles tactiles (audit UX du 2026-10-24) : onglets et cadences a 35 px,
    pastilles a 41, EN/FR a 33 x 28, boutons d'info a 24 x 24 et "Voir le
    calendrier complet" a 14 px de haut, sous les 44 px recommandes (Apple,
@@ -1417,7 +1431,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <button id="tab-puzzles">Solve</button>
       <button id="tab-edit">Analyse</button>
       <button id="tab-friend">Invite</button>
-      <button id="tab-watch">Watch</button>
       <button id="tab-explore">Explore</button>
     </nav>
   </header>
@@ -2329,25 +2342,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ================= WATCH ================= -->
-  <div id="pane-watch" class="hide">
-    <div class="panel">
-      <h2>Chess on YouTube</h2>
-      <!-- margin-bottom:0 (2026-09-04) : ".sub" porte par defaut
-           margin-bottom:14px, pense pour separer le sous-titre d'un
-           contenu qui suit DANS le meme panneau (voir Explorer/Calendrier,
-           qui gardent tout dans une seule boite). Ici la grille de chaines
-           est un bloc frere APRES le panneau, pas dedans -- ce sous-titre
-           est donc le dernier enfant du panneau. Son margin-bottom
-           s'ajoutait au padding-bottom du panneau (16px) sans rien en face
-           cote padding-top (juste 16px, aucune marge sur h2), d'ou une
-           boite visiblement plus haute en bas qu'en haut (30px vs 16px).
-           A 0, les deux cotes valent desormais 16px. -->
-      <p class="sub" style="margin-bottom:0">The latest video from each channel, updated automatically.</p>
-    </div>
-    <div class="channels" id="channels"></div>
   </div>
 
   <!-- ================= EXPLORE ================= -->

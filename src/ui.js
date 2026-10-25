@@ -2773,6 +2773,9 @@ function setMode(m,opts){
   /* Le CSS dimensionne l'echiquier et place la barre d'actions selon
      l'ecran (audit UX du 2026-10-24) : il lui faut savoir lequel. */
   $("appLayout").dataset.mode=m;
+  /* Et sur body, pour l'en-tete qui est hors de #appLayout (en-tete compact
+     pendant une partie sur petit telephone, 2026-10-25). */
+  document.body.dataset.mode=m;
   $("pane-play").classList.toggle("hide",m!=="play");
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");

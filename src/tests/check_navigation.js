@@ -78,8 +78,7 @@ setTimeout(async()=>{
   for(const [id,nom] of [
     ["heroPlay","Jouer maintenant"],["heroPuzzle","Exercice du jour"],
     ["cardPlay","carte Jouer"],["cardPuzzles","carte Exercices"],
-    ["cardFriend","carte Entre amis"],
-    ["tab-watch","onglet Videos"]
+    ["cardFriend","carte Entre amis"]
   ]){
     d.getElementById("brand").click(); await wait(250);
     const avant=tops;

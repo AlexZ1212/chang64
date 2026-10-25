@@ -2084,11 +2084,17 @@ function queueOg(name, title, subtitle, fen) {
    si jamais il tourne, la CSP n'etant qu'un filet de securite.
    La regle sans cache de l'application vise "/" et non plus "/index.html"
    (2026-10-24) : _headers s'applique au chemin demande, et Pages redirige
-   "/index.html" vers "/". La regle ne touchait donc jamais la page servie. */
+   "/index.html" vers "/". La regle ne touchait donc jamais la page servie.
+   SVG (2026-10-25) : max-age=604800 seul, Cloudflare (qui met les .svg en
+   cache par defaut, contrairement au JSON) les gardait 7 jours sur ses
+   serveurs, nouveau deploiement ou non : apres la publication de la banque,
+   og/home.svg annoncait encore "108868" (Age: 86534 s, cf-cache-status: HIT).
+   Le navigateur garde un jour ; le CDN, via s-maxage, revalide toutes les
+   5 minutes. */
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' __HACHAGES__ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-src https://www.youtube-nocookie.com; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' __HACHAGES__ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()
@@ -2105,7 +2111,7 @@ fs.writeFileSync(OUT + "/_headers", `/*
   Cache-Control: public, max-age=600
 
 /*.svg
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=86400, s-maxage=300
 
 /*.webmanifest
   Content-Type: application/manifest+json

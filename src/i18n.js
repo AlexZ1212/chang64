@@ -67,7 +67,7 @@ const FR={
 "Puzzles you've gotten wrong, from any mode. Tap one to try it again. Each success spaces it out further before it comes back. Solve it enough times and it drops off this list for good.":"Des exercices ratés, tous modes confondus. Touche-en un pour le retenter. Chaque réussite espace un peu plus son retour. Assez de réussites et il disparaît de cette liste pour de bon.",
 "Solve a few puzzles to see your progress here.":"Résous quelques exercices pour voir ta progression ici.",
 /* --- navigation et accueil --- */
-"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Play Chang Sprint again":"Relancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Watch":"Regarder","Solve":"Résoudre","Invite":"Inviter",
+"Home":"Accueil","Play":"Jouer","Puzzles":"Exercices","Challenges":"Défis","Give up the Sprint":"Abandonner le Sprint","Confirm give up":"Confirmer l'abandon","Given up.":"Sprint abandonné.","Start Chang Sprint":"Lancer le Chang Sprint","Play Chang Sprint again":"Relancer le Chang Sprint","Three minutes to solve as many puzzles as you can. Three misses and it stops.":"Trois minutes pour résoudre le plus d'exercices possible. Trois erreurs et ça s'arrête.","Train":"S'entraîner","Friends":"Entre amis","Solve":"Résoudre","Invite":"Inviter",
 "Loading puzzles…":"Chargement des exercices…","Couldn't load puzzles. Check your connection and try again.":"Impossible de charger les exercices. Vérifie ta connexion et réessaie.",
 "Quiet move":"Coup silencieux","Mate in three":"Mat en trois coups",
 "chang64 · play chess, solve tactics":"chang64 · joue aux échecs, travaille la tactique",
@@ -320,29 +320,6 @@ const FR={
 "I challenge you on chang64, you play White:":"Je te défie sur chang64, tu joues les Blancs :",
 "Come play chess on chang64:":"Viens jouer aux échecs sur chang64 :",
 
-/* --- vidéos --- */
-"Chess on YouTube":"Les échecs sur YouTube",
-"The latest video from each channel, updated automatically.":
- "La dernière vidéo de chaque chaîne, mise à jour automatiquement.",
-"See the channel":"Voir la chaîne",
-"Game recaps, opening guides and the friendliest teaching on the platform.":
- "Résumés de parties, guides d'ouvertures et la pédagogie la plus accessible de la plateforme.",
-"Super-grandmaster speed chess, tournament recaps and long live streams.":
- "Parties rapides d'un super grand maître, résumés de tournois et longs directs.",
-"Calm, story-driven walkthroughs of historic and current games.":
- "Analyses posées et racontées, de parties historiques comme actuelles.",
-"Practical lessons and rating-climb series built for beginner and intermediate players.":
- "Leçons pratiques et séries de progression de classement pour joueurs débutants et intermédiaires.",
-"An advanced player working openly to cut out his own blunders, one honest game at a time.":
- "Un joueur avancé qui travaille ouvertement à éliminer ses propres gaffes, partie après partie.",
-"Romanian IM breaking down openings, especially the London System and Caro-Kann, with tournament recaps.":
- "MI roumain qui décortique les ouvertures, notamment le système London et la Caro-Kann, avec des résumés de tournois.",
-"Three coaches reviewing student games and teaching the fundamentals behind real improvement.":
- "Trois entraîneurs qui analysent des parties d'élèves et enseignent les fondamentaux d'une vraie progression.",
-"GM Simon Williams brings aggressive attacking chess and lively commentary on his own games.":
- "Le grand maître Simon Williams propose des échecs d'attaque agressifs et des commentaires vivants sur ses propres parties.",
-"Calm, friendly streaming highlights from an IM known for the Stafford Gambit and London System.":
- "Extraits de stream calmes et chaleureux d'un MI connu pour le gambit Stafford et le système London.",
 
 /* --- thèmes des exercices --- */
 "Mate in one":"Mat en un coup","Mate in two":"Mat en deux coups","Winning capture":"Prise gagnante",

@@ -44,7 +44,9 @@ console.log("\n--- Ce que le site a vraiment besoin d'autoriser ---");
 T("le moteur WebAssembly reste autorise", /wasm-unsafe-eval/.test(a("script-src")||""), a("script-src"));
 T("les workers, pour Stockfish", /blob:/.test(a("worker-src")||""), a("worker-src"));
 T("les images encodees en ligne", /data:/.test(a("img-src")||""), a("img-src"));
-T("YouTube sans cookies, et lui seul", (a("frame-src")||"")==="https://www.youtube-nocookie.com", a("frame-src"));
+/* Plus aucun cadre tiers depuis le retrait de Regarder (2026-10-25) : sans
+   frame-src, les cadres retombent sur default-src 'self'. */
+T("aucun cadre tiers autorise", !a("frame-src") && !/youtube/.test(csp), a("frame-src"));
 
 console.log("\n--- Aucune ouverture vers l'exterieur ---");
 T("connect-src reste au site", a("connect-src")==="'self'", a("connect-src"));

@@ -210,26 +210,13 @@ const H = w => {
   T("rush best saved", +a.$("rushBestTrain").textContent >= 1, a.$("rushBestTrain").textContent);
   {const b = a.$("resultBanner"); if (b && !b.className.includes("hide")) { a.click(a.$("resultClose")); await wait(300); }}
 
-  console.log("\nWATCH");
-  a.click(a.$("tab-watch")); await wait(400);
-  T("watch pane shown", !a.$("pane-watch").className.includes("hide"));
-  T("board hidden", a.$("appLayout").className.includes("hide"));
-  T("nine channels", a.$("channels").children.length === 9, Array.from(a.$("channels").children).map(c => c.querySelector("h3").textContent).join(", "));
-  T("each card has an auto-updating embed", [...a.$("channels").children].every(c => {
-    const f = c.querySelector("iframe");
-    return f && /youtube-nocookie\.com\/embed\/videoseries\?list=UU/.test(f.src);
-  }));
-  T("one button per channel card", a.$("channels").children[0].querySelectorAll("button").length === 1);
-  a.click(a.$("channels").children[0].querySelectorAll("button")[0]);
-  await wait(200);
-
   console.log("\nLEGAL");
   a.click(a.$("footLegal")); await wait(300);
   T("legal pane shown", !a.$("pane-legal").className.includes("hide"));
   T("host details present", /Cloudflare, Inc\./.test(a.$("legalBody").textContent));
   T("publisher filled in, no placeholders", /AlexZ1212/.test(a.$("legalBody").textContent) && !/\[/.test(a.$("legalBody").textContent));
   T("privacy mentions no cookies", /sets no cookies/.test(a.$("privacyBody").textContent));
-  T("privacy mentions youtube", /YouTube/.test(a.$("privacyBody").textContent));
+  T("privacy no longer mentions youtube (Watch tab removed)", !/YouTube/.test(a.$("privacyBody").textContent));
 
   console.log("\nBACK TO NORMAL");
   a.click(a.$("footHome")); await wait(400);

@@ -251,8 +251,10 @@ console.log("\n--- En-tetes de securite ---");
   T("politique de securite presente", /Content-Security-Policy:/.test(h));
   const csp = (h.match(/Content-Security-Policy:([^\n]*)/) || [])[1] || "";
   /* Chaque ressource externe reellement utilisee doit etre autorisee. */
+  /* YouTube n'en fait plus partie : l'onglet Regarder, qui l'integrait en
+     iframe, a ete retire le 2026-10-25. */
+  T("plus d'autorisation YouTube (onglet Regarder retire)", !csp.includes("youtube"), csp.slice(0, 60));
   for (const [besoin, motif, pourquoi] of [
-    ["videos YouTube", "youtube-nocookie.com", "l'onglet Videos affiche la derniere video de chaque chaine en iframe"],
     ["travailleurs web", "worker-src", "Stockfish tourne dans un Worker"],
     ["styles en ligne", "'unsafe-inline'", "le site pose des styles par script"],
     ["compilation WebAssembly", "'wasm-unsafe-eval'",

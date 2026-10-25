@@ -27,8 +27,11 @@ const $=id=>d.getElementById(id);
 setTimeout(()=>{
 
   console.log("\n--- Les onglets ---");
-  for(const id of ["tab-play","tab-puzzles","tab-edit","tab-friend","tab-watch","tab-explore"])
+  for(const id of ["tab-play","tab-puzzles","tab-edit","tab-friend","tab-explore"])
     T(id, !!$(id));
+  /* tab-watch (Regarder, chaines YouTube) supprime le 2026-10-25 a la
+     demande d'Alexandre ; il ne doit pas reparaitre. */
+  T("tab-watch retire", !$("tab-watch") && !$("pane-watch"));
   /* tab-train a ete supprime le 03/09. S'il reparaissait, ce serait un
      retour en arriere a expliquer, pas un detail. */
   T("tab-train reste supprime", !$("tab-train"));

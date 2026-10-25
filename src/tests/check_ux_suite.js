@@ -36,5 +36,36 @@ for (const sel of [".tabs button::after", ".tc-cats button::after", ".chip::afte
   T(sel + " : zone de 44 px", bloc.includes(sel) && /height:44px/.test(bloc));
 T("lien du calendrier agrandi", /#calFullLink\{display:inline-block;padding:15px 0\}/.test(bloc));
 
+console.log("\n--- En-tete compact en partie, petit telephone (2026-10-25) ---");
+/* Mesure dans le navigateur a 375 x 548 (iPhone SE dans Safari) : pendule du
+   joueur a 546-602 avant, 490-538 apres, plateau inchange (325 px). */
+const compact = (css.match(/@media ?\(max-width:599px\) and \(max-height:700px\) ?\{(.*?\}) ?\}/) || [])[1] || "";
+T("bloc limite aux petits ecrans, en largeur ET en hauteur", !!compact);
+T("logo et langue masques dans Jouer et Inviter", /body\[data-mode="play"\] header>\.brand/.test(compact) && /body\[data-mode="friend"\] header>\.langswitch/.test(compact) && /display:none/.test(compact));
+T("la barre d'onglets reste (pas masquee)", !/header>\.tabs|header>nav/.test(compact));
+T("ligne des coups apres la pendule du joueur", /#boardTools[^{]*\{order:1\}/.test(compact));
+{
+  const jd = require("jsdom");
+  const dom = new jd.JSDOM(html, { runScripts: "dangerously", pretendToBeVisual: true, url: "https://chang64.com/", virtualConsole: new jd.VirtualConsole(),
+    beforeParse(w) { w.fetch = () => new Promise(() => {}); } });
+  const d = dom.window.document;
+  const mode = () => d.body.dataset.mode;
+  d.getElementById("tab-play").click();
+  T("body[data-mode] = play dans Jouer", mode() === "play", mode());
+  d.getElementById("tab-explore").click();
+  T("body[data-mode] suit aussi Explorer (setMode de ui2.js)", mode() === "explore", mode());
+  dom.window.close();
+}
+
+console.log("\n--- Cache des SVG (2026-10-25) ---");
+/* Avec max-age=604800 seul, Cloudflare gardait les .svg 7 jours malgre un
+   nouveau deploiement (og/home.svg annoncait encore 108868). */
+const headers = fs.readFileSync(path.join(__dirname, "..", "site", "_headers"), "utf8");
+T("SVG : un jour au navigateur, 5 minutes au CDN", /\/\*\.svg\s+Cache-Control: public, max-age=86400, s-maxage=300/.test(headers));
+
+console.log("\n--- Regarder retire (2026-10-25) ---");
+T("plus d'onglet ni de panneau Regarder", !/id="tab-watch"|id="pane-watch"/.test(html));
+T("plus de cadre YouTube autorise", !/youtube/i.test(headers));
+
 console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
 process.exit(ko ? 1 : 0);

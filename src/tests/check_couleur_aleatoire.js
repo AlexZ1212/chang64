@@ -136,8 +136,14 @@ setTimeout(async () => {
   const tir=[];
   for(let i=0;i<8;i++){
     d.getElementById("brand").click(); await wait(220);
-    d.getElementById("heroPlay").click(); await wait(450);
-    tir.push(/Black|Noirs/.test(d.getElementById("readySub").textContent)?"N":"B");
+    /* Le texte est vide avant le clic, puis on attend qu'il soit reecrit
+       (2026-10-25) : lu a 450 ms fixes, sous la charge d'une suite complete,
+       il pouvait etre encore celui du tour precedent, et les huit tirages
+       sortaient identiques (BBBBBBBB, NNNNNNNN) sans rien dire du hasard. */
+    const sub=d.getElementById("readySub"); sub.textContent="";
+    d.getElementById("heroPlay").click();
+    for(let k=0;k<40&&!/White|Black|Blancs|Noirs/.test(sub.textContent);k++) await wait(100);
+    tir.push(/Black|Noirs/.test(sub.textContent)?"N":(/White|Blancs/.test(sub.textContent)?"B":"?"));
     d.getElementById("readyStart").click(); await wait(180);
     await abandonner();
     const b=d.getElementById("resultBanner");

@@ -2279,42 +2279,6 @@ function onPuzzleWrong(){
 }
 
 /* ==========================================================
-   11. WATCH
-   ========================================================== */
-const CHANNELS=[
-  {id:"UCQHX6ViZmPsWiYSFAyS0a3Q",name:"GothamChess",handle:"@GothamChess",desc:"Game recaps, opening guides and the friendliest teaching on the platform."},
-  {id:"UCweCc7bSMX5J4jEH7HFImng",name:"GMHikaru",handle:"@GMHikaru",desc:"Super-grandmaster speed chess, tournament recaps and long live streams."},
-  {id:"UCL5YbN5WLFD8dLIegT5QAbA",name:"agadmator's Chess Channel",handle:"@agadmator",desc:"Calm, story-driven walkthroughs of historic and current games."},
-  {id:"UChDxbOUQRXEZ1zdI14Zyx9w",name:"Chess Vibes",handle:"@ChessVibesOfficial",desc:"Practical lessons and rating-climb series built for beginner and intermediate players."},
-  {id:"UCUfvZgo9uLvTEt7unKw_Xhw",name:"Blunder Man",handle:"@Blunder_Man",desc:"An advanced player working openly to cut out his own blunders, one honest game at a time."},
-  {id:"UC76v5qR-TKSRalQeKskzoDg",name:"Alex Banzea",handle:"@AlexBanzea",desc:"Romanian IM breaking down openings, especially the London System and Caro-Kann, with tournament recaps."},
-  {id:"UC4liTXRJ-XknH6OtKz-tOuw",name:"ChessDojo",handle:"@ChessDojo",desc:"Three coaches reviewing student games and teaching the fundamentals behind real improvement."},
-  {id:"UClV9nqHHcsrm2krkFDPPr-g",name:"GingerGM",handle:"@GingerGM",desc:"GM Simon Williams brings aggressive attacking chess and lively commentary on his own games."},
-  {id:"UCXy10-NEFGxQ3b4NVrzHw1Q",name:"Eric Rosen",handle:"@eric-rosen",desc:"Calm, friendly streaming highlights from an IM known for the Stafford Gambit and London System."}
-];
-function renderChannels(){
-  const box=$("channels");if(!box)return;
-  poserHtml(box,"");
-  for(const c of CHANNELS){
-    const el=document.createElement("div");
-    el.className="chan";
-    /* list=UU+id : playlist "uploads" de la chaine. YouTube y place toujours
-       la derniere video en premier, donc l'aperçu se met a jour tout seul,
-       sans jamais coder une video precise en dur. youtube-nocookie.com pour
-       limiter le pistage tant que la video n'est pas lancee. */
-    poserHtml(el,'<div class="chanEmbed"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU'+c.id.slice(2)+'" title="'+c.name+'" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'+
-      '<h3>'+c.name+'</h3><p>'+t(c.desc)+'</p>');
-    const row=document.createElement("div");row.className="btnrow";
-    const open=document.createElement("button");
-    open.className="btn primary";open.textContent=t("See the channel");
-    open.onclick=()=>window.open("https://www.youtube.com/"+c.handle,"_blank","noopener");
-    row.appendChild(open);
-    el.appendChild(row);
-    box.appendChild(el);
-  }
-}
-
-/* ==========================================================
    12. LEGAL
    ========================================================== */
 const PUBLISHER={name:"AlexZ1212",email:"contact@chang64.com"};
@@ -2344,8 +2308,6 @@ function renderLegal(){
       "Son code source est disponible sur <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
       "et le texte de sa licence accompagne le moteur. C'est parce que chang64 distribue Stockfish que son propre code est publié sous la même licence. "+
       "Stockfish est optionnel : il n'est chargé qu'au moment où tu analyses une partie terminée, jamais pendant que tu joues.</p>"+
-      "<h4>Contenus tiers</h4><p>La section Vidéos intègre des lecteurs YouTube. Ces vidéos appartiennent à leurs chaînes respectives ; "+
-      "chang64 n'a aucun lien avec elles et rien ne se charge avant que tu appuies sur lecture.</p>"+
       "<h4>Signalement</h4><p>Toute demande relative au contenu du site peut être adressée à "+PUBLISHER.email+".</p>"
     : "<h4>Publisher</h4><p><strong>"+PUBLISHER.name+"</strong><br>Publication director: "+PUBLISHER.name+
       "<br>Contact: "+PUBLISHER.email+"</p>"+
@@ -2368,8 +2330,6 @@ function renderLegal(){
       "Its source code is available at <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, "+
       "and its licence text ships alongside the engine. It is because chang64 distributes Stockfish that its own code is released under the same licence. "+
       "Stockfish is optional: it is only loaded when you analyse a finished game, never while you play.</p>"+
-      "<h4>Third-party content</h4><p>The Watch section embeds YouTube players. Those videos belong to their respective channels; "+
-      "chang64 has no affiliation with them and nothing is loaded until you press play.</p>"+
       "<h4>Reporting</h4><p>Any request concerning the content of this site can be sent to "+PUBLISHER.email+".</p>");
   poserHtml($("privacyBody"),fr
     ? "<h4>En bref</h4><p>chang64 n'a ni compte, ni inscription, ni publicité. Le site ne demande jamais ton nom, "+
@@ -2382,8 +2342,6 @@ function renderLegal(){
       "lutte contre les attaques. Ces journaux relèvent de sa propre politique de confidentialité et chang64 n'y a pas accès.</p>"+
       "<h4>Parties par lien</h4><p>Une partie entre amis tient entièrement dans le lien que tu partages. Les coups transitent par la "+
       "messagerie de ton choix ; aucune copie n'est conservée sur ce site.</p>"+
-      "<h4>YouTube</h4><p>La section Vidéos ne charge rien tant que tu n'appuies pas sur lecture. Ensuite, c'est YouTube (Google) qui "+
-      "sert le lecteur et applique sa propre politique de confidentialité. Les lecteurs sont demandés via youtube-nocookie.com.</p>"+
       "<h4>Tes droits</h4><p>Aucune donnée personnelle n'étant collectée par le site, il n'y a rien à consulter, corriger ou supprimer. "+
       "Toute question peut être adressée à "+PUBLISHER.email+".</p>"+
       "<h4>Évolutions</h4><p>Si des comptes ou une mesure d'audience étaient ajoutés un jour, cette page serait mise à jour avant leur mise en service.</p>"
@@ -2397,8 +2355,6 @@ function renderLegal(){
       "under its own privacy policy and chang64 has no access to them.</p>"+
       "<h4>Games played by link</h4><p>A friend game lives entirely inside the link you share. The moves travel through whichever "+
       "messaging app you choose; no copy is kept on this site.</p>"+
-      "<h4>YouTube</h4><p>The Watch section loads nothing until you press play. Once you do, YouTube (Google) serves the player and "+
-      "applies its own privacy policy. Players are requested through youtube-nocookie.com.</p>"+
       "<h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any "+
       "question can go to "+PUBLISHER.email+".</p>"+
       "<h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live.</p>");
@@ -2438,32 +2394,31 @@ setMode=function(m,opts){
      d'onglet est ajoute, et n'arrete le sprint que lors d'un vrai
      changement d'onglet. */
   if(rush&&m!==mode)rushEnd(t("Stopped."));
-  if(m==="watch"||m==="legal"||m==="prefs"||m==="explore"||m==="calendar"){
+  if(m==="legal"||m==="prefs"||m==="explore"||m==="calendar"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode=m;
-    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",watch:"tab-watch",explore:"tab-explore"};
+    /* Ces ecrans ne passent pas par setMode (ui.js) : sans cette ligne,
+       body garderait "play" et l'en-tete resterait compact hors partie. */
+    document.body.dataset.mode=m;
+    const tabs={play:"tab-play",puzzles:"tab-puzzles",train:"tab-train",edit:"tab-edit",friend:"tab-friend",explore:"tab-explore"};
     for(const k in tabs)markTab($(tabs[k]),k===m);
     $("pane-home").classList.add("hide");
     $("appLayout").classList.add("hide");
-    $("pane-watch").classList.toggle("hide",m!=="watch");
     $("pane-legal").classList.toggle("hide",m!=="legal");
     const pp=$("pane-prefs"); if(pp)pp.classList.toggle("hide",m!=="prefs");
     const pe=$("pane-explore"); if(pe)pe.classList.toggle("hide",m!=="explore");
     const pc=$("pane-calendar"); if(pc)pc.classList.toggle("hide",m!=="calendar");
-    if(m==="watch")renderChannels();
-    else if(m==="prefs"){if(typeof renderPrefs==="function")renderPrefs();}
+    if(m==="prefs"){if(typeof renderPrefs==="function")renderPrefs();}
     else if(m==="explore"){if(typeof renderExplore==="function")renderExplore();}
     else if(m==="calendar"){calFullOffset=0;if(typeof renderFullCalendar==="function")renderFullCalendar();}
     else renderLegal();
     return;
   }
-  $("pane-watch").classList.add("hide");
   $("pane-legal").classList.add("hide");
   { const pp=$("pane-prefs"); if(pp)pp.classList.add("hide"); }
   { const pe=$("pane-explore"); if(pe)pe.classList.add("hide"); }
   { const pc=$("pane-calendar"); if(pc)pc.classList.add("hide"); }
   markTab($("tab-explore"),false);
-  markTab($("tab-watch"),false);
   baseSetMode(m,opts);
   renderExtraStats();applyEvalPref();
   if(m==="play"){renderOpening();renderSheetPlay();}
@@ -2627,7 +2582,6 @@ function rushRestore(){
     });
   }
 })();
-$("tab-watch").onclick=()=>{setMode("watch");goTop();};
 if($("tab-explore"))$("tab-explore").onclick=()=>{setMode("explore");goTop();};
 if($("calFullLink"))$("calFullLink").onclick=(e)=>{e.preventDefault();setMode("calendar");goTop();};
 /* "Retour a ta progression" (item 2) : le seul point d'entree vers le

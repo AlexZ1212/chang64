@@ -204,7 +204,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   background-image:linear-gradient(var(--ink),transparent);pointer-events:none}
 .brand{display:flex;align-items:center;gap:11px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit}
 .brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:6px}
-.brand .glyph{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}
+.brand .glyph{width:clamp(30px,6vw,40px);height:calc(clamp(30px,6vw,40px) * 54 / 64);display:block;flex:none;color:var(--brass)}
 .brand .glyph svg{width:100%;height:100%;display:block}
 .brand h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1}
 .brand h1 .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
@@ -244,7 +244,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   position:relative;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;
   letter-spacing:.06em;color:var(--brass);margin-bottom:14px
 }
-.brand{align-items:center}
+/* Pieds de l'elephant sur la ligne de base de "chang" (2026-10-25) : voir
+   brandMark() dans build_site.js, le signe de l'entete y est recadre aux
+   pieds (viewBox 0 0 64 54). */
+.brand{align-items:baseline}
 .names{display:flex;flex-direction:column;gap:2px;min-width:0}
 .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
 @media(max-width:620px){.tagline{display:none}}
@@ -1414,7 +1417,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   </noscript>
   <header>
     <button class="brand" id="brand" aria-label="chang64 home">
-      <span class="glyph" id="brandmark">/*__BRANDMARK__*/</span>
+      <span class="glyph" id="brandmark">/*__BRANDMARK_ENTETE__*/</span>
       <span class="names">
         <h1>chang<span class="sixtyfour">64</span></h1>
         <span class="tagline">The elephant on 64 squares</span>

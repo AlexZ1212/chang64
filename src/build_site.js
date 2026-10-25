@@ -1034,8 +1034,8 @@ box-shadow:0 14px 14px -6px var(--ink)}
    position relative des elements. Seules les couleurs changent, pour un fond
    clair : l'elephant et le 64 en laiton, "chang" et la baseline en gris
    fonce. */
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--chalk)}
-.brandmark{width:clamp(30px,6vw,40px);height:clamp(30px,6vw,40px);display:block;flex:none;color:var(--brass)}
+.brand{display:flex;align-items:baseline;gap:11px;text-decoration:none;color:var(--chalk)}
+.brandmark{width:clamp(30px,6vw,40px);height:calc(clamp(30px,6vw,40px) * 54 / 64);display:block;flex:none;color:var(--brass)}
 .brand .names{display:flex;flex-direction:column;gap:2px}
 .brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}
 .brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
@@ -1252,7 +1252,6 @@ const CSS_MIN = minifyCss(CSS);
    justifiait cette difference, l'entete est le meme reperage d'un bout a
    l'autre du site. Fonction declaree (donc hoistee) pour ne pas dependre de
    l'ordre des constantes plus bas dans le fichier. */
-let _mark = null;
 /* Nouvelle identite (2026-10-24, design/identite) : un elephant geometrique de
    profil, a la place de la tete de face qui se lisait comme un champignon a
    petite taille. ds/signe.svg est le signe principal (24 px et plus) ; son
@@ -1266,16 +1265,25 @@ function signe(fichier) {
     return { d, regle };
   }).filter(p => p.d);
 }
-function brandMark() {
-  if (_mark === null) {
+/* entete=true : cadre arrete aux pieds de l'elephant (viewBox 0 0 64 54,
+   rien n'est dessine plus bas). Dans l'entete, le bas de la boite tombe
+   ainsi sur les pieds, et l'alignement sur la ligne de base (.brand en
+   align-items:baseline) pose les pieds exactement sur le bas du "c" de
+   chang (demande d'Alexandre, 2026-10-25 ; ecart mesure : 12,9 px avant,
+   0 apres). Le filigrane de "L'elephant sur l'echiquier" garde le cadre
+   carre. */
+const _marks = {};
+function brandMark(entete) {
+  const cle = entete ? "entete" : "carre";
+  if (!_marks[cle]) {
     /* Pas de width/height en attribut : c'est le CSS qui donne la taille,
        adaptative comme dans l'application (clamp 30 a 40 px). Des attributs
        fixes entreraient en conflit avec elle. */
-    _mark = `<svg class="brandmark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">` +
+    _marks[cle] = `<svg class="brandmark" viewBox="0 0 64 ${entete ? 54 : 64}" aria-hidden="true" focusable="false">` +
       signe("signe.svg").map(p => `<path fill="currentColor"${p.regle ? ` fill-rule="${p.regle}"` : ""} d="${p.d}"/>`).join("") +
       `</svg>`;
   }
-  return _mark;
+  return _marks[cle];
 }
 
 /* L'application posait la marque par JavaScript au demarrage
@@ -1288,7 +1296,7 @@ function brandMark() {
    filigrane de la section "The elephant on the board") sont desormais poses
    ici, comme sur les pages claires : le logo fait partie du HTML, il n'a
    plus besoin du script pour exister. */
-app = app.split("/*__BRANDMARK__*/").join(brandMark());
+app = app.split("/*__BRANDMARK_ENTETE__*/").join(brandMark(true)).split("/*__BRANDMARK__*/").join(brandMark());
 
 /* Liens vers toutes les sections, dans la langue de la page. La page en cours
    est signalee et non cliquable : un lien vers soi-meme n'apporte rien.
@@ -1521,7 +1529,7 @@ ${/* Lien d'evitement ajoute le 2026-09-06. L'application en avait un, ces
      pages, l'ajout ne change donc rien a la mise en page. */""}<a class="skiplink" href="#contenu">${lang === "fr" ? "Aller au contenu" : "Skip to main content"}</a>
 <div class="wrap">
 <header>
-  <a class="brand" href="/">${brandMark()}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${lang === "fr" ? "L'éléphant sur 64 cases" : "The elephant on 64 squares"}</span></span></a>
+  <a class="brand" href="/">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${lang === "fr" ? "L'éléphant sur 64 cases" : "The elephant on 64 squares"}</span></span></a>
   <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
        le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
        place du contenu. Sur ecran etroit la rangee defile horizontalement,

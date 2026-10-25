@@ -68,6 +68,17 @@ console.log("\n--- Barre d'onglets equilibree (2026-10-25) ---");
    360 px, chaque libelle reste entier et rien ne defile. */
 T("onglets de meme largeur (flex 1 1 0)", /\.tabs button\{flex:1 1 0\}/.test(css));
 
+console.log("\n--- Pieds de l'elephant sur la ligne de base (2026-10-25) ---");
+/* Mesure dans le navigateur : ecart pieds / ligne de base de "chang" de
+   12,9 px avant, 0 apres, a 1280 et 375 px de large, et sur les pages
+   claires. Le signe de l'entete est recadre aux pieds (viewBox 0 0 64 54) ;
+   le filigrane de l'accueil reste carre. */
+const entete = (html.match(/<span class="glyph" id="brandmark">(<svg[^>]*>)/) || [])[1] || "";
+T("signe de l'entete recadre aux pieds", /viewBox="0 0 64 54"/.test(entete), entete);
+T("filigrane de l'accueil toujours carre", /id="originMark"[^>]*><svg[^>]*viewBox="0 0 64 64"/.test(html));
+T("entete aligne sur la ligne de base", /\.brand\{align-items:baseline\}/.test(css));
+T("boite du signe a la proportion 64:54", /\.brand \.glyph\{[^}]*height:calc\(clamp\(30px,6vw,40px\) \* 54 \/ 64\)/.test(css));
+
 console.log("\n--- Regarder retire (2026-10-25) ---");
 T("plus d'onglet ni de panneau Regarder", !/id="tab-watch"|id="pane-watch"/.test(html));
 T("plus de cadre YouTube autorise", !/youtube/i.test(headers));

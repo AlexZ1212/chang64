@@ -82,18 +82,78 @@ const lireJournal = () => {
   return m;
 };
 
+/* Suites (2026-10-25, --suites). Les muets sans menace concrete sont des
+   coups de position : ils ne menacent rien de precis si l'adversaire passe,
+   mais la meilleure defense perd quand meme. On garde la ligne principale de
+   Stockfish apres le coup (adversaire au trait), et on en tire le plus court
+   debut qui, joue jusqu'a un coup a nous, mate ou gagne au moins deux points
+   de materiel net -- et les garde encore apres la reponse adverse suivante,
+   pour ne pas annoncer une prise aussitot reprise. Six demi-coups au plus :
+   au-dela, la phrase ne se lirait plus. */
+const SUITES = path.join(__dirname, "menaces-suites.jsonl");
+const VALEUR = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+function suiteDe(p, pv) {
+  const g = new Game(p.fen), nous = p.fen.split(" ")[1];
+  const m0 = g.moves().find(x => g.uci(x) === p.sol[0]); if (!m0) return null;
+  g.makeMove(m0);
+  const bilan = fen => { const s = { w: {}, b: {} }; for (const ch of fen.split(" ")[0]) { const k = ch.toLowerCase(); if (!VALEUR[k]) continue; const c = ch === k ? "b" : "w"; s[c][k] = (s[c][k] || 0) + 1; } return s; };
+  const avant = bilan(p.fen), eux = nous === "w" ? "b" : "w";
+  const net = fen => { const a = bilan(fen); let n = 0; for (const k in VALEUR) n += VALEUR[k] * (((a[nous][k] || 0) - (avant[nous][k] || 0)) - ((a[eux][k] || 0) - (avant[eux][k] || 0))); return n; };
+  const san = [], fens = [];
+  for (const u of pv.slice(0, 7)) {
+    const m = g.moves().find(x => g.uci(x) === u); if (!m) break;
+    san.push(g.san(m)); g.makeMove(m); fens.push(g.fen());
+    if (!g.moves().length) break;
+  }
+  /* Indices pairs = coups adverses, impairs = coups a nous. */
+  for (let k = 1; k < san.length && k <= 5; k += 2) {
+    if (/#$/.test(san[k])) return { san: san.slice(0, k + 1), mat: true };
+    /* Une promotion dans la ligne se lirait "gagne la dame contre un pion" :
+       faux. Ces lignes gardent le silence. */
+    if (san.slice(0, k + 2).some(s => /=/.test(s))) return null;
+    const ici = net(fens[k]), apres = k + 1 < fens.length ? net(fens[k + 1]) : ici;
+    if (ici >= 2 && apres >= 2) {
+      /* Si la reponse adverse reprend du materiel, elle fait partie du
+         bilan : on l'affiche, sinon "gagne la dame contre une tour" ne
+         se comprendrait pas (#p771 : Txh6, puis la tour est reprise). */
+      const fin = k + 1 < fens.length && apres !== ici ? k + 1 : k;
+      const a = bilan(fens[fin]), gagne = {}, perdu = {};
+      for (const x in VALEUR) {
+        const d = ((avant[eux][x] || 0) - (a[eux][x] || 0)) - ((avant[nous][x] || 0) - (a[nous][x] || 0));
+        if (d > 0) gagne[x] = d; else if (d < 0) perdu[x] = -d;
+      }
+      return { san: san.slice(0, fin + 1), gagne, perdu };
+    }
+  }
+  return null;
+}
+
 if (ARGS.includes("--appliquer")) {
   const j = lireJournal(), toute = banque.charger();
-  let poses = 0, retires = 0;
+  const js = new Map();
+  if (fs.existsSync(SUITES)) for (const l of fs.readFileSync(SUITES, "utf8").split("\n")) { if (!l) continue; try { const o = JSON.parse(l); js.set(o.id, o); } catch (e) {} }
+  let poses = 0, retires = 0, suites = 0;
   for (const p of toute) {
     const o = j.get(p.id);
     const garde = o && o.menace && o.fen === p.fen && o.coup === p.sol[0] && muet(p);
     if (garde) { p.explain = Object.assign({}, p.explain, { menace: o.menace }); poses++; }
     else if (p.explain && p.explain.menace) { delete p.explain.menace; retires++; }
+    const s = js.get(p.id);
+    const suite = !garde && s && s.fen === p.fen && s.coup === p.sol[0] && s.pv && muet(p) ? suiteDe(p, s.pv) : null;
+    if (suite) { p.explain = Object.assign({}, p.explain, { suite }); suites++; }
+    else if (p.explain && p.explain.suite) delete p.explain.suite;
   }
   console.log("sauvegarde : " + banque.sauvegarder());
   const ecrits = banque.ecrire(toute);
-  console.log(poses + " menaces posees, " + retires + " retirees, " + ecrits.length + " tranches reecrites");
+  console.log(poses + " menaces posees, " + retires + " retirees, " + suites + " suites posees, " + ecrits.length + " tranches reecrites");
+  process.exit(0);
+}
+if (ARGS.includes("--essai-suites")) {
+  /* Ce que --appliquer poserait, sans rien ecrire. */
+  const js = new Map(fs.readFileSync(SUITES, "utf8").split("\n").filter(Boolean).map(l => { const o = JSON.parse(l); return [o.id, o]; }));
+  let n = 0;
+  for (const p of lot) { const s = js.get(p.id); const r = s && s.pv ? suiteDe(p, s.pv) : null; if (r) { n++; if (n <= 12) console.log(p.id, p.sol[0], JSON.stringify(r)); } }
+  console.log(n + " suites sur " + js.size + " lignes analysees");
   process.exit(0);
 }
 
@@ -125,15 +185,38 @@ const dodo = ms => new Promise(r => setTimeout(r, ms));
     await cmd("ucinewgame"); await cmd("isready"); await attendre(/readyok/, 30000);
     lignes = []; await cmd("position fen " + fen); await cmd("go depth " + PROF);
     const bm = await attendre(/^bestmove/, 300000);
-    let score = null, mat = null;
+    let score = null, mat = null, pv = null;
     for (const l of lignes.filter(x => /^info depth \d+ .*score/.test(x))) {
       const sc = /score (cp|mate) (-?\d+)/.exec(l);
       if (!sc) continue;
       if (sc[1] === "mate") { mat = +sc[2]; score = +sc[2] > 0 ? 100000 : -100000; } else { mat = null; score = +sc[2]; }
+      const v = / pv (.+)$/.exec(l); if (v) pv = v[1].trim().split(/\s+/);
     }
     capture = false;
-    return { coup: bm ? bm.split(" ")[1] : null, score, mat };
+    return { coup: bm ? bm.split(" ")[1] : null, score, mat, pv };
   };
+
+  if (ARGS.includes("--suites")) {
+    /* Les muets restes sans menace : ligne principale apres le coup. */
+    const j = lireJournal();
+    const cibles = lot.filter(p => !(j.get(p.id) && j.get(p.id).menace));
+    const dejaS = new Set();
+    if (ARGS.includes("--reprendre") && fs.existsSync(SUITES)) for (const l of fs.readFileSync(SUITES, "utf8").split("\n")) if (l) try { dejaS.add(JSON.parse(l).id); } catch (e) {}
+    const js = fs.createWriteStream(SUITES, { flags: ARGS.includes("--reprendre") ? "a" : "w" });
+    dire("suites : " + cibles.length + " exercices, profondeur " + PROF);
+    let f = 0; const t1 = Date.now();
+    for (const p of cibles) {
+      if (dejaS.has(p.id)) continue;
+      const g = new Game(p.fen);
+      g.makeMove(g.moves().find(x => g.uci(x) === p.sol[0]));
+      const r = await analyser(g.fen());
+      js.write(JSON.stringify({ id: p.id, fen: p.fen, coup: p.sol[0], score: r.score, mat: r.mat, pv: r.pv }) + "\n");
+      if (++f % 20 === 0) dire(f + "/" + cibles.length + "  reste ~" + Math.round((cibles.length - f) * (Date.now() - t1) / f / 60000) + " min");
+    }
+    js.end();
+    dire("termine : " + f + " lignes. Ensuite : node menaces_coups_gagnants.js --essai-suites, puis --appliquer");
+    process.exit(0);
+  }
 
   const deja = ARGS.includes("--reprendre") ? lireJournal() : new Map();
   const journal = fs.createWriteStream(JOURNAL, { flags: ARGS.includes("--reprendre") ? "a" : "w" });

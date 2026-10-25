@@ -46,9 +46,9 @@ function reference(p) {
 (async () => {
   for (const [langue, att] of [
     ["fr-FR", { qualite: "la qualité", cp: "un cavalier contre un pion", deux: "deux pions", tour: "une tour", fou: "un fou",
-      dame: "la dame contre une tour", trois: "du matériel", gagne: /gagne|prépare le mat/, mat: /mat/, menace: /menace/ }],
+      dame: "la dame contre une tour", trois: "du matériel", gagne: /gagne|prépare le mat/, mat: /mat/, menace: /menace/, suite: /La meilleure défense est .* ; la suite .* (gagne|mate)/ }],
     ["en-US", { qualite: "the exchange", cp: "a knight for a pawn", deux: "two pawns", tour: "a rook", fou: "a bishop",
-      dame: "the queen for a rook", trois: "material", gagne: /wins|prepares checkmate/, mat: /checkmate|mate in/, menace: /threatens/ }]]) {
+      dame: "the queen for a rook", trois: "material", gagne: /wins|prepares checkmate/, mat: /checkmate|mate in|mates/, menace: /threatens/, suite: /The best defence is .*; the continuation .* (wins|mates)/ }]]) {
     const w = ouvrir(langue); await attendre(1500);
     console.log("\n--- " + langue + " : tournures ---");
     T("fonctions presentes", typeof w.phraseGain === "function" && typeof w.explainSentence === "function");
@@ -71,7 +71,7 @@ function reference(p) {
       if (!s) { vides[p.theme]++; continue; }
       if (/undefined|NaN|\{|\}/.test(s)) cassees.push(p.code + " " + s);
       const r = reference(p);
-      if (/gagne|wins/.test(s) && !r.mat && r.net <= 0) fausses.push(p.code + " net " + r.net + " : " + s);
+      if (/gagne|wins/.test(s) && !r.mat && r.net <= 0 && !(p.explain && p.explain.suite)) fausses.push(p.code + " net " + r.net + " : " + s);
       if (r.mat && !att.mat.test(s)) matsTus.push(p.code + " " + s);
     }
     T("aucune phrase cassee", !cassees.length, cassees.slice(0, 3).join(" | "));
@@ -87,7 +87,7 @@ function reference(p) {
        restent muets les coups de position sans menace. */
     const muetsAttendus = banque.filter(p => {
       if (p.theme !== "Winning move" || p.sol.length !== 1 || reference(p).net > 0) return false;
-      if (p.explain && p.explain.menace) return false;
+      if (p.explain && (p.explain.menace || p.explain.suite)) return false;
       const g = new Game(p.fen), m = g.moves().find(x => g.uci(x) === p.sol[0]);
       if (m.promo) return false;
       g.makeMove(m); return !g.inCheck();
@@ -103,6 +103,19 @@ function reference(p) {
       malDites.slice(0, 3).map(p => p.code + " " + nbsp(w.explainSentence(p))).join(" | "));
     const ex = avecMenace.find(p => p.explain.menace.piece);
     if (ex) console.log("  exemple : " + nbsp(w.explainSentence(ex)));
+    /* Lignes de Stockfish (explain.suite, 2026-10-25) : la reponse et toute
+       la suite affichees, et un bilan reellement positif au bout. */
+    const avecSuite = banque.filter(p => p.explain && p.explain.suite);
+    const VALS = { p: 1, n: 3, b: 3, r: 5, q: 9 }, somme = l => Object.keys(l || {}).reduce((s, k) => s + VALS[k] * l[k], 0);
+    const malSuites = avecSuite.filter(p => {
+      const s = nbsp(w.explainSentence(p)), su = p.explain.suite;
+      if (!su.san.every(x => s.includes(x)) || !att.suite.test(s)) return true;
+      return !su.mat && somme(su.gagne) - somme(su.perdu) < 2;
+    });
+    T("chaque ligne relevee est dite, avec un vrai gain (" + avecSuite.length + ")", avecSuite.length > 0 && !malSuites.length,
+      malSuites.slice(0, 3).map(p => p.code + " " + nbsp(w.explainSentence(p))).join(" | "));
+    const ex2 = avecSuite.find(p => !p.explain.suite.mat && p.explain.suite.san.length > 2);
+    if (ex2) console.log("  exemple : " + nbsp(w.explainSentence(ex2)));
     w.close();
   }
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");

@@ -202,6 +202,8 @@ const FR={
 "{move} threatens mate in {n}, starting with {threat}.":"{move} menace un mat en {n}, qui commence par {threat}.",
 "{move} threatens to take {piece} with {threat}.":"{move} menace de prendre {piece} par {threat}.",
 "{move} threatens {threat}.":"{move} menace {threat}.",
+"The best defence is {reply}; the continuation {line} mates.":"La meilleure défense est {reply} ; la suite {line} mate.",
+"The best defence is {reply}; the continuation {line} wins {gain}.":"La meilleure défense est {reply} ; la suite {line} gagne {gain}.",
 "The piece on {from} attacks both {p1} and {p2} at once.":"La pièce en {from} attaque à la fois {p1} et {p2}.",
 "{pinned} can't move without exposing {behind}.":"{pinned} ne peut pas bouger sans exposer {behind}.",
 "{captured} was only defended by {pinned}, which is pinned and can't recapture.":"{captured} n'était défendu que par {pinned}, qui est cloué et ne peut pas reprendre.",

@@ -24,13 +24,10 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
 const jourDe = iso => Math.floor(Date.parse(iso + "T00:00:00Z") / 86400000);
 
 console.log("\n--- Les fichiers ---");
-/* puzzle-index.json reste publie pendant la transition, pour les anciens
-   clients encore en cache (voir build_site.js) ; il doit au moins couvrir
-   la banque courante. Que le NOUVEAU code ne le charge plus est verifie
-   plus bas, dans la page. */
-const transition = path.join(SITE, "data", "puzzle-index.json");
-T("puzzle-index.json de transition coherent avec la banque", !fs.existsSync(transition) ||
-  Object.keys(JSON.parse(fs.readFileSync(transition, "utf8"))).length === banque.length);
+/* puzzle-index.json, garde deux publications pour la transition, n'est plus
+   publie depuis le 2026-10-25 (voir build_site.js). Que le code ne le
+   charge plus est verifie plus bas, dans la page. */
+T("puzzle-index.json n'est plus publie", !fs.existsSync(path.join(SITE, "data", "puzzle-index.json")));
 const idx = {};
 const tranches = fs.readdirSync(path.join(SITE, "data", "ids"));
 let rangees = true;

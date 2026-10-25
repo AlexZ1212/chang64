@@ -385,14 +385,12 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
 
      1. data/ids/<k>.json : l'index par tranche de 10 000 identifiants
         (p0-p9999 dans 0.json...). Un lien direct ne lit que sa tranche. */
-  /* Transition (2026-10-25) : le nouveau code ne lit plus ce fichier, mais
-     un visiteur deja venu lance encore l'ancien pendant sa premiere visite
-     apres la mise en ligne (le service worker sert l'application depuis son
-     cache et ne la remplace qu'ensuite). Sans lui, cet ancien code
-     tomberait en erreur sur l'exercice du jour et les liens directs. Calcule
-     sur la banque courante, il reste coherent avec les morceaux publies. A
-     retirer apres une publication ou deux. */
-  fs.writeFileSync(OUT + "/data/puzzle-index.json", JSON.stringify(puzzleIndex));
+  /* puzzle-index.json n'est plus publie (2026-10-25). Il etait garde pour
+     la transition : un visiteur deja venu lance encore l'ancienne
+     application pendant sa premiere visite apres une mise en ligne, et
+     celle d'avant le 25/10 le lisait. Deux publications l'ont servi depuis ;
+     ses 3,8 Mo pesaient a chaque publication sans plus servir qu'a un
+     visiteur absent depuis. */
   const TRANCHE_IDS = 10000;
   const tranchesIds = {};
   for (const id in puzzleIndex) {

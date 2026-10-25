@@ -1958,6 +1958,19 @@ function phraseLigne(p){
     else if(me.piece&&me.sq)parts.push(t("{move} threatens to take {piece} with {threat}.",{move:premier,piece:groupe(me.piece,me.sq),threat:me.san}));
     else parts.push(t("{move} threatens {threat}.",{move:premier,threat:me.san}));
   }
+  /* Coup de position, sans menace concrete : la ligne principale de
+     Stockfish apres le coup (explain.suite, meme outil, mode --suites),
+     coupee au premier coup a nous qui mate ou gagne du materiel et le garde
+     apres la reponse adverse. Sans elle, silence. */
+  const su=!parts.length&&p.explain&&p.explain.suite;
+  if(su&&su.san&&su.san.length>=2){
+    const reponse=su.san[0],ligne=su.san.slice(1).join(" ");
+    if(su.mat)parts.push(t("The best defence is {reply}; the continuation {line} mates.",{reply:reponse,line:ligne}));
+    else{
+      const g=phraseGain({gagne:su.gagne||{},perdu:su.perdu||{}});
+      if(g)parts.push(t("The best defence is {reply}; the continuation {line} wins {gain}.",{reply:reponse,line:ligne,gain:g}));
+    }
+  }
   return parts.join(" ");
 }
 /* Pedagogie coup juste / coup faute (exercices mines depuis de vraies

@@ -289,6 +289,8 @@ module.exports = {
 "{move} threatens mate in {n}, starting with {threat}.":{"one":"{move} угрожает матом в {n} ход, начиная с {threat}.","few":"{move} угрожает матом в {n} хода, начиная с {threat}.","many":"{move} угрожает матом в {n} ходов, начиная с {threat}.","other":"{move} угрожает матом в {n} хода, начиная с {threat}."},
 "{move} threatens to take {piece} with {threat}.":"{move} угрожает взять {piece:acc} ходом {threat}.",
 "{move} threatens {threat}.":"{move} угрожает ходом {threat}.",
+"The best defence is {reply}; the continuation {line} mates.":"Лучшая защита — {reply}; продолжение {line} ставит мат.",
+"The best defence is {reply}; the continuation {line} wins {gain}.":"Лучшая защита — {reply}; продолжение {line} выигрывает {gain}.",
 "The piece on {from} attacks both {p1} and {p2} at once.":"Фигура на {from} атакует одновременно {p1:acc} и {p2:acc}.",
 "{pinned} can't move without exposing {behind}.":"{pinned} не может уйти, не открыв {behind:acc}.",
 "{captured} was only defended by {pinned}, which is pinned and can't recapture.":"{captured} был{captured?|а} защищ{captured?ён|ена} только {pinned:ins}, котор{pinned?ый связан|ая связана} и не может взять обратно.",

@@ -289,6 +289,8 @@ module.exports = {
 "{move} threatens mate in {n}, starting with {threat}.":"{move} amenaza mate en {n}, empezando por {threat}.",
 "{move} threatens to take {piece} with {threat}.":"{move} amenaza capturar {piece} con {threat}.",
 "{move} threatens {threat}.":"{move} amenaza {threat}.",
+"The best defence is {reply}; the continuation {line} mates.":"La mejor defensa es {reply}; la continuación {line} da mate.",
+"The best defence is {reply}; the continuation {line} wins {gain}.":"La mejor defensa es {reply}; la continuación {line} gana {gain}.",
 "The piece on {from} attacks both {p1} and {p2} at once.":"La pieza de {from} ataca a la vez {p1} y {p2}.",
 "{pinned} can't move without exposing {behind}.":"{pinned} no puede moverse sin dejar expuest{behind?o|a} {behind}.",
 "{captured} was only defended by {pinned}, which is pinned and can't recapture.":"{captured} solo estaba defendid{captured?o|a} por {pinned}, que está clavad{pinned?o|a} y no puede recapturar.",

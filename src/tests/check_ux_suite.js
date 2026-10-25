@@ -63,6 +63,11 @@ console.log("\n--- Cache des SVG (2026-10-25) ---");
 const headers = fs.readFileSync(path.join(__dirname, "..", "site", "_headers"), "utf8");
 T("SVG : un jour au navigateur, 5 minutes au CDN", /\/\*\.svg\s+Cache-Control: public, max-age=86400, s-maxage=300/.test(headers));
 
+console.log("\n--- Barre d'onglets equilibree (2026-10-25) ---");
+/* Mesure dans le navigateur : 5 x 210 px a 1280 px de large ; a 375 et
+   360 px, chaque libelle reste entier et rien ne defile. */
+T("onglets de meme largeur (flex 1 1 0)", /\.tabs button\{flex:1 1 0\}/.test(css));
+
 console.log("\n--- Regarder retire (2026-10-25) ---");
 T("plus d'onglet ni de panneau Regarder", !/id="tab-watch"|id="pane-watch"/.test(html));
 T("plus de cadre YouTube autorise", !/youtube/i.test(headers));

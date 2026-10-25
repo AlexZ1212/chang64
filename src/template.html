@@ -213,6 +213,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   font:inherit;font-size:13px;font-weight:500;color:var(--sage);background:none;border:0;
   padding:8px 15px;border-radius:999px;cursor:pointer;transition:background .18s,color .18s;white-space:nowrap
 }
+/* Onglets de meme largeur (2026-10-25, choix d'Alexandre) : avec cinq
+   onglets, la barre restait ferree a gauche avec un grand vide a droite.
+   Meme principe que les autres selecteurs du site (couleur, force,
+   cadence). flex-basis 0 : la place se partage a parts egales ; le
+   min-width automatique garde chaque libelle entier, et la barre defile
+   encore si un ecran tres etroit ne peut pas tout contenir. */
+.tabs button{flex:1 1 0}
 .tabs button[aria-current="page"]{background-color:var(--brass);color:#1b1508;font-weight:600}
 .tabs button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 /* 8 px au lieu de 11 depuis le retrait de Regarder (2026-10-25) : les cinq

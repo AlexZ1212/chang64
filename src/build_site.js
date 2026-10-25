@@ -520,7 +520,14 @@ fs.mkdirSync(OUT + "/fonts", { recursive: true });
 for (const f of [
   "source-serif-4-v14-latin-600.woff2",
   "archivo-v25-latin-400.woff2", "archivo-v25-latin-500.woff2", "archivo-v25-latin-600.woff2",
-  "jetbrains-mono-v24-latin-500.woff2", "jetbrains-mono-v24-latin-700.woff2"
+  "jetbrains-mono-v24-latin-500.woff2", "jetbrains-mono-v24-latin-700.woff2",
+  /* Cyrillique (2026-10-25, pour le russe), declare avec unicode-range sous
+     les memes noms de famille : le navigateur ne le charge que sur une page
+     qui contient du cyrillique. Archivo n'a pas de cyrillique ; Golos Text,
+     grotesque concue pour lui, en tient lieu. Polices variables pour Golos
+     et JetBrains Mono : un fichier couvre toutes les graisses. */
+  "source-serif-4-v15-cyrillic-600.woff2", "golos-text-v7-cyrillic-variable.woff2",
+  "jetbrains-mono-v24-cyrillic-variable.woff2"
 ]) {
   fs.copyFileSync(path.join(__dirname, "fonts", f), OUT + "/fonts/" + f);
 }
@@ -1387,7 +1394,7 @@ const SUFFIXES_FIL = [
    que content.js et la boucle des ouvertures emploient pour les titres. */
 for (const l of LANGUES) {
   if (l.code === "en" || l.code === "fr") continue;
-  SUFFIXES_FIL.push(" · " + tr(l.code, "chess term explained"), " : " + tr(l.code, "moves, variations and ECO codes"),
+  SUFFIXES_FIL.push(" · " + tr(l.code, "chess term explained"), ": " + tr(l.code, "moves, variations and ECO codes"),
     ": " + tr(l.code, "3 worked examples"));
 }
 /* Le prefixe de section n'est jamais ajoute ici : le fil porte deja la
@@ -1552,6 +1559,9 @@ ${alts || ""}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v15-cyrillic-600.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:optional;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500 700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 ${CSS_MIN}</style>
 ${(() => {
   /* Complement automatique du JSON-LD (2026-09-05). Les Article emis par
@@ -1938,8 +1948,10 @@ ${p.count > p.variations.length ? `<p>${esc(d.showing(p.variations.length, p.cou
     let title = lang === "fr"
       ? `${name} : coups, variantes et codes ECO | chang64`
       : lang === "en" ? `${name} : moves, variations and ECO codes | chang64`
-      : `${name} : ${tr(lang, "moves, variations and ECO codes")} | chang64`;
-    if (title.length > 70) title = `${name} : ${T(lang, "moves and variations", "coups et variantes")} | chang64`;
+      : `${name}: ${tr(lang, "moves, variations and ECO codes")} | chang64`;
+    /* Pas d'espace avant les deux-points hors du francais (le titre anglais
+       la garde, tel qu'il est depuis le debut). */
+    if (title.length > 70) title = `${name}${lang === "fr" || lang === "en" ? " :" : ":"} ${T(lang, "moves and variations", "coups et variantes")} | chang64`;
     if (title.length > 70) title = `${name} | chang64`;
     const ogName = "op-" + p.slugEn;
     if (lang === "en") queueOg(ogName, p.family, moves + "  ·  ECO " + ecoRange, p.fen);

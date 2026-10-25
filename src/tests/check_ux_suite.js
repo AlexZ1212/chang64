@@ -32,7 +32,7 @@ T("telephone : pas de bornage pour Jouer", !/@media ?\(max-width:860px\) ?\{ ?#a
 console.log("\n--- Ecran tactile ---");
 const bloc = (css.match(/@media ?\(pointer:coarse\) ?\{(.*?\}) ?\}/) || [])[1] || "";
 T("un bloc pointer:coarse existe", !!bloc);
-for (const sel of [".tabs button::after", ".tc-cats button::after", ".chip::after", ".langswitch button::after", ".info-tip::after"])
+for (const sel of [".tabs button::after", ".tc-cats button::after", ".chip::after", ".langswitch summary::before", ".info-tip::after"])
   T(sel + " : zone de 44 px", bloc.includes(sel) && /height:44px/.test(bloc));
 T("lien du calendrier agrandi", /#calFullLink\{display:inline-block;padding:15px 0\}/.test(bloc));
 

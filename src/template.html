@@ -43,6 +43,10 @@
      attendre, plus de connexion tierce, et font-display:swap fait le
      meme travail que le montage asynchrone precedent sans le JS qu'il
      fallait pour ca.
+     Trois fichiers cyrilliques s'y ajoutent le 2026-10-25, pour le russe,
+     sous les memes noms de famille et avec unicode-range : ils ne sont
+     charges que sur une page qui contient du cyrillique. Archivo n'en a
+     pas ; Golos Text, grotesque concue pour le cyrillique, en tient lieu.
      Les regles @font-face vivent dans le MEME <style> que le reste du CSS
      applicatif, pas dans une balise separee : plusieurs outils du projet
      (plusieurs tests/check_*.js, et probablement le pipeline de
@@ -58,6 +62,9 @@
 @font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/source-serif-4-v15-cyrillic-600.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:swap;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500 700;font-display:swap;src:url(/fonts/jetbrains-mono-v24-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 :root{
   --ink:#101413;
   --slate:#191F1D;
@@ -1393,7 +1400,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    d'un pixel (l'espace vertical gagne pour l'echiquier reste gagne). */
 @media(pointer:coarse){
   .tabs button,.tc-cats button,.chip,.langswitch summary,.seg button,.info-tip{position:relative}
-  .tabs button::after,.tc-cats button::after,.seg button::after,.chip::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
+  .tabs button::after,.tc-cats button::after,.seg button::after,.chip::after,.langswitch summary::before{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}
   .info-tip::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
   #calFullLink{display:inline-block;padding:15px 0}
 }

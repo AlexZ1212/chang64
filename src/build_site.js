@@ -1034,7 +1034,8 @@ box-shadow:0 14px 14px -6px var(--ink)}
    position relative des elements. Seules les couleurs changent, pour un fond
    clair : l'elephant et le 64 en laiton, "chang" et la baseline en gris
    fonce. */
-.brand{display:flex;align-items:baseline;gap:11px;text-decoration:none;color:var(--chalk)}
+/* Ecart logo / nom identique a l'application : 15 % de la taille du logo. */
+.brand{display:flex;align-items:baseline;gap:calc(clamp(30px,6vw,40px) * .15);text-decoration:none;color:var(--chalk)}
 .brandmark{width:clamp(30px,6vw,40px);height:calc(clamp(30px,6vw,40px) * 54 / 64);display:block;flex:none;color:var(--brass)}
 .brand .names{display:flex;flex-direction:column;gap:2px}
 .brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}

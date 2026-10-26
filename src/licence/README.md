@@ -58,7 +58,7 @@ The GPL above covers the **program**. It does not cover the editorial and creati
 material distributed alongside it, which remains the property of its author. The exact
 scope is set out in [COPYING.CONTENT](COPYING.CONTENT), and covers in short:
 
-- the written content of the __NPAGES__ pages, in both languages
+- the written content of the __NPAGES__ pages, in every language
 - the puzzle set and its curation
 - the opening notes and commentary
 - the visual identity: logo, elephant mark, chess piece artwork, colour system

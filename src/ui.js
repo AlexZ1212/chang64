@@ -1483,6 +1483,10 @@ function afficherChargementExercice(){
   render();
 }
 function nextPuzzle(){
+  /* Session de revision en cours (ui2.js) : Suivant passe a l'erreur echue
+     suivante plutot qu'a un exercice au hasard. */
+  if(typeof revisionEnCours!=="undefined"&&revisionEnCours){suiteRevision();return;}
+  if(typeof revisionId!=="undefined")revisionId=null;
   /* Niveau pas encore en cache : on le charge puis on se rappelle soi-meme,
      meme mecanique que loadOpeningBook/openingMap. Le statut affiche un
      message le temps du chargement, plutot qu'un bouton qui semble ne rien
@@ -1619,7 +1623,8 @@ function loadPuzzle(){
      soit, se charge pour de bon (y compris le vrai premier exercice du
      sprint, via rushNext()), exPanel redevient legitime a montrer. */
   const ep=$("exPanel"); if(ep)ep.classList.remove("hide");
-  $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day · "):"")+t(puzzle.theme);
+  const enRevision=typeof revisionId!=="undefined"&&revisionId&&puzzle.id===revisionId;
+  $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day · "):enRevision?t("Review · "):"")+t(puzzle.theme);
   const ec=$("exCode");
   if(ec){
     ec.textContent=puzzle.code?"#"+puzzle.code:"";

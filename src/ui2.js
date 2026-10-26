@@ -1390,6 +1390,8 @@ function showSolveScreen(screen){
      ecran qui le conserve est celui ou on resout, et startMotif() le repose
      juste apres cet appel. */
   if(screen!=="puzzles")stopMotif();
+  /* Quitter l'ecran des exercices termine la session de revision. */
+  if(screen!=="puzzles"&&typeof revisionEnCours!=="undefined"){revisionEnCours=false;revisionId=null;}
   if(menu)menu.classList.toggle("hide",screen!=="menu");
   if(motifsEcran)motifsEcran.classList.toggle("hide",screen!=="motifs");
   if(ex)ex.classList.toggle("hide",screen!=="puzzles"&&screen!=="daily");
@@ -1469,6 +1471,14 @@ function renderSolveMenu(){
   const proposes=MOTIFS_ENTRAINEMENT.filter(m=>motifPropose(m.theme));
   const motifsFaits=proposes.filter(m=>(prog.themeSolved||{})[m.theme]>0).length;
   set("subSolveMotifs",t("{n}/{total} patterns started",{n:motifsFaits,total:proposes.length}));
+  /* Erreurs a revoir : la carte n'apparait qu'une fois la file non vide. */
+  const cm=$("cardSolveMistakes");
+  if(cm){
+    const n=erreursEchues().length;
+    cm.classList.toggle("hide",!prog.mistakeQueue.length);
+    cm.disabled=!n;
+    set("subSolveMistakes",n?t("{n} to review now",{n}):t("Nothing to review right now"));
+  }
 }
 /* Grille des motifs. Les decomptes viennent de THEME_COUNTS, donc du fichier
    reellement produit par le build : une tuile ne peut pas annoncer plus
@@ -1930,7 +1940,37 @@ function renderMistakeQueue(){
    rate", explicitement demande, pas juste le revoir. Une reussite ici
    passe par le chemin habituel (tryPuzzleMove -> finishPuzzle) et retire
    donc l'entree de la file normalement, sans code special. */
+/* Session de revision (2026-10-26). Le bouton Suivant d'une erreur rejouee
+   tirait un exercice au hasard : on revenait a la grille pour chaque erreur.
+   Lancee depuis la carte "Erreurs a revoir", la session enchaine les erreurs
+   echues une a une (une seule fois chacune, meme ratee de nouveau, sinon
+   deux erreurs ratees en alternance ne finiraient jamais), puis ramene au
+   menu. revisionId marque l'exercice rejoue : il ne compte pas dans la
+   mesure de la difficulte (noterPremierEssai), on le connait deja. */
+let revisionEnCours=false,revisionId=null;
+const revisionVus=new Set();
+function erreursEchues(){
+  ensureProgFields();
+  const now=Date.now();
+  return prog.mistakeQueue.filter(m=>(m.due||0)<=now);
+}
+function lancerRevision(){
+  revisionEnCours=true;revisionVus.clear();
+  suiteRevision();
+}
+function suiteRevision(){
+  const m=erreursEchues().find(x=>!revisionVus.has(x.id));
+  if(!m){
+    revisionEnCours=false;revisionId=null;revisionVus.clear();
+    if(typeof setMode==="function")setMode("puzzles",{screen:"menu"});
+    return;
+  }
+  revisionVus.add(m.id);
+  retryMistake(m.id);
+}
+if($("cardSolveMistakes"))$("cardSolveMistakes").onclick=lancerRevision;
 function retryMistake(id){
+  revisionId=id;
   /* Meme drapeau anti-course qu'attemptDailyArchive()/viewDailyArchive()
      (voir solveScreenSuppressAutoload plus haut) : showSolveScreen("puzzles")
      lancait sa propre chaine asynchrone (nextPuzzle(), exercice au hasard)
@@ -2314,6 +2354,9 @@ function onPuzzleResult(won){
 const PREMIERS_ESSAIS_NOTES=new Set();
 function noterPremierEssai(reussi){
   if(rush||!puzzle||!/^p\d+$/.test(String(puzzle.id||""))||PREMIERS_ESSAIS_NOTES.has(puzzle.id))return;
+  /* Une erreur rejouee est deja connue du joueur : ce n'est plus un premier
+     essai, elle fausserait la mesure (2026-10-26). */
+  if(typeof revisionId!=="undefined"&&puzzle.id===revisionId)return;
   PREMIERS_ESSAIS_NOTES.add(puzzle.id);
   const corps=JSON.stringify({id:puzzle.id,ok:reussi?1:0});
   try{

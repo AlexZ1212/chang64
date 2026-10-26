@@ -1910,6 +1910,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <span class="solveCard-desc">One new puzzle every day. Come back to build your streak, and revisit any past day in the calendar.</span>
             <span class="solveCard-sub" id="subSolveDaily"></span>
           </button>
+          <!-- Erreurs a revoir (2026-10-26) : la file de repetition espacee
+               existait deja (prog.mistakeQueue), mais on ne la trouvait que
+               sous forme de croix dans la colonne de l'ecran Exercices.
+               Carte cachee tant que la file est vide ; un clic enchaine
+               toutes les erreurs echues, voir lancerRevision() dans ui2.js. -->
+          <button type="button" class="solveCard hide" id="cardSolveMistakes">
+            <b>Mistakes to review</b>
+            <span class="solveCard-desc">The puzzles you got wrong come back, spaced out further after each success, until you know them.</span>
+            <span class="solveCard-sub" id="subSolveMistakes"></span>
+          </button>
           <button type="button" class="solveCard" id="cardSolveSprint">
             <b>Chang Sprint</b>
             <span class="solveCard-desc">Three minutes to solve as many puzzles as you can. Three misses and it stops.</span>

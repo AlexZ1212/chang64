@@ -1610,6 +1610,7 @@ function loadPuzzle(){
   { const dcb=$("dailyChallengeBlock"),dcp=$("dailyChallengePanel");
     if(dcb)dcb.classList.add("hide");
     if(dcp)dcp.classList.add("hide");
+    const bjs=$("btnDailyNext");if(bjs)bjs.classList.add("hide");
   }
   legalCache=game.moves();
   const side=game.turn===W?"White":"Black";
@@ -1988,6 +1989,26 @@ function pedagogySentence(p){
     ? t("{candidate} looks tempting, but only {refutation} actually refutes it. Worth calculating a move further next time.",{candidate:pg.candidateSan,refutation:pg.refutationSan})
     : t("Careful with {candidate}: {refutation} punishes it.",{candidate:pg.candidateSan,refutation:pg.refutationSan});
 }
+/* Exercice du jour suivant (2026-10-25, demande d'Alexandre) : apres un
+   rattrapage reussi, un bouton enchaine sur le lendemain sans repasser par
+   le calendrier. Jusqu'a hier, c'est encore un rattrapage
+   (attemptDailyArchive) ; si le lendemain est aujourd'hui, c'est le vrai
+   exercice du jour, qui fait avancer la serie. Jamais au-dela : les jours
+   futurs ne sont pas encore jouables. */
+function montrerJourSuivant(cle){
+  const b=$("btnDailyNext");
+  if(!b||typeof todayKey!=="function")return;
+  const [y,m,d]=cle.split("-").map(Number);
+  const s=new Date(Date.UTC(y,m-1,d+1)),suivant=s.toISOString().slice(0,10),aujourdhui=todayKey();
+  if(suivant>aujourdhui)return;
+  b.textContent=t("Next day's puzzle");
+  b.onclick=()=>{
+    b.classList.add("hide");
+    if(suivant===aujourdhui){if(typeof setMode==="function")setMode("puzzles",{screen:"daily"});}
+    else if(typeof attemptDailyArchive==="function")attemptDailyArchive(suivant);
+  };
+  b.classList.remove("hide");
+}
 function finishPuzzle(won,msg){
   puzzleDone=true;majBoutonSuivant();
   if(typeof onPuzzleResult==="function"&&onPuzzleResult(won,msg))return;
@@ -2024,6 +2045,7 @@ function finishPuzzle(won,msg){
            l'exercice DU JOUR", faux dans ce cas -- il reste reserve au vrai
            puzzle du jour, juste en dessous. */
         prog.dailyLog[puzzle.dailyCatchupKey]=true;
+        montrerJourSuivant(puzzle.dailyCatchupKey);
       } else {
         prog.dailyLog[todayKey()]=true;
         const dcb=$("dailyChallengeBlock");if(dcb)dcb.classList.remove("hide");

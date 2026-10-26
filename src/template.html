@@ -2089,6 +2089,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                ui.js) et revele seulement apres une reussite sur LE puzzle
                du jour precisement (finishPuzzle, ui.js) -- avant ca,
                "j'ai resolu..." serait faux. -->
+          <!-- Rattrapage d'un jour passe reussi : enchaine sur le jour
+               suivant sans repasser par le calendrier (demande d'Alexandre,
+               2026-10-25). Libelle pose par t() a l'affichage, voir
+               montrerJourSuivant() dans ui.js. -->
+          <button class="btn hide" id="btnDailyNext" style="margin-top:8px">Next day's puzzle</button>
           <div class="hide" id="dailyChallengeBlock" style="margin-top:8px">
             <button class="btn" id="btnChallengeDaily">Challenge a friend</button>
             <div class="panel hide" id="dailyChallengePanel" style="margin-top:8px">

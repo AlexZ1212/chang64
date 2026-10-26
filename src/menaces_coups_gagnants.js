@@ -128,6 +128,25 @@ function suiteDe(p, pv) {
   return null;
 }
 
+/* Repli (2026-10-26) pour les lignes ou suiteDe() ne trouve rien en six
+   demi-coups : coups de position dont le gain vient tard. Deux choses
+   restent exactes. Un mat force : Stockfish l'annonce (mat en n pour nous,
+   adversaire au trait apres le coup). Sinon, un avantage d'au moins deux
+   pions apres la meilleure defense. On nomme cette defense et notre coup
+   suivant. En dessous de deux pions, silence. */
+function repliDe(p, s) {
+  if (!s.pv || s.pv.length < 2) return null;
+  const g = new Game(p.fen);
+  const m0 = g.moves().find(x => g.uci(x) === p.sol[0]); if (!m0) return null;
+  g.makeMove(m0);
+  const san = [];
+  for (const u of s.pv.slice(0, 2)) { const m = g.moves().find(x => g.uci(x) === u); if (!m) return null; san.push(g.san(m)); g.makeMove(m); }
+  /* Scores du journal : du point de vue de l'adversaire, au trait. */
+  if (s.mat != null && s.mat < 0) return { san: san.slice(0, 1), matEn: -s.mat };
+  if (s.mat == null && s.score != null && -s.score >= 200) return { san, avantage: true };
+  return null;
+}
+
 if (ARGS.includes("--appliquer")) {
   const j = lireJournal(), toute = banque.charger();
   const js = new Map();
@@ -139,7 +158,8 @@ if (ARGS.includes("--appliquer")) {
     if (garde) { p.explain = Object.assign({}, p.explain, { menace: o.menace }); poses++; }
     else if (p.explain && p.explain.menace) { delete p.explain.menace; retires++; }
     const s = js.get(p.id);
-    const suite = !garde && s && s.fen === p.fen && s.coup === p.sol[0] && s.pv && muet(p) ? suiteDe(p, s.pv) : null;
+    const valable = !garde && s && s.fen === p.fen && s.coup === p.sol[0] && s.pv && muet(p);
+    const suite = valable ? (suiteDe(p, s.pv) || repliDe(p, s)) : null;
     if (suite) { p.explain = Object.assign({}, p.explain, { suite }); suites++; }
     else if (p.explain && p.explain.suite) delete p.explain.suite;
   }
@@ -152,7 +172,9 @@ if (ARGS.includes("--essai-suites")) {
   /* Ce que --appliquer poserait, sans rien ecrire. */
   const js = new Map(fs.readFileSync(SUITES, "utf8").split("\n").filter(Boolean).map(l => { const o = JSON.parse(l); return [o.id, o]; }));
   let n = 0;
-  for (const p of lot) { const s = js.get(p.id); const r = s && s.pv ? suiteDe(p, s.pv) : null; if (r) { n++; if (n <= 12) console.log(p.id, p.sol[0], JSON.stringify(r)); } }
+  let rep = 0;
+  for (const p of lot) { const s = js.get(p.id); const r0 = s && s.pv ? suiteDe(p, s.pv) : null; const r = r0 || (s && s.pv ? repliDe(p, s) : null); if (r) { n++; if (!r0) { rep++; if (rep <= 6) console.log("repli", p.id, JSON.stringify(r)); } } }
+  console.log("dont " + rep + " par le repli");
   console.log(n + " suites sur " + js.size + " lignes analysees");
   process.exit(0);
 }

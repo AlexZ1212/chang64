@@ -291,6 +291,8 @@ module.exports = {
 "{move} threatens {threat}.":"{move} amenaza {threat}.",
 "The best defence is {reply}; the continuation {line} mates.":"La mejor defensa es {reply}; la continuación {line} da mate.",
 "The best defence is {reply}; the continuation {line} wins {gain}.":"La mejor defensa es {reply}; la continuación {line} gana {gain}.",
+"Even against the best defence, {reply}, mate is forced in {n} moves.":{one:"Incluso contra la mejor defensa, {reply}, el mate es forzado en {n} jugada.",other:"Incluso contra la mejor defensa, {reply}, el mate es forzado en {n} jugadas."},
+"The best defence is {reply}; after {next}, the advantage stays decisive.":"La mejor defensa es {reply}; tras {next}, la ventaja sigue siendo decisiva.",
 "The piece on {from} attacks both {p1} and {p2} at once.":"La pieza de {from} ataca a la vez {p1} y {p2}.",
 "{pinned} can't move without exposing {behind}.":"{pinned} no puede moverse sin dejar expuest{behind?o|a} {behind}.",
 "{captured} was only defended by {pinned}, which is pinned and can't recapture.":"{captured} solo estaba defendid{captured?o|a} por {pinned}, que está clavad{pinned?o|a} y no puede recapturar.",

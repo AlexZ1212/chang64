@@ -48,9 +48,9 @@ function reference(p) {
 (async () => {
   for (const [langue, att] of [
     ["fr-FR", { qualite: "la qualité", cp: "un cavalier contre un pion", deux: "deux pions", tour: "une tour", fou: "un fou",
-      dame: "la dame contre une tour", trois: "du matériel", gagne: /gagne|prépare le mat/, mat: /mat/, menace: /menace/, suite: /La meilleure défense est .* ; la suite .* (gagne|mate)/ }],
+      dame: "la dame contre une tour", trois: "du matériel", gagne: /gagne|prépare le mat/, mat: /mat/, menace: /menace/, suite: /La meilleure défense est .* ; la suite .* (gagne|mate)/, repliMat: /meilleure défense.*le mat est forcé en/, repliAvantage: /La meilleure défense est .* ; après .*, l.avantage reste décisif/ }],
     ["en-US", { qualite: "the exchange", cp: "a knight for a pawn", deux: "two pawns", tour: "a rook", fou: "a bishop",
-      dame: "the queen for a rook", trois: "material", gagne: /wins|prepares checkmate/, mat: /checkmate|mate in|mates/, menace: /threatens/, suite: /The best defence is .*; the continuation .* (wins|mates)/ }]]) {
+      dame: "the queen for a rook", trois: "material", gagne: /wins|prepares checkmate/, mat: /checkmate|mate in|mates/, menace: /threatens/, suite: /The best defence is .*; the continuation .* (wins|mates)/, repliMat: /best defence.*mate is forced in/, repliAvantage: /The best defence is .*; after .*, the advantage stays decisive/ }]]) {
     const w = ouvrir(langue); await attendre(1500);
     console.log("\n--- " + langue + " : tournures ---");
     T("fonctions presentes", typeof w.phraseGain === "function" && typeof w.explainSentence === "function");
@@ -109,11 +109,19 @@ function reference(p) {
        la suite affichees, et un bilan reellement positif au bout. */
     const avecSuite = banque.filter(p => p.explain && p.explain.suite);
     const VALS = { p: 1, n: 3, b: 3, r: 5, q: 9 }, somme = l => Object.keys(l || {}).reduce((s, k) => s + VALS[k] * l[k], 0);
+    /* Repli du 2026-10-26 (coups de position au gain lointain) : mat force
+       en n coups, ou avantage decisif apres la meilleure defense. */
     const malSuites = avecSuite.filter(p => {
       const s = nbsp(w.explainSentence(p)), su = p.explain.suite;
-      if (!su.san.every(x => s.includes(x)) || !att.suite.test(s)) return true;
+      if (!su.san.every(x => s.includes(x))) return true;
+      if (su.matEn) return !att.repliMat.test(s) || !s.includes(String(su.matEn));
+      if (su.avantage) return !att.repliAvantage.test(s);
+      if (!att.suite.test(s)) return true;
       return !su.mat && somme(su.gagne) - somme(su.perdu) < 2;
     });
+    const repli = avecSuite.filter(p => p.explain.suite.matEn || p.explain.suite.avantage);
+    T("le repli est utilise (" + repli.length + ")", repli.length > 0);
+    for (const k of ["matEn", "avantage"]) { const e = repli.find(p => p.explain.suite[k]); if (e) console.log("  exemple : " + nbsp(w.explainSentence(e))); }
     T("chaque ligne relevee est dite, avec un vrai gain (" + avecSuite.length + ")", avecSuite.length > 0 && !malSuites.length,
       malSuites.slice(0, 3).map(p => p.code + " " + nbsp(w.explainSentence(p))).join(" | "));
     const ex2 = avecSuite.find(p => !p.explain.suite.mat && p.explain.suite.san.length > 2);

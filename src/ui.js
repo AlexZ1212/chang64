@@ -1964,9 +1964,14 @@ function phraseLigne(p){
      coupee au premier coup a nous qui mate ou gagne du materiel et le garde
      apres la reponse adverse. Sans elle, silence. */
   const su=!parts.length&&p.explain&&p.explain.suite;
-  if(su&&su.san&&su.san.length>=2){
+  if(su&&su.san&&(su.san.length>=2||su.matEn)){
     const reponse=su.san[0],ligne=su.san.slice(1).join(" ");
-    if(su.mat)parts.push(t("The best defence is {reply}; the continuation {line} mates.",{reply:reponse,line:ligne}));
+    /* Repli des coups de position au gain lointain (2026-10-26) : mat force
+       annonce par Stockfish, ou avantage d'au moins deux pions apres la
+       meilleure defense. */
+    if(su.matEn)parts.push(t("Even against the best defence, {reply}, mate is forced in {n} moves.",{reply:reponse,n:su.matEn}));
+    else if(su.avantage)parts.push(t("The best defence is {reply}; after {next}, the advantage stays decisive.",{reply:reponse,next:su.san[1]}));
+    else if(su.mat)parts.push(t("The best defence is {reply}; the continuation {line} mates.",{reply:reponse,line:ligne}));
     else{
       const g=phraseGain({gagne:su.gagne||{},perdu:su.perdu||{}});
       if(g)parts.push(t("The best defence is {reply}; the continuation {line} wins {gain}.",{reply:reponse,line:ligne,gain:g}));

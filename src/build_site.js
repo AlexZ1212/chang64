@@ -446,7 +446,22 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
   const aujourdHui = jourDe(BUILD_DATE);
   const premierJour = Math.min(jourDe((DATES["/"] && DATES["/"].publiee) || BUILD_DATE),
     ...Object.keys(registre).map(Number));
-  const tirage = n => ordreIds[n % ordreIds.length];
+  /* Difficulte croissante dans la semaine (2026-10-26, demande
+     d'Alexandre, a la maniere de chess.com) : facile le lundi, de plus en
+     plus dur jusqu'au dimanche. La banque est rangee par niveau puis par
+     diff, et coupee en sept parts egales : le lundi pioche dans la plus
+     facile, le dimanche dans la plus difficile. Dans sa part, le jour n
+     prend un exercice designe par un hachage de n, pour ne pas enchainer
+     des voisins de la liste. Seuls les jours a venir suivent cette regle :
+     les jours ecoules restent figes dans le registre ci-dessus. */
+  const parDifficulte = Object.keys(byLevel).sort((a, b) => a - b)
+    .flatMap(l => byLevel[l].slice().sort((a, b) => (a.diff || 0) - (b.diff || 0)).map(p => p.id));
+  const jourSemaine = n => (n + 3) % 7;          // 1970-01-01 etait un jeudi ; 0 = lundi
+  const tirage = n => {
+    const w = jourSemaine(n), N = parDifficulte.length;
+    const debut = Math.floor(w * N / 7), fin = Math.floor((w + 1) * N / 7);
+    return parDifficulte[debut + (Math.imul(n, 2654435761) >>> 0) % (fin - debut)];
+  };
   let joursFiges = 0;
   for (let n = premierJour; n <= aujourdHui; n++) {
     /* Un exercice fige qui a quitte la banque (purge) est retire du
@@ -456,7 +471,12 @@ fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirnam
   }
   fs.writeFileSync(REGISTRE_JOURS, JSON.stringify(registre, null, 1) + "\n");
   const joursPublies = [];
-  for (let n = premierJour; n <= aujourdHui + 60; n++) joursPublies.push(registre[n] || tirage(n));
+  /* Au-dela de la liste, ui.js (idDuJour) la reprend en boucle : sa longueur
+     est arrondie a un multiple de 7 pour que la boucle garde chaque exercice
+     sur son jour de la semaine. */
+  let dernierJour = aujourdHui + 60;
+  while ((dernierJour - premierJour + 1) % 7) dernierJour++;
+  for (let n = premierJour; n <= dernierJour; n++) joursPublies.push(registre[n] || tirage(n));
   fs.writeFileSync(OUT + "/data/jour.json", JSON.stringify({ debut: premierJour, ids: joursPublies }));
   console.log("Exercices du jour  : " + joursPublies.length + " jours publies, " + joursFiges + " nouveau(x) jour(s) fige(s)");
   /* Code affiche -> identifiant (2026-10-24). Le badge montre le code

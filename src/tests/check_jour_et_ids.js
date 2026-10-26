@@ -55,6 +55,21 @@ for (let n = J.debut; n <= auj - 1; n++) {
 T("chaque jour ecoule est fige", manquants === 0, manquants + " manquant(s)");
 T("jour.json reprend le registre pour ces jours", desaccords === 0, desaccords + " desaccord(s)");
 
+/* Difficulte croissante dans la semaine (2026-10-26) : sur les jours a
+   venir pas encore figes, le lundi pioche dans la part la plus facile de la
+   banque, le dimanche dans la plus difficile. Les parts suivent l'ordre
+   niveau puis diff : le niveau le plus haut d'un jour de la semaine ne
+   depasse donc jamais le plus bas du jour suivant. */
+console.log("\n--- Difficulte croissante dans la semaine ---");
+const parJour = Array.from({ length: 7 }, () => []);
+for (let n = auj + 1; n < J.debut + J.ids.length; n++) if (!R[n]) parJour[(n + 3) % 7].push(idx[J.ids[n - J.debut]][0]);
+T("des jours a venir dans chaque jour de la semaine", parJour.every(l => l.length > 0), parJour.map(l => l.length).join(" "));
+let monte = true;
+for (let w = 0; w < 6; w++) if (Math.max(...parJour[w]) > Math.min(...parJour[w + 1])) monte = false;
+const moy = parJour.map(l => (l.reduce((a, b) => a + b, 0) / l.length).toFixed(1));
+T("du lundi au dimanche, la difficulte ne fait que monter", monte, "niveaux moyens lun-dim : " + moy.join(" "));
+T("longueur de jour.json multiple de 7 (la boucle garde le jour de la semaine)", J.ids.length % 7 === 0, J.ids.length);
+
 (async () => {
   console.log("\n--- Dans la page ---");
   const demandes = [];

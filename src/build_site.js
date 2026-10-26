@@ -1031,20 +1031,24 @@ pages.sort((a, b) => b.count - a.count || a.family.localeCompare(b.family));
   for (const p of pages) p.slugFr = p.slugs.fr;
 }
 
-const VAR_FR = [
-  [/\bMain line\b/g, "Ligne principale"], [/\bVariation\b/g, "Variante"], [/\bVariations\b/g, "Variantes"],
-  [/\bAttack\b/g, "Attaque"], [/\bDefense\b/g, "Défense"], [/\bDefence\b/g, "Défense"],
-  [/\bCountergambit\b/g, "Contre-gambit"], [/\bOpening\b/g, "Ouverture"], [/\bSystem\b/g, "Système"],
-  [/\bGame\b/g, "Partie"], [/\bAccepted\b/g, "accepté"], [/\bDeclined\b/g, "refusé"],
-  [/\bDeferred\b/g, "différé"], [/\bLine\b/g, "Ligne"], [/\bwith\b/g, "avec"],
-  [/\bwithout\b/g, "sans"], [/\band\b/g, "et"], [/\bTrap\b/g, "Piège"], [/\bModern\b/g, "moderne"],
-  [/\bClassical\b/g, "classique"], [/\bOld\b/g, "ancienne"], [/\bNormal\b/g, "normale"],
-  [/\bDouble\b/g, "double"], [/\bCounterattack\b/g, "Contre-attaque"]
-];
-function varFr(name) {
-  let out = name;
-  for (const [re, to] of VAR_FR) out = out.replace(re, to);
-  return out;
+/* Noms de variantes traduits (2026-10-26). Le francais passait par une
+   substitution mot a mot (VAR_FR) qui donnait "Czerniak Attaque" ; les
+   autres langues gardaient l'anglais. Chaque langue a maintenant un
+   dictionnaire des morceaux de nom (langues/<code>/variantes.js) : un nom
+   Lichess "Grob Gambit, Basman Gambit" se traduit morceau par morceau.
+   Un morceau absent garde l'anglais et est releve (check_noms_variantes). */
+const VARIANTES = {}, variantesManquantes = new Set();
+function nomVariante(lang, name) {
+  if (lang === "en") return name;
+  if (!(lang in VARIANTES)) {
+    try { VARIANTES[lang] = require(path.join(__dirname, "langues", lang, "variantes.js")); }
+    catch (e) { if (e.code !== "MODULE_NOT_FOUND") throw e; VARIANTES[lang] = {}; }
+  }
+  return name.split(", ").map(p => {
+    const t = VARIANTES[lang][p];
+    if (t == null) { variantesManquantes.add(lang + " : " + p); return p; }
+    return t;
+  }).join(", ");
 }
 const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -1897,10 +1901,8 @@ for (const l of LANGUES) fs.mkdirSync(OUT + "/" + l.dirs.openings, { recursive: 
 /* Une passe par langue du registre (2026-10-25). L'anglais et le francais
    gardent leurs phrases redigees ; les autres langues passent par tr(), avec
    des gabarits qui citent la famille apres "l'ouverture" plutot qu'avec un
-   article a accorder. Les noms de variantes (Najdorf Variation, English
-   Attack...) restent en anglais hors du francais, comme sur Lichess : une
-   substitution mot a mot comme VAR_FR ne se transpose ni a l'allemand ni au
-   russe. */
+   article a accorder. Les noms de variantes passent par nomVariante() (un
+   dictionnaire par langue, voir plus haut). */
 for (const { code: lang } of LANGUES) {
   const d = libellesOuvertures(lang);
   const accueil = PAR_CODE[lang].accueil;
@@ -1920,7 +1922,7 @@ for (const { code: lang } of LANGUES) {
     const alsoKnown = (lang !== "en" && name !== p.family)
       ? `<p style="font-size:13px;color:var(--sage)">${T(lang, "Commonly used English name: {name}.", "Nom anglais couramment utilisé : {name}.", { name: `<strong>${esc(p.family)}</strong>` })}</p>` : "";
     const rows = p.variations.map(v =>
-      `<tr><td>${esc(v.variation ? (lang === "fr" ? varFr(v.variation) : v.variation) : T(lang, "Main line", "Ligne principale"))}</td><td class="mono">${esc(numbered(v.moves))}</td><td class="mono">${v.eco}</td></tr>`).join("");
+      `<tr><td>${esc(v.variation ? nomVariante(lang, v.variation) : T(lang, "Main line", "Ligne principale"))}</td><td class="mono">${esc(numbered(v.moves))}</td><td class="mono">${v.eco}</td></tr>`).join("");
     /* desc sert la balise meta et le referencement : elle contient la note
        d'ouverture, laquelle est aussi affichee dans le corps. La reprendre
        en chapo faisait relire la meme phrase deux fois de suite. Le chapo
@@ -2555,6 +2557,9 @@ console.log("Poids du site      :", (total / 1048576).toFixed(1), "Mo");
    langues/manquants.json (ignore par git), que lit check_traductions.js. */
 {
   const manq = TRAD.rapport();
+  /* Morceaux de noms de variantes sans traduction (nomVariante), francais
+     compris : ils rejoignent la meme liste. */
+  for (const m of variantesManquantes) { const [l, p] = m.split(" : "); (manq[l] = manq[l] || []).push("variantes:" + p); }
   fs.writeFileSync(path.join(__dirname, "langues", "manquants.json"), JSON.stringify(manq, null, 1) + "\n");
   for (const l of LANGUES) {
     if (l.code === "en" || l.code === "fr") continue;

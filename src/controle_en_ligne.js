@@ -107,6 +107,18 @@ const correspond = (motif, u) => new RegExp("^" + motif.split("*").map(s => s.re
       if (r.status !== 200) { T(u, false, "statut " + r.status + (r.headers.get("location") ? " vers " + r.headers.get("location") : "")); return; }
       const b = Buffer.from(await r.arrayBuffer());
       octets += b.length;
+      /* robots.txt (2026-10-27) : Cloudflare place devant le notre son bloc
+         "Managed robots.txt" (robots d'IA), garde avec l'accord d'Alexandre.
+         On exige ce bloc borne par ses marqueurs, puis notre fichier a
+         l'identique a la fin. */
+      if (rel === "robots.txt") {
+        const servi = b.toString("utf8"), publie = fs.readFileSync(path.join(REF, rel), "utf8");
+        const fin = servi.lastIndexOf("# END Cloudflare Managed Content");
+        const reste = fin < 0 ? servi : servi.slice(fin + "# END Cloudflare Managed Content".length);
+        T(u + " (notre fichier apres le bloc Cloudflare)", reste.trim() === publie.trim(),
+          fin < 0 ? "contenu different, sans bloc Cloudflare" : "nos regles ne sont pas servies a l'identique apres le bloc");
+        return;
+      }
       T(u, sha(b) === sha(fs.readFileSync(path.join(REF, rel))), "contenu different (" + b.length + " octets servis, " + fs.statSync(path.join(REF, rel)).size + " publies)");
     } catch (e) { T(u, false, "erreur reseau : " + e.message); }
   });

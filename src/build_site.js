@@ -2350,7 +2350,12 @@ function queueOg(name, title, subtitle, fen) {
    serveurs, nouveau deploiement ou non : apres la publication de la banque,
    og/home.svg annoncait encore "108868" (Age: 86534 s, cf-cache-status: HIT).
    Le navigateur garde un jour ; le CDN, via s-maxage, revalide toutes les
-   5 minutes. */
+   5 minutes.
+   X-Robots-Tag sur /engine/* (2026-10-27) : Cloudflare ajoute en tete de
+   robots.txt son propre bloc (robots d'IA, "Managed robots.txt", garde avec
+   l'accord d'Alexandre), qui ouvre un premier groupe "User-agent: *". Un
+   robot qui ne lit que le premier groupe ignorerait notre Disallow:
+   /engine/ ; l'en-tete vaut quel que soit le robots.txt. */
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
@@ -2361,6 +2366,7 @@ fs.writeFileSync(OUT + "/_headers", `/*
 
 /engine/*
   Cache-Control: public, max-age=31536000, immutable
+  X-Robots-Tag: noindex, nofollow
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable

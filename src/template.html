@@ -476,7 +476,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
     background-color:var(--slate);border-top:1px solid var(--rule);box-shadow:0 -8px 24px rgba(0,0,0,.35)}
   #appLayout[data-mode="puzzles"] .ex-actions .btnrow{display:contents}
   #appLayout[data-mode="puzzles"] .ex-actions .btn{flex:1 1 0;min-width:0;min-height:44px;margin:0;padding:8px 6px;font-size:14px;line-height:1.15}
-  #appLayout[data-mode="puzzles"] .ex-actions #btnNext{order:3}
+  #appLayout[data-mode="puzzles"] .ex-actions #btnNext,#appLayout[data-mode="puzzles"] .ex-actions #btnDailyNext{order:3}
   /* La barre couvre le bas de la page : on reserve sa hauteur. Et l'ecart
      entre le plateau et l'enonce passe de 37 a 12 px : sur un iPhone SE,
      c'est ce qui laisse la consigne visible au-dessus de la barre. */
@@ -2078,6 +2078,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
           <div class="ex-actions hors-sprint review-hide" id="exActions">
           <div class="btnrow hors-sprint review-hide" style="margin-top:12px">
             <button class="btn primary" id="btnNext">Next puzzle</button>
+            <!-- Rattrapage d'un jour passe reussi : enchaine sur le jour
+                 suivant sans repasser par le calendrier (2026-10-25). Il
+                 prend la place d'"Exercice suivant", cache sur l'ecran du
+                 jour, dans la barre collante (demande d'Alexandre,
+                 2026-10-27). Libelle court pose par t() a l'affichage, voir
+                 montrerJourSuivant() dans ui.js. -->
+            <button class="btn primary hide" id="btnDailyNext">Next day</button>
           </div>
           <div class="btnrow hors-sprint review-hide" style="margin-top:8px">
             <!-- Un seul bouton a deux etats : "Indice" surligne la piece a
@@ -2099,11 +2106,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                ui.js) et revele seulement apres une reussite sur LE puzzle
                du jour precisement (finishPuzzle, ui.js) -- avant ca,
                "j'ai resolu..." serait faux. -->
-          <!-- Rattrapage d'un jour passe reussi : enchaine sur le jour
-               suivant sans repasser par le calendrier (demande d'Alexandre,
-               2026-10-25). Libelle pose par t() a l'affichage, voir
-               montrerJourSuivant() dans ui.js. -->
-          <button class="btn hide" id="btnDailyNext" style="margin-top:8px">Next day's puzzle</button>
           <div class="hide" id="dailyChallengeBlock" style="margin-top:8px">
             <button class="btn" id="btnChallengeDaily">Challenge a friend</button>
             <div class="panel hide" id="dailyChallengePanel" style="margin-top:8px">

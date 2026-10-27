@@ -257,6 +257,7 @@ module.exports = {
 "Exercise {n}, missed":"Exercice {n}, raté",
 "Puzzle of the day · ":"Exercice du jour · ",
 "Next day's puzzle":"Exercice du jour suivant",
+"Next day":"Jour suivant",
 "Exercise ID: {code} · useful when reporting an issue":
  "Identifiant de l'exercice : {code}, utile en cas de signalement",
 "This exercise is rated about {pr}. You: {yr}.":"Cet exercice est estimé à environ {pr}. Toi : {yr}.",

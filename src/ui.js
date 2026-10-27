@@ -2011,7 +2011,10 @@ function montrerJourSuivant(cle){
   const [y,m,d]=cle.split("-").map(Number);
   const s=new Date(Date.UTC(y,m-1,d+1)),suivant=s.toISOString().slice(0,10),aujourdhui=todayKey();
   if(suivant>aujourdhui)return;
-  b.textContent=t("Next day's puzzle");
+  /* Libelle court pour tenir dans la barre collante a trois boutons ; le
+     libelle complet reste pour les lecteurs d'ecran. */
+  b.textContent=t("Next day");
+  b.setAttribute("aria-label",t("Next day's puzzle"));
   b.onclick=()=>{
     b.classList.add("hide");
     if(suivant===aujourdhui){if(typeof setMode==="function")setMode("puzzles",{screen:"daily"});}

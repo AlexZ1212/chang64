@@ -77,7 +77,12 @@ function ouvrir(page) {
   T("pas de bouton avant de resoudre", !visible());
   T("rattrapage resolu", await resoudre());
   T("bouton affiche", visible());
-  T("libelle anglais", $("btnDailyNext").textContent === "Next day's puzzle", $("btnDailyNext").textContent);
+  T("libelle court", $("btnDailyNext").textContent === "Next day", $("btnDailyNext").textContent);
+  T("libelle complet pour les lecteurs d'ecran", $("btnDailyNext").getAttribute("aria-label") === "Next day's puzzle");
+  /* Demande du 2026-10-27 : dans la barre d'actions collante, a la place
+     d'"Exercice suivant" (cache sur l'ecran du jour), pas sous l'echiquier. */
+  T("dans la barre d'actions, a cote d'Indice et Recommencer", $("exActions").contains($("btnDailyNext")));
+  T("\"Exercice suivant\" reste cache sur l'ecran du jour", $("btnNext").classList.contains("hide"));
   clic($("btnDailyNext")); await attendre(1500);
   const p2 = w.eval("({id:puzzle.id,cle:puzzle.dailyCatchupKey,daily:puzzle.daily})");
   T("ouvre le rattrapage du lendemain", p2.daily && p2.cle === cle(-2), JSON.stringify(p2));
@@ -102,6 +107,8 @@ function ouvrir(page) {
   w.close();
 
   console.log("\n--- Libelle dans les six langues ---");
+  /* Libelle court (barre d'actions) et libelle complet (aria-label). */
+  const court = { en: "Next day", fr: "Jour suivant", es: "Día siguiente", pt: "Dia seguinte", de: "Nächster Tag", ru: "Следующая" };
   const attendu = { en: "Next day's puzzle", fr: "Exercice du jour suivant", es: "Ejercicio del día siguiente",
     pt: "Exercício do dia seguinte", de: "Aufgabe des nächsten Tages", ru: "Задача следующего дня" };
   for (const l in attendu) {
@@ -112,6 +119,8 @@ function ouvrir(page) {
        compare le texte, pas la typographie. */
     const s = wl.eval("t(\"Next day's puzzle\")").replace(/ /g, " ");
     T(l + " : " + attendu[l], s === attendu[l], s);
+    const c = wl.eval("t(\"Next day\")").replace(/ /g, " ");
+    T(l + " : court, " + court[l], c === court[l] && c.length <= 14, c);
     wl.close();
   }
 

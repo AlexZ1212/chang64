@@ -132,28 +132,45 @@ Pieges connus :
 
 ## 5. A faire, idees en attente
 
-Rien n'est en cours. Par ordre de priorite suggere :
+Mise a jour le 1er novembre, en cours de session.
 
-1. **Easter egg Makruk** (echecs thais ; "chang" = elephant en thai) :
-   **en attente de la decision d'Alexandre, ne rien implementer avant**. Un
-   jeu de pieces a deja ete dessine dans le style du site (maquette
-   https://claude.ai/artifact/CK67gGfdyoGnFT7epGcZu6) ; details dans la
-   memoire `makruk-pieces.md`. Moteur a part (`makruk.js`, Stockfish ne joue
-   pas le makruk), mode isole, declencheur par ex. 7 touches sur l'elephant du
-   logo.
-2. **Recalibrer la difficulte** quand `/api/stats` aura quelques semaines
+**En cours : publication.** Sur main, commite et non pousse (8 commits
+d'avance au 01/11) : calendrier du jour (contours a 1 px, serie verte sans
+les rattrapages), Makruk, partage emojis, import Lichess, mesure d'audience.
+Suite complete `run_tests.js` lancee le 01/11 ; publier seulement si elle est
+verte et avec l'accord d'Alexandre (section 2), puis `controle_en_ligne.js`.
+
+Fait le 01/11 (commite, pas encore en ligne) :
+- **Easter egg Makruk** : porte = le mot ช้าง de l'encadre "L'elephant sur
+  l'echiquier" de l'accueil (`#changPorte`). `src/makruk.js` (regles,
+  comptage complet, moteur a trois niveaux dans un Worker, partie a deux,
+  fiche des regles illustree), servi a part en `/makruk.js?v=empreinte`.
+  Test `tests/check_makruk.js` (30 OK). Memoire `makruk-pieces.md`.
+- **Mesure des visites** : Cloudflare Web Analytics, active dans le tableau
+  de bord en mode "JS Snippet installation" ; jeton `CF_WA_JETON` dans
+  `build_site.js`, balise sur toutes les pages, CSP ouverte a
+  static.cloudflareinsights.com et cloudflareinsights.com. Page
+  Confidentialite mise a jour dans les six langues. Memoire
+  `mesure-audience.md`.
+- **Partage du resultat de l'exercice du jour** : bouton "Partager mon
+  resultat", une ligne d'emojis (un carre par coup : vert du premier coup,
+  jaune apres une erreur ou un indice), date avec le jour de la semaine, lien.
+- **Import des parties Lichess** : onglet Jouer, panneau PGN ; par pseudo (dix
+  dernieres parties standard) ou par lien de partie. CSP connect-src ouverte
+  a lichess.org.
+
+Reste a faire, par ordre de priorite suggere :
+
+1. **Recalibrer la difficulte** quand `/api/stats` aura quelques semaines
    d'essais (`difficulte_reelle.js` liste les exercices mal classes ; puis
    l'exercice du jour pourra piocher par difficulte reelle).
-3. **Mesure des visites** : decision d'Alexandre en suspens entre Cloudflare
-   Web Analytics (sans cookie, demande une ouverture de la CSP et une mise a
-   jour de la page Confidentialite) et de nouveaux compteurs anonymes maison.
-   La promesse "sans traqueur" reste.
-4. Idees proposees : partage du resultat de l'exercice du jour en une ligne
-   d'emojis ; import des parties Lichess (ouvrirait la CSP vers lichess.org).
-5. Langues suivantes (italien, turc, polonais, arabe) selon la Search Console.
-6. Cote Alexandre : relecture des traductions par des natifs ; test en mode
-   avion sur iPhone (ouvrir les exercices une fois en ligne avant).
-7. Taille du depot (214 Mo) : rien a faire avant 1 Go. Deployer depuis
+2. Langues suivantes (italien, turc, polonais, arabe) selon la Search Console,
+   et bientot selon les pays de Web Analytics.
+3. Cote Alexandre : relecture des traductions par des natifs ; test en mode
+   avion sur iPhone (ouvrir les exercices une fois en ligne avant) ; essayer
+   le Makruk sur telephone.
+4. Petite option : la piece du Bia ngai dans la fiche des regles du Makruk.
+5. Taille du depot (214 Mo) : rien a faire avant 1 Go. Deployer depuis
    Cloudflare plutot que versionner `chang64-site` poserait probleme : le
    build ecrit des registres a commiter (dates, exercices du jour figes).
 

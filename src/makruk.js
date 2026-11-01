@@ -505,6 +505,12 @@ const STYLE=`
 .mk details ul{margin:8px 0 0;padding-left:18px}
 .mk details li{margin:4px 0}
 .mk details strong{color:var(--chalk)}
+/* Petite piece blanche a cote de chaque nom de la fiche. La boite ne fait
+   qu'une ligne de haut et la piece en deborde, centree : l'interligne de la
+   fiche ne bouge pas (21 px avec ou sans piece). max-height:none, parce
+   qu'une regle generale du site borne les svg a leur boite. */
+.mk-icone{display:inline-block;position:relative;width:1.9em;height:1em;vertical-align:-.15em}
+.mk-icone svg{position:absolute;left:0;top:50%;width:1.9em;height:1.9em;max-width:none;max-height:none;transform:translateY(-55%)}
 html.mk-ouvert{overflow:hidden}
 .mk-compte:empty{display:none}
 /* Telephone : les marges du voile, du panneau et du cadre s'additionnaient
@@ -530,12 +536,12 @@ function construire(){
   racine.setAttribute("role","dialog");racine.setAttribute("aria-modal","true");
   racine.setAttribute("aria-labelledby","mkTitre");
   const regles=[
-    ["Khun","moves one square in any direction, like the king."],
-    ["Met","moves one square diagonally."],
-    ["Khon","moves one square diagonally or one square straight forward."],
-    ["Ma","moves like the knight."],
-    ["Rua","moves like the rook."],
-    ["Bia","moves one square forward and captures one square diagonally forward, never two squares at once. On the sixth rank it turns over and becomes a bia ngai, which moves like the met."]
+    ["Khun","moves one square in any direction, like the king.",KHUN],
+    ["Met","moves one square diagonally.",MET],
+    ["Khon","moves one square diagonally or one square straight forward.",KHON],
+    ["Ma","moves like the knight.",MA],
+    ["Rua","moves like the rook.",RUA],
+    ["Bia","moves one square forward and captures one square diagonally forward, never two squares at once. On the sixth rank it turns over and becomes a bia ngai, which moves like the met.",BIA]
   ];
   poserHtml(racine,
     '<div class="mk-panneau">'+
@@ -557,7 +563,7 @@ function construire(){
         '<button type="button" class="btn" id="mkAnnuler">'+echappe(tr("Take back"))+"</button></div>"+
       "<details><summary>"+echappe(tr("Rules of makruk"))+"</summary>"+
         "<p>"+echappe(tr("Makruk is the chess of Thailand, a descendant of chaturanga. White moves first. The goal is the same: checkmate the khun."))+"</p>"+
-        "<ul>"+regles.map(([n,r])=>'<li><strong>'+echappe(tr(n))+"</strong> "+echappe(tr(r))+"</li>").join("")+"</ul>"+
+        "<ul>"+regles.map(([n,r,p])=>'<li><strong>'+echappe(tr(n))+'</strong> <span class="mk-icone">'+dessinPiece(p)+"</span> "+echappe(tr(r))+"</li>").join("")+"</ul>"+
         "<p>"+echappe(tr("No castling, no en passant. Stalemate is a draw."))+"</p>"+
         "<p>"+echappe(tr("Counting: once no unpromoted bia is left, the stronger side has 64 moves to checkmate. When one side has only its khun left, the limit depends on the stronger side's pieces: 8 with two rua, 16 with one, 22 with two khon, 44 with one, 32 with two ma, 64 otherwise, minus the number of pieces on the board. Without checkmate in time, the game is drawn."))+"</p>"+
       "</details>"+

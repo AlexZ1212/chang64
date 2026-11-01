@@ -176,9 +176,9 @@ Reste a faire, par ordre de priorite suggere :
 1. **Recalibrer la difficulte** quand `/api/stats` aura quelques semaines
    d'essais (`difficulte_reelle.js` liste les exercices mal classes ; puis
    l'exercice du jour pourra piocher par difficulte reelle).
-2. Langues suivantes : l'arabe (mise en page de droite a gauche, plus cher),
-   selon la Search Console et les pays de Web Analytics. Italien, turc,
-   polonais et indonesien sont faits et en ligne depuis le 01/11.
+2. Langues suivantes : pas de nouvelle langue prevue. L'arabe est ecarte par
+   Alexandre le 01/11 ("oublie l'arabe pour l'instant") : ne pas le proposer.
+   Italien, turc, polonais et indonesien sont faits et en ligne depuis le 01/11.
 3. Cote Alexandre : relecture des traductions par des natifs, surtout le turc
    et le polonais (deuxieme vague). Makruk sur telephone : verifie par
    Alexandre le 01/11, il fonctionne. Test en mode avion sur iPhone : fait le

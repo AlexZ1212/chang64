@@ -810,6 +810,64 @@ $("btnPgnDownload").onclick=()=>{
   }catch(e){copyText(buildPgn());$("pgnMsg").textContent=t("Download unavailable here, PGN copied instead.");}
 };
 $("btnPgnLoad").onclick=()=>loadPgn($("pgnIn").value);
+/* Import Lichess (2026-11-01, demande d'Alexandre). Un pseudo donne les
+   dix dernieres parties standard du joueur, a choisir dans une liste ; un
+   lien de partie charge directement celle-ci. C'est le navigateur de la
+   personne qui interroge lichess.org (CSP connect-src, page
+   Confidentialite) : rien ne passe par chang64, rien n'y est garde. Les
+   coups arrivent en SAN et passent par loadPgn(), comme un PGN colle. */
+const LICHESS="https://lichess.org";
+let lichessEnCours=false;
+function nomJoueurLichess(j){
+  if(j&&j.user&&j.user.name)return j.user.name;
+  if(j&&j.aiLevel)return t("Stockfish level {n}",{n:j.aiLevel});
+  return "?";
+}
+async function importerLichess(){
+  if(lichessEnCours)return;
+  const v=$("lichessIn").value.trim(),msg=$("lichessMsg"),liste=$("lichessGames");
+  poserHtml(liste,"");
+  if(!v){msg.textContent=t("Enter a Lichess username or a game link.");return;}
+  const id=(/lichess\.org\/([A-Za-z0-9]{8})/.exec(v)||[])[1];
+  if(!id&&!/^[A-Za-z0-9_-]{2,30}$/.test(v)){msg.textContent=t("That doesn't look like a Lichess username or game link.");return;}
+  lichessEnCours=true;$("btnLichess").disabled=true;
+  try{
+    if(id){
+      msg.textContent=t("Fetching the game from Lichess…");
+      const r=await fetch(LICHESS+"/game/export/"+id+"?clocks=false&evals=false",{headers:{Accept:"application/x-chess-pgn"}});
+      if(r.status===404){msg.textContent=t("No Lichess game at that link.");return;}
+      if(!r.ok)throw new Error(String(r.status));
+      if(loadPgn(await r.text())){msg.textContent=t("Game imported from Lichess.");if(typeof goTop==="function")goTop();}
+      else msg.textContent=t("This game could not be read.");
+      return;
+    }
+    msg.textContent=t("Fetching the last games of {name}…",{name:v});
+    const r=await fetch(LICHESS+"/api/games/user/"+encodeURIComponent(v)+"?max=10",{headers:{Accept:"application/x-ndjson"}});
+    if(r.status===404){msg.textContent=t("No Lichess player by that name.");return;}
+    if(!r.ok)throw new Error(String(r.status));
+    const parties=(await r.text()).split("\n").filter(Boolean).map(l=>{try{return JSON.parse(l);}catch(e){return null;}})
+      .filter(p=>p&&p.variant==="standard"&&p.moves);
+    if(!parties.length){msg.textContent=t("No standard games found for {name}.",{name:v});return;}
+    msg.textContent=t("Choose a game to review:");
+    for(const p of parties){
+      const b=document.createElement("button");
+      b.type="button";b.className="btn lichess-partie";
+      const res=p.winner?(p.winner==="white"?"1-0":"0-1"):(p.status==="started"||p.status==="created"?"*":"½-½");
+      b.textContent=nomJoueurLichess(p.players&&p.players.white)+" – "+nomJoueurLichess(p.players&&p.players.black)+
+        " · "+res+" · "+new Date(p.createdAt).toLocaleDateString(LANG_INTL,{day:"numeric",month:"short",year:"numeric"});
+      /* Partie chargee : on remonte a l'echiquier, sinon elle se charge
+         hors de l'ecran, sous la liste. */
+      b.onclick=()=>{if(loadPgn(p.moves)){msg.textContent=t("Game imported from Lichess.");poserHtml(liste,"");if(typeof goTop==="function")goTop();}};
+      liste.appendChild(b);
+    }
+  }catch(e){
+    msg.textContent=t("Lichess could not be reached. Try again in a moment.");
+  }finally{
+    lichessEnCours=false;$("btnLichess").disabled=false;
+  }
+}
+$("btnLichess").onclick=importerLichess;
+$("lichessIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();importerLichess();}});
 
 
 /* ==========================================================
@@ -1308,6 +1366,27 @@ function openDailyChallenge(){
   shareButtons(share,url,t("I solved today's puzzle in {n} moves. Your turn:",{n:(puzzle.sol||[]).length}),true);
 }
 if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
+/* Partage du resultat de l'exercice du jour (2026-11-01, demande
+   d'Alexandre) : une ligne d'emojis, un carre par coup joue (vert : trouve
+   du premier coup, jaune : apres une erreur ou un indice), facon Wordle.
+   Rien de la solution ne transparait, on peut le poster sans gacher
+   l'exercice des autres. Le jour de la semaine est dans la date : il dit
+   la difficulte (facile le lundi, de plus en plus dur jusqu'au dimanche).
+   Le lien mene au meme exercice, comme celui du defi. */
+function texteResultatDuJour(){
+  const date=new Date().toLocaleDateString(LANG_INTL,{weekday:"long",day:"numeric",month:"long"});
+  const carres=parcoursCoups.map(c=>c==="ok"?"\u{1F7E9}":"\u{1F7E8}").join("");
+  return t("chang64 · Puzzle of the day · {date}",{date:date})+"\n"+carres+"\n"+baseUrl()+"#puzzle="+dateToDailyId(todayKey());
+}
+if($("btnShareDaily"))$("btnShareDaily").onclick=async()=>{
+  const texte=texteResultatDuJour(),note=$("dailyShareNote");
+  if(navigator.share){
+    try{await navigator.share({text:texte});return;}
+    catch(e){if(e&&e.name==="AbortError")return;}
+  }
+  copyText(texte);
+  if(note)note.textContent=t("Result copied. Paste it wherever you like.");
+};
 /* ==========================================================
    MENU A 5 CARTES DE "RESOUDRE" (discussion UX, 2026-09-03)
    ========================================================== */
@@ -2387,7 +2466,7 @@ const REGISTRAR={name:"OVH SAS",address:"2 rue Kellermann, 59100 Roubaix, France
    code ; les autres langues dans leur dictionnaire, sous les cles "@legal"
    et "@privacy" (langues/<code>/app.js). */
 const LEGAL_EN="<h4>Publisher</h4><p><strong>{name}</strong><br>Publication director: {name}<br>Contact: {email}</p><p>chang64 is published by a private individual, on a non-professional basis. Under article 1-1, II of the French Digital Economy Act, the publisher has chosen not to make their name and address public. That information is held by the host and will be disclosed to the judicial authority on request.</p><h4>Hosting</h4><p><strong>{host}</strong><br>{hostAddress}<br>{hostSite}</p><h4>Domain name</h4><p>Registered through <strong>{registrar}</strong>, {registrarAddress}.</p><h4>Code licence</h4><p>The source code of chang64 is released under the <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\" rel=\"license noopener\" target=\"_blank\">GNU General Public License version 3</a> or later. You are free to study, modify and redistribute it under the terms of that licence, from <a href=\"https://github.com/AlexZ1212/chang64\" rel=\"noopener\" target=\"_blank\">the project's public repository</a>. The licence text is also served at <a href=\"/LICENSE\">/LICENSE</a>.</p><h4>Intellectual property</h4><p>The licence above covers the program. It does not cover the editorial content: the written pages on openings, rules, endgames and traps, the puzzle collection as a curated set, and the site's visual identity. Those remain protected by copyright and may not be reproduced without permission. The exact scope is set out in <a href=\"/COPYING.CONTENT\">COPYING.CONTENT</a>.</p><p>Opening names come from the lichess-org/chess-openings project, published under a free licence.</p><h4>Stockfish</h4><p>Deeper analysis is powered by <a href=\"https://stockfishchess.org\" rel=\"noopener\" target=\"_blank\">Stockfish</a>, a free and open source chess engine developed by the Stockfish contributors and distributed under the GNU GPL v3. Its source code is available at <a href=\"https://github.com/official-stockfish/Stockfish\" rel=\"noopener\" target=\"_blank\">github.com/official-stockfish/Stockfish</a>, and its licence text ships alongside the engine. It is because chang64 distributes Stockfish that its own code is released under the same licence. Stockfish is optional: it is only loaded when you analyse a finished game, never while you play.</p><h4>Reporting</h4><p>Any request concerning the content of this site can be sent to {email}.</p>";
-const PRIVACY_EN="<h4>The short version</h4><p>chang64 has no accounts, no sign-up and no advertising. It never asks for your name, your email address or any other personal detail.</p><h4>What is stored, and where</h4><p>Your puzzle progress, your rating, your day streak and your current friend game are saved <strong>in your own browser</strong> and never leave it. Clearing your browser data erases them, which is why the transfer code exists.</p><h4>Measuring puzzle difficulty</h4><p>When you finish or miss a puzzle, the site sends its number and a single fact: solved on the first try, or not. Nothing else goes out: no identifier, no progress, no cookie. The server only keeps two counters per puzzle (attempts and successes), with no date, no IP address and no link between two reports. They are used for one thing only: ranking puzzles by difficulty more accurately. Chang Sprint sends nothing.</p><h4>Cookies</h4><p>chang64 sets no cookies and uses no tracker, so there is no consent banner to click through.</p><h4>Server logs</h4><p>The host keeps connection logs, including IP addresses, for security and abuse prevention. Those logs fall under its own privacy policy and chang64 has no access to them.</p><h4>Games played by link</h4><p>A friend game lives entirely inside the link you share. The moves travel through whichever messaging app you choose; no copy is kept on this site.</p><h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any question can go to {email}.</p><h4>Changes</h4><p>Should accounts or audience measurement ever be added, this page will be updated before they go live, as it was for difficulty measurement.</p>";
+const PRIVACY_EN="<h4>The short version</h4><p>chang64 has no accounts, no sign-up and no advertising. It never asks for your name, your email address or any other personal detail.</p><h4>What is stored, and where</h4><p>Your puzzle progress, your rating, your day streak and your current friend game are saved <strong>in your own browser</strong> and never leave it. Clearing your browser data erases them, which is why the transfer code exists.</p><h4>Measuring puzzle difficulty</h4><p>When you finish or miss a puzzle, the site sends its number and a single fact: solved on the first try, or not. Nothing else goes out: no identifier, no progress, no cookie. The server only keeps two counters per puzzle (attempts and successes), with no date, no IP address and no link between two reports. They are used for one thing only: ranking puzzles by difficulty more accurately. Chang Sprint sends nothing.</p><h4>Audience measurement</h4><p>To know how many people visit and which pages they read, chang64 uses Cloudflare Web Analytics, run by the company that already hosts the site. It sets no cookie, does not identify you, does not follow you from one site to another and does not keep your IP address for this purpose. It records the page viewed, the site you came from, your country, the type of browser and device, and how fast the page loaded. A content blocker can switch it off without breaking anything.</p><h4>Importing from Lichess</h4><p>If you import games from Lichess, your browser asks lichess.org for them directly, with the username or link you typed. Lichess handles that request under its own privacy policy; nothing goes through chang64 and nothing is kept here.</p><h4>Cookies</h4><p>chang64 sets no cookies and follows no one from one site to another, so there is no consent banner to click through.</p><h4>Server logs</h4><p>The host keeps connection logs, including IP addresses, for security and abuse prevention. Those logs fall under its own privacy policy and chang64 has no access to them.</p><h4>Games played by link</h4><p>A friend game lives entirely inside the link you share. The moves travel through whichever messaging app you choose; no copy is kept on this site.</p><h4>Your rights</h4><p>Since no personal data is collected by the site, there is nothing for us to access, correct or delete. Any question can go to {email}.</p><h4>Changes</h4><p>Should accounts ever be added, this page will be updated before they go live, as it was for difficulty and audience measurement.</p>";
 function renderLegal(){
   const v={name:PUBLISHER.name,email:PUBLISHER.email,host:HOST.name,hostAddress:HOST.address,hostSite:HOST.site,
     registrar:REGISTRAR.name,registrarAddress:REGISTRAR.address};

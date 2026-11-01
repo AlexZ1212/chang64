@@ -492,6 +492,11 @@ let gameStarted=false;
 
 /* puzzles */
 let puzzle=null,puzzleN=0,puzzleTries=0,puzzleDone=false,puzzleSolPly=0,solCache={};
+/* Parcours de l'exercice en cours, un element par coup joue (2026-11-01,
+   partage du resultat de l'exercice du jour) : "ok" trouve du premier coup,
+   "aide" trouve apres une erreur ou un indice. fauteIci et indiceIci
+   valent pour le coup en cours de recherche. */
+let parcoursCoups=[],fauteIci=false,indiceIci=false;
 /* Horodatage du chargement de l'exercice courant, pour le record "Fastest
    solve" (records personnels, item 3 de la liste "pour plus tard").
    Remis a zero a CHAQUE loadPuzzle() (voir plus bas), y compris pendant un
@@ -1599,6 +1604,7 @@ function loadPuzzle(){
      avoir introduit des gains a plusieurs coups (voir tryPuzzleMove). */
   puzzleSolPly=0;
   puzzleTries=0;puzzleDone=false;majBoutonSuivant();
+  parcoursCoups=[];fauteIci=false;indiceIci=false;
   /* Repart a zero a chaque exercice : sans ca, le delta du PRECEDENT
      exercice resterait affiche par erreur si jamais quelque chose lisait
      lastRatingDelta avant que le nouveau ne soit calcule (ex: un exercice
@@ -1614,6 +1620,7 @@ function loadPuzzle(){
   { const dcb=$("dailyChallengeBlock"),dcp=$("dailyChallengePanel");
     if(dcb)dcb.classList.add("hide");
     if(dcp)dcp.classList.add("hide");
+    const dsn=$("dailyShareNote");if(dsn)dsn.textContent="";
     const bjs=$("btnDailyNext");if(bjs)bjs.classList.add("hide");
   }
   legalCache=game.moves();
@@ -1747,6 +1754,7 @@ function tryPuzzleMove(m){
   }
   selected=-1;
   if(!ok){
+    fauteIci=true;
     puzzleTries++;majBoutonSuivant();
     if(typeof noterPremierEssai==="function")noterPremierEssai(false);
     marks={};marks[m.to]="bad";render();
@@ -1762,6 +1770,7 @@ function tryPuzzleMove(m){
     return;
   }
   const san=game.san(m);
+  parcoursCoups.push(fauteIci||indiceIci?"aide":"ok");fauteIci=false;indiceIci=false;
   game.makeMove(m);lastMove=m;marks={};marks[m.to]="good";
   legalCache=game.moves();
   render();updateEval();
@@ -2223,7 +2232,7 @@ function hintPuzzle(){
   if(puzzleTries===0)puzzleTries=1;
   majBoutonSuivant();
   if(typeof noterPremierEssai==="function")noterPremierEssai(false);
-  hintShown=true;
+  hintShown=true;indiceIci=true;
   syncHintBtn();
 }
 function solvePuzzle(){

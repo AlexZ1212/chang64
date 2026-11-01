@@ -48,10 +48,20 @@ T("les images encodees en ligne", /data:/.test(a("img-src")||""), a("img-src"));
    frame-src, les cadres retombent sur default-src 'self'. */
 T("aucun cadre tiers autorise", !a("frame-src") && !/youtube/.test(csp), a("frame-src"));
 
-console.log("\n--- Aucune ouverture vers l'exterieur ---");
-T("connect-src reste au site", a("connect-src")==="'self'", a("connect-src"));
+console.log("\n--- Ouvertures vers l'exterieur : celles qu'on a decidees, pas une de plus ---");
+/* Depuis le 2026-11-01 : lichess.org pour l'import des parties (fait par le
+   navigateur de la personne), et Cloudflare Web Analytics (script et envoi
+   des mesures) quand son jeton est pose dans build_site.js. Toute autre
+   origine est une fuite que la page Confidentialite ne decrit pas. */
+const tiers=v=>(v||"").split(/\s+/).filter(x=>/^https?:/.test(x)).sort().join(" ");
+const audience=/cloudflareinsights/.test(csp);
+T("connect-src : le site, Lichess, et la mesure d'audience si elle est active",
+  tiers(a("connect-src"))===(audience?"https://cloudflareinsights.com https://lichess.org":"https://lichess.org"), a("connect-src"));
 T("font-src reste au site", a("font-src")==="'self'", a("font-src"));
-T("aucun domaine tiers en script-src", !/https?:\/\//.test(a("script-src")||""), a("script-src"));
+T("script-src : aucun domaine tiers hors la balise d'audience",
+  tiers(a("script-src"))===(audience?"https://static.cloudflareinsights.com":""), a("script-src"));
+T("les deux origines d'audience vont ensemble",
+  /static\.cloudflareinsights\.com/.test(a("script-src")||"")===/ https:\/\/cloudflareinsights\.com/.test(" "+(a("connect-src")||"")));
 
 console.log("\n--- Plus d'unsafe-inline pour les scripts ---");
 T("script-src ne porte plus 'unsafe-inline'", !/'unsafe-inline'/.test(a("script-src")||""), a("script-src"));

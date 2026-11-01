@@ -878,6 +878,14 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .btnrow .btn{flex:1;min-width:104px}
+/* Import Lichess : champ et bouton sur une ligne, parties en liste. */
+.lichess-import{margin-top:14px;border-top:1px solid var(--rule);padding-top:4px}
+.lichess-import label{display:block}
+.lichess-row{display:flex;gap:8px;margin-top:6px}
+.lichess-row .linkbox{flex:1;min-width:0;margin:0}
+.lichess-games{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.lichess-games:empty{display:none}
+.btn.lichess-partie{text-align:left;font-weight:500;font-size:13px;padding:8px 12px}
 /* Les boutons se partagent la ligne a parts egales, soit environ 105 px sur
    un telephone. Un mot long et insecable comme "Recommencer" depassait alors
    des deux cotes de sa case : rien n'autorisait la cesure. On la permet, et
@@ -1844,6 +1852,17 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
             <div class="btnrow"><button class="btn" id="btnPgnLoad">Load PGN</button></div>
             <p class="note" id="pgnMsg"></p>
           </div>
+          <!-- Import Lichess (2026-11-01) : le navigateur interroge lichess.org
+               directement, rien ne passe par chang64 ni n'y est garde. -->
+          <div class="lichess-import">
+            <label class="note" for="lichessIn">Import from Lichess: a username or a game link.</label>
+            <div class="lichess-row">
+              <input class="linkbox" id="lichessIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Lichess username or game link">
+              <button class="btn" id="btnLichess" type="button">Import</button>
+            </div>
+            <p class="note" id="lichessMsg" aria-live="polite"></p>
+            <div class="lichess-games" id="lichessGames"></div>
+          </div>
         </div>
       </div>
 
@@ -2113,7 +2132,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                du jour precisement (finishPuzzle, ui.js) -- avant ca,
                "j'ai resolu..." serait faux. -->
           <div class="hide" id="dailyChallengeBlock" style="margin-top:8px">
-            <button class="btn" id="btnChallengeDaily">Challenge a friend</button>
+            <!-- Partage du resultat (2026-11-01) : une ligne d'emojis, un
+                 carre par coup, sans rien devoiler de la solution. -->
+            <div class="btnrow">
+              <button class="btn" id="btnShareDaily">Share my result</button>
+              <button class="btn" id="btnChallengeDaily">Challenge a friend</button>
+            </div>
+            <p class="note" id="dailyShareNote" aria-live="polite"></p>
             <div class="panel hide" id="dailyChallengePanel" style="margin-top:8px">
               <input class="linkbox" id="dailyChallengeLink" readonly aria-label="Challenge link">
               <div class="shareRow" id="dailyChallengeShare"></div>
@@ -2543,5 +2568,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
 
 /*__UI3__*/
 </script>
+<!--__AUDIENCE__-->
 </body>
 </html>

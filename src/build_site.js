@@ -203,6 +203,15 @@ function ecrireRegistreDates() {
    dans ui2.js). Duplique faute de module partage entre l'application et le
    generateur : a garder synchronise si elle change. */
 const PUBLISHER = { name: "AlexZ1212" };
+/* Mesure d'audience : Cloudflare Web Analytics (decide par Alexandre le
+   2026-11-01). Sans cookie, sans empreinte, sans suivi d'un site a l'autre ;
+   la page Confidentialite le decrit. Balise posee ici plutot qu'injectee par
+   Cloudflare : on sait exactement ou elle est, et la CSP n'ouvre que les deux
+   origines qu'elle utilise. Jeton vide = aucune balise et CSP inchangee. */
+const CF_WA_JETON = "";
+const BALISE_AUDIENCE = CF_WA_JETON
+  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_WA_JETON}"}'></script>`
+  : "";
 
 /* ---------- 1. application ---------- */
 const THEMES = JSON.parse(fs.readFileSync(path.join(__dirname, "themes.json"), "utf8"));
@@ -251,7 +260,8 @@ app = app
   .replace("/*__GRAMMAIRE__*/", grammaire)
   .replace("/*__I18N__*/", i18n)
   .replace("/*__ENGINE__*/", engine).replace("/*__PIECES__*/", pieces)
-  .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3);
+  .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3)
+  .replace("<!--__AUDIENCE__-->", BALISE_AUDIENCE);
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT + "/openings", { recursive: true });
@@ -1849,6 +1859,7 @@ ${!/id="grille"/.test(body) ? "" : `
   }else go();
 })();
 </script>
+${BALISE_AUDIENCE}
 </body>
 </html>`;
 }
@@ -2349,6 +2360,11 @@ function queueOg(name, title, subtitle, fen) {
    tableau de bord -- le script serait alors bloque, avec une erreur en
    console et aucune donnee envoyee. A desactiver aussi cote tableau de bord
    si jamais il tourne, la CSP n'etant qu'un filet de securite.
+   Revu le 2026-11-01 : Alexandre retient Cloudflare Web Analytics. Les deux
+   origines reviennent, mais seulement quand CF_WA_JETON est rempli, et la
+   page Confidentialite decrit la mesure avant sa mise en service, comme
+   elle le promettait. lichess.org (connect-src) : l'import des parties
+   Lichess, fait par le navigateur de la personne (voir ui3.js).
    La regle sans cache de l'application vise "/" et non plus "/index.html"
    (2026-10-24) : _headers s'applique au chemin demande, et Pages redirige
    "/index.html" vers "/". La regle ne touchait donc jamais la page servie.
@@ -2366,7 +2382,7 @@ function queueOg(name, title, subtitle, fen) {
 fs.writeFileSync(OUT + "/_headers", `/*
   X-Content-Type-Options: nosniff
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' __HACHAGES__ 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' __HACHAGES__ 'wasm-unsafe-eval'${CF_WA_JETON ? " https://static.cloudflareinsights.com" : ""}; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'${CF_WA_JETON ? " https://cloudflareinsights.com" : ""} https://lichess.org; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=()

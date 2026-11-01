@@ -16,8 +16,9 @@ publication et de chaque reglage de compte (Cloudflare, GitHub).
 chang64.com : site d'echecs gratuit, sans compte, sans publicite, sans
 traqueur. Jouer contre un moteur, exercices tactiques verifies (banque de
 229 172), exercice du jour, Chang Sprint, coordonnees, finales, pages
-d'ouvertures et de contenu. Six langues : anglais (`/`), francais (`/fr/`),
-espagnol, portugais, allemand, russe.
+d'ouvertures et de contenu. Dix langues : anglais (`/`), francais (`/fr/`),
+espagnol, portugais, allemand, russe, et depuis le 01/11 italien, turc,
+polonais, indonesien.
 
 | ou | quoi |
 |---|---|
@@ -106,9 +107,15 @@ Pieges connus :
   cas, pluriels via Intl.PluralRules). Les textes fixes du gabarit sont
   traduits automatiquement (`collectI18n`/`applyI18n` dans `i18n.js`) si leur
   phrase anglaise est dans le dictionnaire. Notation des coups en lettres
-  anglaises (Nf3) partout. Polices avec cyrillique.
+  anglaises (Nf3) partout. Polices avec cyrillique et latin etendu (turc,
+  polonais), toutes declarees en graisses statiques : une face a plage
+  ("400 600") empechait Archivo latin de se charger (corrige le 01/11).
+  Deuxieme vague (it, tr, pl, id) : tutoiement (tu, sen, ty, kamu), cas
+  polonais et suffixes turcs dans `grammaire.js` ("e4'teki at"). Sources des
+  traductions (listes numerotees, scripts d'assemblage) dans les notes de la
+  session local_26745fb3, dossier `trad-vague2`.
 - **Noms de variantes traduits** : `langues/<code>/variantes.js` (fr, es, pt,
-  de, ru ; 1 005 morceaux, un nom Lichess "A, B" se traduit morceau par
+  de, ru, it, tr, pl, id ; 1 005 morceaux, un nom Lichess "A, B" se traduit morceau par
   morceau), lus par `nomVariante()` dans `build_site.js`. Un nouveau nom
   Lichess s'ajoute a la main dans chaque dictionnaire ;
   `tests/check_noms_variantes.js` signale tout manque.
@@ -133,6 +140,12 @@ Pieges connus :
 ## 5. A faire, idees en attente
 
 Mise a jour le 1er novembre, en cours de session.
+
+**Publie le 01/11 au soir (64dd387e)** : site en italien (`/it/`), turc
+(`/tr/`), polonais (`/pl/`) et indonesien (`/id/`), application et pages
+statiques ; police Archivo de nouveau chargee (le texte courant s'affichait en
+police systeme depuis le 25/10). run_tests 2 487 OK, 0 echec ;
+controle_en_ligne 4 937 OK, 16 FAIL tous reseau (fetch failed sur une serie de pages de finales), les 16 reverifiees a la main : 200.
 
 **Publie le 01/11 (903071db, cache chang64-202611011126)** : calendrier du
 jour (contours a 1 px, serie verte sans les rattrapages), Makruk, partage
@@ -163,11 +176,13 @@ Reste a faire, par ordre de priorite suggere :
 1. **Recalibrer la difficulte** quand `/api/stats` aura quelques semaines
    d'essais (`difficulte_reelle.js` liste les exercices mal classes ; puis
    l'exercice du jour pourra piocher par difficulte reelle).
-2. Langues suivantes (italien, turc, polonais, arabe) selon la Search Console,
-   et bientot selon les pays de Web Analytics.
-3. Cote Alexandre : relecture des traductions par des natifs ; essayer le
-   Makruk sur telephone. (Test en mode avion sur iPhone : fait le 01/11 par
-   Alexandre, les exercices marchent hors ligne.)
+2. Langues suivantes : l'arabe (mise en page de droite a gauche, plus cher),
+   selon la Search Console et les pays de Web Analytics. Italien, turc,
+   polonais et indonesien sont faits et en ligne depuis le 01/11.
+3. Cote Alexandre : relecture des traductions par des natifs, surtout le turc
+   et le polonais (deuxieme vague). Makruk sur telephone : verifie par
+   Alexandre le 01/11, il fonctionne. Test en mode avion sur iPhone : fait le
+   01/11, les exercices marchent hors ligne.
 4. Petite option : la piece du Bia ngai dans la fiche des regles du Makruk.
 5. Taille du depot (214 Mo) : rien a faire avant 1 Go. Deployer depuis
    Cloudflare plutot que versionner `chang64-site` poserait probleme : le

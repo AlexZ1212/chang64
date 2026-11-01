@@ -134,13 +134,12 @@ Pieges connus :
 
 Mise a jour le 1er novembre, en cours de session.
 
-**En cours : publication.** Sur main, commite et non pousse (8 commits
-d'avance au 01/11) : calendrier du jour (contours a 1 px, serie verte sans
-les rattrapages), Makruk, partage emojis, import Lichess, mesure d'audience.
-Suite complete `run_tests.js` lancee le 01/11 ; publier seulement si elle est
-verte et avec l'accord d'Alexandre (section 2), puis `controle_en_ligne.js`.
+**Publie le 01/11 (903071db, cache chang64-202611011126)** : calendrier du
+jour (contours a 1 px, serie verte sans les rattrapages), Makruk, partage
+emojis, import Lichess, mesure d'audience. run_tests 2 285 OK puis les deux
+tests en defaut corriges ; controle_en_ligne 3 442 OK, 0 FAIL.
 
-Fait le 01/11 (commite, pas encore en ligne) :
+Fait le 01/11 (en ligne) :
 - **Easter egg Makruk** : porte = le mot ช้าง de l'encadre "L'elephant sur
   l'echiquier" de l'accueil (`#changPorte`). `src/makruk.js` (regles,
   comptage complet, moteur a trois niveaux dans un Worker, partie a deux,

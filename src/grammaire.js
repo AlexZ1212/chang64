@@ -23,16 +23,46 @@ const GRAMMAIRE=(function(){
     es:{p:"peón",n:"caballo",b:"alfil",r:"torre",q:"dama",k:"rey"},
     pt:{p:"peão",n:"cavalo",b:"bispo",r:"torre",q:"dama",k:"rei"},
     de:{p:"Bauer",n:"Springer",b:"Läufer",r:"Turm",q:"Dame",k:"König"},
-    ru:{p:"пешка",n:"конь",b:"слон",r:"ладья",q:"ферзь",k:"король"}
+    ru:{p:"пешка",n:"конь",b:"слон",r:"ладья",q:"ферзь",k:"король"},
+    it:{p:"pedone",n:"cavallo",b:"alfiere",r:"torre",q:"donna",k:"re"},
+    tr:{p:"piyon",n:"at",b:"fil",r:"kale",q:"vezir",k:"şah"},
+    pl:{p:"pion",n:"skoczek",b:"goniec",r:"wieża",q:"hetman",k:"król"},
+    id:{p:"pion",n:"kuda",b:"gajah",r:"benteng",q:"menteri",k:"raja"}
   };
-  const FEM={fr:"rq",es:"rq",pt:"rq",de:"q",ru:"pr",en:""};
+  const FEM={fr:"rq",es:"rq",pt:"rq",de:"q",ru:"pr",it:"rq",pl:"r",en:""};
   const PLURIEL={
     en:{p:"pawns",n:"knights",b:"bishops",r:"rooks",q:"queens",k:"kings"},
     fr:{p:"pions",n:"cavaliers",b:"fous",r:"tours",q:"dames",k:"rois"},
     es:{p:"peones",n:"caballos",b:"alfiles",r:"torres",q:"damas",k:"reyes"},
     pt:{p:"peões",n:"cavalos",b:"bispos",r:"torres",q:"damas",k:"reis"},
-    de:{p:"Bauern",n:"Springer",b:"Läufer",r:"Türme",q:"Damen",k:"Könige"}
+    de:{p:"Bauern",n:"Springer",b:"Läufer",r:"Türme",q:"Damen",k:"Könige"},
+    it:{p:"pedoni",n:"cavalli",b:"alfieri",r:"torri",q:"donne",k:"re"},
+    pl:{p:"piony",n:"skoczki",b:"gońce",r:"wieże",q:"hetmany",k:"króle"}
   };
+  /* Polonais (2026-11-01) : declinaison des six noms, comme le russe. Les
+     pieces se declinent en animes (zdobyć piona, wygrać gońca). */
+  const PL={
+    p:{nom:"pion",acc:"piona",gen:"piona",dat:"pionowi",ins:"pionem"},
+    n:{nom:"skoczek",acc:"skoczka",gen:"skoczka",dat:"skoczkowi",ins:"skoczkiem"},
+    b:{nom:"goniec",acc:"gońca",gen:"gońca",dat:"gońcowi",ins:"gońcem"},
+    r:{nom:"wieża",acc:"wieżę",gen:"wieży",dat:"wieży",ins:"wieżą"},
+    q:{nom:"hetman",acc:"hetmana",gen:"hetmana",dat:"hetmanowi",ins:"hetmanem"},
+    k:{nom:"król",acc:"króla",gen:"króla",dat:"królowi",ins:"królem"}
+  };
+  /* Turc (2026-11-01) : pas de genre, mais un suffixe de cas accorde au nom
+     (harmonie vocalique, consonne de liaison), et la case avant le nom :
+     "e4'teki at", "e4'teki atı". Le suffixe de la case suit la lecture du
+     chiffre (bir, iki, üç, dört, beş, altı, yedi, sekiz). */
+  const TR={
+    p:{nom:"piyon",acc:"piyonu",dat:"piyona",gen:"piyonun",ins:"piyonla",abl:"piyondan"},
+    n:{nom:"at",acc:"atı",dat:"ata",gen:"atın",ins:"atla",abl:"attan"},
+    b:{nom:"fil",acc:"fili",dat:"file",gen:"filin",ins:"fille",abl:"filden"},
+    r:{nom:"kale",acc:"kaleyi",dat:"kaleye",gen:"kalenin",ins:"kaleyle",abl:"kaleden"},
+    q:{nom:"vezir",acc:"veziri",dat:"vezire",gen:"vezirin",ins:"vezirle",abl:"vezirden"},
+    k:{nom:"şah",acc:"şahı",dat:"şaha",gen:"şahın",ins:"şahla",abl:"şahtan"}
+  };
+  const TR_LOC={1:"de",2:"de",3:"te",4:"te",5:"te",6:"da",7:"de",8:"de"};
+  const trLoc=sq=>{const s=String(sq||"");return s+"'"+(TR_LOC[s.slice(-1)]||"de");};
   /* Russe : declinaison des six noms, et genitif singulier/pluriel pour les
      nombres (две пешки, пять пешек). */
   const RU={
@@ -72,6 +102,15 @@ const GRAMMAIRE=(function(){
         for(const c in f)o[c]=f[c]+" auf "+sq;o.ins=o.dat;return o;}
       case "ru":{const f=RU[k]||RU.p,o={g:g};
         for(const c of ["nom","acc","gen","dat","ins"])o[c]=f[c]+" на "+sq;return o;}
+      case "it":{const el=/^[aeiou]/.test(w),
+          art=g==="f"?(el?"l'":"la "):(el?"l'":"il "),a=g==="f"?(el?"all'":"alla "):(el?"all'":"al "),
+          di=g==="f"?(el?"dell'":"della "):(el?"dell'":"del ");
+        const o=tous(art+w+" in "+sq);o.dat=a+w+" in "+sq;o.gen=di+w+" in "+sq;return o;}
+      case "pl":{const f=PL[k]||PL.p,o={g:g};
+        for(const c of ["nom","acc","gen","dat","ins"])o[c]=f[c]+" na "+sq;return o;}
+      case "tr":{const f=TR[k]||TR.p,o={g:g};
+        for(const c in f)o[c]=trLoc(sq)+"ki "+f[c];return o;}
+      case "id":return tous(w+" di "+sq);
       default:return tous("the "+w+" on "+sq);
     }
   }
@@ -85,6 +124,10 @@ const GRAMMAIRE=(function(){
       case "pt":return blanc?(f?"branca":"branco"):(f?"preta":"preto");
       case "de":return blanc?(f?"weiße":"weißer"):(f?"schwarze":"schwarzer");
       case "ru":return blanc?(f?"белая":"белый"):(f?"чёрная":"чёрный");
+      case "it":return blanc?(f?"bianca":"bianco"):(f?"nera":"nero");
+      case "pl":return blanc?(f?"biała":"biały"):(f?"czarna":"czarny");
+      case "tr":return blanc?"beyaz":"siyah";
+      case "id":return blanc?"putih":"hitam";
       default:return blanc?"white":"black";
     }
   }
@@ -98,6 +141,10 @@ const GRAMMAIRE=(function(){
       case "pt":return w+" "+c+" em "+nom;
       case "de":return c+" "+w+" auf "+nom;
       case "ru":return c+" "+w+" на "+nom;
+      case "it":return w+" "+c+" in "+nom;
+      case "pl":return c+" "+w+" na "+nom;
+      case "tr":return trLoc(nom)+" "+c+" "+w;
+      case "id":return w+" "+c+" di "+nom;
       default:return c+" "+w+" on "+nom;
     }
   }
@@ -105,8 +152,9 @@ const GRAMMAIRE=(function(){
      pions", "la dame". Deux sortes de pieces au plus, au-dela la phrase ne se
      lit plus : on se rabat sur "du materiel". Accusatif en allemand et en
      russe, ou la phrase est toujours "gewinnt .../выигрывает ...". */
-  const MATERIEL={en:"material",fr:"du matériel",es:"material",pt:"material",de:"Material",ru:"материал"};
-  const ET={en:" and ",fr:" et ",es:" y ",pt:" e ",de:" und ",ru:" и "};
+  const MATERIEL={en:"material",fr:"du matériel",es:"material",pt:"material",de:"Material",ru:"материал",
+    it:"materiale",tr:"malzeme",pl:"materiał",id:"materi"};
+  const ET={en:" and ",fr:" et ",es:" y ",pt:" e ",de:" und ",ru:" и ",it:" e ",tr:" ve ",pl:" i ",id:" dan "};
   function unePiece(l,k){
     const w=mot(l,k),f=genre(l,k)==="f";
     switch(l){
@@ -115,6 +163,10 @@ const GRAMMAIRE=(function(){
       case "pt":return k==="q"?"a dama":(f?"uma ":"um ")+w;
       case "de":return k==="q"?"die Dame":(f?"eine ":"einen ")+(k==="p"?"Bauern":w);
       case "ru":return (RU[k]||RU.p).acc;
+      case "it":return k==="q"?"la donna":(f?"una ":"un ")+w;
+      case "pl":return (PL[k]||PL.p).acc;
+      case "tr":return k==="q"?"veziri":"bir "+w;
+      case "id":return k==="q"?"menteri":"satu "+w;
       default:return k==="q"?"the queen":"a "+w;
     }
   }
@@ -126,6 +178,11 @@ const GRAMMAIRE=(function(){
       case "pt":return [,"",f?"duas":"dois","três","quatro"][n]+" "+PLURIEL.pt[k];
       case "de":return ["","","zwei","drei","vier"][n]+" "+PLURIEL.de[k];
       case "ru":{const r=RU[k]||RU.p;return [,"",f?"две":"два","три","четыре"][n]+" "+r.gen;}
+      case "it":return ["","","due","tre","quattro"][n]+" "+PLURIEL.it[k];
+      case "pl":return [,"",f?"dwie":"dwa","trzy","cztery"][n]+" "+PLURIEL.pl[k];
+      /* Turc et indonesien : le nom reste au singulier apres un nombre. */
+      case "tr":return ["","","iki","üç","dört"][n]+" "+mot(l,k);
+      case "id":return ["","","dua","tiga","empat"][n]+" "+mot(l,k);
       default:return ["","","two","three","four"][n]+" "+PLURIEL.en[k];
     }
   }
@@ -137,8 +194,9 @@ const GRAMMAIRE=(function(){
     return ks.map(k=>lt[k]>4?MATERIEL[l]:lt[k]>1?plusieurs(l,k,lt[k]):unePiece(l,k)).join(ET[l]);
   }
   /* Tour contre piece mineure, et "X contre Y". */
-  const QUALITE={en:"the exchange",fr:"la qualité",es:"la calidad",pt:"a qualidade",de:"die Qualität",ru:"качество"};
-  const CONTRE={en:" for ",fr:" contre ",es:" por ",pt:" por ",de:" für ",ru:" за "};
+  const QUALITE={en:"the exchange",fr:"la qualité",es:"la calidad",pt:"a qualidade",de:"die Qualität",ru:"качество",
+    it:"la qualità",tr:"kalite",pl:"jakość",id:"kualitas"};
+  const CONTRE={en:" for ",fr:" contre ",es:" por ",pt:" por ",de:" für ",ru:" за ",it:" per ",pl:" za ",id:" dengan imbalan "};
   /* Gabarits a variables (2026-10-25). Au-dela du simple {n}, trois formes,
      pour les langues ou un mot change selon ce qu'on y met :
      - une traduction peut etre un objet de formes plurielles, choisie par
@@ -151,7 +209,9 @@ const GRAMMAIRE=(function(){
      Un groupe nominal place en tete de phrase (debut du gabarit, ou apres
      un point) y prend la majuscule : "Der Springer...", "La torre...". */
   const RE_VARIABLE=/\{([A-Za-z0-9_]+)(?::([a-z]+))?(?:\?([^|{}]*)\|([^{}]*))?\}/g;
-  const maj=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  /* Un groupe turc commence par sa case ("e4'teki at") : pas de majuscule
+     sur une case. */
+  const maj=s=>/^[a-h][1-8]/.test(s)?s:s.charAt(0).toUpperCase()+s.slice(1);
   function gabarit(modele,v){
     const out=String(modele);
     if(!v)return out;
@@ -176,7 +236,8 @@ const GRAMMAIRE=(function(){
     gabarit:gabarit,pluriel:pluriel,
     mot:mot,genre:genre,groupe:groupe,couleur:couleur,caseOccupee:caseOccupee,lot:lot,
     qualite:l=>QUALITE[langue(l)],
-    contre:(l,g,p)=>g+CONTRE[langue(l)]+p
+    /* Turc : "bir piyon karşılığında bir at", le prix d'abord. */
+    contre:(l,g,p)=>langue(l)==="tr"?p+" karşılığında "+g:g+CONTRE[langue(l)]+p
   };
 })();
 if(typeof module!=="undefined"&&module.exports)module.exports=GRAMMAIRE;

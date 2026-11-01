@@ -564,7 +564,11 @@ for (const f of [
      grotesque concue pour lui, en tient lieu. Polices variables pour Golos
      et JetBrains Mono : un fichier couvre toutes les graisses. */
   "source-serif-4-v15-cyrillic-600.woff2", "golos-text-v7-cyrillic-variable.woff2",
-  "jetbrains-mono-v24-cyrillic-variable.woff2"
+  "jetbrains-mono-v24-cyrillic-variable.woff2",
+  /* Latin etendu (2026-11-01, pour le turc et le polonais : ğ ş ı İ ł ą ę
+     ś ź ż ć ń), meme principe : charge seulement si la page en contient. */
+  "source-serif-4-v15-latin-ext-600.woff2", "archivo-v25-latin-ext-variable.woff2",
+  "jetbrains-mono-v24-latin-ext-variable.woff2"
 ]) {
   fs.copyFileSync(path.join(__dirname, "fonts", f), OUT + "/fonts/" + f);
 }
@@ -1603,6 +1607,9 @@ ${alts || ""}
 @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v15-cyrillic-600.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:optional;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500 700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v15-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:optional;src:url(/fonts/archivo-v25-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500 700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 ${CSS_MIN}</style>
 ${(() => {
   /* Complement automatique du JSON-LD (2026-09-05). Les Article emis par

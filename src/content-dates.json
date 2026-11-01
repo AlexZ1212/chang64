@@ -1,13 +1,13 @@
 {
  "/": {
-  "sceau": "3422788254dcff37",
+  "sceau": "151b7dcf70fe0418",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-01"
  },
  "/404": {
-  "sceau": "d8da4fad8d39be64",
+  "sceau": "ec02cac9441129bd",
   "publiee": "2026-09-06",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-01"
  },
  "/de/endspiele/": {
   "sceau": "3ad89964bc080ac3",
@@ -3939,6 +3939,2426 @@
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
  },
+ "/id/akhir-permainan/": {
+  "sceau": "593874b6016e0658",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/akhir-permainan/benteng-lawan-raja": {
+  "sceau": "058b9e6fb2bf8c01",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/akhir-permainan/dua-benteng-lawan-raja": {
+  "sceau": "8d1995491f085458",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/akhir-permainan/menteri-lawan-raja": {
+  "sceau": "7eeb59edb2d90205",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/akhir-permainan/raja-dan-pion-lawan-raja": {
+  "sceau": "dd7b304bde3737fb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/akhir-permainan/skakmat-gajah-dan-kuda": {
+  "sceau": "c13be39f0b52a7a9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/": {
+  "sceau": "8feaedd98648d17f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/bidak-menggantung": {
+  "sceau": "ab8ca3a4abd92ab0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/cara-bidak-bergerak": {
+  "sceau": "454b41059d477b50",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/en-passant": {
+  "sceau": "2c56f9114f56bee7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/garpu-kuda": {
+  "sceau": "ac1529d59320234f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/garpu-pion": {
+  "sceau": "686d144b43438398",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/kontrol-waktu": {
+  "sceau": "17fd6bbb4eae8094",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/langkah-tenang": {
+  "sceau": "bad55fa90cc2f4cd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/notasi-catur": {
+  "sceau": "7d3338269766995b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/pengalihan": {
+  "sceau": "33ea850fc63f40d0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/pin": {
+  "sceau": "e2ce23695482bf4a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/prinsip-pembukaan": {
+  "sceau": "5494c3d467d17b57",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/promosi-pion": {
+  "sceau": "dcc27a84f8980327",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/remis": {
+  "sceau": "d8033644d4baf8e4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/rokade": {
+  "sceau": "e5940be244a64c3f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/serangan-ganda": {
+  "sceau": "6aee06ef5b298b22",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/skak-skakmat-dan-pat": {
+  "sceau": "1f6d9c67c70b9234",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/skakmat-baris-belakang": {
+  "sceau": "96542ec1ed235837",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/aturan/tusuk-sate": {
+  "sceau": "6253111fbe077578",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/": {
+  "sceau": "5d10101172de0249",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/aturan-lima-puluh-langkah": {
+  "sceau": "016df054d93ae9a0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/baris-ketujuh": {
+  "sceau": "0e3eae502c40e978",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/bidak-menggantung": {
+  "sceau": "024016aa811d830f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/bidak-terjebak": {
+  "sceau": "12f6c3880c7b24bf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/blunder": {
+  "sceau": "474e57f5947491ca",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/fianchetto": {
+  "sceau": "6aa7f91202eb9bcf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/gambit": {
+  "sceau": "533af911b28960de",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/garpu": {
+  "sceau": "5616715e31222a9a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/interferensi": {
+  "sceau": "a87a1812c6039f7f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/kelebihan-beban": {
+  "sceau": "64d09c31608c646e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/kesalahan": {
+  "sceau": "fa0ac653d8ffd133",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/ketidakakuratan": {
+  "sceau": "16be99099a6552fb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/keuntungan-materi": {
+  "sceau": "28fae283991010b5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/kincir-angin": {
+  "sceau": "82e7b4b234d38e3f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/kode-eco": {
+  "sceau": "e1a4336c6aca8f88",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/kombinasi": {
+  "sceau": "b532a96cfa92f4cf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/lajur-terbuka": {
+  "sceau": "34da44cd70b3563d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/langkah-brilian": {
+  "sceau": "650dce8d8b32ad94",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/langkah-sela": {
+  "sceau": "ad3582a8719a42b6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/langkah-terbaik": {
+  "sceau": "00980c2d3d09f48c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/mayoritas-pion": {
+  "sceau": "2fbb237bde0890a1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/menyingkirkan-pelindung": {
+  "sceau": "a726b9d9e679aaeb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/oposisi": {
+  "sceau": "a6fa29f601808ab4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pasangan-gajah": {
+  "sceau": "ca99235372f0bb68",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pat": {
+  "sceau": "2ae6f8e64303fc32",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pembersihan": {
+  "sceau": "d6487e897902419b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/penarikan": {
+  "sceau": "1b6114d28fa9ca63",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pengalihan": {
+  "sceau": "32afbfc080646d3c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pengembangan": {
+  "sceau": "336f1d203e1073e0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pengorbanan": {
+  "sceau": "683f120b2e734b3b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pengulangan-tiga-kali": {
+  "sceau": "22a0c6110d492a51",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pin": {
+  "sceau": "f958f0c645481f0f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pion-bebas": {
+  "sceau": "ff099fa6d13ef8bb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pion-ganda": {
+  "sceau": "50fe2535787006b3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pion-terbelakang": {
+  "sceau": "9134768899b86c7a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pion-terisolasi": {
+  "sceau": "c49870f4c3e16ecf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/pos-terdepan": {
+  "sceau": "bbbbde7434070d41",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/profilaksis": {
+  "sceau": "40b51ce5b155f10f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/promosi": {
+  "sceau": "b96ab4647411e83f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/promosi-minor": {
+  "sceau": "3abc38029640cf7b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/rating-elo": {
+  "sceau": "27d6bcfea328a472",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/satu-satunya-langkah": {
+  "sceau": "1c5e265a6ad6d90e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/serangan-ganda": {
+  "sceau": "ad20a3a9da6596fc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/serangan-ke-raja": {
+  "sceau": "f09436d134b05d08",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/serangan-skakmat": {
+  "sceau": "80fafd1197064a6f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/serangan-terbuka": {
+  "sceau": "46cfcb9215115acc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/skak-abadi": {
+  "sceau": "d6e593b7779d6d24",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/skak-ganda": {
+  "sceau": "e42b02c960b3be08",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/skakmat-baris-belakang": {
+  "sceau": "e42837fd4daaaae8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/skakmat-tercekik": {
+  "sceau": "f9d0c96fbd6b223e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/tempo": {
+  "sceau": "5021b77b1ee7cf33",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/tusuk-sate": {
+  "sceau": "9a9c1e692773641e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/glosarium/zugzwang": {
+  "sceau": "f220c1a6e73f1bf6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/": {
+  "sceau": "8dec35004bbf11fb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/jebakan-blackburne-shilling": {
+  "sceau": "ca9520d7461199f1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/jebakan-gambit-englund": {
+  "sceau": "4d78773a68662340",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/pertahanan-damiano-dihukum": {
+  "sceau": "78073edb15d5790a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/serangan-hati-goreng": {
+  "sceau": "95831a70c200e094",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/skakmat-anak-sekolah": {
+  "sceau": "1cf4d2db9082900f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/jebakan/skakmat-legal": {
+  "sceau": "dd685d5b4d82eed4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/": {
+  "sceau": "22f2589446e7eae3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/garpu-kuda": {
+  "sceau": "6192ce740e4af0eb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/garpu-pion": {
+  "sceau": "7ed59e5d2697804f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/langkah-kemenangan": {
+  "sceau": "f61e0f39fc5825d0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/langkah-tenang": {
+  "sceau": "31d0c8be235109fb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/makan-yang-menang": {
+  "sceau": "1d1910ffd7955330",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/pengalihan": {
+  "sceau": "9d7ec80aebbb3b3c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/pin": {
+  "sceau": "9f5d779d1fb3fe42",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/serangan-ganda": {
+  "sceau": "5ae5817190c36f9c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/skakmat-baris-belakang": {
+  "sceau": "86e999b900f8c0b0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/skakmat-dalam-dua": {
+  "sceau": "97b93da671d43bff",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/skakmat-dalam-satu": {
+  "sceau": "7c11b15990be72b3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/skakmat-dalam-tiga": {
+  "sceau": "2d51ec7f06b6dbb3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/motif/tusuk-sate": {
+  "sceau": "a3692e83bee3ab37",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/": {
+  "sceau": "29bb574a1e390379",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/formasi-creepy-crawly": {
+  "sceau": "03de5438aead3a6d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-balasan-blumenfeld": {
+  "sceau": "5801f36eef9110fd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-benko": {
+  "sceau": "b8fa051fcdd4eedc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-benko-diterima": {
+  "sceau": "7ffec7887b575acb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-benko-ditolak": {
+  "sceau": "b6b1f7bf3dce56f6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-blackmar-diemer": {
+  "sceau": "9568053376cbdf22",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-blackmar-diemer-diterima": {
+  "sceau": "b7d19d116d3ff3cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-blackmar-diemer-ditolak": {
+  "sceau": "dbbefbf08ae475d0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-denmark": {
+  "sceau": "0fa659dd2bffc5d9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-denmark-diterima": {
+  "sceau": "f65ea580ed892341",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-denmark-ditolak": {
+  "sceau": "6df378c563d541fa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-duras": {
+  "sceau": "bceb5ec35fa53269",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-englund": {
+  "sceau": "c070c068bc73f409",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-englund-ditolak": {
+  "sceau": "1f7783275071c47f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-gajah": {
+  "sceau": "f70e66376322037f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-irlandia": {
+  "sceau": "8775a8e2222b1d9f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-latvia": {
+  "sceau": "1e3cebb924af2a15",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-latvia-diterima": {
+  "sceau": "86458915a507be20",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-menteri": {
+  "sceau": "c7de2e56b1e31040",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-menteri-diterima": {
+  "sceau": "819df6aad7c24972",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-menteri-ditolak": {
+  "sceau": "327500e4158751e3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-raja": {
+  "sceau": "ad04400109b05feb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-raja-diterima": {
+  "sceau": "a2058e2529616ddf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-raja-ditolak": {
+  "sceau": "847c0385e27c1fbf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/gambit-wina-dengan-pertahanan-max-lange": {
+  "sceau": "cc0fd167c0d7a332",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/india-menteri-dipercepat": {
+  "sceau": "7df6d8e7d3bdab24",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/orangutan-inggris": {
+  "sceau": "a70e7e1423f7ec0a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-amar": {
+  "sceau": "4a7e476e8e44bead",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-anderssen": {
+  "sceau": "79c43f400e75e5c8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-barnes": {
+  "sceau": "742d5830fe6b3cc4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-basque": {
+  "sceau": "d330b63d4ca89f92",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-bird": {
+  "sceau": "a251f4c04c7d3d95",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-canard": {
+  "sceau": "f7dcb4b440ba72de",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-clemenz": {
+  "sceau": "43a1edd945354aa6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-dresden": {
+  "sceau": "49675ad99f647906",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-gajah": {
+  "sceau": "0ab2bf5fc0cc3126",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-global": {
+  "sceau": "b0de43a248abdd8e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-grob": {
+  "sceau": "b63f87a13b215218",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-hungaria": {
+  "sceau": "dc053efa1eebb2c2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-inggris": {
+  "sceau": "dec4c8c1d71c7542",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-kadas": {
+  "sceau": "fed3c2abdd86ad6a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-katalan": {
+  "sceau": "22eec8e928f1bf18",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-kuda-raja": {
+  "sceau": "a3e94746686dc45c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-mieses": {
+  "sceau": "c09f8c2f637872a0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-pion-raja": {
+  "sceau": "58325c286f73ef77",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-polandia": {
+  "sceau": "d8dd7c2dd484547d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-polandia-dengan-d5": {
+  "sceau": "a77b9a82688277b4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-ponziani": {
+  "sceau": "053d63e201a6ff31",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-portugis": {
+  "sceau": "bf8438a7d3575c6e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-reti": {
+  "sceau": "7f86553ba4ff049c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-saragossa": {
+  "sceau": "9cbfcaab74740747",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-tiga-kuda": {
+  "sceau": "1aa67c82ebe0b451",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-valencia": {
+  "sceau": "d4950a07e794127c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-van-geet": {
+  "sceau": "d0f3ebe8152fd0b9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-vant-kruijs": {
+  "sceau": "dd60807b156461dd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-ware": {
+  "sceau": "11315057d5c84223",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pembukaan-zukertort": {
+  "sceau": "0f834984ec9ad4cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-empat-kuda": {
+  "sceau": "a8400a69be2dba5d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-italia": {
+  "sceau": "357d844267e9ae24",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-pion-menteri": {
+  "sceau": "c841944f05cea877",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-pion-raja": {
+  "sceau": "67f1ce84e541aa9e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-skotlandia": {
+  "sceau": "dba613bc6ae3cabe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-tengah": {
+  "sceau": "48d93508a0ef48d7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-tengah-diterima": {
+  "sceau": "aa8acbcc25c634c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/permainan-wina": {
+  "sceau": "091a7c19b6b8b20c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-alekhine": {
+  "sceau": "2964f85ef126edd9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-australia": {
+  "sceau": "20cc07922c03bc29",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-barnes": {
+  "sceau": "8b609c2f8576a389",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-belanda": {
+  "sceau": "88543333804ad9d0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-benoni": {
+  "sceau": "b9dedd01238a6606",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-bogo-india": {
+  "sceau": "114e1b109ab30c3d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-borg": {
+  "sceau": "87c9255dcd4fa33e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-burung-nasar": {
+  "sceau": "9af5fe2b7957319c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-caro-kann": {
+  "sceau": "8aee95d402af4988",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-carr": {
+  "sceau": "8685272fdd1ff3c1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-ceko": {
+  "sceau": "44257e009cb3e4db",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-dory": {
+  "sceau": "caeacf8fef8600eb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-goldsmith": {
+  "sceau": "3cd098be22ef1240",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-grunfeld": {
+  "sceau": "728a32d179555173",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-gunderam": {
+  "sceau": "9e7982d8fac89c43",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-horwitz": {
+  "sceau": "43210bf681fa7770",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-india": {
+  "sceau": "b53f0800bd87e010",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-india-lama": {
+  "sceau": "b043ee43e9b8637e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-india-menteri": {
+  "sceau": "207dfe8e4978b7fe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-india-raja": {
+  "sceau": "1965cc2187782172",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-india-timur": {
+  "sceau": "289e52c60eb64ecc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-inggris": {
+  "sceau": "2f8b83ee8806e5fe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-kanguru": {
+  "sceau": "a26ecda404f4b125",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-kuda-nil": {
+  "sceau": "ad29e534f5005a4c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-lemming": {
+  "sceau": "f04ea11316f787b1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-meksiko": {
+  "sceau": "3c0533dc662c125d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-mikenas": {
+  "sceau": "6d5f036e866af0e9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-modern": {
+  "sceau": "b4053eab537accdd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-montevideo": {
+  "sceau": "4d9b2fca9272f7fe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-neo-grunfeld": {
+  "sceau": "01240f816bba6dbd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-nimzo-india": {
+  "sceau": "6d91b794ec8a2ddf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-nimzowitsch": {
+  "sceau": "242eaae3e4148464",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-owen": {
+  "sceau": "d32680322874ec82",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-petrov": {
+  "sceau": "2d27fefe78982073",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-philidor": {
+  "sceau": "74b0b48d13ec288e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-pirc": {
+  "sceau": "908f84b5657e20a5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-polandia": {
+  "sceau": "499e0f85cdfb2551",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-prancis": {
+  "sceau": "59e74e881c3db813",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-pterodaktil": {
+  "sceau": "ec67e8629f1138eb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-robatsch": {
+  "sceau": "399066f4e5610a3f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-rubah-goreng": {
+  "sceau": "4f3255d325f4bf92",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-santo-george": {
+  "sceau": "7a56211851f0a714",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-semi-slavia": {
+  "sceau": "e00775252187b064",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-semu-india-menteri": {
+  "sceau": "3e7857c57ad4aa1f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-singa": {
+  "sceau": "4c8305f1197622ea",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-sisilia": {
+  "sceau": "ea24b52a1d68e337",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-skandinavia": {
+  "sceau": "17d8a985e7c5967b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-slavia": {
+  "sceau": "302de374403121fe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-tarrasch": {
+  "sceau": "1ddadf43c5ccca78",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-tikus": {
+  "sceau": "f197b46d52c6d0dc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-wade": {
+  "sceau": "8081861bd5f76e79",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-ware": {
+  "sceau": "52ec99980007a03a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-zaire": {
+  "sceau": "64bf7b159a9c9183",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pertahanan-zukertort": {
+  "sceau": "799004ff23f380e0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/pion-menteri-serangan-mengarini": {
+  "sceau": "4efc036e55e8fe14",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/ruy-lopez": {
+  "sceau": "125b7226c76bba24",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-amazon": {
+  "sceau": "0979a878ab81aebc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-amsterdam": {
+  "sceau": "f0e159c04aa2a3b8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-bongcloud": {
+  "sceau": "b84bf8d8e3703aa9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-india-raja": {
+  "sceau": "f70bfa2d71883355",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-india-raja-dengan-bf5": {
+  "sceau": "47b55ba46c7326b9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-india-raja-dengan-e6": {
+  "sceau": "f87c7296f80e93c6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-nimzo-larsen": {
+  "sceau": "04c07043966befde",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-paleface": {
+  "sceau": "b47a8fe42aee1b6c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-richter-veresov": {
+  "sceau": "9594f4163f5f098d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-sodium": {
+  "sceau": "e78c22e865aa2baa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-torre": {
+  "sceau": "fca4857dc91151f0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/serangan-trompowsky": {
+  "sceau": "aa736895369a2ae5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/sistem-colle": {
+  "sceau": "ac7625c62afbdf5b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/sistem-london": {
+  "sceau": "ac4505fa8363e2ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/sistem-marienbad": {
+  "sceau": "192b22711cb20a31",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/sistem-rapport-jobava": {
+  "sceau": "3c456ac83815a3fe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/sistem-rapport-jobava-dengan-e6": {
+  "sceau": "a8f1a15fcc12eff7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/sistem-yusupov-rubinstein": {
+  "sceau": "a5e59e96e6ea6402",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/slavia-india": {
+  "sceau": "6471eb2663e98779",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/id/pembukaan/spesial-simultan-lasker": {
+  "sceau": "44791bfe1953e659",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/": {
+  "sceau": "80308f50e3cc2d9d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-amar": {
+  "sceau": "3aa018931283a2c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-anderssen": {
+  "sceau": "572522fe6823c4f2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-barnes": {
+  "sceau": "27fbc314b780ae4b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-basca": {
+  "sceau": "8e2b0f4885bc99c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-bird": {
+  "sceau": "3752432dfe29f83d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-canard": {
+  "sceau": "b01cd95ae4ca2f27",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-catalana": {
+  "sceau": "2591ffb5eecf5d15",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-clemenz": {
+  "sceau": "55e5390639a71846",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-dalfiere": {
+  "sceau": "6fa20e546e546958",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-dei-tre-cavalli": {
+  "sceau": "c60b448224ca3ac7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-di-cavallo-di-re": {
+  "sceau": "36ff7bbaea758216",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-di-dresda": {
+  "sceau": "bf8c2276a033672a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-di-pedone-di-re": {
+  "sceau": "b8bc0dbad5f9b6e1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-global": {
+  "sceau": "c3e9130b8b633160",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-grob": {
+  "sceau": "c81bddcfde1b1efd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-inglese": {
+  "sceau": "8329a00eaa291ec1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-kadas": {
+  "sceau": "c8b9f29852b31fff",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-mieses": {
+  "sceau": "fc87e6ab1d25bf09",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-polacca": {
+  "sceau": "8d55cb78cce46f2a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-polacca-con-d5": {
+  "sceau": "88c4b5e986609837",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-ponziani": {
+  "sceau": "a29a4c66ab42b60c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-portoghese": {
+  "sceau": "b66f39852dafc52b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-reti": {
+  "sceau": "3dc20c6fe0988e92",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-saragozza": {
+  "sceau": "921f38cf70a9f6aa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-ungherese": {
+  "sceau": "4702fcea84371314",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-valencia": {
+  "sceau": "425f2902a40ff24f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-van-geet": {
+  "sceau": "a6de0fbce1bfa081",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-vant-kruijs": {
+  "sceau": "5f6edb922f09c72e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-ware": {
+  "sceau": "64606e08332ee9be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/apertura-zukertort": {
+  "sceau": "e8204ea0a447d327",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-amazzone": {
+  "sceau": "fd976cc33d0d91bc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-amsterdam": {
+  "sceau": "10f2c441c075df6d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-bongcloud": {
+  "sceau": "6b495aa3d3e189db",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-est-indiano": {
+  "sceau": "dfef65fcc8910f8d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-est-indiano-con-bf5": {
+  "sceau": "713b864518298a8e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-est-indiano-con-e6": {
+  "sceau": "8db5d3e3adef153e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-nimzo-larsen": {
+  "sceau": "4fb13c3763856fe1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-paleface": {
+  "sceau": "69e674211e0366ce",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-richter-veresov": {
+  "sceau": "6c195687b976fce5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-sodium": {
+  "sceau": "dd0b07ad0f5f9c96",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-torre": {
+  "sceau": "a24beb8c48b3a113",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/attacco-trompowsky": {
+  "sceau": "fe02e4135c1b3efa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/controgambetto-blumenfeld": {
+  "sceau": "25a37436ce153758",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-alekhine": {
+  "sceau": "09dc63bd6fef55cf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-australiana": {
+  "sceau": "d4644c206e4adfb7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-avvoltoio": {
+  "sceau": "23e76d9cd0d1dd64",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-barnes": {
+  "sceau": "cdef77bad3ddfb6f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-benoni": {
+  "sceau": "d780b6b5fa46ca2a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-bogo-indiana": {
+  "sceau": "e5664955c218169b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-borg": {
+  "sceau": "f22313b30d3aa4d6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-canguro": {
+  "sceau": "4d9039194008f9f1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-caro-kann": {
+  "sceau": "a1fb76c0cb8ac069",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-carr": {
+  "sceau": "1e14ec4f2521f845",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-ceca": {
+  "sceau": "b7f931540538fd15",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-del-leone": {
+  "sceau": "19675e351695d303",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-del-topo": {
+  "sceau": "72257d0e9e454a97",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-dory": {
+  "sceau": "494f4a813acc7591",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-est-indiana": {
+  "sceau": "78727ba3a6a3fb83",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-francese": {
+  "sceau": "e40df2acfc12bb19",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-fried-fox": {
+  "sceau": "6c7d086602c3b6cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-goldsmith": {
+  "sceau": "7170177601005128",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-grunfeld": {
+  "sceau": "8565a66b03b8cf44",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-gunderam": {
+  "sceau": "9009090b2584c915",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-horwitz": {
+  "sceau": "f4ea4542a7e3a083",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-indiana": {
+  "sceau": "2fe911d44beff48a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-indiana-orientale": {
+  "sceau": "ab313202249a956c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-inglese": {
+  "sceau": "c461e83e8f16180e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-ippopotamo": {
+  "sceau": "b2cd3465ec91483b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-lemming": {
+  "sceau": "79f58339166df600",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-messicana": {
+  "sceau": "11ce1b4af4a3f537",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-mikenas": {
+  "sceau": "b15e8a69f3339bc7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-moderna": {
+  "sceau": "0b8ff2d20176a6c8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-montevideo": {
+  "sceau": "b761ca8e0921a113",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-neo-grunfeld": {
+  "sceau": "b214c1699eaaf5c2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-nimzo-indiana": {
+  "sceau": "1e1332aae9511935",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-nimzowitsch": {
+  "sceau": "2e98bb15358719b2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-olandese": {
+  "sceau": "341632bb5d660c63",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-ovest-indiana": {
+  "sceau": "fccdc671a71b9851",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-owen": {
+  "sceau": "023a96729cf1419b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-petrov": {
+  "sceau": "70cf2c6c7df2621c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-philidor": {
+  "sceau": "c07a863926317003",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-pirc": {
+  "sceau": "8602965bea50b2e3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-polacca": {
+  "sceau": "e4d8504e1316b413",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-pterodattilo": {
+  "sceau": "58f38b76ed358122",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-robatsch": {
+  "sceau": "02afc8b04c5567e6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-san-giorgio": {
+  "sceau": "0a53f8f3fd286751",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-scandinava": {
+  "sceau": "d2c9e0a899afc6b5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-semi-slava": {
+  "sceau": "03bab433623ba2f2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-siciliana": {
+  "sceau": "a6a13b59100e3c7b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-slava": {
+  "sceau": "0e36e5f2b128a522",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-tarrasch": {
+  "sceau": "a5c5e0f4dbf95855",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-vecchia-indiana": {
+  "sceau": "f796e168aeb6f076",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-wade": {
+  "sceau": "a80bdda95dea5a73",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-ware": {
+  "sceau": "0d9f3328ce810627",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-zaire": {
+  "sceau": "cae3a8d6fc5c1f8f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/difesa-zukertort": {
+  "sceau": "28dab8c7258fcaf7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/formazione-creepy-crawly": {
+  "sceau": "1e962a4b7113617a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-benko": {
+  "sceau": "82e3ed39665ecc39",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-benko-accettato": {
+  "sceau": "4a5e60bec41200a1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-benko-rifiutato": {
+  "sceau": "8a2fc0b6a3c4399c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-blackmar-diemer": {
+  "sceau": "22faadcdd21978ae",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-blackmar-diemer-accettato": {
+  "sceau": "089b26c1bed0fd50",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-blackmar-diemer-rifiutato": {
+  "sceau": "3a4962b3d5b8002d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-danese": {
+  "sceau": "cd7cfed5ba0984b6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-danese-accettato": {
+  "sceau": "7ec03fcb4a750752",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-danese-rifiutato": {
+  "sceau": "b9e3612527342cef",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-dellelefante": {
+  "sceau": "2a7cd1f8a74a7fd2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-di-donna": {
+  "sceau": "3ff39d2343e47a8b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-di-donna-accettato": {
+  "sceau": "2850f74c7d314949",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-di-donna-rifiutato": {
+  "sceau": "ff7684aaaa9cbc19",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-di-re": {
+  "sceau": "0536f9db114769be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-di-re-accettato": {
+  "sceau": "6ecf2bc7813e7f95",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-di-re-rifiutato": {
+  "sceau": "120f9e4cab342566",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-duras": {
+  "sceau": "d8271b17f77be875",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-englund": {
+  "sceau": "5de46595f661b48b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-englund-rifiutato": {
+  "sceau": "ecadb4825e42e530",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-irlandese": {
+  "sceau": "4f5eac0800c92257",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-lettone": {
+  "sceau": "b57009fd5d02f272",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-lettone-accettato": {
+  "sceau": "f59368f980e93eb9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/gambetto-viennese-con-la-difesa-max-lange": {
+  "sceau": "61035578f5c8c2f6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/orangutan-inglese": {
+  "sceau": "dfce50bc4bfc5499",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/ovest-indiana-accelerata": {
+  "sceau": "47e3348e72f17bbf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-dei-quattro-cavalli": {
+  "sceau": "ed74b316988f5e5f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-del-centro": {
+  "sceau": "a413e60546a28eff",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-del-centro-accettata": {
+  "sceau": "1a41ae028a5c5930",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-di-pedone-di-donna": {
+  "sceau": "0e8dbd125140e4ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-di-pedone-di-re": {
+  "sceau": "b0aaa73fdb64abcb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-italiana": {
+  "sceau": "5b0e05fdbebf5b7e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-scozzese": {
+  "sceau": "47a4c45eb65845c1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-spagnola": {
+  "sceau": "22b300d59502f7bf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/partita-viennese": {
+  "sceau": "75866c795d148a13",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/pedone-di-donna-attacco-mengarini": {
+  "sceau": "bc5e4dbe1a1c4472",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/pseudo-difesa-ovest-indiana": {
+  "sceau": "dcfea9749d954061",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/sistema-colle": {
+  "sceau": "8d5c0a04e03d3ec2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/sistema-londra": {
+  "sceau": "36882fc63c50bfb2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/sistema-marienbad": {
+  "sceau": "1bb3265f404e2d69",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/sistema-rapport-jobava": {
+  "sceau": "7a5d26970161d94a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/sistema-rapport-jobava-con-e6": {
+  "sceau": "bb917f5e49bc0f2a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/sistema-yusupov-rubinstein": {
+  "sceau": "b4f432d3b53862ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/slava-indiana": {
+  "sceau": "9a448038c136f351",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/aperture/speciale-da-simultanea-di-lasker": {
+  "sceau": "49b23d3b0bdb99b1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/finali/": {
+  "sceau": "942682d00ac09e6a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/finali/donna-contro-re": {
+  "sceau": "674f28dcea776d84",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/finali/due-torri-contro-re": {
+  "sceau": "8996323b67fd276d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/finali/matto-di-alfiere-e-cavallo": {
+  "sceau": "02506384c1070dcb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/finali/re-e-pedone-contro-re": {
+  "sceau": "0c239696373e663b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/finali/torre-contro-re": {
+  "sceau": "06cfc1d1d87192c1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/": {
+  "sceau": "3902efa3fc038d29",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/adescamento": {
+  "sceau": "be4dee507b7f736b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/attacco-al-re": {
+  "sceau": "3c6f5c86a169938f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/attacco-di-matto": {
+  "sceau": "a2c5d0492843e390",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/attacco-di-scoperta": {
+  "sceau": "d4a8113248a85dc1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/attacco-doppio": {
+  "sceau": "48ac099bd2bdd94e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/avamposto": {
+  "sceau": "d0dce75b238091ef",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/codice-eco": {
+  "sceau": "02f545135e85a269",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/colonna-aperta": {
+  "sceau": "d744abe2937fcd2e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/combinazione": {
+  "sceau": "a7bc8f3a76b7c0e3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/coppia-degli-alfieri": {
+  "sceau": "4e2be6451bbf4382",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/deviazione": {
+  "sceau": "c3f616f919c40902",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/eliminazione-del-difensore": {
+  "sceau": "9e2902cbb726993d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/errore": {
+  "sceau": "15a3130afa1bdd50",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/errore-grave": {
+  "sceau": "e2af3ada1463d24a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/fianchetto": {
+  "sceau": "fa4cc6323df868fa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/forchetta": {
+  "sceau": "f91d654e17462c6d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/gambetto": {
+  "sceau": "72289849f16419fa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/guadagno-di-materiale": {
+  "sceau": "2f1908cb1608b0d2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/il-punteggio-elo": {
+  "sceau": "0a7548891f5a2e8e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/imprecisione": {
+  "sceau": "0296dc3d3c50596e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/inchiodatura": {
+  "sceau": "7540f5cf5c091cef",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/infilata": {
+  "sceau": "d676de589067853f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/interferenza": {
+  "sceau": "36e44c3588b0e7a9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/maggioranza-di-pedoni": {
+  "sceau": "6ccb443873b82cb9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/matto-affogato": {
+  "sceau": "6413040e45f9e75a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/matto-del-corridoio": {
+  "sceau": "93e7f0f9218314e9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/mossa-brillante": {
+  "sceau": "34d9bea156baffab",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/mossa-intermedia": {
+  "sceau": "dded98c66b0b6c80",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/mossa-migliore": {
+  "sceau": "4e3a547279f8b843",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/mossa-unica": {
+  "sceau": "a2100060b4c2889c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/mulino": {
+  "sceau": "90adcc7c691cf93d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/opposizione": {
+  "sceau": "77f7989498931fe5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/pedone-arretrato": {
+  "sceau": "d96d6aafa09ed380",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/pedone-isolato": {
+  "sceau": "a3e6eff3abf6e019",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/pedone-passato": {
+  "sceau": "e6da1fd7094d1729",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/pedoni-doppiati": {
+  "sceau": "4f217d00c4d75738",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/pezzo-indifeso": {
+  "sceau": "83213559d14b74bf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/pezzo-intrappolato": {
+  "sceau": "3afc53bb258df902",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/profilassi": {
+  "sceau": "e6de3ad8100ca5bb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/promozione": {
+  "sceau": "2909ba0cc05e6d72",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/regola-delle-cinquanta-mosse": {
+  "sceau": "023fbc6656339721",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/sacrificio": {
+  "sceau": "593c85946d126290",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/scacco-doppio": {
+  "sceau": "51022d07ce9df7e7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/scacco-perpetuo": {
+  "sceau": "d7677c01b494eddb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/settima-traversa": {
+  "sceau": "4558b3fa50d5d4f2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/sgombero": {
+  "sceau": "1e9ae5b0d9a65cc2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/sottopromozione": {
+  "sceau": "19bda0f3a3a8e2a3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/sovraccarico": {
+  "sceau": "b3172dd2feeb73a4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/stallo": {
+  "sceau": "001192c76563011a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/sviluppo": {
+  "sceau": "6596695bd9ff1f7b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/tempo": {
+  "sceau": "0382739f7446678c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/triplice-ripetizione": {
+  "sceau": "cf0485a65f3d1379",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/glossario/zugzwang": {
+  "sceau": "7513011214fa84e7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/": {
+  "sceau": "65368d4e448fea6b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/attacco-doppio": {
+  "sceau": "80cf465f8f64bd84",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/cattura-vincente": {
+  "sceau": "50c3993fb0429e5a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/deviazione": {
+  "sceau": "57c5b103b4556693",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/forchetta-di-cavallo": {
+  "sceau": "ef0bed09a73a71a2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/forchetta-di-pedone": {
+  "sceau": "e22b71ce4db25f67",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/inchiodatura": {
+  "sceau": "a87d2191299cb013",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/infilata": {
+  "sceau": "6dd699e340a5b853",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/matto-del-corridoio": {
+  "sceau": "5b9094952cc5e8d8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/matto-in-due": {
+  "sceau": "039a6c1be715f2ad",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/matto-in-tre": {
+  "sceau": "78cb8f85a3f1e122",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/matto-in-uno": {
+  "sceau": "69918667f1cf0262",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/mossa-tranquilla": {
+  "sceau": "53fd677dddfeb0e9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/motivi/mossa-vincente": {
+  "sceau": "21f7fcd75fd28510",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/": {
+  "sceau": "9d253a63475666b8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/come-si-muovono-i-pezzi": {
+  "sceau": "7288c402ad70a16f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/i-principi-d-apertura": {
+  "sceau": "d28e06e9b8b7b8b5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/il-matto-del-corridoio": {
+  "sceau": "7dda72ee79155026",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/l-arrocco": {
+  "sceau": "b7fb3d5fb84cd6bc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/l-attacco-doppio": {
+  "sceau": "c4559414e4276515",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/l-inchiodatura": {
+  "sceau": "849544ea234a9653",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/l-infilata": {
+  "sceau": "01a7573b2787255d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-deviazione": {
+  "sceau": "ac1d4833a70795ce",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-forchetta-di-cavallo": {
+  "sceau": "0683dd3fd45b14c1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-forchetta-di-pedone": {
+  "sceau": "1a970ff80e975f5e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-mossa-tranquilla": {
+  "sceau": "6775815b5d655b43",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-notazione": {
+  "sceau": "8bddd5ea89c9c017",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-patta": {
+  "sceau": "ca63db1cfdf40861",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-presa-en-passant": {
+  "sceau": "bc33c6f9e6cddbeb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/la-promozione-del-pedone": {
+  "sceau": "8471d8c4d8f20ef7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/le-cadenze-di-gioco": {
+  "sceau": "28232619e27a14d4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/riconoscere-un-pezzo-indifeso": {
+  "sceau": "bf58521f0d79a2f9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/regole/scacco-matto-e-stallo": {
+  "sceau": "0d5430a3676c4a89",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/": {
+  "sceau": "3a4ce6abf61d40bb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/attacco-fegato-fritto": {
+  "sceau": "c8bc3ed0cee8cdb2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/difesa-damiano-punita": {
+  "sceau": "4fe5c58a8160bb2f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/matto-del-barbiere": {
+  "sceau": "ae4d9ced9019d4c2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/matto-di-legal": {
+  "sceau": "8069e8f413122c74",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/trappola-blackburne-shilling": {
+  "sceau": "910ed4833ffe78d1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/it/trappole/trappola-del-gambetto-englund": {
+  "sceau": "4565bbaded6664fd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
  "/learn/": {
   "sceau": "5e6c3aaac98b42aa",
   "publiee": "2026-09-06",
@@ -4743,6 +7163,1216 @@
   "sceau": "647624de03aecf87",
   "publiee": "2026-09-06",
   "modifiee": "2026-09-06"
+ },
+ "/pl/debiuty/": {
+  "sceau": "efe48bc1acab0614",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-amazonki": {
+  "sceau": "4101f8810db91a15",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-amsterdamski": {
+  "sceau": "1a3f83fa07e2e471",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-bladej-twarzy": {
+  "sceau": "03ea136ee45a4dbf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-bongcloud": {
+  "sceau": "4cac1d30ea42f9b5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-krolewsko-indyjski": {
+  "sceau": "33cf1b5e90ebed7d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-krolewsko-indyjski-z-bf5": {
+  "sceau": "78d1179dccab9940",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-krolewsko-indyjski-z-e6": {
+  "sceau": "05808b50dc34f6e9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-nimzowitscha-larsena": {
+  "sceau": "83ab13f34ca27366",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-richtera-wieriesowa": {
+  "sceau": "0f144acdd67d025f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-sodium": {
+  "sceau": "a60327043bfe0282",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-torrego": {
+  "sceau": "3f8cb792964a5a80",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/atak-trompowskiego": {
+  "sceau": "dfa1d4995bbeb4d3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-amar": {
+  "sceau": "edf93e0d9a1e40e1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-anderssena": {
+  "sceau": "b6a6cb39db5842b9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-angielski": {
+  "sceau": "36d1cd8a322ed4fa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-barnesa": {
+  "sceau": "b8ed4b17f8ec0c01",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-baskijski": {
+  "sceau": "4937c013144f786d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-birda": {
+  "sceau": "d0bc3c9a6d1521b9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-canard": {
+  "sceau": "45f534acc145ddfc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-clemenza": {
+  "sceau": "1406b7e7710fbc56",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-drezdenski": {
+  "sceau": "7d86a5ce8e9573f3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-global": {
+  "sceau": "fb49e34a76f64ecb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-gonca": {
+  "sceau": "83e55e87630f3a6c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-groba": {
+  "sceau": "8513f243b13ad0cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-kadasa": {
+  "sceau": "e33412242e346be3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-katalanski": {
+  "sceau": "89d9cf56b3730ffa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-miesesa": {
+  "sceau": "27bd5fb243bfc92c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-piona-krolewskiego": {
+  "sceau": "6a0af9b729d4f0a5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-polski": {
+  "sceau": "5cc74d9137174126",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-polski-z-d5": {
+  "sceau": "c510b0a46401e2ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-ponzianiego": {
+  "sceau": "2afc9981b3f6350c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-portugalski": {
+  "sceau": "3d31bfec93e02aaa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-retiego": {
+  "sceau": "52c0e13b7a664dd8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-saragossa": {
+  "sceau": "cefb2a8b8bf0b988",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-skoczka-krolewskiego": {
+  "sceau": "1be57105c43583f9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-trzech-skoczkow": {
+  "sceau": "382ca18a37bf2ed9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-van-geeta": {
+  "sceau": "d9159bfcb6c711c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-vant-kruijsa": {
+  "sceau": "f267eaefa61b6cc9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-walencki": {
+  "sceau": "fe11a5b3458d107a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-warea": {
+  "sceau": "45a1cb4c121c75c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-wegierski": {
+  "sceau": "b746f44ce1b58823",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/debiut-zukertorta": {
+  "sceau": "e559f4a16580cdfa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/formacja-creepy-crawly": {
+  "sceau": "1815a7c44de173fa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-benko": {
+  "sceau": "a943c373a8dbf495",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-benko-odrzucony": {
+  "sceau": "c00ff69942ef8149",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-benko-przyjety": {
+  "sceau": "b60cbf1de1de29e5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-blackmara-diemera": {
+  "sceau": "c9cf6ee6ca92b10b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-blackmara-diemera-odrzucony": {
+  "sceau": "b6970a708bc543ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-blackmara-diemera-przyjety": {
+  "sceau": "aeff85faff677236",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-dunski": {
+  "sceau": "2ec98bc2c2617da4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-dunski-odrzucony": {
+  "sceau": "32ef8024f981897d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-dunski-przyjety": {
+  "sceau": "3934bf81e8bbc491",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-durasa": {
+  "sceau": "0b55673111fbe47e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-englunda": {
+  "sceau": "b4ad568073b446fa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-englunda-odrzucony": {
+  "sceau": "026772511e26d926",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-hetmanski": {
+  "sceau": "97fd98490078ed43",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-hetmanski-odrzucony": {
+  "sceau": "76a3f9b94077c7f9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-hetmanski-przyjety": {
+  "sceau": "4d96a98b588cfc6b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-irlandzki": {
+  "sceau": "268a4283cbaee14b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-krolewski": {
+  "sceau": "7c46501965608497",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-krolewski-odrzucony": {
+  "sceau": "df6795e48735642a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-krolewski-przyjety": {
+  "sceau": "00a6fdc506d56b57",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-lotewski": {
+  "sceau": "caf29812b454f8c4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-lotewski-przyjety": {
+  "sceau": "851db4843252bcc9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-slonia": {
+  "sceau": "ac486db260215d9b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gambit-wiedenski-z-obrona-maxa-langego": {
+  "sceau": "1b2831dcb911f10e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gra-pionem-hetmanskim": {
+  "sceau": "1ac819b9582f607f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/gra-pionem-krolewskim": {
+  "sceau": "6c319afa0406c785",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/kontrgambit-blumenfelda": {
+  "sceau": "58579b8ffe3b46d2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-aljechina": {
+  "sceau": "b95c7b0732ce41f7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-angielska": {
+  "sceau": "c6df590dd493d477",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-australijska": {
+  "sceau": "38660af55583b8b3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-barnesa": {
+  "sceau": "487e4d2158b0a6be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-benoni": {
+  "sceau": "c383f8627225c369",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-bogo-indyjska": {
+  "sceau": "e0caaa42f2c803e1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-borga": {
+  "sceau": "c0404d5f0f39e94e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-caro-kann": {
+  "sceau": "915d59d48537f30e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-carra": {
+  "sceau": "6d442511f3fafe8b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-czeska": {
+  "sceau": "73dffbfa359b1464",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-doryego": {
+  "sceau": "b0fea39cef4dd761",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-francuska": {
+  "sceau": "9adf9e82a0372ce0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-goldsmitha": {
+  "sceau": "6b6541e025dbf5b3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-grunfelda": {
+  "sceau": "eb282094bed9e9f4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-gunderama": {
+  "sceau": "08600dd089fad681",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-hetmansko-indyjska": {
+  "sceau": "e36fc1b517c7c6ae",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-hipopotama": {
+  "sceau": "8e4ce078f95b2e09",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-holenderska": {
+  "sceau": "422caa2ee276d881",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-horwitza": {
+  "sceau": "e7ecf49c4f498c28",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-indyjska": {
+  "sceau": "069a35760238c1cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-kangura": {
+  "sceau": "99fff23e33e602bc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-krolewsko-indyjska": {
+  "sceau": "9175549d4f3b3da4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-leminga": {
+  "sceau": "9a5d58537426c36f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-lwa": {
+  "sceau": "804ff71d76cc39cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-meksykanska": {
+  "sceau": "62b0a228d5d5011d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-mikenasa": {
+  "sceau": "a6fba63ec8b04471",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-montevideo": {
+  "sceau": "86378041e080d2be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-neo-grunfelda": {
+  "sceau": "78f41b0f7b8ac6c6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-nimzoindyjska": {
+  "sceau": "a9a676223bfdb243",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-nimzowitscha": {
+  "sceau": "c3e19f03a3da78c5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-nowoczesna": {
+  "sceau": "d0133e40d645ea91",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-owena": {
+  "sceau": "2a92af4ca8e1c0db",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-philidora": {
+  "sceau": "4bde61e7a27ebe10",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-pietrowa": {
+  "sceau": "05f7d0518c759c1d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-pirca": {
+  "sceau": "7daa987e824a6012",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-polska": {
+  "sceau": "38425c6ed0d8ab28",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-polslowianska": {
+  "sceau": "cbb25c28be41e162",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-pterodaktyla": {
+  "sceau": "fb2304fd3e0ce46d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-robatscha": {
+  "sceau": "59c6e1417888cb75",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-sepa": {
+  "sceau": "fac1662d4405e679",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-skandynawska": {
+  "sceau": "666b4b6eff2af5cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-slowianska": {
+  "sceau": "829ffc5ef31e8199",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-smazonego-lisa": {
+  "sceau": "af3a57be33a29aee",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-staroindyjska": {
+  "sceau": "738c386db561b99f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-sw-jerzego": {
+  "sceau": "1b4038e6a7f32faf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-sycylijska": {
+  "sceau": "aee6a136c81d832e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-szczura": {
+  "sceau": "92cdc0976a3f1090",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-tarrascha": {
+  "sceau": "5d8115702705a946",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-wadea": {
+  "sceau": "8808ed8deaca1786",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-warea": {
+  "sceau": "3fab69c4bb375a9a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-wschodnioindyjska": {
+  "sceau": "53a136045340e4aa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-zair": {
+  "sceau": "c9f198b1c2f1720d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/obrona-zukertorta": {
+  "sceau": "56a4e4514c7ac1e9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/orangutan-angielski": {
+  "sceau": "22790666c85ad383",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-czterech-skoczkow": {
+  "sceau": "e622508261240361",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-hiszpanska": {
+  "sceau": "0bcc622937e83afb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-srodkowa": {
+  "sceau": "24baacd0934096d4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-srodkowa-przyjeta": {
+  "sceau": "cf58a2c8e08b2f55",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-szkocka": {
+  "sceau": "9bf19e3f291637b9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-wiedenska": {
+  "sceau": "bf4c6d081e1b5905",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/partia-wloska": {
+  "sceau": "6529a899982fd975",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/pion-hetmanski-atak-mengariniego": {
+  "sceau": "a1a78d0b39724108",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/przyspieszona-obrona-hetmansko-indyjska": {
+  "sceau": "9b89f1f4b90ef4de",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/pseudo-obrona-hetmansko-indyjska": {
+  "sceau": "ed974892307c58c3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/slowiansko-indyjska": {
+  "sceau": "40205feba54a82c2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/symultaniczny-wariant-laskera": {
+  "sceau": "f091740288fbacca",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/system-collego": {
+  "sceau": "3e24fb88e852437e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/system-jusupowa-rubinsteina": {
+  "sceau": "65700c5a5256c1c1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/system-londynski": {
+  "sceau": "435044338b1f3968",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/system-marienbadzki": {
+  "sceau": "9ab52424e655b195",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/system-rapporta-jobavy": {
+  "sceau": "16b1ca31cf3f4833",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/debiuty/system-rapporta-jobavy-z-e6": {
+  "sceau": "1abe4be3e8fab42f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/koncowki/": {
+  "sceau": "0079db6162f34ff6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/koncowki/dwie-wieze-przeciw-krolowi": {
+  "sceau": "92e7429ff008270c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/koncowki/hetman-przeciw-krolowi": {
+  "sceau": "0734c49bfc26546a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/koncowki/krol-i-pion-przeciw-krolowi": {
+  "sceau": "7ab33378eb03aa7a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/koncowki/mat-goncem-i-skoczkiem": {
+  "sceau": "03641c0857119033",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/koncowki/wieza-przeciw-krolowi": {
+  "sceau": "1378692c2f94cbee",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/": {
+  "sceau": "759932f8dacf6a9d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/cichy-ruch": {
+  "sceau": "5a8208e93cbff158",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/mat-na-ostatniej-linii": {
+  "sceau": "8149d5c572967915",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/mat-w-dwoch-ruchach": {
+  "sceau": "738f9b5f1620906e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/mat-w-jednym-ruchu": {
+  "sceau": "34dbd3dfeb83037c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/mat-w-trzech-ruchach": {
+  "sceau": "b8eed66662222cb0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/odciagniecie": {
+  "sceau": "a2e131cf7560933d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/podwojny-atak": {
+  "sceau": "a0af772354b354cf",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/przeszycie": {
+  "sceau": "4dd90c127ea86602",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/widelki-pionem": {
+  "sceau": "36018b9b63af6729",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/widelki-skoczkiem": {
+  "sceau": "fff381ba895b3b9a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/wygrywajace-bicie": {
+  "sceau": "64032ce9010c7023",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/wygrywajacy-ruch": {
+  "sceau": "77b8b410cbd88276",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/motywy/zwiazanie": {
+  "sceau": "a37fb8d79bbe027f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/": {
+  "sceau": "107b95c1f91602e0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/atak-smazonej-watrobki": {
+  "sceau": "137785bd40e1001f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/mat-legala": {
+  "sceau": "552a58b27f363e3c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/mat-szewski": {
+  "sceau": "a4e93166d1f209a1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/pulapka-blackburne-shilling": {
+  "sceau": "3c23ac9cfd91aab5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/pulapka-w-gambicie-englunda": {
+  "sceau": "a3ee9ae27e10a8c6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/pulapki/ukarana-obrona-damiano": {
+  "sceau": "4eb36637cc17b37e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/": {
+  "sceau": "4a7c7452be7e1f0e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/atak-matowy": {
+  "sceau": "102c91edb60ad477",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/atak-na-krola": {
+  "sceau": "c1ef05b28e2106f6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/blad": {
+  "sceau": "9f30513eaa1654c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/blyskotliwy-ruch": {
+  "sceau": "9385abe088291f4e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/fianchetto": {
+  "sceau": "7b5ba2e200dbabe0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/gambit": {
+  "sceau": "50bc7b8978312dab",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/gruby-blad": {
+  "sceau": "ce79f74a7d4600bd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/izolowany-pion": {
+  "sceau": "112ed1afed218254",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/jedyny-ruch": {
+  "sceau": "7c46d9f2344b0644",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/kod-eco": {
+  "sceau": "0b0987744e79ecfe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/kombinacja": {
+  "sceau": "ad1aaba84fa7349d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/mat-na-ostatniej-linii": {
+  "sceau": "78425cf4eee5f4d8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/mat-zduszony": {
+  "sceau": "5aaa5b8ee4b174f9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/najlepszy-ruch": {
+  "sceau": "4a73936ed60bf95c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/niedokladnosc": {
+  "sceau": "077158a2e92a193f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/niepelna-promocja": {
+  "sceau": "e8664f80f7f2821c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/odciagniecie": {
+  "sceau": "28137c9308d6bf2e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/odslona": {
+  "sceau": "efaa090b4c6b1de8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/opozycja": {
+  "sceau": "e2628d13e8da87d1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/otwarta-kolumna": {
+  "sceau": "3abfd9e24970fcd7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/para-goncow": {
+  "sceau": "72375bae79ee8658",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/pat": {
+  "sceau": "76b9e691d7e5257b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/pion-zacofany": {
+  "sceau": "2696e52a31a6a89c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/placowka": {
+  "sceau": "52ee1774ceccdba5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/podwojny-atak": {
+  "sceau": "d5c3933c89d4e8c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/podwojny-szach": {
+  "sceau": "0b7c6d81bead77cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/poswiecenie": {
+  "sceau": "95e1e27ee8059120",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/profilaktyka": {
+  "sceau": "57d13048e9bd01c6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/promocja": {
+  "sceau": "167dccf3eca0a091",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/przeciazenie": {
+  "sceau": "b2d00ce242aa6b3a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/przesloniecie": {
+  "sceau": "12bb9d2bef499416",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/przeszycie": {
+  "sceau": "5525d25e392916ef",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/przewaga-pionowa": {
+  "sceau": "376496ba53fc13ee",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/przyciagniecie": {
+  "sceau": "f7e94cfc588b316f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/ranking-elo": {
+  "sceau": "8deb28b40eac5aaa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/rozwoj": {
+  "sceau": "c473c8ef0531a694",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/ruch-posredni": {
+  "sceau": "8514c4dcb1c57b47",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/siodma-linia": {
+  "sceau": "4571113d5ae667d9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/tempo": {
+  "sceau": "8e0f77b006d23b1c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/trzykrotne-powtorzenie": {
+  "sceau": "9867776b96b26b3f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/usuniecie-obroncy": {
+  "sceau": "2e2606fc0b281dd7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/uwieziona-bierka": {
+  "sceau": "08529f78312b30d9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/wiatrak": {
+  "sceau": "a0a4515ce3073e85",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/widelki": {
+  "sceau": "cc71ea63f8a2fef7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/wieczny-szach": {
+  "sceau": "5ee5adb8237ec1f8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/wiszaca-bierka": {
+  "sceau": "1a431324b61e63bc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/wolny-pion": {
+  "sceau": "360350996be89674",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/zasada-piecdziesieciu-ruchow": {
+  "sceau": "e4e2717964175df7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/zdwojone-piony": {
+  "sceau": "b5a7bd7718b04352",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/zugzwang": {
+  "sceau": "5182322a52bb90e2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/zwiazanie": {
+  "sceau": "628e73c6014af1be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/zwolnienie-pola": {
+  "sceau": "0e1bb9c256017a2d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/slownik/zysk-materialu": {
+  "sceau": "661f7aff1c4f763c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/": {
+  "sceau": "0ee6dee33d4c2965",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/bicie-w-przelocie": {
+  "sceau": "a89e784d8dbf775d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/cichy-ruch": {
+  "sceau": "3c0452e8e26aa3a7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/jak-poruszaja-sie-bierki": {
+  "sceau": "6050f7f10b39cf32",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/mat-na-ostatniej-linii": {
+  "sceau": "1277abbfc53344e6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/notacja": {
+  "sceau": "80ede06957f1931b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/odciagniecie": {
+  "sceau": "a8296f230da77b5b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/podwojny-atak": {
+  "sceau": "7f3c4062199a185d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/promocja-piona": {
+  "sceau": "205cd330a865d0ad",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/przeszycie": {
+  "sceau": "af940f9edf423efa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/remis": {
+  "sceau": "4699d5c5cb05f4d6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/roszada": {
+  "sceau": "7b1a7a430129a570",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/szach-mat-i-pat": {
+  "sceau": "b863f0309ed36b53",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/tempo-gry": {
+  "sceau": "1c35e1a37c8467c0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/widelki-pionem": {
+  "sceau": "feadd98a9950ce33",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/widelki-skoczkiem": {
+  "sceau": "22a81a2f00672ccc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/wiszaca-bierka": {
+  "sceau": "63d502cb727b96a1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/zasady-debiutowe": {
+  "sceau": "67590ec1e61fbbba",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/pl/zasady/zwiazanie": {
+  "sceau": "8b928a7d54a12f9f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
  },
  "/players/": {
   "sceau": "cc95b3536c052cee",
@@ -7238,6 +10868,1216 @@
   "sceau": "ea492bbdbedaba0a",
   "publiee": "2026-10-25",
   "modifiee": "2026-10-25"
+ },
+ "/tr/acilislar/": {
+  "sceau": "e068009a9c98c65b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/akbaba-savunmasi": {
+  "sceau": "b8f5f908516a541a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/alekhine-savunmasi": {
+  "sceau": "d72767a7e1a7760d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/amar-acilisi": {
+  "sceau": "0ad0aa5cc267e8fc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/amazon-saldirisi": {
+  "sceau": "0de356f90549b02e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/amsterdam-saldirisi": {
+  "sceau": "1d25910941b7c876",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/anderssen-acilisi": {
+  "sceau": "ddbba1b200c74f18",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/aslan-savunmasi": {
+  "sceau": "3cfecb75403934eb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/avustralya-savunmasi": {
+  "sceau": "57327f03cfd92d66",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/aziz-george-savunmasi": {
+  "sceau": "6e5a9ebc9f524545",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/barnes-acilisi": {
+  "sceau": "2ef94c865e3ea1a1",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/barnes-savunmasi": {
+  "sceau": "7faec96f47be255d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/bask-acilisi": {
+  "sceau": "4e98850c3ddfdaba",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/benko-gambiti": {
+  "sceau": "508d6d9772282d39",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/benoni-savunmasi": {
+  "sceau": "913b1976845c4983",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/bird-acilisi": {
+  "sceau": "d049233dc98ee6a5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/blackmar-diemer-gambiti": {
+  "sceau": "173fe09f9444b388",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/blumenfeld-karsi-gambiti": {
+  "sceau": "170f17c5f36959db",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/bogo-hint-savunmasi": {
+  "sceau": "bdb1a48deb55c981",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/bongcloud-saldirisi": {
+  "sceau": "d07e6dd5c67d7be0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/borg-savunmasi": {
+  "sceau": "78050f97ddda37f0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/canard-acilisi": {
+  "sceau": "b2969cb35379dc8f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/caro-kann-savunmasi": {
+  "sceau": "6b6e55c61df0ed34",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/carr-savunmasi": {
+  "sceau": "e7c82794be0447aa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/cek-savunmasi": {
+  "sceau": "e3a21d872998b3eb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/clemenz-acilisi": {
+  "sceau": "06622faf465592d6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/colle-sistemi": {
+  "sceau": "a208b6d058036f99",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/creepy-crawly-dizilisi": {
+  "sceau": "088cdd0d8919722c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/danimarka-gambiti": {
+  "sceau": "87ed2f01442e162c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/dogu-hint-savunmasi": {
+  "sceau": "093ce678e00a1eb4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/dort-at-oyunu": {
+  "sceau": "315c8c20c66f341c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/dory-savunmasi": {
+  "sceau": "75b505866928bae6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/dresden-acilisi": {
+  "sceau": "3bcd3b120bab50d8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/duras-gambiti": {
+  "sceau": "666090439caf1c02",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/englund-gambiti": {
+  "sceau": "b6a4040f99a5c07e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/eski-hint-savunmasi": {
+  "sceau": "b4a0d5f8e922facb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/fare-savunmasi": {
+  "sceau": "629d957e8b455193",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/fil-acilisi": {
+  "sceau": "df1e9d3e78805c50",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/fil-gambiti": {
+  "sceau": "392d67824187d590",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/fransiz-savunmasi": {
+  "sceau": "362381cc0ca29269",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/global-acilisi": {
+  "sceau": "a320c5b47f679ebb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/goldsmith-savunmasi": {
+  "sceau": "292efa570bcb5381",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/grob-acilisi": {
+  "sceau": "f6da01a29151a754",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/grunfeld-savunmasi": {
+  "sceau": "52f895f3dc8332aa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/gunderam-savunmasi": {
+  "sceau": "f95ada69f819cf95",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/hint-savunmasi": {
+  "sceau": "a0adb64087cc471a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/hizlandirilmis-vezir-hint": {
+  "sceau": "cebb0811492d5135",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/hollanda-savunmasi": {
+  "sceau": "bb5f7035828c4cf4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/horwitz-savunmasi": {
+  "sceau": "dd7190f00a15152a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ingiliz-acilisi": {
+  "sceau": "268fa14116433a48",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ingiliz-orangutani": {
+  "sceau": "a329d938b293b5db",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ingiliz-savunmasi": {
+  "sceau": "38fe140f1fcb5e50",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/irlanda-gambiti": {
+  "sceau": "f2505b0050058103",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/iskandinav-savunmasi": {
+  "sceau": "543b2ab936abc830",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/iskoc-oyunu": {
+  "sceau": "d2ebbaee26a213ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ispanyol-acilisi": {
+  "sceau": "26d1d64431f84be7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/italyan-oyunu": {
+  "sceau": "9c94374e9e605283",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-benko-gambiti": {
+  "sceau": "0e3ad73efd35eebb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-blackmar-diemer-gambiti": {
+  "sceau": "584fdcd9314bff27",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-danimarka-gambiti": {
+  "sceau": "8ae399362de7d333",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-letonya-gambiti": {
+  "sceau": "20ec5f54e2b4b863",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-merkez-oyunu": {
+  "sceau": "6ab0727fdc772278",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-sah-gambiti": {
+  "sceau": "5995b49c3399a6ff",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kabul-edilmis-vezir-gambiti": {
+  "sceau": "c1ec391516b205a0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kadas-acilisi": {
+  "sceau": "15a4bb943d198d91",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kanguru-savunmasi": {
+  "sceau": "533b687f54069fde",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/katalan-acilisi": {
+  "sceau": "b0b21f9f47f36b05",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/kizarmis-tilki-savunmasi": {
+  "sceau": "cdc91991fdac832d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/lasker-simultane-ozel": {
+  "sceau": "a0b2c363defbdea0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/leming-savunmasi": {
+  "sceau": "e617733fc30aab84",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/letonya-gambiti": {
+  "sceau": "c2828e7746322666",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/londra-sistemi": {
+  "sceau": "db680c3387d3d2d0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/macar-acilisi": {
+  "sceau": "4fa8267795ac5fe5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/marienbad-sistemi": {
+  "sceau": "b7a22ccff324fa69",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/meksika-savunmasi": {
+  "sceau": "ded23e0387a4d806",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/merkez-oyunu": {
+  "sceau": "9fba6da823994067",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/mieses-acilisi": {
+  "sceau": "4f674814c28077dd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/mikenas-savunmasi": {
+  "sceau": "def8d9167fa6152f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/modern-savunma": {
+  "sceau": "3c83f036a6669c18",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/montevideo-savunmasi": {
+  "sceau": "b18c752a5cbfba06",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/neo-grunfeld-savunmasi": {
+  "sceau": "cccc908e88e3b73e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/nimzo-hint-savunmasi": {
+  "sceau": "dd20e27ce256b9a2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/nimzo-larsen-saldirisi": {
+  "sceau": "a0b7be077bc836ac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/nimzowitsch-savunmasi": {
+  "sceau": "4cda53f838d536f3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/owen-savunmasi": {
+  "sceau": "6ef6bb6623a6405f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/petrov-savunmasi": {
+  "sceau": "df6883fad23d167d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/philidor-savunmasi": {
+  "sceau": "c33f9fade58d21e5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/pirc-savunmasi": {
+  "sceau": "38e85996ae385e56",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/polonya-acilisi": {
+  "sceau": "36d8840e0bda6fd6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/polonya-acilisi-d5-ile": {
+  "sceau": "26961269bfabfb70",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/polonya-savunmasi": {
+  "sceau": "5af31b95f41cfce3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ponziani-acilisi": {
+  "sceau": "ca42c71820c3317f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/portekiz-acilisi": {
+  "sceau": "b24b796b2fb1463c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/pterodaktil-savunmasi": {
+  "sceau": "70e19759a5a0ea60",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/rapport-jobava-sistemi": {
+  "sceau": "8d8e983e6dc2cabe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/rapport-jobava-sistemi-e6-ile": {
+  "sceau": "25ae39a348a99fb7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reddedilmis-benko-gambiti": {
+  "sceau": "5e5f366b49d3cd94",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reddedilmis-blackmar-diemer-gambiti": {
+  "sceau": "215cd2736b81b634",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reddedilmis-danimarka-gambiti": {
+  "sceau": "4a005bb693aa3231",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reddedilmis-englund-gambiti": {
+  "sceau": "a7c2f86924f4301a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reddedilmis-sah-gambiti": {
+  "sceau": "861ca0e68ee5e157",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reddedilmis-vezir-gambiti": {
+  "sceau": "c9c23045b900680f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/reti-acilisi": {
+  "sceau": "ec74c24c09dbb48d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/richter-veresov-saldirisi": {
+  "sceau": "151ae4bc7f3518ae",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/robatsch-savunmasi": {
+  "sceau": "1cceac345be89af4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-ati-acilisi": {
+  "sceau": "276f9e190cbb21c9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-gambiti": {
+  "sceau": "2e1ebfbdb7d86e99",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-hint-saldirisi": {
+  "sceau": "658f7f461e63abf3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-hint-saldirisi-bf5-ile": {
+  "sceau": "2a82949c6fb720be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-hint-saldirisi-e6-ile": {
+  "sceau": "657bee25cf5e16ee",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-hint-savunmasi": {
+  "sceau": "0e1a627733bcaaa5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-piyonu-acilisi": {
+  "sceau": "91b254e8199254fe",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sah-piyonu-oyunu": {
+  "sceau": "ad133cefbfb0ed79",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/saragosa-acilisi": {
+  "sceau": "0ea1b0ac534a7339",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sicilya-savunmasi": {
+  "sceau": "520ba6c160083acd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/slav-hint": {
+  "sceau": "c727eb3f98219d8b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/slav-savunmasi": {
+  "sceau": "ae3ac827050417e2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sodyum-saldirisi": {
+  "sceau": "482377a4f060d961",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/solgun-yuz-saldirisi": {
+  "sceau": "28a2922c43c24f97",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/sozde-vezir-hint-savunmasi": {
+  "sceau": "8602fcdfb70d6d7d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/su-aygiri-savunmasi": {
+  "sceau": "1f2fb5021929814b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/tarrasch-savunmasi": {
+  "sceau": "88bc47d050b31b8b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/torre-saldirisi": {
+  "sceau": "f11ec30f143954a4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/trompowsky-saldirisi": {
+  "sceau": "9545e0b3e7a6b0c6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/uc-at-acilisi": {
+  "sceau": "dcf857f55d618da4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/valensiya-acilisi": {
+  "sceau": "7f32608ac5f95594",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/van-geet-acilisi": {
+  "sceau": "197902d598dfe560",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/vant-kruijs-acilisi": {
+  "sceau": "a1a5e2a16ed0378c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/vezir-gambiti": {
+  "sceau": "95f176e612589d09",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/vezir-hint-savunmasi": {
+  "sceau": "e4b8480581c7d3c5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/vezir-piyonu-mengarini-saldirisi": {
+  "sceau": "93a4ffc5b9cbae9f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/vezir-piyonu-oyunu": {
+  "sceau": "3befb569be888600",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/viyana-gambiti-max-lange-savunmasiyla": {
+  "sceau": "400afd01d75e92a0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/viyana-oyunu": {
+  "sceau": "c12a8d5a5525d930",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/wade-savunmasi": {
+  "sceau": "bdf96bf9617b9d89",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ware-acilisi": {
+  "sceau": "d7f0e41aa856313a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/ware-savunmasi": {
+  "sceau": "9cac059744e2f0c7",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/yari-slav-savunmasi": {
+  "sceau": "8cc009f28e082043",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/yusupov-rubinstein-sistemi": {
+  "sceau": "13da170fdce8a829",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/zaire-savunmasi": {
+  "sceau": "9172dedec278886c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/zukertort-acilisi": {
+  "sceau": "4e998d54572f5cad",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/acilislar/zukertort-savunmasi": {
+  "sceau": "472be8860a00fcac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/": {
+  "sceau": "4dc50bd55d5d2f85",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/acilis-ilkeleri": {
+  "sceau": "5c160f3af99ea7a2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/acmaz": {
+  "sceau": "d746e81dcec80228",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/arka-sira-mati": {
+  "sceau": "7a5b90a59cb5fbcd",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/asili-tasi-fark-etmek": {
+  "sceau": "c41715b5aecc5b3f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/at-catali": {
+  "sceau": "835b505f996e11e4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/beraberlik": {
+  "sceau": "340d9f8c595693a5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/cifte-saldiri": {
+  "sceau": "5b4a391e6e196432",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/gecerken-alma": {
+  "sceau": "57931a8fad9b6786",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/notasyon": {
+  "sceau": "9dad86eea757d9cc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/piyon-catali": {
+  "sceau": "25d2cd22bf86b746",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/piyon-terfisi": {
+  "sceau": "df45854e60120a50",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/rok": {
+  "sceau": "5ac03c69ecf19c44",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/sah-mat-ve-pat": {
+  "sceau": "1cb7944527aa088f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/saptirma": {
+  "sceau": "d86b4e7d92496f13",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/sessiz-hamle": {
+  "sceau": "b5c2c600333f17a9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/sis": {
+  "sceau": "5101bdb50bd20177",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/taslar-nasil-hareket-eder": {
+  "sceau": "2c5fa66c70ecd0aa",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/kurallar/tempolar": {
+  "sceau": "5cb78918360be6af",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/": {
+  "sceau": "d1a23fa2a91e22be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/acmaz": {
+  "sceau": "6b19152d82257062",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/arka-sira-mati": {
+  "sceau": "b5684aad663585a5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/at-catali": {
+  "sceau": "1d9f4a4929c79285",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/bir-hamlede-mat": {
+  "sceau": "ca6fd1be9ac394bc",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/cifte-saldiri": {
+  "sceau": "e6a00338f22417e3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/iki-hamlede-mat": {
+  "sceau": "94e17891e1ef6a77",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/kazandiran-alma": {
+  "sceau": "e96c9eeba55a0f48",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/kazandiran-hamle": {
+  "sceau": "f8e2dcf0b91d3a6d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/piyon-catali": {
+  "sceau": "9e584eceb10e67c9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/saptirma": {
+  "sceau": "ea5d4bd4bd15d253",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/sessiz-hamle": {
+  "sceau": "1e9782f73f1dec18",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/sis": {
+  "sceau": "4e92e49257fd42b9",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/motifler/uc-hamlede-mat": {
+  "sceau": "6f99ddbf4a6f89d4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/oyun-sonlari/": {
+  "sceau": "2d82f4e9f2a9df57",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/oyun-sonlari/fil-ve-at-mati": {
+  "sceau": "b156b99eb0dee863",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/oyun-sonlari/iki-kale-karsi-sah": {
+  "sceau": "e1a7683c37e97efb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/oyun-sonlari/kale-sah-karsi-sah": {
+  "sceau": "5d6652476845b636",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/oyun-sonlari/sah-ve-piyon-karsi-sah": {
+  "sceau": "c29552bbfa161998",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/oyun-sonlari/vezir-sah-karsi-sah": {
+  "sceau": "990c1ded21849a79",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/": {
+  "sceau": "daddb3c2a6c1c06a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/acarak-saldiri": {
+  "sceau": "cf6f351e9cf586c5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/acik-dikey": {
+  "sceau": "320a8a4a2af41562",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/acmaz": {
+  "sceau": "801754fd33115c60",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/ara-hamle": {
+  "sceau": "05448c838246251a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/araya-girme": {
+  "sceau": "409929353a106e00",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/arka-sira-mati": {
+  "sceau": "3572a6a340debb3c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/asili-tas": {
+  "sceau": "c2373057b01a5999",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/asiri-yukleme": {
+  "sceau": "72f6e6af0c645568",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/bogmaca-mat": {
+  "sceau": "873d14cce563390f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/bosaltma": {
+  "sceau": "e8c518699cda995b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/catal": {
+  "sceau": "94c1335d55a072f6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/cekme": {
+  "sceau": "6d1b31a17f004234",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/cifte-sah": {
+  "sceau": "4c14ecc1f225f08d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/cifte-saldiri": {
+  "sceau": "8a3e283bf839b507",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/degirmen": {
+  "sceau": "8dbdf76081f70e63",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/eco-kodu": {
+  "sceau": "20df00489892cdde",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/elli-hamle-kurali": {
+  "sceau": "5f50e04dd07f9ef0",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/elo-puani": {
+  "sceau": "8742c26e4422c52e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/en-iyi-hamle": {
+  "sceau": "eaf455a80fb1c51d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/feda": {
+  "sceau": "27fc41ee252b40a8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/fil-cifti": {
+  "sceau": "454ea04796f8cb5c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/fiyanketto": {
+  "sceau": "2a6d02ba1ed2f789",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/gambit": {
+  "sceau": "167fb4710a10fcac",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/gecer-piyon": {
+  "sceau": "e2c86f39f4a32281",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/gelisim": {
+  "sceau": "babcd2fa46110345",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/geri-kalmis-piyon": {
+  "sceau": "031916382e562548",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/hata": {
+  "sceau": "0803babc0017d630",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/ileri-karakol": {
+  "sceau": "023a511a743820b3",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/izole-piyon": {
+  "sceau": "b2d00b837c07b70e",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/kapana-kisilmis-tas": {
+  "sceau": "4b1b35b43c5d3c38",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/karsilikli-durum": {
+  "sceau": "081f4ecb1c4f68ca",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/katmerli-piyonlar": {
+  "sceau": "339abe43201087a2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/kombinasyon": {
+  "sceau": "b86b72843342c90f",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/kucuk-terfi": {
+  "sceau": "f91c4b506eff06b2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/malzeme-kazanci": {
+  "sceau": "77d00f69cfb116cb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/mat-saldirisi": {
+  "sceau": "6d8befd26d156ef8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/parlak-hamle": {
+  "sceau": "83c47b480373c123",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/pat": {
+  "sceau": "d1de71eb7105c207",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/piyon-cogunlugu": {
+  "sceau": "1cb69fa7750ed12b",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/profilaksi": {
+  "sceau": "e34a3dee195aea03",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/sah-saldirisi": {
+  "sceau": "04bc52958ec6cc42",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/saptirma": {
+  "sceau": "39231aec8821eba5",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/savunucuyu-ortadan-kaldirmak": {
+  "sceau": "b0b0191b2b3f841d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/sis": {
+  "sceau": "f9947afdff203430",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/surekli-sah": {
+  "sceau": "99b4d0f60643efe4",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/tek-hamle": {
+  "sceau": "a01d86269eca3e4a",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/tempo": {
+  "sceau": "3e3ef242fc4fe9eb",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/terfi": {
+  "sceau": "f044b411ee5a4e76",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/uc-kez-tekrar": {
+  "sceau": "b41c705228a900f8",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/vahim-hata": {
+  "sceau": "5e1a2c2c7b8bcf84",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/yanlislik": {
+  "sceau": "e03b4dd174101a8d",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/yedinci-sira": {
+  "sceau": "d22abb46d3791461",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/sozluk/zugzwang": {
+  "sceau": "3ab11fd00012f316",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/": {
+  "sceau": "6dc25d80e41f37be",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/blackburne-shilling-tuzagi": {
+  "sceau": "d2aa2ad3be75bcf2",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/cezalandirilan-damiano-savunmasi": {
+  "sceau": "da3477bf3398ecd6",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/coban-mati": {
+  "sceau": "3f9c9465840fc607",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/englund-gambiti-tuzagi": {
+  "sceau": "88a77d10ce7fbd51",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/kizarmis-ciger-saldirisi": {
+  "sceau": "cdba82c94c68485c",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
+ },
+ "/tr/tuzaklar/legal-mati": {
+  "sceau": "40992ca4ae7af024",
+  "publiee": "2026-11-01",
+  "modifiee": "2026-11-01"
  },
  "/traps/": {
   "sceau": "daa469afc01cad74",

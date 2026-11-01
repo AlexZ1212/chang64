@@ -48,7 +48,24 @@ const LANGUES = [
             endgames: "de/endspiele", puzzles: "de/motive", traps: "de/fallen" } },
   { code: "ru", intl: "ru-RU", html: "ru", hreflang: "ru", og: "ru_RU", nom: "Русский", accueil: "/ru/", slugsAnglais: true,
     dirs: { openings: "ru/openings", learn: "ru/learn", glossary: "ru/glossary",
-            endgames: "ru/endgames", puzzles: "ru/puzzles", traps: "ru/traps" } }
+            endgames: "ru/endgames", puzzles: "ru/puzzles", traps: "ru/traps" } },
+  /* Deuxieme vague (decision d'Alexandre du 01/11) : italien, turc,
+     polonais, indonesien. Le turc et le polonais ont des lettres que NFD ne
+     decompose pas (ı, ł) : slug() les effacerait sans translit. */
+  { code: "it", intl: "it-IT", html: "it", hreflang: "it", og: "it_IT", nom: "Italiano", accueil: "/it/",
+    dirs: { openings: "it/aperture", learn: "it/regole", glossary: "it/glossario",
+            endgames: "it/finali", puzzles: "it/motivi", traps: "it/trappole" } },
+  { code: "tr", intl: "tr-TR", html: "tr", hreflang: "tr", og: "tr_TR", nom: "Türkçe", accueil: "/tr/",
+    translit: { "ı": "i", "İ": "I" },
+    dirs: { openings: "tr/acilislar", learn: "tr/kurallar", glossary: "tr/sozluk",
+            endgames: "tr/oyun-sonlari", puzzles: "tr/motifler", traps: "tr/tuzaklar" } },
+  { code: "pl", intl: "pl-PL", html: "pl", hreflang: "pl", og: "pl_PL", nom: "Polski", accueil: "/pl/",
+    translit: { "ł": "l", "Ł": "L" },
+    dirs: { openings: "pl/debiuty", learn: "pl/zasady", glossary: "pl/slownik",
+            endgames: "pl/koncowki", puzzles: "pl/motywy", traps: "pl/pulapki" } },
+  { code: "id", intl: "id-ID", html: "id", hreflang: "id", og: "id_ID", nom: "Bahasa Indonesia", accueil: "/id/",
+    dirs: { openings: "id/pembukaan", learn: "id/aturan", glossary: "id/glosarium",
+            endgames: "id/akhir-permainan", puzzles: "id/motif", traps: "id/jebakan" } }
 ];
 const CODES = LANGUES.map(l => l.code);
 const PAR_CODE = Object.fromEntries(LANGUES.map(l => [l.code, l]));

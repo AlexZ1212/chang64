@@ -713,9 +713,9 @@ function drawRatingGraph(){
      partout sans jamais vraiment adapter l'ordre a la langue active. */
   const fmtDate=ts=>{
     const d=new Date(ts),mo=String(d.getMonth()+1).padStart(2,"0"),da=String(d.getDate()).padStart(2,"0");
-    /* Jour avant le mois partout sauf en anglais ; point en allemand et en
-       russe, ou c'est l'usage (25.10). */
-    return LANG==="en"?mo+"/"+da:(LANG==="de"||LANG==="ru")?da+"."+mo:da+"/"+mo;
+    /* Jour avant le mois partout sauf en anglais ; point en allemand, en
+       russe, en turc et en polonais, ou c'est l'usage (25.10). */
+    return LANG==="en"?mo+"/"+da:["de","ru","tr","pl"].includes(LANG)?da+"."+mo:da+"/"+mo;
   };
   const dateSvg='<text x="'+padL+'" y="'+(h-3)+'" text-anchor="start" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[0].t)+'</text>'+
     '<text x="'+(w-padR)+'" y="'+(h-3)+'" text-anchor="end" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[hist.length-1].t)+'</text>';
@@ -1333,11 +1333,16 @@ const MONTH_NAMES={
   pt:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"],
   de:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
   /* Nominatif : le mois s'affiche seul, en titre du calendrier. */
-  ru:["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"]
+  ru:["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"],
+  it:["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"],
+  tr:["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],
+  pl:["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"],
+  id:["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
 };
 const WEEKDAY_SHORT={en:["Mo","Tu","We","Th","Fr","Sa","Su"],fr:["L","M","M","J","V","S","D"],
   es:["L","M","X","J","V","S","D"],pt:["S","T","Q","Q","S","S","D"],de:["Mo","Di","Mi","Do","Fr","Sa","So"],
-  ru:["Пн","Вт","Ср","Чт","Пт","Сб","Вс"]};
+  ru:["Пн","Вт","Ср","Чт","Пт","Сб","Вс"],it:["L","M","M","G","V","S","D"],
+  tr:["Pt","Sa","Ça","Pe","Cu","Ct","Pz"],pl:["Pn","Wt","Śr","Cz","Pt","So","Nd"],id:["Sn","Sl","Rb","Km","Jm","Sb","Mg"]};
 function calDateKey(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
 /* Meme formule que dailyPuzzle() (ui.js), mais pour une date donnee plutot
    que "aujourd'hui" -- doit rester EXACTEMENT synchronisee avec elle (meme

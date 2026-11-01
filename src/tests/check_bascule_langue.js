@@ -132,7 +132,8 @@ const ECRANS = [
   T("navigateur francais sans choix : /fr/", essai(null, "fr-FR") === "/fr/");
   T("navigateur bresilien : /pt/", essai(null, "pt-BR") === "/pt/");
   T("choix enregistre : allemand, le # suit", essai("de", "en-US", "#puzzle=p3") === "/de/#puzzle=p3");
-  T("langue hors registre : reste sur /", essai(null, "it-IT") === null);
+  T("langue hors registre : reste sur /", essai(null, "ja-JP") === null);
+  T("navigateur italien (deuxieme vague) : /it/", essai(null, "it-IT") === "/it/");
   for (const l of LANGUES.filter(x => x.code !== "en")) {
     const h = fs.readFileSync(PATH.join(SITE, l.code, "index.html"), "utf8");
     T("pas de renvoi sur " + l.accueil, !/location\.replace/.test((h.match(/<head>[\s\S]*?<\/head>/) || [""])[0]));

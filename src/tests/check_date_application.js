@@ -33,7 +33,11 @@ const FORME={
   es:[/^Publicada el \d{1,2} de [a-z]+ de \d{4}/,/actualizada el/],
   pt:[/^Publicada em \d{1,2} de [a-zç]+ de \d{4}/,/atualizada em/],
   de:[/^Veröffentlicht am \d{1,2}\. [A-Za-zä]+ \d{4}/,/aktualisiert am/],
-  ru:[/^Опубликовано \d{1,2} [а-я]+ \d{4}/,/обновлено/]
+  ru:[/^Опубликовано \d{1,2} [а-я]+ \d{4}/,/обновлено/],
+  it:[/^Pubblicato il \d{1,2} [a-z]+ \d{4}/,/aggiornato il/],
+  tr:[/^Yayımlanma: \d{1,2} [A-Za-zÇĞİÖŞÜçğıöşü]+ \d{4}/,/güncelleme:/],
+  pl:[/^Opublikowano \d{1,2} [a-ząćęłńóśźż]+ \d{4}/,/zaktualizowano/],
+  id:[/^Terbit \d{1,2} [A-Za-z]+ \d{4}/,/diperbarui/]
 };
 const nb=s=>String(s).replace(/ /g," ");
 

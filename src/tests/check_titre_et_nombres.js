@@ -29,8 +29,10 @@ function ouvrir(l) {
 const presentation = d => d.querySelector(".hero-lede p:last-child").textContent;
 const compteur = d => d.getElementById("hCount").textContent;
 /* Mots qui suivent le nombre dans le texte de presentation. */
-const MOT = { en: " puzzles", fr: " exercices", es: " ejercicios", pt: " exercícios", de: " Zug für Zug", ru: " задач" };
-const TITRE = { en: /play chess/, fr: /joue aux/, es: /juega al ajedrez/, pt: /jogue xadrez/, de: /Schach spielen/, ru: /играй в шахматы/ };
+const MOT = { en: " puzzles", fr: " exercices", es: " ejercicios", pt: " exercícios", de: " Zug für Zug", ru: " задач",
+  it: " esercizi", tr: " bulmaca", pl: " zadań", id: " teka-teki" };
+const TITRE = { en: /play chess/, fr: /joue aux/, es: /juega al ajedrez/, pt: /jogue xadrez/, de: /Schach spielen/, ru: /играй в шахматы/,
+  it: /gioca a scacchi/, tr: /satranç oyna/, pl: /graj w szachy/, id: /main catur/ };
 
 (async () => {
   console.log("\n--- Le nombre brut n'est plus affiche tel quel ---");

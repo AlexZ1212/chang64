@@ -44,7 +44,7 @@ function ouvrir(rep){
   console.log("ENGLISH BY DEFAULT");
   T("html lang", w.document.documentElement.lang==="en", w.document.documentElement.lang);
   T("hero in english", /Play chess/.test($("pane-home").textContent));
-  T("switcher present", !!$("langSwitch") && $("langSwitch").querySelectorAll("a[data-lang]").length===6);
+  T("switcher present", !!$("langSwitch") && $("langSwitch").querySelectorAll("a[data-lang]").length===require("./langues/registre.js").LANGUES.length);
   click($("footLegal")); await wait(500);
   T("legal in english", /Publisher/.test($("legalBody").textContent));
 

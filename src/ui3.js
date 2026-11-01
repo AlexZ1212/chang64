@@ -800,6 +800,8 @@ function renderCoordHud(){
    defauts documentee de septembre a octobre. Une navigation n'en a aucun.
    La partie en cours est deja enregistree (loadPlaySave), et le # suit le
    lien : un lien vers un exercice ou une partie entre amis reste ouvert.
+   Ce # n'est plus dans l'adresse une fois l'ecran quitte (noterFragment,
+   ui.js) : de l'accueil, on arrive donc sur l'accueil de l'autre langue.
    La langue choisie est notee avant de partir : sans cela, la page anglaise
    "/" relirait l'ancienne langue et renverrait aussitot vers elle. */
 $("langSwitch").addEventListener("click",e=>{

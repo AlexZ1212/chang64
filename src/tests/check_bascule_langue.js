@@ -111,6 +111,23 @@ const ECRANS = [
     T("clic : le # suit le lien", vers.getAttribute("href") === "/es/#puzzle=p12", vers.getAttribute("href"));
     w.close();
   }
+  {
+    /* Signale le 2026-11-01 : arrive par un lien vers un exercice, puis
+       revenu a l'accueil, on changeait de langue et l'exercice se rouvrait
+       au lieu de l'accueil (le # restait dans l'adresse). */
+    const w = await ouvrir("de", { attente: 1200 });
+    w.history.replaceState(null, "", "#puzzle=p12");
+    w.dispatchEvent(new w.HashChangeEvent("hashchange"));
+    await wait(200);
+    T("lien vers un exercice : l'exercice s'ouvre", w.eval("mode") === "puzzles", w.eval("mode"));
+    w.eval("setMode('home')");
+    T("retour a l'accueil : le # quitte l'adresse", w.location.hash === "", w.location.hash);
+    const vers = [...w.document.querySelectorAll("#langSwitch a[data-lang]")].find(a => a.dataset.lang === "pt");
+    vers.addEventListener("click", e => e.preventDefault());
+    vers.click();
+    T("retour a l'accueil : la bascule mene a l'accueil de l'autre langue", vers.getAttribute("href") === "/pt/", vers.getAttribute("href"));
+    w.close();
+  }
 
   console.log("\n--- renvoi depuis la page anglaise ---");
   /* Le script de tete de "/" est rejoue dans un bac a sable, avec un

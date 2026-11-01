@@ -2720,6 +2720,8 @@ if($("calBackLink"))$("calBackLink").onclick=(e)=>{e.preventDefault();setMode("p
     else if(f==="privacy"){setMode("legal");goToSection("privacyTitle");}
     else if(f==="prefs"){setMode("prefs");}
     else if(f==="accessibilite"){setMode("prefs");goToSection("accessibilite");}
+    else return;
+    noterFragment();   /* voir ui.js : efface en quittant l'ecran */
   };
   window.addEventListener("hashchange",versFragment);
   setTimeout(versFragment,60);

@@ -2590,6 +2590,15 @@ function readDeepLink(){
   }
   return null;
 }
+/* Fragment d'arrivee deja suivi (2026-11-01). L'application lit le # une
+   fois puis ne le touche plus : arrive par /de/#theme=fork depuis une page
+   Apprendre, on revenait a l'accueil avec le # toujours dans l'adresse, et
+   le selecteur de langue (ui3.js), qui recopie le #, rouvrait l'exercice
+   dans la nouvelle langue au lieu de l'accueil. On note donc le # et l'ecran
+   qu'il a ouvert ; setMode l'efface de l'adresse quand on quitte cet ecran.
+   Un # qu'aucun ecran n'a suivi n'est pas note, donc jamais efface. */
+let fragmentSuivi=null;
+function noterFragment(){fragmentSuivi=location.hash?{hash:location.hash,mode:mode}:null;}
 function applyDeepLink(d){
   if(!d)return false;
   if(d.kind==="train"){
@@ -2800,6 +2809,14 @@ function markTab(el,actif){
 }
 function setMode(m,opts){
   opts=opts||{};
+  /* Voir noterFragment : un # nouvellement arrive differe de celui note,
+     il n'est donc pas efface par le setMode qui l'ouvre. replaceState ne
+     declenche pas hashchange. window.history et non history : ui2.js
+     appelle "history" la liste des parties jouees. */
+  if(fragmentSuivi&&m!==fragmentSuivi.mode){
+    if(location.hash===fragmentSuivi.hash)try{window.history.replaceState(null,"",location.pathname+location.search);}catch(e){}
+    fragmentSuivi=null;
+  }
   reviewGame=null;reviewLast=null;
   const rb=$("resultBanner"); if(rb)rb.classList.add("hide");
   /* Tant que cette modale couvrait tout le navigateur, la barre d'onglets
@@ -3019,8 +3036,8 @@ $("btnAmiResign").onclick=()=>{
 };
 window.addEventListener("hashchange",()=>{
   const d=readDeepLink();
-  if(d&&applyDeepLink(d))return;
-  if(readHash())setMode("friend");
+  if(d&&applyDeepLink(d)){noterFragment();return;}
+  if(readHash()){setMode("friend");noterFragment();}
 });
 
 /* ---------- start ---------- */
@@ -3062,7 +3079,7 @@ Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAm
      restaurer -- chaque clic y agit tout de suite, rien a cocher au
      chargement. */
   const deep=readDeepLink();
-  if(deep&&applyDeepLink(deep)){}
-  else if(readHash())setMode("friend");
+  if(deep&&applyDeepLink(deep))noterFragment();
+  else if(readHash()){setMode("friend");noterFragment();}
   else setMode("home");
 });

@@ -208,9 +208,9 @@ const PUBLISHER = { name: "AlexZ1212" };
    la page Confidentialite le decrit. Balise posee ici plutot qu'injectee par
    Cloudflare : on sait exactement ou elle est, et la CSP n'ouvre que les deux
    origines qu'elle utilise. Jeton vide = aucune balise et CSP inchangee. */
-const CF_WA_JETON = "";
+const CF_WA_JETON = "4dd429315c894ab4a0ae75aeb4ec37db";
 const BALISE_AUDIENCE = CF_WA_JETON
-  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_WA_JETON}"}'></script>`
+  ? `<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${CF_WA_JETON}"}'></script>`
   : "";
 
 /* ---------- 1. application ---------- */

@@ -494,6 +494,12 @@ module.exports = {
 "Play chess against a built-in engine at bullet, blitz, rapid and classical time controls, solve __NP__ engine-verified tactics puzzles, review your games move by move and challenge friends over a link. No account required.":"Joue aux échecs contre un moteur intégré en bullet, blitz, rapide ou cadence classique, résous __NP__ exercices tactiques vérifiés par le moteur, analyse tes parties coup par coup et défie tes amis par lien. Sans compte.",
 "@noscript":"chang64 a besoin de JavaScript pour jouer, résoudre des exercices et analyser des parties. Sans lui, rien sur cette page ne répondra.<br>Les pages de contenu fonctionnent sans JavaScript : <a href=\"/{openings}/\">ouvertures</a>, <a href=\"/{learn}/\">règles</a>, <a href=\"/{glossary}/\">lexique</a>, <a href=\"/{endgames}/\">finales</a>.",
 /* Makruk, les echecs thais (easter egg, 2026-11-01) : makruk.js. */
+"Khun":"Khun",
+"Met":"Met",
+"Khon":"Khon",
+"Ma":"Ma",
+"Rua":"Rua",
+"Bia":"Bia",
 "Makruk, Thai chess":"Makruk, les échecs thaïs",
 "Back to chess":"Revenir aux échecs",
 "Opponent":"Adversaire",

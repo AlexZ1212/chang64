@@ -29,15 +29,24 @@ const html=fs.readFileSync(""+SITE+"/index.html","utf8");
 let ok=0,ko=0;
 const T=(n,c,d)=>{if(c){ok++;console.log("  OK   "+n)}else{ko++;console.log("  FAIL "+n+(d?"  -> "+d:""))}};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+/* Date figee au 15 du mois courant (2026-11-01) : le test raisonne sur
+   "hier", "il y a quatre jours"... dans le calendrier du mois affiche. Les
+   premiers jours d'un mois, ces jours tombaient dans le mois precedent, hors
+   de la grille, et le test plantait (le 1er novembre, par exemple). */
+const BASE=new Date();BASE.setDate(15);BASE.setHours(12,0,0,0);
 const dom=new jd.JSDOM(html,{runScripts:"dangerously",pretendToBeVisual:true,url:"https://chang64.com/",
   virtualConsole:new jd.VirtualConsole(),
-  beforeParse(w){ w.fetch=u=>{const p=SITE+String(u).replace(/^https?:\/\/[^/]+/,"");
+  beforeParse(w){
+    const D=w.Date;
+    class Fige extends D{constructor(...a){if(a.length)super(...a);else super(BASE.getTime());} static now(){return BASE.getTime();}}
+    w.Date=Fige;
+    w.fetch=u=>{const p=SITE+String(u).replace(/^https?:\/\/[^/]+/,"");
     return fs.existsSync(p)?Promise.resolve({ok:true,status:200,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(p,"utf8")))})
                            :Promise.resolve({ok:false,status:404});};}});
 const w=dom.window,d=w.document,$=id=>d.getElementById(id);
 
 /* Cle de date a N jours en arriere, dans le meme format que calDateKey. */
-const jour=n=>{const x=new Date();x.setDate(x.getDate()-n);
+const jour=n=>{const x=new Date(BASE);x.setDate(x.getDate()-n);
   return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");};
 const cases=()=>[...d.querySelectorAll("#calFull .cal-day:not(.empty)")];
 const parDate=k=>cases().find(c=>c.getAttribute("data-date")===k);

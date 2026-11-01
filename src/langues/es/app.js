@@ -640,6 +640,12 @@ module.exports = {
 "@keyboard":"<p>En el tablero: las <b>flechas</b> mueven el cursor, <b>Intro</b> o <b>Espacio</b> eligen una pieza y luego su casilla de destino, <b>Esc</b> anula la selección. <b>Inicio</b> y <b>Fin</b> saltan al borde de la fila, <b>Re Pág</b> y <b>Av Pág</b> a los extremos de la columna.</p>",
 "@noscript":"chang64 necesita JavaScript para jugar, resolver ejercicios y analizar partidas. Sin él, nada en esta página responderá.<br>Las páginas de contenido funcionan sin JavaScript: <a href=\"/{openings}/\">aperturas</a>, <a href=\"/{learn}/\">reglas</a>, <a href=\"/{glossary}/\">glosario</a>, <a href=\"/{endgames}/\">finales</a>.",
 /* Makruk, les echecs thais (easter egg, 2026-11-01) : makruk.js. */
+"Khun":"Khun",
+"Met":"Met",
+"Khon":"Khon",
+"Ma":"Ma",
+"Rua":"Rua",
+"Bia":"Bia",
 "Makruk, Thai chess":"Makruk, el ajedrez tailandés",
 "Back to chess":"Volver al ajedrez",
 "Opponent":"Rival",

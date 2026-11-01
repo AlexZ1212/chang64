@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debiuty szachowe: wszystkie nazwane warianty z ruchami i kodami ECO | chang64</title>
+<meta name="description" content="Pełny spis debiutów szachowych (rodziny: 141, nazwane warianty: 1758), każdy z ruchami, kodem ECO i szachownicą do gry.">
+<link rel="canonical" href="https://chang64.com/pl/debiuty/">
+
+<!-- Icones de la nouvelle identite (2026-10-24) : le .ico pour les anciens
+     navigateurs et Safari, le SVG (signe allege) pour les autres, et une
+     image pleine pour l'ecran d'accueil iOS. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://chang64.com/openings/">
+<link rel="alternate" hreflang="fr" href="https://chang64.com/fr/ouvertures/">
+<link rel="alternate" hreflang="es" href="https://chang64.com/es/aperturas/">
+<link rel="alternate" hreflang="pt" href="https://chang64.com/pt/aberturas/">
+<link rel="alternate" hreflang="de" href="https://chang64.com/de/eroeffnungen/">
+<link rel="alternate" hreflang="ru" href="https://chang64.com/ru/openings/">
+<link rel="alternate" hreflang="it" href="https://chang64.com/it/aperture/">
+<link rel="alternate" hreflang="tr" href="https://chang64.com/tr/acilislar/">
+<link rel="alternate" hreflang="pl" href="https://chang64.com/pl/debiuty/">
+<link rel="alternate" hreflang="id" href="https://chang64.com/id/pembukaan/">
+<link rel="alternate" hreflang="x-default" href="https://chang64.com/openings/">
+
+<meta property="og:title" content="Debiuty szachowe: wszystkie nazwane warianty z ruchami i kodami ECO | chang64">
+<meta property="og:description" content="Pełny spis debiutów szachowych (rodziny: 141, nazwane warianty: 1758), każdy z ruchami, kodem ECO i szachownicą do gry.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://chang64.com/pl/debiuty/">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:image" content="https://chang64.com/og/openings-pl.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Auto-heberge depuis le 2026-09-05 (voir audit : la promesse "aucun
+     traqueur" de la page Confidentialite etait fausse tant que Google
+     Fonts recevait IP et user-agent de chaque visiteur). Le raisonnement
+     display=optional ci-dessous reste identique et s'applique de la meme
+     facon a des fichiers locaux : optional laisse un tres court delai
+     (largement tenu ici, les fichiers etant sur la meme origine que la
+     page) puis, s'il n'est pas tenu, garde la police de secours pour toute
+     la vue sans jamais la remplacer plus tard.
+     display=swap montrait d'abord la police de secours puis la remplacait
+     par Archivo/Source Serif 4 des qu'elle arrivait : sur ces pages, chaque
+     navigation recharge le document (ce ne sont pas des pages d'application
+     a etat persistant), donc ce remplacement rejouait a chaque clic. Sur le
+     menu du haut, une rangee de courtes pastilles cote a cote, l'ecart de
+     largeur entre les deux polices (mesure : jusqu'a 40px sur les six
+     entrees) se voyait comme un reflow du menu, comme si la page repartait
+     de zero.
+     Chemins relatifs a la racine ("/fonts/...", pas "${SITE}/fonts/...") :
+     ces pages vivent a des profondeurs variees (/openings/*.html,
+     /fr/lexique/*.html...), donc un chemin relatif au DOCUMENT casserait
+     selon la profondeur, alors qu'un chemin relatif a la RACINE fonctionne
+     partout tel quel. Fige sur le domaine de production aurait aussi rate
+     tout apercu servi ailleurs (previsualisation de branche Cloudflare
+     Pages, environnement local) -- constate en testant ce correctif : les
+     six polices tombaient en erreur reseau des qu'on sortait de
+     production.
+     Regroupe dans le MEME <style> que ${CSS} depuis ce correctif : une
+     balise separee decalait ce que plusieurs tests/check_*.js lisent comme
+     "le premier bloc <style>", casse constatee sur check_pied_de_page.js
+     (11 echecs, regles .sitenav/.tabs cherchees dans le mauvais bloc). -->
+<style>
+.skiplink{position:absolute;left:-9999px;top:0;z-index:100;background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
+.skiplink:focus{left:0}
+.pagedate{margin:6px 0 0;font-size:12px;color:var(--sage)}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v14-latin-600.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-400.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-500.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-600.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-500.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format('woff2')}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v15-cyrillic-600.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-cyrillic-variable.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/source-serif-4-v15-latin-ext-600.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400;font-display:optional;src:url(/fonts/archivo-v25-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/archivo-v25-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600;font-display:optional;src:url(/fonts/archivo-v25-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:optional;src:url(/fonts/jetbrains-mono-v24-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+*{box-sizing:border-box;margin:0;padding:0}:root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;--bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;--rule:rgba(21,32,28,.14);--r:8px}body{background:var(--ink);color:var(--chalk);font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}.wrap{max-width:880px;margin:0 auto}a{color:var(--brass)}header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:14px;position:sticky;top:0;z-index:30;background-color:var(--ink);padding-top:10px;box-shadow:0 14px 14px -6px var(--ink)}.brand{display:flex;align-items:baseline;gap:calc(clamp(30px,6vw,40px) * .15);text-decoration:none;color:var(--chalk)}.brandmark{width:clamp(30px,6vw,40px);height:calc(clamp(30px,6vw,40px) * 54 / 64);display:block;flex:none;color:var(--brass)}.brand .names{display:flex;flex-direction:column;gap:2px}.brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}.brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}.brand .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}@media(max-width:620px){.brand .tagline{display:none}}.brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}header nav:not(.sitenav){display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0;min-width:0}nav a{font-size:13px;text-decoration:none;color:var(--sage)}nav a:hover{color:var(--brass)}h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,5vw,44px);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin-bottom:10px}h2{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;line-height:1.22;margin:32px 0 12px}p{margin-bottom:12px;max-width:66ch}.lede{font-size:17px;color:var(--sage);margin-bottom:24px}.cols{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}@media(max-width:700px){.cols{grid-template-columns:1fr}}.diagram{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:10px}.anim svg{display:block;width:100%;height:auto;border-radius:6px}.anim g[data-ply][hidden]{display:none}[hidden],.tile[hidden],[data-theme][hidden],.toc[hidden]{display:none!important}.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}.animctl button:hover{background:var(--board);color:var(--slate)}.animctl button:disabled{opacity:.38;cursor:default}.animctl button:disabled:hover{background:var(--slate);color:var(--board)}.animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}.animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}.diagram svg{width:100%;height:auto;display:block;border-radius:2px}.moves{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.02em;background:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}.theme-bloc{padding-top:20px;margin-top:20px;border-top:1px solid var(--rule)}.theme-bloc:first-of-type{padding-top:0;margin-top:0;border-top:none}.theme-bloc h2{margin-top:0}.eco{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--brass);border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0}.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:var(--sage);border:1px solid var(--rule);border-radius:var(--r);padding:3px 9px;margin:0 6px 6px 0;user-select:all}table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px}.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:14px}.tablewrap table{margin-bottom:0;width:auto;min-width:100%}th{text-align:left;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);padding:8px;border-bottom:1px solid var(--rule)}td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk);white-space:nowrap}.cta{display:inline-block;background:var(--brass);color:#FFF;font-weight:600;font-size:14px;text-decoration:none;padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}.cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);border:1px solid var(--rule);border-radius:12px}.toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;color:var(--chalk);background:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 12px}.toc a:hover{border-color:var(--brass);color:var(--brass)}.toc a b{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--sage);font-size:12px}html{scroll-padding-top:150px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.tile{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:14px;text-decoration:none;display:block}.tile:hover{border-color:var(--brass)}.tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}.tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);font-size:12.5px;letter-spacing:.03em;line-height:1.7;text-align:center}.filtre{margin-bottom:18px}.filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;padding:11px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--slate);color:var(--chalk)}.filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}.filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}.cotefiltre{display:flex;gap:3px;background-color:var(--slate);padding:4px;border-radius:999px;border:1px solid var(--rule);width:fit-content;margin-top:10px}.cotefiltre button{font:inherit;font-size:13px;font-weight:500;color:var(--sage);background:none;border:0;cursor:pointer;padding:7px 14px;border-radius:999px;white-space:nowrap;transition:background .18s,color .18s}.cotefiltre button:hover{color:var(--chalk)}.cotefiltre button[aria-pressed="true"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}.sitenav{display:flex;gap:3px;background-color:var(--slate);padding:4px;border-radius:999px;border:1px solid var(--rule);overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}.sitenav::-webkit-scrollbar{display:none}.sitenav::before,.sitenav::after{content:"";position:sticky;width:22px;flex:none;pointer-events:none;z-index:2;opacity:0;display:flex;align-items:center;font-size:13px;color:var(--sage)}.sitenav::before{left:-4px;order:-1;margin-right:-22px;border-radius:999px 0 0 999px;background:linear-gradient(to right,var(--slate) 38%,transparent);content:"‹";padding-left:6px}.sitenav::after{right:-4px;order:999;margin-left:-22px;border-radius:0 999px 999px 0;background:linear-gradient(to left,var(--slate) 38%,transparent);content:"›";justify-content:flex-end;padding-right:6px}.sitenav.sl::before,.sitenav.sr::after{opacity:1}.sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;transition:background .18s,color .18s}.sitenav a:hover{color:var(--chalk)}.sitenav [aria-current="page"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}@media(max-width:520px){.sitenav a,.sitenav span{padding:8px 11px;font-size:12.5px}}.langsw{background-color:var(--ink);padding:3px;position:relative;border-radius:8px;border:1px solid var(--rule);flex:none}.langsw summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:6px;background-color:var(--raise);color:var(--chalk);white-space:nowrap}.langsw summary::-webkit-details-marker{display:none}.langsw summary::after{content:"";display:inline-block;width:5px;height:5px;margin:0 0 2px 7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}.langsw[open] summary::after{transform:rotate(-135deg);margin-bottom:-1px}.langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px}.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:6px;white-space:nowrap}.langmenu a:hover{color:var(--chalk)}.langmenu a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}.footnav{margin-bottom:14px}.foot-pair{white-space:nowrap}.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:6px 2px}.footnav a:hover{color:var(--brass)}.footnav [aria-current="page"]{color:var(--sage);font-weight:600}.footnote,.pagedate{margin-left:auto;margin-right:auto}.footnote{margin-top:0;margin-bottom:0}</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Debiuty szachowe","url":"https://chang64.com/pl/debiuty/","inLanguage":"pl","author":{"@type":"Person","name":"AlexZ1212"},"publisher":{"@type":"Organization","name":"chang64","url":"https://chang64.com"},"datePublished":"2026-11-01","dateModified":"2026-11-01","mainEntityOfPage":{"@type":"WebPage","@id":"https://chang64.com/pl/debiuty/"},"image":"https://chang64.com/og/openings-pl.png","isPartOf":{"@type":"WebSite","name":"chang64","url":"https://chang64.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"chang64","item":"https://chang64.com/"},{"@type":"ListItem","position":2,"name":"Debiuty","item":"https://chang64.com/pl/debiuty/"}]}</script>
+</head>
+<body>
+<a class="skiplink" href="#contenu">Przejdź do głównej treści</a>
+<div class="wrap">
+<header>
+  <a class="brand" href="/pl/"><svg class="brandmark" viewBox="0 0 64 54" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z"/></svg><span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">Słoń na 64 polach</span></span></a>
+  <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
+       le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
+       place du contenu. Sur ecran etroit la rangee defile horizontalement,
+       comme les onglets de l'application. -->
+  <details class="langsw"><summary aria-label="Język: Polski">PL</summary><div class="langmenu"><a href="/openings/" hreflang="en" lang="en" rel="alternate">English</a><a href="/fr/ouvertures/" hreflang="fr" lang="fr" rel="alternate">Français</a><a href="/es/aperturas/" hreflang="es" lang="es" rel="alternate">Español</a><a href="/pt/aberturas/" hreflang="pt" lang="pt-BR" rel="alternate">Português</a><a href="/de/eroeffnungen/" hreflang="de" lang="de" rel="alternate">Deutsch</a><a href="/ru/openings/" hreflang="ru" lang="ru" rel="alternate">Русский</a><a href="/it/aperture/" hreflang="it" lang="it" rel="alternate">Italiano</a><a href="/tr/acilislar/" hreflang="tr" lang="tr" rel="alternate">Türkçe</a><a href="/pl/debiuty/" hreflang="pl" lang="pl" rel="alternate" aria-current="true">Polski</a><a href="/id/pembukaan/" hreflang="id" lang="id" rel="alternate">Bahasa Indonesia</a></div></details>
+  <nav class="sitenav"><span aria-current="page" id="cn">Debiuty</span><a href="/pl/motywy/">Motywy</a><a href="/pl/zasady/">Zasady</a><a href="/pl/koncowki/">Końcówki</a><a href="/pl/pulapki/">Pułapki debiutowe</a><a href="/pl/slownik/">Słownik</a></nav>
+</header>
+<main id="contenu">
+
+<h1>Debiuty szachowe</h1>
+<p class="lede">Każda nazwana rodzina debiutów, z ruchami i wariantami. Otwórz jedną, żeby zobaczyć pozycję, odtworzyć wariant ruch po ruchu albo zagrać go samemu z silnikiem. Rodziny: 141, nazwane warianty: 1758.</p>
+<!-- Champ de recherche. Masque par defaut et revele par le script : sans
+     JavaScript la page reste exactement ce qu'elle etait, et personne ne se
+     retrouve devant un champ inerte. Cent quarante et une entrees sur une
+     seule page ne se parcourent pas a l'oeil. -->
+<div class="filtre hide" id="filtreBloc">
+  <input type="search" id="filtre" autocomplete="off"
+         placeholder="Szukaj: nazwa, ruchy lub kod ECO"
+         aria-label="Filtruj debiuty"
+         aria-controls="grille">
+  <!-- Une ouverture implique toujours les deux camps : le classement
+       Blancs/Noirs suit la tradition (qui choisit cette ouverture pour son
+       repertoire), pas une propriete stricte de la position. Absent par
+       defaut ("Toutes"), pour ne pas presenter un jugement comme un fait
+       la ou une seule case le distinguerait mal. -->
+  <div class="cotefiltre" id="coteFiltre" role="group" aria-label="Filtruj według koloru">
+    <button type="button" data-side="all" aria-pressed="true">Wszystkie</button>
+    <button type="button" data-side="w" aria-pressed="false">Białe</button>
+    <button type="button" data-side="b" aria-pressed="false">Czarne</button>
+  </div>
+  <p class="filtre-etat" id="filtreEtat" role="status" aria-live="polite" data-aucun="Brak wyników." data-sur="{a} z {b}"></p>
+</div>
+<div class="grid" id="grille">
+<a class="tile" data-cle="obrona sycylijska sicilian defense 1 e4 c5 b20 b21 b22 b23 b24 b27 b28 b29 b30 b31 b32 b33 b40 b41 b44 b50 b51 b52 b53 b54" data-side="b" href="/pl/debiuty/obrona-sycylijska"><b>Obrona sycylijska</b><span>1.e4 c5 · B20 B21 B22 B23 B24 B27 B28 B29 B30 B31 B32 B33 B40 B41 B44 B50 B51 B52 B53 B54</span></a>
+<a class="tile" data-cle="debiut angielski english opening 1 c4 a10 a11 a13 a15 a16 a17 a18 a19 a20 a21 a22 a23 a24 a25 a27 a28 a29 a30 a31 a32 a34 a35 a36 c20" data-side="w" href="/pl/debiuty/debiut-angielski"><b>Debiut angielski</b><span>1.c4 · A10 A11 A13 A15 A16 A17 A18 A19 A20 A21 A22 A23 A24 A25 A27 A28 A29 A30 A31 A32 A34 A35 A36 C20</span></a>
+<a class="tile" data-cle="obrona francuska french defense 1 e4 e6 c00 c01 c02 c03 c04 c05 c07 c08 c10 c11 c12 c13 c15 c16 c17" data-side="b" href="/pl/debiuty/obrona-francuska"><b>Obrona francuska</b><span>1.e4 e6 · C00 C01 C02 C03 C04 C05 C07 C08 C10 C11 C12 C13 C15 C16 C17</span></a>
+<a class="tile" data-cle="obrona caro kann caro kann defense 1 e4 c6 b10 b11 b12 b13 b15 b16 b17 b18" data-side="b" href="/pl/debiuty/obrona-caro-kann"><b>Obrona Caro-Kann</b><span>1.e4 c6 · B10 B11 B12 B13 B15 B16 B17 B18</span></a>
+<a class="tile" data-cle="gra pionem hetmanskim queen s pawn game 1 d4 a40 a41 a43 a45 a46 a48 a80 d00 d02 d03 d04 d05" data-side="w" href="/pl/debiuty/gra-pionem-hetmanskim"><b>Gra pionem hetmańskim</b><span>1.d4 · A40 A41 A43 A45 A46 A48 A80 D00 D02 D03 D04 D05</span></a>
+<a class="tile" data-cle="gambit krolewski przyjety king s gambit accepted 1 e4 e5 2 f4 exf4 c33 c34 c35 c36 c37 c38 c39" data-side="w" href="/pl/debiuty/gambit-krolewski-przyjety"><b>Gambit królewski przyjęty</b><span>1.e4 e5 2.f4 exf4 · C33 C34 C35 C36 C37 C38 C39</span></a>
+<a class="tile" data-cle="obrona indyjska indian defense 1 d4 nf6 a43 a45 a46 a47 a48 a49 a50 a51 a52 e00 e10 e60" data-side="b" href="/pl/debiuty/obrona-indyjska"><b>Obrona indyjska</b><span>1.d4 Nf6 · A43 A45 A46 A47 A48 A49 A50 A51 A52 E00 E10 E60</span></a>
+<a class="tile" data-cle="partia hiszpanska ruy lopez 1 e4 e5 2 nf3 nc6 3 bb5 c60 c61 c62 c63 c64 c65 c66 c67 c68 c70 c71" data-side="w" href="/pl/debiuty/partia-hiszpanska"><b>Partia hiszpańska</b><span>1.e4 e5 2.Nf3 Nc6 3.Bb5 · C60 C61 C62 C63 C64 C65 C66 C67 C68 C70 C71</span></a>
+<a class="tile" data-cle="gambit hetmanski odrzucony queen s gambit declined 1 d4 d5 2 c4 c5 d02 d06 d07 d08 d30 d31 d32 d35 d37 d38 d40 d50 d51 d53" data-side="w" href="/pl/debiuty/gambit-hetmanski-odrzucony"><b>Gambit hetmański odrzucony</b><span>1.d4 d5 2.c4 c5 · D02 D06 D07 D08 D30 D31 D32 D35 D37 D38 D40 D50 D51 D53</span></a>
+<a class="tile" data-cle="obrona holenderska dutch defense 1 d4 f5 a80 a81 a82 a83 a84 a85 a86 a90 a91" data-side="b" href="/pl/debiuty/obrona-holenderska"><b>Obrona holenderska</b><span>1.d4 f5 · A80 A81 A82 A83 A84 A85 A86 A90 A91</span></a>
+<a class="tile" data-cle="debiut zukertorta zukertort opening 1 nf3 a04 a05 a06 a08 a41" data-side="w" href="/pl/debiuty/debiut-zukertorta"><b>Debiut Zukertorta</b><span>1.Nf3 · A04 A05 A06 A08 A41</span></a>
+<a class="tile" data-cle="obrona nimzowitscha nimzowitsch defense 1 e4 nc6 b00" data-side="b" href="/pl/debiuty/obrona-nimzowitscha"><b>Obrona Nimzowitscha</b><span>1.e4 Nc6 · B00</span></a>
+<a class="tile" data-cle="gambit krolewski odrzucony king s gambit declined 1 e4 e5 2 f4 bc5 c30 c31" data-side="w" href="/pl/debiuty/gambit-krolewski-odrzucony"><b>Gambit królewski odrzucony</b><span>1.e4 e5 2.f4 Bc5 · C30 C31</span></a>
+<a class="tile" data-cle="gra pionem krolewskim king s pawn game 1 e4 b00 b07 c20 c40 c44" data-side="w" href="/pl/debiuty/gra-pionem-krolewskim"><b>Gra pionem królewskim</b><span>1.e4 · B00 B07 C20 C40 C44</span></a>
+<a class="tile" data-cle="obrona aljechina alekhine defense 1 e4 nf6 b02 b03 b04 b05" data-side="b" href="/pl/debiuty/obrona-aljechina"><b>Obrona Aljechina</b><span>1.e4 Nf6 · B02 B03 B04 B05</span></a>
+<a class="tile" data-cle="debiut gonca bishop s opening 1 e4 e5 2 bc4 c23 c24 c26 c27 c43" data-side="w" href="/pl/debiuty/debiut-gonca"><b>Debiut gońca</b><span>1.e4 e5 2.Bc4 · C23 C24 C26 C27 C43</span></a>
+<a class="tile" data-cle="debiut van geeta van geet opening 1 nc3 a00 b00 b01 c31" data-side="w" href="/pl/debiuty/debiut-van-geeta"><b>Debiut Van Geeta</b><span>1.Nc3 · A00 B00 B01 C31</span></a>
+<a class="tile" data-cle="obrona nowoczesna modern defense 1 e4 g6 a04 a40 a41 a42 b06 b07 b27" data-side="b" href="/pl/debiuty/obrona-nowoczesna"><b>Obrona nowoczesna</b><span>1.e4 g6 · A04 A40 A41 A42 B06 B07 B27</span></a>
+<a class="tile" data-cle="obrona skandynawska scandinavian defense 1 e4 d5 b01" data-side="b" href="/pl/debiuty/obrona-skandynawska"><b>Obrona skandynawska</b><span>1.e4 d5 · B01</span></a>
+<a class="tile" data-cle="partia włoska italian game 1 e4 e5 2 nf3 nc6 3 bc4 c50 c51 c53 c54 c55 c56 c57" data-side="w" href="/pl/debiuty/partia-wloska"><b>Partia włoska</b><span>1.e4 e5 2.Nf3 Nc6 3.Bc4 · C50 C51 C53 C54 C55 C56 C57</span></a>
+<a class="tile" data-cle="gambit hetmanski przyjety queen s gambit accepted 1 d4 d5 2 c4 dxc4 d20 d21 d22 d23 d24 d25 d26" data-side="w" href="/pl/debiuty/gambit-hetmanski-przyjety"><b>Gambit hetmański przyjęty</b><span>1.d4 d5 2.c4 dxc4 · D20 D21 D22 D23 D24 D25 D26</span></a>
+<a class="tile" data-cle="debiut birda bird opening 1 f4 a02 a03 b21" data-side="w" href="/pl/debiuty/debiut-birda"><b>Debiut Birda</b><span>1.f4 · A02 A03 B21</span></a>
+<a class="tile" data-cle="debiut retiego reti opening 1 nf3 d5 2 c4 a09 a11 a12" data-side="w" href="/pl/debiuty/debiut-retiego"><b>Debiut Rétiego</b><span>1.Nf3 d5 2.c4 · A09 A11 A12</span></a>
+<a class="tile" data-cle="obrona benoni benoni defense 1 d4 c5 a43 a44 a56 a60" data-side="b" href="/pl/debiuty/obrona-benoni"><b>Obrona Benoni</b><span>1.d4 c5 · A43 A44 A56 A60</span></a>
+<a class="tile" data-cle="obrona philidora philidor defense 1 e4 e5 2 nf3 d6 c41" data-side="b" href="/pl/debiuty/obrona-philidora"><b>Obrona Philidora</b><span>1.e4 e5 2.Nf3 d6 · C41</span></a>
+<a class="tile" data-cle="debiut polski polish opening 1 b4 a00 a05" data-side="w" href="/pl/debiuty/debiut-polski"><b>Debiut polski</b><span>1.b4 · A00 A05</span></a>
+<a class="tile" data-cle="partia wiedenska vienna game 1 e4 e5 2 nc3 c25 c26 c27 c28 c29" data-side="w" href="/pl/debiuty/partia-wiedenska"><b>Partia wiedeńska</b><span>1.e4 e5 2.Nc3 · C25 C26 C27 C28 C29</span></a>
+<a class="tile" data-cle="obrona pietrowa petrov s defense 1 e4 e5 2 nf3 nf6 c42 c43" data-side="b" href="/pl/debiuty/obrona-pietrowa"><b>Obrona Pietrowa</b><span>1.e4 e5 2.Nf3 Nf6 · C42 C43</span></a>
+<a class="tile" data-cle="obrona słowianska slav defense 1 d4 d5 2 c4 c6 d10 d11 d12 d13 d15" data-side="b" href="/pl/debiuty/obrona-slowianska"><b>Obrona słowiańska</b><span>1.d4 d5 2.c4 c6 · D10 D11 D12 D13 D15</span></a>
+<a class="tile" data-cle="debiut groba grob opening 1 g4 a00" data-side="w" href="/pl/debiuty/debiut-groba"><b>Debiut Groba</b><span>1.g4 · A00</span></a>
+<a class="tile" data-cle="obrona nimzoindyjska nimzo indian defense 1 d4 nf6 2 c4 e6 3 nc3 bb4 e20 e21 e22 e24 e30 e32 e33 e34 e38 e40 e41 e43 e46" data-side="b" href="/pl/debiuty/obrona-nimzoindyjska"><b>Obrona nimzoindyjska</b><span>1.d4 Nf6 2.c4 e6 3.Nc3 Bb4 · E20 E21 E22 E24 E30 E32 E33 E34 E38 E40 E41 E43 E46</span></a>
+<a class="tile" data-cle="atak nimzowitscha larsena nimzo larsen attack 1 b3 a01 a06" data-side="w" href="/pl/debiuty/atak-nimzowitscha-larsena"><b>Atak Nimzowitscha-Larsena</b><span>1.b3 · A01 A06</span></a>
+<a class="tile" data-cle="debiut wegierski hungarian opening 1 g3 a00 a07" data-side="w" href="/pl/debiuty/debiut-wegierski"><b>Debiut węgierski</b><span>1.g3 · A00 A07</span></a>
+<a class="tile" data-cle="gambit blackmara diemera blackmar diemer gambit 1 d4 d5 2 e4 d00" data-side="w" href="/pl/debiuty/gambit-blackmara-diemera"><b>Gambit Blackmara-Diemera</b><span>1.d4 d5 2.e4 · D00</span></a>
+<a class="tile" data-cle="obrona pterodaktyla pterodactyl defense 1 d4 g6 2 c4 bg7 3 nc3 c5 4 e3 a40 b06 b27" data-side="b" href="/pl/debiuty/obrona-pterodaktyla"><b>Obrona pterodaktyla</b><span>1.d4 g6 2.c4 Bg7 3.Nc3 c5 4.e3 · A40 B06 B27</span></a>
+<a class="tile" data-cle="partia szkocka scotch game 1 e4 e5 2 nf3 nc6 3 d4 c44 c45" data-side="w" href="/pl/debiuty/partia-szkocka"><b>Partia szkocka</b><span>1.e4 e5 2.Nf3 Nc6 3.d4 · C44 C45</span></a>
+<a class="tile" data-cle="partia srodkowa center game 1 e4 e5 2 d4 c20 c21 c22" data-side="w" href="/pl/debiuty/partia-srodkowa"><b>Partia środkowa</b><span>1.e4 e5 2.d4 · C20 C21 C22</span></a>
+<a class="tile" data-cle="atak krolewsko indyjski king s indian attack 1 nf3 d5 2 g3 a05 a07 a08" data-side="w" href="/pl/debiuty/atak-krolewsko-indyjski"><b>Atak królewsko-indyjski</b><span>1.Nf3 d5 2.g3 · A05 A07 A08</span></a>
+<a class="tile" data-cle="gambit łotewski latvian gambit 1 e4 e5 2 nf3 f5 c40 c44" data-side="b" href="/pl/debiuty/gambit-lotewski"><b>Gambit łotewski</b><span>1.e4 e5 2.Nf3 f5 · C40 C44</span></a>
+<a class="tile" data-cle="partia czterech skoczkow four knights game 1 e4 e5 2 nf3 nc6 3 nc3 nf6 c47 c48 c49 c50" data-side="both" href="/pl/debiuty/partia-czterech-skoczkow"><b>Partia czterech skoczków</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 · C47 C48 C49 C50</span></a>
+<a class="tile" data-cle="obrona staroindyjska old indian defense 1 d4 d6 2 c4 a41 a53 a54" data-side="b" href="/pl/debiuty/obrona-staroindyjska"><b>Obrona staroindyjska</b><span>1.d4 d6 2.c4 · A41 A53 A54</span></a>
+<a class="tile" data-cle="debiut ponzianiego ponziani opening 1 e4 e5 2 nf3 nc6 3 c3 c44" data-side="w" href="/pl/debiuty/debiut-ponzianiego"><b>Debiut Ponzianiego</b><span>1.e4 e5 2.Nf3 Nc6 3.c3 · C44</span></a>
+<a class="tile" data-cle="obrona grunfelda grunfeld defense 1 d4 nf6 2 c4 g6 3 nc3 d5 d80 d81 d82 d85 d90 e60" data-side="b" href="/pl/debiuty/obrona-grunfelda"><b>Obrona Grünfelda</b><span>1.d4 Nf6 2.c4 g6 3.Nc3 d5 · D80 D81 D82 D85 D90 E60</span></a>
+<a class="tile" data-cle="obrona pirca pirc defense 1 e4 d6 b00 b07 b08 b09" data-side="b" href="/pl/debiuty/obrona-pirca"><b>Obrona Pirca</b><span>1.e4 d6 · B00 B07 B08 B09</span></a>
+<a class="tile" data-cle="obrona szczura rat defense 1 e4 d6 2 f4 a41 a82 b00 b06 c00" data-side="b" href="/pl/debiuty/obrona-szczura"><b>Obrona szczura</b><span>1.e4 d6 2.f4 · A41 A82 B00 B06 C00</span></a>
+<a class="tile" data-cle="obrona bogo indyjska bogo indian defense 1 d4 nf6 2 c4 e6 3 nf3 bb4 e11" data-side="b" href="/pl/debiuty/obrona-bogo-indyjska"><b>Obrona bogo-indyjska</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 Bb4 · E11</span></a>
+<a class="tile" data-cle="gambit englunda englund gambit 1 d4 e5 a40" data-side="b" href="/pl/debiuty/gambit-englunda"><b>Gambit Englunda</b><span>1.d4 e5 · A40</span></a>
+<a class="tile" data-cle="debiut kadasa kadas opening 1 h4 a00" data-side="w" href="/pl/debiuty/debiut-kadasa"><b>Debiut Kádasa</b><span>1.h4 · A00</span></a>
+<a class="tile" data-cle="obrona hetmansko indyjska queen s indian defense 1 d4 nf6 2 c4 e6 3 nf3 b6 e12 e14 e15" data-side="b" href="/pl/debiuty/obrona-hetmansko-indyjska"><b>Obrona hetmańsko-indyjska</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 b6 · E12 E14 E15</span></a>
+<a class="tile" data-cle="gambit blackmara diemera odrzucony blackmar diemer gambit declined 1 d4 d5 2 e4 dxe4 3 nc3 nf6 4 f3 c5 d00" data-side="w" href="/pl/debiuty/gambit-blackmara-diemera-odrzucony"><b>Gambit Blackmara-Diemera odrzucony</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 c5 · D00</span></a>
+<a class="tile" data-cle="atak trompowskiego trompowsky attack 1 d4 nf6 2 bg5 a45" data-side="w" href="/pl/debiuty/atak-trompowskiego"><b>Atak Trompowskiego</b><span>1.d4 Nf6 2.Bg5 · A45</span></a>
+<a class="tile" data-cle="gambit englunda odrzucony englund gambit declined 1 d4 e5 2 d5 a40" data-side="b" href="/pl/debiuty/gambit-englunda-odrzucony"><b>Gambit Englunda odrzucony</b><span>1.d4 e5 2.d5 · A40</span></a>
+<a class="tile" data-cle="obrona krolewsko indyjska king s indian defense 1 d4 nf6 2 c4 g6 3 g3 e60 e61 e70" data-side="b" href="/pl/debiuty/obrona-krolewsko-indyjska"><b>Obrona królewsko-indyjska</b><span>1.d4 Nf6 2.c4 g6 3.g3 · E60 E61 E70</span></a>
+<a class="tile" data-cle="obrona owena owen defense 1 e4 b6 b00" data-side="b" href="/pl/debiuty/obrona-owena"><b>Obrona Owena</b><span>1.e4 b6 · B00</span></a>
+<a class="tile" data-cle="atak richtera wieriesowa richter veresov attack 1 d4 nf6 2 nc3 d5 3 bg5 d01" data-side="w" href="/pl/debiuty/atak-richtera-wieriesowa"><b>Atak Richtera-Wieriesowa</b><span>1.d4 Nf6 2.Nc3 d5 3.Bg5 · D01</span></a>
+<a class="tile" data-cle="debiut ware a ware opening 1 a4 a00" data-side="w" href="/pl/debiuty/debiut-warea"><b>Debiut Ware'a</b><span>1.a4 · A00</span></a>
+<a class="tile" data-cle="debiut barnesa barnes opening 1 f3 a00 c20" data-side="w" href="/pl/debiuty/debiut-barnesa"><b>Debiut Barnesa</b><span>1.f3 · A00 C20</span></a>
+<a class="tile" data-cle="gambit benko odrzucony benko gambit declined 1 d4 nf6 2 c4 c5 3 d5 b5 4 bg5 a57" data-side="b" href="/pl/debiuty/gambit-benko-odrzucony"><b>Gambit Benkö odrzucony</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.Bg5 · A57</span></a>
+<a class="tile" data-cle="obrona borga borg defense 1 d4 g5 a40 b00" data-side="b" href="/pl/debiuty/obrona-borga"><b>Obrona Borga</b><span>1.d4 g5 · A40 B00</span></a>
+<a class="tile" data-cle="debiut katalanski catalan opening 1 d4 nf6 2 c4 e6 3 g3 e00 e01 e02" data-side="w" href="/pl/debiuty/debiut-katalanski"><b>Debiut katalański</b><span>1.d4 Nf6 2.c4 e6 3.g3 · E00 E01 E02</span></a>
+<a class="tile" data-cle="obrona lwa lion defense 1 e4 d6 2 d4 nf6 3 f3 b00 b07" data-side="b" href="/pl/debiuty/obrona-lwa"><b>Obrona lwa</b><span>1.e4 d6 2.d4 Nf6 3.f3 · B00 B07</span></a>
+<a class="tile" data-cle="obrona połsłowianska semi slav defense 1 d4 d5 2 c4 e6 3 nc3 c6 d31 d43" data-side="b" href="/pl/debiuty/obrona-polslowianska"><b>Obrona półsłowiańska</b><span>1.d4 d5 2.c4 e6 3.Nc3 c6 · D31 D43</span></a>
+<a class="tile" data-cle="debiut trzech skoczkow three knights opening 1 e4 e5 2 nf3 nc6 3 nc3 c46" data-side="w" href="/pl/debiuty/debiut-trzech-skoczkow"><b>Debiut trzech skoczków</b><span>1.e4 e5 2.Nf3 Nc6 3.Nc3 · C46</span></a>
+<a class="tile" data-cle="atak torrego torre attack 1 d4 nf6 2 nf3 e6 3 bg5 a46 a48" data-side="w" href="/pl/debiuty/atak-torrego"><b>Atak Torrego</b><span>1.d4 Nf6 2.Nf3 e6 3.Bg5 · A46 A48</span></a>
+<a class="tile" data-cle="debiut van t kruijsa van t kruijs opening 1 e3 a00" data-side="w" href="/pl/debiuty/debiut-vant-kruijsa"><b>Debiut Van't Kruijsa</b><span>1.e3 · A00</span></a>
+<a class="tile" data-cle="gambit wiedenski z obrona maxa langego vienna gambit with max lange defense 1 e4 e5 2 nc3 nc6 3 f4 c25" data-side="w" href="/pl/debiuty/gambit-wiedenski-z-obrona-maxa-langego"><b>Gambit wiedeński, z obroną Maxa Langego</b><span>1.e4 e5 2.Nc3 Nc6 3.f4 · C25</span></a>
+<a class="tile" data-cle="gambit słonia elephant gambit 1 e4 e5 2 nf3 d5 c40" data-side="b" href="/pl/debiuty/gambit-slonia"><b>Gambit słonia</b><span>1.e4 e5 2.Nf3 d5 · C40</span></a>
+<a class="tile" data-cle="obrona angielska english defense 1 d4 b6 a40" data-side="b" href="/pl/debiuty/obrona-angielska"><b>Obrona angielska</b><span>1.d4 b6 · A40</span></a>
+<a class="tile" data-cle="debiut miesesa mieses opening 1 d3 a00" data-side="w" href="/pl/debiuty/debiut-miesesa"><b>Debiut Miesesa</b><span>1.d3 · A00</span></a>
+<a class="tile" data-cle="obrona mikenasa mikenas defense 1 d4 nc6 a40" data-side="b" href="/pl/debiuty/obrona-mikenasa"><b>Obrona Mikenasa</b><span>1.d4 Nc6 · A40</span></a>
+<a class="tile" data-cle="debiut skoczka krolewskiego king s knight opening 1 e4 e5 2 nf3 c40 c44" data-side="w" href="/pl/debiuty/debiut-skoczka-krolewskiego"><b>Debiut skoczka królewskiego</b><span>1.e4 e5 2.Nf3 · C40 C44</span></a>
+<a class="tile" data-cle="gambit łotewski przyjety latvian gambit accepted 1 e4 e5 2 nf3 f5 3 exf5 c40" data-side="b" href="/pl/debiuty/gambit-lotewski-przyjety"><b>Gambit łotewski przyjęty</b><span>1.e4 e5 2.Nf3 f5 3.exf5 · C40</span></a>
+<a class="tile" data-cle="system londynski london system 1 d4 nf6 2 nf3 g6 3 bf4 a48" data-side="w" href="/pl/debiuty/system-londynski"><b>System londyński</b><span>1.d4 Nf6 2.Nf3 g6 3.Bf4 · A48</span></a>
+<a class="tile" data-cle="obrona neo grunfelda neo grunfeld defense 1 d4 nf6 2 c4 g6 3 f3 d5 d70" data-side="b" href="/pl/debiuty/obrona-neo-grunfelda"><b>Obrona neo-Grünfelda</b><span>1.d4 Nf6 2.c4 g6 3.f3 d5 · D70</span></a>
+<a class="tile" data-cle="debiut portugalski portuguese opening 1 e4 e5 2 bb5 c20" data-side="w" href="/pl/debiuty/debiut-portugalski"><b>Debiut portugalski</b><span>1.e4 e5 2.Bb5 · C20</span></a>
+<a class="tile" data-cle="system rapporta jobavy rapport jobava system 1 d4 d5 2 nc3 nf6 3 bf4 d01" data-side="w" href="/pl/debiuty/system-rapporta-jobavy"><b>System Rapporta-Jobavy</b><span>1.d4 d5 2.Nc3 Nf6 3.Bf4 · D01</span></a>
+<a class="tile" data-cle="atak sodium sodium attack 1 na3 a00" data-side="w" href="/pl/debiuty/atak-sodium"><b>Atak Sodium</b><span>1.Na3 · A00</span></a>
+<a class="tile" data-cle="obrona sw jerzego st george defense 1 e4 a6 b00" data-side="b" href="/pl/debiuty/obrona-sw-jerzego"><b>Obrona św. Jerzego</b><span>1.e4 a6 · B00</span></a>
+<a class="tile" data-cle="debiut amar amar opening 1 nh3 a00" data-side="w" href="/pl/debiuty/debiut-amar"><b>Debiut Amar</b><span>1.Nh3 · A00</span></a>
+<a class="tile" data-cle="atak amazonki amazon attack 1 d4 d5 2 qd3 a45 d00" data-side="w" href="/pl/debiuty/atak-amazonki"><b>Atak Amazonki</b><span>1.d4 d5 2.Qd3 · A45 D00</span></a>
+<a class="tile" data-cle="debiut anderssena anderssen s opening 1 a3 a00" data-side="w" href="/pl/debiuty/debiut-anderssena"><b>Debiut Anderssena</b><span>1.a3 · A00</span></a>
+<a class="tile" data-cle="gambit benko benko gambit 1 d4 nf6 2 c4 c5 3 d5 b5 a57" data-side="b" href="/pl/debiuty/gambit-benko"><b>Gambit Benkö</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 · A57</span></a>
+<a class="tile" data-cle="obrona carra carr defense 1 e4 h6 b00" data-side="b" href="/pl/debiuty/obrona-carra"><b>Obrona Carra</b><span>1.e4 h6 · B00</span></a>
+<a class="tile" data-cle="debiut clemenza clemenz opening 1 h3 a00" data-side="w" href="/pl/debiuty/debiut-clemenza"><b>Debiut Clemenza</b><span>1.h3 · A00</span></a>
+<a class="tile" data-cle="system collego colle system 1 nf3 c5 2 e3 g6 3 d4 bg7 4 dxc5 qa5 a04 a40" data-side="w" href="/pl/debiuty/system-collego"><b>System Collego</b><span>1.Nf3 c5 2.e3 g6 3.d4 Bg7 4.dxc5 Qa5 · A04 A40</span></a>
+<a class="tile" data-cle="gambit dunski przyjety danish gambit accepted 1 e4 e5 2 d4 exd4 3 c3 dxc3 c21" data-side="w" href="/pl/debiuty/gambit-dunski-przyjety"><b>Gambit duński przyjęty</b><span>1.e4 e5 2.d4 exd4 3.c3 dxc3 · C21</span></a>
+<a class="tile" data-cle="orangutan angielski english orangutan 1 c4 nf6 2 b4 a15" data-side="w" href="/pl/debiuty/orangutan-angielski"><b>Orangutan angielski</b><span>1.c4 Nf6 2.b4 · A15</span></a>
+<a class="tile" data-cle="obrona goldsmitha goldsmith defense 1 e4 h5 b00" data-side="b" href="/pl/debiuty/obrona-goldsmitha"><b>Obrona Goldsmitha</b><span>1.e4 h5 · B00</span></a>
+<a class="tile" data-cle="obrona hipopotama hippopotamus defense 1 e4 nh6 b00" data-side="b" href="/pl/debiuty/obrona-hipopotama"><b>Obrona hipopotama</b><span>1.e4 Nh6 · B00</span></a>
+<a class="tile" data-cle="obrona horwitza horwitz defense 1 d4 e6 a40" data-side="b" href="/pl/debiuty/obrona-horwitza"><b>Obrona Horwitza</b><span>1.d4 e6 · A40</span></a>
+<a class="tile" data-cle="obrona kangura kangaroo defense 1 d4 e6 2 c4 bb4 a40" data-side="b" href="/pl/debiuty/obrona-kangura"><b>Obrona kangura</b><span>1.d4 e6 2.c4 Bb4 · A40</span></a>
+<a class="tile" data-cle="atak krolewsko indyjski z e6 king s indian attack with e6 1 nf3 nf6 2 g3 d5 3 bg2 e6 a07" data-side="w" href="/pl/debiuty/atak-krolewsko-indyjski-z-e6"><b>Atak królewsko-indyjski, z e6</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 e6 · A07</span></a>
+<a class="tile" data-cle="debiut piona krolewskiego king s pawn opening 1 e4 e5 2 b3 c20" data-side="w" href="/pl/debiuty/debiut-piona-krolewskiego"><b>Debiut piona królewskiego</b><span>1.e4 e5 2.b3 · C20</span></a>
+<a class="tile" data-cle="obrona meksykanska mexican defense 1 d4 nf6 2 c4 nc6 a50" data-side="b" href="/pl/debiuty/obrona-meksykanska"><b>Obrona meksykańska</b><span>1.d4 Nf6 2.c4 Nc6 · A50</span></a>
+<a class="tile" data-cle="obrona polska polish defense 1 d4 b5 a40" data-side="b" href="/pl/debiuty/obrona-polska"><b>Obrona polska</b><span>1.d4 b5 · A40</span></a>
+<a class="tile" data-cle="debiut polski z d5 polish opening with d5 1 b4 d5 a00" data-side="w" href="/pl/debiuty/debiut-polski-z-d5"><b>Debiut polski, z d5</b><span>1.b4 d5 · A00</span></a>
+<a class="tile" data-cle="słowiansko indyjska slav indian 1 d4 nf6 2 c4 c6 a40 a50" data-side="b" href="/pl/debiuty/slowiansko-indyjska"><b>Słowiańsko-indyjska</b><span>1.d4 Nf6 2.c4 c6 · A40 A50</span></a>
+<a class="tile" data-cle="obrona tarrascha tarrasch defense 1 d4 d5 2 c4 e6 3 nc3 c5 d32" data-side="b" href="/pl/debiuty/obrona-tarrascha"><b>Obrona Tarrascha</b><span>1.d4 d5 2.c4 e6 3.Nc3 c5 · D32</span></a>
+<a class="tile" data-cle="obrona ware a ware defense 1 e4 a5 b00" data-side="b" href="/pl/debiuty/obrona-warea"><b>Obrona Ware'a</b><span>1.e4 a5 · B00</span></a>
+<a class="tile" data-cle="obrona zukertorta zukertort defense 1 nf3 nh6 2 d4 g6 a04" data-side="b" href="/pl/debiuty/obrona-zukertorta"><b>Obrona Zukertorta</b><span>1.Nf3 Nh6 2.d4 g6 · A04</span></a>
+<a class="tile" data-cle="atak amsterdamski amsterdam attack 1 e3 e5 2 c4 d6 3 nc3 nc6 4 b3 nf6 a00" data-side="w" href="/pl/debiuty/atak-amsterdamski"><b>Atak amsterdamski</b><span>1.e3 e5 2.c4 d6 3.Nc3 Nc6 4.b3 Nf6 · A00</span></a>
+<a class="tile" data-cle="obrona australijska australian defense 1 d4 na6 a40" data-side="b" href="/pl/debiuty/obrona-australijska"><b>Obrona australijska</b><span>1.d4 Na6 · A40</span></a>
+<a class="tile" data-cle="obrona barnesa barnes defense 1 e4 f6 b00" data-side="b" href="/pl/debiuty/obrona-barnesa"><b>Obrona Barnesa</b><span>1.e4 f6 · B00</span></a>
+<a class="tile" data-cle="debiut baskijski basque opening 1 d4 nf6 2 b3 a45" data-side="w" href="/pl/debiuty/debiut-baskijski"><b>Debiut baskijski</b><span>1.d4 Nf6 2.b3 · A45</span></a>
+<a class="tile" data-cle="gambit benko przyjety benko gambit accepted 1 d4 nf6 2 c4 c5 3 d5 b5 4 cxb5 a6 a57" data-side="b" href="/pl/debiuty/gambit-benko-przyjety"><b>Gambit Benkö przyjęty</b><span>1.d4 Nf6 2.c4 c5 3.d5 b5 4.cxb5 a6 · A57</span></a>
+<a class="tile" data-cle="gambit blackmara diemera przyjety blackmar diemer gambit accepted 1 d4 d5 2 e4 dxe4 3 nc3 nf6 4 f3 exf3 d00" data-side="w" href="/pl/debiuty/gambit-blackmara-diemera-przyjety"><b>Gambit Blackmara-Diemera przyjęty</b><span>1.d4 d5 2.e4 dxe4 3.Nc3 Nf6 4.f3 exf3 · D00</span></a>
+<a class="tile" data-cle="kontrgambit blumenfelda blumenfeld countergambit 1 d4 nf6 2 c4 e6 3 nf3 c5 4 d5 b5 e10" data-side="b" href="/pl/debiuty/kontrgambit-blumenfelda"><b>Kontrgambit Blumenfelda</b><span>1.d4 Nf6 2.c4 e6 3.Nf3 c5 4.d5 b5 · E10</span></a>
+<a class="tile" data-cle="atak bongcloud bongcloud attack 1 e4 e5 2 ke2 c20" data-side="w" href="/pl/debiuty/atak-bongcloud"><b>Atak Bongcloud</b><span>1.e4 e5 2.Ke2 · C20</span></a>
+<a class="tile" data-cle="debiut canard canard opening 1 d4 nf6 2 f4 a45" data-side="w" href="/pl/debiuty/debiut-canard"><b>Debiut Canard</b><span>1.d4 Nf6 2.f4 · A45</span></a>
+<a class="tile" data-cle="partia srodkowa przyjeta center game accepted 1 e4 e5 2 d4 exd4 c21" data-side="w" href="/pl/debiuty/partia-srodkowa-przyjeta"><b>Partia środkowa przyjęta</b><span>1.e4 e5 2.d4 exd4 · C21</span></a>
+<a class="tile" data-cle="formacja creepy crawly creepy crawly formation 1 h3 d5 2 a3 e5 a00" data-side="w" href="/pl/debiuty/formacja-creepy-crawly"><b>Formacja Creepy Crawly</b><span>1.h3 d5 2.a3 e5 · A00</span></a>
+<a class="tile" data-cle="obrona czeska czech defense 1 e4 d6 2 d4 nf6 3 nc3 c6 b07" data-side="b" href="/pl/debiuty/obrona-czeska"><b>Obrona czeska</b><span>1.e4 d6 2.d4 Nf6 3.Nc3 c6 · B07</span></a>
+<a class="tile" data-cle="gambit dunski danish gambit 1 e4 e5 2 d4 exd4 3 c3 c21" data-side="w" href="/pl/debiuty/gambit-dunski"><b>Gambit duński</b><span>1.e4 e5 2.d4 exd4 3.c3 · C21</span></a>
+<a class="tile" data-cle="gambit dunski odrzucony danish gambit declined 1 e4 e5 2 d4 exd4 3 c3 d5 c21" data-side="w" href="/pl/debiuty/gambit-dunski-odrzucony"><b>Gambit duński odrzucony</b><span>1.e4 e5 2.d4 exd4 3.c3 d5 · C21</span></a>
+<a class="tile" data-cle="obrona dory ego dory defense 1 d4 nf6 2 nf3 ne4 a46" data-side="b" href="/pl/debiuty/obrona-doryego"><b>Obrona Döry'ego</b><span>1.d4 Nf6 2.Nf3 Ne4 · A46</span></a>
+<a class="tile" data-cle="debiut drezdenski dresden opening 1 e4 e5 2 nf3 nc6 3 c4 nf6 4 nxe5 c44" data-side="w" href="/pl/debiuty/debiut-drezdenski"><b>Debiut drezdeński</b><span>1.e4 e5 2.Nf3 Nc6 3.c4 Nf6 4.Nxe5 · C44</span></a>
+<a class="tile" data-cle="gambit durasa duras gambit 1 e4 f5 b00" data-side="b" href="/pl/debiuty/gambit-durasa"><b>Gambit Durasa</b><span>1.e4 f5 · B00</span></a>
+<a class="tile" data-cle="obrona wschodnioindyjska east indian defense 1 d4 nf6 2 nf3 g6 a48" data-side="b" href="/pl/debiuty/obrona-wschodnioindyjska"><b>Obrona wschodnioindyjska</b><span>1.d4 Nf6 2.Nf3 g6 · A48</span></a>
+<a class="tile" data-cle="obrona smazonego lisa fried fox defense 1 e4 f6 2 d4 kf7 b00" data-side="b" href="/pl/debiuty/obrona-smazonego-lisa"><b>Obrona Smażonego Lisa</b><span>1.e4 f6 2.d4 Kf7 · B00</span></a>
+<a class="tile" data-cle="debiut global global opening 1 h3 e5 2 a3 a00" data-side="w" href="/pl/debiuty/debiut-global"><b>Debiut Global</b><span>1.h3 e5 2.a3 · A00</span></a>
+<a class="tile" data-cle="obrona gunderama gunderam defense 1 e4 e5 2 nf3 qe7 c40" data-side="b" href="/pl/debiuty/obrona-gunderama"><b>Obrona Gunderama</b><span>1.e4 e5 2.Nf3 Qe7 · C40</span></a>
+<a class="tile" data-cle="gambit irlandzki irish gambit 1 e4 e5 2 nf3 nc6 3 nxe5 c44" data-side="w" href="/pl/debiuty/gambit-irlandzki"><b>Gambit irlandzki</b><span>1.e4 e5 2.Nf3 Nc6 3.Nxe5 · C44</span></a>
+<a class="tile" data-cle="gambit krolewski king s gambit 1 e4 e5 2 f4 c30" data-side="w" href="/pl/debiuty/gambit-krolewski"><b>Gambit królewski</b><span>1.e4 e5 2.f4 · C30</span></a>
+<a class="tile" data-cle="atak krolewsko indyjski z bf5 king s indian attack with bf5 1 nf3 nf6 2 g3 d5 3 bg2 c6 4 o o bf5 a07" data-side="w" href="/pl/debiuty/atak-krolewsko-indyjski-z-bf5"><b>Atak królewsko-indyjski, z Bf5</b><span>1.Nf3 Nf6 2.g3 d5 3.Bg2 c6 4.O-O Bf5 · A07</span></a>
+<a class="tile" data-cle="symultaniczny wariant laskera lasker simul special 1 g3 h5 a00" data-side="b" href="/pl/debiuty/symultaniczny-wariant-laskera"><b>Symultaniczny wariant Laskera</b><span>1.g3 h5 · A00</span></a>
+<a class="tile" data-cle="obrona leminga lemming defense 1 e4 na6 b00" data-side="b" href="/pl/debiuty/obrona-leminga"><b>Obrona leminga</b><span>1.e4 Na6 · B00</span></a>
+<a class="tile" data-cle="system marienbadzki marienbad system 1 d4 nf6 2 nf3 b6 3 g3 bb7 4 bg2 c5 a47" data-side="b" href="/pl/debiuty/system-marienbadzki"><b>System marienbadzki</b><span>1.d4 Nf6 2.Nf3 b6 3.g3 Bb7 4.Bg2 c5 · A47</span></a>
+<a class="tile" data-cle="obrona montevideo montevideo defense 1 d4 nc6 2 d5 nb8 a40" data-side="b" href="/pl/debiuty/obrona-montevideo"><b>Obrona Montevideo</b><span>1.d4 Nc6 2.d5 Nb8 · A40</span></a>
+<a class="tile" data-cle="atak bladej twarzy paleface attack 1 d4 nf6 2 f3 a45" data-side="w" href="/pl/debiuty/atak-bladej-twarzy"><b>Atak Bladej Twarzy</b><span>1.d4 Nf6 2.f3 · A45</span></a>
+<a class="tile" data-cle="pseudo obrona hetmansko indyjska pseudo queen s indian defense 1 d4 nf6 2 nf3 b6 a47" data-side="b" href="/pl/debiuty/pseudo-obrona-hetmansko-indyjska"><b>Pseudo-obrona hetmańsko-indyjska</b><span>1.d4 Nf6 2.Nf3 b6 · A47</span></a>
+<a class="tile" data-cle="gambit hetmanski queen s gambit 1 d4 d5 2 c4 d06" data-side="w" href="/pl/debiuty/gambit-hetmanski"><b>Gambit hetmański</b><span>1.d4 d5 2.c4 · D06</span></a>
+<a class="tile" data-cle="przyspieszona obrona hetmansko indyjska queen s indian accelerated 1 d4 nf6 2 c4 b6 a50" data-side="b" href="/pl/debiuty/przyspieszona-obrona-hetmansko-indyjska"><b>Przyspieszona obrona hetmańsko-indyjska</b><span>1.d4 Nf6 2.c4 b6 · A50</span></a>
+<a class="tile" data-cle="pion hetmanski atak mengariniego queen s pawn mengarini attack 1 d4 nf6 2 c4 g6 3 qc2 e60" data-side="w" href="/pl/debiuty/pion-hetmanski-atak-mengariniego"><b>Pion hetmański, atak Mengariniego</b><span>1.d4 Nf6 2.c4 g6 3.Qc2 · E60</span></a>
+<a class="tile" data-cle="system rapporta jobavy z e6 rapport jobava system with e6 1 d4 d5 2 nc3 e6 3 bf4 d01" data-side="w" href="/pl/debiuty/system-rapporta-jobavy-z-e6"><b>System Rapporta-Jobavy, z e6</b><span>1.d4 d5 2.Nc3 e6 3.Bf4 · D01</span></a>
+<a class="tile" data-cle="obrona robatscha robatsch defense 1 d4 d6 2 nf3 g6 3 c4 bg7 4 e4 bg4 a41" data-side="b" href="/pl/debiuty/obrona-robatscha"><b>Obrona Robatscha</b><span>1.d4 d6 2.Nf3 g6 3.c4 Bg7 4.e4 Bg4 · A41</span></a>
+<a class="tile" data-cle="debiut saragossa saragossa opening 1 c3 a00" data-side="w" href="/pl/debiuty/debiut-saragossa"><b>Debiut Saragossa</b><span>1.c3 · A00</span></a>
+<a class="tile" data-cle="debiut walencki valencia opening 1 d3 e5 2 nd2 a00" data-side="w" href="/pl/debiuty/debiut-walencki"><b>Debiut walencki</b><span>1.d3 e5 2.Nd2 · A00</span></a>
+<a class="tile" data-cle="obrona sepa vulture defense 1 d4 nf6 2 c4 c5 3 d5 ne4 a56" data-side="b" href="/pl/debiuty/obrona-sepa"><b>Obrona sępa</b><span>1.d4 Nf6 2.c4 c5 3.d5 Ne4 · A56</span></a>
+<a class="tile" data-cle="obrona wade a wade defense 1 d4 d6 2 nf3 bg4 a41" data-side="b" href="/pl/debiuty/obrona-wadea"><b>Obrona Wade'a</b><span>1.d4 d6 2.Nf3 Bg4 · A41</span></a>
+<a class="tile" data-cle="system jusupowa rubinsteina yusupov rubinstein system 1 d4 nf6 2 nf3 e6 3 e3 a46" data-side="w" href="/pl/debiuty/system-jusupowa-rubinsteina"><b>System Jusupowa-Rubinsteina</b><span>1.d4 Nf6 2.Nf3 e6 3.e3 · A46</span></a>
+<a class="tile" data-cle="obrona zair zaire defense 1 d4 nc6 2 d5 nb8 3 e4 nf6 4 e5 ng8 a40" data-side="b" href="/pl/debiuty/obrona-zair"><b>Obrona Zair</b><span>1.d4 Nc6 2.d5 Nb8 3.e4 Nf6 4.e5 Ng8 · A40</span></a>
+</div>
+</main>
+<footer>
+  <!-- Plus de menu ici : les six sections sont desormais dans l'entete, le
+       repeter en bas etait un doublon. Le pied de page garde son role
+       classique, les liens legaux. -->
+  <nav class="footnav" aria-label="Informacje prawne">
+    <a href="/pl/">Start</a> &middot;
+    <a href="/pl/#legal">Nota prawna</a> &middot;
+    <a href="/pl/#privacy">Prywatność</a> &middot;
+    <span class="foot-pair"><a href="/pl/#prefs">Preferencje</a> &middot;
+    <a href="/pl/#accessibilite">Dostępność</a></span>
+  </nav>
+  <p class="footnote">chang64: darmowe szachy, bez konta. Dane debiutów z projektu lichess-org/chess-openings.</p>
+  <p class="pagedate">Opublikowano 1 listopada 2026</p>
+</footer>
+</div>
+<script>
+/* L'application (accessible via le logo ou "Accueil") partage le meme
+   stockage que ces pages, sous la cle "chang64:lang" (voir window.storage et
+   loadLang dans i18n.js), mais ne le lisait jamais depuis ici : choisir
+   l'anglais sur une page claire, puis revenir a l'accueil, retombait sur la
+   langue du navigateur au lieu de respecter ce choix. On l'ecrit donc a
+   chaque visite d'une page claire, dans le meme format qu'attend loadLang
+   (chaine "fr" ou "en", pas de JSON). */
+try{localStorage.setItem("chang64:lang","pl");var c=document.getElementById("cn"),sn=c.parentElement;c.scrollIntoView({block:"nearest"});var u=function(){sn.classList.toggle("sl",sn.scrollLeft>2);sn.classList.toggle("sr",sn.scrollLeft<sn.scrollWidth-sn.clientWidth-2);};u();sn.onscroll=u;}catch(e){}
+
+/* Filtrage de la liste des ouvertures.
+   Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page
+   se comporte comme avant. On compare sur une cle sans accents ni
+   ponctuation, ce qui permet de trouver "Defense sicilienne" en tapant
+   "defense sicilien", et "1.e4 c5" en tapant "e4c5". */
+(function(){
+  var bloc=document.getElementById("filtreBloc");
+  var champ=document.getElementById("filtre");
+  var grille=document.getElementById("grille");
+  if(!bloc||!champ||!grille)return;
+  var tuiles=[].slice.call(grille.querySelectorAll("[data-cle]"));
+  if(tuiles.length<20)return;          /* inutile sur une liste courte */
+  bloc.classList.remove("hide");
+  var etat=document.getElementById("filtreEtat");
+  /* Messages dans la langue de la page, poses par le build sur #filtreEtat
+     (2026-10-25) : le script reste le meme d'une langue a l'autre. */
+  var aucun=etat.getAttribute("data-aucun")||"No match.",sur=etat.getAttribute("data-sur")||"{a} of {b}";
+  var total=tuiles.length;
+  /* Bascule Blancs/Noirs/Les deux : absente des pages plus courtes que le
+     seuil ci-dessus tout comme le champ de recherche, puisqu'elle partage
+     le meme bloc masque par defaut. "both" (une seule ouverture reellement
+     symetrique) reste visible quel que soit le camp choisi : elle n'est
+     ni plus blanche ni plus noire que l'autre. */
+  var coteFiltre=document.getElementById("coteFiltre");
+  var coteActif="all";
+  if(coteFiltre){
+    var boutons=[].slice.call(coteFiltre.querySelectorAll("button"));
+    for(var c=0;c<boutons.length;c++){
+      boutons[c].addEventListener("click",function(){
+        coteActif=this.getAttribute("data-side");
+        for(var j=0;j<boutons.length;j++)boutons[j].setAttribute("aria-pressed",boutons[j]===this?"true":"false");
+        filtrer();
+      });
+    }
+  }
+
+  function normalise(t){
+    return String(t).normalize?String(t).normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .toLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim()
+      :String(t).toLowerCase();
+  }
+  function correspondCote(tuile){
+    if(coteActif==="all")return true;
+    var cote=tuile.getAttribute("data-side");
+    return cote===coteActif||cote==="both";
+  }
+  function filtrer(){
+    var q=normalise(champ.value);
+    if(!q&&coteActif==="all"){
+      for(var i=0;i<total;i++)tuiles[i].hidden=false;
+      var tousBlocs=grille.querySelectorAll("[data-theme]");
+      for(var b=0;b<tousBlocs.length;b++)tousBlocs[b].hidden=false;
+      var toc0=grille.querySelector(".toc");
+      if(toc0)toc0.hidden=false;
+      etat.textContent="";
+      return;
+    }
+    /* Chaque mot tape doit se retrouver, dans n'importe quel ordre :
+       "sicilienne e4" fonctionne comme "e4 sicilienne". */
+    var mots=q.split(" ").filter(Boolean);
+    var vus=0;
+    for(var i=0;i<total;i++){
+      var cle=tuiles[i].getAttribute("data-cle")||"";
+      var ok=correspondCote(tuiles[i]);
+      for(var k=0;k<mots.length;k++){if(cle.indexOf(mots[k])<0){ok=false;break;}}
+      tuiles[i].hidden=!ok;
+      if(ok)vus++;
+    }
+    /* Les exercices sont groupes par theme : un titre de section dont plus
+       aucune tuile ne correspond doit disparaitre aussi, sinon la page se
+       remplit d'intitules suivis de vide. Le sommaire des themes est masque
+       pendant une recherche, il ne mene plus nulle part. */
+    var blocs=grille.querySelectorAll("[data-theme]");
+    for(var b=0;b<blocs.length;b++){
+      var reste=blocs[b].querySelectorAll("[data-cle]:not([hidden])").length;
+      blocs[b].hidden=(reste===0);
+    }
+    var toc=grille.querySelector(".toc");
+    if(toc)toc.hidden=true;
+    etat.textContent = vus===0 ? aucun : sur.replace("{a}",vus).replace("{b}",total);
+  }
+  champ.addEventListener("input",filtrer);
+  /* Echap vide le champ, geste attendu sur un champ de recherche. */
+  champ.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&champ.value){champ.value="";filtrer();}
+  });
+})();
+
+/* Le bloc ci-dessus n'est emis que sur les pages d'index : il pesait 1,7 Ko
+   repete sur 1 929 pages, soit 3 Mo, alors que deux pages seulement s'en
+   servent. */
+
+/* Pilote l'echiquier anime des pages d'ouverture.
+   Sans ce script, la position finale reste affichee et les commandes sont
+   masquees : la page fonctionne exactement comme avant. */
+(function(){
+  var box=document.querySelector(".anim"); if(!box)return;
+  var plies=[]; try{plies=JSON.parse(box.getAttribute("data-plies"))||[];}catch(e){}
+  var groups=box.querySelectorAll("svg > g[data-ply]");
+  if(groups.length<2)return;
+  var ctl=box.querySelector(".animctl"), lab=box.querySelector(".animply");
+  var btn={}; if(ctl){ctl.hidden=false;
+    ctl.querySelectorAll("button").forEach(function(b){btn[b.dataset.act]=b;});}
+  var i=groups.length-1, timer=null;
+  function show(n){
+    i=Math.max(0,Math.min(groups.length-1,n));
+    /* .hidden est une propriete de HTMLElement, pas de SVGElement : sur un
+       <g> il faut passer par l'attribut, sinon rien ne se passe. */
+    for(var k=0;k<groups.length;k++){
+      if(k===i)groups[k].removeAttribute("hidden");
+      else groups[k].setAttribute("hidden","");
+    }
+    if(lab)lab.textContent=plies[i]||"";
+    if(btn.prev)btn.prev.disabled=(i===0);
+    if(btn.next)btn.next.disabled=(i===groups.length-1);
+  }
+  var pp=btn.play&&btn.play.querySelectorAll("path");
+  function tog(k){pp[k].style.display="";pp[1-k].style.display="none";}
+  function stop(){if(timer){clearInterval(timer);timer=null;}
+    if(pp)tog(0);}
+  function playFrom(n){
+    stop(); show(n);
+    if(pp)tog(1);
+    timer=setInterval(function(){
+      if(i>=groups.length-1){stop();return;}
+      show(i+1);
+    },850);
+  }
+  if(btn.prev)btn.prev.onclick=function(){stop();show(i-1);};
+  if(btn.next)btn.next.onclick=function(){stop();show(i+1);};
+  if(btn.play)btn.play.onclick=function(){
+    if(timer)stop(); else playFrom(i>=groups.length-1?0:i);
+  };
+  /* Une personne qui a demande moins d'animation garde la position finale
+     et pilote elle-meme. Les autres voient la ligne se jouer une fois. */
+  var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(calm){show(groups.length-1);return;}
+  show(0);
+  var started=false;
+  function go(){if(started)return;started=true;playFrom(0);}
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){go();io.disconnect();}});
+    },{threshold:.35});
+    io.observe(box);
+  }else go();
+})();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4dd429315c894ab4a0ae75aeb4ec37db"}'></script>
+</body>
+</html>

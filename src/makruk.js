@@ -501,10 +501,21 @@ const STYLE=`
 .mk-actions{display:flex;flex-wrap:wrap;gap:8px}
 .mk details{border-top:1px solid var(--rule);padding-top:10px;font-size:14px;line-height:1.5;color:var(--sage)}
 .mk summary{cursor:pointer;color:var(--chalk);font-weight:600}
+.mk details p{margin:8px 0 0}
 .mk details ul{margin:8px 0 0;padding-left:18px}
 .mk details li{margin:4px 0}
 .mk details strong{color:var(--chalk)}
 html.mk-ouvert{overflow:hidden}
+.mk-compte:empty{display:none}
+/* Telephone : les marges du voile, du panneau et du cadre s'additionnaient
+   (le plateau ne faisait que 291 px sur 375). On les resserre pour rendre
+   la place au plateau. */
+@media(max-width:480px){
+  .mk{padding:8px}
+  .mk-panneau{padding:12px;gap:10px}
+  .mk .board-frame{padding:4px}
+  .mk .chip{padding:7px 10px}
+}
 `;
 
 let racine=null,plateau=null,P=null,legaux=[],sel=-1,dernier=0,fini=null;

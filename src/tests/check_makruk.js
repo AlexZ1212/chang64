@@ -105,7 +105,7 @@ console.log("\n--- Fin de partie et moteur ---");
   P.jouer(m);
   const f = P.fin();
   T("et la partie est gagnee par les Blancs", f && f.gagnant === 1 && f.raison === "mat", JSON.stringify(f));
-  const pat = new Partie("k7/8/1K6/8/8/8/8/1R6 b");
+  const pat = new Partie("k7/2K5/2N5/8/8/8/8/8 b");
   T("le pat est nul", (pat.fin() || {}).raison === "pat", JSON.stringify(pat.fin()));
   /* Quelques coups du moteur depuis le depart : tous legaux. */
   const G = new Partie();

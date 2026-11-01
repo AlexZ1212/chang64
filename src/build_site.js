@@ -233,7 +233,7 @@ let ui2 = minifyJs(fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8"), "ui2
    ancienne version (voir /makruk.js dans _headers). */
 const makruk = minifyJs(fs.readFileSync(path.join(__dirname, "makruk.js"), "utf8"), "makruk.js");
 const makrukV = require("crypto").createHash("sha1").update(makruk, "utf8").digest("hex").slice(0, 10);
-let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8").replace("__MAKRUK_V__", makrukV), "ui3.js");
+let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8").split("__MAKRUK_V__").join(makrukV), "ui3.js");
 const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), "i18n.js");
 const grammaire = minifyJs(fs.readFileSync(path.join(__dirname, "grammaire.js"), "utf8"), "grammaire.js");
 /* Le nombre d'exercices etait ecrit en dur a neuf endroits : accueil, meta

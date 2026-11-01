@@ -1823,3 +1823,21 @@ function updateTabsScrollHint(){
        quel groupe de liens. */
   }
 }
+/* Porte du Makruk (easter egg, 2026-11-01) : le mot ช้าง de l'encadre
+   "L'elephant sur l'echiquier". Le mode tient dans un fichier a part
+   (makruk.js), charge au premier clic seulement ; son adresse porte
+   l'empreinte que le build pose a la place de __MAKRUK_V__. */
+{
+  const porte=$("changPorte");
+  let chargement=null;
+  if(porte)porte.addEventListener("click",()=>{
+    if(typeof window.ouvrirMakruk==="function"){window.ouvrirMakruk(porte);return;}
+    if(chargement)return;
+    chargement=document.createElement("script");
+    chargement.src="/makruk.js?v=__MAKRUK_V__";
+    chargement.onload=()=>{if(typeof window.ouvrirMakruk==="function")window.ouvrirMakruk(porte);};
+    /* Hors ligne et jamais charge : on permet un nouvel essai au clic suivant. */
+    chargement.onerror=()=>{chargement.remove();chargement=null;};
+    document.head.appendChild(chargement);
+  });
+}

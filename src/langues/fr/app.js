@@ -352,8 +352,8 @@ module.exports = {
 
 /* --- origine du nom --- */
 "The elephant on the board":"L'éléphant sur l'échiquier",
-"Chang (ช้าง) is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.":
- "Chang (ช้าง) est le mot thaï pour éléphant. C'est aussi, par un long détour, une pièce du jeu d'échecs. Le jeu est né en Inde sous le nom de chaturanga, dont les quatre corps d'armée étaient l'infanterie, la cavalerie, les chars et les éléphants.",
+") is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.":
+ ") est le mot thaï pour éléphant. C'est aussi, par un long détour, une pièce du jeu d'échecs. Le jeu est né en Inde sous le nom de chaturanga, dont les quatre corps d'armée étaient l'infanterie, la cavalerie, les chars et les éléphants.",
 "The elephant travelled west and changed its name at every border: gaja in Sanskrit, al-fil in Arabic, alfil in Spanish, and at last the bishop in English and the fou in French. It never left Russian, where the same piece is still slon, elephant, nor Chinese chess, where it is written 象. Thailand kept a game of its own, makruk, played there to this day.":
  "L'éléphant a voyagé vers l'ouest en changeant de nom à chaque frontière : gaja en sanskrit, al-fil en arabe, alfil en espagnol, puis le fou en français et le bishop en anglais. Il n'a jamais quitté le russe, où la même pièce s'appelle toujours slon, l'éléphant, ni les échecs chinois, où elle s'écrit 象. La Thaïlande, elle, a gardé son propre jeu, le makruk, que l'on y pratique encore.",
 "Sixty-four is the rest of the name: the squares. chang64 is the elephant on the sixty-four squares, a piece that crossed a thousand years and half the world, on a board that never changed.":
@@ -492,5 +492,51 @@ module.exports = {
 "Play chess against the computer, solve __NP__ tactics puzzles verified move by move, and challenge a friend by link. No account, no ads.":"Joue aux échecs contre l'ordinateur, résous __NP__ exercices tactiques vérifiés coup par coup et défie un ami par lien. Sans compte, sans publicité.",
 "Bullet, blitz, rapid and daily chess. __NP__ verified puzzles with adaptive difficulty. Challenge a friend with a link.":"Échecs en bullet, blitz, rapide et par correspondance. __NP__ exercices vérifiés à difficulté adaptative. Défie un ami par un simple lien.",
 "Play chess against a built-in engine at bullet, blitz, rapid and classical time controls, solve __NP__ engine-verified tactics puzzles, review your games move by move and challenge friends over a link. No account required.":"Joue aux échecs contre un moteur intégré en bullet, blitz, rapide ou cadence classique, résous __NP__ exercices tactiques vérifiés par le moteur, analyse tes parties coup par coup et défie tes amis par lien. Sans compte.",
-"@noscript":"chang64 a besoin de JavaScript pour jouer, résoudre des exercices et analyser des parties. Sans lui, rien sur cette page ne répondra.<br>Les pages de contenu fonctionnent sans JavaScript : <a href=\"/{openings}/\">ouvertures</a>, <a href=\"/{learn}/\">règles</a>, <a href=\"/{glossary}/\">lexique</a>, <a href=\"/{endgames}/\">finales</a>."
+"@noscript":"chang64 a besoin de JavaScript pour jouer, résoudre des exercices et analyser des parties. Sans lui, rien sur cette page ne répondra.<br>Les pages de contenu fonctionnent sans JavaScript : <a href=\"/{openings}/\">ouvertures</a>, <a href=\"/{learn}/\">règles</a>, <a href=\"/{glossary}/\">lexique</a>, <a href=\"/{endgames}/\">finales</a>.",
+/* Makruk, les echecs thais (easter egg, 2026-11-01) : makruk.js. */
+"Makruk, Thai chess":"Makruk, les échecs thaïs",
+"Back to chess":"Revenir aux échecs",
+"Opponent":"Adversaire",
+"Against the computer":"Contre l'ordinateur",
+"Two players":"À deux",
+"Easy":"Facile",
+"Medium":"Moyen",
+"Hard":"Difficile",
+"Your side":"Ton camp",
+"Makruk board":"Plateau de makruk",
+"Take back":"Reprendre le coup",
+"Rules of makruk":"Règles du makruk",
+"Makruk is the chess of Thailand, a descendant of chaturanga. White moves first. The goal is the same: checkmate the khun.":"Le makruk est le jeu d'échecs de la Thaïlande, un descendant du chaturanga. Les Blancs commencent. Le but est le même : mater le khun.",
+"moves one square in any direction, like the king.":"se déplace d'une case dans toutes les directions, comme le roi.",
+"moves one square diagonally.":"se déplace d'une case en diagonale.",
+"moves one square diagonally or one square straight forward.":"se déplace d'une case en diagonale ou d'une case droit devant.",
+"moves like the knight.":"se déplace comme le cavalier.",
+"moves like the rook.":"se déplace comme la tour.",
+"moves one square forward and captures one square diagonally forward, never two squares at once. On the sixth rank it turns over and becomes a bia ngai, which moves like the met.":"avance d'une case et prend d'une case en diagonale vers l'avant, jamais de deux cases d'un coup. Sur la sixième rangée, il se retourne et devient un bia ngai, qui se déplace comme le met.",
+"No castling, no en passant. Stalemate is a draw.":"Pas de roque, pas de prise en passant. Le pat est nul.",
+"Counting: once no unpromoted bia is left, the stronger side has 64 moves to checkmate. When one side has only its khun left, the limit depends on the stronger side's pieces: 8 with two rua, 16 with one, 22 with two khon, 44 with one, 32 with two ma, 64 otherwise, minus the number of pieces on the board. Without checkmate in time, the game is drawn.":"Comptage : dès qu'il ne reste plus de bia non promu, le camp le plus fort a 64 coups pour mater. Quand un camp n'a plus que son khun, la limite dépend des pièces du camp le plus fort : 8 avec deux rua, 16 avec une, 22 avec deux khon, 44 avec un, 32 avec deux ma, 64 sinon, moins le nombre de pièces sur l'échiquier. Faute de mat à temps, la partie est nulle.",
+"Checkmate. White wins.":"Échec et mat, les Blancs gagnent.",
+"Checkmate. Black wins.":"Échec et mat, les Noirs gagnent.",
+"Draw by counting: no checkmate in time.":"Nulle par comptage : pas de mat à temps.",
+"Draw by repetition.":"Nulle par répétition.",
+"Draw: only the two khun are left.":"Nulle : il ne reste que les deux khun.",
+"Check!":"Échec !",
+"Board's honour count":"Comptage du plateau",
+"Pieces' honour count":"Comptage des pièces",
+"White must checkmate. Moves left: {n}":"Les Blancs doivent mater. Coups restants : {n}",
+"Black must checkmate. Moves left: {n}":"Les Noirs doivent mater. Coups restants : {n}",
+"White bia":"Bia blanc",
+"Black bia":"Bia noir",
+"White ma":"Ma blanc",
+"Black ma":"Ma noir",
+"White khon":"Khon blanc",
+"Black khon":"Khon noir",
+"White rua":"Rua blanc",
+"Black rua":"Rua noir",
+"White met":"Met blanc",
+"Black met":"Met noir",
+"White khun":"Khun blanc",
+"Black khun":"Khun noir",
+"White bia ngai":"Bia ngai blanc",
+"Black bia ngai":"Bia ngai noir"
 };

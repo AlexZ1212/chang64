@@ -227,7 +227,13 @@ let ui = minifyJs(fs.readFileSync(path.join(__dirname, "ui.js"), "utf8").replace
   .replace("__COMPTES_MOTIFS__", JSON.stringify(comptesMotifs)), "ui.js");
 let ui2 = minifyJs(fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8"), "ui2.js");
 // la table famille -> adresses de pages est construite plus bas, après le calcul des slugs
-let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8"), "ui3.js");
+/* Makruk (easter egg, 2026-11-01) : fichier a part, charge au clic sur le mot
+   ช้าง de l'accueil, jamais embarque dans la page. Son adresse porte une
+   empreinte du contenu, d'ou un cache long sans risque de servir une
+   ancienne version (voir /makruk.js dans _headers). */
+const makruk = minifyJs(fs.readFileSync(path.join(__dirname, "makruk.js"), "utf8"), "makruk.js");
+const makrukV = require("crypto").createHash("sha1").update(makruk, "utf8").digest("hex").slice(0, 10);
+let ui3 = minifyJs(fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8").replace("__MAKRUK_V__", makrukV), "ui3.js");
 const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), "i18n.js");
 const grammaire = minifyJs(fs.readFileSync(path.join(__dirname, "grammaire.js"), "utf8"), "grammaire.js");
 /* Le nombre d'exercices etait ecrit en dur a neuf endroits : accueil, meta
@@ -255,6 +261,7 @@ fs.mkdirSync(OUT + "/data", { recursive: true });
 /* Livre d'ouvertures servi a part : 94 Ko retires de index.html, charges
    seulement quand une partie commence (voir loadOpeningBook dans ui2.js). */
 fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirname, "openings.json"), "utf8"));
+fs.writeFileSync(OUT + "/makruk.js", makruk);
 /* Meme principe applique a la banque d'exercices, a bien plus grande
    echelle (voir loadLevel/loadPuzzleById/loadRushPool/loadThemeCounts dans
    ui.js et ui2.js) : plus aucun exercice n'est embarque dans index.html,
@@ -2387,6 +2394,10 @@ fs.writeFileSync(OUT + "/_headers", `/*
 
 /engine/*.js
   Content-Type: text/javascript
+
+/makruk.js
+  Content-Type: text/javascript; charset=utf-8
+  Cache-Control: public, max-age=31536000, immutable
 
 /
   Cache-Control: public, max-age=0, must-revalidate

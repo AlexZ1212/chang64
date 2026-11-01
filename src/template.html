@@ -1187,6 +1187,11 @@ header>*{min-width:0}
 .origin-text h2{margin-bottom:10px}
 .origin-text p{color:var(--sage);font-size:14.5px;margin-bottom:10px;max-width:58ch}
 .origin-text p:last-child{margin-bottom:0}
+/* Le mot ช้าง ouvre le Makruk (easter egg) : un bouton qui garde l'allure
+   du texte. Seuls le curseur et le survol le trahissent. */
+.chang-porte{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:3px}
+.chang-porte:hover{color:var(--brass)}
+.chang-porte:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .explore{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(max-width:620px){.explore{grid-template-columns:repeat(2,1fr)}}
 .explore a{
@@ -1557,7 +1562,9 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <span class="origin-mark" id="originMark" aria-hidden="true">/*__BRANDMARK__*/</span>
       <div class="origin-text">
         <h2>The elephant on the board</h2>
-        <p>Chang (ช้าง) is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.</p>
+        <!-- Le mot thai ouvre le Makruk, les echecs thais (easter egg,
+             2026-11-01) : il reste ecrit comme le texte qui l'entoure. -->
+        <p>Chang (<button type="button" class="chang-porte" id="changPorte" lang="th" aria-label="Makruk, Thai chess">ช้าง</button>) is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.</p>
         <p>The elephant travelled west and changed its name at every border: gaja in Sanskrit, al-fil in Arabic, alfil in Spanish, and at last the bishop in English and the fou in French. It never left Russian, where the same piece is still slon, elephant, nor Chinese chess, where it is written 象. Thailand kept a game of its own, makruk, played there to this day.</p>
         <p>Sixty-four is the rest of the name: the squares. chang64 is the elephant on the sixty-four squares, a piece that crossed a thousand years and half the world, on a board that never changed.</p>
       </div>

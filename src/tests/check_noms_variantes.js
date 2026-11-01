@@ -31,7 +31,7 @@ T("des morceaux a traduire (" + morceaux.size + ")", morceaux.size > 900);
 
 /* "System" n'y figure pas : c'est aussi le mot allemand. */
 const ANGLAIS = /\b(Variation|Variations|Attack|Defense|Countergambit|Counterattack|Accepted|Declined|Deferred|Opening|Trap)\b/;
-for (const lang of ["fr", "es", "pt", "de", "ru"]) {
+for (const lang of ["fr", "es", "pt", "de", "ru", "it", "tr", "pl", "id"]) {
   console.log("\n--- " + lang + " ---");
   const d = require(path.join(SRC, "langues", lang, "variantes.js"));
   const absents = [...morceaux].filter(m => typeof d[m] !== "string" || !d[m]);
@@ -52,6 +52,11 @@ T("francais : plus de \"Czerniak Attaque\"", fr && !fr.includes("Czerniak Attaqu
 T("espagnol : \"Ataque Czerniak\"", lire("es/aperturas/defensa-siciliana.html").includes("<td>Ataque Czerniak</td>"));
 T("allemand : \"Czerniak-Angriff\"", lire("de/eroeffnungen/sizilianische-verteidigung.html").includes("<td>Czerniak-Angriff</td>"));
 T("russe : \"Атака Черняка\"", lire("ru/openings/sicilian-defense.html").includes("<td>Атака Черняка</td>"));
+/* Deuxieme vague (2026-11-01). */
+T("italien : \"Attacco Czerniak\"", lire("it/aperture/difesa-siciliana.html").includes("<td>Attacco Czerniak</td>"));
+T("turc : \"Czerniak Saldırısı\"", lire("tr/acilislar/sicilya-savunmasi.html").includes("<td>Czerniak Saldırısı</td>"));
+T("polonais : \"Atak Czerniaka\"", lire("pl/debiuty/obrona-sycylijska.html").includes("<td>Atak Czerniaka</td>"));
+T("indonesien : \"Serangan Czerniak\"", lire("id/pembukaan/pertahanan-sisilia.html").includes("<td>Serangan Czerniak</td>"));
 let manq = {};
 try { manq = JSON.parse(fs.readFileSync(path.join(SRC, "langues", "manquants.json"), "utf8")); } catch (e) {}
 const manquantes = Object.values(manq).flat().filter(x => String(x).startsWith("variantes:"));

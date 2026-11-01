@@ -104,8 +104,8 @@ function ouvrir(page, envois) {
   w.close();
 
   console.log("\n--- Traductions ---");
-  const attendu = { fr: "Erreurs à revoir", es: null, pt: null, de: null, ru: null };
-  for (const l of ["fr", "es", "pt", "de", "ru"]) {
+  const attendu = { fr: "Erreurs à revoir", es: null, pt: null, de: null, ru: null, it: null, tr: null, pl: null, id: null };
+  for (const l of ["fr", "es", "pt", "de", "ru", "it", "tr", "pl", "id"]) {
     const wl = ouvrir(l + "/index.html"); await attendre(800);
     const s = wl.eval("t(\"{n} to review now\",{n:3})"), r = wl.eval("t(\"Review · \")");
     T(l + " : phrases traduites", !/to review|Review/.test(s + r) && /3/.test(s), s + " | " + r);

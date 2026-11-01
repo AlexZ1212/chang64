@@ -61,7 +61,7 @@ T("les libelles francais sont plus longs", largeur(FR) > largeur(EN),
   largeur(FR) + " vs " + largeur(EN));
 /* Les autres langues, pour memoire : la rangee defile, quelle que soit leur
    longueur (l'allemand est la plus longue). */
-for (const l of ["es", "pt", "de", "ru"]) {
+for (const l of ["es", "pt", "de", "ru", "it", "tr", "pl", "id"]) {
   const L = EN.map(k => tr(k, l));
   console.log("  " + l + " : " + largeur(L) + " px   (" + L.join(", ") + ")");
 }

@@ -71,7 +71,10 @@ for (const l of AUTRES) {
   }
   /* Registre familier partout, comme le francais : tu, tú, você, du, ты. */
   const VOUS = { fr: /\b(vous|votre|vos)\b/i, es: /\b(usted|ustedes)\b/i, pt: /\b(o senhor|a senhora)\b/i,
-    de: /(?<![.!?:]\s|^|„|«)\bSie\b|\bIhnen\b/, ru: /(^|[^а-яё])(Вы|вы|Вас|вас|Вам|вам|Ваш|ваш)([^а-яё]|$)/ };
+    de: /(?<![.!?:]\s|^|„|«)\bSie\b|\bIhnen\b/, ru: /(^|[^а-яё])(Вы|вы|Вас|вас|Вам|вам|Ваш|ваш)([^а-яё]|$)/,
+    /* Deuxieme vague (2026-11-01) : tu, sen, ty, kamu. */
+    it: /\b(Lei|Suo|Sua|Suoi|Sue)\b/, tr: /(^|\s)(siz|sizin|size|sizi|sizden)(?=[\s.,;:!?]|$)/i,
+    pl: /\b(Pan|Pani|Pana|Panu|Państwo)\b/, id: /\bAnda\b/ };
   if (VOUS[l]) {
     const vouv = Object.entries(D).filter(([, v]) => formes(v).some(([, f]) => VOUS[l].test(String(f).replace(/<[^>]+>/g, " "))));
     T("registre familier respecte", vouv.length === 0, vouv.slice(0, 3).map(x => String(x[1]).slice(0, 60)).join(" | "));

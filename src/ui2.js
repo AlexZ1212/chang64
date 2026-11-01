@@ -1632,19 +1632,21 @@ function attemptDailyArchive(key){
    report sur hier, la serie paraitrait rompue toute la journee jusqu'a ce
    qu'on resolve l'exercice, ce qui est exactement le contraire de ce qu'un
    compteur de serie doit dire.
-   Recalculee depuis prog.dailyLog plutot que lue dans prog.days : c'est le
-   journal par date qui fait foi pour le calendrier, et lui seul permet de
-   savoir QUELLES cases forment la serie, pas seulement combien. Le garde-fou
-   a 4000 tours ne sert qu'a borner un journal abime : une serie honnete de
-   dix ans reste tres en dessous. */
+   Seuls comptent les jours faits LE JOUR MEME (demande d'Alexandre le
+   01/11) : un rattrapage coche sa case dans prog.dailyLog mais ne fait pas
+   avancer la serie (pas de bumpStreak(), voir finishPuzzle dans ui.js).
+   prog.dailyLog ne distingue pas les deux, prog.days et prog.lastDay si :
+   la serie, ce sont les prog.days jours qui finissent a prog.lastDay. On
+   garde quand meme la condition sur dailyLog, pour ne pas entourer une case
+   vide (series anterieures au calendrier, journal abime). */
 function serieEnCours(){
   const vus=new Set();
-  if(!prog.dailyLog)return vus;
+  if(!prog.dailyLog||!prog.lastDay||!(prog.days>0))return vus;
   const d=new Date();
   const cle=n=>calDateKey(n.getFullYear(),n.getMonth(),n.getDate());
-  if(!prog.dailyLog[cle(d)])d.setDate(d.getDate()-1);
-  let garde=0;
-  while(prog.dailyLog[cle(d)]&&garde++<4000){vus.add(cle(d));d.setDate(d.getDate()-1);}
+  if(prog.lastDay!==cle(d))d.setDate(d.getDate()-1);
+  if(prog.lastDay!==cle(d))return vus;
+  for(let i=0;i<prog.days&&prog.dailyLog[cle(d)];i++){vus.add(cle(d));d.setDate(d.getDate()-1);}
   return vus;
 }
 function renderCalendarGrid(containerId,monthOffset,opts){

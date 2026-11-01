@@ -1057,19 +1057,18 @@ header>*{min-width:0}
 .cal-day.todo{background-color:var(--raise);color:var(--chalk);font-weight:600;cursor:pointer}
 .cal-day.todo:hover{background-color:var(--brass);color:var(--ink)}
 /* Anneau chalk sur les DEUX cas d'aujourd'hui (fait ou non) : c'est le
-   reperage de la date du jour, pas un etat de resolution. */
-.cal-day.today{border:2px solid var(--chalk)}
-/* Halo jade porte a 2px : avec la gouttiere de 3px de la grille, les halos
-   de deux jours voisins se rejoignent, et la serie se lit comme une chaine
-   continue plutot que comme des cases isolees. */
+   reperage de la date du jour, pas un etat de resolution. Meme epaisseur que
+   le contour laiton des jours faits (1px, demande d'Alexandre le 01/11) :
+   les contours du calendrier ne different que par la couleur. */
+.cal-day.today{border:1px solid var(--chalk)}
 /* Un seul anneau a la fois. Un jour en serie portait jusqu'ici l'anneau jade
    ET le contour de son etat (ivoire pour aujourd'hui, laiton pour un jour
    reussi) : deux cercles concentriques de deux couleurs autour du meme
-   chiffre, que l'oeil lit comme un troisieme etat inexistant. Le contour
-   s'efface donc quand l'anneau est la, et la serie reste la seule chose
-   entouree. La largeur du trait, elle, ne bouge pas : la case garde
-   exactement la meme taille avec ou sans anneau. */
-.cal-day.streak{box-shadow:0 0 0 2px var(--jade);border-color:transparent}
+   chiffre, que l'oeil lit comme un troisieme etat inexistant. La serie
+   prend donc la place du contour, a la meme epaisseur de 1px : plus de halo
+   de 2px a l'exterieur de la case, qui la faisait paraitre plus grosse que
+   ses voisines. */
+.cal-day.streak{border-color:var(--jade)}
 .cal-day.future{opacity:.3}
 /* Legende : sans elle, cinq etats a deviner. Les pastilles reprennent
    exactement les memes classes que les cases, pour qu'un futur changement de

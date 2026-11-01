@@ -17,10 +17,12 @@
       serie est forcement un jour fait, la serie se superpose au lieu de
       remplacer.
 
-   La serie est recalculee depuis prog.dailyLog et non lue dans prog.days :
-   le compteur dit combien de jours, pas lesquels. Et elle se termine hier
-   tant que l'exercice du jour n'est pas fait, sinon elle paraitrait rompue
-   toute la journee jusqu'a ce qu'on le resolve. */
+   La serie suit le compteur (prog.days jours finissant a prog.lastDay) et
+   non tous les jours coches : un rattrapage coche sa case sans faire
+   avancer la serie, il ne doit donc pas etre entoure de vert (demande
+   d'Alexandre, 01/11). Et elle se termine hier tant que l'exercice du jour
+   n'est pas fait, sinon elle paraitrait rompue toute la journee jusqu'a ce
+   qu'on le resolve. */
 const SITE = require("path").join(__dirname, "..", "site");
 const fs=require("fs"),jd=require("jsdom");
 const html=fs.readFileSync(""+SITE+"/index.html","utf8");
@@ -44,9 +46,10 @@ const classes=c=>c?c.className.replace("cal-day","").trim().split(/\s+/).filter(
 
 setTimeout(async()=>{
   /* Journal fabrique : serie de trois jours finissant hier, un trou a J-4,
-     un jour isole plus loin. Le trou est ce qui prouve que la serie s'arrete
-     ou elle doit s'arreter, et pas simplement que tout jour fait est marque. */
-  w.eval(`ensureProgFields();prog.dailyLog={${[1,2,3,6].map(n=>`"${jour(n)}":1`).join(",")}};`);
+     un jour isole plus loin, et J-7 rattrape apres coup, colle a J-6. Le
+     trou est ce qui prouve que la serie s'arrete ou elle doit s'arreter, et
+     pas simplement que tout jour fait est marque. */
+  w.eval(`ensureProgFields();prog.dailyLog={${[1,2,3,6,7].map(n=>`"${jour(n)}":1`).join(",")}};prog.days=3;prog.lastDay="${jour(1)}";`);
   w.eval("renderCalendarGrid('calFull',0,{nav:true});renderCalendarLegend();");
   await wait(150);
 
@@ -87,6 +90,8 @@ setTimeout(async()=>{
   T("le trou arrete la serie",!parDate(jour(4)).classList.contains("streak"));
   T("un jour fait au-dela du trou n'en fait pas partie",
     !parDate(jour(6)).classList.contains("streak"),classes(parDate(jour(6))));
+  T("un jour rattrape reste coche, mais hors de la serie",
+    parDate(jour(7)).classList.contains("done")&&!parDate(jour(7)).classList.contains("streak"),classes(parDate(jour(7))));
   T("la serie se superpose a l'etat fait, elle ne le remplace pas",
     parDate(jour(1)).classList.contains("done"));
   T("elle continue de courir bien qu'aujourd'hui ne soit pas fait",
@@ -94,13 +99,23 @@ setTimeout(async()=>{
     "sinon la serie paraitrait rompue toute la journee");
 
   console.log("\n--- Une fois l'exercice du jour resolu ---");
-  w.eval(`prog.dailyLog["${jour(0)}"]=1;renderCalendarGrid('calFull',0,{nav:true});`);
+  w.eval(`prog.dailyLog["${jour(0)}"]=1;prog.days=4;prog.lastDay="${jour(0)}";renderCalendarGrid('calFull',0,{nav:true});`);
   await wait(150);
   const auj2=laDuJour();
   T("la case du jour passe a l'etat fait",auj2.classList.contains("done"),classes(auj2));
   T("elle n'est plus a faire",!auj2.classList.contains("todo"));
   T("elle reste reperee comme etant aujourd'hui",auj2.classList.contains("today"));
   T("la serie l'absorbe",auj2.classList.contains("streak"),classes(auj2));
+
+  console.log("\n--- Des rattrapages qui comblent un trou ---");
+  /* J-4 rattrape : la chaine des cases cochees va maintenant d'aujourd'hui a
+     J-7 sans trou, mais la serie, elle, n'a pas bouge. */
+  w.eval(`prog.dailyLog["${jour(4)}"]=1;prog.dailyLog["${jour(5)}"]=1;renderCalendarGrid('calFull',0,{nav:true});`);
+  await wait(150);
+  T("la serie garde ses quatre jours",[0,1,2,3].every(n=>parDate(jour(n))&&parDate(jour(n)).classList.contains("streak")));
+  T("les jours rattrapes ne la prolongent pas",
+    [4,5,6,7].every(n=>!parDate(jour(n)).classList.contains("streak")),
+    [4,5,6,7].map(n=>classes(parDate(jour(n)))).join(" | "));
 
   console.log("\n--- Les jours a venir restent hors d'atteinte ---");
   const futurs=cases().filter(c=>c.classList.contains("future"));

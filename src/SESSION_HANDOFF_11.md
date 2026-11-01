@@ -166,9 +166,9 @@ Reste a faire, par ordre de priorite suggere :
    l'exercice du jour pourra piocher par difficulte reelle).
 2. Langues suivantes (italien, turc, polonais, arabe) selon la Search Console,
    et bientot selon les pays de Web Analytics.
-3. Cote Alexandre : relecture des traductions par des natifs ; test en mode
-   avion sur iPhone (ouvrir les exercices une fois en ligne avant) ; essayer
-   le Makruk sur telephone.
+3. Cote Alexandre : relecture des traductions par des natifs ; essayer le
+   Makruk sur telephone. (Test en mode avion sur iPhone : fait le 01/11 par
+   Alexandre, les exercices marchent hors ligne.)
 4. Petite option : la piece du Bia ngai dans la fiche des regles du Makruk.
 5. Taille du depot (214 Mo) : rien a faire avant 1 Go. Deployer depuis
    Cloudflare plutot que versionner `chang64-site` poserait probleme : le

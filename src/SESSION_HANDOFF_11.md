@@ -179,11 +179,12 @@ Reste a faire, par ordre de priorite suggere :
 2. Langues suivantes : pas de nouvelle langue prevue. L'arabe est ecarte par
    Alexandre le 01/11 ("oublie l'arabe pour l'instant") : ne pas le proposer.
    Italien, turc, polonais et indonesien sont faits et en ligne depuis le 01/11.
-3. Cote Alexandre : relecture des traductions par des natifs, surtout le turc
-   et le polonais (deuxieme vague). Makruk sur telephone : verifie par
-   Alexandre le 01/11, il fonctionne. Test en mode avion sur iPhone : fait le
-   01/11, les exercices marchent hors ligne.
-4. Petite option : la piece du Bia ngai dans la fiche des regles du Makruk.
+3. FAIT : relecture des traductions, consideree comme faite par Alexandre le
+   07/11. Makruk sur telephone : verifie par Alexandre le 01/11, il
+   fonctionne. Test en mode avion sur iPhone : fait le 01/11, les exercices
+   marchent hors ligne.
+4. FAIT le 07/11 : le Bia ngai a sa ligne et sa piece dans la fiche des
+   regles du Makruk.
 5. Taille du depot (214 Mo) : rien a faire avant 1 Go. Deployer depuis
    Cloudflare plutot que versionner `chang64-site` poserait probleme : le
    build ecrit des registres a commiter (dates, exercices du jour figes).

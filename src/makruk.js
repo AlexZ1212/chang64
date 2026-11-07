@@ -541,7 +541,10 @@ function construire(){
     ["Khon","moves one square diagonally or one square straight forward.",KHON],
     ["Ma","moves like the knight.",MA],
     ["Rua","moves like the rook.",RUA],
-    ["Bia","moves one square forward and captures one square diagonally forward, never two squares at once. On the sixth rank it turns over and becomes a bia ngai, which moves like the met.",BIA]
+    ["Bia","moves one square forward and captures one square diagonally forward, never two squares at once. On the sixth rank it turns over and becomes a bia ngai, which moves like the met.",BIA],
+    /* Ligne a part (2026-11-07) pour montrer la piece retournee, qu'on ne
+       voyait qu'apres une promotion. Meme phrase que le Met. */
+    ["Bia ngai","moves one square diagonally.",NGAI]
   ];
   poserHtml(racine,
     '<div class="mk-panneau">'+

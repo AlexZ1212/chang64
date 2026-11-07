@@ -659,6 +659,7 @@ module.exports = {
 "Ma":"Ма",
 "Rua":"Руа",
 "Bia":"Бия",
+"Bia ngai":"Бия нгай",
 "moves one square in any direction, like the king.":"ходит на одно поле в любую сторону, как король.",
 "moves one square diagonally.":"ходит на одно поле по диагонали.",
 "moves one square diagonally or one square straight forward.":"ходит на одно поле по диагонали или на одно поле прямо вперёд.",

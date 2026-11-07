@@ -500,6 +500,7 @@ module.exports = {
 "Ma":"Ma",
 "Rua":"Rua",
 "Bia":"Bia",
+"Bia ngai":"Bia ngai",
 "Makruk, Thai chess":"Makruk, les échecs thaïs",
 "Back to chess":"Revenir aux échecs",
 "Opponent":"Adversaire",

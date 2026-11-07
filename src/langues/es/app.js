@@ -646,6 +646,7 @@ module.exports = {
 "Ma":"Ma",
 "Rua":"Rua",
 "Bia":"Bia",
+"Bia ngai":"Bia ngai",
 "Makruk, Thai chess":"Makruk, el ajedrez tailandés",
 "Back to chess":"Volver al ajedrez",
 "Opponent":"Rival",

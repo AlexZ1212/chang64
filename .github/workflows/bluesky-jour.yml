@@ -1,0 +1,46 @@
+# Exercice du jour sur Bluesky (2026-11-07) : chaque matin, src/bluesky_jour.js
+# lit l'exercice du jour sur le site en ligne et le publie avec l'image du
+# plateau. Secrets du depot a creer : BLUESKY_IDENTIFIANT (ex.
+# chang64.bsky.social) et BLUESKY_MOT_DE_PASSE (mot de passe d'APPLICATION
+# Bluesky). Sans eux, la tache ne publie rien et reste verte.
+name: Exercice du jour sur Bluesky
+
+on:
+  schedule:
+    # 7 h UTC : 8 h a Paris l'hiver, 9 h l'ete.
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bluesky-jour
+  cancel-in-progress: false
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Seuls les trois fichiers utiles : le depot entier (banque comprise)
+      # pese plus de 200 Mo.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            src/bluesky_jour.js
+            src/plateau_svg.js
+            src/ds/pieces.json
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Installer sharp (rendu de l'image)
+        working-directory: src
+        run: npm install sharp@0.35.4 --no-save --no-audit --no-fund --no-package-lock
+      - name: Publier
+        working-directory: src
+        env:
+          BLUESKY_IDENTIFIANT: ${{ secrets.BLUESKY_IDENTIFIANT }}
+          BLUESKY_MOT_DE_PASSE: ${{ secrets.BLUESKY_MOT_DE_PASSE }}
+        run: node bluesky_jour.js

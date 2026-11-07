@@ -2415,7 +2415,8 @@ console.log("Redirections FR    :", oldFrRedirects ? oldFrRedirects.split("\n").
    chaque fichier statique passerait par elles et compterait dans le quota
    gratuit de 100 000 appels par jour. */
 fs.cpSync(path.join(__dirname, "functions"), path.join(OUT, "functions"), { recursive: true });
-fs.writeFileSync(OUT + "/_routes.json", JSON.stringify({ version: 1, include: ["/api/*"], exclude: [] }, null, 2) + "\n");
+/* _routes.json est ecrit plus bas, apres content.js, qui produit les pages
+   de /puzzles/ et /fr/exercices/ qu'il doit exclure. */
 
 /* "/fr" menait aux ouvertures francaises ; depuis le 2026-10-25 il mene a
    l'application en francais (/fr/), comme "/es" a l'espagnol, etc. */
@@ -2459,6 +2460,21 @@ const extraUrls = require("./content.js")({
    avoir perdu la moitie de ses pages d'une session a l'autre. Le compte reel
    est donne plus bas par "Dates de contenu". */
 console.log("URLs de contenu    :", extraUrls.length);
+
+/* 2026-11-07 : /puzzles/* et /fr/exercices/* passent aussi par une fonction,
+   qui redirige les anciennes pages numerotees (903-mate-in-two.html) vers
+   leur theme. Les pages qui existent sont exclues une a une, avec et sans
+   .html, pour rester statiques. Cloudflare limite _routes.json a 100 regles. */
+const routesExclues = [];
+for (const dossier of ["/puzzles/", "/fr/exercices/"]) {
+  for (const f of fs.readdirSync(OUT + dossier).filter(f => f.endsWith(".html")).sort()) {
+    const nom = f.slice(0, -5);
+    routesExclues.push(dossier + f, nom === "index" ? dossier : dossier + nom);
+  }
+}
+const routes = { version: 1, include: ["/api/*", "/puzzles/*", "/fr/exercices/*"], exclude: routesExclues };
+if (routes.include.length + routes.exclude.length > 100) throw new Error("_routes.json depasse 100 regles");
+fs.writeFileSync(OUT + "/_routes.json", JSON.stringify(routes, null, 2) + "\n");
 /* Conversion des images de partage en PNG, par og_render.js (Node + sharp).
    Remplace og_render.py depuis le 2026-09-09 : la chaine Python + cairosvg +
    Cairo etait impraticable sous Windows, et build_site.js appelait de surcroit

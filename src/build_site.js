@@ -1499,6 +1499,7 @@ ${alts || ""}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="article">
+<meta property="og:site_name" content="chang64">
 <meta property="og:url" content="${canonical}">
 <meta property="og:locale" content="${PAR_CODE[lang].og}">
 <meta property="og:image" content="${ogImage || SITE + "/og/home.png"}">

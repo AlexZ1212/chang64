@@ -1,6 +1,10 @@
 # chang64
 
-A free, bilingual (EN/FR) chess website. Live at **https://chang64.com**
+**Play at [chang64.com](https://chang64.com)**
+
+This repository holds the source code of chang64.com, a free chess website for beginners,
+available in 10 languages. If you are looking for the site itself, go to
+[chang64.com](https://chang64.com): there is nothing to install.
 
 Play the built-in engine at any time control, solve engine-verified tactics puzzles,
 review your games move by move, and challenge a friend over a plain link. No account,
@@ -61,9 +65,12 @@ editorial material with your own.
 
 ## Notice en français
 
-chang64 est un site d'échecs gratuit et bilingue : parties contre un moteur intégré,
-exercices tactiques vérifiés, revue de partie, et parties entre amis par simple lien.
-Sans compte, sans cookie de suivi, sans publicité.
+Le site se trouve sur **[chang64.com](https://chang64.com/fr/)** ; ce dépôt n'en contient que
+le code source.
+
+chang64 est un site d'échecs gratuit pour débutants, en 10 langues : parties contre un
+moteur intégré, exercices tactiques vérifiés, revue de partie, et parties entre amis par
+simple lien. Sans compte, sans cookie de suivi, sans publicité.
 
 Le dépôt contient les sources (`src/`), le site publié (`chang64-site/`) et l'identité
 visuelle (`design-system/`).

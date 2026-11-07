@@ -690,6 +690,8 @@ module.exports = {
 "Share my result":"Sonucumu paylaş",
 "Result copied. Paste it wherever you like.":"Sonuç kopyalandı. İstediğin yere yapıştır.",
 "chang64 · Puzzle of the day · {date}":"chang64 · Günün bulmacası · {date}",
+"solved without help":"yardımsız çözüldü",
+"Difficulty":"Zorluk",
 "Import from Lichess: a username or a game link.":"Lichess'ten içe aktar: bir kullanıcı adı ya da oyun bağlantısı.",
 "Lichess username or game link":"Lichess kullanıcı adı ya da oyun bağlantısı",
 "Import":"İçe aktar",

@@ -1372,16 +1372,26 @@ function openDailyChallenge(){
 }
 if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
 /* Partage du resultat de l'exercice du jour (2026-11-01, demande
-   d'Alexandre) : une ligne d'emojis, un carre par coup joue (vert : trouve
-   du premier coup, jaune : apres une erreur ou un indice), facon Wordle.
-   Rien de la solution ne transparait, on peut le poster sans gacher
-   l'exercice des autres. Le jour de la semaine est dans la date : il dit
-   la difficulte (facile le lundi, de plus en plus dur jusqu'au dimanche).
-   Le lien mene au meme exercice, comme celui du defi. */
+   d'Alexandre). Rien de la solution ne transparait, on peut le poster sans
+   gacher l'exercice des autres. Le lien mene au meme exercice, comme celui
+   du defi.
+   Depuis le 2026-11-07 (les carres verts et jaunes facon Wordle ne
+   plaisaient pas a Alexandre) : une note en etoiles (3 sans aide, 2 avec
+   une erreur ou un indice, 1 au-dela), le detail en symboles (❌ erreurs,
+   💡 indices) plutot qu'en phrase, pour n'avoir aucun accord a construire
+   dans dix langues, et la difficulte du jour sur 7 points : facile le
+   lundi, de plus en plus dur jusqu'au dimanche (voir tirage, exercice du
+   jour). */
 function texteResultatDuJour(){
   const date=new Date().toLocaleDateString(LANG_INTL,{weekday:"long",day:"numeric",month:"long"});
-  const carres=parcoursCoups.map(c=>c==="ok"?"\u{1F7E9}":"\u{1F7E8}").join("");
-  return t("chang64 · Puzzle of the day · {date}",{date:date})+"\n"+carres+"\n"+baseUrl()+"#puzzle="+dateToDailyId(todayKey());
+  const aides=fautesExo+indicesExo,etoiles=aides===0?3:aides===1?2:1;
+  const detail=aides===0?t("solved without help")
+    :[fautesExo?"❌ "+fautesExo:"",indicesExo?"\u{1F4A1} "+indicesExo:""].filter(Boolean).join("  ");
+  const jour=new Date().getDay()||7;   /* lundi 1 ... dimanche 7 */
+  return "\u{1F418} "+t("chang64 · Puzzle of the day · {date}",{date:date})+"\n"+
+    "⭐".repeat(etoiles)+"☆".repeat(3-etoiles)+"  "+detail+"\n"+
+    t("Difficulty")+" "+"●".repeat(jour)+"○".repeat(7-jour)+"\n"+
+    baseUrl()+"#puzzle="+dateToDailyId(todayKey());
 }
 if($("btnShareDaily"))$("btnShareDaily").onclick=async()=>{
   const texte=texteResultatDuJour(),note=$("dailyShareNote");

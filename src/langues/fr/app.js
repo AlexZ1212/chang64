@@ -550,6 +550,8 @@ module.exports = {
 "Share my result":"Partager mon résultat",
 "Result copied. Paste it wherever you like.":"Résultat copié. Colle-le où tu veux.",
 "chang64 · Puzzle of the day · {date}":"chang64 · Exercice du jour · {date}",
+"solved without help":"résolu sans aide",
+"Difficulty":"Difficulté",
 "Import from Lichess: a username or a game link.":"Importer depuis Lichess : un pseudo ou le lien d'une partie.",
 "Lichess username or game link":"Pseudo Lichess ou lien de partie",
 "Import":"Importer",

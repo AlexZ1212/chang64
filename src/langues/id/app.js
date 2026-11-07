@@ -690,6 +690,8 @@ module.exports = {
 "Share my result":"Bagikan hasilku",
 "Result copied. Paste it wherever you like.":"Hasil disalin. Tempel di mana saja.",
 "chang64 · Puzzle of the day · {date}":"chang64 · Teka-teki hari ini · {date}",
+"solved without help":"diselesaikan tanpa bantuan",
+"Difficulty":"Kesulitan",
 "Import from Lichess: a username or a game link.":"Impor dari Lichess: nama pengguna atau tautan partai.",
 "Lichess username or game link":"Nama pengguna Lichess atau tautan partai",
 "Import":"Impor",

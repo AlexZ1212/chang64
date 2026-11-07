@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /* bluesky_jour.js - publie l'exercice du jour sur Bluesky (2026-11-07,
-   plan de lancement d'Alexandre : un rendez-vous public chaque matin, comme
-   Wordle). Lance chaque matin par .github/workflows/bluesky-jour.yml.
+   plan de lancement d'Alexandre : un rendez-vous public, comme Wordle).
+   Lance lundi, jeudi et dimanche par .github/workflows/bluesky-jour.yml
+   (trois fois par semaine plutot que tous les jours, pour ne pas inonder).
 
    Ce que fait le script :
      1. lit sur le site en ligne l'exercice du jour (data/jour.json, puis
@@ -87,11 +88,14 @@ function texteDuMessage(cle, p) {
     : camp + " to play and win.";
   const j = jourDeSemaine(cle);
   const lien = SITE + "/#puzzle=" + p.id;
+  /* Ecriture sobre, comme un joueur qui poste son exercice : ni emoji en
+     tete, ni point median, ni pastilles (retour d'Alexandre du 2026-11-07,
+     ces tics font "texte genere"). */
   const texte =
-    "\u{1F418} Puzzle of the day · " + date + "\n" +
+    "Puzzle of the day, " + date + "\n" +
     consigne + "\n" +
-    "Difficulty " + "●".repeat(j) + "○".repeat(7 - j) + " · made for beginners\n\n" +
-    "Solve it: " + lien + "\n\n" +
+    "Difficulty " + j + "/7. It gets harder from Monday to Sunday, and it's all aimed at beginners.\n\n" +
+    lien + "\n\n" +
     "#chess #chesspuzzle";
   return { texte, lien, camp };
 }

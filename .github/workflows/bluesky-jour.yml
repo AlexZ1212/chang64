@@ -1,4 +1,4 @@
-# Exercice du jour sur Bluesky (2026-11-07) : chaque matin, src/bluesky_jour.js
+# Exercice du jour sur Bluesky (2026-11-07) : lundi, jeudi et dimanche, src/bluesky_jour.js
 # lit l'exercice du jour sur le site en ligne et le publie avec l'image du
 # plateau. Secrets du depot a creer : BLUESKY_IDENTIFIANT (ex.
 # chang64.bsky.social) et BLUESKY_MOT_DE_PASSE (mot de passe d'APPLICATION
@@ -7,8 +7,12 @@ name: Exercice du jour sur Bluesky
 
 on:
   schedule:
-    # 7 h UTC : 8 h a Paris l'hiver, 9 h l'ete.
-    - cron: "0 7 * * *"
+    # Trois fois par semaine, pas tous les jours (2026-11-07, Alexandre : "il
+    # ne faut pas trop en faire") : lundi (le plus facile), jeudi (milieu de
+    # courbe), dimanche (le plus dur). 15 h UTC : 16 h a Paris l'hiver,
+    # 10 h a New York, ou se trouve une bonne part du public echecs de
+    # Bluesky. Pour la cron de GitHub, 0 = dimanche.
+    - cron: "0 15 * * 1,4,0"
   workflow_dispatch:
 
 permissions:

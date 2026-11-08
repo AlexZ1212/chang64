@@ -25,6 +25,17 @@ const iPlay = html.indexOf('id="heroPlay"'), iCadence = html.indexOf('class="tc-
 T("\"Jouer maintenant\" sous la cadence", iPlay > 0 && iCadence > 0 && iPlay > iCadence);
 T("les boutons secondaires restent ensemble", /<div class="cta">\s*<button class="btn" id="heroPuzzle">[\s\S]*?id="heroDebut"/.test(html));
 T("espace sous les boutons", /\.hero \.cta\{[^}]*margin-bottom:22px/.test(css));
+/* Mesure dans le navigateur a 375 x 667 : "Jouer maintenant" finissait a 838 px,
+   657 px avec ce bloc, en fr, de, ru et pt. */
+{
+  const tel = css.search(/@media ?\(max-width:480px\) ?\{ ?\.hero\{padding-top:18px\}/);
+  const bloc = tel >= 0 ? css.slice(tel, css.indexOf(".cards{", tel)) : "";
+  T("telephone : bloc de l'accueil resserre", tel >= 0);
+  T("telephone : titre reduit a 29 px", /\.hero h2\{font-size:29px/.test(bloc));
+  T("telephone : phrase de cadence retiree", /\.hero \.tc-note\{display:none\}/.test(bloc));
+  T("telephone : la cadence n'est pas repliee", !/\.tc-(cats|chips|block)\{[^}]*display:none/.test(bloc));
+  T("la bulle d'aide de la cadence reste", html.includes('aria-controls="tipTimeControl"'));
+}
 
 console.log("\n--- Jouer et Inviter ---");
 T("bureau : plateau borne par la hauteur visible", /@media ?\(min-width:861px\) ?\{ ?#appLayout\[data-mode="play"\] \.board-frame,#appLayout\[data-mode="friend"\] \.board-frame\{max-width:calc\(100vh - 360px\);max-width:calc\(100svh - 360px\)/.test(css));

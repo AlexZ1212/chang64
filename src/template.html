@@ -367,6 +367,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   color:var(--brass)}
 .chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .tc-note{font-size:12px;color:var(--sage);margin-top:10px}
+/* Accueil plus court sur telephone (2026-11-08, version choisie par Alexandre) :
+   "Jouer maintenant" est sous la cadence et finissait a 838 px sur 375 x 667.
+   Titre sur 3 lignes, marges reduites, et sans la phrase sous la cadence, que
+   la bulle "i" explique deja : le bouton finit a 657 px. Mesure en fr, de, ru
+   et pt. La cadence reste depliee, Alexandre ne veut pas la replier. */
+@media(max-width:480px){
+  .hero{padding-top:18px}
+  .hero h2{font-size:29px;margin-bottom:8px}
+  .hero p.promise{font-size:12.5px;line-height:1.45;margin-bottom:10px}
+  .hero-lede p:not(.promise){margin-bottom:14px}
+  .hero .cta{margin-bottom:14px}
+  .hero .cta.cta-jouer{margin:12px 0 0}
+  .hero .tc-note{display:none}
+}
 
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
 @media(max-width:760px){.cards{grid-template-columns:1fr}}

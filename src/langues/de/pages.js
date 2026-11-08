@@ -9,6 +9,12 @@
    l'anglais et le build le signale (langues/manquants.json). */
 module.exports = {
  textes: {
+  "Chess at school or at the club: free, with no accounts": "Schach in Schule oder Verein: kostenlos und ohne Konten",
+  "chang64 is a free chess site that pupils can use straight away in a browser: no account, no email address, no password, nothing to install. It runs on computers, tablets and phones, in 10 languages, with no advertising and nothing to buy.": "chang64 ist eine kostenlose Schachseite, die Schülerinnen und Schüler direkt im Browser nutzen können: kein Konto, keine E-Mail-Adresse, kein Passwort, keine Installation. Sie läuft auf Computern, Tablets und Handys, in 10 Sprachen, ohne Werbung und ohne Käufe.",
+  "The site never asks anyone for a name or an email address, and it sets no cookies. Progress stays in the browser of the device being used. To measure traffic and how hard each puzzle is, it keeps only anonymous statistics, with nothing that could identify a pupil. The privacy page, at the bottom of the home page, gives the full details, including the connection logs kept by the host.": "Die Seite fragt nie nach einem Namen oder einer E-Mail-Adresse und setzt keine Cookies. Der Fortschritt bleibt im Browser des verwendeten Geräts. Um die Besuche und die Schwierigkeit jeder Aufgabe zu messen, speichert sie nur anonyme Statistiken, die keinen Rückschluss auf einzelne Personen zulassen. Die Datenschutzseite unten auf der Startseite nennt alle Einzelheiten, auch zu den Verbindungsprotokollen des Hosters.",
+  "In class, the <strong>puzzle of the day</strong> is the same for everyone, so a group can look at it together as a warm-up. The <strong>rule pages</strong> explain one idea at a time with a diagram, and several lead straight to practice on that theme, such as forks or pins. There is also a trainer for learning the names of the squares.": "Im Unterricht ist die <strong>Aufgabe des Tages</strong> für alle gleich, sodass eine Gruppe sie gemeinsam zum Aufwärmen ansehen kann. Die <strong>Regelseiten</strong> erklären jeweils ein Thema mit einem Diagramm, und mehrere führen direkt zum Training dieses Themas, etwa Gabel oder Fesselung. Außerdem gibt es ein Training, um die Namen der Felder zu lernen.",
+  "Pupils can play the computer, whose lowest level forgives mistakes, or each other: one pupil creates a game and sends the link, and the game continues move by move from any device.": "Gespielt wird gegen den Computer, dessen niedrigste Stufe Fehler verzeiht, oder gegeneinander: Eine Person erstellt eine Partie und schickt den Link, und die Partie geht Zug für Zug auf jedem beliebigen Gerät weiter.",
+  "Two limits are worth knowing. There are no class accounts, so a teacher cannot follow pupils' results from a dashboard. And progress belongs to the browser: on a shared computer, pupils share the same progress, and clearing the browser erases it.": "Zwei Einschränkungen sollte man kennen. Es gibt keine Klassenkonten, Lehrkräfte können die Ergebnisse also nicht über eine Übersicht verfolgen. Und der Fortschritt gehört zum Browser: An einem gemeinsam genutzten Computer teilen sich alle denselben Fortschritt, und das Löschen der Browserdaten entfernt ihn.",
   "chess term explained": "Schachbegriff erklärt",
   "moves, variations and ECO codes": "Züge, Varianten und ECO-Codes",
   "3 worked examples": "3 erklärte Beispiele",
@@ -560,6 +566,7 @@ module.exports = {
   "Catalan Opening": "Weiß verbindet d4 und c4 mit einem Fianchetto am Königsflügel. Der Läufer auf g2 kann die ganze Partie über Druck machen."
  },
  slugs: {
+  "learn:for-teachers-and-clubs": "fuer-lehrkraefte-und-vereine",
   "learn:how-the-pieces-move": "wie-die-figuren-ziehen",
   "learn:castling": "die-rochade",
   "learn:en-passant": "en-passant",

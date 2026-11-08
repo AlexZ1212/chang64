@@ -2295,7 +2295,7 @@ function queueOg(name, title, subtitle, fen) {
 {
   const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
   const ITALIAN = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1";
-  queueOg("home", "Chess for beginners.", "Easy puzzles. No account. No ads.", START);
+  queueOg("home", "Play chess. Solve tactics. Get better.", "For beginners. No account. No ads.", START);
   queueOg("openings", "Chess openings", pages.length + " families \u00b7 " + lines.length + " named lines", ITALIAN);
   queueOg("ouvertures", "Ouvertures d'\u00e9checs", pages.length + " familles \u00b7 " + lines.length + " variantes", ITALIAN);
   queueOg("puzzles-index", "Verified tactics puzzles", puzzles.length + " engine-proved positions", puzzles[0] ? puzzles[0].fen : START);

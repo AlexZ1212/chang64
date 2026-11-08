@@ -26,20 +26,14 @@ function ouvrir(l) {
     beforeParse(w) { w.fetch = () => Promise.resolve({ ok: false, status: 404 }); } });
   return dom.window;
 }
-const presentation = d => d.querySelector(".hero-lede p:last-child").textContent;
 const compteur = d => d.getElementById("hCount").textContent;
 /* Mots qui suivent le nombre dans le texte de presentation. */
-const MOT = { en: " puzzles", fr: " exercices", es: " ejercicios", pt: " exercícios", de: " Aufgaben", ru: ", все",
-  it: " esercizi", tr: " bulmaca", pl: ", wszystkie", id: " teka-teki" };
 const TITRE = { en: /for beginners/, fr: /pour débutants/, es: /para principiantes/, pt: /para iniciantes/, de: /für Anfänger/, ru: /для начинающих/,
   it: /per principianti/, tr: /Yeni başlayanlar/, pl: /dla początkujących/, id: /untuk pemula/ };
 
 (async () => {
   console.log("\n--- Le nombre brut n'est plus affiche tel quel ---");
-  const EN = NP.toLocaleString("en-US"), FR = NP.toLocaleString("fr-FR");
-  const html = pageDe(LANGUES[0]), htmlFr = pageDe(LANGUES[1]);
-  T("le HTML anglais groupe les milliers", html.includes(EN + " puzzles verified move by move"), EN);
-  T("la traduction francaise groupe les milliers", htmlFr.includes(FR + " exercices v"), JSON.stringify(FR));
+  const html = pageDe(LANGUES[0]);
   T("hCount garde la valeur brute pour le script", new RegExp('id="hCount" data-nombre="' + NP + '"').test(html));
 
   for (const l of LANGUES) {
@@ -49,7 +43,6 @@ const TITRE = { en: /for beginners/, fr: /pour débutants/, es: /para principian
     const d = w.document;
     T("langue du document " + l.html, d.documentElement.lang === l.html, d.documentElement.lang);
     T("titre de l'onglet dans la langue", TITRE[l.code].test(d.title) && (l.code === "en" || !/for beginners/.test(d.title)), d.title);
-    T("texte de presentation : " + JSON.stringify(N), presentation(d).includes(N + MOT[l.code]), presentation(d).slice(0, 90));
     T("carte des exercices : " + JSON.stringify(N), compteur(d) === N, JSON.stringify(compteur(d)));
     w.close();
   }

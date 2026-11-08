@@ -77,7 +77,7 @@ module.exports = {
 "Loading puzzles…":"Chargement des exercices…","Couldn't load puzzles. Check your connection and try again.":"Impossible de charger les exercices. Vérifie ta connexion et réessaie.",
 "Quiet move":"Coup silencieux","Mate in three":"Mat en trois coups",
 "Free chess for beginners, easy puzzles | chang64":"Échecs gratuits pour débutants, exercices faciles | chang64",
-"Chess for beginners.":"Les échecs pour débutants.","__NP_EN__ puzzles verified move by move, all aimed at beginners, a puzzle of the day, a computer that goes easy on you, and games with friends over a plain link. No account, no sign-up.":"__NP_FR__ exercices vérifiés coup par coup, tous pensés pour les débutants, un exercice du jour, un ordinateur indulgent et des parties entre amis par simple lien. Sans compte, sans inscription.",
+"Play chess.":"Joue aux échecs.","Solve tactics.":"Travaille la tactique.","Get better.":"Progresse.","Made for beginners: puzzles within your reach, a computer at your level and games with friends.":"Pensé pour les débutants : des exercices à ta portée, un ordinateur à ta mesure et des parties entre amis.",
 "Play now":"Jouer maintenant","Puzzle of the day":"Exercice du jour","Install the app":"Installer l'application",
 "Time control":"Cadence","Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.":"Bullet, blitz, rapide, classique : ce sont juste des tranches selon le temps de départ. Les chiffres (comme 10+0) donnent les minutes, puis les secondes rendues après chaque coup. Plus c'est lent, plus tu as le temps de réfléchir.","Play the computer":"Jouer contre l'ordinateur",
 "Start a game →":"Commencer une partie →","Tactics trainer":"Entraînement tactique",
@@ -437,8 +437,7 @@ module.exports = {
 "Play a move, or use Hint, to unlock the next puzzle.":"Joue un coup, ou utilise l'indice, pour débloquer l'exercice suivant.",
 "Try this puzzle first.":"Essaie d'abord cet exercice.",
 "This browser isn't keeping your progress: it will be lost when you close the tab. Private browsing or a full storage can cause this.":"Ce navigateur ne conserve pas ta progression : elle sera perdue en fermant l'onglet. La navigation privée ou un stockage plein peuvent en être la cause.",
-"chang64 · no account, no tracking · progress saved on this device":
- "chang64 · sans compte, sans traqueur · progression enregistrée sur cet appareil",
+"chang64 · no tracking · progress saved on this device":"chang64 · sans traqueur · progression enregistrée sur cet appareil",
 "Use your browser menu: Add to home screen":"Passe par le menu du navigateur : Ajouter à l'écran d'accueil",
 /* Pied de page de l'application (2026-10-25) : la date passait par une
    branche LANG==="fr" de rendreDateSite, elle passe desormais par t(). */

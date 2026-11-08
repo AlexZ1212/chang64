@@ -9,6 +9,12 @@
    l'anglais et le build le signale (langues/manquants.json). */
 module.exports = {
  textes: {
+  "Chess at school or at the club: free, with no accounts": "Catur di sekolah atau klub: gratis dan tanpa akun",
+  "chang64 is a free chess site that pupils can use straight away in a browser: no account, no email address, no password, nothing to install. It runs on computers, tablets and phones, in 10 languages, with no advertising and nothing to buy.": "chang64 adalah situs catur gratis yang bisa langsung dipakai siswa di peramban: tanpa akun, tanpa alamat email, tanpa kata sandi, tanpa instalasi. Situs ini berjalan di komputer, tablet, dan ponsel, dalam 10 bahasa, tanpa iklan dan tanpa pembelian.",
+  "The site never asks anyone for a name or an email address, and it sets no cookies. Progress stays in the browser of the device being used. To measure traffic and how hard each puzzle is, it keeps only anonymous statistics, with nothing that could identify a pupil. The privacy page, at the bottom of the home page, gives the full details, including the connection logs kept by the host.": "Situs ini tidak pernah meminta nama atau alamat email dan tidak memakai cookie. Kemajuan tetap tersimpan di peramban perangkat yang digunakan. Untuk mengukur kunjungan dan tingkat kesulitan tiap teka-teki, situs hanya menyimpan statistik anonim, tanpa apa pun yang bisa mengenali siswa. Halaman privasi, di bagian bawah halaman utama, memberikan semua perinciannya, termasuk log koneksi yang disimpan oleh penyedia hosting.",
+  "In class, the <strong>puzzle of the day</strong> is the same for everyone, so a group can look at it together as a warm-up. The <strong>rule pages</strong> explain one idea at a time with a diagram, and several lead straight to practice on that theme, such as forks or pins. There is also a trainer for learning the names of the squares.": "Di kelas, <strong>teka-teki harian</strong> sama untuk semua orang, sehingga satu kelompok bisa melihatnya bersama sebagai pemanasan. <strong>Halaman aturan</strong> menjelaskan satu gagasan setiap kali dengan diagram, dan beberapa di antaranya langsung mengarah ke latihan tema itu, seperti garpu atau pin. Ada juga latihan untuk menghafal nama petak.",
+  "Pupils can play the computer, whose lowest level forgives mistakes, or each other: one pupil creates a game and sends the link, and the game continues move by move from any device.": "Siswa bisa melawan komputer, yang tingkat terendahnya memaafkan kesalahan, atau saling melawan: satu siswa membuat permainan dan mengirim tautan, lalu permainan berlanjut langkah demi langkah dari perangkat apa pun.",
+  "Two limits are worth knowing. There are no class accounts, so a teacher cannot follow pupils' results from a dashboard. And progress belongs to the browser: on a shared computer, pupils share the same progress, and clearing the browser erases it.": "Ada dua batasan yang perlu diketahui. Tidak ada akun kelas, sehingga guru tidak bisa memantau hasil siswa dari dasbor. Selain itu, kemajuan melekat pada peramban: di komputer bersama, para siswa berbagi kemajuan yang sama, dan menghapus data peramban akan menghilangkannya.",
   "chess term explained": "istilah catur dijelaskan",
   "moves, variations and ECO codes": "langkah, variasi, dan kode ECO",
   "3 worked examples": "3 contoh yang dibahas",
@@ -560,6 +566,7 @@ module.exports = {
   "Catalan Opening": "Putih memadukan d4 dan c4 dengan fianchetto di sayap raja. Gajah di g2 bisa menekan sepanjang partai."
  },
  slugs: {
+  "learn:for-teachers-and-clubs": "untuk-guru-dan-klub",
   "learn:how-the-pieces-move": "cara-bidak-bergerak",
   "learn:castling": "rokade",
   "learn:en-passant": "en-passant",

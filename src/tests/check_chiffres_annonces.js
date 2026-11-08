@@ -80,8 +80,8 @@ T("meta description", new RegExp('name="description"[^>]*' + NP + ' ').test(idx)
 T("image de partage (og:description)", new RegExp('og:description"[^>]*' + NP + ' ').test(idx),
   (idx.match(/og:description" content="([^"]{0,120})/) || [])[1]);
 T("donnees structurees", new RegExp('featureList[^\\]]*' + NP + ' ').test(idx));
-T("texte de presentation anglais", idx.includes(NP_EN + ' puzzles verified move by move'));
-T("texte de presentation francais", idxFr.includes(NP_FR + ' exercices v'));
+T("texte de presentation anglais : pour debutants", idx.includes("Made for beginners"));
+T("texte de presentation : pas de nombre repete", !idx.includes(NP_EN + ' puzzles verified move by move'));
 /* "tuile de navigation" retiree le 2026-09-05. Elle exigeait que la tuile
    Explorer annonce "51619 verified positions". Ce sous-titre a ete change
    volontairement (session du 2026-09-04) en "10 patterns, 3 examples each" :

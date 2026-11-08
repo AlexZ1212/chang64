@@ -9,6 +9,12 @@
    l'anglais et le build le signale (langues/manquants.json). */
 module.exports = {
  textes: {
+  "Chess at school or at the club: free, with no accounts": "Okulda veya kulüpte satranç: ücretsiz ve hesapsız",
+  "chang64 is a free chess site that pupils can use straight away in a browser: no account, no email address, no password, nothing to install. It runs on computers, tablets and phones, in 10 languages, with no advertising and nothing to buy.": "chang64, öğrencilerin doğrudan tarayıcıda kullanabileceği ücretsiz bir satranç sitesidir: hesap yok, e-posta adresi yok, parola yok, kurulacak bir şey yok. Bilgisayarda, tablette ve telefonda, 10 dilde, reklamsız ve satın alma olmadan çalışır.",
+  "The site never asks anyone for a name or an email address, and it sets no cookies. Progress stays in the browser of the device being used. To measure traffic and how hard each puzzle is, it keeps only anonymous statistics, with nothing that could identify a pupil. The privacy page, at the bottom of the home page, gives the full details, including the connection logs kept by the host.": "Site hiç kimseden ad veya e-posta adresi istemez ve çerez kullanmaz. İlerleme, kullanılan cihazın tarayıcısında kalır. Ziyaretleri ve her bulmacanın zorluğunu ölçmek için yalnızca bir öğrenciyi tanımlamaya yarayacak hiçbir şey içermeyen anonim istatistikler tutar. Ana sayfanın altındaki gizlilik sayfası, barındırma hizmetinin tuttuğu bağlantı kayıtları dahil tüm ayrıntıları verir.",
+  "In class, the <strong>puzzle of the day</strong> is the same for everyone, so a group can look at it together as a warm-up. The <strong>rule pages</strong> explain one idea at a time with a diagram, and several lead straight to practice on that theme, such as forks or pins. There is also a trainer for learning the names of the squares.": "Sınıfta <strong>günün bulmacası</strong> herkes için aynıdır, bu yüzden bir grup ısınma olarak birlikte bakabilir. <strong>Kural sayfaları</strong> her seferinde bir konuyu diyagramla açıklar ve bazıları çatal veya açmaz gibi o konunun alıştırmasına doğrudan götürür. Karelerin adlarını öğrenmek için bir alıştırma da vardır.",
+  "Pupils can play the computer, whose lowest level forgives mistakes, or each other: one pupil creates a game and sends the link, and the game continues move by move from any device.": "Öğrenciler, en düşük seviyesi hataları affeden bilgisayara karşı veya birbirleriyle oynayabilir: biri oyunu oluşturup bağlantıyı gönderir ve oyun herhangi bir cihazdan hamle hamle devam eder.",
+  "Two limits are worth knowing. There are no class accounts, so a teacher cannot follow pupils' results from a dashboard. And progress belongs to the browser: on a shared computer, pupils share the same progress, and clearing the browser erases it.": "Bilinmesi gereken iki sınır var. Sınıf hesabı yoktur, bu nedenle öğretmen öğrencilerin sonuçlarını bir panodan izleyemez. Ayrıca ilerleme tarayıcıya aittir: ortak bir bilgisayarda öğrenciler aynı ilerlemeyi paylaşır ve tarayıcı verilerini temizlemek onu siler.",
   "chess term explained": "satranç terimi açıklandı",
   "moves, variations and ECO codes": "hamleler, varyantlar ve ECO kodları",
   "3 worked examples": "açıklamalı 3 örnek",
@@ -560,6 +566,7 @@ module.exports = {
   "Catalan Opening": "Beyaz d4 ve c4'ü şah kanadı fiyankettosuyla birleştirir. g2'deki fil bütün oyun boyunca baskı yapabilir."
  },
  slugs: {
+  "learn:for-teachers-and-clubs": "ogretmenler-ve-kulupler-icin",
   "learn:how-the-pieces-move": "taslar-nasil-hareket-eder",
   "learn:castling": "rok",
   "learn:en-passant": "gecerken-alma",

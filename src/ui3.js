@@ -1951,6 +1951,8 @@ async function debutOuvrir(){
   }
   if(mode!=="debut")return;
   debutCharger();
+  /* Parcours termine avant l'arrivee du badge : il est attribue ici. */
+  debutBadge();
   if(typeof focusBoard==="function")focusBoard();
 }
 function debutStatut(cls,txt){
@@ -2048,6 +2050,17 @@ function debutSuivant(){
   else{debut.e++;debut.x=0;}
   debutSauver();
   debutCharger();
+  debutBadge();
+}
+/* Toutes les etapes a exercices sont faites, dans n'importe quel ordre : on
+   peut sauter d'une etape a l'autre, donc la derniere reussie n'est pas
+   forcement la sixieme. */
+function debutFini(){
+  if(!debut||!debut.faites.length)return false;
+  return debutEtapes().every((et,i)=>!et.exos.length||debut.faites.includes(i));
+}
+function debutBadge(){
+  if(debutFini()&&!prog.badges.includes("debut_fini")){checkBadges();saveProg();}
 }
 function debutIndice(){
   if(debut.ok||debut.occupe)return;

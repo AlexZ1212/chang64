@@ -98,6 +98,45 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   T("indice cache a la fin", $("btnDebutIndice").classList.contains("hide"));
   T("pas de niveau modifie", ev("prog.solved") === 0, String(ev("prog.solved")));
 
+  console.log("\n--- Badge et felicitations ---");
+  const bravo = $("bravo");
+  T("badge du parcours gagne", ev("prog.badges.includes('debut_fini')"));
+  T("date du badge notee", ev("!!prog.badgeDates.debut_fini"));
+  T("felicitations encore fermees juste apres", bravo.hidden === true);
+  await attendre(1100);
+  T("felicitations ouvertes", bravo.hidden === false);
+  T("titre traduit", $("bravoTitre").textContent === "Félicitations", $("bravoTitre").textContent);
+  T("bouton traduit", $("bravoOk").textContent === "Continuer", $("bravoOk").textContent);
+  T("nom du badge affiche", $("bravoNoms").textContent === "Parcours débutant terminé", $("bravoNoms").textContent);
+  T("focus sur le bouton", w.document.activeElement === $("bravoOk"));
+  $("bravoOk").click();
+  T("fermee par le bouton", bravo.hidden === true);
+  ev("debutBadge()");
+  await attendre(1100);
+  T("pas de seconde fenetre pour le meme badge", bravo.hidden === true);
+
+  ev("bravoAnnoncer([BADGES[0],BADGES[9]])");
+  await attendre(1100);
+  T("deux badges dans la meme fenetre", $("bravoNoms").children.length === 2, String($("bravoNoms").children.length));
+  w.document.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  T("fermee par Echap", bravo.hidden === true);
+
+  ev("rush={score:0,strikes:0,endsAt:Date.now()+60000,queue:[],history:[]};bravoAnnoncer([BADGES[1]])");
+  await attendre(1100);
+  T("attend la fin du chrono", bravo.hidden === true);
+  ev("rush=null");
+  await attendre(1100);
+  T("s'ouvre une fois le chrono fini", bravo.hidden === false);
+  $("bravoOk").click();
+
+  ev("clock.enabled=true;clock.w=600000;clock.b=600000;clock.last=Date.now();clock.active=0;var __m=mode;mode='play';bravoAnnoncer([BADGES[2]])");
+  await attendre(1100);
+  T("ne coupe pas une partie a la pendule", bravo.hidden === true);
+  ev("clock.active=null;mode=__m;clock.enabled=false");
+  await attendre(1100);
+  T("s'ouvre une fois la partie finie", bravo.hidden === false);
+  $("bravoOk").click();
+
   const stocke = JSON.parse(w.localStorage.getItem("chang64:debut") || "{}");
   T("progression gardee sur l'appareil", stocke.e === 6 && stocke.f.length === 6, JSON.stringify(stocke));
 

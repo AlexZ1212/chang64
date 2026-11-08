@@ -1185,22 +1185,83 @@ const BADGES=[
      le marbre. type compare directement a prog.rushBest/prog.coordBest
      (deja suivis, rien de nouveau a journaliser) -- voir checkBadges(). */
   {id:"sprint_15",type:"rushBest",n:15,label:"Chang Sprint: {n} solved"},
-  {id:"coord_20",type:"coordBest",n:20,label:"Coordinates: {n} correct"}
+  {id:"coord_20",type:"coordBest",n:20,label:"Coordinates: {n} correct"},
+  /* Parcours "Je debute" (2026-11-08) : voir debutFini(), ui3.js. */
+  {id:"debut_fini",type:"debut",n:1,label:"Beginner course completed"}
 ];
 function checkBadges(){
   ensureProgFields();
   const stat={solved:prog.solved||0,days:prog.days||0,rating:prog.rating||0,
-    rushBest:prog.rushBest||0,coordBest:prog.coordBest||0};
+    rushBest:prog.rushBest||0,coordBest:prog.coordBest||0,
+    debut:typeof debutFini==="function"&&debutFini()?1:0};
   let gained=null;
+  const nouveaux=[];
   for(const b of BADGES){
     if(prog.badges.includes(b.id))continue;
     /* type "theme" compare a un compteur par theme (prog.themeSolved), pas
        au flat "stat" ci-dessus -- seul type qui a besoin d'une cle
        supplementaire (b.theme) plutot que juste b.n. */
     const val=b.type==="theme"?(prog.themeSolved[b.theme]||0):stat[b.type];
-    if(val>=b.n){prog.badges.push(b.id);prog.badgeDates[b.id]=Date.now();gained=b;}
+    if(val>=b.n){prog.badges.push(b.id);prog.badgeDates[b.id]=Date.now();gained=b;nouveaux.push(b);}
   }
-  return gained; /* le dernier nouveau badge de cet appel, pour un eventuel accuse de reception discret -- pas de popup pour l'instant, cf. "no noise" */
+  if(nouveaux.length)bravoAnnoncer(nouveaux);
+  return gained;
+}
+/* Popin de felicitations (2026-11-08, demande d'Alexandre). Plusieurs badges
+   gagnes d'un coup partagent la meme fenetre. On attend un instant pour laisser
+   voir le coup qui vient d'etre joue, et on ne coupe jamais un exercice chrono
+   ni une partie a la pendule : la fenetre attend la fin. var plutot que let :
+   checkBadges() peut tourner avant que le script soit lu en entier. */
+var bravoFile,bravoMinuteur,bravoPret,bravoAvant;
+function bravoAnnoncer(liste){
+  bravoFile=(bravoFile||[]).concat(liste);
+  const r=$("bravo");
+  if(r&&!r.hidden){bravoRemplir();return;}
+  clearTimeout(bravoMinuteur);
+  bravoMinuteur=setTimeout(bravoTenter,900);
+}
+function bravoOccupe(){
+  if(rush||coord)return true;
+  if((mode==="play"||mode==="friend")&&clock.enabled&&clock.active!==null)return true;
+  const mk=$("makruk");if(mk&&!mk.hidden)return true;
+  return $("promoModal").className.includes("on");
+}
+function bravoTenter(){
+  if(bravoOccupe()){bravoMinuteur=setTimeout(bravoTenter,1000);return;}
+  const r=$("bravo");
+  if(!r||!bravoFile||!bravoFile.length)return;
+  if(!bravoPret){
+    bravoPret=true;
+    $("bravoOk").onclick=bravoFermer;
+    r.addEventListener("click",e=>{if(e.target===r)bravoFermer();});
+    document.addEventListener("keydown",bravoTouche,true);
+  }
+  bravoRemplir();
+  bravoAvant=document.activeElement;
+  r.hidden=false;
+  $("bravoOk").focus();
+}
+function bravoRemplir(){
+  const el=$("bravoNoms");poserHtml(el,"");
+  for(const b of bravoFile){
+    const d=document.createElement("div");
+    d.textContent=badgeLabel(b);
+    el.appendChild(d);
+  }
+}
+function bravoFermer(){
+  const r=$("bravo");if(!r||r.hidden)return;
+  r.hidden=true;bravoFile=[];
+  if(bravoAvant&&bravoAvant.focus&&document.contains(bravoAvant))bravoAvant.focus();
+  bravoAvant=null;
+}
+/* Tant que la fenetre est ouverte, le clavier ne doit pas jouer sur l'echiquier
+   derriere. Entree et Espace restent sur le bouton, seul element de la fenetre. */
+function bravoTouche(e){
+  const r=$("bravo");if(!r||r.hidden)return;
+  e.stopPropagation();
+  if(e.key==="Escape"){e.preventDefault();bravoFermer();}
+  else if(e.key==="Tab")e.preventDefault();
 }
 function renderBadges(){
   const el=$("badgeGrid");if(!el)return;

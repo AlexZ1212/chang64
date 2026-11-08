@@ -367,6 +367,22 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   color:var(--brass)}
 .chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .tc-note{font-size:12px;color:var(--sage);margin-top:10px}
+/* Felicitations pour un badge : fenetre de memes valeurs que celle du Makruk,
+   au-dessus d'elle (z-index), bandeau du degrade de l'accueil. */
+.bravo{position:fixed;inset:0;z-index:210;display:flex;justify-content:center;align-items:flex-start;padding:16px;box-sizing:border-box;background:rgba(10,14,13,.78);overflow-y:auto}
+.bravo[hidden]{display:none}
+.bravo-fenetre{position:relative;overflow:hidden;width:100%;max-width:340px;margin:auto 0;padding:26px 24px 24px;box-sizing:border-box;text-align:center;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2);color:var(--chalk);animation:bravoFenetre .26s cubic-bezier(.22,.7,.3,1)}
+.bravo-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-70px;height:176px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,#2F4A3E 0%,#26382F 100%)}
+.bravo-medaille{position:relative;display:block;width:132px;height:154px;margin:0 auto 12px}
+.bravo-sceau{transform-box:view-box;transform-origin:66px 62px;animation:bravoSceau .5s cubic-bezier(.3,1.5,.5,1) .08s both}
+.bravo-confettis{transform-box:view-box;transform-origin:66px 62px;animation:bravoConfettis .6s ease-out .18s both}
+.bravo h2{position:relative;font-family:'Source Serif 4',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
+.bravo-noms{position:relative;color:var(--brass);font-size:16px;font-weight:600;line-height:1.4;margin:0 0 20px}
+.bravo .btn{position:relative;min-width:170px}
+@keyframes bravoFenetre{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes bravoSceau{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}
+@keyframes bravoConfettis{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.bravo-fenetre,.bravo-sceau,.bravo-confettis{animation:none}}
 /* Accueil plus court sur telephone (2026-11-08, version choisie par Alexandre) :
    "Jouer maintenant" est sous la cadence et finissait a 838 px sur 375 x 667.
    Titre sur 3 lignes, marges reduites, et sans la phrase sous la cadence, que
@@ -2317,7 +2333,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
                  ne laisse alors aucun espace entre les deux. Meme valeur que
                  l'ecart eyebrow->contenu standard du site (.eyebrow
                  margin-bottom:8px). -->
-            <p class="note" id="badgeSummary" style="margin-top:0;margin-bottom:8px">0/41 unlocked</p>
+            <p class="note" id="badgeSummary" style="margin-top:0;margin-bottom:8px">0/42 unlocked</p>
             <div class="badges" id="badgeRecentGrid"></div>
             <details class="repliable" id="badgeAllWrap">
               <summary><span class="sub-inline" id="badgeAllToggle">See all badges</span></summary>
@@ -2629,6 +2645,41 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   </div>
 
   </main>
+  <!-- Felicitations pour un badge gagne : voir bravoAnnoncer(), ui2.js. La
+       medaille reprend le signe de l'elephant (ds/signe.svg) et les couleurs
+       du site ; les petits carres rappellent les cases de l'echiquier. -->
+  <div class="bravo" id="bravo" role="dialog" aria-modal="true" aria-labelledby="bravoTitre" aria-describedby="bravoNoms" hidden>
+    <div class="bravo-fenetre">
+      <svg class="bravo-medaille" viewBox="0 0 132 154" aria-hidden="true">
+        <g class="bravo-confettis">
+          <rect x="14" y="22" width="7" height="7" fill="#E0A93B" transform="rotate(20 17 25)"/>
+          <rect x="116" y="18" width="6" height="6" fill="#ECEAE3" transform="rotate(-15 119 21)"/>
+          <rect x="6" y="68" width="5" height="5" fill="#5FBF92" transform="rotate(35 8 70)"/>
+          <rect x="121" y="72" width="7" height="7" fill="#EDE4D2" transform="rotate(10 124 75)"/>
+          <rect x="30" y="6" width="5" height="5" fill="#97A49D" transform="rotate(25 32 8)"/>
+          <rect x="98" y="4" width="5" height="5" fill="#E0A93B" transform="rotate(40 100 6)"/>
+          <rect x="16" y="106" width="6" height="6" fill="#E0A93B" transform="rotate(15 19 109)"/>
+          <rect x="112" y="110" width="5" height="5" fill="#5FBF92" transform="rotate(-25 114 112)"/>
+        </g>
+        <g class="bravo-sceau">
+          <polygon points="50,90 30,146 47,136 58,150 76,100" fill="#4B6B63"/>
+          <polygon points="82,90 102,146 85,136 74,150 56,100" fill="#3B564F"/>
+          <g fill="#E0A93B">
+            <circle cx="102" cy="62" r="10"/><circle cx="97.2" cy="80" r="10"/><circle cx="84" cy="93.2" r="10"/><circle cx="66" cy="98" r="10"/>
+            <circle cx="48" cy="93.2" r="10"/><circle cx="34.8" cy="80" r="10"/><circle cx="30" cy="62" r="10"/><circle cx="34.8" cy="44" r="10"/>
+            <circle cx="48" cy="30.8" r="10"/><circle cx="66" cy="26" r="10"/><circle cx="84" cy="30.8" r="10"/><circle cx="97.2" cy="44" r="10"/>
+            <circle cx="66" cy="62" r="38"/>
+          </g>
+          <circle cx="66" cy="62" r="32" fill="#101413"/>
+          <circle cx="66" cy="62" r="28.5" fill="none" stroke="#E0A93B" stroke-width="1.2" opacity=".6"/>
+          <path transform="translate(43 38) scale(.72)" fill="#E0A93B" fill-rule="evenodd" d="M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z"/>
+        </g>
+      </svg>
+      <h2 id="bravoTitre">Congratulations</h2>
+      <div class="bravo-noms" id="bravoNoms"></div>
+      <button type="button" class="btn primary" id="bravoOk">Continue</button>
+    </div>
+  </div>
 
   <p class="storagewarn hide" id="storageWarn" role="status"></p>
 

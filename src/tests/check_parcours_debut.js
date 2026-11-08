@@ -112,6 +112,19 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   console.log("\n--- Adresse directe ---");
   const w2 = await ouvrir("en", { avant(x) { x.location.hash = "#start"; } });
   T("#start ouvre le parcours", w2.eval("mode") === "debut", w2.eval("mode"));
+
+  console.log("\n--- Plein ecran sur telephone ---");
+  const croix = w2.document.getElementById("btnDebutFermer");
+  T("croix presente et nommee", !!croix && !!croix.getAttribute("aria-label"));
+  croix.click(); await attendre(50);
+  T("la croix ramene a l'accueil", w2.eval("mode") === "home", w2.eval("mode"));
+  T("l'accueil est visible apres la croix", !w2.document.getElementById("pane-home").classList.contains("hide"));
+  const css = require("fs").readFileSync(path.join(__dirname, "..", "site", "index.html"), "utf8").replace(/\s+/g, " ");
+  const tel = css.search(/@media ?\(max-width:599px\) ?\{ ?body\[data-mode="debut"\] header/);
+  const bloc = tel >= 0 ? css.slice(tel, css.indexOf(".sq.prenable", tel)) : "";
+  T("telephone : en-tete et pied de page masques", /body\[data-mode="debut"\] header,body\[data-mode="debut"\] footer\{display:none\}/.test(bloc));
+  T("telephone : echiquier agrandi", /100svh - 392px/.test(bloc));
+  T("croix visible seulement sur telephone", /\.debut-fermer\{display:none\}/.test(css) && /\.debut-fermer\{display:flex/.test(bloc));
   w2.close();
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");

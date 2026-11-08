@@ -527,6 +527,19 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 480px));max-width:max(240px,calc(100svh - 480px));margin-inline:auto}
   #appLayout[data-mode="debut"]{row-gap:12px}
 }
+/* Parcours en plein ecran sur telephone (2026-11-08, idee d'Alexandre) : sur
+   375 x 667, le contenu finissait entre 726 et 751 px a cause de l'en-tete.
+   Sans en-tete ni pied de page, tout tient et l'echiquier gagne de la place.
+   La croix remplace les onglets pour sortir. Meme echiquier que le reste du
+   site, contrairement au Makruk qui a le sien : on ne touche pas au moteur. */
+.debut{position:relative}
+.debut-fermer{display:none}
+@media(max-width:599px){
+  body[data-mode="debut"] header,body[data-mode="debut"] footer{display:none}
+  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 392px));max-width:max(240px,calc(100svh - 392px))}
+  .debut-fermer{display:flex;align-items:center;justify-content:center;position:absolute;top:0;right:0;width:48px;height:44px;padding:0;background:none;border:0;color:var(--sage);font-size:26px;line-height:1;cursor:pointer}
+  .debut-fermer:focus-visible{outline:2px solid var(--brass);outline-offset:-4px}
+}
 /* Sans ceci, un glissement au doigt faisait defiler la page et annulait le
    deplacement. Les cases vides et les pieces adverses laissent defiler. */
 .sq.prenable{touch-action:none}
@@ -2410,6 +2423,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <!-- Parcours "Je debute" (2026-11-08), voir la fin de ui3.js. -->
       <div id="pane-debut" class="hide">
         <div class="panel debut">
+          <button type="button" class="debut-fermer" id="btnDebutFermer" aria-label="Leave">×</button>
           <div class="eyebrow" id="debutEtape"></div>
           <div class="debut-pas" id="debutPas"></div>
           <h2 class="debut-titre" id="debutTitre"></h2>

@@ -2069,6 +2069,7 @@ function debutPremierePartie(){
   setMode("play",{fresh:true});
   goTop();
 }
+if($("btnDebutFermer"))$("btnDebutFermer").onclick=()=>{setMode("home");goTop();};
 if($("btnDebutIndice"))$("btnDebutIndice").onclick=debutIndice;
 if($("btnDebutSuite"))$("btnDebutSuite").onclick=debutSuivant;
 if($("btnDebutPartie"))$("btnDebutPartie").onclick=debutPremierePartie;

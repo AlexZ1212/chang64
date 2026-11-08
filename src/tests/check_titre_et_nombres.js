@@ -29,10 +29,10 @@ function ouvrir(l) {
 const presentation = d => d.querySelector(".hero-lede p:last-child").textContent;
 const compteur = d => d.getElementById("hCount").textContent;
 /* Mots qui suivent le nombre dans le texte de presentation. */
-const MOT = { en: " puzzles", fr: " exercices", es: " ejercicios", pt: " exercícios", de: " Zug für Zug", ru: " задач",
-  it: " esercizi", tr: " bulmaca", pl: " zadań", id: " teka-teki" };
-const TITRE = { en: /play chess/, fr: /joue aux/, es: /juega al ajedrez/, pt: /jogue xadrez/, de: /Schach spielen/, ru: /играй в шахматы/,
-  it: /gioca a scacchi/, tr: /satranç oyna/, pl: /graj w szachy/, id: /main catur/ };
+const MOT = { en: " puzzles", fr: " exercices", es: " ejercicios", pt: " exercícios", de: " Aufgaben", ru: ", все",
+  it: " esercizi", tr: " bulmaca", pl: ", wszystkie", id: " teka-teki" };
+const TITRE = { en: /for beginners/, fr: /pour débutants/, es: /para principiantes/, pt: /para iniciantes/, de: /für Anfänger/, ru: /для начинающих/,
+  it: /per principianti/, tr: /Yeni başlayanlar/, pl: /dla początkujących/, id: /untuk pemula/ };
 
 (async () => {
   console.log("\n--- Le nombre brut n'est plus affiche tel quel ---");
@@ -48,9 +48,8 @@ const TITRE = { en: /play chess/, fr: /joue aux/, es: /juega al ajedrez/, pt: /j
     const w = ouvrir(l); await attendre(1500);
     const d = w.document;
     T("langue du document " + l.html, d.documentElement.lang === l.html, d.documentElement.lang);
-    T("titre de l'onglet dans la langue", TITRE[l.code].test(d.title) && (l.code === "en" || !/play chess/.test(d.title)), d.title);
-    T("texte de presentation : " + JSON.stringify(N), presentation(d).includes(N + MOT[l.code]) ||
-      (l.code === "de" && presentation(d).includes(N + " Zug")), presentation(d).slice(0, 90));
+    T("titre de l'onglet dans la langue", TITRE[l.code].test(d.title) && (l.code === "en" || !/for beginners/.test(d.title)), d.title);
+    T("texte de presentation : " + JSON.stringify(N), presentation(d).includes(N + MOT[l.code]), presentation(d).slice(0, 90));
     T("carte des exercices : " + JSON.stringify(N), compteur(d) === N, JSON.stringify(compteur(d)));
     w.close();
   }

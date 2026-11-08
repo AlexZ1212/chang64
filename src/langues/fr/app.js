@@ -360,7 +360,7 @@ module.exports = {
  "Soixante-quatre, c'est le reste du nom : les cases. chang64, c'est l'éléphant sur les soixante-quatre cases, une pièce qui a traversé mille ans et la moitié du monde, sur un échiquier qui n'a pas bougé.",
 
 /* --- accroche et signature --- */
-"No account. No ads. No noise. Just chess.":"Sans compte. Sans publicité. Sans bruit. Juste les échecs.",
+"No account. No ads. No distractions. Just chess.":"Sans compte. Sans publicité. Sans distraction. Juste les échecs.",
 "The elephant on 64 squares":"L'éléphant sur 64 cases",
 "Tip: “Suggest a move” shows what the engine would play in the position you are looking at.":
  "Astuce : « Suggérer un coup » montre ce que le moteur jouerait dans la position que tu regardes.",

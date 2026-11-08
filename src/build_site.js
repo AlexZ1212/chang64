@@ -2447,6 +2447,9 @@ ${/* Une tuile par autre langue (2026-10-25), vers son application. */
 }
 
 fs.writeFileSync(OUT + "/robots.txt", `User-agent: *\nAllow: /\nDisallow: /engine/\n\nSitemap: ${SITE}/sitemap.xml\n`);
+/* Cle IndexNow, relue par les moteurs pour verifier les envois de indexnow.js. */
+{ const cle = fs.readFileSync(path.join(__dirname, "indexnow-cle.txt"), "utf8").trim();
+  fs.writeFileSync(OUT + "/" + cle + ".txt", cle + "\n"); }
 
 const today = BUILD_DATE;   /* meme date que dateModified des fiches JSON-LD */
 const extraUrls = require("./content.js")({

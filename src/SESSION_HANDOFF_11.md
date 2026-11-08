@@ -6,6 +6,10 @@ difficulte, et une serie d'ameliorations. **Etat au depart : tout est publie,
 rien n'attend sur main** (dernier commit `19f2e890`, deja pousse et en ligne,
 controle en ligne 3 439 OK / 0 echec).
 
+**Complete le 8 novembre** : voir la section 5 bis pour ce qui a ete fait les
+7 et 8 novembre. La liste des choses a faire est desormais tenue dans la
+memoire (`todo-projet.md`), a lire en premier.
+
 On parle a Alexandre en francais et on le tutoie. Il decide de chaque
 publication et de chaque reglage de compte (Cloudflare, GitHub).
 
@@ -41,7 +45,9 @@ Environnement : Windows 10, Node 24, 8 coeurs, 16 Go, pas de Python.
    2 292 verifications au 27/10. Format : `N verifications passees, N en echec`.
    Les tests unitaires : `node tests/check_xxx.js` (`N OK, N FAIL`) et les
    anciennes suites `uitestN.js` (` ok ` / ` FAIL `).
-3. Publication, **uniquement avec l'accord d'Alexandre** et une suite verte :
+   Regle d'Alexandre depuis le 07/11 : petit correctif = tests cibles
+   seulement, grosse publication = suite complete.
+3. Publication, **uniquement avec l'accord d'Alexandre** et des tests verts :
    - `robocopy src\site chang64-site /MIR` (PowerShell ; code de sortie < 8 =
      succes, 1 et 3 sont normaux) ;
    - `diff -rq src/site chang64-site` doit etre vide ;
@@ -49,7 +55,10 @@ Environnement : Windows 10, Node 24, 8 coeurs, 16 Go, pas de Python.
      commit "Publication : ..." ;
    - push avec le contournement DNS (section 7) ;
    - attendre que `https://chang64.com/sw.js` porte le nouveau `const CACHE="chang64-AAAAMMJJHHMM"` ;
-   - `node src/controle_en_ligne.js` : doit finir en `0 FAIL`.
+   - `node src/controle_en_ligne.js` : doit finir en `0 FAIL` ;
+   - `node src/indexnow.js` (`--essai` pour voir sans envoyer) signale a Bing
+     les pages dont la date a change, puis commiter `src/indexnow-envoye.json`
+     avec la publication suivante.
 4. Traitements de plus de quelques minutes (minage, Stockfish) : **hors de
    Claude**, via un `.cmd` lance par `Start-Process explorer.exe`, sinon une
    mise a jour de l'application les tue.
@@ -60,9 +69,15 @@ Pieges connus :
   avant de chercher un defaut ;
 - en francais, `t()` pose des espaces insecables apres les mots courts : les
   tests comparent apres `.replace(/\u00a0/g, " ")` ;
-- le navigateur integre de l'app n'atteint pas les serveurs locaux ; il ouvre
-  les `file://` en instantane statique. Le compte Cloudflare est connecte dans
-  **Chrome** (extension Claude in Chrome), pas dans le navigateur integre.
+- le site local s'ouvre dans le navigateur integre via `preview_start` et la
+  configuration `site-local` de `.claude/launch.json` (port 8064). Vider le
+  service worker et les caches avant de tester, sinon il sert l'ancienne page.
+  Les comptes d'Alexandre (Cloudflare, GitHub, Search Console, Bluesky,
+  AlternativeTo) sont connectes dans **Chrome** (extension Claude in Chrome).
+  Les pages de reglages et d'actions de GitHub peuvent y etre bloquees, et
+  Reddit est bloque dans les deux navigateurs ;
+- PowerShell 5.1 leve une erreur sur une reponse 301 lue avec
+  `-MaximumRedirection 0` : verifier les redirections avec `curl`.
 
 ---
 
@@ -188,6 +203,37 @@ Reste a faire, par ordre de priorite suggere :
 5. Taille du depot (214 Mo) : rien a faire avant 1 Go. Deployer depuis
    Cloudflare plutot que versionner `chang64-site` poserait probleme : le
    build ecrit des registres a commiter (dates, exercices du jour figes).
+
+---
+
+## 5 bis. Ajouts des 7 et 8 novembre
+
+En ligne :
+- **Partage de l'exercice du jour** : les carres d'emojis decrits plus haut
+  sont remplaces par des etoiles et la difficulte du jour
+  (`texteResultatDuJour`, `ui2.js`).
+- **Lancement** : Search Console et Bing branches ; fiche AlternativeTo validee
+  (`alternativeto.net/software/chang64/`) ; brouillons Reddit et Show HN dans
+  `lancement/`, dossier exclu de git. Show HN et Reddit ne sont pas publies.
+- **Bluesky** : `@alexz1212.bsky.social`, publication automatique lundi, jeudi
+  et dimanche a 15 h UTC (`src/bluesky_jour.js`,
+  `.github/workflows/bluesky-jour.yml`, secrets poses par Alexandre).
+- **Google et le depot GitHub** : l'accueil declare `WebSite` et `Organization`,
+  toutes les pages `og:site_name`, le README renvoie vers le site, fiche About
+  du depot remplie. Plus aucun "bilingue" dans les README.
+- **Anciennes pages d'exercices** (`/puzzles/903-mate-in-two.html`,
+  `/fr/exercices/53-prise-gagnante.html`) : redirigees en 301 vers leur theme
+  par `functions/puzzles/[page].js` et `functions/fr/exercices/[page].js`.
+  `_routes.json` exclut les pages existantes et reste sous la limite de 100
+  regles. Validation des 404 lancee dans la Search Console le 07/11.
+- **Sons** (`ff406216`) : objet `SON` de `ui.js`, 14 sons fabriques en Web Audio,
+  sans fichier. Actifs par defaut, reglage dans les Preferences (`sonOn`, cle
+  `son` de `chang64:prefs`). Le toc doit rester mat et discret : Alexandre a
+  refuse la premiere version, trop electronique.
+
+Hors site : generateur de GIF `src/visuels/anime_mat.js` et projet Remotion
+`lancement/video/` (hors git). Regles visuelles dans la memoire
+(`charte-visuels.md`, `eviter-tics-ia.md`). Rien n'est publie.
 
 ---
 

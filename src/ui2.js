@@ -1119,7 +1119,7 @@ const LEVEL_RATING=[800,1000,1150,1300,1450,1600,1750,1900,2100,2300];
    qui n'existe pas encore (a construire une fois la banque de puzzles
    stabilisee, cf. classify() corrige cette semaine). Noms factuels plutot
    que des titres ronflants ("Centurion" etc.) : coherent avec le ton
-   "No account. No ads. No noise." du reste du site. */
+   "No account. No ads. No distractions." du reste du site. */
 const BADGES=[
   {id:"solved_10",type:"solved",n:10,label:"10 solved"},
   {id:"solved_25",type:"solved",n:25,label:"25 solved"},
@@ -1950,7 +1950,7 @@ function renderExtraStats(){
   if(start)start.classList.toggle("hide",!vierge);
 }
 /* Recap hebdo (item 3, "pour plus tard") : une ligne discrete sur l'ecran
-   d'accueil, pas de popup -- coherent avec "No account. No ads. No noise."
+   d'accueil, pas de popup -- coherent avec "No account. No ads. No distractions."
    deja affiche dans le code. Fenetre GLISSANTE de 7 jours (Date.now()-7j),
    pas la semaine calendaire (lundi-dimanche) : plus simple, et evite l'
    effet de bord d'un recap qui se vide brutalement chaque lundi matin.

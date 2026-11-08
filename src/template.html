@@ -529,16 +529,23 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 }
 /* Parcours en plein ecran sur telephone (2026-11-08, idee d'Alexandre) : sur
    375 x 667, le contenu finissait entre 726 et 751 px a cause de l'en-tete.
-   Sans en-tete ni pied de page, tout tient et l'echiquier gagne de la place.
-   La croix remplace les onglets pour sortir. Meme echiquier que le reste du
-   site, contrairement au Makruk qui a le sien : on ne touche pas au moteur. */
-.debut{position:relative}
-.debut-fermer{display:none}
+   Sans en-tete ni pied de page, tout tient. Le tout forme une seule fenetre,
+   titre et croix en haut, avec les valeurs de .mk-panneau et .mk-fermer
+   (makruk.js) : c'est la meme apparence que le Makruk. Mais l'echiquier reste
+   celui du site, le Makruk a le sien : on ne touche pas au moteur. */
+.debut-tete{display:none}
 @media(max-width:599px){
   body[data-mode="debut"] header,body[data-mode="debut"] footer{display:none}
-  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 392px));max-width:max(240px,calc(100svh - 392px))}
-  .debut-fermer{display:flex;align-items:center;justify-content:center;position:absolute;top:0;right:0;width:48px;height:44px;padding:0;background:none;border:0;color:var(--sage);font-size:26px;line-height:1;cursor:pointer}
-  .debut-fermer:focus-visible{outline:2px solid var(--brass);outline-offset:-4px}
+  body[data-mode="debut"]{padding-bottom:8px}
+  #appLayout[data-mode="debut"]{margin:-10px -8px 0;padding:12px;row-gap:10px;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2)}
+  #appLayout[data-mode="debut"] .debut-tete{display:flex;align-items:center;gap:10px}
+  .debut-tete h2{margin:0;font-size:22px}
+  .debut-fermer{margin-left:auto;font:inherit;font-size:22px;line-height:1;width:44px;height:44px;padding:0;border-radius:8px;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);cursor:pointer}
+  .debut-fermer:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  #appLayout[data-mode="debut"] .panel.debut{padding:0;background:none;border:0;box-shadow:none}
+  #appLayout[data-mode="debut"] .debut-pas{margin:6px 0 10px}
+  #appLayout[data-mode="debut"] .debut-titre{font-size:22px}
+  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 415px));max-width:max(240px,calc(100svh - 415px))}
 }
 /* Sans ceci, un glissement au doigt faisait defiler la page et annulait le
    deplacement. Les cases vides et les pieces adverses laissent defiler. */
@@ -1708,6 +1715,8 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
     <p class="info-tip-pop hide" id="tipEdit">Set up any position to study it: check an idea from a book, a puzzle you saw elsewhere, or an endgame, without replaying a whole game to get there. Pick a piece below, then tap a square. Tap a piece already on the board to remove it.</p>
   </div>
   <div class="layout hide" id="appLayout">
+    <!-- Haut de la fenetre du parcours "Je debute", sur telephone seulement. -->
+    <div class="debut-tete"><h2>I'm a beginner</h2><button type="button" class="debut-fermer" id="btnDebutFermer" aria-label="Leave">×</button></div>
     <div class="board-side">
       <!-- Au-dessus de l'echiquier, comme le bandeau des coordonnees : le
            temps restant doit rester sous les yeux pendant qu'on joue, pas
@@ -2423,7 +2432,6 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <!-- Parcours "Je debute" (2026-11-08), voir la fin de ui3.js. -->
       <div id="pane-debut" class="hide">
         <div class="panel debut">
-          <button type="button" class="debut-fermer" id="btnDebutFermer" aria-label="Leave">×</button>
           <div class="eyebrow" id="debutEtape"></div>
           <div class="debut-pas" id="debutPas"></div>
           <h2 class="debut-titre" id="debutTitre"></h2>

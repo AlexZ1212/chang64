@@ -123,8 +123,10 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   const tel = css.search(/@media ?\(max-width:599px\) ?\{ ?body\[data-mode="debut"\] header/);
   const bloc = tel >= 0 ? css.slice(tel, css.indexOf(".sq.prenable", tel)) : "";
   T("telephone : en-tete et pied de page masques", /body\[data-mode="debut"\] header,body\[data-mode="debut"\] footer\{display:none\}/.test(bloc));
-  T("telephone : echiquier agrandi", /100svh - 392px/.test(bloc));
-  T("croix visible seulement sur telephone", /\.debut-fermer\{display:none\}/.test(css) && /\.debut-fermer\{display:flex/.test(bloc));
+  T("telephone : echiquier borne par la hauteur", /debut"\] \.board-frame\{max-width:max\(240px,calc\(100vh - \d+px\)\)/.test(bloc));
+  T("telephone : une seule fenetre", /#appLayout\[data-mode="debut"\]\{[^}]*border:1px solid/.test(bloc) && /\.panel\.debut\{[^}]*border:0/.test(bloc));
+  T("titre et croix seulement sur telephone", /\.debut-tete\{display:none\}/.test(css) && /\.debut-tete\{display:flex/.test(bloc));
+  T("titre et croix au-dessus de l'echiquier", css.indexOf('class="debut-tete"') > 0 && css.indexOf('class="debut-tete"') < css.indexOf('class="board-side"'));
   w2.close();
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");

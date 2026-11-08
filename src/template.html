@@ -334,6 +334,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .hero p{color:var(--sage);font-size:clamp(14px,2.6vw,16.5px);max-width:46ch;margin-bottom:24px;position:relative}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;position:relative;margin-bottom:22px} /* avant la cadence depuis le 2026-10-24 : l'ecart vient d'ici */
 .hero .cta .btn{font-size:14.5px;padding:12px 22px}
+.hero .cta.cta-jouer{margin:16px 0 0}
 /* "Jouer maintenant" + "Puzzle du jour" resserres sur mobile (mise en page) :
    au-dela de 22px de rembourrage chacun, les deux libelles ne tenaient plus
    cote a cote sur un ecran de telephone etroit -- "Puzzle du jour", plus
@@ -502,6 +503,27 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   /* Tablette en portrait : le plateau large de 718 px repoussait tout. */
   #appLayout[data-mode="puzzles"] .board-frame{max-width:calc(100vh - 440px);max-width:calc(100svh - 440px)}
 }
+/* Parcours "Je debute" : meme taille d'echiquier que les exercices. */
+@media(min-width:861px){
+  #appLayout[data-mode="debut"] .board-frame{max-width:calc(100vh - 200px);max-width:calc(100svh - 200px);margin-inline:auto}
+}
+@media(max-width:860px){
+  /* Le panneau du parcours est plus haut que celui des exercices : la consigne
+     doit rester visible sous le plateau sans faire defiler. */
+  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 480px));max-width:max(240px,calc(100svh - 480px));margin-inline:auto}
+  #appLayout[data-mode="debut"]{row-gap:12px}
+}
+/* Sans ceci, un glissement au doigt faisait defiler la page et annulait le
+   deplacement. Les cases vides et les pieces adverses laissent defiler. */
+.sq.prenable{touch-action:none}
+.sq.cible::before{content:"";position:absolute;inset:0;background:rgba(224,169,63,.6);pointer-events:none}
+.debut-pas{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
+.debut-pas button{width:36px;height:36px;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);color:inherit;font:inherit;font-size:14px;cursor:pointer}
+.debut-pas button.fait{border-color:var(--jade)}
+.debut-pas button[aria-current="step"]{background-color:var(--brass);border-color:var(--brass);color:var(--ink);font-weight:700}
+.debut-titre{font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;line-height:1.2;margin:0 0 8px}
+.debut p{margin:0 0 12px}
+.debut-actions{margin-top:12px}
 /* Jouer et Inviter (suite de l'audit UX, 2026-10-24) : meme probleme que
    Resoudre, avec en plus une pendule au-dessus et une au-dessous du
    plateau. Sur iPad, plateau de 718 px de 249 a 967 : la pendule du joueur,
@@ -1527,14 +1549,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       <p>Made for beginners: puzzles within your reach, a computer at your level and games with friends.</p>
       </div>
       <div class="hero-rest">
-      <!-- Boutons d'action AVANT la cadence (audit UX du 2026-10-24) : apres
-           elle, "Play now" tombait sous la ligne de flottaison, a 724 px sur
-           un iPhone SE (667 px de haut) et a 789 px sur un portable 1366x768.
-           La cadence devient le reglage juste en dessous ; "Play now" lance
-           toujours celle qui est choisie (10+0 par defaut). -->
+      <!-- Depuis le 2026-11-08, a la demande d'Alexandre, "Play now" est sous
+           la cadence qu'il lance : les autres boutons tiennent ainsi sur une
+           seule ligne. L'audit UX du 2026-10-24 l'avait place au-dessus parce
+           qu'il tombait alors sous la ligne de flottaison des petits ecrans. -->
       <div class="cta">
-        <button class="btn primary" id="heroPlay">Play now</button>
         <button class="btn" id="heroPuzzle">Puzzle of the day</button>
+        <button class="btn" id="heroDebut">I'm a beginner</button>
         <button class="btn hide" id="btnInstall">Install the app</button>
       </div>
       <div class="tc-block">
@@ -1553,6 +1574,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
         <div class="tc-chips" id="tcChips"><button class="chip" aria-pressed="true">10+0</button><button class="chip" aria-pressed="false">10+5</button><button class="chip" aria-pressed="false">15+10</button></div>
         <p class="tc-note" id="tcNote">Rapid: enough time to actually think. A good default.</p>
       </div>
+      <div class="cta cta-jouer"><button class="btn primary" id="heroPlay">Play now</button></div>
 
       </div>
       <!-- Apercu anime : montrer l'echiquier reel du site des la premiere
@@ -2371,6 +2393,25 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
       </div>
 
       <!-- ---------- FRIENDS ---------- -->
+      <!-- Parcours "Je debute" (2026-11-08), voir la fin de ui3.js. -->
+      <div id="pane-debut" class="hide">
+        <div class="panel debut">
+          <div class="eyebrow" id="debutEtape"></div>
+          <div class="debut-pas" id="debutPas"></div>
+          <h2 class="debut-titre" id="debutTitre"></h2>
+          <p id="debutIntro"></p>
+          <div class="status" id="debutStatus"></div>
+          <div class="btnrow debut-actions">
+            <button class="btn" id="btnDebutIndice">Hint</button>
+            <button class="btn primary hide" id="btnDebutSuite">Next</button>
+          </div>
+          <div class="btnrow debut-actions hide" id="debutFin">
+            <button class="btn primary" id="btnDebutPartie">Play my first game</button>
+            <button class="btn" id="btnDebutJour">Puzzle of the day</button>
+            <button class="btn" id="btnDebutRegles">Read the rules</button>
+          </div>
+        </div>
+      </div>
       <div id="pane-friend" class="hide">
         <div class="panel" id="amiStatusPanel">
           <h2>Play a friend</h2>

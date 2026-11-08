@@ -20,8 +20,10 @@ const css = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]
 
 console.log("\n--- Accueil ---");
 const iPlay = html.indexOf('id="heroPlay"'), iCadence = html.indexOf('class="tc-block"');
-T("\"Jouer maintenant\" avant la cadence", iPlay > 0 && iCadence > 0 && iPlay < iCadence);
-T("les deux boutons restent dans le meme bloc", /<div class="cta">\s*<button class="btn primary" id="heroPlay">[\s\S]*?id="heroPuzzle"/.test(html));
+/* Inverse le 2026-11-08 a la demande d'Alexandre : "Jouer maintenant" lance la
+   cadence choisie juste au-dessus, et les autres boutons tiennent sur une ligne. */
+T("\"Jouer maintenant\" sous la cadence", iPlay > 0 && iCadence > 0 && iPlay > iCadence);
+T("les boutons secondaires restent ensemble", /<div class="cta">\s*<button class="btn" id="heroPuzzle">[\s\S]*?id="heroDebut"/.test(html));
 T("espace sous les boutons", /\.hero \.cta\{[^}]*margin-bottom:22px/.test(css));
 
 console.log("\n--- Jouer et Inviter ---");

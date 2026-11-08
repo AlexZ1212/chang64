@@ -897,6 +897,9 @@ function render(){
     if(hl&&(sq===hl.from||sq===hl.to))cls+=" last";
     if(sq===selected)cls+=" sel";
     if(sq===checkSq)cls+=" check";
+    /* Voir .sq.prenable : au doigt, glisser cette piece ne doit pas faire
+       defiler la page. */
+    if(p&&pC(p)===g.turn)cls+=" prenable";
     if(marks[sq])cls+=" "+marks[sq];
     c.className=cls;
     /* Nom accessible de la case (2026-09-05). Sans lui, les 64 cases sont
@@ -923,7 +926,7 @@ function render(){
      finale ou revue. On compare au coup precedemment anime pour ne pas
      rejouer l'animation a chaque rendu (survol, selection, redimensionnement). */
   const mv=reviewGame?reviewLast:lastMove;
-  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);{let etat=0;if(checkSq>=0)etat=g.moves().length?1:(ecranExercice()?0:2);SON.coup(mv,etat);}}
+  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);{let etat=0;if(checkSq>=0)etat=g.moves().length?1:(ecranExercice()||mode==="debut"?0:2);SON.coup(mv,etat);}}
   else if(!mv)lastAnimated=null;
   else if(mv&&animEnCours)animateMove(mv,true);   /* rendu pendant l'animation */
 }
@@ -1153,6 +1156,7 @@ function onSquare(e){
   if(typeof enFinales==="function"&&enFinales()){handleEndgameClick(sq);return;}
   if(mode==="play")handleGameClick(sq);
   else if(mode==="friend")handleAmiClick(sq);
+  else if(mode==="debut")handleDebutClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
   else if(mode==="edit"){if(typeof handleEditorClick==="function")handleEditorClick(sq);}
   else if(mode==="analyse"){if(typeof handleAnalyseClick==="function")handleAnalyseClick(sq);}
@@ -2675,6 +2679,8 @@ async function loadAmi(){
 }
 function readDeepLink(){
   const h=location.hash||"";
+  /* Parcours "Je debute" (ui3.js). */
+  if(/[#&]start$/.test(h))return {kind:"start"};
   let m=h.match(/[#&]train=([a-z]+)/);
   if(m)return {kind:"train",id:m[1]};
   m=h.match(/[#&]puzzle=([a-zA-Z0-9]+)/);
@@ -2737,6 +2743,7 @@ let fragmentSuivi=null;
 function noterFragment(){fragmentSuivi=location.hash?{hash:location.hash,mode:mode}:null;}
 function applyDeepLink(d){
   if(!d)return false;
+  if(d.kind==="start"){setMode("debut");return true;}
   if(d.kind==="train"){
     /* Corrige le 2026-09-03 : ce lien (#train=<id>) visait une finale
        precise, mais pointait vers setMode("train") -- l'onglet Defis, qui
@@ -2981,6 +2988,7 @@ function setMode(m,opts){
   $("pane-play").classList.toggle("hide",m!=="play");
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");
+  $("pane-debut").classList.toggle("hide",m!=="debut");
   $("evalwrap").classList.toggle("hide",m!=="play");
   /* Bouton de retournement : visible en Jouer et Entre amis (les deux
      modes ou #board, partage par tout le site, affiche une vraie partie
@@ -3035,6 +3043,8 @@ function setMode(m,opts){
        (deep-link #puzzle=, etc.) qui ne connaissaient pas encore "screen". */
     const screen=opts.screen||(opts.daily?"daily":"menu");
     if(typeof showSolveScreen==="function")showSolveScreen(screen);
+  } else if(m==="debut"){
+    debutOuvrir();
   } else {
     renderDailyChips();rebuildAmi();showAmi();
     if(typeof renderAmiHistory==="function")renderAmiHistory();
@@ -3066,6 +3076,7 @@ $("heroPlay").onclick=()=>{
   goTop();
 };
 $("heroPuzzle").onclick=()=>{setMode("puzzles",{daily:true});goTop();};
+$("heroDebut").onclick=()=>{setMode("debut");goTop();};
 $("cardPlay").onclick=()=>{tirerCouleur();setMode("play",{fresh:true});goTop();};
 $("cardPuzzles").onclick=()=>{setMode("puzzles");goTop();};
 $("cardFriend").onclick=()=>{setMode("friend");goTop();};

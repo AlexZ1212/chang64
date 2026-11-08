@@ -78,7 +78,14 @@ function fausseBase() {
   console.log("\n--- Build ---");
   T("functions/ recopiees dans le site", ["resultat.js", "stats.js"].every(f => fs.existsSync(path.join(SITE, "functions", "api", f))));
   const routes = JSON.parse(fs.readFileSync(path.join(SITE, "_routes.json"), "utf8"));
-  T("_routes.json limite les fonctions a /api/*", JSON.stringify(routes.include) === '["/api/*"]' && routes.version === 1, JSON.stringify(routes));
+  /* Depuis le 2026-11-07, /puzzles/* et /fr/exercices/* passent aussi par une
+     fonction, pour rediriger les anciennes pages numerotees ; les pages de ces
+     dossiers qui existent restent exclues, donc hors du quota de fonctions. */
+  T("_routes.json limite les fonctions a /api/* et aux anciennes pages",
+    JSON.stringify(routes.include) === '["/api/*","/puzzles/*","/fr/exercices/*"]' && routes.version === 1, JSON.stringify(routes.include));
+  T("_routes.json laisse les pages existantes en statique",
+    ["/puzzles/", "/puzzles/mate-in-two", "/fr/exercices/", "/fr/exercices/clouage"].every(u => routes.exclude.includes(u)));
+  T("_routes.json sous la limite de 100 regles", routes.include.length + routes.exclude.length <= 100);
   const sw = fs.readFileSync(path.join(SITE, "sw.js"), "utf8");
   T("le service worker laisse /api/ au reseau", /startsWith\("\/api\/"\)\)return;/.test(sw));
 

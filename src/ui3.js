@@ -407,9 +407,12 @@ function modeClick(sq){
   else if(mode==="friend")handleAmiClick(sq);
   else if(mode==="puzzles")handlePuzzleClick(sq);
   else if(mode==="train")handleTrainClick(sq);
+  else if(mode==="debut")handleDebutClick(sq);
 }
 boardEl.addEventListener("pointerdown",e=>{
   if(busy||pendingPromo||coord)return;
+  if(e.button>0)return;
+  if(mode==="debut"&&(debut.ok||debut.occupe))return;
   const sq=squareFromPoint(e.clientX,e.clientY);
   if(sq<0)return;
   const g=viewGame();
@@ -423,6 +426,10 @@ boardEl.addEventListener("pointermove",e=>{
   if(!drag.moved&&Math.abs(dx)+Math.abs(dy)<6)return;
   if(!drag.moved){
     drag.moved=true;
+    /* Capture posee ici et pas au pointerdown, ou elle detournerait le clic
+       simple vers l'echiquier : sans elle, relacher hors du plateau laissait
+       la piece fantome accrochee au pointeur. */
+    try{boardEl.setPointerCapture(e.pointerId);}catch(err){}
     const g=viewGame(),p=g.board[drag.from];
     const el=document.createElement("div");
     el.className="dragghost";
@@ -1866,3 +1873,204 @@ function updateTabsScrollHint(){
     document.head.appendChild(chargement);
   });
 }
+
+/* ---------- parcours "Je debute" (2026-11-08) ----------
+   Sept etapes courtes pour quelqu'un qui n'a jamais joue, adresse #start.
+   Les positions sont ecrites ici plutot que tirees de la banque : elles sont
+   choisies a la main parmi les plus simples, identiques pour tout le monde,
+   et tests/check_parcours_debut.js les verifie contre le moteur. Le parcours
+   ne touche ni au niveau, ni a la notation, ni aux statistiques d'exercices.
+   Ces declarations sont en var et en function : l'initialisation de ui.js
+   peut y arriver avant la fin de l'execution de ce fichier. */
+var debut={e:0,x:0,faites:[],ok:false,occupe:false,gen:0,charge:false};
+function debutEtapes(){
+  const mat1=t("White to play. Find the checkmate in one move.");
+  const fourchette=t("Find the knight move that attacks two pieces at once.");
+  const apresF=t("The knight attacks two pieces at once. The king has to move, and the knight takes the other one.");
+  const clouage=t("Find the rook move that pins the black knight to its king.");
+  const apresC=t("The knight can no longer move: if it did, its own king would be in check.");
+  return [
+    {titre:t("How the pieces move"),intro:t("Each piece moves in its own way. Click a piece to see where it can go."),exos:[
+      {fen:"7k/8/8/8/8/8/8/R5K1 w - - 0 1",sol:["a1a5"],cible:"a5",consigne:t("The rook moves in straight lines. Move it to the marked square.")},
+      {fen:"7k/8/8/8/8/8/8/2B3K1 w - - 0 1",sol:["c1g5"],cible:"g5",consigne:t("The bishop moves diagonally. Move it to the marked square.")},
+      {fen:"7k/8/8/8/8/8/8/3Q2K1 w - - 0 1",sol:["d1a4"],cible:"a4",consigne:t("The queen moves like a rook and a bishop combined. Move it to the marked square.")},
+      {fen:"7k/8/8/8/8/8/8/4K3 w - - 0 1",sol:["e1e2"],cible:"e2",consigne:t("The king moves one square in any direction. Move it to the marked square.")},
+      {fen:"7k/8/8/8/8/8/PPP5/1N4K1 w - - 0 1",sol:["b1c3"],cible:"c3",consigne:t("The knight jumps in an L shape, even over other pieces. Move it to the marked square.")},
+      {fen:"7k/8/8/8/8/8/4P3/6K1 w - - 0 1",sol:["e2e4"],cible:"e4",consigne:t("A pawn moves straight ahead, and can go two squares on its first move. Push it to the marked square.")}
+    ]},
+    {titre:t("Taking a piece"),intro:t("To take a piece, move onto its square. Before you take, check that it is not defended."),exos:[
+      {fen:"7k/8/n7/8/8/8/8/R5K1 w - - 0 1",sol:["a1a6"],consigne:t("The black knight is not defended. Take it.")},
+      {fen:"6k1/8/8/3b4/8/8/8/3R2K1 w - - 0 1",sol:["d1d5"],consigne:t("The black bishop is not defended. Take it.")},
+      {fen:"6k1/8/2p5/3p3n/8/8/8/3Q2K1 w - - 0 1",sol:["d1h5"],consigne:t("One of these two black pieces is defended by a pawn. Take the one that is not."),
+        faux:{d1d5:t("That pawn is defended: your queen would be taken back.")}}
+    ]},
+    {titre:t("Checkmate"),intro:t("Checkmate ends the game: the king is attacked and has no way out."),exos:[
+      {fen:"4k3/7R/4K3/8/8/8/8/8 w - - 0 1",sol:["h7h8"],mat:true,consigne:mat1},
+      {fen:"1Q6/8/8/8/8/5K2/5P2/5k2 w - - 0 1",sol:["b8b1"],mat:true,consigne:mat1},
+      {fen:"k7/8/1R6/2R5/8/8/1r6/7K w - - 0 1",sol:["c5a5"],mat:true,consigne:mat1},
+      {fen:"8/3N4/5K1k/8/6R1/8/8/8 w - - 0 1",sol:["g4h4"],mat:true,consigne:mat1},
+      {fen:"8/8/6pk/8/3Q1P2/6K1/r7/8 w - - 0 1",sol:["d4h8"],mat:true,consigne:mat1}
+    ]},
+    {titre:t("Back-rank mate"),intro:t("A king shut in behind its own pawns can be mated along its last rank."),exos:[
+      {fen:"6k1/R5pp/4K3/8/2n5/P6r/8/8 w - - 0 1",sol:["a7a8"],mat:true,consigne:mat1},
+      {fen:"1k6/pp6/8/6Q1/5K1P/1P6/8/8 w - - 0 1",sol:["g5d8"],mat:true,consigne:mat1},
+      {fen:"6k1/5pp1/6P1/7p/7r/2R1p3/4K3/8 w - - 0 1",sol:["c3c8"],mat:true,consigne:mat1}
+    ]},
+    {titre:t("The fork"),intro:t("A fork is one piece attacking two at the same time. Your opponent can only save one."),exos:[
+      {fen:"8/8/8/8/4kPN1/6K1/8/7q w - - 0 1",sol:["g4f2"],suite:["e4d5","f2h1"],consigne:fourchette,apres:apresF},
+      {fen:"6k1/7q/8/8/6N1/5RK1/8/8 w - - 0 1",sol:["g4f6"],suite:["g8f7","f6h7"],consigne:fourchette,apres:apresF},
+      {fen:"8/5b2/2k3N1/2P5/3K4/8/8/8 w - - 0 1",sol:["g6e5"],suite:["c6c7","e5f7"],consigne:fourchette,apres:apresF}
+    ]},
+    {titre:t("The pin"),intro:t("A pin stops a piece from moving, because moving it would expose its king."),exos:[
+      {fen:"R7/1n2k3/8/7p/2K5/8/8/8 w - - 0 1",sol:["a8a7"],consigne:clouage,apres:apresC},
+      {fen:"8/R5p1/4n2k/7P/6K1/8/8/8 w - - 0 1",sol:["a7a6"],consigne:clouage,apres:apresC},
+      {fen:"8/8/8/pK6/P6R/1k2n3/8/8 w - - 0 1",sol:["h4h3"],consigne:clouage,apres:apresC}
+    ]},
+    {titre:t("Your first game"),intro:t("You know enough to play. Your first game is against the computer at its easiest level, with no clock."),exos:[]}
+  ];
+}
+function debutCase(n){return (8-Number(n[1]))*16+n.charCodeAt(0)-97;}
+function debutMarques(ex){const m={};if(ex&&ex.cible)m[debutCase(ex.cible)]="cible";return m;}
+async function debutSauver(){
+  try{await window.storage.set("chang64:debut",JSON.stringify({e:debut.e,x:debut.x,f:debut.faites}));}catch(e){}
+}
+async function debutOuvrir(){
+  if(!debut.charge){
+    debut.charge=true;
+    try{
+      const r=await window.storage.get("chang64:debut");
+      if(r&&r.value){
+        const d=JSON.parse(r.value),E=debutEtapes();
+        if(Number.isInteger(d.e)&&d.e>=0&&d.e<E.length){
+          debut.e=d.e;
+          debut.x=Number.isInteger(d.x)&&d.x>=0&&d.x<E[d.e].exos.length?d.x:0;
+        }
+        if(Array.isArray(d.f))debut.faites=d.f.filter(i=>Number.isInteger(i)&&i>=0&&i<E.length);
+      }
+    }catch(e){}
+  }
+  if(mode!=="debut")return;
+  debutCharger();
+  if(typeof focusBoard==="function")focusBoard();
+}
+function debutStatut(cls,txt){
+  const s=$("debutStatus");s.className="status"+(cls?" "+cls:"");s.textContent=txt;
+  if(txt&&typeof announce==="function")announce(txt,"status");
+}
+function debutCharger(){
+  const E=debutEtapes(),et=E[debut.e],ex=et.exos[debut.x];
+  debut.gen++;debut.ok=false;debut.occupe=false;
+  game=ex?new Game(ex.fen):new Game();
+  flipped=false;selected=-1;lastMove=null;marks=debutMarques(ex);
+  legalCache=ex?game.moves():[];
+  const n=debut.e+1,total=E.length;
+  $("debutEtape").textContent=ex
+    ?t("Step {n} of {total}, exercise {x} of {y}",{n:n,total:total,x:debut.x+1,y:et.exos.length})
+    :t("Step {n} of {total}",{n:n,total:total});
+  const pas=$("debutPas");poserHtml(pas,"");
+  E.forEach((_,i)=>{
+    const b=document.createElement("button");
+    b.type="button";b.textContent=String(i+1);
+    b.className=debut.faites.includes(i)?"fait":"";
+    b.setAttribute("aria-label",t("Go to step {n}",{n:i+1}));
+    if(i===debut.e)b.setAttribute("aria-current","step");
+    b.onclick=()=>{debut.e=i;debut.x=0;debutSauver();debutCharger();};
+    pas.appendChild(b);
+  });
+  $("debutTitre").textContent=et.titre;
+  $("debutIntro").textContent=et.intro;
+  $("debutStatus").classList.toggle("hide",!ex);
+  if(ex)debutStatut("",ex.consigne);
+  $("btnDebutIndice").classList.toggle("hide",!ex);
+  $("btnDebutSuite").classList.add("hide");
+  $("debutFin").classList.toggle("hide",!!ex);
+  render();
+}
+function handleDebutClick(sq){
+  if(debut.ok||debut.occupe||!legalCache.length)return;
+  const ex=debutEtapes()[debut.e].exos[debut.x];
+  if(selected>=0){
+    const r=pickMove(selected,sq);
+    if(r&&r.move){debutEssai(r.move,ex);return;}
+  }
+  const p=game.board[sq];
+  selected=p&&pC(p)===game.turn?sq:-1;
+  marks=debutMarques(ex);
+  render();
+}
+function debutEssai(m,ex){
+  const uci=game.uci(m);
+  let bon=ex.sol.includes(uci);
+  if(ex.mat){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
+  selected=-1;
+  if(!bon){
+    const g=debut.gen;
+    SON.erreur();
+    marks=debutMarques(ex);marks[m.to]="bad";render();
+    boardEl.classList.add("shake");
+    setTimeout(()=>boardEl.classList.remove("shake"),340);
+    debutStatut("lose",(ex.faux&&ex.faux[uci])||t("Not quite. Try again.")+" "+ex.consigne);
+    setTimeout(()=>{if(g===debut.gen&&mode==="debut"&&!debut.ok){marks=debutMarques(ex);render();}},700);
+    return;
+  }
+  game.makeMove(m);lastMove=m;marks={};legalCache=[];debut.occupe=true;
+  render();
+  debutSuite(ex,0,debut.gen);
+}
+/* Rejoue la fin de la combinaison (le roi s'ecarte, le cavalier prend) : voir
+   la piece tomber explique la fourchette mieux qu'une phrase. */
+function debutSuite(ex,i,g){
+  if(!ex.suite||i>=ex.suite.length){debutReussi(ex);return;}
+  setTimeout(()=>{
+    if(g!==debut.gen||mode!=="debut")return;
+    const m=game.moves().find(x=>game.uci(x)===ex.suite[i]);
+    if(!m){debutReussi(ex);return;}
+    game.makeMove(m);lastMove=m;render();
+    debutSuite(ex,i+1,g);
+  },750);
+}
+function debutReussi(ex){
+  debut.ok=true;debut.occupe=false;
+  SON.reussite();
+  debutStatut("win",ex.apres||(ex.mat?t("Checkmate. Well done."):t("Well done.")));
+  const et=debutEtapes()[debut.e],dernier=debut.x>=et.exos.length-1;
+  if(dernier&&!debut.faites.includes(debut.e))debut.faites.push(debut.e);
+  const b=$("btnDebutSuite");
+  b.textContent=dernier?t("Next step"):t("Next");
+  b.classList.remove("hide");
+  $("btnDebutIndice").classList.add("hide");
+  debutSauver();
+}
+function debutSuivant(){
+  if(!debut.ok)return;
+  const et=debutEtapes()[debut.e];
+  if(debut.x<et.exos.length-1)debut.x++;
+  else{debut.e++;debut.x=0;}
+  debutSauver();
+  debutCharger();
+}
+function debutIndice(){
+  if(debut.ok||debut.occupe)return;
+  const ex=debutEtapes()[debut.e].exos[debut.x];
+  const u=ex.sol[0];
+  selected=debutCase(u.slice(0,2));
+  marks=debutMarques(ex);marks[debutCase(u.slice(2,4))]="hint";
+  render();
+  debutStatut("",t("Move the highlighted piece to the highlighted square."));
+}
+function debutPremierePartie(){
+  if(!debut.faites.includes(debut.e)){debut.faites.push(debut.e);debutSauver();}
+  colorMode="w";myColor=W;
+  if(typeof syncColorSeg==="function")syncColorSeg();
+  botLevel=1;
+  const seg=$("segLevel");
+  if(seg)for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v==="1");
+  pendingNoClock=true;
+  setMode("play",{fresh:true});
+  goTop();
+}
+if($("btnDebutIndice"))$("btnDebutIndice").onclick=debutIndice;
+if($("btnDebutSuite"))$("btnDebutSuite").onclick=debutSuivant;
+if($("btnDebutPartie"))$("btnDebutPartie").onclick=debutPremierePartie;
+if($("btnDebutJour"))$("btnDebutJour").onclick=()=>{setMode("puzzles",{daily:true});goTop();};
+if($("btnDebutRegles"))$("btnDebutRegles").onclick=()=>{location.href="/"+((PAGE_LANGUE.dirs&&PAGE_LANGUE.dirs.learn)||"learn")+"/";};

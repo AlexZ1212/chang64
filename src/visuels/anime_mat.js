@@ -24,7 +24,9 @@ if (!ID) { console.log("Usage : node visuels/anime_mat.js --id pNNN --sortie mat
 
 const C = { ardoise: "#101413", ardoise2: "#171d1b", ligne: "#2a3330", laiton: "#E0A93B", craie: "#ECEAE3",
   sauge: "#97A49D", clair: "#EDE4D2", fonce: "#4B6B63", rouge: "#C8553D" };
-const ELEPHANT = "M48.38 23.6A10.08 10.08 0 1 0 43.34 32.328V37.04A10.08 10.08 0 0 0 53.42 47.12A2.52 2.52 0 0 0 53.42 42.08A5.04 5.04 0 0 1 48.38 37.04ZM25.104 17.124A20.16 20.16 0 0 0 8.06 37.04V50.48H14.78V43.76A6.72 6.72 0 0 1 28.22 43.76V50.48H34.94V37.914A14.7 14.7 0 0 1 25.104 17.124Z";
+/* Le signe officiel (ds/signe.svg), avec son oeil : un trou dans la tete,
+   d'ou fill-rule evenodd. Le favicon, lui, n'a pas d'oeil (trop petit). */
+const ELEPHANT = (fs.readFileSync(path.join(__dirname, "..", "ds", "signe.svg"), "utf8").match(/\sd="([^"]+)"/) || [])[1];
 const SERIF = "Georgia, 'Source Serif 4', serif", MONO = "Consolas, 'JetBrains Mono', monospace", SANS = "'Segoe UI', Arial, sans-serif";
 
 /* ---------- l'exercice ---------- */
@@ -92,14 +94,20 @@ function image({ grille, mobile, surligne, roi, mat, titre, coups, pied }) {
   let s = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${defs}` +
     `<filter id="ombre" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/>` +
     `<feOffset dx="3" dy="10" result="o"/><feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>` +
-    `<feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
-  /* Fond uni, sans decor : les gabarits charges (damiers d'angle, pastilles
-     en capitales espacees, points medians) font "image generee" (retour
-     d'Alexandre du 2026-11-07). On reste sur un diagramme sobre. */
+    `<feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>` +
+    `<radialGradient id="vignette" cx="50%" cy="48%" r="72%"><stop offset="55%" stop-color="#000" stop-opacity="0"/>` +
+    `<stop offset="100%" stop-color="#000" stop-opacity="0.62"/></radialGradient></defs>`;
+  /* Fond : un grand damier a peine visible sur toute l'image, assombri vers
+     les bords par une vignette (demande d'Alexandre du 2026-11-07). Pas de
+     damier d'angle ni de pastille : ces decors de gabarit font "image
+     generee". */
   s += `<rect width="${W}" height="${H}" fill="${C.ardoise}"/>`;
+  for (let r = 0; r < 12; r++) for (let f = 0; f < 12; f++)
+    if ((r + f) % 2) s += `<rect x="${f * 90}" y="${r * 90}" width="90" height="90" fill="#18201d"/>`;
+  s += `<rect width="${W}" height="${H}" fill="url(#vignette)"/>`;
   /* En-tete : elephant et nom a gauche, numero de l'exercice a droite, comme
      la puce "#CODE" du site. */
-  s += `<g transform="translate(70,58) scale(0.95)"><path fill="${C.laiton}" d="${ELEPHANT}"/></g>`;
+  s += `<g transform="translate(64,56) scale(0.95)"><path fill="${C.laiton}" fill-rule="evenodd" d="${ELEPHANT}"/></g>`;
   s += `<text x="140" y="104" font-family="${SERIF}" font-size="46" font-weight="700" fill="${C.craie}">chang<tspan fill="${C.laiton}" font-family="${MONO}" font-size="40">64</tspan></text>`;
   s += `<text x="${W - 70}" y="100" text-anchor="end" font-family="${MONO}" font-size="24" fill="${C.sauge}">#${esc(p.code)}</text>`;
   /* Titre au-dessus du plateau. */

@@ -1,7 +1,7 @@
 /* Verifie le choix des adresses a signaler a IndexNow et la forme de l'envoi,
  * sans aucun appel reseau. */
 const fs = require("fs"), path = require("path");
-const { lireSitemap, aEnvoyer, paquets, envoyer } = require("../indexnow.js");
+const { lireSitemap, signatures, aEnvoyer, paquets, envoyer } = require("../indexnow.js");
 
 let ok = 0, ko = 0;
 function verif(nom, c) { if (c) { ok++; console.log("  OK   " + nom); } else { ko++; console.log("  FAIL " + nom); } }
@@ -22,6 +22,11 @@ function verif(nom, c) { if (c) { ok++; console.log("  OK   " + nom); } else { k
   verif("date changee : seule cette page part", modif.length === 1 && modif[0] === "https://chang64.com/");
   const etatSansFr = { ...s }; delete etatSansFr["https://chang64.com/fr/"];
   verif("page nouvelle : elle part", aEnvoyer(s, etatSansFr)[0] === "https://chang64.com/fr/");
+
+  const avant = signatures(s, { "/": { sceau: "aaa" }, "/fr/": { sceau: "bbb" } });
+  const apres = signatures(s, { "/": { sceau: "ccc" }, "/fr/": { sceau: "bbb" } });
+  const memeJour = aEnvoyer(apres, avant);
+  verif("meme jour, contenu change : la page part", memeJour.length === 1 && memeJour[0] === "https://chang64.com/");
 
   const p = paquets(Array.from({ length: 25 }, (_, i) => i), 10);
   verif("paquets : 10 + 10 + 5", p.length === 3 && p[2].length === 5);

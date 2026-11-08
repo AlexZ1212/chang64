@@ -122,7 +122,7 @@ module.exports = {
 "You":"Ty",
 "Your game":"Twoja partia",
 "Settings":"Ustawienia",
-"Piece animation":"Animacja bierek",
+"Piece animation":"Animacja bierek","On (sounds)":"Wł.","Off (sounds)":"Wył.","Sounds":"Dźwięki","A short sound for moves, checks and the end of a game, and when a puzzle is solved or missed.":"Krótki dźwięk przy ruchach, szachach i na koniec partii oraz gdy zadanie zostanie rozwiązane lub nie.",
 "Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"Bierki przesuwają się na swoje pole po wykonaniu ruchu. Wyłącz, jeśli wolisz natychmiastową szachownicę.",
 "Sprint over":"Koniec Sprintu",
 "New personal best":"Nowy rekord osobisty",

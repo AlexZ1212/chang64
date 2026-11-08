@@ -416,11 +416,20 @@ let resultDismissed=false;
    Sert uniquement a decider si btnRushAgain doit apparaitre au clic sur
    "Fermer" -- voir plus bas. */
 let finWasRushSprint=false;
+/* Partie dont la fin a deja sonne : renderResult repasse ici a chaque rendu
+   et a chaque retour sur l'onglet. En partie entre amis l'objet game est
+   reconstruit, le lien sert donc de repere. */
+let finSonnee=null;
 function renderResult(show){
   const b=$("resultBanner"); if(!b)return;
   if(show&&resultInfo){
     if(mode==="play")saveFinishedGame();
     else if(mode==="friend"&&typeof saveFinishedAmiGame==="function")saveFinishedAmiGame();
+    const cleFin=mode==="friend"?amiUrl():game;
+    if((mode==="play"||mode==="friend")&&!isReviewGame&&finSonnee!==cleFin){
+      finSonnee=cleFin;
+      SON.fin(resultInfo.kind,game.isCheckmate()?0.62:(mode==="play"&&isFlagged())?0.3:0.1);
+    }
   }
   if(!show||!resultInfo||resultDismissed){b.className="result hide";return;}
   /* Le bandeau est partage avec le bilan de Chang Sprint (showFin) : sans ce
@@ -2892,6 +2901,7 @@ function hideReady(){
 function startReadyGame(){
   hideReady();
   awaitingStart=false;
+  SON.debut();
   /* La pendule a ete armee au moment du newGame : sans cette remise a
      l'heure, tout le temps passe sur l'overlay serait decompte d'un coup. */
   if(clock&&clock.enabled)clock.last=Date.now();

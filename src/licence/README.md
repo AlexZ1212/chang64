@@ -1,6 +1,6 @@
 # chang64
 
-A free, bilingual (EN/FR) chess website: play against a bot, solve tactics puzzles,
+A free chess website for beginners, in 10 languages: play against a bot, solve tactics puzzles,
 review your games, and browse a library of openings, endgames, traps and rules.
 
 Live at **https://chang64.com**
@@ -103,7 +103,7 @@ The generated site lands in the output directory, ready to upload as-is.
 
 ## Notice en français
 
-chang64 est un site d'échecs gratuit et bilingue : parties contre un bot, exercices
+chang64 est un site d'échecs gratuit pour débutants, en 10 langues : parties contre un bot, exercices
 tactiques, revue de partie, et une bibliothèque d'ouvertures, de finales, de pièges et
 de règles.
 

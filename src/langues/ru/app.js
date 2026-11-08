@@ -122,7 +122,7 @@ module.exports = {
 "You":"Ты",
 "Your game":"Твоя партия",
 "Settings":"Настройки",
-"Piece animation":"Анимация фигур",
+"Piece animation":"Анимация фигур","On (sounds)":"Вкл.","Off (sounds)":"Выкл.","Sounds":"Звуки","A short sound for moves, checks and the end of a game, and when a puzzle is solved or missed.":"Короткий звук при ходах, шахах и в конце партии, а также когда задача решена или нет.",
 "Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"Фигуры плавно перемещаются на своё поле, когда сделан ход. Отключи, если предпочитаешь мгновенную доску.",
 "Sprint over":"Спринт окончен",
 "New personal best":"Новый личный рекорд",

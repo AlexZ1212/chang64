@@ -122,7 +122,7 @@ module.exports = {
 "You":"Kamu",
 "Your game":"Partaimu",
 "Settings":"Pengaturan",
-"Piece animation":"Animasi bidak",
+"Piece animation":"Animasi bidak","On (sounds)":"Aktif","Off (sounds)":"Mati","Sounds":"Suara","A short sound for moves, checks and the end of a game, and when a puzzle is solved or missed.":"Suara singkat untuk langkah, skak, dan akhir permainan, serta saat teka-teki terpecahkan atau terlewat.",
 "Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"Bidak meluncur ke petaknya saat langkah dimainkan. Matikan jika kamu lebih suka papan yang langsung berubah.",
 "Sprint over":"Sprint selesai",
 "New personal best":"Rekor pribadi baru",

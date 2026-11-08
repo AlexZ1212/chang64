@@ -122,7 +122,7 @@ module.exports = {
 "You":"Sen",
 "Your game":"Oyunun",
 "Settings":"Ayarlar",
-"Piece animation":"Taş animasyonu",
+"Piece animation":"Taş animasyonu","On (sounds)":"Açık","Off (sounds)":"Kapalı","Sounds":"Sesler","A short sound for moves, checks and the end of a game, and when a puzzle is solved or missed.":"Hamlelerde, şahlarda ve oyun sonunda, ayrıca bir bulmaca çözüldüğünde ya da kaçırıldığında kısa bir ses.",
 "Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"Bir hamle oynandığında taşlar karelerine kayar. Anında değişen bir tahta istersen kapat.",
 "Sprint over":"Sprint bitti",
 "New personal best":"Yeni kişisel rekor",

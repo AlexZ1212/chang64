@@ -1,6 +1,6 @@
 # chang64
 
-A free, bilingual (EN/FR) chess website. Live at **https://chang64.com**
+A free chess website for beginners, in 10 languages. Live at **https://chang64.com**
 
 Play the built-in engine at any time control, solve engine-verified tactics puzzles,
 review your games move by move, and challenge a friend over a plain link. No account,
@@ -61,7 +61,7 @@ editorial material with your own.
 
 ## Notice en français
 
-chang64 est un site d'échecs gratuit et bilingue : parties contre un moteur intégré,
+chang64 est un site d'échecs gratuit pour débutants, en 10 langues : parties contre un moteur intégré,
 exercices tactiques vérifiés, revue de partie, et parties entre amis par simple lien.
 Sans compte, sans cookie de suivi, sans publicité.
 

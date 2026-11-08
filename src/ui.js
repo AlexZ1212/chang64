@@ -622,6 +622,8 @@ function clockSetup(){
 /* Tant que la partie n'est pas lancee depuis l'overlay de preparation, la
    pendule ne doit pas s'ecouler et l'ordinateur ne doit pas jouer. */
 let awaitingStart=false;
+/* Le tic des dix dernieres secondes ne sonne qu'une fois par partie. */
+let ticTemps=false;
 /* Pose par le bandeau de fin : on vient de choisir, inutile de redemander. */
 let skipReady=false;
 let readyStatus="";
@@ -782,9 +784,12 @@ setInterval(()=>{
   if(mode!=="play"||!clock.enabled||isFlagged()||clock.active===null)return;
   clockDrain();
   renderClocks();
+  {const moi=myColor===W?clock.w:clock.b;
+   if(!ticTemps&&clock.active===myColor&&moi>0&&moi<=10000){ticTemps=true;SON.tic();}}
   if(clock.w<=0||clock.b<=0){
     clock.flagged=clock.w<=0?W:B;
     clock.active=null;
+    SON.drapeau();
     const iLost=clock.flagged===myColor;
     const s=$("status");
     const other=clock.flagged^1;
@@ -918,7 +923,7 @@ function render(){
      finale ou revue. On compare au coup precedemment anime pour ne pas
      rejouer l'animation a chaque rendu (survol, selection, redimensionnement). */
   const mv=reviewGame?reviewLast:lastMove;
-  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);}
+  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);{let etat=0;if(checkSq>=0)etat=g.moves().length?1:(ecranExercice()?0:2);SON.coup(mv,etat);}}
   else if(!mv)lastAnimated=null;
   else if(mv&&animEnCours)animateMove(mv,true);   /* rendu pendant l'animation */
 }
@@ -969,6 +974,131 @@ function cellOf(sq){
 function prefersReducedMotion(){
   try{return window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){return false;}
 }
+/* ---------- sons (2026-11-07) ----------
+   Fabriques en Web Audio au moment de les jouer : aucun fichier a charger,
+   rien qui sorte du navigateur. Actives par defaut, desactivables dans les
+   preferences (sonOn, relu par loadPrefs). Un navigateur n'autorise le son
+   qu'apres un geste de l'utilisateur : le contexte audio est cree au premier
+   appui, et tant qu'il ne tourne pas, les sons sont simplement ignores (un
+   coup restaure au chargement de la page ne sonne pas en differe). */
+let sonOn=true;
+const SON=(function(){
+  let ctx=null,bruit=null;
+  function reveiller(){
+    try{
+      if(!ctx){
+        const AC=window.AudioContext||window.webkitAudioContext;
+        if(!AC)return;
+        ctx=new AC();
+        /* Impulsion de 4 ms, legerement irreguliere : c'est elle qui fait
+           vibrer les resonances du choc des pieces. */
+        bruit=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.004),ctx.sampleRate);
+        const d=bruit.getChannelData(0);
+        for(let i=0;i<d.length;i++)d[i]=Math.sin(Math.PI*i/d.length)*(0.7+0.6*(Math.random()-0.5));
+      }
+      if(ctx.state==="suspended")ctx.resume();
+    }catch(e){}
+  }
+  for(const ev of ["pointerdown","keydown","touchend"])
+    document.addEventListener(ev,reveiller,{capture:true,passive:true});
+  function pret(){return sonOn&&ctx&&ctx.state==="running";}
+  /* Piece de bois posee : une impulsion excite quelques resonances tres
+     amorties, puis un passe-bas coupe les aigus. Pas d'oscillateur ici : la
+     premiere version en avait un, avec une hauteur qui glissait, et sonnait
+     electronique (retour d'Alexandre, 07/11). Les resonances bougent de
+     2,5 % a chaque coup, pour que deux coups de suite ne soient pas
+     identiques sans changer de volume. */
+  function impact(t0,vol,modes,coupure){
+    const src=ctx.createBufferSource();src.buffer=bruit;
+    const lp=ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=coupure;
+    const s=ctx.createGain();s.gain.value=vol;
+    for(const m of modes){
+      const b=ctx.createBiquadFilter();b.type="bandpass";b.frequency.value=m[0]*(0.975+Math.random()*0.05);b.Q.value=m[1];
+      const g=ctx.createGain();g.gain.value=m[2];
+      src.connect(b);b.connect(g);g.connect(lp);
+    }
+    lp.connect(s);s.connect(ctx.destination);
+    src.start(t0);
+  }
+  /* [frequence, Q, poids] de chaque resonance */
+  const BOIS=[[170,4,0.2],[430,8,2.2],[1020,9,2.5]];
+  const BOIS_SEC=[[210,3,0.25],[560,6,2.2],[1350,8,4],[2300,6,3]];
+  const posee=t0=>impact(t0,VOL_COUP,BOIS,1600);
+  const VOL_COUP=0.85,VOL_PRISE=0.7,VOL_TIC=2;
+  /* Note douce, attaque courte et extinction lente. vers = hauteur d'arrivee
+     si la note monte. */
+  function note(t0,freq,vol,duree,forme,vers){
+    const o=ctx.createOscillator();o.type=forme||"sine";o.frequency.setValueAtTime(freq,t0);
+    if(vers)o.frequency.exponentialRampToValueAtTime(vers,t0+0.1);
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.0001,t0);
+    g.gain.exponentialRampToValueAtTime(vol,t0+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+duree);
+    o.connect(g);g.connect(ctx.destination);
+    o.start(t0);o.stop(t0+duree+0.02);
+  }
+  const MELODIES={
+    win:[[523.25,0],[659.25,0.13],[783.99,0.26]],
+    lose:[[392,0],[329.63,0.2]],
+    draw:[[523.25,0],[523.25,0.2]]
+  };
+  return {
+    reveiller,
+    /* etat : 0 rien, 1 echec, 2 mat */
+    coup(mv,etat){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.005;
+      const roque=mv&&(mv.flags&96);
+      if(roque){posee(t0);posee(t0+0.1);}
+      else if(mv&&mv.captured)impact(t0,VOL_PRISE,BOIS_SEC,3200);
+      else posee(t0);
+      if(mv&&mv.promo)note(t0+0.07,659.25,0.05,0.3,"triangle",987.77);
+      const apres=t0+(roque||(mv&&mv.promo)?0.17:0.06);
+      if(etat===2)for(const f of [392,523.25,659.25])note(apres,f,0.035,0.5,"triangle");
+      else if(etat===1)note(apres,880,0.045,0.25,"triangle");
+    },
+    reussite(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.18;
+      note(t0,440,0.085,0.35,"sine");
+      note(t0+0.12,659.25,0.085,0.5,"sine");
+    },
+    erreur(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.01;
+      const o=ctx.createOscillator();o.type="sine";
+      o.frequency.setValueAtTime(240,t0);o.frequency.exponentialRampToValueAtTime(170,t0+0.22);
+      const g=ctx.createGain();
+      g.gain.setValueAtTime(0.0001,t0);
+      g.gain.exponentialRampToValueAtTime(0.09,t0+0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+0.26);
+      o.connect(g);g.connect(ctx.destination);
+      o.start(t0);o.stop(t0+0.3);
+    },
+    debut(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.02;
+      note(t0,523.25,0.04,0.2,"triangle");
+      note(t0+0.11,659.25,0.04,0.28,"triangle");
+    },
+    /* resultat : "win", "lose" ou "draw". delai : laisse finir ce qui sonne
+       deja (l'accord du mat, la note du drapeau). */
+    fin(resultat,delai){
+      const m=MELODIES[resultat];
+      if(!m||!pret())return;
+      const t0=ctx.currentTime+(delai||0);
+      m.forEach((n,i)=>note(t0+n[1],n[0],resultat==="win"?0.06:0.05,i===m.length-1?0.55:0.3,resultat==="lose"?"sine":"triangle"));
+    },
+    tic(){
+      if(!pret())return;
+      impact(ctx.currentTime+0.005,VOL_TIC,[[1700,10,1]],4000);
+    },
+    drapeau(){
+      if(!pret())return;
+      note(ctx.currentTime+0.01,311.13,0.07,0.2,"sine");
+    }
+  };
+})();
 function updateEval(){
   const g=viewGame();
   let cpTrue=null,mate=null;
@@ -1319,6 +1449,7 @@ function newGame(){
      le bon etat. */
   if(colorMode==="r")myColor=Math.random()<0.5?W:B;
   gameStarted=true;
+  ticTemps=false;
   if(typeof gameSaved!=="undefined")gameSaved=false;
   resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
@@ -1364,6 +1495,7 @@ function newGame(){
   }
   awaitingStart=false;
   skipReady=false;
+  SON.debut();
   if(myColor===B){busy=true;$("status").textContent=t("The computer is thinking…");setTimeout(botMove,220);}
 }
 let resignTimer=null;
@@ -1756,6 +1888,7 @@ function tryPuzzleMove(m){
   selected=-1;
   if(!ok){
     fautesExo++;
+    SON.erreur();
     puzzleTries++;majBoutonSuivant();
     if(typeof noterPremierEssai==="function")noterPremierEssai(false);
     marks={};marks[m.to]="bad";render();
@@ -2034,6 +2167,7 @@ function montrerJourSuivant(cle){
 }
 function finishPuzzle(won,msg){
   puzzleDone=true;majBoutonSuivant();
+  if(won)SON.reussite();
   if(typeof onPuzzleResult==="function"&&onPuzzleResult(won,msg))return;
   const st=$("exStatus");
   st.className="status "+(won?"win":"lose");
@@ -2521,6 +2655,7 @@ function undoAmi(){
 function newAmiGame(){
   amiStarted=true;
   amiResigned=null;amiMoves=[];flipped=amiColor===B;rebuildAmi();showAmi();saveAmi();
+  SON.debut();
   if(typeof focusBoard==="function")focusBoard();
   const st=$("amiStatus");st.className="status";
   st.textContent=amiColor===W

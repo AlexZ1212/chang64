@@ -122,7 +122,7 @@ module.exports = {
 "You":"Tu",
 "Your game":"La tua partita",
 "Settings":"Impostazioni",
-"Piece animation":"Animazione dei pezzi",
+"Piece animation":"Animazione dei pezzi","On (sounds)":"Sì","Off (sounds)":"No","Sounds":"Suoni","A short sound for moves, checks and the end of a game, and when a puzzle is solved or missed.":"Un breve suono per le mosse, gli scacchi e la fine della partita, e quando un esercizio è risolto o sbagliato.",
 "Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"I pezzi scivolano sulla loro casa quando si gioca una mossa. Disattivala se preferisci una scacchiera istantanea.",
 "Sprint over":"Sprint finito",
 "New personal best":"Nuovo record personale",

@@ -961,12 +961,14 @@ async function loadPrefs(){
       /* Animation activee par defaut : seule une valeur explicitement fausse
          la desactive, pour qu'une preference absente ne la coupe pas. */
       if(typeof d.anim==="boolean")animOn=d.anim;
+      /* Sons : meme regle, actives tant qu'on ne les a pas coupes. */
+      if(typeof d.son==="boolean")sonOn=d.son;
     }
   }catch(e){}
   applyBoardTheme();
 }
 async function savePrefs(){
-  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn}));}catch(e){}
+  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn,son:sonOn}));}catch(e){}
 }
 function applyBoardTheme(){
   document.documentElement.setAttribute("data-board",prefBoard);
@@ -1189,6 +1191,27 @@ function renderPrefs(){
       b.textContent=lab[v];
       b.onclick=()=>{animOn=(v==="on");savePrefs();renderPrefs();};
       segA.appendChild(b);
+    }
+  }
+  const segS=$("segSon");
+  if(segS){
+    /* "On"/"Off" sont traduits au feminin pour l'animation ("Activee") :
+       les sons ont leurs cles a part ("Actives" en francais). Une langue
+       sans ces cles, l'anglais compris, retombe sur "On"/"Off". */
+    const tSon=k=>{const s=t(k+" (sounds)");return s===k+" (sounds)"?t(k):s;};
+    const lab={on:tSon("On"),off:tSon("Off")};
+    poserHtml(segS,"");
+    for(const v of ["on","off"]){
+      const b=document.createElement("button");
+      b.type="button";
+      b.setAttribute("data-v",v);
+      b.setAttribute("role","radio");
+      b.setAttribute("aria-checked",String((v==="on")===sonOn));
+      b.textContent=lab[v];
+      /* En les activant, on fait entendre un coup : le reglage se verifie
+         a l'oreille. Le clic a deja reveille le contexte audio. */
+      b.onclick=()=>{sonOn=(v==="on");savePrefs();renderPrefs();if(sonOn)SON.coup(null,0);};
+      segS.appendChild(b);
     }
   }
   const seg=$("segAnnounce");

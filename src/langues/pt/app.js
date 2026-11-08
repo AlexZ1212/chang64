@@ -122,7 +122,7 @@ module.exports = {
 "You":"Você",
 "Your game":"Sua partida",
 "Settings":"Configurações",
-"Piece animation":"Animação das peças",
+"Piece animation":"Animação das peças","On (sounds)":"Ativados","Off (sounds)":"Desativados","Sounds":"Sons","A short sound for moves, checks and the end of a game, and when a puzzle is solved or missed.":"Um som curto para os lances, os xeques e o fim da partida, e quando um exercício é resolvido ou falhado.",
 "Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.":"As peças deslizam até a casa quando um lance é jogado. Desative se preferir um tabuleiro instantâneo.",
 "Sprint over":"Sprint encerrado",
 "New personal best":"Novo recorde pessoal",

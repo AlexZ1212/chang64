@@ -1766,14 +1766,27 @@ function editEndDrag(){
   for(const c of boardEl.children)c.classList.remove("drag-over","drag-source");
   editDrag=null;
 }
+/* Ecoute sur window, plus sur la case (2026-11-14) : au doigt, l'echiquier se
+   redessine des le premier mouvement (la case passe "sel"), la case d'origine
+   est remplacee et perd la capture du pointeur. Le lacher arrivait alors sur
+   #board, editPointerUp ne le voyait jamais, et le fantome restait colle a
+   l'ecran (signale par Alexandre sur iPhone, page Analyser). window recoit
+   le deplacement et le lacher quoi que devienne la case ; sa taille est donc
+   mesuree au depart, tant qu'elle existe encore. */
 function editPointerDown(e,info){
   if(mode!=="edit"||(e.button!=null&&e.button>0))return;
+  if(editDrag)editPointerCancel();
   const el=e.currentTarget;
-  if(el.setPointerCapture){try{el.setPointerCapture(e.pointerId);}catch(err){}}
-  editDrag={...info,startX:e.clientX,startY:e.clientY,moved:false,ghost:null,el:el};
-  el.addEventListener("pointermove",editPointerMove,{passive:false});
-  el.addEventListener("pointerup",editPointerUp,{passive:false});
-  el.addEventListener("pointercancel",editPointerCancel,{passive:false});
+  const r=el.getBoundingClientRect();
+  editDrag={...info,startX:e.clientX,startY:e.clientY,moved:false,ghost:null,el:el,w:r.width,h:r.height};
+  window.addEventListener("pointermove",editPointerMove,{passive:false});
+  window.addEventListener("pointerup",editPointerUp,{passive:false});
+  window.addEventListener("pointercancel",editPointerCancel,{passive:false});
+}
+function editDetacher(){
+  window.removeEventListener("pointermove",editPointerMove);
+  window.removeEventListener("pointerup",editPointerUp);
+  window.removeEventListener("pointercancel",editPointerCancel);
 }
 function editPointerMove(e){
   if(!editDrag)return;
@@ -1784,10 +1797,9 @@ function editPointerMove(e){
     const sym=editDrag.source==="board"?SYM[pT(editDrag.piece)]:editDrag.tool.t;
     const col=editDrag.source==="board"?(pC(editDrag.piece)===W?"w":"b"):editDrag.tool.c;
     editDrag.ghost=editMakeGhost(sym,col);
-    const rect=editDrag.el.getBoundingClientRect();
-    editDrag.ghost.style.width=rect.width+"px";
-    editDrag.ghost.style.height=rect.height+"px";
-    if(editDrag.source==="board")editDrag.el.classList.add("drag-source");
+    editDrag.ghost.style.width=editDrag.w+"px";
+    editDrag.ghost.style.height=editDrag.h+"px";
+    if(editDrag.source==="board"){const c=cellOf(editDrag.sq);if(c)c.classList.add("drag-source");}
   }
   e.preventDefault();
   editPositionGhost(e.clientX,e.clientY);
@@ -1795,10 +1807,7 @@ function editPointerMove(e){
 }
 function editPointerUp(e){
   if(!editDrag)return;
-  const el=editDrag.el;
-  el.removeEventListener("pointermove",editPointerMove);
-  el.removeEventListener("pointerup",editPointerUp);
-  el.removeEventListener("pointercancel",editPointerCancel);
+  editDetacher();
   if(!editDrag.moved){editEndDrag();return;}
   if(editDrag.source==="board")editDragJustHappened=true;
   const targetIdx=editCellIndexFromPoint(e.clientX,e.clientY);
@@ -1808,10 +1817,7 @@ function editPointerUp(e){
 }
 function editPointerCancel(){
   if(!editDrag)return;
-  const el=editDrag.el;
-  el.removeEventListener("pointermove",editPointerMove);
-  el.removeEventListener("pointerup",editPointerUp);
-  el.removeEventListener("pointercancel",editPointerCancel);
+  editDetacher();
   editEndDrag();
 }
 /* Applique le resultat d'un glissement termine : deplacement/retrait pour

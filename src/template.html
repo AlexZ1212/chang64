@@ -1311,6 +1311,14 @@ header>*{min-width:0}
    du texte. Seuls le curseur et le survol le trahissent. */
 .chang-porte{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:3px}
 .chang-porte:hover{color:var(--brass)}
+/* Reflet sur ช้าง (2026-11-14, idee d'Alexandre) : toutes les douze
+   secondes, un eclat laiton traverse le mot, pour signaler discretement
+   qu'il cache quelque chose. Le texte prend sa couleur d'un degrade (clip
+   text) ; au repos on voit la partie "currentColor" du degrade, donc le
+   mot reste lisible si l'animation est coupee (mouvement calme). */
+.chang-porte{background-image:linear-gradient(110deg,currentColor 0 42%,var(--brass) 47%,#FFE7A3 50%,var(--brass) 53%,currentColor 58% 100%);background-size:260% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:refletChang 12s ease-in-out 3s infinite}
+.chang-porte:hover{-webkit-text-fill-color:var(--brass)}
+@keyframes refletChang{0%,86%{background-position:100% 0}100%{background-position:0 0}}
 .chang-porte:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .explore{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(max-width:620px){.explore{grid-template-columns:repeat(2,1fr)}}

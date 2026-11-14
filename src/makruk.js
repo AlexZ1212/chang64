@@ -648,10 +648,40 @@ function toucher(i){
   dessiner();
 }
 function jouerCoup(m){
+  const prise=!!P.b[(m>>6)&63];
   P.jouer(m);dernier=m;sel=-1;
   legaux=P.coups();fini=P.fin();
   dessiner();
+  glisserCoup(m);
+  sonCoup(prise);
   if(!fini&&mode==="ordi"&&P.trait!==camp)lancerOrdi();
+}
+/* Sons (2026-11-14) : ceux du site (objet SON de ui.js, qui respecte le
+   reglage Sons des Preferences), pour que le Makruk ne soit plus la seule
+   partie muette. Coup, prise, echec, accord de mat, puis la melodie de fin
+   (gagne, perdu ou nulle, vue du joueur contre l'ordinateur). */
+/* Glissement de la piece jouee (2026-11-14), comme sur l'echiquier du site :
+   dessiner() a deja pose la piece a l'arrivee, on la fait partir de la case
+   de depart. Rien si le mouvement est reduit ou les animations coupees. */
+function glisserCoup(m){
+  if(typeof mouvementCalme==="function"&&mouvementCalme())return;
+  const de=m&63,a=(m>>6)&63;
+  let dDe=-1,dA=-1;
+  for(let d=0;d<64;d++){const i=versCase(d);if(i===de)dDe=d;if(i===a)dA=d;}
+  const el=dA>=0&&plateau.children[dA].querySelector(".piece");
+  if(!el||!el.animate||dDe<0)return;
+  const dx=((dDe&7)-(dA&7))*100,dy=((dDe>>3)-(dA>>3))*100;
+  el.animate([{transform:"translate("+dx+"%,"+dy+"%)"},{transform:"none"}],{duration:300,easing:"cubic-bezier(.22,.7,.3,1)"});
+}
+function sonCoup(prise){
+  if(typeof SON==="undefined")return;
+  const mat=fini&&fini.raison==="mat";
+  SON.coup({captured:prise?1:0,flags:0,promo:0},mat?2:(P.enEchec(P.trait)?1:0));
+  if(fini){
+    const g=fini.gagnant;
+    const res=g===0?"draw":(mode==="ordi"?(g===camp?"win":"lose"):"win");
+    SON.fin(res,mat?0.62:0.1);
+  }
 }
 function lancerOrdi(){
   attente=true;

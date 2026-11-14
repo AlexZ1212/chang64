@@ -193,6 +193,12 @@ function renderEndgame(){
 function endEndgame(kind){
   eg.done=true;
   eg.statusKind=kind;
+  /* Son de fin (2026-11-14, signale par Alexandre : une finale se
+     terminait en silence). Les finales sont un ecran d'exercice : le coup
+     du mat n'y joue pas l'accord de mat (render, etat 0), comme pour les
+     exercices ; c'est donc ici que sonne la reussite, ou l'erreur pour un
+     pat, un manque de materiel ou des coups epuises. */
+  if(kind==="checkmate")SON.reussite();else SON.erreur();
   if(kind==="checkmate"){
     prog.endgames=prog.endgames||{};
     const cur=prog.endgames[eg.scen.id];
@@ -277,7 +283,9 @@ function coordTick(){
   $("chudMiss").textContent=coord.misses;
   $("chudSquare").textContent=coord.target;
   $("coordHud").classList.toggle("low",left<10000);
-  if(left<=0)stopCoord();
+  /* Fin du temps : petite melodie de reussite (2026-11-14), seulement quand
+     le chrono s'epuise, pas quand on quitte l'ecran en cours de route. */
+  if(left<=0){SON.reussite();stopCoord();}
 }
 function stopCoord(){
   if(!coord)return;
@@ -308,13 +316,17 @@ function stopCoord(){
 function handleCoordClick(sq){
   if(!coord)return;
   const name=sqN(sq);
+  /* Sons (2026-11-14) : le "toc" d'un coup pose pour une bonne case, le
+     son d'erreur des exercices pour une mauvaise. */
   if(name===coord.target){
     coord.score++;
     marks={};marks[sq]="good";
     coord.target=coordSquareName();
+    SON.coup(null,0);
   } else {
     coord.misses++;
     marks={};marks[sq]="bad";
+    SON.erreur();
   }
   render();coordTick();
   setTimeout(()=>{marks={};render();},220);
@@ -2419,6 +2431,9 @@ registerWrong=function(){
   animerCompagnon(PENCHE_COMPAGNON,750);
   return r;
 };
+/* Je debute : la meme onde de reussite que les exercices. */
+const debutReussiSansOnde=debutReussi;
+debutReussi=function(){const r=debutReussiSansOnde.apply(this,arguments);if(lastMove)ondeReussite(lastMove.to);return r;};
 /* Serie en pastilles sous le chiffre de la serie (Resoudre), et classement
    qui defile avec son ecart (+12 / -8). Releves apres chaque
    renderProgress / renderExtraStats, qui posent les vraies valeurs. */

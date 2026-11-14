@@ -1502,15 +1502,19 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    600 px de large ET moins de 700 px de haut seulement, la ligne du logo et
    de la langue s'efface ; la barre d'onglets reste, pour quitter la partie.
    body[data-mode] est pose par setMode (ui.js et ui2.js). */
-@media(max-width:599px) and (max-height:700px){
-  /* 2026-11-14, demande d'Alexandre : le logo et la langue ne disparaissent
-     plus selon l'onglet, ce n'etait pas coherent. Sur ces petits ecrans,
-     l'en-tete est le meme partout, simplement plus compact : logo reduit,
-     marges serrees. */
+/* 2026-11-14, demandes d'Alexandre : le logo et la langue ne disparaissent
+   plus selon l'onglet, et l'en-tete doit etre le meme dans Safari et dans
+   l'application installee sur l'ecran d'accueil. Il dependait de la HAUTEUR
+   (moins de 700 px) : Safari, amputé de ses barres, passait en compact, et
+   l'application plein ecran du meme iPhone 12 non. Sur telephone, c'est
+   donc la largeur seule qui decide : meme en-tete compact partout. */
+@media(max-width:599px){
   header{margin-bottom:8px;padding-top:4px;padding-bottom:4px;row-gap:6px}
   .brand .glyph{width:26px;height:calc(26px * 54 / 64)}
   .brand h1{font-size:22px}
   .langswitch summary{padding-top:2px;padding-bottom:2px}
+}
+@media(max-width:599px) and (max-height:700px){
   /* Le logo masque ne suffisait pas (pendule du joueur a 546 px pour 548) :
      la ligne des coups passe apres la pendule du joueur, qui suit donc
      directement le plateau, et pendules et ecarts se resserrent un peu. */

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /* bluesky_jour.js - publie l'exercice du jour sur Bluesky (2026-11-07,
    plan de lancement d'Alexandre : un rendez-vous public, comme Wordle).
-   Lance lundi, jeudi et dimanche par .github/workflows/bluesky-jour.yml
-   (trois fois par semaine plutot que tous les jours, pour ne pas inonder).
+   Lance tous les jours par .github/workflows/bluesky-jour.yml (depuis le
+   2026-11-14, trois fois par semaine avant), deux fois par jour pour
+   rattraper un lancement saute par GitHub.
 
    Ce que fait le script :
      1. lit sur le site en ligne l'exercice du jour (data/jour.json, puis

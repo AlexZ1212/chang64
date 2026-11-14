@@ -1,4 +1,4 @@
-# Exercice du jour sur Bluesky (2026-11-07) : lundi, jeudi et dimanche, src/bluesky_jour.js
+# Exercice du jour sur Bluesky (2026-11-07), tous les jours depuis le 14/11 : src/bluesky_jour.js
 # lit l'exercice du jour sur le site en ligne et le publie avec l'image du
 # plateau. Secrets du depot a creer : BLUESKY_IDENTIFIANT (ex.
 # chang64.bsky.social) et BLUESKY_MOT_DE_PASSE (mot de passe d'APPLICATION
@@ -7,12 +7,16 @@ name: Exercice du jour sur Bluesky
 
 on:
   schedule:
-    # Trois fois par semaine, pas tous les jours (2026-11-07, Alexandre : "il
-    # ne faut pas trop en faire") : lundi (le plus facile), jeudi (milieu de
-    # courbe), dimanche (le plus dur). 15 h UTC : 16 h a Paris l'hiver,
-    # 10 h a New York, ou se trouve une bonne part du public echecs de
-    # Bluesky. Pour la cron de GitHub, 0 = dimanche.
-    - cron: "0 15 * * 1,4,0"
+    # Tous les jours depuis le 2026-11-14, a la demande d'Alexandre (trois
+    # fois par semaine avant). GitHub lance les taches programmees avec
+    # retard : prevues a 15 h UTC, elles sont parties entre 19 h 14 et
+    # 23 h 38, et celle du lundi 9 a publie l'exercice du mardi (minuit
+    # passe a Paris). D'ou un depart tot le matin, et un second passage a
+    # midi qui rattrape un lancement saute : le script ne publie jamais deux
+    # fois le meme exercice. Meme avec 8 h de retard, on reste dans la
+    # journee de Paris.
+    - cron: "0 6 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 permissions:

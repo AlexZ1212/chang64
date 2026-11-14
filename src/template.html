@@ -374,7 +374,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .chip{
   font:inherit;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;
   background-color:var(--ink);border:1px solid var(--rule);color:var(--chalk);
-  padding:9px 14px;border-radius:8px;cursor:pointer;transition:border-color .16s,background .16s
+  padding:9px 14px;border-radius:8px;cursor:pointer;transition:border-color .16s,background .16s,transform var(--duree-appui) var(--courbe-ressort)
 }
 .chip:hover{background-color:var(--raise)}
 /* Meme correction que pour la pendule : background en raccourci effacait le
@@ -965,9 +965,11 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    visible autrement : la couleur tiree est mise en avant pendant la partie,
    et le bouton "Au hasard" redevient selectionne des qu'elle est finie. */
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
-.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform .08s}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform var(--duree-appui) var(--courbe-ressort)}
 .btn:hover{background:#33483e}
-.btn:active{transform:translateY(1px)}
+/* Le bouton s'enfonce sous le doigt et revient avec un leger ressort
+   (relooking anime, 2026-11-14) ; il descendait d'un pixel auparavant. */
+.btn:active{transform:scale(.96)}
 /* Un bouton verrouille pendant une partie doit se voir comme tel : aucune
    reaction au survol ni au clic, et un affaiblissement net. Sans cela, il
    changeait de couleur au toucher et semblait fonctionner. */
@@ -1523,6 +1525,67 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   .info-tip::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
   #calFullLink{display:inline-block;padding:15px 0}
 }
+/* ---------- Glisseurs (relooking anime, lot 2, 2026-11-14) ----------
+   Dans les onglets et dans chaque selecteur (couleur, force, cadence, puces
+   de cadence, reglages), la marque du choix glisse de l'ancien au nouveau
+   au lieu de s'eteindre ici et de s'allumer la. Voir GLISSEURS dans
+   ui3.js : il mesure le bouton choisi et pose --gx, --gy, --gw, --gh sur le
+   conteneur, puis la classe .glisse. Tant qu'elle n'est pas posee (pas de
+   JavaScript, conteneur cache, avant la premiere mesure), chaque bouton
+   garde son propre fond, comme avant.
+   Dans les segments, la marque est le ::before du conteneur : du code et
+   des tests parcourent seg.children en n'y attendant que des boutons. La
+   barre d'onglets, dont ::before et ::after font deja les degrades de
+   defilement, recoit un vrai element, .tabs-marque. */
+.seg,.tc-cats,.tc-chips,.chips{position:relative}
+.seg.glisse::before,.tc-cats.glisse::before,.tc-chips.glisse::before,.chips.glisse::before,.tabs-marque{
+  content:"";position:absolute;left:0;top:0;width:var(--gw);height:var(--gh);
+  transform:translate(var(--gx),var(--gy));pointer-events:none;
+  transition:transform var(--duree-moyenne) var(--courbe-ressort),width var(--duree-moyenne) var(--courbe-ressort),height var(--duree-moyenne) var(--courbe-ressort),opacity var(--duree-courte)
+}
+/* Segments et categories : le fond du choix passe sous les libelles. */
+.seg.glisse::before,.tc-cats.glisse::before{background-color:var(--raise);border-radius:6px;z-index:0}
+.seg.glisse button,.tc-cats.glisse button{position:relative;z-index:1}
+.seg.glisse button[aria-pressed="true"],.seg.glisse button[aria-checked="true"],.tc-cats.glisse button[aria-pressed="true"]{background-color:transparent}
+/* Choix verrouille pendant une partie : la marque palit avec lui, comme le
+   fond du bouton palissait (opacity .5 plus haut). */
+.seg.glisse-pale::before,.tc-cats.glisse-pale::before{opacity:.5}
+/* Puces : c'est le liseré laiton qui glisse, par-dessus les puces (leur fond
+   --ink masquerait une marque passee dessous). La teinte et la couleur du
+   texte restent portees par la puce elle-meme. */
+.tc-chips.glisse::before,.chips.glisse::before{border:1px solid var(--brass);border-radius:8px;box-sizing:border-box;z-index:2}
+.tc-chips.glisse .chip[aria-pressed="true"],.chips.glisse .chip[aria-checked="true"]{border-color:var(--rule)}
+/* Onglets : la pastille laiton, qui disparait en fondu sur l'accueil (aucun
+   onglet n'y est actif) et reapparait en place. */
+.tabs-marque{background-color:var(--brass);border-radius:999px;z-index:0;opacity:0}
+.tabs.glisse .tabs-marque{opacity:1}
+.tabs.glisse button{position:relative;z-index:1}
+.tabs.glisse button[aria-current="page"]{background-color:transparent}
+/* Premiere mesure (ou conteneur qui reapparait) : la marque se pose sans
+   glisser depuis le coin. */
+.glisse-net::before{transition:none}
+.glisse-net .tabs-marque{transition:opacity var(--duree-courte)}
+/* Appui sur un choix : il s'enfonce un instant, comme les boutons. */
+.seg button,.tc-cats button{transition:transform var(--duree-appui) var(--courbe-ressort)}
+.seg button:active,.tc-cats button:active,.chip:active{transform:scale(.95)}
+/* Puces d'une nouvelle categorie de cadence : elles arrivent l'une apres
+   l'autre (renderTC pose .donne seulement quand la categorie change). */
+.tc-chips.donne .chip{animation:puceArrive var(--duree-moyenne) var(--courbe-ressort) both}
+.tc-chips.donne .chip:nth-child(2){animation-delay:.05s}
+.tc-chips.donne .chip:nth-child(3){animation-delay:.1s}
+.tc-chips.donne .chip:nth-child(4){animation-delay:.15s}
+.tc-chips.donne .chip:nth-child(n+5){animation-delay:.2s}
+@keyframes puceArrive{from{opacity:0;transform:translateY(6px) scale(.92)}to{opacity:1;transform:none}}
+.tc-note.change{animation:fonduNote var(--duree-courte) ease-out}
+@keyframes fonduNote{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+/* Arrivee du contenu quand on change d'onglet : il glisse depuis le cote de
+   l'onglet choisi (voir setMode, fin de ui3.js). */
+.arrivee-d{animation:arriveeDroite var(--duree-moyenne) var(--courbe-sortie)}
+.arrivee-g{animation:arriveeGauche var(--duree-moyenne) var(--courbe-sortie)}
+.arrivee{animation:arriveeFondu var(--duree-courte) ease-out}
+@keyframes arriveeDroite{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes arriveeGauche{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes arriveeFondu{from{opacity:0}to{opacity:1}}
 .hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
 .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}

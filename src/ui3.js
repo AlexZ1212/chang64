@@ -2119,3 +2119,113 @@ if($("btnDebutSuite"))$("btnDebutSuite").onclick=debutSuivant;
 if($("btnDebutPartie"))$("btnDebutPartie").onclick=debutPremierePartie;
 if($("btnDebutJour"))$("btnDebutJour").onclick=()=>{setMode("puzzles",{daily:true});goTop();};
 if($("btnDebutRegles"))$("btnDebutRegles").onclick=()=>{location.href="/"+((PAGE_LANGUE.dirs&&PAGE_LANGUE.dirs.learn)||"learn")+"/";};
+
+/* ==========================================================
+   GLISSEURS (relooking anime, lot 2, 2026-11-14)
+   ========================================================== */
+/* La marque du choix glisse d'un bouton a l'autre dans les onglets et dans
+   chaque selecteur. Le dessin est en CSS (voir "Glisseurs" dans
+   template.html) ; ici, on mesure le bouton choisi et on pose sa place sur
+   le conteneur (--gx, --gy, --gw, --gh), puis .glisse, qui rend son propre
+   fond transparent.
+   Les conteneurs sont souvent reconstruits a chaque choix (renderTC,
+   renderPrefs, renderEgChips) : un MutationObserver suit leurs enfants et
+   les attributs d'etat, un ResizeObserver leur taille (conteneur qui
+   reapparait, rotation, police chargee), et la marque est replacee a
+   l'image suivante. Un conteneur cache, ou sans choix (aucun onglet sur
+   l'accueil), perd .glisse : sa marque disparait, et a son retour elle se
+   pose sans glisser (.glisse-net). En mouvement reduit ou animations
+   coupees, la regle html[data-mouvement="calme"] supprime les transitions :
+   la marque saute, comme avant. */
+const GLISSEURS=[
+  {sel:".tabs",actif:'button[aria-current="page"]',marque:true},
+  {sel:".seg",actif:'button[aria-pressed="true"],button[aria-checked="true"]'},
+  {sel:".tc-cats",actif:'button[aria-pressed="true"]'},
+  {sel:".tc-chips,.chips",actif:'.chip[aria-pressed="true"],.chip[aria-checked="true"]'}
+];
+function placerGlisseur(c,actif){
+  const b=c.querySelector(actif);
+  if(!b||!b.offsetWidth){c.classList.remove("glisse","glisse-pale");return;}
+  const premier=!c.classList.contains("glisse");
+  if(premier)c.classList.add("glisse-net");
+  c.style.setProperty("--gx",b.offsetLeft+"px");
+  c.style.setProperty("--gy",b.offsetTop+"px");
+  c.style.setProperty("--gw",b.offsetWidth+"px");
+  c.style.setProperty("--gh",b.offsetHeight+"px");
+  c.classList.toggle("glisse-pale",!!b.disabled);
+  c.classList.add("glisse");
+  /* Deux images : la premiere applique la place sans transition, la
+     seconde rend la main aux transitions pour les choix suivants. */
+  if(premier)requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.remove("glisse-net")));
+}
+function initGlisseurs(){
+  if(!window.MutationObserver||!window.requestAnimationFrame)return;
+  for(const g of GLISSEURS){
+    for(const c of document.querySelectorAll(g.sel)){
+      if(c.dataset.glisseur)continue;
+      c.dataset.glisseur="1";
+      if(g.marque){
+        const m=document.createElement("span");
+        m.className="tabs-marque";
+        m.setAttribute("aria-hidden","true");
+        c.appendChild(m);
+      }
+      let prevu=0;
+      const maj=()=>{
+        if(prevu)return;
+        prevu=requestAnimationFrame(()=>{prevu=0;placerGlisseur(c,g.actif);});
+      };
+      /* Pas "class" dans le filtre : placerGlisseur pose ses classes sur le
+         conteneur lui-meme, ce qui relancerait l'observateur sans fin. */
+      new MutationObserver(maj).observe(c,{childList:true,subtree:true,attributes:true,
+        attributeFilter:["aria-pressed","aria-checked","aria-current","disabled"]});
+      if(window.ResizeObserver)new ResizeObserver(maj).observe(c);
+      maj();
+    }
+  }
+}
+initGlisseurs();
+/* Les polices arrivent apres le premier placement : les libelles changent
+   alors de largeur sans que les conteneurs changent toujours de taille. */
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{
+  for(const g of GLISSEURS)for(const c of document.querySelectorAll(g.sel))placerGlisseur(c,g.actif);
+});
+
+/* ==========================================================
+   ARRIVEE DU CONTENU (relooking anime, lot 2, 2026-11-14)
+   ========================================================== */
+/* Au changement d'onglet, le panneau qui apparait glisse depuis le cote de
+   l'onglet choisi : de la droite si l'on va vers la droite de la barre, de
+   la gauche sinon, en simple fondu entre deux ecrans du meme onglet. Ce
+   dernier habillage de setMode passe apres tous les autres (ui.js, ui2.js,
+   et les deux plus haut dans ce fichier), quel que soit l'ecran demande.
+   Rien au premier affichage (lien profond, reprise) : arriveePrete n'est
+   vrai qu'une fois la page chargee. Rien non plus en mouvement reduit ou
+   animations coupees. */
+const ORDRE_ONGLETS={home:0,debut:0,play:1,puzzles:2,train:2,calendar:2,edit:3,friend:4,explore:5,prefs:6,legal:6};
+const PANNEAUX_ARRIVEE=["pane-home","appLayout","pane-prefs","pane-explore","pane-legal","pane-calendar"];
+let arriveePrete=false;
+window.addEventListener("load",()=>setTimeout(()=>{arriveePrete=true;},300));
+const setModeSansArrivee=setMode;
+setMode=function(m,opts){
+  const avant=mode;
+  const r=setModeSansArrivee(m,opts);
+  if(arriveePrete&&avant!==mode&&!mouvementCalme())arriverPanneau(avant,mode);
+  return r;
+};
+function arriverPanneau(avant,apres){
+  let p=null;
+  for(const id of PANNEAUX_ARRIVEE){const e=$(id);if(e&&!e.classList.contains("hide")){p=e;break;}}
+  if(!p)return;
+  const a=ORDRE_ONGLETS[avant],b=ORDRE_ONGLETS[apres];
+  const cls=(a===undefined||b===undefined||a===b)?"arrivee":(b>a?"arrivee-d":"arrivee-g");
+  p.classList.remove("arrivee","arrivee-d","arrivee-g");
+  void p.offsetWidth;
+  p.classList.add(cls);
+  /* Retiree a la fin : un transform laisse en place ferait de ce panneau le
+     repere des elements position:fixed qu'il contient. */
+  if(!p.dataset.arrivee){
+    p.dataset.arrivee="1";
+    p.addEventListener("animationend",e=>{if(e.target===p)p.classList.remove("arrivee","arrivee-d","arrivee-g");});
+  }
+}

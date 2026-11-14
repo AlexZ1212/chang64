@@ -2904,6 +2904,12 @@ function renderTC(catsId,chipsId,allowDaily){
     cats.appendChild(b);
   }
   const cat=TC_CATS.find(c=>c.id===tcCat)||TC_CATS[2];
+  /* Nouvelle categorie : les puces arrivent l'une apres l'autre (.donne,
+     relooking anime 2026-11-14). Meme categorie (on a seulement choisi une
+     autre puce) : rien ne doit rejouer, la marque laiton glisse seule. */
+  const nouvelleCat=chips.dataset.cat!==undefined&&chips.dataset.cat!==cat.id;
+  chips.dataset.cat=cat.id;
+  chips.classList.toggle("donne",nouvelleCat);
   poserHtml(chips,"");
   cat.items.forEach((item,i)=>{
     const b=document.createElement("button");
@@ -2917,7 +2923,14 @@ function renderTC(catsId,chipsId,allowDaily){
 function syncTC(){
   renderTC("tcCats","tcChips",true);
   renderTC("tcCats2","tcChips2",false);
-  const n=$("tcNote"); if(n)n.textContent=TC_NOTES[tcCat]?t(TC_NOTES[tcCat]):"";
+  const n=$("tcNote");
+  if(n){
+    const txt=TC_NOTES[tcCat]?t(TC_NOTES[tcCat]):"";
+    /* La phrase qui decrit la cadence change avec elle : un court fondu le
+       montre (relooking anime 2026-11-14). */
+    if(n.textContent&&n.textContent!==txt){n.classList.remove("change");void n.offsetWidth;n.classList.add("change");}
+    n.textContent=txt;
+  }
 }
 function onTCChange(){
   if(tcCat==="daily")return;

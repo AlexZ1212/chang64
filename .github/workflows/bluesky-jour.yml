@@ -8,15 +8,18 @@ name: Exercice du jour sur Bluesky
 on:
   schedule:
     # Tous les jours depuis le 2026-11-14, a la demande d'Alexandre (trois
-    # fois par semaine avant). GitHub lance les taches programmees avec
-    # retard : prevues a 15 h UTC, elles sont parties entre 19 h 14 et
-    # 23 h 38, et celle du lundi 9 a publie l'exercice du mardi (minuit
-    # passe a Paris). D'ou un depart tot le matin, et un second passage a
-    # midi qui rattrape un lancement saute : le script ne publie jamais deux
-    # fois le meme exercice. Meme avec 8 h de retard, on reste dans la
-    # journee de Paris.
-    - cron: "0 6 * * *"
-    - cron: "0 12 * * *"
+    # fois par semaine avant), a 14 h UTC : 15 h a Paris l'hiver, 9 h a New
+    # York, dans le creneau de journee ou les etudes des outils de
+    # planification placent l'activite sur Bluesky (13 h - 20 h UTC environ).
+    # GitHub lance les taches programmees avec retard (prevues a 15 h UTC,
+    # elles sont parties entre 19 h 14 et 23 h 38, et celle du lundi 9 a
+    # publie l'exercice du mardi). La tache part donc a 8 h 17 et le script
+    # attend 14 h (--heure) ; un second depart a 12 h 47 rattrape un
+    # lancement saute, et le script ne publie jamais deux fois le meme
+    # exercice. Minutes 17 et 47 : GitHub conseille d'eviter le debut de
+    # l'heure, le plus charge. Depot public : l'attente ne coute rien.
+    - cron: "17 8 * * *"
+    - cron: "47 12 * * *"
   workflow_dispatch:
 
 permissions:
@@ -29,7 +32,8 @@ concurrency:
 jobs:
   publier:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Jusqu'a 5 h 43 d'attente (8 h 17 -> 14 h), limite GitHub : 6 h.
+    timeout-minutes: 355
     steps:
       # Seuls les trois fichiers utiles : le depot entier (banque comprise)
       # pese plus de 200 Mo.
@@ -51,4 +55,5 @@ jobs:
         env:
           BLUESKY_IDENTIFIANT: ${{ secrets.BLUESKY_IDENTIFIANT }}
           BLUESKY_MOT_DE_PASSE: ${{ secrets.BLUESKY_MOT_DE_PASSE }}
-        run: node bluesky_jour.js
+        # Lance a la main (Run workflow), il publie tout de suite.
+        run: node bluesky_jour.js ${{ github.event_name == 'schedule' && '--heure 14:00' || '' }}

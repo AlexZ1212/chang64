@@ -2,8 +2,8 @@
 /* bluesky_jour.js - publie l'exercice du jour sur Bluesky (2026-11-07,
    plan de lancement d'Alexandre : un rendez-vous public, comme Wordle).
    Lance tous les jours par .github/workflows/bluesky-jour.yml (depuis le
-   2026-11-14, trois fois par semaine avant), deux fois par jour pour
-   rattraper un lancement saute par GitHub.
+   2026-11-14, trois fois par semaine avant), pour une publication a 14 h
+   UTC, avec un second depart qui rattrape un lancement saute par GitHub.
 
    Ce que fait le script :
      1. lit sur le site en ligne l'exercice du jour (data/jour.json, puis
@@ -29,7 +29,13 @@
      node bluesky_jour.js                     publie l'exercice d'aujourd'hui
      node bluesky_jour.js --essai             n'envoie rien : ecrit l'image et
                                               le texte dans le dossier courant
-     node bluesky_jour.js --essai --date 2026-11-09   pour un autre jour */
+     node bluesky_jour.js --essai --date 2026-11-09   pour un autre jour
+     node bluesky_jour.js --heure 14:00       attend 14 h UTC avant de publier
+
+   --heure (2026-11-14) : GitHub lance les taches programmees avec plusieurs
+   heures de retard, mais rarement en avance. La tache part donc tot et le
+   script attend l'heure voulue ; lance apres cette heure, il publie tout de
+   suite. */
 const fs = require("fs");
 const path = require("path");
 const { boardSvg } = require("./plateau_svg.js");
@@ -39,6 +45,18 @@ const SERVEUR = "https://bsky.social";
 const args = process.argv.slice(2);
 const essai = args.includes("--essai");
 const dateForcee = (() => { const i = args.indexOf("--date"); return i >= 0 ? args[i + 1] : null; })();
+const heureVisee = (() => { const i = args.indexOf("--heure"); return i >= 0 ? args[i + 1] : null; })();
+
+async function attendreHeure() {
+  if (!heureVisee) return;
+  const m = /^(\d{2}):(\d{2})$/.exec(heureVisee);
+  if (!m) throw new Error("--heure attend HH:MM (UTC) : " + heureVisee);
+  const n = new Date();
+  const ms = Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate(), +m[1], +m[2]) - n.getTime();
+  if (ms <= 0) { console.log("Deja " + heureVisee + " UTC passees : publication tout de suite."); return; }
+  console.log("Attente jusqu'a " + heureVisee + " UTC (" + Math.round(ms / 60000) + " min).");
+  await new Promise(r => setTimeout(r, ms));
+}
 
 /* Date de Paris, quelle que soit l'horloge de la machine (GitHub tourne en
    UTC) : c'est elle qui decide de l'exercice, comme pour un visiteur
@@ -140,6 +158,7 @@ async function appel(methode, jeton, corps, type) {
 }
 
 (async () => {
+  await attendreHeure();
   const cle = dateDuJour();
   const p = await exerciceDuJour(cle);
   const { texte, lien, camp } = texteDuMessage(cle, p);

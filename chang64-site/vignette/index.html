@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Puzzle of the day from chang64, free chess for beginners, to show on a club or school website.">
+<link rel="canonical" href="https://chang64.com/vignette/">
+<title>chang64</title>
+<style>
+@font-face{font-family:"Archivo";src:url(/fonts/archivo-v25-latin-ext-variable.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Golos Text";src:url(/fonts/golos-text-v7-cyrillic-variable.woff2) format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Source Serif 4";src:url(/fonts/source-serif-4-v14-latin-600.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format("woff2");font-weight:700;font-display:swap}
+*{box-sizing:border-box;margin:0}
+html,body{background:transparent;color:#ECEAE3;font-family:"Archivo","Golos Text",system-ui,sans-serif}
+.carte{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto;padding:12px;background-color:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;color:inherit;text-decoration:none}
+.tete{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.marque{display:flex;align-items:baseline;gap:5px;font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:19px;letter-spacing:-.015em;color:#ECEAE3}
+.marque svg{width:20px;height:17px;fill:#E0A93B;align-self:center}
+.marque b{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.86em;letter-spacing:-.03em;color:#E0A93B}
+#titre{font-size:13px;font-weight:600;color:#97A49D;text-align:right}
+#plateau{border-radius:6px;overflow:hidden;line-height:0;aspect-ratio:1}
+#plateau svg{width:100%;height:auto;display:block}
+#consigne{font-size:15px;font-weight:600;line-height:1.35;min-height:20px}
+.bouton{display:block;text-align:center;padding:11px 14px;border-radius:9px;background-color:#E0A93B;color:#1b1508;font-weight:600;font-size:15px}
+.carte:hover .bouton,.carte:focus-visible .bouton{background-color:#ECBB57}
+.carte:focus-visible{outline:2px solid #E0A93B;outline-offset:2px}
+</style>
+</head>
+<body>
+<a class="carte" id="lien" href="/#daily" target="_blank" rel="noopener">
+  <span class="tete">
+    <span class="marque"><svg viewBox="0 0 64 54" aria-hidden="true"><path fill-rule="evenodd" d="M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z"/></svg><span>chang<b>64</b></span></span>
+    <span id="titre">Puzzle of the day</span>
+  </span>
+  <span id="plateau"></span>
+  <span id="consigne"></span>
+  <span class="bouton" id="bouton">Solve</span>
+</a>
+<script src="vignette.js"></script>
+</body>
+</html>

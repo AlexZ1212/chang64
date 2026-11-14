@@ -44,6 +44,7 @@ const PAGE = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
+<meta name="description" content="Puzzle of the day from chang64, free chess for beginners, to show on a club or school website.">
 <link rel="canonical" href="https://chang64.com/vignette/">
 <title>chang64</title>
 <style>

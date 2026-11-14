@@ -733,7 +733,29 @@ function coupSuivantAccueil(){
 function arreterAccueil(){
   if(minuteurAccueil){clearTimeout(minuteurAccueil);minuteurAccueil=null;}
 }
+/* Position finale, immobile (2026-11-14) : ce que montre le bloc quand le
+   systeme demande moins de mouvement ou que les animations sont coupees
+   dans les Preferences. Le but du bloc est de montrer l'echiquier, pas le
+   mouvement. accueilFige evite de la redessiner a chaque passage a l'ecran,
+   et permet a appliquerMouvement() de relancer la partie si on rallume. */
+let accueilFige=false;
+function figerAccueil(){
+  arreterAccueil();
+  if(accueilFige)return;
+  accueilFige=true;
+  partieAccueil=new Game();plyAccueil=0;
+  for(const u of COUPS_ACCUEIL){
+    const mv=partieAccueil.moves().find(m=>partieAccueil.uci(m)===u);
+    if(!mv)break;
+    partieAccueil.makeMove(mv);plyAccueil++;
+  }
+  dessinerAccueil(null);
+}
 function demarrerAccueil(){
+  /* Animations coupees : on montre la position finale. La preference est
+     lue apres le premier affichage (loadPrefs est asynchrone) : c'est
+     appliquerMouvement() qui fige alors le bloc s'il tournait deja. */
+  if(mouvementCalme()){if(accueilPret)figerAccueil();return;}
   if(minuteurAccueil||!accueilVisible||document.hidden)return;
   if(!partieAccueil){partieAccueil=new Game();plyAccueil=0;dessinerAccueil(null);}
   minuteurAccueil=setTimeout(coupSuivantAccueil,CADENCE_ACCUEIL);
@@ -764,12 +786,7 @@ function initAccueilAnime(){
      bloc est de montrer l'echiquier, pas le mouvement ; le supprimer
      entierement priverait ces personnes du visuel pour rien. */
   if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches){
-    for(const u of COUPS_ACCUEIL){
-      const mv=partieAccueil.moves().find(m=>partieAccueil.uci(m)===u);
-      if(!mv)break;
-      partieAccueil.makeMove(mv);
-    }
-    dessinerAccueil(null);
+    figerAccueil();
     return;
   }
   /* Ne tourner que quand le bloc est reellement a l'ecran. Cela couvre d'un
@@ -973,6 +990,16 @@ async function loadPrefs(){
     }
   }catch(e){}
   applyBoardTheme();
+  appliquerMouvement();
+}
+/* Reglage "Animations" (2026-11-14) : l'attribut sur <html> coupe tout le
+   mouvement CSS (voir html[data-mouvement="calme"] dans template.html), et
+   l'echiquier de l'accueil, anime par script, se fige ou repart. */
+function appliquerMouvement(){
+  document.documentElement.setAttribute("data-mouvement",animOn?"normal":"calme");
+  if(!accueilPret)return;
+  if(mouvementCalme())figerAccueil();
+  else if(accueilFige){accueilFige=false;partieAccueil=null;demarrerAccueil();}
 }
 async function savePrefs(){
   try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn,son:sonOn}));}catch(e){}
@@ -1185,7 +1212,11 @@ function renderPrefs(){
   }
   const segA=$("segAnim");
   if(segA){
-    const lab={on:t("On"),off:t("Off")};
+    /* "Animations" est au pluriel depuis le 2026-11-14 : cles a part
+       ("Activees" en francais), comme pour les sons. Une langue sans ces
+       cles retombe sur "On"/"Off". */
+    const tAnim=k=>{const s=t(k+" (animations)");return s===k+" (animations)"?t(k):s;};
+    const lab={on:tAnim("On"),off:tAnim("Off")};
     poserHtml(segA,"");
     for(const v of ["on","off"]){
       const b=document.createElement("button");
@@ -1196,7 +1227,7 @@ function renderPrefs(){
       /* Idem : aria-checked seul sur un role="radio". */
       b.setAttribute("aria-checked",String(actif));
       b.textContent=lab[v];
-      b.onclick=()=>{animOn=(v==="on");savePrefs();renderPrefs();};
+      b.onclick=()=>{animOn=(v==="on");savePrefs();appliquerMouvement();renderPrefs();};
       segA.appendChild(b);
     }
   }

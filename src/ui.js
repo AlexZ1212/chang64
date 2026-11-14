@@ -938,7 +938,7 @@ function render(){
    une piece declenche un rendu, qui recree le HTML et effaçait l'animation en
    plein vol. On la reprend alors la ou elle en etait au lieu de la perdre. */
 function animateMove(mv,reprise){
-  if(!mv||prefersReducedMotion()||!animOn)return;
+  if(!mv||mouvementCalme())return;
   if(reprise&&!animEnCours)return;
   const dep=cellOf(mv.from), arr=cellOf(mv.to);
   if(!dep||!arr)return;
@@ -977,6 +977,13 @@ function cellOf(sq){
 function prefersReducedMotion(){
   try{return window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){return false;}
 }
+/* Une seule question pour tout mouvement pilote en JavaScript (2026-11-14) :
+   le systeme demande moins de mouvement, ou les animations sont coupees dans
+   les Preferences. Le CSS suit les deux de son cote (media query et
+   html[data-mouvement="calme"]) ; ce qui est anime par script (glissement
+   des pieces, echiquier de l'accueil, chiffres qui defilent) doit poser
+   cette question-ci et montrer directement l'etat final. */
+function mouvementCalme(){return prefersReducedMotion()||!animOn;}
 /* ---------- sons (2026-11-07) ----------
    Fabriques en Web Audio au moment de les jouer : aucun fichier a charger,
    rien qui sorte du navigateur. Actives par defaut, desactivables dans les

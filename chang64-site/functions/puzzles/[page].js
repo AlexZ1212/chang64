@@ -8,12 +8,23 @@
  * (/puzzles/mate-in-two), qui existe toujours. Toute autre adresse continue
  * vers les fichiers statiques, donc vers la 404.
  *
+ * 2026-11-14 : la Search Console a refuse la correction le 10/11. Il restait
+ * les adresses a "g" (/puzzles/g691-pin), d'une version plus ancienne, et des
+ * themes qui n'ont plus de page (mat-etouffe, attaque-a-distance) : ceux-la
+ * vont a la liste des themes plutot qu'a une 404.
+ *
  * _routes.json n'envoie ici que les adresses de ce dossier qui ne sont pas
  * des pages existantes : les pages de theme restent servies sans fonction.
  * Meme code dans functions/fr/exercices/[page].js : un fichier commun dans
  * functions/ deviendrait lui-meme une route. */
-export function onRequest({ request, params, next }) {
-  const m = /^\d+-([a-z][a-z-]*)(?:\.html)?$/.exec(params.page || "");
+const DOSSIER = "/puzzles/";
+export async function onRequest({ request, params, next, env }) {
+  const m = /^g?\d+-([a-z][a-z-]*)(?:\.html)?$/.exec(params.page || "");
   if (!m) return next();
-  return Response.redirect(new URL("/puzzles/" + m[1], request.url).toString(), 301);
+  let cible = new URL(DOSSIER + m[1], request.url);
+  try {
+    const r = await env.ASSETS.fetch(new Request(cible.toString()));
+    if (r.status === 404) cible = new URL(DOSSIER, request.url);
+  } catch (e) { /* en cas de doute, la page du theme */ }
+  return Response.redirect(cible.toString(), 301);
 }

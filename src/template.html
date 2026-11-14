@@ -104,6 +104,25 @@
   --r:8px;
   --e1:0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,234,227,.04);
   --e2:0 12px 32px rgba(0,0,0,.55);
+  /* Mouvement (2026-11-14, relooking anime, direction "pieces vivantes").
+     Toute nouvelle animation de l'interface puise ici plutot que d'inventer
+     sa duree : quatre durees, trois courbes.
+     - appui   : un bouton qui s'enfonce, un retour immediat au doigt ;
+     - courte  : survols, fondus, changements d'etat ;
+     - moyenne : deplacements (pastille des onglets, piece qui glisse) ;
+     - longue  : petites celebrations (saut, onde, pastille de serie).
+     Courbes : sortie = arrivee franche puis douce (deplacements) ; ressort =
+     leger depassement (pastille, pieces vivantes) ; douce = jauges et
+     barres. Rien de tout cela ne joue quand le systeme demande moins de
+     mouvement ni quand les animations sont coupees dans les Preferences
+     (html[data-mouvement="calme"], plus bas). */
+  --duree-appui:.12s;
+  --duree-courte:.22s;
+  --duree-moyenne:.36s;
+  --duree-longue:.6s;
+  --courbe-sortie:cubic-bezier(.22,.7,.3,1);
+  --courbe-ressort:cubic-bezier(.3,1.35,.5,1);
+  --courbe-douce:cubic-bezier(.4,0,.2,1);
 }
 /* Themes d'echiquier. Seules les deux couleurs de cases changent : le reste
    de l'interface garde les jetons d'origine. Le theme est pose en attribut
@@ -1507,6 +1526,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
 .hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
 .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}
+/* Animations coupees dans les Preferences (2026-11-14) : exactement le meme
+   effet que le mouvement reduit du systeme ci-dessus, pour que les deux
+   chemins restent identiques et deja eprouves. L'attribut est pose sur
+   <html> par appliquerMouvement() (ui3.js). */
+html[data-mouvement="calme"] *{animation:none!important;transition:none!important}
+html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -2600,10 +2625,13 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
 
       <!-- L'animation est un reglage de confort visuel, pas d'accessibilite :
            sa place est avec la personnalisation de l'echiquier, avant la
-           separation ci-dessous. -->
+           separation ci-dessous. Elargi le 2026-11-14 : "Animation des
+           pieces" devient "Animations" et coupe tout le mouvement de
+           l'interface, pas seulement le glissement des pieces. Meme cle de
+           sauvegarde (anim) : qui l'avait coupe la garde coupee. -->
       <div class="field">
-        <div class="eyebrow" id="prefsAnimLabel">Piece animation</div>
-        <p class="note" style="margin-top:0;margin-bottom:10px">Pieces slide to their square when a move is played. Turn it off if you prefer an instant board.</p>
+        <div class="eyebrow" id="prefsAnimLabel">Animations</div>
+        <p class="note" style="margin-top:0;margin-bottom:10px">Pieces slide to their square, and buttons, screens and rewards move gently. Turn them off for a still interface.</p>
         <div class="seg" id="segAnim" role="radiogroup" aria-labelledby="prefsAnimLabel">
           <button data-v="on" aria-pressed="true">On</button>
           <button data-v="off" aria-pressed="false">Off</button>

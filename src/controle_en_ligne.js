@@ -78,7 +78,9 @@ function reglesEntetes() {
   const regles = []; let cur = null;
   for (const l of fs.readFileSync(path.join(REF, "_headers"), "utf8").split(/\r?\n/)) {
     if (!l.trim() || l.trim().startsWith("#")) continue;
-    if (!/^\s/.test(l)) { cur = { motif: l.trim(), entetes: {} }; regles.push(cur); }
+    if (!/^\s/.test(l)) { cur = { motif: l.trim(), entetes: {}, retires: [] }; regles.push(cur); }
+    /* "! Nom" detache un en-tete herite d'une regle plus generale. */
+    else if (cur && l.trim().startsWith("!")) cur.retires.push(l.trim().slice(1).trim().toLowerCase());
     else if (cur) { const i = l.indexOf(":"); cur.entetes[l.slice(0, i).trim().toLowerCase()] = l.slice(i + 1).trim(); }
   }
   return regles;
@@ -159,7 +161,7 @@ const correspond = (motif, u) => new RegExp("^" + motif.split("*").map(s => s.re
   section("4. En-tetes de _headers");
   a = etat();
   const toutes = fichiersPublies();
-  for (const { motif, entetes } of reglesEntetes()) {
+  for (const { motif, entetes, retires } of reglesEntetes()) {
     /* _headers s'applique au chemin DEMANDE : la regle "/" vise l'URL servie
        de index.html, qu'aucun chemin de fichier ne reproduit. On essaie donc
        l'URL servie, puis le chemin du fichier. */
@@ -174,6 +176,9 @@ const correspond = (motif, u) => new RegExp("^" + motif.split("*").map(s => s.re
          separee par une virgule. On exige que la valeur declaree y figure. */
       T(motif + "  " + h + "  (" + u + ")", servi !== null && servi.split(/,\s*/).join(", ").includes(v), servi === null ? "absent" : "servi : " + servi);
     }
+    /* Un en-tete detache et non redeclare dans la regle doit etre absent. */
+    for (const h of retires.filter(h => !(h in entetes)))
+      T(motif + "  sans " + h + "  (" + u + ")", r.headers.get(h) === null, "servi : " + r.headers.get(h));
   }
   bilan(a);
 

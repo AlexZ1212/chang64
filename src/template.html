@@ -1297,12 +1297,15 @@ header>*{min-width:0}
 #editErase[aria-pressed="true"]{border-color:var(--brass);color:var(--brass);font-weight:600}
 
 .origin{position:relative;overflow:hidden}
+/* Silhouette entiere, centree en hauteur et a peine rognee a droite
+   (2026-11-14, remarque d'Alexandre : remontee de 60 %, on n'en voyait que
+   les pattes, coupees par le haut du panneau). */
 .origin-mark{
-  position:absolute;right:-3%;top:0;width:min(44%,300px);aspect-ratio:1;opacity:.14;
-  transform:translateY(-60%);pointer-events:none;z-index:0;line-height:0;color:var(--brass)
+  position:absolute;right:4%;top:50%;width:min(30%,240px);opacity:.12;
+  transform:translateY(-50%);pointer-events:none;z-index:0;line-height:0;color:var(--brass)
 }
 .origin-mark svg{width:100%;height:auto;display:block}
-@media(max-width:620px){.origin-mark{right:-14%;width:74%;transform:translateY(-52%);opacity:.11}}
+@media(max-width:620px){.origin-mark{right:-18%;width:70%;opacity:.08}}
 .origin-text{position:relative;z-index:1;min-width:0}
 .origin-text h2{margin-bottom:10px}
 .origin-text p{color:var(--sage);font-size:14.5px;margin-bottom:10px;max-width:58ch}
@@ -1689,8 +1692,12 @@ html[data-mouvement="calme"] .btn.coche::after{animation:none}
    quand on trouve, penche la tete quand on se trompe (ui3.js l'anime par
    Web Animations sur ce ::before, que les reecritures du message ne
    touchent pas). */
-#exStatus::before{content:"";flex:none;width:30px;height:26px;margin-right:10px;transform-origin:50% 100%;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 54'%3E%3Cpath fill='%23E0A93B' fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat}
+/* viewBox resserre sur la silhouette (2 9 60 46 et non 0 0 64 54) : le
+   signe a 9 unites de vide au-dessus de la tete, qui faisaient paraitre
+   l'elephant trop bas a cote du texte (remarque d'Alexandre). align-self :
+   centre sur toute la hauteur du message, une ou deux lignes. */
+#exStatus::before{content:"";flex:none;align-self:center;width:30px;height:23px;margin-right:10px;transform-origin:50% 100%;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 9 60 46'%3E%3Cpath fill='%23E0A93B' fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat}
 /* Serie en pastilles, sous le chiffre : une par exercice reussi d'affilee,
    jusqu'a cinq ; la derniere gagnee arrive en rebondissant. */
 .pastilles{display:flex;justify-content:center;gap:3px;margin:3px 0 2px}

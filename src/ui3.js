@@ -2389,6 +2389,72 @@ renderProgress=function(){
   niveauVu=n;
   return r;
 };
+/* ---------- Exercices (lot 4) ---------- */
+/* L'elephant devant le message (#exStatus::before) : saut sur une reussite,
+   tete penchee sur une erreur. Web Animations sur le pseudo-element : le
+   message est reecrit sans cesse (textContent, className), une classe
+   posee dessus serait effacee aussitot. */
+function animerCompagnon(images,duree){
+  const st=$("exStatus");
+  if(!st||!st.animate||mouvementCalme())return;
+  try{st.animate(images,{duration:duree,easing:"cubic-bezier(.3,1.4,.5,1)",pseudoElement:"::before"});}catch(e){}
+}
+const SAUT_COMPAGNON=[{transform:"none"},{transform:"scale(1.1,.88)",offset:.2},{transform:"translateY(-9px) scale(.95,1.07)",offset:.5},{transform:"scale(1.04,.96)",offset:.8},{transform:"none"}];
+const PENCHE_COMPAGNON=[{transform:"none"},{transform:"rotate(-12deg)",offset:.3},{transform:"rotate(-12deg)",offset:.7},{transform:"none"}];
+/* Onde jade depuis la case d'arrivee du coup gagnant. */
+function ondeReussite(sq){
+  if(mouvementCalme()||sq==null)return;
+  const c=cellOf(sq);
+  if(c&&c.animate)c.animate([{boxShadow:"inset 0 0 0 0 rgba(95,191,146,.95)"},{boxShadow:"inset 0 0 0 9px rgba(95,191,146,.85)",offset:.35},{boxShadow:"inset 0 0 0 0 rgba(95,191,146,0)"}],{duration:800,easing:"ease-out"});
+}
+const finishPuzzleSansCompagnon=finishPuzzle;
+finishPuzzle=function(won){
+  const r=finishPuzzleSansCompagnon.apply(this,arguments);
+  if(won){animerCompagnon(SAUT_COMPAGNON,650);if(lastMove)ondeReussite(lastMove.to);}
+  return r;
+};
+const registerWrongSansCompagnon=registerWrong;
+registerWrong=function(){
+  const r=registerWrongSansCompagnon.apply(this,arguments);
+  animerCompagnon(PENCHE_COMPAGNON,750);
+  return r;
+};
+/* Serie en pastilles sous le chiffre de la serie (Resoudre), et classement
+   qui defile avec son ecart (+12 / -8). Releves apres chaque
+   renderProgress / renderExtraStats, qui posent les vraies valeurs. */
+let serieVue=null,classementVu=null,rafClassement=0;
+function majPastilles(){
+  const b=$("stStreak");if(!b)return;
+  const stat=b.closest(".stat");if(!stat)return;
+  let p=stat.querySelector(".pastilles");
+  if(!p){p=document.createElement("span");p.className="pastilles";p.setAttribute("aria-hidden","true");for(let i=0;i<5;i++)p.appendChild(document.createElement("i"));b.after(p);}
+  const n=prog.streak||0,allumees=Math.min(n,5);
+  [...p.children].forEach((d,i)=>{d.classList.toggle("on",i<allumees);d.classList.remove("neuve");});
+  if(serieVue!==null&&n>serieVue&&allumees>0&&!mouvementCalme()){const d=p.children[allumees-1];void d.offsetWidth;d.classList.add("neuve");}
+  serieVue=n;
+}
+function majClassement(){
+  const b=$("stRating");if(!b)return;
+  const n=prog.rating;
+  if(classementVu!==null&&n!==classementVu&&b.offsetParent&&!mouvementCalme()){
+    const de=classementVu,stat=b.closest(".stat");
+    if(stat){stat.removeAttribute("data-ecart");void stat.offsetWidth;stat.setAttribute("data-ecart",(n>de?"+":"")+(n-de));}
+    cancelAnimationFrame(rafClassement);
+    const t0=performance.now();
+    const pas=now=>{
+      const k=Math.min(1,(now-t0)/650),e=1-Math.pow(1-k,3);
+      b.textContent=k<1?String(Math.round(de+(prog.rating-de)*e)):String(prog.rating);
+      if(k<1)rafClassement=requestAnimationFrame(pas);else rafClassement=0;
+    };
+    rafClassement=requestAnimationFrame(pas);
+  }
+  classementVu=n;
+}
+const renderProgressSansPastilles=renderProgress;
+renderProgress=function(){const r=renderProgressSansPastilles.apply(this,arguments);majPastilles();majClassement();return r;};
+const renderExtraStatsSansClassement=renderExtraStats;
+renderExtraStats=function(){const r=renderExtraStatsSansClassement.apply(this,arguments);majClassement();return r;};
+
 /* Exercice du jour reussi : si le jour d'aujourd'hui vient de passer a
    "fait" dans un calendrier, il se coche avec un petit rebond. */
 if(typeof renderCalendarWidget==="function"){

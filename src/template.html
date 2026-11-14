@@ -1673,6 +1673,27 @@ html[data-mouvement="calme"] .btn.coche::after{animation:none}
 /* Niveau gagne : le nouveau cran de l'echelle se remplit. */
 .ladder i.monte{transform-origin:0 50%;animation:cranRemplit .6s var(--courbe-sortie) both}
 @keyframes cranRemplit{from{transform:scaleX(0)}to{transform:none}}
+/* ---------- Exercices (relooking anime, lot 4, 2026-11-14) ----------
+   L'elephant du logo accompagne l'exercice, devant le message : il saute
+   quand on trouve, penche la tete quand on se trompe (ui3.js l'anime par
+   Web Animations sur ce ::before, que les reecritures du message ne
+   touchent pas). */
+#exStatus::before{content:"";flex:none;width:30px;height:26px;margin-right:10px;transform-origin:50% 100%;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 54'%3E%3Cpath fill='%23E0A93B' fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat}
+/* Serie en pastilles, sous le chiffre : une par exercice reussi d'affilee,
+   jusqu'a cinq ; la derniere gagnee arrive en rebondissant. */
+.pastilles{display:flex;justify-content:center;gap:3px;margin:3px 0 2px}
+.pastilles i{width:7px;height:7px;border-radius:50%;background-color:var(--raise);border:1px solid var(--rule);box-sizing:border-box}
+.pastilles i.on{background-color:var(--brass);border-color:var(--brass)}
+.pastilles i.neuve{animation:pastilleNeuve .45s var(--courbe-ressort)}
+@keyframes pastilleNeuve{from{transform:scale(.2)}to{transform:none}}
+/* Classement qui change : le chiffre defile et l'ecart s'envole au-dessus. */
+.stats .stat{position:relative}
+.stats .stat[data-ecart]::after{content:attr(data-ecart);position:absolute;right:6px;top:4px;font:700 11px 'JetBrains Mono',monospace;color:var(--jade);opacity:0;animation:ecartEnvole .9s ease-out}
+.stats .stat[data-ecart^="-"]::after{color:var(--brick)}
+@keyframes ecartEnvole{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
+html[data-mouvement="calme"] .stats .stat[data-ecart]::after{animation:none;display:none}
+@media(prefers-reduced-motion:reduce){.stats .stat[data-ecart]::after{animation:none;display:none}}
 /* Exercice du jour reussi : le jour se coche dans le calendrier. */
 .cal-day.coche{animation:jourCoche .5s var(--courbe-ressort)}
 @keyframes jourCoche{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:none}}

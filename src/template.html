@@ -1574,8 +1574,16 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    glisser depuis le coin. */
 .glisse-net::before{transition:none}
 .glisse-net .tabs-marque{transition:opacity var(--duree-courte)}
+/* Survol (2026-11-14, remarque d'Alexandre : la barre d'onglets ne
+   reagissait pas a la souris). Ecrans a souris seulement : au doigt, un
+   survol reste colle apres le toucher. Le choix actif garde sa marque. */
+@media(hover:hover){
+  .tabs button:not([aria-current="page"]):hover,
+  .seg button:not([aria-pressed="true"]):not([aria-checked="true"]):not(:disabled):hover,
+  .tc-cats button:not([aria-pressed="true"]):not(:disabled):hover{color:var(--chalk);background-color:rgba(236,234,227,.07)}
+}
+.seg button,.tc-cats button{transition:transform var(--duree-appui) var(--courbe-ressort),color var(--duree-courte),background-color var(--duree-courte)}
 /* Appui sur un choix : il s'enfonce un instant, comme les boutons. */
-.seg button,.tc-cats button{transition:transform var(--duree-appui) var(--courbe-ressort)}
 .seg button:active,.tc-cats button:active,.chip:active{transform:scale(.95)}
 /* Puces d'une nouvelle categorie de cadence : elles arrivent l'une apres
    l'autre (renderTC pose .donne seulement quand la categorie change). */

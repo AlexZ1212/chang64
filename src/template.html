@@ -134,6 +134,9 @@ html[data-board="moss"]   { --bone:#E4E7D2; --board:#6B7F4B; }
 
 /* Preferences : aperçu du damier et puces de choix */
 hr.rule{border:0;border-top:1px solid var(--rule);margin:20px 0 0}
+/* Dans Resoudre, le filet collait a l'echelle des niveaux juste dessous
+   (remarque d'Alexandre, 2026-11-14) : un peu d'air, comme sur telephone. */
+#pane-puzzles hr.rule{margin-bottom:16px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .themepreview{display:grid;grid-template-columns:repeat(8,1fr);width:150px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
 .themepreview i{display:block;aspect-ratio:1/1}

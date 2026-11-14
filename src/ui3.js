@@ -2208,6 +2208,7 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{
    Rien au premier affichage (lien profond, reprise) : arriveePrete n'est
    vrai qu'une fois la page chargee. Rien non plus en mouvement reduit ou
    animations coupees. */
+let chiffresAJouer=true;
 const ORDRE_ONGLETS={home:0,debut:0,play:1,puzzles:2,train:2,calendar:2,edit:3,friend:4,explore:5,prefs:6,legal:6};
 const PANNEAUX_ARRIVEE=["pane-home","appLayout","pane-prefs","pane-explore","pane-legal","pane-calendar"];
 let arriveePrete=false;
@@ -2216,6 +2217,9 @@ const setModeSansArrivee=setMode;
 setMode=function(m,opts){
   const avant=mode;
   const r=setModeSansArrivee(m,opts);
+  /* Retour a l'accueil : les chiffres de Ma progression rejoueront leur
+     arrivee quand la bande reviendra a l'ecran (lot 3, plus bas). */
+  if(mode==="home"&&avant!=="home")chiffresAJouer=true;
   if(arriveePrete&&avant!==mode&&!mouvementCalme())arriverPanneau(avant,mode);
   return r;
 };
@@ -2234,4 +2238,112 @@ function arriverPanneau(avant,apres){
     p.dataset.arrivee="1";
     p.addEventListener("animationend",e=>{if(e.target===p)p.classList.remove("arrivee","arrivee-d","arrivee-g");});
   }
+}
+
+/* ==========================================================
+   ACCUEIL VIVANT (relooking anime, lot 3, 2026-11-14)
+   ========================================================== */
+/* Paupiere du logo : une ellipse de la couleur du logo, posee sur le trou de
+   l'oeil (44.25, 19 dans le viewBox 0 0 64 54 du signe) ; le CSS la ferme
+   un instant toutes les cinq secondes environ. */
+(function(){
+  const svg=document.querySelector("#brandmark svg");
+  if(!svg||svg.querySelector(".paupiere"))return;
+  const e=document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+  e.setAttribute("class","paupiere");
+  e.setAttribute("cx","44.25");e.setAttribute("cy","19");
+  e.setAttribute("rx","2.7");e.setAttribute("ry","2.7");
+  e.setAttribute("fill","currentColor");
+  svg.appendChild(e);
+})();
+
+/* Icones des cartes : sur telephone, pas de survol pour les faire bouger.
+   Chaque carte joue donc son mouvement une fois, quand elle arrive a
+   l'ecran pour la premiere fois de la visite. */
+if(window.IntersectionObserver){
+  const vues=new IntersectionObserver(entries=>{
+    for(const en of entries){
+      if(!en.isIntersecting)continue;
+      vues.unobserve(en.target);
+      if(mouvementCalme())continue;
+      const c=en.target;
+      c.classList.add("vivant");
+      c.addEventListener("animationend",()=>c.classList.remove("vivant"),{once:true});
+    }
+  },{threshold:.6});
+  for(const id of ["cardPlay","cardPuzzles","cardFriend"]){const c=$(id);if(c)vues.observe(c);}
+}
+
+/* Chiffres de Ma progression. Quand la bande arrive a l'ecran (et pas
+   avant : sur telephone elle est bien plus bas), chaque chiffre defile
+   depuis sa valeur a la derniere visite, gardee dans chang64:vus ; ce qui a
+   progresse porte une pastille "+N". Rejoue a chaque retour sur l'accueil
+   (chiffresAJouer, pose par setMode plus haut), pas a chaque defilement.
+   renderProgress et renderExtraStats ecrivent toujours la vraie valeur :
+   on la releve juste apres eux (data-cible), si bien qu'un chiffre qui
+   change pendant le defilement finit quand meme sur le bon nombre. */
+const TUILES_CHIFFRES=["hLevel","hSolved","hBest","hRating","hStreak"];
+let vusChiffres=null,rafChiffres=0;
+(async()=>{
+  try{const r=await window.storage.get("chang64:vus");vusChiffres=r&&r.value?JSON.parse(r.value):{};}
+  catch(e){vusChiffres={};}
+})();
+function noterCibles(){
+  for(const id of TUILES_CHIFFRES){
+    const el=$(id);
+    if(el&&!rafChiffres)el.dataset.cible=el.textContent;
+    else if(el&&el.dataset.ecrit!==el.textContent)el.dataset.cible=el.textContent;
+  }
+}
+const renderProgressSansChiffres=renderProgress;
+renderProgress=function(){const r=renderProgressSansChiffres.apply(this,arguments);noterCibles();return r;};
+const renderExtraStatsSansChiffres=renderExtraStats;
+renderExtraStats=function(){const r=renderExtraStatsSansChiffres.apply(this,arguments);noterCibles();return r;};
+function jouerChiffres(){
+  const strip=$("homeStrip");
+  if(!strip||strip.classList.contains("hide")||!chiffresAJouer)return;
+  if(vusChiffres===null){setTimeout(jouerChiffres,150);return;}
+  chiffresAJouer=false;
+  noterCibles();
+  const tuiles=TUILES_CHIFFRES.map(id=>$(id)).filter(Boolean);
+  const cible=el=>parseInt(el.dataset.cible,10);
+  const depart=tuiles.map(el=>{const v=vusChiffres[el.id];return typeof v==="number"?v:0;});
+  const premiere=!Object.keys(vusChiffres).length;
+  tuiles.forEach((el,i)=>{
+    const g=cible(el)-depart[i];
+    const stat=el.closest(".stat");
+    if(stat){if(!premiere&&g>0)stat.dataset.gain="+"+g;else delete stat.dataset.gain;}
+  });
+  const enregistrer=()=>{
+    const v={};for(const el of tuiles){const n=cible(el);if(!isNaN(n))v[el.id]=n;}
+    vusChiffres=v;
+    try{window.storage.set("chang64:vus",JSON.stringify(v));}catch(e){}
+  };
+  if(mouvementCalme()){enregistrer();return;}
+  strip.classList.remove("arrive");void strip.offsetWidth;strip.classList.add("arrive");
+  cancelAnimationFrame(rafChiffres);
+  const t0=performance.now();
+  const pas=now=>{
+    let fini=true;
+    tuiles.forEach((el,i)=>{
+      const n=cible(el);
+      if(isNaN(n))return;
+      const k=Math.max(0,Math.min(1,(now-t0-150-i*90)/900));
+      if(k<1)fini=false;
+      const e=1-Math.pow(1-k,3);
+      const txt=String(Math.round(depart[i]+(n-depart[i])*e));
+      el.dataset.ecrit=txt;el.textContent=txt;
+    });
+    if(fini){
+      rafChiffres=0;
+      for(const el of tuiles){el.textContent=el.dataset.cible;delete el.dataset.ecrit;}
+      enregistrer();
+    } else rafChiffres=requestAnimationFrame(pas);
+  };
+  rafChiffres=requestAnimationFrame(pas);
+}
+if(window.IntersectionObserver&&$("homeStrip")){
+  new IntersectionObserver(entries=>{
+    if(entries.some(e=>e.isIntersecting))jouerChiffres();
+  },{threshold:.5}).observe($("homeStrip"));
 }

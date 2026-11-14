@@ -54,7 +54,11 @@ console.log("\n--- En-tete compact en partie, petit telephone (2026-10-25) ---")
    joueur a 546-602 avant, 490-538 apres, plateau inchange (325 px). */
 const compact = (css.match(/@media ?\(max-width:599px\) and \(max-height:700px\) ?\{(.*?\}) ?\}/) || [])[1] || "";
 T("bloc limite aux petits ecrans, en largeur ET en hauteur", !!compact);
-T("logo et langue masques dans Jouer et Inviter", /body\[data-mode="play"\] header>\.brand/.test(compact) && /body\[data-mode="friend"\] header>\.langswitch/.test(compact) && /display:none/.test(compact));
+/* 2026-11-14, demande d'Alexandre : le logo et la langue ne disparaissent
+   plus selon l'onglet ; l'en-tete compact vaut pour tout telephone, quelle
+   que soit sa hauteur (Safari et application installee identiques). */
+T("logo et langue jamais masques selon l'onglet", !/header>\.brand[^{]*\{[^}]*display:none/.test(css) && !/header>\.langswitch[^{]*\{[^}]*display:none/.test(css));
+T("en-tete compact sur tout telephone, par la largeur seule", /@media ?\(max-width:599px\) ?\{header\{[^}]*padding-top:4px/.test(css));
 T("la barre d'onglets reste (pas masquee)", !/header>\.tabs|header>nav/.test(compact));
 T("ligne des coups apres la pendule du joueur", /#boardTools[^{]*\{order:1\}/.test(compact));
 {

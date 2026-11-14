@@ -421,7 +421,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(max-width:760px){.cards{grid-template-columns:1fr}}
 .card{
   background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:20px;
-  text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .18s,transform .12s
+  text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .18s,transform var(--duree-courte) var(--courbe-ressort)
 }
 /* Survol : var(--brass) plein, comme les cartes de Resoudre (.solveCard,
    .motif-tuile). Trois surfaces cliquables portaient un laiton transparent
@@ -1595,6 +1595,43 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
 @keyframes arriveeDroite{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
 @keyframes arriveeGauche{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
 @keyframes arriveeFondu{from{opacity:0}to{opacity:1}}
+/* ---------- Accueil vivant (relooking anime, lot 3, 2026-11-14) ----------
+   Les icones des trois cartes bougent comme leur piece : le cavalier saute
+   en L, la dame oscille, le pion avance d'une case. Au survol sur
+   ordinateur ; sur telephone, ou il n'y a pas de survol, une fois quand la
+   carte arrive a l'ecran (.vivant, posee par ui3.js). */
+.card .ico svg{transform-origin:50% 90%}
+#cardPlay:hover .ico svg,#cardPlay:focus-visible .ico svg,#cardPlay.vivant .ico svg{animation:sautCavalier .62s var(--courbe-sortie)}
+#cardPuzzles:hover .ico svg,#cardPuzzles:focus-visible .ico svg,#cardPuzzles.vivant .ico svg{animation:couronneDame .55s ease-in-out}
+#cardFriend:hover .ico svg,#cardFriend:focus-visible .ico svg,#cardFriend.vivant .ico svg{animation:pasPion .5s var(--courbe-sortie)}
+@keyframes sautCavalier{0%{transform:none}35%{transform:translateY(-14px)}65%{transform:translate(9px,-14px)}100%{transform:none}}
+@keyframes couronneDame{0%,100%{transform:none}25%{transform:rotate(-12deg) scale(1.1)}75%{transform:rotate(9deg) scale(1.1)}}
+@keyframes pasPion{0%,100%{transform:none}45%{transform:translateY(-10px)}}
+/* L'elephant du logo cligne de l'oeil de temps en temps (la paupiere est
+   une ellipse posee par ui3.js sur le trou de l'oeil) et hoche la tete au
+   survol. */
+.brand .paupiere{transform-box:fill-box;transform-origin:center;transform:scaleY(0);animation:cligne 5.2s 2s infinite}
+@keyframes cligne{0%,94%,100%{transform:scaleY(0)}96.5%{transform:scaleY(1)}}
+.brand .glyph svg{transform-origin:30% 90%}
+.brand:hover .glyph svg{animation:hocheTete .6s ease-in-out}
+@keyframes hocheTete{0%,100%{transform:none}30%{transform:rotate(-6deg)}65%{transform:rotate(3deg)}}
+/* Ma progression : quand la bande arrive a l'ecran, les tuiles montent en
+   cascade et chaque chiffre defile depuis sa valeur a la derniere visite.
+   Ce qui a progresse depuis porte une pastille verte (+8), en ::after pour
+   ne rien ajouter dans la tuile (des tests et des annonces lisent son
+   texte). */
+.strip .stat{position:relative}
+.strip.arrive .stat{animation:tuileArrive var(--duree-longue) var(--courbe-sortie) both}
+.strip.arrive .stat:nth-child(2){animation-delay:.07s}
+.strip.arrive .stat:nth-child(3){animation-delay:.14s}
+.strip.arrive .stat:nth-child(4){animation-delay:.21s}
+.strip.arrive .stat:nth-child(5){animation-delay:.28s}
+@keyframes tuileArrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.strip .stat[data-gain]::after{content:attr(data-gain);position:absolute;top:6px;right:6px;font:700 11px 'JetBrains Mono',monospace;color:var(--jade);background-color:rgba(95,191,146,.14);border-radius:999px;padding:1px 6px;animation:gainArrive .4s var(--courbe-ressort) 1.1s both}
+@keyframes gainArrive{from{opacity:0;transform:translateY(4px) scale(.8)}to{opacity:1;transform:none}}
+/* Le * des regles de mouvement calme n'atteint pas les pseudo-elements. */
+html[data-mouvement="calme"] .strip .stat[data-gain]::after{animation:none}
+@media(prefers-reduced-motion:reduce){.strip .stat[data-gain]::after{animation:none}}
 .hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
 .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}

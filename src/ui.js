@@ -2688,6 +2688,10 @@ function readDeepLink(){
   const h=location.hash||"";
   /* Parcours "Je debute" (ui3.js). */
   if(/[#&]start$/.test(h))return {kind:"start"};
+  /* Exercice du jour (2026-11-14) : bouton de la vignette integree sur
+     d'autres sites (vignette_build.js). Meme effet que le bouton de l'accueil,
+     la serie de jours compte donc. */
+  if(/[#&]daily$/.test(h))return {kind:"daily"};
   let m=h.match(/[#&]train=([a-z]+)/);
   if(m)return {kind:"train",id:m[1]};
   m=h.match(/[#&]puzzle=([a-zA-Z0-9]+)/);
@@ -2751,6 +2755,7 @@ function noterFragment(){fragmentSuivi=location.hash?{hash:location.hash,mode:mo
 function applyDeepLink(d){
   if(!d)return false;
   if(d.kind==="start"){setMode("debut");return true;}
+  if(d.kind==="daily"){setMode("puzzles",{daily:true});return true;}
   if(d.kind==="train"){
     /* Corrige le 2026-09-03 : ce lien (#train=<id>) visait une finale
        precise, mais pointait vers setMode("train") -- l'onglet Defis, qui

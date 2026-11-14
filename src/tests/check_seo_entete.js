@@ -191,7 +191,9 @@ console.log("\n--- Adresses dans la forme servie par Cloudflare Pages ---");
        au controle d'accueil plus haut. */
     if (c && f !== "/index.html" && c !== ORIG + urlDe(f)) canonFaux.push(f + " -> " + c);
     /* Toute adresse absolue du site : canonical, og:url, hreflang, JSON-LD. */
-    for (const m of h.matchAll(/https:\/\/chang64\.com(\/[^"'\s<>\\]*)/g)) {
+    /* "&" arrete l'adresse (2026-11-14) : le code a copier de la vignette,
+       affiche sur la page enseignants et clubs, est echappe (&quot;). */
+    for (const m of h.matchAll(/https:\/\/chang64\.com(\/[^"'\s<>\\&]*)/g)) {
       const u = m[1].replace(/[#?].*$/, "");
       if (/\.(png|svg|json|xml|txt|woff2|webmanifest)$/.test(u)) continue;
       nAbs++;

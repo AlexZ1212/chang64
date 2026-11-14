@@ -328,6 +328,30 @@ module.exports = function (H) {
         "Deux limites à connaître. Il n'y a pas de compte de classe : un enseignant ne peut pas suivre les résultats des élèves depuis un tableau de bord. Et la progression appartient au navigateur : sur un ordinateur partagé, les élèves partagent la même progression, et vider le navigateur l'efface."] } }
   ];
 
+  /* Vignette de l'exercice du jour (2026-11-14, vignette_build.js), sur la
+     page enseignants et clubs : apercu en direct et code a copier. Le lien
+     texte sous le cadre est le vrai lien entrant pour les moteurs ; son texte
+     reprend le titre de l'accueil dans la langue. */
+  const sectionVignette = lang => {
+    let d = {};
+    if (lang !== "en") { try { d = require(`./langues/${lang}/app.js`); } catch (e) { d = {}; } }
+    const tx = s => typeof d[s] === "string" ? d[s] : s;
+    const titreCadre = tx("Puzzle of the day") + ", chang64";
+    const ancre = tx("Free chess for beginners, easy puzzles | chang64").replace(/\s*\|\s*chang64$/, "");
+    const accueilAbs = SITE + PAR_CODE[lang].accueil;
+    const code = `<iframe src="${SITE}/vignette/?lang=${lang}" width="320" height="450" style="border:0;max-width:100%" title="${esc(titreCadre)}" loading="lazy"></iframe>\n<p><a href="${accueilAbs}">${esc(ancre)}</a></p>`;
+    return `
+<h2>${esc(choix(lang, { en: "Show the puzzle of the day on your website", fr: "Afficher l'exercice du jour sur votre site" }))}</h2>
+<p>${choix(lang, {
+      en: "A club or school website can show the puzzle of the day in a small frame that changes by itself every day. A click opens the puzzle on chang64. To add it, copy this code into the page where it should appear:",
+      fr: "Le site d'un club ou d'une école peut afficher l'exercice du jour dans un petit cadre qui change tout seul chaque jour. Un clic ouvre l'exercice sur chang64. Pour l'ajouter, copiez ce code dans la page où il doit apparaître :" })}</p>
+<pre style="white-space:pre-wrap;word-break:break-all;user-select:all;font-size:13px;padding:12px;border-radius:8px;background:rgba(236,234,227,.06);border:1px solid rgba(236,234,227,.12)"><code>${esc(code)}</code></pre>
+<p>${choix(lang, {
+      en: "The frame loads nothing from other websites and sets no cookies. Here is what it looks like today:",
+      fr: "Le cadre ne charge rien depuis d'autres sites et ne dépose aucun cookie. Voici ce qu'il affiche aujourd'hui :" })}</p>
+<iframe src="/vignette/?lang=${lang}" width="320" height="450" style="border:0;max-width:100%" title="${esc(titreCadre)}" loading="lazy"></iframe>`;
+  };
+
   /* Titre, paragraphes et slug d'une page Apprendre dans une langue. */
   const regle = (r, lang, rub) => {
     const title = choix(lang, r.title);
@@ -395,6 +419,7 @@ module.exports = function (H) {
 <div class="cols">
   ${diagram(r.fen, "")}
   <div>${R.body.map(p => `<p>${p}</p>`).join("\n")}
+    ${r.slug.en === "for-teachers-and-clubs" ? sectionVignette(lang) : ""}
     ${/* Trois boutons possibles, jamais tous les trois par hasard.
           "Entraine-toi" quand la banque connait le motif : apres avoir lu ce
           qu'est un clouage, s'exercer sur mille clouages vaut mieux que

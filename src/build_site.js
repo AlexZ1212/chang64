@@ -2386,7 +2386,19 @@ fs.writeFileSync(OUT + "/_headers", `/*
 /COPYING.CONTENT
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=86400
+
+/vignette/*
+  ! X-Frame-Options
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors *; base-uri 'self'; form-action 'none'
+  X-Robots-Tag: noindex
+  Cache-Control: public, max-age=3600
 `);
+/* Vignette de l'exercice du jour (2026-11-14, vignette_build.js) : faite pour
+   etre integree dans un cadre sur d'autres sites. Le bloc ci-dessus retire
+   pour elle seule l'interdiction d'etre encadree (X-Frame-Options et
+   frame-ancestors du bloc general, detaches par "!") et la sort de l'index. */
+require("./vignette_build.js").ecrireVignette(OUT);
 
 /* Redirections des anciennes URL francaises.
    Avant que les familles soient traduites, la page francaise portait le slug

@@ -1640,6 +1640,42 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
 /* Le * des regles de mouvement calme n'atteint pas les pseudo-elements. */
 html[data-mouvement="calme"] .strip .stat[data-gain]::after{animation:none}
 @media(prefers-reduced-motion:reduce){.strip .stat[data-gain]::after{animation:none}}
+/* ---------- Finitions (relooking anime, 2026-11-14) ---------- */
+/* Bulles d'info : elles s'ouvrent depuis le "i", en fondu et en grandissant
+   un peu, au lieu d'apparaitre d'un bloc. */
+.info-tip-pop:not(.hide){animation:bulleOuvre var(--duree-courte) var(--courbe-sortie);transform-origin:0 0}
+@keyframes bulleOuvre{from{opacity:0;transform:translateY(-4px) scale(.97)}to{opacity:1;transform:none}}
+/* Menu des langues : il se deroule, et la fleche pivote. */
+.langmenu{transform-origin:100% 0}
+.langswitch[open] .langmenu{animation:menuDeroule var(--duree-courte) var(--courbe-sortie)}
+@keyframes menuDeroule{from{opacity:0;transform:translateY(-6px) scale(.96)}to{opacity:1;transform:none}}
+.langswitch summary::after{transition:transform var(--duree-courte) var(--courbe-ressort),margin var(--duree-courte)}
+/* Copie reussie : une coche jade se dessine dans le bouton (.coche, posee
+   par copyText dans ui3.js), puis s'efface. */
+.btn.coche{position:relative;border-color:var(--jade)}
+.btn.coche::after{content:"";position:absolute;right:9px;top:50%;width:5px;height:10px;margin-top:-7px;border-right:2px solid var(--jade);border-bottom:2px solid var(--jade);transform:rotate(45deg);transform-origin:50% 50%;animation:cocheDessin .35s var(--courbe-ressort) both}
+@keyframes cocheDessin{from{opacity:0;transform:rotate(45deg) scale(.3)}to{opacity:1;transform:rotate(45deg)}}
+html[data-mouvement="calme"] .btn.coche::after{animation:none}
+@media(prefers-reduced-motion:reduce){.btn.coche::after{animation:none}}
+/* Retournement : l'echiquier pivote d'un demi-tour au lieu de s'inverser
+   d'un coup. */
+.board.pivote{animation:pivote .55s var(--courbe-sortie)}
+@keyframes pivote{from{transform:rotate(-180deg)}to{transform:none}}
+/* Pendule : dans les dix dernieres secondes du joueur au trait, les
+   chiffres battent doucement. */
+.clock.tres-bas time{display:inline-block;animation:battement 1s ease-in-out infinite}
+@keyframes battement{0%,100%{transform:none}50%{transform:scale(1.07)}}
+/* Carte de fin de partie : elle monte, puis le titre apparait. */
+.result-card{animation:carteMonte .45s var(--courbe-ressort)}
+@keyframes carteMonte{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+.result-card b{animation:titreApparait .4s ease-out .15s both}
+@keyframes titreApparait{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* Niveau gagne : le nouveau cran de l'echelle se remplit. */
+.ladder i.monte{transform-origin:0 50%;animation:cranRemplit .6s var(--courbe-sortie) both}
+@keyframes cranRemplit{from{transform:scaleX(0)}to{transform:none}}
+/* Exercice du jour reussi : le jour se coche dans le calendrier. */
+.cal-day.coche{animation:jourCoche .5s var(--courbe-ressort)}
+@keyframes jourCoche{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:none}}
 .hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
 .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}

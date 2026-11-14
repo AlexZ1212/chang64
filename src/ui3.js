@@ -2347,3 +2347,57 @@ if(window.IntersectionObserver&&$("homeStrip")){
     if(entries.some(e=>e.isIntersecting))jouerChiffres();
   },{threshold:.5}).observe($("homeStrip"));
 }
+
+/* ==========================================================
+   FINITIONS (relooking anime, 2026-11-14)
+   ========================================================== */
+/* Relance une animation CSS portee par une classe, meme deja posee. */
+function rejouerClasse(el,cls,duree){
+  if(!el||mouvementCalme())return;
+  el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);
+  clearTimeout(el["_t_"+cls]);
+  el["_t_"+cls]=setTimeout(()=>el.classList.remove(cls),duree);
+}
+/* Copie : copyText ne sait pas quel bouton l'a demandee ; on retient le
+   dernier bouton clique, et s'il date de moins d'une seconde, il recoit la
+   coche (.coche) pendant un peu plus d'une seconde. */
+let dernierBouton=null,dernierBoutonT=0;
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(b){dernierBouton=b;dernierBoutonT=Date.now();}},true);
+const copyTextSansCoche=copyText;
+copyText=function(){
+  const r=copyTextSansCoche.apply(this,arguments);
+  if(dernierBouton&&Date.now()-dernierBoutonT<1000&&dernierBouton.classList.contains("btn")){
+    const b=dernierBouton;
+    b.classList.remove("coche");void b.offsetWidth;b.classList.add("coche");
+    clearTimeout(b._coche);b._coche=setTimeout(()=>b.classList.remove("coche"),1400);
+  }
+  return r;
+};
+/* Retournement : toggleFlip est deja branche en onclick ; ce second
+   ecouteur passe juste apres lui et fait pivoter l'echiquier redessine. */
+if($("btnFlip"))$("btnFlip").addEventListener("click",()=>rejouerClasse(boardEl,"pivote",600));
+/* Niveau gagne : l'echelle est reconstruite a chaque renderProgress ; on
+   compare au niveau vu juste avant et on fait remplir les nouveaux crans. */
+let niveauVu=null;
+const renderProgressSansEchelle=renderProgress;
+renderProgress=function(){
+  const r=renderProgressSansEchelle.apply(this,arguments);
+  const n=prog.level,ech=$("ladder");
+  if(niveauVu!==null&&n>niveauVu&&ech&&!mouvementCalme()){
+    for(let i=niveauVu;i<n;i++){const c=ech.children[i];if(c){c.classList.add("monte");c.style.animationDelay=((i-niveauVu)*120)+"ms";}}
+  }
+  niveauVu=n;
+  return r;
+};
+/* Exercice du jour reussi : si le jour d'aujourd'hui vient de passer a
+   "fait" dans un calendrier, il se coche avec un petit rebond. */
+if(typeof renderCalendarWidget==="function"){
+  const renderCalendarWidgetSansCoche=renderCalendarWidget;
+  renderCalendarWidget=function(){
+    const avant=document.querySelectorAll(".cal-day.today.done").length;
+    const r=renderCalendarWidgetSansCoche.apply(this,arguments);
+    const apres=document.querySelectorAll(".cal-day.today.done");
+    if(apres.length>avant)apres.forEach(c=>rejouerClasse(c,"coche",600));
+    return r;
+  };
+}

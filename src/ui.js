@@ -768,6 +768,9 @@ function renderClocks(){
   const set=(el,c)=>{
     el.classList.toggle("active",!sansTemps&&clock.active===c&&!isFlagged());
     el.classList.toggle("low",!sansTemps&&val(c)<20000&&val(c)>0);
+    /* Dix dernieres secondes du joueur au trait : les chiffres battent
+       (relooking anime, 2026-11-14). */
+    el.classList.toggle("tres-bas",!sansTemps&&clock.active===c&&val(c)<10000&&val(c)>0&&!isFlagged());
     el.classList.toggle("flagged",!sansTemps&&clock.flagged===c);
   };
   set($("clockTop"),topColor);
@@ -926,7 +929,13 @@ function render(){
      finale ou revue. On compare au coup precedemment anime pour ne pas
      rejouer l'animation a chaque rendu (survol, selection, redimensionnement). */
   const mv=reviewGame?reviewLast:lastMove;
-  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);{let etat=0;if(checkSq>=0)etat=g.moves().length?1:(ecranExercice()||mode==="debut"?0:2);SON.coup(mv,etat);}}
+  if(mv&&mv!==lastAnimated){lastAnimated=mv;animateMove(mv);
+    /* Echec : la case du roi s'illumine une fois en rouge, au coup qui le
+       donne seulement (relooking anime, 2026-11-14). Web Animations plutot
+       qu'une classe : render() reecrit les classes des cases a chaque
+       passage et couperait l'effet. */
+    if(checkSq>=0&&!mouvementCalme()){const kc=cellOf(checkSq);if(kc&&kc.animate)kc.animate([{boxShadow:"inset 0 0 0 0 rgba(228,119,106,.95)"},{boxShadow:"inset 0 0 0 7px rgba(228,119,106,.95)",offset:.3},{boxShadow:"inset 0 0 0 0 rgba(228,119,106,0)"}],{duration:750,easing:"ease-out"});}
+    {let etat=0;if(checkSq>=0)etat=g.moves().length?1:(ecranExercice()||mode==="debut"?0:2);SON.coup(mv,etat);}}
   else if(!mv)lastAnimated=null;
   else if(mv&&animEnCours)animateMove(mv,true);   /* rendu pendant l'animation */
 }

@@ -648,7 +648,7 @@ function drawGraph(plies){
   poserHtml($("evalGraph"),'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" role="img" aria-label="'+t("Evaluation over the game")+'">'+
     '<line x1="0" y1="'+mid+'" x2="'+w+'" y2="'+mid+'" stroke="rgba(239,233,217,.25)" stroke-width="1"/>'+
     (area?'<path d="'+area+'" fill="rgba(217,168,63,.18)"/>':"")+
-    (d?'<path d="'+d+'" fill="none" stroke="#D9A83F" stroke-width="2" stroke-linejoin="round"/>':"")+
+    (d?'<path d="'+d+'" fill="none" style="stroke:var(--brass)" stroke-width="2" stroke-linejoin="round"/>':"")+
     '</svg>');
 }
 /* Historique de notation (integration ELO, point 2). Meme principe que

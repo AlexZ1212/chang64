@@ -22,6 +22,7 @@
      voyait jamais l'application en francais. Pose par build_site.js. -->
 <!--__HREFLANG__-->
 <meta name="theme-color" content="#101413">
+<script>try{var p=JSON.parse(localStorage.getItem("chang64:prefs")||"{}"),r=document.documentElement;if(p.theme)r.setAttribute("data-theme",p.theme);if(p.board)r.setAttribute("data-board",p.board);}catch(e){}</script>
 <title>Free chess for beginners, easy puzzles | chang64</title>
 <!-- 174 caracteres a l'origine : tronquee dans les resultats de recherche,
      ce qui coupait les arguments de fin. Ramenee sous 155. -->
@@ -90,6 +91,19 @@
   --bone:#EDE4D2;
   --board:#4B6B63;
   --brass:#E0A93B;
+  /* Themes (2026-11-15, themes.js) : ce qui suit l'accent et l'ambiance de
+     chaque theme. --brass-rgb sert aux rgba(), --on-brass au texte pose sur
+     l'accent, --survol au survol des boutons, --arc-a/--arc-b aux arcs des
+     fenetres (Bravo, bilan), --lueur au halo du fond, --bone-t/--board-t au
+     damier assorti au theme. */
+  --brass-rgb:224,169,63;
+  --on-brass:#1b1508;
+  --survol:#33483e;
+  --arc-a:#2F4A3E;
+  --arc-b:#26382F;
+  --lueur:#17201D;
+  --bone-t:#EDE4D2;
+  --board-t:#4B6B63;
   --jade:#5FBF92;
   /* Eclairci le 2026-09-05 : #D9584A ne donnait que 3,76:1 sur --raise et
      4,34:1 sur --slate, sous le seuil WCAG AA de 4,5:1 pour du texte
@@ -131,6 +145,22 @@ html[data-board="walnut"] { --bone:#E8D3B0; --board:#9A6B45; }
 html[data-board="slate"]  { --bone:#D8DEE4; --board:#5A6B80; }
 html[data-board="ink"]    { --bone:#C9C6BE; --board:#3A3D41; }
 html[data-board="moss"]   { --bone:#E4E7D2; --board:#6B7F4B; }
+/* Damier assorti au theme (2026-11-15) : les cases du theme choisi. */
+html[data-board="theme"]  { --bone:var(--bone-t); --board:var(--board-t); }
+/* Themes gagnes par les badges (2026-11-15, themes.js). Genere depuis une
+   seule table (scratchpad themes-pose.js) : contrastes verifies, texte >= 15:1
+   sur le fond, gris >= 5,6:1 et accent >= 6,3:1 sur les cartes, texte sur
+   l'accent >= 7:1. [data-apercu] sert aux apercus des Preferences et de la
+   fenetre Bravo, qui montrent un theme sans l'appliquer. */
+[data-apercu="chang"]{--ink:#101413;--slate:#191F1D;--raise:#232B28;--chalk:#ECEAE3;--sage:#97A49D;--brass:#E0A93B;--brass-rgb:224,169,59;--on-brass:#1b1508;--survol:#33483e;--arc-a:#2F4A3E;--arc-b:#26382F;--lueur:#17201D;--bone-t:#EDE4D2;--board-t:#4B6B63;--rule:rgba(236,234,227,.12)}
+html[data-theme="glace"],[data-apercu="glace"]{--ink:#0D1418;--slate:#141E26;--raise:#1D2B36;--chalk:#E8F1F5;--sage:#93AABA;--brass:#7FCBEF;--brass-rgb:127,203,239;--on-brass:#0F181D;--survol:#374D5C;--arc-a:#394F5D;--arc-b:#2B3D48;--lueur:#172127;--bone-t:#DCE8EE;--board-t:#5D7F96;--rule:rgba(232,241,245,.12)}
+html[data-theme="jade"],[data-apercu="jade"]{--ink:#0E1512;--slate:#151F1B;--raise:#1E2C25;--chalk:#E6F0EA;--sage:#8FAD9E;--brass:#5FCF9C;--brass-rgb:95,207,156;--on-brass:#0B1913;--survol:#2B4F3F;--arc-a:#295240;--arc-b:#213F32;--lueur:#14221C;--bone-t:#E3EEDF;--board-t:#3F8466;--rule:rgba(230,240,234,.12)}
+html[data-theme="bibliotheque"],[data-apercu="bibliotheque"]{--ink:#15110D;--slate:#1E1913;--raise:#2A221B;--chalk:#EFE6D8;--sage:#AE9F8A;--brass:#DDA45C;--brass-rgb:221,164,92;--on-brass:#1B140B;--survol:#573F2C;--arc-a:#5E432C;--arc-b:#483322;--lueur:#251C14;--bone-t:#E8D3B0;--board-t:#9A6B45;--rule:rgba(239,230,216,.12)}
+html[data-theme="hibou"],[data-apercu="hibou"]{--ink:#110F1A;--slate:#1A1726;--raise:#242034;--chalk:#ECE8F4;--sage:#A29CB8;--brass:#C3A3F2;--brass-rgb:195,163,242;--on-brass:#17141D;--survol:#403857;--arc-a:#423959;--arc-b:#332C45;--lueur:#1C1828;--bone-t:#E2DCEE;--board-t:#6A5C8C;--rule:rgba(236,232,244,.12)}
+html[data-theme="siam"],[data-apercu="siam"]{--ink:#0F1120;--slate:#171A2D;--raise:#21253D;--chalk:#ECEAF2;--sage:#9DA2BE;--brass:#E8BC52;--brass-rgb:232,188,82;--on-brass:#1C170A;--survol:#313755;--arc-a:#2F3550;--arc-b:#252A41;--lueur:#16192B;--bone-t:#EAE0C8;--board-t:#4A5378;--rule:rgba(236,234,242,.12)}
+html[data-theme="braise"],[data-apercu="braise"]{--ink:#160F0D;--slate:#201613;--raise:#2C1F1B;--chalk:#F2E7E2;--sage:#B39E96;--brass:#F2875A;--brass-rgb:242,135,90;--on-brass:#1D100B;--survol:#5B3528;--arc-a:#633627;--arc-b:#4B2A1F;--lueur:#271713;--bone-t:#F0DDD0;--board-t:#A2553C;--rule:rgba(242,231,226,.12)}
+html[data-theme="fritkot"],[data-apercu="fritkot"]{--ink:#14120C;--slate:#1D1B12;--raise:#29251A;--chalk:#F4EEDC;--sage:#ADA48A;--brass:#F5C842;--brass-rgb:245,200,66;--on-brass:#1D1808;--survol:#613828;--arc-a:#6D3626;--arc-b:#512B1E;--lueur:#271A12;--bone-t:#F6EBCB;--board-t:#B5543C;--rule:rgba(244,238,220,.12)}
+html[data-theme="or"],[data-apercu="or"]{--ink:#0B0B0A;--slate:#141412;--raise:#1F1E1B;--chalk:#F2EEE4;--sage:#A8A396;--brass:#E9C46A;--brass-rgb:233,196,106;--on-brass:#1C180D;--survol:#4B402A;--arc-a:#524528;--arc-b:#3C331F;--lueur:#1A1810;--bone-t:#EFE6CF;--board-t:#8C7440;--rule:rgba(242,238,228,.12)}
 
 /* Preferences : aperçu du damier et puces de choix */
 hr.rule{border:0;border-top:1px solid var(--rule);margin:20px 0 0}
@@ -180,7 +210,7 @@ body{
      d'atteindre cette marge (measure : ancien centre laissait un residu
      visible jusqu'a environ y=100px ; le bas de l'entete meme dans son plus
      grand etat de retour a la ligne mobile approche les 150px). */
-  background-image:radial-gradient(1100px 620px at 18% -400px, #17201D 0%, transparent 62%);
+  background-image:radial-gradient(1100px 620px at 18% -400px, var(--lueur) 0%, transparent 62%);
   background-repeat:no-repeat;
   color:var(--chalk);
   font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;
@@ -190,7 +220,7 @@ body{
 /* Hors ecran tant qu'il n'a pas le focus : il ne doit gener personne, mais
    apparaitre nettement des la premiere tabulation. */
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;
-  background-color:var(--brass);color:#1b1508;font-weight:600;font-size:13.5px;
+  background-color:var(--brass);color:var(--on-brass);font-weight:600;font-size:13.5px;
   padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
 .skiplink:focus{left:0}
 /* Avertissement de stockage : discret mais pas decoratif, il contredit la
@@ -269,7 +299,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    min-width automatique garde chaque libelle entier, et la barre defile
    encore si un ecran tres etroit ne peut pas tout contenir. */
 .tabs button{flex:1 1 0}
-.tabs button[aria-current="page"]{background-color:var(--brass);color:#1b1508;font-weight:600}
+.tabs button[aria-current="page"]{background-color:var(--brass);color:var(--on-brass);font-weight:600}
 .tabs button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 /* 8 px au lieu de 11 depuis le retrait de Regarder (2026-10-25) : les cinq
    onglets restants tiennent alors sans defiler jusqu'a 360 px de large
@@ -278,7 +308,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 
 /* ---------- home ---------- */
 .hero{
-  background-image:linear-gradient(155deg,#26382f 0%,var(--slate) 62%);
+  background-image:linear-gradient(155deg,var(--arc-b) 0%,var(--slate) 62%);
   border:1px solid var(--rule);border-radius:16px;padding:clamp(24px,5vw,44px);margin-bottom:16px;
   position:relative;overflow:hidden
 }
@@ -385,7 +415,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    au lieu de se teinter de laiton. */
 .chip[aria-pressed="true"],.chip[aria-checked="true"]{border-color:var(--brass);
   background-color:var(--ink);
-  background-image:linear-gradient(rgba(217,168,63,.16),rgba(217,168,63,.16));
+  background-image:linear-gradient(rgba(var(--brass-rgb),.16),rgba(var(--brass-rgb),.16));
   color:var(--brass)}
 .chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .tc-note{font-size:12px;color:var(--sage);margin-top:10px}
@@ -394,7 +424,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .bravo{position:fixed;inset:0;z-index:210;display:flex;justify-content:center;align-items:flex-start;padding:16px;box-sizing:border-box;background:rgba(10,14,13,.78);overflow-y:auto}
 .bravo[hidden]{display:none}
 .bravo-fenetre{position:relative;overflow:hidden;width:100%;max-width:340px;margin:auto 0;padding:26px 24px 24px;box-sizing:border-box;text-align:center;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2);color:var(--chalk);animation:bravoFenetre .26s cubic-bezier(.22,.7,.3,1)}
-.bravo-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-70px;height:176px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,#2F4A3E 0%,#26382F 100%)}
+.bravo-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-70px;height:176px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,var(--arc-a) 0%,var(--arc-b) 100%)}
 .bravo-medaille{position:relative;display:block;width:132px;height:154px;margin:0 auto 12px}
 .bravo-sceau{transform-box:view-box;transform-origin:66px 62px;animation:bravoSceau .5s cubic-bezier(.3,1.5,.5,1) .08s both}
 .bravo-confettis{transform-box:view-box;transform-origin:66px 62px;animation:bravoConfettis .6s ease-out .18s both}
@@ -588,7 +618,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 /* Sans ceci, un glissement au doigt faisait defiler la page et annulait le
    deplacement. Les cases vides et les pieces adverses laissent defiler. */
 .sq.prenable{touch-action:none}
-.sq.cible::before{content:"";position:absolute;inset:0;background:rgba(224,169,63,.6);pointer-events:none}
+.sq.cible::before{content:"";position:absolute;inset:0;background:rgba(var(--brass-rgb),.6);pointer-events:none}
 .debut-pas{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
 .debut-pas button{width:36px;height:36px;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);color:inherit;font:inherit;font-size:14px;cursor:pointer}
 .debut-pas button.fait{border-color:var(--jade)}
@@ -739,7 +769,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    plat au fond d'origine, qui reste declare. */
 .clock.active{border-color:var(--brass);
   background-color:var(--slate);
-  background-image:linear-gradient(rgba(217,168,63,.12),rgba(217,168,63,.12))}
+  background-image:linear-gradient(rgba(var(--brass-rgb),.12),rgba(var(--brass-rgb),.12))}
 .clock.active time{color:var(--brass)}
 .clock.low time{color:var(--brick)}
 .clock.flagged{border-color:var(--brick)}
@@ -786,8 +816,8 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .sq .co.f{right:3px;bottom:1px}
 .sq .co.r{left:3px;top:1px}
 .sq.l .co{color:var(--board)}.sq.d .co{color:var(--bone)}
-.sq.last::before{content:"";position:absolute;inset:0;background:rgba(224,169,63,.42);pointer-events:none}
-.sq.sel::before{content:"";position:absolute;inset:0;background:rgba(224,169,63,.62);pointer-events:none}
+.sq.last::before{content:"";position:absolute;inset:0;background:rgba(var(--brass-rgb),.42);pointer-events:none}
+.sq.sel::before{content:"";position:absolute;inset:0;background:rgba(var(--brass-rgb),.62);pointer-events:none}
 .sq.good::before{content:"";position:absolute;inset:0;background:rgba(95,191,146,.50);pointer-events:none}
 .sq.bad::before{content:"";position:absolute;inset:0;background:rgba(217,88,74,.50);pointer-events:none}
 .sq.sel{box-shadow:inset 0 0 0 3px var(--brass)}
@@ -969,7 +999,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    et le bouton "Au hasard" redevient selectionne des qu'elle est finie. */
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform var(--duree-appui) var(--courbe-ressort)}
-.btn:hover{background:#33483e}
+.btn:hover{background:var(--survol)}
 /* Le bouton s'enfonce sous le doigt et revient avec un leger ressort
    (relooking anime, 2026-11-14) ; il descendait d'un pixel auparavant. */
 .btn:active{transform:scale(.96)}
@@ -984,8 +1014,8 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .btn.danger{border-color:rgba(196,87,63,.5);color:#E4907C}
 .btn.danger:hover{background:rgba(196,87,63,.16)}
-.btn.danger.armed{background-color:var(--brick);border-color:var(--brick);color:#1b1508}
-.btn.primary{background-color:var(--brass);border-color:var(--brass);color:#1b1508}
+.btn.danger.armed{background-color:var(--brick);border-color:var(--brick);color:var(--on-brass)}
+.btn.primary{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass)}
 .btn.primary:hover{background:#e6b954}
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
@@ -1044,7 +1074,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    qui creaient un decalage residuel quand le groupe passait a la ligne --
    voir le commentaire dans le HTML, juste au-dessus de cette rangee. */
 .theme-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
-.theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(217,168,63,.4);padding:2px 8px;border-radius:999px}
+.theme{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(var(--brass-rgb),.4);padding:2px 8px;border-radius:999px}
 /* Identifiant court de l'exercice : discret (mono, couleur sourde, pas de
    pastille) pour ne pas rivaliser avec le thème, mais toujours visible, y
    compris pendant Chang Sprint puisqu'il ne revele rien de la solution.
@@ -1151,7 +1181,7 @@ header>*{min-width:0}
    (#E0A93B) et non sur l'ancien #D9A83F encore ecrit sur .chip : meme
    nettoyage que sur les contours de survol. */
 .cal-day.done{background-color:var(--ink);
-  background-image:linear-gradient(rgba(224,169,63,.16),rgba(224,169,63,.16));
+  background-image:linear-gradient(rgba(var(--brass-rgb),.16),rgba(var(--brass-rgb),.16));
   border-color:var(--brass);color:var(--brass);font-weight:600;cursor:pointer}
 /* Reussi AUJOURD'HUI : l'aplat de laiton, desormais reserve au seul jour en
    cours. Avant, les trente jours d'un mois plein sortaient tous dans la meme
@@ -1222,12 +1252,12 @@ header>*{min-width:0}
    long, tombait a 4px de large pour 15 de haut -- un point bleu illisible --
    et WhatsApp a 9px. Le trace SVG n'y etait pour rien. */
 .shareRow button svg{flex:none}
-.shareRow button:hover{background:#33483e}
+.shareRow button:hover{background:var(--survol)}
 .shareRow button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .shareRow button.wa{border-color:rgba(37,211,102,.45)}
 .shareRow button.msg{border-color:rgba(0,132,255,.45)}
 .shareRow button.tg{border-color:rgba(38,165,228,.5)}
-.shareRow button.native{background-color:var(--brass);border-color:var(--brass);color:#1b1508}
+.shareRow button.native{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass)}
 /* 12.5px et non 11.5 : ce sont de vraies phrases explicatives, pas des
    etiquettes. En dessous de 12px, un texte destine a etre lu devient penible
    et les outils d'accessibilite le signalent a juste titre. Les reperes tres
@@ -1401,7 +1431,7 @@ header>*{min-width:0}
 .plyinfo.mistake{border-left-color:#C4762A}
 .plyinfo.inacc{border-left-color:#8A7A2A}
 .plyinfo.best{border-left-color:var(--jade)}
-.opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(217,168,63,.35)}
+.opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(var(--brass-rgb),.35)}
 .opening a:hover{border-bottom-color:var(--brass)}
 .opening{font-size:12.5px;color:var(--brass);margin-top:2px;margin-bottom:12px;min-height:18px}
 /* Vide (avant toute partie, ou tant qu'aucune ouverture n'est detectee), la
@@ -1724,13 +1754,13 @@ html[data-mouvement="calme"] .stats .stat[data-ecart]::after{animation:none;disp
 @keyframes jourCoche{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:none}}
 .hide{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
-.sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}}
+.sq.hint{box-shadow:inset 0 0 0 2px rgba(var(--brass-rgb),.7)}}
 /* Animations coupees dans les Preferences (2026-11-14) : exactement le meme
    effet que le mouvement reduit du systeme ci-dessus, pour que les deux
    chemins restent identiques et deja eprouves. L'attribut est pose sur
    <html> par appliquerMouvement() (ui3.js). */
 html[data-mouvement="calme"] *{animation:none!important;transition:none!important}
-html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63,.7)}
+html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(var(--brass-rgb),.7)}
 
 /* Medailles illustrees (2026-11-15, voir badges.js). Le socle de la fenetre
    Bravo : rayons, halo, medaille en 3D, etincelles. .bx-joue lance le gain ;
@@ -1839,7 +1869,7 @@ html.menu-ouvert{overflow:hidden}
 .menu-tuile span{font-size:12px;color:var(--sage);line-height:1.3}
 #menuBadgeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:12px 6px;padding-top:6px}
 .menu-nouveaute{position:relative;margin:8px 4px 0;padding:12px 14px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule)}
-.menu-nouveaute.neuve{border-color:rgba(224,169,59,.55)}
+.menu-nouveaute.neuve{border-color:rgba(var(--brass-rgb),.55)}
 .menu-nouveaute.neuve::before{content:"";position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background-color:var(--brass)}
 .menu-nouveaute time{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--sage)}
 .menu-nouveaute h3{margin:4px 0 4px;font-size:15px;font-weight:600}
@@ -1889,7 +1919,7 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 /* Annonces (2026-11-15) : carte qui descend du haut avec un rebond, pastille
    en degrade qui tourne en arrivant, filet qui se vide en 4 s. Trois teintes :
    glace (gels), laiton (defi), jade (semaine parfaite). */
-.obj-annonce{position:fixed;left:50%;top:12px;z-index:220;display:flex;align-items:center;gap:12px;width:min(92vw,380px);padding:12px 16px 14px 12px;box-sizing:border-box;border-radius:14px;background:linear-gradient(135deg,rgba(35,43,40,.98),rgba(25,31,29,.98));border:1px solid var(--obj-teinte);box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 4px color-mix(in srgb,var(--obj-teinte) 14%,transparent);color:var(--chalk);cursor:pointer;overflow:hidden;transform:translate(-50%,-150%);transition:transform var(--duree-moyenne) var(--courbe-ressort)}
+.obj-annonce{position:fixed;left:50%;top:12px;z-index:220;display:flex;align-items:center;gap:12px;width:min(92vw,380px);padding:12px 16px 14px 12px;box-sizing:border-box;border-radius:14px;background:linear-gradient(135deg,var(--raise),var(--slate));border:1px solid var(--obj-teinte);box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 4px color-mix(in srgb,var(--obj-teinte) 14%,transparent);color:var(--chalk);cursor:pointer;overflow:hidden;transform:translate(-50%,-150%);transition:transform var(--duree-moyenne) var(--courbe-ressort)}
 .obj-annonce.visible{transform:translate(-50%,0)}
 .obj-gel{--obj-teinte:#7FCBEF;--obj-a:#E3F6FF;--obj-b:#5AB0DE;--obj-c:#1D5F86}
 .obj-defi{--obj-teinte:#E0A93B;--obj-a:#FFF0C2;--obj-b:#E9B44C;--obj-c:#7A4C0C}
@@ -1941,7 +1971,7 @@ html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-co
 .bilan{position:fixed;inset:0;z-index:210;display:flex;justify-content:center;align-items:flex-start;padding:16px;box-sizing:border-box;background:rgba(10,14,13,.78);overflow-y:auto}
 .bilan[hidden]{display:none}
 .bilan-fenetre{position:relative;overflow:hidden;width:100%;max-width:360px;margin:auto 0;padding:22px 20px 20px;box-sizing:border-box;text-align:center;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2);color:var(--chalk)}
-.bilan-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-56px;height:152px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,#2F4A3E 0%,#26382F 100%)}
+.bilan-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-56px;height:152px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,var(--arc-a) 0%,var(--arc-b) 100%)}
 .bilan-mascotte{position:relative;width:76px;height:64px;margin:0 auto 14px;color:var(--brass)}
 .bilan-mascotte svg{width:100%;height:100%}
 .bilan-joue .bilan-mascotte{animation:bilanSaut .9s var(--courbe-ressort) .1s both}
@@ -2030,6 +2060,35 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 /* Lien vers la page d'une ouverture ou d'un piege (badges Ouvertures, 15/11). */
 .bx-lien{display:inline-block;position:relative;margin:-4px 0 12px;font-size:13.5px;font-weight:600;color:var(--brass);text-decoration:underline;text-underline-offset:3px}
 .bx-lien.hide{display:none}
+
+/* Themes (2026-11-15, themes.js) : apercus des Preferences et annonce Bravo.
+   Chaque apercu porte data-apercu : ses couleurs sont celles du theme montre. */
+.themes-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:4px}
+.theme-choix{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;border-radius:10px;border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);font:inherit;text-align:left;cursor:pointer;transition:transform var(--duree-appui) var(--courbe-ressort),box-shadow var(--duree-courte)}
+.theme-choix:active{transform:scale(.97)}
+.theme-choix[aria-checked="true"]{box-shadow:0 0 0 2px var(--brass);border-color:var(--brass)}
+.theme-choix:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.theme-apercu{display:grid;gap:4px;padding:6px;border-radius:6px;background-color:var(--slate)}
+.theme-apercu i{display:block}
+.ta-carte{padding:5px;border-radius:4px;background-color:var(--raise)}
+.ta-carte b,.ta-carte s{display:block;height:4px;border-radius:2px;background-color:var(--chalk);width:70%}
+.ta-carte s{margin-top:3px;height:3px;width:45%;background-color:var(--sage)}
+.ta-bouton{height:8px;border-radius:3px;background-color:var(--brass)}
+.theme-apercu .ta-damier{display:grid;grid-template-columns:repeat(4,1fr);height:10px;border-radius:2px;overflow:hidden}
+.ta-damier u{display:block}
+.ta-damier u:nth-child(odd){background-color:var(--bone-t)}
+.ta-damier u:nth-child(even){background-color:var(--board-t)}
+.theme-nom{font-size:12.5px;font-weight:600;line-height:1.2}
+.theme-choix.verrou{cursor:help}
+.theme-choix.verrou .theme-apercu{opacity:.4;filter:grayscale(.6)}
+.theme-choix.verrou .theme-nom{color:var(--sage)}
+.theme-verrou{display:flex;align-items:center;gap:4px;min-width:0;font-size:11px;color:var(--sage)}
+.theme-verrou svg{flex:none;width:20px;height:20px}
+.theme-verrou em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bx-theme{position:relative;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 10px;margin:-2px auto 14px;padding:8px 12px;border-radius:10px;background-color:var(--raise);color:var(--chalk);font-size:13.5px;font-weight:600}
+.bx-theme.hide{display:none}
+.bx-theme-pastille{width:14px;height:14px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 3px var(--slate)}
+.bx-theme .btn{min-width:0;padding:5px 12px;font-size:13px}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -3142,6 +3201,10 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <p class="sub" id="prefsSub">Kept on this device. Nothing is sent anywhere.</p>
 
       <div class="field">
+        <div class="eyebrow" id="prefsThemeLabel">Site theme</div>
+        <div class="themes-grille" id="themeChoix" role="radiogroup" aria-labelledby="prefsThemeLabel"></div>
+      </div>
+      <div class="field">
         <div class="eyebrow" id="prefsBoardLabel">Board colours</div>
         <div class="chips" id="boardThemes" role="radiogroup" aria-labelledby="prefsBoardLabel"></div>
         <div class="themepreview" id="themePreview" aria-hidden="true"></div>
@@ -3275,6 +3338,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <div class="bravo-noms" id="bravoNoms"></div>
       <p class="bx-texte hide" id="bravoTexte"></p>
       <a class="bx-lien hide" id="bravoLien"></a>
+      <div class="bx-theme hide" id="bravoTheme"><span class="bx-theme-pastille" aria-hidden="true"></span><span id="bravoThemeTexte"></span><button type="button" class="btn" id="bravoThemeEssai">Try it</button></div>
       <div class="bx-autres" id="bravoAutres" aria-hidden="true"></div>
       <button type="button" class="btn primary" id="bravoOk">Continue</button>
     </div>

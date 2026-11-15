@@ -810,5 +810,21 @@ module.exports = {
 "Last challenge: {n}/{total} on the first try":"Último desafio: {n}/{total} de primeira",
 /* Badges Ouvertures (2026-11-15) */
 "Discover this opening":"Conhecer a abertura",
-"See the trap":"Ver a armadilha"
+"See the trap":"Ver a armadilha",
+/* Themes gagnes par les badges (2026-11-15) */
+"Site theme":"Tema",
+"Matching the theme":"Combinando com o tema",
+"Theme {name}":"Tema {name}",
+"Theme unlocked: {name}":"Tema desbloqueado: {name}",
+"Unlocks the {name} theme":"Desbloqueia o tema {name}",
+"Try it":"Experimentar",
+"Chang":"Chang",
+"Ice":"Gelo",
+"Jade":"Jade",
+"Library":"Biblioteca",
+"Owl":"Coruja",
+"Siam night":"Noite de Sião",
+"Ember":"Brasa",
+"Fritkot":"Fritkot",
+"Gold":"Ouro"
 };

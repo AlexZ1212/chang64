@@ -810,5 +810,21 @@ module.exports = {
 "Last challenge: {n}/{total} on the first try":"Последний вызов: {n}/{total} с первой попытки",
 /* Badges Ouvertures (2026-11-15) */
 "Discover this opening":"Узнать о дебюте",
-"See the trap":"Посмотреть ловушку"
+"See the trap":"Посмотреть ловушку",
+/* Themes gagnes par les badges (2026-11-15) */
+"Site theme":"Тема оформления",
+"Matching the theme":"Под тему",
+"Theme {name}":"Тема «{name}»",
+"Theme unlocked: {name}":"Открыта тема: {name}",
+"Unlocks the {name} theme":"Открывает тему «{name}»",
+"Try it":"Попробовать",
+"Chang":"Чанг",
+"Ice":"Лёд",
+"Jade":"Нефрит",
+"Library":"Библиотека",
+"Owl":"Сова",
+"Siam night":"Сиамская ночь",
+"Ember":"Угли",
+"Fritkot":"Фриткот",
+"Gold":"Золото"
 };

@@ -3252,8 +3252,8 @@ const icoBrass=t=>{
     const a=[];
     if(f.t==="circle")a.push('cx="'+f.cx+'" cy="'+f.cy+'" r="'+f.r+'"');
     else a.push('d="'+f.d+'"');
-    if(!f.fixe)a.push('fill="#E0A93B" stroke="#101413" stroke-linecap="round" stroke-linejoin="round"');
-    else a.push('fill="#101413"');   /* oeil et naseau : plein, sans contour */
+    if(!f.fixe)a.push('style="fill:var(--brass);stroke:var(--ink)" stroke-linecap="round" stroke-linejoin="round"');
+    else a.push('style="fill:var(--ink)"');   /* oeil et naseau : plein, sans contour */
     if(f.sw)a.push('stroke-width="'+f.sw+'"');
     s+='<'+f.t+' '+a.join(' ')+'/>';
   }

@@ -808,5 +808,21 @@ module.exports = {
 "Last challenge: {n}/{total} on the first try":"Son meydan okuma: ilk denemede {n}/{total}",
 /* Badges Ouvertures (2026-11-15) */
 "Discover this opening":"Açılışı keşfet",
-"See the trap":"Tuzağı gör"
+"See the trap":"Tuzağı gör",
+/* Themes gagnes par les badges (2026-11-15) */
+"Site theme":"Tema",
+"Matching the theme":"Temaya uygun",
+"Theme {name}":"{name} teması",
+"Theme unlocked: {name}":"Tema açıldı: {name}",
+"Unlocks the {name} theme":"{name} temasını açar",
+"Try it":"Dene",
+"Chang":"Chang",
+"Ice":"Buz",
+"Jade":"Yeşim",
+"Library":"Kütüphane",
+"Owl":"Baykuş",
+"Siam night":"Siyam gecesi",
+"Ember":"Kor",
+"Fritkot":"Fritkot",
+"Gold":"Altın"
 };

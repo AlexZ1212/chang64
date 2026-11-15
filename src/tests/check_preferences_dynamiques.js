@@ -58,9 +58,11 @@ setTimeout(async()=>{
 
   console.log("\n--- Les themes changent vraiment ---");
   const chips=[...d.getElementById("boardThemes").children];
-  T("5 themes proposes", chips.length===5, chips.length);
+  /* 6 depuis le 2026-11-15 : "Assorti au theme" (themes.js) passe en tete
+     des cinq damiers offerts. On clique un damier different du courant. */
+  T("6 damiers proposes", chips.length===6, chips.length);
   const avant=d.documentElement.getAttribute("data-board");
-  chips[1].click();
+  chips.find(c=>c.getAttribute("aria-checked")!=="true").click();
   await new Promise(r=>setTimeout(r,80));
   const apres=d.documentElement.getAttribute("data-board");
   T("le theme change", apres!==avant, avant+" -> "+apres);

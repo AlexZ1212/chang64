@@ -15,9 +15,14 @@ function lireLangue(code) {
   const f = path.join(DOSSIER, code + ".json");
   return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : {};
 }
+/* Le menu (menu.js, 2026-11-15) suit les badges dans le meme script : il
+   s'en sert pour sa grille et ses statistiques. */
+const NOUVEAUTES = JSON.parse(fs.readFileSync(path.join(__dirname, "nouveautes.json"), "utf8"))
+  .sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
 function code() {
   const liste = CATALOGUE.map(b => [b[0], b[1]]);
-  return fs.readFileSync(path.join(__dirname, "badges.js"), "utf8").replace("__BADGES_LISTE__", JSON.stringify(liste));
+  return fs.readFileSync(path.join(__dirname, "badges.js"), "utf8").replace("__BADGES_LISTE__", JSON.stringify(liste)) + "\n" +
+    fs.readFileSync(path.join(__dirname, "menu.js"), "utf8").replace("__NOUVEAUTES_DATE__", NOUVEAUTES[0].d);
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir
@@ -71,6 +76,10 @@ function ecrire(OUT) {
     if (absents) manques.push(c + " (" + absents + ")");
     fs.writeFileSync(OUT + "/data/badges-" + c + ".json", JSON.stringify(sortie));
   }
+  /* Nouveautes du menu, de la plus recente a la plus ancienne, par langue
+     (repli sur l'anglais). */
+  for (const c of CODES) fs.writeFileSync(OUT + "/data/nouveautes-" + c + ".json",
+    JSON.stringify(NOUVEAUTES.map(n => { const v = n[c] || n.en; return { d: n.d, t: v[0], x: v[1] }; })));
   console.log("Badges illustres  : " + CATALOGUE.length + " badges, " + CODES.length + " langues" +
     (manques.length ? " ; textes manquants : " + manques.join(", ") : ", textes complets"));
 }

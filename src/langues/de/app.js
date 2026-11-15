@@ -713,5 +713,19 @@ module.exports = {
 "No Lichess player by that name.":"Kein Lichess-Spieler mit diesem Namen.",
 "No standard games found for {name}.":"Keine Standardschach-Partien von {name} gefunden.",
 "Choose a game to review:":"Wähle eine Partie zum Nachspielen:",
-"Lichess could not be reached. Try again in a moment.":"Lichess ist nicht erreichbar. Versuch es gleich noch einmal."
+"Lichess could not be reached. Try again in a moment.":"Lichess ist nicht erreichbar. Versuch es gleich noch einmal.",
+/* Menu (2026-11-15, voir menu.js) */
+"Menu":"Menü",
+"Back":"Zurück",
+"Close menu":"Menü schließen",
+"Statistics":"Statistiken",
+"What's new":"Neuigkeiten",
+"Language":"Sprache",
+"About":"Über",
+"Puzzles solved":"Gelöste Aufgaben",
+"Days in a row":"Tage am Stück",
+"Days played":"Gespielte Tage",
+"Sprint record":"Sprint-Rekord",
+"Coordinates record":"Koordinaten-Rekord",
+"Endgames won":"Gewonnene Endspiele"
 };

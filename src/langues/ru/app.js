@@ -713,5 +713,19 @@ module.exports = {
 "No Lichess player by that name.":"Игрока с таким именем на Lichess нет.",
 "No standard games found for {name}.":"У игрока {name} не найдено партий в обычные шахматы.",
 "Choose a game to review:":"Выбери партию для разбора:",
-"Lichess could not be reached. Try again in a moment.":"Lichess не отвечает. Попробуй ещё раз чуть позже."
+"Lichess could not be reached. Try again in a moment.":"Lichess не отвечает. Попробуй ещё раз чуть позже.",
+/* Menu (2026-11-15, voir menu.js) */
+"Menu":"Меню",
+"Back":"Назад",
+"Close menu":"Закрыть меню",
+"Statistics":"Статистика",
+"What's new":"Что нового",
+"Language":"Язык",
+"About":"О сайте",
+"Puzzles solved":"Решено задач",
+"Days in a row":"Дней подряд",
+"Days played":"Игровых дней",
+"Sprint record":"Рекорд в спринте",
+"Coordinates record":"Рекорд в координатах",
+"Endgames won":"Выигранные эндшпили"
 };

@@ -358,12 +358,13 @@ function bxVisible(b){
   const r=b.id.match(/^theme_([a-z_]+?)(?:_(10|100))?$/);
   return !r||motifPropose(BX_THEMES[r[1]])||prog.badges.includes(b.id);
 }
-renderBadges=function(){
-  const el=$("badgeGrid");if(!el)return;
+/* el : la grille a remplir (celle de Resoudre par defaut, ou celle du menu). */
+renderBadges=function(el){
+  el=el&&el.nodeType?el:$("badgeGrid");if(!el)return;
   ensureProgFields();
   /* Sans les fichiers (pas encore arrives, ou hors ligne au premier
      passage), la grille se dessine quand meme, puis se redessine. */
-  if(!bxTextes||!bxMedailles)bxCharger().then(ok=>{if(ok)renderBadges();});
+  if(!bxTextes||!bxMedailles)bxCharger().then(ok=>{if(ok)renderBadges(el);});
   let h="",fam="";
   for(const b of BADGES.filter(bxVisible)){
     if(b.f!==fam){fam=b.f;h+='<h4 class="bx-famille">'+echapper(bxUi("famille:"+fam))+"</h4>";}

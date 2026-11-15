@@ -1527,6 +1527,7 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
   .brand .glyph{width:26px;height:calc(26px * 54 / 64)}
   .brand h1{font-size:22px}
   .langswitch summary{padding-top:2px;padding-bottom:2px}
+
 }
 @media(max-width:599px) and (max-height:700px){
   /* Le logo masque ne suffisait pas (pendule du joueur a 546 px pour 548) :
@@ -1777,6 +1778,61 @@ html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(224,169,63
 .bx-carte:active .bx-medaille{transform:scale(.95)}
 html[data-mouvement="calme"] .bx-piece3d,html[data-mouvement="calme"] .bx-rayons,html[data-mouvement="calme"] .bx-etincelle{animation:none!important}
 @media(prefers-reduced-motion:reduce){.bx-piece3d,.bx-rayons,.bx-halo,.bx-etincelle,.bx-reflet{animation:none!important}}
+
+/* Menu (2026-11-15, voir menu.js) : bouton a trois barres dans l'en-tete,
+   tiroir qui glisse depuis la droite. Le point laiton signale une nouveaute
+   pas encore lue. Sous la fenetre Bravo (z-index 210), qui sert aussi de
+   fiche de badge depuis le tiroir. */
+.burger{flex:none;position:relative;width:44px;height:44px;margin-left:auto;padding:0;border-radius:8px;border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);cursor:pointer;display:grid;place-items:center;transition:transform var(--duree-appui) var(--courbe-ressort),background-color var(--duree-courte)}
+.burger:active{transform:scale(.94)}
+@media(hover:hover){.burger:hover{background-color:var(--raise)}}
+.burger:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.burger-barres{display:grid;gap:4px;width:18px}
+@media(max-width:599px){.burger{width:40px;height:28px}.burger-barres{gap:3.5px;width:16px}.burger::before{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}.burger[aria-expanded="true"] .burger-barres i:nth-child(1){transform:translateY(5.5px) rotate(45deg)}.burger[aria-expanded="true"] .burger-barres i:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}}
+.burger-barres i{display:block;height:2px;border-radius:2px;background-color:currentColor;transition:transform var(--duree-courte) var(--courbe-sortie),opacity var(--duree-courte)}
+.burger[aria-expanded="true"] .burger-barres i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] .burger-barres i:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] .burger-barres i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.burger-point{width:9px;height:9px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 2px var(--ink)}
+.burger .burger-point{position:absolute;top:-3px;right:-3px}
+.burger-point[hidden]{display:none}
+.tiroir{position:fixed;inset:0;z-index:200}
+.tiroir[hidden]{display:none}
+.tiroir-voile{position:absolute;inset:0;background:rgba(10,14,13,.6);opacity:0;transition:opacity var(--duree-moyenne) var(--courbe-sortie)}
+.tiroir-panneau{position:absolute;top:0;right:0;bottom:0;width:min(360px,88vw);display:flex;flex-direction:column;background-color:var(--slate);border-left:1px solid var(--rule);box-shadow:var(--e2);transform:translateX(100%);transition:transform var(--duree-moyenne) var(--courbe-sortie)}
+.tiroir.ouvert .tiroir-voile{opacity:1}
+.tiroir.ouvert .tiroir-panneau{transform:none}
+html.menu-ouvert{overflow:hidden}
+.tiroir-tete{display:flex;align-items:center;gap:8px;padding:12px 12px 8px 16px;border-bottom:1px solid var(--rule)}
+.tiroir-tete h2{flex:1;margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:21px;font-weight:600}
+.tiroir-bouton{width:40px;height:40px;padding:0;border-radius:8px;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);font:inherit;font-size:22px;line-height:1;cursor:pointer}
+.tiroir-bouton[hidden]{display:none}
+.tiroir-bouton:focus-visible,.tiroir-lien:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
+.tiroir-vue{flex:1;overflow-y:auto;padding:6px 10px 24px;overscroll-behavior:contain}
+.tiroir-vue[hidden]{display:none}
+.tiroir-section{margin:16px 8px 6px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}
+.tiroir-lien{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:46px;padding:10px 12px;border:0;border-radius:8px;background:none;color:var(--chalk);font:inherit;font-size:15px;text-align:left;cursor:pointer;transition:background-color var(--duree-courte)}
+@media(hover:hover){.tiroir-lien:hover{background-color:var(--raise)}}
+.tiroir-lien[data-vue]::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
+.tiroir-lien[data-vue] .burger-point,.tiroir-detail{margin-left:auto}
+.tiroir-detail{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brass)}
+.tiroir .langswitch{border:0;background:none}
+.tiroir .langswitch summary{display:none}
+.tiroir .langmenu{position:static;display:grid;grid-template-columns:1fr 1fr;gap:2px;min-width:0;padding:0;border:0;background:none;box-shadow:none;animation:none!important}
+.tiroir .langmenu a{padding:10px 12px;font-size:14px}
+.menu-tuiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:8px}
+.menu-tuile{display:flex;flex-direction:column;gap:4px;padding:14px 12px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule)}
+.menu-tuile b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
+.menu-tuile span{font-size:12px;color:var(--sage);line-height:1.3}
+#menuBadgeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:12px 6px;padding-top:6px}
+.menu-nouveaute{position:relative;margin:8px 4px 0;padding:12px 14px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule)}
+.menu-nouveaute.neuve{border-color:rgba(224,169,59,.55)}
+.menu-nouveaute.neuve::before{content:"";position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background-color:var(--brass)}
+.menu-nouveaute time{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--sage)}
+.menu-nouveaute h3{margin:4px 0 4px;font-size:15px;font-weight:600}
+.menu-nouveaute p{margin:0;font-size:13.5px;line-height:1.45;color:var(--chalk);opacity:.85}
+html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroir-voile{transition:none}
+@media(prefers-reduced-motion:reduce){.tiroir-panneau,.tiroir-voile{transition:none}}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -1831,7 +1887,13 @@ html[data-mouvement="calme"] .bx-piece3d,html[data-mouvement="calme"] .bx-rayons
          d'accueil de chaque langue, repliee derriere le code de la langue
          courante. Deux boutons tenaient dans l'entete, six non. Pose par
          build_site.js ; le # suit le lien (voir ui3.js). -->
-    <!--__LANGSWITCH__-->
+    <!-- Menu (2026-11-15) : le selecteur de langue a rejoint le tiroir du
+         menu, avec les statistiques, les badges, les nouveautes et les
+         reglages (voir menu.js). -->
+    <button type="button" class="burger" id="btnMenu" aria-expanded="false" aria-controls="menuTiroir" aria-label="Menu" data-t-label="Menu">
+      <span class="burger-barres" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="burger-point" id="btnMenuPoint" hidden></span>
+    </button>
     <!-- Barre passee du patron "onglets" au patron "navigation" le
          2026-09-05. Un role="tablist" promet a un lecteur d'ecran des
          panneaux autonomes (role="tabpanel"), chacun contenant tout le
@@ -2921,6 +2983,34 @@ html[data-mouvement="calme"] .bx-piece3d,html[data-mouvement="calme"] .bx-rayons
   <!-- Felicitations pour un badge gagne : voir bravoAnnoncer(), ui2.js. La
        medaille reprend le signe de l'elephant (ds/signe.svg) et les couleurs
        du site ; les petits carres rappellent les cases de l'echiquier. -->
+  <div class="tiroir" id="menuTiroir" hidden>
+    <div class="tiroir-voile" data-fermer></div>
+    <aside class="tiroir-panneau" role="dialog" aria-modal="true" aria-labelledby="menuTitre">
+      <div class="tiroir-tete">
+        <button type="button" class="tiroir-bouton" id="menuRetour" aria-label="Back" data-t-label="Back" hidden>&#8249;</button>
+        <h2 id="menuTitre">Menu</h2>
+        <button type="button" class="tiroir-bouton" id="menuFermer" aria-label="Close menu" data-t-label="Close menu">&times;</button>
+      </div>
+      <div class="tiroir-vue" id="menuAccueil">
+        <p class="tiroir-section" data-t="My progress">My progress</p>
+        <button type="button" class="tiroir-lien" data-vue="stats"><span data-t="Statistics">Statistics</span><span class="tiroir-detail" id="menuResume"></span></button>
+        <button type="button" class="tiroir-lien" data-vue="badges"><span data-t="Badges">Badges</span><span class="tiroir-detail" id="menuBadgesCompte"></span></button>
+        <button type="button" class="tiroir-lien" data-vue="nouveautes"><span data-t="What's new">What's new</span><span class="burger-point" id="menuNouveau" hidden></span></button>
+        <p class="tiroir-section" data-t="Settings">Settings</p>
+        <button type="button" class="tiroir-lien" data-aller="prefs"><span data-t="Preferences">Preferences</span></button>
+        <button type="button" class="tiroir-lien" data-aller="access"><span data-t="Accessibility">Accessibility</span></button>
+        <p class="tiroir-section" data-t="Language">Language</p>
+        <!--__LANGSWITCH__-->
+        <p class="tiroir-section" data-t="About">About</p>
+        <button type="button" class="tiroir-lien" data-aller="legal"><span data-t="Legal notice">Legal notice</span></button>
+        <button type="button" class="tiroir-lien" data-aller="privacy"><span data-t="Privacy">Privacy</span></button>
+      </div>
+      <div class="tiroir-vue" id="menuStats" hidden></div>
+      <div class="tiroir-vue" id="menuBadges" hidden><div class="badges" id="menuBadgeGrid"></div></div>
+      <div class="tiroir-vue" id="menuNouveautes" hidden></div>
+    </aside>
+  </div>
+
   <div class="bravo" id="bravo" role="dialog" aria-modal="true" aria-labelledby="bravoTitre" aria-describedby="bravoNoms" hidden>
     <div class="bravo-fenetre">
       <!-- Medaille illustree (2026-11-15, voir badges.js) : elle tombe en

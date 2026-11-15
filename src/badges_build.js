@@ -56,7 +56,7 @@ function conditions(code, t) {
     /* Jour special sans condition ecrite : la date, au format de la langue
        ("6 janvier", "6. Januar", "6 января"). */
     else if ((r = id.match(/^fete_(\d\d)(\d\d)$/)) && !e[1]) {
-      const loc = (PAR_CODE[code] && PAR_CODE[code].intl) || "en-GB";
+      const loc = code === "en" ? "en-GB" : (PAR_CODE[code] && PAR_CODE[code].intl) || "en-GB";
       const date = new Intl.DateTimeFormat(loc, { day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2024, +r[1] - 1, +r[2])));
       e[1] = f(g("cond:fete"), { date });
     }

@@ -118,9 +118,9 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   T("medaille gagnee affichee en grand", !!$("bravoSocle").querySelector(".bx-medaille.bx-or"));
   T("bouton Suivant tant qu'il reste des pages", $("bravoOk").textContent === "Suivant", $("bravoOk").textContent);
   T("focus sur le bouton", w.document.activeElement === $("bravoOk"));
-  const vus = [$("bravoNoms").textContent];
-  for (let i = 1; i < pages; i++) { $("bravoOk").click(); vus.push($("bravoNoms").textContent); }
-  T("badges des etapes annonces aussi", vus.includes("Premiers pas") && vus.includes("Épingle"), vus.join(", "));
+  const vusPages = [$("bravoNoms").textContent];
+  for (let i = 1; i < pages; i++) { $("bravoOk").click(); vusPages.push($("bravoNoms").textContent); }
+  T("badges des etapes annonces aussi", vusPages.includes("Premiers pas") && vusPages.includes("Épingle"), vusPages.join(", "));
   T("bouton traduit sur la derniere page", $("bravoOk").textContent === "Continuer", $("bravoOk").textContent);
   T("toujours ouverte avant la derniere page", bravo.hidden === false);
   $("bravoOk").click();

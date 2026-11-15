@@ -111,6 +111,16 @@ const PERSO = {
     <ellipse cx="-18" cy="1" rx="5.4" ry="7" transform="rotate(-18 -18 1)"/>
     <ellipse cx="-21.5" cy="-6" rx="3.6" ry="1.8" transform="rotate(-35 -21.5 -6)"/>
     <circle cx="-17" cy="-0.5" r="1.4" style="fill:var(--oeil)"/></g>`,
+  /* Cornet de frites (15/11, journee de la frite belge du 1er aout). */
+  frites: `<g fill="currentColor">
+    <rect x="-13" y="-19" width="4.4" height="20" rx="1.4" transform="rotate(-16 -10.8 -1)"/>
+    <rect x="-7.6" y="-23" width="4.4" height="24" rx="1.4" transform="rotate(-7 -5.4 -1)"/>
+    <rect x="-2.2" y="-24.5" width="4.4" height="25" rx="1.4"/>
+    <rect x="3.2" y="-22" width="4.4" height="23" rx="1.4" transform="rotate(8 5.4 -1)"/>
+    <rect x="8.4" y="-18" width="4.4" height="19" rx="1.4" transform="rotate(17 10.6 -1)"/>
+    <path d="M-17 -4h34l-2 1.5h-30z" style="fill:var(--oeil)"/>
+    <path d="M-15.5 -3h31l-9.5 26h-12z"/>
+    <path style="fill:none;stroke:var(--oeil);stroke-width:1.4;stroke-linecap:round" opacity=".55" d="M-9 2l4.5 17M9 2l-4.5 17"/></g>`,
   /* Brochette : une pique en biais, des pions enfiles. */
   pique: n => `<g transform="rotate(-35)"><rect x="-24" y="-1.6" width="48" height="3.2" rx="1.6" fill="currentColor"/>${
     [0, 1, 2].slice(0, n).map(i => P("p", `translate(${(i - (n - 1) / 2) * (n === 3 ? 14 : 17)} 0) rotate(35) scale(${n === 3 ? .62 : .74}) translate(0 -4)`)).join("")}</g>`,
@@ -332,6 +342,7 @@ const S = {
   fete_0429: [P("n", G) + A("music-notes-simple"), "jade"],
   fete_0621: [F("guitar"), "jade"],
   fete_0717: [P("p", G) + A("smiley-wink"), "jade"],
+  fete_0801: [PERSO.frites, "jade"],
   fete_0812: [E(), "jade"],
   fete_1005: [F("chalkboard-teacher"), "jade"],
   fete_1016: [F("bowl-steam"), "jade"],

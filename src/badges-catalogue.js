@@ -410,6 +410,8 @@ const BADGES_CATALOGUE = [
    "La FIDE a été fondée à Paris le 20 juillet 1924. Depuis 2019, l'ONU célèbre ce jour comme la Journée mondiale des échecs."],
   ["fete_0723","jours_speciaux","Jouer le 23 juillet","Judit","une étoile filante",
    "Judit Polgár, née le 23 juillet 1976, devint grand maître à 15 ans. Elle reste la joueuse la plus forte de l'histoire."],
+  ["fete_0801","jours_speciaux","Jouer le 1er août","Mat en deux bains","un cornet de frites",
+   "Le 1er août, c'est la Journée internationale de la frite belge. Les vraies frites belges cuisent deux fois, comme un mat en deux coups : un premier bain pour les cuire, un second pour les dorer."],
   ["fete_0812","jours_speciaux","Jouer le 12 août","Cousins éléphants","l'éléphant du logo",
    "Journée mondiale de l'éléphant ! Chang veut dire éléphant en thaï, et le fou était un éléphant dans les échecs anciens. Notre mascotte salue ses cousins."],
   ["fete_0901","jours_speciaux","Jouer le 1er septembre","Reykjavik","un volcan",

@@ -164,6 +164,7 @@ if(typeof registerWrong==="function"){const av=registerWrong;registerWrong=funct
       bxActivite();
       if(h<5)bxMarquer("ex_hibou");else if(h<7)bxMarquer("ex_coq");
       if(typeof puzzleTries==="number"&&puzzleTries>0)bxMarquer("ex_tetu");
+      if(typeof puzzleTries==="number"&&puzzleTries>=3)bxMarquer("lec_acharne");
       else b.c.sansErreur=(b.c.sansErreur||0)+1;
       if(bxIndice||hintShown)b.c.sansIndice=0;else b.c.sansIndice=(b.c.sansIndice||0)+1;
       if((b.c.sansErreur||0)>=10)bxMarquer("ex_huit_dames");
@@ -206,6 +207,17 @@ if(typeof registerWrong==="function"){const av=registerWrong;registerWrong=funct
       const b=bxEtat(),k=resultInfo.kind;
       bxActivite();
       if(k==="draw")bxMarquer("jeu_nulle");
+      /* Lecons apprises (2026-11-15) : la defaite devient un apprentissage. */
+      if(botLevel===4)bxMarquer("lec_courage");
+      b.c.perduNiv=b.c.perduNiv&&typeof b.c.perduNiv==="object"?b.c.perduNiv:{};
+      if(k==="lose"){
+        bxMarquer("lec_premiere");
+        b.c.perduNiv[botLevel]=1;
+        b.c.defaite=Date.now();
+        if(isFlagged())bxMarquer("lec_temps");
+        if(game.isCheckmate()&&Math.ceil(gameUci.length/2)<10)bxMarquer("lec_berger");
+      }
+      if(k==="win"&&b.c.perduNiv[botLevel])bxMarquer("lec_remontada");
       if(k==="win"){
         b.c.vic=(b.c.vic||0)+1;
         bxMarquer("jeu_victoire");
@@ -270,7 +282,32 @@ window.addEventListener("chang64:makruk",e=>{
   }
   return r;
 };}
-{const an=$("resultAnalyse");if(an)an.addEventListener("click",()=>{if(bxMarquer("ex_analyse"))bxVerifier();});}
+{const an=$("resultAnalyse");if(an)an.addEventListener("click",()=>{
+  const perdue=resultInfo&&resultInfo.kind==="lose";
+  const a=bxMarquer("ex_analyse"),l=perdue&&bxMarquer("lec_analyse");
+  if(a||l)bxVerifier();
+});}
+/* Abandon d'une partie contre l'ordinateur ; nouvelle partie lancee moins
+   de deux minutes apres une defaite ; serie de jours qui repart apres une
+   coupure. */
+if(typeof resignGame==="function"){const av=resignGame;resignGame=function(){
+  const avant=resigned,r=av.apply(this,arguments);
+  if(avant===null&&resigned!==null){bxMarquer("lec_abandon");bxVerifier();}
+  return r;
+};}
+if(typeof newGame==="function"){const av=newGame;newGame=function(){
+  const b=bxEtat();
+  if(b.c.defaite&&Date.now()-b.c.defaite<120000){b.c.defaite=0;bxMarquer("lec_rancunier");}
+  const r=av.apply(this,arguments);
+  bxVerifier();
+  return r;
+};}
+if(typeof bumpStreak==="function"){const av=bumpStreak;bumpStreak=function(){
+  ensureProgFields();
+  const auj=bxCle(new Date()),hier=new Date();hier.setDate(hier.getDate()-1);
+  if(prog.lastDay&&prog.lastDay!==auj&&prog.lastDay!==bxCle(hier))bxMarquer("lec_reprise");
+  return av.apply(this,arguments);
+};}
 /* Au chargement : langues essayees, application installee. Apres la lecture
    de la progression (loadProg est asynchrone), d'ou le delai. */
 setTimeout(()=>{
@@ -306,23 +343,38 @@ setTimeout(()=>{
    metal egal, l'ordre des familles (les exercices avant les jours). */
 const BX_RANG={jade:4,or:3,argent:2,bronze:1};
 function bxTrier(liste){
-  const rang=b=>(bxMedailles&&bxMedailles[b.id]?BX_RANG[bxMedailles[b.id][0]]||0:0);
+  /* Les lecons apprises passent toujours apres les badges de victoire. */
+  const rang=b=>(b.f==="lecons"?-1:0)*10+(bxMedailles&&bxMedailles[b.id]?BX_RANG[bxMedailles[b.id][0]]||0:0);
   const ordre=b=>BADGES.findIndex(x=>x.id===b.id);
   return liste.slice().sort((a,b)=>rang(b)-rang(a)||ordre(a)-ordre(b));
 }
-bravoRemplir=function(){
-  const r=$("bravo"),f=bxTrier(bravoFile||[]);
-  const socle=$("bravoSocle"),noms=$("bravoNoms"),tx=$("bravoTexte"),autres=$("bravoAutres");
-  if(!socle||!noms)return;
-  const premier=f[0];
+/* Une medaille a la fois (2026-11-15, choix d'Alexandre) : chaque badge a
+   sa page, avec son nom et son anecdote ; "Suivant" tourne la page, et
+   "Continuer" n'apparait que sur la derniere. Sous le texte, la rangee des
+   petites medailles montre ou l'on en est (celle de la page en cours est
+   allumee). Echap ou un clic a cote ferment tout. */
+let bxPages=[],bxPage=0;
+function bxAfficherPage(premiere){
+  const r=$("bravo"),b=bxPages[bxPage];if(!r||!b)return;
+  const socle=$("bravoSocle"),noms=$("bravoNoms"),tx=$("bravoTexte"),autres=$("bravoAutres"),ok=$("bravoOk");
   r.classList.remove("bx-fiche");
-  poserHtml(socle.querySelector(".bx-piece3d"),premier?bxMedaille(premier.id,true):"");
+  poserHtml(socle.querySelector(".bx-piece3d"),bxMedaille(b.id,true));
   poserHtml(noms,"");
-  for(const b of f){const d=document.createElement("div");d.textContent=badgeLabel(b);noms.appendChild(d);}
-  if(tx){tx.textContent=f.length===1?bxTexte(premier.id,2):"";tx.classList.toggle("hide",f.length!==1);}
-  if(autres)poserHtml(autres,f.slice(1,6).map(b=>bxMedaille(b.id,true)).join(""));
+  const d=document.createElement("div");d.textContent=badgeLabel(b);noms.appendChild(d);
+  tx.textContent=bxTexte(b.id,2);tx.classList.toggle("hide",!tx.textContent);
+  poserHtml(autres,bxPages.length>1?bxPages.map((x,i)=>'<span class="bx-page'+(i===bxPage?" en-cours":"")+'">'+bxMedaille(x.id,true)+"</span>").join(""):"");
+  autres.setAttribute("aria-hidden","true");
+  const dernier=bxPage>=bxPages.length-1;
+  ok.textContent=dernier?t("Continue"):t("Next");
+  ok.onclick=dernier?bravoFermer:()=>{bxPage++;bxAfficherPage(false);ok.focus();};
   $("bravoTitre").textContent=t("Congratulations");
-  r.classList.remove("bx-joue");void r.offsetWidth;r.classList.add("bx-joue");
+  r.classList.remove("bx-joue","bx-tourne");void r.offsetWidth;
+  r.classList.add(premiere?"bx-joue":"bx-tourne");
+  if(typeof SON!=="undefined"&&SON.medaille)SON.medaille(premiere&&!mouvementCalme()?0.95:0.05,!premiere);
+}
+bravoRemplir=function(){
+  bxPages=bxTrier(bravoFile||[]);bxPage=0;
+  bxAfficherPage(true);
 };
 /* Fiche d'un badge, depuis la collection : meme fenetre, sans la chute. */
 function bxFiche(id){
@@ -344,7 +396,8 @@ function bxFiche(id){
   $("bravoNoms").appendChild(c);
   const tx=$("bravoTexte");tx.textContent=bxTexte(id,2);tx.classList.remove("hide");
   poserHtml($("bravoAutres"),"");
-  r.classList.add("bx-fiche");r.classList.remove("bx-joue");
+  $("bravoOk").textContent=t("Continue");$("bravoOk").onclick=bravoFermer;
+  r.classList.add("bx-fiche");r.classList.remove("bx-joue","bx-tourne");
   r.hidden=false;
   if(gagne){void r.offsetWidth;r.classList.add("bx-brille");setTimeout(()=>r.classList.remove("bx-brille"),1300);}
   $("bravoOk").focus();

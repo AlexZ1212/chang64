@@ -107,16 +107,22 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   await attendre(1100);
   T("felicitations ouvertes", bravo.hidden === false);
   T("titre traduit", $("bravoTitre").textContent === "Félicitations", $("bravoTitre").textContent);
-  T("bouton traduit", $("bravoOk").textContent === "Continuer", $("bravoOk").textContent);
   /* Medailles illustrees (2026-11-15) : chaque etape du parcours a desormais
-     son badge, annonce dans la meme fenetre que "Diplome" (le badge du
-     parcours termine) ; la premiere medaille en grand, les autres en petit. */
-  const noms = [...$("bravoNoms").children].map(x => x.textContent);
-  T("nom du badge affiche", noms.includes("Diplôme"), noms.join(", "));
-  T("badges des etapes annonces aussi", noms.includes("Premiers pas") && noms.includes("Épingle"), noms.join(", "));
-  T("medaille gagnee affichee en grand", !!$("bravoSocle").querySelector(".bx-medaille:not(.bx-ombre)"));
-  T("autres medailles en petit", $("bravoAutres").querySelectorAll(".bx-medaille").length >= 1);
+     son badge, annonce avec "Diplome" (le parcours termine). Une medaille par
+     page, la plus precieuse d'abord (Diplome est en or) : son nom et son
+     anecdote, puis "Suivant" jusqu'a la derniere page, qui dit "Continuer". */
+  const pages = $("bravoAutres").querySelectorAll(".bx-page").length;
+  T("une page par badge gagne", pages >= 7, String(pages));
+  T("nom du badge affiche", $("bravoNoms").textContent === "Diplôme", $("bravoNoms").textContent);
+  T("anecdote du badge affichee", $("bravoTexte").textContent.length > 20, $("bravoTexte").textContent);
+  T("medaille gagnee affichee en grand", !!$("bravoSocle").querySelector(".bx-medaille.bx-or"));
+  T("bouton Suivant tant qu'il reste des pages", $("bravoOk").textContent === "Suivant", $("bravoOk").textContent);
   T("focus sur le bouton", w.document.activeElement === $("bravoOk"));
+  const vus = [$("bravoNoms").textContent];
+  for (let i = 1; i < pages; i++) { $("bravoOk").click(); vus.push($("bravoNoms").textContent); }
+  T("badges des etapes annonces aussi", vus.includes("Premiers pas") && vus.includes("Épingle"), vus.join(", "));
+  T("bouton traduit sur la derniere page", $("bravoOk").textContent === "Continuer", $("bravoOk").textContent);
+  T("toujours ouverte avant la derniere page", bravo.hidden === false);
   $("bravoOk").click();
   T("fermee par le bouton", bravo.hidden === true);
   ev("debutBadge()");
@@ -125,7 +131,7 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
 
   ev("bravoAnnoncer([BADGES[0],BADGES[9]])");
   await attendre(1100);
-  T("deux badges dans la meme fenetre", $("bravoNoms").children.length === 2, String($("bravoNoms").children.length));
+  T("deux badges dans la meme fenetre, deux pages", $("bravoAutres").querySelectorAll(".bx-page").length === 2, String($("bravoAutres").querySelectorAll(".bx-page").length));
   w.document.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
   T("fermee par Echap", bravo.hidden === true);
 

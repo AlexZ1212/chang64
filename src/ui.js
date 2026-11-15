@@ -1002,13 +1002,22 @@ function mouvementCalme(){return prefersReducedMotion()||!animOn;}
    coup restaure au chargement de la page ne sonne pas en differe). */
 let sonOn=true;
 const SON=(function(){
-  let ctx=null,bruit=null;
+  let ctx=null,bruit=null,sortie=null;
+  /* Volume general (2026-11-15, retour d'Alexandre : "avec un volume un peu
+     plus fort c'est mieux") : tous les sons passent par une sortie commune,
+     relevee de 5 dB environ, puis par un compresseur qui evite la saturation
+     quand plusieurs sons se superposent (accord du mat, fanfare de medaille). */
+  const VOLUME_GENERAL=1.8;
   function reveiller(){
     try{
       if(!ctx){
         const AC=window.AudioContext||window.webkitAudioContext;
         if(!AC)return;
         ctx=new AC();
+        const comp=ctx.createDynamicsCompressor();
+        comp.threshold.value=-10;comp.knee.value=8;comp.ratio.value=4;comp.attack.value=0.003;comp.release.value=0.2;
+        sortie=ctx.createGain();sortie.gain.value=VOLUME_GENERAL;
+        sortie.connect(comp);comp.connect(ctx.destination);
         /* Impulsion de 4 ms, legerement irreguliere : c'est elle qui fait
            vibrer les resonances du choc des pieces. */
         bruit=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.004),ctx.sampleRate);
@@ -1036,7 +1045,7 @@ const SON=(function(){
       const g=ctx.createGain();g.gain.value=m[2];
       src.connect(b);b.connect(g);g.connect(lp);
     }
-    lp.connect(s);s.connect(ctx.destination);
+    lp.connect(s);s.connect(sortie);
     src.start(t0);
   }
   /* [frequence, Q, poids] de chaque resonance */
@@ -1053,7 +1062,7 @@ const SON=(function(){
     g.gain.setValueAtTime(0.0001,t0);
     g.gain.exponentialRampToValueAtTime(vol,t0+0.01);
     g.gain.exponentialRampToValueAtTime(0.0001,t0+duree);
-    o.connect(g);g.connect(ctx.destination);
+    o.connect(g);g.connect(sortie);
     o.start(t0);o.stop(t0+duree+0.02);
   }
   const MELODIES={
@@ -1091,8 +1100,20 @@ const SON=(function(){
       g.gain.setValueAtTime(0.0001,t0);
       g.gain.exponentialRampToValueAtTime(0.09,t0+0.015);
       g.gain.exponentialRampToValueAtTime(0.0001,t0+0.26);
-      o.connect(g);g.connect(ctx.destination);
+      o.connect(g);g.connect(sortie);
       o.start(t0);o.stop(t0+0.3);
+    },
+    /* Medaille gagnee (2026-11-15) : un carillon clair qui monte (do, mi,
+       sol, do) et tinte longtemps, au moment ou la medaille se pose
+       (delai : la chute dure un peu moins d'une seconde). leger : la page
+       suivante d'une serie de badges, deux notes seulement. */
+    medaille(delai,leger){
+      if(!pret())return;
+      const t0=ctx.currentTime+(delai||0);
+      if(leger){note(t0,1318.51,0.035,0.6,"sine");note(t0+0.08,1975.53,0.03,0.8,"sine");return;}
+      note(t0,523.25,0.05,0.9,"triangle");
+      [1046.5,1318.51,1567.98,2093].forEach((f,i)=>note(t0+0.07*i,f,0.04,1.1+0.15*i,"sine"));
+      note(t0+0.32,3135.96,0.012,0.9,"sine");
     },
     debut(){
       if(!pret())return;

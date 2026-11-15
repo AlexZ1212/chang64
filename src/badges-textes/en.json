@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Won on {date}", "To unlock: {c}": "To unlock: {c}", "famille:resolus": "Puzzles solved", "famille:serie": "Days in a row", "famille:jours": "Days played in total", "famille:classement": "Rating", "famille:themes": "Tactical themes", "famille:finales": "Endgames", "famille:ordinateur": "Games against the computer", "famille:ami": "Playing with a friend", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinates", "famille:debut": "I'm a beginner", "famille:makruk": "Makruk", "famille:semaine": "Days of the week", "famille:du_jour": "Puzzle of the day", "famille:jours_speciaux": "Special days", "famille:exploits": "Feats and curiosities", "famille:defis": "Weekly challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level", "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}"
+ "_ui": { "Won on {date}": "Won on {date}", "To unlock: {c}": "To unlock: {c}", "famille:resolus": "Puzzles solved", "famille:serie": "Days in a row", "famille:jours": "Days played in total", "famille:classement": "Rating", "famille:themes": "Tactical themes", "famille:finales": "Endgames", "famille:ordinateur": "Games against the computer", "famille:ami": "Playing with a friend", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinates", "famille:debut": "I'm a beginner", "famille:makruk": "Makruk", "famille:semaine": "Days of the week", "famille:du_jour": "Puzzle of the day", "famille:jours_speciaux": "Special days", "famille:exploits": "Feats and curiosities", "famille:defis": "Weekly challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level", "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "famille:lecons": "Lessons learnt"
  },
  "solved_1": ["First move", "1 puzzle solved", "One down! On the very first move, White already has 20 choices: 16 pawn moves and 4 knight moves."
 ],
@@ -364,5 +364,55 @@
  "defi_10": ["Challenge collector", "10 challenges completed", "Ten challenges. Every week brings three new ones."
 ],
  "defi_52": ["A year of challenges", "52 challenges completed", "Fifty-two challenges, as many as there are weeks in a year."
+],
+ "fete_0106": ["Kings' Day", "", "It's Epiphany, Three Kings' Day. On the board there are only two kings, and they can never stand on neighbouring squares."
+],
+ "fete_0221": ["Mother tongue", "", "International Mother Language Day. The knight is a horse in Russian (конь) and in Turkish (at), but a jumper in German (Springer)."
+],
+ "fete_0308": ["Queen of the game", "", "International Women's Day. The most powerful piece on the board is a queen, and in 2002 Judit Polgár beat Garry Kasparov."
+],
+ "fete_0314": ["Pi Day", "", "Today we celebrate π, 3.14159… and its endless decimals. Chess prefers round numbers: 8 × 8 = 64 squares."
+],
+ "fete_0320": ["Happiness", "", "International Day of Happiness. Happiness in chess? That little click when you finally see the right move."
+],
+ "fete_0321": ["Poet", "", "World Poetry Day. Caïssa, the goddess of chess, was born in a poem: William Jones invented her in 1763."
+],
+ "fete_0423": ["Chess book", "", "World Book Day. One of the very first books printed in English, around 1474 by William Caxton, was about chess."
+],
+ "fete_0429": ["Knight's dance", "", "International Dance Day. The knight has its own step: two squares one way, one the other, and a jump over everyone."
+],
+ "fete_0621": ["Music Day", "", "World Music Day. The composer Sergei Prokofiev loved chess: in 1914 he beat Capablanca in a simultaneous exhibition."
+],
+ "fete_0717": ["♟", "", "World Emoji Day. The pawn has had its own since 2018: ♟. It is the only chess piece to get that honour."
+],
+ "fete_0812": ["Elephant cousins", "", "World Elephant Day! Chang means elephant in Thai, and the bishop was an elephant in early chess. Our mascot greets its cousins."
+],
+ "fete_1005": ["Schoolteacher", "", "World Teachers' Day. In Armenia, chess has been a compulsory school subject since 2011."
+],
+ "fete_1016": ["Good fork", "", "World Food Day. The perfect day for a good fork… a knight fork, preferably."
+],
+ "fete_1113": ["J'adoube", "", "World Kindness Day. In chess you say j'adoube, I adjust, before straightening a piece without moving it: a player's courtesy."
+],
+ "fete_1120": ["Little prodigy", "", "World Children's Day. Magnus Carlsen became a grandmaster at 13. And when did you start?"
+],
+ "lec_premiere": ["Even champions", "First loss against the computer", "Losing is part of the game. In 1997, Garry Kasparov himself lost a match to the computer Deep Blue."
+],
+ "lec_analyse": ["Lesson learnt", "Review a lost game", "Strong players study their losses closely: that is where you learn the most. You just did the same."
+],
+ "lec_remontada": ["Comeback", "Beat a level that had beaten you", "Beaten yesterday, winner today. Before 1972, Fischer had never beaten Spassky; that year, he took his world title."
+],
+ "lec_rancunier": ["No hard feelings", "Play again right after a loss", "Set up the pieces and start again. Playing again is how you improve."
+],
+ "lec_abandon": ["Graceful resignation", "Resign a lost game", "Resigning a hopeless position is a mark of respect for your opponent, and grandmasters do it all the time."
+],
+ "lec_berger": ["Fell for it", "Get checkmated in under 10 moves", "The most famous trap, Scholar's mate, targets the f7 pawn. The cure: defend it early, for example with your knight."
+],
+ "lec_temps": ["Flag fell, your side", "Lose on time", "The clock is part of the game: even world champions have lost tournament games on time."
+],
+ "lec_courage": ["Brave", "Play a game at the Tough level", "Taking on someone stronger is the best school. Won or lost, this game taught you something."
+],
+ "lec_acharne": ["Relentless", "Solve a puzzle after 3 mistakes", "Three missed tries, and you did not give up. Searching longer fixes the solution better in your memory."
+],
+ "lec_reprise": ["Fresh start", "Start a streak again after breaking it", "A broken streak erases nothing you have learnt. What matters most is coming back."
 ]
 }

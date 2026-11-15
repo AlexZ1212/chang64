@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Gewonnen am {date}", "To unlock: {c}": "So bekommst du ihn: {c}", "famille:resolus": "Gelöste Aufgaben", "famille:serie": "Tage am Stück", "famille:jours": "Gespielte Tage insgesamt", "famille:classement": "Wertung", "famille:themes": "Taktische Motive", "famille:finales": "Endspiele", "famille:ordinateur": "Partien gegen den Computer", "famille:ami": "Mit Freunden spielen", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinaten", "famille:debut": "Ich bin Anfänger", "famille:makruk": "Makruk", "famille:semaine": "Wochentage", "famille:du_jour": "Aufgabe des Tages", "famille:jours_speciaux": "Besondere Tage", "famille:exploits": "Glanzleistungen und Kuriositäten", "famille:defis": "Wochen-Challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Sieg auf der Stufe {niveau}", "cond:mk": "Makruk-Sieg, Stufe {niveau}", "cond:eg": "Endspiel {finale} gewonnen", "cond:etape": "Schritt {n}: {titre}"
+ "_ui": { "Won on {date}": "Gewonnen am {date}", "To unlock: {c}": "So bekommst du ihn: {c}", "famille:resolus": "Gelöste Aufgaben", "famille:serie": "Tage am Stück", "famille:jours": "Gespielte Tage insgesamt", "famille:classement": "Wertung", "famille:themes": "Taktische Motive", "famille:finales": "Endspiele", "famille:ordinateur": "Partien gegen den Computer", "famille:ami": "Mit Freunden spielen", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinaten", "famille:debut": "Ich bin Anfänger", "famille:makruk": "Makruk", "famille:semaine": "Wochentage", "famille:du_jour": "Aufgabe des Tages", "famille:jours_speciaux": "Besondere Tage", "famille:exploits": "Glanzleistungen und Kuriositäten", "famille:defis": "Wochen-Challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Sieg auf der Stufe {niveau}", "cond:mk": "Makruk-Sieg, Stufe {niveau}", "cond:eg": "Endspiel {finale} gewonnen", "cond:etape": "Schritt {n}: {titre}", "cond:fete": "Am {date} spielen", "famille:lecons": "Gelernte Lektionen"
  },
  "solved_1": ["Erster Zug", "1 Aufgabe gelöst", "Eine geschafft! Schon beim allerersten Zug hat Weiß 20 Möglichkeiten: 16 Bauernzüge und 4 Springerzüge."
 ],
@@ -364,5 +364,55 @@
  "defi_10": ["Challenge-Sammler", "10 Challenges geschafft", "Zehn Challenges. Jede Woche bringt drei neue."
 ],
  "defi_52": ["Ein Jahr voller Challenges", "52 Challenges geschafft", "Zweiundfünfzig Challenges, so viele, wie das Jahr Wochen hat."
+],
+ "fete_0106": ["Dreikönigstag", "", "Es ist Dreikönigstag. Auf dem Brett gibt es nur zwei Könige, und sie dürfen nie auf benachbarten Feldern stehen."
+],
+ "fete_0221": ["Muttersprache", "", "Internationaler Tag der Muttersprache. Der Springer ist im Russischen (конь) und im Türkischen (at) ein Pferd, im Deutschen aber ein Springer."
+],
+ "fete_0308": ["Königin des Spiels", "", "Internationaler Frauentag. Die stärkste Figur auf dem Brett ist eine Dame, und 2002 besiegte Judit Polgár Garri Kasparow."
+],
+ "fete_0314": ["Pi-Tag", "", "Heute feiern wir π, 3,14159… mit seinen endlosen Nachkommastellen. Schach mag lieber runde Zahlen: 8 × 8 = 64 Felder."
+],
+ "fete_0320": ["Glück", "", "Internationaler Tag des Glücks. Glück im Schach? Dieses kleine Klick, wenn man endlich den richtigen Zug sieht."
+],
+ "fete_0321": ["Dichter", "", "Welttag der Poesie. Caissa, die Göttin des Schachs, entstand in einem Gedicht: William Jones erfand sie 1763."
+],
+ "fete_0423": ["Schachbuch", "", "Welttag des Buches. Eines der allerersten auf Englisch gedruckten Bücher, um 1474 von William Caxton, handelte vom Schach."
+],
+ "fete_0429": ["Springertanz", "", "Welttag des Tanzes. Der Springer hat seinen eigenen Schritt: zwei Felder in eine Richtung, eines in die andere, und ein Sprung über alle hinweg."
+],
+ "fete_0621": ["Fête de la Musique", "", "Fête de la Musique. Der Komponist Sergei Prokofjew liebte Schach: 1914 besiegte er Capablanca in einem Simultanspiel."
+],
+ "fete_0717": ["♟", "", "Welt-Emoji-Tag. Der Bauer hat seit 2018 sein eigenes: ♟. Als einzige Schachfigur bekam er diese Ehre."
+],
+ "fete_0812": ["Elefantenvettern", "", "Welt-Elefanten-Tag! Chang heißt auf Thai Elefant, und der Läufer war im alten Schach ein Elefant. Unser Maskottchen grüßt seine Vettern."
+],
+ "fete_1005": ["Schulmeister", "", "Weltlehrertag. In Armenien ist Schach seit 2011 Pflichtfach in der Schule."
+],
+ "fete_1016": ["Gute Gabel", "", "Welternährungstag. Der perfekte Tag für eine gute Gabel… am liebsten eine Springergabel."
+],
+ "fete_1113": ["J'adoube", "", "Weltnettigkeitstag. Im Schach sagt man j'adoube, ich rücke zurecht, bevor man eine Figur gerade stellt, ohne sie zu ziehen: die Höflichkeit des Spielers."
+],
+ "fete_1120": ["Kleines Wunderkind", "", "Weltkindertag. Magnus Carlsen wurde mit 13 Großmeister. Und wann hast du angefangen?"
+],
+ "lec_premiere": ["Selbst Weltmeister", "Erste Niederlage gegen den Computer", "Verlieren gehört dazu. 1997 verlor sogar Garri Kasparow einen Wettkampf gegen den Computer Deep Blue."
+],
+ "lec_analyse": ["Lektion gelernt", "Eine verlorene Partie analysieren", "Starke Spieler studieren ihre Niederlagen genau: Dort lernt man am meisten. Genau das hast du getan."
+],
+ "lec_remontada": ["Aufholjagd", "Eine Stufe schlagen, die dich geschlagen hatte", "Gestern besiegt, heute Sieger. Vor 1972 hatte Fischer Spasski nie geschlagen; in jenem Jahr nahm er ihm den WM-Titel ab."
+],
+ "lec_rancunier": ["Nicht nachtragend", "Gleich nach einer Niederlage wieder spielen", "Figuren aufstellen und von vorn anfangen. Wer wieder spielt, wird besser."
+],
+ "lec_abandon": ["Würdige Aufgabe", "Eine verlorene Partie aufgeben", "Eine aussichtslose Stellung aufzugeben ist eine Geste des Respekts vor dem Gegner, unter Großmeistern ganz üblich."
+],
+ "lec_berger": ["Reingefallen", "In weniger als 10 Zügen mattgesetzt werden", "Die berühmteste Falle, das Schäfermatt, zielt auf den Bauern f7. Die Abwehr: ihn früh decken, zum Beispiel mit dem Springer."
+],
+ "lec_temps": ["Blättchen gefallen, bei dir", "Auf Zeit verlieren", "Die Uhr gehört zum Spiel: Selbst Weltmeister haben Turnierpartien auf Zeit verloren."
+],
+ "lec_courage": ["Mutig", "Eine Partie auf der Stufe Zäh spielen", "Gegen Stärkere anzutreten ist die beste Schule. Gewonnen oder verloren, diese Partie hat dir etwas beigebracht."
+],
+ "lec_acharne": ["Unermüdlich", "Eine Aufgabe nach 3 Fehlern lösen", "Drei Fehlversuche, und du hast nicht aufgegeben. Länger zu suchen prägt die Lösung besser ins Gedächtnis ein."
+],
+ "lec_reprise": ["Neustart", "Eine Serie nach einer Unterbrechung neu beginnen", "Eine unterbrochene Serie löscht nichts von dem, was du gelernt hast. Am wichtigsten ist, wiederzukommen."
 ]
 }

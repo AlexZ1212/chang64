@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Conquistado em {date}", "To unlock: {c}": "Para conquistar: {c}", "famille:resolus": "Exercícios resolvidos", "famille:serie": "Dias seguidos", "famille:jours": "Dias jogados no total", "famille:classement": "Pontuação", "famille:themes": "Temas táticos", "famille:finales": "Finais", "famille:ordinateur": "Partidas contra o computador", "famille:ami": "Jogar com um amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Sou iniciante", "famille:makruk": "Makruk", "famille:semaine": "Dias da semana", "famille:du_jour": "Exercício do dia", "famille:jours_speciaux": "Dias especiais", "famille:exploits": "Façanhas e curiosidades", "famille:defis": "Desafios da semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vitória no nível {niveau}", "cond:mk": "Vitória no makruk, nível {niveau}", "cond:eg": "Final {finale} vencido", "cond:etape": "Etapa {n}: {titre}"
+ "_ui": { "Won on {date}": "Conquistado em {date}", "To unlock: {c}": "Para conquistar: {c}", "famille:resolus": "Exercícios resolvidos", "famille:serie": "Dias seguidos", "famille:jours": "Dias jogados no total", "famille:classement": "Pontuação", "famille:themes": "Temas táticos", "famille:finales": "Finais", "famille:ordinateur": "Partidas contra o computador", "famille:ami": "Jogar com um amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Sou iniciante", "famille:makruk": "Makruk", "famille:semaine": "Dias da semana", "famille:du_jour": "Exercício do dia", "famille:jours_speciaux": "Dias especiais", "famille:exploits": "Façanhas e curiosidades", "famille:defis": "Desafios da semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vitória no nível {niveau}", "cond:mk": "Vitória no makruk, nível {niveau}", "cond:eg": "Final {finale} vencido", "cond:etape": "Etapa {n}: {titre}", "cond:fete": "Jogar em {date}", "famille:lecons": "Lições aprendidas"
  },
  "solved_1": ["Primeiro lance", "1 exercício resolvido", "Um já foi! No primeiríssimo lance, as brancas já têm 20 opções: 16 lances de peão e 4 de cavalo."
 ],
@@ -364,5 +364,55 @@
  "defi_10": ["Colecionador de desafios", "10 desafios concluídos", "Dez desafios. Cada semana traz três novos."
 ],
  "defi_52": ["Um ano de desafios", "52 desafios concluídos", "Cinquenta e dois desafios, tantos quanto as semanas do ano."
+],
+ "fete_0106": ["Dia de Reis", "", "É a Epifania, o Dia de Reis. No tabuleiro só existem dois, e eles nunca podem ficar em casas vizinhas."
+],
+ "fete_0221": ["Língua materna", "", "Dia Internacional da Língua Materna. O cavalo é um cavalo em russo (конь) e em turco (at), mas um saltador em alemão (Springer)."
+],
+ "fete_0308": ["Rainha do jogo", "", "Dia Internacional da Mulher. A peça mais poderosa do tabuleiro é uma dama, e em 2002 Judit Polgár venceu Garry Kasparov."
+],
+ "fete_0314": ["Dia do π", "", "Hoje se comemora o π, 3,14159… e suas casas decimais infinitas. O xadrez prefere contas redondas: 8 × 8 = 64 casas."
+],
+ "fete_0320": ["Felicidade", "", "Dia Internacional da Felicidade. A felicidade no xadrez? Aquele estalo quando você finalmente vê o lance certo."
+],
+ "fete_0321": ["Poeta", "", "Dia Mundial da Poesia. Caíssa, a deusa do xadrez, nasceu num poema: William Jones a inventou em 1763."
+],
+ "fete_0423": ["Livro de xadrez", "", "Dia Mundial do Livro. Um dos primeiríssimos livros impressos em inglês, por volta de 1474 por William Caxton, era sobre xadrez."
+],
+ "fete_0429": ["Dança do cavalo", "", "Dia Internacional da Dança. O cavalo tem seu próprio passo: duas casas para um lado, uma para o outro, e um salto por cima de todo mundo."
+],
+ "fete_0621": ["Dia da Música", "", "Dia Mundial da Música. O compositor Serguei Prokofiev adorava xadrez: em 1914, venceu Capablanca numa simultânea."
+],
+ "fete_0717": ["♟", "", "Dia Mundial do Emoji. O peão tem o seu desde 2018: ♟. É a única peça de xadrez com essa honra."
+],
+ "fete_0812": ["Primos elefantes", "", "Dia Mundial do Elefante! Chang quer dizer elefante em tailandês, e o bispo era um elefante no xadrez antigo. Nosso mascote cumprimenta os primos."
+],
+ "fete_1005": ["Mestre-escola", "", "Dia Mundial dos Professores. Na Armênia, o xadrez é matéria obrigatória na escola desde 2011."
+],
+ "fete_1016": ["Bom garfo", "", "Dia Mundial da Alimentação. O dia ideal para um bom garfo… de cavalo, de preferência."
+],
+ "fete_1113": ["J'adoube", "", "Dia Mundial da Gentileza. No xadrez se diz j'adoube, eu ajusto, antes de arrumar uma peça sem jogá-la: a cortesia do jogador."
+],
+ "fete_1120": ["Pequeno prodígio", "", "Dia Mundial da Criança. Magnus Carlsen virou grande mestre aos 13 anos. E você, começou quando?"
+],
+ "lec_premiere": ["Até os campeões", "Primeira derrota contra o computador", "Perder faz parte do jogo. Em 1997, o próprio Garry Kasparov perdeu um match para o computador Deep Blue."
+],
+ "lec_analyse": ["Lição aprendida", "Analisar uma partida perdida", "Os jogadores fortes estudam suas derrotas a fundo: é aí que mais se aprende. Você acabou de fazer o mesmo."
+],
+ "lec_remontada": ["Virada", "Vencer um nível que tinha vencido você", "Derrotado ontem, vencedor hoje. Antes de 1972, Fischer nunca tinha vencido Spassky; naquele ano, tomou dele o título mundial."
+],
+ "lec_rancunier": ["Sem mágoa", "Jogar de novo logo depois de uma derrota", "Arruma as peças e começa de novo. É jogando que se evolui."
+],
+ "lec_abandon": ["Abandono elegante", "Abandonar uma partida perdida", "Abandonar uma posição sem esperança é um gesto de respeito ao adversário, muito comum entre grandes mestres."
+],
+ "lec_berger": ["Caiu na armadilha", "Levar mate em menos de 10 lances", "A armadilha mais famosa, o mate pastor, mira o peão de f7. A defesa: protegê-lo cedo, por exemplo com o cavalo."
+],
+ "lec_temps": ["Bandeira caída, a sua", "Perder no tempo", "O relógio faz parte do jogo: até campeões mundiais já perderam partidas de torneio no tempo."
+],
+ "lec_courage": ["Corajoso", "Jogar uma partida no nível Duro", "Enfrentar alguém mais forte é a melhor escola. Ganha ou perdida, essa partida ensinou algo a você."
+],
+ "lec_acharne": ["Persistente", "Resolver um exercício depois de 3 erros", "Três tentativas erradas, e você não desistiu. Procurar por mais tempo grava melhor a solução na memória."
+],
+ "lec_reprise": ["Recomeço", "Retomar uma sequência depois de quebrá-la", "Uma sequência quebrada não apaga nada do que você aprendeu. O mais importante é voltar."
 ]
 }

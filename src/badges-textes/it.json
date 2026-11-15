@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Ottenuto il {date}", "To unlock: {c}": "Per ottenerlo: {c}", "famille:resolus": "Esercizi risolti", "famille:serie": "Giorni di fila", "famille:jours": "Giorni giocati in totale", "famille:classement": "Punteggio", "famille:themes": "Temi tattici", "famille:finales": "Finali", "famille:ordinateur": "Partite contro il computer", "famille:ami": "Giocare con un amico", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinate", "famille:debut": "Sono principiante", "famille:makruk": "Makruk", "famille:semaine": "Giorni della settimana", "famille:du_jour": "Esercizio del giorno", "famille:jours_speciaux": "Giorni speciali", "famille:exploits": "Imprese e curiosità", "famille:defis": "Sfide della settimana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vittoria al livello {niveau}", "cond:mk": "Vittoria a makruk, livello {niveau}", "cond:eg": "Finale {finale} vinto", "cond:etape": "Tappa {n}: {titre}"
+ "_ui": { "Won on {date}": "Ottenuto il {date}", "To unlock: {c}": "Per ottenerlo: {c}", "famille:resolus": "Esercizi risolti", "famille:serie": "Giorni di fila", "famille:jours": "Giorni giocati in totale", "famille:classement": "Punteggio", "famille:themes": "Temi tattici", "famille:finales": "Finali", "famille:ordinateur": "Partite contro il computer", "famille:ami": "Giocare con un amico", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinate", "famille:debut": "Sono principiante", "famille:makruk": "Makruk", "famille:semaine": "Giorni della settimana", "famille:du_jour": "Esercizio del giorno", "famille:jours_speciaux": "Giorni speciali", "famille:exploits": "Imprese e curiosità", "famille:defis": "Sfide della settimana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vittoria al livello {niveau}", "cond:mk": "Vittoria a makruk, livello {niveau}", "cond:eg": "Finale {finale} vinto", "cond:etape": "Tappa {n}: {titre}", "cond:fete": "Giocare il {date}", "famille:lecons": "Lezioni imparate"
  },
  "solved_1": ["Prima mossa", "1 esercizio risolto", "Uno fatto! Già alla primissima mossa il Bianco ha 20 scelte: 16 mosse di pedone e 4 di cavallo."
 ],
@@ -364,5 +364,55 @@
  "defi_10": ["Collezionista di sfide", "10 sfide completate", "Dieci sfide. Ogni settimana ne porta tre nuove."
 ],
  "defi_52": ["Un anno di sfide", "52 sfide completate", "Cinquantadue sfide, tante quante le settimane dell'anno."
+],
+ "fete_0106": ["Epifania", "", "È l'Epifania, il giorno dei Re Magi. Sulla scacchiera i re sono solo due, e non possono mai stare su case vicine."
+],
+ "fete_0221": ["Lingua madre", "", "Giornata internazionale della lingua madre. Il cavallo è un cavallo in russo (конь) e in turco (at), ma un saltatore in tedesco (Springer)."
+],
+ "fete_0308": ["Regina del gioco", "", "Giornata internazionale della donna. Il pezzo più potente della scacchiera è una donna, e nel 2002 Judit Polgár ha battuto Garri Kasparov."
+],
+ "fete_0314": ["Giorno del π", "", "Oggi si festeggia π, 3,14159… con i suoi decimali infiniti. Gli scacchi preferiscono i conti tondi: 8 × 8 = 64 case."
+],
+ "fete_0320": ["Felicità", "", "Giornata internazionale della felicità. La felicità negli scacchi? Quel piccolo clic quando finalmente vedi la mossa giusta."
+],
+ "fete_0321": ["Poeta", "", "Giornata mondiale della poesia. Caissa, la dea degli scacchi, è nata in una poesia: William Jones la inventò nel 1763."
+],
+ "fete_0423": ["Libro di scacchi", "", "Giornata mondiale del libro. Uno dei primissimi libri stampati in inglese, verso il 1474 da William Caxton, parlava di scacchi."
+],
+ "fete_0429": ["Danza del cavallo", "", "Giornata internazionale della danza. Il cavallo ha il suo passo: due case da una parte, una dall'altra e un salto sopra tutti."
+],
+ "fete_0621": ["Festa della musica", "", "Festa della musica. Il compositore Sergej Prokof'ev adorava gli scacchi: nel 1914 batté Capablanca in una simultanea."
+],
+ "fete_0717": ["♟", "", "Giornata mondiale delle emoji. Il pedone ha la sua dal 2018: ♟. È l'unico pezzo degli scacchi ad avere questo onore."
+],
+ "fete_0812": ["Cugini elefanti", "", "Giornata mondiale dell'elefante! Chang vuol dire elefante in thailandese, e l'alfiere era un elefante negli scacchi antichi. La nostra mascotte saluta i cugini."
+],
+ "fete_1005": ["Maestro di scuola", "", "Giornata mondiale degli insegnanti. In Armenia gli scacchi sono materia obbligatoria a scuola dal 2011."
+],
+ "fete_1016": ["Buona forchetta", "", "Giornata mondiale dell'alimentazione. Il giorno ideale per una buona forchetta… di cavallo, preferibilmente."
+],
+ "fete_1113": ["Acconcio", "", "Giornata mondiale della gentilezza. Negli scacchi si dice acconcio prima di sistemare un pezzo senza muoverlo: la cortesia del giocatore."
+],
+ "fete_1120": ["Piccolo prodigio", "", "Giornata mondiale dell'infanzia. Magnus Carlsen è diventato grande maestro a 13 anni. E tu, quando hai cominciato?"
+],
+ "lec_premiere": ["Anche i campioni", "Prima sconfitta contro il computer", "Perdere fa parte del gioco. Nel 1997 perfino Garri Kasparov perse un match contro il computer Deep Blue."
+],
+ "lec_analyse": ["Lezione imparata", "Analizzare una partita persa", "I giocatori forti studiano a fondo le loro sconfitte: è lì che si impara di più. Hai appena fatto lo stesso."
+],
+ "lec_remontada": ["Rimonta", "Battere un livello che ti aveva battuto", "Sconfitto ieri, vincitore oggi. Prima del 1972 Fischer non aveva mai battuto Spassky; quell'anno gli tolse il titolo mondiale."
+],
+ "lec_rancunier": ["Niente rancore", "Rigiocare subito dopo una sconfitta", "Si rimettono a posto i pezzi e si ricomincia. Giocando si migliora."
+],
+ "lec_abandon": ["Abbandono elegante", "Abbandonare una partita persa", "Abbandonare una posizione senza speranza è un gesto di rispetto verso l'avversario, molto comune tra i grandi maestri."
+],
+ "lec_berger": ["Caduto nella trappola", "Subire matto in meno di 10 mosse", "La trappola più famosa, il matto del barbiere, punta al pedone f7. La difesa: proteggerlo presto, per esempio con il cavallo."
+],
+ "lec_temps": ["Bandierina caduta, la tua", "Perdere per tempo", "L'orologio fa parte del gioco: anche campioni del mondo hanno perso partite di torneo per tempo."
+],
+ "lec_courage": ["Coraggioso", "Giocare una partita al livello Tosto", "Affrontare qualcuno più forte è la scuola migliore. Vinta o persa, questa partita ti ha insegnato qualcosa."
+],
+ "lec_acharne": ["Accanito", "Risolvere un esercizio dopo 3 errori", "Tre tentativi sbagliati, e non hai mollato. Cercare più a lungo fissa meglio la soluzione nella memoria."
+],
+ "lec_reprise": ["Nuovo inizio", "Ricominciare una serie dopo averla interrotta", "Una serie interrotta non cancella nulla di ciò che hai imparato. La cosa più importante è tornare."
 ]
 }

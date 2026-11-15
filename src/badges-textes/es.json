@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Ganado el {date}", "To unlock: {c}": "Para conseguirlo: {c}", "famille:resolus": "Ejercicios resueltos", "famille:serie": "Días seguidos", "famille:jours": "Días jugados en total", "famille:classement": "Puntuación", "famille:themes": "Temas tácticos", "famille:finales": "Finales", "famille:ordinateur": "Partidas contra el ordenador", "famille:ami": "Jugar con un amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Soy principiante", "famille:makruk": "Makruk", "famille:semaine": "Días de la semana", "famille:du_jour": "Ejercicio del día", "famille:jours_speciaux": "Días especiales", "famille:exploits": "Hazañas y curiosidades", "famille:defis": "Retos de la semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Victoria en nivel {niveau}", "cond:mk": "Victoria en makruk, nivel {niveau}", "cond:eg": "Final {finale} ganado", "cond:etape": "Etapa {n}: {titre}"
+ "_ui": { "Won on {date}": "Ganado el {date}", "To unlock: {c}": "Para conseguirlo: {c}", "famille:resolus": "Ejercicios resueltos", "famille:serie": "Días seguidos", "famille:jours": "Días jugados en total", "famille:classement": "Puntuación", "famille:themes": "Temas tácticos", "famille:finales": "Finales", "famille:ordinateur": "Partidas contra el ordenador", "famille:ami": "Jugar con un amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Soy principiante", "famille:makruk": "Makruk", "famille:semaine": "Días de la semana", "famille:du_jour": "Ejercicio del día", "famille:jours_speciaux": "Días especiales", "famille:exploits": "Hazañas y curiosidades", "famille:defis": "Retos de la semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Victoria en nivel {niveau}", "cond:mk": "Victoria en makruk, nivel {niveau}", "cond:eg": "Final {finale} ganado", "cond:etape": "Etapa {n}: {titre}", "cond:fete": "Jugar el {date}", "famille:lecons": "Lecciones aprendidas"
  },
  "solved_1": ["Primera jugada", "1 ejercicio resuelto", "¡Uno hecho! En la primerísima jugada, las blancas ya tienen 20 opciones: 16 jugadas de peón y 4 de caballo."
 ],
@@ -364,5 +364,55 @@
  "defi_10": ["Coleccionista de retos", "10 retos superados", "Diez retos. Cada semana trae tres nuevos."
 ],
  "defi_52": ["Un año de retos", "52 retos superados", "Cincuenta y dos retos, tantos como semanas tiene el año."
+],
+ "fete_0106": ["Día de Reyes", "", "Es la Epifanía, el día de Reyes. En el tablero solo hay dos, y nunca pueden estar en casillas vecinas."
+],
+ "fete_0221": ["Lengua materna", "", "Día Internacional de la Lengua Materna. El caballo es un caballo en ruso (конь) y en turco (at), pero un saltador en alemán (Springer)."
+],
+ "fete_0308": ["Reina del juego", "", "Día Internacional de la Mujer. La pieza más poderosa del tablero es una dama, y en 2002 Judit Polgár venció a Garri Kaspárov."
+],
+ "fete_0314": ["Día de π", "", "Hoy se celebra π, 3,14159… y sus decimales infinitos. El ajedrez prefiere las cuentas redondas: 8 × 8 = 64 casillas."
+],
+ "fete_0320": ["Felicidad", "", "Día Internacional de la Felicidad. ¿La felicidad en ajedrez? Ese pequeño clic cuando por fin ves la buena jugada."
+],
+ "fete_0321": ["Poeta", "", "Día Mundial de la Poesía. Caissa, la diosa del ajedrez, nació en un poema: William Jones la inventó en 1763."
+],
+ "fete_0423": ["Libro de ajedrez", "", "Día del Libro. Uno de los primerísimos libros impresos en inglés, hacia 1474 por William Caxton, trataba de ajedrez."
+],
+ "fete_0429": ["Danza del caballo", "", "Día Internacional de la Danza. El caballo tiene su propio paso: dos casillas hacia un lado, una hacia el otro y un salto por encima de todos."
+],
+ "fete_0621": ["Día de la Música", "", "Día de la Música. Al compositor Serguéi Prokófiev le encantaba el ajedrez: en 1914 venció a Capablanca en una simultánea."
+],
+ "fete_0717": ["♟", "", "Día Mundial del Emoji. El peón tiene el suyo desde 2018: ♟. Es la única pieza de ajedrez con ese honor."
+],
+ "fete_0812": ["Primos elefantes", "", "¡Día Mundial del Elefante! Chang significa elefante en tailandés, y el alfil era un elefante en el ajedrez antiguo. Nuestra mascota saluda a sus primos."
+],
+ "fete_1005": ["Maestro de escuela", "", "Día Mundial de los Docentes. En Armenia, el ajedrez es asignatura obligatoria en la escuela desde 2011."
+],
+ "fete_1016": ["Buen tenedor", "", "Día Mundial de la Alimentación. El día ideal para un buen tenedor… de caballo, a ser posible."
+],
+ "fete_1113": ["Compongo", "", "Día Mundial de la Bondad. En ajedrez se dice compongo antes de colocar bien una pieza sin jugarla: la cortesía del jugador."
+],
+ "fete_1120": ["Pequeño prodigio", "", "Día Mundial de la Infancia. Magnus Carlsen fue gran maestro a los 13 años. ¿Y tú, cuándo empezaste?"
+],
+ "lec_premiere": ["Hasta los campeones", "Primera derrota contra el ordenador", "Perder forma parte del juego. En 1997, el mismísimo Garri Kaspárov perdió un match contra el ordenador Deep Blue."
+],
+ "lec_analyse": ["Lección aprendida", "Analizar una partida perdida", "Los jugadores fuertes estudian sus derrotas a fondo: ahí es donde más se aprende. Acabas de hacer lo mismo."
+],
+ "lec_remontada": ["Remontada", "Vencer a un nivel que te había vencido", "Derrotado ayer, vencedor hoy. Antes de 1972, Fischer nunca había vencido a Spassky; ese año le quitó el título mundial."
+],
+ "lec_rancunier": ["Sin rencor", "Volver a jugar justo después de una derrota", "Se colocan las piezas y se empieza otra vez. Jugando se progresa."
+],
+ "lec_abandon": ["Abandono elegante", "Abandonar una partida perdida", "Abandonar una posición sin esperanza es un gesto de respeto hacia el rival, muy habitual entre grandes maestros."
+],
+ "lec_berger": ["Caíste en la trampa", "Recibir mate en menos de 10 jugadas", "La trampa más famosa, el mate del pastor, apunta al peón de f7. La defensa: protegerlo pronto, por ejemplo con el caballo."
+],
+ "lec_temps": ["Bandera caída, la tuya", "Perder por tiempo", "El reloj forma parte del juego: hasta campeones del mundo han perdido partidas de torneo por tiempo."
+],
+ "lec_courage": ["Valiente", "Jugar una partida en nivel Duro", "Enfrentarse a alguien más fuerte es la mejor escuela. Ganada o perdida, esta partida te ha enseñado algo."
+],
+ "lec_acharne": ["Tenaz", "Resolver un ejercicio tras 3 errores", "Tres intentos fallidos y no te rendiste. Buscar más tiempo graba mejor la solución en la memoria."
+],
+ "lec_reprise": ["Nuevo comienzo", "Retomar una racha después de romperla", "Una racha rota no borra nada de lo aprendido. Lo más importante es volver."
 ]
 }

@@ -8,7 +8,7 @@
    par badge, sur l'anglais : le build le signale sans s'arreter. */
 const fs = require("fs"), path = require("path");
 const CATALOGUE = require("./badges-catalogue.js");
-const { CODES } = require("./langues/registre.js");
+const { CODES, PAR_CODE } = require("./langues/registre.js");
 const DOSSIER = path.join(__dirname, "badges-textes");
 
 function lireLangue(code) {
@@ -36,7 +36,7 @@ const NIVEAUX = ["Beginner", "Casual", "Solid", "Tough"], NIVEAUX_MK = { mk_faci
 const FINALES = { eg_kq: "Queen vs King", eg_kr: "Rook vs King", eg_krr: "Two rooks vs King", eg_kbn: "Bishop and knight", eg_kp: "King and pawn" };
 const ETAPES = ["How the pieces move", "Taking a piece", "Checkmate", "Back-rank mate", "The fork", "The pin", "Your first game"];
 const GABARITS = { "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level",
-  "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}" };
+  "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}" };
 function dictionnaire(code) {
   if (code === "en") return {};
   try { return require("./langues/" + code + "/app.js"); } catch (e) { return {}; }
@@ -53,6 +53,13 @@ function conditions(code, t) {
     else if (NIVEAUX_MK[id]) e[1] = f(g("cond:mk"), { niveau: tr(NIVEAUX_MK[id]) });
     else if (FINALES[id]) e[1] = f(g("cond:eg"), { finale: tr(FINALES[id]) });
     else if ((r = id.match(/^debut_(\d)$/))) e[1] = f(g("cond:etape"), { n: r[1], titre: tr(ETAPES[r[1] - 1]) });
+    /* Jour special sans condition ecrite : la date, au format de la langue
+       ("6 janvier", "6. Januar", "6 января"). */
+    else if ((r = id.match(/^fete_(\d\d)(\d\d)$/)) && !e[1]) {
+      const loc = (PAR_CODE[code] && PAR_CODE[code].intl) || "en-GB";
+      const date = new Intl.DateTimeFormat(loc, { day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2024, +r[1] - 1, +r[2])));
+      e[1] = f(g("cond:fete"), { date });
+    }
   }
   return t;
 }

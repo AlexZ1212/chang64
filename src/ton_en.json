@@ -42,7 +42,8 @@
  ],
  "Play a move, or use Hint, to unlock the next puzzle.": [
   "Have a go first: play a move (or ask for a hint) to move on.",
-  "One try first! Play a move or take a hint to unlock the next one."
+  "One try first! Play a move or take a hint to unlock the next one.",
+  "No skipping ahead: try a move first, or ask for a hint."
  ],
  "Correct. Your move.": [
   "Correct. Keep going.",
@@ -55,16 +56,24 @@
   "Polishing the pieces…"
  ],
  "Couldn't load puzzles. Check your connection and try again.": [
-  "The puzzles got stuck on the way. Check your connection and try again."
+  "The puzzles got stuck on the way. Check your connection and try again.",
+  "The puzzles missed the bus. Check your connection and try again.",
+  "No puzzles came through. Check your connection and try again."
  ],
  "Three misses.": [
-  "Three misses, the Sprint stops here."
+  "Three misses, the Sprint stops here.",
+  "Third miss, end of the Sprint.",
+  "Three slips and the Sprint is over."
  ],
  "Time is up.": [
-  "Time's up: the clock has spoken."
+  "Time's up: the clock has spoken.",
+  "Time's up! The clock wins this round.",
+  "Ding! Time's up."
  ],
  "You cleared every puzzle.": [
-  "You cleared every single puzzle. We're out of stock!"
+  "You cleared every single puzzle. We're out of stock!",
+  "Every puzzle solved. We'll have to dig up some more!",
+  "Not a single puzzle left. Impressive."
  ],
  "Checkmate in {n} moves. Well done.": [
   "Checkmate in {n} moves. Textbook.",
@@ -73,7 +82,8 @@
  ],
  "Stalemate. The lone king escaped with a draw.": [
   "Stalemate! The lone king can't move but isn't in check: it sneaks a draw.",
-  "Stalemate. The king slipped away with a draw, watch those last squares."
+  "Stalemate. The king slipped away with a draw, watch those last squares.",
+  "Stalemate: the king has no move and isn't in check. A draw, so leave it a square next time."
  ],
  "The computer is thinking…": [
   "The computer is scratching its head…",
@@ -94,42 +104,64 @@
   "Checkmate, the computer wins. Every defeat teaches something."
  ],
  "Stalemate. The game is drawn.": [
-  "Stalemate: the king can't move without walking into check. Nobody wins."
+  "Stalemate: the king can't move without walking into check. Nobody wins.",
+  "Stalemate! No legal move, no check: it's a draw.",
+  "Stalemate: the king is stuck but safe. A draw, shake hands."
  ],
  "The computer's flag fell. You win on time.": [
-  "The computer dawdled: its time ran out, you win."
+  "The computer dawdled: its time ran out, you win.",
+  "The computer ran out of time. Even machines lose on time: you win.",
+  "Time's up for the computer! You win on time."
  ],
  "Your flag fell. The computer wins on time.": [
-  "Your time ran out, the computer wins on time. Next time, keep an eye on the clock."
+  "Your time ran out, the computer wins on time. Next time, keep an eye on the clock.",
+  "Your flag fell, the computer wins on time. The clock is part of the game too.",
+  "Out of time! The computer wins on time. Try a slower time control?"
  ],
  "You resigned. The computer wins.": [
   "You resigned. Shall we set the pieces up again?",
-  "You resigned. A fresh game is just a click away."
+  "You resigned. A fresh game is just a click away.",
+  "You resigned. The computer says thanks for the game."
  ],
  "Check. Your move.": [
   "Check! Your king needs looking after.",
-  "Check. Protect your king, your move."
+  "Check. Protect your king, your move.",
+  "Check! Get your king out of trouble."
  ],
  "Fetching the engine, this can take a moment on a first visit.": [
-  "The computer is putting its slippers on. On a first visit, this can take a moment."
+  "The computer is putting its slippers on. On a first visit, this can take a moment.",
+  "The computer is warming up before the game. On a first visit, this can take a moment.",
+  "The computer is waking up. On a first visit, this can take a moment."
  ],
  "Downloading the engine…": [
-  "The computer is getting dressed…"
+  "The computer is getting dressed…",
+  "The computer is tying its shoelaces…",
+  "The computer is on its way…"
  ],
  "Move taken back. Your turn.": [
-  "Move taken back. We'll pretend nothing happened. Your turn."
+  "Move taken back. We'll pretend nothing happened. Your turn.",
+  "Move taken back. Nobody saw a thing. Your turn.",
+  "Undo done. Second chance, your turn."
  ],
  "Checkmate. You win this one.": [
-  "Checkmate, you win this one. Bragging rights are yours."
+  "Checkmate, you win this one. Bragging rights are yours.",
+  "Checkmate, you win this one! Your friend owes you a rematch.",
+  "Checkmate, you win this one. Be nice in your next message."
  ],
  "Checkmate. Your friend wins.": [
-  "Checkmate, your friend wins. Time to ask for a rematch."
+  "Checkmate, your friend wins. Time to ask for a rematch.",
+  "Checkmate, your friend wins. There's always the next game.",
+  "Checkmate, your friend wins this one. Payback next time?"
  ],
  "Your friend resigned. You win.": [
-  "Your friend resigned. You win, be a gracious winner."
+  "Your friend resigned. You win, be a gracious winner.",
+  "Your friend resigned. Victory! Offering a rematch would be classy.",
+  "Your friend threw in the towel. You win."
  ],
  "No finished game yet.": [
-  "No finished game yet. The board is waiting."
+  "No finished game yet. The board is waiting.",
+  "No finished game yet. Your first one will land here.",
+  "Nothing here yet. Finish a game and it will be kept here."
  ],
  "Brilliant session!": [
   "Brilliant session!",
@@ -153,6 +185,7 @@
  ],
  "Not quite. Try again.": [
   "Not quite. Try again.",
-  "Almost! Have another go."
+  "Almost! Have another go.",
+  "Not that one. Another try?"
  ]
 }

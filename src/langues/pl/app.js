@@ -733,5 +733,23 @@ module.exports = {
 "Streak freezes":"Zamrożenia serii",
 "You earned a streak freeze.":"Zdobywasz zamrożenie serii.",
 "Your streak is saved: a freeze was used.":"Seria uratowana: użyto zamrożenia.",
-"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Zadania do rozwiązania każdego dnia. Osiągnij cel 7 dni z rzędu, by zdobyć zamrożenie serii."
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Zadania do rozwiązania każdego dnia. Osiągnij cel 7 dni z rzędu, by zdobyć zamrożenie serii.",
+/* Defis de la semaine (2026-11-15, voir defis.js) */
+"Weekly challenges":"Wyzwania tygodnia",
+"Solve {n} puzzles":{"one":"Rozwiąż {n} zadania","few":"Rozwiąż {n} zadania","many":"Rozwiąż {n} zadań","other":"Rozwiąż {n} zadań"},
+"Solve the puzzle of the day on {n} days":{"one":"Rozwiąż zadanie dnia przez {n} dni","few":"Rozwiąż zadanie dnia przez {n} dni","many":"Rozwiąż zadanie dnia przez {n} dni","other":"Rozwiąż zadanie dnia przez {n} dni"},
+"Reach your daily goal on {n} days":{"one":"Osiągnij cel dnia przez {n} dni","few":"Osiągnij cel dnia przez {n} dni","many":"Osiągnij cel dnia przez {n} dni","other":"Osiągnij cel dnia przez {n} dni"},
+"Play on {n} different days":{"one":"Zagraj w {n} różne dni","few":"Zagraj w {n} różne dni","many":"Zagraj w {n} różnych dni","other":"Zagraj w {n} różnych dni"},
+"Solve {n} puzzles with the theme {theme}":{"one":"Rozwiąż {n} zadania z motywem {theme}","few":"Rozwiąż {n} zadania z motywem {theme}","many":"Rozwiąż {n} zadań z motywem {theme}","other":"Rozwiąż {n} zadań z motywem {theme}"},
+"Solve {n} puzzles in a row without a mistake":{"one":"Rozwiąż {n} zadania z rzędu bez błędu","few":"Rozwiąż {n} zadania z rzędu bez błędu","many":"Rozwiąż {n} zadań z rzędu bez błędu","other":"Rozwiąż {n} zadań z rzędu bez błędu"},
+"Score {n} or more in a Sprint":{"one":"Zdobądź {n} punkty lub więcej w Sprincie","few":"Zdobądź {n} punkty lub więcej w Sprincie","many":"Zdobądź {n} punktów lub więcej w Sprincie","other":"Zdobądź {n} punktów lub więcej w Sprincie"},
+"Score {n} or more in Coordinates":{"one":"Zdobądź {n} punkty lub więcej we Współrzędnych","few":"Zdobądź {n} punkty lub więcej we Współrzędnych","many":"Zdobądź {n} punktów lub więcej we Współrzędnych","other":"Zdobądź {n} punktów lub więcej we Współrzędnych"},
+"Win {n} games against the computer":{"one":"Wygraj {n} partie z komputerem","few":"Wygraj {n} partie z komputerem","many":"Wygraj {n} partii z komputerem","other":"Wygraj {n} partii z komputerem"},
+"Win {n} endgames":{"one":"Wygraj {n} końcówki","few":"Wygraj {n} końcówki","many":"Wygraj {n} końcówek","other":"Wygraj {n} końcówek"},
+"Challenge completed:":"Wyzwanie zaliczone:",
+"Perfect week: you earn a streak freeze.":"Idealny tydzień: zdobywasz zamrożenie serii.",
+"Perfect week!":"Idealny tydzień!",
+"New challenges tomorrow.":"Nowe wyzwania jutro.",
+"New challenges in {n} days.":{"one":"Nowe wyzwania za {n} dni.","few":"Nowe wyzwania za {n} dni.","many":"Nowe wyzwania za {n} dni.","other":"Nowe wyzwania za {n} dni."},
+"Complete all three to earn a streak freeze.":"Zalicz wszystkie trzy, by zdobyć zamrożenie serii."
 };

@@ -1,6 +1,49 @@
 [
  {
-  "d": "2026-11-16",
+  "d": "2026-11-15",
+  "en": [
+   "Weekly challenges",
+   "Three new challenges every Monday, the same for everyone. Complete all three for a perfect week and a streak freeze."
+  ],
+  "fr": [
+   "Défis de la semaine",
+   "Trois nouveaux défis chaque lundi, les mêmes pour tout le monde. Relève les trois pour une semaine parfaite et un gel de série."
+  ],
+  "es": [
+   "Retos de la semana",
+   "Tres retos nuevos cada lunes, los mismos para todos. Supera los tres para una semana perfecta y una congelación de racha."
+  ],
+  "pt": [
+   "Desafios da semana",
+   "Três novos desafios toda segunda, iguais para todo mundo. Conclua os três para uma semana perfeita e um congelamento de sequência."
+  ],
+  "de": [
+   "Wochen-Challenges",
+   "Jeden Montag drei neue Challenges, für alle dieselben. Schaffe alle drei für eine perfekte Woche und einen Frost-Schutz."
+  ],
+  "ru": [
+   "Задания недели",
+   "Каждый понедельник три новых задания, одинаковые для всех. Выполни все три ради идеальной недели и заморозки серии."
+  ],
+  "it": [
+   "Sfide della settimana",
+   "Tre nuove sfide ogni lunedì, uguali per tutti. Completale tutte e tre per una settimana perfetta e un congelamento della serie."
+  ],
+  "tr": [
+   "Haftanın görevleri",
+   "Her pazartesi herkes için aynı üç yeni görev. Kusursuz bir hafta ve bir seri dondurması için üçünü de tamamla."
+  ],
+  "pl": [
+   "Wyzwania tygodnia",
+   "Co poniedziałek trzy nowe wyzwania, te same dla wszystkich. Zalicz wszystkie trzy, by mieć idealny tydzień i zamrożenie serii."
+  ],
+  "id": [
+   "Tantangan mingguan",
+   "Tiga tantangan baru setiap Senin, sama untuk semua orang. Selesaikan ketiganya untuk minggu sempurna dan pembeku rangkaian."
+  ]
+ },
+ {
+  "d": "2026-11-15",
   "en": [
    "Daily goal and streak freeze",
    "A ring fills with each puzzle you solve. Reach your goal 7 days in a row and earn a freeze that saves your streak if you miss a day."

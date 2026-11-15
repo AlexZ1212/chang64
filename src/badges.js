@@ -15,7 +15,7 @@
      bravoAnnoncer(), qui attend toujours la fin d'un chrono ou d'une partie. */
 const BX_LISTE=__BADGES_LISTE__;
 /* Familles pas encore jouables : leurs badges n'apparaissent pas. */
-const BX_CACHEES=["defis"];
+const BX_CACHEES=[];
 const BX_THEMES={winning_capture:"Winning capture",double_attack:"Double attack",skewer:"Skewer",
   mate_in_two:"Mate in two",winning_move:"Winning move",knight_fork:"Knight fork",mate_in_one:"Mate in one",
   back_rank_mate:"Back-rank mate",pin:"Pin",pawn_fork:"Pawn fork",deflection:"Deflection",
@@ -135,6 +135,12 @@ function bxAcquis(id){
   if((r=id.match(/^eg_(kq|kr|krr|kbn|kp)$/)))return (p.endgames||{})[r[1]]!==undefined;
   if(id==="sem_toute")return BX_JOURS.every(j=>b.f["sem_"+j]);
   if(id==="jeu_10")return (b.c.vic||0)>=10;
+  /* Defis de la semaine (defis.js). */
+  if(id==="defi_1")return (b.c.defisFaits||0)>=1;
+  if(id==="defi_10")return (b.c.defisFaits||0)>=10;
+  if(id==="defi_52")return (b.c.defisFaits||0)>=52;
+  if(id==="defi_parfait")return (b.c.semParfaites||0)>=1;
+  if(id==="defi_mois")return (b.c.semParfaites||0)>=4;
   if(id==="debut_fini")return typeof debutFini==="function"&&debutFini();
   if((r=id.match(/^debut_(\d)$/)))return !!(debut&&debut.faites&&debut.faites.includes(+r[1]-1));
   return false;

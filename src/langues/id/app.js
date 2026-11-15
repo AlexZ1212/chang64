@@ -733,5 +733,23 @@ module.exports = {
 "Streak freezes":"Pembeku rangkaian",
 "You earned a streak freeze.":"Kamu mendapat satu pembeku rangkaian.",
 "Your streak is saved: a freeze was used.":"Rangkaianmu selamat: satu pembeku dipakai.",
-"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Teka-teki yang dipecahkan setiap hari. Capai 7 hari berturut-turut untuk mendapat pembeku rangkaian."
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Teka-teki yang dipecahkan setiap hari. Capai 7 hari berturut-turut untuk mendapat pembeku rangkaian.",
+/* Defis de la semaine (2026-11-15, voir defis.js) */
+"Weekly challenges":"Tantangan mingguan",
+"Solve {n} puzzles":"Pecahkan {n} teka-teki",
+"Solve the puzzle of the day on {n} days":"Pecahkan teka-teki hari ini selama {n} hari",
+"Reach your daily goal on {n} days":"Capai target harianmu selama {n} hari",
+"Play on {n} different days":"Bermain di {n} hari berbeda",
+"Solve {n} puzzles with the theme {theme}":"Pecahkan {n} teka-teki bertema {theme}",
+"Solve {n} puzzles in a row without a mistake":"Pecahkan {n} teka-teki berturut-turut tanpa salah",
+"Score {n} or more in a Sprint":"Raih {n} poin atau lebih di Sprint",
+"Score {n} or more in Coordinates":"Raih {n} poin atau lebih di Koordinat",
+"Win {n} games against the computer":"Menangkan {n} permainan melawan komputer",
+"Win {n} endgames":"Menangkan {n} akhir permainan",
+"Challenge completed:":"Tantangan selesai:",
+"Perfect week: you earn a streak freeze.":"Minggu sempurna: kamu mendapat pembeku rangkaian.",
+"Perfect week!":"Minggu sempurna!",
+"New challenges tomorrow.":"Tantangan baru besok.",
+"New challenges in {n} days.":"Tantangan baru dalam {n} hari.",
+"Complete all three to earn a streak freeze.":"Selesaikan ketiganya untuk mendapat pembeku rangkaian."
 };

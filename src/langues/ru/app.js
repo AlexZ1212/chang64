@@ -735,5 +735,23 @@ module.exports = {
 "Streak freezes":"Заморозки серии",
 "You earned a streak freeze.":"Ты заработал заморозку серии.",
 "Your streak is saved: a freeze was used.":"Серия спасена: использована заморозка.",
-"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Сколько задач решать каждый день. Выполняй цель 7 дней подряд, чтобы получить заморозку серии."
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Сколько задач решать каждый день. Выполняй цель 7 дней подряд, чтобы получить заморозку серии.",
+/* Defis de la semaine (2026-11-15, voir defis.js) */
+"Weekly challenges":"Задания недели",
+"Solve {n} puzzles":{"one":"Реши {n} задачи","few":"Реши {n} задачи","many":"Реши {n} задач","other":"Реши {n} задач"},
+"Solve the puzzle of the day on {n} days":{"one":"Реши задачу дня {n} дня","few":"Реши задачу дня {n} дня","many":"Реши задачу дня {n} дней","other":"Реши задачу дня {n} дней"},
+"Reach your daily goal on {n} days":{"one":"Выполни цель дня {n} дня","few":"Выполни цель дня {n} дня","many":"Выполни цель дня {n} дней","other":"Выполни цель дня {n} дней"},
+"Play on {n} different days":{"one":"Сыграй {n} разных дня","few":"Сыграй {n} разных дня","many":"Сыграй {n} разных дней","other":"Сыграй {n} разных дней"},
+"Solve {n} puzzles with the theme {theme}":{"one":"Реши {n} задачи на тему «{theme}»","few":"Реши {n} задачи на тему «{theme}»","many":"Реши {n} задач на тему «{theme}»","other":"Реши {n} задач на тему «{theme}»"},
+"Solve {n} puzzles in a row without a mistake":{"one":"Реши {n} задачи подряд без ошибок","few":"Реши {n} задачи подряд без ошибок","many":"Реши {n} задач подряд без ошибок","other":"Реши {n} задач подряд без ошибок"},
+"Score {n} or more in a Sprint":{"one":"Набери {n} очка или больше в спринте","few":"Набери {n} очка или больше в спринте","many":"Набери {n} очков или больше в спринте","other":"Набери {n} очков или больше в спринте"},
+"Score {n} or more in Coordinates":{"one":"Набери {n} очка или больше в координатах","few":"Набери {n} очка или больше в координатах","many":"Набери {n} очков или больше в координатах","other":"Набери {n} очков или больше в координатах"},
+"Win {n} games against the computer":{"one":"Выиграй {n} партии у компьютера","few":"Выиграй {n} партии у компьютера","many":"Выиграй {n} партий у компьютера","other":"Выиграй {n} партий у компьютера"},
+"Win {n} endgames":{"one":"Выиграй {n} эндшпиля","few":"Выиграй {n} эндшпиля","many":"Выиграй {n} эндшпилей","other":"Выиграй {n} эндшпилей"},
+"Challenge completed:":"Задание выполнено:",
+"Perfect week: you earn a streak freeze.":"Идеальная неделя: ты получаешь заморозку серии.",
+"Perfect week!":"Идеальная неделя!",
+"New challenges tomorrow.":"Новые задания завтра.",
+"New challenges in {n} days.":{"one":"Новые задания через {n} дня.","few":"Новые задания через {n} дня.","many":"Новые задания через {n} дней.","other":"Новые задания через {n} дней."},
+"Complete all three to earn a streak freeze.":"Выполни все три, чтобы получить заморозку серии."
 };

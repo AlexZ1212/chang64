@@ -733,5 +733,23 @@ module.exports = {
 "Streak freezes":"Congelamenti della serie",
 "You earned a streak freeze.":"Hai guadagnato un congelamento della serie.",
 "Your streak is saved: a freeze was used.":"La tua serie è salva: è stato usato un congelamento.",
-"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Esercizi da risolvere ogni giorno. Raggiungilo 7 giorni di fila per guadagnare un congelamento della serie."
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Esercizi da risolvere ogni giorno. Raggiungilo 7 giorni di fila per guadagnare un congelamento della serie.",
+/* Defis de la semaine (2026-11-15, voir defis.js) */
+"Weekly challenges":"Sfide della settimana",
+"Solve {n} puzzles":"Risolvi {n} esercizi",
+"Solve the puzzle of the day on {n} days":"Risolvi l'esercizio del giorno per {n} giorni",
+"Reach your daily goal on {n} days":"Raggiungi l'obiettivo del giorno per {n} giorni",
+"Play on {n} different days":"Gioca in {n} giorni diversi",
+"Solve {n} puzzles with the theme {theme}":"Risolvi {n} esercizi sul tema {theme}",
+"Solve {n} puzzles in a row without a mistake":"Risolvi {n} esercizi di fila senza errori",
+"Score {n} or more in a Sprint":"Fai {n} punti o più nello Sprint",
+"Score {n} or more in Coordinates":"Fai {n} punti o più nelle Coordinate",
+"Win {n} games against the computer":"Vinci {n} partite contro il computer",
+"Win {n} endgames":"Vinci {n} finali",
+"Challenge completed:":"Sfida completata:",
+"Perfect week: you earn a streak freeze.":"Settimana perfetta: guadagni un congelamento della serie.",
+"Perfect week!":"Settimana perfetta!",
+"New challenges tomorrow.":"Nuove sfide domani.",
+"New challenges in {n} days.":"Nuove sfide tra {n} giorni.",
+"Complete all three to earn a streak freeze.":"Completa tutte e tre per guadagnare un congelamento della serie."
 };

@@ -4,15 +4,16 @@
 /* Un tiroir qui glisse depuis la droite et reunit ce qui etait disperse :
    statistiques et badges (consultables sans quitter l'ecran en cours),
    nouveautes, preferences, accessibilite, langues, mentions. Colle apres
-   badges.js par build_site.js ; __NOUVEAUTES_DATE__ = date de la plus
-   recente nouveaute (data/nouveautes-<langue>.json). Un point laiton sur le
-   bouton signale une nouveaute pas encore vue (chang64:nouveautesVues). */
-const MENU_DERNIERE="__NOUVEAUTES_DATE__";
+   badges.js par build_site.js ; le build pose le nombre de
+   nouveautes publiees (data/nouveautes-<langue>.json). Un point laiton sur le
+   bouton signale une nouveaute pas encore lue : on retient le NOMBRE de
+   nouveautes deja vues (chang64:nouveautesLues), plus robuste qu'une date. */
+const MENU_NOMBRE=__NOUVEAUTES_NOMBRE__;
 let menuAvant=null,menuNouveautes=null;
 function menuEl(id){return document.getElementById(id);}
-function menuVu(){try{return localStorage.getItem("chang64:nouveautesVues")||"";}catch(e){return "";}}
+function menuVu(){try{return Number(localStorage.getItem("chang64:nouveautesLues"))||0;}catch(e){return 0;}}
 function menuPoint(){
-  const nouveau=MENU_DERNIERE>menuVu();
+  const nouveau=MENU_NOMBRE>menuVu();
   const p=menuEl("btnMenuPoint"),q=menuEl("menuNouveau");
   if(p)p.hidden=!nouveau;
   if(q)q.hidden=!nouveau;
@@ -104,10 +105,10 @@ function menuListeNouveautes(){
   const el=menuEl("menuNouveautes");
   const dessiner=()=>{
     const vu=menuVu();
-    poserHtml(el,(menuNouveautes||[]).map(n=>
-      '<article class="menu-nouveaute'+(n.d>vu?" neuve":"")+'"><time datetime="'+n.d+'">'+echapper(fmtDayMonth(new Date(n.d+"T12:00:00"))+"/"+n.d.slice(0,4))+"</time>"+
+    poserHtml(el,(menuNouveautes||[]).map((n,i)=>
+      '<article class="menu-nouveaute'+(i<MENU_NOMBRE-vu?" neuve":"")+'"><time datetime="'+n.d+'">'+echapper(fmtDayMonth(new Date(n.d+"T12:00:00"))+"/"+n.d.slice(0,4))+"</time>"+
       "<h3>"+echapper(n.t)+"</h3><p>"+echapper(n.x)+"</p></article>").join(""));
-    try{localStorage.setItem("chang64:nouveautesVues",MENU_DERNIERE);}catch(e){}
+    try{localStorage.setItem("chang64:nouveautesLues",String(MENU_NOMBRE));}catch(e){}
     menuPoint();
   };
   if(menuNouveautes){dessiner();return;}

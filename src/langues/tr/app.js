@@ -733,5 +733,23 @@ module.exports = {
 "Streak freezes":"Seri dondurmaları",
 "You earned a streak freeze.":"Bir seri dondurması kazandın.",
 "Your streak is saved: a freeze was used.":"Serin kurtarıldı: bir dondurma kullanıldı.",
-"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Her gün çözülecek bulmaca sayısı. 7 gün art arda ulaşırsan bir seri dondurması kazanırsın."
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Her gün çözülecek bulmaca sayısı. 7 gün art arda ulaşırsan bir seri dondurması kazanırsın.",
+/* Defis de la semaine (2026-11-15, voir defis.js) */
+"Weekly challenges":"Haftanın görevleri",
+"Solve {n} puzzles":"{n} bulmaca çöz",
+"Solve the puzzle of the day on {n} days":"Günün bulmacasını {n} gün çöz",
+"Reach your daily goal on {n} days":"Günlük hedefine {n} gün ulaş",
+"Play on {n} different days":"{n} farklı gün oyna",
+"Solve {n} puzzles with the theme {theme}":"{theme} temasında {n} bulmaca çöz",
+"Solve {n} puzzles in a row without a mistake":"Art arda hatasız {n} bulmaca çöz",
+"Score {n} or more in a Sprint":"Sprint'te {n} veya daha fazla puan al",
+"Score {n} or more in Coordinates":"Koordinatlar'da {n} veya daha fazla puan al",
+"Win {n} games against the computer":"Bilgisayara karşı {n} oyun kazan",
+"Win {n} endgames":"{n} oyun sonu kazan",
+"Challenge completed:":"Görev tamamlandı:",
+"Perfect week: you earn a streak freeze.":"Kusursuz hafta: bir seri dondurması kazandın.",
+"Perfect week!":"Kusursuz hafta!",
+"New challenges tomorrow.":"Yeni görevler yarın.",
+"New challenges in {n} days.":"Yeni görevler {n} gün sonra.",
+"Complete all three to earn a streak freeze.":"Bir seri dondurması kazanmak için üçünü de tamamla."
 };

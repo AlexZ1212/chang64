@@ -735,5 +735,23 @@ module.exports = {
 "Streak freezes":"Frost-Schutz",
 "You earned a streak freeze.":"Du hast einen Frost-Schutz für deine Serie verdient.",
 "Your streak is saved: a freeze was used.":"Deine Serie ist gerettet: ein Frost-Schutz wurde verbraucht.",
-"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Aufgaben, die du jeden Tag lösen willst. Schaffst du es 7 Tage am Stück, bekommst du einen Frost-Schutz für deine Serie."
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Aufgaben, die du jeden Tag lösen willst. Schaffst du es 7 Tage am Stück, bekommst du einen Frost-Schutz für deine Serie.",
+/* Defis de la semaine (2026-11-15, voir defis.js) */
+"Weekly challenges":"Wochen-Challenges",
+"Solve {n} puzzles":"Löse {n} Aufgaben",
+"Solve the puzzle of the day on {n} days":"Löse die Aufgabe des Tages an {n} Tagen",
+"Reach your daily goal on {n} days":"Erreiche dein Tagesziel an {n} Tagen",
+"Play on {n} different days":"Spiele an {n} verschiedenen Tagen",
+"Solve {n} puzzles with the theme {theme}":"Löse {n} Aufgaben zum Motiv {theme}",
+"Solve {n} puzzles in a row without a mistake":"Löse {n} Aufgaben am Stück ohne Fehler",
+"Score {n} or more in a Sprint":"Erziele {n} Punkte oder mehr im Sprint",
+"Score {n} or more in Coordinates":"Erziele {n} Punkte oder mehr bei den Koordinaten",
+"Win {n} games against the computer":"Gewinne {n} Partien gegen den Computer",
+"Win {n} endgames":"Gewinne {n} Endspiele",
+"Challenge completed:":"Challenge geschafft:",
+"Perfect week: you earn a streak freeze.":"Perfekte Woche: Du bekommst einen Frost-Schutz.",
+"Perfect week!":"Perfekte Woche!",
+"New challenges tomorrow.":"Neue Challenges morgen.",
+"New challenges in {n} days.":"Neue Challenges in {n} Tagen.",
+"Complete all three to earn a streak freeze.":"Schaffe alle drei, um einen Frost-Schutz zu bekommen."
 };

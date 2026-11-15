@@ -49,6 +49,7 @@ function objMaj(pulse){
           if(c.objSerie%OBJ_JOURS_GEL===0&&c.gels<OBJ_GELS_MAX){c.gels++;objAnnoncer(t("You earned a streak freeze."));}
         }
         bxMarquer("obj_atteint");
+        try{window.dispatchEvent(new CustomEvent("chang64:objectif"));}catch(e){}
         if(typeof SON!=="undefined"&&SON.medaille)SON.medaille(0.25,true);
         bxVerifier();
       }

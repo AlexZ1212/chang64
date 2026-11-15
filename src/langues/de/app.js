@@ -753,5 +753,13 @@ module.exports = {
 "Perfect week!":"Perfekte Woche!",
 "New challenges tomorrow.":"Neue Challenges morgen.",
 "New challenges in {n} days.":"Neue Challenges in {n} Tagen.",
-"Complete all three to earn a streak freeze.":"Schaffe alle drei, um einen Frost-Schutz zu bekommen."
+"Complete all three to earn a streak freeze.":"Schaffe alle drei, um einen Frost-Schutz zu bekommen.",
+/* Annonces de gel et de defi (2026-11-15) */
+"Freeze earned!":"Frost-Schutz verdient!",
+"It will save your streak if you miss a day.":"Er rettet deine Serie, wenn du einen Tag verpasst.",
+"Streak saved!":"Serie gerettet!",
+"A freeze was used, your streak continues.":"Ein Frost-Schutz wurde verbraucht, deine Serie geht weiter.",
+"Challenge completed!":"Challenge geschafft!",
+"You earn a streak freeze.":"Du bekommst einen Frost-Schutz.",
+"All three challenges completed.":"Alle drei Challenges geschafft."
 };

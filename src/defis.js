@@ -69,13 +69,13 @@ function defiNoter(type,valeur){
     change=true;
     if(s.p[i]>=d.cible){
       s.p[i]=d.cible;s.ok[i]=true;c.defisFaits++;
-      objAnnoncer(t("Challenge completed:")+" "+defiTexte(d));
+      objAnnoncer("defi",t("Challenge completed!"),defiTexte(d));
       if(typeof SON!=="undefined"&&SON.medaille)SON.medaille(0.1,true);
       if(s.ok.every(Boolean)){
         c.semParfaites++;
         const g=objEtat();
-        if(g.gels<OBJ_GELS_MAX){g.gels++;setTimeout(()=>objAnnoncer(t("Perfect week: you earn a streak freeze.")),4600);}
-        else setTimeout(()=>objAnnoncer(t("Perfect week!")),4600);
+        if(g.gels<OBJ_GELS_MAX){g.gels++;objAnnoncer("parfait",t("Perfect week!"),t("You earn a streak freeze."));}
+        else objAnnoncer("parfait",t("Perfect week!"),t("All three challenges completed."));
       }
     }
   });
@@ -131,9 +131,14 @@ function defiMaj(){
     const pc=Math.round(100*s.p[i]/d.cible);
     return '<div class="defi'+(s.ok[i]?" fait":"")+'"><div class="defi-tete"><span class="defi-texte">'+echapper(defiTexte(d))+"</span>"+
       '<span class="defi-compte">'+(s.ok[i]?"✓":s.p[i]+"/"+d.cible)+"</span></div>"+
-      '<div class="defi-barre" role="progressbar" aria-valuemin="0" aria-valuemax="'+d.cible+'" aria-valuenow="'+s.p[i]+'"><i style="width:'+pc+'%"></i></div></div>';
+      '<div class="defi-barre" role="progressbar" aria-valuemin="0" aria-valuemax="'+d.cible+'" aria-valuenow="'+s.p[i]+'"><i style="width:0" data-w="'+pc+'%"></i></div></div>';
   }).join("")+'<p class="defi-note">'+echapper(reste===1?t("New challenges tomorrow."):t("New challenges in {n} days.",{n:reste}))+" "+
     echapper(t("Complete all three to earn a streak freeze."))+"</p>");
+  /* Les barres partent de zero et se remplissent l'une apres l'autre a
+     l'ouverture de la vue (2026-11-15, demande d'Alexandre). */
+  const barres=[...$("menuDefisVue").querySelectorAll(".defi-barre i")];
+  const remplir=()=>barres.forEach((b,i)=>{b.style.transitionDelay=mouvementCalme()?"0s":(0.18+i*0.14)+"s";b.style.width=b.dataset.w;});
+  if(mouvementCalme())remplir();else requestAnimationFrame(()=>requestAnimationFrame(remplir));
 }
 {
   /* Vue du menu, entree "Defis de la semaine", raccourci dans Resoudre. */

@@ -751,5 +751,13 @@ module.exports = {
 "Perfect week!":"Minggu sempurna!",
 "New challenges tomorrow.":"Tantangan baru besok.",
 "New challenges in {n} days.":"Tantangan baru dalam {n} hari.",
-"Complete all three to earn a streak freeze.":"Selesaikan ketiganya untuk mendapat pembeku rangkaian."
+"Complete all three to earn a streak freeze.":"Selesaikan ketiganya untuk mendapat pembeku rangkaian.",
+/* Annonces de gel et de defi (2026-11-15) */
+"Freeze earned!":"Pembeku didapat!",
+"It will save your streak if you miss a day.":"Ini akan menyelamatkan rangkaianmu jika kamu melewatkan satu hari.",
+"Streak saved!":"Rangkaian selamat!",
+"A freeze was used, your streak continues.":"Satu pembeku dipakai, rangkaianmu berlanjut.",
+"Challenge completed!":"Tantangan selesai!",
+"You earn a streak freeze.":"Kamu mendapat pembeku rangkaian.",
+"All three challenges completed.":"Ketiga tantangan selesai."
 };

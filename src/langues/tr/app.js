@@ -751,5 +751,13 @@ module.exports = {
 "Perfect week!":"Kusursuz hafta!",
 "New challenges tomorrow.":"Yeni görevler yarın.",
 "New challenges in {n} days.":"Yeni görevler {n} gün sonra.",
-"Complete all three to earn a streak freeze.":"Bir seri dondurması kazanmak için üçünü de tamamla."
+"Complete all three to earn a streak freeze.":"Bir seri dondurması kazanmak için üçünü de tamamla.",
+/* Annonces de gel et de defi (2026-11-15) */
+"Freeze earned!":"Dondurma kazanıldı!",
+"It will save your streak if you miss a day.":"Bir gün kaçırırsan serini kurtaracak.",
+"Streak saved!":"Seri kurtarıldı!",
+"A freeze was used, your streak continues.":"Bir dondurma kullanıldı, serin devam ediyor.",
+"Challenge completed!":"Görev tamamlandı!",
+"You earn a streak freeze.":"Bir seri dondurması kazandın.",
+"All three challenges completed.":"Üç görevin hepsi tamamlandı."
 };

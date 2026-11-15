@@ -753,5 +753,13 @@ module.exports = {
 "Perfect week!":"Идеальная неделя!",
 "New challenges tomorrow.":"Новые задания завтра.",
 "New challenges in {n} days.":{"one":"Новые задания через {n} дня.","few":"Новые задания через {n} дня.","many":"Новые задания через {n} дней.","other":"Новые задания через {n} дней."},
-"Complete all three to earn a streak freeze.":"Выполни все три, чтобы получить заморозку серии."
+"Complete all three to earn a streak freeze.":"Выполни все три, чтобы получить заморозку серии.",
+/* Annonces de gel et de defi (2026-11-15) */
+"Freeze earned!":"Заморозка получена!",
+"It will save your streak if you miss a day.":"Она спасёт серию, если пропустишь день.",
+"Streak saved!":"Серия спасена!",
+"A freeze was used, your streak continues.":"Использована заморозка, серия продолжается.",
+"Challenge completed!":"Задание выполнено!",
+"You earn a streak freeze.":"Ты получаешь заморозку серии.",
+"All three challenges completed.":"Все три задания выполнены."
 };

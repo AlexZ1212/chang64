@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Médailles chang64</title>
+<style>
+:root{--ink:#101413;--slate:#191F1D;--raise:#232B28;--chalk:#ECEAE3;--sage:#97A49D;--brass:#E0A93B;--jade:#5FBF92;--rule:rgba(236,234,227,.12);
+  --courbe-ressort:cubic-bezier(.3,1.35,.5,1);--courbe-sortie:cubic-bezier(.22,.7,.3,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--chalk);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px 60px}
+main{max-width:920px;margin:0 auto}
+h1{font-family:Georgia,serif;font-weight:600;font-size:28px;margin:0 0 4px}
+h2{font-family:Georgia,serif;font-weight:600;font-size:20px;margin:36px 0 6px}
+p.note{color:var(--sage);margin:0 0 16px;max-width:640px}
+.rang{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.carte{width:132px;text-align:center}
+.carte b{display:block;font-size:14px;margin-top:6px}
+.carte small{display:block;color:var(--sage);font-size:12px;line-height:1.35}
+.medaille{display:block;width:112px;height:112px;margin:0 auto;overflow:visible}
+
+/* ---------- Le reflet qui traverse la medaille ---------- */
+.reflet{transform:translateX(-140px);}
+.brille .reflet{animation:reflet 1.1s var(--courbe-sortie) both}
+@keyframes reflet{from{transform:translateX(-140px)}to{transform:translateX(140px)}}
+/* Vitrine : l'or et le jade brillent de temps en temps, chacun a son tour. */
+.vitrine .or .reflet,.vitrine .jade .reflet{animation:refletLent 9s var(--courbe-sortie) infinite;animation-delay:var(--d,0s)}
+@keyframes refletLent{0%{transform:translateX(-140px)}12%,100%{transform:translateX(140px)}}
+
+/* ---------- Le gain : fenetre de felicitations ---------- */
+.scene{position:relative;width:min(340px,100%);padding:26px 24px 24px;background:var(--slate);border:1px solid var(--rule);border-radius:8px;text-align:center;overflow:hidden}
+.scene::before{content:"";position:absolute;left:-20%;right:-20%;top:-70px;height:176px;border-radius:0 0 50% 50%;background:linear-gradient(155deg,#2F4A3E,#26382F)}
+.socle{position:relative;width:180px;height:180px;margin:0 auto 8px;perspective:600px}
+.rayons{position:absolute;inset:-20px;border-radius:50%;opacity:0;
+  background:repeating-conic-gradient(from 0deg,rgba(255,226,150,.16) 0deg 8deg,transparent 8deg 22deg);
+  -webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%)}
+.halo{position:absolute;inset:20px;border-radius:50%;opacity:0;background:radial-gradient(circle,rgba(255,214,120,.45),transparent 65%)}
+.piece3d{position:absolute;inset:24px;transform-style:preserve-3d}
+.piece3d .medaille{width:132px;height:132px}
+.joue .piece3d{animation:entree 1.15s var(--courbe-ressort) both}
+@keyframes entree{
+  0%{transform:translateY(-60px) scale(.25) rotateY(-720deg);opacity:0}
+  35%{opacity:1}
+  100%{transform:none;opacity:1}}
+.joue .halo{animation:halo 1.6s ease-out .55s both}
+@keyframes halo{0%{opacity:0;transform:scale(.6)}40%{opacity:1}100%{opacity:.55;transform:scale(1)}}
+.joue .rayons{animation:rayonsIn .8s ease-out .7s both,tourne 24s linear .7s infinite}
+@keyframes rayonsIn{from{opacity:0}to{opacity:1}}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.joue .piece3d .reflet{animation:reflet 1.1s var(--courbe-sortie) 1.05s both}
+.etincelle{position:absolute;width:14px;height:14px;opacity:0}
+.etincelle::before,.etincelle::after{content:"";position:absolute;left:6px;top:0;width:2px;height:14px;border-radius:2px;background:#FFF3D1}
+.etincelle::after{transform:rotate(90deg)}
+.joue .etincelle{animation:scintille .9s ease-out both}
+@keyframes scintille{0%{opacity:0;transform:scale(.2) rotate(0)}40%{opacity:1;transform:scale(1) rotate(45deg)}100%{opacity:0;transform:scale(.4) rotate(90deg)}}
+.scene h3{position:relative;font-family:Georgia,serif;font-size:26px;font-weight:600;margin:0 0 2px}
+.scene .nom{position:relative;color:var(--brass);font-weight:600;font-size:17px;margin:0 0 4px}
+.scene .texte{position:relative;color:var(--chalk);opacity:.85;font-size:14px;margin:0 0 18px}
+.joue .apparait{animation:monte .45s var(--courbe-sortie) both}
+@keyframes monte{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+button{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:1px solid var(--brass);background:var(--brass);color:var(--ink);cursor:pointer}
+button.second{background:transparent;color:var(--chalk);border-color:var(--rule)}
+.choix{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+<h1>Médailles de chang64</h1>
+<p class="note">Démonstration du système de badges : quatre métaux, un relief gravé, un reflet de lumière, et l'animation du gain. Les 182 symboles suivront ce modèle.</p>
+
+<h2>Le gain</h2>
+<p class="note">La médaille tombe en tournant, se pose avec un rebond, le reflet la traverse, puis les rayons tournent doucement derrière.</p>
+<div class="scene" id="scene">
+  <div class="socle">
+    <div class="rayons"></div><div class="halo"></div>
+    <div class="piece3d" id="pieceGain"></div>
+    <span class="etincelle" style="left:8px;top:30px;animation-delay:1.1s"></span>
+    <span class="etincelle" style="right:4px;top:60px;animation-delay:1.25s"></span>
+    <span class="etincelle" style="left:24px;bottom:6px;animation-delay:1.4s"></span>
+    <span class="etincelle" style="right:26px;top:4px;animation-delay:1.5s"></span>
+  </div>
+  <h3 class="apparait" style="animation-delay:.9s">Bravo !</h3>
+  <p class="nom apparait" id="gainNom" style="animation-delay:1s"></p>
+  <p class="texte apparait" id="gainTexte" style="animation-delay:1.1s"></p>
+  <button class="apparait" style="animation-delay:1.2s">Continuer</button>
+</div>
+<div class="choix" id="choixGain"></div>
+
+<h2>Quatre métaux</h2>
+<p class="note">Le métal dit la rareté : bronze pour les premiers paliers, argent pour les intermédiaires, or pour les grands exploits, jade bordé d'or pour les jours spéciaux, qu'on ne gagne qu'un jour par an. À droite, un badge pas encore gagné : on devine le symbole, gravé dans l'ombre.</p>
+<div class="rang" id="metaux"></div>
+
+<h2>La vitrine</h2>
+<p class="note">Dans la collection, l'or et le jade captent la lumière de temps en temps, chacun à son tour : ce qui brille se remarque et donne envie.</p>
+<div class="rang vitrine" id="vitrine"></div>
+</main>
+
+<script>
+/* Symboles : genere par symboles.js puis injecter.js. */
+const SYM={"premierCoup":"<g fill=\"currentColor\" transform=\"translate(-6 1) scale(.92) translate(-24 -24) scale(1.0667)\"><path d=\"M14.31,33.79h16.38c1.14,0,2.07.93,2.07,2.07v2.14H12.24v-2.14c0-1.14.93-2.07,2.07-2.07Z\"/><path d=\"M31.85,34.14c-1.31-1.01-6.34-5.24-6.57-11.44-.84.03-1.78.03-2.77.03s-1.94,0-2.77-.03c-.24,6.2-5.26,10.43-6.57,11.44,0,0,0,0,0,0,.33-.22.73-.35,1.16-.35h16.38c.43,0,.83.13,1.16.35,0,0,0,0,0,0Z\"/><path d=\"M28.82,21.68c0,1.02-2.83,1.05-6.32,1.05s-6.32-.04-6.32-1.05,1.41-2.63,6.32-2.63,6.32,1.61,6.32,2.63Z\"/><circle cx=\"22.5\" cy=\"13.53\" r=\"5.53\"/></g><g fill=\"currentColor\" transform=\"translate(12 -4) scale(.5) translate(-24 -24) scale(.1875)\"><path d=\"M184,216a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,216Zm45.66-101.66-96-96a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,32,128H72v56a8,8,0,0,0,8,8h96a8,8,0,0,0,8-8V128h40a8,8,0,0,0,5.66-13.66Z\"/></g>","fourchette":"<g transform=\"rotate(38)\" fill=\"currentColor\">\n    <rect x=\"-8\" y=\"-24\" width=\"3.6\" height=\"12\" rx=\"1.8\"/><rect x=\"-1.8\" y=\"-24\" width=\"3.6\" height=\"12\" rx=\"1.8\"/><rect x=\"4.4\" y=\"-24\" width=\"3.6\" height=\"12\" rx=\"1.8\"/>\n    <path d=\"M-8 -14h16v1c0 5-3 8-5.5 9v24a2.5 2.5 0 0 1-5 0v-24c-2.5-1-5.5-4-5.5-9z\"/></g>","punaise":"<g fill=\"currentColor\" transform=\" translate(-24 -24) scale(.1875)\"><path d=\"M235.33,104l-53.47,53.65c4.56,12.67,6.45,33.89-13.19,60A15.93,15.93,0,0,1,157,224c-.38,0-.75,0-1.13,0a16,16,0,0,1-11.32-4.69L96.29,171,53.66,213.66a8,8,0,0,1-11.32-11.32L85,159.71l-48.3-48.3A16,16,0,0,1,38,87.63c25.42-20.51,49.75-16.48,60.4-13.14L152,20.7a16,16,0,0,1,22.63,0l60.69,60.68A16,16,0,0,1,235.33,104Z\"/></g>","hibou":"<path fill=\"currentColor\" d=\"M-15 -19c3 3 5 5 7 6 5-2 11-2 16 0 2-1 4-3 7-6 2 7 3 13 3 20 0 12-7 21-18 22-11-1-18-10-18-22 0-7 1-13 3-20z\"/>\n    <path style=\"fill:var(--oeil)\" d=\"M0 -5c-3-3-8-5-14-4 1 5 4 9 8 10 3 1 5-2 6-6zM0 -5c3-3 8-5 14-4-1 5-4 9-8 10-3 1-5-2-6-6z\" opacity=\".35\"/>\n    <circle cx=\"-7\" cy=\"-2\" r=\"5.6\" style=\"fill:var(--oeil)\"/><circle cx=\"7\" cy=\"-2\" r=\"5.6\" style=\"fill:var(--oeil)\"/>\n    <circle cx=\"-6.2\" cy=\"-1.4\" r=\"2.7\" fill=\"currentColor\"/><circle cx=\"7.8\" cy=\"-1.4\" r=\"2.7\" fill=\"currentColor\"/>\n    <path style=\"fill:var(--oeil)\" d=\"M-2.4 4h4.8L0 8.6z\"/>\n    <path style=\"fill:none;stroke:var(--oeil);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round\" opacity=\".55\" d=\"M-6 12l2 1.6 2-1.6M2 12l2 1.6 2-1.6M-2 16.5l2 1.6 2-1.6\"/>","shahMat":"<g fill=\"currentColor\" transform=\"translate(-4 1) rotate(28 12 14.5) scale(.88) translate(-24 -24) scale(1.0667)\"><path d=\"M31.54,31.96H13.46c-2.08,0-3.79,1.7-3.79,3.79v2.25h25.66v-2.25c0-2.09-1.7-3.79-3.79-3.79Z\"/><path d=\"M31.08,12.5c-1.67,0-3.32.64-4.72,1.42l-1.8-2.32v-1.53h2.95v-4.12h-2.95v-2.95h-4.12v2.95h-2.95v4.12h2.95v1.53l-1.8,2.32c-1.4-.78-3.05-1.42-4.72-1.42-2.74,0-7.28,2.13-7.28,7.55,0,5.98,5.8,8.15,6.78,11.92.01,0,.03,0,.04,0h18.08s.03,0,.04,0c.97-3.77,6.78-5.94,6.78-11.92,0-5.41-4.54-7.55-7.28-7.55ZM29.1,25.07c-.58.62-1.23,1.31-1.82,2.09-.14.18-.35.29-.58.29-.35,0-.84,0-.81,0v-7.39c1.3-.96,2.57-1.55,3.39-1.56.42.03,2.24.27,2.24,2.46,0,1.37-.74,2.3-2.42,4.1ZM13.48,20.97c0-2.19,1.82-2.44,2.24-2.46.82.01,2.09.6,3.39,1.56v7.39s-.46,0-.81,0c-.23,0-.44-.11-.58-.29-.59-.77-1.24-1.46-1.82-2.09-1.68-1.8-2.42-2.73-2.42-4.1Z\"/></g>","tourCavalier":"<g fill=\"currentColor\" transform=\"translate(-4 1) scale(.92) translate(-24 -24) scale(1.0667)\"><path d=\"M14.4,33.1h20.67c1.39,0,2.52,1.13,2.52,2.52v2.38H11.88v-2.38c0-1.39,1.13-2.52,2.52-2.52Z\"/><path d=\"M14.65,21.66c.97-.66,4.68-.28,7.56-3.75.52-.62.98,1.68-.34,3.64-2.86,4.23-8.3,4.94-8.39,11.72.29-.11.6-.18.92-.18h20.67c.52,0,1,.16,1.4.42-.55-.46-1.93-1.71-1.93-2.68,0-1.21.9-4.35.9-9.83s-4.54-14.07-12.47-14.07l-3.39-2.95-.75,2.7-3-1.87s-.15,2.38-.24,4.01c-.54.3-2.22.96-4.03,5.99-.63,1.75-4.15,3-4.15,6.07,0,3.41,3.21,3.83,3.82,3.83,1.57,0,2.36-2.34,3.42-3.06Z\"/><path d=\"M18.54,13.2c.9-.63.98-1.58,1.21-2.02.03-.06-.02-.12-.08-.12-.49.06-1.4-.18-2.31.45-.9.64-.98,1.58-1.2,2.02-.03.06.02.12.08.12.49-.06,1.4.18,2.3-.45Z\" style=\"fill:var(--oeil)\"/><path d=\"M10.24,20.58c-.46.42-.86.73-1.07.5s.14-1.16.6-1.57.87-.16,1.08.07-.15.59-.61,1.01Z\" style=\"fill:var(--oeil)\"/></g><g transform=\"translate(9 -4)\"><g fill=\"currentColor\"><circle cx=\"0\" cy=\"0\" r=\"1.6\"/><circle cx=\"5\" cy=\"-3\" r=\"1.6\"/><circle cx=\"10\" cy=\"-6\" r=\"1.6\"/><circle cx=\"12\" cy=\"-12\" r=\"1.6\"/></g></g>","goutte":"<g fill=\"currentColor\" transform=\" translate(-24 -24) scale(.1875)\"><path d=\"M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75Zm9.85,105.59a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z\"/></g>","laurier":"<g fill=\"currentColor\" transform=\" translate(-24 -24) scale(.1875)\"><path d=\"M248,80a28,28,0,1,0-51.12,15.77l-26.79,33L146,73.4a28,28,0,1,0-36.06,0L85.91,128.74l-26.79-33a28,28,0,1,0-26.6,12L47,194.63A16,16,0,0,0,62.78,208H193.22A16,16,0,0,0,209,194.63l14.47-86.85A28,28,0,0,0,248,80ZM128,40a12,12,0,1,1-12,12A12,12,0,0,1,128,40ZM24,80A12,12,0,1,1,36,92,12,12,0,0,1,24,80ZM220,92a12,12,0,1,1,12-12A12,12,0,0,1,220,92Z\"/></g>"};
+/* Metaux : face (degrade radial), tranche (lineaire), gravure (trait sombre),
+   eclat (meme forme en clair, decalee d'un demi-pixel : le relief). */
+const METAUX={
+  bronze:{face:["#F0B98C","#C07A47","#7A4321"],tranche:["#D99566","#6A381A"],grave:"#4A2410",nom:"Bronze"},
+  argent:{face:["#FFFFFF","#C9CFCC","#7E8784"],tranche:["#E4E8E6","#5E6765"],grave:"#2F3634",nom:"Argent"},
+  or:{face:["#FFF0C2","#E9B44C","#9C6512"],tranche:["#F6CF77","#7A4C0C"],grave:"#4E3104",nom:"Or"},
+  jade:{face:["#C9F2DC","#5FBF92","#1F6B4A"],tranche:["#F6CF77","#7A4C0C"],grave:"#0C3524",nom:"Jade"},
+  ombre:{face:["#2C3532","#232B28","#1A201E"],tranche:["#2A3230","#141917"],grave:"rgba(236,234,227,.16)",nom:"À gagner"}
+};
+let n=0;
+function medaille(sym,metal){
+  const m=METAUX[metal],i="m"+(++n),eteint=metal==="ombre";
+  sym=SYM[sym];
+  return `<svg class="medaille ${metal}" viewBox="-60 -60 120 120" aria-hidden="true">
+  <defs>
+    <radialGradient id="${i}f" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="${m.face[0]}"/><stop offset=".45" stop-color="${m.face[1]}"/><stop offset="1" stop-color="${m.face[2]}"/></radialGradient>
+    <linearGradient id="${i}t" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${m.tranche[0]}"/><stop offset="1" stop-color="${m.tranche[1]}"/></linearGradient>
+    <linearGradient id="${i}r" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <clipPath id="${i}c"><circle r="54"/></clipPath>
+  </defs>
+  ${eteint?"":`<circle r="56" cy="3" fill="rgba(0,0,0,.45)"/>`}
+  <circle r="55" fill="url(#${i}t)"/>
+  <circle r="47" fill="url(#${i}f)"/>
+  <circle r="43" fill="none" stroke="${m.grave}" stroke-opacity=".35" stroke-width="1"/>
+  <circle r="47" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.2"/>
+  ${eteint?"":`<g opacity=".45" transform="translate(0 .9) scale(1.45)" style="color:#fff;--oeil:transparent">${sym}</g>`}
+  <g transform="scale(1.45)" style="color:${m.grave};--oeil:${m.face[1]}">${sym}</g>
+  ${eteint?"":`<g clip-path="url(#${i}c)"><rect class="reflet" x="-22" y="-80" width="30" height="160" fill="url(#${i}r)" transform="rotate(22)" opacity=".7"/></g>`}
+</svg>`;
+}
+const EXEMPLES=[
+  ["premierCoup","bronze","Premier coup","1 exercice résolu","Un de fait ! Au tout premier coup, les Blancs ont déjà 20 choix."],
+  ["fourchette","bronze","Fourchette à dessert","Fourchette de cavalier : 10","Le cavalier est la seule pièce qui saute par-dessus les autres."],
+  ["punaise","argent","Punaise !","Clouage : 10","La pièce clouée ne peut pas bouger sans exposer plus précieux qu'elle."],
+  ["hibou","argent","Hibou","Un exercice entre minuit et 5 h","Les grands joueurs jouent aussi la nuit. Mais le cerveau, lui, aime dormir."],
+  ["shahMat","or","Shâh mât","7 jours d'affilée","Échec et mat vient du persan shâh mât : le roi est sans issue."],
+  ["tourCavalier","or","Tour du cavalier","1 000 exercices résolus","En 1759, Euler étudia le tour du cavalier sur les 64 cases."],
+  ["goutte","jade","Songkran","Jouer le 13 avril","Le Nouvel An thaï, fêté à grands jets d'eau. L'occasion d'une partie de Makruk ?"],
+  ["laurier","jade","Caïssa","Classement 2300","La déesse des échecs, inventée par le poète William Jones en 1763."]
+];
+// Vitrine
+document.getElementById("vitrine").innerHTML=EXEMPLES.map((e,k)=>`<div class="carte" style="--d:${k*1.1}s">${medaille(e[0],e[1])}<b>${e[2]}</b><small>${e[3]}</small></div>`).join("")
+  .replace(/class="carte" style="--d:([\d.]+)s">(<svg class="medaille (\w+))/g,(a,d,s,met)=>`class="carte ${met}" style="--d:${d}s">${s}`);
+// Metaux
+document.getElementById("metaux").innerHTML=["bronze","argent","or","jade","ombre"].map(m=>`<div class="carte">${medaille("tourCavalier",m)}<b>${METAUX[m].nom}</b></div>`).join("");
+// Gain
+const scene=document.getElementById("scene");
+function gagner(k){
+  const e=EXEMPLES[k];
+  document.getElementById("pieceGain").innerHTML=medaille(e[0],e[1]);
+  document.getElementById("gainNom").textContent=e[2];
+  document.getElementById("gainTexte").textContent=e[4];
+  scene.classList.remove("joue");void scene.offsetWidth;scene.classList.add("joue");
+}
+document.getElementById("choixGain").innerHTML=EXEMPLES.map((e,k)=>`<button class="second" data-k="${k}">${e[2]}</button>`).join("");
+document.getElementById("choixGain").onclick=ev=>{const b=ev.target.closest("button");if(b)gagner(+b.dataset.k);};
+gagner(4);
+</script>
+</body>
+</html>

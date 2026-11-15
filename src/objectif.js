@@ -90,8 +90,12 @@ const OBJ_ICONES={gel:"<path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0
 const objFile=[];let objEnCours=false;
 function objAnnoncer(type,titre,texte){objFile.push({type:type,titre:titre,texte:texte||""});if(!objEnCours)objSuivante();}
 function objSuivante(){
-  const a=objFile.shift();if(!a){objEnCours=false;return;}
+  if(!objFile.length){objEnCours=false;return;}
   objEnCours=true;
+  /* Jamais pendant le jeu, ni par-dessus la fenetre Bravo : on attend. */
+  const br=$("bravo");
+  if((typeof bravoOccupe==="function"&&bravoOccupe())||(br&&!br.hidden)||(typeof bravoFile!=="undefined"&&bravoFile&&bravoFile.length)){setTimeout(objSuivante,1000);return;}
+  const a=objFile.shift();
   let b=document.getElementById("objAnnonce");
   if(!b){
     b=document.createElement("div");b.id="objAnnonce";b.setAttribute("role","status");b.setAttribute("aria-live","polite");

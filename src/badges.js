@@ -326,6 +326,26 @@ setTimeout(()=>{
   bxVerifier();
 },2500);
 
+/* ---------- Jamais pendant le jeu ----------
+   Regle d'Alexandre (15/11) : recompenses, badges et annonces s'affichent en
+   fin de partie, de defi ou d'exercice, jamais pendant. bravoOccupe (ui2.js)
+   ne couvrait que la pendule, le Sprint, les Coordonnees, le Makruk et la
+   promotion ; on y ajoute toute partie en cours (meme sans pendule), un
+   exercice affiche et pas encore fini, une finale en cours et une etape de
+   Je debute pas encore reussie. La fenetre et les annonces attendent. */
+function bxVisibleEl(id){const e=$(id);return !!(e&&e.offsetParent);}
+{
+  const av=bravoOccupe;
+  bravoOccupe=function(){
+    if(av.apply(this,arguments))return true;
+    if(mode==="play"&&gameStarted&&!resultInfo&&!isReviewGame)return true;
+    if(mode==="friend"&&amiStarted&&!resultInfo&&amiMoves.length>0)return true;
+    if(mode==="puzzles"&&puzzle&&!puzzleDone&&bxVisibleEl("exStatus"))return true;
+    if(eg&&!eg.done&&bxVisibleEl("egStatus"))return true;
+    if(mode==="debut"&&debut&&!debut.ok&&debutEtapes()[debut.e]&&debutEtapes()[debut.e].exos[debut.x])return true;
+    return false;
+  };
+}
 /* ---------- Fenetre de gain ---------- */
 /* La medaille tombe en tournant, se pose, le reflet la traverse, puis des
    rayons tournent doucement derriere (direction validee le 15/11). Plusieurs

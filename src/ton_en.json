@@ -1,0 +1,158 @@
+{
+ "{san}: material won. Nicely spotted.": [
+  "{san}: material won. Sharp eyes.",
+  "{san}: one more piece in the box.",
+  "{san}: your opponent never saw it coming.",
+  "{san}: free material, thank you very much.",
+  "{san}: clean and tidy, nothing to add."
+ ],
+ "{san}: checkmate.": [
+  "{san}: checkmate. The king can pack his bags.",
+  "{san}: checkmate. Curtain.",
+  "{san}: checkmate. Nowhere left to hide.",
+  "{san}: checkmate, and in style.",
+  "{san}: checkmate. The king never saw it coming."
+ ],
+ "Not quite. Look at the enemy king and its escape squares.": [
+  "Missed, but no harm done. Look at the enemy king: where can it run?",
+  "Not that one. Check the enemy king and its escape squares.",
+  "Close, but no. Where could the enemy king escape to?",
+  "Nope. Take another look at the enemy king and its way out."
+ ],
+ "Still not it. A hint or the solution can help.": [
+  "Still not it. Even grandmasters ask for a hint sometimes.",
+  "Not yet. A hint never hurt anyone.",
+  "Still no luck. The Hint button is right there, no shame in it.",
+  "Not that either. Time for a little hint?"
+ ],
+ "The piece to move is highlighted.": [
+  "Psst: that's the piece that needs to move.",
+  "This one. The highlighted piece holds the answer.",
+  "A little nudge: play the piece that lit up."
+ ],
+ "The answer is {san}. Play it to continue.": [
+  "The answer was {san}. Play it, it'll stick better.",
+  "It was {san}. Play it yourself, your hand will remember.",
+  "The move was {san}. Play it to see why."
+ ],
+ "Three in a row. Moving up to level {n}: {name}.": [
+  "Three in a row! Off to level {n}: {name}.",
+  "Three straight! Level {n} awaits: {name}.",
+  "Hat-trick! Up you go to level {n}: {name}."
+ ],
+ "Play a move, or use Hint, to unlock the next puzzle.": [
+  "Have a go first: play a move (or ask for a hint) to move on.",
+  "One try first! Play a move or take a hint to unlock the next one."
+ ],
+ "Correct. Your move.": [
+  "Correct. Keep going.",
+  "Good, the attack goes on. Your move.",
+  "Right! Now finish the job."
+ ],
+ "Loading puzzles…": [
+  "Getting the puzzles out of the cupboard…",
+  "Setting up the pieces…",
+  "Polishing the pieces…"
+ ],
+ "Couldn't load puzzles. Check your connection and try again.": [
+  "The puzzles got stuck on the way. Check your connection and try again."
+ ],
+ "Three misses.": [
+  "Three misses, the Sprint stops here."
+ ],
+ "Time is up.": [
+  "Time's up: the clock has spoken."
+ ],
+ "You cleared every puzzle.": [
+  "You cleared every single puzzle. We're out of stock!"
+ ],
+ "Checkmate in {n} moves. Well done.": [
+  "Checkmate in {n} moves. Textbook.",
+  "Checkmate in {n} moves. Smooth as a lesson.",
+  "Checkmate in {n} moves. The lone king never stood a chance."
+ ],
+ "Stalemate. The lone king escaped with a draw.": [
+  "Stalemate! The lone king can't move but isn't in check: it sneaks a draw.",
+  "Stalemate. The king slipped away with a draw, watch those last squares."
+ ],
+ "The computer is thinking…": [
+  "The computer is scratching its head…",
+  "The computer is thinking hard…",
+  "The computer is counting on its fingers…",
+  "The computer is pondering…",
+  "Hmm, says the computer…"
+ ],
+ "Checkmate. You win.": [
+  "Checkmate, you win. The computer is already asking for a rematch.",
+  "Checkmate, you win. The computer is rebooting its pride.",
+  "Checkmate, you win! Well played.",
+  "Checkmate, you win. Even the computer is impressed."
+ ],
+ "Checkmate. The computer wins.": [
+  "Checkmate, the computer wins. It won't brag: it's a computer.",
+  "Checkmate, the computer wins this time. Rematch?",
+  "Checkmate, the computer wins. Every defeat teaches something."
+ ],
+ "Stalemate. The game is drawn.": [
+  "Stalemate: the king can't move without walking into check. Nobody wins."
+ ],
+ "The computer's flag fell. You win on time.": [
+  "The computer dawdled: its time ran out, you win."
+ ],
+ "Your flag fell. The computer wins on time.": [
+  "Your time ran out, the computer wins on time. Next time, keep an eye on the clock."
+ ],
+ "You resigned. The computer wins.": [
+  "You resigned. Shall we set the pieces up again?",
+  "You resigned. A fresh game is just a click away."
+ ],
+ "Check. Your move.": [
+  "Check! Your king needs looking after.",
+  "Check. Protect your king, your move."
+ ],
+ "Fetching the engine, this can take a moment on a first visit.": [
+  "The computer is putting its slippers on. On a first visit, this can take a moment."
+ ],
+ "Downloading the engine…": [
+  "The computer is getting dressed…"
+ ],
+ "Move taken back. Your turn.": [
+  "Move taken back. We'll pretend nothing happened. Your turn."
+ ],
+ "Checkmate. You win this one.": [
+  "Checkmate, you win this one. Bragging rights are yours."
+ ],
+ "Checkmate. Your friend wins.": [
+  "Checkmate, your friend wins. Time to ask for a rematch."
+ ],
+ "Your friend resigned. You win.": [
+  "Your friend resigned. You win, be a gracious winner."
+ ],
+ "No finished game yet.": [
+  "No finished game yet. The board is waiting."
+ ],
+ "Brilliant session!": [
+  "Brilliant session!",
+  "What a session!",
+  "On fire today!"
+ ],
+ "Every mistake teaches you something.": [
+  "Every mistake teaches you something.",
+  "Tough session, good lessons.",
+  "Not your best day, but you kept going."
+ ],
+ "Challenge completed!": [
+  "Challenge completed!",
+  "Challenge done, nicely!",
+  "One more challenge in the bag!"
+ ],
+ "Well done.": [
+  "Well done.",
+  "Spot on.",
+  "Exactly right."
+ ],
+ "Not quite. Try again.": [
+  "Not quite. Try again.",
+  "Almost! Have another go."
+ ]
+}

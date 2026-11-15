@@ -52,8 +52,28 @@ function lier(x){
    (grammaire.js), qui sert aussi aux pages statiques. */
 function rendreGabarit(modele,v){return GRAMMAIRE.gabarit(modele,v);}
 function formePlurielle(val,v){return GRAMMAIRE.pluriel(val,v,LANG_INTL);}
+/* Ton de l'application (2026-11-15, valide par Alexandre) : une reaction
+   (reussite, erreur, attente, fin de partie...) peut avoir plusieurs
+   variantes, une LISTE dans le dictionnaire de la langue, tiree au hasard
+   sans jamais redonner deux fois de suite la meme. L'anglais a sa table a
+   part, TON_EN, la cle restant la phrase d'origine passee a t() : aucun
+   appel du code ne change. Une variante peut etre un objet de pluriel
+   (russe, polonais). Humour seulement dans l'app, jamais aux depens du
+   joueur ; regles, explications et pages claires restent sobres. */
+const TON_EN=__TON_EN__;
+const TON_DERNIER={};
+function tVariante(s,val){
+  if(!Array.isArray(val)||!val.length)return val;
+  let i=Math.floor(Math.random()*val.length);
+  if(val.length>1&&i===TON_DERNIER[s])i=(i+1)%val.length;
+  TON_DERNIER[s]=i;
+  return val[i];
+}
 function t(s,v){
-  const out=rendreGabarit(formePlurielle(DICT[s],v)||s,v);
+  let val=DICT[s];
+  if(val===undefined&&TON_EN[s])val=TON_EN[s];
+  val=tVariante(s,val);
+  const out=rendreGabarit(formePlurielle(val,v)||s,v);
   return LANG==="fr" ? lier(out) : out;
 }
 /* textes statiques du document : relevés une fois, retraduits à la demande */

@@ -56,7 +56,8 @@ const texte = (d, id) => (d.getElementById(id) || {}).textContent || "";
     T("pas d'etiquette de motif perimee", !/Mat du couloir|Back-rank mate/.test(texte(d, "exTheme")), texte(d, "exTheme"));
     T("etiquette neutre", texte(d, "exTheme") === "…", JSON.stringify(texte(d, "exTheme")));
     T("consigne en attente", texte(d, "exQuest") === "Chargement…", texte(d, "exQuest"));
-    T("statut du panneau : chargement des exercices", /Chargement des\s+exercices/.test(texte(d, "exStatus")), texte(d, "exStatus"));
+    /* Trois variantes en alternance depuis le 2026-11-15 (ton de l'app). */
+    T("statut du panneau : chargement des exercices", /exercices du\s+placard|installe les\s+pièces|astique les\s+pièces/.test(texte(d, "exStatus")), texte(d, "exStatus"));
     T("pas de code d'exercice perime", texte(d, "exCode") === "", texte(d, "exCode"));
     T("le statut de l'onglet Jouer n'est pas touche", texte(d, "status") === statutJouer, texte(d, "status"));
 

@@ -246,7 +246,10 @@ const makrukV = require("crypto").createHash("sha1").update(makruk, "utf8").dige
    le meme script ; medailles et textes partent dans data/ (voir badges_build.js). */
 const BADGES_BUILD = require("./badges_build.js");
 let ui3 = minifyJs((fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8") + "\n" + BADGES_BUILD.code()).split("__MAKRUK_V__").join(makrukV), "ui3.js");
-const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), "i18n.js");
+/* Variantes anglaises des reactions de l'app (ton.json, 2026-11-15) : voir
+   TON_EN dans i18n.js. Les autres langues ont les leurs dans leur app.js. */
+const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8")
+  .replace("__TON_EN__", JSON.stringify(JSON.parse(fs.readFileSync(path.join(__dirname, "ton_en.json"), "utf8")))), "i18n.js");
 const grammaire = minifyJs(fs.readFileSync(path.join(__dirname, "grammaire.js"), "utf8"), "grammaire.js");
 /* Le nombre d'exercices etait ecrit en dur a neuf endroits : accueil, meta
    description, image de partage, donnees structurees, tuiles de navigation,

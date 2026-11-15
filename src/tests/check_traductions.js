@@ -42,7 +42,9 @@ const utilisees = [...code.matchAll(/\bt\("((?:[^"\\]|\\.)+)"/g)].map(m => m[1])
      statiquement, on les ecarte. */
 const norm = s => s.replace(/\\u([0-9a-fA-F]{4})/g, (_, h) => String.fromCharCode(parseInt(h, 16))).replace(/\\"/g, "\"");
 const vars = s => [...new Set([...String(s).matchAll(/\{([A-Za-z0-9_]+)(?::[a-z]+)?(?:\?[^|{}]*\|[^{}]*)?\}/g)].map(m => m[1]))].sort().join(",");
-const formes = v => typeof v === "object" ? Object.entries(v) : [["", v]];
+/* Une valeur peut etre une liste de variantes (ton de l'app, 2026-11-15),
+   dont chaque element est une chaine ou un objet de pluriel. */
+const formes = v => Array.isArray(v) ? v.flatMap(formes) : typeof v === "object" ? Object.entries(v) : [["", v]];
 
 for (const l of AUTRES) {
   console.log("\n--- Table de l'application : " + l + " ---");

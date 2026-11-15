@@ -150,7 +150,9 @@ setTimeout(async()=>{
   aide.click(); await new Promise(r=>setTimeout(r,400));
   T("le coup complet est donne", d.querySelectorAll("#board .sq.hint").length===2,
     String(d.querySelectorAll("#board .sq.hint").length));
-  T("la reponse est annoncee", /answer|réponse|solution/i.test(d.getElementById("exStatus").textContent),
+  /* Trois tournures en alternance depuis le 2026-11-15 (ton de l'app) :
+     on verifie que le coup lui-meme est annonce, en notation. */
+  T("la reponse est annoncee", /\b([KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h](x[a-h])?[1-8](=[QRBN])?|O-O(-O)?)[+#]?/.test(d.getElementById("exStatus").textContent),
     d.getElementById("exStatus").textContent.slice(0,50));
   d.getElementById("btnNext").click(); await new Promise(r=>setTimeout(r,600));
   T("revient a Indice a l'exercice suivant", /Hint|Indice/i.test(aide.textContent), aide.textContent);

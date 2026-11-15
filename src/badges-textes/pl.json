@@ -414,5 +414,9 @@
  "lec_acharne": ["Zawzięty", "Rozwiązać zadanie po 3 błędach", "Trzy nieudane próby, a ty się nie poddałeś. Dłuższe szukanie lepiej utrwala rozwiązanie w pamięci."
 ],
  "lec_reprise": ["Nowy start", "Zacząć serię od nowa po jej przerwaniu", "Przerwana seria niczego nie wymazuje z tego, czego się nauczyłeś. Najważniejsze to wrócić."
+],
+ "obj_atteint": ["Cel osiągnięty", "Osiągnąć dzienny cel", "Cel osiągnięty! Trochę każdego dnia to więcej niż dużo raz w miesiącu: postępy daje regularność."
+],
+ "obj_gel": ["Kostka lodu", "Uratować serię zamrożeniem", "Jeden dzień opuszczony, a seria trwa. W szachach pozycja też może zamarznąć: gdy ta sama powtórzy się trzy razy, jest remis."
 ]
 }

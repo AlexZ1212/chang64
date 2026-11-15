@@ -725,5 +725,13 @@ module.exports = {
 "Days played":"Hari bermain",
 "Sprint record":"Rekor Sprint",
 "Coordinates record":"Rekor Koordinat",
-"Endgames won":"Akhir permainan dimenangkan"
+"Endgames won":"Akhir permainan dimenangkan",
+/* Objectif du jour et gel de serie (2026-11-15, voir objectif.js) */
+"Daily goal":"Target harian",
+"{n}/{total} today":"{n}/{total} hari ini",
+"Goal reached!":"Target tercapai!",
+"Streak freezes":"Pembeku rangkaian",
+"You earned a streak freeze.":"Kamu mendapat satu pembeku rangkaian.",
+"Your streak is saved: a freeze was used.":"Rangkaianmu selamat: satu pembeku dipakai.",
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Teka-teki yang dipecahkan setiap hari. Capai 7 hari berturut-turut untuk mendapat pembeku rangkaian."
 };

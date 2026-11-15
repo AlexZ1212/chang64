@@ -414,5 +414,9 @@
  "lec_acharne": ["Yılmaz", "3 hatadan sonra bir bulmacayı çözmek", "Üç başarısız deneme ve pes etmedin. Uzun aramak çözümü belleğe daha iyi kazır."
 ],
  "lec_reprise": ["Yeni başlangıç", "Bozulan bir seriye yeniden başlamak", "Bozulan bir seri öğrendiklerinden hiçbir şeyi silmez. En önemlisi geri dönmek."
+],
+ "obj_atteint": ["Hedefe ulaşıldı", "Günlük hedefine ulaşmak", "Hedefe ulaşıldı! Her gün biraz, ayda bir çoktan iyidir: ilerleten şey düzenliliktir."
+],
+ "obj_gel": ["Buz küpü", "Serini bir dondurmayla kurtarmak", "Bir gün kaçtı ama serin sağlam. Satrançta da konum donabilir: aynı konum üç kez tekrarlanırsa oyun berabere biter."
 ]
 }

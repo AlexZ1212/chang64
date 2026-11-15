@@ -414,5 +414,9 @@
  "lec_acharne": ["Accanito", "Risolvere un esercizio dopo 3 errori", "Tre tentativi sbagliati, e non hai mollato. Cercare più a lungo fissa meglio la soluzione nella memoria."
 ],
  "lec_reprise": ["Nuovo inizio", "Ricominciare una serie dopo averla interrotta", "Una serie interrotta non cancella nulla di ciò che hai imparato. La cosa più importante è tornare."
+],
+ "obj_atteint": ["Obiettivo raggiunto", "Raggiungere l'obiettivo del giorno", "Obiettivo raggiunto! Un po' ogni giorno vale più di tanto una volta al mese: è la costanza che fa migliorare."
+],
+ "obj_gel": ["Cubetto di ghiaccio", "Salvare la serie con un congelamento", "Un giorno saltato, e la tua serie regge. Anche negli scacchi una posizione può congelarsi: se la stessa si ripete tre volte, è patta."
 ]
 }

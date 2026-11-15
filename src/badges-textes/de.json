@@ -414,5 +414,9 @@
  "lec_acharne": ["Unermüdlich", "Eine Aufgabe nach 3 Fehlern lösen", "Drei Fehlversuche, und du hast nicht aufgegeben. Länger zu suchen prägt die Lösung besser ins Gedächtnis ein."
 ],
  "lec_reprise": ["Neustart", "Eine Serie nach einer Unterbrechung neu beginnen", "Eine unterbrochene Serie löscht nichts von dem, was du gelernt hast. Am wichtigsten ist, wiederzukommen."
+],
+ "obj_atteint": ["Ziel erreicht", "Dein Tagesziel erreichen", "Ziel erreicht! Jeden Tag ein bisschen ist besser als einmal im Monat viel: Regelmäßigkeit bringt dich weiter."
+],
+ "obj_gel": ["Eiswürfel", "Deine Serie mit einem Frost-Schutz retten", "Ein verpasster Tag, und deine Serie hält. Auch im Schach kann eine Stellung einfrieren: Kommt dieselbe dreimal vor, ist die Partie remis."
 ]
 }

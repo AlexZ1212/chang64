@@ -414,5 +414,9 @@
  "lec_acharne": ["Tenaz", "Resolver un ejercicio tras 3 errores", "Tres intentos fallidos y no te rendiste. Buscar más tiempo graba mejor la solución en la memoria."
 ],
  "lec_reprise": ["Nuevo comienzo", "Retomar una racha después de romperla", "Una racha rota no borra nada de lo aprendido. Lo más importante es volver."
+],
+ "obj_atteint": ["Objetivo cumplido", "Cumplir tu objetivo del día", "¡Objetivo cumplido! Un poco cada día vale más que mucho una vez al mes: la constancia es lo que hace progresar."
+],
+ "obj_gel": ["Cubito de hielo", "Salvar tu racha con una congelación", "Un día perdido, y tu racha aguanta. En ajedrez una posición también puede congelarse: si la misma se repite tres veces, son tablas."
 ]
 }

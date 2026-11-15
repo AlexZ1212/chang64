@@ -414,5 +414,9 @@
  "lec_acharne": ["Pantang menyerah", "Memecahkan teka-teki setelah 3 kesalahan", "Tiga kali gagal, dan kamu tidak menyerah. Mencari lebih lama membuat solusinya lebih melekat di ingatan."
 ],
  "lec_reprise": ["Awal baru", "Memulai lagi rangkaian setelah terputus", "Rangkaian yang terputus tidak menghapus apa pun yang sudah kamu pelajari. Yang terpenting adalah kembali."
+],
+ "obj_atteint": ["Target tercapai", "Mencapai target harianmu", "Target tercapai! Sedikit setiap hari lebih baik daripada banyak sebulan sekali: keteraturan yang membuatmu berkembang."
+],
+ "obj_gel": ["Es batu", "Menyelamatkan rangkaian dengan pembeku", "Satu hari terlewat, dan rangkaianmu bertahan. Dalam catur posisi juga bisa membeku: jika posisi yang sama muncul tiga kali, permainan remis."
 ]
 }

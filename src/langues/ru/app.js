@@ -727,5 +727,13 @@ module.exports = {
 "Days played":"Игровых дней",
 "Sprint record":"Рекорд в спринте",
 "Coordinates record":"Рекорд в координатах",
-"Endgames won":"Выигранные эндшпили"
+"Endgames won":"Выигранные эндшпили",
+/* Objectif du jour et gel de serie (2026-11-15, voir objectif.js) */
+"Daily goal":"Цель дня",
+"{n}/{total} today":"{n}/{total} сегодня",
+"Goal reached!":"Цель достигнута!",
+"Streak freezes":"Заморозки серии",
+"You earned a streak freeze.":"Ты заработал заморозку серии.",
+"Your streak is saved: a freeze was used.":"Серия спасена: использована заморозка.",
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Сколько задач решать каждый день. Выполняй цель 7 дней подряд, чтобы получить заморозку серии."
 };

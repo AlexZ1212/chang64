@@ -1,5 +1,48 @@
 [
  {
+  "d": "2026-11-16",
+  "en": [
+   "Daily goal and streak freeze",
+   "A ring fills with each puzzle you solve. Reach your goal 7 days in a row and earn a freeze that saves your streak if you miss a day."
+  ],
+  "fr": [
+   "Objectif du jour et gel de série",
+   "Un anneau se remplit à chaque exercice réussi. Atteins ton objectif 7 jours d'affilée et gagne un gel qui sauve ta série si tu manques un jour."
+  ],
+  "es": [
+   "Objetivo del día y congelación de racha",
+   "Un anillo se llena con cada ejercicio resuelto. Cumple tu objetivo 7 días seguidos y gana una congelación que salva tu racha si fallas un día."
+  ],
+  "pt": [
+   "Meta do dia e congelamento de sequência",
+   "Um anel se enche a cada exercício resolvido. Cumpra sua meta 7 dias seguidos e ganhe um congelamento que salva sua sequência se faltar um dia."
+  ],
+  "de": [
+   "Tagesziel und Frost-Schutz",
+   "Ein Ring füllt sich mit jeder gelösten Aufgabe. Erreiche dein Ziel 7 Tage am Stück und verdiene einen Frost-Schutz, der deine Serie rettet, wenn du einen Tag verpasst."
+  ],
+  "ru": [
+   "Цель дня и заморозка серии",
+   "Кольцо заполняется с каждой решённой задачей. Выполняй цель 7 дней подряд и получи заморозку, которая спасёт серию, если пропустишь день."
+  ],
+  "it": [
+   "Obiettivo del giorno e congelamento della serie",
+   "Un anello si riempie a ogni esercizio risolto. Raggiungi l'obiettivo 7 giorni di fila e guadagna un congelamento che salva la serie se salti un giorno."
+  ],
+  "tr": [
+   "Günlük hedef ve seri dondurma",
+   "Çözdüğün her bulmacayla bir halka doluyor. Hedefine 7 gün art arda ulaş, bir gün kaçırırsan serini kurtaran bir dondurma kazan."
+  ],
+  "pl": [
+   "Cel dnia i zamrożenie serii",
+   "Pierścień wypełnia się z każdym rozwiązanym zadaniem. Osiągnij cel 7 dni z rzędu i zdobądź zamrożenie, które uratuje serię, gdy opuścisz dzień."
+  ],
+  "id": [
+   "Target harian dan pembeku rangkaian",
+   "Sebuah cincin terisi setiap kali kamu memecahkan teka-teki. Capai targetmu 7 hari berturut-turut dan dapatkan pembeku yang menyelamatkan rangkaianmu jika melewatkan satu hari."
+  ]
+ },
+ {
   "d": "2026-11-15",
   "en": [
    "200+ illustrated badges",

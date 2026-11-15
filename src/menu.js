@@ -39,14 +39,15 @@ function menuLangues(){
   ls.open=true;setTimeout(()=>{ls.open=true;},0);
 }
 function menuVue(nom){
-  const vues={accueil:"menuAccueil",stats:"menuStats",badges:"menuBadges",nouveautes:"menuNouveautes"};
+  const vues={accueil:"menuAccueil",stats:"menuStats",badges:"menuBadges",nouveautes:"menuNouveautes",langues:"menuLanguesVue"};
   for(const [k,id] of Object.entries(vues)){const e=menuEl(id);if(e)e.hidden=k!==nom;}
-  const titres={accueil:"Menu",stats:"Statistics",badges:"Badges",nouveautes:"What's new"};
+  const titres={accueil:"Menu",stats:"Statistics",badges:"Badges",nouveautes:"What's new",langues:"Language"};
   menuEl("menuTitre").textContent=t(titres[nom]);
   menuEl("menuRetour").hidden=nom==="accueil";
   if(nom==="stats")menuStats();
   if(nom==="badges")menuBadges();
   if(nom==="nouveautes")menuListeNouveautes();
+  if(nom==="langues"){menuLangues();const a=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]');if(a)setTimeout(()=>a.focus({preventScroll:true}),mouvementCalme()?0:280);}
   const v=menuEl(vues[nom]);if(v){v.scrollTop=0;if(nom!=="accueil"&&!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});}
 }
 function menuOuvrir(){
@@ -73,6 +74,7 @@ function menuFermer(){
 function menuResume(){
   ensureProgFields();
   const s=menuEl("menuResume");if(s)s.textContent=String(prog.rating||800);
+  const la=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]'),ld=menuEl("menuLangueActuelle");if(la&&ld)ld.textContent=la.textContent;
   const b=menuEl("menuBadgesCompte");
   if(b){const vis=BADGES.filter(bxVisible);b.textContent=prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length;}
   menuPoint();
@@ -142,23 +144,5 @@ function menuListeNouveautes(){
     });
     menuTraduire();
     setTimeout(menuPoint,0);
-    /* Bouton de langue de l'en-tete : code de la page (FR, PT...), libelle
-       bilingue pour un lecteur d'ecran ("Langue / Language"), et ouverture
-       du menu directement sur la liste des langues, langue actuelle en focus. */
-    const bl=menuEl("btnLangue");
-    if(bl){
-      const code=bxLangue().toUpperCase();
-      menuEl("btnLangueCode").textContent=code;
-      const nom=t("Language");
-      bl.setAttribute("aria-label",nom==="Language"?"Language: "+code:nom+" / Language: "+code);
-      bl.addEventListener("click",()=>{
-        menuOuvrir();
-        setTimeout(()=>{
-          const s=menuEl("menuLangues");if(s)s.scrollIntoView({block:"start",behavior:mouvementCalme()?"auto":"smooth"});
-          const a=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]')||document.querySelector("#menuTiroir .langmenu a");
-          if(a)a.focus({preventScroll:true});
-        },mouvementCalme()?0:280);
-      });
-    }
   }
 }

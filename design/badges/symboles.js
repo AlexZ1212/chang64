@@ -303,6 +303,9 @@ const S = {
   fete_1016: [F("bowl-steam"), "jade"],
   fete_1113: [F("hand-heart"), "jade"],
   fete_1120: [F("balloon"), "jade"],
+  /* Objectif du jour et gel de serie (15/11) */
+  obj_atteint: [F("check-circle"), "bronze"],
+  obj_gel: [F("thermometer-cold"), "argent"],
   /* Lecons apprises (badges de defaite, 15/11) */
   lec_premiere: [P("k", G) + A("heart"), "bronze"],
   lec_analyse: [P("k", G) + A("magnifying-glass"), "argent"],

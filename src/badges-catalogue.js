@@ -58,6 +58,10 @@ const BADGES_CATALOGUE = [
    "En 1886, Wilhelm Steinitz devint le premier champion du monde officiel. Toi, tu es champion de la régularité."],
   ["days_1000","serie","1 000 jours d'affilée","Lasker","une couronne de laurier",
    "Emanuel Lasker garda le titre de champion du monde 27 ans, de 1894 à 1921 : un record. Mille jours d'affilée, c'est ta légende à toi."],
+  ["obj_atteint","serie","Atteindre son objectif du jour","Objectif atteint","un cercle coché",
+   "Objectif rempli ! Un peu chaque jour vaut mieux que beaucoup une fois par mois : c'est la régularité qui fait progresser."],
+  ["obj_gel","serie","Sauver sa série grâce à un gel","Glaçon","un thermomètre froid",
+   "Un jour manqué, et ta série tient bon. Aux échecs aussi, une position peut se figer : si la même revient trois fois, la partie est nulle."],
 
   /* ---------- 3. Jours joués au total, même sans série (8) ---------- */
   ["total_5","jours","5 jours joués","Habitué","une porte ouverte",

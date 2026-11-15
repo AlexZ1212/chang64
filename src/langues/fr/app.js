@@ -580,5 +580,13 @@ module.exports = {
 "Days played":"Jours joués",
 "Sprint record":"Record au Sprint",
 "Coordinates record":"Record aux Coordonnées",
-"Endgames won":"Finales réussies"
+"Endgames won":"Finales réussies",
+/* Objectif du jour et gel de serie (2026-11-15, voir objectif.js) */
+"Daily goal":"Objectif du jour",
+"{n}/{total} today":"{n}/{total} aujourd'hui",
+"Goal reached!":"Objectif atteint !",
+"Streak freezes":"Gels de série",
+"You earned a streak freeze.":"Tu as gagné un gel de série.",
+"Your streak is saved: a freeze was used.":"Ta série est sauvée : un gel a été utilisé.",
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Exercices à réussir chaque jour. Atteins-le 7 jours d'affilée pour gagner un gel de série."
 };

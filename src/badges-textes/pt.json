@@ -414,5 +414,9 @@
  "lec_acharne": ["Persistente", "Resolver um exercício depois de 3 erros", "Três tentativas erradas, e você não desistiu. Procurar por mais tempo grava melhor a solução na memória."
 ],
  "lec_reprise": ["Recomeço", "Retomar uma sequência depois de quebrá-la", "Uma sequência quebrada não apaga nada do que você aprendeu. O mais importante é voltar."
+],
+ "obj_atteint": ["Meta cumprida", "Cumprir sua meta do dia", "Meta cumprida! Um pouco todo dia vale mais que muito uma vez por mês: é a regularidade que faz evoluir."
+],
+ "obj_gel": ["Cubo de gelo", "Salvar sua sequência com um congelamento", "Um dia perdido, e sua sequência se mantém. No xadrez uma posição também pode congelar: se a mesma aparece três vezes, é empate."
 ]
 }

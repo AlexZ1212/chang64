@@ -414,5 +414,9 @@
  "lec_acharne": ["Relentless", "Solve a puzzle after 3 mistakes", "Three missed tries, and you did not give up. Searching longer fixes the solution better in your memory."
 ],
  "lec_reprise": ["Fresh start", "Start a streak again after breaking it", "A broken streak erases nothing you have learnt. What matters most is coming back."
+],
+ "obj_atteint": ["Goal reached", "Reach your daily goal", "Goal reached! A little every day beats a lot once a month: regularity is what makes you improve."
+],
+ "obj_gel": ["Ice cube", "Save your streak with a freeze", "A missed day, and your streak holds. In chess, a position can freeze too: if the same one comes up three times, the game is a draw."
 ]
 }

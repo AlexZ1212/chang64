@@ -1825,6 +1825,7 @@ html.menu-ouvert{overflow:hidden}
 @media(hover:hover){.tiroir-lien:hover{background-color:var(--raise)}}
 .tiroir-lien[data-vue]::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
 .tiroir-lien[data-vue] .burger-point,.tiroir-detail{margin-left:auto}
+.tiroir-detail.tiroir-langue{font-family:inherit;font-size:13.5px;color:var(--sage)}
 .tiroir-detail{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brass)}
 .tiroir .langswitch{border:0;background:none}
 .tiroir .langswitch summary{display:none}
@@ -1865,6 +1866,30 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 @media(max-width:599px){.langue-rapide{height:28px;padding:0 8px;position:relative}.langue-rapide::before{content:"";position:absolute;left:0;right:0;top:50%;height:44px;transform:translateY(-50%)}}
 .tiroir-section-ico{display:flex;align-items:center;gap:8px}
 .tiroir-section-ico .tiroir-ico{width:16px;height:16px}
+
+/* Objectif du jour (2026-11-15) : anneau laiton qui se remplit ; une fois
+   atteint, il se ferme en jade avec une coche et une impulsion. */
+.objectif{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.obj-anneau{flex:none;width:40px;height:40px;transform:rotate(-90deg)}
+.obj-fond{fill:none;stroke:var(--raise);stroke-width:4}
+.obj-plein{fill:none;stroke:var(--brass);stroke-width:4;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:var(--obj,100);transition:stroke-dashoffset var(--duree-longue) var(--courbe-sortie),stroke var(--duree-moyenne)}
+.obj-coche{fill:none;stroke:var(--jade);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transform:rotate(90deg);transform-origin:18px 18px;transition:stroke-dashoffset var(--duree-moyenne) var(--courbe-sortie) .25s}
+.obj-atteint .obj-plein{stroke:var(--jade)}
+.obj-atteint .obj-coche{stroke-dashoffset:0}
+.obj-texte{display:flex;flex-direction:column;gap:2px;min-width:0}
+.obj-texte b{font-size:14px;font-weight:600}
+.obj-texte span{font-size:13px;color:var(--sage)}
+.obj-gels{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#9FD9F2;white-space:nowrap}
+.obj-gels[hidden]{display:none}
+.obj-pulse{animation:objPulse .7s var(--courbe-ressort)}
+@keyframes objPulse{0%{transform:rotate(-90deg) scale(1)}40%{transform:rotate(-90deg) scale(1.18)}100%{transform:rotate(-90deg) scale(1)}}
+.tiroir-lien .obj-anneau{width:20px;height:20px}
+.tiroir-lien .obj-fond,.tiroir-lien .obj-plein{stroke-width:4.5}
+.tiroir-lien .obj-coche{stroke-width:3.5}
+/* Message de serie sauvee par un gel : un bandeau qui descend puis repart. */
+.obj-annonce{position:fixed;left:50%;top:14px;z-index:220;max-width:min(92vw,420px);padding:12px 16px;border-radius:var(--r);background-color:var(--slate);border:1px solid rgba(159,217,242,.5);box-shadow:var(--e2);color:var(--chalk);font-size:14px;transform:translate(-50%,-140%);transition:transform var(--duree-moyenne) var(--courbe-ressort)}
+.obj-annonce.visible{transform:translate(-50%,0)}
+html[data-mouvement="calme"] .obj-plein,html[data-mouvement="calme"] .obj-coche,html[data-mouvement="calme"] .obj-annonce{transition:none}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -1922,11 +1947,6 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
     <!-- Menu (2026-11-15) : le selecteur de langue a rejoint le tiroir du
          menu, avec les statistiques, les badges, les nouveautes et les
          reglages (voir menu.js). -->
-    <!-- Langue (2026-11-15, remarque d'Alexandre) : un visiteur qui ne lit pas
-         la langue de la page doit pouvoir en changer sans deviner qu'elle est
-         dans le menu. Globe + code, compris partout ; ouvre le menu sur les
-         langues (menu.js). -->
-    <button type="button" class="langue-rapide" id="btnLangue" aria-controls="menuTiroir"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></svg><span id="btnLangueCode">EN</span></button>
     <button type="button" class="burger" id="btnMenu" aria-expanded="false" aria-controls="menuTiroir" aria-label="Menu" data-t-label="Menu">
       <span class="burger-barres" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="burger-point" id="btnMenuPoint" hidden></span>
@@ -2637,6 +2657,13 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
             </div>
             <button type="button" class="btn" id="btnMotifSortie">Leave</button>
           </div>
+          <!-- Objectif du jour (2026-11-15, voir objectif.js) : un anneau qui se
+               remplit a chaque exercice reussi, et les gels de serie. -->
+          <div class="objectif" id="objectifBloc" role="group" aria-labelledby="objectifTitre">
+            <svg class="obj-anneau" id="objectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg>
+            <div class="obj-texte"><b id="objectifTitre" data-t="Daily goal">Daily goal</b><span id="objectifCompte" aria-live="polite"></span></div>
+            <span class="obj-gels" id="objectifGels" hidden></span>
+          </div>
           <div class="ladder" id="ladder"></div>
           <div class="lvlrow" id="lvlRow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> <b id="lvlMax">10</b></span><span id="lvlName">First mates</span></div>
           <div class="stats">
@@ -2982,6 +3009,13 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
         </div>
       </div>
 
+      <!-- Objectif du jour (2026-11-15, voir objectif.js). -->
+      <div class="field">
+        <div class="eyebrow" id="prefsObjectifLabel">Daily goal</div>
+        <p class="note" style="margin-top:0;margin-bottom:10px" id="prefsObjectifNote">Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.</p>
+        <div class="seg" id="segObjectif" role="radiogroup" aria-labelledby="prefsObjectifLabel"></div>
+      </div>
+
       <!-- Sons (2026-11-07) : fabriques dans le navigateur, voir SON dans ui.js. -->
       <div class="field">
         <div class="eyebrow" id="prefsSonLabel">Sounds</div>
@@ -3030,14 +3064,14 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
       </div>
       <div class="tiroir-vue" id="menuAccueil">
         <p class="tiroir-section" data-t="My progress">My progress</p>
+        <button type="button" class="tiroir-lien" data-aller-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
         <button type="button" class="tiroir-lien" data-vue="stats"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg><span data-t="Statistics">Statistics</span><span class="tiroir-detail" id="menuResume"></span></button>
         <button type="button" class="tiroir-lien" data-vue="badges"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"/></svg><span data-t="Badges">Badges</span><span class="tiroir-detail" id="menuBadgesCompte"></span></button>
         <button type="button" class="tiroir-lien" data-vue="nouveautes"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg><span data-t="What's new">What's new</span><span class="burger-point" id="menuNouveau" hidden></span></button>
         <p class="tiroir-section" data-t="Settings">Settings</p>
         <button type="button" class="tiroir-lien" data-aller="prefs"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M40,88H73a32,32,0,0,0,62,0h81a8,8,0,0,0,0-16H135a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16Zm64-24A16,16,0,1,1,88,80,16,16,0,0,1,104,64ZM216,168H199a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16h97a32,32,0,0,0,62,0h17a8,8,0,0,0,0-16Zm-48,24a16,16,0,1,1,16-16A16,16,0,0,1,168,192Z"/></svg><span data-t="Preferences">Preferences</span></button>
         <button type="button" class="tiroir-lien" data-aller="access"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M160,40a32,32,0,1,0-32,32A32,32,0,0,0,160,40ZM128,56a16,16,0,1,1,16-16A16,16,0,0,1,128,56ZM231.5,87.71A19.62,19.62,0,0,0,212,72H44a20,20,0,0,0-8.38,38.16l.13,0,50.75,22.35-21,79.72A20,20,0,0,0,102,228.8l26-44.87,26,44.87a20,20,0,0,0,36.4-16.52l-21-79.72,50.75-22.35.13,0A19.64,19.64,0,0,0,231.5,87.71Zm-17.8,7.9-56.93,25.06a8,8,0,0,0-4.51,9.36L175.13,217a7,7,0,0,0,.49,1.35,4,4,0,0,1-5,5.45,4,4,0,0,1-2.25-2.07,6.31,6.31,0,0,0-.34-.63L134.92,164a8,8,0,0,0-13.84,0L88,221.05a6.31,6.31,0,0,0-.34.63,4,4,0,0,1-2.25,2.07,4,4,0,0,1-5-5.45,7,7,0,0,0,.49-1.35L103.74,130a8,8,0,0,0-4.51-9.36L42.3,95.61A4,4,0,0,1,44,88H212a4,4,0,0,1,1.73,7.61Z"/></svg><span data-t="Accessibility">Accessibility</span></button>
-        <p class="tiroir-section tiroir-section-ico" id="menuLangues"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></svg><span data-t="Language">Language</span></p>
-        <!--__LANGSWITCH__-->
+        <button type="button" class="tiroir-lien" data-vue="langues"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></svg><span data-t="Language">Language</span><span class="tiroir-detail tiroir-langue" id="menuLangueActuelle"></span></button>
         <p class="tiroir-section" data-t="About">About</p>
         <button type="button" class="tiroir-lien" data-aller="legal"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M239.43,133l-32-80h0a8,8,0,0,0-9.16-4.84L136,62V40a8,8,0,0,0-16,0V65.58L54.26,80.19A8,8,0,0,0,48.57,85h0v.06L16.57,165a7.92,7.92,0,0,0-.57,3c0,23.31,24.54,32,40,32s40-8.69,40-32a7.92,7.92,0,0,0-.57-3L66.92,93.77,120,82V208H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16H136V78.42L187,67.1,160.57,133a7.92,7.92,0,0,0-.57,3c0,23.31,24.54,32,40,32s40-8.69,40-32A7.92,7.92,0,0,0,239.43,133ZM56,184c-7.53,0-22.76-3.61-23.93-14.64L56,109.54l23.93,59.82C78.76,180.39,63.53,184,56,184Zm144-32c-7.53,0-22.76-3.61-23.93-14.64L200,77.54l23.93,59.82C222.76,148.39,207.53,152,200,152Z"/></svg><span data-t="Legal notice">Legal notice</span></button>
         <button type="button" class="tiroir-lien" data-aller="privacy"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span data-t="Privacy">Privacy</span></button>
@@ -3045,6 +3079,8 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
       <div class="tiroir-vue" id="menuStats" hidden></div>
       <div class="tiroir-vue" id="menuBadges" hidden><div class="badges" id="menuBadgeGrid"></div></div>
       <div class="tiroir-vue" id="menuNouveautes" hidden></div>
+      <!-- Langues (2026-11-15) : la liste du selecteur, dans sa propre vue. -->
+      <div class="tiroir-vue" id="menuLanguesVue" hidden><!--__LANGSWITCH__--></div>
     </aside>
   </div>
 

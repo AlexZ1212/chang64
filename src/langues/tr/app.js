@@ -725,5 +725,13 @@ module.exports = {
 "Days played":"Oynanan günler",
 "Sprint record":"Sprint rekoru",
 "Coordinates record":"Koordinat rekoru",
-"Endgames won":"Kazanılan oyun sonları"
+"Endgames won":"Kazanılan oyun sonları",
+/* Objectif du jour et gel de serie (2026-11-15, voir objectif.js) */
+"Daily goal":"Günlük hedef",
+"{n}/{total} today":"Bugün {n}/{total}",
+"Goal reached!":"Hedefe ulaşıldı!",
+"Streak freezes":"Seri dondurmaları",
+"You earned a streak freeze.":"Bir seri dondurması kazandın.",
+"Your streak is saved: a freeze was used.":"Serin kurtarıldı: bir dondurma kullanıldı.",
+"Puzzles to solve each day. Reach it 7 days in a row to earn a streak freeze.":"Her gün çözülecek bulmaca sayısı. 7 gün art arda ulaşırsan bir seri dondurması kazanırsın."
 };

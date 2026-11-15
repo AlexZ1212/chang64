@@ -12,8 +12,8 @@
  * La version du cache est calculee a la construction : chaque build invalide
  * automatiquement le cache des visiteurs. Ne pas figer cette valeur.
  */
-const CACHE="chang64-202611150940";
-const DATA_CACHE="chang64-data-2b04ee0215d5";
+const CACHE="chang64-202611151311";
+const DATA_CACHE="chang64-data-9b443657e14c";
 /* Plafond du cache de donnees en OCTETS (2026-10-25), et non plus en nombre
    d'entrees. Les trois entrees du 2026-09-06 visaient des shards de 1 a 2 Mo,
    soit environ 5 Mo, loin des 17 Mo qui avaient fait sauter le quota iOS et

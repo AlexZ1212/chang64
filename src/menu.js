@@ -142,5 +142,23 @@ function menuListeNouveautes(){
     });
     menuTraduire();
     setTimeout(menuPoint,0);
+    /* Bouton de langue de l'en-tete : code de la page (FR, PT...), libelle
+       bilingue pour un lecteur d'ecran ("Langue / Language"), et ouverture
+       du menu directement sur la liste des langues, langue actuelle en focus. */
+    const bl=menuEl("btnLangue");
+    if(bl){
+      const code=bxLangue().toUpperCase();
+      menuEl("btnLangueCode").textContent=code;
+      const nom=t("Language");
+      bl.setAttribute("aria-label",nom==="Language"?"Language: "+code:nom+" / Language: "+code);
+      bl.addEventListener("click",()=>{
+        menuOuvrir();
+        setTimeout(()=>{
+          const s=menuEl("menuLangues");if(s)s.scrollIntoView({block:"start",behavior:mouvementCalme()?"auto":"smooth"});
+          const a=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]')||document.querySelector("#menuTiroir .langmenu a");
+          if(a)a.focus({preventScroll:true});
+        },mouvementCalme()?0:280);
+      });
+    }
   }
 }

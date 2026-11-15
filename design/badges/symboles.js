@@ -45,7 +45,24 @@ const G = "translate(-5.5 5.5) scale(.82)";
 const A = nom => `<g data-accent="1">${F(nom, "translate(14.5 -14.5) scale(.5)")}</g>`;
 const AP = l => P(l, "translate(14 -12) scale(.46)");
 /* Chiffres dans la typo du "64" du logo : JetBrains Mono 700, approche -0,03 em. */
-const T = (txt, taille = 22, y = 8, x = 0) => `<text x="${x}" y="${y}" text-anchor="middle" font-family="'JetBrains Mono',ui-monospace,monospace" font-weight="700" letter-spacing="-0.03em" font-size="${taille}" fill="currentColor">${txt}</text>`;
+/* Chiffres dans la typo du "64" du logo (JetBrains Mono, approche -0,03 em),
+   VECTORISES depuis le fichier de la police (fontkit, 3e argument = dossier
+   node_modules qui le contient) : un <text> dependait du chargement de la
+   police, et l'iPhone affichait parfois une police de repli (15/11). */
+const FONTKIT = process.argv[3] ? require(path.join(process.argv[3], "fontkit")) : null;
+const POLICE = FONTKIT ? FONTKIT.openSync(path.join(RACINE, "src/fonts/jetbrains-mono-v24-latin-700.woff2")) : null;
+const T = (txt, taille = 22, y = 8, x = 0) => {
+  if (!POLICE) throw new Error("fontkit manquant : node symboles.js <phosphor> <dossier node_modules avec fontkit>");
+  const k = taille / POLICE.unitsPerEm, approche = -0.03 * POLICE.unitsPerEm;
+  const run = POLICE.layout(txt);
+  const largeur = run.positions.reduce((s, p) => s + p.xAdvance + approche, 0) - approche;
+  let cx = -largeur / 2, d = "";
+  run.glyphs.forEach((g, i) => {
+    d += g.path.scale(k, -k).translate(x + cx * k, y).toSVG();
+    cx += run.positions[i].xAdvance + approche;
+  });
+  return `<path fill="currentColor" d="${d}"/>`;
+};
 const evide = "fill:none;stroke:var(--oeil);stroke-linecap:round;stroke-linejoin:round";
 
 const PERSO = {
@@ -300,7 +317,7 @@ const S = {
   /* Exploits */
   ex_hibou: [PERSO.hibou, "argent"],
   ex_coq: [F("bird"), "argent"],
-  ex_huit_dames: [P("q", G) + T("8", 13, -9, 15), "or"],
+  ex_huit_dames: [P("q", G) + T("8", 17, -7, 14.5), "or"],
   ex_sans_filet: [F("person-simple-tai-chi"), "or"],
   ex_tetu: [F("hand-fist"), "argent"],
   ex_marathon: [F("person-simple-run"), "or"],

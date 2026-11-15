@@ -34,7 +34,7 @@ function bilanSeance(){
 function bilanTenter(){
   if(!bilanAttente)return;
   const br=$("bravo"),an=document.getElementById("objAnnonce");
-  const occupe=bravoOccupe()||(br&&!br.hidden)||(bravoFile&&bravoFile.length)||(an&&an.classList.contains("visible"))||objFile.length;
+  const occupe=bravoOccupe()||(br&&!br.hidden)||(bravoFile&&bravoFile.length)||(an&&an.classList.contains("visible"))||objFile.length||(typeof duelOuvert==="function"&&duelOuvert());
   if(occupe){setTimeout(bilanTenter,1000);return;}
   bilanAttente=false;bilanOuvrir();
 }

@@ -25,7 +25,8 @@ function code() {
     fs.readFileSync(path.join(__dirname, "menu.js"), "utf8").replace("__NOUVEAUTES_NOMBRE__", String(NOUVEAUTES.length)) + "\n" +
     fs.readFileSync(path.join(__dirname, "objectif.js"), "utf8") + "\n" +
     fs.readFileSync(path.join(__dirname, "defis.js"), "utf8") + "\n" +
-    fs.readFileSync(path.join(__dirname, "bilan.js"), "utf8").replace("__ELEPHANT_SIGNE__", fs.readFileSync(path.join(__dirname, "ds/signe.svg"), "utf8").match(/ d="([^"]+)"/)[1]);
+    fs.readFileSync(path.join(__dirname, "bilan.js"), "utf8").replace("__ELEPHANT_SIGNE__", fs.readFileSync(path.join(__dirname, "ds/signe.svg"), "utf8").match(/ d="([^"]+)"/)[1]) + "\n" +
+    fs.readFileSync(path.join(__dirname, "duel.js"), "utf8").replace("__ELEPHANT_SIGNE__", fs.readFileSync(path.join(__dirname, "ds/signe.svg"), "utf8").match(/ d="([^"]+)"/)[1]);
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir

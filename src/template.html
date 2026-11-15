@@ -1989,6 +1989,43 @@ html[data-mouvement="calme"] .bilan-mascotte,html[data-mouvement="calme"] .bilan
 .objv-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 4px 4px}
 .objv-actions .btn{flex:1 1 140px}
 html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv-anneau .obj-plein{transition:none!important}
+
+/* Defi entre amis (2026-11-15, voir duel.js). */
+.duel-bandeau{display:grid;grid-template-columns:1fr auto;grid-template-areas:"titre points" "adv quitter";align-items:center;gap:6px 12px;margin:0 0 12px;padding:8px 10px 8px 12px;border-radius:var(--r);border:1px solid var(--brass);background-color:var(--ink)}
+.duel-bandeau.hide{display:none}
+.duel-bandeau>div{grid-area:titre;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px}
+.duel-bandeau b{font-size:13px;color:var(--brass)}
+.duel-bandeau div span{font-size:13px;color:var(--chalk)}
+.duel-bandeau-points{grid-area:points;display:flex;gap:5px}
+.duel-bandeau-points i,.duel-points i{display:block;width:12px;height:12px;border-radius:50%;background-color:var(--raise)}
+.duel-bandeau-points i.ici{box-shadow:0 0 0 2px var(--brass)}
+.duel-bandeau-points i.d2,.duel-points i.d2{background-color:#5FB37C}
+.duel-bandeau-points i.d1,.duel-points i.d1{background:linear-gradient(90deg,#5FB37C 50%,transparent 50%);box-shadow:0 0 0 1.5px #5FB37C inset}
+.duel-bandeau-points i.d0,.duel-points i.d0{background-color:#C9604F}
+.duel-bandeau-adv{grid-area:adv;font-size:12.5px;color:var(--sage)}
+.duel-bandeau .btn{grid-area:quitter;padding:5px 12px;font-size:13px;min-height:0}
+.duel-points{display:inline-flex;gap:5px}
+.duel-seul{display:flex;justify-content:center;margin:-2px 0 14px}
+.duel-seul .duel-points i{width:14px;height:14px}
+.bilan-joue .duel-points i{animation:bxMonte .4s var(--courbe-ressort) both;animation-delay:calc(.55s + var(--i) * .08s)}
+.duel-tableau{list-style:none;margin:2px 0 16px;padding:0}
+.duel-ligne{display:grid;grid-template-columns:1fr auto auto;grid-template-areas:"qui points score" "qui temps temps";align-items:center;gap:2px 10px;padding:10px 12px;margin-bottom:8px;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--ink);text-align:left}
+.duel-ligne.gagne{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset}
+.duel-qui{grid-area:qui;font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.duel-ligne .duel-points{grid-area:points}
+.duel-ligne b{grid-area:score;font-family:'JetBrains Mono',monospace;font-size:17px}
+.duel-temps{grid-area:temps;justify-self:end;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--sage)}
+.bilan-joue .duel-ligne{animation:bxMonte .45s var(--courbe-sortie) both}
+.bilan-joue .duel-ligne+.duel-ligne{animation-delay:.15s}
+.duel-regle{margin:0 0 14px;font-size:12.5px;line-height:1.5;color:var(--sage)}
+.duel-nom{display:flex;flex-direction:column;gap:4px;margin:0 0 10px;text-align:left;font-size:12.5px;color:var(--sage)}
+.duel-nom input{font:inherit;font-size:15px;padding:9px 10px;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk)}
+.duel .linkbox{width:100%;box-sizing:border-box;margin:0 0 10px}
+.duel-partage,.duel-boutons{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.duel .duel-partage .btn,.duel .duel-boutons .btn{min-width:0;flex:1 1 30%}
+.duel-note{min-height:1.2em;margin:8px 0;font-size:12.5px;color:var(--brass)}
+.duel .duel-fermer{margin-top:4px}
+html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="calme"] .bilan-joue .duel-ligne{animation:none}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -2523,6 +2560,12 @@ html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv
             <span class="solveCard-desc">One new puzzle every day. Come back to build your streak, and revisit any past day in the calendar.</span>
             <span class="solveCard-sub" id="subSolveDaily"></span>
           </button>
+          <!-- Defi entre amis par lien (2026-11-15, voir duel.js). -->
+          <button type="button" class="solveCard" id="cardSolveDuel">
+            <b>Challenge a friend</b>
+            <span class="solveCard-desc">Five puzzles at your level. Play them, send the link: your friend gets the same ones and tries to beat you.</span>
+            <span class="solveCard-sub" id="subSolveDuel"></span>
+          </button>
           <!-- Erreurs a revoir (2026-10-26) : la file de repetition espacee
                existait deja (prog.mistakeQueue), mais on ne la trouvait que
                sous forme de croix dans la colonne de l'ecran Exercices.
@@ -2629,6 +2672,12 @@ html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv
                conteneur flex ne cree jamais ce decalage residuel : il
                n'existe qu'ENTRE deux elements, jamais comme marge de tete
                d'un element replie seul sur sa ligne. -->
+          <div class="duel-bandeau hide" id="duelBandeau">
+            <div><b data-t="Challenge a friend">Challenge a friend</b><span id="duelBandeauNum"></span></div>
+            <span class="duel-bandeau-points" id="duelBandeauPoints" aria-hidden="true"></span>
+            <span class="duel-bandeau-adv" id="duelBandeauAdv"></span>
+            <button type="button" class="btn" id="duelBandeauQuitter">Leave</button>
+          </div>
           <div class="theme-row">
           <span class="theme hors-sprint" id="exTheme">Back-rank mate</span>
           <!-- Regroupe le code de l'exercice et le bouton d'info dans un
@@ -3166,6 +3215,11 @@ html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv
       <div class="bilan-badges-bloc" id="bilanBadgesBloc" hidden><p id="bilanBadgesTitre">Badges earned</p><div class="bilan-badges" id="bilanBadges"></div></div>
       <button type="button" class="btn primary" id="bilanOk">Continue</button>
     </div>
+  </div>
+
+  <!-- Defi entre amis (2026-11-15, voir duel.js) : memes habits que le bilan. -->
+  <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-labelledby="duelTitre" hidden>
+    <div class="bilan-fenetre" id="duelContenu"></div>
   </div>
 
   <div class="tiroir" id="menuTiroir" hidden>

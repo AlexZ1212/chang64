@@ -27,7 +27,7 @@ function objMaj(pulse){
     a.classList.toggle("obj-atteint",ok);
     if(pulse&&!mouvementCalme()){a.classList.remove("obj-pulse");void a.getBoundingClientRect();a.classList.add("obj-pulse");}
   }
-  const txt=ok?t("Goal reached!")+" "+t("{n}/{total} today",{n:n,total:cible}):t("{n}/{total} today",{n:n,total:cible});
+  const txt=ok?t("Goal reached!")+" "+t("Solved today"):t("{n}/{total} today",{n:n,total:cible});
   const ct=$("objectifCompte");if(ct)ct.textContent=txt;
   const mo=$("menuObjectif");if(mo)mo.textContent=n+"/"+cible;
   const g=$("objectifGels");
@@ -137,9 +137,59 @@ if(typeof renderPrefs==="function"){const av=renderPrefs;renderPrefs=function(){
   const av=menuResume;menuResume=function(){const r=av.apply(this,arguments);objMaj(false);return r;};
   const r=$("menuTiroir");
   if(r)r.addEventListener("click",e=>{
-    if(!e.target.closest("[data-aller-objectif]"))return;
+    if(e.target.closest("[data-vue-objectif]")){menuVue("objectif");return;}
+    const a=e.target.closest("[data-objectif-aller]");if(!a)return;
     menuFermer();
-    setTimeout(()=>{setMode("puzzles");const c=$("cardSolvePuzzles");if(c)c.click();},mouvementCalme()?0:200);
+    setTimeout(()=>{
+      if(a.dataset.objectifAller==="prefs"){const f=$("footPrefs");if(f)f.click();}
+      else{setMode("puzzles");const c=$("cardSolvePuzzles");if(c)c.click();}
+    },mouvementCalme()?0:200);
   });
   setTimeout(()=>{objMaj(false);objReglage();},2600);
+}
+/* Sous-vue du menu (2026-11-15, demande d'Alexandre) : l'anneau en grand,
+   ce qui compte, la serie d'objectifs vers le prochain gel (7 jours), les
+   gels en reserve, et deux raccourcis (exercices, reglage). */
+function objVue(){
+  const v=$("menuObjectifVue");if(!v)return;
+  const c=objEtat(),n=objFaits(),cible=c.objectif,ok=n>=cible;
+  const auj=bxCle(new Date()),hier=new Date();hier.setDate(hier.getDate()-1);
+  const vivante=c.objDernier===auj||c.objDernier===bxCle(hier);
+  const serie=vivante?(c.objSerie||0)%OBJ_JOURS_GEL:0;
+  const pleinSerie=vivante&&c.objSerie>0&&c.objSerie%OBJ_JOURS_GEL===0&&c.objDernier===auj;
+  const pas=pleinSerie?OBJ_JOURS_GEL:serie;
+  const reste=Math.max(0,100-Math.round(100*Math.min(n,cible)/cible));
+  const flocon='<svg viewBox="0 0 256 256" aria-hidden="true">'+OBJ_ICONES.gel+"</svg>";
+  poserHtml(v,
+    '<div class="objv-tete"><svg class="obj-anneau objv-anneau'+(ok?" obj-atteint":"")+'" viewBox="0 0 36 36" aria-hidden="true" style="--obj:100"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg>'+
+    '<div class="objv-chiffre"><b>'+Math.min(n,cible)+"/"+cible+"</b><span>"+echapper(ok?t("Goal reached!"):t("Solved today"))+"</span></div></div>"+
+    '<p class="objv-note">'+echapper(t("Every puzzle you solve today counts, in every mode."))+"</p>"+
+    '<div class="objv-bloc"><p class="objv-titre">'+echapper(t("Towards your next freeze"))+'</p><div class="objv-jours">'+
+    Array.from({length:OBJ_JOURS_GEL},(_,i)=>'<span class="'+(i<pas?"plein":"")+'" style="--i:'+i+'"></span>').join("")+
+    '</div><p class="objv-note">'+echapper(t("Reach your goal {n} days in a row to earn a streak freeze.",{n:OBJ_JOURS_GEL}))+"</p></div>"+
+    '<div class="objv-bloc objv-gels"><p class="objv-titre">'+echapper(t("Freezes in reserve"))+'</p><div class="objv-flocons">'+
+    Array.from({length:OBJ_GELS_MAX},(_,i)=>'<span class="'+(i<c.gels?"plein":"")+'">'+flocon+"</span>").join("")+
+    "</div></div>"+
+    '<div class="objv-actions"><button type="button" class="btn primary" data-objectif-aller="exos">'+echapper(t("Go to puzzles"))+"</button>"+
+    '<button type="button" class="btn" data-objectif-aller="prefs">'+echapper(t("Change the goal"))+"</button></div>");
+  /* L'anneau et les jours se remplissent a l'ouverture. */
+  const a=v.querySelector(".objv-anneau");
+  const remplir=()=>{a.style.setProperty("--obj",String(reste));v.classList.add("objv-pret");};
+  v.classList.remove("objv-pret");
+  if(mouvementCalme())remplir();else requestAnimationFrame(()=>requestAnimationFrame(remplir));
+}
+{
+  const av=menuVue;
+  menuVue=function(nom){
+    const v=$("menuObjectifVue");
+    if(nom==="objectif"){
+      for(const id of ["menuAccueil","menuStats","menuBadges","menuNouveautes","menuLanguesVue","menuDefisVue"]){const e=$(id);if(e)e.hidden=true;}
+      v.hidden=false;$("menuTitre").textContent=t("Daily goal");$("menuRetour").hidden=false;
+      objVue();
+      if(!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});
+      return;
+    }
+    if(v)v.hidden=true;
+    return av.apply(this,arguments);
+  };
 }

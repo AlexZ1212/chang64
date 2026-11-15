@@ -768,5 +768,12 @@ module.exports = {
 "{n} puzzles in this session":{"one":"{n} zadanie w tej sesji","few":"{n} zadania w tej sesji","many":"{n} zadań w tej sesji","other":"{n} zadania w tej sesji"},
 "First try":"Za pierwszym razem",
 "Best run":"Najlepsza seria",
-"Badges earned":"Zdobyte odznaki"
+"Badges earned":"Zdobyte odznaki",
+/* Sous-vue Objectif du jour (2026-11-15) */
+"Every puzzle you solve today counts, in every mode.":"Liczy się każde zadanie rozwiązane dziś, w każdym trybie.",
+"Towards your next freeze":"Do następnego zamrożenia",
+"Reach your goal {n} days in a row to earn a streak freeze.":"Osiągaj cel {n} dni z rzędu, by zdobyć zamrożenie serii.",
+"Freezes in reserve":"Zamrożenia w zapasie",
+"Go to puzzles":"Przejdź do zadań",
+"Change the goal":"Zmień cel"
 };

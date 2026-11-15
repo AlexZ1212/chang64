@@ -623,5 +623,12 @@ module.exports = {
 "{n} puzzles in this session":"{n} exercices pendant cette séance",
 "First try":"Du premier coup",
 "Best run":"Meilleure suite",
-"Badges earned":"Badges gagnés"
+"Badges earned":"Badges gagnés",
+/* Sous-vue Objectif du jour (2026-11-15) */
+"Every puzzle you solve today counts, in every mode.":"Chaque exercice réussi aujourd'hui compte, dans tous les modes.",
+"Towards your next freeze":"Vers ton prochain gel",
+"Reach your goal {n} days in a row to earn a streak freeze.":"Atteins ton objectif {n} jours d'affilée pour gagner un gel de série.",
+"Freezes in reserve":"Gels en réserve",
+"Go to puzzles":"Aller aux exercices",
+"Change the goal":"Changer l'objectif"
 };

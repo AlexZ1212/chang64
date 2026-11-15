@@ -768,5 +768,12 @@ module.exports = {
 "{n} puzzles in this session":"Bu oturumda {n} bulmaca",
 "First try":"İlk denemede",
 "Best run":"En iyi seri",
-"Badges earned":"Kazanılan rozetler"
+"Badges earned":"Kazanılan rozetler",
+/* Sous-vue Objectif du jour (2026-11-15) */
+"Every puzzle you solve today counts, in every mode.":"Bugün çözdüğün her bulmaca, her modda sayılır.",
+"Towards your next freeze":"Bir sonraki dondurmaya doğru",
+"Reach your goal {n} days in a row to earn a streak freeze.":"Bir seri dondurması kazanmak için hedefine {n} gün art arda ulaş.",
+"Freezes in reserve":"Yedekteki dondurmalar",
+"Go to puzzles":"Bulmacalara git",
+"Change the goal":"Hedefi değiştir"
 };

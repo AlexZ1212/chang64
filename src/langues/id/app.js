@@ -768,5 +768,12 @@ module.exports = {
 "{n} puzzles in this session":"{n} teka-teki di sesi ini",
 "First try":"Langsung benar",
 "Best run":"Rangkaian terbaik",
-"Badges earned":"Lencana didapat"
+"Badges earned":"Lencana didapat",
+/* Sous-vue Objectif du jour (2026-11-15) */
+"Every puzzle you solve today counts, in every mode.":"Setiap teka-teki yang kamu pecahkan hari ini dihitung, di semua mode.",
+"Towards your next freeze":"Menuju pembeku berikutnya",
+"Reach your goal {n} days in a row to earn a streak freeze.":"Capai targetmu {n} hari berturut-turut untuk mendapat pembeku rangkaian.",
+"Freezes in reserve":"Pembeku cadangan",
+"Go to puzzles":"Ke teka-teki",
+"Change the goal":"Ubah target"
 };

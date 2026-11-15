@@ -145,7 +145,7 @@ function defiMaj(){
   const av=menuVue;
   menuVue=function(nom){
     if(nom==="defis"){
-      for(const id of ["menuAccueil","menuStats","menuBadges","menuNouveautes","menuLanguesVue"]){const e=$(id);if(e)e.hidden=true;}
+      for(const id of ["menuAccueil","menuStats","menuBadges","menuNouveautes","menuLanguesVue","menuObjectifVue"]){const e=$(id);if(e)e.hidden=true;}
       const v=$("menuDefisVue");v.hidden=false;
       $("menuTitre").textContent=t("Weekly challenges");$("menuRetour").hidden=false;
       defiMaj();

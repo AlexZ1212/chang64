@@ -770,5 +770,12 @@ module.exports = {
 "{n} puzzles in this session":{"one":"{n} задача за занятие","few":"{n} задачи за занятие","many":"{n} задач за занятие","other":"{n} задачи за занятие"},
 "First try":"С первой попытки",
 "Best run":"Лучшая серия",
-"Badges earned":"Полученные значки"
+"Badges earned":"Полученные значки",
+/* Sous-vue Objectif du jour (2026-11-15) */
+"Every puzzle you solve today counts, in every mode.":"Считается каждая задача, решённая сегодня, в любом режиме.",
+"Towards your next freeze":"До следующей заморозки",
+"Reach your goal {n} days in a row to earn a streak freeze.":"Выполняй цель {n} дней подряд, чтобы получить заморозку серии.",
+"Freezes in reserve":"Заморозки в запасе",
+"Go to puzzles":"К задачам",
+"Change the goal":"Изменить цель"
 };

@@ -1914,7 +1914,7 @@ html[data-mouvement="calme"] .obj-annonce,html[data-mouvement="calme"] .obj-anno
 html[data-mouvement="calme"] .obj-plein,html[data-mouvement="calme"] .obj-coche,html[data-mouvement="calme"] .obj-annonce{transition:none}
 
 /* Defis de la semaine (2026-11-15, voir defis.js). */
-.tiroir-lien[data-vue-defis]::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
+.tiroir-lien[data-vue-defis]::after,.tiroir-lien[data-vue-objectif]::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
 .defis-raccourci{display:flex;align-items:center;gap:10px;width:100%;margin:-4px 0 12px;padding:10px 12px;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);font:inherit;font-size:14px;text-align:left;cursor:pointer;transition:background-color var(--duree-courte),transform var(--duree-appui) var(--courbe-ressort)}
 .defis-raccourci b{font-weight:600}
 .defis-raccourci span{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brass)}
@@ -1963,6 +1963,32 @@ html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-co
 .bilan-badges .bx-medaille{width:42px;height:42px}
 .bilan .btn{position:relative;min-width:170px}
 html[data-mouvement="calme"] .bilan-mascotte,html[data-mouvement="calme"] .bilan-tuile{animation:none!important}
+
+/* Sous-vue Objectif du jour (2026-11-15) : grand anneau, jours vers le
+   prochain gel (7 pastilles qui s'allument une a une), gels en reserve. */
+.objv-tete{display:flex;align-items:center;gap:16px;padding:14px 6px 6px}
+.objv-anneau{width:96px;height:96px}
+.objv-anneau .obj-fond,.objv-anneau .obj-plein{stroke-width:3.4}
+.objv-anneau .obj-plein{transition:stroke-dashoffset 1s var(--courbe-sortie) .15s,stroke var(--duree-moyenne)}
+.objv-chiffre{display:flex;flex-direction:column;gap:2px}
+.objv-chiffre b{font-family:'JetBrains Mono',monospace;font-size:30px;color:var(--chalk)}
+.objv-chiffre span{font-size:13.5px;color:var(--sage)}
+.objv-note{margin:6px 6px 0;font-size:13px;line-height:1.5;color:var(--sage)}
+.objv-bloc{margin:14px 4px 0;padding:12px 14px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.objv-titre{margin:0 0 10px;font-size:13.5px;font-weight:600;color:var(--chalk)}
+.objv-bloc .objv-note{margin:10px 0 0}
+.objv-jours{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.objv-jours span{height:10px;border-radius:5px;background-color:var(--raise)}
+.objv-jours span.plein{background-color:#7FCBEF;transform:scaleX(.2);opacity:.3;transition:transform .45s var(--courbe-ressort),opacity .3s;transition-delay:calc(.3s + var(--i) * .08s)}
+.objv-pret .objv-jours span.plein{transform:none;opacity:1}
+.objv-flocons{display:flex;gap:10px}
+.objv-flocons span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background-color:var(--raise)}
+.objv-flocons svg{width:22px;height:22px;fill:var(--sage);opacity:.45}
+.objv-flocons span.plein{background:radial-gradient(circle at 35% 30%,#E3F6FF,#5AB0DE 55%,#1D5F86)}
+.objv-flocons span.plein svg{fill:#fff;opacity:1}
+.objv-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 4px 4px}
+.objv-actions .btn{flex:1 1 140px}
+html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv-anneau .obj-plein{transition:none!important}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -3152,7 +3178,7 @@ html[data-mouvement="calme"] .bilan-mascotte,html[data-mouvement="calme"] .bilan
       </div>
       <div class="tiroir-vue" id="menuAccueil">
         <p class="tiroir-section" data-t="My progress">My progress</p>
-        <button type="button" class="tiroir-lien" data-aller-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
+        <button type="button" class="tiroir-lien" data-vue-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
         <button type="button" class="tiroir-lien" data-vue-defis="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg><span data-t="Weekly challenges">Weekly challenges</span><span class="tiroir-detail" id="menuDefis"></span></button>
         <button type="button" class="tiroir-lien" data-vue="stats"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg><span data-t="Statistics">Statistics</span><span class="tiroir-detail" id="menuResume"></span></button>
         <button type="button" class="tiroir-lien" data-vue="badges"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"/></svg><span data-t="Badges">Badges</span><span class="tiroir-detail" id="menuBadgesCompte"></span></button>
@@ -3169,6 +3195,7 @@ html[data-mouvement="calme"] .bilan-mascotte,html[data-mouvement="calme"] .bilan
       <div class="tiroir-vue" id="menuBadges" hidden><div class="badges" id="menuBadgeGrid"></div></div>
       <div class="tiroir-vue" id="menuNouveautes" hidden></div>
       <div class="tiroir-vue" id="menuDefisVue" hidden></div>
+      <div class="tiroir-vue" id="menuObjectifVue" hidden></div>
       <!-- Langues (2026-11-15) : la liste du selecteur, dans sa propre vue. -->
       <div class="tiroir-vue" id="menuLanguesVue" hidden><!--__LANGSWITCH__--></div>
     </aside>

@@ -1,101 +1,389 @@
 [
- {"d": "2026-11-15",
-  "en": ["197 illustrated badges", "Bronze, silver, gold and jade medals, each with a chess story. Tap a medal to read it."],
-  "fr": ["197 badges illustrés", "Des médailles de bronze, d'argent, d'or et de jade, chacune avec une anecdote d'échecs. Touche une médaille pour la lire."],
-  "es": ["197 insignias ilustradas", "Medallas de bronce, plata, oro y jade, cada una con una historia de ajedrez. Toca una medalla para leerla."],
-  "pt": ["197 conquistas ilustradas", "Medalhas de bronze, prata, ouro e jade, cada uma com uma curiosidade de xadrez. Toque numa medalha para ler."],
-  "de": ["197 illustrierte Abzeichen", "Medaillen aus Bronze, Silber, Gold und Jade, jede mit einer Schachgeschichte. Tippe auf eine Medaille, um sie zu lesen."],
-  "ru": ["197 значка с иллюстрациями", "Бронзовые, серебряные, золотые и нефритовые медали, у каждой своя шахматная история. Нажми на медаль, чтобы прочитать."],
-  "it": ["197 distintivi illustrati", "Medaglie di bronzo, argento, oro e giada, ognuna con una curiosità sugli scacchi. Tocca una medaglia per leggerla."],
-  "tr": ["197 resimli rozet", "Bronz, gümüş, altın ve yeşim madalyalar, her birinin bir satranç hikâyesi var. Okumak için bir madalyaya dokun."],
-  "pl": ["197 ilustrowane odznaki", "Medale z brązu, srebra, złota i jadeitu, każdy z szachową ciekawostką. Dotknij medalu, by ją przeczytać."],
-  "id": ["197 lencana bergambar", "Medali perunggu, perak, emas, dan giok, masing-masing dengan cerita catur. Ketuk medali untuk membacanya."]},
- {"d": "2026-11-15",
-  "en": ["A brand-new menu", "Your statistics, your badges, the settings and the languages are all gathered here."],
-  "fr": ["Un menu tout neuf", "Tes statistiques, tes badges, les réglages et les langues sont réunis ici."],
-  "es": ["Un menú nuevo", "Tus estadísticas, tus insignias, los ajustes y los idiomas están reunidos aquí."],
-  "pt": ["Um menu novinho", "Suas estatísticas, suas conquistas, as configurações e os idiomas estão reunidos aqui."],
-  "de": ["Ein ganz neues Menü", "Deine Statistiken, deine Abzeichen, die Einstellungen und die Sprachen sind hier versammelt."],
-  "ru": ["Новое меню", "Статистика, значки, настройки и языки теперь собраны здесь."],
-  "it": ["Un menu tutto nuovo", "Le tue statistiche, i tuoi distintivi, le impostazioni e le lingue sono riuniti qui."],
-  "tr": ["Yepyeni bir menü", "İstatistiklerin, rozetlerin, ayarlar ve diller artık burada bir arada."],
-  "pl": ["Zupełnie nowe menu", "Twoje statystyki, odznaki, ustawienia i języki są teraz w jednym miejscu."],
-  "id": ["Menu baru", "Statistik, lencana, pengaturan, dan bahasa kini terkumpul di sini."]},
- {"d": "2026-11-14",
-  "en": ["The site comes to life", "Tabs slide, the logo winks, the elephant jumps when you solve a puzzle, and every screen has its sounds."],
-  "fr": ["Le site prend vie", "Les onglets glissent, le logo cligne de l'œil, l'éléphant saute quand tu réussis un exercice, et chaque écran a ses sons."],
-  "es": ["El sitio cobra vida", "Las pestañas se deslizan, el logo guiña un ojo, el elefante salta cuando resuelves un ejercicio y cada pantalla tiene sus sonidos."],
-  "pt": ["O site ganha vida", "As abas deslizam, o logo pisca, o elefante pula quando você resolve um exercício, e cada tela tem seus sons."],
-  "de": ["Die Seite wird lebendig", "Die Reiter gleiten, das Logo zwinkert, der Elefant hüpft, wenn du eine Aufgabe löst, und jeder Bildschirm hat seine Klänge."],
-  "ru": ["Сайт оживает", "Вкладки скользят, логотип подмигивает, слон подпрыгивает, когда ты решаешь задачу, и у каждого экрана свои звуки."],
-  "it": ["Il sito prende vita", "Le schede scivolano, il logo fa l'occhiolino, l'elefante salta quando risolvi un esercizio e ogni schermata ha i suoi suoni."],
-  "tr": ["Site canlanıyor", "Sekmeler kayıyor, logo göz kırpıyor, bir bulmaca çözdüğünde fil zıplıyor ve her ekranın kendi sesleri var."],
-  "pl": ["Strona ożywa", "Zakładki się przesuwają, logo puszcza oko, słoń podskakuje, gdy rozwiążesz zadanie, a każdy ekran ma swoje dźwięki."],
-  "id": ["Situs jadi hidup", "Tab bergeser, logo berkedip, gajah melompat saat kamu memecahkan teka-teki, dan setiap layar punya suaranya."]},
- {"d": "2026-11-14",
-  "en": ["The puzzle of the day on your website", "Clubs and teachers can show the puzzle of the day on their own website."],
-  "fr": ["L'exercice du jour sur ton site", "Clubs et enseignants peuvent afficher l'exercice du jour sur leur propre site."],
-  "es": ["El ejercicio del día en tu web", "Clubes y profesores pueden mostrar el ejercicio del día en su propia web."],
-  "pt": ["O exercício do dia no seu site", "Clubes e professores podem exibir o exercício do dia no próprio site."],
-  "de": ["Die Aufgabe des Tages auf deiner Website", "Vereine und Lehrkräfte können die Aufgabe des Tages auf ihrer eigenen Website zeigen."],
-  "ru": ["Задача дня на твоём сайте", "Клубы и учителя могут показывать задачу дня на своём сайте."],
-  "it": ["L'esercizio del giorno sul tuo sito", "Circoli e insegnanti possono mostrare l'esercizio del giorno sul proprio sito."],
-  "tr": ["Günün bulmacası senin sitende", "Kulüpler ve öğretmenler günün bulmacasını kendi sitelerinde gösterebilir."],
-  "pl": ["Zadanie dnia na twojej stronie", "Kluby i nauczyciele mogą pokazywać zadanie dnia na własnej stronie."],
-  "id": ["Teka-teki hari ini di situsmu", "Klub dan guru bisa menampilkan teka-teki hari ini di situs mereka sendiri."]},
- {"d": "2026-11-08",
-  "en": ["The I'm a beginner course", "Seven steps to learn how the pieces move, checkmate and the first tactics, then play your first game."],
-  "fr": ["Le parcours Je débute", "Sept étapes pour apprendre la marche des pièces, le mat et les premières tactiques, puis jouer ta première partie."],
-  "es": ["El recorrido Soy principiante", "Siete etapas para aprender cómo se mueven las piezas, el mate y las primeras tácticas, y luego jugar tu primera partida."],
-  "pt": ["O percurso Sou iniciante", "Sete etapas para aprender como as peças andam, o mate e as primeiras táticas, e depois jogar sua primeira partida."],
-  "de": ["Der Kurs Ich bin Anfänger", "Sieben Schritte, um die Gangart der Figuren, das Matt und die ersten Taktiken zu lernen, und dann deine erste Partie."],
-  "ru": ["Курс «Я новичок»", "Семь шагов: как ходят фигуры, мат и первые тактические приёмы, а потом твоя первая партия."],
-  "it": ["Il percorso Sono principiante", "Sette tappe per imparare come si muovono i pezzi, il matto e le prime tattiche, poi la tua prima partita."],
-  "tr": ["Yeni başlıyorum kursu", "Taşların hareketini, matı ve ilk taktikleri öğrenmek için yedi adım, ardından ilk oyunun."],
-  "pl": ["Kurs Jestem początkujący", "Siedem kroków, by poznać ruchy bierek, mata i pierwsze taktyki, a potem zagrać pierwszą partię."],
-  "id": ["Kursus Saya pemula", "Tujuh langkah untuk mempelajari gerakan buah, skakmat, dan taktik pertama, lalu memainkan permainan pertamamu."]},
- {"d": "2026-11-08",
-  "en": ["Sounds", "Moves, captures, checks and game endings can now be heard. You can turn them off in the preferences."],
-  "fr": ["Des sons", "Coups, prises, échecs et fins de partie s'entendent désormais. Tu peux les couper dans les préférences."],
-  "es": ["Sonidos", "Ahora se oyen las jugadas, capturas, jaques y finales de partida. Puedes desactivarlos en las preferencias."],
-  "pt": ["Sons", "Lances, capturas, xeques e fins de partida agora têm som. Você pode desligá-los nas preferências."],
-  "de": ["Klänge", "Züge, Schlagzüge, Schachgebote und Partieenden sind jetzt zu hören. Du kannst sie in den Einstellungen ausschalten."],
-  "ru": ["Звуки", "Теперь слышны ходы, взятия, шахи и окончания партий. Их можно выключить в настройках."],
-  "it": ["Suoni", "Ora si sentono mosse, catture, scacchi e fine partita. Puoi disattivarli nelle preferenze."],
-  "tr": ["Sesler", "Hamleler, almalar, şahlar ve oyun sonları artık duyuluyor. Tercihlerden kapatabilirsin."],
-  "pl": ["Dźwięki", "Ruchy, bicia, szachy i końce partii są teraz słyszalne. Możesz je wyłączyć w ustawieniach."],
-  "id": ["Suara", "Langkah, makan, skak, dan akhir permainan kini terdengar. Kamu bisa mematikannya di preferensi."]},
- {"d": "2026-11-01",
-  "en": ["Four new languages", "Italian, Turkish, Polish and Indonesian join the site. And a little Thai secret is hiding on the home page…"],
-  "fr": ["Quatre nouvelles langues", "L'italien, le turc, le polonais et l'indonésien rejoignent le site. Et un petit secret thaï se cache sur l'accueil…"],
-  "es": ["Cuatro idiomas nuevos", "El italiano, el turco, el polaco y el indonesio llegan al sitio. Y un pequeño secreto tailandés se esconde en la portada…"],
-  "pt": ["Quatro novos idiomas", "Italiano, turco, polonês e indonésio chegam ao site. E um pequeno segredo tailandês se esconde na página inicial…"],
-  "de": ["Vier neue Sprachen", "Italienisch, Türkisch, Polnisch und Indonesisch sind dazugekommen. Und auf der Startseite versteckt sich ein kleines thailändisches Geheimnis…"],
-  "ru": ["Четыре новых языка", "Итальянский, турецкий, польский и индонезийский теперь на сайте. А на главной странице прячется маленький тайский секрет…"],
-  "it": ["Quattro nuove lingue", "Italiano, turco, polacco e indonesiano arrivano sul sito. E un piccolo segreto thailandese si nasconde nella pagina iniziale…"],
-  "tr": ["Dört yeni dil", "İtalyanca, Türkçe, Lehçe ve Endonezce siteye katıldı. Ana sayfada da küçük bir Tay sırrı saklanıyor…"],
-  "pl": ["Cztery nowe języki", "Włoski, turecki, polski i indonezyjski dołączają do strony. A na stronie głównej kryje się mały tajski sekret…"],
-  "id": ["Empat bahasa baru", "Bahasa Italia, Turki, Polandia, dan Indonesia hadir di situs. Dan ada rahasia kecil dari Thailand di beranda…"]},
- {"d": "2026-10-26",
-  "en": ["A week that gets harder", "The puzzle of the day is easy on Monday and gets tougher until Sunday."],
-  "fr": ["Une semaine qui monte en difficulté", "L'exercice du jour est facile le lundi et de plus en plus corsé jusqu'au dimanche."],
-  "es": ["Una semana cada vez más difícil", "El ejercicio del día es fácil el lunes y se complica hasta el domingo."],
-  "pt": ["Uma semana cada vez mais difícil", "O exercício do dia é fácil na segunda e fica mais puxado até domingo."],
-  "de": ["Eine Woche, die schwerer wird", "Die Aufgabe des Tages ist montags leicht und wird bis Sonntag immer kniffliger."],
-  "ru": ["Неделя по нарастающей", "Задача дня в понедельник лёгкая и усложняется к воскресенью."],
-  "it": ["Una settimana in salita", "L'esercizio del giorno è facile il lunedì e diventa sempre più tosto fino alla domenica."],
-  "tr": ["Gittikçe zorlaşan bir hafta", "Günün bulmacası pazartesi kolay, pazara doğru giderek zorlaşıyor."],
-  "pl": ["Tydzień pod górkę", "Zadanie dnia jest łatwe w poniedziałek i coraz trudniejsze aż do niedzieli."],
-  "id": ["Seminggu yang makin menantang", "Teka-teki hari ini mudah di hari Senin dan makin sulit sampai hari Minggu."]},
- {"d": "2026-10-25",
-  "en": ["More than 229,000 puzzles", "The puzzle bank grows, and the site now speaks Spanish, Portuguese, German and Russian."],
-  "fr": ["Plus de 229 000 exercices", "La banque d'exercices s'agrandit, et le site parle maintenant espagnol, portugais, allemand et russe."],
-  "es": ["Más de 229 000 ejercicios", "El banco de ejercicios crece y el sitio ya habla español, portugués, alemán y ruso."],
-  "pt": ["Mais de 229 mil exercícios", "O banco de exercícios cresceu, e o site agora fala espanhol, português, alemão e russo."],
-  "de": ["Über 229 000 Aufgaben", "Die Aufgabensammlung wächst, und die Seite spricht jetzt Spanisch, Portugiesisch, Deutsch und Russisch."],
-  "ru": ["Больше 229 000 задач", "Банк задач растёт, а сайт теперь говорит по-испански, по-португальски, по-немецки и по-русски."],
-  "it": ["Oltre 229 000 esercizi", "La raccolta di esercizi cresce e il sito ora parla spagnolo, portoghese, tedesco e russo."],
-  "tr": ["229 000'den fazla bulmaca", "Bulmaca bankası büyüyor ve site artık İspanyolca, Portekizce, Almanca ve Rusça konuşuyor."],
-  "pl": ["Ponad 229 000 zadań", "Baza zadań rośnie, a strona mówi teraz po hiszpańsku, portugalsku, niemiecku i rosyjsku."],
-  "id": ["Lebih dari 229.000 teka-teki", "Bank teka-teki bertambah, dan situs kini berbahasa Spanyol, Portugis, Jerman, dan Rusia."]}
+ {
+  "d": "2026-11-15",
+  "en": [
+   "200+ illustrated badges",
+   "Bronze, silver, gold and jade medals, each with a chess story. Tap a medal to read it."
+  ],
+  "fr": [
+   "Plus de 200 badges illustrés",
+   "Des médailles de bronze, d'argent, d'or et de jade, chacune avec une anecdote d'échecs. Touche une médaille pour la lire."
+  ],
+  "es": [
+   "Más de 200 insignias ilustradas",
+   "Medallas de bronce, plata, oro y jade, cada una con una historia de ajedrez. Toca una medalla para leerla."
+  ],
+  "pt": [
+   "Mais de 200 conquistas ilustradas",
+   "Medalhas de bronze, prata, ouro e jade, cada uma com uma curiosidade de xadrez. Toque numa medalha para ler."
+  ],
+  "de": [
+   "Über 200 illustrierte Abzeichen",
+   "Medaillen aus Bronze, Silber, Gold und Jade, jede mit einer Schachgeschichte. Tippe auf eine Medaille, um sie zu lesen."
+  ],
+  "ru": [
+   "Более 200 значков с иллюстрациями",
+   "Бронзовые, серебряные, золотые и нефритовые медали, у каждой своя шахматная история. Нажми на медаль, чтобы прочитать."
+  ],
+  "it": [
+   "Oltre 200 distintivi illustrati",
+   "Medaglie di bronzo, argento, oro e giada, ognuna con una curiosità sugli scacchi. Tocca una medaglia per leggerla."
+  ],
+  "tr": [
+   "200'den fazla resimli rozet",
+   "Bronz, gümüş, altın ve yeşim madalyalar, her birinin bir satranç hikâyesi var. Okumak için bir madalyaya dokun."
+  ],
+  "pl": [
+   "Ponad 200 ilustrowanych odznak",
+   "Medale z brązu, srebra, złota i jadeitu, każdy z szachową ciekawostką. Dotknij medalu, by ją przeczytać."
+  ],
+  "id": [
+   "Lebih dari 200 lencana bergambar",
+   "Medali perunggu, perak, emas, dan giok, masing-masing dengan cerita catur. Ketuk medali untuk membacanya."
+  ]
+ },
+ {
+  "d": "2026-11-15",
+  "en": [
+   "A brand-new menu",
+   "Your statistics, your badges, the settings and the languages are all gathered here."
+  ],
+  "fr": [
+   "Un menu tout neuf",
+   "Tes statistiques, tes badges, les réglages et les langues sont réunis ici."
+  ],
+  "es": [
+   "Un menú nuevo",
+   "Tus estadísticas, tus insignias, los ajustes y los idiomas están reunidos aquí."
+  ],
+  "pt": [
+   "Um menu novinho",
+   "Suas estatísticas, suas conquistas, as configurações e os idiomas estão reunidos aqui."
+  ],
+  "de": [
+   "Ein ganz neues Menü",
+   "Deine Statistiken, deine Abzeichen, die Einstellungen und die Sprachen sind hier versammelt."
+  ],
+  "ru": [
+   "Новое меню",
+   "Статистика, значки, настройки и языки теперь собраны здесь."
+  ],
+  "it": [
+   "Un menu tutto nuovo",
+   "Le tue statistiche, i tuoi distintivi, le impostazioni e le lingue sono riuniti qui."
+  ],
+  "tr": [
+   "Yepyeni bir menü",
+   "İstatistiklerin, rozetlerin, ayarlar ve diller artık burada bir arada."
+  ],
+  "pl": [
+   "Zupełnie nowe menu",
+   "Twoje statystyki, odznaki, ustawienia i języki są teraz w jednym miejscu."
+  ],
+  "id": [
+   "Menu baru",
+   "Statistik, lencana, pengaturan, dan bahasa kini terkumpul di sini."
+  ]
+ },
+ {
+  "d": "2026-11-14",
+  "en": [
+   "The site comes to life",
+   "Tabs slide, the logo winks, the elephant jumps when you solve a puzzle, and every screen has its sounds."
+  ],
+  "fr": [
+   "Le site prend vie",
+   "Les onglets glissent, le logo cligne de l'œil, l'éléphant saute quand tu réussis un exercice, et chaque écran a ses sons."
+  ],
+  "es": [
+   "El sitio cobra vida",
+   "Las pestañas se deslizan, el logo guiña un ojo, el elefante salta cuando resuelves un ejercicio y cada pantalla tiene sus sonidos."
+  ],
+  "pt": [
+   "O site ganha vida",
+   "As abas deslizam, o logo pisca, o elefante pula quando você resolve um exercício, e cada tela tem seus sons."
+  ],
+  "de": [
+   "Die Seite wird lebendig",
+   "Die Reiter gleiten, das Logo zwinkert, der Elefant hüpft, wenn du eine Aufgabe löst, und jeder Bildschirm hat seine Klänge."
+  ],
+  "ru": [
+   "Сайт оживает",
+   "Вкладки скользят, логотип подмигивает, слон подпрыгивает, когда ты решаешь задачу, и у каждого экрана свои звуки."
+  ],
+  "it": [
+   "Il sito prende vita",
+   "Le schede scivolano, il logo fa l'occhiolino, l'elefante salta quando risolvi un esercizio e ogni schermata ha i suoi suoni."
+  ],
+  "tr": [
+   "Site canlanıyor",
+   "Sekmeler kayıyor, logo göz kırpıyor, bir bulmaca çözdüğünde fil zıplıyor ve her ekranın kendi sesleri var."
+  ],
+  "pl": [
+   "Strona ożywa",
+   "Zakładki się przesuwają, logo puszcza oko, słoń podskakuje, gdy rozwiążesz zadanie, a każdy ekran ma swoje dźwięki."
+  ],
+  "id": [
+   "Situs jadi hidup",
+   "Tab bergeser, logo berkedip, gajah melompat saat kamu memecahkan teka-teki, dan setiap layar punya suaranya."
+  ]
+ },
+ {
+  "d": "2026-11-14",
+  "en": [
+   "The puzzle of the day on your website",
+   "Clubs and teachers can show the puzzle of the day on their own website."
+  ],
+  "fr": [
+   "L'exercice du jour sur ton site",
+   "Clubs et enseignants peuvent afficher l'exercice du jour sur leur propre site."
+  ],
+  "es": [
+   "El ejercicio del día en tu web",
+   "Clubes y profesores pueden mostrar el ejercicio del día en su propia web."
+  ],
+  "pt": [
+   "O exercício do dia no seu site",
+   "Clubes e professores podem exibir o exercício do dia no próprio site."
+  ],
+  "de": [
+   "Die Aufgabe des Tages auf deiner Website",
+   "Vereine und Lehrkräfte können die Aufgabe des Tages auf ihrer eigenen Website zeigen."
+  ],
+  "ru": [
+   "Задача дня на твоём сайте",
+   "Клубы и учителя могут показывать задачу дня на своём сайте."
+  ],
+  "it": [
+   "L'esercizio del giorno sul tuo sito",
+   "Circoli e insegnanti possono mostrare l'esercizio del giorno sul proprio sito."
+  ],
+  "tr": [
+   "Günün bulmacası senin sitende",
+   "Kulüpler ve öğretmenler günün bulmacasını kendi sitelerinde gösterebilir."
+  ],
+  "pl": [
+   "Zadanie dnia na twojej stronie",
+   "Kluby i nauczyciele mogą pokazywać zadanie dnia na własnej stronie."
+  ],
+  "id": [
+   "Teka-teki hari ini di situsmu",
+   "Klub dan guru bisa menampilkan teka-teki hari ini di situs mereka sendiri."
+  ]
+ },
+ {
+  "d": "2026-11-08",
+  "en": [
+   "The I'm a beginner course",
+   "Seven steps to learn how the pieces move, checkmate and the first tactics, then play your first game."
+  ],
+  "fr": [
+   "Le parcours Je débute",
+   "Sept étapes pour apprendre la marche des pièces, le mat et les premières tactiques, puis jouer ta première partie."
+  ],
+  "es": [
+   "El recorrido Soy principiante",
+   "Siete etapas para aprender cómo se mueven las piezas, el mate y las primeras tácticas, y luego jugar tu primera partida."
+  ],
+  "pt": [
+   "O percurso Sou iniciante",
+   "Sete etapas para aprender como as peças andam, o mate e as primeiras táticas, e depois jogar sua primeira partida."
+  ],
+  "de": [
+   "Der Kurs Ich bin Anfänger",
+   "Sieben Schritte, um die Gangart der Figuren, das Matt und die ersten Taktiken zu lernen, und dann deine erste Partie."
+  ],
+  "ru": [
+   "Курс «Я новичок»",
+   "Семь шагов: как ходят фигуры, мат и первые тактические приёмы, а потом твоя первая партия."
+  ],
+  "it": [
+   "Il percorso Sono principiante",
+   "Sette tappe per imparare come si muovono i pezzi, il matto e le prime tattiche, poi la tua prima partita."
+  ],
+  "tr": [
+   "Yeni başlıyorum kursu",
+   "Taşların hareketini, matı ve ilk taktikleri öğrenmek için yedi adım, ardından ilk oyunun."
+  ],
+  "pl": [
+   "Kurs Jestem początkujący",
+   "Siedem kroków, by poznać ruchy bierek, mata i pierwsze taktyki, a potem zagrać pierwszą partię."
+  ],
+  "id": [
+   "Kursus Saya pemula",
+   "Tujuh langkah untuk mempelajari gerakan buah, skakmat, dan taktik pertama, lalu memainkan permainan pertamamu."
+  ]
+ },
+ {
+  "d": "2026-11-08",
+  "en": [
+   "Sounds",
+   "Moves, captures, checks and game endings can now be heard. You can turn them off in the preferences."
+  ],
+  "fr": [
+   "Des sons",
+   "Coups, prises, échecs et fins de partie s'entendent désormais. Tu peux les couper dans les préférences."
+  ],
+  "es": [
+   "Sonidos",
+   "Ahora se oyen las jugadas, capturas, jaques y finales de partida. Puedes desactivarlos en las preferencias."
+  ],
+  "pt": [
+   "Sons",
+   "Lances, capturas, xeques e fins de partida agora têm som. Você pode desligá-los nas preferências."
+  ],
+  "de": [
+   "Klänge",
+   "Züge, Schlagzüge, Schachgebote und Partieenden sind jetzt zu hören. Du kannst sie in den Einstellungen ausschalten."
+  ],
+  "ru": [
+   "Звуки",
+   "Теперь слышны ходы, взятия, шахи и окончания партий. Их можно выключить в настройках."
+  ],
+  "it": [
+   "Suoni",
+   "Ora si sentono mosse, catture, scacchi e fine partita. Puoi disattivarli nelle preferenze."
+  ],
+  "tr": [
+   "Sesler",
+   "Hamleler, almalar, şahlar ve oyun sonları artık duyuluyor. Tercihlerden kapatabilirsin."
+  ],
+  "pl": [
+   "Dźwięki",
+   "Ruchy, bicia, szachy i końce partii są teraz słyszalne. Możesz je wyłączyć w ustawieniach."
+  ],
+  "id": [
+   "Suara",
+   "Langkah, makan, skak, dan akhir permainan kini terdengar. Kamu bisa mematikannya di preferensi."
+  ]
+ },
+ {
+  "d": "2026-11-01",
+  "en": [
+   "Four new languages",
+   "Italian, Turkish, Polish and Indonesian join the site. And a little Thai secret is hiding on the home page…"
+  ],
+  "fr": [
+   "Quatre nouvelles langues",
+   "L'italien, le turc, le polonais et l'indonésien rejoignent le site. Et un petit secret thaï se cache sur l'accueil…"
+  ],
+  "es": [
+   "Cuatro idiomas nuevos",
+   "El italiano, el turco, el polaco y el indonesio llegan al sitio. Y un pequeño secreto tailandés se esconde en la portada…"
+  ],
+  "pt": [
+   "Quatro novos idiomas",
+   "Italiano, turco, polonês e indonésio chegam ao site. E um pequeno segredo tailandês se esconde na página inicial…"
+  ],
+  "de": [
+   "Vier neue Sprachen",
+   "Italienisch, Türkisch, Polnisch und Indonesisch sind dazugekommen. Und auf der Startseite versteckt sich ein kleines thailändisches Geheimnis…"
+  ],
+  "ru": [
+   "Четыре новых языка",
+   "Итальянский, турецкий, польский и индонезийский теперь на сайте. А на главной странице прячется маленький тайский секрет…"
+  ],
+  "it": [
+   "Quattro nuove lingue",
+   "Italiano, turco, polacco e indonesiano arrivano sul sito. E un piccolo segreto thailandese si nasconde nella pagina iniziale…"
+  ],
+  "tr": [
+   "Dört yeni dil",
+   "İtalyanca, Türkçe, Lehçe ve Endonezce siteye katıldı. Ana sayfada da küçük bir Tay sırrı saklanıyor…"
+  ],
+  "pl": [
+   "Cztery nowe języki",
+   "Włoski, turecki, polski i indonezyjski dołączają do strony. A na stronie głównej kryje się mały tajski sekret…"
+  ],
+  "id": [
+   "Empat bahasa baru",
+   "Bahasa Italia, Turki, Polandia, dan Indonesia hadir di situs. Dan ada rahasia kecil dari Thailand di beranda…"
+  ]
+ },
+ {
+  "d": "2026-10-26",
+  "en": [
+   "A week that gets harder",
+   "The puzzle of the day is easy on Monday and gets tougher until Sunday."
+  ],
+  "fr": [
+   "Une semaine qui monte en difficulté",
+   "L'exercice du jour est facile le lundi et de plus en plus corsé jusqu'au dimanche."
+  ],
+  "es": [
+   "Una semana cada vez más difícil",
+   "El ejercicio del día es fácil el lunes y se complica hasta el domingo."
+  ],
+  "pt": [
+   "Uma semana cada vez mais difícil",
+   "O exercício do dia é fácil na segunda e fica mais puxado até domingo."
+  ],
+  "de": [
+   "Eine Woche, die schwerer wird",
+   "Die Aufgabe des Tages ist montags leicht und wird bis Sonntag immer kniffliger."
+  ],
+  "ru": [
+   "Неделя по нарастающей",
+   "Задача дня в понедельник лёгкая и усложняется к воскресенью."
+  ],
+  "it": [
+   "Una settimana in salita",
+   "L'esercizio del giorno è facile il lunedì e diventa sempre più tosto fino alla domenica."
+  ],
+  "tr": [
+   "Gittikçe zorlaşan bir hafta",
+   "Günün bulmacası pazartesi kolay, pazara doğru giderek zorlaşıyor."
+  ],
+  "pl": [
+   "Tydzień pod górkę",
+   "Zadanie dnia jest łatwe w poniedziałek i coraz trudniejsze aż do niedzieli."
+  ],
+  "id": [
+   "Seminggu yang makin menantang",
+   "Teka-teki hari ini mudah di hari Senin dan makin sulit sampai hari Minggu."
+  ]
+ },
+ {
+  "d": "2026-10-25",
+  "en": [
+   "More than 229,000 puzzles",
+   "The puzzle bank grows, and the site now speaks Spanish, Portuguese, German and Russian."
+  ],
+  "fr": [
+   "Plus de 229 000 exercices",
+   "La banque d'exercices s'agrandit, et le site parle maintenant espagnol, portugais, allemand et russe."
+  ],
+  "es": [
+   "Más de 229 000 ejercicios",
+   "El banco de ejercicios crece y el sitio ya habla español, portugués, alemán y ruso."
+  ],
+  "pt": [
+   "Mais de 229 mil exercícios",
+   "O banco de exercícios cresceu, e o site agora fala espanhol, português, alemão e russo."
+  ],
+  "de": [
+   "Über 229 000 Aufgaben",
+   "Die Aufgabensammlung wächst, und die Seite spricht jetzt Spanisch, Portugiesisch, Deutsch und Russisch."
+  ],
+  "ru": [
+   "Больше 229 000 задач",
+   "Банк задач растёт, а сайт теперь говорит по-испански, по-португальски, по-немецки и по-русски."
+  ],
+  "it": [
+   "Oltre 229 000 esercizi",
+   "La raccolta di esercizi cresce e il sito ora parla spagnolo, portoghese, tedesco e russo."
+  ],
+  "tr": [
+   "229 000'den fazla bulmaca",
+   "Bulmaca bankası büyüyor ve site artık İspanyolca, Portekizce, Almanca ve Rusça konuşuyor."
+  ],
+  "pl": [
+   "Ponad 229 000 zadań",
+   "Baza zadań rośnie, a strona mówi teraz po hiszpańsku, portugalsku, niemiecku i rosyjsku."
+  ],
+  "id": [
+   "Lebih dari 229.000 teka-teki",
+   "Bank teka-teki bertambah, dan situs kini berbahasa Spanyol, Portugis, Jerman, dan Rusia."
+  ]
+ }
 ]

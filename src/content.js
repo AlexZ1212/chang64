@@ -1161,6 +1161,10 @@ module.exports = function (H) {
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       urlsIndex("traps"), `${SITE}/${dir}/`);
   }
+  /* Adresse de chaque piege dans chaque langue, pour les badges Ouvertures
+     (badges.js, 2026-11-15) : la fiche d un badge renvoie vers sa page. */
+  fs.writeFileSync(`${OUT}/data/pieges.json`, JSON.stringify(Object.fromEntries(LANGS.map(lang =>
+    [lang, Object.fromEntries(validTraps.map(trap => [trap.slug.en, `/${DIRS.traps[lang]}/${piege(trap, lang).slug}`]))]))));
 
   /* ================= 5. CATEGORY EXAMPLE PAGES (10 x 2 langues, remplace 1 page/exercice) ================= */
   for (const lang of LANGS) {

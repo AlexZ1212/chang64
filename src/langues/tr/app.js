@@ -805,5 +805,8 @@ module.exports = {
 "A puzzle found on the first try scores a point. If you are level, the faster player wins.":"İlk denemede çözülen her bulmaca bir puan getirir. Eşitlikte daha hızlı olan kazanır.",
 "Take the challenge":"Meydan okumayı kabul et",
 "Not now":"Şimdi değil",
-"Last challenge: {n}/{total} on the first try":"Son meydan okuma: ilk denemede {n}/{total}"
+"Last challenge: {n}/{total} on the first try":"Son meydan okuma: ilk denemede {n}/{total}",
+/* Badges Ouvertures (2026-11-15) */
+"Discover this opening":"Açılışı keşfet",
+"See the trap":"Tuzağı gör"
 };

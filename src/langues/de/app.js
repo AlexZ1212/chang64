@@ -807,5 +807,8 @@ module.exports = {
 "A puzzle found on the first try scores a point. If you are level, the faster player wins.":"Jede auf Anhieb gelöste Aufgabe zählt einen Punkt. Bei Gleichstand gewinnt, wer schneller war.",
 "Take the challenge":"Herausforderung annehmen",
 "Not now":"Später",
-"Last challenge: {n}/{total} on the first try":"Letzte Herausforderung: {n}/{total} auf Anhieb"
+"Last challenge: {n}/{total} on the first try":"Letzte Herausforderung: {n}/{total} auf Anhieb",
+/* Badges Ouvertures (2026-11-15) */
+"Discover this opening":"Zur Eröffnung",
+"See the trap":"Zur Falle"
 };

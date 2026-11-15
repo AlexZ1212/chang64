@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Ottenuto il {date}", "To unlock: {c}": "Per ottenerlo: {c}", "famille:resolus": "Esercizi risolti", "famille:serie": "Giorni di fila", "famille:jours": "Giorni giocati in totale", "famille:classement": "Punteggio", "famille:themes": "Temi tattici", "famille:finales": "Finali", "famille:ordinateur": "Partite contro il computer", "famille:ami": "Giocare con un amico", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinate", "famille:debut": "Sono principiante", "famille:makruk": "Makruk", "famille:semaine": "Giorni della settimana", "famille:du_jour": "Esercizio del giorno", "famille:jours_speciaux": "Giorni speciali", "famille:exploits": "Imprese e curiosità", "famille:defis": "Sfide della settimana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vittoria al livello {niveau}", "cond:mk": "Vittoria a makruk, livello {niveau}", "cond:eg": "Finale {finale} vinto", "cond:etape": "Tappa {n}: {titre}", "cond:fete": "Giocare il {date}", "famille:lecons": "Lezioni imparate"
+ "_ui": { "Won on {date}": "Ottenuto il {date}", "To unlock: {c}": "Per ottenerlo: {c}", "famille:resolus": "Esercizi risolti", "famille:serie": "Giorni di fila", "famille:jours": "Giorni giocati in totale", "famille:classement": "Punteggio", "famille:themes": "Temi tattici", "famille:finales": "Finali", "famille:ordinateur": "Partite contro il computer", "famille:ami": "Giocare con un amico", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinate", "famille:debut": "Sono principiante", "famille:makruk": "Makruk", "famille:semaine": "Giorni della settimana", "famille:du_jour": "Esercizio del giorno", "famille:jours_speciaux": "Giorni speciali", "famille:exploits": "Imprese e curiosità", "famille:defis": "Sfide della settimana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vittoria al livello {niveau}", "cond:mk": "Vittoria a makruk, livello {niveau}", "cond:eg": "Finale {finale} vinto", "cond:etape": "Tappa {n}: {titre}", "cond:fete": "Giocare il {date}", "famille:lecons": "Lezioni imparate", "famille:ouvertures": "Aperture"
  },
  "solved_1": ["Prima mossa", "1 esercizio risolto", "Uno fatto! Già alla primissima mossa il Bianco ha 20 scelte: 16 mosse di pedone e 4 di cavallo."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Obiettivo raggiunto", "Raggiungere l'obiettivo del giorno", "Obiettivo raggiunto! Un po' ogni giorno vale più di tanto una volta al mese: è la costanza che fa migliorare."
 ],
  "obj_gel": ["Cubetto di ghiaccio", "Salvare la serie con un congelamento", "Un giorno saltato, e la tua serie regge. Anche negli scacchi una posizione può congelarsi: se la stessa si ripete tre volte, è patta."
+],
+ "ouv_italienne": ["Partita italiana", "Giocare la partita italiana con il Bianco (3.Bc4)", "Il suo nome, giuoco piano, vuol dire «gioco tranquillo». L'alfiere in c4 punta già il punto debole f7."
+],
+ "ouv_espagnole": ["Partita spagnola", "Giocare la partita spagnola con il Bianco (3.Bb5)", "Si chiama anche Ruy López, dal nome di un sacerdote spagnolo che la studiò nel suo libro di scacchi del 1561."
+],
+ "ouv_sicilienne": ["Difesa siciliana", "Rispondere 1…c5 a 1.e4 con il Nero", "È la risposta a 1.e4 più giocata dai giocatori forti. Invece di copiare il Bianco, il Nero squilibra subito la partita."
+],
+ "ouv_francaise": ["Difesa francese", "Rispondere 1…e6 a 1.e4 con il Nero", "Il nome viene da un incontro per corrispondenza tra Londra e Parigi iniziato nel 1834: la squadra di Parigi la giocò."
+],
+ "ouv_carokann": ["Caro-Kann", "Rispondere 1…c6 a 1.e4 con il Nero", "Porta il nome di due giocatori, Horatio Caro e Marcus Kann, che la analizzarono nel 1886."
+],
+ "ouv_gambit_dame": ["Gambetto di donna", "Giocare il gambetto di donna con il Bianco (1.d4 d5 2.c4)", "Nonostante il nome, non è un vero sacrificio: se il Nero prende il pedone c4, il Bianco quasi sempre lo recupera."
+],
+ "ouv_scandinave": ["Scandinava", "Rispondere 1…d5 a 1.e4 con il Nero", "La donna nera esce molto presto. Questa apertura compare in una delle più antiche partite conosciute, giocata a Valencia verso il 1475."
+],
+ "ouv_anglaise": ["Apertura inglese", "Cominciare con 1.c4 con il Bianco", "Deve il nome all'inglese Howard Staunton, che la giocò nel 1843 nel match contro il francese Saint-Amant."
+],
+ "ouv_gambit_roi": ["Gambetto di re", "Giocare il gambetto di re con il Bianco (1.e4 e5 2.f4)", "L'Immortale, giocata a Londra nel 1851 da Anderssen contro Kieseritzky, comincia con questo gambetto."
+],
+ "ouv_londres": ["Sistema di Londra", "Giocare 1.d4 e portare l'alfiere in f4 con il Bianco", "Prende il nome dal torneo di Londra del 1922, dove diversi maestri lo usarono."
+],
+ "ouv_fegatello": ["Fegatello", "Sacrificare il cavallo in f7 nell'attacco Fegatello", "Un fegatello è un pezzo di fegato; gli inglesi lo chiamano Fried Liver, fegato fritto. Il re nero finisce allo scoperto."
+],
+ "ouv_traxler": ["Traxler", "Rispondere 4…Bc5 a 4.Ng5 con il Nero (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "Il sacerdote ceco Karel Traxler la giocò a Praga nel 1890. Invece di difendere f7, il Nero contrattacca f2."
+],
+ "ouv_berger": ["Matto del barbiere", "Vincere con il matto del barbiere: la donna dà matto in f7 (o f2) nelle tue prime 4 mosse", "In francese e in tedesco è il matto del pastore: mat du berger, Schäfermatt. Funziona una sola volta per avversario!"
+],
+ "ouv_legal": ["Matto di Légal", "Dare matto meno di due mosse dopo aver lasciato prendere la donna, nelle tue prime 10 mosse", "Si dice che Légal de Kermur, maestro di Philidor, tendesse questa trappola al Café de la Régence di Parigi verso il 1750."
+],
+ "ouv_shilling": ["Trappola dello scellino", "Dare matto con …Nf3 dopo 3…Nd4 con il Nero", "La leggenda vuole che Blackburne, grande giocatore inglese dell'Ottocento, vincesse uno scellino a partita con questa trappola."
+],
+ "ouv_englund": ["Trappola Englund", "Dare matto in c1 con la donna dopo 1.d4 e5, con il Nero", "Questo gambetto porta il nome dello svedese Fritz Englund. Ha cattiva fama, ma nasconde un pungiglione: il matto in c1."
+],
+ "ouv_damiano": ["Damiano punito", "Vincere dopo 2…f6 prendendo in e5 (3.Nxe5) con il Bianco", "Nel 1512 il portoghese Pedro Damiano scriveva già che 2…f6 era una cattiva mossa. Lo hai appena dimostrato."
+],
+ "ouv_5": ["Curioso", "Giocare 5 aperture diverse", "Esistono centinaia di aperture con un nome. Il codice ECO le ordina da A00 a E99: 500 caselle."
+],
+ "ouv_15": ["Enciclopedista", "Giocare 15 aperture diverse", "Il codice ECO viene dall'Enciclopedia delle aperture scacchistiche, pubblicata a Belgrado a partire dal 1974."
+],
+ "ouv_30": ["Biblioteca vivente", "Giocare 30 aperture diverse", "Trenta aperture diverse! I grandi maestri, invece, ne approfondiscono poche piuttosto che giocarle tutte."
+],
+ "lec_sot": ["Matto dell'imbecille", "Subire matto in due mosse", "Il matto più veloce possibile: 1.f3 e5 2.g4 Qh4#. Bisognava viverlo una volta per non vederlo mai più."
+],
+ "lec_tondu": ["Tosato", "Cadere nel matto del barbiere", "Il matto del barbiere mira a f7, difeso dal solo re. Il rimedio: proteggere e5 e f7, poi scacciare la donna sviluppando i pezzi."
 ]
 }

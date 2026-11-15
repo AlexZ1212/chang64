@@ -805,5 +805,8 @@ module.exports = {
 "A puzzle found on the first try scores a point. If you are level, the faster player wins.":"Setiap teka-teki yang terpecahkan pada percobaan pertama bernilai satu poin. Jika seri, yang lebih cepat menang.",
 "Take the challenge":"Terima tantangan",
 "Not now":"Nanti saja",
-"Last challenge: {n}/{total} on the first try":"Tantangan terakhir: {n}/{total} pada percobaan pertama"
+"Last challenge: {n}/{total} on the first try":"Tantangan terakhir: {n}/{total} pada percobaan pertama",
+/* Badges Ouvertures (2026-11-15) */
+"Discover this opening":"Kenali pembukaannya",
+"See the trap":"Lihat jebakannya"
 };

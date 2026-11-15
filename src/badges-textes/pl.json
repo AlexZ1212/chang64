@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Zdobyta {date}", "To unlock: {c}": "Jak zdobyć: {c}", "famille:resolus": "Rozwiązane zadania", "famille:serie": "Dni z rzędu", "famille:jours": "Dni gry łącznie", "famille:classement": "Ranking", "famille:themes": "Motywy taktyczne", "famille:finales": "Końcówki", "famille:ordinateur": "Partie z komputerem", "famille:ami": "Gra ze znajomym", "famille:sprint": "Sprint", "famille:coordonnees": "Współrzędne", "famille:debut": "Jestem początkujący", "famille:makruk": "Makruk", "famille:semaine": "Dni tygodnia", "famille:du_jour": "Zadanie dnia", "famille:jours_speciaux": "Wyjątkowe dni", "famille:exploits": "Wyczyny i ciekawostki", "famille:defis": "Wyzwania tygodnia", "cond:theme": "{theme}: {n}", "cond:niveau": "Wygrana na poziomie {niveau}", "cond:mk": "Wygrana w makruk, poziom {niveau}", "cond:eg": "Wygrana końcówka: {finale}", "cond:etape": "Krok {n}: {titre}", "cond:fete": "Zagrać {date}", "famille:lecons": "Odrobione lekcje"
+ "_ui": { "Won on {date}": "Zdobyta {date}", "To unlock: {c}": "Jak zdobyć: {c}", "famille:resolus": "Rozwiązane zadania", "famille:serie": "Dni z rzędu", "famille:jours": "Dni gry łącznie", "famille:classement": "Ranking", "famille:themes": "Motywy taktyczne", "famille:finales": "Końcówki", "famille:ordinateur": "Partie z komputerem", "famille:ami": "Gra ze znajomym", "famille:sprint": "Sprint", "famille:coordonnees": "Współrzędne", "famille:debut": "Jestem początkujący", "famille:makruk": "Makruk", "famille:semaine": "Dni tygodnia", "famille:du_jour": "Zadanie dnia", "famille:jours_speciaux": "Wyjątkowe dni", "famille:exploits": "Wyczyny i ciekawostki", "famille:defis": "Wyzwania tygodnia", "cond:theme": "{theme}: {n}", "cond:niveau": "Wygrana na poziomie {niveau}", "cond:mk": "Wygrana w makruk, poziom {niveau}", "cond:eg": "Wygrana końcówka: {finale}", "cond:etape": "Krok {n}: {titre}", "cond:fete": "Zagrać {date}", "famille:lecons": "Odrobione lekcje", "famille:ouvertures": "Debiuty"
  },
  "solved_1": ["Pierwszy ruch", "1 rozwiązane zadanie", "Jedno za tobą! Już w pierwszym ruchu białe mają 20 możliwości: 16 ruchów pionami i 4 skoczkami."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Cel osiągnięty", "Osiągnąć dzienny cel", "Cel osiągnięty! Trochę każdego dnia to więcej niż dużo raz w miesiącu: postępy daje regularność."
 ],
  "obj_gel": ["Kostka lodu", "Uratować serię zamrożeniem", "Jeden dzień opuszczony, a seria trwa. W szachach pozycja też może zamarznąć: gdy ta sama powtórzy się trzy razy, jest remis."
+],
+ "ouv_italienne": ["Partia włoska", "Zagraj partię włoską białymi (3.Bc4)", "Jej włoska nazwa, giuoco piano, znaczy „spokojna gra”. Goniec z c4 już celuje w słaby punkt f7."
+],
+ "ouv_espagnole": ["Partia hiszpańska", "Zagraj partię hiszpańską białymi (3.Bb5)", "Nazywa się ją też Ruy López, od hiszpańskiego księdza, który opisał ją w swojej książce szachowej z 1561 roku."
+],
+ "ouv_sicilienne": ["Obrona sycylijska", "Odpowiedz czarnymi 1…c5 na 1.e4", "To najczęstsza odpowiedź silnych graczy na 1.e4. Zamiast naśladować białe, czarne od razu zaburzają równowagę."
+],
+ "ouv_francaise": ["Obrona francuska", "Odpowiedz czarnymi 1…e6 na 1.e4", "Nazwa pochodzi od meczu korespondencyjnego Londyn–Paryż rozpoczętego w 1834 roku: drużyna paryska zagrała właśnie tak."
+],
+ "ouv_carokann": ["Caro-Kann", "Odpowiedz czarnymi 1…c6 na 1.e4", "Nosi nazwiska dwóch szachistów, Horatio Caro i Marcusa Kanna, którzy przeanalizowali ją w 1886 roku."
+],
+ "ouv_gambit_dame": ["Gambit hetmański", "Zagraj gambit hetmański białymi (1.d4 d5 2.c4)", "Mimo nazwy to nie jest prawdziwe poświęcenie: jeśli czarne zbiją pionka c4, białe prawie zawsze go odzyskują."
+],
+ "ouv_scandinave": ["Obrona skandynawska", "Odpowiedz czarnymi 1…d5 na 1.e4", "Czarny hetman wychodzi bardzo wcześnie. Ten debiut pojawia się w jednej z najstarszych znanych partii, rozegranej w Walencji około 1475 roku."
+],
+ "ouv_anglaise": ["Partia angielska", "Zacznij białymi od 1.c4", "Zawdzięcza nazwę Anglikowi Howardowi Stauntonowi, który grał ją w 1843 roku w meczu z Francuzem Saint-Amantem."
+],
+ "ouv_gambit_roi": ["Gambit królewski", "Zagraj gambit królewski białymi (1.e4 e5 2.f4)", "Nieśmiertelna partia, rozegrana w Londynie w 1851 roku przez Anderssena z Kieseritzkym, zaczyna się od tego gambitu."
+],
+ "ouv_londres": ["System londyński", "Zagraj białymi 1.d4 i wyprowadź gońca na f4", "Nazwa pochodzi od turnieju w Londynie w 1922 roku, na którym stosowało go kilku mistrzów."
+],
+ "ouv_fegatello": ["Fegatello", "Poświęć skoczka na f7 w ataku Fegatello", "Po włosku fegatello to kawałek wątróbki; Anglicy mówią Fried Liver, smażona wątróbka. Czarny król kończy na otwartej przestrzeni."
+],
+ "ouv_traxler": ["Traxler", "Odpowiedz czarnymi 4…Bc5 na 4.Ng5 (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "Czeski ksiądz Karel Traxler zagrał tak w Pradze w 1890 roku. Zamiast bronić f7, czarne kontratakują f2."
+],
+ "ouv_berger": ["Mat szewczyka", "Wygraj matem szewczyka: hetman matuje na f7 (lub f2) w twoich pierwszych 4 ruchach", "Po francusku i niemiecku to mat pasterza: mat du berger, Schäfermatt. Działa tylko raz na każdego przeciwnika!"
+],
+ "ouv_legal": ["Mat Légala", "Daj mata najpóźniej dwa ruchy po oddaniu hetmana, w twoich pierwszych 10 ruchach", "Podobno Légal de Kermur, nauczyciel Philidora, zastawiał tę pułapkę w paryskiej kawiarni Café de la Régence około 1750 roku."
+],
+ "ouv_shilling": ["Pułapka szylingowa", "Daj czarnymi mata ruchem …Nf3 po 3…Nd4", "Legenda głosi, że Blackburne, wielki angielski szachista XIX wieku, wygrywał tą pułapką szylinga za partię."
+],
+ "ouv_englund": ["Pułapka Englunda", "Daj czarnymi mata hetmanem na c1 po 1.d4 e5", "Ten gambit nosi nazwisko Szweda Fritza Englunda. Ma złą sławę, ale kryje żądło: mat na c1."
+],
+ "ouv_damiano": ["Damiano ukarany", "Wygraj białymi po 2…f6, biorąc na e5 (3.Nxe5)", "Już w 1512 roku Portugalczyk Pedro Damiano pisał, że 2…f6 to zły ruch. Właśnie to udowodniłeś."
+],
+ "ouv_5": ["Ciekawski", "Zagraj 5 różnych debiutów", "Istnieją setki debiutów z własną nazwą. Kod ECO porządkuje je od A00 do E99: 500 przegródek."
+],
+ "ouv_15": ["Encyklopedysta", "Zagraj 15 różnych debiutów", "Kod ECO pochodzi z Encyklopedii debiutów szachowych, wydawanej w Belgradzie od 1974 roku."
+],
+ "ouv_30": ["Żywa biblioteka", "Zagraj 30 różnych debiutów", "Trzydzieści różnych debiutów! Arcymistrzowie zgłębiają raczej kilka, zamiast grać wszystkie."
+],
+ "lec_sot": ["Mat głupca", "Dostań mata w dwóch ruchach", "Najszybszy możliwy mat: 1.f3 e5 2.g4 Qh4#. Trzeba było to przeżyć raz, żeby więcej tego nie zobaczyć."
+],
+ "lec_tondu": ["Ostrzyżony", "Daj się złapać na mata szewczyka", "Mat szewczyka celuje w f7, którego broni tylko król. Lekarstwo: osłoń e5 i f7, a potem przeganiaj hetmana, rozwijając figury."
 ]
 }

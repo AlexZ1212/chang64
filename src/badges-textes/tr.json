@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Kazanıldı: {date}", "To unlock: {c}": "Nasıl kazanılır: {c}", "famille:resolus": "Çözülen bulmacalar", "famille:serie": "Art arda günler", "famille:jours": "Toplam oynanan gün", "famille:classement": "Puan", "famille:themes": "Taktik temalar", "famille:finales": "Oyun sonları", "famille:ordinateur": "Bilgisayara karşı oyunlar", "famille:ami": "Arkadaşla oynamak", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinatlar", "famille:debut": "Yeni başlıyorum", "famille:makruk": "Makruk", "famille:semaine": "Haftanın günleri", "famille:du_jour": "Günün bulmacası", "famille:jours_speciaux": "Özel günler", "famille:exploits": "Başarılar ve ilginçlikler", "famille:defis": "Haftanın görevleri", "cond:theme": "{theme}: {n}", "cond:niveau": "{niveau} seviyesinde galibiyet", "cond:mk": "Makruk galibiyeti, {niveau} seviye", "cond:eg": "{finale} oyun sonu kazanıldı", "cond:etape": "Adım {n}: {titre}", "cond:fete": "{date} tarihinde oynamak", "famille:lecons": "Öğrenilen dersler"
+ "_ui": { "Won on {date}": "Kazanıldı: {date}", "To unlock: {c}": "Nasıl kazanılır: {c}", "famille:resolus": "Çözülen bulmacalar", "famille:serie": "Art arda günler", "famille:jours": "Toplam oynanan gün", "famille:classement": "Puan", "famille:themes": "Taktik temalar", "famille:finales": "Oyun sonları", "famille:ordinateur": "Bilgisayara karşı oyunlar", "famille:ami": "Arkadaşla oynamak", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinatlar", "famille:debut": "Yeni başlıyorum", "famille:makruk": "Makruk", "famille:semaine": "Haftanın günleri", "famille:du_jour": "Günün bulmacası", "famille:jours_speciaux": "Özel günler", "famille:exploits": "Başarılar ve ilginçlikler", "famille:defis": "Haftanın görevleri", "cond:theme": "{theme}: {n}", "cond:niveau": "{niveau} seviyesinde galibiyet", "cond:mk": "Makruk galibiyeti, {niveau} seviye", "cond:eg": "{finale} oyun sonu kazanıldı", "cond:etape": "Adım {n}: {titre}", "cond:fete": "{date} tarihinde oynamak", "famille:lecons": "Öğrenilen dersler", "famille:ouvertures": "Açılışlar"
  },
  "solved_1": ["İlk hamle", "1 bulmaca çözüldü", "Bir tane tamam! Daha ilk hamlede Beyaz'ın 20 seçeneği var: 16 piyon hamlesi ve 4 at hamlesi."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Hedefe ulaşıldı", "Günlük hedefine ulaşmak", "Hedefe ulaşıldı! Her gün biraz, ayda bir çoktan iyidir: ilerleten şey düzenliliktir."
 ],
  "obj_gel": ["Buz küpü", "Serini bir dondurmayla kurtarmak", "Bir gün kaçtı ama serin sağlam. Satrançta da konum donabilir: aynı konum üç kez tekrarlanırsa oyun berabere biter."
+],
+ "ouv_italienne": ["İtalyan Oyunu", "Beyazla İtalyan Oyunu'nu oyna (3.Bc4)", "İtalyanca adı giuoco piano, \"sakin oyun\" demektir. c4'teki fil şimdiden zayıf f7 karesini hedefler."
+],
+ "ouv_espagnole": ["İspanyol Açılışı", "Beyazla İspanyol Açılışı'nı oyna (3.Bb5)", "Ruy López adıyla da bilinir; adını, onu 1561 tarihli satranç kitabında inceleyen İspanyol bir rahipten alır."
+],
+ "ouv_sicilienne": ["Sicilya Savunması", "Siyahla 1.e4'e 1…c5 ile karşılık ver", "Güçlü oyuncuların 1.e4'e en sık verdiği cevaptır. Siyah, Beyaz'ı taklit etmek yerine dengeyi hemen bozar."
+],
+ "ouv_francaise": ["Fransız Savunması", "Siyahla 1.e4'e 1…e6 ile karşılık ver", "Adı, 1834'te başlayan Londra–Paris yazışmalı maçından gelir: Paris ekibi bu savunmayı oynamıştı."
+],
+ "ouv_carokann": ["Caro-Kann", "Siyahla 1.e4'e 1…c6 ile karşılık ver", "Adını, onu 1886'da inceleyen iki oyuncudan, Horatio Caro ve Marcus Kann'dan alır."
+],
+ "ouv_gambit_dame": ["Vezir Gambiti", "Beyazla Vezir Gambiti'ni oyna (1.d4 d5 2.c4)", "Adına rağmen gerçek bir fedakârlık değildir: Siyah c4 piyonunu alırsa Beyaz onu neredeyse her zaman geri kazanır."
+],
+ "ouv_scandinave": ["İskandinav Savunması", "Siyahla 1.e4'e 1…d5 ile karşılık ver", "Siyah vezir çok erken çıkar. Bu açılış, 1475 civarında Valensiya'da oynanan, bilinen en eski oyunlardan birinde geçer."
+],
+ "ouv_anglaise": ["İngiliz Açılışı", "Beyazla 1.c4 ile başla", "Adını, onu 1843'te Fransız Saint-Amant'a karşı maçında oynayan İngiliz Howard Staunton'dan alır."
+],
+ "ouv_gambit_roi": ["Şah Gambiti", "Beyazla Şah Gambiti'ni oyna (1.e4 e5 2.f4)", "1851'de Londra'da Anderssen ile Kieseritzky arasında oynanan Ölümsüz Oyun bu gambitle başlar."
+],
+ "ouv_londres": ["Londra Sistemi", "Beyazla 1.d4 oyna ve fili f4'e çıkar", "Adını, birçok ustanın onu kullandığı 1922 Londra turnuvasından alır."
+],
+ "ouv_fegatello": ["Fegatello", "Fegatello Saldırısı'nda atı f7'de feda et", "İtalyancada fegatello bir parça ciğer demektir; İngilizler Fried Liver, yani kızarmış ciğer der. Siyah şah açıkta kalır."
+],
+ "ouv_traxler": ["Traxler", "Siyahla 4.Ng5'e 4…Bc5 ile karşılık ver (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "Çek rahip Karel Traxler bunu 1890'da Prag'da oynadı. Siyah, f7'yi savunmak yerine f2'ye karşı saldırır."
+],
+ "ouv_berger": ["Çoban matı", "Çoban matıyla kazan: vezir ilk 4 hamlende f7'de (ya da f2'de) mat eder", "Fransızca ve Almancada da adı çoban matıdır: mat du berger, Schäfermatt. Her rakibe karşı yalnızca bir kez işe yarar!"
+],
+ "ouv_legal": ["Légal matı", "Vezirini aldırdıktan sonra en geç iki hamlede, ilk 10 hamlen içinde mat et", "Philidor'un hocası Légal de Kermur'un bu tuzağı 1750 civarında Paris'teki Café de la Régence'ta kurduğu söylenir."
+],
+ "ouv_shilling": ["Şilin tuzağı", "Siyahla 3…Nd4'ten sonra …Nf3 ile mat et", "Efsaneye göre 19. yüzyılın büyük İngiliz oyuncusu Blackburne, bu tuzakla oyun başına bir şilin kazanırdı."
+],
+ "ouv_englund": ["Englund tuzağı", "Siyahla 1.d4 e5'ten sonra veziri c1'e getirip mat et", "Bu gambit adını İsveçli Fritz Englund'dan alır. Kötü bir ünü vardır ama bir iğnesi saklıdır: c1'de mat."
+],
+ "ouv_damiano": ["Damiano'ya ders", "Beyazla 2…f6'dan sonra e5'te alıp (3.Nxe5) kazan", "Portekizli Pedro Damiano daha 1512'de 2…f6'nın kötü bir hamle olduğunu yazmıştı. Sen de bunu kanıtladın."
+],
+ "ouv_5": ["Meraklı", "5 farklı açılış oyna", "Adı konmuş yüzlerce açılış vardır. ECO kodu onları A00'dan E99'a kadar sıralar: 500 kutu."
+],
+ "ouv_15": ["Ansiklopedist", "15 farklı açılış oyna", "ECO kodu, 1974'ten itibaren Belgrad'da yayımlanan Satranç Açılışları Ansiklopedisi'nden gelir."
+],
+ "ouv_30": ["Yaşayan kütüphane", "30 farklı açılış oyna", "Otuz farklı açılış! Büyükustalar ise hepsini oynamak yerine birkaç tanesini derinlemesine çalışır."
+],
+ "lec_sot": ["Ahmak matı", "İki hamlede mat ol", "Mümkün olan en hızlı mat: 1.f3 e5 2.g4 Qh4#. Bir daha görmemek için bir kez yaşamak gerekiyordu."
+],
+ "lec_tondu": ["Kırkıldın", "Çoban matına yakalan", "Çoban matı, yalnızca şahın koruduğu f7'yi hedefler. Çaresi: e5 ve f7'yi koru, sonra taşlarını geliştirerek veziri kovala."
 ]
 }

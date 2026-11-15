@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Gewonnen am {date}", "To unlock: {c}": "So bekommst du ihn: {c}", "famille:resolus": "Gelöste Aufgaben", "famille:serie": "Tage am Stück", "famille:jours": "Gespielte Tage insgesamt", "famille:classement": "Wertung", "famille:themes": "Taktische Motive", "famille:finales": "Endspiele", "famille:ordinateur": "Partien gegen den Computer", "famille:ami": "Mit Freunden spielen", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinaten", "famille:debut": "Ich bin Anfänger", "famille:makruk": "Makruk", "famille:semaine": "Wochentage", "famille:du_jour": "Aufgabe des Tages", "famille:jours_speciaux": "Besondere Tage", "famille:exploits": "Glanzleistungen und Kuriositäten", "famille:defis": "Wochen-Challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Sieg auf der Stufe {niveau}", "cond:mk": "Makruk-Sieg, Stufe {niveau}", "cond:eg": "Endspiel {finale} gewonnen", "cond:etape": "Schritt {n}: {titre}", "cond:fete": "Am {date} spielen", "famille:lecons": "Gelernte Lektionen"
+ "_ui": { "Won on {date}": "Gewonnen am {date}", "To unlock: {c}": "So bekommst du ihn: {c}", "famille:resolus": "Gelöste Aufgaben", "famille:serie": "Tage am Stück", "famille:jours": "Gespielte Tage insgesamt", "famille:classement": "Wertung", "famille:themes": "Taktische Motive", "famille:finales": "Endspiele", "famille:ordinateur": "Partien gegen den Computer", "famille:ami": "Mit Freunden spielen", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinaten", "famille:debut": "Ich bin Anfänger", "famille:makruk": "Makruk", "famille:semaine": "Wochentage", "famille:du_jour": "Aufgabe des Tages", "famille:jours_speciaux": "Besondere Tage", "famille:exploits": "Glanzleistungen und Kuriositäten", "famille:defis": "Wochen-Challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Sieg auf der Stufe {niveau}", "cond:mk": "Makruk-Sieg, Stufe {niveau}", "cond:eg": "Endspiel {finale} gewonnen", "cond:etape": "Schritt {n}: {titre}", "cond:fete": "Am {date} spielen", "famille:lecons": "Gelernte Lektionen", "famille:ouvertures": "Eröffnungen"
  },
  "solved_1": ["Erster Zug", "1 Aufgabe gelöst", "Eine geschafft! Schon beim allerersten Zug hat Weiß 20 Möglichkeiten: 16 Bauernzüge und 4 Springerzüge."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Ziel erreicht", "Dein Tagesziel erreichen", "Ziel erreicht! Jeden Tag ein bisschen ist besser als einmal im Monat viel: Regelmäßigkeit bringt dich weiter."
 ],
  "obj_gel": ["Eiswürfel", "Deine Serie mit einem Frost-Schutz retten", "Ein verpasster Tag, und deine Serie hält. Auch im Schach kann eine Stellung einfrieren: Kommt dieselbe dreimal vor, ist die Partie remis."
+],
+ "ouv_italienne": ["Italienische Partie", "Die Italienische Partie mit Weiß spielen (3.Bc4)", "Ihr italienischer Name, Giuoco piano, bedeutet „ruhiges Spiel“. Der Läufer auf c4 zielt schon auf den schwachen Punkt f7."
+],
+ "ouv_espagnole": ["Spanische Partie", "Die Spanische Partie mit Weiß spielen (3.Bb5)", "Sie heißt auch Ruy López, nach einem spanischen Priester, der sie in seinem Schachbuch von 1561 untersuchte."
+],
+ "ouv_sicilienne": ["Sizilianisch", "Mit Schwarz 1.e4 mit 1…c5 beantworten", "Sie ist die beliebteste Antwort starker Spieler auf 1.e4. Statt Weiß nachzuahmen, bringt Schwarz die Stellung sofort aus dem Gleichgewicht."
+],
+ "ouv_francaise": ["Französisch", "Mit Schwarz 1.e4 mit 1…e6 beantworten", "Der Name stammt aus einem Fernschachwettkampf zwischen London und Paris, der 1834 begann: Die Pariser spielten sie."
+],
+ "ouv_carokann": ["Caro-Kann", "Mit Schwarz 1.e4 mit 1…c6 beantworten", "Sie trägt die Namen zweier Spieler, Horatio Caro und Marcus Kann, die sie 1886 analysierten."
+],
+ "ouv_gambit_dame": ["Damengambit", "Das Damengambit mit Weiß spielen (1.d4 d5 2.c4)", "Trotz des Namens ist es kein echtes Opfer: Nimmt Schwarz den Bauern auf c4, holt Weiß ihn fast immer zurück."
+],
+ "ouv_scandinave": ["Skandinavisch", "Mit Schwarz 1.e4 mit 1…d5 beantworten", "Die schwarze Dame kommt sehr früh heraus. Die Eröffnung steht in einer der ältesten bekannten Partien, gespielt um 1475 in Valencia."
+],
+ "ouv_anglaise": ["Englische Eröffnung", "Mit Weiß 1.c4 spielen", "Sie ist nach dem Engländer Howard Staunton benannt, der sie 1843 in seinem Wettkampf gegen den Franzosen Saint-Amant spielte."
+],
+ "ouv_gambit_roi": ["Königsgambit", "Das Königsgambit mit Weiß spielen (1.e4 e5 2.f4)", "Die Unsterbliche Partie, 1851 in London von Anderssen gegen Kieseritzky gespielt, beginnt mit diesem Gambit."
+],
+ "ouv_londres": ["Londoner System", "Mit Weiß 1.d4 spielen und den Läufer nach f4 bringen", "Es ist nach dem Londoner Turnier von 1922 benannt, bei dem mehrere Meister es anwendeten."
+],
+ "ouv_fegatello": ["Fegatello", "Den Springer auf f7 im Fegatello-Angriff opfern", "Ein Fegatello ist auf Italienisch ein Stück Leber; die Engländer sagen Fried Liver, gebratene Leber. Der schwarze König landet im Freien."
+],
+ "ouv_traxler": ["Traxler", "Mit Schwarz 4.Ng5 mit 4…Bc5 beantworten (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "Der tschechische Priester Karel Traxler spielte sie 1890 in Prag. Statt f7 zu verteidigen, greift Schwarz f2 an."
+],
+ "ouv_berger": ["Schäfermatt", "Mit dem Schäfermatt gewinnen: Die Dame setzt in deinen ersten 4 Zügen auf f7 (oder f2) matt", "Auf Französisch heißt es ebenfalls Schäfermatt, mat du berger; auf Englisch Scholar's mate, Schülermatt. Es klappt nur einmal pro Gegner!"
+],
+ "ouv_legal": ["Seekadettenmatt", "Weniger als zwei Züge, nachdem du deine Dame hast schlagen lassen, mattsetzen, in deinen ersten 10 Zügen", "Légal de Kermur, der Lehrer Philidors, soll diese Falle um 1750 im Pariser Café de la Régence gestellt haben."
+],
+ "ouv_shilling": ["Schilling-Falle", "Mit Schwarz nach 3…Nd4 mit …Nf3 mattsetzen", "Der Legende nach gewann Blackburne, ein großer englischer Spieler des 19. Jahrhunderts, mit dieser Falle einen Schilling pro Partie."
+],
+ "ouv_englund": ["Englund-Falle", "Mit Schwarz nach 1.d4 e5 mit der Dame auf c1 mattsetzen", "Dieses Gambit ist nach dem Schweden Fritz Englund benannt. Es hat einen schlechten Ruf, verbirgt aber einen Stachel: das Matt auf c1."
+],
+ "ouv_damiano": ["Damiano bestraft", "Mit Weiß nach 2…f6 gewinnen, indem du auf e5 schlägst (3.Nxe5)", "Schon 1512 schrieb der Portugiese Pedro Damiano, dass 2…f6 ein schlechter Zug ist. Du hast es gerade bewiesen."
+],
+ "ouv_5": ["Neugierig", "5 verschiedene Eröffnungen spielen", "Es gibt Hunderte benannter Eröffnungen. Der ECO-Code ordnet sie von A00 bis E99: 500 Fächer."
+],
+ "ouv_15": ["Enzyklopädist", "15 verschiedene Eröffnungen spielen", "Der ECO-Code stammt aus der Enzyklopädie der Schacheröffnungen, die ab 1974 in Belgrad erschien."
+],
+ "ouv_30": ["Lebende Bibliothek", "30 verschiedene Eröffnungen spielen", "Dreißig verschiedene Eröffnungen! Großmeister vertiefen dagegen lieber einige wenige, statt alle zu spielen."
+],
+ "lec_sot": ["Narrenmatt", "In zwei Zügen mattgesetzt werden", "Das schnellste mögliche Matt: 1.f3 e5 2.g4 Qh4#. Einmal musste man es erleben, um es nie wieder zu sehen."
+],
+ "lec_tondu": ["Geschoren", "Ins Schäfermatt laufen", "Das Schäfermatt zielt auf f7, das nur der König deckt. Die Abwehr: e5 und f7 schützen, dann die Dame mit Entwicklungszügen vertreiben."
 ]
 }

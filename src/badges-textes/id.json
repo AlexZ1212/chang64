@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Diraih pada {date}", "To unlock: {c}": "Cara mendapatkannya: {c}", "famille:resolus": "Teka-teki terpecahkan", "famille:serie": "Hari berturut-turut", "famille:jours": "Total hari bermain", "famille:classement": "Rating", "famille:themes": "Tema taktik", "famille:finales": "Akhir permainan", "famille:ordinateur": "Permainan melawan komputer", "famille:ami": "Bermain dengan teman", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinat", "famille:debut": "Saya pemula", "famille:makruk": "Makruk", "famille:semaine": "Hari dalam seminggu", "famille:du_jour": "Teka-teki hari ini", "famille:jours_speciaux": "Hari istimewa", "famille:exploits": "Prestasi dan keunikan", "famille:defis": "Tantangan mingguan", "cond:theme": "{theme}: {n}", "cond:niveau": "Menang di level {niveau}", "cond:mk": "Menang makruk, level {niveau}", "cond:eg": "Akhir permainan {finale} dimenangkan", "cond:etape": "Langkah {n}: {titre}", "cond:fete": "Bermain pada {date}", "famille:lecons": "Pelajaran berharga"
+ "_ui": { "Won on {date}": "Diraih pada {date}", "To unlock: {c}": "Cara mendapatkannya: {c}", "famille:resolus": "Teka-teki terpecahkan", "famille:serie": "Hari berturut-turut", "famille:jours": "Total hari bermain", "famille:classement": "Rating", "famille:themes": "Tema taktik", "famille:finales": "Akhir permainan", "famille:ordinateur": "Permainan melawan komputer", "famille:ami": "Bermain dengan teman", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinat", "famille:debut": "Saya pemula", "famille:makruk": "Makruk", "famille:semaine": "Hari dalam seminggu", "famille:du_jour": "Teka-teki hari ini", "famille:jours_speciaux": "Hari istimewa", "famille:exploits": "Prestasi dan keunikan", "famille:defis": "Tantangan mingguan", "cond:theme": "{theme}: {n}", "cond:niveau": "Menang di level {niveau}", "cond:mk": "Menang makruk, level {niveau}", "cond:eg": "Akhir permainan {finale} dimenangkan", "cond:etape": "Langkah {n}: {titre}", "cond:fete": "Bermain pada {date}", "famille:lecons": "Pelajaran berharga", "famille:ouvertures": "Pembukaan"
  },
  "solved_1": ["Langkah pertama", "1 teka-teki terpecahkan", "Satu beres! Di langkah paling pertama, Putih sudah punya 20 pilihan: 16 langkah pion dan 4 langkah kuda."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Target tercapai", "Mencapai target harianmu", "Target tercapai! Sedikit setiap hari lebih baik daripada banyak sebulan sekali: keteraturan yang membuatmu berkembang."
 ],
  "obj_gel": ["Es batu", "Menyelamatkan rangkaian dengan pembeku", "Satu hari terlewat, dan rangkaianmu bertahan. Dalam catur posisi juga bisa membeku: jika posisi yang sama muncul tiga kali, permainan remis."
+],
+ "ouv_italienne": ["Pembukaan Italia", "Mainkan Pembukaan Italia dengan Putih (3.Bc4)", "Nama Italianya, giuoco piano, berarti \"permainan tenang\". Gajah di c4 sudah membidik titik lemah f7."
+],
+ "ouv_espagnole": ["Pembukaan Spanyol", "Mainkan Pembukaan Spanyol dengan Putih (3.Bb5)", "Pembukaan ini juga disebut Ruy López, nama pastor Spanyol yang mempelajarinya dalam buku caturnya tahun 1561."
+],
+ "ouv_sicilienne": ["Pertahanan Sisilia", "Jawab 1.e4 dengan 1…c5 sebagai Hitam", "Ini jawaban atas 1.e4 yang paling sering dimainkan pemain kuat. Alih-alih meniru Putih, Hitam langsung membuat posisi tidak seimbang."
+],
+ "ouv_francaise": ["Pertahanan Prancis", "Jawab 1.e4 dengan 1…e6 sebagai Hitam", "Namanya berasal dari pertandingan korespondensi London melawan Paris yang dimulai tahun 1834: tim Paris memainkannya."
+],
+ "ouv_carokann": ["Caro-Kann", "Jawab 1.e4 dengan 1…c6 sebagai Hitam", "Namanya diambil dari dua pemain, Horatio Caro dan Marcus Kann, yang menganalisisnya pada tahun 1886."
+],
+ "ouv_gambit_dame": ["Gambit Menteri", "Mainkan Gambit Menteri dengan Putih (1.d4 d5 2.c4)", "Meski namanya begitu, ini bukan pengorbanan sungguhan: jika Hitam mengambil pion c4, Putih hampir selalu merebutnya kembali."
+],
+ "ouv_scandinave": ["Skandinavia", "Jawab 1.e4 dengan 1…d5 sebagai Hitam", "Menteri hitam keluar sangat awal. Pembukaan ini muncul dalam salah satu partai tertua yang tercatat, dimainkan di Valencia sekitar tahun 1475."
+],
+ "ouv_anglaise": ["Pembukaan Inggris", "Mulai dengan 1.c4 sebagai Putih", "Namanya diambil dari orang Inggris Howard Staunton, yang memainkannya tahun 1843 dalam pertandingannya melawan orang Prancis Saint-Amant."
+],
+ "ouv_gambit_roi": ["Gambit Raja", "Mainkan Gambit Raja dengan Putih (1.e4 e5 2.f4)", "Partai Abadi, yang dimainkan di London tahun 1851 oleh Anderssen melawan Kieseritzky, dimulai dengan gambit ini."
+],
+ "ouv_londres": ["Sistem London", "Mainkan 1.d4 lalu keluarkan gajah ke f4 sebagai Putih", "Namanya berasal dari turnamen London tahun 1922, tempat beberapa master memakainya."
+],
+ "ouv_fegatello": ["Fegatello", "Korbankan kuda di f7 dalam Serangan Fegatello", "Dalam bahasa Italia, fegatello berarti sepotong hati; orang Inggris menyebutnya Fried Liver, hati goreng. Raja hitam akhirnya terbuka."
+],
+ "ouv_traxler": ["Traxler", "Jawab 4.Ng5 dengan 4…Bc5 sebagai Hitam (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "Pastor Ceko Karel Traxler memainkannya di Praha tahun 1890. Alih-alih membela f7, Hitam balik menyerang f2."
+],
+ "ouv_berger": ["Mat Gembala", "Menang dengan mat gembala: menteri memberi mat di f7 (atau f2) dalam 4 langkah pertamamu", "Dalam bahasa Prancis dan Jerman namanya mat gembala: mat du berger, Schäfermatt. Trik ini hanya mempan sekali untuk tiap lawan!"
+],
+ "ouv_legal": ["Mat Légal", "Beri mat kurang dari dua langkah setelah membiarkan menterimu dimakan, dalam 10 langkah pertamamu", "Konon Légal de Kermur, guru Philidor, memasang jebakan ini di Café de la Régence, Paris, sekitar tahun 1750."
+],
+ "ouv_shilling": ["Jebakan Shilling", "Beri mat dengan …Nf3 setelah 3…Nd4 sebagai Hitam", "Legenda mengatakan Blackburne, pemain besar Inggris abad ke-19, memenangkan satu shilling per partai dengan jebakan ini."
+],
+ "ouv_englund": ["Jebakan Englund", "Beri mat di c1 dengan menteri setelah 1.d4 e5, sebagai Hitam", "Gambit ini dinamai menurut orang Swedia Fritz Englund. Reputasinya buruk, tetapi ia menyimpan sengat: mat di c1."
+],
+ "ouv_damiano": ["Damiano dihukum", "Menang setelah 2…f6 dengan memakan di e5 (3.Nxe5) sebagai Putih", "Pada tahun 1512, orang Portugis Pedro Damiano sudah menulis bahwa 2…f6 adalah langkah buruk. Kamu baru saja membuktikannya."
+],
+ "ouv_5": ["Penasaran", "Mainkan 5 pembukaan berbeda", "Ada ratusan pembukaan yang punya nama. Kode ECO mengurutkannya dari A00 sampai E99: 500 kotak."
+],
+ "ouv_15": ["Ensiklopedis", "Mainkan 15 pembukaan berbeda", "Kode ECO berasal dari Ensiklopedia Pembukaan Catur, yang terbit di Beograd sejak tahun 1974."
+],
+ "ouv_30": ["Perpustakaan berjalan", "Mainkan 30 pembukaan berbeda", "Tiga puluh pembukaan berbeda! Para grandmaster justru mendalami beberapa saja daripada memainkan semuanya."
+],
+ "lec_sot": ["Mat Si Bodoh", "Terkena mat dalam dua langkah", "Mat tercepat yang mungkin: 1.f3 e5 2.g4 Qh4#. Kamu perlu mengalaminya sekali agar tak pernah melihatnya lagi."
+],
+ "lec_tondu": ["Tercukur", "Terkena mat gembala", "Mat gembala membidik f7, yang hanya dibela raja. Obatnya: lindungi e5 dan f7, lalu usir menteri sambil mengembangkan bidakmu."
 ]
 }

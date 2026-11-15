@@ -2026,6 +2026,10 @@ html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv
 .duel-note{min-height:1.2em;margin:8px 0;font-size:12.5px;color:var(--brass)}
 .duel .duel-fermer{margin-top:4px}
 html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="calme"] .bilan-joue .duel-ligne{animation:none}
+
+/* Lien vers la page d'une ouverture ou d'un piege (badges Ouvertures, 15/11). */
+.bx-lien{display:inline-block;position:relative;margin:-4px 0 12px;font-size:13.5px;font-weight:600;color:var(--brass);text-decoration:underline;text-underline-offset:3px}
+.bx-lien.hide{display:none}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -3270,6 +3274,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <h2 id="bravoTitre">Congratulations</h2>
       <div class="bravo-noms" id="bravoNoms"></div>
       <p class="bx-texte hide" id="bravoTexte"></p>
+      <a class="bx-lien hide" id="bravoLien"></a>
       <div class="bx-autres" id="bravoAutres" aria-hidden="true"></div>
       <button type="button" class="btn primary" id="bravoOk">Continue</button>
     </div>

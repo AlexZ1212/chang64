@@ -98,6 +98,19 @@ const PERSO = {
     }
     return s;
   })(),
+  /* Mouton (15/11, coup du berger) : toison en nuage de boucles, tete en
+     ovale detachee par un liseré couleur de face, oreille, oeil, pattes.
+     Un seul <g> : verif-contacts le traite comme un dessin d'un seul tenant.
+     tondu : corps lisse, sans toison. */
+  mouton: tondu => `<g fill="currentColor">${tondu
+      ? '<ellipse cx="2" cy="-1" rx="15" ry="10"/>'
+      : '<circle cx="-8" cy="-3" r="7.5"/><circle cx="-1" cy="-8" r="7.5"/><circle cx="7" cy="-7" r="7.5"/><circle cx="12" cy="0" r="7"/><circle cx="5" cy="4" r="7.5"/><circle cx="-4" cy="4" r="7.5"/><circle cx="16" cy="-6" r="3.2"/>'}
+    <rect x="-9" y="6" width="3.8" height="11" rx="1.9"/><rect x="-3.6" y="6" width="3.8" height="11" rx="1.9"/><rect x="5.6" y="6" width="3.8" height="11" rx="1.9"/><rect x="11" y="6" width="3.8" height="11" rx="1.9"/>
+    ${tondu ? "" : '<path style="fill:none;stroke:var(--oeil);stroke-width:1.3;stroke-linecap:round" opacity=".7" d="M-6 -4a2.4 2.4 0 1 1 3 2.6M3 -9a2.4 2.4 0 1 1 3 2.6M8 0a2.4 2.4 0 1 1 3 2.6M-1 3a2.4 2.4 0 1 1 3 2.6"/>'}
+    <ellipse cx="-17" cy="0" rx="7.2" ry="8.6" transform="rotate(-18 -17 0)" style="fill:var(--oeil)"/>
+    <ellipse cx="-18" cy="1" rx="5.4" ry="7" transform="rotate(-18 -18 1)"/>
+    <ellipse cx="-21.5" cy="-6" rx="3.6" ry="1.8" transform="rotate(-35 -21.5 -6)"/>
+    <circle cx="-17" cy="-0.5" r="1.4" style="fill:var(--oeil)"/></g>`,
   /* Brochette : une pique en biais, des pions enfiles. */
   pique: n => `<g transform="rotate(-35)"><rect x="-24" y="-1.6" width="48" height="3.2" rx="1.6" fill="currentColor"/>${
     [0, 1, 2].slice(0, n).map(i => P("p", `translate(${(i - (n - 1) / 2) * (n === 3 ? 14 : 17)} 0) rotate(35) scale(${n === 3 ? .62 : .74}) translate(0 -4)`)).join("")}</g>`,
@@ -224,6 +237,27 @@ const S = {
   ami_invite: [F("envelope-open"), "bronze"],
   ami_partie: [F("hands-clapping"), "argent"],
   ami_revanche: [F("arrows-clockwise"), "argent"],
+  /* Ouvertures (15/11) */
+  ouv_italienne: [P("b", G) + A("pizza"), "bronze"],
+  ouv_espagnole: [P("b", G) + A("church"), "bronze"],
+  ouv_sicilienne: [P("p", G) + A("mountains"), "bronze"],
+  ouv_francaise: [P("p", G) + A("envelope"), "bronze"],
+  ouv_carokann: [P("p", G) + A("users"), "bronze"],
+  ouv_gambit_dame: [P("q", G) + A("hand-coins"), "bronze"],
+  ouv_scandinave: [P("q", G) + A("sailboat"), "bronze"],
+  ouv_anglaise: [P("p", G) + A("tea-bag"), "bronze"],
+  ouv_gambit_roi: [P("k", G) + A("sparkle"), "bronze"],
+  ouv_londres: [P("b", G) + A("bus"), "bronze"],
+  ouv_fegatello: [P("n", G) + A("fire"), "argent"],
+  ouv_traxler: [P("b", G) + A("sword"), "argent"],
+  ouv_berger: [PERSO.mouton(false), "argent"],
+  ouv_legal: [P("q", G) + A("gift"), "argent"],
+  ouv_shilling: [P("n", G) + A("coin"), "argent"],
+  ouv_englund: [P("q", G) + A("snowflake"), "argent"],
+  ouv_damiano: [P("p", G) + A("book-open"), "argent"],
+  ouv_5: [F("notebook"), "bronze"],
+  ouv_15: [F("archive"), "argent"],
+  ouv_30: [F("bank"), "or"],
   /* Sprint */
   sprint_10: [F("clock-countdown"), "bronze"],
   sprint_15: [F("sneaker"), "bronze"],
@@ -317,6 +351,8 @@ const S = {
   lec_courage: [F("shield-star"), "argent"],
   lec_acharne: [F("person-simple-hike"), "argent"],
   lec_reprise: [F("leaf"), "bronze"],
+  lec_sot: [P("k", G) + A("smiley-x-eyes"), "bronze"],
+  lec_tondu: [`<g transform="${G}">${PERSO.mouton(true)}</g>` + A("scissors"), "bronze"],
   /* Exploits */
   ex_hibou: [PERSO.hibou, "argent"],
   ex_coq: [F("bird"), "argent"],

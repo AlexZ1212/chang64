@@ -807,5 +807,8 @@ module.exports = {
 "A puzzle found on the first try scores a point. If you are level, the faster player wins.":"Каждая задача, решённая с первой попытки, даёт очко. При равенстве побеждает тот, кто быстрее.",
 "Take the challenge":"Принять вызов",
 "Not now":"Не сейчас",
-"Last challenge: {n}/{total} on the first try":"Последний вызов: {n}/{total} с первой попытки"
+"Last challenge: {n}/{total} on the first try":"Последний вызов: {n}/{total} с первой попытки",
+/* Badges Ouvertures (2026-11-15) */
+"Discover this opening":"Узнать о дебюте",
+"See the trap":"Посмотреть ловушку"
 };

@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Conquistado em {date}", "To unlock: {c}": "Para conquistar: {c}", "famille:resolus": "Exercícios resolvidos", "famille:serie": "Dias seguidos", "famille:jours": "Dias jogados no total", "famille:classement": "Pontuação", "famille:themes": "Temas táticos", "famille:finales": "Finais", "famille:ordinateur": "Partidas contra o computador", "famille:ami": "Jogar com um amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Sou iniciante", "famille:makruk": "Makruk", "famille:semaine": "Dias da semana", "famille:du_jour": "Exercício do dia", "famille:jours_speciaux": "Dias especiais", "famille:exploits": "Façanhas e curiosidades", "famille:defis": "Desafios da semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vitória no nível {niveau}", "cond:mk": "Vitória no makruk, nível {niveau}", "cond:eg": "Final {finale} vencido", "cond:etape": "Etapa {n}: {titre}", "cond:fete": "Jogar em {date}", "famille:lecons": "Lições aprendidas"
+ "_ui": { "Won on {date}": "Conquistado em {date}", "To unlock: {c}": "Para conquistar: {c}", "famille:resolus": "Exercícios resolvidos", "famille:serie": "Dias seguidos", "famille:jours": "Dias jogados no total", "famille:classement": "Pontuação", "famille:themes": "Temas táticos", "famille:finales": "Finais", "famille:ordinateur": "Partidas contra o computador", "famille:ami": "Jogar com um amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Sou iniciante", "famille:makruk": "Makruk", "famille:semaine": "Dias da semana", "famille:du_jour": "Exercício do dia", "famille:jours_speciaux": "Dias especiais", "famille:exploits": "Façanhas e curiosidades", "famille:defis": "Desafios da semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Vitória no nível {niveau}", "cond:mk": "Vitória no makruk, nível {niveau}", "cond:eg": "Final {finale} vencido", "cond:etape": "Etapa {n}: {titre}", "cond:fete": "Jogar em {date}", "famille:lecons": "Lições aprendidas", "famille:ouvertures": "Aberturas"
  },
  "solved_1": ["Primeiro lance", "1 exercício resolvido", "Um já foi! No primeiríssimo lance, as brancas já têm 20 opções: 16 lances de peão e 4 de cavalo."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Meta cumprida", "Cumprir sua meta do dia", "Meta cumprida! Um pouco todo dia vale mais que muito uma vez por mês: é a regularidade que faz evoluir."
 ],
  "obj_gel": ["Cubo de gelo", "Salvar sua sequência com um congelamento", "Um dia perdido, e sua sequência se mantém. No xadrez uma posição também pode congelar: se a mesma aparece três vezes, é empate."
+],
+ "ouv_italienne": ["Abertura Italiana", "Jogar a Abertura Italiana de brancas (3.Bc4)", "Seu nome italiano, giuoco piano, quer dizer \"jogo tranquilo\". O bispo em c4 já mira o ponto fraco f7."
+],
+ "ouv_espagnole": ["Abertura Espanhola", "Jogar a Abertura Espanhola de brancas (3.Bb5)", "Também é chamada de Ruy López, nome de um padre espanhol que a estudou em seu livro de xadrez de 1561."
+],
+ "ouv_sicilienne": ["Defesa Siciliana", "Responder 1…c5 a 1.e4 de pretas", "É a resposta a 1.e4 mais jogada pelos jogadores fortes. Em vez de copiar as brancas, as pretas desequilibram o jogo logo de cara."
+],
+ "ouv_francaise": ["Defesa Francesa", "Responder 1…e6 a 1.e4 de pretas", "O nome vem de um match por correspondência entre Londres e Paris, iniciado em 1834: a equipe de Paris a jogou."
+],
+ "ouv_carokann": ["Caro-Kann", "Responder 1…c6 a 1.e4 de pretas", "Leva o nome de dois jogadores, Horatio Caro e Marcus Kann, que a analisaram em 1886."
+],
+ "ouv_gambit_dame": ["Gambito da Dama", "Jogar o Gambito da Dama de brancas (1.d4 d5 2.c4)", "Apesar do nome, não é um sacrifício de verdade: se as pretas tomam o peão de c4, as brancas quase sempre o recuperam."
+],
+ "ouv_scandinave": ["Escandinava", "Responder 1…d5 a 1.e4 de pretas", "A dama preta sai muito cedo. Esta abertura aparece em uma das partidas mais antigas registradas, jogada em Valência por volta de 1475."
+],
+ "ouv_anglaise": ["Abertura Inglesa", "Começar com 1.c4 de brancas", "Deve seu nome ao inglês Howard Staunton, que a jogou em 1843 no match contra o francês Saint-Amant."
+],
+ "ouv_gambit_roi": ["Gambito do Rei", "Jogar o Gambito do Rei de brancas (1.e4 e5 2.f4)", "A Imortal, jogada em Londres em 1851 por Anderssen contra Kieseritzky, começa com este gambito."
+],
+ "ouv_londres": ["Sistema Londres", "Jogar 1.d4 e levar o bispo a f4 de brancas", "Tem esse nome por causa do torneio de Londres de 1922, em que vários mestres o usaram."
+],
+ "ouv_fegatello": ["Fegatello", "Sacrificar o cavalo em f7 no ataque Fegatello", "Em italiano, fegatello é um pedaço de fígado; os ingleses dizem Fried Liver, fígado frito. O rei preto acaba exposto."
+],
+ "ouv_traxler": ["Traxler", "Responder 4…Bc5 a 4.Ng5 de pretas (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "O padre tcheco Karel Traxler a jogou em Praga em 1890. Em vez de defender f7, as pretas contra-atacam f2."
+],
+ "ouv_berger": ["Mate do Pastor", "Vencer com o Mate do Pastor: a dama dá mate em f7 (ou f2) nos seus 4 primeiros lances", "Em francês e em alemão também é o mate do pastor: mat du berger, Schäfermatt. Só funciona uma vez com cada adversário!"
+],
+ "ouv_legal": ["Mate de Légal", "Dar mate menos de dois lances depois de deixar sua dama ser capturada, nos seus 10 primeiros lances", "Dizem que Légal de Kermur, professor de Philidor, armava essa armadilha no Café de la Régence, em Paris, por volta de 1750."
+],
+ "ouv_shilling": ["Armadilha do xelim", "Dar mate com …Nf3 depois de 3…Nd4 de pretas", "Diz a lenda que Blackburne, grande jogador inglês do século XIX, ganhava um xelim por partida com essa armadilha."
+],
+ "ouv_englund": ["Armadilha Englund", "Dar mate em c1 com a dama depois de 1.d4 e5, de pretas", "Este gambito leva o nome do sueco Fritz Englund. Tem má fama, mas esconde uma pegadinha: o mate em c1."
+],
+ "ouv_damiano": ["Damiano punido", "Vencer depois de 2…f6 capturando em e5 (3.Nxe5) de brancas", "Em 1512, o português Pedro Damiano já escrevia que 2…f6 era um lance ruim. Você acabou de provar."
+],
+ "ouv_5": ["Curioso", "Jogar 5 aberturas diferentes", "Existem centenas de aberturas com nome. O código ECO as organiza de A00 a E99: 500 casas."
+],
+ "ouv_15": ["Enciclopedista", "Jogar 15 aberturas diferentes", "O código ECO vem da Enciclopédia de Aberturas de Xadrez, publicada em Belgrado a partir de 1974."
+],
+ "ouv_30": ["Biblioteca viva", "Jogar 30 aberturas diferentes", "Trinta aberturas diferentes! Os grandes mestres, por sua vez, aprofundam poucas em vez de jogar todas."
+],
+ "lec_sot": ["Mate do Louco", "Levar mate em dois lances", "O mate mais rápido possível: 1.f3 e5 2.g4 Qh4#. Era preciso viver isso uma vez para nunca mais ver."
+],
+ "lec_tondu": ["Tosquiado", "Cair no Mate do Pastor", "O Mate do Pastor mira f7, defendido só pelo rei. O remédio: proteger e5 e f7 e depois expulsar a dama desenvolvendo suas peças."
 ]
 }

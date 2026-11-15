@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Won on {date}", "To unlock: {c}": "To unlock: {c}", "famille:resolus": "Puzzles solved", "famille:serie": "Days in a row", "famille:jours": "Days played in total", "famille:classement": "Rating", "famille:themes": "Tactical themes", "famille:finales": "Endgames", "famille:ordinateur": "Games against the computer", "famille:ami": "Playing with a friend", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinates", "famille:debut": "I'm a beginner", "famille:makruk": "Makruk", "famille:semaine": "Days of the week", "famille:du_jour": "Puzzle of the day", "famille:jours_speciaux": "Special days", "famille:exploits": "Feats and curiosities", "famille:defis": "Weekly challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level", "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "famille:lecons": "Lessons learnt"
+ "_ui": { "Won on {date}": "Won on {date}", "To unlock: {c}": "To unlock: {c}", "famille:resolus": "Puzzles solved", "famille:serie": "Days in a row", "famille:jours": "Days played in total", "famille:classement": "Rating", "famille:themes": "Tactical themes", "famille:finales": "Endgames", "famille:ordinateur": "Games against the computer", "famille:ami": "Playing with a friend", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinates", "famille:debut": "I'm a beginner", "famille:makruk": "Makruk", "famille:semaine": "Days of the week", "famille:du_jour": "Puzzle of the day", "famille:jours_speciaux": "Special days", "famille:exploits": "Feats and curiosities", "famille:defis": "Weekly challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level", "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "famille:lecons": "Lessons learnt", "famille:ouvertures": "Openings"
  },
  "solved_1": ["First move", "1 puzzle solved", "One down! On the very first move, White already has 20 choices: 16 pawn moves and 4 knight moves."
 ],
@@ -418,5 +418,49 @@
  "obj_atteint": ["Goal reached", "Reach your daily goal", "Goal reached! A little every day beats a lot once a month: regularity is what makes you improve."
 ],
  "obj_gel": ["Ice cube", "Save your streak with a freeze", "A missed day, and your streak holds. In chess, a position can freeze too: if the same one comes up three times, the game is a draw."
+],
+ "ouv_italienne": ["Italian Game", "Play the Italian Game with White (3.Bc4)", "Its Italian name, giuoco piano, means \"quiet game\". The bishop on c4 already eyes the weak f7 square."
+],
+ "ouv_espagnole": ["Spanish Game", "Play the Spanish Game with White (3.Bb5)", "It is also called the Ruy Lopez, after a Spanish priest who studied it in his chess book of 1561."
+],
+ "ouv_sicilienne": ["Sicilian Defence", "Answer 1.e4 with 1…c5 as Black", "It is strong players' most popular reply to 1.e4. Instead of copying White, Black unbalances the game straight away."
+],
+ "ouv_francaise": ["French Defence", "Answer 1.e4 with 1…e6 as Black", "Its name comes from a correspondence match between London and Paris that began in 1834: the Paris side played it."
+],
+ "ouv_carokann": ["Caro-Kann", "Answer 1.e4 with 1…c6 as Black", "It is named after two players, Horatio Caro and Marcus Kann, who analysed it in 1886."
+],
+ "ouv_gambit_dame": ["Queen's Gambit", "Play the Queen's Gambit with White (1.d4 d5 2.c4)", "Despite the name, it is not a real sacrifice: if Black takes the c4 pawn, White almost always wins it back."
+],
+ "ouv_scandinave": ["Scandinavian", "Answer 1.e4 with 1…d5 as Black", "Black's queen comes out very early. The opening appears in one of the oldest recorded games, played in Valencia around 1475."
+],
+ "ouv_anglaise": ["English Opening", "Start with 1.c4 as White", "It is named after the Englishman Howard Staunton, who played it in 1843 in his match against the Frenchman Saint-Amant."
+],
+ "ouv_gambit_roi": ["King's Gambit", "Play the King's Gambit with White (1.e4 e5 2.f4)", "The Immortal Game, played in London in 1851 by Anderssen against Kieseritzky, opens with this gambit."
+],
+ "ouv_londres": ["London System", "Play 1.d4, then bring the bishop to f4, as White", "It takes its name from the London tournament of 1922, where several masters used it."
+],
+ "ouv_fegatello": ["Fried Liver", "Sacrifice the knight on f7 in the Fried Liver Attack", "Its Italian name, fegatello, means a piece of liver. Hence Fried Liver in English. The black king ends up out in the open."
+],
+ "ouv_traxler": ["Traxler", "Answer 4.Ng5 with 4…Bc5 as Black (1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6)", "The Czech priest Karel Traxler played it in Prague in 1890. Instead of defending f7, Black counterattacks f2."
+],
+ "ouv_berger": ["Scholar's mate", "Win with Scholar's mate: the queen mates on f7 (or f2) within your first 4 moves", "In French and German it is the shepherd's mate: mat du berger, Schäfermatt. It only works once per opponent!"
+],
+ "ouv_legal": ["Légal's mate", "Mate less than two moves after letting your queen be taken, within your first 10 moves", "Légal de Kermur, Philidor's teacher, is said to have set this trap at the Café de la Régence in Paris around 1750."
+],
+ "ouv_shilling": ["Shilling trap", "Mate with …Nf3 after 3…Nd4 as Black", "Legend has it that Blackburne, a great nineteenth-century English player, won a shilling a game with this trap."
+],
+ "ouv_englund": ["Englund trap", "Mate on c1 with the queen after 1.d4 e5, as Black", "This gambit is named after the Swede Fritz Englund. It has a poor reputation, but hides a sting: mate on c1."
+],
+ "ouv_damiano": ["Damiano punished", "Win after 2…f6 by taking on e5 (3.Nxe5) as White", "In 1512 the Portuguese Pedro Damiano already wrote that 2…f6 was a bad move. You have just proved it."
+],
+ "ouv_5": ["Curious", "Play 5 different openings", "There are hundreds of named openings. The ECO code files them from A00 to E99: 500 boxes."
+],
+ "ouv_15": ["Encyclopedist", "Play 15 different openings", "The ECO code comes from the Encyclopaedia of Chess Openings, published in Belgrade from 1974."
+],
+ "ouv_30": ["Living library", "Play 30 different openings", "Thirty different openings! Grandmasters, for their part, study a few in depth rather than playing them all."
+],
+ "lec_sot": ["Fool's mate", "Get checkmated in two moves", "The fastest checkmate possible: 1.f3 e5 2.g4 Qh4#. You had to live it once, so you never see it again."
+],
+ "lec_tondu": ["Fleeced", "Fall for Scholar's mate", "Scholar's mate aims at f7, defended by the king alone. The cure: protect e5 and f7, then chase the queen while developing your pieces."
 ]
 }

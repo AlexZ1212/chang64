@@ -135,6 +135,7 @@ function bxAcquis(id){
   if((r=id.match(/^eg_(kq|kr|krr|kbn|kp)$/)))return (p.endgames||{})[r[1]]!==undefined;
   if(id==="sem_toute")return BX_JOURS.every(j=>b.f["sem_"+j]);
   if(id==="jeu_10")return (b.c.vic||0)>=10;
+  if((r=id.match(/^ouv_(5|15|30)$/)))return (Array.isArray(b.c.ouvFam)?b.c.ouvFam.length:0)>=+r[1];
   /* Defis de la semaine (defis.js). */
   if(id==="defi_1")return (b.c.defisFaits||0)>=1;
   if(id==="defi_10")return (b.c.defisFaits||0)>=10;
@@ -237,6 +238,7 @@ if(typeof registerWrong==="function"){const av=registerWrong;registerWrong=funct
         if(isFlagged())bxMarquer("jeu_temps");
         if(game.isCheckmate()&&Math.ceil(gameUci.length/2)<20)bxMarquer("jeu_express");
       }
+      if(!gameStartFen)bxOuvertures(sanList,game.history,myColor,k==="win"?"win":k==="lose"?"loss":"draw",game.isCheckmate());
       bxVerifier();
     }
     return r;
@@ -257,9 +259,101 @@ let bxAmiFini=false;
   const av2=saveFinishedAmiGame;
   saveFinishedAmiGame=function(){
     const avant=amiGameSaved,r=av2.apply(this,arguments);
-    if(!avant&&amiGameSaved){bxAmiFini=true;bxMarquer("ami_partie");bxActivite();bxVerifier();}
+    if(!avant&&amiGameSaved){
+      bxAmiFini=true;bxMarquer("ami_partie");bxActivite();
+      bxOuvertures(amiSan,amiGame.history,amiColor,amiResultCode(),amiGame.isCheckmate());
+      bxVerifier();
+    }
     return r;
   };
+}
+/* ---------- Ouvertures (2026-11-15) ----------
+   En fin de partie (ordinateur ou ami, position de depart normale), on relit
+   les coups : seuls ceux du joueur comptent. Les coups poses par un lien
+   #line= (pages Ouvertures et Pieges, "jouer cette ligne") ne sont pas de
+   lui : bxPrecharge en garde le nombre, remis a zero a chaque nouvelle
+   partie. res : "win", "loss" ou "draw" du point de vue du joueur. */
+let bxPrecharge=0;
+if(typeof setupGame==="function"){const av=setupGame;setupGame=function(){bxPrecharge=0;return av.apply(this,arguments);};}
+{const av=applyDeepLink;applyDeepLink=function(d){const r=av.apply(this,arguments);if(r&&d&&d.kind==="line")bxPrecharge=sanList.length;return r;};}
+function bxOuvertures(san,hist,moi,res,mat){
+  if(!Array.isArray(san)||!san.length)return;
+  const s=san.map(cleanSan),n=s.length,b=bxEtat(),L=n-1,gagne=res==="win"&&mat,perdu=res==="loss"&&mat;
+  const debut=(...l)=>l.every((x,i)=>s[i]===x);
+  const mien=i=>i>=bxPrecharge&&(i%2===0?W:B)===moi;
+  const joue=(i,x)=>s[i]===x&&mien(i);
+  const m=(id,ok)=>{if(ok)bxMarquer(id);};
+  /* Jouer une ouverture celebre. */
+  m("ouv_italienne",debut("e4","e5","Nf3","Nc6")&&joue(4,"Bc4"));
+  m("ouv_espagnole",debut("e4","e5","Nf3","Nc6")&&joue(4,"Bb5"));
+  m("ouv_sicilienne",debut("e4")&&joue(1,"c5"));
+  m("ouv_francaise",debut("e4")&&joue(1,"e6"));
+  m("ouv_carokann",debut("e4")&&joue(1,"c6"));
+  m("ouv_gambit_dame",debut("d4","d5")&&joue(2,"c4"));
+  m("ouv_scandinave",debut("e4")&&joue(1,"d5"));
+  m("ouv_anglaise",joue(0,"c4"));
+  m("ouv_gambit_roi",debut("e4","e5")&&joue(2,"f4"));
+  m("ouv_londres",joue(0,"d4")&&[2,4,6].some(i=>joue(i,"Bf4")));
+  /* Pieges et attaques. */
+  m("ouv_fegatello",debut("e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Nxd5")&&joue(10,"Nxf7"));
+  m("ouv_traxler",debut("e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5")&&joue(7,"Bc5"));
+  m("ouv_berger",gagne&&mien(L)&&(moi===W?s[L]==="Qxf7"&&L<=6:s[L]==="Qxf2"&&L<=7));
+  m("ouv_shilling",gagne&&moi===B&&debut("e4","e5","Nf3","Nc6","Bc4")&&joue(5,"Nd4")&&joue(L,"Nf3"));
+  m("ouv_englund",gagne&&moi===B&&debut("d4")&&joue(1,"e5")&&joue(L,"Qc1"));
+  m("ouv_damiano",res==="win"&&moi===W&&debut("e4","e5","Nf3","f6")&&joue(4,"Nxe5"));
+  /* Mat de Legal : l'adversaire prend ta dame, tu mates au plus deux coups
+     plus tard, dans tes dix premiers coups, sans avoir pris la sienne. */
+  if(gagne&&mien(L)&&L<=(moi===W?18:19)&&hist&&hist.length===n){
+    const dame=i=>{const h=hist[i],c=h&&h.m&&h.m.captured;return !!c&&pT(c)===Q;};
+    for(let i=L-1;i>=Math.max(bxPrecharge,L-3);i--){
+      if(!mien(i)&&dame(i)){
+        let echange=false;for(let j=Math.max(0,i-1);j<=L;j++)if(mien(j)&&dame(j))echange=true;
+        if(!echange)bxMarquer("ouv_legal");
+        break;
+      }
+    }
+  }
+  /* Lecons apprises. */
+  if(bxPrecharge===0&&perdu){
+    let miens=0;for(let i=0;i<n;i++)if(mien(i))miens++;
+    m("lec_sot",miens<=2);
+    m("lec_tondu",!mien(L)&&(moi===B?s[L]==="Qxf7"&&L<=6:s[L]==="Qxf2"&&L<=7));
+  }
+  /* Collection : familles d'ouvertures differentes (nom du livre). */
+  if(bxPrecharge===0&&n>=4&&typeof detectOpening==="function"){
+    const o=detectOpening(san);
+    if(o&&o.name){
+      const fam=o.name.split(":")[0].trim();
+      b.c.ouvFam=Array.isArray(b.c.ouvFam)?b.c.ouvFam:[];
+      if(!b.c.ouvFam.includes(fam))b.c.ouvFam.push(fam);
+    }
+  }
+}
+/* Page a lire pour chaque badge d'ouverture : l'ouverture elle-meme (pages
+   Ouvertures) ou le piege (pages Pieges, adresses dans data/pieges.json). */
+const BX_LIENS={ouv_italienne:["o","Italian Game"],ouv_espagnole:["o","Ruy Lopez"],ouv_sicilienne:["o","Sicilian Defense"],
+  ouv_francaise:["o","French Defense"],ouv_carokann:["o","Caro-Kann Defense"],ouv_gambit_dame:["o","Queen's Gambit"],
+  ouv_scandinave:["o","Scandinavian Defense"],ouv_anglaise:["o","English Opening"],ouv_gambit_roi:["o","King's Gambit"],
+  ouv_londres:["o","London System"],ouv_traxler:["o","Italian Game"],
+  ouv_fegatello:["p","fried-liver-attack"],ouv_berger:["p","scholars-mate"],lec_tondu:["p","scholars-mate"],
+  ouv_legal:["p","legals-mate"],ouv_shilling:["p","blackburne-shilling-trap"],ouv_englund:["p","englund-gambit-trap"],
+  ouv_damiano:["p","damiano-defence-punished"]};
+let bxPieges=null;
+function bxLien(id){
+  const e=BX_LIENS[id];if(!e)return null;
+  if(e[0]==="o")return typeof openingHref==="function"?openingHref(e[1]):null;
+  const l=bxPieges&&(bxPieges[bxLangue()]||bxPieges.en);
+  return l&&l[e[1]]||null;
+}
+function bxPoserLien(id){
+  const a=$("bravoLien");if(!a)return;
+  if(!bxPieges&&BX_LIENS[id]&&BX_LIENS[id][0]==="p"&&typeof fetch==="function")
+    fetch("/data/pieges.json").then(r=>r.json()).then(d=>{bxPieges=d;bxPoserLien(id);}).catch(()=>{});
+  const h=bxLien(id);
+  a.classList.toggle("hide",!h);
+  if(!h){a.removeAttribute("href");return;}
+  a.href=h;
+  a.textContent=BX_LIENS[id][0]==="o"?t("Discover this opening"):t("See the trap");
 }
 /* Je debute : une etape reussie compte comme une activite. */
 if(typeof debutReussi==="function"){const av=debutReussi;debutReussi=function(){bxActivite();const r=av.apply(this,arguments);bxVerifier();return r;};}
@@ -388,6 +482,7 @@ function bxAfficherPage(premiere){
   poserHtml(noms,"");
   const d=document.createElement("div");d.textContent=badgeLabel(b);noms.appendChild(d);
   tx.textContent=bxTexte(b.id,2);tx.classList.toggle("hide",!tx.textContent);
+  bxPoserLien(b.id);
   poserHtml(autres,bxPages.length>1?bxPages.map((x,i)=>'<span class="bx-page'+(i===bxPage?" en-cours":"")+'">'+bxMedaille(x.id,true)+"</span>").join(""):"");
   autres.setAttribute("aria-hidden","true");
   const dernier=bxPage>=bxPages.length-1;
@@ -421,6 +516,7 @@ function bxFiche(id){
   c.textContent=gagne&&d?bxUi("Won on {date}",{date:fmtDayMonth(d)+"/"+new Date(d).getFullYear()}):bxUi("To unlock: {c}",{c:bxTexte(id,1)});
   $("bravoNoms").appendChild(c);
   const tx=$("bravoTexte");tx.textContent=bxTexte(id,2);tx.classList.remove("hide");
+  bxPoserLien(id);
   poserHtml($("bravoAutres"),"");
   $("bravoOk").textContent=t("Continue");$("bravoOk").onclick=bravoFermer;
   r.classList.add("bx-fiche");r.classList.remove("bx-joue","bx-tourne");

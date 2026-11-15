@@ -824,5 +824,14 @@ module.exports = {
 "Siam night":"Malam Siam",
 "Ember":"Bara",
 "Fritkot":"Fritkot",
-"Gold":"Emas"
+"Gold":"Emas",
+/* Themes de saison (2026-11-15) */
+"To earn until {date}":"Bisa diraih sampai {date}",
+"From {start} to {end}":"Dari {start} sampai {end}",
+"Holidays":"Liburan",
+"King and Queen":"Raja dan Menteri",
+"Songkran":"Songkran",
+"Solstice":"Titik balik matahari",
+"World chess":"Catur dunia",
+"The Turk":"Si Turki"
 };

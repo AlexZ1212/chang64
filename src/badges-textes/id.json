@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Diraih pada {date}", "To unlock: {c}": "Cara mendapatkannya: {c}", "famille:resolus": "Teka-teki terpecahkan", "famille:serie": "Hari berturut-turut", "famille:jours": "Total hari bermain", "famille:classement": "Rating", "famille:themes": "Tema taktik", "famille:finales": "Akhir permainan", "famille:ordinateur": "Permainan melawan komputer", "famille:ami": "Bermain dengan teman", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinat", "famille:debut": "Saya pemula", "famille:makruk": "Makruk", "famille:semaine": "Hari dalam seminggu", "famille:du_jour": "Teka-teki hari ini", "famille:jours_speciaux": "Hari istimewa", "famille:exploits": "Prestasi dan keunikan", "famille:defis": "Tantangan mingguan", "cond:theme": "{theme}: {n}", "cond:niveau": "Menang di level {niveau}", "cond:mk": "Menang makruk, level {niveau}", "cond:eg": "Akhir permainan {finale} dimenangkan", "cond:etape": "Langkah {n}: {titre}", "cond:fete": "Bermain pada {date}", "famille:lecons": "Pelajaran berharga", "famille:ouvertures": "Pembukaan"
+ "_ui": { "Won on {date}": "Diraih pada {date}", "To unlock: {c}": "Cara mendapatkannya: {c}", "famille:resolus": "Teka-teki terpecahkan", "famille:serie": "Hari berturut-turut", "famille:jours": "Total hari bermain", "famille:classement": "Rating", "famille:themes": "Tema taktik", "famille:finales": "Akhir permainan", "famille:ordinateur": "Permainan melawan komputer", "famille:ami": "Bermain dengan teman", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinat", "famille:debut": "Saya pemula", "famille:makruk": "Makruk", "famille:semaine": "Hari dalam seminggu", "famille:du_jour": "Teka-teki hari ini", "famille:jours_speciaux": "Hari istimewa", "famille:exploits": "Prestasi dan keunikan", "famille:defis": "Tantangan mingguan", "cond:theme": "{theme}: {n}", "cond:niveau": "Menang di level {niveau}", "cond:mk": "Menang makruk, level {niveau}", "cond:eg": "Akhir permainan {finale} dimenangkan", "cond:etape": "Langkah {n}: {titre}", "cond:fete": "Bermain pada {date}", "famille:lecons": "Pelajaran berharga", "famille:ouvertures": "Pembukaan", "famille:saisons": "Musim"
  },
  "solved_1": ["Langkah pertama", "1 teka-teki terpecahkan", "Satu beres! Di langkah paling pertama, Putih sudah punya 20 pilihan: 16 langkah pion dan 4 langkah kuda."
 ],
@@ -464,5 +464,17 @@
  "lec_sot": ["Mat Si Bodoh", "Terkena mat dalam dua langkah", "Mat tercepat yang mungkin: 1.f3 e5 2.g4 Qh4#. Kamu perlu mengalaminya sekali agar tak pernah melihatnya lagi."
 ],
  "lec_tondu": ["Tercukur", "Terkena mat gembala", "Mat gembala membidik f7, yang hanya dibela raja. Obatnya: lindungi e5 dan f7, lalu usir menteri sambil mengembangkan bidakmu."
+],
+ "saison_fetes": ["Gencatan liburan", "Bermain antara 20 Desember dan 6 Januari", "Sejak 1920, turnamen Hastings di Inggris dimainkan antara Natal dan Tahun Baru. Ini salah satu turnamen tertua yang masih diadakan."
+],
+ "saison_valentin": ["Cinta pada pandangan pertama", "Bermain antara 10 dan 16 Februari", "Di awal partai, menteri berdiri di petak warnanya sendiri: menteri putih di petak putih, menteri hitam di petak hitam. Raja berdiri tepat di sebelahnya."
+],
+ "saison_songkran": ["Festival air", "Bermain antara 13 dan 15 April", "Songkran, Tahun Baru Thailand, dirayakan dengan perang air. Di Thailand, orang bermain makruk di papan tanpa petak berwarna: semua petak sama."
+],
+ "saison_solstice": ["Hari terpanjang", "Bermain antara 20 dan 24 Juni", "Partai turnamen terpanjang, Nikolić melawan Arsović di Beograd tahun 1989, berlangsung 269 langkah dan lebih dari 20 jam. Hasilnya remis."
+],
+ "saison_mondial": ["Gens una sumus", "Bermain antara 15 dan 25 Juli", "Semboyan FIDE, Gens una sumus, dalam bahasa Latin berarti \"Kita adalah satu keluarga\". Di seluruh dunia, aturan permainannya sama."
+],
+ "saison_turc": ["Otomaton", "Bermain antara 25 Oktober dan 2 November", "Konon pada tahun 1809, Turki Mekanik melawan Napoleon dan menang. Sang kaisar bahkan mencoba langkah ilegal untuk menjebaknya."
 ]
 }

@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Ganado el {date}", "To unlock: {c}": "Para conseguirlo: {c}", "famille:resolus": "Ejercicios resueltos", "famille:serie": "Días seguidos", "famille:jours": "Días jugados en total", "famille:classement": "Puntuación", "famille:themes": "Temas tácticos", "famille:finales": "Finales", "famille:ordinateur": "Partidas contra el ordenador", "famille:ami": "Jugar con un amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Soy principiante", "famille:makruk": "Makruk", "famille:semaine": "Días de la semana", "famille:du_jour": "Ejercicio del día", "famille:jours_speciaux": "Días especiales", "famille:exploits": "Hazañas y curiosidades", "famille:defis": "Retos de la semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Victoria en nivel {niveau}", "cond:mk": "Victoria en makruk, nivel {niveau}", "cond:eg": "Final {finale} ganado", "cond:etape": "Etapa {n}: {titre}", "cond:fete": "Jugar el {date}", "famille:lecons": "Lecciones aprendidas", "famille:ouvertures": "Aperturas"
+ "_ui": { "Won on {date}": "Ganado el {date}", "To unlock: {c}": "Para conseguirlo: {c}", "famille:resolus": "Ejercicios resueltos", "famille:serie": "Días seguidos", "famille:jours": "Días jugados en total", "famille:classement": "Puntuación", "famille:themes": "Temas tácticos", "famille:finales": "Finales", "famille:ordinateur": "Partidas contra el ordenador", "famille:ami": "Jugar con un amigo", "famille:sprint": "Sprint", "famille:coordonnees": "Coordenadas", "famille:debut": "Soy principiante", "famille:makruk": "Makruk", "famille:semaine": "Días de la semana", "famille:du_jour": "Ejercicio del día", "famille:jours_speciaux": "Días especiales", "famille:exploits": "Hazañas y curiosidades", "famille:defis": "Retos de la semana", "cond:theme": "{theme}: {n}", "cond:niveau": "Victoria en nivel {niveau}", "cond:mk": "Victoria en makruk, nivel {niveau}", "cond:eg": "Final {finale} ganado", "cond:etape": "Etapa {n}: {titre}", "cond:fete": "Jugar el {date}", "famille:lecons": "Lecciones aprendidas", "famille:ouvertures": "Aperturas", "famille:saisons": "Temporadas"
  },
  "solved_1": ["Primera jugada", "1 ejercicio resuelto", "¡Uno hecho! En la primerísima jugada, las blancas ya tienen 20 opciones: 16 jugadas de peón y 4 de caballo."
 ],
@@ -464,5 +464,17 @@
  "lec_sot": ["Mate del loco", "Recibir mate en dos jugadas", "El mate más rápido posible: 1.f3 e5 2.g4 Qh4#. Había que vivirlo una vez para no volver a verlo nunca."
 ],
  "lec_tondu": ["Esquilado", "Caer en el mate del pastor", "El mate del pastor apunta a f7, defendido solo por el rey. El remedio: proteger e5 y f7 y luego echar a la dama desarrollando tus piezas."
+],
+ "saison_fetes": ["Tregua navideña", "Jugar entre el 20 de diciembre y el 6 de enero", "Desde 1920, el torneo de Hastings, en Inglaterra, se juega entre Navidad y Año Nuevo. Es uno de los torneos más antiguos que siguen disputándose."
+],
+ "saison_valentin": ["Flechazo", "Jugar entre el 10 y el 16 de febrero", "Al empezar la partida, la dama se coloca en su color: dama blanca en casilla blanca, dama negra en casilla negra. El rey se pone justo al lado."
+],
+ "saison_songkran": ["Fiesta del agua", "Jugar entre el 13 y el 15 de abril", "Songkran, el Año Nuevo tailandés, se celebra a chorros de agua. En Tailandia se juega al makruk en un tablero sin casillas de color: todas son iguales."
+],
+ "saison_solstice": ["El día más largo", "Jugar entre el 20 y el 24 de junio", "La partida de torneo más larga, Nikolić contra Arsović en Belgrado en 1989, duró 269 jugadas y más de 20 horas. Terminó en tablas."
+],
+ "saison_mondial": ["Gens una sumus", "Jugar entre el 15 y el 25 de julio", "El lema de la FIDE, Gens una sumus, significa en latín «Somos una sola familia». En todo el mundo, las mismas reglas del juego."
+],
+ "saison_turc": ["Autómata", "Jugar entre el 25 de octubre y el 2 de noviembre", "Se cuenta que en 1809 el Turco mecánico se enfrentó a Napoleón y le ganó. El emperador incluso intentó jugadas ilegales para engañarlo."
 ]
 }

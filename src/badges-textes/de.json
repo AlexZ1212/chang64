@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Gewonnen am {date}", "To unlock: {c}": "So bekommst du ihn: {c}", "famille:resolus": "Gelöste Aufgaben", "famille:serie": "Tage am Stück", "famille:jours": "Gespielte Tage insgesamt", "famille:classement": "Wertung", "famille:themes": "Taktische Motive", "famille:finales": "Endspiele", "famille:ordinateur": "Partien gegen den Computer", "famille:ami": "Mit Freunden spielen", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinaten", "famille:debut": "Ich bin Anfänger", "famille:makruk": "Makruk", "famille:semaine": "Wochentage", "famille:du_jour": "Aufgabe des Tages", "famille:jours_speciaux": "Besondere Tage", "famille:exploits": "Glanzleistungen und Kuriositäten", "famille:defis": "Wochen-Challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Sieg auf der Stufe {niveau}", "cond:mk": "Makruk-Sieg, Stufe {niveau}", "cond:eg": "Endspiel {finale} gewonnen", "cond:etape": "Schritt {n}: {titre}", "cond:fete": "Am {date} spielen", "famille:lecons": "Gelernte Lektionen", "famille:ouvertures": "Eröffnungen"
+ "_ui": { "Won on {date}": "Gewonnen am {date}", "To unlock: {c}": "So bekommst du ihn: {c}", "famille:resolus": "Gelöste Aufgaben", "famille:serie": "Tage am Stück", "famille:jours": "Gespielte Tage insgesamt", "famille:classement": "Wertung", "famille:themes": "Taktische Motive", "famille:finales": "Endspiele", "famille:ordinateur": "Partien gegen den Computer", "famille:ami": "Mit Freunden spielen", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinaten", "famille:debut": "Ich bin Anfänger", "famille:makruk": "Makruk", "famille:semaine": "Wochentage", "famille:du_jour": "Aufgabe des Tages", "famille:jours_speciaux": "Besondere Tage", "famille:exploits": "Glanzleistungen und Kuriositäten", "famille:defis": "Wochen-Challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Sieg auf der Stufe {niveau}", "cond:mk": "Makruk-Sieg, Stufe {niveau}", "cond:eg": "Endspiel {finale} gewonnen", "cond:etape": "Schritt {n}: {titre}", "cond:fete": "Am {date} spielen", "famille:lecons": "Gelernte Lektionen", "famille:ouvertures": "Eröffnungen", "famille:saisons": "Jahreszeiten"
  },
  "solved_1": ["Erster Zug", "1 Aufgabe gelöst", "Eine geschafft! Schon beim allerersten Zug hat Weiß 20 Möglichkeiten: 16 Bauernzüge und 4 Springerzüge."
 ],
@@ -464,5 +464,17 @@
  "lec_sot": ["Narrenmatt", "In zwei Zügen mattgesetzt werden", "Das schnellste mögliche Matt: 1.f3 e5 2.g4 Qh4#. Einmal musste man es erleben, um es nie wieder zu sehen."
 ],
  "lec_tondu": ["Geschoren", "Ins Schäfermatt laufen", "Das Schäfermatt zielt auf f7, das nur der König deckt. Die Abwehr: e5 und f7 schützen, dann die Dame mit Entwicklungszügen vertreiben."
+],
+ "saison_fetes": ["Feiertagsfrieden", "Zwischen dem 20. Dezember und dem 6. Januar spielen", "Seit 1920 wird das Turnier von Hastings in England zwischen Weihnachten und Neujahr gespielt. Es ist eines der ältesten Turniere, die es noch gibt."
+],
+ "saison_valentin": ["Liebe auf den ersten Blick", "Zwischen dem 10. und 16. Februar spielen", "Zu Beginn der Partie steht die Dame auf ihrer Farbe: weiße Dame auf hellem Feld, schwarze Dame auf dunklem Feld. Der König steht gleich daneben."
+],
+ "saison_songkran": ["Wasserfest", "Zwischen dem 13. und 15. April spielen", "Songkran, das thailändische Neujahr, wird mit Wasserschlachten gefeiert. In Thailand spielt man Makruk auf einem Brett ohne farbige Felder: Alle Felder sehen gleich aus."
+],
+ "saison_solstice": ["Der längste Tag", "Zwischen dem 20. und 24. Juni spielen", "Die längste Turnierpartie, Nikolić gegen Arsović 1989 in Belgrad, dauerte 269 Züge und mehr als 20 Stunden. Sie endete remis."
+],
+ "saison_mondial": ["Gens una sumus", "Zwischen dem 15. und 25. Juli spielen", "Das Motto der FIDE, Gens una sumus, heißt auf Latein „Wir sind eine Familie“. Überall auf der Welt gelten dieselben Spielregeln."
+],
+ "saison_turc": ["Automat", "Zwischen dem 25. Oktober und dem 2. November spielen", "Man erzählt, dass der Schachtürke 1809 gegen Napoleon spielte und gewann. Der Kaiser soll sogar unerlaubte Züge versucht haben, um ihn hereinzulegen."
 ]
 }

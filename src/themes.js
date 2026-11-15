@@ -11,7 +11,7 @@
    Un petit script en tete de page pose data-theme et data-board avant le
    premier affichage (pas d'eclair du theme par defaut). Colle apres duel.js
    par build_site.js. */
-const THEMES=[{"id":"chang","b":null,"en":"Chang"},{"id":"glace","b":"obj_gel","en":"Ice"},{"id":"jade","b":"defi_parfait","en":"Jade"},{"id":"bibliotheque","b":"ouv_15","en":"Library"},{"id":"hibou","b":"ex_hibou","en":"Owl"},{"id":"siam","b":"mk_facile","en":"Siam night"},{"id":"braise","b":"sprint_20","en":"Ember"},{"id":"fritkot","b":"fete_0801","en":"Fritkot"},{"id":"or","b":"solved_1000","en":"Gold"}];
+const THEMES=[{"id":"chang","b":null,"en":"Chang"},{"id":"glace","b":"obj_gel","en":"Ice"},{"id":"jade","b":"defi_parfait","en":"Jade"},{"id":"bibliotheque","b":"ouv_15","en":"Library"},{"id":"hibou","b":"ex_hibou","en":"Owl"},{"id":"siam","b":"mk_facile","en":"Siam night"},{"id":"braise","b":"sprint_20","en":"Ember"},{"id":"fritkot","b":"fete_0801","en":"Fritkot"},{"id":"or","b":"solved_1000","en":"Gold"},{"id":"fetes","b":"saison_fetes","en":"Holidays","s":[1220,106]},{"id":"valentin","b":"saison_valentin","en":"King and Queen","s":[210,216]},{"id":"songkran","b":"saison_songkran","en":"Songkran","s":[413,415]},{"id":"solstice","b":"saison_solstice","en":"Solstice","s":[620,624]},{"id":"mondial","b":"saison_mondial","en":"World chess","s":[715,725]},{"id":"turc","b":"saison_turc","en":"The Turk","s":[1025,1102]}];
 /* Point de depart : ce que le script de tete a lu dans les preferences,
    pour ne rien changer a l'affichage avant que tout soit charge. */
 let prefTheme=document.documentElement.getAttribute("data-theme")||"chang";
@@ -66,7 +66,7 @@ function rendreThemes(){
     h+='<button type="button" class="theme-choix'+(ouvert?"":" verrou")+'" data-theme-id="'+th.id+'" data-apercu="'+th.id+'" role="radio" aria-checked="'+actif+'"'+(ouvert?"":' aria-disabled="true"')+'>'+
       '<span class="theme-apercu" aria-hidden="true"><i class="ta-carte"><b></b><s></s></i><i class="ta-bouton"></i><i class="ta-damier"><u></u><u></u><u></u><u></u></i></span>'+
       '<span class="theme-nom">'+echapper(themeNom(th))+"</span>"+
-      (ouvert?"":'<span class="theme-verrou">'+(typeof bxMedaille==="function"?bxMedaille(th.b,false):"")+"<em>"+echapper(typeof badgeLabel==="function"?badgeLabel({id:th.b}):th.b)+"</em></span>")+
+      (ouvert?"":'<span class="theme-verrou'+(th.s&&saisonEnCours(th.s)?" en-saison":"")+'">'+(typeof bxMedaille==="function"?bxMedaille(th.b,false):"")+"<em>"+echapper(th.s?saisonTexte(th.s):(typeof badgeLabel==="function"?badgeLabel({id:th.b}):th.b))+"</em></span>")+
       "</button>";
   }
   poserHtml(box,h);
@@ -81,6 +81,31 @@ function rendreThemes(){
   });
 }
 {const av=renderPrefs;renderPrefs=function(){const r=av.apply(this,arguments);rendreThemes();return r;};}
+/* ---------- Themes de saison ----------
+   s = [debut, fin] en MMJJ (la fin peut passer le 1er janvier : Fetes du
+   20 decembre au 6 janvier). Jouer un jour de la periode (exercice reussi,
+   partie, finale, Makruk... : tout ce qui appelle bxActivite) donne le badge
+   de la saison, qui ouvre le theme pour toute l'annee (choix d'Alexandre,
+   15/11). La date est celle de l'appareil. */
+function saisonEnCours(s,d){
+  d=d||new Date();const md=(d.getMonth()+1)*100+d.getDate();
+  return s[0]<=s[1]?md>=s[0]&&md<=s[1]:md>=s[0]||md<=s[1];
+}
+function saisonDate(mmjj){
+  const d=new Date(2024,Math.floor(mmjj/100)-1,mmjj%100);
+  try{return new Intl.DateTimeFormat(typeof LANG_INTL!=="undefined"?LANG_INTL:undefined,{day:"numeric",month:"short"}).format(d);}catch(e){return d.getDate()+"/"+(d.getMonth()+1);}
+}
+function saisonTexte(s){
+  return saisonEnCours(s)?t("To earn until {date}",{date:saisonDate(s[1])}):t("From {start} to {end}",{start:saisonDate(s[0]),end:saisonDate(s[1])});
+}
+if(typeof bxActivite==="function"){
+  const av=bxActivite;
+  bxActivite=function(){
+    const r=av.apply(this,arguments);
+    for(const th of THEMES)if(th.s&&saisonEnCours(th.s))bxMarquer(th.b);
+    return r;
+  };
+}
 /* Fenetre Bravo et fiche d'un badge : "Theme debloque" et "Essayer" quand
    ce badge ouvre un theme (en fin de partie ou d'exercice, comme toujours). */
 function bxPoserTheme(id){

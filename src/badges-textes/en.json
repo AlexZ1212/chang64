@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Won on {date}", "To unlock: {c}": "To unlock: {c}", "famille:resolus": "Puzzles solved", "famille:serie": "Days in a row", "famille:jours": "Days played in total", "famille:classement": "Rating", "famille:themes": "Tactical themes", "famille:finales": "Endgames", "famille:ordinateur": "Games against the computer", "famille:ami": "Playing with a friend", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinates", "famille:debut": "I'm a beginner", "famille:makruk": "Makruk", "famille:semaine": "Days of the week", "famille:du_jour": "Puzzle of the day", "famille:jours_speciaux": "Special days", "famille:exploits": "Feats and curiosities", "famille:defis": "Weekly challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level", "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "famille:lecons": "Lessons learnt", "famille:ouvertures": "Openings"
+ "_ui": { "Won on {date}": "Won on {date}", "To unlock: {c}": "To unlock: {c}", "famille:resolus": "Puzzles solved", "famille:serie": "Days in a row", "famille:jours": "Days played in total", "famille:classement": "Rating", "famille:themes": "Tactical themes", "famille:finales": "Endgames", "famille:ordinateur": "Games against the computer", "famille:ami": "Playing with a friend", "famille:sprint": "Sprint", "famille:coordonnees": "Coordinates", "famille:debut": "I'm a beginner", "famille:makruk": "Makruk", "famille:semaine": "Days of the week", "famille:du_jour": "Puzzle of the day", "famille:jours_speciaux": "Special days", "famille:exploits": "Feats and curiosities", "famille:defis": "Weekly challenges", "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level", "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "famille:lecons": "Lessons learnt", "famille:ouvertures": "Openings", "famille:saisons": "Seasons"
  },
  "solved_1": ["First move", "1 puzzle solved", "One down! On the very first move, White already has 20 choices: 16 pawn moves and 4 knight moves."
 ],
@@ -464,5 +464,17 @@
  "lec_sot": ["Fool's mate", "Get checkmated in two moves", "The fastest checkmate possible: 1.f3 e5 2.g4 Qh4#. You had to live it once, so you never see it again."
 ],
  "lec_tondu": ["Fleeced", "Fall for Scholar's mate", "Scholar's mate aims at f7, defended by the king alone. The cure: protect e5 and f7, then chase the queen while developing your pieces."
+],
+ "saison_fetes": ["Holiday truce", "Play between 20 December and 6 January", "Since 1920, the Hastings tournament in England has been played between Christmas and New Year. It is one of the oldest tournaments still running."
+],
+ "saison_valentin": ["Love at first sight", "Play between 10 and 16 February", "At the start of the game, the queen goes on her own colour: white queen on a light square, black queen on a dark square. The king stands right next to her."
+],
+ "saison_songkran": ["Water festival", "Play between 13 and 15 April", "Songkran, the Thai New Year, is celebrated with water fights. In Thailand, people play makruk on a board without coloured squares: all the squares look the same."
+],
+ "saison_solstice": ["Longest day", "Play between 20 and 24 June", "The longest tournament game, Nikolić against Arsović in Belgrade in 1989, lasted 269 moves and more than 20 hours. It ended in a draw."
+],
+ "saison_mondial": ["Gens una sumus", "Play between 15 and 25 July", "FIDE's motto, Gens una sumus, is Latin for \"We are one family\". All over the world, the same rules of the game."
+],
+ "saison_turc": ["Automaton", "Play between 25 October and 2 November", "It is said that in 1809 the Mechanical Turk faced Napoleon and beat him. The emperor even tried illegal moves to trip it up."
 ]
 }

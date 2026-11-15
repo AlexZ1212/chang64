@@ -439,6 +439,20 @@ const BADGES_CATALOGUE = [
   ["fete_1231","jours_speciaux","Jouer le 31 décembre","Dernier coup de l'année","une pendule à minuit",
    "La dernière partie de l'année. Demain, on recommence avec les Blancs."],
 
+  /* ---------- 15 bis. Saisons (6, chacune ouvre un theme ; jouer un jour de la periode) ---------- */
+  ["saison_fetes","saisons","Jouer entre le 20 décembre et le 6 janvier","Trêve des confiseurs","un roi et un sapin",
+   "Depuis 1920, le tournoi de Hastings, en Angleterre, se joue entre Noël et le Nouvel An. C'est l'un des plus vieux tournois encore disputés."],
+  ["saison_valentin","saisons","Jouer entre le 10 et le 16 février","Coup de foudre","un roi et une dame côte à côte",
+   "Au début de la partie, la dame se pose sur sa couleur : dame blanche sur case blanche, dame noire sur case noire. Le roi se place juste à côté."],
+  ["saison_songkran","saisons","Jouer entre le 13 et le 15 avril","Fête de l'eau","l'éléphant et une goutte d'eau",
+   "Songkran, le Nouvel An thaï, se fête à grands jets d'eau. En Thaïlande, on joue au makruk sur un échiquier sans cases de couleur : toutes les cases sont pareilles."],
+  ["saison_solstice","saisons","Jouer entre le 20 et le 24 juin","Jour le plus long","un soleil à l'horizon",
+   "La plus longue partie de tournoi, Nikolić contre Arsović à Belgrade en 1989, a duré 269 coups et plus de 20 heures. Elle s'est terminée par une nulle."],
+  ["saison_mondial","saisons","Jouer entre le 15 et le 25 juillet","Gens una sumus","un pion et un globe",
+   "La devise de la FIDE, Gens una sumus, veut dire en latin « Nous sommes une seule famille ». Partout dans le monde, les mêmes règles du jeu."],
+  ["saison_turc","saisons","Jouer entre le 25 octobre et le 2 novembre","Automate","un cavalier et un fantôme",
+   "On raconte qu'en 1809, le Turc mécanique affronta Napoléon et le battit. L'empereur aurait même tenté des coups illégaux pour le piéger."],
+
   /* ---------- 16. Exploits et curiosités (15) ---------- */
   ["ex_hibou","exploits","Résoudre un exercice entre minuit et 5 h","Hibou","une chouette",
    "Les grands joueurs jouent aussi la nuit. Mais le cerveau, lui, aime dormir."],

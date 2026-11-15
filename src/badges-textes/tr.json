@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Kazanıldı: {date}", "To unlock: {c}": "Nasıl kazanılır: {c}", "famille:resolus": "Çözülen bulmacalar", "famille:serie": "Art arda günler", "famille:jours": "Toplam oynanan gün", "famille:classement": "Puan", "famille:themes": "Taktik temalar", "famille:finales": "Oyun sonları", "famille:ordinateur": "Bilgisayara karşı oyunlar", "famille:ami": "Arkadaşla oynamak", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinatlar", "famille:debut": "Yeni başlıyorum", "famille:makruk": "Makruk", "famille:semaine": "Haftanın günleri", "famille:du_jour": "Günün bulmacası", "famille:jours_speciaux": "Özel günler", "famille:exploits": "Başarılar ve ilginçlikler", "famille:defis": "Haftanın görevleri", "cond:theme": "{theme}: {n}", "cond:niveau": "{niveau} seviyesinde galibiyet", "cond:mk": "Makruk galibiyeti, {niveau} seviye", "cond:eg": "{finale} oyun sonu kazanıldı", "cond:etape": "Adım {n}: {titre}", "cond:fete": "{date} tarihinde oynamak", "famille:lecons": "Öğrenilen dersler", "famille:ouvertures": "Açılışlar"
+ "_ui": { "Won on {date}": "Kazanıldı: {date}", "To unlock: {c}": "Nasıl kazanılır: {c}", "famille:resolus": "Çözülen bulmacalar", "famille:serie": "Art arda günler", "famille:jours": "Toplam oynanan gün", "famille:classement": "Puan", "famille:themes": "Taktik temalar", "famille:finales": "Oyun sonları", "famille:ordinateur": "Bilgisayara karşı oyunlar", "famille:ami": "Arkadaşla oynamak", "famille:sprint": "Sprint", "famille:coordonnees": "Koordinatlar", "famille:debut": "Yeni başlıyorum", "famille:makruk": "Makruk", "famille:semaine": "Haftanın günleri", "famille:du_jour": "Günün bulmacası", "famille:jours_speciaux": "Özel günler", "famille:exploits": "Başarılar ve ilginçlikler", "famille:defis": "Haftanın görevleri", "cond:theme": "{theme}: {n}", "cond:niveau": "{niveau} seviyesinde galibiyet", "cond:mk": "Makruk galibiyeti, {niveau} seviye", "cond:eg": "{finale} oyun sonu kazanıldı", "cond:etape": "Adım {n}: {titre}", "cond:fete": "{date} tarihinde oynamak", "famille:lecons": "Öğrenilen dersler", "famille:ouvertures": "Açılışlar", "famille:saisons": "Mevsimler"
  },
  "solved_1": ["İlk hamle", "1 bulmaca çözüldü", "Bir tane tamam! Daha ilk hamlede Beyaz'ın 20 seçeneği var: 16 piyon hamlesi ve 4 at hamlesi."
 ],
@@ -464,5 +464,17 @@
  "lec_sot": ["Ahmak matı", "İki hamlede mat ol", "Mümkün olan en hızlı mat: 1.f3 e5 2.g4 Qh4#. Bir daha görmemek için bir kez yaşamak gerekiyordu."
 ],
  "lec_tondu": ["Kırkıldın", "Çoban matına yakalan", "Çoban matı, yalnızca şahın koruduğu f7'yi hedefler. Çaresi: e5 ve f7'yi koru, sonra taşlarını geliştirerek veziri kovala."
+],
+ "saison_fetes": ["Bayram ateşkesi", "20 Aralık ile 6 Ocak arasında oyna", "1920'den beri İngiltere'deki Hastings turnuvası Noel ile Yılbaşı arasında oynanır. Hâlâ düzenlenen en eski turnuvalardan biridir."
+],
+ "saison_valentin": ["İlk görüşte aşk", "10 ile 16 Şubat arasında oyna", "Oyunun başında vezir kendi rengindeki kareye konur: beyaz vezir beyaz kareye, siyah vezir siyah kareye. Şah da hemen yanında durur."
+],
+ "saison_songkran": ["Su bayramı", "13 ile 15 Nisan arasında oyna", "Tay Yeni Yılı Songkran, su savaşlarıyla kutlanır. Tayland'da makruk, kareleri renkli olmayan bir tahtada oynanır: bütün kareler aynıdır."
+],
+ "saison_solstice": ["En uzun gün", "20 ile 24 Haziran arasında oyna", "En uzun turnuva oyunu, 1989'da Belgrad'da Nikolić ile Arsović arasında oynandı; 269 hamle ve 20 saatten fazla sürdü. Beraberlikle bitti."
+],
+ "saison_mondial": ["Gens una sumus", "15 ile 25 Temmuz arasında oyna", "FIDE'nin sloganı Gens una sumus, Latincede \"Biz tek bir aileyiz\" demektir. Dünyanın her yerinde aynı oyun kuralları."
+],
+ "saison_turc": ["Otomat", "25 Ekim ile 2 Kasım arasında oyna", "Anlatılana göre 1809'da Mekanik Türk, Napolyon'la oynadı ve onu yendi. İmparator onu kandırmak için kuralsız hamleler bile denemiş."
 ]
 }

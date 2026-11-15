@@ -348,6 +348,13 @@ const S = {
   fete_1016: [F("bowl-steam"), "jade"],
   fete_1113: [F("hand-heart"), "jade"],
   fete_1120: [F("balloon"), "jade"],
+  /* Saisons (15/11) : chacune ouvre un theme */
+  saison_fetes: [P("k", G) + A("tree-evergreen"), "jade"],
+  saison_valentin: [P("k", "translate(-9 2) scale(.6)") + P("q", "translate(9 2) scale(.6)"), "jade"],
+  saison_songkran: [E("translate(-5 5) scale(.82)") + A("drop"), "jade"],
+  saison_solstice: [F("sun-horizon"), "jade"],
+  saison_mondial: [P("p", G) + A("globe-hemisphere-east"), "jade"],
+  saison_turc: [P("n", G) + A("ghost"), "jade"],
   /* Objectif du jour et gel de serie (15/11) */
   obj_atteint: [F("check-circle"), "bronze"],
   obj_gel: [F("thermometer-cold"), "argent"],

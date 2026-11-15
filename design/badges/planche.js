@@ -6,7 +6,7 @@ const S = JSON.parse(fs.readFileSync(path.join(__dirname, "symboles.json"), "utf
 const NOMS = { resolus: "Exercices résolus", serie: "Série de jours d'affilée", jours: "Jours joués au total", classement: "Classement",
   themes: "Thèmes tactiques", finales: "Finales", ordinateur: "Parties contre l'ordinateur", ami: "Jouer avec un ami", sprint: "Sprint",
   coordonnees: "Coordonnées", debut: "Je débute", makruk: "Makruk", semaine: "Jours de la semaine", du_jour: "Exercice du jour",
-  jours_speciaux: "Jours spéciaux", exploits: "Exploits et curiosités", ouvertures: "Ouvertures", lecons: "Leçons apprises", defis: "Défis de la semaine" };
+  jours_speciaux: "Jours spéciaux", saisons: "Saisons", exploits: "Exploits et curiosités", ouvertures: "Ouvertures", lecons: "Leçons apprises", defis: "Défis de la semaine" };
 const METAUX = {
   bronze: { face: ["#F0B98C", "#C07A47", "#7A4321"], tranche: ["#D99566", "#6A381A"], grave: "#4A2410" },
   argent: { face: ["#FFFFFF", "#C9CFCC", "#7E8784"], tranche: ["#E4E8E6", "#5E6765"], grave: "#2F3634" },

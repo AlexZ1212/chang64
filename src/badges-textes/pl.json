@@ -1,5 +1,5 @@
 {
- "_ui": { "Won on {date}": "Zdobyta {date}", "To unlock: {c}": "Jak zdobyć: {c}", "famille:resolus": "Rozwiązane zadania", "famille:serie": "Dni z rzędu", "famille:jours": "Dni gry łącznie", "famille:classement": "Ranking", "famille:themes": "Motywy taktyczne", "famille:finales": "Końcówki", "famille:ordinateur": "Partie z komputerem", "famille:ami": "Gra ze znajomym", "famille:sprint": "Sprint", "famille:coordonnees": "Współrzędne", "famille:debut": "Jestem początkujący", "famille:makruk": "Makruk", "famille:semaine": "Dni tygodnia", "famille:du_jour": "Zadanie dnia", "famille:jours_speciaux": "Wyjątkowe dni", "famille:exploits": "Wyczyny i ciekawostki", "famille:defis": "Wyzwania tygodnia", "cond:theme": "{theme}: {n}", "cond:niveau": "Wygrana na poziomie {niveau}", "cond:mk": "Wygrana w makruk, poziom {niveau}", "cond:eg": "Wygrana końcówka: {finale}", "cond:etape": "Krok {n}: {titre}", "cond:fete": "Zagrać {date}", "famille:lecons": "Odrobione lekcje", "famille:ouvertures": "Debiuty"
+ "_ui": { "Won on {date}": "Zdobyta {date}", "To unlock: {c}": "Jak zdobyć: {c}", "famille:resolus": "Rozwiązane zadania", "famille:serie": "Dni z rzędu", "famille:jours": "Dni gry łącznie", "famille:classement": "Ranking", "famille:themes": "Motywy taktyczne", "famille:finales": "Końcówki", "famille:ordinateur": "Partie z komputerem", "famille:ami": "Gra ze znajomym", "famille:sprint": "Sprint", "famille:coordonnees": "Współrzędne", "famille:debut": "Jestem początkujący", "famille:makruk": "Makruk", "famille:semaine": "Dni tygodnia", "famille:du_jour": "Zadanie dnia", "famille:jours_speciaux": "Wyjątkowe dni", "famille:exploits": "Wyczyny i ciekawostki", "famille:defis": "Wyzwania tygodnia", "cond:theme": "{theme}: {n}", "cond:niveau": "Wygrana na poziomie {niveau}", "cond:mk": "Wygrana w makruk, poziom {niveau}", "cond:eg": "Wygrana końcówka: {finale}", "cond:etape": "Krok {n}: {titre}", "cond:fete": "Zagrać {date}", "famille:lecons": "Odrobione lekcje", "famille:ouvertures": "Debiuty", "famille:saisons": "Pory roku"
  },
  "solved_1": ["Pierwszy ruch", "1 rozwiązane zadanie", "Jedno za tobą! Już w pierwszym ruchu białe mają 20 możliwości: 16 ruchów pionami i 4 skoczkami."
 ],
@@ -464,5 +464,17 @@
  "lec_sot": ["Mat głupca", "Dostań mata w dwóch ruchach", "Najszybszy możliwy mat: 1.f3 e5 2.g4 Qh4#. Trzeba było to przeżyć raz, żeby więcej tego nie zobaczyć."
 ],
  "lec_tondu": ["Ostrzyżony", "Daj się złapać na mata szewczyka", "Mat szewczyka celuje w f7, którego broni tylko król. Lekarstwo: osłoń e5 i f7, a potem przeganiaj hetmana, rozwijając figury."
+],
+ "saison_fetes": ["Świąteczny rozejm", "Zagraj między 20 grudnia a 6 stycznia", "Od 1920 roku turniej w Hastings, w Anglii, rozgrywa się między Bożym Narodzeniem a Nowym Rokiem. To jeden z najstarszych wciąż rozgrywanych turniejów."
+],
+ "saison_valentin": ["Miłość od pierwszego wejrzenia", "Zagraj między 10 a 16 lutego", "Na początku partii hetman stoi na polu swojego koloru: biały na białym, czarny na czarnym. Król stoi tuż obok."
+],
+ "saison_songkran": ["Święto wody", "Zagraj między 13 a 15 kwietnia", "Songkran, tajski Nowy Rok, świętuje się bitwami na wodę. W Tajlandii gra się w makruk na szachownicy bez kolorowych pól: wszystkie pola są takie same."
+],
+ "saison_solstice": ["Najdłuższy dzień", "Zagraj między 20 a 24 czerwca", "Najdłuższa partia turniejowa, Nikolić przeciw Arsoviciowi w Belgradzie w 1989 roku, trwała 269 ruchów i ponad 20 godzin. Zakończyła się remisem."
+],
+ "saison_mondial": ["Gens una sumus", "Zagraj między 15 a 25 lipca", "Dewiza FIDE, Gens una sumus, znaczy po łacinie „Jesteśmy jedną rodziną”. Na całym świecie te same zasady gry."
+],
+ "saison_turc": ["Automat", "Zagraj między 25 października a 2 listopada", "Podobno w 1809 roku Turek mechaniczny zagrał z Napoleonem i wygrał. Cesarz próbował nawet nieprzepisowych ruchów, żeby go przechytrzyć."
 ]
 }

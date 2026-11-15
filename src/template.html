@@ -1914,9 +1914,13 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 .obj-anneau{flex:none;width:40px;height:40px;transform:rotate(-90deg)}
 .obj-fond{fill:none;stroke:var(--raise);stroke-width:4}
 .obj-plein{fill:none;stroke:var(--brass);stroke-width:4;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:var(--obj,100);transition:stroke-dashoffset var(--duree-longue) var(--courbe-sortie),stroke var(--duree-moyenne)}
-.obj-coche{fill:none;stroke:var(--jade);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transform:rotate(90deg);transform-origin:18px 18px;transition:stroke-dashoffset var(--duree-moyenne) var(--courbe-sortie) .25s}
+.obj-coche{fill:none;stroke:var(--jade);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transform:rotate(90deg);transform-origin:18px 18px;transition:stroke-dashoffset var(--duree-moyenne) var(--courbe-sortie) .25s,opacity 0s .25s;
+  /* 2026-11-15 (remarque d'Alexandre) : coche masquee par le seul decalage
+     du trait, son bout arrondi laissait un point vert dans l'anneau (Safari).
+     Invisible tant que l'objectif n'est pas atteint. */
+  opacity:0}
 .obj-atteint .obj-plein{stroke:var(--jade)}
-.obj-atteint .obj-coche{stroke-dashoffset:0}
+.obj-atteint .obj-coche{stroke-dashoffset:0;opacity:1}
 .obj-texte{display:flex;flex-direction:column;gap:2px;min-width:0}
 .obj-texte b{font-size:14px;font-weight:600}
 .obj-texte span{font-size:13px;color:var(--sage)}

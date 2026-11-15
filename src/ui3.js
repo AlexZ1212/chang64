@@ -2159,7 +2159,12 @@ const GLISSEURS=[
   {sel:".tabs",actif:'button[aria-current="page"]',marque:true},
   {sel:".seg",actif:'button[aria-pressed="true"],button[aria-checked="true"]'},
   {sel:".tc-cats",actif:'button[aria-pressed="true"]'},
-  {sel:".tc-chips,.chips",actif:'.chip[aria-pressed="true"],.chip[aria-checked="true"]'}
+  /* #mkOptions (Makruk) n'est qu'une enveloppe de deux groupes de puces :
+     chacun a sa propre marque. */
+  {sel:".tc-chips,.chips:not(#mkOptions)",actif:'.chip[aria-pressed="true"],.chip[aria-checked="true"]'},
+  /* Numeros d'etape de "Je debute" (2026-11-15) : le disque laiton glisse
+     d'une etape a l'autre ; la rangee est reconstruite a chaque etape. */
+  {sel:".debut-pas",actif:'button[aria-current="step"]'}
 ];
 function placerGlisseur(c,actif){
   const b=c.querySelector(actif);
@@ -2479,6 +2484,35 @@ if(typeof renderCalendarWidget==="function"){
     const r=renderCalendarWidgetSansCoche.apply(this,arguments);
     const apres=document.querySelectorAll(".cal-day.today.done");
     if(apres.length>avant)apres.forEach(c=>rejouerClasse(c,"coche",600));
+    return r;
+  };
+}
+
+/* ==========================================================
+   JE DEBUTE : PASSAGE D'ETAPE (2026-11-15, demande d'Alexandre)
+   ========================================================== */
+/* Le titre, l'explication et la consigne arrivent du cote ou l'on va :
+   de la droite quand on avance, de la gauche quand on revient. Un simple
+   exercice suivant dans la meme etape ne fait glisser que la consigne.
+   Web Animations : debutCharger reecrit les textes, une classe serait
+   perdue au rendu suivant. */
+if(typeof debutCharger==="function"){
+  const debutChargerAvant=debutCharger;
+  let debutVu=null;
+  debutCharger=function(){
+    const prec=debutVu;
+    const r=debutChargerAvant.apply(this,arguments);
+    debutVu={e:debut.e,x:debut.x};
+    if(!prec||mouvementCalme()||mode!=="debut")return r;
+    if(prec.e===debutVu.e&&prec.x===debutVu.x)return r;
+    const sens=(debutVu.e>prec.e||(debutVu.e===prec.e&&debutVu.x>prec.x))?1:-1;
+    const ids=prec.e===debutVu.e?["debutStatus"]:["debutTitre","debutIntro","debutStatus","debutFin"];
+    ids.forEach((id,i)=>{
+      const el=document.getElementById(id);
+      if(!el||el.classList.contains("hide")||!el.animate)return;
+      el.animate([{opacity:0,transform:"translateX("+(24*sens)+"px)"},{opacity:1,transform:"none"}],
+        {duration:360,delay:i*50,easing:"cubic-bezier(.22,.7,.3,1)",fill:"backwards"});
+    });
     return r;
   };
 }

@@ -1581,6 +1581,12 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
 /* Onglets : la pastille laiton, qui disparait en fondu sur l'accueil (aucun
    onglet n'y est actif) et reapparait en place. */
 .tabs-marque{background-color:var(--brass);border-radius:999px;z-index:0;opacity:0}
+/* Etapes de "Je debute" (2026-11-15) : le disque laiton passe sous les
+   numeros d'une etape a l'autre. */
+.debut-pas{position:relative}
+.debut-pas.glisse::before{content:"";position:absolute;left:0;top:0;width:var(--gw);height:var(--gh);transform:translate(var(--gx),var(--gy));pointer-events:none;border-radius:50%;background-color:var(--brass);z-index:0;transition:transform var(--duree-moyenne) var(--courbe-ressort)}
+.debut-pas.glisse button{position:relative;z-index:1}
+.debut-pas.glisse button[aria-current="step"]{background-color:transparent;border-color:transparent}
 .tabs.glisse .tabs-marque{opacity:1}
 .tabs.glisse button{position:relative;z-index:1}
 .tabs.glisse button[aria-current="page"]{background-color:transparent}

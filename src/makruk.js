@@ -763,6 +763,9 @@ function ouvrir(depuis){
   porte=depuis||document.activeElement;
   if(!racine){construire();nouvelle();}
   racine.hidden=false;
+  /* Puces construites ici, apres le premier passage de initGlisseurs :
+     on les lui confie (marque qui glisse, fin de ui3.js). */
+  if(typeof initGlisseurs==="function")initGlisseurs();
   document.documentElement.classList.add("mk-ouvert");
   racine.querySelector("#mkFermer").focus();
 }

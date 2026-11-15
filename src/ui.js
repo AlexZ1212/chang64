@@ -1024,10 +1024,22 @@ const SON=(function(){
         const d=bruit.getChannelData(0);
         for(let i=0;i<d.length;i++)d[i]=Math.sin(Math.PI*i/d.length)*(0.7+0.6*(Math.random()-0.5));
       }
-      if(ctx.state==="suspended")ctx.resume();
+      /* 2026-11-15, plus de son sur iPhone (retour d'Alexandre) : Safari
+         met le contexte audio en etat "interrupted" (pas "suspended") apres
+         un appel, un passage dans une autre appli ou l'ecran verrouille.
+         On ne relancait que "suspended" : le contexte restait muet jusqu'au
+         rechargement de la page. On relance donc tout ce qui ne tourne pas,
+         et on recree un contexte ferme. */
+      if(ctx.state==="closed"){ctx=null;reveiller();return;}
+      if(ctx.state!=="running")ctx.resume().catch(()=>{});
     }catch(e){}
   }
-  for(const ev of ["pointerdown","keydown","touchend"])
+  /* Retour sur la page (autre onglet, autre appli) : le prochain appui
+     relance le son, mais on tente aussi tout de suite. */
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&ctx&&ctx.state!=="running")try{ctx.resume().catch(()=>{});}catch(e){}});
+  /* "click" en plus : sur iPhone, seuls touchend et click comptent comme un
+     geste qui autorise le son ; pointerdown ne suffit pas. */
+  for(const ev of ["pointerdown","keydown","touchend","click"])
     document.addEventListener(ev,reveiller,{capture:true,passive:true});
   function pret(){return sonOn&&ctx&&ctx.state==="running";}
   /* Piece de bois posee : une impulsion excite quelques resonances tres

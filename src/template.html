@@ -1560,7 +1560,11 @@ footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;lett
    l'application plein ecran du meme iPhone 12 non. Sur telephone, c'est
    donc la largeur seule qui decide : meme en-tete compact partout. */
 @media(max-width:599px){
-  header{margin-bottom:8px;padding-top:4px;padding-bottom:4px;row-gap:6px}
+  /* 2026-11-15, remarque d'Alexandre : le logo et le menu etaient trop bas,
+     colles aux onglets (22 px au-dessus, 6 px en dessous). Meme hauteur
+     totale, ecart reparti : environ 12 px de chaque cote. */
+  header{margin-bottom:8px;padding-top:4px;padding-bottom:4px;row-gap:12px}
+  body{padding-top:8px}
   .brand .glyph{width:26px;height:calc(26px * 54 / 64)}
   .brand h1{font-size:22px}
   .langswitch summary{padding-top:2px;padding-bottom:2px}

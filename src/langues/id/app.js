@@ -759,5 +759,14 @@ module.exports = {
 "A freeze was used, your streak continues.":"Satu pembeku dipakai, rangkaianmu berlanjut.",
 "Challenge completed!":"Tantangan selesai!",
 "You earn a streak freeze.":"Kamu mendapat pembeku rangkaian.",
-"All three challenges completed.":"Ketiga tantangan selesai."
+"All three challenges completed.":"Ketiga tantangan selesai.",
+/* Bilan de seance (2026-11-15, voir bilan.js) */
+"Session summary":"Ringkasan sesi",
+"Brilliant session!":"Sesi yang hebat!",
+"Well played!":"Permainan bagus!",
+"Every mistake teaches you something.":"Setiap kesalahan mengajarkan sesuatu.",
+"{n} puzzles in this session":"{n} teka-teki di sesi ini",
+"First try":"Langsung benar",
+"Best run":"Rangkaian terbaik",
+"Badges earned":"Lencana didapat"
 };

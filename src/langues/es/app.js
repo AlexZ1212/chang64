@@ -761,5 +761,14 @@ module.exports = {
 "A freeze was used, your streak continues.":"Se usó una congelación, tu racha continúa.",
 "Challenge completed!":"¡Reto superado!",
 "You earn a streak freeze.":"Ganas una congelación de racha.",
-"All three challenges completed.":"Los tres retos están superados."
+"All three challenges completed.":"Los tres retos están superados.",
+/* Bilan de seance (2026-11-15, voir bilan.js) */
+"Session summary":"Resumen de la sesión",
+"Brilliant session!":"¡Sesión brillante!",
+"Well played!":"¡Bien jugado!",
+"Every mistake teaches you something.":"Cada error te enseña algo.",
+"{n} puzzles in this session":"{n} ejercicios en esta sesión",
+"First try":"A la primera",
+"Best run":"Mejor racha",
+"Badges earned":"Insignias ganadas"
 };

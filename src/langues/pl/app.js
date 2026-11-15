@@ -759,5 +759,14 @@ module.exports = {
 "A freeze was used, your streak continues.":"Użyto zamrożenia, seria trwa dalej.",
 "Challenge completed!":"Wyzwanie zaliczone!",
 "You earn a streak freeze.":"Zdobywasz zamrożenie serii.",
-"All three challenges completed.":"Wszystkie trzy wyzwania zaliczone."
+"All three challenges completed.":"Wszystkie trzy wyzwania zaliczone.",
+/* Bilan de seance (2026-11-15, voir bilan.js) */
+"Session summary":"Podsumowanie sesji",
+"Brilliant session!":"Świetna sesja!",
+"Well played!":"Dobrze zagrane!",
+"Every mistake teaches you something.":"Każdy błąd czegoś uczy.",
+"{n} puzzles in this session":{"one":"{n} zadanie w tej sesji","few":"{n} zadania w tej sesji","many":"{n} zadań w tej sesji","other":"{n} zadania w tej sesji"},
+"First try":"Za pierwszym razem",
+"Best run":"Najlepsza seria",
+"Badges earned":"Zdobyte odznaki"
 };

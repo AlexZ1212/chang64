@@ -1935,6 +1935,34 @@ html[data-mouvement="calme"] .obj-plein,html[data-mouvement="calme"] .obj-coche,
 html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-compte{transition:none!important;animation:none!important}
 .defi.fait .defi-barre i{background-color:var(--jade)}
 .defi-note{margin:14px 6px 0;font-size:13px;line-height:1.5;color:var(--sage)}
+
+/* Bilan de seance (2026-11-15) : l'elephant saute, les tuiles montent une a
+   une. Meme habillage que la fenetre Bravo. */
+.bilan{position:fixed;inset:0;z-index:210;display:flex;justify-content:center;align-items:flex-start;padding:16px;box-sizing:border-box;background:rgba(10,14,13,.78);overflow-y:auto}
+.bilan[hidden]{display:none}
+.bilan-fenetre{position:relative;overflow:hidden;width:100%;max-width:360px;margin:auto 0;padding:22px 20px 20px;box-sizing:border-box;text-align:center;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2);color:var(--chalk)}
+.bilan-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-70px;height:160px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,#2F4A3E 0%,#26382F 100%)}
+.bilan-mascotte{position:relative;width:76px;height:64px;margin:0 auto 4px;color:var(--brass)}
+.bilan-mascotte svg{width:100%;height:100%}
+.bilan-joue .bilan-mascotte{animation:bilanSaut .9s var(--courbe-ressort) .1s both}
+@keyframes bilanSaut{0%{transform:translateY(20px) scale(.6);opacity:0}45%{transform:translateY(-14px) scale(1.05);opacity:1}70%{transform:translateY(0) scale(.97,1.03)}100%{transform:none}}
+.bilan-entete{position:relative;margin:0;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}
+.bilan h2{position:relative;margin:4px 0 2px;font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;line-height:1.2}
+.bilan-sous{position:relative;margin:0 0 14px;font-size:13.5px;color:var(--sage)}
+.bilan-tuiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.bilan-tuile{display:flex;flex-direction:column;gap:2px;padding:12px 8px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.bilan-tuile b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
+.bilan-tuile span{font-size:12px;color:var(--sage)}
+.bilan-joue .bilan-tuile{animation:bxMonte .45s var(--courbe-sortie) both;animation-delay:calc(.35s + var(--i) * .1s)}
+.bilan-lignes{list-style:none;margin:0 0 12px;padding:0;text-align:left}
+.bilan-lignes li{display:flex;justify-content:space-between;padding:8px 4px;border-top:1px solid var(--rule);font-size:14px}
+.bilan-lignes b{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--brass)}
+.bilan-badges-bloc[hidden]{display:none}
+.bilan-badges-bloc p{margin:4px 0 6px;font-size:12px;color:var(--sage)}
+.bilan-badges{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
+.bilan-badges .bx-medaille{width:42px;height:42px}
+.bilan .btn{position:relative;min-width:170px}
+html[data-mouvement="calme"] .bilan-mascotte,html[data-mouvement="calme"] .bilan-tuile{animation:none!important}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -3100,6 +3128,20 @@ html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-co
   <!-- Felicitations pour un badge gagne : voir bravoAnnoncer(), ui2.js. La
        medaille reprend le signe de l'elephant (ds/signe.svg) et les couleurs
        du site ; les petits carres rappellent les cases de l'echiquier. -->
+  <!-- Bilan de seance (2026-11-15, voir bilan.js). -->
+  <div class="bilan" id="bilan" role="dialog" aria-modal="true" aria-labelledby="bilanTitre" hidden>
+    <div class="bilan-fenetre">
+      <div class="bilan-mascotte" id="bilanMascotte" aria-hidden="true"></div>
+      <p class="bilan-entete" id="bilanEntete">Session summary</p>
+      <h2 id="bilanTitre"></h2>
+      <p class="bilan-sous" id="bilanSous"></p>
+      <div class="bilan-tuiles" id="bilanTuiles"></div>
+      <ul class="bilan-lignes" id="bilanLignes"></ul>
+      <div class="bilan-badges-bloc" id="bilanBadgesBloc" hidden><p id="bilanBadgesTitre">Badges earned</p><div class="bilan-badges" id="bilanBadges"></div></div>
+      <button type="button" class="btn primary" id="bilanOk">Continue</button>
+    </div>
+  </div>
+
   <div class="tiroir" id="menuTiroir" hidden>
     <div class="tiroir-voile" data-fermer></div>
     <aside class="tiroir-panneau" role="dialog" aria-modal="true" aria-labelledby="menuTitre">

@@ -24,7 +24,8 @@ function code() {
   return fs.readFileSync(path.join(__dirname, "badges.js"), "utf8").replace("__BADGES_LISTE__", JSON.stringify(liste)) + "\n" +
     fs.readFileSync(path.join(__dirname, "menu.js"), "utf8").replace("__NOUVEAUTES_NOMBRE__", String(NOUVEAUTES.length)) + "\n" +
     fs.readFileSync(path.join(__dirname, "objectif.js"), "utf8") + "\n" +
-    fs.readFileSync(path.join(__dirname, "defis.js"), "utf8");
+    fs.readFileSync(path.join(__dirname, "defis.js"), "utf8") + "\n" +
+    fs.readFileSync(path.join(__dirname, "bilan.js"), "utf8");
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir

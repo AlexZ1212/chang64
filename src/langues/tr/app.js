@@ -759,5 +759,14 @@ module.exports = {
 "A freeze was used, your streak continues.":"Bir dondurma kullanıldı, serin devam ediyor.",
 "Challenge completed!":"Görev tamamlandı!",
 "You earn a streak freeze.":"Bir seri dondurması kazandın.",
-"All three challenges completed.":"Üç görevin hepsi tamamlandı."
+"All three challenges completed.":"Üç görevin hepsi tamamlandı.",
+/* Bilan de seance (2026-11-15, voir bilan.js) */
+"Session summary":"Oturum özeti",
+"Brilliant session!":"Harika bir oturum!",
+"Well played!":"İyi oynadın!",
+"Every mistake teaches you something.":"Her hata sana bir şey öğretir.",
+"{n} puzzles in this session":"Bu oturumda {n} bulmaca",
+"First try":"İlk denemede",
+"Best run":"En iyi seri",
+"Badges earned":"Kazanılan rozetler"
 };

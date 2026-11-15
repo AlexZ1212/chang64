@@ -61,7 +61,8 @@ function bilanOuvrir(){
   poserHtml($("bilanBadges"),gagnes.slice(0,6).map(id=>bxMedaille(id,true)).join(""));
   $("bilanBadgesBloc").hidden=!gagnes.length;
   /* L'elephant du logo. */
-  const m=$("brandmark");poserHtml($("bilanMascotte"),m?m.innerHTML:"");
+  /* Le signe officiel (src/ds/signe.svg), avec son oeil : evenodd. */
+  poserHtml($("bilanMascotte"),'<svg viewBox="0 0 64 64" fill="currentColor"><path fill-rule="evenodd" d="__ELEPHANT_SIGNE__"/></svg>');
   r.hidden=false;
   r.classList.remove("bilan-joue");void r.offsetWidth;r.classList.add("bilan-joue");
   if(typeof SON!=="undefined"&&SON.medaille)SON.medaille(0.3,true);

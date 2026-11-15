@@ -11,7 +11,9 @@ const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko+
 const attendre = ms => new Promise(r => setTimeout(r, ms));
 
 (async () => {
-  const w = await ouvrir("fr");
+  /* fetch : les medailles et textes des badges (data/badges-*.json) sont
+     charges a la demande depuis le 2026-11-15. */
+  const w = await ouvrir("fr", { fetch: true });
   const ev = s => w.eval(s);
   const E = ev("debutEtapes()");
   T("sept etapes", E.length === 7, String(E.length));
@@ -102,12 +104,18 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   const bravo = $("bravo");
   T("badge du parcours gagne", ev("prog.badges.includes('debut_fini')"));
   T("date du badge notee", ev("!!prog.badgeDates.debut_fini"));
-  T("felicitations encore fermees juste apres", bravo.hidden === true);
   await attendre(1100);
   T("felicitations ouvertes", bravo.hidden === false);
   T("titre traduit", $("bravoTitre").textContent === "Félicitations", $("bravoTitre").textContent);
   T("bouton traduit", $("bravoOk").textContent === "Continuer", $("bravoOk").textContent);
-  T("nom du badge affiche", $("bravoNoms").textContent === "Parcours débutant terminé", $("bravoNoms").textContent);
+  /* Medailles illustrees (2026-11-15) : chaque etape du parcours a desormais
+     son badge, annonce dans la meme fenetre que "Diplome" (le badge du
+     parcours termine) ; la premiere medaille en grand, les autres en petit. */
+  const noms = [...$("bravoNoms").children].map(x => x.textContent);
+  T("nom du badge affiche", noms.includes("Diplôme"), noms.join(", "));
+  T("badges des etapes annonces aussi", noms.includes("Premiers pas") && noms.includes("Épingle"), noms.join(", "));
+  T("medaille gagnee affichee en grand", !!$("bravoSocle").querySelector(".bx-medaille:not(.bx-ombre)"));
+  T("autres medailles en petit", $("bravoAutres").querySelectorAll(".bx-medaille").length >= 1);
   T("focus sur le bouton", w.document.activeElement === $("bravoOk"));
   $("bravoOk").click();
   T("fermee par le bouton", bravo.hidden === true);

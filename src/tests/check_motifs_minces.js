@@ -58,16 +58,20 @@ const minces=Object.keys(counts).filter(th=>counts[th]<SEUIL);
     new RegExp("/"+tuiles.length+"\\b").test(sous),sous+" pour "+tuiles.length+" tuiles");
 
   console.log("\n--- Badges ---");
+  /* Medailles illustrees (2026-11-15) : les noms ne contiennent plus celui
+     du motif ("Punaise !" pour le clouage) ; on lit l'identifiant de chaque
+     medaille, theme_<motif>[_10|_100]. */
   const badgesVisibles=()=>{w.eval("renderBadges()");
-    return [...d.querySelectorAll("#badgeGrid .badge")].map(b=>b.textContent);};
-  const nomMotif=th=>w.eval("t("+JSON.stringify(th)+")");
+    return [...d.querySelectorAll("#badgeGrid .badge")].map(b=>b.dataset.bx||"");};
+  const cle=th=>"theme_"+th.toLowerCase().replace(/[^a-z]+/g,"_");
+  const deMotif=(id,th)=>id===cle(th)||id===cle(th)+"_10"||id===cle(th)+"_100";
   let vus=badgesVisibles();
   T("pas de badge a gagner pour un motif mince",
-    minces.every(th=>!vus.some(x=>x.includes(nomMotif(th)))),vus.join(" | "));
-  T("les badges des motifs proposes restent",vus.some(x=>x.includes(nomMotif("Knight fork"))));
+    minces.every(th=>!vus.some(x=>deMotif(x,th))),vus.filter(x=>x.startsWith("theme_")).join(" | "));
+  T("les badges des motifs proposes restent",vus.some(x=>deMotif(x,"Knight fork")));
   w.eval("prog.badges.push('theme_winning_capture')");
   vus=badgesVisibles();
-  T("un badge deja gagne reste affiche",vus.some(x=>x.includes(nomMotif("Winning capture"))));
+  T("un badge deja gagne reste affiche",vus.some(x=>x==="theme_winning_capture"));
 
   console.log("\n--- Page Apprendre ---");
   for(const f of ["learn/spotting-a-hanging-piece.html","learn/the-quiet-move.html"]){

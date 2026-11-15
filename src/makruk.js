@@ -647,13 +647,21 @@ function toucher(i){
   sel=(p&&(p>0)===(P.trait>0)&&sel!==i)?i:-1;
   dessiner();
 }
+/* Evenements pour les badges du site (2026-11-15, voir badges.js) : premier
+   coup du joueur, bia promu, fin de partie (vainqueur, raison, niveau). */
+function signaler(detail){try{window.dispatchEvent(new CustomEvent("chang64:makruk",{detail:detail}));}catch(e){}}
 function jouerCoup(m){
-  const prise=!!P.b[(m>>6)&63];
+  const prise=!!P.b[(m>>6)&63],avant=P.b[m&63],joueur=mode==="deux"||Math.sign(avant)===camp;
   P.jouer(m);dernier=m;sel=-1;
   legaux=P.coups();fini=P.fin();
   dessiner();
   glisserCoup(m);
   sonCoup(prise);
+  if(joueur){
+    signaler({type:"coup"});
+    if(Math.abs(avant)===1&&Math.abs(P.b[(m>>6)&63])===7)signaler({type:"promotion"});
+  }
+  if(fini)signaler({type:"fin",gagnant:fini.gagnant,raison:fini.raison,mode:mode,niveau:niveau,camp:camp});
   if(!fini&&mode==="ordi"&&P.trait!==camp)lancerOrdi();
 }
 /* Sons (2026-11-14) : ceux du site (objet SON de ui.js, qui respecte le

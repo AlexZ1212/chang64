@@ -10,3 +10,4 @@ src/site/
 src/fournee*.json
 src/fournee-*.json
 src/langues/manquants.json
+.claude/

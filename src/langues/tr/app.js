@@ -865,5 +865,14 @@ module.exports = {
 "Animations follow your system setting and can be turned off.":"Animasyonlar cihazının ayarına uyar ve kapatılabilir.",
 "Buttons are large enough to be tapped easily.":"Düğmeler kolayca dokunulacak kadar büyük.",
 "Every image that carries meaning has a text alternative.":"Anlam taşıyan her görselin metin karşılığı vardır.",
-"Something gets in your way? Write to us at {email}.":"Siteyi kullanmanı engelleyen bir şey mi var? {email} adresine yaz."
+"Something gets in your way? Write to us at {email}.":"Siteyi kullanmanı engelleyen bir şey mi var? {email} adresine yaz.",
+/* Statistiques : graphes et classement (2026-11-16) */
+"How does the rating work?":"Puan nasıl işler?",
+"Your rating estimates your level at puzzles. You start at 800.":"Puanın bulmacalardaki seviyeni tahmin eder. 800'den başlarsın.",
+"Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.":"Her bulmacanın zorluğuna göre kendi puanı vardır. İlk denemede çözmek sana puan kazandırır; seviyenden zorsa daha çok. Bir hata, ipucu ya da çözüm, bulmaca başına bir kez puan kaybettirir, sonrakine geçsen bile.",
+"Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.":"Yalnızca Bulmacalar bölümündeki bulmacalar sayılır. Günün bulmacası ve Sprint onu değiştirmez.",
+"It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's.":"Bu, chang64'e özgü bir ölçüdür: bir FIDE puanıyla ya da başka bir sitenin puanıyla doğrudan karşılaştırılamaz.",
+"Puzzles solved, last 30 days":"Çözülen bulmacalar, son 30 gün",
+"Best day: {n}":"En iyi gün: {n}",
+"{n} in 30 days":"30 günde {n}"
 };

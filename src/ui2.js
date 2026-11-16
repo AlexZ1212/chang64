@@ -664,8 +664,8 @@ function drawGraph(plies){
    exactement le ratio du viewBox -- voir .graph.ratinggraph svg en CSS,
    qui fixe ce ratio via aspect-ratio plutot qu'une hauteur figee, pour que
    "meet" n'ait justement jamais besoin d'ajouter de bandes vides. */
-function drawRatingGraph(){
-  const el=$("ratingGraph"); if(!el)return;
+function drawRatingGraph(cible){
+  const el=cible&&cible.nodeType?cible:$("ratingGraph"); if(!el)return;
   ensureProgFields();
   const hist=prog.ratingHistory;
   const w=300,h=90,padL=30,padR=6,padT=8,padB=16;
@@ -1975,6 +1975,18 @@ function renderFullCalendar(){
   renderCalendarGrid("calFull",calFullOffset,{nav:true,onNav:o=>{calFullOffset=o;}});
   renderCalendarLegend();
 }
+/* Classement : un exercice rate compte des la premiere erreur, le premier
+   indice ou la solution demandee (2026-11-16). Avant, il ne comptait qu'a la
+   fin de l'exercice : passer a l'exercice suivant apres une erreur evitait
+   la perte de points, et on pouvait "sauter" les exercices difficiles sans
+   que le classement le voie. Une fois par exercice ; ni l'exercice du jour
+   ni le Sprint ne comptent (meme regle qu'onPuzzleResult). */
+function eloEchec(){
+  if(rush||!puzzle||puzzle.daily||puzzle.eloNote||puzzleDone)return;
+  puzzle.eloNote=true;
+  updateRating(puzzle.level,false);
+  saveProg();if(typeof renderExtraStats==="function")renderExtraStats();
+}
 function updateRating(puzzleLevel,won){
 
   ensureProgFields();
@@ -2516,7 +2528,9 @@ function onPuzzleResult(won){
      jour, jour apres jour, faisait quand meme progresser le classement
      sans jamais toucher a l'echelle de niveaux -- incoherent avec
      l'affichage "Niveau {n}" juste a cote, qui ne bougeait pas lui. */
-  if(!puzzle.daily)updateRating(puzzle.level,won&&puzzleTries===0);
+  /* Une seule note par exercice : si une erreur, un indice ou la solution
+     l'a deja comptee comme perdue (eloEchec), la fin n'y touche plus. */
+  if(!puzzle.daily&&!puzzle.eloNote){puzzle.eloNote=true;updateRating(puzzle.level,won&&puzzleTries===0);}
   noterPremierEssai(won&&puzzleTries===0);
   saveProg();renderExtraStats();
   return false;

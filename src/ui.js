@@ -512,7 +512,7 @@ let prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[],echel
    charge (loadPuzzle) pour ne jamais laisser un delta perime s'afficher
    sur l'exercice suivant si jamais l'affichage etait lu avant qu'un nouveau
    delta ne soit calcule. */
-let lastRatingDelta=null;
+let lastRatingDelta=null,eloIdCourant=null;
 
 /* ---------- storage ----------
    window.storage n'existe pas dans un navigateur : cette API vient de
@@ -1799,6 +1799,9 @@ function loadPuzzle(){
      lastRatingDelta avant que le nouveau ne soit calcule (ex: un exercice
      abandonne sans etre juge, rechargement de page). */
   lastRatingDelta=null;
+  /* Note du classement remise a zero quand l'exercice CHANGE seulement :
+     "Recommencer" recharge le meme et ne doit pas effacer une erreur. */
+  if(puzzle&&puzzle.id!==eloIdCourant){puzzle.eloNote=false;eloIdCourant=puzzle.id;}
   /* Le bouton d'aide repart sur "Indice" a chaque exercice. */
   hintShown=false;
   if(typeof syncHintBtn==="function")syncHintBtn();
@@ -1946,7 +1949,7 @@ function tryPuzzleMove(m){
     fautesExo++;
     SON.erreur();
     puzzleTries++;majBoutonSuivant();
-    if(typeof noterPremierEssai==="function")noterPremierEssai(false);
+    if(typeof noterPremierEssai==="function")noterPremierEssai(false);if(typeof eloEchec==="function")eloEchec();
     marks={};marks[m.to]="bad";render();
     boardEl.classList.add("shake");
     setTimeout(()=>boardEl.classList.remove("shake"),340);
@@ -2425,7 +2428,7 @@ function hintPuzzle(){
   st.textContent=t("The piece to move is highlighted.");
   if(puzzleTries===0)puzzleTries=1;
   majBoutonSuivant();
-  if(typeof noterPremierEssai==="function")noterPremierEssai(false);
+  if(typeof noterPremierEssai==="function")noterPremierEssai(false);if(typeof eloEchec==="function")eloEchec();
   hintShown=true;if(!indiceIci)indicesExo++;indiceIci=true;
   syncHintBtn();
 }
@@ -2435,7 +2438,7 @@ function solvePuzzle(){
   const san=game.san(mv);
   marks={};marks[mv.from]="hint";marks[mv.to]="hint";render();
   puzzleTries=Math.max(puzzleTries,1);majBoutonSuivant();
-  if(typeof noterPremierEssai==="function")noterPremierEssai(false);
+  if(typeof noterPremierEssai==="function")noterPremierEssai(false);if(typeof eloEchec==="function")eloEchec();
   const st=$("exStatus");st.className="status";
   st.textContent=t("The answer is {san}. Play it to continue.",{san:san});
 }

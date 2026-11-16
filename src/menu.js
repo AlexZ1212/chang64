@@ -94,8 +94,53 @@ function menuStats(){
     ["Coordinates record",prog.coordBest||0],
     ["Endgames won",finales+"/5"]
   ];
+  /* Graphes (2026-11-16, demande d'Alexandre) : le classement dans le temps
+     (meme dessin que dans Exercices) avec son explication, et les exercices
+     reussis par jour sur 30 jours. */
   poserHtml(menuEl("menuStats"),'<div class="menu-tuiles">'+tuiles.map(([l,v])=>
-    '<div class="menu-tuile"><b>'+echapper(String(v))+'</b><span>'+echapper(t(l))+"</span></div>").join("")+"</div>");
+    '<div class="menu-tuile"><b>'+echapper(String(v))+'</b><span>'+echapper(t(l))+"</span></div>").join("")+"</div>"+
+    '<p class="tiroir-section">'+echapper(t("Rating over time"))+"</p>"+
+    '<div class="graph ratinggraph menu-graphe" id="menuRatingGraph"></div>'+
+    '<details class="menu-explication"><summary>'+echapper(t("How does the rating work?"))+"</summary>"+
+    ["Your rating estimates your level at puzzles. You start at 800.",
+     "Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.",
+     "Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.",
+     "It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's."].map(x=>"<p>"+echapper(t(x))+"</p>").join("")+"</details>"+
+    '<p class="tiroir-section">'+echapper(t("Puzzles solved, last 30 days"))+"</p>"+
+    '<div class="graph menu-graphe" id="menuJoursGraph"></div>');
+  drawRatingGraph(menuEl("menuRatingGraph"));
+  menuJoursGraphe(menuEl("menuJoursGraph"));
+}
+/* Exercices reussis par jour, 30 derniers jours (prog.solveLog : un
+   horodatage par reussite, 500 au plus). Barres en laiton, aujourd'hui en
+   plein ; trois dates sous l'axe ; le meilleur jour indique en haut. */
+function menuJoursGraphe(el){
+  if(!el)return;
+  const N=30,w=300,h=90,padL=6,padR=6,padT=14,padB=16,plotW=w-padL-padR,plotH=h-padT-padB;
+  const jour=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x.getTime();};
+  const auj=jour(Date.now()),compte=new Array(N).fill(0);
+  for(const ts of prog.solveLog||[]){const i=N-1-Math.round((auj-jour(ts))/864e5);if(i>=0&&i<N)compte[i]++;}
+  const total=compte.reduce((a,b)=>a+b,0),max=Math.max(1,...compte);
+  const fmt=i=>{const d=new Date(auj-(N-1-i)*864e5),mo=String(d.getMonth()+1).padStart(2,"0"),da=String(d.getDate()).padStart(2,"0");
+    return LANG==="en"?mo+"/"+da:["de","ru","tr","pl"].includes(LANG)?da+"."+mo:da+"/"+mo;};
+  let s="";
+  if(!total){
+    s='<line x1="10" y1="'+(h/2)+'" x2="'+(w-10)+'" y2="'+(h/2)+'" stroke="rgba(239,233,217,.18)" stroke-width="1" stroke-dasharray="4 4"/>'+
+      '<text x="'+(w/2)+'" y="'+(h/2-10)+'" text-anchor="middle" fill="var(--sage)" font-size="10">'+echapper(t("Solve a few puzzles to see your progress here."))+"</text>";
+  }else{
+    const bw=plotW/N;
+    compte.forEach((c,i)=>{
+      if(!c)return;
+      const bh=Math.max(2,c/max*plotH),x=padL+i*bw+bw*.15,y=padT+plotH-bh;
+      s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(bw*.7).toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="1.5" style="fill:var(--brass)" opacity="'+(i===N-1?1:.6)+'"><title>'+fmt(i)+" : "+c+"</title></rect>";
+    });
+    s+='<line x1="'+padL+'" y1="'+(padT+plotH)+'" x2="'+(w-padR)+'" y2="'+(padT+plotH)+'" stroke="rgba(239,233,217,.18)" stroke-width="1"/>';
+    for(const [i,a] of [[0,"start"],[Math.floor(N/2),"middle"],[N-1,"end"]])
+      s+='<text x="'+(a==="start"?padL:a==="end"?w-padR:padL+(i+.5)*plotW/N)+'" y="'+(h-3)+'" text-anchor="'+a+'" fill="var(--sage)" font-size="8.5">'+fmt(i)+"</text>";
+    s+='<text x="'+(w-padR)+'" y="9" text-anchor="end" fill="var(--sage)" font-size="8.5">'+echapper(t("Best day: {n}",{n:max}))+"</text>"+
+      '<text x="'+padL+'" y="9" text-anchor="start" fill="var(--chalk)" font-size="8.5">'+echapper(t("{n} in 30 days",{n:total}))+"</text>";
+  }
+  poserHtml(el,'<svg viewBox="0 0 '+w+" "+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+echapper(t("Puzzles solved, last 30 days")+" : "+total)+'">'+s+"</svg>");
 }
 function menuBadges(){
   /* Meme grille que la collection de Resoudre (renderBadges), dessinee ici. */

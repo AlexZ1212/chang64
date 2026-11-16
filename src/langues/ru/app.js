@@ -867,5 +867,14 @@ module.exports = {
 "Animations follow your system setting and can be turned off.":"Анимации следуют настройке твоего устройства, их можно отключить.",
 "Buttons are large enough to be tapped easily.":"Кнопки достаточно большие, чтобы легко на них нажимать.",
 "Every image that carries meaning has a text alternative.":"У каждого значимого изображения есть текстовая альтернатива.",
-"Something gets in your way? Write to us at {email}.":"Что-то мешает пользоваться сайтом? Напиши нам: {email}."
+"Something gets in your way? Write to us at {email}.":"Что-то мешает пользоваться сайтом? Напиши нам: {email}.",
+/* Statistiques : graphes et classement (2026-11-16) */
+"How does the rating work?":"Как работает рейтинг?",
+"Your rating estimates your level at puzzles. You start at 800.":"Твой рейтинг оценивает твой уровень в задачах. Ты начинаешь с 800.",
+"Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.":"У каждой задачи свой рейтинг, по её сложности. Решив её с первой попытки, ты получаешь очки, тем больше, чем она сложнее твоего уровня. Ошибка, подсказка или решение отнимают очки — один раз за задачу, даже если ты переходишь к следующей.",
+"Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.":"Учитываются только задачи из раздела «Задачи». Задача дня и спринт его не меняют.",
+"It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's.":"Это мера chang64: её нельзя напрямую сравнивать с рейтингом ФИДЕ или другого сайта.",
+"Puzzles solved, last 30 days":"Решённые задачи, последние 30 дней",
+"Best day: {n}":"Лучший день: {n}",
+"{n} in 30 days":"{n} за 30 дней"
 };

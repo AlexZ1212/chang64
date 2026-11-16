@@ -867,5 +867,14 @@ module.exports = {
 "Animations follow your system setting and can be turned off.":"Animationen folgen der Einstellung deines Geräts und lassen sich abschalten.",
 "Buttons are large enough to be tapped easily.":"Die Schaltflächen sind groß genug, um sie leicht zu treffen.",
 "Every image that carries meaning has a text alternative.":"Jedes Bild mit Bedeutung hat eine Textalternative.",
-"Something gets in your way? Write to us at {email}.":"Hindert dich etwas an der Nutzung? Schreib uns an {email}."
+"Something gets in your way? Write to us at {email}.":"Hindert dich etwas an der Nutzung? Schreib uns an {email}.",
+/* Statistiques : graphes et classement (2026-11-16) */
+"How does the rating work?":"Wie funktioniert die Wertung?",
+"Your rating estimates your level at puzzles. You start at 800.":"Deine Wertung schätzt dein Niveau bei Aufgaben. Du startest bei 800.",
+"Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.":"Jede Aufgabe hat eine eigene Wertung, je nach Schwierigkeit. Löst du sie auf Anhieb, bekommst du Punkte, mehr, wenn sie schwerer ist als dein Niveau. Ein Fehler, ein Tipp oder die Lösung kosten Punkte, einmal pro Aufgabe, auch wenn du weitergehst.",
+"Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.":"Nur die Aufgaben im Bereich Aufgaben zählen. Die Aufgabe des Tages und der Sprint ändern sie nicht.",
+"It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's.":"Es ist eine Messung von chang64: Sie lässt sich nicht direkt mit einer FIDE-Wertung oder der einer anderen Seite vergleichen.",
+"Puzzles solved, last 30 days":"Gelöste Aufgaben, letzte 30 Tage",
+"Best day: {n}":"Bester Tag: {n}",
+"{n} in 30 days":"{n} in 30 Tagen"
 };

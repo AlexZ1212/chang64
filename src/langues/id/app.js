@@ -865,5 +865,14 @@ module.exports = {
 "Animations follow your system setting and can be turned off.":"Animasi mengikuti pengaturan perangkatmu dan bisa dimatikan.",
 "Buttons are large enough to be tapped easily.":"Tombol cukup besar untuk disentuh dengan mudah.",
 "Every image that carries meaning has a text alternative.":"Setiap gambar yang bermakna punya alternatif teks.",
-"Something gets in your way? Write to us at {email}.":"Ada yang menghalangimu memakai situs ini? Tulis ke {email}."
+"Something gets in your way? Write to us at {email}.":"Ada yang menghalangimu memakai situs ini? Tulis ke {email}.",
+/* Statistiques : graphes et classement (2026-11-16) */
+"How does the rating work?":"Bagaimana rating bekerja?",
+"Your rating estimates your level at puzzles. You start at 800.":"Ratingmu memperkirakan levelmu dalam teka-teki. Kamu mulai dari 800.",
+"Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.":"Setiap teka-teki punya rating sendiri, sesuai tingkat kesulitannya. Memecahkannya pada percobaan pertama memberimu poin, lebih banyak jika lebih sulit dari levelmu. Kesalahan, petunjuk, atau solusi mengurangi poin, sekali per teka-teki, meski kamu lanjut ke berikutnya.",
+"Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.":"Hanya teka-teki di bagian Teka-teki yang dihitung. Teka-teki harian dan Sprint tidak mengubahnya.",
+"It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's.":"Ini ukuran khas chang64: tidak bisa langsung dibandingkan dengan rating FIDE atau situs lain.",
+"Puzzles solved, last 30 days":"Teka-teki terpecahkan, 30 hari terakhir",
+"Best day: {n}":"Hari terbaik: {n}",
+"{n} in 30 days":"{n} dalam 30 hari"
 };

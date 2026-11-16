@@ -58,7 +58,7 @@ function choisirTheme(id){
    Toucher un theme verrouille ouvre la fiche du badge. */
 function rendreThemes(){
   const box=$("themeChoix");if(!box)return;
-  const lab=$("prefsThemeLabel");if(lab)lab.textContent=t("Site theme");
+  const lab=$("prefsThemeLabel");if(lab)lab.textContent=t("Site themes");
   if(typeof bxCharger==="function"&&(!bxTextes||!bxMedailles))bxCharger().then(ok=>{if(ok)rendreThemes();});
   let h="";
   for(const th of THEMES){

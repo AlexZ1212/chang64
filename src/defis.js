@@ -128,10 +128,14 @@ function defiMaj(){
   if(!$("menuDefisVue")||$("menuDefisVue").hidden)return;
   const liste=defiListe(s.lundi),reste=defiResteJours();
   poserHtml($("menuDefisVue"),liste.map((d,i)=>{
-    const pc=Math.round(100*s.p[i]/d.cible);
+    /* "D'affilee sans erreur" (2026-11-16, remarque d'Alexandre) : la jauge
+       montre la suite EN COURS, qui retombe a zero apres une erreur. Le
+       defi reste gagne des que cette suite atteint la cible. */
+    const v=s.ok[i]?d.cible:d.type==="sansfaute"?Math.min(bxEtat().c.sansErreur||0,d.cible):s.p[i];
+    const pc=Math.round(100*v/d.cible);
     return '<div class="defi'+(s.ok[i]?" fait":"")+'"><div class="defi-tete"><span class="defi-texte">'+echapper(defiTexte(d))+"</span>"+
-      '<span class="defi-compte">'+(s.ok[i]?"✓":s.p[i]+"/"+d.cible)+"</span></div>"+
-      '<div class="defi-barre" role="progressbar" aria-valuemin="0" aria-valuemax="'+d.cible+'" aria-valuenow="'+s.p[i]+'"><i style="width:0" data-w="'+pc+'%"></i></div></div>';
+      '<span class="defi-compte">'+(s.ok[i]?"✓":v+"/"+d.cible)+"</span></div>"+
+      '<div class="defi-barre" role="progressbar" aria-valuemin="0" aria-valuemax="'+d.cible+'" aria-valuenow="'+v+'"><i style="width:0" data-w="'+pc+'%"></i></div></div>';
   }).join("")+'<p class="defi-note">'+echapper(reste===1?t("New challenges tomorrow."):t("New challenges in {n} days.",{n:reste}))+" "+
     echapper(t("Complete all three to earn a streak freeze."))+"</p>");
   /* Les barres partent de zero et se remplissent l'une apres l'autre a

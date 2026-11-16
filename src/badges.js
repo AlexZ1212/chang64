@@ -294,6 +294,18 @@ function bxOuvertures(san,hist,moi,res,mat){
   m("ouv_anglaise",joue(0,"c4"));
   m("ouv_gambit_roi",debut("e4","e5")&&joue(2,"f4"));
   m("ouv_londres",joue(0,"d4")&&[2,4,6].some(i=>joue(i,"Bf4")));
+  /* Par le nom du livre d'ouvertures aussi (2026-11-16, remarque
+     d'Alexandre : pas de badge apres une espagnole) : une ouverture atteinte
+     par un autre ordre de coups compte, du moment que le joueur est le camp
+     qui la choisit (les Blancs pour l'espagnole, les Noirs pour la
+     sicilienne...). */
+  if(bxPrecharge===0&&typeof detectOpening==="function"){
+    const o=detectOpening(san),nom=o&&o.name||"";
+    const PAR_NOM=[["ouv_italienne",/^Italian Game/,W],["ouv_espagnole",/^Ruy Lopez/,W],["ouv_sicilienne",/^Sicilian Defense/,B],
+      ["ouv_francaise",/^French Defense/,B],["ouv_carokann",/^Caro-Kann/,B],["ouv_gambit_dame",/^Queen's Gambit/,W],
+      ["ouv_scandinave",/^Scandinavian Defense/,B],["ouv_anglaise",/^English Opening/,W],["ouv_gambit_roi",/^King's Gambit/,W]];
+    for(const [id,re,camp] of PAR_NOM)m(id,moi===camp&&re.test(nom));
+  }
   /* Pieges et attaques. */
   m("ouv_fegatello",debut("e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5","d5","exd5","Nxd5")&&joue(10,"Nxf7"));
   m("ouv_traxler",debut("e4","e5","Nf3","Nc6","Bc4","Nf6","Ng5")&&joue(7,"Bc5"));

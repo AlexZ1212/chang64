@@ -812,7 +812,7 @@ module.exports = {
 "Discover this opening":"Узнать о дебюте",
 "See the trap":"Посмотреть ловушку",
 /* Themes gagnes par les badges (2026-11-15) */
-"Site theme":"Тема оформления",
+"Site themes":"Темы оформления",
 "Matching the theme":"Под тему",
 "Theme {name}":"Тема «{name}»",
 "Theme unlocked: {name}":"Открыта тема: {name}",

@@ -812,7 +812,7 @@ module.exports = {
 "Discover this opening":"Zur Eröffnung",
 "See the trap":"Zur Falle",
 /* Themes gagnes par les badges (2026-11-15) */
-"Site theme":"Farbschema",
+"Site themes":"Farbschemas",
 "Matching the theme":"Passend zum Farbschema",
 "Theme {name}":"Farbschema {name}",
 "Theme unlocked: {name}":"Farbschema freigeschaltet: {name}",

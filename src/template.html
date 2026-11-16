@@ -1316,9 +1316,15 @@ header>*{min-width:0}
 #promoModal .box,#amiColorModal .box{max-width:min(320px,100%);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)}
 .modal .box{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);box-shadow:var(--e2);padding:20px;text-align:center;max-width:320px;width:100%}
 .modal h3{font-family:'Source Serif 4',Georgia,serif;font-size:18px;margin-bottom:12px}
+/* 2026-11-16 (remarque d'Alexandre : la fenetre se deformait dans Safari) :
+   sur telephone, quatre boutons de 60 px plus les ecarts depassaient la
+   boite ; Safari les ecrasait en largeur sans toucher a leur hauteur. Les
+   boutons se partagent desormais la largeur en restant carres (60 px au
+   plus), et la piece suit leur taille. */
 .promos{display:flex;gap:8px;justify-content:center}
-.promos button svg{width:44px;height:44px;display:block}
-.promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:8px;width:60px;height:60px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.promos button svg{width:74%;height:74%;display:block}
+.promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:8px;flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1/1;height:auto;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+@media(max-width:420px){#promoModal .box{padding:16px 12px}}
 .promos button:hover{background:#fff2d4}
 .promos button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 
@@ -2073,7 +2079,7 @@ html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv
 html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="calme"] .bilan-joue .duel-ligne{animation:none}
 
 /* Lien vers la page d'une ouverture ou d'un piege (badges Ouvertures, 15/11). */
-.bx-lien{display:inline-block;position:relative;margin:-4px 0 12px;font-size:13.5px;font-weight:600;color:var(--brass);text-decoration:underline;text-underline-offset:3px}
+.bx-lien{display:table;position:relative;margin:16px auto 0;font-size:13.5px;font-weight:600;color:var(--brass);text-decoration:underline;text-underline-offset:3px}
 .bx-lien.hide{display:none}
 
 /* Themes (2026-11-15, themes.js) : apercus des Preferences et annonce Bravo.
@@ -3217,7 +3223,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <p class="sub" id="prefsSub">Kept on this device. Nothing is sent anywhere.</p>
 
       <div class="field">
-        <div class="eyebrow" id="prefsThemeLabel">Site theme</div>
+        <div class="eyebrow" id="prefsThemeLabel">Site themes</div>
         <div class="themes-grille" id="themeChoix" role="radiogroup" aria-labelledby="prefsThemeLabel"></div>
       </div>
       <div class="field">
@@ -3353,10 +3359,13 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <h2 id="bravoTitre">Congratulations</h2>
       <div class="bravo-noms" id="bravoNoms"></div>
       <p class="bx-texte hide" id="bravoTexte"></p>
-      <a class="bx-lien hide" id="bravoLien"></a>
       <div class="bx-theme hide" id="bravoTheme"><span class="bx-theme-pastille" aria-hidden="true"></span><span id="bravoThemeTexte"></span><button type="button" class="btn" id="bravoThemeEssai">Try it</button></div>
       <div class="bx-autres" id="bravoAutres" aria-hidden="true"></div>
       <button type="button" class="btn primary" id="bravoOk">Continue</button>
+      <!-- Lien vers la page d'une ouverture ou d'un piege : sous le bouton
+           principal, comme le lien secondaire de la fenetre de fin de partie
+           (2026-11-16, il collait au bouton quand il etait au-dessus). -->
+      <a class="bx-lien hide" id="bravoLien"></a>
     </div>
   </div>
 

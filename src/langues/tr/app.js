@@ -810,7 +810,7 @@ module.exports = {
 "Discover this opening":"Açılışı keşfet",
 "See the trap":"Tuzağı gör",
 /* Themes gagnes par les badges (2026-11-15) */
-"Site theme":"Tema",
+"Site themes":"Temalar",
 "Matching the theme":"Temaya uygun",
 "Theme {name}":"{name} teması",
 "Theme unlocked: {name}":"Tema açıldı: {name}",

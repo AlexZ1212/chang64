@@ -1763,6 +1763,9 @@ function dailyPuzzle(){
   puzzle=PUZZLE_CACHE[id];
   puzzle.daily=true;puzzle.dailyCatchupKey=null; /* le vrai puzzle du jour, pas un rattrapage */
   loadPuzzle();
+  /* Deja resolu aujourd'hui (2026-11-16, remarque d'Alexandre) : le partage
+     et le defi restent proposes en revenant sur l'exercice. */
+  if(prog.dailyLog&&prog.dailyLog[todayKey()]){const dcb=$("dailyChallengeBlock");if(dcb)dcb.classList.remove("hide");}
 }
 /* Onglets qui affichent un exercice sur l'echiquier partage : Exercices, et
    Defis pour le Sprint. */
@@ -2259,6 +2262,9 @@ function finishPuzzle(won,msg){
       } else {
         prog.dailyLog[todayKey()]=true;
         const dcb=$("dailyChallengeBlock");if(dcb)dcb.classList.remove("hide");
+        /* Resultat du premier essai du jour garde (2026-11-16) : en revenant
+           sur l'exercice deja resolu, on peut encore le partager. */
+        if(!prog.dailyRes||prog.dailyRes.k!==todayKey())prog.dailyRes={k:todayKey(),f:fautesExo,i:indicesExo};
         /* Serie de jours : migree ici depuis onPuzzleResult() (ui2.js) le
            2026-09-03, ou elle comptait N'IMPORTE QUEL exercice reussi. Avec
            "Puzzle du jour" devenu sa propre categorie du menu (a cote de

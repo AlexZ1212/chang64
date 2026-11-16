@@ -665,7 +665,7 @@ module.exports = {
 "Discover this opening":"Découvrir l'ouverture",
 "See the trap":"Voir le piège",
 /* Themes gagnes par les badges (2026-11-15) */
-"Site theme":"Thème",
+"Site themes":"Thèmes",
 "Matching the theme":"Assorti au thème",
 "Theme {name}":"Thème {name}",
 "Theme unlocked: {name}":"Thème débloqué : {name}",

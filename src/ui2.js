@@ -727,7 +727,22 @@ function drawRatingGraph(){
     return LANG==="en"?mo+"/"+da:["de","ru","tr","pl"].includes(LANG)?da+"."+mo:da+"/"+mo;
   };
   const dateSvg='<text x="'+padL+'" y="'+(h-3)+'" text-anchor="start" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[0].t)+'</text>'+
-    '<text x="'+(w-padR)+'" y="'+(h-3)+'" text-anchor="end" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[hist.length-1].t)+'</text>';
+    '<text x="'+(w-padR)+'" y="'+(h-3)+'" text-anchor="end" fill="var(--sage)" font-size="8.5">'+fmtDate(hist[hist.length-1].t)+'</text>'+
+    /* Dates intermediaires (2026-11-16, demande d'Alexandre) : celles des
+       points places au tiers et aux deux tiers de la courbe, chacune sous son
+       propre point, donc exactes meme si le temps n'est pas regulier. Une
+       date identique a sa voisine n'est pas repetee. */
+    (()=>{
+      const n=hist.length;if(n<4)return "";
+      const idx=[0,Math.round((n-1)/3),Math.round(2*(n-1)/3),n-1],txt=idx.map(i=>fmtDate(hist[i].t));
+      let s="";
+      for(const k of [1,2]){
+        if(txt[k]===txt[k-1]||txt[k]===txt[k+1])continue;
+        const x=padL+(idx[k]/(n-1))*plotW;
+        s+='<text x="'+x.toFixed(1)+'" y="'+(h-3)+'" text-anchor="middle" fill="var(--sage)" font-size="8.5">'+txt[k]+'</text>';
+      }
+      return s;
+    })();
   let d="";
   hist.forEach((p,i)=>{
     const x=padL+(hist.length>1?(i/(hist.length-1))*plotW:plotW/2);
@@ -1454,9 +1469,12 @@ if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
    jour). */
 function texteResultatDuJour(){
   const date=new Date().toLocaleDateString(LANG_INTL,{weekday:"long",day:"numeric",month:"long"});
-  const aides=fautesExo+indicesExo,etoiles=aides===0?3:aides===1?2:1;
+  /* Le premier essai du jour fait foi (prog.dailyRes, pose par finishPuzzle) :
+     en revenant sur l'exercice, le partage montre ce resultat-la. */
+  const r=prog.dailyRes&&prog.dailyRes.k===todayKey()?prog.dailyRes:{f:fautesExo,i:indicesExo};
+  const aides=r.f+r.i,etoiles=aides===0?3:aides===1?2:1;
   const detail=aides===0?t("solved without help")
-    :[fautesExo?"❌ "+fautesExo:"",indicesExo?"\u{1F4A1} "+indicesExo:""].filter(Boolean).join("  ");
+    :[r.f?"❌ "+r.f:"",r.i?"\u{1F4A1} "+r.i:""].filter(Boolean).join("  ");
   const jour=new Date().getDay()||7;   /* lundi 1 ... dimanche 7 */
   return "\u{1F418} "+t("chang64 · Puzzle of the day · {date}",{date:date})+"\n"+
     "⭐".repeat(etoiles)+"☆".repeat(3-etoiles)+"  "+detail+"\n"+

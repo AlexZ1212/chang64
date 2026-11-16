@@ -379,7 +379,7 @@ module.exports = {
 "You win":"Tu gagnes","You lose":"Tu perds","Draw":"Partie nulle","Review":"Analyser","Dismiss":"Masquer",
 "Opening played out. Continue the game from here.":"Ouverture jouée. Poursuis la partie à partir d'ici.",
 "Your games":"Tes parties","Your friend games":"Tes parties entre amis","No finished game yet.":["Pas encore de partie terminée. L'échiquier t'attend.","Aucune partie terminée pour l'instant. Ta première arrivera ici.","Rien ici pour l'instant. Termine une partie et elle sera gardée ici."],
-"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Sauvegardé uniquement dans ce navigateur. Pas de compte : vider les données du site ou changer d'appareil fait tout perdre.",
+"Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.":"Sauvegardé dans ce navigateur. Sans compte, vider les données du site ou changer d'appareil fait tout perdre.",
 "Finished games are stored in this browser so you can replay and review them later.":"Les parties terminées sont conservées dans ce navigateur, pour les rejouer et les analyser plus tard.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":"{n} partie(s) conservée(s) sur cet appareil. Choisis-en une pour la rejouer et l'analyser.",
 "Clear history":"Effacer l'historique","Confirm":"Confirmer","Game":"Partie","{n} moves":"{n} coups",

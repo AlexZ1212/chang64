@@ -494,7 +494,7 @@ module.exports = {
 "Your games":"Partaimu",
 "Your friend games":"Partaimu dengan teman",
 "No finished game yet.":["Belum ada partai yang selesai. Papan menunggumu.","Belum ada partai yang selesai. Partai pertamamu akan muncul di sini.","Belum ada apa-apa di sini. Selesaikan satu partai dan partai itu akan disimpan di sini."],
-"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Hanya tersimpan di browser ini. Tanpa akun: menghapus data penjelajahan atau berganti perangkat akan menghilangkannya.",
+"Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.":"Tersimpan di browser ini. Tanpa akun, menghapus data penjelajahan atau berganti perangkat akan menghilangkannya.",
 "Finished games are stored in this browser so you can replay and review them later.":"Partai yang selesai disimpan di browser ini supaya kamu bisa memutar ulang dan meninjaunya nanti.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":"{n} partai tersimpan di perangkat ini. Pilih satu untuk memutar ulang dan meninjaunya.",
 "Clear history":"Hapus riwayat",

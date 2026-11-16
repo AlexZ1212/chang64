@@ -494,7 +494,7 @@ module.exports = {
 "Your games":"Tus partidas",
 "Your friend games":"Tus partidas entre amigos",
 "No finished game yet.":["Todavía no hay partidas terminadas. El tablero te espera.","Aún no hay partidas terminadas. La primera aparecerá aquí.","Todavía no hay nada. Termina una partida y se guardará aquí."],
-"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Guardado solo en este navegador. Sin cuenta: si borras los datos de navegación o cambias de dispositivo, se pierde.",
+"Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.":"Guardado en este navegador. Sin cuenta, se pierde si borras los datos de navegación o cambias de dispositivo.",
 "Finished games are stored in this browser so you can replay and review them later.":"Las partidas terminadas se guardan en este navegador para que puedas repetirlas y analizarlas más tarde.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":"{n} partida(s) guardada(s) en este dispositivo. Elige una para repetirla y analizarla.",
 "Clear history":"Borrar el historial",

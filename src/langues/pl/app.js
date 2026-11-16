@@ -494,7 +494,7 @@ module.exports = {
 "Your games":"Twoje partie",
 "Your friend games":"Twoje partie ze znajomymi",
 "No finished game yet.":["Jeszcze żadnej skończonej partii. Szachownica czeka.","Jeszcze żadnej skończonej partii. Pierwsza pojawi się tutaj.","Na razie pusto. Skończ partię, a zostanie tu zapisana."],
-"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Zapisane tylko w tej przeglądarce. Bez konta: wyczyszczenie danych przeglądania albo zmiana urządzenia oznacza ich utratę.",
+"Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.":"Zapisane w tej przeglądarce. Bez konta wyczyszczenie danych przeglądania albo zmiana urządzenia oznacza ich utratę.",
 "Finished games are stored in this browser so you can replay and review them later.":"Zakończone partie są zapisywane w tej przeglądarce, żebyś mógł je później odtworzyć i przeanalizować.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":{"one":"Na tym urządzeniu zapisano {n} partię. Wybierz ją, żeby ją odtworzyć i przeanalizować.","few":"Na tym urządzeniu zapisano {n} partie. Wybierz jedną, żeby ją odtworzyć i przeanalizować.","many":"Na tym urządzeniu zapisano {n} partii. Wybierz jedną, żeby ją odtworzyć i przeanalizować.","other":"Na tym urządzeniu zapisano {n} partii. Wybierz jedną, żeby ją odtworzyć i przeanalizować."},
 "Clear history":"Wyczyść historię",

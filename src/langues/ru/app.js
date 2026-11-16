@@ -494,7 +494,7 @@ module.exports = {
 "Your games":"Твои партии",
 "Your friend games":"Твои партии с друзьями",
 "No finished game yet.":["Пока нет законченных партий. Доска тебя ждёт.","Пока нет законченных партий. Первая появится здесь.","Здесь пока пусто. Закончи партию, и она сохранится здесь."],
-"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Хранится только в этом браузере. Аккаунта нет: если очистить данные браузера или сменить устройство, всё пропадёт.",
+"Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.":"Хранится в этом браузере. Без аккаунта всё пропадёт, если очистить данные браузера или сменить устройство.",
 "Finished games are stored in this browser so you can replay and review them later.":"Завершённые партии хранятся в этом браузере, чтобы их можно было потом переиграть и разобрать.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":{"one":"На этом устройстве сохранена {n} партия. Выбери её, чтобы переиграть и разобрать.","few":"На этом устройстве сохранено {n} партии. Выбери одну, чтобы переиграть и разобрать.","many":"На этом устройстве сохранено {n} партий. Выбери одну, чтобы переиграть и разобрать.","other":"На этом устройстве сохранено {n} партии. Выбери одну, чтобы переиграть и разобрать."},
 "Clear history":"Очистить историю",

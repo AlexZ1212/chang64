@@ -494,7 +494,7 @@ module.exports = {
 "Your games":"Oyunların",
 "Your friend games":"Arkadaşlarınla oyunların",
 "No finished game yet.":["Henüz biten oyun yok. Tahta seni bekliyor.","Henüz biten oyun yok. İlki buraya gelecek.","Burada henüz bir şey yok. Bir oyunu bitir, burada saklansın."],
-"Saved only in this browser. No account: clearing your browsing data or switching devices loses it.":"Yalnızca bu tarayıcıda saklanır. Hesap yok: tarama verilerini silmek ya da cihaz değiştirmek bunları kaybettirir.",
+"Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.":"Bu tarayıcıda saklanır. Hesap yoksa tarama verilerini silmek ya da cihaz değiştirmek bunları kaybettirir.",
 "Finished games are stored in this browser so you can replay and review them later.":"Biten oyunlar bu tarayıcıda saklanır, böylece sonra yeniden oynayıp inceleyebilirsin.",
 "{n} game(s) kept on this device. Pick one to replay and review it.":"Bu cihazda {n} oyun saklı. Yeniden oynayıp incelemek için birini seç.",
 "Clear history":"Geçmişi temizle",

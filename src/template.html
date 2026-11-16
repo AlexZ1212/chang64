@@ -2111,6 +2111,35 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 .bx-theme.hide{display:none}
 .bx-theme-pastille{width:14px;height:14px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 3px var(--slate)}
 .bx-theme .btn{min-width:0;padding:5px 12px;font-size:13px}
+
+/* Web app (2026-11-16, webapp.js) : vue du menu, suggestion du bilan. */
+.app-intro{margin:6px 8px 10px;font-size:14px;line-height:1.5;color:var(--chalk)}
+.app-avantages{margin:0 8px 6px;padding-left:20px;font-size:13.5px;line-height:1.6;color:var(--sage)}
+.app-deja{margin:14px 8px;font-weight:600;color:var(--brass)}
+.app-installer{display:block;width:calc(100% - 16px);margin:4px 8px 12px}
+.app-bloc,.app-autres{margin:0 8px 10px;padding:12px 14px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.app-bloc h4,.app-autres h4{margin:0 0 6px;font-size:13.5px;color:var(--chalk)}
+.app-autres h4{margin-top:12px}
+.app-etapes{margin:0;padding-left:20px;font-size:13.5px;line-height:1.6;color:var(--sage)}
+.app-autres summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--chalk)}
+.bilan-app{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 0 14px;padding:10px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule);font-size:13px;color:var(--sage)}
+.bilan-app[hidden]{display:none}
+.bilan-app .btn{min-width:0}
+/* Telephone a l'horizontale : le site se joue en portrait (2026-11-16).
+   Hauteur de 500 px au plus : les tablettes en paysage ne sont pas
+   concernees, ni un telephone en portrait clavier ouvert. */
+.paysage{display:none}
+@media (orientation:landscape) and (max-height:500px) and (pointer:coarse){
+  .paysage{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;background-color:var(--ink);color:var(--chalk);text-align:center}
+  .paysage>div{display:flex;flex-direction:column;align-items:center;gap:8px;max-width:340px}
+  .paysage svg{width:54px;height:54px;color:var(--brass);animation:paysageTourne 1.8s var(--courbe-sortie) infinite}
+  .paysage b{font-family:'Source Serif 4',Georgia,serif;font-size:22px}
+  .paysage span{font-size:14px;color:var(--sage)}
+  html,body{overflow:hidden}
+}
+@keyframes paysageTourne{0%,20%{transform:rotate(-90deg)}60%,100%{transform:rotate(0)}}
+/* Accessibilite : notre demarche. */
+.a11y-demarche ul{margin:8px 0;padding-left:20px;font-size:14px;line-height:1.6;color:var(--chalk)}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebApplication","name":"chang64",
@@ -2140,6 +2169,9 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
   <!-- Lien d'evitement : premier element atteint au clavier, il permet de
        sauter la navigation pour aller droit au contenu. Invisible tant qu'il
        n'a pas le focus, comme le veut l'usage. -->
+  <!-- Telephone tenu a l'horizontale (2026-11-16, demande d'Alexandre) :
+       le site se joue en portrait ; un ecran demande de le redresser. -->
+  <div class="paysage" id="paysage" aria-hidden="true"><div><svg viewBox="0 0 256 256" fill="currentColor" focusable="false"><path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"/></svg><b>Turn your phone upright</b><span>chang64 is designed to be played in portrait.</span></div></div>
   <a class="skiplink" href="#contenu">Skip to main content</a>
   <!-- Ajoute le 2026-09-06. Sans JavaScript, cette page rendait sa mise en
        page et son texte de presentation, avec un seul lien utilisable, et
@@ -3281,6 +3313,23 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 
 
 
+      <!-- Notre demarche (2026-11-16) : ce qui est fait, honnetement, sans
+           pretendre a une conformite que seul un audit pourrait etablir. -->
+      <div class="field a11y-demarche">
+        <div class="eyebrow">Our approach</div>
+        <p class="note" style="margin-top:0">We follow the criteria of the RGAA, the French accessibility standard. No official audit has been done yet.</p>
+        <ul>
+          <li>The board can be played entirely with the keyboard.</li>
+          <li>Moves and game state can be read aloud by your screen reader.</li>
+          <li>A link at the top of the page skips straight to the content.</li>
+          <li>Text contrast is checked in every theme.</li>
+          <li>Animations follow your system setting and can be turned off.</li>
+          <li>Buttons are large enough to be tapped easily.</li>
+          <li>Every image that carries meaning has a text alternative.</li>
+        </ul>
+        <p class="note" id="a11yContact"></p>
+      </div>
+
       <div class="field">
         <div class="eyebrow" id="prefsKbdLabel">Keyboard</div>
         <div class="prose" id="kbdHelp"></div>
@@ -3302,6 +3351,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <div class="bilan-tuiles" id="bilanTuiles"></div>
       <ul class="bilan-lignes" id="bilanLignes"></ul>
       <div class="bilan-badges-bloc" id="bilanBadgesBloc" hidden><p id="bilanBadgesTitre">Badges earned</p><div class="bilan-badges" id="bilanBadges"></div></div>
+      <div class="bilan-app" id="bilanApp" hidden><span id="bilanAppTexte"></span><button type="button" class="btn" id="bilanAppBouton">Install the app</button></div>
       <button type="button" class="btn primary" id="bilanOk">Continue</button>
     </div>
   </div>
@@ -3330,6 +3380,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
         <button type="button" class="tiroir-lien" data-aller="prefs"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M40,88H73a32,32,0,0,0,62,0h81a8,8,0,0,0,0-16H135a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16Zm64-24A16,16,0,1,1,88,80,16,16,0,0,1,104,64ZM216,168H199a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16h97a32,32,0,0,0,62,0h17a8,8,0,0,0,0-16Zm-48,24a16,16,0,1,1,16-16A16,16,0,0,1,168,192Z"/></svg><span data-t="Preferences">Preferences</span></button>
         <button type="button" class="tiroir-lien" data-aller="access"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M160,40a32,32,0,1,0-32,32A32,32,0,0,0,160,40ZM128,56a16,16,0,1,1,16-16A16,16,0,0,1,128,56ZM231.5,87.71A19.62,19.62,0,0,0,212,72H44a20,20,0,0,0-8.38,38.16l.13,0,50.75,22.35-21,79.72A20,20,0,0,0,102,228.8l26-44.87,26,44.87a20,20,0,0,0,36.4-16.52l-21-79.72,50.75-22.35.13,0A19.64,19.64,0,0,0,231.5,87.71Zm-17.8,7.9-56.93,25.06a8,8,0,0,0-4.51,9.36L175.13,217a7,7,0,0,0,.49,1.35,4,4,0,0,1-5,5.45,4,4,0,0,1-2.25-2.07,6.31,6.31,0,0,0-.34-.63L134.92,164a8,8,0,0,0-13.84,0L88,221.05a6.31,6.31,0,0,0-.34.63,4,4,0,0,1-2.25,2.07,4,4,0,0,1-5-5.45,7,7,0,0,0,.49-1.35L103.74,130a8,8,0,0,0-4.51-9.36L42.3,95.61A4,4,0,0,1,44,88H212a4,4,0,0,1,1.73,7.61Z"/></svg><span data-t="Accessibility">Accessibility</span></button>
         <button type="button" class="tiroir-lien" data-vue="langues"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></svg><span data-t="Language">Language</span><span class="tiroir-detail tiroir-langue" id="menuLangueActuelle"></span></button>
+        <button type="button" class="tiroir-lien" data-vue-app="1" id="menuAppLigne"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"/></svg><span data-t="Install the app">Install the app</span></button>
         <p class="tiroir-section" data-t="About">About</p>
         <button type="button" class="tiroir-lien" data-aller="legal"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M239.43,133l-32-80h0a8,8,0,0,0-9.16-4.84L136,62V40a8,8,0,0,0-16,0V65.58L54.26,80.19A8,8,0,0,0,48.57,85h0v.06L16.57,165a7.92,7.92,0,0,0-.57,3c0,23.31,24.54,32,40,32s40-8.69,40-32a7.92,7.92,0,0,0-.57-3L66.92,93.77,120,82V208H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16H136V78.42L187,67.1,160.57,133a7.92,7.92,0,0,0-.57,3c0,23.31,24.54,32,40,32s40-8.69,40-32A7.92,7.92,0,0,0,239.43,133ZM56,184c-7.53,0-22.76-3.61-23.93-14.64L56,109.54l23.93,59.82C78.76,180.39,63.53,184,56,184Zm144-32c-7.53,0-22.76-3.61-23.93-14.64L200,77.54l23.93,59.82C222.76,148.39,207.53,152,200,152Z"/></svg><span data-t="Legal notice">Legal notice</span></button>
         <button type="button" class="tiroir-lien" data-aller="privacy"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span data-t="Privacy">Privacy</span></button>
@@ -3340,6 +3391,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <div class="tiroir-vue" id="menuDefisVue" hidden></div>
       <div class="tiroir-vue" id="menuObjectifVue" hidden></div>
       <!-- Langues (2026-11-15) : la liste du selecteur, dans sa propre vue. -->
+      <div class="tiroir-vue" id="menuAppVue" hidden></div>
       <div class="tiroir-vue" id="menuLanguesVue" hidden><!--__LANGSWITCH__--></div>
     </aside>
   </div>

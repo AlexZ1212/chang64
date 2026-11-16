@@ -279,6 +279,26 @@ const avancer = ms => { decalage += ms; };
   env = {};
   T("sans base : 503", (await appel("POST", "pseudo", { pseudo: "Alexandre" })).s === 503);
 
+  console.log("\nTableaux des joueurs");
+  {
+    const cl = await import(pathToFileURL(path.join(__dirname, "..", "functions", "api", "classement.js")).href);
+    env = { DB: fausseD1() };
+    const now = Date.now(), sem = E.lundi(now);
+    const ins = env.DB.brut.prepare("INSERT INTO comptes (cle, pseudo, pin_hash, secours_hash, cree, vu, note, resolus, serie, badges, sprint, sem, sem_resolus) VALUES (?, ?, 'h', 's', ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    for (let i = 1; i <= 60; i++) ins.run("j" + i, "Joueur" + i, now, now, 800 + i, i * 3, i % 9, i % 12, i % 20, i % 2 ? sem : "2020-01-06", i);
+    const tableau = async par => { const r = await cl.onRequestGet({ request: new Request("https://chang64.com/api/classement" + (par ? "?par=" + par : "")), env }); return { s: r.status, j: r.status === 200 ? await r.json() : null, h: r.headers }; };
+    let r = await tableau("note");
+    T("note : 50 joueurs au plus, du meilleur au moins bon", r.s === 200 && r.j.joueurs.length === 50 && r.j.joueurs[0].p === "Joueur60" && r.j.joueurs[0].v === 860 && r.j.joueurs[49].v === 811);
+    T("seuls le pseudo et le chiffre sortent", r.j.joueurs.every(x => Object.keys(x).join() === "p,v"));
+    T("mis en cache cinq minutes", /s-maxage=300/.test(r.h.get("Cache-Control")));
+    r = await tableau("");
+    T("par defaut : la semaine en cours, sans les semaines passees", r.j.par === "semaine" && r.j.semaine === sem && r.j.joueurs.length === 30 && r.j.joueurs[0].p === "Joueur59");
+    r = await tableau("note");
+    T("moins de 10 exercices : absent du tableau des notes", !r.j.joueurs.some(x => ["Joueur1", "Joueur2", "Joueur3"].includes(x.p)));
+    for (const par of ["resolus", "serie", "badges", "sprint"]) { r = await tableau(par); T("tableau " + par, r.s === 200 && r.j.joueurs.length > 0 && r.j.joueurs.every((x, i, l) => !i || l[i - 1].v >= x.v)); }
+    T("critere inconnu : 400", (await tableau("pin_hash")).s === 400 && (await tableau("note;DROP")).s === 400);
+  }
+
   console.log("\n" + ok + " OK, " + ko + " FAIL");
   process.exit(ko ? 1 : 0);
 })().catch(e => { console.log("  FAIL plantage -> " + (e && e.stack || e)); console.log("\n" + ok + " OK, " + (ko + 1) + " FAIL"); process.exit(1); });

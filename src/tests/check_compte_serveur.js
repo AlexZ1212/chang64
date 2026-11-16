@@ -11,27 +11,11 @@
    complete, effacement apres deux ans. */
 const fs = require("fs"), path = require("path"), { pathToFileURL } = require("url");
 process.removeAllListeners("warning"); process.on("warning", () => {});
-const { DatabaseSync } = require("node:sqlite");
 
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d !== undefined ? "  -> " + d : "")); } };
 
-const SCHEMA = fs.readFileSync(path.join(__dirname, "..", "compte-schema.sql"), "utf8");
-function fausseD1() {
-  const db = new DatabaseSync(":memory:");
-  db.exec(SCHEMA);
-  const prep = (sql, args) => ({
-    bind(...a) { return prep(sql, a); },
-    async first() { const r = db.prepare(sql).get(...(args || [])); return r === undefined ? null : Object.assign({}, r); },
-    async all() { return { results: db.prepare(sql).all(...(args || [])).map(r => Object.assign({}, r)) }; },
-    async run() {
-      const st = db.prepare(sql);
-      if (/RETURNING/i.test(sql)) { st.all(...(args || [])); return { meta: {} }; }
-      const r = st.run(...(args || [])); return { meta: { changes: Number(r.changes) } };
-    }
-  });
-  return { brut: db, prepare: sql => prep(sql), async batch(l) { const out = []; for (const s of l) out.push(await s.run()); return out; } };
-}
+const { fausseD1 } = require("../serveur_local.js");
 
 const VRAI_NOW = Date.now;
 let decalage = 0;

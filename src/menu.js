@@ -182,7 +182,7 @@ function menuListeNouveautes(){
       if(r.hidden)return;
       if(e.key==="Escape"){e.preventDefault();menuFermer();return;}
       if(e.key!=="Tab")return;
-      const f=[...r.querySelectorAll("button,a[href],[tabindex]:not([tabindex='-1'])")].filter(x=>x.offsetParent);
+      const f=[...r.querySelectorAll("button,a[href],input,[tabindex]:not([tabindex='-1'])")].filter(x=>x.offsetParent);
       if(!f.length)return;
       const i=f.indexOf(document.activeElement);
       if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus();}

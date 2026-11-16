@@ -2130,6 +2130,35 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 .app-autres summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--chalk)}
 .bilan-app{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 0 14px;padding:10px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule);font-size:13px;color:var(--sage)}
 .bilan-app[hidden]{display:none}
+/* Compte (2026-11-16, compte.js) : ecrans de la vue "Mon compte" du menu. */
+#menuCompteVue h3{margin:6px 8px 10px;font-size:17px;color:var(--chalk)}
+.cp-etape{margin:8px 8px 0;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
+.cp-note{margin:0 8px 12px;font-size:13.5px;line-height:1.55;color:var(--sage)}
+.cp-centre{margin:10px 8px;text-align:center}
+.cp-champ{display:block;margin:0 8px 12px}
+.cp-champ>span{display:block;margin-bottom:5px;font-size:13px;font-weight:600;color:var(--chalk)}
+.cp-champ input{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
+.cp-champ input[type=password],#cpLien,#cpSecoursSaisi{font-family:'JetBrains Mono',monospace;letter-spacing:.12em}
+.cp-champ input:focus-visible{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
+.cp-champ small{display:block;margin-top:5px;font-size:12.5px;line-height:1.45;color:var(--sage)}
+.cp-msg{min-height:1.5em;margin:0 8px 10px;font-size:13.5px;line-height:1.5;color:var(--brick)}
+.cp-msg.cp-ok{color:var(--jade)}
+.cp-large{display:block;width:calc(100% - 16px);min-height:46px;margin:0 8px 10px}
+.cp-large:disabled{opacity:.45;cursor:default}
+.cp-lien{color:var(--sage);font-size:13px;text-decoration:underline}
+button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
+.cp-secours{margin:4px 8px 12px;padding:16px 10px;border-radius:var(--r);border:1px dashed var(--brass);background-color:var(--ink);color:var(--chalk);font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:600;letter-spacing:.06em;text-align:center;overflow-wrap:anywhere;user-select:all}
+.cp-case{display:flex;align-items:flex-start;gap:10px;margin:4px 8px 14px;font-size:14px;line-height:1.45;color:var(--chalk);cursor:pointer}
+.cp-case input{flex:none;width:22px;height:22px;margin:0;accent-color:var(--brass)}
+.cp-carte{display:flex;flex-direction:column;gap:4px;margin:6px 8px 12px;padding:14px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.cp-carte b{font-size:18px;color:var(--chalk);overflow-wrap:anywhere}
+.cp-carte span{font-size:13px;color:var(--sage)}
+.cp-carte .cp-alerte{color:var(--brick)}
+.cp-danger{border-color:var(--brick);color:var(--brick)}
+.cp-qr{width:min(220px,70%);margin:0 auto 10px;border-radius:8px;overflow:hidden;background:#fff}
+.cp-qr svg{display:block;width:100%;height:auto}
+.cp-qr[hidden]{display:none}
+#menuCompteVue a.tiroir-lien{box-sizing:border-box;text-decoration:none}
 .bilan-app .btn{min-width:0}
 /* Telephone a l'horizontale : le site se joue en portrait (2026-11-16).
    Hauteur de 500 px au plus : les tablettes en paysage ne sont pas
@@ -3358,6 +3387,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <ul class="bilan-lignes" id="bilanLignes"></ul>
       <div class="bilan-badges-bloc" id="bilanBadgesBloc" hidden><p id="bilanBadgesTitre">Badges earned</p><div class="bilan-badges" id="bilanBadges"></div></div>
       <div class="bilan-app" id="bilanApp" hidden><span id="bilanAppTexte"></span><button type="button" class="btn" id="bilanAppBouton">Install the app</button></div>
+      <div class="bilan-app" id="bilanCompte" hidden><span id="bilanCompteTexte"></span><button type="button" class="btn" id="bilanCompteBouton">Create an account</button></div>
       <button type="button" class="btn primary" id="bilanOk">Continue</button>
     </div>
   </div>
@@ -3377,6 +3407,8 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       </div>
       <div class="tiroir-vue" id="menuAccueil">
         <p class="tiroir-section" data-t="My progress">My progress</p>
+        <!-- Compte (2026-11-16, compte.js) : facultatif. Le pseudo s'affiche a droite une fois connecte ; le point signale une session a rouvrir. -->
+        <button type="button" class="tiroir-lien" data-vue-compte="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"/></svg><span data-t="My account" id="menuCompteTexte">My account</span><span class="tiroir-detail tiroir-langue" id="menuCompteDetail"></span><span class="burger-point" id="menuComptePoint" hidden></span></button>
         <button type="button" class="tiroir-lien" data-vue-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
         <button type="button" class="tiroir-lien" data-vue-defis="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg><span data-t="Weekly challenges">Weekly challenges</span><span class="tiroir-detail" id="menuDefis"></span></button>
         <button type="button" class="tiroir-lien" data-vue="stats"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg><span data-t="Statistics">Statistics</span><span class="tiroir-detail" id="menuResume"></span></button>
@@ -3398,6 +3430,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
       <div class="tiroir-vue" id="menuObjectifVue" hidden></div>
       <!-- Langues (2026-11-15) : la liste du selecteur, dans sa propre vue. -->
       <div class="tiroir-vue" id="menuAppVue" hidden></div>
+      <div class="tiroir-vue" id="menuCompteVue" hidden></div>
       <div class="tiroir-vue" id="menuLanguesVue" hidden><!--__LANGSWITCH__--></div>
     </aside>
   </div>

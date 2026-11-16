@@ -19,6 +19,8 @@ function lireLangue(code) {
    s'en sert pour sa grille et ses statistiques. */
 const NOUVEAUTES = JSON.parse(fs.readFileSync(path.join(__dirname, "nouveautes.json"), "utf8"))
   .sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
+const COMPTE_SLUGS = JSON.parse(fs.readFileSync(path.join(__dirname, "compte-pages.json"), "utf8"));
+const COMPTE_PAGES = Object.fromEntries(CODES.map(c => [c, "/" + PAR_CODE[c].dirs.learn + "/" + (COMPTE_SLUGS[c] || COMPTE_SLUGS.en)]));
 function code() {
   const liste = CATALOGUE.map(b => [b[0], b[1]]);
   return fs.readFileSync(path.join(__dirname, "badges.js"), "utf8").replace("__BADGES_LISTE__", JSON.stringify(liste)) + "\n" +
@@ -28,7 +30,9 @@ function code() {
     fs.readFileSync(path.join(__dirname, "bilan.js"), "utf8").replace("__ELEPHANT_SIGNE__", fs.readFileSync(path.join(__dirname, "ds/signe.svg"), "utf8").match(/ d="([^"]+)"/)[1]) + "\n" +
     fs.readFileSync(path.join(__dirname, "duel.js"), "utf8").replace("__ELEPHANT_SIGNE__", fs.readFileSync(path.join(__dirname, "ds/signe.svg"), "utf8").match(/ d="([^"]+)"/)[1]) + "\n" +
     fs.readFileSync(path.join(__dirname, "themes.js"), "utf8") + "\n" +
-    fs.readFileSync(path.join(__dirname, "webapp.js"), "utf8");
+    fs.readFileSync(path.join(__dirname, "webapp.js"), "utf8") + "\n" +
+    /* Compte (2026-11-16) : l'adresse de la page "Ton compte" par langue. */
+    fs.readFileSync(path.join(__dirname, "compte.js"), "utf8").replace("__COMPTE_PAGES__", JSON.stringify(COMPTE_PAGES));
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir

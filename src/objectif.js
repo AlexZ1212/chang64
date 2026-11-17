@@ -166,7 +166,7 @@ function objVue(){
     '<p class="objv-note">'+echapper(t("Every puzzle you solve today counts, in every mode."))+"</p>"+
     '<div class="objv-bloc"><p class="objv-titre">'+echapper(t("Towards your next freeze"))+'</p><div class="objv-jours">'+
     Array.from({length:OBJ_JOURS_GEL},(_,i)=>'<span class="'+(i<pas?"plein":"")+'" style="--i:'+i+'"></span>').join("")+
-    '</div><p class="objv-note">'+echapper(t("Reach your goal {n} days in a row to earn a streak freeze.",{n:OBJ_JOURS_GEL}))+"</p></div>"+
+    '</div><p class="objv-note">'+echapper(t("Reach your goal {n} days in a row to earn a streak freeze.",{n:OBJ_JOURS_GEL}))+" "+echapper(t("A perfect week of challenges earns one too."))+"</p></div>"+
     '<div class="objv-bloc objv-gels"><p class="objv-titre">'+echapper(t("Freezes in reserve"))+'</p><div class="objv-flocons">'+
     Array.from({length:OBJ_GELS_MAX},(_,i)=>'<span class="'+(i<c.gels?"plein":"")+'">'+flocon+"</span>").join("")+
     "</div></div>"+

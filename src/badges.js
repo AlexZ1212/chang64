@@ -166,6 +166,8 @@ if(typeof registerWrong==="function"){const av=registerWrong;registerWrong=funct
 {
   const av=finishPuzzle;
   finishPuzzle=function(won){
+    /* Un exercice deja reussi aujourd'hui ne compte pas deux fois (exoRejoue, ui.js). */
+    if(won&&typeof exoRejoue==="function"&&exoRejoue())return av.apply(this,arguments);
     if(won){
       const b=bxEtat(),h=new Date().getHours(),cle=bxCle(new Date());
       bxActivite();

@@ -997,5 +997,6 @@ module.exports = {
 "Create an account to challenge other members by their username.":"Diğer üyelere kullanıcı adlarıyla meydan okumak için hesap oluştur.",
 "Your answer has been sent to {name}.":"Yanıtın {name} adlı üyeye gönderildi.",
 "Your answer could not be sent. Check your network.":"Yanıtın gönderilemedi. Ağını kontrol et.",
-"Try again":"Yeniden dene"
+"Try again":"Yeniden dene",
+"A perfect week of challenges earns one too.":"Kusursuz bir görev haftası da bir tane kazandırır."
 };

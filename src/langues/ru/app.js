@@ -999,5 +999,6 @@ module.exports = {
 "Create an account to challenge other members by their username.":"Создай аккаунт, чтобы бросать вызов другим участникам по имени пользователя.",
 "Your answer has been sent to {name}.":"Твой ответ отправлен: {name}.",
 "Your answer could not be sent. Check your network.":"Не удалось отправить ответ. Проверь сеть.",
-"Try again":"Повторить"
+"Try again":"Повторить",
+"A perfect week of challenges earns one too.":"Идеальная неделя заданий тоже приносит одну."
 };

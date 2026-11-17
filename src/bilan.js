@@ -20,8 +20,9 @@ function bilanSeance(){
   const av=finishPuzzle;
   finishPuzzle=function(won){
     const enSprint=!!rush,essais=typeof puzzleTries==="number"?puzzleTries:0;
+    const rejoue=won&&typeof exoRejoue==="function"&&exoRejoue();
     const r=av.apply(this,arguments);
-    if(enSprint||mode!=="puzzles")return r;
+    if(enSprint||mode!=="puzzles"||rejoue)return r;
     const s=bilanSeance();
     s.dernier=Date.now();s.faits++;s.depuis++;
     if(won){s.reussis++;if(essais===0){s.premier++;s.suite++;s.meilleure=Math.max(s.meilleure,s.suite);}else s.suite=0;}

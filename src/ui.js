@@ -2224,10 +2224,34 @@ function montrerJourSuivant(cle){
   };
   b.classList.remove("hide");
 }
+/* Un meme exercice ne compte qu'une fois par jour (2026-11-17). Le rejouer
+   apres l'avoir reussi (Recommencer, retour sur l'exercice du jour pour le
+   partager...) reste possible, mais ne fait plus avancer ni les exercices
+   resolus, ni le niveau, ni l'objectif du jour, ni les defis de la semaine,
+   ni les badges, ni les tableaux des joueurs : sans cela on gonflait tous
+   ces chiffres en refaisant le meme exercice. prog.gagnes garde les
+   exercices reussis du jour ; exoRejoue() le dit a finishPuzzle et a tout
+   ce qui l'habille (badges.js, defis.js, bilan.js). L'exercice n'est inscrit
+   qu'une fois toute la chaine passee (microtache) : pendant celle-ci, la
+   reponse reste la meme pour tout le monde. Le lendemain, il compte de
+   nouveau : c'est le principe de la revision espacee. */
+function exoGagnes(){
+  const k=typeof todayKey==="function"?todayKey():"";
+  if(!prog.gagnes||prog.gagnes.k!==k||!Array.isArray(prog.gagnes.ids))prog.gagnes={k:k,ids:[]};
+  return prog.gagnes.ids;
+}
+function exoRejoue(){return !!(puzzle&&puzzle.id!==undefined&&exoGagnes().includes(puzzle.id));}
 function finishPuzzle(won,msg){
+  const rejoue=won&&exoRejoue();
   puzzleDone=true;majBoutonSuivant();
   if(won)SON.reussite();
   if(typeof onPuzzleResult==="function"&&onPuzzleResult(won,msg))return;
+  /* Apres la sortie du Sprint : un exercice vu en Sprint n'est pas "deja
+     compte", le Sprint ne compte rien. */
+  if(won&&!rejoue&&puzzle&&puzzle.id!==undefined){
+    const id=puzzle.id;
+    Promise.resolve().then(()=>{const l=exoGagnes();if(!l.includes(id)){l.push(id);if(l.length>400)l.shift();saveProg();}});
+  }
   const st=$("exStatus");
   st.className="status "+(won?"win":"lose");
   /* Delta de notation affiche a cote du verdict (integration ELO, point 1) :
@@ -2242,7 +2266,8 @@ function finishPuzzle(won,msg){
   st.textContent=msg+(typeof lastRatingDelta==="number"?" "+t("({delta} rating)",{delta:(lastRatingDelta>=0?"+":"\u2212")+Math.abs(lastRatingDelta)}):"");
   const ex=$("exExplain");if(ex)ex.textContent=won?explainSentence(puzzle):"";
   const pg=$("exPedagogy");if(pg)pg.textContent=won?pedagogySentence(puzzle):"";
-  if(won&&puzzleTries===0)registerSolved();
+  if(rejoue){/* deja compte aujourd'hui */}
+  else if(won&&puzzleTries===0)registerSolved();
   else if(won)registerPartial();
   if(!prog.seen.includes(puzzle.id)){prog.seen.push(puzzle.id);if(prog.seen.length>200)prog.seen.shift();}
   if(won){
@@ -2287,6 +2312,7 @@ function finishPuzzle(won,msg){
        incrementation -- on le rappelle ici pour que le badge se debloque
        des l'exercice qui l'atteint, pas au suivant. Inoffensif de
        l'appeler deux fois (boucle sur BADGES, ids deja acquis ignores). */
+    if(!rejoue){
     prog.themeSolved[puzzle.theme]=(prog.themeSolved[puzzle.theme]||0)+1;
     /* Recap hebdo : un timestamp par reussite, plafonne comme
        prog.ratingHistory. Pousse ici plutot que dans registerSolved()/
@@ -2331,6 +2357,7 @@ function finishPuzzle(won,msg){
           m.box++;m.due=Date.now()+delayDays*86400000;
         }
       }
+    }
     }
   }
   saveProg();renderProgress();

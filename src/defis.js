@@ -94,8 +94,8 @@ function defiJour(cle,type){
 {
   const av=finishPuzzle;
   finishPuzzle=function(won){
-    const pz=puzzle,r=av.apply(this,arguments);
-    if(won){
+    const pz=puzzle,rejoue=won&&typeof exoRejoue==="function"&&exoRejoue(),r=av.apply(this,arguments);
+    if(won&&!rejoue){
       defiNoter("resoudre",1);
       if(pz&&pz.theme)defiNoter("motif",pz.theme);
       defiNoter("sansfaute",bxEtat().c.sansErreur||0);

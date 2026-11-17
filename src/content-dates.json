@@ -1,6 +1,6 @@
 {
  "/": {
-  "sceau": "142d29acbea4fc8d",
+  "sceau": "c77d6340d8f404b0",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-16"
  },
@@ -1125,9 +1125,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/regeln/": {
-  "sceau": "434693bfed7bae05",
+  "sceau": "acb8dfb3f1ad53e5",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/de/regeln/bedenkzeiten": {
   "sceau": "913809ec5b247d5f",
@@ -1138,6 +1138,11 @@
   "sceau": "0992ec7c8f9ae817",
   "publiee": "2026-10-25",
   "modifiee": "2026-11-14"
+ },
+ "/de/regeln/dein-konto": {
+  "sceau": "07d2266fb332bf14",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
  },
  "/de/regeln/der-doppelangriff": {
   "sceau": "f9e423675686512d",
@@ -1200,9 +1205,9 @@
   "modifiee": "2026-11-14"
  },
  "/de/regeln/fuer-lehrkraefte-und-vereine": {
-  "sceau": "e639771151d096e9",
+  "sceau": "6c2f59dda1a31dc7",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/de/regeln/haengende-figuren-erkennen": {
   "sceau": "0e5bc7023d285c94",
@@ -1965,9 +1970,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/aprender/": {
-  "sceau": "da4243a2ea82eab1",
+  "sceau": "185915bec097e2bf",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/es/aprender/como-se-mueven-las-piezas": {
   "sceau": "2d709b73bf1b1c26",
@@ -2060,9 +2065,14 @@
   "modifiee": "2026-11-14"
  },
  "/es/aprender/para-profesores-y-clubes": {
-  "sceau": "3c65377c4d9c7c9d",
+  "sceau": "8acc9d671818082f",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-17"
+ },
+ "/es/aprender/tu-cuenta": {
+  "sceau": "4d22de4229963f03",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
  },
  "/es/finales/": {
   "sceau": "3acd9b3469529be5",
@@ -2470,9 +2480,9 @@
   "modifiee": "2026-10-25"
  },
  "/fr/apprendre/": {
-  "sceau": "4a8177a6543bf6de",
+  "sceau": "7f2fda151529fb6a",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/fr/apprendre/deplacement-des-pieces": {
   "sceau": "094ceb14b5468d5c",
@@ -2560,14 +2570,19 @@
   "modifiee": "2026-11-14"
  },
  "/fr/apprendre/pour-les-enseignants-et-les-clubs": {
-  "sceau": "af39677af6acda1d",
+  "sceau": "3f0ddf6f7c32ec85",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-17"
  },
  "/fr/apprendre/reperer-une-piece-qui-traine": {
   "sceau": "caa01ccda4434c83",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-14"
+ },
+ "/fr/apprendre/ton-compte": {
+  "sceau": "862c92246d03a83a",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-16"
  },
  "/fr/exercices/": {
   "sceau": "cacae771855da42b",
@@ -3985,9 +4000,14 @@
   "modifiee": "2026-11-01"
  },
  "/id/aturan/": {
-  "sceau": "4a10fb66ec38281e",
+  "sceau": "da46ca5d89767ec0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-16"
+ },
+ "/id/aturan/akunmu": {
+  "sceau": "8ba501b275d473fd",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-16"
  },
  "/id/aturan/bidak-menggantung": {
   "sceau": "93056913469865ff",
@@ -4080,9 +4100,9 @@
   "modifiee": "2026-11-14"
  },
  "/id/aturan/untuk-guru-dan-klub": {
-  "sceau": "aa8193d0e558f5f8",
+  "sceau": "c048554f0fd0e050",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/id/glosarium/": {
   "sceau": "5d10101172de0249",
@@ -6250,9 +6270,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/regole/": {
-  "sceau": "ecc77d29b1ada6e3",
+  "sceau": "1e90663e5486ff90",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/it/regole/come-si-muovono-i-pezzi": {
   "sceau": "1155123ae1b19135",
@@ -6268,6 +6288,11 @@
   "sceau": "66d7e60b91b7bb1b",
   "publiee": "2026-11-01",
   "modifiee": "2026-11-14"
+ },
+ "/it/regole/il-tuo-account": {
+  "sceau": "658c6e9ed6074355",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
  },
  "/it/regole/l-arrocco": {
   "sceau": "1017425a7bd4675b",
@@ -6335,9 +6360,9 @@
   "modifiee": "2026-11-14"
  },
  "/it/regole/per-insegnanti-e-circoli": {
-  "sceau": "8347f5249ae0c41e",
+  "sceau": "b0ebc0f96b22af88",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/it/regole/riconoscere-un-pezzo-indifeso": {
   "sceau": "98d2e94e2dc0a5e4",
@@ -6385,9 +6410,9 @@
   "modifiee": "2026-11-01"
  },
  "/learn/": {
-  "sceau": "95304901668eb5a3",
+  "sceau": "dd25129122d39b62",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-16"
  },
  "/learn/back-rank-mate": {
   "sceau": "250cec37e0f7a55b",
@@ -6425,9 +6450,9 @@
   "modifiee": "2026-11-14"
  },
  "/learn/for-teachers-and-clubs": {
-  "sceau": "8ebd16a893818464",
+  "sceau": "c3301b7e0444869a",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/learn/how-games-are-drawn": {
   "sceau": "71832af6654ddc37",
@@ -6483,6 +6508,11 @@
   "sceau": "47687f0a9429ab53",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-14"
+ },
+ "/learn/your-account": {
+  "sceau": "9f11f12523521437",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-16"
  },
  "/openings/": {
   "sceau": "ab77f38e1d4cb216",
@@ -8310,9 +8340,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/zasady/": {
-  "sceau": "d7520744b2c0b512",
+  "sceau": "4ff3ed1bc9d76fb3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/pl/zasady/bicie-w-przelocie": {
   "sceau": "688f23e589017fbc",
@@ -8325,9 +8355,9 @@
   "modifiee": "2026-11-14"
  },
  "/pl/zasady/dla-nauczycieli-i-klubow": {
-  "sceau": "fc9b30fc30073244",
+  "sceau": "caeac61e4c23f3aa",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/pl/zasady/jak-poruszaja-sie-bierki": {
   "sceau": "9d1de5eaf1b96806",
@@ -8383,6 +8413,11 @@
   "sceau": "b85225d5862e3a7a",
   "publiee": "2026-11-01",
   "modifiee": "2026-11-14"
+ },
+ "/pl/zasady/twoje-konto": {
+  "sceau": "0a195934b418c9dd",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
  },
  "/pl/zasady/widelki-pionem": {
   "sceau": "f95a91d9374e9057",
@@ -9125,9 +9160,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/aprender/": {
-  "sceau": "62b197159d2aafaa",
+  "sceau": "214e27a63c19eab0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/pt/aprender/a-cravada": {
   "sceau": "c9910d0229b90d48",
@@ -9215,9 +9250,14 @@
   "modifiee": "2026-11-14"
  },
  "/pt/aprender/para-professores-e-clubes": {
-  "sceau": "6fb4bffcc97b0424",
+  "sceau": "25b11a9ea424dcc9",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
+ },
+ "/pt/aprender/sua-conta": {
+  "sceau": "690d7987fb2f0eb9",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
  },
  "/pt/aprender/xeque-mate-e-afogamento": {
   "sceau": "a0a932d95d46add0",
@@ -10000,9 +10040,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/learn/": {
-  "sceau": "f7a387a8a4ded747",
+  "sceau": "a3974287b1615040",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/ru/learn/back-rank-mate": {
   "sceau": "48fbae8c96cb897c",
@@ -10040,9 +10080,9 @@
   "modifiee": "2026-11-14"
  },
  "/ru/learn/for-teachers-and-clubs": {
-  "sceau": "56c270a1ff1bd63d",
+  "sceau": "8bf8ab5986c8c4c5",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/ru/learn/how-games-are-drawn": {
   "sceau": "d0d86fa68d93be82",
@@ -10098,6 +10138,11 @@
   "sceau": "fc2342a2a7586189",
   "publiee": "2026-10-25",
   "modifiee": "2026-11-14"
+ },
+ "/ru/learn/your-account": {
+  "sceau": "aaa1ac34e8b8ea92",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
  },
  "/ru/openings/": {
   "sceau": "82230f42d2d63be6",
@@ -11625,9 +11670,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/kurallar/": {
-  "sceau": "0b98f568bcc6e514",
+  "sceau": "a82005d21f6b604b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-08"
+  "modifiee": "2026-11-17"
  },
  "/tr/kurallar/acilis-ilkeleri": {
   "sceau": "f39a15d69e51976f",
@@ -11669,15 +11714,20 @@
   "publiee": "2026-11-01",
   "modifiee": "2026-11-14"
  },
+ "/tr/kurallar/hesabin": {
+  "sceau": "ca9b91a7eef8f52a",
+  "publiee": "2026-11-16",
+  "modifiee": "2026-11-17"
+ },
  "/tr/kurallar/notasyon": {
   "sceau": "83ec6f4478be2093",
   "publiee": "2026-11-01",
   "modifiee": "2026-11-14"
  },
  "/tr/kurallar/ogretmenler-ve-kulupler-icin": {
-  "sceau": "b63d435e21bf6b6f",
+  "sceau": "804369d71a1208ee",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-14"
+  "modifiee": "2026-11-16"
  },
  "/tr/kurallar/piyon-catali": {
   "sceau": "fc4d936083ee3a0a",

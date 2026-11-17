@@ -24,7 +24,9 @@ setTimeout(()=>{
   T("slugs conserves (liens ouvertures)", html.includes("OPENING_SLUGS"));
 
   console.log("\n--- Themes d'echiquier ---");
-  T("5 themes declares en CSS", (html.match(/html\[data-board=/g)||[]).length===5);
+  /* 5 themes fixes, plus html[data-board="theme"] pour les themes gagnes
+     (themes.js, 2026-11-15). */
+  T("5 themes fixes et le theme gagne declares en CSS", (html.match(/html\[data-board=/g)||[]).length===6);
   const root=d.documentElement;
   T("theme applique au chargement", root.getAttribute("data-board")!==null, "data-board="+root.getAttribute("data-board"));
   T("panneau de themes present", !!d.getElementById("boardThemes"));

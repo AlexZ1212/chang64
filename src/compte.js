@@ -970,7 +970,7 @@ async function cpdVue(){
    un lien. */
 async function cpdRepondre(ids,adv,moi){
   const c=duelComparer(moi,adv);
-  duelOuvrir(duelTete(c>0?t("You win!"):c<0?t("{name} wins!",{name:adv.n}):t("Perfect tie!"),"")+
+  duelOuvrir(duelTete(c>0?t("You win!"):c<0?t("{name} wins!",{name:adv.n}):t("Perfect tie!"),"").replace(echapper(t("Challenge a friend")),echapper(t("Member challenges")))+
     '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(adv.n,adv,c<0)+"</ul>"+
     '<p class="duel-note" id="cpdRepMsg" aria-live="polite">'+cpE("Syncing…")+"</p>"+
     '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-nouveau data-cpd-revanche="'+echapper(adv.n)+'" data-duel-premier>'+cpE("Rematch")+

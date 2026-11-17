@@ -2,6 +2,49 @@
  {
   "d": "2026-11-17",
   "en": [
+   "Challenge a member",
+   "After your five puzzles, send the challenge to a member by username. They find it in Menu, Member challenges, and you both see the result."
+  ],
+  "fr": [
+   "Défie un membre",
+   "Après tes cinq exercices, envoie le défi à un membre par son pseudo. Il le trouve dans Menu, Défis entre membres, et vous voyez tous les deux le résultat."
+  ],
+  "es": [
+   "Reta a un miembro",
+   "Después de tus cinco ejercicios, envía el reto a un miembro por su nombre de usuario. Lo encuentra en Menú, Retos entre miembros, y los dos veis el resultado."
+  ],
+  "pt": [
+   "Desafie um membro",
+   "Depois dos seus cinco exercícios, envie o desafio para um membro pelo nome de usuário. Ele o encontra em Menu, Desafios entre membros, e vocês dois veem o resultado."
+  ],
+  "de": [
+   "Fordere ein Mitglied heraus",
+   "Schicke die Herausforderung nach deinen fünf Aufgaben per Benutzername an ein Mitglied. Es findet sie unter Menü, Herausforderungen unter Mitgliedern, und ihr seht beide das Ergebnis."
+  ],
+  "ru": [
+   "Брось вызов участнику",
+   "После пяти задач отправь вызов участнику по имени пользователя. Он найдёт его в Меню, Вызовы между участниками, и вы оба увидите результат."
+  ],
+  "it": [
+   "Sfida un membro",
+   "Dopo i tuoi cinque esercizi, invia la sfida a un membro con il suo nome utente. La trova in Menu, Sfide tra membri, e vedete entrambi il risultato."
+  ],
+  "tr": [
+   "Bir üyeye meydan oku",
+   "Beş bulmacandan sonra meydan okumayı kullanıcı adıyla bir üyeye gönder. Onu Menü, Üyeler arası meydan okumalar bölümünde bulur ve sonucu ikiniz de görürsünüz."
+  ],
+  "pl": [
+   "Rzuć wyzwanie członkowi",
+   "Po swoich pięciu zadaniach wyślij wyzwanie członkowi po nazwie użytkownika. Znajdzie je w Menu, Wyzwania między członkami, i oboje zobaczycie wynik."
+  ],
+  "id": [
+   "Tantang seorang anggota",
+   "Setelah lima teka-tekimu, kirim tantangan ke seorang anggota lewat nama penggunanya. Ia menemukannya di Menu, Tantangan antaranggota, dan kalian berdua melihat hasilnya."
+  ]
+ },
+ {
+  "d": "2026-11-17",
+  "en": [
    "A free account, if you want one",
    "A username and a code are enough to find your progress on all your devices. Optional: everything still works without one. Menu, My account."
   ],

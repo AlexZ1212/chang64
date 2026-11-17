@@ -664,7 +664,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 }
 @keyframes fadein{from{opacity:0}}
 .result-card{
-  background-color:var(--slate);border:1px solid var(--rule);border-left:4px solid var(--brass);
+  background-color:var(--slate);border:1px solid var(--rule);
   border-radius:calc(var(--r)*1.5);padding:18px 20px;text-align:center;max-width:320px;width:100%;
   box-shadow:var(--e2);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)
 }
@@ -680,13 +680,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   .result-actions{flex-direction:column}
   .result-actions .btn{width:100%;padding:11px 12px}
 }
-.result.win .result-card{border-left-color:var(--jade)}
-.result.lose .result-card{border-left-color:var(--brick)}
-.result.draw .result-card{border-left-color:var(--sage)}
 #resultClose{margin-top:10px}
 .coordhud{
   display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  background-color:var(--slate);border:1px solid var(--rule);border-left:4px solid var(--brass);
+  background-color:var(--slate);border:1px solid var(--rule);
   border-radius:var(--r);padding:12px 16px;position:sticky;top:8px;z-index:15
 }
 .chud-target{display:flex;align-items:baseline;gap:10px;min-width:0}
@@ -1825,8 +1822,8 @@ html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(var(--bras
 /* Collection : une grille de medailles, une famille par rangee titree. */
 #badgeGrid,#badgeRecentGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:12px 6px}
 #badgeRecentGrid:empty{display:none}
-.bx-famille{grid-column:1/-1;margin:10px 0 0;font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.02em}
-.bx-famille:first-child{margin-top:0}
+h3.bx-famille{font-family:inherit;grid-column:1/-1;margin:10px 0 0;font-size:13px;font-weight:600;color:var(--sage);letter-spacing:.02em}
+h3.bx-famille:first-child{margin-top:0}
 .badge.bx-carte{display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 2px;background:none;border:0;border-radius:var(--r);color:var(--sage);font:inherit;font-size:12px;line-height:1.25;text-align:center;cursor:pointer;opacity:1}
 .badge.bx-carte.unlocked{color:var(--chalk)}
 .badge.bx-carte:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
@@ -2166,7 +2163,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpj-onglets button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .cpj-liste{list-style:none;margin:0 8px 14px;padding:0}
 .cpj-liste li{display:flex;align-items:center;gap:10px;min-height:40px;padding:6px 10px;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--chalk)}
-.cpj-liste li.cpj-moi{border-radius:8px;border-bottom-color:transparent;background-color:var(--raise);box-shadow:inset 3px 0 0 var(--brass)}
+.cpj-liste li.cpj-moi{border-left:3px solid var(--brass);border-radius:0 8px 8px 0;border-bottom-color:transparent;background-color:var(--raise);padding-left:7px}
 .cpj-rang{flex:none;width:26px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--sage);text-align:right}
 .cpj-liste li:nth-child(-n+3) .cpj-rang{color:var(--brass);font-weight:600}
 .cpj-nom{flex:1;min-width:0;overflow-wrap:anywhere}
@@ -3079,7 +3076,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
           <div class="eyebrow">Daily puzzle calendar<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipCalendar" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipCalendar">Highlighted days are puzzles of the day you've solved. Tap one to see it again with the solution shown.</p>
           <div id="calWidget"></div>
-          <p class="note"><a href="#calendar" id="calFullLink">See full calendar</a></p>
+          <p class="note"><a href="#pane-calendar" id="calFullLink">See full calendar</a></p>
           </div>
         </div>
         <!-- Ecran "Finales" : promu depuis le <details> replie qu'il etait
@@ -3172,7 +3169,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
         <div class="panel debut">
           <div class="eyebrow" id="debutEtape"></div>
           <div class="debut-pas" id="debutPas"></div>
-          <h2 class="debut-titre" id="debutTitre"></h2>
+          <h2 class="debut-titre" id="debutTitre">I'm a beginner</h2>
           <p id="debutIntro"></p>
           <div class="status" id="debutStatus"></div>
           <div class="btnrow debut-actions">
@@ -3406,7 +3403,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
     <div class="bilan-fenetre">
       <div class="bilan-mascotte" id="bilanMascotte" aria-hidden="true"></div>
       <p class="bilan-entete" id="bilanEntete">Session summary</p>
-      <h2 id="bilanTitre"></h2>
+      <h2 id="bilanTitre">Well played!</h2>
       <p class="bilan-sous" id="bilanSous"></p>
       <div class="bilan-tuiles" id="bilanTuiles"></div>
       <ul class="bilan-lignes" id="bilanLignes"></ul>
@@ -3418,7 +3415,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
   </div>
 
   <!-- Defi entre amis (2026-11-15, voir duel.js) : memes habits que le bilan. -->
-  <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-labelledby="duelTitre" hidden>
+  <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-label="Challenge a friend" hidden>
     <div class="bilan-fenetre" id="duelContenu"></div>
   </div>
 

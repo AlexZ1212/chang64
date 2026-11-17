@@ -527,8 +527,11 @@ function bxFiche(id){
   $("bravoTitre").textContent=bxTexte(id,0);
   poserHtml($("bravoNoms"),"");
   const c=document.createElement("div");c.className="bx-condition";
-  c.textContent=gagne&&d?bxUi("Won on {date}",{date:fmtDayMonth(d)+"/"+new Date(d).getFullYear()}):bxUi("To unlock: {c}",{c:bxTexte(id,1)});
-  $("bravoNoms").appendChild(c);
+  c.textContent=gagne&&d?bxUi("Won on {date}",{date:fmtDayMonth(d)+"/"+new Date(d).getFullYear()}):gagne?"":bxUi("To unlock: {c}",{c:bxTexte(id,1)});
+  if(c.textContent)$("bravoNoms").appendChild(c);
+  /* Un badge gagne dit aussi comment il l'a ete (2026-11-17) : avant, la
+     condition disparaissait de la fiche une fois le badge acquis. */
+  if(gagne&&bxTexte(id,1)){const k=document.createElement("div");k.className="bx-condition bx-comment";k.textContent=bxTexte(id,1);$("bravoNoms").appendChild(k);}
   const tx=$("bravoTexte");tx.textContent=bxTexte(id,2);tx.classList.remove("hide");
   bxPoserLien(id);
   poserHtml($("bravoAutres"),"");
@@ -556,7 +559,7 @@ renderBadges=function(el){
   if(!bxTextes||!bxMedailles)bxCharger().then(ok=>{if(ok)renderBadges(el);});
   let h="",fam="";
   for(const b of BADGES.filter(bxVisible)){
-    if(b.f!==fam){fam=b.f;h+='<h4 class="bx-famille">'+echapper(bxUi("famille:"+fam))+"</h4>";}
+    if(b.f!==fam){fam=b.f;h+='<h3 class="bx-famille">'+echapper(bxUi("famille:"+fam))+"</h3>";}
     const g=prog.badges.includes(b.id);
     h+='<button type="button" class="badge bx-carte'+(g?" unlocked":"")+'" data-bx="'+b.id+'">'+bxMedaille(b.id,g)+
       '<span class="bx-nom">'+echapper(badgeLabel(b))+"</span></button>";

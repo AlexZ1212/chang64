@@ -28,6 +28,14 @@ function verif(nom, c) { if (c) { ok++; console.log("  OK   " + nom); } else { k
   const memeJour = aEnvoyer(apres, avant);
   verif("meme jour, contenu change : la page part", memeJour.length === 1 && memeJour[0] === "https://chang64.com/");
 
+  /* Le sitemap datait tout le site du jour du build : la date seule ne
+     prouve rien quand l'empreinte du contenu est la meme. */
+  const hier = { "https://chang64.com/a": "2026-11-14:aaa", "https://chang64.com/b": "2026-11-14:bbb", "https://chang64.com/": "2026-11-14:", "https://chang64.com/vieux": "2026-11-14" };
+  const auj = { "https://chang64.com/a": "2026-10-25:aaa", "https://chang64.com/b": "2026-11-17:ccc", "https://chang64.com/": "2026-11-17:", "https://chang64.com/vieux": "2026-11-17:ddd", "https://chang64.com/neuve": "2026-11-17:eee" };
+  const part = aEnvoyer(auj, hier).map(u => u.replace("https://chang64.com", "")).sort().join(" ");
+  verif("meme contenu, date differente : la page ne part pas", !part.split(" ").includes("/a"));
+  verif("contenu change, page sans empreinte, ancien format et page neuve : elles partent", part === "/ /b /neuve /vieux");
+
   const p = paquets(Array.from({ length: 25 }, (_, i) => i), 10);
   verif("paquets : 10 + 10 + 5", p.length === 3 && p[2].length === 5);
 

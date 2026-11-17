@@ -38,9 +38,19 @@ function signatures(sitemap, dates) {
   for (const u of Object.keys(sitemap)) out[u] = sitemap[u] + ":" + ((dates[new URL(u).pathname] || {}).sceau || "");
   return out;
 }
-/* Adresses nouvelles ou dont la signature a change */
+/* Adresses nouvelles ou dont la signature a change. Quand les deux
+   signatures portent la meme empreinte de contenu, la page n'a pas change
+   meme si sa date differe : c'etait le cas de tout le site tant que le
+   sitemap datait chaque page du jour du build (corrige le 2026-11-17). Sans
+   cette regle, le premier passage apres la correction aurait tout renvoye. */
 function aEnvoyer(sitemap, etat) {
-  return Object.keys(sitemap).filter(u => etat[u] !== sitemap[u]);
+  const sceau = s => (s.includes(":") ? s.slice(s.indexOf(":") + 1) : "");
+  return Object.keys(sitemap).filter(u => {
+    const avant = etat[u], apres = sitemap[u];
+    if (avant === undefined) return true;
+    if (avant === apres) return false;
+    return !(sceau(avant) && sceau(avant) === sceau(apres));
+  });
 }
 function paquets(liste, taille) {
   const out = [];
@@ -60,11 +70,17 @@ async function envoyer(cle, urls) {
   }
   return true;
 }
+/* Trois essais : un rate de reseau passager ne doit pas faire croire que le
+   site n'est pas publie (constate le 2026-11-17). */
 async function cleEnLigne(cle) {
-  try {
-    const r = await fetch(`${SITE}/${cle}.txt`, { cache: "no-store" });
-    return r.ok && (await r.text()).trim() === cle;
-  } catch (e) { return false; }
+  for (let essai = 0; essai < 3; essai++) {
+    try {
+      const r = await fetch(`${SITE}/${cle}.txt`, { cache: "no-store" });
+      if (r.ok && (await r.text()).trim() === cle) return true;
+    } catch (e) {}
+    await new Promise(f => setTimeout(f, 2000));
+  }
+  return false;
 }
 
 async function main() {

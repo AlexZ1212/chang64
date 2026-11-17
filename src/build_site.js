@@ -2556,7 +2556,16 @@ fs.writeFileSync(OUT + "/sitemap.xml",
     const alts = LANGUES.filter(l => v[l.code]).map(l =>
       `\n    <xhtml:link rel="alternate" hreflang="${l.hreflang}" href="${v[l.code]}"/>`).join("") +
       (v.en ? `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${v.en}"/>` : "");
-    return `  <url><loc>${u.loc}</loc><lastmod>${today}</lastmod><priority>${u.pri}</priority>${alts}\n  </url>`;
+    /* Date de derniere modification REELLE de la page (content-dates.json),
+       et non plus la date du build (2026-11-17) : dater tout le site du jour
+       a chaque publication apprenait aux moteurs a ignorer cette date, et
+       faisait re-signaler les 1 330 pages a IndexNow au lieu des quelques
+       dizaines qui avaient change. Les accueils de l'application n'ont pas
+       d'empreinte de contenu : ils changent avec l'application, donc a
+       chaque publication, et gardent la date du build. */
+    const suivi = DATES[new URL(u.loc).pathname];
+    const lastmod = suivi && suivi.sceau && suivi.modifiee ? suivi.modifiee : today;
+    return `  <url><loc>${u.loc}</loc><lastmod>${lastmod}</lastmod><priority>${u.pri}</priority>${alts}\n  </url>`;
   }).join("\n") + `\n</urlset>\n`);
 
 /* .htaccess retire : le site est heberge sur Cloudflare Pages, qui ne lit pas

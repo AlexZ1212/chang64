@@ -224,6 +224,23 @@ const { fausseD1 } = require("../serveur_local.js");
   T("Recommencer la progression : le compte repart de zero lui aussi", lire().progress.solved === 0);
   await A.api.cpSynchro({ tirer: true });
   T("et l'ancienne progression ne revient pas sur l'appareil", A.api.prog.solved === 0);
+  /* B a encore l'ancienne progression (75) et sa base : sans la date de
+     remise a zero, sa synchronisation la ferait revenir partout. */
+  await B.api.cpSynchro({ tirer: true });
+  T("un autre appareil recoit la remise a zero au lieu de la defaire", B.api.prog.solved === 0 && lire().progress.solved === 0, B.api.prog.solved + " / " + lire().progress.solved);
+  B.jouer(2, 11500);
+  await B.api.cpSynchro();
+  await A.api.cpSynchro({ tirer: true });
+  T("puis la progression repart normalement des deux cotes (2)", A.api.prog.solved === 2 && lire().progress.solved === 2, A.api.prog.solved);
+  {
+    const D = appareil("D");
+    D.jouer(30, 400);
+    const rc = await D.api.cpApi("POST", "connexion", { pseudo: "Alexandre", code: await D.api.cpEtirer(pv.cle, "583920") });
+    D.api.cpOuvrir(rc.j.pseudo, rc.j.version);
+    await D.api.cpSynchro({ tirer: true });
+    T("un appareil qui se connecte pour la premiere fois apres une remise a zero garde ce qu'il apporte (30)", D.api.prog.solved === 30 && lire().progress.solved === 30, D.api.prog.solved);
+    await A.api.cpSynchro({ tirer: true });
+  }
   A.api.cpFermer(false);
   T("deconnexion en gardant : plus de session locale, progression en place", A.api.cp === null && A.stock.has("chang64:progress"));
   const avant = A.requetes.length;

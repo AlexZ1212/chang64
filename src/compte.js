@@ -108,7 +108,8 @@ async function cpEtirer(cle,code){
    - serie de jours : les deux series sont raboutees si elles se touchent ;
    - etat du moment (niveau, classement, suite en cours, preferences, etape de
      Je debute) : celui de l'appareil qui a joue en dernier ;
-   - un champ inconnu (ajoute plus tard) : celui de l'appareil le plus recent. */
+   - un champ inconnu (ajoute plus tard) : celui de l'appareil le plus recent ;
+   - remise a zero : la plus recente efface tout ce qui la precede, partout. */
 const CP_NOMS=["progress","prefs","debut","games","friendgames","duels","duelNom"];
 function cpNombre(x){return typeof x==="number"&&isFinite(x)?x:0;}
 function cpObjet(x){return x&&typeof x==="object"&&!Array.isArray(x)?x:{};}
@@ -136,12 +137,19 @@ function cpSerie(l,d){
   return x;
 }
 function cpFusionProg(l,d,b,distantRecent){
-  l=cpObjet(l);d=cpObjet(d);const avecBase=!!b;b=cpObjet(b);
+  l=cpObjet(l);d=cpObjet(d);
+  /* Remise a zero ("Recommencer la progression") : elle porte une date, raz.
+     Le cote dont la remise a zero est la plus recente l'emporte en entier,
+     sinon l'ancienne progression reviendrait par un autre appareil. */
+  /* Seulement pour un appareil deja relie au compte (il a une base) : un
+     appareil qui se connecte pour la premiere fois garde ce qu'il apporte. */
+  const avecBase=!!b;b=cpObjet(b);
+  if(avecBase&&cpNombre(l.raz)!==cpNombre(d.raz))return JSON.parse(JSON.stringify(cpNombre(l.raz)>cpNombre(d.raz)?l:d));
   const R=distantRecent?d:l,A=distantRecent?l:d;
   const o=Object.assign({},A,R);
   const max=k=>{if(typeof l[k]==="number"||typeof d[k]==="number")o[k]=Math.max(cpNombre(l[k]),cpNombre(d[k]));};
   o.solved=cpPlus(l.solved,d.solved,b.solved,avecBase);
-  ["best","rushBest","coordBest","bestDay"].forEach(max);
+  ["best","rushBest","coordBest","bestDay","raz"].forEach(max);
   const vit=[l.fastestSolveMs,d.fastestSolveMs].filter(x=>typeof x==="number"&&x>0);
   if(vit.length)o.fastestSolveMs=Math.min.apply(null,vit);else delete o.fastestSolveMs;
   if(l.usedHint||d.usedHint)o.usedHint=true;
@@ -406,6 +414,7 @@ async function cpEcraser(){
   const r=await cpApi("GET","synchro");
   if(r.s!==200)return;
   cpMaj.progress=Date.now();cpEcrire("chang64:compteMaj",cpMaj);
+  prog.raz=Date.now();cpSilence=true;try{saveProg();}finally{cpSilence=false;}
   const env=cpEnveloppe();
   env.vv=Object.assign({},cpObjet(r.j.donnees&&r.j.donnees.vv));
   const w=await cpApi("PUT","synchro",{version:r.j.version,donnees:env});

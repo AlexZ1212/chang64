@@ -132,7 +132,7 @@ function egal(a, b) {
 function json(corps, statut, entetes) {
   return new Response(corps === null ? null : JSON.stringify(corps), {
     status: statut || 200,
-    headers: Object.assign({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }, entetes || {})
+    headers: Object.assign({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" }, entetes || {})
   });
 }
 const erreur = (code, statut, plus) => json(Object.assign({ erreur: code }, plus || {}), statut);
@@ -205,6 +205,8 @@ function donneesTexte(donnees) {
 /* ---------- Requete ---------- */
 async function corps(request) {
   if (!/^application\/json\b/i.test(request.headers.get("Content-Type") || "")) return null;
+  /* Un corps annonce trop gros n'est meme pas lu. */
+  if (+(request.headers.get("Content-Length") || 0) > 4 * TAILLE_MAX) return null;
   const texte = await request.text();
   if (texte.length > TAILLE_MAX + 2000) return null;
   try {

@@ -1,6 +1,6 @@
 {
  "/": {
-  "sceau": "eac1ab52cb59bb52",
+  "sceau": "2bd1b1572a88512d",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-17"
  },
@@ -15,29 +15,29 @@
   "modifiee": "2026-10-25"
  },
  "/de/endspiele/dame-gegen-koenig": {
-  "sceau": "3f9acd65bb1e6184",
+  "sceau": "b61406b354bfae95",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/de/endspiele/koenig-und-bauer-gegen-koenig": {
-  "sceau": "8002156a667e74e4",
+  "sceau": "83eda40ceac8b7a7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/de/endspiele/matt-mit-laeufer-und-springer": {
-  "sceau": "ecc32a412be7d71a",
+  "sceau": "75a0f39fa7e5b671",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/de/endspiele/turm-gegen-koenig": {
-  "sceau": "85c245c610667fc5",
+  "sceau": "b76c440cc109605a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/de/endspiele/zwei-tuerme-gegen-koenig": {
-  "sceau": "79f47f85f92fb85d",
+  "sceau": "2b50f481b7f78fd2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/de/eroeffnungen/": {
   "sceau": "69a801eef5047b69",
@@ -1140,7 +1140,7 @@
   "modifiee": "2026-11-14"
  },
  "/de/regeln/dein-konto": {
-  "sceau": "07d2266fb332bf14",
+  "sceau": "2d6035c5b79f8957",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -1205,9 +1205,9 @@
   "modifiee": "2026-11-14"
  },
  "/de/regeln/fuer-lehrkraefte-und-vereine": {
-  "sceau": "6c2f59dda1a31dc7",
+  "sceau": "d3fd3792bb9ec9dc",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/de/regeln/haengende-figuren-erkennen": {
   "sceau": "0e5bc7023d285c94",
@@ -1235,29 +1235,29 @@
   "modifiee": "2026-09-06"
  },
  "/endgames/bishop-and-knight-mate": {
-  "sceau": "ee530202cfa5d9e3",
+  "sceau": "bd7464b286f4ab76",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/endgames/king-and-pawn-vs-king": {
-  "sceau": "1829bc382e72f5a1",
+  "sceau": "125f83bb3760c758",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/endgames/queen-vs-king": {
-  "sceau": "b0b258b31dc7520a",
+  "sceau": "66aa49a9ad984a2f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/endgames/rook-vs-king": {
-  "sceau": "a0b1613a02b5d56d",
+  "sceau": "2c38184fc5216564",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/endgames/two-rooks-vs-king": {
-  "sceau": "311dcd95408c61a4",
+  "sceau": "35a10ce5c0b7b421",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/es/aperturas/": {
   "sceau": "bb74b5b848bf8031",
@@ -2065,12 +2065,12 @@
   "modifiee": "2026-11-14"
  },
  "/es/aprender/para-profesores-y-clubes": {
-  "sceau": "8acc9d671818082f",
+  "sceau": "23c066eea1509ac9",
   "publiee": "2026-11-08",
   "modifiee": "2026-11-17"
  },
  "/es/aprender/tu-cuenta": {
-  "sceau": "4d22de4229963f03",
+  "sceau": "4cf53528bfdac73c",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -2080,29 +2080,29 @@
   "modifiee": "2026-10-25"
  },
  "/es/finales/dama-contra-rey": {
-  "sceau": "5b86699c195ced91",
+  "sceau": "ac236ff2f1d8ef1b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/es/finales/dos-torres-contra-rey": {
-  "sceau": "3b3c5aababc37666",
+  "sceau": "410316b5edc774f5",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/es/finales/mate-de-alfil-y-caballo": {
-  "sceau": "7a298c42ac8d796c",
+  "sceau": "dba3bf9943b2c238",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/es/finales/rey-y-peon-contra-rey": {
-  "sceau": "a3332a2ec76125fd",
+  "sceau": "014c18cdece175be",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/es/finales/torre-contra-rey": {
-  "sceau": "a0cebc88b9008e2a",
+  "sceau": "1286e6226ccbe911",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/es/glosario/": {
   "sceau": "783a4a14559039f4",
@@ -2570,7 +2570,7 @@
   "modifiee": "2026-11-14"
  },
  "/fr/apprendre/pour-les-enseignants-et-les-clubs": {
-  "sceau": "3f0ddf6f7c32ec85",
+  "sceau": "16c5ed66226ffdae",
   "publiee": "2026-11-08",
   "modifiee": "2026-11-17"
  },
@@ -2580,9 +2580,9 @@
   "modifiee": "2026-11-14"
  },
  "/fr/apprendre/ton-compte": {
-  "sceau": "862c92246d03a83a",
+  "sceau": "6a45e11205fa4a08",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/fr/exercices/": {
   "sceau": "cacae771855da42b",
@@ -2660,29 +2660,29 @@
   "modifiee": "2026-09-06"
  },
  "/fr/finales/dame-contre-roi": {
-  "sceau": "6f2ce9366ad66ceb",
+  "sceau": "90207518f35cf547",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/fr/finales/deux-tours-contre-roi": {
-  "sceau": "a2d2aa79b22e92b8",
+  "sceau": "b9c7aae0b068ed95",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/fr/finales/mat-fou-et-cavalier": {
-  "sceau": "67872cc8bd5236e1",
+  "sceau": "340647c20fb6bb01",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/fr/finales/roi-et-pion-contre-roi": {
-  "sceau": "b3100db3ab263687",
+  "sceau": "1d02463556bd55dd",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/fr/finales/tour-contre-roi": {
-  "sceau": "6989fd547d822e6e",
+  "sceau": "5798f9aab63dee92",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-17"
  },
  "/fr/lexique/": {
   "sceau": "7785028b42fc65f1",
@@ -3975,29 +3975,29 @@
   "modifiee": "2026-11-01"
  },
  "/id/akhir-permainan/benteng-lawan-raja": {
-  "sceau": "058b9e6fb2bf8c01",
+  "sceau": "765541c91b155deb",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/id/akhir-permainan/dua-benteng-lawan-raja": {
-  "sceau": "8d1995491f085458",
+  "sceau": "cdbac1a556bd4718",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/id/akhir-permainan/menteri-lawan-raja": {
-  "sceau": "7eeb59edb2d90205",
+  "sceau": "193d20204ca9aa53",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/id/akhir-permainan/raja-dan-pion-lawan-raja": {
-  "sceau": "dd7b304bde3737fb",
+  "sceau": "32a8c25bfc2b3919",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/id/akhir-permainan/skakmat-gajah-dan-kuda": {
-  "sceau": "c13be39f0b52a7a9",
+  "sceau": "30d7bf60b094f069",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/id/aturan/": {
   "sceau": "da46ca5d89767ec0",
@@ -4005,9 +4005,9 @@
   "modifiee": "2026-11-16"
  },
  "/id/aturan/akunmu": {
-  "sceau": "8ba501b275d473fd",
+  "sceau": "6c3da364587c875c",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/id/aturan/bidak-menggantung": {
   "sceau": "93056913469865ff",
@@ -4100,9 +4100,9 @@
   "modifiee": "2026-11-14"
  },
  "/id/aturan/untuk-guru-dan-klub": {
-  "sceau": "c048554f0fd0e050",
+  "sceau": "26ee703796818dbd",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/id/glosarium/": {
   "sceau": "5d10101172de0249",
@@ -5905,29 +5905,29 @@
   "modifiee": "2026-11-01"
  },
  "/it/finali/donna-contro-re": {
-  "sceau": "674f28dcea776d84",
+  "sceau": "2993442137cb89dd",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/it/finali/due-torri-contro-re": {
-  "sceau": "8996323b67fd276d",
+  "sceau": "d7883633fc69f28a",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/it/finali/matto-di-alfiere-e-cavallo": {
-  "sceau": "02506384c1070dcb",
+  "sceau": "1cc4a3e98fafe46d",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/it/finali/re-e-pedone-contro-re": {
-  "sceau": "0c239696373e663b",
+  "sceau": "d021e5a752b401a2",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/it/finali/torre-contro-re": {
-  "sceau": "06cfc1d1d87192c1",
+  "sceau": "b7fba1401232ec5b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/it/glossario/": {
   "sceau": "3902efa3fc038d29",
@@ -6290,7 +6290,7 @@
   "modifiee": "2026-11-14"
  },
  "/it/regole/il-tuo-account": {
-  "sceau": "658c6e9ed6074355",
+  "sceau": "d67ebd81fd07f18e",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -6360,9 +6360,9 @@
   "modifiee": "2026-11-14"
  },
  "/it/regole/per-insegnanti-e-circoli": {
-  "sceau": "b0ebc0f96b22af88",
+  "sceau": "3724873acdeeb972",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/it/regole/riconoscere-un-pezzo-indifeso": {
   "sceau": "98d2e94e2dc0a5e4",
@@ -6450,9 +6450,9 @@
   "modifiee": "2026-11-14"
  },
  "/learn/for-teachers-and-clubs": {
-  "sceau": "c3301b7e0444869a",
+  "sceau": "b96b02eafcc490a1",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/learn/how-games-are-drawn": {
   "sceau": "71832af6654ddc37",
@@ -6510,9 +6510,9 @@
   "modifiee": "2026-11-14"
  },
  "/learn/your-account": {
-  "sceau": "9f11f12523521437",
+  "sceau": "40a09ef03b0bb147",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/openings/": {
   "sceau": "ab77f38e1d4cb216",
@@ -7940,29 +7940,29 @@
   "modifiee": "2026-11-01"
  },
  "/pl/koncowki/dwie-wieze-przeciw-krolowi": {
-  "sceau": "92e7429ff008270c",
+  "sceau": "3259ea6b9e1c7968",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/pl/koncowki/hetman-przeciw-krolowi": {
-  "sceau": "0734c49bfc26546a",
+  "sceau": "d29e58210d51fa0e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/pl/koncowki/krol-i-pion-przeciw-krolowi": {
-  "sceau": "7ab33378eb03aa7a",
+  "sceau": "0ca206f45e22dd57",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/pl/koncowki/mat-goncem-i-skoczkiem": {
-  "sceau": "03641c0857119033",
+  "sceau": "cda8aefd7cac8572",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/pl/koncowki/wieza-przeciw-krolowi": {
-  "sceau": "1378692c2f94cbee",
+  "sceau": "c4787c3b3b455a5e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/pl/motywy/": {
   "sceau": "759932f8dacf6a9d",
@@ -8355,9 +8355,9 @@
   "modifiee": "2026-11-14"
  },
  "/pl/zasady/dla-nauczycieli-i-klubow": {
-  "sceau": "caeac61e4c23f3aa",
+  "sceau": "018cb8026e368109",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/pl/zasady/jak-poruszaja-sie-bierki": {
   "sceau": "9d1de5eaf1b96806",
@@ -8415,7 +8415,7 @@
   "modifiee": "2026-11-14"
  },
  "/pl/zasady/twoje-konto": {
-  "sceau": "0a195934b418c9dd",
+  "sceau": "95e1f3be11b1391a",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -9250,12 +9250,12 @@
   "modifiee": "2026-11-14"
  },
  "/pt/aprender/para-professores-e-clubes": {
-  "sceau": "25b11a9ea424dcc9",
+  "sceau": "0cf0c403b5fc9f36",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/pt/aprender/sua-conta": {
-  "sceau": "690d7987fb2f0eb9",
+  "sceau": "434d0e4e4a7946db",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -9305,29 +9305,29 @@
   "modifiee": "2026-10-25"
  },
  "/pt/finais/dama-contra-rei": {
-  "sceau": "3433f51db60a8529",
+  "sceau": "e2cc963fb10c70a1",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/pt/finais/duas-torres-contra-rei": {
-  "sceau": "7ac136c0952dda6e",
+  "sceau": "b53e3d0525ddb992",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/pt/finais/mate-de-bispo-e-cavalo": {
-  "sceau": "6415dc14382bd2b5",
+  "sceau": "cb37a6eebab4839d",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/pt/finais/rei-e-peao-contra-rei": {
-  "sceau": "69cd1e09dfd4df74",
+  "sceau": "39cd0b7f439b0d2b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/pt/finais/torre-contra-rei": {
-  "sceau": "abf6cac53ebcbbba",
+  "sceau": "f0c4a623fa8ac897",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/pt/glossario/": {
   "sceau": "2c3f7cedebb4d8f6",
@@ -9745,29 +9745,29 @@
   "modifiee": "2026-10-25"
  },
  "/ru/endgames/bishop-and-knight-mate": {
-  "sceau": "bb56fd05eddf2834",
+  "sceau": "981a1b999209a2d2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/ru/endgames/king-and-pawn-vs-king": {
-  "sceau": "b9b3df39f10eed9f",
+  "sceau": "9d154635cf91bfc7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/ru/endgames/queen-vs-king": {
-  "sceau": "f3e7c4adada16e53",
+  "sceau": "35b307d3c3c0a77f",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/ru/endgames/rook-vs-king": {
-  "sceau": "69c88ce3ca6253ab",
+  "sceau": "787383d9f0eabe4c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/ru/endgames/two-rooks-vs-king": {
-  "sceau": "8b83c9b9a8e5cc5a",
+  "sceau": "0a88577ba72dc1a2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-17"
  },
  "/ru/glossary/": {
   "sceau": "47929bd17e4023f2",
@@ -10080,9 +10080,9 @@
   "modifiee": "2026-11-14"
  },
  "/ru/learn/for-teachers-and-clubs": {
-  "sceau": "8bf8ab5986c8c4c5",
+  "sceau": "5fcfa5fcb90850ef",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/ru/learn/how-games-are-drawn": {
   "sceau": "d0d86fa68d93be82",
@@ -10140,7 +10140,7 @@
   "modifiee": "2026-11-14"
  },
  "/ru/learn/your-account": {
-  "sceau": "aaa1ac34e8b8ea92",
+  "sceau": "ab724ada4c167134",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -11715,7 +11715,7 @@
   "modifiee": "2026-11-14"
  },
  "/tr/kurallar/hesabin": {
-  "sceau": "ca9b91a7eef8f52a",
+  "sceau": "9ce318bd96b11cfd",
   "publiee": "2026-11-16",
   "modifiee": "2026-11-17"
  },
@@ -11725,9 +11725,9 @@
   "modifiee": "2026-11-14"
  },
  "/tr/kurallar/ogretmenler-ve-kulupler-icin": {
-  "sceau": "804369d71a1208ee",
+  "sceau": "b9df53e8e2070b06",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-16"
+  "modifiee": "2026-11-17"
  },
  "/tr/kurallar/piyon-catali": {
   "sceau": "fc4d936083ee3a0a",
@@ -11850,29 +11850,29 @@
   "modifiee": "2026-11-01"
  },
  "/tr/oyun-sonlari/fil-ve-at-mati": {
-  "sceau": "b156b99eb0dee863",
+  "sceau": "240d7b8f311787b1",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/tr/oyun-sonlari/iki-kale-karsi-sah": {
-  "sceau": "e1a7683c37e97efb",
+  "sceau": "a613547034900871",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/tr/oyun-sonlari/kale-sah-karsi-sah": {
-  "sceau": "5d6652476845b636",
+  "sceau": "8511f7644688556f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/tr/oyun-sonlari/sah-ve-piyon-karsi-sah": {
-  "sceau": "c29552bbfa161998",
+  "sceau": "f1559f87d167bc57",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/tr/oyun-sonlari/vezir-sah-karsi-sah": {
-  "sceau": "990c1ded21849a79",
+  "sceau": "d6d446104fbe7c09",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-17"
  },
  "/tr/sozluk/": {
   "sceau": "daddb3c2a6c1c06a",

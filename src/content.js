@@ -312,7 +312,7 @@ module.exports = function (H) {
      dans toutes les langues : elle s'adresse a des adultes, le reste du site tutoie. */
   { slug: { en: "for-teachers-and-clubs", fr: "pour-les-enseignants-et-les-clubs" },
     fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    title: { en: "Chess at school or at the club: free, no account needed", fr: "Les échecs à l'école ou au club : gratuit, sans compte obligatoire" },
+    title: { en: "Chess at school or at the club: free, no account needed", fr: "Les échecs à l'école ou au club : gratuit, compte facultatif" },
     body: {
       en: [
         "chang64 is a free chess site that pupils can use straight away in a browser: no account needed, no email address, no password, nothing to install. It runs on computers, tablets and phones, in 10 languages, with no advertising and nothing to buy.",

@@ -206,7 +206,8 @@ console.log("\n--- Adresses dans la forme servie par Cloudflare Pages ---");
       if (!u || u.startsWith("//")) continue;
       nLiens++;
       if (u.endsWith(".html")) liensHtml.push(f + " : " + u);
-      else if (!existe(u)) liensMorts.push(f + " : " + u);
+      /* /api/ : des fonctions du serveur (compte, mesures), pas des fichiers. */
+      else if (!u.startsWith("/api/") && !existe(u)) liensMorts.push(f + " : " + u);
     }
   }
   T(pages.length + " pages, canonical = forme sans extension de leur fichier", canonFaux.length === 0,

@@ -2051,7 +2051,7 @@ const SW_VERSION = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "");
    entre-temps n'en avait plus aucun. Tout changement de donnees (banque,
    jour.json...) change l'empreinte, donc le cache repart a neuf, comme avant :
    pas de melange entre un ancien index de niveau et de nouveaux morceaux. */
-const DATA_VERSION = (() => {
+const empreinteData = () => {
   const h = require("crypto").createHash("sha1");
   const parcourir = dossier => {
     for (const nom of fs.readdirSync(dossier).sort()) {
@@ -2062,7 +2062,8 @@ const DATA_VERSION = (() => {
   };
   parcourir(path.join(OUT, "data"));
   return h.digest("hex").slice(0, 12);
-})();
+};
+const DATA_VERSION = empreinteData();
 fs.writeFileSync(OUT + "/sw.js", `/* chang64 offline cache
  *
  * chang64 - a free chess website
@@ -2474,6 +2475,17 @@ const today = BUILD_DATE;   /* meme date que dateModified des fiches JSON-LD */
 const extraUrls = require("./content.js")({
   fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc
 });
+/* content.js ecrit lui aussi dans data/ (pieges.json, 2026-11-16), apres le
+   calcul de l'empreinte du cache de donnees : sw.js gardait donc une version
+   qui ignorait ce fichier, et un changement des pieges ne vidait pas le cache
+   hors ligne. On refait l'empreinte ici et on la reporte dans sw.js. */
+{
+  const v = empreinteData();
+  if (v !== DATA_VERSION) {
+    const swf = OUT + "/sw.js";
+    fs.writeFileSync(swf, fs.readFileSync(swf, "utf8").split("chang64-data-" + DATA_VERSION).join("chang64-data-" + v));
+  }
+}
 /* Etiquette corrigee le 2026-09-07 : ce nombre n'a jamais compte les pages
    ecrites par content.js, mais les URLs qu'il verse au sitemap, c'est-a-dire
    les seules pages indexables. L'ecart est large -- 180 contre 466 pages

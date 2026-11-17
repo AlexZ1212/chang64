@@ -1431,6 +1431,177 @@ function playUser(m){
   $("btnHint").disabled=true;
   setTimeout(botMove,60);
 }
+/* Repertoire d'ouvertures de l'ordinateur (2026-11-17, demande d'Alexandre :
+   des ouvertures plus habituelles, plus humaines, et variees). Jusqu'ici il
+   calculait des le premier coup : il jouait toujours la meme chose, jamais
+   1.e4 e5, et aux niveaux faciles il lui arrivait de sortir un coup au
+   hasard des le debut.
+   Cle : les coups deja joues (sans + ni #), separes par une espace.
+   Valeur : les coups possibles, chacun suivi de son poids. Les lignes sont
+   les grandes ouvertures classiques ; des que la partie en sort (le joueur
+   joue autre chose, ou la ligne s'arrete), l'ordinateur reprend son calcul
+   comme avant. Les niveaux faciles suivent le livre moins longtemps :
+   un debutant n'affronte pas huit coups de theorie.
+   tests/check_ouvertures_ordi.js verifie que chaque ligne est jouable. */
+const BOT_OUVERTURES={
+  "":"e4 5|d4 3|Nf3 1|c4 1",
+  "e4":"e5 5|c5 3|e6 1|c6 1",
+  "d4":"d5 4|Nf6 4",
+  "Nf3":"d5 3|Nf6 3",
+  "c4":"e5 3|Nf6 3|c5 1|e6 1",
+  /* 1.e4 e5 */
+  "e4 e5":"Nf3 8|Bc4 1|Nc3 1",
+  "e4 e5 Nf3":"Nc6 8|Nf6 2|d6 1",
+  "e4 e5 Nf3 Nc6":"Bc4 4|Bb5 4|d4 2|Nc3 1",
+  "e4 e5 Nf3 Nc6 Bc4":"Bc5 4|Nf6 4",
+  "e4 e5 Nf3 Nc6 Bc4 Bc5":"c3 3|d3 3|O-O 2",
+  "e4 e5 Nf3 Nc6 Bc4 Bc5 c3":"Nf6 6",
+  "e4 e5 Nf3 Nc6 Bc4 Bc5 d3":"Nf6 6",
+  "e4 e5 Nf3 Nc6 Bc4 Nf6":"d3 4|Nc3 2|Ng5 2",
+  "e4 e5 Nf3 Nc6 Bc4 Nf6 d3":"Bc5 4|Be7 2",
+  "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5":"d5 6",
+  "e4 e5 Nf3 Nc6 Bb5":"a6 5|Nf6 3",
+  "e4 e5 Nf3 Nc6 Bb5 a6":"Ba4 6|Bxc6 1",
+  "e4 e5 Nf3 Nc6 Bb5 a6 Ba4":"Nf6 6",
+  "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6":"O-O 6",
+  "e4 e5 Nf3 Nc6 Bb5 Nf6":"O-O 4|d3 3",
+  "e4 e5 Nf3 Nc6 d4":"exd4 6",
+  "e4 e5 Nf3 Nc6 d4 exd4":"Nxd4 5|Bc4 1",
+  "e4 e5 Nf3 Nc6 d4 exd4 Nxd4":"Nf6 4|Bc5 3",
+  "e4 e5 Nf3 Nc6 Nc3":"Nf6 6",
+  "e4 e5 Nf3 Nf6":"Nxe5 4|Nc3 2|d4 1",
+  "e4 e5 Nf3 Nf6 Nxe5":"d6 6",
+  "e4 e5 Nf3 Nf6 Nxe5 d6":"Nf3 6",
+  "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3":"Nxe4 6",
+  "e4 e5 Nf3 d6":"d4 6",
+  "e4 e5 Nf3 d6 d4":"exd4 4|Nf6 2",
+  "e4 e5 Bc4":"Nf6 4|Bc5 2|Nc6 2",
+  "e4 e5 Nc3":"Nf6 4|Nc6 3",
+  /* Sicilienne */
+  "e4 c5":"Nf3 7|Nc3 2|c3 1",
+  "e4 c5 Nf3":"d6 4|Nc6 3|e6 3",
+  "e4 c5 Nf3 d6":"d4 6",
+  "e4 c5 Nf3 d6 d4":"cxd4 6",
+  "e4 c5 Nf3 d6 d4 cxd4":"Nxd4 6",
+  "e4 c5 Nf3 d6 d4 cxd4 Nxd4":"Nf6 6",
+  "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6":"Nc3 6",
+  "e4 c5 Nf3 Nc6":"d4 5|Bb5 2",
+  "e4 c5 Nf3 Nc6 d4":"cxd4 6",
+  "e4 c5 Nf3 Nc6 d4 cxd4":"Nxd4 6",
+  "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4":"Nf6 4|g6 2|e5 1",
+  "e4 c5 Nf3 e6":"d4 6",
+  "e4 c5 Nf3 e6 d4":"cxd4 6",
+  "e4 c5 Nf3 e6 d4 cxd4":"Nxd4 6",
+  "e4 c5 Nf3 e6 d4 cxd4 Nxd4":"Nc6 3|a6 3|Nf6 2",
+  "e4 c5 Nc3":"Nc6 5|d6 2",
+  "e4 c5 c3":"Nf6 3|d5 3",
+  /* Francaise, Caro-Kann, Scandinave, Pirc, Alekhine */
+  "e4 e6":"d4 6",
+  "e4 e6 d4":"d5 6",
+  "e4 e6 d4 d5":"Nc3 3|e5 2|exd5 2|Nd2 1",
+  "e4 e6 d4 d5 Nc3":"Nf6 3|Bb4 3",
+  "e4 e6 d4 d5 e5":"c5 6",
+  "e4 e6 d4 d5 e5 c5":"c3 6",
+  "e4 e6 d4 d5 exd5":"exd5 6",
+  "e4 c6":"d4 6",
+  "e4 c6 d4":"d5 6",
+  "e4 c6 d4 d5":"Nc3 3|e5 3|exd5 2",
+  "e4 c6 d4 d5 Nc3":"dxe4 6",
+  "e4 c6 d4 d5 Nc3 dxe4":"Nxe4 6",
+  "e4 c6 d4 d5 Nc3 dxe4 Nxe4":"Bf5 4|Nd7 2|Nf6 2",
+  "e4 c6 d4 d5 e5":"Bf5 5|c5 1",
+  "e4 c6 d4 d5 exd5":"cxd5 6",
+  "e4 d5":"exd5 6",
+  "e4 d5 exd5":"Qxd5 4|Nf6 2",
+  "e4 d5 exd5 Qxd5":"Nc3 6",
+  "e4 d5 exd5 Qxd5 Nc3":"Qa5 4|Qd6 2",
+  "e4 d6":"d4 6",
+  "e4 d6 d4":"Nf6 6",
+  "e4 d6 d4 Nf6":"Nc3 6",
+  "e4 d6 d4 Nf6 Nc3":"g6 5|e5 1",
+  "e4 g6":"d4 6",
+  "e4 g6 d4":"Bg7 6",
+  "e4 Nf6":"e5 6",
+  "e4 Nf6 e5":"Nd5 6",
+  "e4 Nf6 e5 Nd5":"d4 6",
+  "e4 Nf6 e5 Nd5 d4":"d6 6",
+  /* 1.d4 d5 */
+  "d4 d5":"c4 6|Nf3 2|Bf4 2",
+  "d4 d5 c4":"e6 4|c6 3|dxc4 2",
+  "d4 d5 c4 e6":"Nc3 4|Nf3 3",
+  "d4 d5 c4 e6 Nc3":"Nf6 6",
+  "d4 d5 c4 e6 Nc3 Nf6":"Bg5 3|Nf3 3|cxd5 2",
+  "d4 d5 c4 e6 Nc3 Nf6 Bg5":"Be7 5|Nbd7 2",
+  "d4 d5 c4 e6 Nf3":"Nf6 6",
+  "d4 d5 c4 e6 Nf3 Nf6":"Nc3 5|g3 2",
+  "d4 d5 c4 c6":"Nf3 5|Nc3 3",
+  "d4 d5 c4 c6 Nf3":"Nf6 6",
+  "d4 d5 c4 c6 Nf3 Nf6":"Nc3 5|e3 2",
+  "d4 d5 c4 c6 Nc3":"Nf6 6",
+  "d4 d5 c4 dxc4":"Nf3 4|e3 2|e4 2",
+  "d4 d5 c4 dxc4 Nf3":"Nf6 6",
+  "d4 d5 c4 dxc4 Nf3 Nf6":"e3 6",
+  "d4 d5 Nf3":"Nf6 6",
+  "d4 d5 Nf3 Nf6":"c4 4|Bf4 2|e3 1",
+  "d4 d5 Bf4":"Nf6 5|c5 2",
+  "d4 d5 Bf4 Nf6":"e3 5|Nf3 2",
+  "d4 d5 Bf4 Nf6 e3":"c5 3|e6 3",
+  /* 1.d4 Cf6 */
+  "d4 Nf6":"c4 6|Nf3 3|Bf4 1",
+  "d4 Nf6 c4":"e6 4|g6 4|c5 1",
+  "d4 Nf6 c4 e6":"Nc3 4|Nf3 4",
+  "d4 Nf6 c4 e6 Nc3":"Bb4 4|d5 3",
+  "d4 Nf6 c4 e6 Nc3 Bb4":"e3 3|Qc2 3|Nf3 2",
+  "d4 Nf6 c4 e6 Nf3":"d5 3|b6 3",
+  "d4 Nf6 c4 e6 Nf3 b6":"g3 4|a3 2|Nc3 2",
+  "d4 Nf6 c4 g6":"Nc3 6",
+  "d4 Nf6 c4 g6 Nc3":"Bg7 4|d5 3",
+  "d4 Nf6 c4 g6 Nc3 Bg7":"e4 6",
+  "d4 Nf6 c4 g6 Nc3 Bg7 e4":"d6 6",
+  "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6":"Nf3 4|f3 2|Be2 2",
+  "d4 Nf6 c4 g6 Nc3 d5":"cxd5 4|Nf3 3",
+  "d4 Nf6 c4 g6 Nc3 d5 cxd5":"Nxd5 6",
+  "d4 Nf6 c4 c5":"d5 6",
+  "d4 Nf6 Nf3":"d5 3|e6 3|g6 3",
+  "d4 Nf6 Nf3 d5":"c4 4|Bf4 2",
+  "d4 Nf6 Nf3 e6":"c4 5|Bf4 1",
+  "d4 Nf6 Nf3 g6":"c4 4|g3 2",
+  "d4 Nf6 Bf4":"d5 3|e6 2|g6 2",
+  /* 1.Cf3 et 1.c4 */
+  "Nf3 d5":"d4 3|c4 3|g3 2",
+  "Nf3 d5 d4":"Nf6 6",
+  "Nf3 d5 c4":"e6 3|c6 3|d4 1",
+  "Nf3 d5 g3":"Nf6 4|c5 2",
+  "Nf3 Nf6":"d4 3|c4 3|g3 2",
+  "Nf3 Nf6 d4":"d5 3|e6 2|g6 2",
+  "Nf3 Nf6 c4":"e6 3|g6 3|c5 2",
+  "Nf3 Nf6 g3":"d5 3|g6 3",
+  "c4 e5":"Nc3 6",
+  "c4 e5 Nc3":"Nf6 4|Nc6 3",
+  "c4 e5 Nc3 Nf6":"Nf3 4|g3 3",
+  "c4 e5 Nc3 Nc6":"g3 4|Nf3 3",
+  "c4 Nf6":"Nc3 4|Nf3 2|d4 2",
+  "c4 Nf6 Nc3":"e5 3|e6 3|g6 2",
+  "c4 c5":"Nf3 3|Nc3 3",
+  "c4 c5 Nf3":"Nf6 4|Nc6 3",
+  "c4 c5 Nc3":"Nc6 4|Nf6 3",
+  "c4 e6":"Nc3 3|d4 3|Nf3 2",
+  "c4 e6 d4":"d5 4|Nf6 3"
+};
+/* Nombre de demi-coups (les deux camps) pendant lesquels l'ordinateur suit
+   le repertoire, selon sa force. */
+const BOT_LIVRE_MAX={1:4,2:6,3:10,4:12};
+function botLivre(){
+  if(typeof gameStartFen!=="undefined"&&gameStartFen)return null;
+  if(sanList.length>=(BOT_LIVRE_MAX[botLevel]||0))return null;
+  const propre=x=>x.replace(/[+#!?]/g,"");
+  const e=BOT_OUVERTURES[sanList.map(propre).join(" ")];
+  if(!e)return null;
+  const choix=e.split("|").map(x=>{const p=x.split(" ");return {san:p[0],poids:+p[1]||1};});
+  let tirage=Math.random()*choix.reduce((a,c)=>a+c.poids,0),voulu=choix[choix.length-1].san;
+  for(const c of choix){tirage-=c.poids;if(tirage<0){voulu=c.san;break;}}
+  return game.moves().find(m=>propre(game.san(m))===voulu)||null;
+}
 function botMove(){
   if(isFlagged()){busy=false;refreshGame();return;}
   /* Profondeurs relevees apres optimisation du moteur. Auparavant, le niveau
@@ -1445,9 +1616,10 @@ function botMove(){
     const left=(myColor===W?clock.b:clock.w);
     budget=Math.max(50,Math.min(conf.t,left/25));
   }
-  let mv;
+  let mv=botLivre();
   const rnd=botLevel===1?0.35:botLevel===2?0.15:0;
-  if(rnd&&Math.random()<rnd){const l=game.moves();mv=l[Math.floor(Math.random()*l.length)];}
+  if(mv){/* coup du repertoire */}
+  else if(rnd&&Math.random()<rnd){const l=game.moves();mv=l[Math.floor(Math.random()*l.length)];}
   else mv=search(game,conf.d,budget).move;
   if(!mv){busy=false;refreshGame();return;}
   sanList.push(game.san(mv));

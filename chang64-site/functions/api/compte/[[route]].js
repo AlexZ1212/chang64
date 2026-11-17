@@ -23,6 +23,10 @@
  *   POST secours-nouveau   {code}                   -> {secours}
  *   POST lien                                       -> {code, expire}
  *   POST lien-connexion    {pseudo, code}           -> {pseudo, version}
+ *   GET  defis                                      -> {recus, envoyes}
+ *   POST defi-envoyer      {a, exos, r, t}          -> {id}
+ *   POST defi-repondre     {id, r, t}               -> {ok}
+ *   POST defi-supprimer    {id}                     -> {ok}
  *
  * Securite, en bref :
  * - Le code choisi par le joueur ne quitte jamais son navigateur. Celui-ci
@@ -64,6 +68,12 @@ const SESSIONS_MAX = 10;
 const TAILLE_MAX = 300000;           /* caracteres de la progression en JSON */
 const CREATIONS_PAR_HEURE = 300;     /* garde-fou global, sans adresse IP */
 const DELTA_SEMAINE_MAX = 300;
+/* Defis entre membres (table defis de compte-schema.sql). */
+const DEFIS_PAR_JOUR = 20;           /* envois par membre sur 24 h */
+const DEFIS_MEME_MEMBRE = 3;         /* en attente vers un meme destinataire */
+const DEFIS_BOITE = 30;              /* en attente chez un destinataire */
+const DEFIS_DUREE = 60 * JOUR;       /* puis efface */
+const DEFIS_LISTE = 30;
 
 /* ---------- Pseudo ---------- */
 /* PSEUDO-DEBUT : ce bloc est recopie a l'identique dans compte.js (le
@@ -299,6 +309,16 @@ async function nettoyer(env, now) {
     env.DB.prepare("DELETE FROM jetons WHERE vu < ?1").bind(now - DUREE_JETON),
     env.DB.prepare("DELETE FROM liens_appareil WHERE expire < ?1").bind(now)
   ]);
+  /* Defis : ceux de plus de 60 jours, et ceux dont un des deux comptes
+     n'existe plus. A part du lot : si la table defis n'a pas encore ete
+     creee, le reste du menage et la creation de compte ne doivent pas en
+     souffrir. */
+  try {
+    await env.DB.batch([
+      env.DB.prepare("DELETE FROM defis WHERE cree < ?1").bind(now - DEFIS_DUREE),
+      env.DB.prepare("DELETE FROM defis WHERE de NOT IN (SELECT id FROM comptes) OR a NOT IN (SELECT id FROM comptes)")
+    ]);
+  } catch (e) {}
 }
 
 /* ---------- Routes ---------- */
@@ -377,6 +397,13 @@ async function rSynchroEcrire(s, d, env, now) {
 async function rExporter(s, env) {
   const l = await env.DB.prepare("SELECT pseudo, cree, vu, version, donnees, note, resolus, serie, badges, sprint, sem, sem_resolus FROM comptes WHERE id = ?1").bind(s.id).first();
   const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM jetons WHERE compte_id = ?1").bind(s.id).first();
+  let defis = [];
+  try {
+    defis = (await env.DB.prepare(
+      "SELECT d.cree, d.repondu, d.exos, d.r1, d.t1, d.r2, d.t2, c1.pseudo AS de, c2.pseudo AS a FROM defis d " +
+      "JOIN comptes c1 ON c1.id = d.de JOIN comptes c2 ON c2.id = d.a WHERE d.de = ?1 OR d.a = ?1 ORDER BY d.cree DESC"
+    ).bind(s.id).all()).results || [];
+  } catch (e) {}
   const export_ = {
     site: "chang64.com",
     a_propos: "Tout ce que chang64 garde sur ce compte. Le code et le code de secours ne sont gardes que sous forme d'empreintes, illisibles : ils ne figurent pas ici. Aucune adresse IP, aucun e-mail, aucun nom n'est enregistre.",
@@ -386,6 +413,7 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     version: l.version,
+    defis_entre_membres: defis.map(x => ({ envoye_le: new Date(x.cree).toISOString(), de: x.de, a: x.a, exercices: x.exos, resultat_de: x.r1, secondes_de: x.t1, resultat_a: x.r2, secondes_a: x.t2 })),
     progression: l.donnees ? JSON.parse(l.donnees) : null
   };
   return new Response(JSON.stringify(export_, null, 2), {
@@ -394,6 +422,7 @@ async function rExporter(s, env) {
 }
 
 async function effacer(env, id) {
+  try { await env.DB.prepare("DELETE FROM defis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -473,6 +502,57 @@ async function rLienConnexion(d, env, now) {
   return json({ pseudo: c.pseudo, version: c.version }, 200, cookiePoser(jeton));
 }
 
+/* ---------- Defis entre membres ---------- */
+/* Un membre joue cinq exercices puis envoie le defi a un autre membre, par
+   son pseudo : les memes exercices, son resultat a battre. Le destinataire
+   le trouve dans son compte, le releve, et les deux voient le resultat.
+   Aucun texte libre ne circule : un pseudo, cinq exercices, un score.
+   - exos : cinq numeros d'exercice, 4 caracteres en base 36 chacun ;
+   - r : cinq chiffres, 2 = trouve du premier coup, 1 = trouve ensuite,
+     0 = rate ; t : secondes (comme le defi par lien, duel.js).
+   Limites, pour qu'on ne puisse pas inonder quelqu'un : 20 envois par jour,
+   3 defis en attente vers un meme membre, 30 en attente dans une boite.
+   Le destinataire peut effacer un defi recu, l'auteur un defi envoye. */
+const defiExos = x => typeof x === "string" && /^[0-9a-z]{20}$/.test(x);
+const defiScore = x => typeof x === "string" && /^[012]{5}$/.test(x);
+const defiTemps = x => Number.isInteger(x) && x >= 0 && x <= 35999;
+async function rDefis(s, env) {
+  const lire = async (moi, autre) => (await env.DB.prepare(
+    "SELECT d.id, c.pseudo AS p, d.exos, d.r1, d.t1, d.r2, d.t2, d.cree, d.repondu FROM defis d JOIN comptes c ON c.id = d." + autre +
+    " WHERE d." + moi + " = ?1 ORDER BY d.cree DESC LIMIT ?2"
+  ).bind(s.id, DEFIS_LISTE).all()).results || [];
+  return json({ recus: await lire("a", "de"), envoyes: await lire("de", "a") });
+}
+async function rDefiEnvoyer(s, d, env, now) {
+  if (!defiExos(d.exos) || !defiScore(d.r) || !defiTemps(d.t)) return erreur("requete", 400);
+  const c = await compteParPseudo(env, d.a);
+  if (!c) return erreur("membre", 404);
+  if (c.id === s.id) return erreur("soi", 400);
+  /* Les trois plafonds et l'insertion en une seule instruction : des envois
+     simultanes ne passent pas entre les mailles. */
+  const r = await env.DB.prepare(
+    "INSERT INTO defis (de, a, exos, r1, t1, cree) SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE " +
+    "(SELECT COUNT(*) FROM defis WHERE de = ?1 AND cree > ?7) < ?8 AND " +
+    "(SELECT COUNT(*) FROM defis WHERE de = ?1 AND a = ?2 AND r2 IS NULL) < ?9 AND " +
+    "(SELECT COUNT(*) FROM defis WHERE a = ?2 AND r2 IS NULL) < ?10 RETURNING id"
+  ).bind(s.id, c.id, d.exos, d.r, d.t, now, now - JOUR, DEFIS_PAR_JOUR, DEFIS_MEME_MEMBRE, DEFIS_BOITE).first();
+  if (!r) return erreur("trop", 429);
+  return json({ id: r.id, a: c.pseudo }, 201);
+}
+async function rDefiRepondre(s, d, env, now) {
+  if (!Number.isInteger(d.id) || !defiScore(d.r) || !defiTemps(d.t)) return erreur("requete", 400);
+  /* Seul le destinataire repond, et une seule fois. */
+  const r = await env.DB.prepare(
+    "UPDATE defis SET r2 = ?3, t2 = ?4, repondu = ?5 WHERE id = ?1 AND a = ?2 AND r2 IS NULL RETURNING id"
+  ).bind(d.id, s.id, d.r, d.t, now).first();
+  return r ? json({ ok: true }) : erreur("defi", 404);
+}
+async function rDefiSupprimer(s, d, env) {
+  if (!Number.isInteger(d.id)) return erreur("requete", 400);
+  const r = await env.DB.prepare("DELETE FROM defis WHERE id = ?1 AND (a = ?2 OR de = ?2) RETURNING id").bind(d.id, s.id).first();
+  return r ? json({ ok: true }) : erreur("defi", 404);
+}
+
 export async function onRequest({ request, env, params }) {
   try {
     if (!env.DB) return erreur("indisponible", 503);
@@ -497,13 +577,14 @@ export async function onRequest({ request, env, params }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
     if (m === "GET") {
       if (route === "etat") return json({ pseudo: s.pseudo, version: s.version, cree: s.cree });
       if (route === "synchro") return await rSynchroLire(s, env);
+      if (route === "defis") return await rDefis(s, env);
       return await rExporter(s, env);
     }
     const d = await corps(request);
@@ -512,6 +593,9 @@ export async function onRequest({ request, env, params }) {
     if (route === "supprimer") return await rSupprimer(s, d, env, now);
     if (route === "code") return await rCode(s, d, env, now);
     if (route === "secours-nouveau") return await rSecoursNouveau(s, d, env, now);
+    if (route === "defi-envoyer") return await rDefiEnvoyer(s, d, env, now);
+    if (route === "defi-repondre") return await rDefiRepondre(s, d, env, now);
+    if (route === "defi-supprimer") return await rDefiSupprimer(s, d, env);
     return await rLien(s, env, now);
   } catch (e) {
     /* Jamais de detail d'erreur dans la reponse. */

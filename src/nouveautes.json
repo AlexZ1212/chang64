@@ -1,5 +1,91 @@
 [
  {
+  "d": "2026-11-17",
+  "en": [
+   "A free account, if you want one",
+   "A username and a code are enough to find your progress on all your devices. Optional: everything still works without one. Menu, My account."
+  ],
+  "fr": [
+   "Un compte gratuit, si tu veux",
+   "Un pseudo et un code suffisent pour retrouver ta progression sur tous tes appareils. Facultatif : tout marche encore sans compte. Menu, Mon compte."
+  ],
+  "es": [
+   "Una cuenta gratuita, si quieres",
+   "Un nombre de usuario y un código bastan para recuperar tu progreso en todos tus dispositivos. Opcional: todo sigue funcionando sin cuenta. Menú, Mi cuenta."
+  ],
+  "pt": [
+   "Uma conta grátis, se você quiser",
+   "Um nome de usuário e um código bastam para reencontrar seu progresso em todos os seus aparelhos. Opcional: tudo continua funcionando sem conta. Menu, Minha conta."
+  ],
+  "de": [
+   "Ein kostenloses Konto, wenn du magst",
+   "Ein Benutzername und ein Code genügen, um deinen Fortschritt auf allen deinen Geräten wiederzufinden. Freiwillig: Alles funktioniert weiterhin ohne Konto. Menü, Mein Konto."
+  ],
+  "ru": [
+   "Бесплатный аккаунт, если хочешь",
+   "Имени пользователя и кода достаточно, чтобы твой прогресс был на всех твоих устройствах. По желанию: всё по-прежнему работает без аккаунта. Меню, Мой аккаунт."
+  ],
+  "it": [
+   "Un account gratuito, se vuoi",
+   "Bastano un nome utente e un codice per ritrovare i tuoi progressi su tutti i tuoi dispositivi. Facoltativo: tutto funziona ancora senza account. Menu, Il mio account."
+  ],
+  "tr": [
+   "İstersen ücretsiz bir hesap",
+   "İlerlemeni bütün cihazlarında bulmak için bir kullanıcı adı ve bir kod yeter. İsteğe bağlı: her şey hesapsız da çalışmaya devam ediyor. Menü, Hesabım."
+  ],
+  "pl": [
+   "Darmowe konto, jeśli chcesz",
+   "Wystarczą nazwa użytkownika i kod, żeby mieć swoje postępy na wszystkich urządzeniach. Nieobowiązkowe: wszystko nadal działa bez konta. Menu, Moje konto."
+  ],
+  "id": [
+   "Akun gratis, kalau kamu mau",
+   "Cukup nama pengguna dan kode untuk menemukan progresmu di semua perangkatmu. Opsional: semuanya tetap berjalan tanpa akun. Menu, Akun saya."
+  ]
+ },
+ {
+  "d": "2026-11-17",
+  "en": [
+   "Top players",
+   "Six leaderboards for players with an account: this week, rating, puzzles solved, streak, badges and Sprint."
+  ],
+  "fr": [
+   "Meilleurs joueurs",
+   "Six tableaux pour les joueurs qui ont un compte : cette semaine, classement, exercices résolus, série, badges et Sprint."
+  ],
+  "es": [
+   "Mejores jugadores",
+   "Seis tablas para los jugadores con cuenta: esta semana, puntuación, ejercicios resueltos, racha, insignias y Sprint."
+  ],
+  "pt": [
+   "Melhores jogadores",
+   "Seis tabelas para os jogadores com conta: esta semana, pontuação, exercícios resolvidos, sequência, medalhas e Sprint."
+  ],
+  "de": [
+   "Beste Spieler",
+   "Sechs Ranglisten für Spieler mit Konto: diese Woche, Wertung, gelöste Aufgaben, Serie, Abzeichen und Sprint."
+  ],
+  "ru": [
+   "Лучшие игроки",
+   "Шесть таблиц для игроков с аккаунтом: эта неделя, рейтинг, решённые задачи, серия, значки и спринт."
+  ],
+  "it": [
+   "Migliori giocatori",
+   "Sei classifiche per i giocatori con un account: questa settimana, punteggio, esercizi risolti, serie, medaglie e Sprint."
+  ],
+  "tr": [
+   "En iyi oyuncular",
+   "Hesabı olan oyuncular için altı sıralama: bu hafta, puan, çözülen bulmacalar, seri, rozetler ve Sprint."
+  ],
+  "pl": [
+   "Najlepsi gracze",
+   "Sześć rankingów dla graczy z kontem: ten tydzień, ranking, rozwiązane zadania, seria, odznaki i Sprint."
+  ],
+  "id": [
+   "Pemain terbaik",
+   "Enam papan peringkat untuk pemain yang punya akun: minggu ini, rating, teka-teki terpecahkan, rangkaian, lencana, dan Sprint."
+  ]
+ },
+ {
   "d": "2026-11-15",
   "en": [
    "A livelier tone",

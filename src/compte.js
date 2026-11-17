@@ -815,6 +815,58 @@ function cpDemarrer(){
 {const l=$("menuCompteTexte");if(l)l.textContent=t("My account");}
 setTimeout(cpDemarrer,1200);
 
+/* ---------- Tableaux des joueurs ---------- */
+/* Vue "Meilleurs joueurs" du menu (2026-11-17) : six tableaux de 50 joueurs
+   lus dans /api/classement (pseudo + chiffre, rien d'autre). Ouverte a tous ;
+   seuls les joueurs qui ont un compte y figurent. La ligne du joueur
+   connecte est mise en avant. Chaque tableau est garde une minute ici, cinq
+   sur le serveur. */
+const CPJ=[["semaine","This week"],["note","Rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"]];
+let cpjPar="semaine",cpjCache={};
+async function cpjVue(par){
+  const v=$("menuJoueursVue");if(!v)return;
+  if(par)cpjPar=par;
+  const p=cpjPar;
+  const onglets='<div class="cpj-onglets">'+CPJ.map(([k,l])=>'<button type="button" aria-pressed="'+(k===p)+'" data-cpj="'+k+'">'+cpE(l)+"</button>").join("")+"</div>"+
+    (p==="semaine"?'<p class="cp-note">'+cpE("Puzzles solved since Monday.")+"</p>":"");
+  const pied=cp?"":'<p class="cp-note cp-centre">'+cpE("Create an account to appear here.")+'</p><button type="button" class="btn cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>";
+  const dessiner=corps=>{if(p===cpjPar&&!v.hidden)poserHtml(v,onglets+corps+pied);};
+  let c=cpjCache[p];
+  if(!c||Date.now()-c.t>60000){
+    dessiner('<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");
+    try{
+      const r=await fetch("/api/classement?par="+p);
+      if(r.status!==200)throw new Error("statut");
+      c=cpjCache[p]={t:Date.now(),j:await r.json()};
+    }catch(e){dessiner('<p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
+  }
+  const l=cpListe(c.j&&c.j.joueurs);
+  if(!l.length){dessiner('<p class="cp-note cp-centre">'+cpE("No one here yet. Be the first!")+"</p>");return;}
+  const moi=cp?l.findIndex(x=>x.p===cp.pseudo):-1;
+  dessiner('<ol class="cpj-liste">'+l.map((x,i)=>
+    '<li'+(i===moi?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom">'+echapper(String(x.p))+(i===moi?" <em>("+cpE("You")+")</em>":"")+
+    '</span><b>'+echapper(String(x.v))+"</b></li>").join("")+"</ol>"+
+    (cp&&moi<0?'<p class="cp-note cp-centre">'+cpE("You are not in the top 50 yet.")+"</p>":""));
+}
+{
+  const av=menuVue;
+  menuVue=function(nom){
+    const v=$("menuJoueursVue");
+    if(nom!=="joueurs"){if(v)v.hidden=true;return av.apply(this,arguments);}
+    av.call(this,"accueil");
+    for(const e of document.querySelectorAll("#menuTiroir .tiroir-vue"))e.hidden=e!==v;
+    $("menuRetour").hidden=false;
+    $("menuTitre").textContent=t("Top players");
+    cpjVue();
+    if(v){v.scrollTop=0;if(!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});}
+  };
+}
+document.addEventListener("click",e=>{
+  if(e.target.closest("[data-vue-joueurs]")){menuVue("joueurs");return;}
+  const b=e.target.closest("#menuJoueursVue [data-cpj]");
+  if(b)cpjVue(b.dataset.cpj);
+});
+
 /* ---------- QR code ---------- */
 /* Encodeur minimal : mode octets, correction L, versions 1 a 6 (134 octets),
    de quoi porter l'adresse d'ajout d'appareil. Rend un SVG. Verifie par

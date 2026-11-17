@@ -970,5 +970,13 @@ module.exports = {
 "Logging in…":"Accesso in corso…",
 "Your code has been changed.":"Il tuo codice è stato cambiato.",
 "Your account has been deleted.":"Il tuo account è stato eliminato.",
-"Keep your progress on all your devices: create a free account.":"Tieni i tuoi progressi su tutti i tuoi dispositivi: crea un account gratuito."
+"Keep your progress on all your devices: create a free account.":"Tieni i tuoi progressi su tutti i tuoi dispositivi: crea un account gratuito.",
+/* Meilleurs joueurs (2026-11-17, compte.js). */
+"Top players":"Migliori giocatori",
+"This week":"Questa settimana",
+"Puzzles solved since Monday.":"Esercizi risolti da lunedì.",
+"Create an account to appear here.":"Crea un account per comparire qui.",
+"Could not load the list. Try again later.":"Impossibile caricare l'elenco. Riprova più tardi.",
+"No one here yet. Be the first!":"Ancora nessuno. Apri tu la lista!",
+"You are not in the top 50 yet.":"Non sei ancora tra i primi 50."
 };

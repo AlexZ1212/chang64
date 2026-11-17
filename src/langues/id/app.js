@@ -970,5 +970,13 @@ module.exports = {
 "Logging in…":"Sedang masuk…",
 "Your code has been changed.":"Kodemu sudah diganti.",
 "Your account has been deleted.":"Akunmu sudah dihapus.",
-"Keep your progress on all your devices: create a free account.":"Simpan progresmu di semua perangkatmu: buat akun gratis."
+"Keep your progress on all your devices: create a free account.":"Simpan progresmu di semua perangkatmu: buat akun gratis.",
+/* Meilleurs joueurs (2026-11-17, compte.js). */
+"Top players":"Pemain terbaik",
+"This week":"Minggu ini",
+"Puzzles solved since Monday.":"Teka-teki terpecahkan sejak Senin.",
+"Create an account to appear here.":"Buat akun untuk tampil di sini.",
+"Could not load the list. Try again later.":"Daftar tidak bisa dimuat. Coba lagi nanti.",
+"No one here yet. Be the first!":"Belum ada siapa-siapa. Jadilah yang pertama!",
+"You are not in the top 50 yet.":"Kamu belum masuk 50 besar."
 };

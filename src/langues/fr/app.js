@@ -825,5 +825,13 @@ module.exports = {
 "Logging in…":"Connexion…",
 "Your code has been changed.":"Ton code a été changé.",
 "Your account has been deleted.":"Ton compte a été supprimé.",
-"Keep your progress on all your devices: create a free account.":"Garde ta progression sur tous tes appareils : crée un compte gratuit."
+"Keep your progress on all your devices: create a free account.":"Garde ta progression sur tous tes appareils : crée un compte gratuit.",
+/* Meilleurs joueurs (2026-11-17, compte.js). */
+"Top players":"Meilleurs joueurs",
+"This week":"Cette semaine",
+"Puzzles solved since Monday.":"Exercices résolus depuis lundi.",
+"Create an account to appear here.":"Crée un compte pour y figurer.",
+"Could not load the list. Try again later.":"Impossible de charger la liste. Réessaie plus tard.",
+"No one here yet. Be the first!":"Personne ici pour l'instant. À toi d'ouvrir la liste !",
+"You are not in the top 50 yet.":"Tu n'es pas encore parmi les 50 en tête."
 };

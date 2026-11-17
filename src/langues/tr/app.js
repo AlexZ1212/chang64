@@ -970,5 +970,13 @@ module.exports = {
 "Logging in…":"Giriş yapılıyor…",
 "Your code has been changed.":"Kodun değiştirildi.",
 "Your account has been deleted.":"Hesabın silindi.",
-"Keep your progress on all your devices: create a free account.":"İlerlemeni bütün cihazlarında sakla: ücretsiz bir hesap oluştur."
+"Keep your progress on all your devices: create a free account.":"İlerlemeni bütün cihazlarında sakla: ücretsiz bir hesap oluştur.",
+/* Meilleurs joueurs (2026-11-17, compte.js). */
+"Top players":"En iyi oyuncular",
+"This week":"Bu hafta",
+"Puzzles solved since Monday.":"Pazartesiden beri çözülen bulmacalar.",
+"Create an account to appear here.":"Burada görünmek için hesap oluştur.",
+"Could not load the list. Try again later.":"Liste yüklenemedi. Daha sonra yeniden dene.",
+"No one here yet. Be the first!":"Henüz kimse yok. Listeyi sen aç!",
+"You are not in the top 50 yet.":"Henüz ilk 50'de değilsin."
 };

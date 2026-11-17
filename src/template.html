@@ -2340,7 +2340,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <div class="hero-lede">
       <h2>Play chess.<br>Solve tactics.<br>Get better.</h2>
       <p class="promise">No account needed. No ads. No distractions. Just chess.</p>
-      <p>Made for beginners: puzzles within your reach, a computer at your level and games with friends.</p>
+      <p>Made for beginners: puzzles that won't make you cry, a computer that knows how to lose, and games with your friends.</p>
       </div>
       <div class="hero-rest">
       <!-- Depuis le 2026-11-08, a la demande d'Alexandre, "Play now" est sous
@@ -2366,7 +2366,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
              qu'il produit. -->
         <div class="tc-cats" id="tcCats"><button aria-pressed="false">Bullet</button><button aria-pressed="false">Blitz</button><button aria-pressed="true">Rapid</button><button aria-pressed="false">Classical</button><button aria-pressed="false">Daily</button></div>
         <div class="tc-chips" id="tcChips"><button class="chip" aria-pressed="true">10+0</button><button class="chip" aria-pressed="false">10+5</button><button class="chip" aria-pressed="false">15+10</button></div>
-        <p class="tc-note" id="tcNote">Rapid: enough time to actually think. A good default.</p>
+        <p class="tc-note" id="tcNote">Rapid: enough time to think, not enough to fall asleep. The right place to start.</p>
       </div>
       <div class="cta cta-jouer"><button class="btn primary" id="heroPlay">Play now</button></div>
 
@@ -2391,19 +2391,19 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <button class="card" id="cardPlay">
         <span class="ico" id="icoPlay"></span>
         <h3>Play the computer</h3>
-        <p>Four strengths, from a forgiving beginner to an engine that punishes loose moves. Legal moves shown, no assistance while you play.</p>
+        <p>Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Possible moves are shown; the rest is up to you.</p>
         <span class="go">Start a game &rarr;</span>
       </button>
       <button class="card" id="cardPuzzles">
         <span class="ico" id="icoPuzzles"></span>
         <h3>Tactics trainer</h3>
-        <p><span id="hCount" data-nombre="__NP__">__NP_EN__</span> puzzles, each one proved by the engine. Difficulty rises after three in a row and eases off when you stumble.</p>
+        <p><span id="hCount" data-nombre="__NP__">__NP_EN__</span> puzzles, all checked by the engine. Three in a row and it gets spicier; stumble and it eases off.</p>
         <span class="go">Solve a puzzle &rarr;</span>
       </button>
       <button class="card" id="cardFriend">
         <span class="ico" id="icoFriend"></span>
         <h3>Play a friend</h3>
-        <p>Every move produces a link. Send it on WhatsApp or Messenger, your friend replies with theirs. Nothing to install.</p>
+        <p>Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.</p>
         <span class="go">Challenge a friend &rarr;</span>
       </button>
     </div>
@@ -2455,7 +2455,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
         <div class="stat"><b id="hStreak">0</b><span>Day streak</span><em>Puzzle of the day</em></div>
       </div>
       <div class="startline hide" id="homeStart">
-        <span>Your progress will show up here.</span>
+        <span>Your progress will show up here. It is waiting for your first move.</span>
         <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>
       </div>
       <!-- Recap hebdo : une ligne discrete, masquee par defaut
@@ -2521,7 +2521,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
           <div class="result-card">
             <b id="readyTitle">Ready?</b><button type="button" class="info-tip hide" id="tipResumeBtn" aria-expanded="false" aria-controls="tipResume" aria-label="More info">i</button>
             <span id="readySub"></span>
-            <p class="info-tip-pop hide" id="tipResume">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
+            <p class="info-tip-pop hide" id="tipResume">You can leave, your game will wait: it saves itself in this browser, ready to pick up again.</p>
             <!-- Choix de couleur, optionnel : masque par defaut (showReadyFor,
                  ui2.js), revele uniquement pour Coordonnees, seule epreuve ou
                  le point de vue se choisit avant de commencer. Meme carte que
@@ -2607,7 +2607,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <div id="pane-play" class="hide">
         <div class="panel" id="statusPanel">
           <p class="opening" id="opening"></p>
-          <div class="status" id="status">Pick a colour and a strength, then play.</div>
+          <div class="status" id="status">Pick a colour, pick a strength, and off you go.</div>
           <div class="btnrow" style="margin-top:10px">
             <button class="btn danger" id="btnResign">Resign</button>
           </div>
@@ -2643,7 +2643,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
         </div>
         <div class="panel" id="scoresheetPanel">
           <div class="eyebrow">Scoresheet<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipScoresheet" aria-label="More info">i</button></div>
-          <p class="info-tip-pop hide" id="tipScoresheet">Leaving the page won't lose your game: it saves automatically in this browser, ready to pick up again.</p>
+          <p class="info-tip-pop hide" id="tipScoresheet">You can leave, your game will wait: it saves itself in this browser, ready to pick up again.</p>
           <div class="sheet">
             <div class="sheet-head"><span>#</span><span>White</span><span>Black</span></div>
             <div class="sheet-body" id="sheet"><div class="sheet-empty">No moves yet</div></div>
@@ -2771,18 +2771,18 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
         <div id="solveMenu">
           <button type="button" class="solveCard" id="cardSolvePuzzles">
             <b>Puzzles</b>
-            <span class="solveCard-desc">Solve tactical exercises at your level, as much as you like. The level adjusts as you improve.</span>
+            <span class="solveCard-desc">Puzzles at your level, as many as you like. Get better and they get tougher.</span>
             <span class="solveCard-sub" id="subSolvePuzzles"></span>
           </button>
           <button type="button" class="solveCard" id="cardSolveDaily">
             <b>Puzzle of the day</b>
-            <span class="solveCard-desc">One new puzzle every day. Come back to build your streak, and revisit any past day in the calendar.</span>
+            <span class="solveCard-desc">One new puzzle every day, like a morning coffee. Come back to build your streak, or catch up on a past day in the calendar.</span>
             <span class="solveCard-sub" id="subSolveDaily"></span>
           </button>
           <!-- Defi entre amis par lien (2026-11-15, voir duel.js). -->
           <button type="button" class="solveCard" id="cardSolveDuel">
             <b>Challenge a friend</b>
-            <span class="solveCard-desc">Five puzzles at your level. Play them, send the link: your friend gets the same ones and tries to beat you.</span>
+            <span class="solveCard-desc">Five puzzles at your level. Play them, send the link: your friend gets the same ones and has to do better. Good luck to them.</span>
             <span class="solveCard-sub" id="subSolveDuel"></span>
           </button>
           <!-- Erreurs a revoir (2026-10-26) : la file de repetition espacee
@@ -2792,22 +2792,22 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
                toutes les erreurs echues, voir lancerRevision() dans ui2.js. -->
           <button type="button" class="solveCard hide" id="cardSolveMistakes">
             <b>Mistakes to review</b>
-            <span class="solveCard-desc">The puzzles you got wrong come back, spaced out further after each success, until you know them.</span>
+            <span class="solveCard-desc">The puzzles you got wrong come back for a rematch, further apart after each success, until you know them by heart.</span>
             <span class="solveCard-sub" id="subSolveMistakes"></span>
           </button>
           <button type="button" class="solveCard" id="cardSolveSprint">
             <b>Chang Sprint</b>
-            <span class="solveCard-desc">Three minutes to solve as many puzzles as you can. Three misses and it stops.</span>
+            <span class="solveCard-desc">Three minutes, as many puzzles as you can. Three misses and the party is over.</span>
             <span class="solveCard-sub" id="subSolveSprint"></span>
           </button>
           <button type="button" class="solveCard" id="cardSolveCoord">
             <b>Coordinates</b>
-            <span class="solveCard-desc">Recognise every square at a glance, the foundation of fast calculation.</span>
+            <span class="solveCard-desc">Find e4 without counting on your fingers: knowing the squares at a glance is where fast calculation starts.</span>
             <span class="solveCard-sub" id="subSolveCoord"></span>
           </button>
           <button type="button" class="solveCard" id="cardSolveEndgames">
             <b>Endgames</b>
-            <span class="solveCard-desc">Five essential endgames worth knowing cold, they matter in almost any game.</span>
+            <span class="solveCard-desc">Five endgames to know by heart. They decide more games than any brilliant opening.</span>
             <span class="solveCard-sub" id="subSolveEndgames"></span>
           </button>
           <!-- Sixieme carte (2026-09-07). Elle remplace le filtre par motif
@@ -2823,7 +2823,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
                autres modes sans danger pour la progression. -->
           <button type="button" class="solveCard" id="cardSolveMotifs">
             <b>By pattern</b>
-            <span class="solveCard-desc">Drill one tactic at a time, as long as you like. Your level doesn't move here.</span>
+            <span class="solveCard-desc">One tactic at a time, for as long as you like. Your level stays put, so make all the mistakes you want.</span>
             <span class="solveCard-sub" id="subSolveMotifs"></span>
           </button>
           <!-- Actions "de compte" : deplacees ici depuis le bas de l'onglet
@@ -2861,7 +2861,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
         <div class="panel hide" id="solveMotifsScreen">
           <div class="bloc">
             <h2 id="motifsTitle">Train one pattern</h2>
-            <p class="sub" id="motifsBrief">Pick a tactic and drill it. Your level and streak stay where they are.</p>
+            <p class="sub" id="motifsBrief">Pick a tactic and go for it. Your level and streak are not watching.</p>
           </div>
           <div id="motifsGrid"></div>
         </div>
@@ -3231,7 +3231,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <div id="pane-friend" class="hide">
         <div class="panel" id="amiStatusPanel">
           <h2>Play a friend</h2>
-          <p class="sub">Each move produces a link. Send it, your friend plays, they send theirs back.</p>
+          <p class="sub">Each move becomes a link. Send it, your friend plays, and the link comes back to you.</p>
           <div class="status" id="amiStatus">Start a game.</div>
           <!-- "Annuler mon coup" et "Abandonner" vivaient dans
                #amiNewGamePanel, qui se masque ENTIEREMENT des qu'une partie

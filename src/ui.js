@@ -395,12 +395,12 @@ const TC_CATS=[
   {id:"none",label:"No clock",items:[[0,0]]}
 ];
 const TC_NOTES={
-  bullet:"Bullet: every second counts. The engine will move almost instantly.",
-  blitz:"Blitz: the most popular pace online.",
-  rapid:"Rapid: enough time to actually think. A good default.",
-  classical:"Classical: long games, no rush.",
+  bullet:"Bullet: blink and it's over. The engine will move almost instantly.",
+  blitz:"Blitz: the most popular pace online, and the best excuse for a blunder.",
+  rapid:"Rapid: enough time to think, not enough to fall asleep. The right place to start.",
+  classical:"Classical: long games, no rush. Tea is allowed.",
   daily:"Daily games are played with a friend over a link, one move at a time.",
-  none:"No clock: take as long as you like."
+  none:"No clock: take as long as you like. Nobody is counting."
 };
 let tcCat="rapid", tcIdx=0;
 function tcCurrent(){

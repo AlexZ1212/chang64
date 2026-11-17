@@ -3025,7 +3025,7 @@ if($("readySettings"))$("readySettings").onclick=()=>{
   const p=$("gameSettings")||$("segLevel");
   if(p){try{p.scrollIntoView({behavior:"smooth",block:"center"});}catch(e){p.scrollIntoView();}}
   const s=$("status");
-  if(s)s.textContent=t("Pick a colour and a strength, then play.");
+  if(s)s.textContent=t("Pick a colour, pick a strength, and off you go.");
 };
 
 /* ==========================================================

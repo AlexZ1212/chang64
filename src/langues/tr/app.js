@@ -998,5 +998,10 @@ module.exports = {
 "Your answer has been sent to {name}.":"Yanıtın {name} adlı üyeye gönderildi.",
 "Your answer could not be sent. Check your network.":"Yanıtın gönderilemedi. Ağını kontrol et.",
 "Try again":"Yeniden dene",
-"A perfect week of challenges earns one too.":"Kusursuz bir görev haftası da bir tane kazandırır."
+"A perfect week of challenges earns one too.":"Kusursuz bir görev haftası da bir tane kazandırır.",
+/* Changer de pseudo (2026-11-17, compte.js). */
+"Change my username":"Kullanıcı adımı değiştir",
+"New username":"Yeni kullanıcı adı",
+"Your code stays the same.":"Kodun aynı kalır.",
+"Your username has been changed.":"Kullanıcı adın değiştirildi."
 };

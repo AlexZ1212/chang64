@@ -998,5 +998,10 @@ module.exports = {
 "Your answer has been sent to {name}.":"La tua risposta è stata inviata a {name}.",
 "Your answer could not be sent. Check your network.":"Impossibile inviare la tua risposta. Controlla la rete.",
 "Try again":"Riprova",
-"A perfect week of challenges earns one too.":"Anche una settimana perfetta di sfide ne fa guadagnare uno."
+"A perfect week of challenges earns one too.":"Anche una settimana perfetta di sfide ne fa guadagnare uno.",
+/* Changer de pseudo (2026-11-17, compte.js). */
+"Change my username":"Cambia il mio nome utente",
+"New username":"Nuovo nome utente",
+"Your code stays the same.":"Il tuo codice resta lo stesso.",
+"Your username has been changed.":"Il tuo nome utente è stato cambiato."
 };

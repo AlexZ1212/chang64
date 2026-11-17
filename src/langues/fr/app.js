@@ -853,5 +853,10 @@ module.exports = {
 "Your answer has been sent to {name}.":"Ta réponse a été envoyée à {name}.",
 "Your answer could not be sent. Check your network.":"Ta réponse n'a pas pu être envoyée. Vérifie ton réseau.",
 "Try again":"Réessayer",
-"A perfect week of challenges earns one too.":"Une semaine parfaite de défis en rapporte un aussi."
+"A perfect week of challenges earns one too.":"Une semaine parfaite de défis en rapporte un aussi.",
+/* Changer de pseudo (2026-11-17, compte.js). */
+"Change my username":"Changer mon pseudo",
+"New username":"Nouveau pseudo",
+"Your code stays the same.":"Ton code reste le même.",
+"Your username has been changed.":"Ton pseudo a été changé."
 };

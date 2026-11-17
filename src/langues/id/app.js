@@ -998,5 +998,10 @@ module.exports = {
 "Your answer has been sent to {name}.":"Jawabanmu sudah terkirim ke {name}.",
 "Your answer could not be sent. Check your network.":"Jawabanmu tidak bisa dikirim. Periksa jaringanmu.",
 "Try again":"Coba lagi",
-"A perfect week of challenges earns one too.":"Minggu tantangan yang sempurna juga memberi satu."
+"A perfect week of challenges earns one too.":"Minggu tantangan yang sempurna juga memberi satu.",
+/* Changer de pseudo (2026-11-17, compte.js). */
+"Change my username":"Ganti nama penggunaku",
+"New username":"Nama pengguna baru",
+"Your code stays the same.":"Kodemu tetap sama.",
+"Your username has been changed.":"Nama penggunamu sudah diganti."
 };

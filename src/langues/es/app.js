@@ -1000,5 +1000,10 @@ module.exports = {
 "Your answer has been sent to {name}.":"Tu respuesta se ha enviado a {name}.",
 "Your answer could not be sent. Check your network.":"No se pudo enviar tu respuesta. Comprueba tu red.",
 "Try again":"Reintentar",
-"A perfect week of challenges earns one too.":"Una semana perfecta de retos también da una."
+"A perfect week of challenges earns one too.":"Una semana perfecta de retos también da una.",
+/* Changer de pseudo (2026-11-17, compte.js). */
+"Change my username":"Cambiar mi nombre de usuario",
+"New username":"Nuevo nombre de usuario",
+"Your code stays the same.":"Tu código sigue siendo el mismo.",
+"Your username has been changed.":"Tu nombre de usuario se ha cambiado."
 };

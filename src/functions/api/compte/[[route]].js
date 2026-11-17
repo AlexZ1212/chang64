@@ -21,6 +21,7 @@
  *   POST code              {ancien, nouveau}
  *   POST secours           {pseudo, secours, code}  -> {pseudo, secours, version}
  *   POST secours-nouveau   {code}                   -> {secours}
+ *   POST pseudo-changer    {pseudo, ancien, nouveau} -> {pseudo}
  *   POST lien                                       -> {code, expire}
  *   POST lien-connexion    {pseudo, code}           -> {pseudo, version}
  *   GET  defis                                      -> {recus, envoyes}
@@ -373,7 +374,7 @@ async function rConnexion(d, env, now) {
 
 async function rSynchroLire(s, env) {
   const l = await env.DB.prepare("SELECT version, donnees FROM comptes WHERE id = ?1").bind(s.id).first();
-  return json({ version: l.version, donnees: l.donnees ? JSON.parse(l.donnees) : null });
+  return json({ version: l.version, pseudo: s.pseudo, donnees: l.donnees ? JSON.parse(l.donnees) : null });
 }
 async function rSynchroEcrire(s, d, env, now) {
   if (!Number.isInteger(d.version) || d.version < 0) return erreur("version", 400);
@@ -447,6 +448,28 @@ async function rCode(s, d, env, now) {
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1 AND hash <> ?2").bind(s.id, s.jeton)
   ]);
   return json({ ok: true });
+}
+
+/* Changer de pseudo. Le code etire par le navigateur est sale par le pseudo
+   (compte.js) : il change donc avec lui, meme si le joueur garde le meme
+   code. Le navigateur envoie les deux, l'ancien pour prouver qu'il connait
+   le code, le nouveau pour la suite. Les regles du pseudo sont celles de la
+   creation ; l'unicite est garantie par la base. Les sessions, le code de
+   secours et la progression ne bougent pas. */
+async function rPseudoChanger(s, d, env, now) {
+  const v = pseudoValider(d.pseudo);
+  if (!v.ok) return erreur("pseudo", 400, { raison: v.raison });
+  if (!codeValide(d.nouveau)) return erreur("code", 400);
+  const r = await codeEssayer(env, s.id, d.ancien, now);
+  if (r !== "ok") return reponseEssai(r, now);
+  try {
+    await env.DB.prepare("UPDATE comptes SET cle = ?2, pseudo = ?3, pin_hash = ?4 WHERE id = ?1")
+      .bind(s.id, v.cle, v.pseudo, await codeHacher(d.nouveau, env)).run();
+  } catch (e) {
+    if (/UNIQUE/i.test(String(e && e.message))) return erreur("pseudo", 409, { raison: "pris" });
+    throw e;
+  }
+  return json({ pseudo: v.pseudo });
 }
 
 /* Code oublie : le code de secours permet d'en choisir un nouveau. Il ne
@@ -577,7 +600,7 @@ export async function onRequest({ request, env, params }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "pseudo-changer"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -593,6 +616,7 @@ export async function onRequest({ request, env, params }) {
     if (route === "supprimer") return await rSupprimer(s, d, env, now);
     if (route === "code") return await rCode(s, d, env, now);
     if (route === "secours-nouveau") return await rSecoursNouveau(s, d, env, now);
+    if (route === "pseudo-changer") return await rPseudoChanger(s, d, env, now);
     if (route === "defi-envoyer") return await rDefiEnvoyer(s, d, env, now);
     if (route === "defi-repondre") return await rDefiRepondre(s, d, env, now);
     if (route === "defi-supprimer") return await rDefiSupprimer(s, d, env);

@@ -362,6 +362,7 @@ async function cpSynchro(o){
       if(r.s===401){cpSessionPerdue();return false;}
       if(r.s!==200){cpEtat("hors-ligne");return false;}
       distant=r.j.donnees;version=r.j.version;lu=true;
+      cpPseudoRecu(r.j.pseudo);
     }
     for(let essai=0;essai<4;essai++){
       const local=cpEnveloppe();
@@ -393,6 +394,15 @@ async function cpSynchro(o){
     cpEnCours=false;
     if(cpEncore){cpEncore=false;cpPlanifier(5000);}
   }
+}
+/* Le serveur donne le pseudo a chaque lecture : s'il a change sur un autre
+   appareil, celui-ci le reprend, avec sa cle (le sel du code en depend). */
+function cpPseudoRecu(pseudo){
+  if(!cp||typeof pseudo!=="string"||pseudo===cp.pseudo)return;
+  const v=pseudoValider(pseudo);if(!v.ok)return;
+  const b=cpLire("chang64:compteBase");
+  if(b&&b.cle===cp.cle){b.cle=v.cle;cpEcrire("chang64:compteBase",b);}
+  cp.pseudo=v.pseudo;cp.cle=v.cle;cpSauver();cpPoint();
 }
 function cpAlleger(){
   cpSilence=true;
@@ -537,6 +547,7 @@ function cpVue(ecran,donnees){
       '<p class="tiroir-section">'+cpE("My devices")+"</p>"+
       '<button type="button" class="tiroir-lien" data-cp="appareil"><span>'+cpE("Add a device")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("Security")+"</p>"+
+      '<button type="button" class="tiroir-lien" data-cp="pseudo"><span>'+cpE("Change my username")+"</span></button>"+
       '<button type="button" class="tiroir-lien" data-cp="code"><span>'+cpE("Change my code")+"</span></button>"+
       '<button type="button" class="tiroir-lien" data-cp="secoursNouveau"><span>'+cpE("New recovery code")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("My data")+"</p>"+
@@ -555,6 +566,13 @@ function cpVue(ecran,donnees){
       cpChamp("cpAncien","Current code",cpAttrCode(false))+cpChamp("cpCode1","New code",cpAttrCode(true),"6 digits or more.")+cpChamp("cpCode2","Same code again",cpAttrCode(true))+
       '<p class="cp-note">'+cpE("Your other devices will be logged out.")+"</p>"+msg+
       '<button type="button" class="btn primary cp-large" id="cpCodeOk">'+cpE("Change my code")+"</button>"+retour("connecte");
+  }else if(ecran==="pseudo"){
+    h="<h3>"+cpE("Change my username")+"</h3>"+
+      '<p class="cp-note">'+echapper(t("Username: {pseudo}",{pseudo:cp.pseudo}))+"</p>"+
+      cpChamp("cpPseudo","New username",CP_ATTR_PSEUDO,"3 to 20 letters or digits. Other players will see it.")+
+      cpChamp("cpAncien","Your code",cpAttrCode(false))+
+      '<p class="cp-note">'+cpE("Your code stays the same.")+"</p>"+msg+
+      '<button type="button" class="btn primary cp-large" id="cpPseudoOk" disabled>'+cpE("Change my username")+"</button>"+retour("connecte");
   }else if(ecran==="secoursNouveau"){
     h="<h3>"+cpE("New recovery code")+"</h3>"+
       '<p class="cp-note">'+cpE("The previous recovery code will stop working.")+"</p>"+
@@ -592,7 +610,7 @@ function cpPage(){return CP_PAGES[typeof LANG==="string"?LANG:"en"]||CP_PAGES.en
 /* Verification du pseudo pendant la saisie : les regles d'abord, ici, puis
    la disponibilite, demandee au serveur apres une courte pause. */
 function cpPseudoVerifier(){
-  const i=$("cpPseudo"),b=$("cpSuite");if(!i||!b)return;
+  const i=$("cpPseudo"),b=$("cpSuite")||$("cpPseudoOk"),ecran=cpEcran;if(!i||!b)return;
   clearTimeout(cpPseudoMinuteur);b.disabled=true;
   const brut=i.value;
   if(!brut.trim()){cpMessage("");return;}
@@ -601,7 +619,7 @@ function cpPseudoVerifier(){
   cpMessage(t("Checking…"));
   cpPseudoMinuteur=setTimeout(async()=>{
     const r=await cpApi("POST","pseudo",{pseudo:v.pseudo});
-    if(cpEcran!=="creer1"||$("cpPseudo").value!==brut)return;
+    if(cpEcran!==ecran||!$("cpPseudo")||$("cpPseudo").value!==brut)return;
     if(r.s!==200){cpMessage(cpErreur(r));return;}
     if(!r.j.libre){cpMessage(t(CP_RAISONS[r.j.raison]||CP_RAISONS.interdit));return;}
     cpMessage(t("This username is free."),true);
@@ -721,6 +739,13 @@ async function cpAction(id){
     cpOccupe(true);
     r=await cpApi("POST","code",{ancien:await cpEtirer(cp.cle,$("cpAncien").value),nouveau:await cpEtirer(cp.cle,code)});
     if(r.s===200){cpVue("connecte");cpMessage(t("Your code has been changed."),true);return;}
+  }else if(id==="cpPseudoOk"){
+    const code=$("cpAncien").value,ancienne=cp.cle;
+    if(!cpBrouillon.pseudo||!cpBrouillon.cle)return;
+    cpOccupe(true);
+    r=await cpApi("POST","pseudo-changer",{pseudo:cpBrouillon.pseudo,ancien:await cpEtirer(ancienne,code),nouveau:await cpEtirer(cpBrouillon.cle,code)});
+    if(r.s===200){cpBrouillon={};cpPseudoRecu(r.j.pseudo);cpjCache={};cpVue("connecte");cpMessage(t("Your username has been changed."),true);return;}
+    if(r.s===409||(r.s===400&&r.j.erreur==="pseudo")){cpOccupe(false);cpMessage(t(CP_RAISONS[r.j.raison]||CP_RAISONS.interdit));return;}
   }else if(id==="cpSecoursNouveauOk"){
     cpOccupe(true);
     r=await cpApi("POST","secours-nouveau",{code:await cpEtirer(cp.cle,$("cpAncien").value)});
@@ -756,7 +781,7 @@ document.addEventListener("click",e=>{
   if(b&&!b.disabled)cpAction(b.id);
 });
 document.addEventListener("input",e=>{
-  if(e.target.id==="cpPseudo"&&cpEcran==="creer1")cpPseudoVerifier();
+  if(e.target.id==="cpPseudo"&&(cpEcran==="creer1"||cpEcran==="pseudo"))cpPseudoVerifier();
   if(e.target.id==="cpNote"){const b=$("cpFini");if(b)b.disabled=!e.target.checked;}
 });
 /* Entree valide l'ecran en cours. */

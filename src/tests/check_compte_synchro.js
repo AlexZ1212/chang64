@@ -211,11 +211,26 @@ const { fausseD1 } = require("../serveur_local.js");
   await C.api.cpSynchro();
   T("ensuite C additionne comme les autres (74)", lire().progress.solved === 74);
 
+  console.log("\nChangement de pseudo sur un appareil");
+  {
+    const nv = A.api.pseudoValider("Alexandre_II");
+    r = await A.api.cpApi("POST", "pseudo-changer", { pseudo: nv.pseudo, ancien: await A.api.cpEtirer(pv.cle, "583920"), nouveau: await A.api.cpEtirer(nv.cle, "583920") });
+    T("A change de pseudo en gardant son code", r.s === 200 && r.j.pseudo === "Alexandre_II", JSON.stringify(r));
+    await B.api.cpSynchro({ tirer: true });
+    T("B apprend le nouveau pseudo a la synchronisation suivante", B.api.cp.pseudo === "Alexandre_II" && B.api.cp.cle === nv.cle, JSON.stringify(B.api.cp));
+    T("sa progression n'a pas bouge et sa base a suivi le pseudo", lire().progress.solved === 74 && B.api.prog.solved === 74 && JSON.parse(B.stock.get("chang64:compteBase")).cle === nv.cle, lire().progress.solved);
+    /* On revient au pseudo d'origine pour la suite du test. */
+    r = await B.api.cpApi("POST", "pseudo-changer", { pseudo: "Alexandre", ancien: await B.api.cpEtirer(nv.cle, "583920"), nouveau: await B.api.cpEtirer(pv.cle, "583920") });
+    T("B, avec la nouvelle cle, peut a son tour changer le pseudo", r.s === 200, JSON.stringify(r));
+    await A.api.cpSynchro({ tirer: true }); await B.api.cpSynchro({ tirer: true }); await C.api.cpSynchro({ tirer: true });
+    T("tous les appareils sont revenus au pseudo d'origine", [A, B, C].every(x => x.api.cp.pseudo === "Alexandre"));
+  }
+
   console.log("\nSession fermee ailleurs, deconnexion, remise a zero");
   await A.api.cpSynchro({ tirer: true });
   B.cookie = "";
   B.jouer(1, 11000);
-  T("session perdue : signalee, la progression reste sur l'appareil", await B.api.cpSynchro() === false && B.api.etat === "session" && B.api.prog.solved === 73);
+  T("session perdue : signalee, la progression reste sur l'appareil", await B.api.cpSynchro() === false && B.api.etat === "session" && B.api.prog.solved === 75, B.api.prog.solved);
   r = await B.api.cpApi("POST", "connexion", { pseudo: "Alexandre", code: await B.api.cpEtirer(pv.cle, "583920") });
   B.api.cpOuvrir(r.j.pseudo, r.j.version);
   await B.api.cpSynchro({ tirer: true });

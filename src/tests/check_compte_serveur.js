@@ -279,6 +279,35 @@ const avancer = ms => { decalage += ms; };
   env = {};
   T("sans base : 503", (await appel("POST", "pseudo", { pseudo: "Alexandre" })).s === 503);
 
+  console.log("\nChangement de pseudo");
+  {
+    env = { DB: fausseD1() };
+    /* Le navigateur etire le code avec le pseudo pour sel : ici, un code par pseudo. */
+    let r = await appel("POST", "creer", { pseudo: "Avant", code: code(11) });
+    const cA = r.cookie, secoursA = r.j.secours;
+    const cAutre = (await appel("POST", "creer", { pseudo: "Voisin", code: code(12) })).cookie;
+    r = await appel("POST", "connexion", { pseudo: "Avant", code: code(11) });
+    const cA2 = r.cookie;
+    T("sans session : 401", (await appel("POST", "pseudo-changer", { pseudo: "Apres", ancien: code(11), nouveau: code(21) })).s === 401);
+    T("mauvais code : refuse", (await appel("POST", "pseudo-changer", { pseudo: "Apres", ancien: code(99), nouveau: code(21) }, { cookie: cA })).s === 401);
+    T("pseudo interdit : refuse", (await appel("POST", "pseudo-changer", { pseudo: "Admin", ancien: code(11), nouveau: code(21) }, { cookie: cA })).s === 400);
+    r = await appel("POST", "pseudo-changer", { pseudo: "voisin", ancien: code(11), nouveau: code(21) }, { cookie: cA });
+    T("pseudo deja pris : 409", r.s === 409 && r.j.raison === "pris", r.texte);
+    T("nouveau code non etire : refuse", (await appel("POST", "pseudo-changer", { pseudo: "Apres", ancien: code(11), nouveau: "123456" }, { cookie: cA })).s === 400);
+    r = await appel("POST", "pseudo-changer", { pseudo: "Apres", ancien: code(11), nouveau: code(21) }, { cookie: cA });
+    T("changement accepte", r.s === 200 && r.j.pseudo === "Apres", r.texte);
+    T("la session reste ouverte, sous le nouveau pseudo", (await appel("GET", "etat", undefined, { cookie: cA })).j.pseudo === "Apres");
+    T("l'autre appareil reste connecte et apprend le nouveau pseudo par la synchronisation", (await appel("GET", "synchro", undefined, { cookie: cA2 })).j.pseudo === "Apres");
+    T("l'ancien pseudo ne permet plus de se connecter", (await appel("POST", "connexion", { pseudo: "Avant", code: code(11) })).s === 401);
+    T("le nouveau pseudo, avec le code etire pour lui, oui", (await appel("POST", "connexion", { pseudo: "apres", code: code(21) })).s === 200);
+    T("l'ancien pseudo est de nouveau libre", (await appel("POST", "pseudo", { pseudo: "Avant" })).j.libre === true);
+    T("le voisin n'a pas bouge", (await appel("GET", "etat", undefined, { cookie: cAutre })).j.pseudo === "Voisin");
+    r = await appel("POST", "pseudo-changer", { pseudo: "APRÈS", ancien: code(21), nouveau: code(21) }, { cookie: cA });
+    T("changer seulement la casse ou un accent de son propre pseudo : accepte", r.s === 200 && r.j.pseudo === "APRÈS", r.texte);
+    r = await appel("POST", "secours", { pseudo: "Après", secours: secoursA, code: code(31) });
+    T("le code de secours marche toujours apres le changement", r.s === 200);
+  }
+
   console.log("\nDefis entre membres");
   {
     env = { DB: fausseD1() };

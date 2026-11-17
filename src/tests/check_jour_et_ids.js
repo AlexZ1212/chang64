@@ -87,7 +87,11 @@ T("longueur de jour.json multiple de 7 (la boucle garde le jour de la semaine)",
   await attendre(1200);
   d.getElementById("tab-puzzles").click(); await attendre(200);
   d.getElementById("cardSolveDaily").click(); await attendre(2500);
-  const attendu = banque.find(p => p.id === J.ids[auj - J.debut]);
+  /* L'application prend le jour LOCAL du joueur (ui.js), pas le jour UTC :
+     entre minuit et l'heure du decalage horaire, les deux different, et ce
+     test echouait a tort (constate le 2026-11-18 a 0 h 30, heure de Paris). */
+  const maintenant = new Date(), aujLocal = Math.floor(Date.UTC(maintenant.getFullYear(), maintenant.getMonth(), maintenant.getDate()) / 86400000);
+  const attendu = banque.find(p => p.id === J.ids[aujLocal - J.debut]);
   const code = ((d.getElementById("exCode") || {}).textContent || "").replace(/^#/, "");
   T("l'exercice du jour est celui de jour.json (" + (attendu && attendu.code) + ")", !!attendu && code === attendu.code, code);
   T("sans charger d'index complet", !demandes.some(u => /puzzle-index/.test(u)), demandes.filter(u => /index/.test(u)).join(" "));

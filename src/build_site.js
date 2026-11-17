@@ -632,16 +632,24 @@ const { pieceShapes, boardSvg } = require("./plateau_svg.js");
    Sans JavaScript, seule la position finale est visible : le comportement
    actuel est preserve.
    ---------------------------------------------------------------------- */
-function fensAlong(moveStr) {
-  const g = new Game();
+/* fenDepart (2026-11-17) : une ligne peut partir d'une autre position que
+   celle de depart, pour les demonstrations des finales. Le numero des coups
+   repart alors de 1, le trait vient de la position, et l'etiquette garde les
+   signes d'echec et de mat. Sans fenDepart, rien ne change pour les
+   ouvertures. */
+function fensAlong(moveStr, fenDepart) {
+  const g = fenDepart ? new Game(fenDepart) : new Game();
   const out = [{ fen: g.fen(), san: "", n: 0, w: true }];
   const list = moveStr.split(" ").filter(Boolean);
+  let white = !fenDepart || fenDepart.split(" ")[1] !== "b", n = 1;
   for (let i = 0; i < list.length; i++) {
     const mv = g.moves().find(m => g.san(m).replace(/[+#]/g, "") === list[i]);
     if (!mv) return null;
-    const white = i % 2 === 0;
+    const san = fenDepart ? g.san(mv) : list[i];
     g.makeMove(mv);
-    out.push({ fen: g.fen(), san: list[i], n: Math.floor(i / 2) + 1, w: white });
+    out.push({ fen: g.fen(), san, n, w: white });
+    if (!white) n++;
+    white = !white;
   }
   return out;
 }
@@ -682,8 +690,8 @@ function usesFor(fen, S) {
    dupliquer un SVG verbeux dans le JS de bascule l'avait fait deraper. */
 const PLAYPAUSE_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7V5Z"/><path d="M5 5h4v14H5zM15 5h4v14h-4z" style="display:none"/></svg>';
 
-function animBoard(moveStr, size, labels) {
-  const steps = fensAlong(moveStr);
+function animBoard(moveStr, size, labels, fenDepart) {
+  const steps = fensAlong(moveStr, fenDepart);
   if (!steps || steps.length < 2) return null;
   const S = size / 8;
   let sq = "";
@@ -2473,7 +2481,7 @@ fs.writeFileSync(OUT + "/robots.txt", `User-agent: *\nAllow: /\nDisallow: /engin
 
 const today = BUILD_DATE;   /* meme date que dateModified des fiches JSON-LD */
 const extraUrls = require("./content.js")({
-  fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc
+  fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc, animBoard
 });
 /* content.js ecrit lui aussi dans data/ (pieges.json, 2026-11-16), apres le
    calcul de l'empreinte du cache de donnees : sw.js gardait donc une version

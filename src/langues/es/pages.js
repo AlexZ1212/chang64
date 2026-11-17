@@ -9,6 +9,10 @@
    l'anglais et le build le signale (langues/manquants.json). */
 module.exports = {
  textes: {
+  /* Finales animees (2026-11-17). */
+  "Chessboard: {name}, demonstration": "Tablero: {name}, demostración",
+  "Replay the demonstration": "Repetir la demostración",
+  "The arrows above replay a model game, move by move. Both sides play the best moves.": "Las flechas de arriba repiten una partida modelo, jugada a jugada. Los dos bandos juegan las mejores jugadas.",
   /* Page Ton compte (2026-11-16). */
   "Your chang64 account: free, optional, a username and a code": "Tu cuenta chang64: gratis, opcional, un usuario y un código",
   "chang64 works without an account, and it will stay that way. An account adds one thing: <strong>your progress follows you</strong>. Your rating, your badges, your day streak, your preferences and your games are also saved on our server, so you find them again on your phone, your tablet and your computer, and you keep them if you clear your browser or change device.": "chang64 funciona sin cuenta, y eso no va a cambiar. Una cuenta añade una sola cosa: <strong>tu progreso te sigue</strong>. Tu puntuación, tus insignias, tu racha de días, tus preferencias y tus partidas se guardan también en nuestro servidor: las encuentras en tu móvil, tu tableta y tu ordenador, y las conservas si borras el navegador o cambias de dispositivo.",

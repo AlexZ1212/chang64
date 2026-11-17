@@ -29,14 +29,17 @@ const TABLEAUX = {
   badges: "SELECT pseudo AS p, badges AS v FROM comptes WHERE badges > 0 ORDER BY badges DESC, vu ASC LIMIT 50",
   sprint: "SELECT pseudo AS p, sprint AS v FROM comptes WHERE sprint > 0 ORDER BY sprint DESC, vu ASC LIMIT 50"
 };
-/* Les six tableaux reunis : memes conditions et memes plafonds que chacun. */
-const TOUT = "SELECT pseudo AS p, CASE WHEN sem = ?1 THEN sem_resolus ELSE 0 END AS s, note AS n, resolus AS r, serie AS j, badges AS b, sprint AS k FROM comptes WHERE id IN (" +
-  "SELECT id FROM (SELECT id FROM comptes WHERE sem = ?1 AND sem_resolus > 0 ORDER BY sem_resolus DESC, vu ASC LIMIT 50) UNION " +
-  "SELECT id FROM (SELECT id FROM comptes WHERE resolus >= 10 ORDER BY note DESC, vu ASC LIMIT 50) UNION " +
-  "SELECT id FROM (SELECT id FROM comptes WHERE resolus > 0 ORDER BY resolus DESC, vu ASC LIMIT 50) UNION " +
-  "SELECT id FROM (SELECT id FROM comptes WHERE serie > 0 ORDER BY serie DESC, vu ASC LIMIT 50) UNION " +
-  "SELECT id FROM (SELECT id FROM comptes WHERE badges > 0 ORDER BY badges DESC, vu ASC LIMIT 50) UNION " +
-  "SELECT id FROM (SELECT id FROM comptes WHERE sprint > 0 ORDER BY sprint DESC, vu ASC LIMIT 50)) ORDER BY resolus DESC, vu ASC";
+/* Les six tableaux reunis : memes conditions et memes plafonds que chacun.
+   Six sous-requetes reliees par OR, et non un UNION : D1 plafonne le nombre
+   de termes d'une requete composee, et la version en UNION, qui passait sur
+   SQLite en local, plantait en production (erreur 1101, 2026-11-18). */
+const TOUT = "SELECT pseudo AS p, CASE WHEN sem = ?1 THEN sem_resolus ELSE 0 END AS s, note AS n, resolus AS r, serie AS j, badges AS b, sprint AS k FROM comptes WHERE " +
+  "id IN (SELECT id FROM comptes WHERE sem = ?1 AND sem_resolus > 0 ORDER BY sem_resolus DESC, vu ASC LIMIT 50) OR " +
+  "id IN (SELECT id FROM comptes WHERE resolus >= 10 ORDER BY note DESC, vu ASC LIMIT 50) OR " +
+  "id IN (SELECT id FROM comptes WHERE resolus > 0 ORDER BY resolus DESC, vu ASC LIMIT 50) OR " +
+  "id IN (SELECT id FROM comptes WHERE serie > 0 ORDER BY serie DESC, vu ASC LIMIT 50) OR " +
+  "id IN (SELECT id FROM comptes WHERE badges > 0 ORDER BY badges DESC, vu ASC LIMIT 50) OR " +
+  "id IN (SELECT id FROM comptes WHERE sprint > 0 ORDER BY sprint DESC, vu ASC LIMIT 50) ORDER BY resolus DESC, vu ASC";
 function lundi(ms) {
   const d = new Date(ms);
   d.setUTCHours(12, 0, 0, 0);
@@ -52,8 +55,14 @@ export async function onRequestGet({ request, env, waitUntil }) {
   if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
   if (!env.DB) return new Response(null, { status: 503 });
   const semaine = lundi(Date.now());
-  const st = env.DB.prepare(par === "tout" ? TOUT : TABLEAUX[par]);
-  const { results } = await (par === "semaine" || par === "tout" ? st.bind(semaine) : st).all();
+  let results;
+  try {
+    const st = env.DB.prepare(par === "tout" ? TOUT : TABLEAUX[par]);
+    results = (await (par === "semaine" || par === "tout" ? st.bind(semaine) : st).all()).results;
+  } catch (e) {
+    /* Une panne de la base ne doit pas devenir une page d'erreur de Cloudflare. */
+    return new Response(JSON.stringify({ erreur: "serveur" }), { status: 500, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+  }
   const joueurs = (results || []).map(r => par === "tout" ? { p: r.p, s: r.s, n: r.n, r: r.r, j: r.j, b: r.b, k: r.k } : { p: r.p, v: r.v });
   const rep = new Response(JSON.stringify({ par, semaine, joueurs }), {
     headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=60, s-maxage=300" }

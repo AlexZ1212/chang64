@@ -854,7 +854,9 @@ async function cpjVue(par){
   const p=cpjPar;
   const onglets='<div class="cpj-onglets">'+CPJ.map(([k,l])=>'<button type="button" aria-pressed="'+(k===p)+'" data-cpj="'+k+'">'+cpE(l)+"</button>").join("")+"</div>"+
     (p==="semaine"?'<p class="cp-note">'+cpE("Puzzles solved since Monday.")+"</p>":"");
-  const pied=cp?"":'<p class="cp-note cp-centre">'+cpE("Create an account to appear here.")+'</p><button type="button" class="btn cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>";
+  const pied='<p class="cp-note cp-centre cpj-astuce">'+cpE("Turn your phone sideways to see all the stats at once.")+"</p>"+
+    '<button type="button" class="btn cp-large cpj-tout" data-cpj-tout>'+cpE("All the stats")+"</button>"+
+    (cp?"":'<p class="cp-note cp-centre">'+cpE("Create an account to appear here.")+'</p><button type="button" class="btn cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>");
   const dessiner=corps=>{if(p===cpjPar&&!v.hidden)poserHtml(v,onglets+corps+pied);};
   let c=cpjCache[p];
   if(!c||Date.now()-c.t>60000){
@@ -873,10 +875,43 @@ async function cpjVue(par){
     '</span><b>'+echapper(String(x.v))+"</b></li>").join("")+"</ol>"+
     (cp&&moi<0?'<p class="cp-note cp-centre">'+cpE("You are not in the top 50 yet.")+"</p>":""));
 }
+/* Le tableau complet (2026-11-17, demande d'Alexandre) : toutes les stats de
+   tous les joueurs des six tableaux, triable en touchant un en-tete. Sur
+   telephone il s'ouvre en tournant l'appareil : c'est la seule exception a
+   l'ecran "Redresse ton telephone" (html.joueurs-ouverts, voir le CSS). Sur
+   ordinateur et tablette, le bouton "Toutes les stats" l'ouvre. */
+const CPJ_COLONNES=[["s","This week"],["n","Rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"]];
+let cpjTout=null,cpjToutT=0,cpjTri="r",cpjSens=-1;
+function cpjGrandDessiner(){
+  const g=$("cpjGrand");if(!g)return;
+  const tete='<div class="cpj-grand-tete"><h2 id="cpjGrandTitre">'+cpE("Top players")+'</h2><button type="button" class="tiroir-bouton" data-cpj-fermer aria-label="'+cpE("Close")+'">&times;</button></div>';
+  if(!cpjTout){poserHtml(g,tete+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");return;}
+  const l=cpListe(cpjTout.joueurs).slice().sort((x,y)=>cpjSens*(cpNombre(x[cpjTri])-cpNombre(y[cpjTri]))||cpNombre(y.r)-cpNombre(x.r)||String(x.p).localeCompare(String(y.p)));
+  if(!l.length){poserHtml(g,tete+'<p class="cp-note cp-centre">'+cpE("No one here yet. Be the first!")+"</p>");return;}
+  poserHtml(g,tete+'<div class="cpj-grand-corps"><table class="cpj-table"><thead><tr><th scope="col" class="cpj-rang">#</th><th scope="col">'+cpE("Username")+"</th>"+
+    CPJ_COLONNES.map(([k,nom])=>'<th scope="col" aria-sort="'+(k===cpjTri?(cpjSens<0?"descending":"ascending"):"none")+'"><button type="button" data-cpj-tri="'+k+'">'+cpE(nom)+
+      '<span aria-hidden="true">'+(k===cpjTri?(cpjSens<0?" ▾":" ▴"):"")+"</span></button></th>").join("")+"</tr></thead><tbody>"+
+    l.map((x,i)=>"<tr"+(cp&&x.p===cp.pseudo?' class="cpj-moi"':"")+'><td class="cpj-rang">'+(i+1)+'</td><th scope="row">'+echapper(String(x.p))+"</th>"+
+      CPJ_COLONNES.map(([k])=>"<td"+(k===cpjTri?' class="cpj-tri"':"")+">"+echapper(String(cpNombre(x[k])))+"</td>").join("")+"</tr>").join("")+"</tbody></table></div>");
+}
+async function cpjGrandCharger(){
+  if(cpjTout&&Date.now()-cpjToutT<60000){cpjGrandDessiner();return;}
+  cpjGrandDessiner();
+  try{
+    const r=await fetch("/api/classement?par=tout");
+    if(r.status!==200)throw new Error("statut");
+    cpjTout=await r.json();cpjToutT=Date.now();
+  }catch(e){const g=$("cpjGrand");if(g&&!cpjTout)poserHtml(g,'<div class="cpj-grand-tete"><h2>'+cpE("Top players")+'</h2><button type="button" class="tiroir-bouton" data-cpj-fermer aria-label="'+cpE("Close")+'">&times;</button></div><p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
+  cpjGrandDessiner();
+}
+function cpjGrandFermer(){const g=$("cpjGrand");if(g)g.classList.remove("ouvert");document.documentElement.classList.remove("joueurs-ouverts");}
+{const av=menuFermer;menuFermer=function(){cpjGrandFermer();return av.apply(this,arguments);};}
 {
   const av=menuVue;
   menuVue=function(nom){
     const v=$("menuJoueursVue");
+    document.documentElement.classList.toggle("joueurs-ouverts",nom==="joueurs");
+    if(nom==="joueurs")cpjGrandCharger();else{const g=$("cpjGrand");if(g)g.classList.remove("ouvert");}
     if(nom!=="joueurs"){if(v)v.hidden=true;return av.apply(this,arguments);}
     av.call(this,"accueil");
     for(const e of document.querySelectorAll("#menuTiroir .tiroir-vue"))e.hidden=e!==v;
@@ -889,7 +924,17 @@ async function cpjVue(par){
 document.addEventListener("click",e=>{
   if(e.target.closest("[data-vue-joueurs]")){menuVue("joueurs");return;}
   const b=e.target.closest("#menuJoueursVue [data-cpj]");
-  if(b)cpjVue(b.dataset.cpj);
+  if(b){cpjVue(b.dataset.cpj);return;}
+  if(e.target.closest("[data-cpj-tout]")){const g=$("cpjGrand");if(g){g.classList.add("ouvert");cpjGrandCharger();const f=g.querySelector("[data-cpj-fermer]");if(f)f.focus();}return;}
+  if(e.target.closest("[data-cpj-fermer]")){
+    /* Fenetre ouverte par le bouton : on la referme. Ouverte par la rotation
+       du telephone : on quitte la vue, l'ecran "Redresse ton telephone" revient. */
+    const g=$("cpjGrand");
+    if(g&&g.classList.contains("ouvert"))g.classList.remove("ouvert");else menuFermer();
+    return;
+  }
+  const tri=e.target.closest("[data-cpj-tri]");
+  if(tri){const k=tri.dataset.cpjTri;if(k===cpjTri)cpjSens=-cpjSens;else{cpjTri=k;cpjSens=-1;}cpjGrandDessiner();const n=document.querySelector('#cpjGrand [data-cpj-tri="'+k+'"]');if(n)n.focus();}
 });
 
 /* ---------- Defis entre membres ---------- */

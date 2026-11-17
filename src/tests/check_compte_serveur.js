@@ -389,6 +389,11 @@ const avancer = ms => { decalage += ms; };
     r = await tableau("note");
     T("moins de 10 exercices : absent du tableau des notes", !r.j.joueurs.some(x => ["Joueur1", "Joueur2", "Joueur3"].includes(x.p)));
     for (const par of ["resolus", "serie", "badges", "sprint"]) { r = await tableau(par); T("tableau " + par, r.s === 200 && r.j.joueurs.length > 0 && r.j.joueurs.every((x, i, l) => !i || l[i - 1].v >= x.v)); }
+    r = await tableau("tout");
+    T("tableau complet : les six chiffres de chaque joueur, rien d'autre", r.s === 200 && r.j.par === "tout" && r.j.joueurs.length > 0 && r.j.joueurs.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k"), JSON.stringify(r.j && r.j.joueurs[0]));
+    const j59 = r.j.joueurs.find(x => x.p === "Joueur59"), j60 = r.j.joueurs.find(x => x.p === "Joueur60");
+    T("tableau complet : valeurs exactes, semaine passee comptee zero", j59 && j59.s === 59 && j59.n === 859 && j59.r === 177 && j60 && j60.s === 0 && j60.n === 860, JSON.stringify([j59, j60]));
+    T("tableau complet : reunion des six tableaux, sans doublon", r.j.joueurs.length <= 300 && new Set(r.j.joueurs.map(x => x.p)).size === r.j.joueurs.length);
     T("critere inconnu : 400", (await tableau("pin_hash")).s === 400 && (await tableau("note;DROP")).s === 400);
   }
 

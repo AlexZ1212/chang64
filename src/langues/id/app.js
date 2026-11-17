@@ -1003,5 +1003,8 @@ module.exports = {
 "Change my username":"Ganti nama penggunaku",
 "New username":"Nama pengguna baru",
 "Your code stays the same.":"Kodemu tetap sama.",
-"Your username has been changed.":"Nama penggunamu sudah diganti."
+"Your username has been changed.":"Nama penggunamu sudah diganti.",
+/* Tableau complet des meilleurs joueurs (2026-11-17). */
+"Turn your phone sideways to see all the stats at once.":"Putar ponselmu ke samping untuk melihat semua statistik sekaligus.",
+"All the stats":"Semua statistik"
 };

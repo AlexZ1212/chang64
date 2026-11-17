@@ -1003,5 +1003,8 @@ module.exports = {
 "Change my username":"Kullanıcı adımı değiştir",
 "New username":"Yeni kullanıcı adı",
 "Your code stays the same.":"Kodun aynı kalır.",
-"Your username has been changed.":"Kullanıcı adın değiştirildi."
+"Your username has been changed.":"Kullanıcı adın değiştirildi.",
+/* Tableau complet des meilleurs joueurs (2026-11-17). */
+"Turn your phone sideways to see all the stats at once.":"Tüm istatistikleri bir arada görmek için telefonunu yan çevir.",
+"All the stats":"Tüm istatistikler"
 };

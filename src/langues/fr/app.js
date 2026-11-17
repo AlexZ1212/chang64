@@ -858,5 +858,8 @@ module.exports = {
 "Change my username":"Changer mon pseudo",
 "New username":"Nouveau pseudo",
 "Your code stays the same.":"Ton code reste le même.",
-"Your username has been changed.":"Ton pseudo a été changé."
+"Your username has been changed.":"Ton pseudo a été changé.",
+/* Tableau complet des meilleurs joueurs (2026-11-17). */
+"Turn your phone sideways to see all the stats at once.":"Tourne ton téléphone pour voir toutes les stats d'un coup.",
+"All the stats":"Toutes les stats"
 };

@@ -67,7 +67,7 @@ const { fausseD1 } = require("../serveur_local.js");
       function ensureProgFields(){if(!Array.isArray(prog.badges))prog.badges=[];}
       function saveProg(){window.storage.set("chang64:progress",JSON.stringify(prog));}
       let menuVue=function(){},bilanOuvrir=function(){};function menuOuvrir(){}function bilanFermer(){}
-      let duelVueCree=function(){},duelVueReponse=function(){},menuPoint=function(){};
+      let duelVueCree=function(){},duelVueReponse=function(){},menuPoint=function(){};function menuFermer(){}
       const LANG="fr";
     `;
     const epilogue = `

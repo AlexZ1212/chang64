@@ -1003,5 +1003,8 @@ module.exports = {
 "Change my username":"Zmień moją nazwę użytkownika",
 "New username":"Nowa nazwa użytkownika",
 "Your code stays the same.":"Twój kod pozostaje ten sam.",
-"Your username has been changed.":"Nazwa użytkownika została zmieniona."
+"Your username has been changed.":"Nazwa użytkownika została zmieniona.",
+/* Tableau complet des meilleurs joueurs (2026-11-17). */
+"Turn your phone sideways to see all the stats at once.":"Obróć telefon, żeby zobaczyć wszystkie statystyki naraz.",
+"All the stats":"Wszystkie statystyki"
 };

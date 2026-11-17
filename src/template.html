@@ -2168,6 +2168,33 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpj-liste li:nth-child(-n+3) .cpj-rang{color:var(--brass);font-weight:600}
 .cpj-nom{flex:1;min-width:0;overflow-wrap:anywhere}
 .cpj-nom em{font-style:normal;font-size:12.5px;color:var(--sage)}
+/* Tableau complet des meilleurs joueurs (2026-11-17) : plein ecran. Il
+   s'affiche tout seul quand la vue est ouverte et le telephone en paysage
+   (seule exception a "Redresse ton telephone"), ou par le bouton. */
+.cpj-grand{display:none;position:fixed;inset:0;z-index:410;flex-direction:column;background-color:var(--ink);color:var(--chalk)}
+.cpj-grand.ouvert{display:flex}
+.cpj-grand-tete{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 14px;border-bottom:1px solid var(--rule)}
+.cpj-grand-tete h2{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:19px}
+.cpj-grand-corps{flex:1;overflow:auto;padding:0 10px 14px;overscroll-behavior:contain}
+.cpj-table{width:100%;max-width:980px;margin:0 auto;border-collapse:collapse;font-size:14px}
+.cpj-table th,.cpj-table td{padding:8px 8px;border-bottom:1px solid var(--rule);text-align:right;white-space:nowrap}
+.cpj-table thead th{position:sticky;top:0;background-color:var(--ink);font-size:12.5px;font-weight:600;color:var(--sage);z-index:1}
+.cpj-table th[scope=row],.cpj-table thead th:nth-child(2){text-align:left;white-space:normal;overflow-wrap:anywhere;font-weight:600;color:var(--chalk)}
+.cpj-table thead th:nth-child(2){color:var(--sage)}
+.cpj-table td{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--sage)}
+.cpj-table td.cpj-tri{color:var(--brass);font-weight:600}
+.cpj-table .cpj-rang{width:30px;text-align:right;color:var(--sage)}
+.cpj-table thead button{background:none;border:0;padding:6px 2px;color:inherit;font:inherit;cursor:pointer;min-height:36px}
+.cpj-table thead th[aria-sort=descending] button,.cpj-table thead th[aria-sort=ascending] button{color:var(--brass)}
+.cpj-table thead button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.cpj-table tr.cpj-moi th[scope=row]{border-left:3px solid var(--brass);padding-left:8px}
+.cpj-table tr.cpj-moi{background-color:var(--raise)}
+.cpj-astuce{display:none}
+@media (pointer:coarse) and (orientation:portrait){.cpj-astuce{display:block}.cpj-tout{display:none}}
+@media (orientation:landscape) and (max-height:500px) and (pointer:coarse){
+  html.joueurs-ouverts .paysage{display:none}
+  html.joueurs-ouverts .cpj-grand{display:flex}
+}
 /* Defis entre membres (2026-11-17). */
 .cpd-carte{margin:0 8px 10px;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .cpd-carte .cp-note{margin:0 0 10px}
@@ -3415,6 +3442,8 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
   </div>
 
   <!-- Defi entre amis (2026-11-15, voir duel.js) : memes habits que le bilan. -->
+  <!-- Tableau complet des meilleurs joueurs (2026-11-17, compte.js) : en paysage sur telephone, ou par le bouton "Toutes les stats". -->
+  <div class="cpj-grand" id="cpjGrand" role="dialog" aria-modal="true" aria-label="Top players"></div>
   <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-label="Challenge a friend" hidden>
     <div class="bilan-fenetre" id="duelContenu"></div>
   </div>

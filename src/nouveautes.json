@@ -1,5 +1,134 @@
 [
  {
+  "d": "2026-11-18",
+  "en": [
+   "Endgames in motion",
+   "Each of the five endgame pages now replays a model game move by move, bishop and knight included."
+  ],
+  "fr": [
+   "Les finales s'animent",
+   "Chacune des cinq pages de finales rejoue maintenant une partie modèle coup par coup, fou et cavalier compris."
+  ],
+  "es": [
+   "Los finales cobran vida",
+   "Cada una de las cinco páginas de finales repite ahora una partida modelo jugada a jugada, alfil y caballo incluidos."
+  ],
+  "pt": [
+   "Os finais ganham movimento",
+   "Cada uma das cinco páginas de finais agora repete uma partida modelo lance a lance, bispo e cavalo incluídos."
+  ],
+  "de": [
+   "Endspiele in Bewegung",
+   "Jede der fünf Endspielseiten spielt jetzt eine Musterpartie Zug für Zug nach, Läufer und Springer inklusive."
+  ],
+  "ru": [
+   "Окончания оживают",
+   "Каждая из пяти страниц окончаний теперь повторяет образцовую партию ход за ходом, включая мат слоном и конём."
+  ],
+  "it": [
+   "I finali si animano",
+   "Ognuna delle cinque pagine dei finali ora ripete una partita modello mossa dopo mossa, alfiere e cavallo compresi."
+  ],
+  "tr": [
+   "Oyun sonları canlanıyor",
+   "Beş oyun sonu sayfasının her biri artık örnek bir oyunu hamle hamle yeniden oynatıyor, fil ve at dahil."
+  ],
+  "pl": [
+   "Końcówki w ruchu",
+   "Każda z pięciu stron końcówek odtwarza teraz wzorcową partię ruch po ruchu, także mat gońcem i skoczkiem."
+  ],
+  "id": [
+   "Permainan akhir kini bergerak",
+   "Kelima halaman permainan akhir kini memutar ulang partai contoh langkah demi langkah, termasuk gajah dan kuda."
+  ]
+ },
+ {
+  "d": "2026-11-18",
+  "en": [
+   "All the stats at a glance",
+   "In Top players, turn your phone sideways to see every stat of every player and sort by any column."
+  ],
+  "fr": [
+   "Toutes les stats d'un coup d'œil",
+   "Dans Meilleurs joueurs, tourne ton téléphone pour voir toutes les stats de chaque joueur et trier sur n'importe quelle colonne."
+  ],
+  "es": [
+   "Todas las estadísticas de un vistazo",
+   "En Mejores jugadores, gira el móvil para ver todas las estadísticas de cada jugador y ordenar por cualquier columna."
+  ],
+  "pt": [
+   "Todas as estatísticas de uma vez",
+   "Em Melhores jogadores, vire o celular para ver todas as estatísticas de cada jogador e ordenar por qualquer coluna."
+  ],
+  "de": [
+   "Alle Werte auf einen Blick",
+   "Dreh unter Beste Spieler dein Handy quer, um alle Werte jedes Spielers zu sehen und nach jeder Spalte zu sortieren."
+  ],
+  "ru": [
+   "Вся статистика сразу",
+   "В разделе «Лучшие игроки» поверни телефон, чтобы увидеть всю статистику каждого игрока и сортировать по любому столбцу."
+  ],
+  "it": [
+   "Tutte le statistiche a colpo d'occhio",
+   "In Migliori giocatori, gira il telefono per vedere tutte le statistiche di ogni giocatore e ordinare per qualsiasi colonna."
+  ],
+  "tr": [
+   "Tüm istatistikler bir bakışta",
+   "En iyi oyuncular bölümünde telefonunu yan çevir: her oyuncunun tüm istatistiklerini gör ve istediğin sütuna göre sırala."
+  ],
+  "pl": [
+   "Wszystkie statystyki naraz",
+   "W Najlepszych graczach obróć telefon, żeby zobaczyć wszystkie statystyki każdego gracza i sortować po dowolnej kolumnie."
+  ],
+  "id": [
+   "Semua statistik sekaligus",
+   "Di Pemain terbaik, putar ponselmu ke samping untuk melihat semua statistik tiap pemain dan mengurutkan menurut kolom mana pun."
+  ]
+ },
+ {
+  "d": "2026-11-18",
+  "en": [
+   "The computer plays real openings",
+   "It now starts its games like a human: Italian, Sicilian, Queen's Gambit and many more, and not the same one every time."
+  ],
+  "fr": [
+   "L'ordinateur joue de vraies ouvertures",
+   "Il commence maintenant ses parties comme un humain : Italienne, Sicilienne, Gambit dame et bien d'autres, et pas la même à chaque fois."
+  ],
+  "es": [
+   "El ordenador juega aperturas de verdad",
+   "Ahora empieza sus partidas como un humano: Italiana, Siciliana, Gambito de dama y muchas más, y no la misma cada vez."
+  ],
+  "pt": [
+   "O computador joga aberturas de verdade",
+   "Agora ele começa as partidas como um humano: Italiana, Siciliana, Gambito da Dama e muitas outras, e não a mesma toda vez."
+  ],
+  "de": [
+   "Der Computer spielt echte Eröffnungen",
+   "Er beginnt seine Partien jetzt wie ein Mensch: Italienisch, Sizilianisch, Damengambit und viele mehr, und nicht jedes Mal dieselbe."
+  ],
+  "ru": [
+   "Компьютер играет настоящие дебюты",
+   "Теперь он начинает партии как человек: итальянская, сицилианская, ферзевый гамбит и многое другое, и не одно и то же каждый раз."
+  ],
+  "it": [
+   "Il computer gioca vere aperture",
+   "Ora comincia le partite come un umano: Italiana, Siciliana, Gambetto di donna e molte altre, e non la stessa ogni volta."
+  ],
+  "tr": [
+   "Bilgisayar gerçek açılışlar oynuyor",
+   "Artık oyunlarına bir insan gibi başlıyor: İtalyan, Sicilya, Vezir Gambiti ve daha fazlası, her seferinde aynısı da değil."
+  ],
+  "pl": [
+   "Komputer gra prawdziwe debiuty",
+   "Teraz zaczyna partie jak człowiek: włoska, sycylijska, gambit hetmański i wiele innych, i nie za każdym razem to samo."
+  ],
+  "id": [
+   "Komputer memainkan pembukaan sungguhan",
+   "Kini ia memulai partainya seperti manusia: Italia, Sisilia, Gambit Menteri, dan banyak lagi, dan tidak sama setiap kali."
+  ]
+ },
+ {
   "d": "2026-11-17",
   "en": [
    "Challenge a member",

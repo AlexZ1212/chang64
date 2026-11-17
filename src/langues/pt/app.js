@@ -133,7 +133,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Pontuação: {score}. Sua melhor até agora.",
 "Score: {score}. Your best is {best}.":"Pontuação: {score}. Seu recorde é {best}.",
 "Random":"Aleatório",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Possible moves are shown; the rest is up to you.":"Quatro níveis, do iniciante que deixa você respirar ao motor que não perdoa nada. Os lances possíveis aparecem; o resto é com você.",
+"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Quatro níveis, do iniciante que deixa você respirar ao motor que não perdoa nada. Os lances legais aparecem, sem nenhuma ajuda enquanto você joga: o resto é com você.",
 "Play White":"Jogar de brancas",
 "Play Black":"Jogar de pretas",
 "Beginner":"Iniciante",

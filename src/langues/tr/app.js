@@ -133,7 +133,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Skor: {score}. Şimdiye kadarki en iyin.",
 "Score: {score}. Your best is {best}.":"Skor: {score}. Rekorun {best}.",
 "Random":"Rastgele",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Possible moves are shown; the rest is up to you.":"Dört seviye: nefes almana izin veren acemiden hiçbir şeyi affetmeyen motora. Olası hamleler gösterilir; gerisi sende.",
+"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Dört seviye: nefes almana izin veren acemiden hiçbir şeyi affetmeyen motora. Yasal hamleler gösterilir, oynarken yardım yok: gerisi sende.",
 "Play White":"Beyazla oyna",
 "Play Black":"Siyahla oyna",
 "Beginner":"Acemi",

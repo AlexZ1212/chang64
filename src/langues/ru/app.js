@@ -133,7 +133,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Очки: {score}. Твой лучший результат.",
 "Score: {score}. Your best is {best}.":"Очки: {score}. Твой рекорд: {best}.",
 "Random":"Случайно",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Possible moves are shown; the rest is up to you.":"Четыре уровня: от новичка, который даёт перевести дух, до движка, который ничего не прощает. Возможные ходы подсвечены, остальное за тобой.",
+"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Четыре уровня: от новичка, который даёт перевести дух, до движка, который ничего не прощает. Возможные ходы подсвечены, никаких подсказок во время игры: остальное за тобой.",
 "Play White":"Играть белыми",
 "Play Black":"Играть чёрными",
 "Beginner":"Новичок",

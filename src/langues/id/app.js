@@ -133,7 +133,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Skor: {score}. Terbaikmu sejauh ini.",
 "Score: {score}. Your best is {best}.":"Skor: {score}. Rekormu {best}.",
 "Random":"Acak",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Possible moves are shown; the rest is up to you.":"Empat level, dari pemula yang memberimu napas sampai mesin yang tidak memaafkan apa pun. Langkah yang mungkin ditampilkan; sisanya terserah kamu.",
+"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Empat level, dari pemula yang memberimu napas sampai mesin yang tidak memaafkan apa pun. Langkah yang sah ditampilkan, tanpa bantuan selama kamu bermain: sisanya terserah kamu.",
 "Play White":"Main sebagai Putih",
 "Play Black":"Main sebagai Hitam",
 "Beginner":"Pemula",

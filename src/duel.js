@@ -10,7 +10,9 @@
    Chiffres de r : 2 = trouve du premier coup, 1 = trouve apres une erreur ou un
    indice, 0 = rate ou passe. Classement : premiers coups, puis trouves, puis
    temps. Colle apres bilan.js par build_site.js, qui y pose le trace de l'elephant. */
-const DUEL_N=5,DUEL_TEMPS_MAX=35999;
+const DUEL_N=5,DUEL_TEMPS_MAX=35999,DUEL_LANGUES=["en","fr","es","pt","de","ru","it","tr","pl","id"];
+/* DUEL_LANGUES : les langues qui ont leurs pages d'apercu /d/ (defi_build.js) ;
+   tests/check_defi_apercu.js verifie que la liste suit le registre. */
 let duel=null,duelNom="",duelEnvoyes=[];
 (async()=>{
   try{const r=await window.storage.get("chang64:duelNom");if(r&&r.value)duelNom=duelPropre(r.value);}catch(e){}
@@ -39,7 +41,10 @@ function duelLire(h){
 }
 function duelLien(ids,a,b){
   const p=j=>"&r"+j.k+"="+j.r+"&t"+j.k+"="+j.t+(j.n?"&n"+j.k+"="+encodeURIComponent(j.n):"");
-  return baseUrl()+"#duel="+duelEnc(ids)+p(Object.assign({k:""},a))+(b?p(Object.assign({k:"2"},b)):"");
+  /* Un defi lance passe par la page d'apercu de son score (defi_build.js),
+     qui renvoie vers l'accueil avec le fragment ; une reponse garde le lien direct. */
+  const apercu=!b&&/^https?:$/.test(location.protocol)&&DUEL_LANGUES.includes(LANG);
+  return (apercu?location.origin+"/d/"+LANG+duelPremiers(a.r)+"/":baseUrl())+"#duel="+duelEnc(ids)+p(Object.assign({k:""},a))+(b?p(Object.assign({k:"2"},b)):"");
 }
 function duelPremiers(r){return (r.match(/2/g)||[]).length;}
 function duelTrouves(r){return (r.match(/[12]/g)||[]).length;}
@@ -116,11 +121,16 @@ function duelBandeau(){
   const av=finishPuzzle;
   finishPuzzle=function(won){
     const ici=duelIci(),essais=typeof puzzleTries==="number"?puzzleTries:0;
+    /* Un exercice de defi compte pour l'objectif du jour et les exercices
+       resolus, pas pour le classement (decision d'Alexandre, 2026-11-17) :
+       les cinq exercices sont imposes par un autre joueur. */
+    if(ici)puzzle.eloNote=true;
     const r=av.apply(this,arguments);
     if(ici)duelNoter(won?(essais===0&&!duel.faute?2:1):0);
     return r;
   };
 }
+if(typeof eloEchec==="function"){const av=eloEchec;eloEchec=function(){if(duelIci())return;return av.apply(this,arguments);};}
 {const av=registerWrong;registerWrong=function(){if(duelIci())duel.faute=true;return av.apply(this,arguments);};}
 if(typeof noterPremierEssai==="function"){const av=noterPremierEssai;noterPremierEssai=function(ok){if(!ok&&duelIci())duel.faute=true;return av.apply(this,arguments);};}
 {const av=setMode;setMode=function(m,o){if(duel&&m!=="puzzles")duelAbandonner();return av.apply(this,arguments);};}

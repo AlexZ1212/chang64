@@ -2403,6 +2403,10 @@ fs.writeFileSync(OUT + "/_headers", `/*
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=86400
 
+/d/*
+  X-Robots-Tag: noindex
+  Cache-Control: public, max-age=3600
+
 /vignette/*
   ! X-Frame-Options
   ! Content-Security-Policy
@@ -2415,6 +2419,8 @@ fs.writeFileSync(OUT + "/_headers", `/*
    pour elle seule l'interdiction d'etre encadree (X-Frame-Options et
    frame-ancestors du bloc general, detaches par "!") et la sort de l'index. */
 require("./vignette_build.js").ecrireVignette(OUT);
+/* Pages d'apercu du defi par lien (2026-11-18, defi_build.js). */
+console.log("Apercus de defi    :", require("./defi_build.js").ecrireDefi(OUT, SITE, queueOg));
 
 /* Redirections des anciennes URL francaises.
    Avant que les familles soient traduites, la page francaise portait le slug

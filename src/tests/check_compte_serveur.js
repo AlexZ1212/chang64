@@ -279,6 +279,70 @@ const avancer = ms => { decalage += ms; };
   env = {};
   T("sans base : 503", (await appel("POST", "pseudo", { pseudo: "Alexandre" })).s === 503);
 
+  console.log("\nDefis entre membres");
+  {
+    env = { DB: fausseD1() };
+    const ouvrir = async p => (await appel("POST", "creer", { pseudo: p, code: code(1) })).cookie;
+    const cA = await ouvrir("Anna"), cB = await ouvrir("Boris"), cC = await ouvrir("Chloe");
+    const EXOS = "000a000b000c000d000e", envoi = (a, o) => Object.assign({ a, exos: EXOS, r: "22102", t: 95 }, o || {});
+    const liste = async c => (await appel("GET", "defis", undefined, { cookie: c })).j;
+    T("sans session : 401", (await appel("GET", "defis")).s === 401 && (await appel("POST", "defi-envoyer", envoi("Boris"))).s === 401);
+    T("membre inconnu : 404", (await appel("POST", "defi-envoyer", envoi("Personne"), { cookie: cA })).s === 404);
+    T("se defier soi-meme : refuse", (await appel("POST", "defi-envoyer", envoi("anna"), { cookie: cA })).s === 400);
+    for (const mauvais of [{ exos: "abc" }, { exos: EXOS + "<b>" }, { r: "22302" }, { r: "2210" }, { t: -1 }, { t: 99999 }, { t: "95" }])
+      T("envoi mal forme refuse : " + JSON.stringify(mauvais), (await appel("POST", "defi-envoyer", envoi("Boris", mauvais), { cookie: cA })).s === 400);
+    let r = await appel("POST", "defi-envoyer", envoi("boris"), { cookie: cA });
+    T("Anna defie Boris", r.s === 201 && Number.isInteger(r.j.id) && r.j.a === "Boris", r.texte);
+    const id1 = r.j.id;
+    let lb = await liste(cB), la = await liste(cA);
+    T("Boris le trouve dans ses defis recus, avec le resultat a battre", lb.recus.length === 1 && lb.recus[0].p === "Anna" && lb.recus[0].r1 === "22102" && lb.recus[0].t1 === 95 && lb.recus[0].exos === EXOS && lb.recus[0].r2 === null && lb.envoyes.length === 0);
+    T("Anna le voit dans ses defis envoyes", la.envoyes.length === 1 && la.envoyes[0].p === "Boris" && la.recus.length === 0);
+    T("Chloe ne voit rien", (await liste(cC)).recus.length === 0 && (await liste(cC)).envoyes.length === 0);
+    T("la liste ne porte que pseudo, exercices, scores et dates", Object.keys(lb.recus[0]).sort().join() === "cree,exos,id,p,r1,r2,repondu,t1,t2");
+    T("un tiers ne peut pas repondre", (await appel("POST", "defi-repondre", { id: id1, r: "22222", t: 10 }, { cookie: cC })).s === 404);
+    T("l'auteur ne peut pas repondre a son propre defi", (await appel("POST", "defi-repondre", { id: id1, r: "22222", t: 10 }, { cookie: cA })).s === 404);
+    T("reponse mal formee refusee", (await appel("POST", "defi-repondre", { id: id1, r: "9", t: 10 }, { cookie: cB })).s === 400);
+    T("Boris repond", (await appel("POST", "defi-repondre", { id: id1, r: "22220", t: 120 }, { cookie: cB })).s === 200);
+    T("une seule reponse par defi", (await appel("POST", "defi-repondre", { id: id1, r: "22222", t: 5 }, { cookie: cB })).s === 404);
+    la = await liste(cA);
+    T("Anna voit la reponse de Boris", la.envoyes[0].r2 === "22220" && la.envoyes[0].t2 === 120 && la.envoyes[0].repondu > 0);
+    for (let i = 0; i < 3; i++) r = await appel("POST", "defi-envoyer", envoi("Boris"), { cookie: cA });
+    T("trois defis en attente vers le meme membre : acceptes", r.s === 201);
+    T("le quatrieme est refuse", (await appel("POST", "defi-envoyer", envoi("Boris"), { cookie: cA })).s === 429);
+    const salve = await Promise.all(Array.from({ length: 10 }, () => appel("POST", "defi-envoyer", envoi("Anna"), { cookie: cC })));
+    T("dix envois simultanes : trois passent", salve.filter(x => x.s === 201).length === 3 && salve.filter(x => x.s === 429).length === 7);
+    const ids = n => lignes("SELECT id FROM comptes WHERE pseudo = ?", n)[0].id;
+    const ins = env.DB.brut.prepare("INSERT INTO defis (de, a, exos, r1, t1, cree, r2) VALUES (?, ?, ?, '22222', 10, ?, ?)");
+    env.DB.brut.exec("DELETE FROM defis WHERE a = " + ids("Chloe"));
+    for (let i = 0; i < 30; i++) ins.run(ids("Boris"), ids("Chloe"), EXOS, Date.now() - 2 * 864e5, null);
+    T("boite pleine (30 en attente) : envoi refuse", (await appel("POST", "defi-envoyer", envoi("Chloe"), { cookie: cA })).s === 429);
+    env.DB.brut.exec("DELETE FROM defis WHERE a = " + ids("Chloe"));
+    for (let i = 0; i < 16; i++) ins.run(ids("Anna"), ids("Boris"), EXOS, Date.now(), "22222");
+    T("20 envois dans la journee : le suivant est refuse", (await appel("POST", "defi-envoyer", envoi("Chloe"), { cookie: cA })).s === 429, String(lignes("SELECT COUNT(*) AS n FROM defis WHERE de = ?", ids("Anna"))[0].n));
+    avancer(864e5 + 1000);
+    r = await appel("POST", "defi-envoyer", envoi("Chloe"), { cookie: cA });
+    T("le lendemain, ca repart", r.s === 201);
+    const id2 = r.j.id;
+    T("un tiers ne peut pas effacer un defi", (await appel("POST", "defi-supprimer", { id: id2 }, { cookie: cB })).s === 404);
+    T("le destinataire peut effacer un defi recu", (await appel("POST", "defi-supprimer", { id: id2 }, { cookie: cC })).s === 200 && (await liste(cA)).envoyes.every(x => x.id !== id2));
+    r = await appel("POST", "defi-envoyer", envoi("Chloe"), { cookie: cA });
+    T("l'auteur peut retirer un defi envoye", (await appel("POST", "defi-supprimer", { id: r.j.id }, { cookie: cA })).s === 200 && (await liste(cC)).recus.length === 0);
+    T("la liste est plafonnee a 30", (await liste(cA)).envoyes.length <= 30);
+    r = await appel("GET", "exporter", undefined, { cookie: cB });
+    T("l'export contient les defis du compte, avec les pseudos", r.j.defis_entre_membres.length > 0 && r.j.defis_entre_membres.every(x => x.de === "Anna" || x.a === "Anna" || x.de === "Boris" || x.a === "Boris"));
+    ins.run(ids("Boris"), ids("Chloe"), EXOS, Date.now() - 61 * 864e5, null);
+    await E.nettoyer(env, Date.now());
+    T("un defi de plus de 60 jours est efface", lignes("SELECT COUNT(*) AS n FROM defis WHERE cree < ?", Date.now() - 60 * 864e5)[0].n === 0);
+    T("supprimer son compte efface ses defis, recus et envoyes", (await appel("POST", "supprimer", { code: code(1) }, { cookie: cA })).s === 200 && lignes("SELECT COUNT(*) AS n FROM defis WHERE de = ? OR a = ?", 1, 1)[0].n === 0 && (await liste(cB)).recus.length === 0);
+    /* Une base ou la table defis n'existe pas encore (code publie avant le SQL). */
+    env = { DB: fausseD1() };
+    env.DB.brut.exec("DROP TABLE defis");
+    r = await appel("POST", "creer", { pseudo: "Avant", code: code(1) });
+    T("sans la table defis : la creation de compte marche encore", r.s === 201);
+    T("sans la table defis : la liste echoue proprement", (await appel("GET", "defis", undefined, { cookie: r.cookie })).s === 500);
+    T("sans la table defis : l'export et la suppression marchent encore", (await appel("GET", "exporter", undefined, { cookie: r.cookie })).s === 200 && (await appel("POST", "supprimer", { code: code(1) }, { cookie: r.cookie })).s === 200);
+  }
+
   console.log("\nTableaux des joueurs");
   {
     const cl = await import(pathToFileURL(path.join(__dirname, "..", "functions", "api", "classement.js")).href);

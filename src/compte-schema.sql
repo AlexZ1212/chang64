@@ -53,3 +53,21 @@ CREATE TABLE IF NOT EXISTS liens_appareil (
   expire INTEGER NOT NULL,
   essais INTEGER NOT NULL DEFAULT 0
 );
+
+-- Defis entre membres (2026-11-17) : cinq exercices, le resultat de l'auteur,
+-- puis celui du destinataire. Aucun texte libre. Effaces apres 60 jours, ou
+-- avec le compte de l'un des deux.
+CREATE TABLE IF NOT EXISTS defis (
+  id INTEGER PRIMARY KEY,
+  de INTEGER NOT NULL,
+  a INTEGER NOT NULL,
+  exos TEXT NOT NULL,
+  r1 TEXT NOT NULL,
+  t1 INTEGER NOT NULL,
+  r2 TEXT,
+  t2 INTEGER,
+  cree INTEGER NOT NULL,
+  repondu INTEGER
+);
+CREATE INDEX IF NOT EXISTS defis_a ON defis (a, cree);
+CREATE INDEX IF NOT EXISTS defis_de ON defis (de, cree);

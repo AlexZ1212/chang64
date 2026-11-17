@@ -107,7 +107,20 @@ function defiJour(cle,type){
 }
 {const av=rushEnd;rushEnd=function(){const sc=rush?rush.score:0,r=av.apply(this,arguments);if(sc>0){defiNoter("sprint",sc);defiJour("jours","jours");}return r;};}
 {const av=stopCoord;stopCoord=function(){const sc=coord?coord.score:0,r=av.apply(this,arguments);if(sc>0){defiNoter("coord",sc);defiJour("jours","jours");}return r;};}
-{const av=endEndgame;endEndgame=function(kind){const r=av.apply(this,arguments);if(kind==="checkmate")defiNoter("finale",1);defiJour("jours","jours");return r;};}
+/* Une meme finale ne compte qu'une fois par jour pour le defi "Reussis N
+   finales" (2026-11-18) : sans cela, refaire trois fois Dame contre roi, la
+   plus facile, bouclait le defi. Meme regle que pour un exercice rejoue
+   (exoRejoue, ui.js). Les autres mesures ne se gonflent pas : les badges de
+   finale et le record de Coordonnees ne s'obtiennent qu'une fois, et le defi
+   de Coordonnees garde le meilleur score de la semaine, pas un cumul. */
+function defiFinaleNeuve(id){
+  const s=defiEtat().defis,cle=bxCle(new Date())+":"+id;
+  s.fin=Array.isArray(s.fin)?s.fin:[];
+  if(s.fin.includes(cle))return false;
+  s.fin.push(cle);
+  return true;
+}
+{const av=endEndgame;endEndgame=function(kind){const id=typeof eg!=="undefined"&&eg&&eg.scen?eg.scen.id:"",r=av.apply(this,arguments);if(kind==="checkmate"&&defiFinaleNeuve(id))defiNoter("finale",1);defiJour("jours","jours");return r;};}
 {const av=saveFinishedGame;saveFinishedGame=function(){
   const avant=gameSaved,r=av.apply(this,arguments);
   if(!avant&&gameSaved&&resultInfo){if(resultInfo.kind==="win")defiNoter("victoire",1);defiJour("jours","jours");}

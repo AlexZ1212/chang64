@@ -135,6 +135,9 @@ const { fausseD1 } = require("../serveur_local.js");
     { bx: { c: { vic: 3, gels: 2, jour: "2026-11-16", jourN: 1 } } }, false);
   T("victoires additionnees, gel depense non rendu, objectif du jour additionne", f.bx.c.vic === 6 && f.bx.c.gels === 1 && f.bx.c.jourN === 6, JSON.stringify([f.bx.c.vic, f.bx.c.gels, f.bx.c.jourN]));
   T("defis de la semaine : le meilleur de chaque", f.bx.c.defis.p.join() === "5,2,8" && f.bx.c.defis.ok.join() === "true,false,true" && f.bx.c.defis.jours.length === 2 && f.bx.c.ouvFam.length === 2);
+  f = F({ bx: { c: { defis: { lundi: "2026-11-16", p: [1, 0, 0], ok: [false, false, false], jours: [], objJours: [], jourJours: ["2026-11-16"], fin: ["2026-11-17:kq"] } } } },
+    { bx: { c: { defis: { lundi: "2026-11-16", p: [1, 0, 0], ok: [false, false, false], jours: [], objJours: [], jourJours: ["2026-11-17"], fin: ["2026-11-17:kq", "2026-11-17:kr"] } } } }, null, true);
+  T("defis : finales deja comptees et jours de l'exercice du jour gardes", f.bx.c.defis.fin.length === 2 && f.bx.c.defis.jourJours.length === 2, JSON.stringify(f.bx.c.defis));
   f = F({ champFutur: "local", autre: 1 }, { champFutur: "distant" }, null, true);
   T("champ inconnu : celui de l'appareil le plus recent, rien n'est jete", f.champFutur === "distant" && f.autre === 1);
   let g = A.api.cpFusion({ t: { prefs: 5, debut: 1 }, prefs: { board: "a" }, debut: { e: 2, x: 0, f: [0, 1] }, games: [{ t: 3, m: "e2e4" }], duels: [{ c: "x" }] },

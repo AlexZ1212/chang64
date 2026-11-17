@@ -74,6 +74,20 @@ function ouvrir(page) {
   const e6 = await gagner();
   T("rate puis reussi le meme jour : la reussite compte une fois", e6.solved === e5.solved + 1, JSON.stringify([e5.solved, e6.solved]));
 
+  /* Finales (2026-11-18) : pour le defi "Reussis N finales", une meme finale
+     ne compte qu'une fois par jour ; une autre finale compte ; la meme
+     recompte le lendemain. Le tirage de la semaine est remplace pour que le
+     defi des finales soit en jeu. */
+  w.eval('defiListe=()=>[{type:"jours",cible:99},{type:"sprint",cible:99},{type:"finale",cible:3}];var __s=defiEtat().defis;__s.p=[0,0,0];__s.ok=[false,false,false];__s.fin=[];');
+  const finale = async id => { w.eval('startEndgame("' + id + '","chip")'); await attendre(80); w.eval('endEndgame("checkmate")'); await attendre(80); return w.eval("defiEtat().defis.p[2]"); };
+  T("une finale gagnee compte", await finale("kq") === 1);
+  T("la meme finale regagnee le meme jour ne compte pas", await finale("kq") === 1, w.eval("defiEtat().defis.p[2]"));
+  T("une autre finale compte", await finale("kr") === 2);
+  w.eval('startEndgame("krr","chip")'); await attendre(80); w.eval('endEndgame("out-of-moves")'); await attendre(80);
+  T("une finale perdue ne compte pas et ne bloque pas la suivante", w.eval("defiEtat().defis.p[2]") === 2 && await finale("krr") === 3);
+  w.eval('__s=defiEtat().defis;__s.p[2]=1;__s.ok[2]=false;__s.fin=__s.fin.map(x=>"2000-01-01"+x.slice(10));');
+  T("le lendemain, la meme finale compte de nouveau", await finale("kq") === 2, w.eval("JSON.stringify(defiEtat().defis.fin)"));
+
   console.log("\n" + ok + " OK, " + ko + " FAIL");
   w.close();
   process.exit(ko ? 1 : 0);

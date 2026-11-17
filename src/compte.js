@@ -223,7 +223,9 @@ function cpFusionProg(l,d,b,distantRecent){
     if(dl&&dd&&dl.lundi&&dd.lundi){
       if(dl.lundi!==dd.lundi)c.defis=dl.lundi>dd.lundi?dl:dd;
       else c.defis={lundi:dl.lundi,p:[0,1,2].map(i=>Math.max(cpNombre(cpListe(dl.p)[i]),cpNombre(cpListe(dd.p)[i]))),
-        ok:[0,1,2].map(i=>!!(cpListe(dl.ok)[i]||cpListe(dd.ok)[i])),jours:cpUnion(dl.jours,dd.jours),objJours:cpUnion(dl.objJours,dd.objJours)};
+        ok:[0,1,2].map(i=>!!(cpListe(dl.ok)[i]||cpListe(dd.ok)[i])),jours:cpUnion(dl.jours,dd.jours),objJours:cpUnion(dl.objJours,dd.objJours),
+        /* Jours de l'exercice du jour et finales deja comptees : sans eux, une synchronisation les oubliait (2026-11-18). */
+        jourJours:cpUnion(dl.jourJours,dd.jourJours),fin:cpUnion(dl.fin,dd.fin)};
     }
     o.bx={f:Object.assign({},cpObjet(xl.f),cpObjet(xd.f)),j:Object.assign({},cpObjet(xl.j),cpObjet(xd.j)),c:c};
   }

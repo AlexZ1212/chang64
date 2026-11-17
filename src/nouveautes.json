@@ -2,6 +2,49 @@
  {
   "d": "2026-11-18",
   "en": [
+   "Challenge links show the score to beat",
+   "When you send a challenge link, its preview now shows your score. Challenge puzzles count toward your daily goal, not your rating."
+  ],
+  "fr": [
+   "Le lien de défi affiche le score à battre",
+   "Quand tu envoies un lien de défi, son aperçu montre maintenant ton score. Les exercices d'un défi comptent pour l'objectif du jour, pas pour le classement."
+  ],
+  "es": [
+   "El enlace del desafío muestra la puntuación a superar",
+   "Cuando envías el enlace de un desafío, su vista previa muestra ahora tu resultado. Los ejercicios de un desafío cuentan para el objetivo del día, no para tu puntuación general."
+  ],
+  "pt": [
+   "O link do desafio mostra o placar a bater",
+   "Quando você envia um link de desafio, a prévia agora mostra o seu placar. Os exercícios de um desafio contam para a meta do dia, não para a sua pontuação geral."
+  ],
+  "de": [
+   "Der Herausforderungslink zeigt das Ergebnis, das es zu schlagen gilt",
+   "Wenn du einen Herausforderungslink verschickst, zeigt seine Vorschau jetzt dein Ergebnis. Aufgaben einer Herausforderung zählen für das Tagesziel, nicht für die Wertung."
+  ],
+  "ru": [
+   "Ссылка на вызов показывает результат, который нужно побить",
+   "Когда ты отправляешь ссылку на вызов, в её превью теперь виден твой результат. Задачи из вызова идут в зачёт цели дня, но не рейтинга."
+  ],
+  "it": [
+   "Il link della sfida mostra il punteggio da battere",
+   "Quando invii il link di una sfida, la sua anteprima ora mostra il tuo risultato. Gli esercizi di una sfida contano per l'obiettivo del giorno, non per il tuo punteggio generale."
+  ],
+  "tr": [
+   "Meydan okuma bağlantısı geçilecek skoru gösteriyor",
+   "Bir meydan okuma bağlantısı gönderdiğinde önizlemesi artık skorunu gösteriyor. Meydan okuma bulmacaları günlük hedefe sayılır, puanına değil."
+  ],
+  "pl": [
+   "Link z wyzwaniem pokazuje wynik do pobicia",
+   "Gdy wysyłasz link z wyzwaniem, jego podgląd pokazuje teraz twój wynik. Zadania z wyzwania liczą się do celu dnia, nie do rankingu."
+  ],
+  "id": [
+   "Tautan tantangan menampilkan skor yang harus dikalahkan",
+   "Saat kamu mengirim tautan tantangan, pratinjaunya kini menampilkan skormu. Teka-teki dalam tantangan dihitung untuk target harian, bukan untuk rating."
+  ]
+ },
+ {
+  "d": "2026-11-18",
+  "en": [
    "Endgames in motion",
    "Each of the five endgame pages now replays a model game move by move, bishop and knight included."
   ],

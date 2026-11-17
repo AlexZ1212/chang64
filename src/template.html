@@ -2171,6 +2171,18 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpj-liste li:nth-child(-n+3) .cpj-rang{color:var(--brass);font-weight:600}
 .cpj-nom{flex:1;min-width:0;overflow-wrap:anywhere}
 .cpj-nom em{font-style:normal;font-size:12.5px;color:var(--sage)}
+/* Defis entre membres (2026-11-17). */
+.cpd-carte{margin:0 8px 10px;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.cpd-carte .cp-note{margin:0 0 10px}
+.cpd-carte .duel-tableau{margin:0}
+.cpd-carte .duel-ligne:last-child{margin-bottom:0}
+.cpd-titre{margin:0 0 8px;font-size:15px;font-weight:600;color:var(--chalk);overflow-wrap:anywhere}
+.cpd-boutons{display:flex;flex-wrap:wrap;gap:8px}
+.cpd-boutons .btn{flex:1;min-height:44px}
+.cpd-attente{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cpd-attente .cp-note{margin:0}
+.duel-membre{margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--rule)}
+.duel-membre .btn{width:100%}
 .cpj-liste b{flex:none;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--brass)}
 .bilan-app .btn{min-width:0}
 /* Telephone a l'horizontale : le site se joue en portrait (2026-11-16).
@@ -3424,6 +3436,8 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
         <button type="button" class="tiroir-lien" data-vue-compte="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"/></svg><span data-t="My account" id="menuCompteTexte">My account</span><span class="tiroir-detail tiroir-langue" id="menuCompteDetail"></span><span class="burger-point" id="menuComptePoint" hidden></span></button>
         <!-- Meilleurs joueurs (2026-11-17, compte.js) : tableaux lus dans /api/classement. -->
         <button type="button" class="tiroir-lien" data-vue-joueurs="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z"/></svg><span data-t="Top players">Top players</span></button>
+        <!-- Defis entre membres (2026-11-17, compte.js) : le nombre a droite = defis a relever + reponses pas encore vues. -->
+        <button type="button" class="tiroir-lien" data-vue-defis-membres="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,32H152a8,8,0,0,0-6.34,3.12l-64,83.21L72,108.69a16,16,0,0,0-22.64,0l-12.69,12.7a16,16,0,0,0,0,22.63l20,20-28,28a16,16,0,0,0,0,22.63l12.69,12.68a16,16,0,0,0,22.62,0l28-28,20,20a16,16,0,0,0,22.64,0l12.69-12.7a16,16,0,0,0,0-22.63l-9.64-9.64,83.21-64A8,8,0,0,0,224,104V40A8,8,0,0,0,216,32Zm-8,68.06-81.74,62.88L115.32,152l50.34-50.34a8,8,0,0,0-11.32-11.31L104,140.68,93.07,129.74,155.94,48H208Z"/></svg><span data-t="Member challenges">Member challenges</span><span class="tiroir-detail" id="menuDefisMembresDetail"></span></button>
         <button type="button" class="tiroir-lien" data-vue-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
         <button type="button" class="tiroir-lien" data-vue-defis="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg><span data-t="Weekly challenges">Weekly challenges</span><span class="tiroir-detail" id="menuDefis"></span></button>
         <button type="button" class="tiroir-lien" data-vue="stats"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg><span data-t="Statistics">Statistics</span><span class="tiroir-detail" id="menuResume"></span></button>
@@ -3447,6 +3461,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <div class="tiroir-vue" id="menuAppVue" hidden></div>
       <div class="tiroir-vue" id="menuCompteVue" hidden></div>
       <div class="tiroir-vue" id="menuJoueursVue" hidden></div>
+      <div class="tiroir-vue" id="menuDefisMembresVue" hidden></div>
       <div class="tiroir-vue" id="menuLanguesVue" hidden><!--__LANGSWITCH__--></div>
     </aside>
   </div>

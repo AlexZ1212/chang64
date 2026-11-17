@@ -978,5 +978,24 @@ module.exports = {
 "Create an account to appear here.":"Burada görünmek için hesap oluştur.",
 "Could not load the list. Try again later.":"Liste yüklenemedi. Daha sonra yeniden dene.",
 "No one here yet. Be the first!":"Henüz kimse yok. Listeyi sen aç!",
-"You are not in the top 50 yet.":"Henüz ilk 50'de değilsin."
+"You are not in the top 50 yet.":"Henüz ilk 50'de değilsin.",
+/* Defis entre membres (2026-11-17, compte.js). */
+"Member challenges":"Üyeler arası meydan okumalar",
+"Or send it to a member":"Ya da bir üyeye gönder",
+"Send to this member":"Bu üyeye gönder",
+"Challenge sent to {name}.":"Meydan okuma {name} adlı üyeye gönderildi.",
+"No member has this username.":"Bu kullanıcı adında bir üye yok.",
+"You cannot challenge yourself.":"Kendine meydan okuyamazsın.",
+"Too many challenges waiting. Try again later.":"Bekleyen çok fazla meydan okuma var. Daha sonra yeniden dene.",
+"To take up":"Kabul edilecekler",
+"Decline":"Reddet",
+"Results":"Sonuçlar",
+"Waiting for an answer":"Yanıt bekleniyor",
+"{name} has not answered yet.":"{name} henüz yanıtlamadı.",
+"Withdraw":"Geri çek",
+"No challenge for now. Play five puzzles and send them to a member.":"Şimdilik meydan okuma yok. Beş bulmaca oyna ve bir üyeye gönder.",
+"Create an account to challenge other members by their username.":"Diğer üyelere kullanıcı adlarıyla meydan okumak için hesap oluştur.",
+"Your answer has been sent to {name}.":"Yanıtın {name} adlı üyeye gönderildi.",
+"Your answer could not be sent. Check your network.":"Yanıtın gönderilemedi. Ağını kontrol et.",
+"Try again":"Yeniden dene"
 };

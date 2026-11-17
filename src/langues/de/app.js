@@ -980,5 +980,24 @@ module.exports = {
 "Create an account to appear here.":"Lege ein Konto an, um hier zu erscheinen.",
 "Could not load the list. Try again later.":"Die Liste konnte nicht geladen werden. Versuche es später noch einmal.",
 "No one here yet. Be the first!":"Noch niemand hier. Mach den Anfang!",
-"You are not in the top 50 yet.":"Du bist noch nicht unter den besten 50."
+"You are not in the top 50 yet.":"Du bist noch nicht unter den besten 50.",
+/* Defis entre membres (2026-11-17, compte.js). */
+"Member challenges":"Herausforderungen unter Mitgliedern",
+"Or send it to a member":"Oder schicke sie an ein Mitglied",
+"Send to this member":"An dieses Mitglied senden",
+"Challenge sent to {name}.":"Herausforderung an {name} gesendet.",
+"No member has this username.":"Kein Mitglied hat diesen Benutzernamen.",
+"You cannot challenge yourself.":"Du kannst dich nicht selbst herausfordern.",
+"Too many challenges waiting. Try again later.":"Zu viele offene Herausforderungen. Versuche es später noch einmal.",
+"To take up":"Anzunehmen",
+"Decline":"Ablehnen",
+"Results":"Ergebnisse",
+"Waiting for an answer":"Warten auf Antwort",
+"{name} has not answered yet.":"{name} hat noch nicht geantwortet.",
+"Withdraw":"Zurückziehen",
+"No challenge for now. Play five puzzles and send them to a member.":"Im Moment keine Herausforderung. Spiele fünf Aufgaben und schicke sie an ein Mitglied.",
+"Create an account to challenge other members by their username.":"Lege ein Konto an, um andere Mitglieder über ihren Benutzernamen herauszufordern.",
+"Your answer has been sent to {name}.":"Deine Antwort wurde an {name} gesendet.",
+"Your answer could not be sent. Check your network.":"Deine Antwort konnte nicht gesendet werden. Prüfe dein Netz.",
+"Try again":"Noch einmal versuchen"
 };

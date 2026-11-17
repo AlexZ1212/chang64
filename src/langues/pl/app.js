@@ -978,5 +978,24 @@ module.exports = {
 "Create an account to appear here.":"Załóż konto, żeby się tu pojawić.",
 "Could not load the list. Try again later.":"Nie udało się wczytać listy. Spróbuj ponownie później.",
 "No one here yet. Be the first!":"Jeszcze nikogo tu nie ma. Otwórz listę!",
-"You are not in the top 50 yet.":"Nie ma cię jeszcze w pierwszej pięćdziesiątce."
+"You are not in the top 50 yet.":"Nie ma cię jeszcze w pierwszej pięćdziesiątce.",
+/* Defis entre membres (2026-11-17, compte.js). */
+"Member challenges":"Wyzwania między członkami",
+"Or send it to a member":"Albo wyślij je członkowi",
+"Send to this member":"Wyślij temu członkowi",
+"Challenge sent to {name}.":"Wyzwanie wysłane do: {name}.",
+"No member has this username.":"Żaden członek nie ma takiej nazwy użytkownika.",
+"You cannot challenge yourself.":"Nie możesz rzucić wyzwania samemu sobie.",
+"Too many challenges waiting. Try again later.":"Zbyt wiele wyzwań czeka na odpowiedź. Spróbuj ponownie później.",
+"To take up":"Do podjęcia",
+"Decline":"Odrzuć",
+"Results":"Wyniki",
+"Waiting for an answer":"Czekają na odpowiedź",
+"{name} has not answered yet.":"{name} jeszcze nie odpowiada.",
+"Withdraw":"Wycofaj",
+"No challenge for now. Play five puzzles and send them to a member.":"Na razie nie ma wyzwań. Rozwiąż pięć zadań i wyślij je członkowi.",
+"Create an account to challenge other members by their username.":"Załóż konto, żeby rzucać wyzwania innym członkom po nazwie użytkownika.",
+"Your answer has been sent to {name}.":"Twoja odpowiedź została wysłana do: {name}.",
+"Your answer could not be sent. Check your network.":"Nie udało się wysłać odpowiedzi. Sprawdź sieć.",
+"Try again":"Spróbuj ponownie"
 };

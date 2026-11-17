@@ -980,5 +980,24 @@ module.exports = {
 "Create an account to appear here.":"Создай аккаунт, чтобы появиться здесь.",
 "Could not load the list. Try again later.":"Не удалось загрузить список. Попробуй позже.",
 "No one here yet. Be the first!":"Здесь пока никого. Открой список!",
-"You are not in the top 50 yet.":"Тебя пока нет в первой полусотне."
+"You are not in the top 50 yet.":"Тебя пока нет в первой полусотне.",
+/* Defis entre membres (2026-11-17, compte.js). */
+"Member challenges":"Вызовы между участниками",
+"Or send it to a member":"Или отправь его участнику",
+"Send to this member":"Отправить этому участнику",
+"Challenge sent to {name}.":"Вызов отправлен: {name}.",
+"No member has this username.":"Участника с таким именем нет.",
+"You cannot challenge yourself.":"Нельзя бросить вызов самому себе.",
+"Too many challenges waiting. Try again later.":"Слишком много вызовов ждут ответа. Попробуй позже.",
+"To take up":"Принять вызов",
+"Decline":"Отклонить",
+"Results":"Результаты",
+"Waiting for an answer":"Ждут ответа",
+"{name} has not answered yet.":"{name} ещё не отвечает.",
+"Withdraw":"Отозвать",
+"No challenge for now. Play five puzzles and send them to a member.":"Пока вызовов нет. Реши пять задач и отправь их участнику.",
+"Create an account to challenge other members by their username.":"Создай аккаунт, чтобы бросать вызов другим участникам по имени пользователя.",
+"Your answer has been sent to {name}.":"Твой ответ отправлен: {name}.",
+"Your answer could not be sent. Check your network.":"Не удалось отправить ответ. Проверь сеть.",
+"Try again":"Повторить"
 };

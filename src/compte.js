@@ -867,6 +867,159 @@ document.addEventListener("click",e=>{
   if(b)cpjVue(b.dataset.cpj);
 });
 
+/* ---------- Defis entre membres ---------- */
+/* Le defi par lien (duel.js) sans le lien (2026-11-17) : apres ses cinq
+   exercices, un joueur connecte peut envoyer le defi a un membre, par son
+   pseudo. Le destinataire le trouve dans "Defis entre membres" du menu, le
+   releve (memes exercices, score a battre), et les deux voient le resultat.
+   Serveur : routes defis / defi-envoyer / defi-repondre / defi-supprimer de
+   functions/api/compte/[[route]].js. Aucun texte libre ne circule.
+   Le point du menu signale un defi a relever ou une reponse pas encore vue
+   (chang64:defisVus garde les reponses deja vues sur cet appareil). */
+let cpdListe=null,cpdT=0,cpdEnvoi=null,cpdRevanche="";
+function cpdVus(){const v=cpLire("chang64:defisVus");return Array.isArray(v)?v:[];}
+function cpdNouveaux(){
+  if(!cp||!cpdListe)return 0;
+  const vus=cpdVus();
+  return cpListe(cpdListe.recus).filter(x=>x.r2===null).length+cpListe(cpdListe.envoyes).filter(x=>x.r2!==null&&!vus.includes(x.id)).length;
+}
+function cpdPoint(){
+  const n=cpdNouveaux(),d=$("menuDefisMembresDetail"),p=$("btnMenuPoint");
+  if(d)d.textContent=n?String(n):"";
+  if(p&&n)p.hidden=false;
+}
+async function cpdCharger(force){
+  if(!cp||cpEtatSync==="session")return cpdListe;
+  if(!force&&cpdListe&&Date.now()-cpdT<60000)return cpdListe;
+  const r=await cpApi("GET","defis");
+  if(r.s===200&&r.j&&Array.isArray(r.j.recus)){cpdListe=r.j;cpdT=Date.now();cpdPoint();}
+  return cpdListe;
+}
+function cpdJoueur(x,k){return {r:x["r"+k],t:x["t"+k]};}
+/* Une ligne de resultat : moi et l'autre, le gagnant encadre. */
+function cpdResultat(x,recu){
+  const moi=cpdJoueur(x,recu?2:1),autre=cpdJoueur(x,recu?1:2),c=duelComparer(moi,autre);
+  return '<p class="cpd-titre">'+echapper(c>0?t("You win!"):c<0?t("{name} wins!",{name:x.p}):t("Perfect tie!"))+"</p>"+
+    '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(x.p,autre,c<0)+"</ul>";
+}
+async function cpdVue(){
+  const v=$("menuDefisMembresVue");if(!v)return;
+  if(!cp){
+    poserHtml(v,'<p class="app-intro">'+cpE("Create an account to challenge other members by their username.")+"</p>"+
+      '<button type="button" class="btn primary cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>");
+    return;
+  }
+  if(!cpdListe)poserHtml(v,'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");
+  const l=await cpdCharger(true);
+  if(v.hidden)return;
+  if(!l){poserHtml(v,'<p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
+  const aRelever=cpListe(l.recus).filter(x=>x.r2===null),attente=cpListe(l.envoyes).filter(x=>x.r2===null);
+  const finis=cpListe(l.recus).filter(x=>x.r2!==null).map(x=>[x,true]).concat(cpListe(l.envoyes).filter(x=>x.r2!==null).map(x=>[x,false]))
+    .sort((a,b)=>cpNombre(b[0].repondu)-cpNombre(a[0].repondu)).slice(0,20);
+  let h="";
+  if(aRelever.length)h+='<p class="tiroir-section">'+cpE("To take up")+"</p>"+aRelever.map(x=>
+    '<div class="cpd-carte"><p class="cpd-titre">'+echapper(t("{name} challenges you!",{name:x.p}))+"</p>"+
+    '<p class="cp-note">'+echapper(t("Score to beat: {n}/{total}",{n:duelPremiers(x.r1),total:DUEL_N}))+" "+duelPoints(x.r1)+" "+duelTemps(x.t1)+"</p>"+
+    '<div class="cpd-boutons"><button type="button" class="btn primary" data-cpd-relever="'+x.id+'">'+cpE("Take the challenge")+'</button><button type="button" class="btn" data-cpd-supprimer="'+x.id+'">'+cpE("Decline")+"</button></div></div>").join("");
+  if(finis.length)h+='<p class="tiroir-section">'+cpE("Results")+"</p>"+finis.map(([x,recu])=>
+    '<div class="cpd-carte">'+cpdResultat(x,recu)+"</div>").join("");
+  if(attente.length)h+='<p class="tiroir-section">'+cpE("Waiting for an answer")+"</p>"+attente.map(x=>
+    '<div class="cpd-carte cpd-attente"><p class="cp-note">'+echapper(t("{name} has not answered yet.",{name:x.p}))+"</p>"+
+    '<button type="button" class="linkbtn cp-lien" data-cpd-supprimer="'+x.id+'">'+cpE("Withdraw")+"</button></div>").join("");
+  if(!h)h='<p class="cp-note cp-centre">'+cpE("No challenge for now. Play five puzzles and send them to a member.")+"</p>";
+  h+='<button type="button" class="btn cp-large" data-cpd-nouveau>'+cpE("New challenge")+"</button>";
+  poserHtml(v,h);
+  /* Les reponses affichees sont vues : le point s'eteint. */
+  cpEcrire("chang64:defisVus",cpListe(l.envoyes).filter(x=>x.r2!==null).map(x=>x.id).slice(0,60));
+  cpdPoint();
+  if(typeof menuPoint==="function")menuPoint();
+}
+{
+  const av=menuVue;
+  menuVue=function(nom){
+    const v=$("menuDefisMembresVue");
+    if(nom!=="defisMembres"){if(v)v.hidden=true;return av.apply(this,arguments);}
+    av.call(this,"accueil");
+    for(const e of document.querySelectorAll("#menuTiroir .tiroir-vue"))e.hidden=e!==v;
+    $("menuRetour").hidden=false;
+    $("menuTitre").textContent=t("Member challenges");
+    cpdVue();
+    if(v){v.scrollTop=0;if(!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});}
+  };
+}
+/* Le point du bouton de menu : une nouveaute OU un defi qui attend. */
+{const av=menuPoint;menuPoint=function(){const r=av.apply(this,arguments);cpdPoint();return r;};}
+{const av=menuOuvrir;menuOuvrir=function(){const r=av.apply(this,arguments);cpdCharger().then(()=>{if(typeof menuPoint==="function")menuPoint();});return r;};}
+/* Fin d'un defi cree : proposer de l'envoyer a un membre. */
+{
+  const av=duelVueCree;
+  duelVueCree=function(ids,moi){
+    const r=av.apply(this,arguments);
+    const fermer=document.querySelector("#duelContenu .duel-fermer");
+    if(cp&&fermer){
+      cpdEnvoi={ids:ids,moi:moi};
+      fermer.insertAdjacentHTML("beforebegin",'<div class="duel-membre"><label class="duel-nom" for="duelMembre"><span>'+cpE("Or send it to a member")+"</span>"+
+        '<input type="text" id="duelMembre" maxlength="24" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+cpE("Username")+'" value="'+echapper(cpdRevanche)+'"></label>'+
+        '<button type="button" class="btn" data-duel-membre>'+cpE("Send to this member")+'</button><p class="duel-note" id="duelMembreMsg" aria-live="polite"></p></div>');
+    }
+    cpdRevanche="";
+    return r;
+  };
+}
+/* Fin d'un defi releve chez un membre : la reponse part au serveur, pas dans
+   un lien. */
+async function cpdRepondre(ids,adv,moi){
+  const c=duelComparer(moi,adv);
+  duelOuvrir(duelTete(c>0?t("You win!"):c<0?t("{name} wins!",{name:adv.n}):t("Perfect tie!"),"")+
+    '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(adv.n,adv,c<0)+"</ul>"+
+    '<p class="duel-note" id="cpdRepMsg" aria-live="polite">'+cpE("Syncing…")+"</p>"+
+    '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-nouveau data-cpd-revanche="'+echapper(adv.n)+'" data-duel-premier>'+cpE("Rematch")+
+    '</button><button type="button" class="btn" data-duel-fermer>'+cpE("Close")+"</button></div>");
+  const envoyer=async()=>{
+    const r=await cpApi("POST","defi-repondre",{id:adv.membre,r:moi.r,t:moi.t});
+    const m=$("cpdRepMsg");if(!m)return;
+    if(r.s===200){m.textContent=t("Your answer has been sent to {name}.",{name:adv.n});cpdT=0;cpdCharger(true);return;}
+    /* Deja repondu ou defi retire : rien a renvoyer. */
+    if(r.s===404){m.textContent="";cpdT=0;return;}
+    poserHtml(m,echapper(t("Your answer could not be sent. Check your network."))+' <button type="button" class="linkbtn cp-lien" id="cpdReessayer">'+cpE("Try again")+"</button>");
+    const b=$("cpdReessayer");if(b)b.onclick=()=>{m.textContent=t("Syncing…");envoyer();};
+  };
+  envoyer();
+}
+{
+  const av=duelVueReponse;
+  duelVueReponse=function(ids,adv,moi){
+    if(adv&&adv.membre&&cp){cpdRepondre(ids,adv,moi);return;}
+    return av.apply(this,arguments);
+  };
+}
+document.addEventListener("click",async e=>{
+  if(e.target.closest("[data-vue-defis-membres]")){menuVue("defisMembres");return;}
+  const rev=e.target.closest("[data-cpd-revanche]");
+  if(rev){cpdRevanche=rev.dataset.cpdRevanche||"";return;}
+  if(e.target.closest("[data-cpd-nouveau]")){menuFermer();duelCreer();return;}
+  const rel=e.target.closest("[data-cpd-relever]");
+  if(rel){
+    const x=cpListe(cpdListe&&cpdListe.recus).find(y=>String(y.id)===rel.dataset.cpdRelever),ids=x&&duelDec(x.exos);
+    if(x&&ids){menuFermer();duelDemarrer(ids,{r:x.r1,t:x.t1,n:x.p,membre:x.id});}
+    return;
+  }
+  const sup=e.target.closest("[data-cpd-supprimer]");
+  if(sup){sup.disabled=true;await cpApi("POST","defi-supprimer",{id:+sup.dataset.cpdSupprimer});cpdVue();return;}
+  const env=e.target.closest("[data-duel-membre]");
+  if(env&&cpdEnvoi){
+    const msg=$("duelMembreMsg"),v=pseudoValider(($("duelMembre")||{}).value||"");
+    if(!v.ok){msg.textContent=t("No member has this username.");return;}
+    env.disabled=true;msg.textContent=t("Syncing…");
+    const r=await cpApi("POST","defi-envoyer",{a:v.pseudo,exos:duelEnc(cpdEnvoi.ids),r:cpdEnvoi.moi.r,t:cpdEnvoi.moi.t});
+    env.disabled=false;
+    if(r.s===201){msg.textContent=t("Challenge sent to {name}.",{name:r.j.a||v.pseudo});env.disabled=true;cpdT=0;return;}
+    msg.textContent=r.s===404?t("No member has this username."):r.s===400&&r.j.erreur==="soi"?t("You cannot challenge yourself."):r.s===429&&r.j.erreur==="trop"?t("Too many challenges waiting. Try again later."):cpErreur(r);
+  }
+});
+/* Au demarrage, une fois la session lue : y a-t-il un defi a relever ? */
+setTimeout(()=>{cpdCharger().then(()=>{if(typeof menuPoint==="function")menuPoint();});},4000);
+
 /* ---------- QR code ---------- */
 /* Encodeur minimal : mode octets, correction L, versions 1 a 6 (134 octets),
    de quoi porter l'adresse d'ajout d'appareil. Rend un SVG. Verifie par

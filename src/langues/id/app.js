@@ -978,5 +978,24 @@ module.exports = {
 "Create an account to appear here.":"Buat akun untuk tampil di sini.",
 "Could not load the list. Try again later.":"Daftar tidak bisa dimuat. Coba lagi nanti.",
 "No one here yet. Be the first!":"Belum ada siapa-siapa. Jadilah yang pertama!",
-"You are not in the top 50 yet.":"Kamu belum masuk 50 besar."
+"You are not in the top 50 yet.":"Kamu belum masuk 50 besar.",
+/* Defis entre membres (2026-11-17, compte.js). */
+"Member challenges":"Tantangan antaranggota",
+"Or send it to a member":"Atau kirim ke seorang anggota",
+"Send to this member":"Kirim ke anggota ini",
+"Challenge sent to {name}.":"Tantangan terkirim ke {name}.",
+"No member has this username.":"Tidak ada anggota dengan nama pengguna itu.",
+"You cannot challenge yourself.":"Kamu tidak bisa menantang dirimu sendiri.",
+"Too many challenges waiting. Try again later.":"Terlalu banyak tantangan yang menunggu. Coba lagi nanti.",
+"To take up":"Untuk diterima",
+"Decline":"Tolak",
+"Results":"Hasil",
+"Waiting for an answer":"Menunggu jawaban",
+"{name} has not answered yet.":"{name} belum menjawab.",
+"Withdraw":"Tarik",
+"No challenge for now. Play five puzzles and send them to a member.":"Belum ada tantangan. Mainkan lima teka-teki lalu kirim ke seorang anggota.",
+"Create an account to challenge other members by their username.":"Buat akun untuk menantang anggota lain lewat nama pengguna mereka.",
+"Your answer has been sent to {name}.":"Jawabanmu sudah terkirim ke {name}.",
+"Your answer could not be sent. Check your network.":"Jawabanmu tidak bisa dikirim. Periksa jaringanmu.",
+"Try again":"Coba lagi"
 };

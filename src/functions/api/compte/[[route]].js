@@ -22,6 +22,8 @@
  *   POST secours           {pseudo, secours, code}  -> {pseudo, secours, version}
  *   POST secours-nouveau   {code}                   -> {secours}
  *   POST pseudo-changer    {pseudo, ancien, nouveau} -> {pseudo}
+ *   GET  enquete                                    -> {possible, dernieres}
+ *   POST enquete           {question, note, commentaire?, langue?} -> {ok}
  *   POST lien                                       -> {code, expire}
  *   POST lien-connexion    {pseudo, code}           -> {pseudo, version}
  *   GET  defis                                      -> {recus, envoyes}
@@ -75,6 +77,10 @@ const DEFIS_MEME_MEMBRE = 3;         /* en attente vers un meme destinataire */
 const DEFIS_BOITE = 30;              /* en attente chez un destinataire */
 const DEFIS_DUREE = 60 * JOUR;       /* puis efface */
 const DEFIS_LISTE = 30;
+/* Mini-enquetes de satisfaction (table enquetes). */
+const ENQUETE_QUESTIONS = ["site", "interface", "exercices", "ordinateur", "compte"];
+const ENQUETE_DELAI = 25 * JOUR;     /* une reponse au plus par compte sur cette duree */
+const ENQUETE_TEXTE_MAX = 500;
 
 /* ---------- Pseudo ---------- */
 /* PSEUDO-DEBUT : ce bloc est recopie a l'identique dans compte.js (le
@@ -314,6 +320,7 @@ async function nettoyer(env, now) {
      n'existe plus. A part du lot : si la table defis n'a pas encore ete
      creee, le reste du menage et la creation de compte ne doivent pas en
      souffrir. */
+  try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try {
     await env.DB.batch([
       env.DB.prepare("DELETE FROM defis WHERE cree < ?1").bind(now - DEFIS_DUREE),
@@ -405,6 +412,8 @@ async function rExporter(s, env) {
       "JOIN comptes c1 ON c1.id = d.de JOIN comptes c2 ON c2.id = d.a WHERE d.de = ?1 OR d.a = ?1 ORDER BY d.cree DESC"
     ).bind(s.id).all()).results || [];
   } catch (e) {}
+  let enquetes = [];
+  try { enquetes = (await env.DB.prepare("SELECT question, note, commentaire, langue, cree FROM enquetes WHERE compte_id = ?1 ORDER BY cree DESC").bind(s.id).all()).results || []; } catch (e) {}
   const export_ = {
     site: "chang64.com",
     a_propos: "Tout ce que chang64 garde sur ce compte. Le code et le code de secours ne sont gardes que sous forme d'empreintes, illisibles : ils ne figurent pas ici. Aucune adresse IP, aucun e-mail, aucun nom n'est enregistre.",
@@ -414,6 +423,7 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     version: l.version,
+    reponses_aux_enquetes: enquetes.map(x => ({ le: new Date(x.cree).toISOString(), question: x.question, note: x.note, commentaire: x.commentaire, langue: x.langue })),
     defis_entre_membres: defis.map(x => ({ envoye_le: new Date(x.cree).toISOString(), de: x.de, a: x.a, exercices: x.exos, resultat_de: x.r1, secondes_de: x.t1, resultat_a: x.r2, secondes_a: x.t2 })),
     progression: l.donnees ? JSON.parse(l.donnees) : null
   };
@@ -424,6 +434,7 @@ async function rExporter(s, env) {
 
 async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM defis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -576,6 +587,42 @@ async function rDefiSupprimer(s, d, env) {
   return r ? json({ ok: true }) : erreur("defi", 404);
 }
 
+/* ---------- Mini-enquetes de satisfaction ---------- */
+/* De temps en temps, un joueur connecte se voit poser UNE question : une
+   note de 1 a 5 et, s'il le veut, un commentaire court. C'est le seul texte
+   libre que le site recoit ; il n'est jamais montre a un autre joueur.
+   - question : un identifiant de la liste ENQUETE_QUESTIONS (les libelles
+     sont dans compte.js) ; toute autre valeur est refusee ;
+   - une reponse au plus par compte tous les 25 jours, garantie par
+     l'insertion elle-meme ;
+   - les reponses partent avec le compte (suppression, effacement apres deux
+     ans) et figurent dans l'export.
+   Pour les lire : requetes en bas de compte-schema.sql. */
+function enqueteTexte(x) {
+  if (x === undefined || x === null) return "";
+  if (typeof x !== "string") return null;
+  /* Ni caracteres de controle ni retours a la ligne en rafale. */
+  const t = x.replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, "").replace(/\s{3,}/g, "  ").trim();
+  return Array.from(t).length > ENQUETE_TEXTE_MAX ? null : t;
+}
+async function rEnqueteLire(s, env, now) {
+  const l = (await env.DB.prepare("SELECT question, MAX(cree) AS t FROM enquetes WHERE compte_id = ?1 GROUP BY question").bind(s.id).all()).results || [];
+  const dernieres = {};
+  let recente = 0;
+  for (const x of l) { dernieres[x.question] = x.t; recente = Math.max(recente, x.t); }
+  return json({ possible: recente < now - ENQUETE_DELAI, dernieres });
+}
+async function rEnqueteEcrire(s, d, env, now) {
+  const texte = enqueteTexte(d.commentaire);
+  if (!ENQUETE_QUESTIONS.includes(d.question) || !Number.isInteger(d.note) || d.note < 1 || d.note > 5 || texte === null) return erreur("requete", 400);
+  const langue = typeof d.langue === "string" && /^[a-z]{2}$/.test(d.langue) ? d.langue : "";
+  const r = await env.DB.prepare(
+    "INSERT INTO enquetes (compte_id, question, note, commentaire, langue, cree) SELECT ?1, ?2, ?3, ?4, ?5, ?6 " +
+    "WHERE NOT EXISTS (SELECT 1 FROM enquetes WHERE compte_id = ?1 AND cree > ?7) RETURNING id"
+  ).bind(s.id, d.question, d.note, texte || null, langue, now, now - ENQUETE_DELAI).first();
+  return r ? json({ ok: true }, 201) : erreur("trop", 429);
+}
+
 export async function onRequest({ request, env, params }) {
   try {
     if (!env.DB) return erreur("indisponible", 503);
@@ -600,7 +647,7 @@ export async function onRequest({ request, env, params }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "pseudo-changer"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -608,6 +655,7 @@ export async function onRequest({ request, env, params }) {
       if (route === "etat") return json({ pseudo: s.pseudo, version: s.version, cree: s.cree });
       if (route === "synchro") return await rSynchroLire(s, env);
       if (route === "defis") return await rDefis(s, env);
+      if (route === "enquete") return await rEnqueteLire(s, env, now);
       return await rExporter(s, env);
     }
     const d = await corps(request);
@@ -617,6 +665,7 @@ export async function onRequest({ request, env, params }) {
     if (route === "code") return await rCode(s, d, env, now);
     if (route === "secours-nouveau") return await rSecoursNouveau(s, d, env, now);
     if (route === "pseudo-changer") return await rPseudoChanger(s, d, env, now);
+    if (route === "enquete") return await rEnqueteEcrire(s, d, env, now);
     if (route === "defi-envoyer") return await rDefiEnvoyer(s, d, env, now);
     if (route === "defi-repondre") return await rDefiRepondre(s, d, env, now);
     if (route === "defi-supprimer") return await rDefiSupprimer(s, d, env);

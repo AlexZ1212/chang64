@@ -308,6 +308,40 @@ const avancer = ms => { decalage += ms; };
     T("le code de secours marche toujours apres le changement", r.s === 200);
   }
 
+  console.log("\nMini-enquetes");
+  {
+    env = { DB: fausseD1() };
+    const cA = (await appel("POST", "creer", { pseudo: "Avis", code: code(1) })).cookie;
+    const cB = (await appel("POST", "creer", { pseudo: "Autre", code: code(1) })).cookie;
+    T("sans session : 401", (await appel("GET", "enquete")).s === 401 && (await appel("POST", "enquete", { question: "site", note: 4 })).s === 401);
+    let r = await appel("GET", "enquete", undefined, { cookie: cA });
+    T("jamais repondu : une enquete est possible", r.s === 200 && r.j.possible === true && Object.keys(r.j.dernieres).length === 0);
+    for (const mauvais of [{ question: "autre" }, { question: "site; DROP TABLE comptes" }, { note: 0 }, { note: 6 }, { note: 3.5 }, { note: "4" }, { commentaire: 12 }, { commentaire: "x".repeat(501) }])
+      T("reponse mal formee refusee : " + JSON.stringify(mauvais).slice(0, 50), (await appel("POST", "enquete", Object.assign({ question: "site", note: 4 }, mauvais), { cookie: cA })).s === 400);
+    r = await appel("POST", "enquete", { question: "site", note: 5, commentaire: "  Super site,\u0007 <b>merci</b> !  ", langue: "fr" }, { cookie: cA });
+    T("reponse acceptee", r.s === 201, r.texte);
+    let l = lignes("SELECT * FROM enquetes")[0];
+    T("gardee telle quelle, sans caractere de controle, liee au compte", l.question === "site" && l.note === 5 && l.commentaire === "Super site, <b>merci</b> !" && l.langue === "fr" && l.compte_id > 0, JSON.stringify(l));
+    T("ni adresse IP ni appareil dans la table", !Object.keys(l).some(k => /ip|agent|appareil/i.test(k)));
+    T("une seconde reponse dans la foulee : refusee", (await appel("POST", "enquete", { question: "interface", note: 3 }, { cookie: cA })).s === 429);
+    const deux = await Promise.all([1, 2, 3].map(() => appel("POST", "enquete", { question: "interface", note: 3 }, { cookie: cB })));
+    T("trois reponses simultanees : une seule passe", deux.filter(x => x.s === 201).length === 1);
+    r = await appel("GET", "enquete", undefined, { cookie: cA });
+    T("juste apres : plus d'enquete possible, la question faite est connue", r.j.possible === false && r.j.dernieres.site > 0);
+    avancer(26 * 864e5);
+    r = await appel("GET", "enquete", undefined, { cookie: cA });
+    T("26 jours plus tard : de nouveau possible", r.j.possible === true && r.j.dernieres.site > 0);
+    T("reponse sans commentaire acceptee", (await appel("POST", "enquete", { question: "exercices", note: 2 }, { cookie: cA })).s === 201 && lignes("SELECT commentaire FROM enquetes WHERE question = 'exercices'")[0].commentaire === null);
+    r = await appel("GET", "exporter", undefined, { cookie: cA });
+    T("l'export contient ses reponses, pas celles des autres", r.j.reponses_aux_enquetes.length === 2 && r.j.reponses_aux_enquetes.every(x => x.question !== "interface"));
+    T("les tableaux des joueurs et les defis n'en disent rien", !/Super site/.test(JSON.stringify((await appel("GET", "defis", undefined, { cookie: cB })).j)));
+    T("supprimer son compte efface ses reponses", (await appel("POST", "supprimer", { code: code(1) }, { cookie: cA })).s === 200 && lignes("SELECT COUNT(*) AS n FROM enquetes WHERE question IN ('site', 'exercices')")[0].n === 0 && lignes("SELECT COUNT(*) AS n FROM enquetes")[0].n === 1);
+    env = { DB: fausseD1() };
+    env.DB.brut.exec("DROP TABLE enquetes");
+    r = await appel("POST", "creer", { pseudo: "Avant", code: code(1) });
+    T("sans la table enquetes : creation, export et suppression marchent encore", r.s === 201 && (await appel("GET", "exporter", undefined, { cookie: r.cookie })).s === 200 && (await appel("POST", "supprimer", { code: code(1) }, { cookie: r.cookie })).s === 200);
+  }
+
   console.log("\nDefis entre membres");
   {
     env = { DB: fausseD1() };

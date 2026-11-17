@@ -2168,6 +2168,23 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpj-liste li:nth-child(-n+3) .cpj-rang{color:var(--brass);font-weight:600}
 .cpj-nom{flex:1;min-width:0;overflow-wrap:anywhere}
 .cpj-nom em{font-style:normal;font-size:12.5px;color:var(--sage)}
+/* Mini-enquete dans le bilan de seance (2026-11-17). */
+.bilan-enquete{margin:0 0 14px;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule);text-align:center}
+.bilan-enquete[hidden]{display:none}
+.cpe-titre{margin:0 0 4px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
+.cpe-question{margin:0 0 10px;font-size:15px;font-weight:600;color:var(--chalk)}
+.cpe-notes{display:flex;justify-content:center;gap:8px}
+.cpe-notes button{width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:none;color:var(--chalk);font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.cpe-notes button[aria-pressed="true"]{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass)}
+.cpe-notes button:focus-visible,.cpe-suite textarea:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.cpe-echelle{display:flex;justify-content:space-between;max-width:252px;margin:6px auto 0;font-size:11.5px;color:var(--sage)}
+.cpe-suite{margin-top:12px;text-align:left}
+.cpe-suite[hidden]{display:none}
+.cpe-suite label{display:block;margin-bottom:5px;font-size:13px;color:var(--sage)}
+.cpe-suite textarea{display:block;width:100%;box-sizing:border-box;padding:9px 10px;border-radius:8px;border:1px solid var(--rule);background-color:var(--slate);color:var(--chalk);font:inherit;font-size:16px;resize:vertical}
+.cpe-suite .btn{display:block;width:100%;margin-top:8px}
+.cpe-msg{min-height:1.2em;margin:6px 0 0;font-size:12.5px;color:var(--brick)}
+.cpe-merci{margin:4px 0;font-size:14px;font-weight:600;color:var(--jade)}
 /* Tableau complet des meilleurs joueurs (2026-11-17) : plein ecran. Il
    s'affiche tout seul quand la vue est ouverte et le telephone en paysage
    (seule exception a "Redresse ton telephone"), ou par le bouton. */
@@ -3437,6 +3454,8 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <ul class="bilan-lignes" id="bilanLignes"></ul>
       <div class="bilan-badges-bloc" id="bilanBadgesBloc" hidden><p id="bilanBadgesTitre">Badges earned</p><div class="bilan-badges" id="bilanBadges"></div></div>
       <div class="bilan-app" id="bilanApp" hidden><span id="bilanAppTexte"></span><button type="button" class="btn" id="bilanAppBouton">Install the app</button></div>
+      <!-- Mini-enquete de satisfaction (2026-11-17, compte.js) : pour les joueurs connectes, de temps en temps. -->
+      <div class="bilan-enquete" id="bilanEnquete" hidden></div>
       <div class="bilan-app" id="bilanCompte" hidden><span id="bilanCompteTexte"></span><button type="button" class="btn" id="bilanCompteBouton">Create an account</button></div>
       <button type="button" class="btn primary" id="bilanOk">Continue</button>
     </div>

@@ -71,3 +71,25 @@ CREATE TABLE IF NOT EXISTS defis (
 );
 CREATE INDEX IF NOT EXISTS defis_a ON defis (a, cree);
 CREATE INDEX IF NOT EXISTS defis_de ON defis (de, cree);
+
+-- Mini-enquetes de satisfaction (2026-11-17) : une question, une note de 1 a
+-- 5, un commentaire facultatif (500 caracteres au plus). Une reponse au plus
+-- par compte tous les 25 jours. Effacees avec le compte.
+CREATE TABLE IF NOT EXISTS enquetes (
+  id INTEGER PRIMARY KEY,
+  compte_id INTEGER NOT NULL,
+  question TEXT NOT NULL,
+  note INTEGER NOT NULL,
+  commentaire TEXT,
+  langue TEXT,
+  cree INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS enquetes_compte ON enquetes (compte_id, cree);
+CREATE INDEX IF NOT EXISTS enquetes_question ON enquetes (question, cree);
+
+-- Pour lire les reponses, dans la console D1 :
+--   moyenne et nombre de reponses par question :
+--     SELECT question, ROUND(AVG(note), 2) AS moyenne, COUNT(*) AS reponses FROM enquetes GROUP BY question;
+--   les commentaires, du plus recent au plus ancien :
+--     SELECT datetime(e.cree / 1000, 'unixepoch') AS quand, c.pseudo, e.question, e.note, e.langue, e.commentaire
+--     FROM enquetes e JOIN comptes c ON c.id = e.compte_id WHERE e.commentaire IS NOT NULL ORDER BY e.cree DESC LIMIT 50;

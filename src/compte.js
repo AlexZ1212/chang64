@@ -1090,6 +1090,59 @@ document.addEventListener("click",async e=>{
 /* Au demarrage, une fois la session lue : y a-t-il un defi a relever ? */
 setTimeout(()=>{cpdCharger().then(()=>{if(typeof menuPoint==="function")menuPoint();});},4000);
 
+/* ---------- Mini-enquetes de satisfaction ---------- */
+/* De temps en temps (2026-11-17, demande d'Alexandre), un joueur connecte se
+   voit poser une question dans le bilan de seance, donc jamais pendant un
+   exercice ni une partie : une note de 1 a 5, puis, s'il le veut, un
+   commentaire court. Au plus une fois tous les 30 jours sur cet appareil,
+   et le serveur refuse plus d'une reponse par compte en 25 jours. La
+   question posee est celle a laquelle il a repondu il y a le plus
+   longtemps. Serveur : routes "enquete" de functions/api/compte. */
+const CPE_QUESTIONS={site:"How much do you enjoy chang64?",interface:"How easy is chang64 to use?",exercices:"Are the puzzles at the right level for you?",ordinateur:"How do you like playing against the computer?",compte:"How well does your account work for you?"};
+const CPE_CLE="chang64:enqueteVue",CPE_DELAI=30*864e5;
+let cpeQuestion="",cpeNote=0;
+async function cpeProposer(){
+  const z=$("bilanEnquete");if(!z)return;
+  z.hidden=true;
+  if(!cp||cpEtatSync==="session")return;
+  const autre=$("bilanApp");if(autre&&!autre.hidden)return;
+  let dernier=0;try{dernier=+(localStorage.getItem(CPE_CLE)||0);}catch(e){}
+  if(Date.now()-dernier<CPE_DELAI)return;
+  const r=await cpApi("GET","enquete");
+  if(r.s!==200||!r.j.possible)return;
+  const bi=$("bilan");if(!bi||bi.hidden)return;
+  const d=cpObjet(r.j.dernieres);
+  cpeQuestion=Object.keys(CPE_QUESTIONS).sort((a,b)=>cpNombre(d[a])-cpNombre(d[b]))[0];
+  cpeNote=0;
+  try{localStorage.setItem(CPE_CLE,String(Date.now()));}catch(e){}
+  poserHtml(z,'<p class="cpe-titre">'+cpE("Your opinion")+'</p><p class="cpe-question" id="cpeQ">'+cpE(CPE_QUESTIONS[cpeQuestion])+"</p>"+
+    '<div class="cpe-notes" role="group" aria-labelledby="cpeQ">'+[1,2,3,4,5].map(n=>'<button type="button" data-cpe-note="'+n+'" aria-pressed="false" aria-label="'+echapper(t("{n} out of 5",{n:n}))+'">'+n+"</button>").join("")+"</div>"+
+    '<p class="cpe-echelle" aria-hidden="true"><span>'+cpE("Not at all")+"</span><span>"+cpE("Very much")+"</span></p>"+
+    '<div class="cpe-suite" id="cpeSuite" hidden><label for="cpeTexte">'+cpE("A word to add? (optional)")+'</label><textarea id="cpeTexte" maxlength="500" rows="3"></textarea>'+
+    '<button type="button" class="btn primary" data-cpe-envoyer>'+cpE("Send")+"</button></div>"+
+    '<p class="cpe-msg" id="cpeMsg" role="status" aria-live="polite"></p>');
+  z.hidden=false;
+}
+{const av=bilanOuvrir;bilanOuvrir=function(){const r=av.apply(this,arguments);cpeProposer();return r;};}
+document.addEventListener("click",async e=>{
+  const n=e.target.closest("#bilanEnquete [data-cpe-note]");
+  if(n){
+    cpeNote=+n.dataset.cpeNote;
+    document.querySelectorAll("#bilanEnquete [data-cpe-note]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.cpeNote===cpeNote)));
+    const s=$("cpeSuite");if(s)s.hidden=false;
+    return;
+  }
+  const env=e.target.closest("#bilanEnquete [data-cpe-envoyer]");
+  if(env&&cpeNote){
+    env.disabled=true;
+    const r=await cpApi("POST","enquete",{question:cpeQuestion,note:cpeNote,commentaire:($("cpeTexte")||{}).value||"",langue:typeof LANG==="string"?LANG:""});
+    const z=$("bilanEnquete");if(!z)return;
+    if(r.s===201||r.s===429){poserHtml(z,'<p class="cpe-merci" role="status">'+cpE("Thank you! It helps make chang64 better.")+"</p>");return;}
+    env.disabled=false;
+    const m=$("cpeMsg");if(m)m.textContent=cpErreur(r);
+  }
+});
+
 /* ---------- QR code ---------- */
 /* Encodeur minimal : mode octets, correction L, versions 1 a 6 (134 octets),
    de quoi porter l'adresse d'ajout d'appareil. Rend un SVG. Verifie par

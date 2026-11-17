@@ -1019,5 +1019,11 @@ module.exports = {
 "Very much":"Çok",
 "A word to add? (optional)":"Eklemek istediğin bir şey var mı? (isteğe bağlı)",
 "Send":"Gönder",
-"Thank you! It helps make chang64 better.":"Teşekkürler! chang64'ü geliştirmeye yardımcı oluyor."
+"Thank you! It helps make chang64 better.":"Teşekkürler! chang64'ü geliştirmeye yardımcı oluyor.",
+/* Limite du changement de pseudo, joueurs bloques (2026-11-17). */
+"You have already changed your username this week. Try again later.":"Bu hafta kullanıcı adını zaten değiştirdin. Daha sonra yeniden dene.",
+"You can change your username once a week.":"Kullanıcı adını haftada bir kez değiştirebilirsin.",
+"Stop receiving challenges from this player":"Bu oyuncudan artık meydan okuma alma",
+"Blocked players":"Engellenen oyuncular",
+"Unblock":"Engeli kaldır"
 };

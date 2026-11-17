@@ -9,6 +9,9 @@
    l'anglais et le build le signale (langues/manquants.json). */
 module.exports = {
  textes: {
+  /* Phrase pour les parents et les enseignants (2026-11-17). */
+  "A child can create an account. The username is visible to other players: choose one that does not let anyone recognise the child, with no first name, surname, school or town.": "Bir çocuk hesap oluşturabilir. Kullanıcı adı diğer oyunculara görünür: çocuğun tanınmasına izin vermeyen, ad, soyad, okul ya da şehir içermeyen bir ad seç.",
+  "Pupils may also create an optional account, with a username and a code, to keep their progress from one device to another. The username is visible to other players: it should not let anyone recognise the pupil.": "Öğrenciler, ilerlemelerini bir cihazdan diğerine taşımak için kullanıcı adı ve kodla isteğe bağlı bir hesap da oluşturabilir. Kullanıcı adı diğer oyunculara görünür: öğrencinin tanınmasına izin vermemelidir.",
   /* Finales animees (2026-11-17). */
   "Chessboard: {name}, demonstration": "Satranç tahtası: {name}, gösterim",
   "Replay the demonstration": "Gösterimi yeniden oynat",

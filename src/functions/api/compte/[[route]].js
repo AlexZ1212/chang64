@@ -30,6 +30,8 @@
  *   POST defi-envoyer      {a, exos, r, t}          -> {id}
  *   POST defi-repondre     {id, r, t}               -> {ok}
  *   POST defi-supprimer    {id}                     -> {ok}
+ *   POST defi-bloquer      {id}                     -> {ok}   (l'auteur du defi recu)
+ *   POST defi-debloquer    {pseudo}                 -> {ok}
  *
  * Securite, en bref :
  * - Le code choisi par le joueur ne quitte jamais son navigateur. Celui-ci
@@ -77,6 +79,8 @@ const DEFIS_MEME_MEMBRE = 3;         /* en attente vers un meme destinataire */
 const DEFIS_BOITE = 30;              /* en attente chez un destinataire */
 const DEFIS_DUREE = 60 * JOUR;       /* puis efface */
 const DEFIS_LISTE = 30;
+const BLOCAGES_MAX = 200;            /* joueurs bloques par compte */
+const PSEUDO_DELAI = 7 * JOUR;       /* un changement de pseudo par semaine */
 /* Mini-enquetes de satisfaction (table enquetes). */
 const ENQUETE_QUESTIONS = ["site", "interface", "exercices", "ordinateur", "compte"];
 const ENQUETE_DELAI = 25 * JOUR;     /* une reponse au plus par compte sur cette duree */
@@ -321,6 +325,7 @@ async function nettoyer(env, now) {
      creee, le reste du menage et la creation de compte ne doivent pas en
      souffrir. */
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id NOT IN (SELECT id FROM comptes) OR bloque_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try {
     await env.DB.batch([
       env.DB.prepare("DELETE FROM defis WHERE cree < ?1").bind(now - DEFIS_DUREE),
@@ -414,6 +419,8 @@ async function rExporter(s, env) {
   } catch (e) {}
   let enquetes = [];
   try { enquetes = (await env.DB.prepare("SELECT question, note, commentaire, langue, cree FROM enquetes WHERE compte_id = ?1 ORDER BY cree DESC").bind(s.id).all()).results || []; } catch (e) {}
+  let bloques = [];
+  try { bloques = (await env.DB.prepare("SELECT c.pseudo AS p FROM blocages b JOIN comptes c ON c.id = b.bloque_id WHERE b.compte_id = ?1 ORDER BY b.cree DESC").bind(s.id).all()).results || []; } catch (e) {}
   const export_ = {
     site: "chang64.com",
     a_propos: "Tout ce que chang64 garde sur ce compte. Le code et le code de secours ne sont gardes que sous forme d'empreintes, illisibles : ils ne figurent pas ici. Aucune adresse IP, aucun e-mail, aucun nom n'est enregistre.",
@@ -423,6 +430,7 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     version: l.version,
+    joueurs_bloques: bloques.map(x => x.p),
     reponses_aux_enquetes: enquetes.map(x => ({ le: new Date(x.cree).toISOString(), question: x.question, note: x.note, commentaire: x.commentaire, langue: x.langue })),
     defis_entre_membres: defis.map(x => ({ envoye_le: new Date(x.cree).toISOString(), de: x.de, a: x.a, exercices: x.exos, resultat_de: x.r1, secondes_de: x.t1, resultat_a: x.r2, secondes_a: x.t2 })),
     progression: l.donnees ? JSON.parse(l.donnees) : null
@@ -435,6 +443,7 @@ async function rExporter(s, env) {
 async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM defis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -473,12 +482,20 @@ async function rPseudoChanger(s, d, env, now) {
   if (!codeValide(d.nouveau)) return erreur("code", 400);
   const r = await codeEssayer(env, s.id, d.ancien, now);
   if (r !== "ok") return reponseEssai(r, now);
+  /* Une fois par semaine au plus (2026-11-17) : sinon un joueur pourrait
+     changer de nom a repetition dans les tableaux. La condition est dans la
+     mise a jour elle-meme. */
+  let fait;
   try {
-    await env.DB.prepare("UPDATE comptes SET cle = ?2, pseudo = ?3, pin_hash = ?4 WHERE id = ?1")
-      .bind(s.id, v.cle, v.pseudo, await codeHacher(d.nouveau, env)).run();
+    fait = await env.DB.prepare("UPDATE comptes SET cle = ?2, pseudo = ?3, pin_hash = ?4, pseudo_change = ?5 WHERE id = ?1 AND pseudo_change <= ?6 RETURNING id")
+      .bind(s.id, v.cle, v.pseudo, await codeHacher(d.nouveau, env), now, now - PSEUDO_DELAI).first();
   } catch (e) {
     if (/UNIQUE/i.test(String(e && e.message))) return erreur("pseudo", 409, { raison: "pris" });
     throw e;
+  }
+  if (!fait) {
+    const l = await env.DB.prepare("SELECT pseudo_change FROM comptes WHERE id = ?1").bind(s.id).first();
+    return erreur("pseudo_recent", 429, { attendre: Math.max(1, Math.ceil(((l ? l.pseudo_change : now) + PSEUDO_DELAI - now) / 1000)) });
   }
   return json({ pseudo: v.pseudo });
 }
@@ -555,7 +572,28 @@ async function rDefis(s, env) {
     "SELECT d.id, c.pseudo AS p, d.exos, d.r1, d.t1, d.r2, d.t2, d.cree, d.repondu FROM defis d JOIN comptes c ON c.id = d." + autre +
     " WHERE d." + moi + " = ?1 ORDER BY d.cree DESC LIMIT ?2"
   ).bind(s.id, DEFIS_LISTE).all()).results || [];
-  return json({ recus: await lire("a", "de"), envoyes: await lire("de", "a") });
+  const bloques = (await env.DB.prepare("SELECT c.pseudo AS p FROM blocages b JOIN comptes c ON c.id = b.bloque_id WHERE b.compte_id = ?1 ORDER BY b.cree DESC").bind(s.id).all()).results || [];
+  return json({ recus: await lire("a", "de"), envoyes: await lire("de", "a"), bloques: bloques.map(x => x.p) });
+}
+/* Ne plus recevoir de defis d'un joueur (2026-11-17). On bloque l'auteur d'un
+   defi RECU : impossible de bloquer quelqu'un au hasard, et inutile de taper
+   un pseudo. Ses defis en attente partent avec. L'auteur n'en est pas
+   averti : ses envois suivants sont refuses comme si la boite etait pleine. */
+async function rDefiBloquer(s, d, env, now) {
+  if (!Number.isInteger(d.id)) return erreur("requete", 400);
+  const l = await env.DB.prepare("SELECT de FROM defis WHERE id = ?1 AND a = ?2").bind(d.id, s.id).first();
+  if (!l) return erreur("defi", 404);
+  await env.DB.batch([
+    env.DB.prepare("INSERT INTO blocages (compte_id, bloque_id, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM blocages WHERE compte_id = ?1) < ?4 " +
+      "ON CONFLICT(compte_id, bloque_id) DO NOTHING").bind(s.id, l.de, now, BLOCAGES_MAX),
+    env.DB.prepare("DELETE FROM defis WHERE de = ?2 AND a = ?1 AND r2 IS NULL").bind(s.id, l.de)
+  ]);
+  return json({ ok: true });
+}
+async function rDefiDebloquer(s, d, env) {
+  const c = await compteParPseudo(env, d.pseudo);
+  if (c) await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 AND bloque_id = ?2").bind(s.id, c.id).run();
+  return json({ ok: true });
 }
 async function rDefiEnvoyer(s, d, env, now) {
   if (!defiExos(d.exos) || !defiScore(d.r) || !defiTemps(d.t)) return erreur("requete", 400);
@@ -568,7 +606,8 @@ async function rDefiEnvoyer(s, d, env, now) {
     "INSERT INTO defis (de, a, exos, r1, t1, cree) SELECT ?1, ?2, ?3, ?4, ?5, ?6 WHERE " +
     "(SELECT COUNT(*) FROM defis WHERE de = ?1 AND cree > ?7) < ?8 AND " +
     "(SELECT COUNT(*) FROM defis WHERE de = ?1 AND a = ?2 AND r2 IS NULL) < ?9 AND " +
-    "(SELECT COUNT(*) FROM defis WHERE a = ?2 AND r2 IS NULL) < ?10 RETURNING id"
+    "(SELECT COUNT(*) FROM defis WHERE a = ?2 AND r2 IS NULL) < ?10 AND " +
+    "NOT EXISTS (SELECT 1 FROM blocages WHERE compte_id = ?2 AND bloque_id = ?1) RETURNING id"
   ).bind(s.id, c.id, d.exos, d.r, d.t, now, now - JOUR, DEFIS_PAR_JOUR, DEFIS_MEME_MEMBRE, DEFIS_BOITE).first();
   if (!r) return erreur("trop", 429);
   return json({ id: r.id, a: c.pseudo }, 201);
@@ -647,7 +686,7 @@ export async function onRequest({ request, env, params }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -669,6 +708,8 @@ export async function onRequest({ request, env, params }) {
     if (route === "defi-envoyer") return await rDefiEnvoyer(s, d, env, now);
     if (route === "defi-repondre") return await rDefiRepondre(s, d, env, now);
     if (route === "defi-supprimer") return await rDefiSupprimer(s, d, env);
+    if (route === "defi-bloquer") return await rDefiBloquer(s, d, env, now);
+    if (route === "defi-debloquer") return await rDefiDebloquer(s, d, env);
     return await rLien(s, env, now);
   } catch (e) {
     /* Jamais de detail d'erreur dans la reponse. */

@@ -219,7 +219,10 @@ const { fausseD1 } = require("../serveur_local.js");
     await B.api.cpSynchro({ tirer: true });
     T("B apprend le nouveau pseudo a la synchronisation suivante", B.api.cp.pseudo === "Alexandre_II" && B.api.cp.cle === nv.cle, JSON.stringify(B.api.cp));
     T("sa progression n'a pas bouge et sa base a suivi le pseudo", lire().progress.solved === 74 && B.api.prog.solved === 74 && JSON.parse(B.stock.get("chang64:compteBase")).cle === nv.cle, lire().progress.solved);
-    /* On revient au pseudo d'origine pour la suite du test. */
+    r = await B.api.cpApi("POST", "pseudo-changer", { pseudo: "Trop_Tot", ancien: await B.api.cpEtirer(nv.cle, "583920"), nouveau: await B.api.cpEtirer("trop_tot", "583920") });
+    T("un second changement dans la semaine est refuse, depuis n'importe quel appareil", r.s === 429 && r.j.erreur === "pseudo_recent", JSON.stringify(r));
+    env.DB.brut.exec("UPDATE comptes SET pseudo_change = 0");
+    /* Une semaine plus tard : on revient au pseudo d'origine pour la suite du test. */
     r = await B.api.cpApi("POST", "pseudo-changer", { pseudo: "Alexandre", ancien: await B.api.cpEtirer(nv.cle, "583920"), nouveau: await B.api.cpEtirer(pv.cle, "583920") });
     T("B, avec la nouvelle cle, peut a son tour changer le pseudo", r.s === 200, JSON.stringify(r));
     await A.api.cpSynchro({ tirer: true }); await B.api.cpSynchro({ tirer: true }); await C.api.cpSynchro({ tirer: true });

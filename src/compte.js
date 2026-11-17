@@ -465,6 +465,7 @@ const CP_CODE_RAISONS={chiffres:"Digits only.",court:"At least 6 digits.",long:"
 const CP_ERREURS={identifiants:"Wrong username or code.",lien:"Wrong or expired device code.",plus_tard:"Too many sign-ups right now. Try again in an hour.",session:"Your session has ended. Log in again."};
 function cpErreur(r){
   if(r.s===0)return t("No connection. Check your network and try again.");
+  if(r.s===429&&r.j.erreur==="pseudo_recent")return t("You have already changed your username this week. Try again later.");
   if(r.s===429&&r.j.erreur==="bloque"){const m=Math.max(1,Math.ceil(cpNombre(r.j.attendre)/60));return t("Too many wrong codes. Try again in {n} min.",{n:m});}
   /* Deja connecte, seul le code a pu etre faux. */
   if(r.j.erreur==="identifiants"&&cp&&cpEtatSync!=="session")return t("Wrong code.");
@@ -571,7 +572,7 @@ function cpVue(ecran,donnees){
       '<p class="cp-note">'+echapper(t("Username: {pseudo}",{pseudo:cp.pseudo}))+"</p>"+
       cpChamp("cpPseudo","New username",CP_ATTR_PSEUDO,"3 to 20 letters or digits. Other players will see it.")+
       cpChamp("cpAncien","Your code",cpAttrCode(false))+
-      '<p class="cp-note">'+cpE("Your code stays the same.")+"</p>"+msg+
+      '<p class="cp-note">'+cpE("Your code stays the same.")+" "+cpE("You can change your username once a week.")+"</p>"+msg+
       '<button type="button" class="btn primary cp-large" id="cpPseudoOk" disabled>'+cpE("Change my username")+"</button>"+retour("connecte");
   }else if(ecran==="secoursNouveau"){
     h="<h3>"+cpE("New recovery code")+"</h3>"+
@@ -990,7 +991,8 @@ async function cpdVue(){
   if(aRelever.length)h+='<p class="tiroir-section">'+cpE("To take up")+"</p>"+aRelever.map(x=>
     '<div class="cpd-carte"><p class="cpd-titre">'+echapper(t("{name} challenges you!",{name:x.p}))+"</p>"+
     '<p class="cp-note">'+echapper(t("Score to beat: {n}/{total}",{n:duelPremiers(x.r1),total:DUEL_N}))+" "+duelPoints(x.r1)+" "+duelTemps(x.t1)+"</p>"+
-    '<div class="cpd-boutons"><button type="button" class="btn primary" data-cpd-relever="'+x.id+'">'+cpE("Take the challenge")+'</button><button type="button" class="btn" data-cpd-supprimer="'+x.id+'">'+cpE("Decline")+"</button></div></div>").join("");
+    '<div class="cpd-boutons"><button type="button" class="btn primary" data-cpd-relever="'+x.id+'">'+cpE("Take the challenge")+'</button><button type="button" class="btn" data-cpd-supprimer="'+x.id+'">'+cpE("Decline")+"</button></div>"+
+    '<button type="button" class="linkbtn cp-lien cpd-bloquer" data-cpd-bloquer="'+x.id+'">'+cpE("Stop receiving challenges from this player")+"</button></div>").join("");
   if(finis.length)h+='<p class="tiroir-section">'+cpE("Results")+"</p>"+finis.map(([x,recu])=>
     '<div class="cpd-carte">'+cpdResultat(x,recu)+"</div>").join("");
   if(attente.length)h+='<p class="tiroir-section">'+cpE("Waiting for an answer")+"</p>"+attente.map(x=>
@@ -998,6 +1000,9 @@ async function cpdVue(){
     '<button type="button" class="linkbtn cp-lien" data-cpd-supprimer="'+x.id+'">'+cpE("Withdraw")+"</button></div>").join("");
   if(!h)h='<p class="cp-note cp-centre">'+cpE("No challenge for now. Play five puzzles and send them to a member.")+"</p>";
   h+='<button type="button" class="btn cp-large" data-cpd-nouveau>'+cpE("New challenge")+"</button>";
+  /* Joueurs bloques : on peut revenir sur sa decision. */
+  if(cpListe(l.bloques).length)h+='<p class="tiroir-section">'+cpE("Blocked players")+"</p>"+cpListe(l.bloques).map(p=>
+    '<div class="cpd-carte cpd-attente"><p class="cp-note">'+echapper(String(p))+'</p><button type="button" class="linkbtn cp-lien" data-cpd-debloquer="'+echapper(String(p))+'">'+cpE("Unblock")+"</button></div>").join("");
   poserHtml(v,h);
   /* Les reponses affichees sont vues : le point s'eteint. */
   cpEcrire("chang64:defisVus",cpListe(l.envoyes).filter(x=>x.r2!==null).map(x=>x.id).slice(0,60));
@@ -1074,6 +1079,10 @@ document.addEventListener("click",async e=>{
     if(x&&ids){menuFermer();duelDemarrer(ids,{r:x.r1,t:x.t1,n:x.p,membre:x.id});}
     return;
   }
+  const blo=e.target.closest("[data-cpd-bloquer]");
+  if(blo){blo.disabled=true;await cpApi("POST","defi-bloquer",{id:+blo.dataset.cpdBloquer});cpdVue();return;}
+  const deb=e.target.closest("[data-cpd-debloquer]");
+  if(deb){deb.disabled=true;await cpApi("POST","defi-debloquer",{pseudo:deb.dataset.cpdDebloquer});cpdVue();return;}
   const sup=e.target.closest("[data-cpd-supprimer]");
   if(sup){sup.disabled=true;await cpApi("POST","defi-supprimer",{id:+sup.dataset.cpdSupprimer});cpdVue();return;}
   const env=e.target.closest("[data-duel-membre]");

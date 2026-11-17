@@ -28,8 +28,12 @@ CREATE TABLE IF NOT EXISTS comptes (
   badges INTEGER NOT NULL DEFAULT 0,
   sprint INTEGER NOT NULL DEFAULT 0,
   sem TEXT NOT NULL DEFAULT '',
-  sem_resolus INTEGER NOT NULL DEFAULT 0
+  sem_resolus INTEGER NOT NULL DEFAULT 0,
+  -- Date du dernier changement de pseudo (un par semaine au plus).
+  pseudo_change INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant le 2026-11-17 : la colonne s'ajoute par
+--   ALTER TABLE comptes ADD COLUMN pseudo_change INTEGER NOT NULL DEFAULT 0;
 CREATE INDEX IF NOT EXISTS comptes_vu ON comptes (vu);
 CREATE INDEX IF NOT EXISTS comptes_cree ON comptes (cree);
 CREATE INDEX IF NOT EXISTS comptes_note ON comptes (note DESC);
@@ -71,6 +75,14 @@ CREATE TABLE IF NOT EXISTS defis (
 );
 CREATE INDEX IF NOT EXISTS defis_a ON defis (a, cree);
 CREATE INDEX IF NOT EXISTS defis_de ON defis (de, cree);
+
+-- Joueurs dont on ne veut plus recevoir de defis (2026-11-17).
+CREATE TABLE IF NOT EXISTS blocages (
+  compte_id INTEGER NOT NULL,
+  bloque_id INTEGER NOT NULL,
+  cree INTEGER NOT NULL,
+  PRIMARY KEY (compte_id, bloque_id)
+);
 
 -- Mini-enquetes de satisfaction (2026-11-17) : une question, une note de 1 a
 -- 5, un commentaire facultatif (500 caracteres au plus). Une reponse au plus

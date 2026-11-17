@@ -871,5 +871,11 @@ module.exports = {
 "Very much":"Tout à fait",
 "A word to add? (optional)":"Un mot à ajouter ? (facultatif)",
 "Send":"Envoyer",
-"Thank you! It helps make chang64 better.":"Merci ! Ça aide à améliorer chang64."
+"Thank you! It helps make chang64 better.":"Merci ! Ça aide à améliorer chang64.",
+/* Limite du changement de pseudo, joueurs bloques (2026-11-17). */
+"You have already changed your username this week. Try again later.":"Tu as déjà changé de pseudo cette semaine. Réessaie plus tard.",
+"You can change your username once a week.":"Tu peux changer de pseudo une fois par semaine.",
+"Stop receiving challenges from this player":"Ne plus recevoir de défis de ce joueur",
+"Blocked players":"Joueurs bloqués",
+"Unblock":"Débloquer"
 };

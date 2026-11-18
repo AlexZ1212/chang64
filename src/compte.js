@@ -492,7 +492,7 @@ function cpVue(ecran,donnees){
   const retour=(vers,texte)=>'<button type="button" class="linkbtn cp-lien" data-cp="'+vers+'">'+cpE(texte||"Back")+"</button>";
   if(ecran==="accueil"){
     h='<p class="app-intro">'+cpE("An account keeps your progress safe and follows you from one device to another.")+"</p>"+
-      '<ul class="app-avantages">'+["Your rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
+      '<ul class="app-avantages">'+["Your rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Your place in Top players, with your own profile and your rank.","Challenge other members by their username, and compare your week with your friends.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
       '<p class="tiroir-section">'+cpE("What we ask for")+"</p>"+
       '<p class="cp-note">'+cpE("A username and a code of 6 digits or more. That is all: today we ask for no name and no email address.")+"</p>"+
       '<button type="button" class="btn primary cp-large" data-cp="creer1">'+cpE("Create an account")+"</button>"+
@@ -975,7 +975,7 @@ function cpBadge(id){
   const f=bxEtat().f;
   if(!f[id]){f[id]=1;saveProg();}
 }
-{const av=checkBadges;checkBadges=function(){if(cp)bxEtat().f.mb_compte=1;return av.apply(this,arguments);};}
+if(typeof checkBadges==="function"){const av=checkBadges;checkBadges=function(){if(cp)bxEtat().f.mb_compte=1;return av.apply(this,arguments);};}
 
 /* ---------- Fiche d'un membre ---------- */
 /* Toucher un pseudo dans les tableaux ouvre sa fiche (2026-11-18) : le mois

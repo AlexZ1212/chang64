@@ -373,6 +373,7 @@ async function nettoyer(env, now) {
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id NOT IN (SELECT id FROM comptes) OR bloque_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id NOT IN (SELECT id FROM comptes) OR ami_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM creations WHERE jour < ?1").bind(new Date(now).toISOString().slice(0, 10)).run(); } catch (e) {}
   try {
     await env.DB.batch([
@@ -446,6 +447,9 @@ async function rSynchroEcrire(s, d, env, now) {
   const texte = donneesTexte(d.donnees);
   if (!texte) return erreur("donnees", texte === null ? 413 : 400);
   const c = chiffres(d.donnees), sem = lundi(now);
+  /* Ligues : le changement de semaine doit passer avant que cet envoi ne
+     remette a zero les exercices de la semaine du joueur. */
+  await liguesEtat(env, now);
   /* La version garantit qu'on n'ecrase pas ce qu'un autre appareil vient
      d'envoyer : si elle a bouge, on rend l'etat actuel et le navigateur
      fusionne avant de reessayer. Les exercices de la semaine sont comptes
@@ -455,7 +459,10 @@ async function rSynchroEcrire(s, d, env, now) {
     "sem_resolus = CASE WHEN sem = ?10 THEN sem_resolus ELSE 0 END + MIN(?11, MAX(0, ?6 - resolus)), resolus = ?6, sem = ?10 " +
     "WHERE id = ?1 AND version = ?2 RETURNING version"
   ).bind(s.id, d.version, texte, now, c.note, c.resolus, c.serie, c.badges, c.sprint, sem, DELTA_SEMAINE_MAX).first();
-  if (r) return json({ version: r.version });
+  if (r) {
+    try { await liguesSuivre(env, s.id, now); } catch (e) {}
+    return json({ version: r.version });
+  }
   const l = await env.DB.prepare("SELECT version, donnees FROM comptes WHERE id = ?1").bind(s.id).first();
   return json({ erreur: "conflit", version: l.version, donnees: l.donnees ? JSON.parse(l.donnees) : null }, 409);
 }
@@ -476,6 +483,8 @@ async function rExporter(s, env) {
   try { bloques = (await env.DB.prepare("SELECT c.pseudo AS p FROM blocages b JOIN comptes c ON c.id = b.bloque_id WHERE b.compte_id = ?1 ORDER BY b.cree DESC").bind(s.id).all()).results || []; } catch (e) {}
   let amis = [];
   try { amis = (await env.DB.prepare("SELECT c.pseudo AS p FROM amis a JOIN comptes c ON c.id = a.ami_id WHERE a.compte_id = ?1 ORDER BY a.cree DESC").bind(s.id).all()).results || []; } catch (e) {}
+  let ligue = null;
+  try { ligue = await env.DB.prepare("SELECT sem, ligue, points, mouv FROM ligues WHERE compte_id = ?1").bind(s.id).first(); } catch (e) {}
   const export_ = {
     site: "chang64.com",
     a_propos: "Tout ce que chang64 garde sur ce compte. Le code et le code de secours ne sont gardes que sous forme d'empreintes, illisibles : ils ne figurent pas ici. Aucune adresse IP, aucun e-mail, aucun nom n'est enregistre.",
@@ -486,6 +495,7 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     version: l.version,
+    ligue: ligue ? { semaine: ligue.sem, ligue: ["Pion", "Cavalier", "Fou", "Tour", "Dame"][ligue.ligue] || "Pion", exercices_de_la_semaine: ligue.points, dernier_mouvement: ligue.mouv } : null,
     joueurs_bloques: bloques.map(x => x.p),
     amis: amis.map(x => x.p),
     reponses_aux_enquetes: enquetes.map(x => ({ le: new Date(x.cree).toISOString(), question: x.question, note: x.note, commentaire: x.commentaire, langue: x.langue })),
@@ -502,6 +512,7 @@ async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 OR ami_id = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -786,6 +797,142 @@ async function rAmiRetirer(s, d, env) {
   return json({ ok: true });
 }
 
+/* ---------- Ligues (2026-11-18) ---------- */
+/* Cinq ligues, de 0 (Pion) a 4 (Dame). Chaque lundi (UTC), les membres qui
+   ont reussi au moins un exercice la semaine d'avant sont ranges, ligue par
+   ligue, en groupes d'environ 20 selon ce nombre d'exercices. Le classement
+   d'un groupe compte les exercices reussis dans la semaine. A la fin, les 5
+   premiers montent, les 5 derniers descendent (moins dans un petit groupe :
+   un tiers au plus), et qui n'a rien fait descend aussi.
+   Pas de tache planifiee : le changement de semaine se fait a la premiere
+   requete de la semaine, une seule fois (ligne de ligues_semaines posee en
+   premier, ouvert = -1 tant que le calcul n'est pas ecrit).
+   Les ligues n'ouvrent que la premiere semaine qui suit LIGUE_SEUIL membres
+   actifs ; avant, rien n'est ecrit dans la table ligues. Une fois ouvertes,
+   elles le restent.
+   Tant que les deux tables n'existent pas dans la base, tout le reste du
+   compte marche : chaque appel est protege. */
+const LIGUES = 5, LIGUE_GROUPE = 20, LIGUE_MOUV = 5, LIGUE_SEUIL = 50;
+const LIGUE_GROUPE_MAX = LIGUE_GROUPE + 5;   /* arrivees en cours de semaine */
+function lundiAvant(sem) {
+  const d = new Date(sem + "T12:00:00Z");
+  d.setUTCDate(d.getUTCDate() - 7);
+  return d.toISOString().slice(0, 10);
+}
+const ligueMouvements = n => Math.min(LIGUE_MOUV, Math.floor(n / 3));
+/* Range des joueurs [{ id, ligue, points, mouv }] en groupes de taille
+   voisine de LIGUE_GROUPE, ligue par ligue, les plus actifs ensemble.
+   Rend des lignes [id, ligue, groupe, mouv]. */
+function liguesRepartir(joueurs) {
+  const lignes = [];
+  for (let lg = 0; lg < LIGUES; lg++) {
+    const l = joueurs.filter(j => j.ligue === lg).sort((a, b) => b.points - a.points || a.id - b.id);
+    const g = Math.max(1, Math.round(l.length / LIGUE_GROUPE));
+    l.forEach((j, i) => lignes.push([j.id, lg, Math.floor(i * g / l.length), j.mouv || 0]));
+  }
+  return lignes;
+}
+/* Fin de semaine : a partir des groupes de la semaine finie
+   [{ id, ligue, groupe, points }], rend les lignes de la semaine suivante.
+   Groupe -1 : le joueur n'a rien fait, il garde sa ligue (une de moins) et
+   sera range dans un groupe a son retour. */
+function liguesCalculer(anciens) {
+  const groupes = new Map();
+  for (const j of anciens) { const k = j.ligue + ":" + j.groupe; if (!groupes.has(k)) groupes.set(k, []); groupes.get(k).push(j); }
+  const actifs = [], lignes = [];
+  for (const l of groupes.values()) {
+    l.sort((a, b) => b.points - a.points || a.id - b.id);
+    const k = ligueMouvements(l.length);
+    l.forEach((j, i) => {
+      let mouv = 0;
+      if (j.points > 0 && i < k) mouv = j.ligue < LIGUES - 1 ? 1 : 0;
+      else if ((j.points <= 0 || i >= l.length - k) && j.ligue > 0) mouv = -1;
+      const suite = { id: j.id, ligue: j.ligue + mouv, points: j.points, mouv };
+      if (j.points > 0) actifs.push(suite); else lignes.push([j.id, suite.ligue, -1, mouv]);
+    });
+  }
+  return lignes.concat(liguesRepartir(actifs));
+}
+const LIGUES_ECRIRE = "INSERT INTO ligues (compte_id, sem, ligue, groupe, points, mouv) " +
+  "SELECT json_extract(value, '$[0]'), ?2, json_extract(value, '$[1]'), json_extract(value, '$[2]'), ?3, json_extract(value, '$[3]') FROM json_each(?1) WHERE true " +
+  "ON CONFLICT(compte_id) DO UPDATE SET sem = excluded.sem, ligue = excluded.ligue, groupe = excluded.groupe, points = excluded.points, mouv = excluded.mouv";
+async function liguesBascule(env, sem) {
+  const avant = lundiAvant(sem);
+  const deja = await env.DB.prepare("SELECT 1 AS x FROM ligues_semaines WHERE ouvert = 1 LIMIT 1").first();
+  let lignes = [], actifs = 0, ouvert = 1;
+  if (deja) {
+    const anciens = (await env.DB.prepare("SELECT compte_id AS id, ligue, groupe, points FROM ligues WHERE sem = ?1 AND groupe >= 0").bind(avant).all()).results || [];
+    actifs = anciens.filter(j => j.points > 0).length;
+    lignes = liguesCalculer(anciens);
+  } else {
+    /* Pas encore ouvertes : on compte les membres actifs. Au seuil, tout le
+       monde commence en ligue Pion. */
+    const a = (await env.DB.prepare("SELECT id, sem_resolus AS points FROM comptes WHERE sem IN (?1, ?2) AND sem_resolus > 0").bind(avant, sem).all()).results || [];
+    actifs = a.length;
+    ouvert = actifs >= LIGUE_SEUIL ? 1 : 0;
+    if (ouvert) lignes = liguesRepartir(a.map(j => ({ id: j.id, ligue: 0, points: j.points, mouv: 0 })));
+  }
+  const fin = env.DB.prepare("UPDATE ligues_semaines SET ouvert = ?2, actifs = ?3 WHERE sem = ?1").bind(sem, ouvert, actifs);
+  /* Un seul lot : ou tout est ecrit, ou rien. */
+  await env.DB.batch(lignes.length ? [env.DB.prepare(LIGUES_ECRIRE).bind(JSON.stringify(lignes), sem, 0), fin] : [fin]);
+}
+/* Etat des ligues pour la semaine en cours, garde en memoire le temps que
+   vit le serveur : { sem, ouvert, actifs }. Fait le changement de semaine si
+   personne ne l'a fait. */
+let liguesMemo = { sem: "" };
+async function liguesEtat(env, now) {
+  const sem = lundi(now);
+  if (liguesMemo.sem === sem) return liguesMemo;
+  try {
+    let pris = await env.DB.prepare("INSERT OR IGNORE INTO ligues_semaines (sem, cree, actifs, ouvert) VALUES (?1, ?2, 0, -1)").bind(sem, now).run();
+    /* Un calcul reste en plan depuis plus d'une minute : on le reprend. */
+    if (!(pris.meta && pris.meta.changes === 1)) pris = await env.DB.prepare("UPDATE ligues_semaines SET cree = ?2 WHERE sem = ?1 AND ouvert = -1 AND cree < ?3").bind(sem, now, now - 60e3).run();
+    if (pris.meta && pris.meta.changes === 1) await liguesBascule(env, sem);
+    const l = await env.DB.prepare("SELECT ouvert, actifs FROM ligues_semaines WHERE sem = ?1").bind(sem).first();
+    if (!l || l.ouvert < 0) return { sem, ouvert: false, actifs: 0 };
+    liguesMemo = { sem, ouvert: l.ouvert === 1, actifs: l.actifs };
+  } catch (e) {
+    /* Tables absentes ou panne : ligues fermees, sans gener le reste. */
+    return { sem, ouvert: false, actifs: 0, panne: true };
+  }
+  return liguesMemo;
+}
+/* Apres une synchronisation reussie : reporte les exercices de la semaine
+   dans le groupe du joueur, ou le range dans un groupe s'il n'en a pas
+   encore cette semaine (nouveau membre, ou retour apres une absence). */
+async function liguesSuivre(env, id, now) {
+  const e = await liguesEtat(env, now);
+  if (!e.ouvert) return;
+  const r = await env.DB.prepare("UPDATE ligues SET points = (SELECT sem_resolus FROM comptes WHERE id = ?1) WHERE compte_id = ?1 AND sem = ?2 AND groupe >= 0").bind(id, e.sem).run();
+  if (r.meta && r.meta.changes === 1) return;
+  const c = await env.DB.prepare("SELECT sem_resolus AS v FROM comptes WHERE id = ?1 AND sem = ?2").bind(id, e.sem).first();
+  if (!c || c.v <= 0) return;
+  const l = await env.DB.prepare("SELECT sem, ligue, mouv FROM ligues WHERE compte_id = ?1").bind(id).first();
+  const ligue = l ? l.ligue : 0, mouv = l && l.sem === e.sem ? l.mouv : 0;
+  const gs = (await env.DB.prepare("SELECT groupe, COUNT(*) AS n FROM ligues WHERE sem = ?1 AND ligue = ?2 AND groupe >= 0 GROUP BY groupe ORDER BY n ASC, groupe ASC").bind(e.sem, ligue).all()).results || [];
+  const groupe = !gs.length ? 0 : gs[0].n < LIGUE_GROUPE_MAX ? gs[0].groupe : Math.max(...gs.map(x => x.groupe)) + 1;
+  await env.DB.prepare(LIGUES_ECRIRE).bind(JSON.stringify([[id, ligue, groupe, mouv]]), e.sem, c.v).run();
+}
+/* GET ligue, avec session.
+   Fermees : { ouvert: false, seuil, actifs }
+   Ouvertes : { ouvert: true, semaine, ligue, mouv, groupe: [{ p, v }], monte, descend }
+     ligue : 0 a 4 ; mouv : 1 monte, -1 descendu, 0 sinon, a l'issue de la
+     semaine d'avant ; groupe : le classement de son groupe (pseudo et
+     exercices de la semaine), vide tant que le joueur n'a rien reussi cette
+     semaine ; monte / descend : combien de places montent et descendent. */
+async function rLigue(s, env, now) {
+  const e = await liguesEtat(env, now);
+  if (!e.ouvert) return json({ ouvert: false, seuil: LIGUE_SEUIL, actifs: e.actifs || 0 });
+  const l = await env.DB.prepare("SELECT sem, ligue, groupe, mouv FROM ligues WHERE compte_id = ?1").bind(s.id).first();
+  const ici = l && l.sem === e.sem;
+  let groupe = [];
+  if (ici && l.groupe >= 0) groupe = (await env.DB.prepare(
+    "SELECT c.pseudo AS p, l.points AS v FROM ligues l JOIN comptes c ON c.id = l.compte_id WHERE l.sem = ?1 AND l.ligue = ?2 AND l.groupe = ?3 ORDER BY l.points DESC, l.compte_id ASC LIMIT 60"
+  ).bind(e.sem, l.ligue, l.groupe).all()).results || [];
+  const k = ligueMouvements(groupe.length), ligue = l ? l.ligue : 0;
+  return json({ ouvert: true, semaine: e.sem, ligue, mouv: ici ? l.mouv : 0, groupe, monte: ligue < LIGUES - 1 ? k : 0, descend: ligue > 0 ? k : 0 });
+}
+
 /* ---------- Profil public d'un membre (2026-11-18) ---------- */
 /* GET /api/compte/profil?p=<pseudo>, sans session :
      { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k }, bl: [identifiants de badges], pays: "FR" ou "" }
@@ -858,7 +1005,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres", "ligue"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -868,6 +1015,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
       if (route === "defis") return await rDefis(s, env);
       if (route === "enquete") return await rEnqueteLire(s, env, now);
       if (route === "amis") return await rAmis(s, env, now);
+      if (route === "ligue") return await rLigue(s, env, now);
       if (route === "membres") return await rMembres(s, request, env);
       return await rExporter(s, env);
     }
@@ -895,4 +1043,4 @@ export async function onRequest({ request, env, params, waitUntil }) {
 }
 
 /* Pour les tests seulement : Pages ne fait de route que de onRequest*. */
-export const _essai = { CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };
+export const _essai = { liguesCalculer, liguesRepartir, liguesOublier: () => { liguesMemo = { sem: "" }; }, LIGUE_SEUIL, CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };

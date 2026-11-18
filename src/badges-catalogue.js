@@ -507,6 +507,26 @@ const BADGES_CATALOGUE = [
   ["lec_reprise","lecons","Recommencer une série après l'avoir cassée","Nouveau départ","une jeune pousse",
    "Une série cassée n'efface rien de ce que tu as appris. Le plus important, c'est de revenir."],
 
+  /* Defi entre amis, par lien ou entre membres (3, 2026-11-18). */
+  ["duel_lien","ami","Terminer un défi à envoyer","Gant jeté","deux maillons",
+   "Cinq exercices, un score, un lien à envoyer. Jeter son gant, c'était autrefois la façon de provoquer quelqu'un en duel."],
+  ["duel_gagne","ami","Battre le score de l'adversaire dans un défi","Touché !","deux épées croisées",
+   "Tu as fait mieux sur les cinq mêmes exercices. Aux échecs, pas de hasard : mêmes positions, mêmes chances pour les deux."],
+  ["duel_parfait","ami","5 sur 5 du premier coup dans un défi","Cinq sur cinq","cinq étoiles",
+   "Cinq exercices, cinq fois le bon coup du premier essai. Bobby Fischer a gagné le championnat des États-Unis 1963-1964 sur un score parfait : 11 victoires en 11 parties."],
+
+  /* ---------- 8 ter. Membres (5, 2026-11-18 : compte, defis entre membres, amis, tableaux, enquetes) ---------- */
+  ["mb_compte","membres","Créer un compte","Carte de membre","une carte de membre",
+   "Te voilà membre. Le club d'échecs de Zurich, fondé en 1809, est considéré comme le plus ancien du monde encore en activité."],
+  ["mb_defi","membres","Envoyer un défi à un membre","Par avion","un avion en papier",
+   "Ton défi est parti. Avant Internet, on jouait par correspondance : un coup par lettre, et des parties qui duraient des mois."],
+  ["mb_ami","membres","Ajouter un ami","Cercle d'amis","deux silhouettes",
+   "Les échecs se jouent à deux, et c'est encore mieux entre amis. Tu les retrouves dans ton tableau Mes amis."],
+  ["mb_top10","membres","Entrer dans les 10 premiers d'un tableau des joueurs","Dans le top 10","un podium",
+   "Depuis 1971, la Fédération internationale publie le classement mondial des joueurs. Toi, tu es dans les dix premiers d'un tableau de chang64."],
+  ["mb_avis","membres","Répondre à une question sur le site","Ton avis compte","une bulle de dialogue",
+   "Merci ! Chaque réponse aide à améliorer chang64. Aux échecs aussi, on progresse en regardant ce qui peut être mieux joué."],
+
   ["lec_sot","lecons","Se faire mater en deux coups","Mat du sot","un roi aux yeux en croix",
    "Le mat le plus rapide possible : 1.f3 e5 2.g4 Qh4#. Il fallait le vivre une fois pour ne plus jamais le revoir."],
   ["lec_tondu","lecons","Subir le coup du berger","Tondu","un mouton et des ciseaux",

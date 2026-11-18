@@ -147,6 +147,14 @@ function duelTenterFin(){
   if(occupe){setTimeout(duelTenterFin,1000);return;}
   const d=duel;duel=null;duelBandeau();
   const moi={r:d.res.join(""),t:Math.min(Math.round(d.ms/1000),DUEL_TEMPS_MAX),n:duelNom};
+  /* Badges de defi (2026-11-18) : a la fin des cinq exercices, donc en fin
+     d'exercice, comme toute recompense. */
+  if(typeof bxMarquer==="function"){
+    if(!d.adv)bxMarquer("duel_lien");
+    else if(duelComparer(moi,d.adv)>0)bxMarquer("duel_gagne");
+    if(moi.r==="2".repeat(DUEL_N))bxMarquer("duel_parfait");
+    bxVerifier();
+  }
   if(d.adv)duelVueReponse(d.ids,d.adv,moi);
   else{
     duelEnvoyes.push({c:duelEnc(d.ids),r:moi.r,t:moi.t});duelEnvoyes=duelEnvoyes.slice(-20);

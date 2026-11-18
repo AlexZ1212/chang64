@@ -124,6 +124,7 @@ function ouvrir(page) {
   amisPleins = false; d.querySelector("#cpProfilContenu [data-cpa]").click(); await attendre(400);
   ami = d.querySelector("#cpProfilContenu [data-cpa]");
   T("ajoute : le bouton propose de le retirer", appelsAmis.includes("ami-ajouter:Alice") && !!ami && ami.dataset.cpa === "retirer" && /Remove from my friends/.test(ami.textContent), appelsAmis.join());
+  T("badge d'ami : note, pas encore annonce (il attend la fin d'un exercice)", w.eval("bxEtat().f.mb_ami===1&&!prog.badges.includes('mb_ami')"));
   w.eval('cppFermer();cpjVue("amis")');
   await attendre(400);
   const rangees = [...d.querySelectorAll("#menuJoueursVue .cpj-liste li")].map(li => li.textContent);
@@ -154,8 +155,34 @@ function ouvrir(page) {
   w.eval("menuFermer()");
   T("fermer le menu ferme aussi la fiche", $("cpProfil").hidden);
 
+  /* Badges de membre et de defi (2026-11-18). */
+  T("hors des 10 premiers : pas de badge du top 10", !w.eval("bxEtat().f.mb_top10"));
+  PROFILS.Moi.rangs.b = 7;
+  w.eval('cppCache={};cppLire("Moi")');
+  await attendre(200);
+  T("dans les 10 premiers d'un tableau : badge note", w.eval("bxEtat().f.mb_top10===1"));
+  w.eval('cppCache={};cppLire("Alice")');
+  await attendre(200);
+  /* L'annonce (fenetre de felicitations) est neutralisee : elle retarderait la fin des defis simules plus bas. */
+  w.eval("bravoAnnoncer=()=>{};checkBadges()");
+  T("fin d'exercice avec un compte : badges de membre accordes", w.eval("['mb_compte','mb_ami','mb_top10'].every(x=>prog.badges.includes(x))"), w.eval("prog.badges.join()"));
+  T("sans les avoir merites : ni defi envoye ni avis", !w.eval("prog.badges.includes('mb_defi')||prog.badges.includes('mb_avis')"));
+  w.eval('duel={ids:["p1","p2","p3","p4","p5"],i:4,res:[2,2,2,2,2],ms:9000,debut:0,faute:false,adv:null,charge:false,fin:true};duelVueCree=()=>{};duelTenterFin();');
+  T("defi termine sans faute : Gant jete et Cinq sur cinq", w.eval("bxEtat().f.duel_lien===1&&bxEtat().f.duel_parfait===1&&!bxEtat().f.duel_gagne"), w.eval("JSON.stringify(bxEtat().f)"));
+  w.eval('duel={ids:["p1","p2","p3","p4","p5"],i:4,res:[2,1,2,0,2],ms:9000,debut:0,faute:false,adv:{r:"21100",t:50,n:"Al"},charge:false,fin:true};duelVueReponse=()=>{};duelTenterFin();');
+  T("defi releve et gagne : Touche", w.eval("bxEtat().f.duel_gagne===1"));
+  {
+    const md = JSON.parse(fs.readFileSync(path.join(SITE, "data", "badges-medailles.json"), "utf8"));
+    const ids = ["duel_lien", "duel_gagne", "duel_parfait", "mb_compte", "mb_defi", "mb_ami", "mb_top10", "mb_avis"];
+    T("les huit badges ont leur medaille", ids.every(id => Array.isArray(md[id]) && ["bronze", "argent", "or"].includes(md[id][0]) && /<path /.test(md[id][1]) && !/<script|onw+=/.test(md[id][1])));
+    for (const l of require("../langues/registre.js").LANGUES) {
+      const tx = JSON.parse(fs.readFileSync(path.join(SITE, "data", "badges-" + l.code + ".json"), "utf8"));
+      T(l.code + " : nom, condition et anecdote des huit badges, famille Membres", ids.every(id => Array.isArray(tx[id]) && tx[id].length === 3 && tx[id].every(x => typeof x === "string" && x.length > 2)) && !!tx._ui["famille:membres"]);
+    }
+  }
+
   /* Le serveur n'est appele qu'une fois par joueur dans la minute. */
-  T("fiche gardee une minute", demandes.filter(p => p === "Alice").length === 1, demandes.join(","));
+  T("fiche gardee une minute", demandes.filter(p => p === "Alice").length === 2, demandes.join(","));
 
   /* Traductions. */
   const { LANGUES } = require("../langues/registre.js");

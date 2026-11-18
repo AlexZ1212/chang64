@@ -964,6 +964,19 @@ document.addEventListener("click",e=>{
   if(tri){const k=tri.dataset.cpjTri;if(k===cpjTri)cpjSens=-cpjSens;else{cpjTri=k;cpjSens=-1;}cpjGrandDessiner();const n=document.querySelector('#cpjGrand [data-cpj-tri="'+k+'"]');if(n)n.focus();}
 });
 
+/* ---------- Badges de membre ---------- */
+/* Cinq badges lies au compte (2026-11-18) : avoir un compte, envoyer un defi
+   a un membre, ajouter un ami, entrer dans les 10 premiers d'un tableau,
+   repondre a une question. Ici on ne fait que les noter : l'annonce attend la
+   fin du prochain exercice ou de la prochaine partie, comme toute recompense
+   (checkBadges y est appele), jamais au milieu d'un menu. */
+function cpBadge(id){
+  if(typeof bxEtat!=="function")return;
+  const f=bxEtat().f;
+  if(!f[id]){f[id]=1;saveProg();}
+}
+{const av=checkBadges;checkBadges=function(){if(cp)bxEtat().f.mb_compte=1;return av.apply(this,arguments);};}
+
 /* ---------- Fiche d'un membre ---------- */
 /* Toucher un pseudo dans les tableaux ouvre sa fiche (2026-11-18) : le mois
    de creation du compte, les six chiffres des tableaux et le rang dans
@@ -979,6 +992,7 @@ async function cppLire(pseudo){
   if(r.status!==200)throw new Error("statut");
   const j=await r.json();
   cppCache[k]={t:Date.now(),j:j};
+  if(cp&&j&&j.p===cp.pseudo&&Object.values(cpObjet(j.rangs)).some(r=>cpNombre(r)>=1&&cpNombre(r)<=10))cpBadge("mb_top10");
   return j;
 }
 function cppMois(am){
@@ -1040,6 +1054,7 @@ document.addEventListener("click",async e=>{
     const m=$("cppMsg");if(m)m.textContent=t(r.s===429?"Your friends list is full.":"Could not load the list. Try again later.");
     return;
   }
+  if(ajout)cpBadge("mb_ami");
   await cpaCharger(true);
   const f=$("cpProfil");
   if(f&&!f.hidden&&f.dataset.pseudo===pseudo)cppOuvrir(pseudo);
@@ -1214,7 +1229,7 @@ document.addEventListener("click",async e=>{
     env.disabled=true;msg.textContent=t("Syncing…");
     const r=await cpApi("POST","defi-envoyer",{a:v.pseudo,exos:duelEnc(cpdEnvoi.ids),r:cpdEnvoi.moi.r,t:cpdEnvoi.moi.t});
     env.disabled=false;
-    if(r.s===201){msg.textContent=t("Challenge sent to {name}.",{name:r.j.a||v.pseudo});env.disabled=true;cpdT=0;return;}
+    if(r.s===201){msg.textContent=t("Challenge sent to {name}.",{name:r.j.a||v.pseudo});env.disabled=true;cpdT=0;cpBadge("mb_defi");return;}
     msg.textContent=r.s===404?t("No member has this username."):r.s===400&&r.j.erreur==="soi"?t("You cannot challenge yourself."):r.s===429&&r.j.erreur==="trop"?t("Too many challenges waiting. Try again later."):cpErreur(r);
   }
 });
@@ -1268,6 +1283,7 @@ document.addEventListener("click",async e=>{
     env.disabled=true;
     const r=await cpApi("POST","enquete",{question:cpeQuestion,note:cpeNote,commentaire:($("cpeTexte")||{}).value||"",langue:typeof LANG==="string"?LANG:""});
     const z=$("bilanEnquete");if(!z)return;
+    if(r.s===201)cpBadge("mb_avis");
     if(r.s===201||r.s===429){poserHtml(z,'<p class="cpe-merci" role="status">'+cpE("Thank you! It helps make chang64 better.")+"</p>");return;}
     env.disabled=false;
     const m=$("cpeMsg");if(m)m.textContent=cpErreur(r);

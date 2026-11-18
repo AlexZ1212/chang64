@@ -1007,11 +1007,12 @@ function cppFermer(){
 async function cppOuvrir(pseudo){
   const f=$("cpProfil"),c=$("cpProfilContenu");if(!f||!c)return;
   if(f.hidden)cppAvant=document.activeElement;
-  /* Une pastille a l'initiale du joueur occupe l'arc du haut de la fenetre,
-     comme l'elephant des defis et du bilan : sans elle, le titre et la ligne
-     "Membre depuis" tombaient a cheval sur le bord de l'arc (signale par
-     Alexandre le 18/11). */
-  const tete=nom=>'<div class="bilan-mascotte cpp-avatar" aria-hidden="true">'+echapper((Array.from(String(nom))[0]||"?").toUpperCase())+'</div><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>";
+  /* En-tete sans arc (2026-11-18, retour d'Alexandre) : la fiche informe, elle
+     ne fete rien. Un pictogramme de profil (Phosphor "user", celui du menu),
+     le nom et la date a sa droite, un filet dessous. L'arc reste aux fenetres
+     qui ont un dessin a y poser : medaille de Bravo, elephant du bilan et des defis. */
+  const CPP_PICTO='<span class="cpp-picto" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"/></svg></span>';
+  const tete=(nom,sous)=>'<div class="cpp-tete">'+CPP_PICTO+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
   const fermer='<button type="button" class="btn cpp-fermer" data-cpp-fermer>'+cpE("Close")+"</button>";
   const poser=h=>{poserHtml(c,h);const b=c.querySelector("[data-cpp-premier]")||c.querySelector("[data-cpp-fermer]");if(b)b.focus();};
   poserHtml(c,tete(pseudo)+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>"+fermer);
@@ -1023,7 +1024,7 @@ async function cppOuvrir(pseudo){
   if(cp&&j.p!==cp.pseudo)await cpaCharger();
   if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
   const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
-  poser(tete(j.p)+(mois?'<p class="bilan-sous">'+echapper(t("Member since {date}",{date:mois}))+"</p>":"")+
+  poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"")+
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";

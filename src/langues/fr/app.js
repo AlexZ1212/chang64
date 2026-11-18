@@ -358,7 +358,7 @@ module.exports = {
  "Soixante-quatre, c'est le reste du nom : les cases. chang64, c'est l'éléphant sur les soixante-quatre cases, une pièce qui a traversé mille ans et la moitié du monde, sur un échiquier qui n'a pas bougé.",
 
 /* --- accroche et signature --- */
-"No account needed. No ads. No distractions. Just chess.":"Sans compte obligatoire. Sans publicité. Sans distraction. Juste les échecs.",
+"Free. No ads. Play right away, and create an account only if you want to.":"Gratuit. Sans publicité. Tu joues tout de suite, et tu crées un compte seulement si tu veux.",
 "The elephant on 64 squares":"L'éléphant sur 64 cases",
 "Tip: “Suggest a move” shows what the engine would play in the position you are looking at.":
  "Astuce : « Suggérer un coup » montre ce que le moteur jouerait dans la position que tu regardes.",

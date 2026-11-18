@@ -123,7 +123,7 @@ function ouvrir(page) {
   T("connecte : tableau Mes amis propose", !!d.querySelector('#menuJoueursVue [data-cpj="amis"]'));
   w.eval('cpjVue("amis")');
   await attendre(400);
-  T("aucun ami : invitation a ouvrir une fiche", /No friends yet/.test($("menuJoueursVue").textContent) && !d.querySelector("#menuJoueursVue .cpj-liste"));
+  T("aucun ami : invitation a ouvrir une fiche", /No friends yet/.test($("menuJoueursVue").textContent) && !d.querySelector("#menuJoueursVue .cpj-liste:not(.cpj-trouves)"));
   w.eval('cpjVue("resolus")');
   await attendre(300);
   d.querySelector("#menuJoueursVue .cpj-joueur").click();

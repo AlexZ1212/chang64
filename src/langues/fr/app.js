@@ -50,16 +50,16 @@ module.exports = {
 "The puzzles you got wrong come back for a rematch, further apart after each success, until you know them by heart.":"Les exercices ratés reviennent prendre leur revanche, de plus en plus espacés après chaque réussite, jusqu'à ce que tu les saches par cœur.",
 "{n} to review now":"{n} à revoir maintenant",
 "Nothing to review right now":"Rien à revoir pour l'instant",
-"Review · ":"Révision · ",
+"Review | ":"Révision | ",
 "Puzzles at your level, as many as you like. Get better and they get tougher.":"Des exercices à ton niveau, autant que tu veux. Tu progresses, ils se corsent.",
 "One new puzzle every day, like a morning coffee. Come back to build your streak, or catch up on a past day in the calendar.":"Un exercice nouveau chaque jour, comme un café du matin. Reviens pour construire ta série, ou rattrape un jour passé dans le calendrier.",
 "Find e4 without counting on your fingers: knowing the squares at a glance is where fast calculation starts.":"Trouve e4 sans compter sur tes doigts : reconnaître les cases en un clin d'œil, c'est là que commence le calcul rapide.",
 "Five endgames to know by heart. They decide more games than any brilliant opening.":"Cinq finales à connaître par cœur. Elles décident plus de parties que n'importe quelle ouverture brillante.",
 "Clears your level, badges, streaks and calendar on this device. This can't be undone.":"Efface ton niveau, tes badges, tes séries et ton calendrier sur cet appareil. C'est irréversible.",
 "Reset everything":"Tout réinitialiser",
-"Level {n} · {r} rating":"Niveau {n} · classement {r}",
-"Done today ✓ · {n}-day streak":"Fait aujourd'hui ✓ · série de {n} j",
-"Not done yet · {n}-day streak":"À faire · série de {n} j",
+"Level {n} | {r} rating":"Niveau {n} | classement {r}",
+"Done today ✓ | {n}-day streak":"Fait aujourd'hui ✓ | série de {n} j",
+"Not done yet | {n}-day streak":"À faire | série de {n} j",
 "Best: {n}":"Record : {n}",
 "{n}/5 mastered":"{n}/5 réussies",
 "Chang Sprint: {n} solved":"Chang Sprint : {n} résolus",
@@ -254,7 +254,7 @@ module.exports = {
 "Tap ✓ or ✗ to see how it was solved.":"Touche un ✓ ou un ✗ pour revoir comment le résoudre.",
 "Exercise {n}, solved":"Exercice {n}, réussi",
 "Exercise {n}, missed":"Exercice {n}, raté",
-"Puzzle of the day · ":"Exercice du jour · ",
+"Puzzle of the day | ":"Exercice du jour | ",
 "Next day's puzzle":"Exercice du jour suivant",
 "Next day":"Jour suivant",
 "Exercise ID: {code} · useful when reporting an issue":
@@ -393,7 +393,7 @@ module.exports = {
 "I resign, well played.":"J'abandonne, bien joué.",
 "Your progress will show up here. It is waiting for your first move.":"Ta progression s'affichera ici. Elle attend ton premier coup.",
 "Solve your first puzzle →":"Résous ton premier exercice →",
-"Ready when you are":"Quand tu veux","Start":"Commencer","Three minutes · three misses and it stops":"Trois minutes · trois erreurs et ça s'arrête","Thirty seconds · click the square that is named":"Trente secondes · clique la case nommée","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press \u201cStart the game\u201d when you are ready.":"Appuie sur « Commencer la partie » quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
+"Ready when you are":"Quand tu veux","Start":"Commencer","Three minutes | three misses and it stops":"Trois minutes | trois erreurs et ça s'arrête","Thirty seconds · click the square that is named":"Trente secondes · clique la case nommée","Start the game":"Commencer la partie","Change settings":"Changer les réglages","Press \u201cStart the game\u201d when you are ready.":"Appuie sur « Commencer la partie » quand tu es prêt.","You play White.":"Tu joues les Blancs.","You play Black.":"Tu joues les Noirs.",
 "You have an unfinished game":"Tu as une partie en cours","Resume the game":"Reprendre la partie","New game instead":"Nouvelle partie","Move {n}":"Coup {n}",
 "Analyse":"Analyser","Board editor":"Éditeur de position","Flip the board":"Retourner l'échiquier",
 "Set up any position to study it: check an idea from a book, a puzzle you saw elsewhere, or an endgame, without replaying a whole game to get there. Pick a piece below, then tap a square. Tap a piece already on the board to remove it.":"Compose n'importe quelle position pour l'étudier : reprends une idée vue dans un livre, un problème vu ailleurs, ou une finale, sans avoir à rejouer toute une partie pour y arriver. Choisis une pièce ci-dessous, puis touche une case. Touche une pièce déjà posée pour la retirer.",
@@ -437,7 +437,7 @@ module.exports = {
 "Play a move, or use Hint, to unlock the next puzzle.":["D'abord un essai : joue un coup (ou demande un indice) pour passer au suivant.","Un essai d'abord ! Joue un coup ou prends un indice pour débloquer la suite.","Pas de raccourci : tente un coup d'abord, ou demande un indice."],
 "Try this puzzle first.":"Essaie d'abord cet exercice.",
 "This browser isn't keeping your progress: it will be lost when you close the tab. Private browsing or a full storage can cause this.":"Ce navigateur ne conserve pas ta progression : elle sera perdue en fermant l'onglet. La navigation privée ou un stockage plein peuvent en être la cause.",
-"chang64 · no tracking · progress saved on this device":"chang64 · sans traqueur · progression enregistrée sur cet appareil",
+"chang64 | no tracking | progress saved on this device":"chang64 | sans traqueur | progression enregistrée sur cet appareil",
 "Use your browser menu: Add to home screen":"Passe par le menu du navigateur : Ajouter à l'écran d'accueil",
 /* Pied de page de l'application (2026-10-25) : la date passait par une
    branche LANG==="fr" de rendreDateSite, elle passe desormais par t(). */
@@ -546,7 +546,7 @@ module.exports = {
 /* Partage de l'exercice du jour et import Lichess (2026-11-01). */
 "Share my result":"Partager mon résultat",
 "Result copied. Paste it wherever you like.":"Résultat copié. Colle-le où tu veux.",
-"chang64 · Puzzle of the day · {date}":"chang64 · Exercice du jour · {date}",
+"chang64 | Puzzle of the day | {date}":"chang64 | Exercice du jour | {date}",
 "solved without help":"résolu sans aide",
 "Difficulty":"Difficulté",
 "Import from Lichess: a username or a game link.":"Importer depuis Lichess : un pseudo ou le lien d'une partie.",
@@ -914,5 +914,8 @@ module.exports = {
 "A username and a code":"Un pseudo et un code",
 "That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"C'est tout ce qu'on te demande : ni nom, ni adresse e-mail. C'est gratuit, et tu peux supprimer ton compte quand tu veux.",
 /* Partage d'un exercice ordinaire (2026-11-18). */
-"I solved this puzzle on chang64. Your turn:":"J'ai résolu cet exercice sur chang64, à toi :"
+"I solved this puzzle on chang64. Your turn:":"J'ai résolu cet exercice sur chang64, à toi :",
+/* Recherche de membres (2026-11-18). */
+"Find a member":"Chercher un membre",
+"No member found.":"Aucun membre trouvé."
 };

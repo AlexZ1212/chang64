@@ -99,6 +99,21 @@ function ouvrir(page) {
   w.eval('__s=defiEtat().defis;__s.p[2]=1;__s.ok[2]=false;__s.fin=__s.fin.map(x=>"2000-01-01"+x.slice(10));');
   T("le lendemain, la meme finale compte de nouveau", await finale("kq") === 2, w.eval("JSON.stringify(defiEtat().defis.fin)"));
 
+  /* Un defi recu par lien ne s'affiche jamais pendant un exercice ou une
+     partie (2026-11-18, demande d'Alexandre) : il attend la fin. */
+  {
+    const $ = id => w.document.getElementById(id);
+    w.eval("loadPuzzle()"); await attendre(100);
+    T("exercice charge mais pas commence : rien n'empeche la fenetre", w.eval("duelOccupe()") === false);
+    w.eval("puzzleTries=1");
+    T("exercice en cours : occupe", w.eval("duelOccupe()") === true);
+    w.eval('duelRecu({ids:["p1","p2","p3","p4","p5"],a:{r:"22100",t:50,n:"Camille"},b:null})');
+    T("defi recu pendant un exercice : pas de fenetre, il attend", $("duel").hidden && w.eval("!!duelRecuAttente"));
+    w.eval("puzzleTries=0;puzzleDone=true;duelRecuTenter()");
+    T("exercice fini : la fenetre se montre", !$("duel").hidden && w.eval("duelRecuAttente===null"));
+    w.eval("duelFermer()");
+  }
+
   console.log("\n" + ok + " OK, " + ko + " FAIL");
   w.close();
   process.exit(ko ? 1 : 0);

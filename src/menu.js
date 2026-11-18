@@ -110,6 +110,31 @@ function menuStats(){
     '<div class="graph menu-graphe" id="menuJoursGraph"></div>');
   drawRatingGraph(menuEl("menuRatingGraph"));
   menuJoursGraphe(menuEl("menuJoursGraph"));
+  menuChiffres();
+}
+/* Les chiffres des tuiles montent a l'ouverture des statistiques, comme ceux
+   de l'accueil (2026-11-18, demande d'Alexandre). Seul le premier nombre
+   d'une tuile bouge ("12/246" : le 12). Rien en mouvement reduit. */
+let menuChiffresRaf=0;
+function menuChiffres(){
+  const tuiles=[...menuEl("menuStats").querySelectorAll(".menu-tuile b")].map(el=>{
+    const m=/^(\d+)(.*)$/.exec(el.textContent);
+    return m?{el:el,n:+m[1],suite:m[2],fin:el.textContent}:null;
+  }).filter(Boolean);
+  cancelAnimationFrame(menuChiffresRaf);
+  if(!tuiles.length||(typeof mouvementCalme==="function"&&mouvementCalme())||!window.requestAnimationFrame)return;
+  for(const x of tuiles)x.el.textContent="0"+x.suite;
+  const t0=performance.now();
+  const pas=now=>{
+    let fini=true;
+    tuiles.forEach((x,i)=>{
+      const k=Math.max(0,Math.min(1,(now-t0-120-i*60)/800));
+      if(k<1)fini=false;
+      x.el.textContent=k<1?Math.round(x.n*(1-Math.pow(1-k,3)))+x.suite:x.fin;
+    });
+    menuChiffresRaf=fini?0:requestAnimationFrame(pas);
+  };
+  menuChiffresRaf=requestAnimationFrame(pas);
 }
 /* Exercices reussis par jour, 30 derniers jours (prog.solveLog : un
    horodatage par reussite, 500 au plus). Barres en laiton, aujourd'hui en

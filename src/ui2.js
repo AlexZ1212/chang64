@@ -647,7 +647,7 @@ function drawGraph(plies){
   const area=d?d+"L"+w+" "+mid+"L0 "+mid+"Z":"";
   poserHtml($("evalGraph"),'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" role="img" aria-label="'+t("Evaluation over the game")+'">'+
     '<line x1="0" y1="'+mid+'" x2="'+w+'" y2="'+mid+'" stroke="rgba(239,233,217,.25)" stroke-width="1"/>'+
-    (area?'<path d="'+area+'" fill="rgba(217,168,63,.18)"/>':"")+
+    (area?'<path d="'+area+'" style="fill:rgba(var(--brass-rgb),.18)"/>':"")+
     (d?'<path d="'+d+'" fill="none" style="stroke:var(--brass)" stroke-width="2" stroke-linejoin="round"/>':"")+
     '</svg>');
 }
@@ -1491,7 +1491,7 @@ function texteResultatDuJour(){
   const detail=aides===0?t("solved without help")
     :[r.f?"❌ "+r.f:"",r.i?"\u{1F4A1} "+r.i:""].filter(Boolean).join("  ");
   const jour=new Date().getDay()||7;   /* lundi 1 ... dimanche 7 */
-  return "\u{1F418} "+t("chang64 · Puzzle of the day · {date}",{date:date})+"\n"+
+  return "\u{1F418} "+t("chang64 | Puzzle of the day | {date}",{date:date})+"\n"+
     "⭐".repeat(etoiles)+"☆".repeat(3-etoiles)+"  "+detail+"\n"+
     t("Difficulty")+" "+"●".repeat(jour)+"○".repeat(7-jour)+"\n"+
     baseUrl()+"#puzzle="+dateToDailyId(todayKey());
@@ -1647,9 +1647,9 @@ function showSolveScreen(screen){
 function renderSolveMenu(){
   ensureProgFields();
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
-  set("subSolvePuzzles",t("Level {n} · {r} rating",{n:prog.level,r:prog.rating}));
+  set("subSolvePuzzles",t("Level {n} | {r} rating",{n:prog.level,r:prog.rating}));
   const doneToday=!!(prog.dailyLog&&prog.dailyLog[todayKey()]);
-  set("subSolveDaily",t(doneToday?"Done today ✓ · {n}-day streak":"Not done yet · {n}-day streak",{n:prog.days||0}));
+  set("subSolveDaily",t(doneToday?"Done today ✓ | {n}-day streak":"Not done yet | {n}-day streak",{n:prog.days||0}));
   set("subSolveSprint",t("Best: {n}",{n:prog.rushBest||0}));
   set("subSolveCoord",t("Best: {n}",{n:prog.coordBest||0}));
   /* "Reussies" plutot que "tentees" (2026-09-03) : une finale tentee sans
@@ -1798,7 +1798,7 @@ function viewDailyArchive(key){
      rafraichit le texte deja pose par loadPuzzle() avec l'ancienne valeur. */
   puzzle.daily=true;
   puzzle.dailyCatchupKey=null; /* consultation d'un jour deja fait, pas un rattrapage */
-  const et=$("exTheme"); if(et)et.textContent=t("Puzzle of the day · ")+t(puzzle.theme);
+  const et=$("exTheme"); if(et)et.textContent=t("Puzzle of the day | ")+t(puzzle.theme);
 }
 /* Rattrapage d'un jour PASSE et MANQUE (item 1) : contrairement a
    viewDailyArchive() ci-dessus (qui rejoue la solution DEJA connue), on
@@ -2769,7 +2769,7 @@ function beginRushFlow(){
      (2026-09-03) : la carte du menu a deja dit "clic = je veux demarrer",
      inutile de re-demander confirmation d'un ton neutre -- autant nommer
      directement ce qui va commencer. */
-  showReadyFor(t("Three minutes · three misses and it stops"),
+  showReadyFor(t("Three minutes | three misses and it stops"),
     ()=>{
       if(typeof startRush==="function")startRush();
       if(typeof desarmerRush==="function")desarmerRush();   /* passe en abandon */

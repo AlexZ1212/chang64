@@ -326,9 +326,11 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
     linear-gradient(45deg,var(--chalk) 25%,transparent 25%,transparent 75%,var(--chalk) 75%);
   background-size:70px 70px;background-position:0 0,35px 35px;transform:rotate(12deg);pointer-events:none
 }
+/* Meme police que le paragraphe suivant, en gras (2026-11-18, demande
+   d'Alexandre : l'accueil melangeait trois polices ; la chasse fixe reste aux
+   chiffres, aux tableaux de notation et aux cadences). */
 .promise{
-  position:relative;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;
-  letter-spacing:.06em;color:var(--brass);margin-bottom:14px
+  position:relative;font-weight:700;color:var(--chalk);margin-bottom:10px
 }
 /* Pieds de l'elephant sur la ligne de base de "chang" (2026-10-25) : voir
    brandMark() dans build_site.js, le signe de l'entete y est recadre aux
@@ -450,7 +452,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(max-width:480px){
   .hero{padding-top:18px}
   .hero h2{font-size:29px;margin-bottom:8px}
-  .hero p.promise{font-size:12.5px;line-height:1.45;margin-bottom:10px}
+  .hero p.promise{margin-bottom:8px}
   .hero-lede p:not(.promise){margin-bottom:14px}
   .hero .cta{margin-bottom:14px}
   .hero .cta.cta-jouer{margin:12px 0 0}
@@ -1020,7 +1022,8 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .btn.danger:hover{background:rgba(196,87,63,.16)}
 .btn.danger.armed{background-color:var(--brick);border-color:var(--brick);color:var(--on-brass)}
 .btn.primary{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass)}
-.btn.primary:hover{background:#e6b954}
+/* Survol et appui : l'accent du theme eclairci, plus un jaune fixe (2026-11-18). */
+.btn.primary:hover{background:var(--brass);background:color-mix(in srgb,var(--brass) 86%,#fff)}
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 .btnrow .btn{flex:1;min-width:104px}
@@ -1551,7 +1554,11 @@ textarea.select{
 }
 .select:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .linkbox{resize:vertical;font-size:11px;line-height:1.4}
-footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;letter-spacing:.03em;line-height:1.7}
+footer{margin-top:30px;text-align:center;color:var(--sage);font-size:12.5px;letter-spacing:.03em;line-height:1.5;text-wrap:balance}
+/* Lignes resserrees (2026-11-18) : les liens gardent leur zone de toucher,
+   mais ne creusent plus l'interligne ; pas de mot seul a la ligne. */
+footer .linkbtn{padding:4px 2px}
+
 .footdate{opacity:.85}
 /* En-tete compact pendant une partie, sur petit telephone (2026-10-25).
    iPhone SE dans Safari : ~548 px visibles, dont ~140 pour l'en-tete (logo,
@@ -1751,8 +1758,9 @@ html[data-mouvement="calme"] .btn.coche::after{animation:none}
    signe a 9 unites de vide au-dessus de la tete, qui faisaient paraitre
    l'elephant trop bas a cote du texte (remarque d'Alexandre). align-self :
    centre sur toute la hauteur du message, une ou deux lignes. */
+/* Couleur du theme (2026-11-18) : le dessin est un masque. */
 #exStatus::before{content:"";flex:none;align-self:center;width:30px;height:23px;margin-right:10px;transform-origin:50% 100%;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 9 60 46'%3E%3Cpath fill='%23E0A93B' fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat}
+  background-color:var(--brass);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 9 60 46'%3E%3Cpath fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 9 60 46'%3E%3Cpath fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat;}
 /* Serie en pastilles, sous le chiffre : une par exercice reussi d'affilee,
    jusqu'a cinq ; la derniere gagnee arrive en rebondissant. */
 .pastilles{display:flex;justify-content:center;gap:3px;margin:3px 0 2px}
@@ -2222,12 +2230,14 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 /* Fiche d'un membre (2026-11-18) : au-dessus du tableau complet (410). */
 .cpp{z-index:420}
 .cpp .bilan-fenetre{padding-top:18px}
-.cpp-tete{display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--rule);text-align:left}
+/* En-tete centre, comme les autres fenetres (2026-11-18) : medaille, titre, filet. */
+.cpp-tete{display:block;padding-bottom:14px;border-bottom:1px solid var(--rule);text-align:center}
 .cpp-picto{flex:none;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background-color:var(--ink);border:1px solid var(--rule);color:var(--brass)}
-.cpp-medaille{width:60px;height:60px;background:none;border:0;border-radius:0}
+.cpp-medaille{display:block;width:84px;height:84px;margin:2px auto 12px;background:none;border:0;border-radius:0}
+.cpp-picto:not(.cpp-medaille){margin:2px auto 12px}
 .cpp-medaille svg{width:100%;height:100%}
 .cpp-qui{flex:1;min-width:0}
-.cpp-tete h2{margin:2px 0 1px;font-size:22px;overflow-wrap:anywhere}
+.cpp-tete h2{margin:4px 0 2px;overflow-wrap:anywhere}
 .cpp-tete .bilan-sous{margin:0}
 .cpp-tete+.cp-note,.cpp-tete+.cp-msg{margin-top:14px}
 .cpp-liste{position:relative;list-style:none;margin:4px 0 16px;padding:0;text-align:left}
@@ -2258,6 +2268,8 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpj-joueur{background:none;border:0;margin:0;padding:6px 0;min-height:32px;color:inherit;font:inherit;text-align:left;cursor:pointer;overflow-wrap:anywhere}
 .cpj-joueur:hover{text-decoration:underline}
 .cpj-joueur:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.cpj-cherche{margin-top:6px}
+.cpj-trouves{margin-top:-4px}
 .cpj-astuce{display:none}
 @media (pointer:coarse) and (orientation:portrait){.cpj-astuce{display:block}.cpj-tout{display:none}}
 @media (orientation:landscape) and (max-height:500px) and (pointer:coarse){
@@ -3607,11 +3619,11 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
   <p class="storagewarn hide" id="storageWarn" role="status"></p>
 
   <footer>
-    chang64 &middot; no tracking &middot; progress saved on this device<br>
-    <button class="linkbtn" id="footHome">Home</button> &middot;
-    <button class="linkbtn" id="footLegal">Legal notice</button> &middot;
-    <button class="linkbtn" id="footPrivacy">Privacy</button> &middot;
-    <span class="foot-pair"><button class="linkbtn" id="footPrefs">Preferences</button> &middot;
+    chang64 | no tracking | progress saved on this device<br>
+    <button class="linkbtn" id="footHome">Home</button> |
+    <button class="linkbtn" id="footLegal">Legal notice</button> |
+    <button class="linkbtn" id="footPrivacy">Privacy</button> |
+    <span class="foot-pair"><button class="linkbtn" id="footPrefs">Preferences</button> |
     <button class="linkbtn" id="footAccess">Accessibility</button></span><br>
     <span class="footdate" id="footDate" data-publiee="__APP_PUBLIEE__" data-modifiee="__APP_MODIFIEE__">__APP_DATES_EN__</span>
   </footer>

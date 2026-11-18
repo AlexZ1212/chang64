@@ -260,7 +260,27 @@ function duelVueReponse(ids,adv,moi){
   duelMajLien();
 }
 /* Lien recu : un defi a relever, ou une reponse a un defi. */
+/* Jamais pendant une partie ni pendant un exercice (2026-11-18, demande
+   d'Alexandre) : un lien de defi ouvert a ce moment attend la fin, puis la
+   fenetre se montre. Une partie compte des son premier coup, un exercice des
+   le premier coup joue ou la premiere erreur ; le Sprint et un defi deja en
+   cours comptent aussi. */
+let duelRecuAttente=null;
+function duelOccupe(){
+  try{
+    if(duel||(typeof rush!=="undefined"&&rush))return true;
+    if(mode==="play"&&gameStarted&&!resultInfo&&sanList.length)return true;
+    if(mode==="puzzles"&&puzzle&&!puzzleDone&&(puzzleSolPly>0||puzzleTries>0||fautesExo>0))return true;
+  }catch(e){}
+  return false;
+}
+function duelRecuTenter(){
+  if(!duelRecuAttente)return;
+  if(duelOccupe()){setTimeout(duelRecuTenter,3000);return;}
+  const d=duelRecuAttente;duelRecuAttente=null;duelRecu(d);
+}
 function duelRecu(d){
+  if(duelOccupe()){duelRecuAttente=d;setTimeout(duelRecuTenter,3000);return;}
   setMode("puzzles",{screen:"menu"});
   if(d.b){
     const code=duelEnc(d.ids);

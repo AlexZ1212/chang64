@@ -89,7 +89,7 @@ function ouvrir(page, envois) {
   console.log("\n--- La session ---");
   clic(carte()); await attendre(1500);
   T("ouvre la premiere erreur echue", w.eval("puzzle.id") === a.id, w.eval("puzzle.id"));
-  T("marquee comme revision", $("exTheme").textContent.startsWith("Review · "), $("exTheme").textContent);
+  T("marquee comme revision", $("exTheme").textContent.startsWith("Review | "), $("exTheme").textContent);
   T("erreur rejouee resolue", await resoudre());
   T("pas envoyee a la mesure de la difficulte", envois.length === 0, envois.length);
   T("palier suivant apres la reussite", w.eval(`prog.mistakeQueue.find(m=>m.id===${JSON.stringify(a.id)}).box`) === 2);
@@ -107,7 +107,7 @@ function ouvrir(page, envois) {
   const attendu = { fr: "Erreurs à revoir", es: null, pt: null, de: null, ru: null, it: null, tr: null, pl: null, id: null };
   for (const l of ["fr", "es", "pt", "de", "ru", "it", "tr", "pl", "id"]) {
     const wl = ouvrir(l + "/index.html"); await attendre(800);
-    const s = wl.eval("t(\"{n} to review now\",{n:3})"), r = wl.eval("t(\"Review · \")");
+    const s = wl.eval("t(\"{n} to review now\",{n:3})"), r = wl.eval("t(\"Review | \")");
     T(l + " : phrases traduites", !/to review|Review/.test(s + r) && /3/.test(s), s + " | " + r);
     if (attendu[l]) T(l + " : titre de la carte", wl.document.getElementById("cardSolveMistakes").textContent.replace(/ /g, " ").includes(attendu[l]));
     wl.close();

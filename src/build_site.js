@@ -1201,7 +1201,7 @@ html{
    de separation reste, lui : sur une page de contenu il marque la fin du
    texte, la ou l'application est deja decoupee en panneaux. */
 footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:var(--sage);
-  font-size:12.5px;letter-spacing:.03em;line-height:1.7;text-align:center}
+  font-size:12.5px;letter-spacing:.03em;line-height:1.5;text-align:center;text-wrap:balance}
 .filtre{margin-bottom:18px}
 .filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
   padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
@@ -1285,7 +1285,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    reel, ces liens faisaient 18px de haut, sous le plancher de 24px de
    WCAG 2.2 (2.5.8, Target Size Minimum). Meme correctif que .linkbtn cote
    application, pour que les deux pieds de page aient la meme cible. */
-.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:6px 2px}
+.footnav a{color:var(--chalk);text-decoration:underline;font-weight:400;font-size:11.5px;display:inline-block;padding:4px 2px}
 .footnav a:hover{color:var(--brass)}
 .footnav [aria-current="page"]{color:var(--sage);font-weight:600}
 /* Ces deux paragraphes heritaient du max-width:66ch pose sur tous les p pour
@@ -1660,10 +1660,10 @@ ${body}
        repeter en bas etait un doublon. Le pied de page garde son role
        classique, les liens legaux. -->
   <nav class="footnav" aria-label="${T(lang, "Legal information", "Informations légales")}">
-    <a href="${accueil}">${T(lang, "Home", "Accueil")}</a> &middot;
-    <a href="${accueil}#legal">${T(lang, "Legal notice", "Mentions légales")}</a> &middot;
-    <a href="${accueil}#privacy">${T(lang, "Privacy", "Confidentialité")}</a> &middot;
-    <span class="foot-pair"><a href="${accueil}#prefs">${T(lang, "Preferences", "Préférences")}</a> &middot;
+    <a href="${accueil}">${T(lang, "Home", "Accueil")}</a> |
+    <a href="${accueil}#legal">${T(lang, "Legal notice", "Mentions légales")}</a> |
+    <a href="${accueil}#privacy">${T(lang, "Privacy", "Confidentialité")}</a> |
+    <span class="foot-pair"><a href="${accueil}#prefs">${T(lang, "Preferences", "Préférences")}</a> |
     <a href="${accueil}#accessibilite">${T(lang, "Accessibility", "Accessibilité")}</a></span>
   </nav>
   <p class="footnote">${d.foot}</p>

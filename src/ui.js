@@ -652,11 +652,15 @@ function fmtTime(ms){
 }
 /* "Chang" designe l'adversaire, pas le site : chang64 reste le nom du site,
    et le distinguer evite de croire qu'on joue contre la plateforme. */
+/* Niveau estime de chaque force (2026-11-18, demande d'Alexandre) : un ordre
+   de grandeur, deduit de la profondeur de calcul et de la part de coups au
+   hasard, PAS une mesure contre des joueurs classes. D'ou le signe "environ". */
+const BOT_ELO={1:500,2:900,3:1300,4:1600};
 function botLabel(){
   const seg=document.getElementById("segLevel");
   let force="";
   if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
-  return force?"Chang \u00b7 "+force:"Chang";
+  return force?"Chang | "+force+(BOT_ELO[botLevel]?" \u2248 "+BOT_ELO[botLevel]+" Elo":""):"Chang";
 }
 /* Pieces capturees et solde materiel, affiches dans la pendule de chaque
    joueur. On reconstitue depuis l'historique plutot que de tenir un compteur
@@ -1997,7 +2001,7 @@ function loadPuzzle(){
      sprint, via rushNext()), exPanel redevient legitime a montrer. */
   const ep=$("exPanel"); if(ep)ep.classList.remove("hide");
   const enRevision=typeof revisionId!=="undefined"&&revisionId&&puzzle.id===revisionId;
-  $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day · "):enRevision?t("Review · "):"")+t(puzzle.theme);
+  $("exTheme").textContent=(puzzle.daily?t("Puzzle of the day | "):enRevision?t("Review | "):"")+t(puzzle.theme);
   const ec=$("exCode");
   if(ec){
     ec.textContent=puzzle.code?"#"+puzzle.code:"";

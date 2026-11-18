@@ -537,6 +537,28 @@ const avancer = ms => { decalage += ms; };
     await appel("POST", "ami-retirer", { pseudo: "Anna" }, { cookie: cB });
     T("l'un retire : la marque disparait chez l'autre", (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.find(x => x.p === "Boris").m === 0);
 
+    /* Recherche de membres par le debut du pseudo (2026-11-18). */
+    {
+      const chercher = async (q, cookie) => {
+        const h = { Origin: "https://chang64.com" }; if (cookie) h.Cookie = cookie;
+        const rep = await mod.onRequest({ request: new Request("https://chang64.com/api/compte/membres?q=" + encodeURIComponent(q), { headers: h }), env, params: { route: ["membres"] } });
+        let j = null; try { j = JSON.parse(await rep.text()); } catch (e) {}
+        return { s: rep.status, j };
+      };
+      T("recherche : sans session, refusee", (await chercher("bo")).s === 401);
+      let q = await chercher("bo", cA);
+      T("recherche : le debut du pseudo suffit, casse indifferente", q.s === 200 && q.j.membres.join() === "Boris" && (await chercher("BOR", cA)).j.membres.join() === "Boris", JSON.stringify(q.j));
+      T("recherche : on ne se trouve pas soi-meme", (await chercher("an", cA)).j.membres.length === 0);
+      T("recherche : une lettre ne suffit pas", (await chercher("b", cA)).j.membres.length === 0);
+      T("recherche : les jokers ne ramassent pas tout", (await chercher("%%", cA)).j.membres.length === 0 && (await chercher("__", cA)).j.membres.length === 0 && (await chercher("b%", cA)).j.membres.length === 0);
+      T("recherche : seuls des pseudos sortent", (await chercher("ch", cA)).j.membres.every(x => typeof x === "string") && Object.keys((await chercher("ch", cA)).j).join() === "membres");
+      const insM = env.DB.brut.prepare("INSERT INTO comptes (cle, pseudo, pin_hash, secours_hash, cree, vu) VALUES (?, ?, 'h', 's', ?, ?)");
+      for (let i = 0; i < 12; i++) insM.run("zoe" + i, "Zoe" + i, Date.now(), Date.now() - i * 1000);
+      q = await chercher("zo", cA);
+      T("recherche : huit resultats au plus, les plus recemment actifs d'abord", q.j.membres.length === 8 && q.j.membres[0] === "Zoe0", JSON.stringify(q.j.membres));
+      env.DB.brut.exec("DELETE FROM comptes WHERE cle LIKE 'zoe%'");
+    }
+
     /* Pays de la fiche (2026-11-18). */
     T("pays : vide au depart, dans etat et sur la fiche", (await appel("GET", "etat", undefined, { cookie: cA })).j.pays === "");
     T("pays : sans session, refuse", (await appel("POST", "pays", { pays: "FR" })).s === 401);

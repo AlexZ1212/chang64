@@ -26,7 +26,7 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
   T("exercice du jour charge", w.eval("!!(puzzle&&puzzle.daily)"));
   const texte = (f, i) => w.eval("fautesExo=" + f + ";indicesExo=" + i + ";texteResultatDuJour()");
   const lignes = texte(0, 0).split("\n");
-  T("titre avec l'elephant", lignes[0].startsWith("\u{1F418} chang64 · Puzzle of the day · "), lignes[0]);
+  T("titre avec l'elephant", lignes[0].startsWith("\u{1F418} chang64 | Puzzle of the day | "), lignes[0]);
   T("sans aide : trois etoiles et la phrase", lignes[1] === "⭐⭐⭐  solved without help", lignes[1]);
   T("une erreur : deux etoiles", texte(1, 0).split("\n")[1] === "⭐⭐☆  ❌ 1", texte(1, 0).split("\n")[1]);
   T("un indice : deux etoiles", texte(0, 1).split("\n")[1] === "⭐⭐☆  \u{1F4A1} 1", texte(0, 1).split("\n")[1]);

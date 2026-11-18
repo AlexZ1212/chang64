@@ -22,7 +22,7 @@ console.log("\n--- Meme pied de page que l'application, meme ordre ---");
   const fa=((app.match(/<footer>([\s\S]*?)<\/footer>/)||[])[1]||"")
     .replace(/<span class="footdate"[^>]*>[^<]*<\/span>/,"");
   const liste=t=>[...t.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim())
-    .filter(x=>x&&x!=="&middot;"&&x.length>2);
+    .filter(x=>x&&x!=="|"&&x.length>2&&!/no tracking/.test(x));
   const enPage=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
   const fp=(enPage.match(/<nav class="footnav"[^>]*>([\s\S]*?)<\/nav>/)||[])[1]||"";
   const a=liste(fa), b=liste(fp);
@@ -209,8 +209,9 @@ console.log("\n--- Le dernier lien n'est jamais seul sur sa ligne ---");
   T("liens, aucune graisse ajoutee sur fond clair", !/font-weight:[5-9]/.test(rClair), rClair);
   T("pas de rangee flex a gouttieres sur fond clair",
     !/\.footnav\{[^}]*display:flex/.test(cssClair), regle(cssClair,".footnav"));
-  T("des points medians separent les liens, comme dans l'application",
-    (pied.match(/&middot;/g)||[]).length===4, String((pied.match(/&middot;/g)||[]).length));
+  /* Barres verticales depuis le 2026-11-18 (demande d'Alexandre), plus de points medians. */
+  T("des barres verticales separent les liens, comme dans l'application",
+    (pied.match(/\|/g)||[]).length===4&&!/&middot;/.test(pied)&&!/&middot;/.test(fa), String((pied.match(/\|/g)||[]).length));
 }
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");

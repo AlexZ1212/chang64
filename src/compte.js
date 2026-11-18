@@ -860,7 +860,9 @@ async function cpjVue(par){
     (p==="semaine"?'<p class="cp-note">'+cpE("Puzzles solved since Monday.")+"</p>":"");
   const pied='<p class="cp-note cp-centre cpj-astuce">'+cpE("Turn your phone sideways to see all the stats at once.")+"</p>"+
     '<button type="button" class="btn cp-large cpj-tout" data-cpj-tout>'+cpE("All the stats")+"</button>"+
-    (cp?'<button type="button" class="btn cp-large" data-cpp="'+echapper(cp.pseudo)+'">'+cpE("My profile")+"</button>":"")+
+    (cp?'<button type="button" class="btn cp-large" data-cpp="'+echapper(cp.pseudo)+'">'+cpE("My profile")+"</button>"+
+      '<label class="cp-champ cpj-cherche" for="cpjCherche"><span>'+cpE("Find a member")+'</span><input type="search" id="cpjCherche" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+cpE("Username")+'"></label>'+
+      '<ul class="cpj-liste cpj-trouves" id="cpjTrouves" aria-live="polite"></ul>':"")+
     (cp?"":'<p class="cp-note cp-centre">'+cpE("Create an account to appear here.")+'</p><button type="button" class="btn cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>");
   const dessiner=corps=>{if(p===cpjPar&&!v.hidden)poserHtml(v,onglets+corps+pied);};
   if(p==="amis"){
@@ -1099,6 +1101,39 @@ function cpBadge(id){
   if(!f[id]){f[id]=1;saveProg();}
 }
 if(typeof checkBadges==="function"){const av=checkBadges;checkBadges=function(){if(cp)bxEtat().f.mb_compte=1;return av.apply(this,arguments);};}
+
+/* ---------- Recherche de membres ---------- */
+/* Les premieres lettres suffisent (2026-11-18, demande d'Alexandre : il
+   fallait saisir le pseudo en entier). Reservee aux joueurs connectes ; le
+   serveur rend huit pseudos au plus. Sert au champ "Chercher un membre" de
+   Meilleurs joueurs et aux suggestions du champ d'envoi d'un defi. */
+let cpmMinuteur=0,cpmDernier="";
+async function cpmChercher(q){
+  q=String(q||"").trim();
+  if(!cp||Array.from(q).length<2)return [];
+  const r=await cpApi("GET","membres?q="+encodeURIComponent(q));
+  return r.s===200?cpListe(r.j.membres).filter(p=>typeof p==="string"):[];
+}
+document.addEventListener("input",e=>{
+  const c=e.target;
+  if(!c||(c.id!=="cpjCherche"&&c.id!=="duelMembre"))return;
+  clearTimeout(cpmMinuteur);
+  const q=c.value;
+  cpmMinuteur=setTimeout(async()=>{
+    cpmDernier=q;
+    const l=await cpmChercher(q);
+    if(cpmDernier!==q)return;
+    if(c.id==="duelMembre"){
+      let d=$("duelMembres");
+      if(!d){d=document.createElement("datalist");d.id="duelMembres";c.after(d);c.setAttribute("list","duelMembres");}
+      poserHtml(d,l.map(p=>'<option value="'+echapper(p)+'"></option>').join(""));
+      return;
+    }
+    const z=$("cpjTrouves");if(!z)return;
+    poserHtml(z,Array.from(q.trim()).length<2?"":l.length?l.map(p=>'<li><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(p)+'">'+echapper(p)+"</button></span></li>").join(""):
+      '<li><span class="cpj-nom">'+cpE("No member found.")+"</span></li>");
+  },250);
+});
 
 /* ---------- Fiche d'un membre ---------- */
 /* Toucher un pseudo dans les tableaux ouvre sa fiche (2026-11-18) : le mois

@@ -19,9 +19,10 @@ setTimeout(async()=>{
   console.log("\n--- L'adversaire est nomme ---");
   T("plus d'Ordinateur generique", !/^(Computer|Ordinateur)$/.test(nom()), nom());
   T("porte la marque", /^Chang/.test(nom()), nom());
-  T("porte la force", nom().includes("\u00b7"), nom());
+  /* Force et niveau estime (2026-11-18) : "Chang | Casual \u2248 900 Elo". */
+  T("porte la force et son niveau estime", /^Chang \| \S.* \u2248 \d{3,4} Elo$/.test(nom()), nom());
   T("ce n'est pas le nom du site", !/chang64/i.test(nom()), nom());
-  T("assez court pour la barre", nom().length<=22, nom().length+" caracteres : "+nom());
+  T("assez court pour la barre", nom().length<=28, nom().length+" caracteres : "+nom());
   T("le joueur reste distinct", d.getElementById("clockBottomName").textContent.trim()!==nom());
 
   console.log("\n--- Le nom suit le changement de force ---");

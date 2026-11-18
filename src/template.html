@@ -2293,6 +2293,29 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 /* Coherence des exercices (2026-11-18). Les noms de finales sont du texte :
    police courante, la chasse fixe reste aux chiffres et aux cadences. */
 #egChips .chip{font-family:inherit}
+/* Barre d'action des Finales, du Sprint et des Coordonnees (2026-11-18) :
+   fixee en bas sur telephone, a portee de pouce, comme celle des Exercices
+   (.ex-actions). Elle disparait si son bouton est masque. Coordonnees : tant
+   que le bandeau "Commencer" est sur l'echiquier, le bouton du bas ferait
+   double emploi, on le retire. Sur grand ecran, les boutons restent dans
+   leur carte. */
+body:has(#readyBanner:not(.hide)) #coordLauncher .barre-actions{display:none}
+@media(max-width:860px){
+  .barre-actions{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:8px;margin:0;
+    padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+    background-color:var(--slate);border-top:1px solid var(--rule);box-shadow:0 -8px 24px rgba(0,0,0,.35)}
+  .barre-actions .btn{flex:1 1 0;min-width:0;min-height:44px;margin:0;padding:8px 6px;font-size:14px;line-height:1.15}
+  .barre-actions:not(:has(.btn:not(.hide))){display:none}
+  #appLayout[data-mode="train"]{padding-bottom:76px}
+}
+/* Avant un Sprint : la carte sous l'echiquier presente le Sprint (titre,
+   explication) au lieu de l'exercice en attente. Pendant le Sprint, la carte
+   du lanceur n'a plus que son bouton, parti dans la barre du bas : sur
+   telephone elle ne laisse pas de cadre vide. */
+#sprintIntro{display:none}
+body[data-entrainement="sprint"]:has(#readyBanner:not(.hide)) #exPanel>*{display:none}
+body[data-entrainement="sprint"]:has(#readyBanner:not(.hide)) #exPanel>#sprintIntro{display:block;margin:0}
+@media(max-width:860px){.rush-on #rushLauncher{background:none;border:0;box-shadow:none;padding:0;margin:0;min-height:0}}
 /* Un seul entrainement a l'ecran : en Sprint, pas la carte des Coordonnees, et inversement. */
 body[data-entrainement="sprint"] #coordLauncher,body[data-entrainement="coord"] #rushLauncher{display:none}
 /* Pied de page : la barre voyage avec le lien qui la suit, jamais seule en fin de ligne. */
@@ -2982,6 +3005,15 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
              differe entre les deux (voir solvePuzzlesSidebar/
              solveDailySidebar plus bas). -->
         <div class="panel hide" id="exPanel">
+          <!-- Avant un Sprint (2026-11-18, demande d'Alexandre) : titre et
+               explication sous l'echiquier, comme les autres types
+               d'exercice, a la place de l'enonce d'un exercice qui n'a pas
+               encore commence. Affiche par la feuille de style tant que le
+               bandeau "Commencer" du Sprint est a l'ecran. -->
+          <div class="bloc" id="sprintIntro">
+          <h2>Chang Sprint</h2>
+          <p class="sub">Three minutes, as many puzzles as you can. Three misses and the party is over.</p>
+          </div>
           <!-- L'enonce passe avant les statistiques : c'est lui qui dit quoi
                faire, alors que les compteurs ne sont qu'un contexte. Les
                laisser en tete obligeait a lire six chiffres avant d'arriver a
@@ -3257,7 +3289,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <div class="stat"><b id="egBudget">12</b><span>Target</span></div>
             <div class="stat"><b id="egBest">–</b><span>Personal best</span></div>
           </div>
-          <div class="btnrow"><button class="btn primary" id="btnEgNew">New position</button></div>
+          <div class="btnrow barre-actions"><button class="btn primary" id="btnEgNew">New position</button></div>
           </div>
         </div>
       </div>
@@ -3281,13 +3313,19 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                ici faisait triple emploi. Ce panneau ne sert plus, dans le
                parcours normal, qu'a l'abandon d'un sprint en cours (voir
                btnGoRush) ; l'eyebrow suffit a l'identifier a ce moment-la. -->
-          <div class="eyebrow hors-sprint">Chang Sprint</div>
+          <!-- Titre et explication (2026-11-18, demande d'Alexandre) : meme
+               en-tete de carte que les Finales, pour que chaque type
+               d'exercice se presente de la meme facon sous l'echiquier. -->
+          <div class="bloc hors-sprint">
+          <h2>Chang Sprint</h2>
+          <p class="sub">Three minutes, as many puzzles as you can. Three misses and the party is over.</p>
+          </div>
           <!-- Cache par defaut (item 5) : hors sprint, la carte du menu
                amene deja directement a l'ecran "Ready" (beginRushFlow),
                ce bouton en double dessous n'a plus de role tant qu'aucun
                sprint n'est en cours -- desarmerRush() (ui2.js) le retire
                de ce hide/le remet des que "rush" devient vrai/faux. -->
-          <div class="btnrow"><button class="btn primary hide" id="btnGoRush">Start Chang Sprint</button></div>
+          <div class="btnrow barre-actions"><button class="btn primary hide" id="btnGoRush">Start Chang Sprint</button></div>
           <p class="note hors-sprint">Personal best: <b id="rushBestTrain">0</b></p>
           <!-- Bouton plein (primary/laiton), pas un lien discret (2026-09-04,
                essai precedent) : voir finWasRushSprint et le clic sur
@@ -3314,12 +3352,15 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                du choix initial (deja dans l'overlay), il retourne aussi le
                plateau EN DIRECT pendant l'epreuve (voir son gestionnaire
                de clic, ui3.js) -- pas seulement un reglage de depart. -->
-          <div class="eyebrow">Coordinates</div>
+          <div class="bloc">
+          <h2>Coordinates</h2>
+          <p class="sub">Thirty seconds to click as many named squares as you can. Knowing the board by name makes everything else faster.</p>
+          </div>
           <div class="field"><div class="seg" id="coordSide">
             <button data-v="w" aria-pressed="true">White's view</button>
             <button data-v="b" aria-pressed="false">Black's view</button>
           </div></div>
-          <div class="btnrow"><button class="btn primary" id="btnCoord">Start 30 seconds</button></div>
+          <div class="btnrow barre-actions"><button class="btn primary" id="btnCoord">Start 30 seconds</button></div>
           <p class="note">Personal best: <b id="coordBest">0</b></p>
         </div>
       </div>

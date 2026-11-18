@@ -76,9 +76,9 @@ T("premiere erreur : eloEchec saute pendant un defi",
 /* ---------- 4. un seul partage sur tout le site (2026-11-18) ---------- */
 {
   const gabarit = fs.readFileSync(path.join(__dirname, "..", "template.html"), "utf8");
-  T("le defi utilise la rangee de partage commune", /shareButtons\(c,duelLienCourant\(\),/.test(src) && src.includes('<div class="shareRow" id="duelPartage"></div>'));
-  T("le defi n'affiche plus l'adresse et n'a plus ses propres boutons", !/duelLienChamp|data-duel-copier|data-duel-wa|data-duel-partager/.test(src));
-  T("partie entre amis et defi du jour : adresse masquee, champ garde", /id="amiLink" readonly hidden/.test(gabarit) && /id="dailyChallengeLink" readonly hidden/.test(gabarit) && gabarit.includes(".linkbox[hidden]{display:none}"));
+  T("le defi utilise la rangee de partage commune", /shareButtons\(c,lien,/.test(src) && src.includes('<div class="shareRow" id="duelPartage"></div>'));
+  T("le defi n'a plus ses propres boutons", !/data-duel-copier|data-duel-wa|data-duel-partager/.test(src));
+  T("bloc modele partout : l'adresse dans son champ, puis les boutons", /class="panel duel-envoi"><input class="linkbox" id="duelLienChamp" readonly/.test(src) && /id="amiLink" readonly aria-label/.test(gabarit) && /id="dailyChallengeLink" readonly aria-label/.test(gabarit));
   T("pseudo, et non prenom ; rien a saisir pour un membre", src.includes('t("Your username (optional)")') && !/first name/i.test(src) && /const membre=typeof cp!=="undefined"&&cp&&cp\.pseudo;/.test(src));
   for (const l of LANGUES) {
     if (l.code === "en") continue;

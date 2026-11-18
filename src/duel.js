@@ -214,18 +214,21 @@ function duelLigne(nom,j,gagne){
 }
 /* Prenom facultatif, lien et partage. */
 function duelPartage(texte){
-  /* Memes boutons de partage que partout sur le site (shareButtons, ui.js),
-     poses par duelMajLien ; l'adresse n'est plus affichee. Un membre connecte
-     n'a pas de nom a saisir : son pseudo part avec le defi. */
+  /* Le bloc de partage du site, tel que sur le defi du jour (modele choisi
+     par Alexandre le 18/11) : l'adresse dans son champ, puis les boutons
+     communs (shareButtons, ui.js), dans un cadre. Un membre connecte n'a pas
+     de nom a saisir : son pseudo part avec le defi. */
   const membre=typeof cp!=="undefined"&&cp&&cp.pseudo;
   return (membre?"":'<label class="duel-nom"><span>'+echapper(t("Your username (optional)"))+'</span><input type="text" id="duelNomChamp" maxlength="20" autocomplete="nickname" autocapitalize="off" spellcheck="false" value="'+echapper(duelNom)+'"></label>')+
-    '<div class="shareRow" id="duelPartage"></div>'+
+    '<div class="panel duel-envoi"><input class="linkbox" id="duelLienChamp" readonly aria-label="'+echapper(t("Challenge link"))+'"><div class="shareRow" id="duelPartage"></div></div>'+
     '<p class="duel-note" id="duelNote" aria-live="polite" data-texte="'+echapper(texte)+'"></p>';
 }
 let duelLienCourant=null;
 function duelMajLien(){
   const c=$("duelPartage"),note=$("duelNote"),r=$("duel");if(!c||!duelLienCourant)return;
-  shareButtons(c,duelLienCourant(),note?note.dataset.texte||"":"",true,note);
+  const lien=duelLienCourant(),champ=$("duelLienChamp");
+  if(champ)champ.value=lien;
+  shareButtons(c,lien,note?note.dataset.texte||"":"",true,note);
   /* A l'ouverture, le premier bouton de partage prend le focus ; pendant la
      saisie du pseudo, le focus reste dans le champ. */
   const b=c.querySelector("button");

@@ -1248,9 +1248,9 @@ header>*{min-width:0}
 .select:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .linkbox{width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--chalk);background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 10px;margin-bottom:10px}
 .linkbox:focus{outline:2px solid var(--brass);outline-offset:1px}
-/* L'adresse n'est plus affichee la ou des boutons de partage la portent
-   (2026-11-18) : le champ reste dans la page pour le code et les tests. */
-.linkbox[hidden]{display:none}
+/* Bloc de partage modele (2026-11-18, choisi par Alexandre sur le defi du
+   jour) : l'adresse dans son champ, puis la rangee de boutons, dans un cadre.
+   Le meme partout : defi du jour, partie entre amis, defi par lien. */
 .shareRow{display:flex;gap:8px;flex-wrap:wrap}
 .shareRow button{flex:1;min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:5px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:8px;padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
 /* Les pictogrammes de marque sont des elements flex comme le libelle : sans
@@ -2083,7 +2083,8 @@ html[data-mouvement="calme"] .objv-jours span,html[data-mouvement="calme"] .objv
 /* Ligne du message (lien copie) : vide, elle ne creuse plus un trou au-dessus de Fermer (2026-11-18). */
 .duel-note{min-height:1.2em;margin:8px 0;font-size:12.5px;color:var(--brass)}
 .duel-note:empty{min-height:0;margin:4px 0}
-.duel .shareRow{position:relative;margin:0 0 8px}
+.duel-envoi{position:relative;margin:0 0 8px;padding:12px;box-shadow:none;text-align:left}
+.duel-envoi .linkbox{margin:0 0 10px}
 .duel .duel-fermer{margin-top:4px}
 html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="calme"] .bilan-joue .duel-ligne{animation:none}
 
@@ -3025,7 +3026,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
             </div>
             <p class="note" id="dailyShareNote" aria-live="polite"></p>
             <div class="panel hide" id="dailyChallengePanel" style="margin-top:8px">
-              <input class="linkbox" id="dailyChallengeLink" readonly hidden aria-label="Challenge link">
+              <input class="linkbox" id="dailyChallengeLink" readonly aria-label="Challenge link">
               <div class="shareRow" id="dailyChallengeShare"></div>
             </div>
           </div>
@@ -3292,7 +3293,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
                (envoyer/recevoir), pas le pourquoi. -->
           <div class="eyebrow">My position<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipFriendLink" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipFriendLink">This link carries the whole game by itself, no server or account behind it. Each move creates a new one to pass along.</p>
-          <input class="linkbox" id="amiLink" readonly hidden aria-label="Game link">
+          <input class="linkbox" id="amiLink" readonly aria-label="Game link">
           <div class="shareRow" id="amiShare"></div>
           <p class="note" id="amiNote"></p>
         </div>

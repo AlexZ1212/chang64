@@ -21,6 +21,9 @@ const PROFILS = {
   Moi: { p: "Moi", depuis: "2026-11", s: 0, n: 820, r: 15, j: 1, b: 2, k: 0, rangs: { s: null, n: 73, r: 68, j: 80, b: 91, k: null } }
 };
 const demandes = [];
+/* Amis : la liste tenue par le faux serveur, et ses appels. */
+let AMIS = [], amisPleins = false;
+const appelsAmis = [];
 
 function ouvrir(page) {
   const html = fs.readFileSync(path.join(SITE, page), "utf8");
@@ -35,6 +38,12 @@ function ouvrir(page) {
         if (url.pathname === "/api/compte/profil") {
           const p = url.searchParams.get("p"); demandes.push(p);
           return PROFILS[p] ? rep(200, PROFILS[p]) : rep(404, { erreur: "inconnu" });
+        }
+        if (url.pathname === "/api/compte/amis") return rep(200, { semaine: "2026-11-16", moi: { p: "Moi", s: 3, n: 820, r: 15, j: 1, b: 2, k: 0 }, amis: AMIS.map(p => ({ p, s: p === "Alice" ? 12 : 1, n: 900, r: 50, j: 1, b: 1, k: 1 })) });
+        if (url.pathname === "/api/compte/ami-ajouter" || url.pathname === "/api/compte/ami-retirer") {
+          const p = JSON.parse(o.body).pseudo; appelsAmis.push(url.pathname.slice(12) + ":" + p);
+          if (url.pathname.endsWith("ajouter")) { if (amisPleins) return rep(429, { erreur: "trop" }); if (!AMIS.includes(p)) AMIS.push(p); return Promise.resolve({ ok: true, status: 201, json: () => Promise.resolve({ ok: true, pseudo: p }) }); }
+          AMIS = AMIS.filter(x => x !== p); return rep(200, { ok: true });
         }
         if (url.pathname.startsWith("/api/")) return rep(401, { erreur: "session" });
         if (o && o.method === "POST") return Promise.resolve({ ok: true, status: 204 });
@@ -57,6 +66,7 @@ function ouvrir(page) {
   const boutons = [...d.querySelectorAll("#menuJoueursVue .cpj-joueur")];
   T("chaque pseudo du tableau est un bouton", boutons.length === 3 && boutons.every(b => b.tagName === "BUTTON" && b.type === "button"));
   T("un pseudo piege reste du texte", boutons[1].textContent === MECHANT && !d.querySelector("#menuJoueursVue img") && !w.pirate);
+  T("sans compte : pas de tableau Mes amis", !d.querySelector('#menuJoueursVue [data-cpj="amis"]'));
   T("sans compte : ni rang ni bouton Ma fiche", !$("cpjMonRang") && !d.querySelector("#menuJoueursVue [data-cpp]:not(.cpj-joueur)"));
 
   boutons[0].click();
@@ -98,6 +108,41 @@ function ouvrir(page) {
   T("sa propre fiche : pas de bouton de defi, rang absent note par un tiret", !d.querySelector("#cpProfilContenu [data-cpp-defier]") && /–/.test(d.querySelector("#cpProfilContenu .cpp-liste li").textContent));
   w.eval("cppFermer()");
 
+  /* Amis : ajouter depuis la fiche, tableau Mes amis, retirer. */
+  T("connecte : tableau Mes amis propose", !!d.querySelector('#menuJoueursVue [data-cpj="amis"]'));
+  w.eval('cpjVue("amis")');
+  await attendre(400);
+  T("aucun ami : invitation a ouvrir une fiche", /No friends yet/.test($("menuJoueursVue").textContent) && !d.querySelector("#menuJoueursVue .cpj-liste"));
+  w.eval('cpjVue("resolus")');
+  await attendre(300);
+  d.querySelector("#menuJoueursVue .cpj-joueur").click();
+  await attendre(300);
+  let ami = d.querySelector("#cpProfilContenu [data-cpa]");
+  T("fiche d'un autre : bouton pour l'ajouter a ses amis", !!ami && ami.dataset.cpa === "ajouter" && ami.dataset.pseudo === "Alice" && /Add to my friends/.test(ami.textContent));
+  amisPleins = true; ami.click(); await attendre(300);
+  T("liste pleine : message, bouton rendu", /friends list is full/.test($("cppMsg").textContent) && !d.querySelector("#cpProfilContenu [data-cpa]").disabled);
+  amisPleins = false; d.querySelector("#cpProfilContenu [data-cpa]").click(); await attendre(400);
+  ami = d.querySelector("#cpProfilContenu [data-cpa]");
+  T("ajoute : le bouton propose de le retirer", appelsAmis.includes("ami-ajouter:Alice") && !!ami && ami.dataset.cpa === "retirer" && /Remove from my friends/.test(ami.textContent), appelsAmis.join());
+  w.eval('cppFermer();cpjVue("amis")');
+  await attendre(400);
+  const rangees = [...d.querySelectorAll("#menuJoueursVue .cpj-liste li")].map(li => li.textContent);
+  T("Mes amis : soi et ses amis, classes par exercices de la semaine", rangees.length === 2 && /Alice/.test(rangees[0]) && /12/.test(rangees[0]) && /Moi/.test(rangees[1]) && /You/.test(rangees[1]), JSON.stringify(rangees));
+  d.querySelector('#menuJoueursVue .cpj-liste .cpj-joueur[data-cpp="Alice"]').click();
+  await attendre(300);
+  d.querySelector("#cpProfilContenu [data-cpa]").click();
+  await attendre(400);
+  T("retire : la liste se vide sans recharger", appelsAmis.includes("ami-retirer:Alice") && /No friends yet/.test($("menuJoueursVue").textContent) && d.querySelector("#cpProfilContenu [data-cpa]").dataset.cpa === "ajouter");
+  d.querySelector('#cpProfilContenu [data-cpp-fermer]').click();
+  d.querySelector('#menuJoueursVue button[data-cpp="Moi"]').click();
+  await attendre(300);
+  T("sa propre fiche : pas de bouton d'ami", !d.querySelector("#cpProfilContenu [data-cpa]"));
+  w.eval('cppFermer();cp=null;cpjVue()');
+  await attendre(300);
+  T("deconnecte sur Mes amis : retour au tableau de la semaine", !d.querySelector('#menuJoueursVue [data-cpj="amis"]') && d.querySelector('#menuJoueursVue [data-cpj="semaine"]').getAttribute("aria-pressed") === "true");
+  w.eval('cp={pseudo:"Moi"};cpjVue("resolus")');
+  await attendre(300);
+
   /* Tableau complet. */
   w.eval('document.querySelector("[data-cpj-tout]").click()');
   await attendre(400);
@@ -117,7 +162,7 @@ function ouvrir(page) {
   for (const l of LANGUES) {
     if (l.code === "en") continue;
     const dict = require("../langues/" + l.code + "/app.js");
-    const cles = ["Player profile", "Member since {date}", "Could not load this profile.", "Challenge this player", "Your rank: {n}", "My profile"];
+    const cles = ["My friends", "Add to my friends", "Remove from my friends", "No friends yet. Open a player's profile to add them.", "You and your friends, by puzzles solved since Monday.", "Your friends list is full.", "Player profile", "Member since {date}", "Could not load this profile.", "Challenge this player", "Your rank: {n}", "My profile"];
     T(l.code + " : textes de la fiche traduits, variables gardees", cles.every(k => typeof dict[k] === "string" && dict[k] !== k) && dict["Member since {date}"].includes("{date}") && dict["Your rank: {n}"].includes("{n}"));
   }
 

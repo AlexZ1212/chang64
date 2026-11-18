@@ -2,6 +2,49 @@
  {
   "d": "2026-11-18",
   "en": [
+   "A leaderboard just for you and your friends",
+   "Open a player's profile and add them to your friends: you will find them in My friends, under Top players. Nobody is notified, and only you can see your list."
+  ],
+  "fr": [
+   "Un tableau rien que pour toi et tes amis",
+   "Ouvre la fiche d'un joueur et ajoute-le à tes amis : tu le retrouves dans Mes amis, sous Meilleurs joueurs. Personne n'est prévenu, et toi seul vois ta liste."
+  ],
+  "es": [
+   "Una clasificación solo para ti y tus amigos",
+   "Abre el perfil de un jugador y añádelo a tus amigos: lo encontrarás en Mis amigos, dentro de Mejores jugadores. Nadie recibe ningún aviso y solo tú ves tu lista."
+  ],
+  "pt": [
+   "Uma classificação só para você e seus amigos",
+   "Abra o perfil de um jogador e adicione-o aos seus amigos: você o encontra em Meus amigos, dentro de Melhores jogadores. Ninguém é avisado e só você vê a sua lista."
+  ],
+  "de": [
+   "Eine Rangliste nur für dich und deine Freunde",
+   "Öffne das Profil eines Spielers und füge ihn zu deinen Freunden hinzu: Du findest ihn unter Meine Freunde, bei Beste Spieler. Niemand wird benachrichtigt, und nur du siehst deine Liste."
+  ],
+  "ru": [
+   "Таблица только для тебя и твоих друзей",
+   "Открой профиль игрока и добавь его в друзья: он появится в разделе «Мои друзья» внутри «Лучших игроков». Никто не получает уведомлений, а твой список видишь только ты."
+  ],
+  "it": [
+   "Una classifica solo per te e i tuoi amici",
+   "Apri il profilo di un giocatore e aggiungilo ai tuoi amici: lo ritrovi in I miei amici, dentro Migliori giocatori. Nessuno viene avvisato e solo tu vedi la tua lista."
+  ],
+  "tr": [
+   "Sadece sen ve arkadaşların için bir sıralama",
+   "Bir oyuncunun profilini aç ve onu arkadaşlarına ekle: En iyi oyuncular bölümündeki Arkadaşlarım listesinde görürsün. Kimseye haber verilmez ve listeni yalnızca sen görürsün."
+  ],
+  "pl": [
+   "Ranking tylko dla ciebie i twoich znajomych",
+   "Otwórz profil gracza i dodaj go do znajomych: znajdziesz go w sekcji Moi znajomi, w Najlepszych graczach. Nikt nie dostaje powiadomienia, a swoją listę widzisz tylko ty."
+  ],
+  "id": [
+   "Papan peringkat khusus untukmu dan teman-temanmu",
+   "Buka profil seorang pemain dan tambahkan dia ke temanmu: kamu akan menemukannya di Temanku, di dalam Pemain terbaik. Tidak ada yang diberi tahu, dan hanya kamu yang melihat daftarmu."
+  ]
+ },
+ {
+  "d": "2026-11-18",
+  "en": [
    "Player profiles and your rank",
    "In Top players, tap a username to see that player's profile and challenge them. Not in the top 50 yet? Your rank now shows under each list."
   ],

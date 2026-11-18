@@ -84,6 +84,18 @@ CREATE TABLE IF NOT EXISTS blocages (
   PRIMARY KEY (compte_id, bloque_id)
 );
 
+-- Amis (2026-11-18) : la liste des joueurs qu'un membre a ajoutes a ses amis.
+-- Sans demande ni acceptation : personne n'est prevenu, et la liste n'est
+-- visible que de son proprietaire. 100 amis au plus par compte. Effacee avec
+-- le compte de l'un ou de l'autre.
+CREATE TABLE IF NOT EXISTS amis (
+  compte_id INTEGER NOT NULL,
+  ami_id INTEGER NOT NULL,
+  cree INTEGER NOT NULL,
+  PRIMARY KEY (compte_id, ami_id)
+);
+CREATE INDEX IF NOT EXISTS amis_ami ON amis (ami_id);
+
 -- Mini-enquetes de satisfaction (2026-11-17) : une question, une note de 1 a
 -- 5, un commentaire facultatif (500 caracteres au plus). Une reponse au plus
 -- par compte tous les 25 jours. Effacees avec le compte.

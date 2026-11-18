@@ -855,13 +855,29 @@ async function cpjVue(par){
   const v=$("menuJoueursVue");if(!v)return;
   if(par)cpjPar=par;
   const p=cpjPar;
-  const onglets='<div class="cpj-onglets">'+CPJ.map(([k,l])=>'<button type="button" aria-pressed="'+(k===p)+'" data-cpj="'+k+'">'+cpE(l)+"</button>").join("")+"</div>"+
+  const onglets='<div class="cpj-onglets">'+CPJ.concat(cp?[["amis","My friends"]]:[]).map(([k,l])=>'<button type="button" aria-pressed="'+(k===p)+'" data-cpj="'+k+'">'+cpE(l)+"</button>").join("")+"</div>"+
     (p==="semaine"?'<p class="cp-note">'+cpE("Puzzles solved since Monday.")+"</p>":"");
   const pied='<p class="cp-note cp-centre cpj-astuce">'+cpE("Turn your phone sideways to see all the stats at once.")+"</p>"+
     '<button type="button" class="btn cp-large cpj-tout" data-cpj-tout>'+cpE("All the stats")+"</button>"+
     (cp?'<button type="button" class="btn cp-large" data-cpp="'+echapper(cp.pseudo)+'">'+cpE("My profile")+"</button>":"")+
     (cp?"":'<p class="cp-note cp-centre">'+cpE("Create an account to appear here.")+'</p><button type="button" class="btn cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>");
   const dessiner=corps=>{if(p===cpjPar&&!v.hidden)poserHtml(v,onglets+corps+pied);};
+  if(p==="amis"){
+    /* Tableau des amis (2026-11-18) : soi et les joueurs ajoutes depuis leur
+       fiche, classes par exercices de la semaine. Liste privee, lue avec la session. */
+    if(!cp){cpjPar="semaine";return cpjVue();}
+    if(!cpaListe)dessiner('<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");
+    const a=await cpaCharger();
+    if(!a){dessiner('<p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
+    if(!cpListe(a.amis).length){dessiner('<p class="cp-note cp-centre">'+cpE("No friends yet. Open a player's profile to add them.")+"</p>");return;}
+    const la=cpListe(a.amis).concat(a.moi?[a.moi]:[]).sort((x,y)=>cpNombre(y.s)-cpNombre(x.s)||cpNombre(y.r)-cpNombre(x.r)||String(x.p).localeCompare(String(y.p)));
+    dessiner('<p class="cp-note">'+cpE("You and your friends, by puzzles solved since Monday.")+'</p><ol class="cpj-liste">'+la.map((x,i)=>{
+      const m=cp&&x.p===cp.pseudo;
+      return "<li"+(m?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+
+        (m?" <em>("+cpE("You")+")</em>":"")+"</span><b>"+echapper(String(cpNombre(x.s)))+"</b></li>";
+    }).join("")+"</ol>");
+    return;
+  }
   let c=cpjCache[p];
   if(!c||Date.now()-c.t>60000){
     dessiner('<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");
@@ -986,6 +1002,7 @@ async function cppOuvrir(pseudo){
   let j;
   try{j=await cppLire(pseudo);}
   catch(e){if(!f.hidden&&f.dataset.pseudo===String(pseudo))poser(tete(pseudo)+'<p class="cp-msg">'+cpE("Could not load this profile.")+"</p>"+fermer);return;}
+  if(cp&&j.p!==cp.pseudo)await cpaCharger();
   if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
   const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
   poser(tete(j.p)+(mois?'<p class="bilan-sous">'+echapper(t("Member since {date}",{date:mois}))+"</p>":"")+
@@ -993,8 +1010,42 @@ async function cppOuvrir(pseudo){
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";
     }).join("")+"</ul>"+
-    (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>":"")+fermer);
+    (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
+      '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Add to my friends")+"</button>"+
+      '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer);
 }
+/* ---------- Amis ---------- */
+/* Une liste privee de joueurs (2026-11-18), tenue par le serveur (routes amis,
+   ami-ajouter, ami-retirer). On ajoute un joueur depuis sa fiche, sans
+   demande : il n'est pas prevenu et personne d'autre ne voit la liste. Elle
+   donne le tableau "Mes amis" de Meilleurs joueurs. Gardee une minute ici. */
+let cpaListe=null,cpaT=0,cpaPour="";
+async function cpaCharger(force){
+  if(!cp)return null;
+  if(!force&&cpaListe&&cpaPour===cp.pseudo&&Date.now()-cpaT<60000)return cpaListe;
+  const r=await cpApi("GET","amis");
+  if(r.s!==200||!cp)return null;
+  cpaListe=r.j;cpaT=Date.now();cpaPour=cp.pseudo;
+  return cpaListe;
+}
+function cpaEst(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.amis).some(x=>x.p===pseudo));}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-cpa]");
+  if(!b||!cp)return;
+  const pseudo=b.dataset.pseudo||"",ajout=b.dataset.cpa==="ajouter";
+  b.disabled=true;
+  const r=await cpApi("POST",ajout?"ami-ajouter":"ami-retirer",{pseudo:pseudo});
+  if(r.s!==200&&r.s!==201){
+    b.disabled=false;
+    const m=$("cppMsg");if(m)m.textContent=t(r.s===429?"Your friends list is full.":"Could not load the list. Try again later.");
+    return;
+  }
+  await cpaCharger(true);
+  const f=$("cpProfil");
+  if(f&&!f.hidden&&f.dataset.pseudo===pseudo)cppOuvrir(pseudo);
+  const v=$("menuJoueursVue");
+  if(cpjPar==="amis"&&v&&!v.hidden)cpjVue();
+});
 document.addEventListener("click",e=>{
   const o=e.target.closest("[data-cpp]");
   if(o){cppOuvrir(o.dataset.cpp);return;}

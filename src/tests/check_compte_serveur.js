@@ -433,6 +433,53 @@ const avancer = ms => { decalage += ms; };
     T("sans la table defis : l'export et la suppression marchent encore", (await appel("GET", "exporter", undefined, { cookie: r.cookie })).s === 200 && (await appel("POST", "supprimer", { code: code(1) }, { cookie: r.cookie })).s === 200);
   }
 
+  console.log("\nAmis");
+  {
+    env = { DB: fausseD1() };
+    const creer = async (p, n, prog) => (await appel("POST", "creer", { pseudo: p, code: code(n), donnees: { progress: prog } })).cookie;
+    const cA = await creer("Anna", 1, { solved: 40, rating: 1000, days: 2, badges: ["a"], rushBest: 5 });
+    const cB = await creer("Boris", 2, { solved: 80, rating: 1200, days: 6, badges: ["a", "b"], rushBest: 9 });
+    const cC = await creer("Chloe", 3, { solved: 10, rating: 900, days: 1, badges: [], rushBest: 0 });
+    let r = await appel("GET", "amis", undefined, { cookie: cA });
+    T("liste vide au depart, avec ses propres chiffres", r.s === 200 && r.j.amis.length === 0 && r.j.moi.p === "Anna" && r.j.moi.n === 1000 && r.j.moi.r === 40, r.texte);
+    T("sans session : refuse", (await appel("GET", "amis")).s === 401 && (await appel("POST", "ami-ajouter", { pseudo: "Boris" })).s === 401 && (await appel("POST", "ami-retirer", { pseudo: "Boris" })).s === 401);
+    T("autre origine : refuse", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA, origine: "https://mechant.example" })).s === 403);
+    r = await appel("POST", "ami-ajouter", { pseudo: "bORIS" }, { cookie: cA });
+    T("ajouter un ami par son pseudo, casse indifferente", r.s === 201 && r.j.pseudo === "Boris", r.texte);
+    T("ajouter deux fois : une seule ligne", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA })).s === 201 && lignes("SELECT COUNT(*) AS n FROM amis")[0].n === 1);
+    T("s'ajouter soi-meme : refuse", (await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cA })).s === 400);
+    T("pseudo inconnu ou invalide : 404", (await appel("POST", "ami-ajouter", { pseudo: "Personne" }, { cookie: cA })).s === 404 && (await appel("POST", "ami-ajouter", { pseudo: "<b>" }, { cookie: cA })).s === 404 && (await appel("POST", "ami-ajouter", {}, { cookie: cA })).s === 404);
+    await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA });
+    r = await appel("GET", "amis", undefined, { cookie: cA });
+    const boris = r.j.amis.find(x => x.p === "Boris");
+    T("la liste donne les six chiffres de chaque ami, rien d'autre", r.j.amis.length === 2 && r.j.amis.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k") && boris.n === 1200 && boris.r === 80 && boris.j === 6 && boris.b === 2 && boris.k === 9, r.texte);
+    T("la liste n'est pas mise en cache", /no-store/.test(r.h.get("Cache-Control")));
+    T("la liste est privee : l'ami ne voit rien chez lui", (await appel("GET", "amis", undefined, { cookie: cB })).j.amis.length === 0);
+    r = await appel("GET", "exporter", undefined, { cookie: cA });
+    T("l'export contient la liste d'amis", r.s === 200 && JSON.parse(r.texte).amis.sort().join() === "Boris,Chloe", r.texte.slice(0, 300));
+    T("l'export de l'ami ne dit pas qui l'a ajoute", !/Anna/.test((await appel("GET", "exporter", undefined, { cookie: cB })).texte));
+    T("retirer un ami", (await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA })).s === 200 && (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.map(x => x.p).join() === "Boris");
+    T("retirer un inconnu ne casse rien", (await appel("POST", "ami-retirer", { pseudo: "Personne" }, { cookie: cA })).s === 200);
+    /* Plafond. */
+    const now = Date.now();
+    const insC = env.DB.brut.prepare("INSERT INTO comptes (cle, pseudo, pin_hash, secours_hash, cree, vu) VALUES (?, ?, 'h', 's', ?, ?)");
+    const insA = env.DB.brut.prepare("INSERT INTO amis (compte_id, ami_id, cree) VALUES (?, ?, ?)");
+    const idA = lignes("SELECT id FROM comptes WHERE pseudo = 'Anna'")[0].id;
+    for (let i = 0; i < 99; i++) { insC.run("plein" + i, "Plein" + i, now, now); insA.run(idA, lignes("SELECT id FROM comptes WHERE cle = ?", "plein" + i)[0].id, now); }
+    T("100 amis au plus", lignes("SELECT COUNT(*) AS n FROM amis WHERE compte_id = ?", idA)[0].n === 100 && (await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA })).s === 429);
+    T("au plafond, un ami deja la reste accepte", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA })).s === 201);
+    /* Suppression d'un compte : il disparait des listes, et sa liste avec lui. */
+    await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cB });
+    T("supprimer son compte efface sa liste et le retire de celles des autres", (await appel("POST", "supprimer", { code: code(2) }, { cookie: cB })).s === 200 &&
+      lignes("SELECT COUNT(*) AS n FROM amis WHERE compte_id NOT IN (SELECT id FROM comptes) OR ami_id NOT IN (SELECT id FROM comptes)")[0].n === 0 &&
+      !(await appel("GET", "amis", undefined, { cookie: cA })).j.amis.some(x => x.p === "Boris"));
+    /* Sans la table (code publie avant sa creation) : rien d'autre ne casse. */
+    env.DB.brut.exec("DROP TABLE amis");
+    T("sans la table amis : la liste echoue proprement", (await appel("GET", "amis", undefined, { cookie: cA })).s === 500);
+    T("sans la table amis : creation, export et suppression marchent encore", (await appel("POST", "creer", { pseudo: "Derniere", code: code(9) })).s === 201 &&
+      (await appel("GET", "exporter", undefined, { cookie: cA })).s === 200 && (await appel("POST", "supprimer", { code: code(1) }, { cookie: cA })).s === 200);
+  }
+
   console.log("\nTableaux des joueurs");
   {
     const cl = await import(pathToFileURL(path.join(__dirname, "..", "functions", "api", "classement.js")).href);

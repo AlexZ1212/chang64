@@ -80,6 +80,7 @@ const DEFIS_BOITE = 30;              /* en attente chez un destinataire */
 const DEFIS_DUREE = 60 * JOUR;       /* puis efface */
 const DEFIS_LISTE = 30;
 const BLOCAGES_MAX = 200;            /* joueurs bloques par compte */
+const AMIS_MAX = 100;                /* amis par compte */
 const PSEUDO_DELAI = 7 * JOUR;       /* un changement de pseudo par semaine */
 /* Mini-enquetes de satisfaction (table enquetes). */
 const ENQUETE_QUESTIONS = ["site", "interface", "exercices", "ordinateur", "compte"];
@@ -326,6 +327,7 @@ async function nettoyer(env, now) {
      souffrir. */
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id NOT IN (SELECT id FROM comptes) OR bloque_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM amis WHERE compte_id NOT IN (SELECT id FROM comptes) OR ami_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try {
     await env.DB.batch([
       env.DB.prepare("DELETE FROM defis WHERE cree < ?1").bind(now - DEFIS_DUREE),
@@ -421,6 +423,8 @@ async function rExporter(s, env) {
   try { enquetes = (await env.DB.prepare("SELECT question, note, commentaire, langue, cree FROM enquetes WHERE compte_id = ?1 ORDER BY cree DESC").bind(s.id).all()).results || []; } catch (e) {}
   let bloques = [];
   try { bloques = (await env.DB.prepare("SELECT c.pseudo AS p FROM blocages b JOIN comptes c ON c.id = b.bloque_id WHERE b.compte_id = ?1 ORDER BY b.cree DESC").bind(s.id).all()).results || []; } catch (e) {}
+  let amis = [];
+  try { amis = (await env.DB.prepare("SELECT c.pseudo AS p FROM amis a JOIN comptes c ON c.id = a.ami_id WHERE a.compte_id = ?1 ORDER BY a.cree DESC").bind(s.id).all()).results || []; } catch (e) {}
   const export_ = {
     site: "chang64.com",
     a_propos: "Tout ce que chang64 garde sur ce compte. Le code et le code de secours ne sont gardes que sous forme d'empreintes, illisibles : ils ne figurent pas ici. Aucune adresse IP, aucun e-mail, aucun nom n'est enregistre.",
@@ -431,6 +435,7 @@ async function rExporter(s, env) {
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     version: l.version,
     joueurs_bloques: bloques.map(x => x.p),
+    amis: amis.map(x => x.p),
     reponses_aux_enquetes: enquetes.map(x => ({ le: new Date(x.cree).toISOString(), question: x.question, note: x.note, commentaire: x.commentaire, langue: x.langue })),
     defis_entre_membres: defis.map(x => ({ envoye_le: new Date(x.cree).toISOString(), de: x.de, a: x.a, exercices: x.exos, resultat_de: x.r1, secondes_de: x.t1, resultat_a: x.r2, secondes_a: x.t2 })),
     progression: l.donnees ? JSON.parse(l.donnees) : null
@@ -444,6 +449,7 @@ async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM defis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 OR ami_id = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -662,6 +668,36 @@ async function rEnqueteEcrire(s, d, env, now) {
   return r ? json({ ok: true }, 201) : erreur("trop", 429);
 }
 
+/* ---------- Amis (2026-11-18) ---------- */
+/* Une liste privee : les joueurs qu'un membre a ajoutes a ses amis, pour les
+   retrouver dans un tableau a part. Pas de demande, pas d'acceptation, pas de
+   message : l'autre n'est pas prevenu et personne d'autre ne voit la liste.
+   Elle ne montre rien de plus que la fiche publique de chacun (six chiffres).
+   GET amis -> { moi: {p,s,n,r,j,b,k}, amis: [{p,s,n,r,j,b,k}] }
+   POST ami-ajouter { pseudo } / POST ami-retirer { pseudo } */
+const AMIS_CHIFFRES = "c.pseudo AS p, CASE WHEN c.sem = ?2 THEN c.sem_resolus ELSE 0 END AS s, c.note AS n, c.resolus AS r, c.serie AS j, c.badges AS b, c.sprint AS k";
+async function rAmis(s, env, now) {
+  const semaine = lundi(now);
+  const moi = await env.DB.prepare("SELECT " + AMIS_CHIFFRES + " FROM comptes c WHERE c.id = ?1").bind(s.id, semaine).first();
+  const amis = (await env.DB.prepare("SELECT " + AMIS_CHIFFRES + " FROM amis a JOIN comptes c ON c.id = a.ami_id WHERE a.compte_id = ?1 ORDER BY a.cree DESC LIMIT ?3").bind(s.id, semaine, AMIS_MAX).all()).results || [];
+  return json({ semaine, moi, amis });
+}
+async function rAmiAjouter(s, d, env, now) {
+  const c = await compteParPseudo(env, d.pseudo);
+  if (!c) return erreur("inconnu", 404);
+  if (c.id === s.id) return erreur("soi", 400);
+  /* Le plafond est verifie dans l'insertion meme : deux requetes simultanees ne le depassent pas. */
+  await env.DB.prepare("INSERT INTO amis (compte_id, ami_id, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM amis WHERE compte_id = ?1) < ?4 " +
+    "ON CONFLICT(compte_id, ami_id) DO NOTHING").bind(s.id, c.id, now, AMIS_MAX).run();
+  const la = await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).first();
+  return la ? json({ ok: true, pseudo: c.pseudo }, 201) : erreur("trop", 429);
+}
+async function rAmiRetirer(s, d, env) {
+  const c = await compteParPseudo(env, d.pseudo);
+  if (c) await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).run();
+  return json({ ok: true });
+}
+
 /* ---------- Profil public d'un membre (2026-11-18) ---------- */
 /* GET /api/compte/profil?p=<pseudo>, sans session :
      { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k } }
@@ -725,7 +761,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete"], PUT: ["synchro"], POST: ["supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis"], PUT: ["synchro"], POST: ["ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -734,6 +770,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
       if (route === "synchro") return await rSynchroLire(s, env);
       if (route === "defis") return await rDefis(s, env);
       if (route === "enquete") return await rEnqueteLire(s, env, now);
+      if (route === "amis") return await rAmis(s, env, now);
       return await rExporter(s, env);
     }
     const d = await corps(request);
@@ -749,6 +786,8 @@ export async function onRequest({ request, env, params, waitUntil }) {
     if (route === "defi-supprimer") return await rDefiSupprimer(s, d, env);
     if (route === "defi-bloquer") return await rDefiBloquer(s, d, env, now);
     if (route === "defi-debloquer") return await rDefiDebloquer(s, d, env);
+    if (route === "ami-ajouter") return await rAmiAjouter(s, d, env, now);
+    if (route === "ami-retirer") return await rAmiRetirer(s, d, env);
     return await rLien(s, env, now);
   } catch (e) {
     /* Jamais de detail d'erreur dans la reponse. */

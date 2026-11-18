@@ -1065,5 +1065,10 @@ module.exports = {
 "I solved this puzzle on chang64. Your turn:":"Aku memecahkan teka-teki ini di chang64. Giliranmu:",
 /* Recherche de membres (2026-11-18). */
 "Find a member":"Cari anggota",
-"No member found.":"Anggota tidak ditemukan."
+"No member found.":"Anggota tidak ditemukan.",
+/* Reserve aux inscrits (2026-11-18). */
+"Create a free account to open your badge collection: every medal, its story, and what is left to win.":"Buat akun gratis untuk membuka koleksi lencanamu: setiap medali, kisahnya, dan apa yang masih bisa diraih.",
+"Create a free account to see your rating over time and your puzzles day by day.":"Buat akun gratis untuk melihat ratingmu dari waktu ke waktu dan teka-tekimu hari demi hari.",
+"The themes you have earned can be applied with a free account.":"Tema yang sudah kamu raih bisa diterapkan dengan akun gratis.",
+"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Tanpa akun, lima partai terakhir ditampilkan. Buat akun gratis untuk menyimpan seluruh riwayatmu."
 };

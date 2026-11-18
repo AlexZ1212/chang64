@@ -210,6 +210,36 @@ function ouvrir(page) {
   w.eval('localStorage.removeItem("chang64:compteInvite");cp={pseudo:"Moi"}');
   T("presentation : jamais avec un compte", w.eval("cpiDue()") === false);
 
+  /* Reserve aux inscrits (2026-11-18) : collection de badges, graphes des
+     statistiques, theme gagne, historique au-dela de cinq parties. Rien
+     n'est efface : une invitation prend la place. */
+  w.eval("menuFermer();cp=null");
+  T("sans compte : estMembre est faux", w.eval("estMembre()") === false);
+  w.eval('menuOuvrir();menuVue("badges")');
+  await attendre(300);
+  T("sans compte : la collection de badges laisse place a une invitation", !d.querySelector("#menuBadgeGrid .bx-carte, #menuBadgeGrid .badge") && !!d.querySelector('#menuBadgeGrid .membre-invite [data-vue-compte]') && /\/\d+/.test(d.querySelector("#menuBadgeGrid .menu-tuile b").textContent));
+  w.eval('menuVue("stats")');
+  await attendre(300);
+  T("sans compte : les chiffres restent, les graphes sont remplaces", d.querySelectorAll("#menuStats .menu-tuile").length >= 6 && !!d.querySelector("#menuRatingGraph .membre-invite") && !d.querySelector("#menuJoursGraph") && !d.querySelector("#menuRatingGraph svg"));
+  w.eval("history=Array.from({length:8},(x,i)=>({m:'e2e4 e7e5',r:'w',c:'w',t:Date.now()-i*1000}));renderHistory()");
+  T("sans compte : cinq parties dans l'historique, puis l'invitation", d.querySelectorAll("#historyList .history-item").length === 5 && !!d.querySelector("#historyList .membre-invite"), String(d.querySelectorAll("#historyList .history-item").length));
+  w.eval("prog.badges.push('obj_gel');rendreThemes()");
+  T("sans compte : un theme gagne ne s'applique pas, invitation affichee", (w.eval("choisirTheme('glace')"), w.eval("prefTheme") !== "glace") && !!d.querySelector("#themeChoix .membre-invite"));
+  w.eval("menuFermer();choisirTheme('chang')");
+  T("sans compte : le theme offert reste applicable", w.eval("prefTheme") === "chang");
+  /* Avec un compte : tout revient. */
+  w.eval('cp={pseudo:"Moi"};menuOuvrir();menuVue("badges")');
+  await attendre(400);
+  T("avec un compte : la collection de badges est la", d.querySelectorAll("#menuBadgeGrid .bx-carte, #menuBadgeGrid .badge").length > 50 && !d.querySelector("#menuBadgeGrid .membre-invite"), String(d.querySelectorAll("#menuBadgeGrid .bx-carte, #menuBadgeGrid .badge").length));
+  w.eval('menuVue("stats")');
+  await attendre(300);
+  T("avec un compte : les deux graphes sont la", !!d.querySelector("#menuJoursGraph") && !d.querySelector("#menuStats .membre-invite"));
+  w.eval("renderHistory()");
+  T("avec un compte : tout l'historique", d.querySelectorAll("#historyList .history-item").length === 8 && !d.querySelector("#historyList .membre-invite"));
+  w.eval("rendreThemes();choisirTheme('glace')");
+  T("avec un compte : le theme gagne s'applique", w.eval("prefTheme") === "glace" && !d.querySelector("#themeChoix .membre-invite"));
+  w.eval("choisirTheme('chang');menuFermer()");
+
   /* Le serveur n'est appele qu'une fois par joueur dans la minute. */
   T("fiche gardee une minute", demandes.filter(p => p === "Alice").length === 2, demandes.join(","));
 

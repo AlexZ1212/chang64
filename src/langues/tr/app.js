@@ -1065,5 +1065,10 @@ module.exports = {
 "I solved this puzzle on chang64. Your turn:":"Bu bulmacayı chang64'te çözdüm. Sıra sende:",
 /* Recherche de membres (2026-11-18). */
 "Find a member":"Üye ara",
-"No member found.":"Üye bulunamadı."
+"No member found.":"Üye bulunamadı.",
+/* Reserve aux inscrits (2026-11-18). */
+"Create a free account to open your badge collection: every medal, its story, and what is left to win.":"Rozet koleksiyonunu açmak için ücretsiz bir hesap oluştur: her madalya, hikâyesi ve kazanılacak olanlar.",
+"Create a free account to see your rating over time and your puzzles day by day.":"Puanını zaman içinde ve bulmacalarını gün gün görmek için ücretsiz bir hesap oluştur.",
+"The themes you have earned can be applied with a free account.":"Kazandığın temalar ücretsiz bir hesapla uygulanır.",
+"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Hesap olmadan son beş oyun gösterilir. Tüm geçmişini saklamak için ücretsiz bir hesap oluştur."
 };

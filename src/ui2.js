@@ -664,8 +664,20 @@ function drawGraph(plies){
    exactement le ratio du viewBox -- voir .graph.ratinggraph svg en CSS,
    qui fixe ce ratio via aspect-ratio plutot qu'une hauteur figee, pour que
    "meet" n'ait justement jamais besoin d'ajouter de bandes vides. */
+/* Reserve aux inscrits (2026-11-18, accord d'Alexandre) : la collection de
+   badges, les graphes des statistiques, l'application d'un theme gagne et
+   l'historique au-dela des cinq dernieres parties. Rien du jeu n'est ferme et
+   rien n'est efface : a la place, une invitation a creer un compte. cp est
+   le compte ouvert (compte.js, charge apres) : d'ou le try. */
+function estMembre(){try{return !!cp;}catch(e){return false;}}
+function inviteMembre(texte){
+  return '<div class="membre-invite"><p>'+echapper(t(texte))+'</p><button type="button" class="btn primary" data-vue-compte="1">'+echapper(t("Create an account"))+"</button></div>";
+}
+const HISTORIQUE_SANS_COMPTE=5;
 function drawRatingGraph(cible){
   const el=cible&&cible.nodeType?cible:$("ratingGraph"); if(!el)return;
+  if(!estMembre()){el.classList.add("graph-invite");poserHtml(el,inviteMembre("Create a free account to see your rating over time and your puzzles day by day."));return;}
+  el.classList.remove("graph-invite");
   ensureProgFields();
   const hist=prog.ratingHistory;
   const w=300,h=90,padL=30,padR=6,padT=8,padB=16;
@@ -948,7 +960,8 @@ function renderHistory(){
   }
   $("historyNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:history.length});
   poserHtml(box,"");
-  history.forEach((g,i)=>{
+  const montrees=estMembre()?history:history.slice(0,HISTORIQUE_SANS_COMPTE);
+  montrees.forEach((g,i)=>{
     const b=document.createElement("button");
     b.className="history-item";
     const san=sanOf(g.m,g.fen);
@@ -961,6 +974,7 @@ function renderHistory(){
     b.onclick=()=>openHistoryGame(i);
     box.appendChild(b);
   });
+  if(montrees.length<history.length)box.insertAdjacentHTML("beforeend",inviteMembre("Without an account, the last five games are shown. Create a free account to keep your whole history."));
 }
 function sanOf(uciStr,fen){
   const g=fen?new Game(fen):new Game(),out=[];

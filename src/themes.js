@@ -45,8 +45,13 @@ window.storage.get("chang64:prefs").then(s=>{
   try{if(s&&s.value){const d=JSON.parse(s.value);if(THEMES.some(x=>x.id===d.theme))prefTheme=d.theme;}}catch(e){}
   appliquerTheme();
 }).catch(()=>{});
+/* Un theme gagne s'applique avec un compte (2026-11-18, accord d'Alexandre).
+   Chang, le theme offert, reste a tous ; un theme deja applique n'est pas
+   retire. */
+function themeReserve(th){return !!(th&&th.b&&typeof estMembre==="function"&&!estMembre());}
 function choisirTheme(id){
   const th=THEMES.find(x=>x.id===id);if(!th||!themeOuvert(th))return;
+  if(themeReserve(th)&&id!==prefTheme){if(typeof menuOuvrir==="function"){menuOuvrir();menuVue("compte");}return;}
   prefTheme=id;prefBoard="theme";
   appliquerTheme();applyBoardTheme();savePrefs();
   if(typeof announce==="function")announce(t("Theme {name}",{name:themeNom(th)}),"cell");
@@ -69,6 +74,7 @@ function rendreThemes(){
       (ouvert?"":'<span class="theme-verrou'+(th.s&&saisonEnCours(th.s)?" en-saison":"")+'">'+(typeof bxMedaille==="function"?bxMedaille(th.b,false):"")+"<em>"+echapper(th.s?saisonTexte(th.s):(typeof badgeLabel==="function"?badgeLabel({id:th.b}):th.b))+"</em></span>")+
       "</button>";
   }
+  if(THEMES.some(th=>th.b&&themeOuvert(th))&&typeof estMembre==="function"&&!estMembre())h+=inviteMembre("The themes you have earned can be applied with a free account.");
   poserHtml(box,h);
 }
 {

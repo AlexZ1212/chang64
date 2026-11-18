@@ -554,6 +554,15 @@ function bxVisible(b){
 renderBadges=function(el){
   el=el&&el.nodeType?el:$("badgeGrid");if(!el)return;
   ensureProgFields();
+  /* La collection est reservee aux inscrits (2026-11-18) : sans compte, on
+     garde le compte des badges gagnes et une invitation. Les badges se
+     gagnent toujours, et la fenetre Bravo les annonce comme avant. */
+  if(typeof estMembre==="function"&&!estMembre()){
+    const vis=BADGES.filter(bxVisible);
+    poserHtml(el,'<div class="menu-tuiles membre-large"><div class="menu-tuile"><b>'+prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length+"</b><span>"+echapper(t("Badges"))+"</span></div></div>"+
+      inviteMembre("Create a free account to open your badge collection: every medal, its story, and what is left to win."));
+    return;
+  }
   /* Sans les fichiers (pas encore arrives, ou hors ligne au premier
      passage), la grille se dessine quand meme, puis se redessine. */
   if(!bxTextes||!bxMedailles)bxCharger().then(ok=>{if(ok)renderBadges(el);});

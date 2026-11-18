@@ -61,7 +61,9 @@ const minces=Object.keys(counts).filter(th=>counts[th]<SEUIL);
   /* Medailles illustrees (2026-11-15) : les noms ne contiennent plus celui
      du motif ("Punaise !" pour le clouage) ; on lit l'identifiant de chaque
      medaille, theme_<motif>[_10|_100]. */
-  const badgesVisibles=()=>{w.eval("renderBadges()");
+  /* La collection est reservee aux inscrits depuis le 2026-11-18 : le test
+     la regarde donc avec un compte ouvert. */
+  const badgesVisibles=()=>{w.eval("cp=cp||{pseudo:'Test'};renderBadges()");
     return [...d.querySelectorAll("#badgeGrid .badge")].map(b=>b.dataset.bx||"");};
   const cle=th=>"theme_"+th.toLowerCase().replace(/[^a-z]+/g,"_");
   const deMotif=(id,th)=>id===cle(th)||id===cle(th)+"_10"||id===cle(th)+"_100";

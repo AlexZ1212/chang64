@@ -192,6 +192,7 @@ let duelAvant=null;
 function duelOuvrir(html){
   const r=$("duel");if(!r)return;
   poserHtml($("duelContenu"),html);
+  if(typeof popinMedailles==="function")popinMedailles();
   if(r.hidden)duelAvant=document.activeElement;
   r.hidden=false;
   r.classList.remove("bilan-joue");void r.offsetWidth;r.classList.add("bilan-joue");
@@ -202,9 +203,13 @@ function duelFermer(){
   r.hidden=true;
   if(duelAvant&&duelAvant.focus&&document.contains(duelAvant))duelAvant.focus();
 }
-const DUEL_ELEPHANT='<div class="bilan-mascotte" aria-hidden="true"><svg viewBox="0 0 64 64" fill="currentColor"><path fill-rule="evenodd" d="__ELEPHANT_SIGNE__"/></svg></div>';
-function duelTete(titre,sous){
-  return DUEL_ELEPHANT+'<p class="bilan-entete">'+echapper(t("Challenge a friend"))+'</p><h2 id="duelTitre">'+echapper(titre)+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"");
+/* En-tete du modele commun (2026-11-18) : une medaille gravee, plus d'arc ni
+   d'elephant. Deux epees croisees pour un defi a relever ou un resultat, deux
+   maillons pour le defi qu'on vient de preparer. */
+const duelMedaille=id=>'<span class="popin-medaille" data-medaille="'+id+'" aria-hidden="true"></span>';
+const DUEL_FILET='<div class="popin-filet"></div>';
+function duelTete(titre,sous,medaille){
+  return duelMedaille(medaille||"duel_gagne")+'<p class="bilan-entete">'+echapper(t("Challenge a friend"))+'</p><h2 id="duelTitre">'+echapper(titre)+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"");
 }
 function duelTuiles(j){
   return '<div class="bilan-tuiles"><div class="bilan-tuile" style="--i:0"><b>'+duelPremiers(j.r)+"/"+DUEL_N+"</b><span>"+echapper(t("First try"))+'</span></div><div class="bilan-tuile" style="--i:1"><b>'+duelTemps(j.t)+"</b><span>"+echapper(t("Time"))+"</span></div></div>";
@@ -238,8 +243,8 @@ function duelVueCree(ids,moi){
   const pc=duelPremiers(moi.r);
   const titre=pc===DUEL_N?t("Flawless!"):pc>=3?t("Well played!"):t("Challenge ready");
   duelLienCourant=()=>duelLien(ids,Object.assign({},moi,{n:duelNomCourant()}),null);
-  duelOuvrir(duelTete(titre,t("Send the link: your friend plays the same five puzzles and tries to beat you."))+
-    duelTuiles(moi)+'<div class="duel-seul">'+duelPoints(moi.r)+"</div>"+
+  duelOuvrir(duelTete(titre,t("Send the link: your friend plays the same five puzzles and tries to beat you."),"duel_lien")+
+    duelTuiles(moi)+'<div class="duel-seul">'+duelPoints(moi.r)+"</div>"+DUEL_FILET+
     duelPartage(t("I challenge you on chang64: five puzzles, can you beat my score?"))+
     '<button type="button" class="btn duel-fermer" data-duel-fermer>'+echapper(t("Close"))+"</button>");
   duelMajLien();
@@ -249,7 +254,7 @@ function duelVueReponse(ids,adv,moi){
   const titre=c>0?t("You win!"):c<0?t("{name} wins!",{name:nomAdv}):t("Perfect tie!");
   duelLienCourant=()=>duelLien(ids,adv,Object.assign({},moi,{n:duelNomCourant()}));
   duelOuvrir(duelTete(titre,t("Send your answer so {name} sees the result.",{name:nomAdv}))+
-    '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(nomAdv,adv,c<0)+"</ul>"+
+    '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(nomAdv,adv,c<0)+"</ul>"+DUEL_FILET+
     duelPartage(t("I took up your chang64 challenge, here is my result:"))+
     '<div class="duel-boutons"><button type="button" class="btn" data-duel-nouveau>'+echapper(t("New challenge"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Close"))+"</button></div>");
   duelMajLien();
@@ -265,7 +270,7 @@ function duelRecu(d){
     const titre=c===0?t("Perfect tie!"):moiA?(c>0?t("You win!"):t("{name} wins!",{name:nomB})):t("{name} wins!",{name:c>0?nomA:nomB});
     duelLienCourant=null;
     duelOuvrir(duelTete(titre,moiA?t("{name} took up your challenge.",{name:nomB}):t("Challenge result"))+
-      '<ul class="duel-tableau">'+duelLigne(nomA,d.a,c>0)+duelLigne(nomB,d.b,c<0)+"</ul>"+
+      '<ul class="duel-tableau">'+duelLigne(nomA,d.a,c>0)+duelLigne(nomB,d.b,c<0)+"</ul>"+DUEL_FILET+
       '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-nouveau data-duel-premier>'+echapper(t("Rematch"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Close"))+"</button></div>");
     return;
   }
@@ -273,7 +278,7 @@ function duelRecu(d){
   duelOuvrir(duelTete(nom?t("{name} challenges you!",{name:nom}):t("A friend challenges you!"),
       t("Five puzzles, the same for both of you. The score to beat:"))+
     duelTuiles(d.a)+'<div class="duel-seul">'+duelPoints(d.a.r)+"</div>"+
-    '<p class="duel-regle">'+echapper(t("A puzzle found on the first try scores a point. If you are level, the faster player wins."))+"</p>"+
+    '<p class="duel-regle">'+echapper(t("A puzzle found on the first try scores a point. If you are level, the faster player wins."))+"</p>"+DUEL_FILET+
     '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-relever data-duel-premier>'+echapper(t("Take the challenge"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Not now"))+"</button></div>");
   $("duel").dataset.ids=duelEnc(d.ids);
   $("duel")._adv=d.a;

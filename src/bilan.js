@@ -32,6 +32,24 @@ function bilanSeance(){
   };
 }
 {const av=registerWrong;registerWrong=function(){if(bilanS)bilanS.suite=0;return av.apply(this,arguments);};}
+/* Medaille du haut des fenetres hors badges (2026-11-18) : un element
+   <span class="popin-medaille" data-medaille="identifiant"> recoit le dessin
+   grave de ce badge, en or, des que les dessins sont charges. Le meme modele
+   sert au bilan, aux defis et a la presentation du compte. */
+function popinMedailles(){
+  const poser=()=>{
+    if(typeof bxMedailles==="undefined"||!bxMedailles||typeof bxMedaille!=="function")return;
+    for(const e of document.querySelectorAll(".popin-medaille[data-medaille]")){
+      const id=e.dataset.medaille,md=bxMedailles[id];
+      if(!Array.isArray(md)||e.dataset.pose===id)continue;
+      const avant=md[0];md[0]="or";
+      try{poserHtml(e,bxMedaille(id,true));}finally{md[0]=avant;}
+      e.dataset.pose=id;
+    }
+  };
+  poser();
+  if(typeof bxCharger==="function")bxCharger().then(poser);
+}
 function bilanTenter(){
   if(!bilanAttente)return;
   const br=$("bravo"),an=document.getElementById("objAnnonce");
@@ -61,9 +79,8 @@ function bilanOuvrir(){
   const gagnes=prog.badges.slice(s.badges);s.badges=prog.badges.length;
   poserHtml($("bilanBadges"),gagnes.slice(0,6).map(id=>bxMedaille(id,true)).join(""));
   $("bilanBadgesBloc").hidden=!gagnes.length;
-  /* L'elephant du logo. */
-  /* Le signe officiel (src/ds/signe.svg), avec son oeil : evenodd. */
-  poserHtml($("bilanMascotte"),'<svg viewBox="0 0 64 64" fill="currentColor"><path fill-rule="evenodd" d="__ELEPHANT_SIGNE__"/></svg>');
+  /* La medaille du haut (modele commun des fenetres, voir popinMedailles). */
+  popinMedailles();
   r.hidden=false;
   r.classList.remove("bilan-joue");void r.offsetWidth;r.classList.add("bilan-joue");
   if(typeof SON!=="undefined"&&SON.medaille)SON.medaille(0.3,true);

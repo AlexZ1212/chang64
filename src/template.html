@@ -2000,9 +2000,14 @@ html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-co
 .bilan[hidden]{display:none}
 .bilan-fenetre{position:relative;overflow:hidden;width:100%;max-width:360px;margin:auto 0;padding:22px 20px 20px;box-sizing:border-box;text-align:center;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2);color:var(--chalk)}
 .bilan-fenetre::before{content:"";position:absolute;left:-20%;right:-20%;top:-56px;height:152px;border-radius:0 0 50% 50%;background-image:linear-gradient(155deg,var(--arc-a) 0%,var(--arc-b) 100%)}
-.bilan-mascotte{position:relative;width:76px;height:64px;margin:0 auto 14px;color:var(--brass)}
-.bilan-mascotte svg{width:100%;height:100%}
-.bilan-joue .bilan-mascotte{animation:bilanSaut .9s var(--courbe-ressort) .1s both}
+/* Modele commun des fenetres hors badges (2026-11-18, demande d'Alexandre) :
+   une medaille gravee en haut, le titre, le texte, un filet, les boutons.
+   L'arc de couleur reste a la fenetre des badges (.bravo-fenetre). */
+.bilan-fenetre::before{display:none}
+.popin-medaille{position:relative;display:block;width:84px;height:84px;margin:2px auto 12px}
+.popin-medaille svg{width:100%;height:100%}
+.popin-filet{position:relative;height:0;margin:2px 0 14px;border-top:1px solid var(--rule)}
+.bilan-joue .popin-medaille{animation:bilanSaut .9s var(--courbe-ressort) .1s both}
 @keyframes bilanSaut{0%{transform:translateY(20px) scale(.6);opacity:0}45%{transform:translateY(-14px) scale(1.05);opacity:1}70%{transform:translateY(0) scale(.97,1.03)}100%{transform:none}}
 .bilan-entete{position:relative;margin:0;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}
 .bilan h2{position:relative;margin:4px 0 2px;font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;line-height:1.2}
@@ -2020,7 +2025,7 @@ html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-co
 .bilan-badges{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
 .bilan-badges .bx-medaille{width:42px;height:42px}
 .bilan .btn{position:relative;min-width:170px}
-html[data-mouvement="calme"] .bilan-mascotte,html[data-mouvement="calme"] .bilan-tuile{animation:none!important}
+html[data-mouvement="calme"] .popin-medaille,html[data-mouvement="calme"] .bilan-tuile{animation:none!important}
 
 /* Sous-vue Objectif du jour (2026-11-15) : grand anneau, jours vers le
    prochain gel (7 pastilles qui s'allument une a une), gels en reserve. */
@@ -2217,7 +2222,6 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 /* Fiche d'un membre (2026-11-18) : au-dessus du tableau complet (410). */
 .cpp{z-index:420}
 .cpp .bilan-fenetre{padding-top:18px}
-.cpp .bilan-fenetre::before{display:none}
 .cpp-tete{display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--rule);text-align:left}
 .cpp-picto{flex:none;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background-color:var(--ink);border:1px solid var(--rule);color:var(--brass)}
 .cpp-medaille{width:60px;height:60px;background:none;border:0;border-radius:0}
@@ -2237,11 +2241,8 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cp-champ select:focus-visible{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 .cp-msg.cp-ok{color:var(--sage)}
 /* Presentation du compte en trois etapes. */
-.cpi .bilan-fenetre::before{display:none}
-.cpi-medaille{display:block;width:84px;height:84px;margin:2px auto 12px}
-.cpi-medaille svg{width:100%;height:100%}
 .cpi-texte{position:relative;margin:6px 0 14px;font-size:14.5px;line-height:1.55;color:var(--chalk)}
-.cpi-points{position:relative;display:flex;justify-content:center;gap:7px;margin:0 0 14px;padding-top:14px;border-top:1px solid var(--rule)}
+.cpi-points{position:relative;display:flex;justify-content:center;gap:7px;margin:0 0 14px}
 .cpi-points i{width:7px;height:7px;border-radius:50%;background-color:var(--rule)}
 .cpi-points i.ici{background-color:var(--brass)}
 .cpi .btn{display:block;width:100%;margin-top:8px}
@@ -3503,7 +3504,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
   <!-- Bilan de seance (2026-11-15, voir bilan.js). -->
   <div class="bilan" id="bilan" role="dialog" aria-modal="true" aria-labelledby="bilanTitre" hidden>
     <div class="bilan-fenetre">
-      <div class="bilan-mascotte" id="bilanMascotte" aria-hidden="true"></div>
+      <span class="popin-medaille" id="bilanMascotte" data-medaille="_bilan" aria-hidden="true"></span>
       <p class="bilan-entete" id="bilanEntete">Session summary</p>
       <h2 id="bilanTitre">Well played!</h2>
       <p class="bilan-sous" id="bilanSous"></p>
@@ -3514,6 +3515,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
       <!-- Mini-enquete de satisfaction (2026-11-17, compte.js) : pour les joueurs connectes, de temps en temps. -->
       <div class="bilan-enquete" id="bilanEnquete" hidden></div>
       <div class="bilan-app" id="bilanCompte" hidden><span id="bilanCompteTexte"></span><button type="button" class="btn" id="bilanCompteBouton">Create an account</button></div>
+      <div class="popin-filet"></div>
       <button type="button" class="btn primary" id="bilanOk">Continue</button>
     </div>
   </div>

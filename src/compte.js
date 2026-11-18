@@ -1025,12 +1025,7 @@ const CPI_FOIS=2,CPI_ECART=14*864e5,CPI_EXERCICES=5;
    pictogrammes aussi soignes que les badges) : la carte de membre, les deux
    silhouettes, le buste du profil. */
 const CPI_MEDAILLES=["mb_compte","mb_ami","_profil"];
-function cpiMedaille(){
-  const id=CPI_MEDAILLES[cpiEtape],md=typeof bxMedailles!=="undefined"&&bxMedailles&&bxMedailles[id];
-  if(!md||typeof bxMedaille!=="function")return '<span class="cpi-medaille" aria-hidden="true"></span>';
-  const avant=md[0];md[0]="or";
-  try{return '<span class="cpi-medaille" aria-hidden="true">'+bxMedaille(id,true)+"</span>";}finally{md[0]=avant;}
-}
+function cpiMedaille(){return '<span class="popin-medaille" data-medaille="'+CPI_MEDAILLES[cpiEtape]+'" aria-hidden="true"></span>';}
 let cpiEtape=0,cpiAttente=false,cpiAvant=null;
 function cpiEtat(){const e=cpLire("chang64:compteInvite");return e&&typeof e==="object"&&!Array.isArray(e)?e:{n:0,t:0};}
 function cpiDue(){
@@ -1043,9 +1038,10 @@ function cpiDessiner(){
   const [titre,texte]=CPI_ETAPES[cpiEtape],fin=cpiEtape===CPI_ETAPES.length-1;
   poserHtml(c,cpiMedaille()+'<p class="bilan-entete">'+cpE("Why create an account?")+'</p><h2 id="cpInviteTitre">'+cpE(titre)+"</h2>"+
     '<p class="cpi-texte">'+cpE(texte)+"</p>"+
-    '<p class="cpi-points" role="img" aria-label="'+echapper(t("Step {n} of 3",{n:cpiEtape+1}))+'">'+CPI_ETAPES.map((x,i)=>"<i"+(i===cpiEtape?' class="ici"':"")+"></i>").join("")+"</p>"+
+    '<div class="popin-filet"></div><p class="cpi-points" role="img" aria-label="'+echapper(t("Step {n} of 3",{n:cpiEtape+1}))+'">'+CPI_ETAPES.map((x,i)=>"<i"+(i===cpiEtape?' class="ici"':"")+"></i>").join("")+"</p>"+
     '<button type="button" class="btn primary" data-cpi="'+(fin?"creer":"suite")+'">'+cpE(fin?"Create an account":"Next")+"</button>"+
     '<button type="button" class="btn" data-cpi="fermer">'+cpE("Not now")+"</button>");
+  if(typeof popinMedailles==="function")popinMedailles();
   const b=c.querySelector("[data-cpi]");if(b)b.focus();
 }
 function cpiOuvrir(){
@@ -1053,8 +1049,7 @@ function cpiOuvrir(){
   const e=cpiEtat();cpEcrire("chang64:compteInvite",{n:cpNombre(e.n)+1,t:Date.now()});
   cpiAvant=document.activeElement;cpiEtape=0;
   f.hidden=false;
-  /* Les dessins des medailles arrivent a la demande : on redessine a leur arrivee. */
-  if(typeof bxCharger==="function"&&!(typeof bxMedailles!=="undefined"&&bxMedailles))bxCharger().then(()=>{if(!f.hidden)cpiDessiner();});
+
   f.classList.remove("bilan-joue");void f.offsetWidth;f.classList.add("bilan-joue");
   cpiDessiner();
 }

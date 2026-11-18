@@ -480,6 +480,7 @@ async function rExporter(s, env) {
     site: "chang64.com",
     a_propos: "Tout ce que chang64 garde sur ce compte. Le code et le code de secours ne sont gardes que sous forme d'empreintes, illisibles : ils ne figurent pas ici. Aucune adresse IP, aucun e-mail, aucun nom n'est enregistre.",
     pseudo: l.pseudo,
+    pays: await paysLire(env, s.id),
     cree_le: new Date(l.cree).toISOString(),
     derniere_activite: new Date(l.vu).toISOString(),
     appareils_connectes: n ? n.n : 0,
@@ -719,6 +720,22 @@ async function rEnqueteEcrire(s, d, env, now) {
   return r ? json({ ok: true }, 201) : erreur("trop", 429);
 }
 
+/* ---------- Pays de la fiche (2026-11-18) ---------- */
+/* Le joueur choisit son pays lui-meme, dans Mon compte : un code a deux
+   lettres, ou rien. Rien n'est deduit de sa connexion. La lecture est a part
+   et protegee : tant que la colonne n'existe pas dans la base, tout le reste
+   du compte marche. */
+const paysValide = p => typeof p === "string" && /^([A-Z]{2})?$/.test(p);
+async function paysLire(env, id) {
+  try { const l = await env.DB.prepare("SELECT pays FROM comptes WHERE id = ?1").bind(id).first(); return l && paysValide(l.pays) ? l.pays : ""; }
+  catch (e) { return ""; }
+}
+async function rPays(s, d, env) {
+  if (!paysValide(d.pays)) return erreur("requete", 400);
+  await env.DB.prepare("UPDATE comptes SET pays = ?2 WHERE id = ?1").bind(s.id, d.pays).run();
+  return json({ ok: true, pays: d.pays });
+}
+
 /* ---------- Amis (2026-11-18) ---------- */
 /* Une liste privee : les joueurs qu'un membre a ajoutes a ses amis, pour les
    retrouver dans un tableau a part. Pas de demande, pas d'acceptation, pas de
@@ -727,10 +744,14 @@ async function rEnqueteEcrire(s, d, env, now) {
    GET amis -> { moi: {p,s,n,r,j,b,k}, amis: [{p,s,n,r,j,b,k}] }
    POST ami-ajouter { pseudo } / POST ami-retirer { pseudo } */
 const AMIS_CHIFFRES = "c.pseudo AS p, CASE WHEN c.sem = ?2 THEN c.sem_resolus ELSE 0 END AS s, c.note AS n, c.resolus AS r, c.serie AS j, c.badges AS b, c.sprint AS k";
+/* m = 1 quand l'ami a lui aussi ajoute le joueur (2026-11-18) : les deux se
+   voient alors comme amis. C'est le seul cas ou l'on apprend qu'un autre
+   joueur vous a ajoute, et il faut l'avoir ajoute soi-meme. */
+const AMIS_RECIPROQUE = "EXISTS (SELECT 1 FROM amis x WHERE x.compte_id = a.ami_id AND x.ami_id = a.compte_id) AS m";
 async function rAmis(s, env, now) {
   const semaine = lundi(now);
   const moi = await env.DB.prepare("SELECT " + AMIS_CHIFFRES + " FROM comptes c WHERE c.id = ?1").bind(s.id, semaine).first();
-  const amis = (await env.DB.prepare("SELECT " + AMIS_CHIFFRES + " FROM amis a JOIN comptes c ON c.id = a.ami_id WHERE a.compte_id = ?1 ORDER BY a.cree DESC LIMIT ?3").bind(s.id, semaine, AMIS_MAX).all()).results || [];
+  const amis = (await env.DB.prepare("SELECT " + AMIS_CHIFFRES + ", " + AMIS_RECIPROQUE + " FROM amis a JOIN comptes c ON c.id = a.ami_id WHERE a.compte_id = ?1 ORDER BY a.cree DESC LIMIT ?3").bind(s.id, semaine, AMIS_MAX).all()).results || [];
   return json({ semaine, moi, amis });
 }
 async function rAmiAjouter(s, d, env, now) {
@@ -751,7 +772,7 @@ async function rAmiRetirer(s, d, env) {
 
 /* ---------- Profil public d'un membre (2026-11-18) ---------- */
 /* GET /api/compte/profil?p=<pseudo>, sans session :
-     { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k }, bl: [identifiants de badges] }
+     { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k }, bl: [identifiants de badges], pays: "FR" ou "" }
    bl (2026-11-18) : les badges gagnes, du plus ancien au plus recent, lus dans
    la progression gardee ; seuls des identifiants simples sortent (lettres
    minuscules, chiffres, tiret bas), 400 au plus.
@@ -776,7 +797,7 @@ async function rProfil(request, env, now, waitUntil) {
   const cache = typeof caches !== "undefined" && caches.default ? caches.default : null;
   const cle = new Request(new URL("/api/compte/profil?p=" + encodeURIComponent(v.cle), request.url).toString());
   if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
-  const c = await env.DB.prepare("SELECT pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees FROM comptes WHERE cle = ?1").bind(v.cle).first();
+  const c = await env.DB.prepare("SELECT id, pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees FROM comptes WHERE cle = ?1").bind(v.cle).first();
   if (!c) return erreur("inconnu", 404);
   let bl = [];
   try {
@@ -790,7 +811,7 @@ async function rProfil(request, env, now, waitUntil) {
     p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
     s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint,
     rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k) },
-    bl
+    bl, pays: await paysLire(env, c.id)
   }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
   if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));
   return rep;
@@ -821,12 +842,12 @@ export async function onRequest({ request, env, params, waitUntil }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis"], PUT: ["synchro"], POST: ["ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
     if (m === "GET") {
-      if (route === "etat") return json({ pseudo: s.pseudo, version: s.version, cree: s.cree });
+      if (route === "etat") return json({ pseudo: s.pseudo, version: s.version, cree: s.cree, pays: await paysLire(env, s.id) });
       if (route === "synchro") return await rSynchroLire(s, env);
       if (route === "defis") return await rDefis(s, env);
       if (route === "enquete") return await rEnqueteLire(s, env, now);
@@ -846,6 +867,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     if (route === "defi-supprimer") return await rDefiSupprimer(s, d, env);
     if (route === "defi-bloquer") return await rDefiBloquer(s, d, env, now);
     if (route === "defi-debloquer") return await rDefiDebloquer(s, d, env);
+    if (route === "pays") return await rPays(s, d, env);
     if (route === "ami-ajouter") return await rAmiAjouter(s, d, env, now);
     if (route === "ami-retirer") return await rAmiRetirer(s, d, env);
     return await rLien(s, env, now);

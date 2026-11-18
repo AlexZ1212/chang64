@@ -547,6 +547,7 @@ function cpVue(ecran,donnees){
     h='<div class="cp-carte"><b>'+echapper(cp.pseudo)+'</b><span class="'+(perdue||cpEtatSync==="hors-ligne"?"cp-alerte":"")+'">'+echapper(etat)+"</span></div>"+msg+
       (perdue?'<button type="button" class="btn primary cp-large" data-cp="connexion">'+cpE("Log in")+"</button>":
       '<button type="button" class="btn cp-large" id="cpSync">'+cpE("Sync now")+"</button>"+
+      '<p class="tiroir-section">'+cpE("My profile")+"</p>"+cpyChoix(cp.pays||"")+
       '<p class="tiroir-section">'+cpE("My devices")+"</p>"+
       '<button type="button" class="tiroir-lien" data-cp="appareil"><span>'+cpE("Add a device")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("Security")+"</p>"+
@@ -874,7 +875,7 @@ async function cpjVue(par){
     dessiner('<p class="cp-note">'+cpE("You and your friends, by puzzles solved since Monday.")+'</p><ol class="cpj-liste">'+la.map((x,i)=>{
       const m=cp&&x.p===cp.pseudo;
       return "<li"+(m?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+
-        (m?" <em>("+cpE("You")+")</em>":"")+"</span><b>"+echapper(String(cpNombre(x.s)))+"</b></li>";
+        (m?" <em>("+cpE("You")+")</em>":x.m?" <em>("+cpE("Friend")+")</em>":"")+"</span><b>"+echapper(String(cpNombre(x.s)))+"</b></li>";
     }).join("")+"</ol>");
     return;
   }
@@ -964,6 +965,120 @@ document.addEventListener("click",e=>{
   if(tri){const k=tri.dataset.cpjTri;if(k===cpjTri)cpjSens=-cpjSens;else{cpjTri=k;cpjSens=-1;}cpjGrandDessiner();const n=document.querySelector('#cpjGrand [data-cpj-tri="'+k+'"]');if(n)n.focus();}
 });
 
+/* ---------- Pays de la fiche ---------- */
+/* Le joueur choisit son pays dans Mon compte (2026-11-18), ou rien : il
+   s'affiche sur sa fiche. Les noms viennent du navigateur (Intl), dans la
+   langue de la page : rien a traduire. Le petit drapeau est un emoji ; Windows
+   ne les dessine pas (il affiche deux lettres), on s'y contente du nom. */
+const CPY_CODES="AD AE AF AG AI AL AM AO AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GT GU GW GY HK HN HR HT HU ID IE IL IM IN IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW".split(" ");
+function cpyNom(code){try{return new Intl.DisplayNames([LANG_INTL],{type:"region"}).of(code)||code;}catch(e){return code;}}
+function cpyDrapeau(code){
+  if(/Windows/i.test((typeof navigator!=="undefined"&&navigator.userAgent)||""))return "";
+  try{return String.fromCodePoint(127397+code.charCodeAt(0),127397+code.charCodeAt(1));}catch(e){return "";}
+}
+function cpyLigne(code){
+  if(typeof code!=="string"||!CPY_CODES.includes(code))return "";
+  const d=cpyDrapeau(code);
+  return (d?d+" ":"")+cpyNom(code);
+}
+function cpyChoix(actuel){
+  let tri;
+  try{const c=new Intl.Collator(LANG_INTL);tri=(a,b)=>c.compare(a[1],b[1]);}catch(e){tri=(a,b)=>a[1]<b[1]?-1:a[1]>b[1]?1:0;}
+  const l=CPY_CODES.map(c=>[c,cpyNom(c)]).sort(tri);
+  return '<label class="cp-champ" for="cpPays"><span>'+cpE("Country")+'</span><select id="cpPays"><option value="">'+cpE("Not shown")+"</option>"+
+    l.map(([c,n])=>'<option value="'+c+'"'+(c===actuel?" selected":"")+">"+echapper(n)+"</option>").join("")+
+    "</select><small>"+cpE("Shown on your player profile. Optional.")+"</small></label>";
+}
+/* Le pays connu du serveur, lu une fois par appareil. */
+async function cpyLire(){
+  if(!cp||typeof cp.pays==="string")return;
+  const r=await cpApi("GET","etat");
+  if(r.s!==200||!cp)return;
+  cp.pays=typeof r.j.pays==="string"?r.j.pays:"";cpSauver();
+  const s=$("cpPays");if(s)s.value=cp.pays;
+}
+document.addEventListener("change",async e=>{
+  if(!e.target||e.target.id!=="cpPays"||!cp)return;
+  const s=e.target,v=s.value;
+  s.disabled=true;
+  const r=await cpApi("POST","pays",{pays:v});
+  s.disabled=false;
+  if(r.s===200){cp.pays=v;cpSauver();cppCache={};cpMessage(t("Saved."),true);}
+  else{s.value=cp.pays||"";cpMessage(cpErreur(r));}
+});
+{const av=cpVue;cpVue=function(ecran){const r=av.apply(this,arguments);if(ecran==="connecte")cpyLire();return r;};}
+
+/* ---------- Presentation du compte en trois etapes ---------- */
+/* Une fenetre qui explique le compte a qui n'en a pas (2026-11-18, demande
+   d'Alexandre) : ce qu'il garde, ce qu'il ouvre avec les autres joueurs, ce
+   qu'il demande. Elle vient a la fin d'un exercice (cinq reussis au moins) ou
+   d'une partie contre l'ordinateur, jamais pendant, et jamais par-dessus une
+   autre fenetre. Deux fois au plus, a quatorze jours d'ecart ; plus jamais
+   une fois le compte cree. */
+const CPI_ETAPES=[
+  ["Keep your progress","Your rating, your badges and your streak follow you on your phone, tablet and computer. Nothing is lost if you change device."],
+  ["Play with the others","Appear in Top players, challenge a member on five puzzles, and compare your week with your friends."],
+  ["A username and a code","That is all we ask: no name, no email address. It is free, and you can delete your account at any time."]];
+const CPI_FOIS=2,CPI_ECART=14*864e5,CPI_EXERCICES=5;
+let cpiEtape=0,cpiAttente=false,cpiAvant=null;
+function cpiEtat(){const e=cpLire("chang64:compteInvite");return e&&typeof e==="object"&&!Array.isArray(e)?e:{n:0,t:0};}
+function cpiDue(){
+  if(cp)return false;
+  const e=cpiEtat();
+  return cpNombre(e.n)<CPI_FOIS&&!(cpNombre(e.t)&&Date.now()-cpNombre(e.t)<CPI_ECART);
+}
+function cpiDessiner(){
+  const c=$("cpInviteContenu");if(!c)return;
+  const [titre,texte]=CPI_ETAPES[cpiEtape],fin=cpiEtape===CPI_ETAPES.length-1;
+  poserHtml(c,(typeof DUEL_ELEPHANT==="string"?DUEL_ELEPHANT:"")+'<p class="bilan-entete">'+cpE("Why create an account?")+'</p><h2 id="cpInviteTitre">'+cpE(titre)+"</h2>"+
+    '<p class="cpi-texte">'+cpE(texte)+"</p>"+
+    '<p class="cpi-points" role="img" aria-label="'+echapper(t("Step {n} of 3",{n:cpiEtape+1}))+'">'+CPI_ETAPES.map((x,i)=>"<i"+(i===cpiEtape?' class="ici"':"")+"></i>").join("")+"</p>"+
+    '<button type="button" class="btn primary" data-cpi="'+(fin?"creer":"suite")+'">'+cpE(fin?"Create an account":"Next")+"</button>"+
+    '<button type="button" class="btn" data-cpi="fermer">'+cpE("Not now")+"</button>");
+  const b=c.querySelector("[data-cpi]");if(b)b.focus();
+}
+function cpiOuvrir(){
+  const f=$("cpInvite");if(!f||!f.hidden)return;
+  const e=cpiEtat();cpEcrire("chang64:compteInvite",{n:cpNombre(e.n)+1,t:Date.now()});
+  cpiAvant=document.activeElement;cpiEtape=0;
+  f.hidden=false;
+  f.classList.remove("bilan-joue");void f.offsetWidth;f.classList.add("bilan-joue");
+  cpiDessiner();
+}
+function cpiFermer(){
+  const f=$("cpInvite");if(!f||f.hidden)return;
+  f.hidden=true;
+  if(cpiAvant&&cpiAvant.focus&&document.contains(cpiAvant))cpiAvant.focus();
+}
+/* Apres la fin d'un exercice ou d'une partie : on laisse d'abord passer les
+   felicitations, le bilan et les defis, puis on se montre si rien n'occupe l'ecran. */
+function cpiTenter(essais){
+  if(!cpiAttente)return;
+  if(!cpiDue()){cpiAttente=false;return;}
+  const br=$("bravo"),an=document.getElementById("objAnnonce"),bi=$("bilan"),ti=$("menuTiroir");
+  const occupe=(typeof bravoOccupe==="function"&&bravoOccupe())||(br&&!br.hidden)||(typeof bravoFile!=="undefined"&&bravoFile&&bravoFile.length)||(an&&an.classList.contains("visible"))||
+    (typeof objFile!=="undefined"&&objFile.length)||(bi&&!bi.hidden)||(typeof duelOuvert==="function"&&duelOuvert())||(typeof duel!=="undefined"&&duel)||(typeof rush!=="undefined"&&rush)||(ti&&!ti.hidden);
+  if(occupe){if((essais||0)<40)setTimeout(()=>cpiTenter((essais||0)+1),1500);else cpiAttente=false;return;}
+  cpiAttente=false;cpiOuvrir();
+}
+function cpiProposer(){
+  if(cpiAttente||!cpiDue())return;
+  cpiAttente=true;setTimeout(()=>cpiTenter(0),2500);
+}
+if(typeof finishPuzzle==="function"){const av=finishPuzzle;finishPuzzle=function(won){const r=av.apply(this,arguments);if(won&&typeof prog!=="undefined"&&cpNombre(prog.solved)>=CPI_EXERCICES)cpiProposer();return r;};}
+if(typeof saveFinishedGame==="function"){const av=saveFinishedGame;saveFinishedGame=function(){const avant=typeof gameSaved!=="undefined"&&gameSaved,r=av.apply(this,arguments);if(!avant&&typeof gameSaved!=="undefined"&&gameSaved)cpiProposer();return r;};}
+document.addEventListener("click",e=>{
+  const f=$("cpInvite");if(!f||f.hidden)return;
+  const b=e.target.closest("[data-cpi]");
+  if(b&&b.dataset.cpi==="suite"){cpiEtape=Math.min(CPI_ETAPES.length-1,cpiEtape+1);cpiDessiner();return;}
+  if(b&&b.dataset.cpi==="creer"){cpiFermer();menuOuvrir();menuVue("compte");return;}
+  if((b&&b.dataset.cpi==="fermer")||e.target===f)cpiFermer();
+});
+document.addEventListener("keydown",e=>{
+  const f=$("cpInvite");
+  if(e.key==="Escape"&&f&&!f.hidden){e.stopPropagation();e.preventDefault();cpiFermer();}
+},true);
+
 /* ---------- Badges de membre ---------- */
 /* Cinq badges lies au compte (2026-11-18) : avoir un compte, envoyer un defi
    a un membre, ajouter un ami, entrer dans les 10 premiers d'un tableau,
@@ -1024,7 +1139,7 @@ async function cppOuvrir(pseudo){
     const avant=md[0];md[0]=metal;
     try{return '<span class="cpp-picto cpp-medaille" aria-hidden="true">'+bxMedaille("_profil",true)+"</span>";}finally{md[0]=avant;}
   };
-  const tete=(nom,sous,rangs)=>'<div class="cpp-tete">'+medaille(rangs)+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
+  const tete=(nom,sous,rangs,pays)=>'<div class="cpp-tete">'+medaille(rangs)+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>"+(pays&&cpyLigne(pays)?'<p class="bilan-sous cpp-pays">'+echapper(cpyLigne(pays))+"</p>":"")+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
   const fermer='<button type="button" class="btn cpp-fermer" data-cpp-fermer>'+cpE("Close")+"</button>";
   const poser=h=>{poserHtml(c,h);const b=c.querySelector("[data-cpp-premier]")||c.querySelector("[data-cpp-fermer]");if(b)b.focus();};
   poserHtml(c,tete(pseudo)+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>"+fermer);
@@ -1037,11 +1152,12 @@ async function cppOuvrir(pseudo){
   if(cp&&j.p!==cp.pseudo)await cpaCharger();
   if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
   const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
-  poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"",rangs)+
+  poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"",rangs,j.pays)+
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";
     }).join("")+"</ul>"+cppBadges(j.bl)+
+    (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+
     (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
       '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Add to my friends")+"</button>"+
       '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer);
@@ -1077,6 +1193,8 @@ async function cpaCharger(force){
   cpaListe=r.j;cpaT=Date.now();cpaPour=cp.pseudo;
   return cpaListe;
 }
+/* Ami reciproque : l'autre joueur m'a ajoute lui aussi (m rendu par le serveur). */
+function cpaReciproque(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.amis).some(x=>x.p===pseudo&&x.m));}
 function cpaEst(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.amis).some(x=>x.p===pseudo));}
 document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-cpa]");

@@ -521,7 +521,7 @@ const avancer = ms => { decalage += ms; };
     await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA });
     r = await appel("GET", "amis", undefined, { cookie: cA });
     const boris = r.j.amis.find(x => x.p === "Boris");
-    T("la liste donne les six chiffres de chaque ami, rien d'autre", r.j.amis.length === 2 && r.j.amis.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k") && boris.n === 1200 && boris.r === 80 && boris.j === 6 && boris.b === 2 && boris.k === 9, r.texte);
+    T("la liste donne les six chiffres de chaque ami, rien d'autre", r.j.amis.length === 2 && r.j.amis.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k,m") && boris.n === 1200 && boris.r === 80 && boris.j === 6 && boris.b === 2 && boris.k === 9, r.texte);
     T("la liste n'est pas mise en cache", /no-store/.test(r.h.get("Cache-Control")));
     T("la liste est privee : l'ami ne voit rien chez lui", (await appel("GET", "amis", undefined, { cookie: cB })).j.amis.length === 0);
     r = await appel("GET", "exporter", undefined, { cookie: cA });
@@ -529,6 +529,40 @@ const avancer = ms => { decalage += ms; };
     T("l'export de l'ami ne dit pas qui l'a ajoute", !/Anna/.test((await appel("GET", "exporter", undefined, { cookie: cB })).texte));
     T("retirer un ami", (await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA })).s === 200 && (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.map(x => x.p).join() === "Boris");
     T("retirer un inconnu ne casse rien", (await appel("POST", "ami-retirer", { pseudo: "Personne" }, { cookie: cA })).s === 200);
+    /* Amis reciproques (2026-11-18) : m = 1 seulement quand l'autre a aussi ajoute. */
+    r = await appel("GET", "amis", undefined, { cookie: cA });
+    T("ami a sens unique : pas de marque", r.j.amis.find(x => x.p === "Boris").m === 0);
+    await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cB });
+    T("ajout dans les deux sens : chacun voit l'autre comme ami", (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.find(x => x.p === "Boris").m === 1 && (await appel("GET", "amis", undefined, { cookie: cB })).j.amis.find(x => x.p === "Anna").m === 1);
+    await appel("POST", "ami-retirer", { pseudo: "Anna" }, { cookie: cB });
+    T("l'un retire : la marque disparait chez l'autre", (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.find(x => x.p === "Boris").m === 0);
+
+    /* Pays de la fiche (2026-11-18). */
+    T("pays : vide au depart, dans etat et sur la fiche", (await appel("GET", "etat", undefined, { cookie: cA })).j.pays === "");
+    T("pays : sans session, refuse", (await appel("POST", "pays", { pays: "FR" })).s === 401);
+    T("pays : valeur invalide refusee", (await appel("POST", "pays", { pays: "France" }, { cookie: cA })).s === 400 && (await appel("POST", "pays", { pays: "fr" }, { cookie: cA })).s === 400 && (await appel("POST", "pays", { pays: "<b" }, { cookie: cA })).s === 400 && (await appel("POST", "pays", {}, { cookie: cA })).s === 400);
+    r = await appel("POST", "pays", { pays: "FR" }, { cookie: cA });
+    T("pays : choisi par le joueur", r.s === 200 && (await appel("GET", "etat", undefined, { cookie: cA })).j.pays === "FR" && lignes("SELECT pays FROM comptes WHERE pseudo = 'Anna'")[0].pays === "FR");
+    {
+      const rep = await mod.onRequest({ request: new Request("https://chang64.com/api/compte/profil?p=Anna"), env, params: { route: ["profil"] } });
+      const j = await rep.json();
+      T("pays : visible sur la fiche, pas celui des autres", j.pays === "FR" && lignes("SELECT pays FROM comptes WHERE pseudo = 'Boris'")[0].pays === "");
+    }
+    T("pays : present dans l'export", JSON.parse((await appel("GET", "exporter", undefined, { cookie: cA })).texte).pays === "FR");
+    T("pays : on peut le retirer", (await appel("POST", "pays", { pays: "" }, { cookie: cA })).s === 200 && (await appel("GET", "etat", undefined, { cookie: cA })).j.pays === "");
+    {
+      /* Sans la colonne (code publie avant son ajout) : le compte marche, le pays reste vide. */
+      const env2 = { DB: fausseD1() };
+      env2.DB.brut.exec("ALTER TABLE comptes DROP COLUMN pays");
+      const garde = env; env = env2;
+      const c2 = (await appel("POST", "creer", { pseudo: "SansPays", code: code(7) })).cookie;
+      const e2 = await appel("GET", "etat", undefined, { cookie: c2 });
+      const rep = await mod.onRequest({ request: new Request("https://chang64.com/api/compte/profil?p=SansPays"), env, params: { route: ["profil"] } });
+      T("sans la colonne pays : creation, etat et fiche marchent", !!c2 && e2.s === 200 && e2.j.pays === "" && rep.status === 200 && (await rep.json()).pays === "");
+      T("sans la colonne pays : l'enregistrement echoue proprement", (await appel("POST", "pays", { pays: "FR" }, { cookie: c2 })).s === 500);
+      env = garde;
+    }
+
     /* Plafond. */
     const now = Date.now();
     const insC = env.DB.brut.prepare("INSERT INTO comptes (cle, pseudo, pin_hash, secours_hash, cree, vu) VALUES (?, ?, 'h', 's', ?, ?)");
@@ -582,7 +616,7 @@ const avancer = ms => { decalage += ms; };
     };
     r = await profil("j60");
     T("profil : sans session, 200", r.s === 200 && r.j.p === "Joueur60", r.texte);
-    T("profil : rien d'autre que pseudo, mois, six chiffres et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,rangs,bl" && Array.isArray(r.j.bl) && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
+    T("profil : rien d'autre que pseudo, mois, six chiffres et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,rangs,bl,pays" && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
     T("profil : premier a la note et aux exercices", r.j.n === 860 && r.j.rangs.n === 1 && r.j.r === 180 && r.j.rangs.r === 1);
     T("profil : rang = 1 + ceux qui font strictement mieux", r.j.j === 6 && r.j.rangs.j === 13, JSON.stringify(r.j.rangs));
     T("profil : hors tableau (zero, ou semaine passee) : pas de rang", r.j.s === 0 && r.j.rangs.s === null && r.j.rangs.b === null && r.j.rangs.k === null, JSON.stringify(r.j));

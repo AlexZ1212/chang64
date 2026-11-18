@@ -30,8 +30,12 @@ CREATE TABLE IF NOT EXISTS comptes (
   sem TEXT NOT NULL DEFAULT '',
   sem_resolus INTEGER NOT NULL DEFAULT 0,
   -- Date du dernier changement de pseudo (un par semaine au plus).
-  pseudo_change INTEGER NOT NULL DEFAULT 0
+  pseudo_change INTEGER NOT NULL DEFAULT 0,
+  -- Pays choisi par le joueur pour sa fiche (code a deux lettres), vide = non montre.
+  pays TEXT NOT NULL DEFAULT ''
 );
+-- Base creee avant le 2026-11-18 : la colonne s'ajoute par
+--   ALTER TABLE comptes ADD COLUMN pays TEXT NOT NULL DEFAULT '';
 -- Base creee avant le 2026-11-17 : la colonne s'ajoute par
 --   ALTER TABLE comptes ADD COLUMN pseudo_change INTEGER NOT NULL DEFAULT 0;
 CREATE INDEX IF NOT EXISTS comptes_vu ON comptes (vu);

@@ -17,7 +17,7 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
 const MECHANT = '<img src=x onerror="window.pirate=1">';
 const JOUEURS = [{ p: "Alice", v: 300 }, { p: MECHANT, v: 200 }, { p: "Bob", v: 100 }];
 const PROFILS = {
-  Alice: { p: "Alice", depuis: "2026-03", s: 12, n: 1450, r: 300, j: 9, b: 31, k: 14, rangs: { s: 2, n: 1, r: 1, j: 4, b: 3, k: 7 },
+  Alice: { pays: "FR", p: "Alice", depuis: "2026-03", s: 12, n: 1450, r: 300, j: 9, b: 31, k: 14, rangs: { s: 2, n: 1, r: 1, j: 4, b: 3, k: 7 },
     bl: ["solved_1", "days_3", "inconnu_xyz", "_profil", "<img src=x onerror=\"window.pirate=1\">"].concat(["solved_10", "solved_25", "solved_50", "solved_64", "solved_100", "days_1", "days_7", "days_14", "days_30", "eg_kq", "eg_kr", "eg_krr", "eg_kp", "mb_compte", "duel_lien"]) },
   Moi: { p: "Moi", depuis: "2026-11", s: 0, n: 820, r: 15, j: 1, b: 2, k: 0, rangs: { s: null, n: 73, r: 68, j: 80, b: 91, k: null } }
 };
@@ -81,6 +81,8 @@ function ouvrir(page) {
     T("badges du joueur : chaque medaille porte son nom", meds.slice(0, 13).every(li => li.getAttribute("title") && li.querySelector(".cp-sr").textContent.length > 1), meds[0] && meds[0].getAttribute("title"));
     T("badges du joueur : identifiants inconnus ou pieges ignores", !d.querySelector("#cpProfilContenu .cpp-badges img") && !w.pirate);
   }
+  T("pays choisi par le joueur : affiche sous son nom", !!d.querySelector("#cpProfilContenu .cpp-pays") && /France/.test(d.querySelector("#cpProfilContenu .cpp-pays").textContent));
+  T("code de pays inconnu : rien d'affiche", w.eval('cpyLigne("XX")') === "" && w.eval('cpyLigne("<b")') === "" && /France/.test(w.eval('cpyLigne("FR")')));
   T("mois de creation en toutes lettres", /March 2026/.test(fiche), fiche.slice(0, 120));
   const lignes = [...d.querySelectorAll("#cpProfilContenu .cpp-liste li")].map(li => li.textContent);
   T("six chiffres avec leur rang", lignes.length === 6 && /1450/.test(lignes[1]) && /#1/.test(lignes[1]) && /14/.test(lignes[5]) && /#7/.test(lignes[5]), JSON.stringify(lignes));
@@ -189,6 +191,24 @@ function ouvrir(page) {
       T(l.code + " : nom, condition et anecdote des huit badges, famille Membres", ids.every(id => Array.isArray(tx[id]) && tx[id].length === 3 && tx[id].every(x => typeof x === "string" && x.length > 2)) && !!tx._ui["famille:membres"]);
     }
   }
+
+  /* Presentation du compte en trois etapes (2026-11-18) : seulement sans
+     compte, deux fois au plus, a quatorze jours d'ecart. */
+  w.eval('cp=null;localStorage.removeItem("chang64:compteInvite")');
+  T("presentation du compte : due pour un joueur sans compte", w.eval("cpiDue()") === true);
+  w.eval("cpiOuvrir()");
+  T("presentation : trois etapes, la premiere ouverte", !$("cpInvite").hidden && d.querySelectorAll("#cpInviteContenu .cpi-points i").length === 3 && /Keep your progress/.test($("cpInviteTitre").textContent));
+  d.querySelector('#cpInviteContenu [data-cpi="suite"]').click();
+  d.querySelector('#cpInviteContenu [data-cpi="suite"]').click();
+  T("presentation : la derniere etape propose de creer un compte", /A username and a code/.test($("cpInviteTitre").textContent) && !!d.querySelector('#cpInviteContenu [data-cpi="creer"]'));
+  d.querySelector('#cpInviteContenu [data-cpi="fermer"]').click();
+  T("presentation : Plus tard ferme, et elle ne revient pas tout de suite", $("cpInvite").hidden && w.eval("cpiDue()") === false);
+  w.eval('localStorage.setItem("chang64:compteInvite",JSON.stringify({n:1,t:Date.now()-15*864e5}))');
+  T("presentation : de nouveau due quatorze jours plus tard", w.eval("cpiDue()") === true);
+  w.eval('localStorage.setItem("chang64:compteInvite",JSON.stringify({n:2,t:Date.now()-90*864e5}))');
+  T("presentation : jamais plus de deux fois", w.eval("cpiDue()") === false);
+  w.eval('localStorage.removeItem("chang64:compteInvite");cp={pseudo:"Moi"}');
+  T("presentation : jamais avec un compte", w.eval("cpiDue()") === false);
 
   /* Le serveur n'est appele qu'une fois par joueur dans la minute. */
   T("fiche gardee une minute", demandes.filter(p => p === "Alice").length === 2, demandes.join(","));

@@ -1070,5 +1070,7 @@ module.exports = {
 "Create a free account to open your badge collection: every medal, its story, and what is left to win.":"Załóż darmowe konto, by otworzyć swoją kolekcję odznak: każdy medal, jego historia i to, co jeszcze zostało do zdobycia.",
 "Create a free account to see your rating over time and your puzzles day by day.":"Załóż darmowe konto, by zobaczyć swój ranking w czasie i swoje zadania dzień po dniu.",
 "The themes you have earned can be applied with a free account.":"Zdobyte motywy można zastosować z darmowym kontem.",
-"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Bez konta widać pięć ostatnich partii. Załóż darmowe konto, by zachować całą historię."
+"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Bez konta widać pięć ostatnich partii. Załóż darmowe konto, by zachować całą historię.",
+/* Ce qu'un compte ouvre (2026-11-18). */
+"Your badge collection, your progress charts, the themes you earn and your full game history.":"Twoja kolekcja odznak, wykresy postępów, zdobywane motywy i cała historia partii."
 };

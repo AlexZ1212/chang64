@@ -922,5 +922,7 @@ module.exports = {
 "Create a free account to open your badge collection: every medal, its story, and what is left to win.":"Crée un compte gratuit pour ouvrir ta collection de badges : chaque médaille, son histoire, et ce qu'il reste à gagner.",
 "Create a free account to see your rating over time and your puzzles day by day.":"Crée un compte gratuit pour voir ton classement dans le temps et tes exercices jour par jour.",
 "The themes you have earned can be applied with a free account.":"Les thèmes que tu as gagnés s'appliquent avec un compte gratuit.",
-"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Sans compte, les cinq dernières parties sont affichées. Crée un compte gratuit pour garder tout ton historique."
+"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Sans compte, les cinq dernières parties sont affichées. Crée un compte gratuit pour garder tout ton historique.",
+/* Ce qu'un compte ouvre (2026-11-18). */
+"Your badge collection, your progress charts, the themes you earn and your full game history.":"Ta collection de badges, tes graphes de progression, les thèmes que tu gagnes et tout ton historique de parties."
 };

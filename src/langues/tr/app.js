@@ -1070,5 +1070,7 @@ module.exports = {
 "Create a free account to open your badge collection: every medal, its story, and what is left to win.":"Rozet koleksiyonunu açmak için ücretsiz bir hesap oluştur: her madalya, hikâyesi ve kazanılacak olanlar.",
 "Create a free account to see your rating over time and your puzzles day by day.":"Puanını zaman içinde ve bulmacalarını gün gün görmek için ücretsiz bir hesap oluştur.",
 "The themes you have earned can be applied with a free account.":"Kazandığın temalar ücretsiz bir hesapla uygulanır.",
-"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Hesap olmadan son beş oyun gösterilir. Tüm geçmişini saklamak için ücretsiz bir hesap oluştur."
+"Without an account, the last five games are shown. Create a free account to keep your whole history.":"Hesap olmadan son beş oyun gösterilir. Tüm geçmişini saklamak için ücretsiz bir hesap oluştur.",
+/* Ce qu'un compte ouvre (2026-11-18). */
+"Your badge collection, your progress charts, the themes you earn and your full game history.":"Rozet koleksiyonun, ilerleme grafiklerin, kazandığın temalar ve tüm oyun geçmişin."
 };

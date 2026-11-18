@@ -492,7 +492,7 @@ function cpVue(ecran,donnees){
   const retour=(vers,texte)=>'<button type="button" class="linkbtn cp-lien" data-cp="'+vers+'">'+cpE(texte||"Back")+"</button>";
   if(ecran==="accueil"){
     h='<p class="app-intro">'+cpE("An account keeps your progress safe and follows you from one device to another.")+"</p>"+
-      '<ul class="app-avantages">'+["Your rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Your place in Top players, with your own profile and your rank.","Challenge other members by their username, and compare your week with your friends.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
+      '<ul class="app-avantages">'+["Your rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Your badge collection, your progress charts, the themes you earn and your full game history.","Your place in Top players, with your own profile and your rank.","Challenge other members by their username, and compare your week with your friends.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
       '<p class="tiroir-section">'+cpE("What we ask for")+"</p>"+
       '<p class="cp-note">'+cpE("A username and a code of 6 digits or more. That is all: today we ask for no name and no email address.")+"</p>"+
       '<button type="button" class="btn primary cp-large" data-cp="creer1">'+cpE("Create an account")+"</button>"+
@@ -1443,6 +1443,8 @@ setTimeout(()=>{cpdCharger().then(()=>{if(typeof menuPoint==="function")menuPoin
 const CPE_QUESTIONS={site:"How much do you enjoy chang64?",interface:"How easy is chang64 to use?",exercices:"Are the puzzles at the right level for you?",ordinateur:"How do you like playing against the computer?",compte:"How well does your account work for you?"};
 const CPE_CLE="chang64:enqueteVue",CPE_DELAI=30*864e5;
 let cpeQuestion="",cpeNote=0;
+/* Cinq etoiles a la place des chiffres (2026-11-18, demande d'Alexandre). */
+const CPE_ETOILE='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z"/></svg>';
 async function cpeProposer(){
   const z=$("bilanEnquete");if(!z)return;
   z.hidden=true;
@@ -1458,7 +1460,7 @@ async function cpeProposer(){
   cpeNote=0;
   try{localStorage.setItem(CPE_CLE,String(Date.now()));}catch(e){}
   poserHtml(z,'<p class="cpe-titre">'+cpE("Your opinion")+'</p><p class="cpe-question" id="cpeQ">'+cpE(CPE_QUESTIONS[cpeQuestion])+"</p>"+
-    '<div class="cpe-notes" role="group" aria-labelledby="cpeQ">'+[1,2,3,4,5].map(n=>'<button type="button" data-cpe-note="'+n+'" aria-pressed="false" aria-label="'+echapper(t("{n} out of 5",{n:n}))+'">'+n+"</button>").join("")+"</div>"+
+    '<div class="cpe-notes" role="group" aria-labelledby="cpeQ">'+[1,2,3,4,5].map(n=>'<button type="button" data-cpe-note="'+n+'" aria-pressed="false" aria-label="'+echapper(t("{n} out of 5",{n:n}))+'">'+CPE_ETOILE+"</button>").join("")+"</div>"+
     '<p class="cpe-echelle" aria-hidden="true"><span>'+cpE("Not at all")+"</span><span>"+cpE("Very much")+"</span></p>"+
     '<div class="cpe-suite" id="cpeSuite" hidden><label for="cpeTexte">'+cpE("A word to add? (optional)")+'</label><textarea id="cpeTexte" maxlength="500" rows="3"></textarea>'+
     '<button type="button" class="btn primary" data-cpe-envoyer>'+cpE("Send")+"</button></div>"+
@@ -1470,7 +1472,8 @@ document.addEventListener("click",async e=>{
   const n=e.target.closest("#bilanEnquete [data-cpe-note]");
   if(n){
     cpeNote=+n.dataset.cpeNote;
-    document.querySelectorAll("#bilanEnquete [data-cpe-note]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.cpeNote===cpeNote)));
+    /* Les etoiles se remplissent jusqu'a la note choisie. */
+    document.querySelectorAll("#bilanEnquete [data-cpe-note]").forEach(b=>{b.setAttribute("aria-pressed",String(+b.dataset.cpeNote===cpeNote));b.classList.toggle("on",+b.dataset.cpeNote<=cpeNote);});
     const s=$("cpeSuite");if(s)s.hidden=false;
     return;
   }

@@ -80,6 +80,9 @@ const DEFIS_BOITE = 30;              /* en attente chez un destinataire */
 const DEFIS_DUREE = 60 * JOUR;       /* puis efface */
 const DEFIS_LISTE = 30;
 const BLOCAGES_MAX = 200;            /* joueurs bloques par compte */
+const COMPTES_PAR_APPAREIL = 2;       /* creations de compte par appareil... */
+const APPAREIL_DUREE = 30 * JOUR;    /* ...sur cette duree */
+const COOKIE_APPAREIL = "__Secure-c64n";
 const AMIS_MAX = 100;                /* amis par compte */
 const PSEUDO_DELAI = 7 * JOUR;       /* un changement de pseudo par semaine */
 /* Mini-enquetes de satisfaction (table enquetes). */
@@ -250,6 +253,24 @@ function cookieLire(request) {
 const cookiePoser = jeton => ({ "Set-Cookie": COOKIE + "=" + jeton + "; Path=/api/; Max-Age=" + DUREE_COOKIE + "; HttpOnly; Secure; SameSite=Strict" });
 const cookieOter = () => ({ "Set-Cookie": COOKIE + "=; Path=/api/; Max-Age=0; HttpOnly; Secure; SameSite=Strict" });
 
+/* ---------- Creations par appareil ---------- */
+/* Un cookie a part, pose a la creation d'un compte : les dates des creations
+   faites depuis cet appareil, signees par le serveur (on ne peut ni les
+   inventer ni les modifier, seulement effacer le cookie). Il ne contient
+   aucun identifiant : ni compte, ni pseudo, ni appareil. Un frein pour le
+   visiteur ordinaire, pas un mur : sans e-mail ni adresse IP, effacer ses
+   cookies remet le compte a zero. Envoye seulement a /api/compte/. */
+const appareilSigner = (texte, env) => hmac("chang64-appareil-v1:" + ((env && env.POIVRE) || ""), texte);
+async function appareilLire(request, env, now) {
+  const m = (request.headers.get("Cookie") || "").match(new RegExp("(?:^|;\\s*)" + COOKIE_APPAREIL + "=([0-9.]{1,80})\\.([A-Za-z0-9_-]{43})(?:;|$)"));
+  if (!m || !egal(await appareilSigner(m[1], env), m[2])) return [];
+  return m[1].split(".").map(Number).filter(t => Number.isFinite(t) && t > now - APPAREIL_DUREE && t <= now + JOUR).slice(-COMPTES_PAR_APPAREIL);
+}
+async function appareilPoser(dates, env) {
+  const texte = dates.slice(-COMPTES_PAR_APPAREIL).join(".");
+  return COOKIE_APPAREIL + "=" + texte + "." + await appareilSigner(texte, env) + "; Path=/api/compte/; Max-Age=" + Math.round(APPAREIL_DUREE / 1000) + "; HttpOnly; Secure; SameSite=Strict";
+}
+
 /* ---------- Sessions ---------- */
 async function sessionOuvrir(env, id, now) {
   const jeton = b64u(alea(32));
@@ -344,10 +365,12 @@ async function rPseudo(d, env) {
   return json(pris ? { libre: false, raison: "pris" } : { libre: true });
 }
 
-async function rCreer(d, env, now) {
+async function rCreer(d, env, now, request) {
   const v = pseudoValider(d.pseudo);
   if (!v.ok) return erreur("pseudo", 400, { raison: v.raison });
   if (!codeValide(d.code)) return erreur("code", 400);
+  const dejaCrees = await appareilLire(request, env, now);
+  if (dejaCrees.length >= COMPTES_PAR_APPAREIL) return erreur("appareil", 429, { attendre: Math.max(1, Math.ceil((dejaCrees[0] + APPAREIL_DUREE - now) / 1000)) });
   const texte = donneesTexte(d.donnees);
   if (texte === null) return erreur("donnees", 413);
   await nettoyer(env, now);
@@ -366,7 +389,9 @@ async function rCreer(d, env, now) {
     throw e;
   }
   const jeton = await sessionOuvrir(env, ligne.id, now);
-  return json({ pseudo: v.pseudo, secours, version: ligne.version }, 201, cookiePoser(jeton));
+  const rep = json({ pseudo: v.pseudo, secours, version: ligne.version }, 201, cookiePoser(jeton));
+  rep.headers.append("Set-Cookie", await appareilPoser(dejaCrees.concat([now]), env));
+  return rep;
 }
 
 async function compteParPseudo(env, pseudo) {
@@ -748,7 +773,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
       const d = await corps(request);
       if (!d) return erreur("requete", 400);
       if (route === "pseudo") return await rPseudo(d, env);
-      if (route === "creer") return await rCreer(d, env, now);
+      if (route === "creer") return await rCreer(d, env, now, request);
       if (route === "connexion") return await rConnexion(d, env, now);
       if (route === "secours") return await rSecours(d, env, now);
       return await rLienConnexion(d, env, now);
@@ -796,4 +821,4 @@ export async function onRequest({ request, env, params, waitUntil }) {
 }
 
 /* Pour les tests seulement : Pages ne fait de route que de onRequest*. */
-export const _essai = { pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };
+export const _essai = { COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };

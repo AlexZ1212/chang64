@@ -464,7 +464,7 @@ function cpPoint(){
 }
 const CP_RAISONS={longueur:"Between 3 and 20 characters.",caracteres:"Letters, digits, - and _ only.",melange:"Use a single alphabet.",interdit:"This username is not allowed. Try another one.",pris:"This username is already taken."};
 const CP_CODE_RAISONS={chiffres:"Digits only.",court:"At least 6 digits.",long:"12 digits at most.",facile:"Too easy to guess. Choose another one."};
-const CP_ERREURS={identifiants:"Wrong username or code.",lien:"Wrong or expired device code.",plus_tard:"Too many sign-ups right now. Try again in an hour.",session:"Your session has ended. Log in again."};
+const CP_ERREURS={identifiants:"Wrong username or code.",lien:"Wrong or expired device code.",plus_tard:"Too many sign-ups right now. Try again in an hour.",appareil:"Two accounts have already been created on this device this month. Log in to one of them, or try again later.",session:"Your session has ended. Log in again."};
 function cpErreur(r){
   if(r.s===0)return t("No connection. Check your network and try again.");
   if(r.s===429&&r.j.erreur==="pseudo_recent")return t("You have already changed your username this week. Try again later.");
@@ -1007,7 +1007,11 @@ function cppFermer(){
 async function cppOuvrir(pseudo){
   const f=$("cpProfil"),c=$("cpProfilContenu");if(!f||!c)return;
   if(f.hidden)cppAvant=document.activeElement;
-  const tete=nom=>'<p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>";
+  /* Une pastille a l'initiale du joueur occupe l'arc du haut de la fenetre,
+     comme l'elephant des defis et du bilan : sans elle, le titre et la ligne
+     "Membre depuis" tombaient a cheval sur le bord de l'arc (signale par
+     Alexandre le 18/11). */
+  const tete=nom=>'<div class="bilan-mascotte cpp-avatar" aria-hidden="true">'+echapper((Array.from(String(nom))[0]||"?").toUpperCase())+'</div><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>";
   const fermer='<button type="button" class="btn cpp-fermer" data-cpp-fermer>'+cpE("Close")+"</button>";
   const poser=h=>{poserHtml(c,h);const b=c.querySelector("[data-cpp-premier]")||c.querySelector("[data-cpp-fermer]");if(b)b.focus();};
   poserHtml(c,tete(pseudo)+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>"+fermer);

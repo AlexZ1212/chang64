@@ -433,6 +433,42 @@ const avancer = ms => { decalage += ms; };
     T("sans la table defis : l'export et la suppression marchent encore", (await appel("GET", "exporter", undefined, { cookie: r.cookie })).s === 200 && (await appel("POST", "supprimer", { code: code(1) }, { cookie: r.cookie })).s === 200);
   }
 
+  console.log("\nCreations de compte par appareil");
+  {
+    /* Deux comptes au plus par appareil sur 30 jours (2026-11-18), comptes
+       dans un cookie signe. Un frein, pas un mur : sans cookie, on repart de zero. */
+    env = { DB: fausseD1(), POIVRE: "secret-de-test" };
+    const marque = r => (r.sc.match(/__Secure-c64n=[^;]+/) || [""])[0];
+    let r = await appel("POST", "creer", { pseudo: "Premier", code: code(1) });
+    const m1 = marque(r);
+    T("la creation pose le cookie de l'appareil, ferme au script et limite a /api/compte/", r.s === 201 && /^__Secure-c64n=\d+\.[A-Za-z0-9_-]{43}$/.test(m1) && /__Secure-c64n=[^,]*Path=\/api\/compte\/; Max-Age=2592000; HttpOnly; Secure; SameSite=Strict/.test(r.sc), r.sc);
+    T("le cookie de session est toujours pose", /__Secure-c64=[A-Za-z0-9_-]{43};/.test(r.sc));
+    T("le cookie de l'appareil ne contient ni pseudo ni identifiant de compte", !/Premier|premier/.test(m1) && m1.split("=")[1].split(".").length === 2);
+    r = await appel("POST", "creer", { pseudo: "Deuxieme", code: code(2) }, { cookie: m1 });
+    const m2 = marque(r);
+    T("deuxieme compte du meme appareil : accepte", r.s === 201 && m2.split("=")[1].split(".").length === 3, m2);
+    r = await appel("POST", "creer", { pseudo: "Troisieme", code: code(3) }, { cookie: m2 });
+    T("troisieme compte du meme appareil : refuse, avec le delai", r.s === 429 && r.j.erreur === "appareil" && r.j.attendre > 29 * 86400 && r.j.attendre <= 30 * 86400, r.texte);
+    T("le compte refuse n'existe pas", lignes("SELECT COUNT(*) AS n FROM comptes")[0].n === 2);
+    T("la connexion a un compte existant n'est pas touchee", (await appel("POST", "connexion", { pseudo: "Premier", code: code(1) }, { cookie: m2 })).s === 200);
+    /* Cookie trafique : ignore, on ne peut pas le fabriquer. */
+    const faux = "__Secure-c64n=" + m2.split("=")[1].split(".").slice(0, 2).join(".") + "." + "A".repeat(43);
+    r = await appel("POST", "creer", { pseudo: "Trafique", code: code(4) }, { cookie: faux });
+    T("cookie a la signature fausse : traite comme absent", r.s === 201 && marque(r).split("=")[1].split(".").length === 2);
+    const vide = "__Secure-c64n=" + m1.split("=")[1].split(".")[1];
+    T("cookie mal forme : pas de plantage", (await appel("POST", "creer", { pseudo: "Malforme", code: code(5) }, { cookie: vide })).s === 201);
+    /* Trente jours plus tard, la place est rendue. */
+    avancer(E.APPAREIL_DUREE + 60000);
+    r = await appel("POST", "creer", { pseudo: "PlusTard", code: code(6) }, { cookie: m2 });
+    T("30 jours apres : de nouveau possible", r.s === 201 && marque(r).split("=")[1].split(".").length === 2, r.texte);
+    avancer(-(E.APPAREIL_DUREE + 60000));
+    /* Sans secret POIVRE (essai local) : meme comportement. */
+    env = { DB: fausseD1() };
+    r = await appel("POST", "creer", { pseudo: "SansSel", code: code(1) });
+    r = await appel("POST", "creer", { pseudo: "SansSel2", code: code(2) }, { cookie: marque(r) });
+    T("sans secret : la limite tient aussi", (await appel("POST", "creer", { pseudo: "SansSel3", code: code(3) }, { cookie: marque(r) })).s === 429);
+  }
+
   console.log("\nAmis");
   {
     env = { DB: fausseD1() };

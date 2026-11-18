@@ -50,6 +50,8 @@ if (require.main === module) {
         const rep = await (mod.onRequest || mod["onRequest" + q.method[0] + q.method.slice(1).toLowerCase()])(ctx);
         const h = {};
         rep.headers.forEach((v, k) => { h[k] = v; });
+        /* Plusieurs Set-Cookie (session + compteur de creations) : un tableau, sinon le dernier ecrase le premier. */
+        if (typeof rep.headers.getSetCookie === "function" && rep.headers.getSetCookie().length) h["set-cookie"] = rep.headers.getSetCookie();
         r.writeHead(rep.status, h);
         return r.end(Buffer.from(await rep.arrayBuffer()));
       }

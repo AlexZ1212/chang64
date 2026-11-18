@@ -24,11 +24,16 @@ console.log("  "+all.length+" fichiers, dont "+html.length+" pages HTML");
 T("plus de 400 pages", html.length>=400, html.length);
 /* 147, plus une image d'index des ouvertures par langue traduite depuis
    l'anglais (2026-10-25 : es, pt, de, ru). */
-const NB_OG=147+require("../langues/registre.js").LANGUES.filter(l=>l.code!=="en"&&l.code!=="fr").length;
+/* Plus six images par langue pour l'apercu du defi par lien (2026-11-18,
+   defi_build.js : score a battre de 0 a 5). */
+const NB_OG=147+require("../langues/registre.js").LANGUES.filter(l=>l.code!=="en"&&l.code!=="fr").length+6*require("../langues/registre.js").LANGUES.length;
 T(NB_OG+" images de partage", fs.readdirSync(S+"/og").filter(f=>f.endsWith(".png")).length===NB_OG);
 
 console.log("\n--- Aucune page vide ou tronquee ---");
-const petites=html.filter(f=>fs.statSync(f).size<1500).map(f=>f.replace(S,""));
+/* Les pages d'apercu du defi (/d/, 2026-11-18) sont petites par nature : un
+   en-tete de partage et un renvoi vers l'accueil. tests/check_defi_apercu.js
+   verifie leur contenu. */
+const petites=html.filter(f=>fs.statSync(f).size<1500).map(f=>f.replace(S,"")).filter(f=>!/^[\\/]d[\\/]/.test(f));
 T("aucune page anormalement petite", petites.length===0, petites.slice(0,4).join(", "));
 const malFermees=html.filter(f=>!fs.readFileSync(f,"utf8").trimEnd().endsWith("</html>")).map(f=>f.replace(S,""));
 T("toutes les pages sont bien fermees", malFermees.length===0, malFermees.slice(0,4).join(", "));

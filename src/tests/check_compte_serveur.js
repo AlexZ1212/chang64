@@ -469,6 +469,39 @@ const avancer = ms => { decalage += ms; };
     T("sans secret : la limite tient aussi", (await appel("POST", "creer", { pseudo: "SansSel3", code: code(3) }, { cookie: marque(r) })).s === 429);
   }
 
+  console.log("\nCreations de compte par connexion");
+  {
+    /* 20 creations par jour et par connexion (2026-11-18) : un script ne peut
+       plus saturer a lui seul le plafond global. L'adresse n'est pas gardee. */
+    env = { DB: fausseD1(), POIVRE: "secret-de-test" };
+    const creerDepuis = async (adresse, pseudo) => {
+      const h = { Origin: "https://chang64.com", "Content-Type": "application/json" };
+      if (adresse) h["CF-Connecting-IP"] = adresse;
+      const rep = await mod.onRequest({ request: new Request("https://chang64.com/api/compte/creer", { method: "POST", headers: h, body: JSON.stringify({ pseudo, code: code(1) }) }), env, params: { route: ["creer"] } });
+      let j = null; try { j = JSON.parse(await rep.text()); } catch (e) {}
+      return { s: rep.status, j };
+    };
+    let dernier = null;
+    for (let i = 1; i <= E.CREATIONS_PAR_ADRESSE; i++) dernier = await creerDepuis("203.0.113.7", "Classe" + i);
+    T("vingt creations depuis la meme connexion : acceptees", dernier.s === 201 && lignes("SELECT COUNT(*) AS n FROM comptes")[0].n === E.CREATIONS_PAR_ADRESSE);
+    const refus = await creerDepuis("203.0.113.7", "DeTrop");
+    T("la vingt et unieme : refusee, sans compte cree", refus.s === 429 && refus.j.erreur === "adresse" && lignes("SELECT COUNT(*) AS n FROM comptes")[0].n === E.CREATIONS_PAR_ADRESSE, JSON.stringify(refus));
+    T("une autre connexion n'est pas touchee", (await creerDepuis("198.51.100.4", "Ailleurs")).s === 201);
+    T("sans adresse (essai local) : pas de plafond par connexion", (await creerDepuis("", "SansAdresse")).s === 201);
+    const garde = lignes("SELECT empreinte, jour, n FROM creations ORDER BY n DESC");
+    T("en base : une empreinte et un compteur, jamais l'adresse", garde.length === 2 && garde[0].n === E.CREATIONS_PAR_ADRESSE && garde.every(x => /^[A-Za-z0-9_-]{22}$/.test(x.empreinte) && /^\d{4}-\d{2}-\d{2}$/.test(x.jour)) && !/203\.0\.113|198\.51\.100/.test(JSON.stringify(garde)), JSON.stringify(garde));
+    T("l'adresse n'apparait nulle part dans la base", !/203\.0\.113\.7/.test(JSON.stringify(lignes("SELECT * FROM comptes")) + JSON.stringify(lignes("SELECT * FROM jetons"))));
+    /* Le lendemain : l'empreinte change, le compteur repart, les lignes de la veille sont effacees. */
+    avancer(86400e3);
+    T("le lendemain : de nouveau possible", (await creerDepuis("203.0.113.7", "Lendemain")).s === 201);
+    const apres = lignes("SELECT empreinte, jour, n FROM creations");
+    T("les compteurs de la veille sont effaces, l'empreinte du jour est differente", apres.length === 1 && apres[0].n === 1 && apres[0].empreinte !== garde[0].empreinte, JSON.stringify(apres));
+    avancer(-86400e3);
+    /* Sans la table (code publie avant sa creation) : la creation marche. */
+    env.DB.brut.exec("DROP TABLE creations");
+    T("sans la table creations : la creation de compte marche encore", (await creerDepuis("203.0.113.7", "SansTable")).s === 201);
+  }
+
   console.log("\nAmis");
   {
     env = { DB: fausseD1() };

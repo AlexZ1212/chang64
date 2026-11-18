@@ -464,7 +464,7 @@ function cpPoint(){
 }
 const CP_RAISONS={longueur:"Between 3 and 20 characters.",caracteres:"Letters, digits, - and _ only.",melange:"Use a single alphabet.",interdit:"This username is not allowed. Try another one.",pris:"This username is already taken."};
 const CP_CODE_RAISONS={chiffres:"Digits only.",court:"At least 6 digits.",long:"12 digits at most.",facile:"Too easy to guess. Choose another one."};
-const CP_ERREURS={identifiants:"Wrong username or code.",lien:"Wrong or expired device code.",plus_tard:"Too many sign-ups right now. Try again in an hour.",appareil:"Two accounts have already been created on this device this month. Log in to one of them, or try again later.",session:"Your session has ended. Log in again."};
+const CP_ERREURS={identifiants:"Wrong username or code.",lien:"Wrong or expired device code.",plus_tard:"Too many sign-ups right now. Try again in an hour.",adresse:"Too many accounts created from this connection today. Try again tomorrow.",appareil:"Two accounts have already been created on this device this month. Log in to one of them, or try again later.",session:"Your session has ended. Log in again."};
 function cpErreur(r){
   if(r.s===0)return t("No connection. Check your network and try again.");
   if(r.s===429&&r.j.erreur==="pseudo_recent")return t("You have already changed your username this week. Try again later.");

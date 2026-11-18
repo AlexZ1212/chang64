@@ -83,6 +83,7 @@ const BLOCAGES_MAX = 200;            /* joueurs bloques par compte */
 const COMPTES_PAR_APPAREIL = 2;       /* creations de compte par appareil... */
 const APPAREIL_DUREE = 30 * JOUR;    /* ...sur cette duree */
 const COOKIE_APPAREIL = "__Secure-c64n";
+const CREATIONS_PAR_ADRESSE = 20;    /* par jour et par connexion Internet */
 const AMIS_MAX = 100;                /* amis par compte */
 const PSEUDO_DELAI = 7 * JOUR;       /* un changement de pseudo par semaine */
 /* Mini-enquetes de satisfaction (table enquetes). */
@@ -253,6 +254,29 @@ function cookieLire(request) {
 const cookiePoser = jeton => ({ "Set-Cookie": COOKIE + "=" + jeton + "; Path=/api/; Max-Age=" + DUREE_COOKIE + "; HttpOnly; Secure; SameSite=Strict" });
 const cookieOter = () => ({ "Set-Cookie": COOKIE + "=; Path=/api/; Max-Age=0; HttpOnly; Secure; SameSite=Strict" });
 
+/* ---------- Creations par connexion ---------- */
+/* Le plafond global (CREATIONS_PAR_HEURE) pouvait etre sature par un seul
+   script, qui bloquait alors les inscriptions de tout le monde. Second
+   garde-fou : 20 creations par jour et par connexion Internet (une classe
+   entiere passe ; un script, non). L'adresse n'est pas gardee : on en calcule
+   une empreinte avec le secret du serveur et la date du jour, illisible et
+   differente chaque jour, et on ne garde qu'un compteur, efface le lendemain.
+   Rend false si le plafond du jour est atteint. Sans adresse (essai local)
+   ou sans la table, on laisse passer : ce garde-fou ne doit jamais empecher
+   une creation legitime par sa propre panne. */
+async function adresseCompter(request, env, now) {
+  const adresse = request.headers.get("CF-Connecting-IP") || "";
+  if (!adresse) return true;
+  const jour = new Date(now).toISOString().slice(0, 10);
+  const empreinte = (await hmac("chang64-adresse-v1:" + ((env && env.POIVRE) || "") + ":" + jour, adresse)).slice(0, 22);
+  try {
+    const r = await env.DB.prepare(
+      "INSERT INTO creations (empreinte, jour, n) VALUES (?1, ?2, 1) ON CONFLICT(empreinte, jour) DO UPDATE SET n = n + 1 WHERE n < ?3 RETURNING n"
+    ).bind(empreinte, jour, CREATIONS_PAR_ADRESSE).first();
+    return !!r;
+  } catch (e) { return true; }
+}
+
 /* ---------- Creations par appareil ---------- */
 /* Un cookie a part, pose a la creation d'un compte : les dates des creations
    faites depuis cet appareil, signees par le serveur (on ne peut ni les
@@ -349,6 +373,7 @@ async function nettoyer(env, now) {
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id NOT IN (SELECT id FROM comptes) OR bloque_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id NOT IN (SELECT id FROM comptes) OR ami_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM creations WHERE jour < ?1").bind(new Date(now).toISOString().slice(0, 10)).run(); } catch (e) {}
   try {
     await env.DB.batch([
       env.DB.prepare("DELETE FROM defis WHERE cree < ?1").bind(now - DEFIS_DUREE),
@@ -374,6 +399,7 @@ async function rCreer(d, env, now, request) {
   const texte = donneesTexte(d.donnees);
   if (texte === null) return erreur("donnees", 413);
   await nettoyer(env, now);
+  if (!(await adresseCompter(request, env, now))) return erreur("adresse", 429);
   const recents = await env.DB.prepare("SELECT COUNT(*) AS n FROM comptes WHERE cree > ?1").bind(now - 3600e3).first();
   if (recents && recents.n >= CREATIONS_PAR_HEURE) return erreur("plus_tard", 429);
   const secours = secoursCreer(), c = chiffres(d.donnees);
@@ -821,4 +847,4 @@ export async function onRequest({ request, env, params, waitUntil }) {
 }
 
 /* Pour les tests seulement : Pages ne fait de route que de onRequest*. */
-export const _essai = { COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };
+export const _essai = { CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };

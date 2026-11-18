@@ -84,6 +84,17 @@ CREATE TABLE IF NOT EXISTS blocages (
   PRIMARY KEY (compte_id, bloque_id)
 );
 
+-- Creations de compte par connexion (2026-11-18) : un compteur par jour et
+-- par empreinte brouillee de l'adresse reseau (l'adresse elle-meme n'est pas
+-- gardee et ne peut pas etre retrouvee). 20 creations au plus par jour et par
+-- connexion. Les lignes des jours passes sont effacees. Lie a aucun compte.
+CREATE TABLE IF NOT EXISTS creations (
+  empreinte TEXT NOT NULL,
+  jour TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (empreinte, jour)
+);
+
 -- Amis (2026-11-18) : la liste des joueurs qu'un membre a ajoutes a ses amis.
 -- Sans demande ni acceptation : personne n'est prevenu, et la liste n'est
 -- visible que de son proprietaire. 100 amis au plus par compte. Effacee avec

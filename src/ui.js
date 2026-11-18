@@ -1984,6 +1984,7 @@ function loadPuzzle(){
   { const dcb=$("dailyChallengeBlock"),dcp=$("dailyChallengePanel");
     if(dcb)dcb.classList.add("hide");
     if(dcp)dcp.classList.add("hide");
+    const drp=$("dailyResultPanel");if(drp)drp.classList.add("hide");
     const dsn=$("dailyShareNote");if(dsn)dsn.textContent="";
     const bjs=$("btnDailyNext");if(bjs)bjs.classList.add("hide");
   }
@@ -2746,7 +2747,9 @@ const SHARE_ICONS={
 /* note (2026-11-18) : l'element qui recoit "Lien copie" ; par defaut celui
    de la partie entre amis. Chaque ecran passe le sien : avant, le defi du
    jour ecrivait son message dans la note d'un autre onglet. */
-function shareButtons(container,url,text,withNative,note){
+/* copie (2026-11-18) : ce que "Copier" met dans le presse-papiers quand ce
+   n'est pas le lien seul (le resultat de l'exercice du jour, texte et lien). */
+function shareButtons(container,url,text,withNative,note,copie){
   const dire=m=>{const n=note||$("amiNote");if(n)n.textContent=m;};
   poserHtml(container,"");
   const mk=(label,cls,fn,icon)=>{
@@ -2765,7 +2768,7 @@ function shareButtons(container,url,text,withNative,note){
     else{copyText(url);dire(t("Link copied, paste it into Messenger."));}
   },SHARE_ICONS.msg);
   mk("Telegram","tg",()=>{window.open("https://t.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(text),"_blank","noopener");},SHARE_ICONS.tg);
-  mk(t("Copy"),"",()=>{copyText(url);dire(t("Link copied."));});
+  mk(t("Copy"),"",()=>{copyText(copie||url);dire(t(copie?"Result copied. Paste it wherever you like.":"Link copied."));});
 }
 function updateAmiNote(){
   const n=$("amiNote"); if(!n)return;

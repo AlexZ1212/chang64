@@ -73,5 +73,19 @@ T("premiere erreur : eloEchec saute pendant un defi",
   T("eloEchec respecte puzzle.eloNote", /function eloEchec\(\)\{\s*if\(rush\|\|!puzzle\|\|puzzle\.daily\|\|puzzle\.eloNote\|\|puzzleDone\)return;/.test(ui2));
 }
 
+/* ---------- 4. un seul partage sur tout le site (2026-11-18) ---------- */
+{
+  const gabarit = fs.readFileSync(path.join(__dirname, "..", "template.html"), "utf8");
+  T("le defi utilise la rangee de partage commune", /shareButtons\(c,duelLienCourant\(\),/.test(src) && src.includes('<div class="shareRow" id="duelPartage"></div>'));
+  T("le defi n'affiche plus l'adresse et n'a plus ses propres boutons", !/duelLienChamp|data-duel-copier|data-duel-wa|data-duel-partager/.test(src));
+  T("partie entre amis et defi du jour : adresse masquee, champ garde", /id="amiLink" readonly hidden/.test(gabarit) && /id="dailyChallengeLink" readonly hidden/.test(gabarit) && gabarit.includes(".linkbox[hidden]{display:none}"));
+  T("pseudo, et non prenom ; rien a saisir pour un membre", src.includes('t("Your username (optional)")') && !/first name/i.test(src) && /const membre=typeof cp!=="undefined"&&cp&&cp\.pseudo;/.test(src));
+  for (const l of LANGUES) {
+    if (l.code === "en") continue;
+    const d = require("../langues/" + l.code + "/app.js");
+    T(l.code + " : libelle du pseudo traduit, ancien libelle retire", typeof d["Your username (optional)"] === "string" && d["Your first name (optional)"] === undefined);
+  }
+}
+
 console.log(ok + " OK, " + ko + " FAIL");
 process.exit(ko ? 1 : 0);

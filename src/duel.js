@@ -19,6 +19,9 @@ let duel=null,duelNom="",duelEnvoyes=[];
   try{const r=await window.storage.get("chang64:duels");if(r&&r.value){const l=JSON.parse(r.value);if(Array.isArray(l))duelEnvoyes=l.slice(-20);}}catch(e){}
   duelCarte();
 })();
+/* Le nom qui part avec le defi : le pseudo du membre connecte (compte.js),
+   sinon celui que le joueur a saisi, s'il en a saisi un. */
+function duelNomCourant(){return typeof cp!=="undefined"&&cp&&cp.pseudo?duelPropre(cp.pseudo):duelNom;}
 function duelPropre(s){return String(s||"").replace(/[\u0000-\u001f\u007f<>]/g,"").replace(/\s+/g," ").trim().slice(0,20);}
 function duelEnc(ids){return ids.map(id=>(+String(id).slice(1)).toString(36).padStart(4,"0")).join("");}
 function duelDec(s){
@@ -146,7 +149,7 @@ function duelTenterFin(){
   const occupe=bravoOccupe()||(br&&!br.hidden)||(bravoFile&&bravoFile.length)||(an&&an.classList.contains("visible"))||objFile.length||(bi&&!bi.hidden);
   if(occupe){setTimeout(duelTenterFin,1000);return;}
   const d=duel;duel=null;duelBandeau();
-  const moi={r:d.res.join(""),t:Math.min(Math.round(d.ms/1000),DUEL_TEMPS_MAX),n:duelNom};
+  const moi={r:d.res.join(""),t:Math.min(Math.round(d.ms/1000),DUEL_TEMPS_MAX),n:duelNomCourant()};
   /* Badges de defi (2026-11-18) : a la fin des cinq exercices, donc en fin
      d'exercice, comme toute recompense. */
   if(typeof bxMarquer==="function"){
@@ -211,22 +214,27 @@ function duelLigne(nom,j,gagne){
 }
 /* Prenom facultatif, lien et partage. */
 function duelPartage(texte){
-  return '<label class="duel-nom"><span>'+echapper(t("Your first name (optional)"))+'</span><input type="text" id="duelNomChamp" maxlength="20" autocomplete="given-name" value="'+echapper(duelNom)+'"></label>'+
-    '<input class="linkbox" id="duelLienChamp" readonly aria-label="'+echapper(t("Challenge link"))+'">'+
-    '<div class="duel-partage">'+(navigator.share?'<button type="button" class="btn primary" data-duel-partager data-duel-premier>'+echapper(t("Share"))+"</button>":"")+
-    '<button type="button" class="btn'+(navigator.share?"":" primary")+'" data-duel-copier'+(navigator.share?"":" data-duel-premier")+">"+echapper(t("Copy link"))+"</button>"+
-    '<button type="button" class="btn" data-duel-wa>WhatsApp</button></div>'+
+  /* Memes boutons de partage que partout sur le site (shareButtons, ui.js),
+     poses par duelMajLien ; l'adresse n'est plus affichee. Un membre connecte
+     n'a pas de nom a saisir : son pseudo part avec le defi. */
+  const membre=typeof cp!=="undefined"&&cp&&cp.pseudo;
+  return (membre?"":'<label class="duel-nom"><span>'+echapper(t("Your username (optional)"))+'</span><input type="text" id="duelNomChamp" maxlength="20" autocomplete="nickname" autocapitalize="off" spellcheck="false" value="'+echapper(duelNom)+'"></label>')+
+    '<div class="shareRow" id="duelPartage"></div>'+
     '<p class="duel-note" id="duelNote" aria-live="polite" data-texte="'+echapper(texte)+'"></p>';
 }
 let duelLienCourant=null;
 function duelMajLien(){
-  const c=$("duelLienChamp");if(!c||!duelLienCourant)return;
-  c.value=duelLienCourant();
+  const c=$("duelPartage"),note=$("duelNote"),r=$("duel");if(!c||!duelLienCourant)return;
+  shareButtons(c,duelLienCourant(),note?note.dataset.texte||"":"",true,note);
+  /* A l'ouverture, le premier bouton de partage prend le focus ; pendant la
+     saisie du pseudo, le focus reste dans le champ. */
+  const b=c.querySelector("button");
+  if(b&&r&&!r.contains(document.activeElement))b.focus();
 }
 function duelVueCree(ids,moi){
   const pc=duelPremiers(moi.r);
   const titre=pc===DUEL_N?t("Flawless!"):pc>=3?t("Well played!"):t("Challenge ready");
-  duelLienCourant=()=>duelLien(ids,Object.assign({},moi,{n:duelNom}),null);
+  duelLienCourant=()=>duelLien(ids,Object.assign({},moi,{n:duelNomCourant()}),null);
   duelOuvrir(duelTete(titre,t("Send the link: your friend plays the same five puzzles and tries to beat you."))+
     duelTuiles(moi)+'<div class="duel-seul">'+duelPoints(moi.r)+"</div>"+
     duelPartage(t("I challenge you on chang64: five puzzles, can you beat my score?"))+
@@ -236,7 +244,7 @@ function duelVueCree(ids,moi){
 function duelVueReponse(ids,adv,moi){
   const c=duelComparer(moi,adv),nomAdv=adv.n||t("Your friend");
   const titre=c>0?t("You win!"):c<0?t("{name} wins!",{name:nomAdv}):t("Perfect tie!");
-  duelLienCourant=()=>duelLien(ids,adv,Object.assign({},moi,{n:duelNom}));
+  duelLienCourant=()=>duelLien(ids,adv,Object.assign({},moi,{n:duelNomCourant()}));
   duelOuvrir(duelTete(titre,t("Send your answer so {name} sees the result.",{name:nomAdv}))+
     '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(nomAdv,adv,c<0)+"</ul>"+
     duelPartage(t("I took up your chang64 challenge, here is my result:"))+
@@ -274,12 +282,6 @@ function duelRecu(d){
       if(e.target===r||e.target.closest("[data-duel-fermer]")){duelFermer();return;}
       if(e.target.closest("[data-duel-relever]")){const ids=duelDec(r.dataset.ids||""),adv=r._adv;if(ids&&adv)duelDemarrer(ids,adv);return;}
       if(e.target.closest("[data-duel-nouveau]")){duelCreer();return;}
-      const note=$("duelNote"),lien=$("duelLienChamp");
-      if(!lien)return;
-      const texte=note?note.dataset.texte:"";
-      if(e.target.closest("[data-duel-copier]")){copyText(lien.value);if(note)note.textContent=t("Link copied.");return;}
-      if(e.target.closest("[data-duel-partager]")){try{navigator.share({title:"chang64",text:texte,url:lien.value}).catch(()=>{});}catch(x){}return;}
-      if(e.target.closest("[data-duel-wa]")){window.open("https://wa.me/?text="+encodeURIComponent(texte+" "+lien.value),"_blank","noopener");return;}
     });
     r.addEventListener("input",e=>{
       if(e.target.id!=="duelNomChamp")return;

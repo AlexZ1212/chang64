@@ -2743,7 +2743,11 @@ const SHARE_ICONS={
    contrairement a Messenger qui se rabat sur une simple copie silencieuse
    hors mobile (voir plus bas) -- et son usage est en forte croissance,
    proche de WhatsApp en telechargements. */
-function shareButtons(container,url,text,withNative){
+/* note (2026-11-18) : l'element qui recoit "Lien copie" ; par defaut celui
+   de la partie entre amis. Chaque ecran passe le sien : avant, le defi du
+   jour ecrivait son message dans la note d'un autre onglet. */
+function shareButtons(container,url,text,withNative,note){
+  const dire=m=>{const n=note||$("amiNote");if(n)n.textContent=m;};
   poserHtml(container,"");
   const mk=(label,cls,fn,icon)=>{
     const b=document.createElement("button");
@@ -2758,10 +2762,10 @@ function shareButtons(container,url,text,withNative){
   mk("Messenger","msg",()=>{
     const mobile=/android|iphone|ipad|ipod/i.test(navigator.userAgent);
     if(mobile)location.href="fb-messenger://share/?link="+encodeURIComponent(url);
-    else{copyText(url);$("amiNote").textContent=t("Link copied, paste it into Messenger.");}
+    else{copyText(url);dire(t("Link copied, paste it into Messenger."));}
   },SHARE_ICONS.msg);
   mk("Telegram","tg",()=>{window.open("https://t.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(text),"_blank","noopener");},SHARE_ICONS.tg);
-  mk(t("Copy"),"",()=>{copyText(url);$("amiNote").textContent=t("Link copied.");});
+  mk(t("Copy"),"",()=>{copyText(url);dire(t("Link copied."));});
 }
 function updateAmiNote(){
   const n=$("amiNote"); if(!n)return;

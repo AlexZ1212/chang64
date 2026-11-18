@@ -662,7 +662,45 @@ async function rEnqueteEcrire(s, d, env, now) {
   return r ? json({ ok: true }, 201) : erreur("trop", 429);
 }
 
-export async function onRequest({ request, env, params }) {
+/* ---------- Profil public d'un membre (2026-11-18) ---------- */
+/* GET /api/compte/profil?p=<pseudo>, sans session :
+     { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k } }
+   Les six chiffres sont ceux des tableaux des joueurs (classement.js), avec
+   le rang dans chacun : 1 + le nombre de comptes qui font strictement mieux,
+   ou null si le joueur n'entre pas dans ce tableau (memes conditions que
+   classement.js). C'est aussi ce qui donne son rang a un joueur au-dela des
+   50 premiers. Rien d'autre ne sort : ni dates precises, ni progression.
+   Une seule requete de comptage, a sous-requetes scalaires (pas de UNION :
+   D1 en plafonne les termes). Garde cinq minutes dans le cache de Cloudflare,
+   comme les tableaux. */
+const PROFIL_RANGS = "SELECT " +
+  "(SELECT COUNT(*) FROM comptes WHERE sem = ?1 AND sem_resolus > ?2) AS s, " +
+  "(SELECT COUNT(*) FROM comptes WHERE resolus >= 10 AND note > ?3) AS n, " +
+  "(SELECT COUNT(*) FROM comptes WHERE resolus > ?4) AS r, " +
+  "(SELECT COUNT(*) FROM comptes WHERE serie > ?5) AS j, " +
+  "(SELECT COUNT(*) FROM comptes WHERE badges > ?6) AS b, " +
+  "(SELECT COUNT(*) FROM comptes WHERE sprint > ?7) AS k";
+async function rProfil(request, env, now, waitUntil) {
+  const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
+  if (!v.ok) return erreur("inconnu", 404);
+  const cache = typeof caches !== "undefined" && caches.default ? caches.default : null;
+  const cle = new Request(new URL("/api/compte/profil?p=" + encodeURIComponent(v.cle), request.url).toString());
+  if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
+  const c = await env.DB.prepare("SELECT pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus FROM comptes WHERE cle = ?1").bind(v.cle).first();
+  if (!c) return erreur("inconnu", 404);
+  const semaine = lundi(now), s = c.sem === semaine ? c.sem_resolus : 0;
+  const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint).first();
+  const rang = (dedans, devant) => dedans ? devant + 1 : null;
+  const rep = json({
+    p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
+    s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint,
+    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k) }
+  }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
+  if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));
+  return rep;
+}
+
+export async function onRequest({ request, env, params, waitUntil }) {
   try {
     if (!env.DB) return erreur("indisponible", 503);
     const route = [].concat(params && params.route || []).join("/"), m = request.method, now = Date.now();
@@ -679,6 +717,7 @@ export async function onRequest({ request, env, params }) {
       if (route === "secours") return await rSecours(d, env, now);
       return await rLienConnexion(d, env, now);
     }
+    if (m === "GET" && route === "profil") return await rProfil(request, env, now, waitUntil);
     if (m === "POST" && route === "deconnexion") {
       const jeton = cookieLire(request);
       if (jeton) await env.DB.prepare("DELETE FROM jetons WHERE hash = ?1").bind(await sha256(jeton)).run();

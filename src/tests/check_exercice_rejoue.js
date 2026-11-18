@@ -45,6 +45,17 @@ function ouvrir(page) {
   const e0 = etat(), e1 = await gagner();
   T("premiere reussite : comptee (resolus, motif, journal, objectif du jour)", e1.solved === e0.solved + 1 && e1.motif === e0.motif + 1 && e1.journal === e0.journal + 1 && e1.objectif === e0.objectif + 1, JSON.stringify([e0, e1]));
   T("l'exercice est inscrit parmi ceux du jour", e1.gagnes === e0.gagnes + 1);
+  /* Partage d'un exercice ordinaire (2026-11-18) : le bloc commun apparait
+     apres la reussite, avec le lien de CET exercice, sans "Partager mon
+     resultat" (propre a l'exercice du jour). */
+  {
+    const $ = id => w.document.getElementById(id);
+    T("exercice ordinaire reussi : le bloc de partage apparait", !$("dailyChallengeBlock").classList.contains("hide") && $("btnShareDaily").classList.contains("hide") && !$("btnChallengeDaily").classList.contains("hide"));
+    $("btnChallengeDaily").click();
+    T("le lien partage est celui de cet exercice", $("dailyChallengeLink").value === "https://chang64.com/#puzzle=" + e1.id && !$("dailyChallengePanel").classList.contains("hide") && $("dailyChallengeShare").children.length >= 4, $("dailyChallengeLink").value);
+    w.eval("loadPuzzle()"); await attendre(100);
+    T("exercice recharge : le bloc se referme", $("dailyChallengeBlock").classList.contains("hide") && !$("btnShareDaily").classList.contains("hide"));
+  }
   w.eval("loadPuzzle()"); await attendre(100);
   T("Recommencer recharge le meme exercice", etat().id === e1.id);
   let e2 = await gagner();

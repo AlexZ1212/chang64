@@ -1985,6 +1985,7 @@ function loadPuzzle(){
     if(dcb)dcb.classList.add("hide");
     if(dcp)dcp.classList.add("hide");
     const drp=$("dailyResultPanel");if(drp)drp.classList.add("hide");
+    const bsd=$("btnShareDaily");if(bsd)bsd.classList.remove("hide");
     const dsn=$("dailyShareNote");if(dsn)dsn.textContent="";
     const bjs=$("btnDailyNext");if(bjs)bjs.classList.add("hide");
   }

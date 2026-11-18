@@ -1060,5 +1060,7 @@ module.exports = {
 "Play with the others":"Bermain dengan yang lain",
 "Appear in Top players, challenge a member on five puzzles, and compare your week with your friends.":"Tampil di Pemain terbaik, tantang seorang anggota pada lima teka-teki, dan bandingkan pekanmu dengan teman-temanmu.",
 "A username and a code":"Nama pengguna dan kode",
-"That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"Hanya itu yang kami minta: tanpa nama, tanpa alamat email. Gratis, dan kamu bisa menghapus akunmu kapan saja."
+"That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"Hanya itu yang kami minta: tanpa nama, tanpa alamat email. Gratis, dan kamu bisa menghapus akunmu kapan saja.",
+/* Partage d'un exercice ordinaire (2026-11-18). */
+"I solved this puzzle on chang64. Your turn:":"Aku memecahkan teka-teki ini di chang64. Giliranmu:"
 };

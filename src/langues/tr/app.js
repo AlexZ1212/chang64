@@ -1060,5 +1060,7 @@ module.exports = {
 "Play with the others":"Diğerleriyle oyna",
 "Appear in Top players, challenge a member on five puzzles, and compare your week with your friends.":"En iyi oyuncular arasında yer al, bir üyeye beş bulmacayla meydan oku ve haftanı arkadaşlarınınkiyle karşılaştır.",
 "A username and a code":"Bir kullanıcı adı ve bir kod",
-"That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"Senden istediğimiz bu kadar: ne ad ne e-posta adresi. Ücretsizdir ve hesabını istediğin zaman silebilirsin."
+"That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"Senden istediğimiz bu kadar: ne ad ne e-posta adresi. Ücretsizdir ve hesabını istediğin zaman silebilirsin.",
+/* Partage d'un exercice ordinaire (2026-11-18). */
+"I solved this puzzle on chang64. Your turn:":"Bu bulmacayı chang64'te çözdüm. Sıra sende:"
 };

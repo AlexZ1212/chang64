@@ -1450,12 +1450,26 @@ function dateToDailyId(key){
 function openDailyChallenge(){
   const panel=$("dailyChallengePanel"),link=$("dailyChallengeLink"),share=$("dailyChallengeShare");
   if(!panel||!link||!share||!puzzle)return;
-  const url=baseUrl()+"#puzzle="+dateToDailyId(todayKey());
+  /* L'exercice du jour, ou l'exercice ordinaire qu'on vient de reussir (2026-11-18). */
+  const duJour=!!puzzle.daily&&!puzzle.dailyCatchupKey;
+  const url=baseUrl()+"#puzzle="+(duJour?dateToDailyId(todayKey()):puzzle.id);
   link.value=url;
   panel.classList.remove("hide");
   const autre=$("dailyResultPanel");if(autre)autre.classList.add("hide");
-  shareButtons(share,url,t("I solved today's puzzle in {n} moves. Your turn:",{n:(puzzle.sol||[]).length}),true,$("dailyShareNote"));
+  shareButtons(share,url,duJour?t("I solved today's puzzle in {n} moves. Your turn:",{n:(puzzle.sol||[]).length}):t("I solved this puzzle on chang64. Your turn:"),true,$("dailyShareNote"));
 }
+/* Un exercice ordinaire reussi propose le meme bloc de partage que
+   l'exercice du jour (2026-11-18, retour d'Alexandre), sans "Partager mon
+   resultat", qui parle de l'exercice du jour. Ni en Sprint, ni pendant un
+   defi : le premier ne s'arrete pas, le second a son propre partage. */
+function exoPartageMaj(won){
+  const bloc=$("dailyChallengeBlock"),res=$("btnShareDaily");
+  if(!bloc||!res||!puzzle)return;
+  const duJour=!!puzzle.daily&&!puzzle.dailyCatchupKey;
+  res.classList.toggle("hide",!duJour);
+  if(won&&!duJour&&!rush&&/^p\d+$/.test(String(puzzle.id))&&!(typeof duel!=="undefined"&&duel))bloc.classList.remove("hide");
+}
+{const av=finishPuzzle;finishPuzzle=function(won){const r=av.apply(this,arguments);exoPartageMaj(won);return r;};}
 if($("btnChallengeDaily"))$("btnChallengeDaily").onclick=openDailyChallenge;
 /* Partage du resultat de l'exercice du jour (2026-11-01, demande
    d'Alexandre). Rien de la solution ne transparait, on peut le poster sans

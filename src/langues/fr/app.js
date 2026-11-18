@@ -912,5 +912,7 @@ module.exports = {
 "Play with the others":"Joue avec les autres",
 "Appear in Top players, challenge a member on five puzzles, and compare your week with your friends.":"Apparais dans Meilleurs joueurs, défie un membre sur cinq exercices, et compare ta semaine avec celle de tes amis.",
 "A username and a code":"Un pseudo et un code",
-"That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"C'est tout ce qu'on te demande : ni nom, ni adresse e-mail. C'est gratuit, et tu peux supprimer ton compte quand tu veux."
+"That is all we ask: no name, no email address. It is free, and you can delete your account at any time.":"C'est tout ce qu'on te demande : ni nom, ni adresse e-mail. C'est gratuit, et tu peux supprimer ton compte quand tu veux.",
+/* Partage d'un exercice ordinaire (2026-11-18). */
+"I solved this puzzle on chang64. Your turn:":"J'ai résolu cet exercice sur chang64, à toi :"
 };

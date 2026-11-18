@@ -2,6 +2,49 @@
  {
   "d": "2026-11-18",
   "en": [
+   "Leagues are on their way",
+   "Five leagues, from Pawn to Queen. Each week you play in a group of about 20 players, ranked by puzzles solved: the top 5 move up, the bottom 5 move down. They open once 50 players are active in the same week. Follow the count in My league, under Top players, with a free account."
+  ],
+  "fr": [
+   "Les ligues arrivent",
+   "Cinq ligues, de Pion à Dame. Chaque semaine, tu joues dans un groupe d'environ 20 joueurs, classés par exercices résolus : les 5 premiers montent, les 5 derniers descendent. Elles ouvriront quand 50 joueurs seront actifs la même semaine. Suis le compteur dans Ma ligue, sous Meilleurs joueurs, avec un compte gratuit."
+  ],
+  "es": [
+   "Llegan las ligas",
+   "Cinco ligas, de Peón a Dama. Cada semana juegas en un grupo de unos 20 jugadores, ordenados por ejercicios resueltos: los 5 primeros suben, los 5 últimos bajan. Abrirán cuando 50 jugadores estén activos la misma semana. Sigue el contador en Mi liga, dentro de Mejores jugadores, con una cuenta gratis."
+  ],
+  "pt": [
+   "As ligas estão chegando",
+   "Cinco ligas, de Peão a Dama. A cada semana você joga em um grupo de cerca de 20 jogadores, classificados pelos exercícios resolvidos: os 5 primeiros sobem, os 5 últimos descem. Elas abrem quando 50 jogadores estiverem ativos na mesma semana. Acompanhe o contador em Minha liga, dentro de Melhores jogadores, com uma conta grátis."
+  ],
+  "de": [
+   "Die Ligen kommen",
+   "Fünf Ligen, vom Bauern bis zur Dame. Jede Woche spielst du in einer Gruppe von etwa 20 Spielern, geordnet nach gelösten Aufgaben: Die ersten 5 steigen auf, die letzten 5 steigen ab. Sie öffnen, sobald 50 Spieler in derselben Woche aktiv sind. Verfolge den Zähler unter Meine Liga, bei Beste Spieler, mit einem kostenlosen Konto."
+  ],
+  "ru": [
+   "Скоро лиги",
+   "Пять лиг, от Пешки до Ферзя. Каждую неделю ты играешь в группе примерно из 20 игроков, место зависит от решённых задач: первые 5 поднимаются, последние 5 опускаются. Лиги откроются, когда за одну неделю наберётся 50 активных игроков. Следи за счётчиком в разделе «Моя лига», в «Лучших игроках», с бесплатным аккаунтом."
+  ],
+  "it": [
+   "Arrivano le leghe",
+   "Cinque leghe, da Pedone a Donna. Ogni settimana giochi in un gruppo di circa 20 giocatori, ordinati per esercizi risolti: i primi 5 salgono, gli ultimi 5 scendono. Apriranno quando 50 giocatori saranno attivi nella stessa settimana. Segui il contatore in La mia lega, sotto Migliori giocatori, con un account gratuito."
+  ],
+  "tr": [
+   "Ligler geliyor",
+   "Piyondan Vezire beş lig. Her hafta yaklaşık 20 oyunculu bir grupta oynarsın; sıralama çözülen bulmacalara göredir: ilk 5 yükselir, son 5 düşer. Aynı hafta içinde 50 oyuncu aktif olduğunda açılacaklar. Sayacı, ücretsiz bir hesapla En iyi oyuncular bölümündeki Ligim'den takip et."
+  ],
+  "pl": [
+   "Nadchodzą ligi",
+   "Pięć lig, od Pionka do Hetmana. Co tydzień grasz w grupie około 20 graczy, ułożonych według rozwiązanych zadań: pierwszych 5 awansuje, ostatnich 5 spada. Ruszą, gdy w jednym tygodniu aktywnych będzie 50 graczy. Śledź licznik w Mojej lidze, w Najlepszych graczach, mając darmowe konto."
+  ],
+  "id": [
+   "Liga segera hadir",
+   "Lima liga, dari Pion hingga Menteri. Setiap minggu kamu bermain dalam grup berisi sekitar 20 pemain, diurutkan menurut teka-teki yang diselesaikan: 5 teratas naik, 5 terbawah turun. Liga dibuka saat 50 pemain aktif dalam minggu yang sama. Pantau hitungannya di Liga saya, di bawah Pemain terbaik, dengan akun gratis."
+  ]
+ },
+ {
+  "d": "2026-11-18",
+  "en": [
    "What an account now unlocks",
    "Your badge collection, your progress charts, the themes you have earned and your full game history now open with a free account. Everything you play stays free without one, and nothing you have earned is lost."
   ],

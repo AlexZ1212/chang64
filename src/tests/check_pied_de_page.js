@@ -42,7 +42,7 @@ console.log("\n--- Meme forme que les composants de l'application ---");
   T("menu sur fond contraste", /\.sitenav\{[^}]*background-color:var\(--slate\)/.test(css));
   T("section courante surlignee en laiton", /\.sitenav \[aria-current="page"\]\{[^}]*background-color:var\(--brass\)/.test(css));
   T("texte clair sur le laiton", /\.sitenav \[aria-current="page"\]\{[^}]*color:#FDF8EC/.test(css));
-  T("langue en pastille, meme rayon que l'application", /\.langsw\{[^}]*border-radius:8px/.test(css));
+  T("langue en pastille, meme rayon que l'application", /\.langsw\{[^}]*border-radius:var\(--r\)/.test(css));
   /* Depuis le 2026-10-25, la langue courante s'affiche seule (summary) et la
      liste des six langues s'ouvre dessous. */
   T("langue courante surlignee", /\.langsw summary\{[^}]*background-color:var\(--raise\)/.test(css));
@@ -83,7 +83,7 @@ console.log("\n--- Meme forme que les composants de l'application ---");
     T("meme ordre des langues", oa===ob, oa+" vs "+ob);
   }
   T("l'application a bien la meme forme d'onglets", /\.tabs\{[^}]*border-radius:999px/.test(cssApp));
-  T("et le meme rayon de selecteur", /\.seg\{[^}]*border-radius:8px/.test(cssApp));
+  T("et le meme rayon de selecteur", /\.seg\{[^}]*border-radius:var\(--r\)/.test(cssApp));
 }
 
 console.log("\n--- Un seul menu, dans l'entete ---");

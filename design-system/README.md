@@ -403,3 +403,18 @@ Dans les libellés et les pieds de page, les éléments d'une même ligne sont s
 ### Partage
 
 Un seul bloc de partage sur tout le site : l'adresse dans son champ, puis Partager, WhatsApp, Messenger, Telegram, Copier, dans un cadre.
+
+## Arrondis et contours (19 novembre 2026, demande d'Alexandre)
+
+Quatre tailles d'arrondi, chacune avec un rôle. Ne plus écrire de valeur en dur.
+
+| Variable | Valeur | Rôle |
+|---|---|---|
+| `--r-l` | 12px | ce qui contient : bloc d'accueil, cartes, panneaux, fenêtres |
+| `--r` | 8px | ce qu'on actionne : boutons, champs, puces, tuiles |
+| `--r-s` | 6px | ce qui est logé dans une commande : segments, lignes de menu |
+| `--r-xs` | 3px | les tout petits éléments : barres, pastilles carrées |
+
+Hors échelle, et seulement là : `999px` (pilule : onglets, étiquettes), `50%` (rond), `2px` (cases de l'échiquier et ses voiles).
+
+Contours : un seul filet, `1px solid var(--rule)`. L'accent (`var(--brass)`) marque le choix en cours ou le survol, jamais un simple décor. Le focus au clavier est un `outline` de 2px en accent.

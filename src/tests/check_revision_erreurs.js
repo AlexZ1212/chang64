@@ -86,6 +86,18 @@ function ouvrir(page, envois) {
   T("annonce deux erreurs echues", $("subSolveMistakes").textContent === "2 to review now", $("subSolveMistakes").textContent);
   T("cliquable", !carte().disabled);
 
+  console.log("\n--- Le bloc de l'ecran Exercices ---");
+  w.eval("renderMistakeQueue()");
+  const bloc = $("mistakeGrid");
+  T("bloc visible quand des erreurs sont echues", !$("mistakeSection").classList.contains("hide"));
+  T("plus de rangee de croix", !bloc.querySelector(".loss") && !/[✗✕]/.test(bloc.textContent), bloc.textContent);
+  T("le chiffre ne compte que les erreurs echues", bloc.querySelector(".erreurs-n").textContent === "2", bloc.textContent);
+  T("dit ce que le chiffre compte", bloc.querySelector(".erreurs-texte b").textContent === "to review now");
+  T("donne les motifs en cause", bloc.querySelector(".erreurs-motifs").textContent === "x 2", bloc.querySelector(".erreurs-motifs").textContent);
+  T("un seul bouton, qui lance la session", bloc.querySelectorAll("button").length === 1 && $("btnMistakes").onclick === w.eval("lancerRevision"));
+  T("la phrase sur le retour espace est la", /come back later/.test($("mistakeSection").textContent));
+  T("la bulle ne parle plus de toucher une croix", !/Tap one/.test($("tipMistakes").textContent));
+
   console.log("\n--- La session ---");
   clic(carte()); await attendre(1500);
   T("ouvre la premiere erreur echue", w.eval("puzzle.id") === a.id, w.eval("puzzle.id"));

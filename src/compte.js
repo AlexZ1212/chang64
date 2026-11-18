@@ -852,11 +852,12 @@ setTimeout(cpDemarrer,1200);
    sur le serveur. */
 const CPJ=[["semaine","This week"],["note","Rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"]];
 let cpjPar="semaine",cpjCache={};
+const CPL=["Pawn","Knight","Bishop","Rook","Queen"];
 async function cpjVue(par){
   const v=$("menuJoueursVue");if(!v)return;
   if(par)cpjPar=par;
   const p=cpjPar;
-  const onglets='<div class="cpj-onglets">'+CPJ.concat(cp?[["amis","My friends"]]:[]).map(([k,l])=>'<button type="button" aria-pressed="'+(k===p)+'" data-cpj="'+k+'">'+cpE(l)+"</button>").join("")+"</div>"+
+  const onglets='<div class="cpj-onglets">'+CPJ.concat(cp?[["amis","My friends"],["ligue","My league"]]:[]).map(([k,l])=>'<button type="button" aria-pressed="'+(k===p)+'" data-cpj="'+k+'">'+cpE(l)+"</button>").join("")+"</div>"+
     (p==="semaine"?'<p class="cp-note">'+cpE("Puzzles solved since Monday.")+"</p>":"");
   const pied='<p class="cp-note cp-centre cpj-astuce">'+cpE("Turn your phone sideways to see all the stats at once.")+"</p>"+
     '<button type="button" class="btn cp-large cpj-tout" data-cpj-tout>'+cpE("All the stats")+"</button>"+
@@ -879,6 +880,41 @@ async function cpjVue(par){
       return "<li"+(m?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+
         (m?" <em>("+cpE("You")+")</em>":x.m?" <em>("+cpE("Friend")+")</em>":"")+"</span><b>"+echapper(String(cpNombre(x.s)))+"</b></li>";
     }).join("")+"</ol>");
+    return;
+  }
+  if(p==="ligue"){
+    /* Ma ligue (2026-11-18) : cinq ligues, de Pion a Dame. Tant qu'elles ne
+       sont pas ouvertes (50 membres actifs dans une semaine), on dit ou on en
+       est. Ensuite : sa ligue, le classement de son groupe par exercices
+       reussis depuis lundi, et les places qui montent ou descendent. Lu avec
+       la session (route ligue), garde une minute. */
+    if(!cp){cpjPar="semaine";return cpjVue();}
+    let g=cpjCache.ligue;
+    if(!g||g.pour!==cp.pseudo||Date.now()-g.t>60000){
+      dessiner('<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");
+      const r=await cpApi("GET","ligue");
+      if(r.s!==200||!cp){dessiner('<p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
+      g=cpjCache.ligue={t:Date.now(),j:r.j,pour:cp.pseudo};
+    }
+    const j=g.j,regle='<p class="cp-note">'+cpE("Five leagues, from Pawn to Queen. Each week you play in a group of about 20 players, ranked by puzzles solved since Monday. The top 5 move up, the bottom 5 move down.")+"</p>";
+    if(!j.ouvert){
+      const seuil=Math.max(1,cpNombre(j.seuil)||50),n=Math.min(seuil,cpNombre(j.actifs));
+      dessiner('<div class="cpl-attente"><b>'+echapper(t("{n} out of {m}",{n:n,m:seuil}))+"</b><span>"+cpE("active players last week")+'</span>'+
+        '<div class="cpl-jauge" role="img" aria-label="'+echapper(t("{n} out of {m}",{n:n,m:seuil}))+'"><i style="width:'+Math.round(100*n/seuil)+'%"></i></div></div>'+
+        '<p class="cp-note">'+echapper(t("Leagues open the Monday after {m} players have each solved at least one puzzle in the same week.",{m:seuil}))+"</p>"+regle);
+      return;
+    }
+    const lg=Math.max(0,Math.min(4,cpNombre(j.ligue))),l=cpListe(j.groupe),monte=cpNombre(j.monte),descend=cpNombre(j.descend);
+    const echelle='<ol class="cpl-echelle" aria-label="'+cpE("Leagues")+'">'+CPL.map((nom,i)=>"<li"+(i===lg?' class="cpl-ici" aria-current="true"':"")+">"+cpE(nom)+"</li>").join("")+"</ol>";
+    const mouv=j.mouv===1?'<p class="cpl-mouv">'+cpE("You moved up a league. Well played.")+"</p>":j.mouv===-1?'<p class="cpl-mouv">'+cpE("You moved down a league. This week is your chance to climb back.")+"</p>":"";
+    if(!l.length){dessiner(echelle+mouv+'<p class="cp-note cp-centre">'+cpE("Solve one puzzle this week to join a group.")+"</p>"+regle);return;}
+    dessiner(echelle+mouv+'<ol class="cpj-liste cpl-liste">'+l.map((x,i)=>{
+      const m=x.p===cp.pseudo;
+      return (monte&&i===monte?'<li class="cpl-zone" aria-hidden="true">'+echapper(t("The top {n} move up",{n:monte}))+"</li>":"")+
+        (descend&&i===l.length-descend?'<li class="cpl-zone" aria-hidden="true">'+echapper(t("The bottom {n} move down",{n:descend}))+"</li>":"")+
+        "<li"+(m?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+
+        (m?" <em>("+cpE("You")+")</em>":"")+"</span><b>"+echapper(String(cpNombre(x.v)))+"</b></li>";
+    }).join("")+"</ol>"+regle);
     return;
   }
   let c=cpjCache[p];

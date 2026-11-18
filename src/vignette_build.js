@@ -63,7 +63,7 @@ html,body{background:transparent;color:#ECEAE3;font-family:"Archivo","Golos Text
 #plateau{border-radius:6px;overflow:hidden;line-height:0;aspect-ratio:1}
 #plateau svg{width:100%;height:auto;display:block}
 #consigne{font-size:15px;font-weight:600;line-height:1.35;min-height:20px}
-.bouton{display:block;text-align:center;padding:11px 14px;border-radius:9px;background-color:#E0A93B;color:#1b1508;font-weight:600;font-size:15px}
+.bouton{display:block;text-align:center;padding:11px 14px;border-radius:8px;background-color:#E0A93B;color:#1b1508;font-weight:600;font-size:15px}
 .carte:hover .bouton,.carte:focus-visible .bouton{background-color:#ECBB57}
 .carte:focus-visible{outline:2px solid #E0A93B;outline-offset:2px}
 </style>

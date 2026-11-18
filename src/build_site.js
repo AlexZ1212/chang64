@@ -1074,7 +1074,7 @@ function metaDesc(raw, max) {
 const CSS = `*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
 --bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
---rule:rgba(21,32,28,.14);--r:8px}
+--rule:rgba(21,32,28,.14);--r-l:12px;--r:8px;--r-s:6px;--r-xs:3px}
 body{background:var(--ink);color:var(--chalk);
 font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}
 .wrap{max-width:880px;margin:0 auto}
@@ -1113,8 +1113,8 @@ p{margin-bottom:12px;max-width:66ch}
 .lede{font-size:17px;color:var(--sage);margin-bottom:24px}
 .cols{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
 @media(max-width:700px){.cols{grid-template-columns:1fr}}
-.diagram{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:10px}
-.anim svg{display:block;width:100%;height:auto;border-radius:6px}
+.diagram{background:var(--slate);border:1px solid var(--rule);border-radius:var(--r-l);padding:10px}
+.anim svg{display:block;width:100%;height:auto;border-radius:var(--r-s)}
 /* l'attribut hidden sur un <g> SVG depend de la feuille du navigateur :
    on l'impose explicitement plutot que d'en dependre */
 .anim g[data-ply][hidden]{display:none}
@@ -1132,7 +1132,7 @@ p{margin-bottom:12px;max-width:66ch}
    un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
-.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:6px;
+.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:var(--r-s);
   width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}
 .animctl button:hover{background:var(--board);color:var(--slate)}
 .animctl button:disabled{opacity:.38;cursor:default}
@@ -1174,7 +1174,7 @@ td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk
 padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}
 .cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);
-border:1px solid var(--rule);border-radius:12px}
+border:1px solid var(--rule);border-radius:var(--r-l)}
 .toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;
 color:var(--chalk);background:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 12px}
 .toc a:hover{border-color:var(--brass);color:var(--brass)}
@@ -1192,7 +1192,7 @@ html{
      de securite comprise ici. */
   scroll-padding-top:150px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.tile{background:var(--slate);border:1px solid var(--rule);border-radius:12px;padding:14px;text-decoration:none;display:block}
+.tile{background:var(--slate);border:1px solid var(--rule);border-radius:var(--r-l);padding:14px;text-decoration:none;display:block}
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
@@ -1204,7 +1204,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   font-size:12.5px;letter-spacing:.03em;line-height:1.5;text-align:center;text-wrap:balance}
 .filtre{margin-bottom:18px}
 .filtre input{width:100%;max-width:520px;box-sizing:border-box;font:inherit;font-size:15px;
-  padding:11px 14px;border:1px solid var(--rule);border-radius:10px;
+  padding:11px 14px;border:1px solid var(--rule);border-radius:var(--r);
   background:var(--slate);color:var(--chalk)}
 .filtre input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 .filtre-etat{margin:8px 0 0;font-size:13px;color:var(--sage);min-height:1.2em}
@@ -1248,22 +1248,22 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    rayon et le meme fond. Ici ce sont deux liens, chaque langue etant une page
    distincte. */
 .langsw{background-color:var(--ink);padding:3px;position:relative;
-  border-radius:8px;border:1px solid var(--rule);flex:none}
+  border-radius:var(--r);border:1px solid var(--rule);flex:none}
 /* Reprise exacte de .langswitch summary dans l'application : JetBrains Mono
    en 600, corps 11.5px, marges 7px 10px. Ce n'est pas la police du corps de
    texte, c'est celle du "64" de la marque : le selecteur de langue appartient
    a la meme famille visuelle. Depuis le 2026-10-25, la langue courante est
    affichee seule et la liste des six langues s'ouvre dessous. */
 .langsw summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;
-  font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:6px;
+  font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:var(--r-s);
   background-color:var(--raise);color:var(--chalk);white-space:nowrap}
 .langsw summary::-webkit-details-marker{display:none}
 .langsw summary::after{content:"";display:inline-block;width:5px;height:5px;margin:0 0 2px 7px;
   border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
 .langsw[open] summary::after{transform:rotate(-135deg);margin-bottom:-1px}
 .langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;
-  min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px}
-.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:6px;white-space:nowrap}
+  min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r)}
+.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:var(--r-s);white-space:nowrap}
 .langmenu a:hover{color:var(--chalk)}
 .langmenu a[aria-current="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 

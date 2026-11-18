@@ -370,6 +370,11 @@ function beginCoordFlow(){
      endroit scrolle plus bas, par exemple juste apres avoir lu la
      description de ce meme bloc. */
   if(typeof focusBoard==="function")focusBoard();
+  /* Echiquier vide des le voile (2026-11-19, choix d'Alexandre) : sans cela
+     on devinait dessous les pieces de l'exercice ou de la partie d'avant. */
+  game=new Game("8/8/8/8/8/8/8/8 w - - 0 1");
+  selected=-1;marks={};lastMove=null;legalCache=[];
+  render();
   /* Titre "Coordinates" plutot que le "Ready when you are" generique
      (2026-09-03), meme raison que beginRushFlow() (ui2.js). */
   if(typeof showReadyFor==="function")
@@ -1490,6 +1495,11 @@ setMode=function(m,opts){
   if(m==="edit"){
     if(mode==="play"&&game){mainGame=game;mainSan=sanList;mainLast=lastMove;mainStarted=gameStarted;mainFlipped=flipped;}
     mode="edit";busy=false;
+    /* 2026-11-18 : sans ces deux lignes, la mise en page gardait le mode de
+       l'onglet d'avant (taille d'echiquier et marges de Resoudre ou de
+       Jouer, selon d'ou l'on venait). */
+    $("appLayout").dataset.mode="edit";
+    document.body.dataset.mode="edit";
     const tabs={play:"tab-play",edit:"tab-edit",puzzles:"tab-puzzles",train:"tab-train",friend:"tab-friend",explore:"tab-explore"};
     for(const k in tabs)markTab($(tabs[k]),k===m);
     $("pane-home").classList.add("hide");

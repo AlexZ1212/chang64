@@ -115,7 +115,17 @@
      historique perdu). */
   --brick:#E4776A;
   --rule:rgba(236,234,227,.12);
+  /* Echelle des arrondis (2026-11-19, demande d'Alexandre : des tailles
+     differentes, mais chacune avec un role). Voir design-system/README.md.
+     --r-l : ce qui contient (bloc d'accueil, cartes, panneaux, fenetres) ;
+     --r   : ce qu'on actionne (boutons, champs, puces, tuiles) ;
+     --r-s : ce qui est loge dans une commande (segments, lignes de menu) ;
+     --r-xs: les tout petits elements (barres, pastilles carrees).
+     Hors echelle : 999px (pilule), 50% (rond), 2px (cases de l'echiquier). */
+  --r-l:12px;
   --r:8px;
+  --r-s:6px;
+  --r-xs:3px;
   --e1:0 1px 2px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,234,227,.04);
   --e2:0 12px 32px rgba(0,0,0,.55);
   /* Mouvement (2026-11-14, relooking anime, direction "pieces vivantes").
@@ -175,7 +185,7 @@ hr.rule{border:0;border-top:1px solid var(--rule);margin:20px 0 0}
    (remarque d'Alexandre, 2026-11-14) : un peu d'air, comme sur telephone. */
 #pane-puzzles hr.rule{margin-bottom:16px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.themepreview{display:grid;grid-template-columns:repeat(8,1fr);width:150px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.themepreview{display:grid;grid-template-columns:repeat(8,1fr);width:150px;border:1px solid var(--rule);border-radius:var(--r-s);overflow:hidden}
 .themepreview i{display:block;aspect-ratio:1/1}
 .themepreview i.l{background-color:var(--bone)}
 .themepreview i.d{background-color:var(--board)}
@@ -228,7 +238,7 @@ body{
    apparaitre nettement des la premiere tabulation. */
 .skiplink{position:absolute;left:-9999px;top:0;z-index:100;
   background-color:var(--brass);color:var(--on-brass);font-weight:600;font-size:13.5px;
-  padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none}
+  padding:10px 16px;border-radius:0 0 var(--r) 0;text-decoration:none}
 .skiplink:focus{left:0}
 /* Avertissement de stockage : discret mais pas decoratif, il contredit la
    ligne juste en dessous qui promet une progression enregistree. */
@@ -239,7 +249,7 @@ body{
 .nextlock{margin:6px 0 0;font-size:12.5px;line-height:1.45;color:var(--sage);opacity:.9}
 .storagewarn{margin:0 auto 12px;max-width:640px;padding:10px 14px;text-align:left;
   background-color:var(--slate);color:var(--chalk);border-left:3px solid var(--brass);
-  font-size:13px;line-height:1.5;border-radius:0 6px 6px 0}
+  font-size:13px;line-height:1.5;border-radius:0 var(--r-s) var(--r-s) 0}
 /* Message affiche uniquement quand JavaScript est absent : il doit se voir
    sans dependre de quoi que ce soit qui s'execute. */
 .nojs{margin:0;padding:14px 16px;background-color:var(--slate);color:var(--chalk);
@@ -289,7 +299,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    30 px), au lieu de 11 px fixes qui faisaient "flotter" l'elephant
    (choix d'Alexandre, 2026-10-25, entre 11, 8, 6 et 4 px). */
 .brand{display:flex;align-items:center;gap:calc(clamp(30px,6vw,40px) * .15);cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left;font:inherit}
-.brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:6px}
+.brand:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:var(--r-s)}
 .brand .glyph{width:clamp(30px,6vw,40px);height:calc(clamp(30px,6vw,40px) * 54 / 64);display:block;flex:none;color:var(--brass)}
 .brand .glyph svg{width:100%;height:100%;display:block}
 .brand h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1}
@@ -316,7 +326,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 /* ---------- home ---------- */
 .hero{
   background-image:linear-gradient(155deg,var(--arc-b) 0%,var(--slate) 62%);
-  border:1px solid var(--rule);border-radius:16px;padding:clamp(24px,5vw,44px);margin-bottom:16px;
+  border:1px solid var(--rule);border-radius:var(--r-l);padding:clamp(24px,5vw,44px);margin-bottom:16px;
   position:relative;overflow:hidden
 }
 .hero::after{
@@ -332,6 +342,9 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .promise{
   position:relative;font-weight:700;color:var(--chalk);margin-bottom:10px
 }
+/* 2026-11-19 (capture d'Alexandre) : ".hero p" (24px) l'emportait sur la
+   marge ci-dessus, les deux paragraphes semblaient etrangers l'un a l'autre. */
+.hero p.promise{margin-bottom:8px}
 /* Pieds de l'elephant sur la ligne de base de "chang" (2026-10-25) : voir
    brandMark() dans build_site.js, le signe de l'entete y est recadre aux
    pieds (viewBox 0 0 64 54). */
@@ -405,10 +418,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(max-width:480px){.hero .cta .btn{font-size:13px;padding:10px 14px;min-height:44px}}
 
 .tc-block{margin-bottom:22px;position:relative}
-.tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:9px;border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto}
+.tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:var(--r);border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto}
 .tc-cats button{
   flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 10px;
-  border-radius:6px;cursor:pointer;white-space:nowrap
+  border-radius:var(--r-s);cursor:pointer;white-space:nowrap
 }
 .tc-cats button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .tc-cats button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
@@ -416,7 +429,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .chip{
   font:inherit;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;
   background-color:var(--ink);border:1px solid var(--rule);color:var(--chalk);
-  padding:9px 14px;border-radius:8px;cursor:pointer;transition:border-color .16s,background .16s,transform var(--duree-appui) var(--courbe-ressort)
+  padding:9px 14px;border-radius:var(--r);cursor:pointer;transition:border-color .16s,background .16s,transform var(--duree-appui) var(--courbe-ressort)
 }
 .chip:hover{background-color:var(--raise)}
 /* Meme correction que pour la pendule : background en raccourci effacait le
@@ -462,7 +475,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
 @media(max-width:760px){.cards{grid-template-columns:1fr}}
 .card{
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:20px;
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r-l);padding:20px;
   text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .18s,transform var(--duree-courte) var(--courbe-ressort)
 }
 /* Survol : var(--brass) plein, comme les cartes de Resoudre (.solveCard,
@@ -576,6 +589,16 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
      pour laisser l'enonce visible au-dessus de la barre d'actions. Il garde
      260 px au minimum, en deca les cases deviennent trop petites au doigt. */
   #appLayout[data-mode="puzzles"] .board-frame{max-width:max(260px,calc(100vh - 350px));max-width:max(260px,calc(100svh - 350px));margin-inline:auto}
+  /* Telephone (2026-11-18) : en-tete, ecarts et barre resserres, la reserve
+     de hauteur passe de 350 a 296 px. Mesure : en-tete 96, ecart 8, puces,
+     consigne et message 124, barre 60, ecart 8. */
+  @media(max-width:599px){
+    #appLayout[data-mode="puzzles"] .board-frame{max-width:max(260px,calc(100vh - 296px));max-width:max(260px,calc(100svh - 296px))}
+    /* Finales : le titre et l'explication prennent 45 px de plus que la
+       consigne d'un exercice ; sans cette reserve, le message de l'elephant
+       passait sous la barre du bas. */
+    #appLayout[data-mode="puzzles"]:has(#solveEndgamesScreen:not(.hide)) .board-frame{max-width:max(260px,calc(100vh - 345px));max-width:max(260px,calc(100svh - 345px))}
+  }
   /* Barre d'actions fixee en bas, a portee de pouce, sur une seule ligne :
      Indice, Recommencer, puis l'action principale a droite. 44 px de haut
      au minimum (recommandation Apple, WCAG 2.5.5). */
@@ -589,6 +612,14 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
      entre le plateau et l'enonce passe de 37 a 12 px : sur un iPhone SE,
      c'est ce qui laisse la consigne visible au-dessus de la barre. */
   #appLayout[data-mode="puzzles"]{padding-bottom:76px;row-gap:12px}
+  @media(max-width:599px){
+    #appLayout[data-mode="puzzles"]{padding-bottom:68px;row-gap:8px}
+    #appLayout[data-mode="puzzles"] .ex-actions{padding-top:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+    /* L'action principale tient sur une ligne : elle prend un peu plus de place que les deux autres. */
+    #appLayout[data-mode="puzzles"] .ex-actions #btnNext,#appLayout[data-mode="puzzles"] .ex-actions #btnDailyNext{flex:1.35 1 0}
+    #appLayout[data-mode="puzzles"] .ex-actions .btn{font-size:13.5px;padding:8px 4px}
+    #pane-puzzles .panel{padding:10px 12px 12px}
+  }
 }
 @media(min-width:600px) and (max-width:860px){
   /* Tablette en portrait : le plateau large de 718 px repoussait tout. */
@@ -617,12 +648,12 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   #appLayout[data-mode="debut"]{margin:-10px -8px 0;padding:12px;row-gap:10px;background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--e2)}
   #appLayout[data-mode="debut"] .debut-tete{display:flex;align-items:center;gap:10px}
   .debut-tete h2{margin:0;font-size:22px}
-  .debut-fermer{margin-left:auto;font:inherit;font-size:22px;line-height:1;width:44px;height:44px;padding:0;border-radius:8px;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);cursor:pointer}
+  .debut-fermer{margin-left:auto;font:inherit;font-size:22px;line-height:1;width:44px;height:44px;padding:0;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);cursor:pointer}
   .debut-fermer:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
   #appLayout[data-mode="debut"] .panel.debut{padding:0;background:none;border:0;box-shadow:none}
   #appLayout[data-mode="debut"] .debut-pas{margin:6px 0 10px}
   #appLayout[data-mode="debut"] .debut-titre{font-size:22px}
-  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 415px));max-width:max(240px,calc(100svh - 415px))}
+  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 385px));max-width:max(240px,calc(100svh - 385px))}
 }
 /* Sans ceci, un glissement au doigt faisait defiler la page et annulait le
    deplacement. Les cases vides et les pieces adverses laissent defiler. */
@@ -650,6 +681,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(min-width:600px) and (max-width:860px){
   #appLayout[data-mode="play"] .board-frame,#appLayout[data-mode="friend"] .board-frame{max-width:max(300px,calc(100vh - 360px));max-width:max(300px,calc(100svh - 360px));margin-inline:auto}
 }
+/* Ordinateur (2026-11-18, demande d'Alexandre : « que l'espace soit bien
+   utilise ») : quand la hauteur de l'ecran limite l'echiquier, sa colonne
+   gardait ses 608 px et laissait un vide a droite du plateau (200 px en
+   1366 x 768 pendant une partie), avec des pendules plus larges que lui. La
+   colonne prend maintenant la largeur du plateau, et le bloc de droite
+   recupere la place. Pas quand le plateau est masque (.solo). */
+@media(min-width:861px){
+  #appLayout[data-mode="play"]:not(.solo),#appLayout[data-mode="friend"]:not(.solo){grid-template-columns:minmax(0,min(608px,max(300px,calc(100vh - 360px)))) minmax(300px,1fr);grid-template-columns:minmax(0,min(608px,max(300px,calc(100svh - 360px)))) minmax(300px,1fr)}
+  /* Analyser : l'echiquier commence plus bas (ligne « Editeur de position »),
+     240 px = son haut (217) et une marge. Il depassait le bas d'un ecran de
+     768 px de haut. */
+  #appLayout[data-mode="edit"]:not(.solo){grid-template-columns:minmax(0,min(608px,max(300px,calc(100vh - 240px)))) minmax(300px,1fr);grid-template-columns:minmax(0,min(608px,max(300px,calc(100svh - 240px)))) minmax(300px,1fr)}
+  #appLayout[data-mode="puzzles"]:not(.solo),#appLayout[data-mode="debut"]:not(.solo){grid-template-columns:minmax(0,min(608px,max(300px,calc(100vh - 200px)))) minmax(300px,1fr);grid-template-columns:minmax(0,min(608px,max(300px,calc(100svh - 200px)))) minmax(300px,1fr)}
+}
 /* La barre suit les rangees qu'elle contient : absente en Sprint et pendant
    la revue d'un Sprint. Sans ces regles, le display:flex ci-dessus, plus
    specifique, l'emporterait sur .rush-on .hors-sprint. */
@@ -658,7 +703,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 /* ---------- clocks ---------- */
 .board-frame{position:relative}
 .result{
-  position:absolute;inset:10px;z-index:20;display:flex;align-items:center;justify-content:center;
+  position:absolute;inset:var(--cadre,10px);z-index:20;display:flex;align-items:center;justify-content:center;
   /* L'overlay couvre exactement l'echiquier (inset = marge du cadre) : son
      rayon doit donc etre celui de l'echiquier, pas un autre, sinon les coins
      laissent voir les cases dessous. */
@@ -667,7 +712,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @keyframes fadein{from{opacity:0}}
 .result-card{
   background-color:var(--slate);border:1px solid var(--rule);
-  border-radius:calc(var(--r)*1.5);padding:18px 20px;text-align:center;max-width:320px;width:100%;
+  border-radius:var(--r-l);padding:18px 20px;text-align:center;max-width:320px;width:100%;
   box-shadow:var(--e2);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)
 }
 @keyframes pop{from{opacity:0;transform:scale(.9)}}
@@ -760,7 +805,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    arrondi et de la taille de la pastille, sa specificite l'emportant sur leur
    propre regle. */
 .clock{--pastille:13px;--pastille-gap:8px}
-.clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:3px;display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
+.clock .who>i{width:var(--pastille);height:var(--pastille);border-radius:var(--r-xs);display:block;background-color:var(--bone);border:1px solid #2A2118;flex:none}
 /* #221D17 remplace par #232B28 (2026-09-04) : cette pastille est censee
    annoncer la couleur des pieces de qui joue, mais son marron ne
    correspondait a rien -- #232B28 est le vrai remplissage des pieces
@@ -799,7 +844,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    plafond explicite garantit que le cadre et la grille ne peuvent jamais
    depasser la place disponible, quelle que soit la cause. box-sizing evite
    que la marge interieure ne s'ajoute a la largeur. */
-.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:10px;box-shadow:0 18px 46px rgba(0,0,0,.34);max-width:100%;box-sizing:border-box}
+.board-frame{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);--cadre:10px;padding:var(--cadre);box-shadow:0 18px 46px rgba(0,0,0,.34);max-width:100%;box-sizing:border-box}
 /* Bouton de retournement de l'echiquier : deplace du coin de l'echiquier
    (ou il recouvrait une piece, le cadre n'ayant que 10px de marge) vers le
    bandeau de coups, a droite du chevron "suivant" -- voir .board-tools plus
@@ -867,13 +912,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- panels ---------- */
-.panel{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;box-shadow:var(--e1)}
+.panel{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r-l);padding:16px;box-shadow:var(--e1)}
 /* Menu d'entree de Resoudre : 6 cartes a egalite (Puzzles/Puzzle du
    jour/Sprint/Coordonnees/Finales/Par motif), meme habillage que .panel
    puisque ce sont deja des blocs cliquables entiers plutot que des boutons
    inline. */
 .solveCard{display:block;width:100%;text-align:left;background-color:var(--slate);
-  border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);padding:16px;
+  border:1px solid var(--rule);border-radius:var(--r-l);padding:16px;
   box-shadow:var(--e1);margin-bottom:10px;cursor:pointer;font:inherit;color:inherit;
   transition:border-color .16s,transform .08s}
 .solveCard:hover{border-color:var(--brass)}
@@ -911,7 +956,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    du navigateur pour poser le notre, qui pivote a l'ouverture. */
 .repliable{padding:0}
 .repliable summary{list-style:none;cursor:pointer;display:flex;align-items:center;
-  gap:10px;padding:16px;border-radius:calc(var(--r)*1.5)}
+  gap:10px;padding:16px;border-radius:var(--r-l)}
 .repliable summary::-webkit-details-marker{display:none}
 .repliable summary::after{content:"";margin-left:auto;width:8px;height:8px;
   border-right:2px solid var(--sage);border-bottom:2px solid var(--sage);
@@ -962,6 +1007,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    ne rend pas le panneau visible quand il est masque. */
 #pane-play{display:flex;flex-direction:column;gap:14px}
 #pane-play > .panel + .panel{margin-top:0}
+/* Meme chose pour Resoudre (2026-11-18) : ses ecrans se remplacent l'un
+   l'autre, un seul est affiche. Sans cela, le panneau de l'exercice, precede
+   d'un ecran masque, commencait 14 px sous le haut de l'echiquier. */
+#pane-puzzles > .panel + .panel{margin-top:0}
 #pane-play.revue #statusPanel{order:1}
 #pane-play.revue #reviewPanel{order:2}
 #pane-play.revue #scoresheetPanel{order:3}
@@ -988,8 +1037,8 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .panel .sub{color:var(--sage);font-size:12.5px;margin-bottom:14px}
 .eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
 .field{margin-bottom:14px}
-.seg{display:flex;gap:3px;background-color:var(--ink);padding:3px;border-radius:8px;border:1px solid var(--rule)}
-.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:6px;cursor:pointer;white-space:nowrap;min-width:0}
+.seg{display:flex;gap:3px;background-color:var(--ink);padding:3px;border-radius:var(--r);border:1px solid var(--rule)}
+.seg button{flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 4px;border-radius:var(--r-s);cursor:pointer;white-space:nowrap;min-width:0}
 /* Les segments partagent la largeur a parts egales sans pouvoir passer a la
    ligne. Sur un ecran etroit, un libelle long comme "Tranquille" reclame plus
    de place que sa case et deborde. On reduit le corps et on autorise la
@@ -1011,7 +1060,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    visible autrement : la couleur tiree est mise en avant pendant la partie,
    et le bouton "Au hasard" redevient selectionne des qu'elle est finie. */
 .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
-.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:8px;cursor:pointer;transition:background .16s,transform var(--duree-appui) var(--courbe-ressort)}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);padding:10px 14px;border-radius:var(--r);cursor:pointer;transition:background .16s,transform var(--duree-appui) var(--courbe-ressort)}
 .btn:hover{background:var(--survol)}
 /* Le bouton s'enfonce sous le doigt et revient avec un leger ressort
    (relooking anime, 2026-11-14) ; il descendait d'un pixel auparavant. */
@@ -1055,7 +1104,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 }
 
 /* ---------- scoresheet ---------- */
-.sheet{background:#F4EEDC;border-radius:6px;overflow:hidden;color:#2A2A22}
+.sheet{background:#F4EEDC;border-radius:var(--r-s);overflow:hidden;color:#2A2A22}
 .sheet-head{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;background:#E2D9C0;color:#605844;padding:5px 0}
 .sheet-head span{text-align:center}
 .sheet-body{max-height:212px;overflow-y:auto}
@@ -1067,7 +1116,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .sheet-empty{padding:22px 12px;text-align:center;color:#8A8069;font-size:12.5px;font-family:'Archivo',sans-serif}
 
 /* ---------- status ---------- */
-.status{border-left:3px solid var(--brass);padding:9px 12px;background-color:var(--ink);border-radius:0 8px 8px 0;font-size:13.5px;min-height:42px;display:flex;align-items:center}
+.status{border-left:3px solid var(--brass);padding:9px 12px;background-color:var(--ink);border-radius:0 var(--r) var(--r) 0;font-size:13.5px;min-height:42px;display:flex;align-items:center}
 /* Sous le statut plutot que dedans : le statut peut etre reecrit 900ms plus
    tard par l'annonce de passage de niveau (voir registerSolved), qui
    effacerait une explication logee au meme endroit avant que quiconque
@@ -1094,7 +1143,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    compris pendant Chang Sprint puisqu'il ne revele rien de la solution.
    user-select:all : un clic-glisser partiel selectionne le code entier,
    plus simple a copier tel quel pour un signalement. */
-.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage);border:1px solid rgba(151,164,157,.35);padding:2px 8px;border-radius:999px;user-select:all}
+.excode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage);border:1px solid var(--rule);padding:2px 8px;border-radius:999px;user-select:all}
 .excode-wrap{display:inline-flex;align-items:center}
 .excode-wrap .excode{margin-left:0}
 /* min-width:0 est indispensable, pas cosmetique. Les boutons sont en
@@ -1146,14 +1195,14 @@ header>*{min-width:0}
    ink, filet, rayon 8px) pour la langue courante, et la liste des langues
    en surimpression a l'ouverture. Les noms sont ecrits dans leur propre
    langue, comme le veut l'usage. */
-.langswitch{flex:none;padding:3px;position:relative;background-color:var(--ink);border-radius:8px;border:1px solid var(--rule)}
-.langswitch summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:6px;background-color:var(--raise);color:var(--chalk);white-space:nowrap}
+.langswitch{flex:none;padding:3px;position:relative;background-color:var(--ink);border-radius:var(--r);border:1px solid var(--rule)}
+.langswitch summary{list-style:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:7px 10px;border-radius:var(--r-s);background-color:var(--raise);color:var(--chalk);white-space:nowrap}
 .langswitch summary::-webkit-details-marker{display:none}
 .langswitch summary::after{content:"";display:inline-block;width:5px;height:5px;margin:0 0 2px 7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg)}
 .langswitch[open] summary::after{transform:rotate(-135deg);margin-bottom:-1px}
 .langswitch summary:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
-.langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
-.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:6px;white-space:nowrap}
+.langmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:flex;flex-direction:column;min-width:150px;padding:4px;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.langmenu a{font-size:13px;color:var(--sage);text-decoration:none;padding:9px 12px;border-radius:var(--r-s);white-space:nowrap}
 .langmenu a:hover,.langmenu a:focus-visible{color:var(--chalk);background-color:var(--slate)}
 .langmenu a:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
 .langmenu a[aria-current="true"]{color:var(--chalk);font-weight:600;background-color:var(--raise)}
@@ -1165,9 +1214,15 @@ header>*{min-width:0}
    ce n'est plus repete ici. La rangee passe donc de trois a deux colonnes,
    plutot que de laisser un troisieme emplacement vide. */
 .stats.stats-2{grid-template-columns:repeat(2,1fr)}
+/* Les quatre chiffres de l'ecran Exercices (2026-11-18) : une rangee de
+   quatre, ou deux rangees de deux sur un ecran etroit. Jamais une tuile
+   seule sur sa ligne. */
+.stats.stats-4{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:1fr}
+.stats.stats-4 .stat span{overflow-wrap:anywhere}
+@media(max-width:520px){.stats.stats-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .stats .stat{display:flex;flex-direction:column;justify-content:space-between;gap:4px}
 .stats .stat span{margin-top:auto}
-.stat{background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 6px;text-align:center}
+.stat{background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:9px 6px;text-align:center}
 .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:600;line-height:1.2}
 .stat span{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage)}
 /* Badges (gamification) : grille de pastilles, grisees tant que non
@@ -1180,13 +1235,13 @@ header>*{min-width:0}
 .badge-date{opacity:.65;font-size:11px}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .cal-title{font-size:13px;color:var(--chalk);font-weight:600;text-transform:capitalize}
-.cal-nav{background:none;border:1px solid var(--rule);border-radius:6px;color:var(--chalk);
+.cal-nav{background:none;border:1px solid var(--rule);border-radius:var(--r-s);color:var(--chalk);
   width:26px;height:26px;font-size:16px;line-height:1;cursor:pointer}
 .cal-nav:disabled{opacity:.3;cursor:default}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal-dow{font-size:10px;color:var(--sage);text-align:center;padding:2px 0}
 .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-  font-size:11px;color:var(--sage);background-color:var(--ink);border-radius:6px;border:1px solid transparent}
+  font-size:11px;color:var(--sage);background-color:var(--ink);border-radius:var(--r-s);border:1px solid transparent}
 .cal-day.empty{background:none}
 /* Jour PASSE reussi : la puce de cadence selectionnee, trait pour trait --
    fond --ink teinte de laiton a 16 %, contour et chiffre en laiton. Le meme
@@ -1239,7 +1294,7 @@ header>*{min-width:0}
    style ne puisse pas desynchroniser la legende de ce qu'elle explique. */
 .cal-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:12px;font-size:11.5px;color:var(--sage)}
 .cal-legend span{display:inline-flex;align-items:center;gap:6px}
-.cal-legend .cal-day{width:14px;height:14px;aspect-ratio:auto;flex:none;font-size:0;border-radius:4px}
+.cal-legend .cal-day{width:14px;height:14px;aspect-ratio:auto;flex:none;font-size:0;border-radius:var(--r-xs)}
 #pane-calendar .panel{max-width:420px;margin:0 auto}
 .ladder{display:flex;gap:4px;margin-bottom:6px}
 .ladder i{flex:1;height:5px;border-radius:999px;background-color:var(--raise)}
@@ -1256,14 +1311,14 @@ header>*{min-width:0}
   background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat
 }
 .select:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
-.linkbox{width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--chalk);background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 10px;margin-bottom:10px}
+.linkbox{width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--chalk);background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:9px 10px;margin-bottom:10px}
 .linkbox:focus{outline:2px solid var(--brass);outline-offset:1px}
 .linkbox[hidden]{display:none}
 /* Bloc de partage modele (2026-11-18, choisi par Alexandre sur le defi du
    jour) : l'adresse dans son champ, puis la rangee de boutons, dans un cadre.
    Le meme partout : defi du jour, partie entre amis, defi par lien. */
 .shareRow{display:flex;gap:8px;flex-wrap:wrap}
-.shareRow button{flex:1;min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:5px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:8px;padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
+.shareRow button{flex:1;min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:5px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid var(--rule);border-radius:var(--r);padding:9px 8px;background-color:var(--raise);color:var(--chalk)}
 /* Les pictogrammes de marque sont des elements flex comme le libelle : sans
    flex:none le navigateur les comprime quand le texte ne tient pas. Mesure
    au navigateur reel le 2026-09-05 : Messenger, dont le libelle est le plus
@@ -1323,9 +1378,9 @@ header>*{min-width:0}
    (meme inset, meme rayon, meme voile), au lieu de couvrir tout le
    navigateur. Les deux vivent dans .board-frame, qui est en
    position:relative. */
-#promoModal,#amiColorModal{position:absolute;inset:10px;background:rgba(10,16,14,.62);border-radius:2px;padding:12px}
+#promoModal,#amiColorModal{position:absolute;inset:var(--cadre,10px);background:rgba(10,16,14,.62);border-radius:2px;padding:12px}
 #promoModal .box,#amiColorModal .box{max-width:min(320px,100%);animation:pop .26s cubic-bezier(.2,.9,.3,1.2)}
-.modal .box{background-color:var(--slate);border:1px solid var(--rule);border-radius:calc(var(--r)*1.5);box-shadow:var(--e2);padding:20px;text-align:center;max-width:320px;width:100%}
+.modal .box{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r-l);box-shadow:var(--e2);padding:20px;text-align:center;max-width:320px;width:100%}
 .modal h3{font-family:'Source Serif 4',Georgia,serif;font-size:18px;margin-bottom:12px}
 /* 2026-11-16 (remarque d'Alexandre : la fenetre se deformait dans Safari) :
    sur telephone, quatre boutons de 60 px plus les ecarts depassaient la
@@ -1334,7 +1389,7 @@ header>*{min-width:0}
    plus), et la piece suit leur taille. */
 .promos{display:flex;gap:8px;justify-content:center}
 .promos button svg{width:74%;height:74%;display:block}
-.promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:8px;flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1/1;height:auto;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.promos button{background-color:var(--bone);border:1px solid var(--rule);border-radius:var(--r);flex:1 1 0;min-width:0;max-width:60px;aspect-ratio:1/1;height:auto;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
 @media(max-width:420px){#promoModal .box{padding:16px 12px}}
 .promos button:hover{background:#fff2d4}
 .promos button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
@@ -1343,7 +1398,7 @@ header>*{min-width:0}
    esthetique que .promos (le selecteur de promotion), en plus petit pour
    loger 6 pieces par rangee sur mobile. */
 .editpal{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}
-.editpal button{background-color:var(--bone);border:2px solid var(--rule);border-radius:8px;width:46px;height:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;touch-action:none}
+.editpal button{background-color:var(--bone);border:1px solid var(--rule);border-radius:var(--r);width:46px;height:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;touch-action:none}
 .editpal button svg{width:30px;height:30px;display:block}
 .editpal button:hover{background:#fff2d4}
 .editpal button[aria-pressed="true"]{border-color:var(--brass)}
@@ -1366,7 +1421,7 @@ header>*{min-width:0}
 .origin-text p:last-child{margin-bottom:0}
 /* Le mot ช้าง ouvre le Makruk (easter egg) : un bouton qui garde l'allure
    du texte. Seuls le curseur et le survol le trahissent. */
-.chang-porte{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:3px}
+.chang-porte{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:var(--r-xs)}
 .chang-porte:hover{color:var(--brass)}
 /* Reflet sur ช้าง (2026-11-14, idee d'Alexandre) : toutes les douze
    secondes, un eclat laiton traverse le mot, pour signaler discretement
@@ -1380,7 +1435,7 @@ header>*{min-width:0}
 .explore{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media(max-width:620px){.explore{grid-template-columns:repeat(2,1fr)}}
 .explore a{
-  display:block;text-decoration:none;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;
+  display:block;text-decoration:none;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);
   padding:11px 12px;color:var(--chalk);font-size:13px;font-weight:600;transition:border-color .16s
 }
 .explore a:hover{border-color:var(--brass)}
@@ -1397,7 +1452,7 @@ header>*{min-width:0}
 .history-item:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .history-item .res{
   font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;flex:none;width:22px;text-align:center;
-  border-radius:3px;padding:2px 0
+  border-radius:var(--r-xs);padding:2px 0
 }
 .history-item .res.win{background-color:var(--jade);color:#101413}
 .history-item .res.loss{background-color:var(--brick);color:#101413}
@@ -1410,7 +1465,7 @@ header>*{min-width:0}
 .rushHistory{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:4px 0 2px;-webkit-overflow-scrolling:touch;position:relative}
 .rushHistory::-webkit-scrollbar{display:none}
 .rushHistory button{
-  flex:none;width:30px;height:30px;border-radius:6px;border:none;cursor:pointer;
+  flex:none;width:30px;height:30px;border-radius:var(--r-s);border:none;cursor:pointer;
   font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;color:#101413
 }
 .rushHistory button.win{background-color:var(--jade)}
@@ -1444,7 +1499,7 @@ header>*{min-width:0}
 .history-empty{color:var(--sage);font-size:13px}
 .plyinfo{
   margin-top:10px;background-color:var(--ink);border:1px solid var(--rule);border-left:3px solid var(--brass);
-  border-radius:0 8px 8px 0;padding:10px 12px;font-size:13px;line-height:1.5
+  border-radius:0 var(--r) var(--r) 0;padding:10px 12px;font-size:13px;line-height:1.5
 }
 .plyinfo b{font-family:'JetBrains Mono',monospace}
 .plyinfo .played{color:var(--chalk)}
@@ -1482,11 +1537,11 @@ header>*{min-width:0}
    incidence ailleurs. */
 .navchev{flex:none;width:30px;display:flex;align-items:center;justify-content:center;
   border:1px solid var(--rule);background-color:var(--raise);color:var(--sage);
-  border-radius:8px;cursor:pointer}
+  border-radius:var(--r);cursor:pointer}
 .navchev svg{width:17px;height:17px}
 .navscroll{flex:1;display:flex;align-items:center;gap:1px;overflow-x:auto;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;min-width:0;position:relative;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:8px;padding:0 6px}
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:0 6px}
 .navscroll::-webkit-scrollbar{display:none}
 /* Meme indice de defilement que la barre d'onglets (degrade colle au bord +
    chevron), a la place des deux boutons |< >| separes qu'il remplace :
@@ -1495,18 +1550,18 @@ header>*{min-width:0}
 .navscroll::before,.navscroll::after{content:"";position:sticky;align-self:stretch;width:25px;
   flex:none;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
   background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%}
-.navscroll::before{left:-7px;order:-1;margin-right:-25px;border-radius:8px 0 0 8px;
+.navscroll::before{left:-7px;order:-1;margin-right:-25px;border-radius:var(--r) 0 0 var(--r);
   background-position:7px center,0 0;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),
     linear-gradient(to right,var(--slate) 38%,transparent)}
-.navscroll::after{right:-7px;order:999;margin-left:-25px;border-radius:0 8px 8px 0;
+.navscroll::after{right:-7px;order:999;margin-left:-25px;border-radius:0 var(--r) var(--r) 0;
   background-position:right 7px center,0 0;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),
     linear-gradient(to left,var(--slate) 38%,transparent)}
 .navscroll.sl::before,.navscroll.sr::after{opacity:1}
 .navchip{flex:none;display:inline-flex;align-items:center;gap:2px;
   font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap;
-  padding:4px 5px;color:var(--sage);cursor:pointer;border-radius:6px;scroll-snap-align:center}
+  padding:4px 5px;color:var(--sage);cursor:pointer;border-radius:var(--r-s);scroll-snap-align:center}
 .navchip .navnum{color:var(--sage);opacity:.7;margin-right:1px;font-size:10.5px}
 /* Le picto de piece porte deja la distinction visuelle voulue (piece +
    camp) : le coup courant se signale par un fond discret et du gras,
@@ -1520,7 +1575,7 @@ header>*{min-width:0}
 .navchip.tag-inacc{color:#8A7A2A}
 .navchip.start{font-style:italic}
 .accrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
-.graph{background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:6px;overflow:hidden;margin-bottom:14px}
+.graph{background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:6px;overflow:hidden;margin-bottom:14px}
 .graph svg{display:block;width:100%;height:96px}
 /* Graphique de notation dans le temps : ratio fixe via aspect-ratio (pas
    de hauteur figee comme le graphique d'eval de partie ci-dessus), pour
@@ -1537,7 +1592,7 @@ header>*{min-width:0}
 .sheet-row span.view{background:#F7E4B0;font-weight:600}
 .sheet-row span[data-ply]{cursor:pointer}
 .rushbar{display:flex;gap:8px;margin-bottom:12px}
-.rushitem{flex:1;background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:8px 4px;text-align:center}
+.rushitem{flex:1;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:8px 4px;text-align:center}
 .rushitem b{display:block;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600}
 .rushitem span{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--sage)}
 .prose{font-size:13.5px;line-height:1.7;color:var(--chalk)}
@@ -1586,6 +1641,13 @@ footer .linkbtn{padding:4px 2px}
      totale, ecart reparti : environ 12 px de chaque cote. */
   header{margin-bottom:8px;padding-top:4px;padding-bottom:4px;row-gap:12px}
   body{padding-top:8px}
+  /* 2026-11-18, demande d'Alexandre (« que l'espace soit bien utilise ») :
+     14 px de marge de page et 10 px de cadre de chaque cote prenaient
+     50 px de large a l'echiquier. 8 et 5 lui en rendent 22. */
+  body{padding-left:8px;padding-right:8px}
+  /* --cadre et non padding : les voiles poses sur l'echiquier (fin de
+     partie, « Commencer », promotion, choix de couleur) se calent dessus. */
+  .board-frame{--cadre:5px}
   .brand .glyph{width:26px;height:calc(26px * 54 / 64)}
   .brand h1{font-size:22px}
   .langswitch summary{padding-top:2px;padding-bottom:2px}
@@ -1630,7 +1692,7 @@ footer .linkbtn{padding:4px 2px}
   transition:transform var(--duree-moyenne) var(--courbe-ressort),width var(--duree-moyenne) var(--courbe-ressort),height var(--duree-moyenne) var(--courbe-ressort),opacity var(--duree-courte)
 }
 /* Segments et categories : le fond du choix passe sous les libelles. */
-.seg.glisse::before,.tc-cats.glisse::before{background-color:var(--raise);border-radius:6px;z-index:0}
+.seg.glisse::before,.tc-cats.glisse::before{background-color:var(--raise);border-radius:var(--r-s);z-index:0}
 .seg.glisse button,.tc-cats.glisse button{position:relative;z-index:1}
 .seg.glisse button[aria-pressed="true"],.seg.glisse button[aria-checked="true"],.tc-cats.glisse button[aria-pressed="true"]{background-color:transparent}
 /* Choix verrouille pendant une partie : la marque palit avec lui, comme le
@@ -1639,7 +1701,7 @@ footer .linkbtn{padding:4px 2px}
 /* Puces : c'est le liseré laiton qui glisse, par-dessus les puces (leur fond
    --ink masquerait une marque passee dessous). La teinte et la couleur du
    texte restent portees par la puce elle-meme. */
-.tc-chips.glisse::before,.chips.glisse::before{border:1px solid var(--brass);border-radius:8px;box-sizing:border-box;z-index:2}
+.tc-chips.glisse::before,.chips.glisse::before{border:1px solid var(--brass);border-radius:var(--r);box-sizing:border-box;z-index:2}
 .tc-chips.glisse .chip[aria-pressed="true"],.chips.glisse .chip[aria-checked="true"]{border-color:var(--rule)}
 /* Onglets : la pastille laiton, qui disparait en fondu sur l'accueil (aucun
    onglet n'y est actif) et reapparait en place. */
@@ -1856,7 +1918,7 @@ html[data-mouvement="calme"] .bx-piece3d,html[data-mouvement="calme"] .bx-rayons
    tiroir qui glisse depuis la droite. Le point laiton signale une nouveaute
    pas encore lue. Sous la fenetre Bravo (z-index 210), qui sert aussi de
    fiche de badge depuis le tiroir. */
-.burger{flex:none;position:relative;width:44px;height:44px;margin-left:auto;padding:0;border-radius:8px;border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);cursor:pointer;display:grid;place-items:center;transition:transform var(--duree-appui) var(--courbe-ressort),background-color var(--duree-courte)}
+.burger{flex:none;position:relative;width:44px;height:44px;margin-left:auto;padding:0;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);cursor:pointer;display:grid;place-items:center;transition:transform var(--duree-appui) var(--courbe-ressort),background-color var(--duree-courte)}
 .burger:active{transform:scale(.94)}
 @media(hover:hover){.burger:hover{background-color:var(--raise)}}
 .burger:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
@@ -1878,15 +1940,18 @@ html[data-mouvement="calme"] .bx-piece3d,html[data-mouvement="calme"] .bx-rayons
 html.menu-ouvert{overflow:hidden}
 .tiroir-tete{display:flex;align-items:center;gap:8px;padding:12px 12px 8px 16px;border-bottom:1px solid var(--rule)}
 .tiroir-tete h2{flex:1;margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:21px;font-weight:600}
-.tiroir-bouton{width:40px;height:40px;padding:0;border-radius:8px;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);font:inherit;font-size:22px;line-height:1;cursor:pointer}
+.tiroir-bouton{width:40px;height:40px;padding:0;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);font:inherit;font-size:22px;line-height:1;cursor:pointer}
 .tiroir-bouton[hidden]{display:none}
 .tiroir-bouton:focus-visible,.tiroir-lien:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
 .tiroir-vue{flex:1;overflow-y:auto;padding:6px 10px 24px;overscroll-behavior:contain}
 .tiroir-vue[hidden]{display:none}
 .tiroir-section{margin:16px 8px 6px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}
-.tiroir-lien{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:46px;padding:10px 12px;border:0;border-radius:8px;background:none;color:var(--chalk);font:inherit;font-size:15px;text-align:left;cursor:pointer;transition:background-color var(--duree-courte)}
+.tiroir-lien{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:46px;padding:10px 12px;border:0;border-radius:var(--r);background:none;color:var(--chalk);font:inherit;font-size:15px;text-align:left;cursor:pointer;transition:background-color var(--duree-courte)}
 @media(hover:hover){.tiroir-lien:hover{background-color:var(--raise)}}
-.tiroir-lien[data-vue]::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
+/* La fleche sur toutes les lignes du menu d'accueil (2026-11-18, demande
+   d'Alexandre) : chacune ouvre un ecran, aucune raison qu'une sur deux
+   seulement le montre. */
+.tiroir-lien[data-vue]::after,#menuAccueil .tiroir-lien::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
 .tiroir-lien[data-vue] .burger-point,.tiroir-detail{margin-left:auto}
 .tiroir-detail.tiroir-langue{font-family:inherit;font-size:13.5px;color:var(--sage)}
 .tiroir-detail{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brass)}
@@ -1897,17 +1962,17 @@ html.menu-ouvert{overflow:hidden}
 /* Langue de la page : une coche laiton (2026-11-15, demande d'Alexandre). */
 .tiroir .langmenu a[aria-current="true"]::after{content:"";flex:none;width:5px;height:10px;margin:-3px 4px 0 0;border-right:2px solid var(--brass);border-bottom:2px solid var(--brass);transform:rotate(45deg)}
 .menu-tuiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:8px}
-.menu-tuile{display:flex;flex-direction:column;gap:4px;padding:14px 12px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule)}
+.menu-tuile{display:flex;flex-direction:column;gap:4px;padding:14px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .menu-tuile b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
 .menu-tuile span{font-size:12px;color:var(--sage);line-height:1.3}
 /* Statistiques : graphes et explication du classement (2026-11-16). */
-.menu-graphe{margin:0 2px;padding:10px 8px 6px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule)}
+.menu-graphe{margin:0 2px;padding:10px 8px 6px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .menu-graphe svg{display:block;width:100%;height:auto;aspect-ratio:300/90}
-.menu-explication{margin:8px 2px 0;padding:10px 12px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule);font-size:13px;line-height:1.55;color:var(--sage)}
+.menu-explication{margin:8px 2px 0;padding:10px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule);font-size:13px;line-height:1.55;color:var(--sage)}
 .menu-explication summary{cursor:pointer;font-weight:600;color:var(--chalk)}
 .menu-explication p{margin:8px 0 0}
 #menuBadgeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:12px 6px;padding-top:6px}
-.menu-nouveaute{position:relative;margin:8px 4px 0;padding:12px 14px;border-radius:8px;background-color:var(--ink);border:1px solid var(--rule)}
+.menu-nouveaute{position:relative;margin:8px 4px 0;padding:12px 14px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .menu-nouveaute.neuve{border-color:rgba(var(--brass-rgb),.55)}
 .menu-nouveaute.neuve::before{content:"";position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background-color:var(--brass)}
 .menu-nouveaute time{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--sage)}
@@ -1926,7 +1991,7 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 
 /* Bouton de langue de l'en-tete (2026-11-15) : globe et code, juste avant le
    menu ; meme hauteur que le menu pour ne pas grandir l'en-tete. */
-.langue-rapide{flex:none;display:inline-flex;align-items:center;gap:5px;height:44px;margin-left:auto;padding:0 10px;border-radius:8px;border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:transform var(--duree-appui) var(--courbe-ressort),background-color var(--duree-courte)}
+.langue-rapide{flex:none;display:inline-flex;align-items:center;gap:5px;height:44px;margin-left:auto;padding:0 10px;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:transform var(--duree-appui) var(--courbe-ressort),background-color var(--duree-courte)}
 .langue-rapide svg{width:17px;height:17px;color:var(--brass)}
 .langue-rapide:active{transform:scale(.94)}
 @media(hover:hover){.langue-rapide:hover{background-color:var(--raise)}}
@@ -1938,6 +2003,17 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 
 /* Objectif du jour (2026-11-15) : anneau laiton qui se remplit ; une fois
    atteint, il se ferme en jade avec une coche et une impulsion. */
+/* Erreurs a revoir (2026-11-18) : un chiffre, ce qu'il compte, les motifs
+   en cause et un bouton, a la place de la rangee de croix rouges. Meme
+   cadre que l'objectif du jour, juste au-dessus dans la colonne. */
+.erreurs-carte{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.erreurs-n{flex:none;min-width:38px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;line-height:1;color:var(--brass)}
+.erreurs-texte{flex:1;min-width:0}
+.erreurs-texte b{display:block;font-size:15px;font-weight:600;line-height:1.3}
+.erreurs-motifs{flex-basis:100%;font-size:13px;line-height:1.5;color:var(--sage)}
+.erreurs-motifs span{white-space:nowrap}
+.erreurs-carte .btn{flex:none;width:auto;padding:10px 14px;font-size:14px}
+.erreurs-note{margin:8px 0 12px}
 .objectif{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .obj-anneau{flex:none;width:40px;height:40px;transform:rotate(-90deg)}
 .obj-fond{fill:none;stroke:var(--raise);stroke-width:4}
@@ -1962,7 +2038,7 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 /* Annonces (2026-11-15) : carte qui descend du haut avec un rebond, pastille
    en degrade qui tourne en arrivant, filet qui se vide en 4 s. Trois teintes :
    glace (gels), laiton (defi), jade (semaine parfaite). */
-.obj-annonce{position:fixed;left:50%;top:12px;z-index:220;display:flex;align-items:center;gap:12px;width:min(92vw,380px);padding:12px 16px 14px 12px;box-sizing:border-box;border-radius:14px;background:linear-gradient(135deg,var(--raise),var(--slate));border:1px solid var(--obj-teinte);box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 4px color-mix(in srgb,var(--obj-teinte) 14%,transparent);color:var(--chalk);cursor:pointer;overflow:hidden;transform:translate(-50%,-150%);transition:transform var(--duree-moyenne) var(--courbe-ressort)}
+.obj-annonce{position:fixed;left:50%;top:12px;z-index:220;display:flex;align-items:center;gap:12px;width:min(92vw,380px);padding:12px 16px 14px 12px;box-sizing:border-box;border-radius:var(--r-l);background:linear-gradient(135deg,var(--raise),var(--slate));border:1px solid var(--obj-teinte);box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 4px color-mix(in srgb,var(--obj-teinte) 14%,transparent);color:var(--chalk);cursor:pointer;overflow:hidden;transform:translate(-50%,-150%);transition:transform var(--duree-moyenne) var(--courbe-ressort)}
 .obj-annonce.visible{transform:translate(-50%,0)}
 .obj-gel{--obj-teinte:#7FCBEF;--obj-a:#E3F6FF;--obj-b:#5AB0DE;--obj-c:#1D5F86}
 .obj-defi{--obj-teinte:#E0A93B;--obj-a:#FFF0C2;--obj-b:#E9B44C;--obj-c:#7A4C0C}
@@ -2002,8 +2078,8 @@ html[data-mouvement="calme"] .obj-plein,html[data-mouvement="calme"] .obj-coche,
 .defi-texte{flex:1;font-size:14.5px;line-height:1.4}
 .defi-compte{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brass);white-space:nowrap}
 .defi.fait .defi-compte{color:var(--jade);font-size:16px}
-.defi-barre{height:6px;margin-top:10px;border-radius:3px;background-color:var(--raise);overflow:hidden}
-.defi-barre i{display:block;height:100%;border-radius:3px;background-color:var(--brass);transition:width .9s var(--courbe-sortie)}
+.defi-barre{height:6px;margin-top:10px;border-radius:var(--r-xs);background-color:var(--raise);overflow:hidden}
+.defi-barre i{display:block;height:100%;border-radius:var(--r-xs);background-color:var(--brass);transition:width .9s var(--courbe-sortie)}
 .defi.fait .defi-compte{display:inline-block;animation:objPastille .6s var(--courbe-ressort) .7s both}
 html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-compte{transition:none!important;animation:none!important}
 .defi.fait .defi-barre i{background-color:var(--jade)}
@@ -2056,7 +2132,7 @@ html[data-mouvement="calme"] .popin-medaille,html[data-mouvement="calme"] .bilan
 .objv-titre{margin:0 0 10px;font-size:13.5px;font-weight:600;color:var(--chalk)}
 .objv-bloc .objv-note{margin:10px 0 0}
 .objv-jours{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.objv-jours span{height:10px;border-radius:5px;background-color:var(--raise)}
+.objv-jours span{height:10px;border-radius:999px;background-color:var(--raise)}
 .objv-jours span.plein{background-color:#7FCBEF;transform:scaleX(.2);opacity:.3;transition:transform .45s var(--courbe-ressort),opacity .3s;transition-delay:calc(.3s + var(--i) * .08s)}
 .objv-pret .objv-jours span.plein{transform:none;opacity:1}
 .objv-flocons{display:flex;gap:10px}
@@ -2116,16 +2192,16 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 /* Themes (2026-11-15, themes.js) : apercus des Preferences et annonce Bravo.
    Chaque apercu porte data-apercu : ses couleurs sont celles du theme montre. */
 .themes-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:4px}
-.theme-choix{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;border-radius:10px;border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);font:inherit;text-align:left;cursor:pointer;transition:transform var(--duree-appui) var(--courbe-ressort),box-shadow var(--duree-courte)}
+.theme-choix{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--ink);color:var(--chalk);font:inherit;text-align:left;cursor:pointer;transition:transform var(--duree-appui) var(--courbe-ressort),box-shadow var(--duree-courte)}
 .theme-choix:active{transform:scale(.97)}
 .theme-choix[aria-checked="true"]{box-shadow:0 0 0 2px var(--brass);border-color:var(--brass)}
 .theme-choix:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-.theme-apercu{display:grid;gap:4px;padding:6px;border-radius:6px;background-color:var(--slate)}
+.theme-apercu{display:grid;gap:4px;padding:6px;border-radius:var(--r-s);background-color:var(--slate)}
 .theme-apercu i{display:block}
-.ta-carte{padding:5px;border-radius:4px;background-color:var(--raise)}
+.ta-carte{padding:5px;border-radius:var(--r-xs);background-color:var(--raise)}
 .ta-carte b,.ta-carte s{display:block;height:4px;border-radius:2px;background-color:var(--chalk);width:70%}
 .ta-carte s{margin-top:3px;height:3px;width:45%;background-color:var(--sage)}
-.ta-bouton{height:8px;border-radius:3px;background-color:var(--brass)}
+.ta-bouton{height:8px;border-radius:var(--r-xs);background-color:var(--brass)}
 .theme-apercu .ta-damier{display:grid;grid-template-columns:repeat(4,1fr);height:10px;border-radius:2px;overflow:hidden}
 .ta-damier u{display:block}
 .ta-damier u:nth-child(odd){background-color:var(--bone-t)}
@@ -2138,7 +2214,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 .theme-verrou svg{flex:none;width:20px;height:20px}
 .theme-verrou em{font-style:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
 .theme-verrou.en-saison{color:var(--brass);font-weight:600}
-.bx-theme{position:relative;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 10px;margin:-2px auto 14px;padding:8px 12px;border-radius:10px;background-color:var(--raise);color:var(--chalk);font-size:13.5px;font-weight:600}
+.bx-theme{position:relative;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 10px;margin:-2px auto 14px;padding:8px 12px;border-radius:var(--r);background-color:var(--raise);color:var(--chalk);font-size:13.5px;font-weight:600}
 .bx-theme.hide{display:none}
 .bx-theme-pastille{width:14px;height:14px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 3px var(--slate)}
 .bx-theme .btn{min-width:0;padding:5px 12px;font-size:13px}
@@ -2162,7 +2238,7 @@ html[data-mouvement="calme"] .bilan-joue .duel-points i,html[data-mouvement="cal
 .cp-centre{margin:10px 8px;text-align:center}
 .cp-champ{display:block;margin:0 8px 12px}
 .cp-champ>span{display:block;margin-bottom:5px;font-size:13px;font-weight:600;color:var(--chalk)}
-.cp-champ input{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
+.cp-champ input{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
 .cp-champ input[type=password],#cpLien,#cpSecoursSaisi{font-family:'JetBrains Mono',monospace;letter-spacing:.12em}
 .cp-champ input:focus-visible{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 .cp-champ small{display:block;margin-top:5px;font-size:12.5px;line-height:1.45;color:var(--sage)}
@@ -2180,7 +2256,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cp-carte span{font-size:13px;color:var(--sage)}
 .cp-carte .cp-alerte{color:var(--brick)}
 .cp-danger{border-color:var(--brick);color:var(--brick)}
-.cp-qr{width:min(220px,70%);margin:0 auto 10px;border-radius:8px;overflow:hidden;background:#fff}
+.cp-qr{width:min(220px,70%);margin:0 auto 10px;border-radius:var(--r);overflow:hidden;background:#fff}
 .cp-qr svg{display:block;width:100%;height:auto}
 .cp-qr[hidden]{display:none}
 #menuCompteVue a.tiroir-lien{box-sizing:border-box;text-decoration:none}
@@ -2190,8 +2266,21 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpj-onglets button[aria-pressed="true"]{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass);font-weight:600}
 .cpj-onglets button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .cpj-liste{list-style:none;margin:0 8px 14px;padding:0}
+/* Ma ligue (2026-11-18) : l'echelle des cinq ligues, la ligne qui separe les
+   places qui montent ou descendent, et la jauge avant l'ouverture. */
+.cpl-echelle{display:flex;gap:4px;list-style:none;margin:4px 8px 12px;padding:0}
+.cpl-echelle li{flex:1;min-width:0;padding:7px 2px;border:1px solid var(--rule);border-radius:var(--r);text-align:center;font-size:12px;color:var(--sage);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpl-echelle li.cpl-ici{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass);font-weight:600}
+.cpl-mouv{margin:0 8px 12px;padding:8px 10px;border-left:3px solid var(--brass);background-color:var(--raise);font-size:13.5px;line-height:1.5;color:var(--chalk)}
+.cpj-liste li.cpl-zone{min-height:0;padding:5px 10px;border-bottom:1px solid rgba(var(--brass-rgb),.55);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--sage)}
+.cpl-liste li:nth-child(-n+3) .cpj-rang{color:inherit;font-weight:inherit}
+.cpl-attente{margin:4px 8px 12px;padding:14px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);text-align:center}
+.cpl-attente b{display:block;font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;line-height:1.1;color:var(--brass)}
+.cpl-attente span{display:block;margin-top:4px;font-size:13px;color:var(--sage)}
+.cpl-jauge{height:6px;margin-top:12px;border-radius:999px;background-color:var(--raise);overflow:hidden}
+.cpl-jauge i{display:block;height:100%;border-radius:999px;background-color:var(--brass)}
 .cpj-liste li{display:flex;align-items:center;gap:10px;min-height:40px;padding:6px 10px;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--chalk)}
-.cpj-liste li.cpj-moi{border-left:3px solid var(--brass);border-radius:0 8px 8px 0;border-bottom-color:transparent;background-color:var(--raise);padding-left:7px}
+.cpj-liste li.cpj-moi{border-left:3px solid var(--brass);border-radius:0 var(--r) var(--r) 0;border-bottom-color:transparent;background-color:var(--raise);padding-left:7px}
 .cpj-rang{flex:none;width:26px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--sage);text-align:right}
 .cpj-liste li:nth-child(-n+3) .cpj-rang{color:var(--brass);font-weight:600}
 .cpj-nom{flex:1;min-width:0;overflow-wrap:anywhere}
@@ -2217,7 +2306,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpe-suite{margin-top:12px;text-align:left}
 .cpe-suite[hidden]{display:none}
 .cpe-suite label{display:block;margin-bottom:5px;font-size:13px;color:var(--sage)}
-.cpe-suite textarea{display:block;width:100%;box-sizing:border-box;padding:9px 10px;border-radius:8px;border:1px solid var(--rule);background-color:var(--slate);color:var(--chalk);font:inherit;font-size:16px;resize:vertical}
+.cpe-suite textarea{display:block;width:100%;box-sizing:border-box;padding:9px 10px;border-radius:var(--r);border:1px solid var(--rule);background-color:var(--slate);color:var(--chalk);font:inherit;font-size:16px;resize:vertical}
 .cpe-suite .btn{display:block;width:100%;margin-top:8px}
 .cpe-msg{min-height:1.2em;margin:6px 0 0;font-size:12.5px;color:var(--brick)}
 .cpe-merci{margin:4px 0;font-size:14px;font-weight:600;color:var(--jade)}
@@ -2262,7 +2351,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpp-rang{flex:none;min-width:44px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--sage)}
 .cpp-drapeau{font-family:inherit;font-size:.8em;white-space:nowrap}
 .cpp-amis{margin:0 0 6px;text-align:left}
-.cp-champ select{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
+.cp-champ select{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
 .cp-champ select:focus-visible{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 .cp-msg.cp-ok{color:var(--sage)}
 /* Presentation du compte en trois etapes. */
@@ -2318,6 +2407,9 @@ body[data-entrainement="sprint"]:has(#readyBanner:not(.hide)) #exPanel>#sprintIn
 @media(max-width:860px){.rush-on #rushLauncher{background:none;border:0;box-shadow:none;padding:0;margin:0;min-height:0}}
 /* Un seul entrainement a l'ecran : en Sprint, pas la carte des Coordonnees, et inversement. */
 body[data-entrainement="sprint"] #coordLauncher,body[data-entrainement="coord"] #rushLauncher{display:none}
+/* Seule carte affichee pendant les Coordonnees : elle demarre au niveau de
+   l'echiquier, sans les 14 px d'ecart entre deux cartes (2026-11-18). */
+body[data-entrainement="coord"] #coordLauncher{margin-top:0}
 /* Pied de page : la barre voyage avec le lien qui la suit, jamais seule en fin de ligne. */
 /* Deux groupes de liens : sur une ligne quand la largeur le permet, sinon
    l'un sous l'autre, et la barre du milieu disparait (jamais de barre seule
@@ -3182,12 +3274,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <button type="button" class="defis-raccourci" id="defisRaccourci"><svg class="defis-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg><b id="defisRaccourciTitre">Weekly challenges</b><span id="defisRaccourciCompte"></span></button>
           <div class="ladder" id="ladder"></div>
           <div class="lvlrow" id="lvlRow"><span>Level <b id="lvlNum">1</b> <span id="lvlOf">of</span> <b id="lvlMax">10</b></span><span id="lvlName">First mates</span></div>
-          <div class="stats">
+          <div class="stats stats-4">
             <div class="stat"><b id="stSolved">0</b><span>Solved</span></div>
             <div class="stat"><b id="stStreak">0</b><span>Streak</span></div>
             <div class="stat"><b id="stBest">0</b><span>Best</span></div>
-          </div>
-          <div class="stats stats-2">
             <div class="stat"><b id="stRating">800</b><span>Rating</span></div>
           </div>
           <!-- Graphique garde visible en permanence (decision du 2026-09-03,
@@ -3198,8 +3288,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <div class="graph ratinggraph" id="ratingGraph"></div>
           <div class="hide" id="mistakeSection">
             <div class="eyebrow">Mistakes to review<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipMistakes" aria-label="More info">i</button></div>
-            <p class="info-tip-pop hide" id="tipMistakes">Puzzles you've gotten wrong, from any mode. Tap one to try it again. Each success spaces it out further before it comes back. Solve it enough times and it drops off this list for good.</p>
-            <div class="rushHistory" id="mistakeGrid"></div>
+            <p class="info-tip-pop hide" id="tipMistakes">Puzzles you've gotten wrong, from any mode. Each success spaces it out further before it comes back. Solve it enough times and it drops off this list for good.</p>
+            <div class="erreurs-carte" id="mistakeGrid" role="group"></div>
+            <p class="note erreurs-note">Solve them: they will come back later, further and further apart.</p>
           </div>
           <!-- Le filtre par motif vivait ici (menu deroulant, 2026-09-03).
                Retire le 2026-09-07 et remplace par la carte "Par motif" du
@@ -3623,11 +3714,11 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
   <!-- Tableau complet des meilleurs joueurs (2026-11-17, compte.js) : en paysage sur telephone, ou par le bouton "Toutes les stats". -->
   <div class="cpj-grand" id="cpjGrand" role="dialog" aria-modal="true" aria-label="Top players"></div>
   <!-- Presentation du compte en trois etapes (2026-11-18, compte.js) : a la fin d'un exercice ou d'une partie, pour qui n'a pas de compte. -->
-  <div class="bilan cpi" id="cpInvite" role="dialog" aria-modal="true" aria-labelledby="cpInviteTitre" hidden>
+  <div class="bilan cpi" id="cpInvite" role="dialog" aria-modal="true" aria-label="Why create an account?" hidden>
     <div class="bilan-fenetre" id="cpInviteContenu"></div>
   </div>
   <!-- Fiche d'un membre (2026-11-18, compte.js) : ouverte en touchant un pseudo des tableaux des joueurs. -->
-  <div class="bilan cpp" id="cpProfil" role="dialog" aria-modal="true" aria-labelledby="cpProfilTitre" hidden>
+  <div class="bilan cpp" id="cpProfil" role="dialog" aria-modal="true" aria-label="Player profile" hidden>
     <div class="bilan-fenetre" id="cpProfilContenu"></div>
   </div>
   <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-label="Challenge a friend" hidden>
@@ -3643,24 +3734,29 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <button type="button" class="tiroir-bouton" id="menuFermer" aria-label="Close menu" data-t-label="Close menu">&times;</button>
       </div>
       <div class="tiroir-vue" id="menuAccueil">
-        <p class="tiroir-section" data-t="My progress">My progress</p>
+        <!-- Rangement du 2026-11-18 (demande d'Alexandre) : chaque ligne dans sa
+             categorie. Membres = ce qui touche au compte et aux autres joueurs ;
+             Ma progression = seulement ce qui mesure sa propre progression ;
+             Nouveautes parle du site, donc A propos. -->
+        <p class="tiroir-section" data-t="Members">Members</p>
         <!-- Compte (2026-11-16, compte.js) : facultatif. Le pseudo s'affiche a droite une fois connecte ; le point signale une session a rouvrir. -->
         <button type="button" class="tiroir-lien" data-vue-compte="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"/></svg><span data-t="My account" id="menuCompteTexte">My account</span><span class="tiroir-detail tiroir-langue" id="menuCompteDetail"></span><span class="burger-point" id="menuComptePoint" hidden></span></button>
         <!-- Meilleurs joueurs (2026-11-17, compte.js) : tableaux lus dans /api/classement. -->
         <button type="button" class="tiroir-lien" data-vue-joueurs="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z"/></svg><span data-t="Top players">Top players</span></button>
         <!-- Defis entre membres (2026-11-17, compte.js) : le nombre a droite = defis a relever + reponses pas encore vues. -->
         <button type="button" class="tiroir-lien" data-vue-defis-membres="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,32H152a8,8,0,0,0-6.34,3.12l-64,83.21L72,108.69a16,16,0,0,0-22.64,0l-12.69,12.7a16,16,0,0,0,0,22.63l20,20-28,28a16,16,0,0,0,0,22.63l12.69,12.68a16,16,0,0,0,22.62,0l28-28,20,20a16,16,0,0,0,22.64,0l12.69-12.7a16,16,0,0,0,0-22.63l-9.64-9.64,83.21-64A8,8,0,0,0,224,104V40A8,8,0,0,0,216,32Zm-8,68.06-81.74,62.88L115.32,152l50.34-50.34a8,8,0,0,0-11.32-11.31L104,140.68,93.07,129.74,155.94,48H208Z"/></svg><span data-t="Member challenges">Member challenges</span><span class="tiroir-detail" id="menuDefisMembresDetail"></span></button>
+        <p class="tiroir-section" data-t="My progress">My progress</p>
         <button type="button" class="tiroir-lien" data-vue-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
         <button type="button" class="tiroir-lien" data-vue-defis="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg><span data-t="Weekly challenges">Weekly challenges</span><span class="tiroir-detail" id="menuDefis"></span></button>
         <button type="button" class="tiroir-lien" data-vue="stats"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg><span data-t="Statistics">Statistics</span><span class="tiroir-detail" id="menuResume"></span></button>
         <button type="button" class="tiroir-lien" data-vue="badges"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z"/></svg><span data-t="Badges">Badges</span><span class="tiroir-detail" id="menuBadgesCompte"></span></button>
-        <button type="button" class="tiroir-lien" data-vue="nouveautes"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg><span data-t="What's new">What's new</span><span class="burger-point" id="menuNouveau" hidden></span></button>
         <p class="tiroir-section" data-t="Settings">Settings</p>
         <button type="button" class="tiroir-lien" data-aller="prefs"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M40,88H73a32,32,0,0,0,62,0h81a8,8,0,0,0,0-16H135a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16Zm64-24A16,16,0,1,1,88,80,16,16,0,0,1,104,64ZM216,168H199a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16h97a32,32,0,0,0,62,0h17a8,8,0,0,0,0-16Zm-48,24a16,16,0,1,1,16-16A16,16,0,0,1,168,192Z"/></svg><span data-t="Preferences">Preferences</span></button>
         <button type="button" class="tiroir-lien" data-aller="access"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M160,40a32,32,0,1,0-32,32A32,32,0,0,0,160,40ZM128,56a16,16,0,1,1,16-16A16,16,0,0,1,128,56ZM231.5,87.71A19.62,19.62,0,0,0,212,72H44a20,20,0,0,0-8.38,38.16l.13,0,50.75,22.35-21,79.72A20,20,0,0,0,102,228.8l26-44.87,26,44.87a20,20,0,0,0,36.4-16.52l-21-79.72,50.75-22.35.13,0A19.64,19.64,0,0,0,231.5,87.71Zm-17.8,7.9-56.93,25.06a8,8,0,0,0-4.51,9.36L175.13,217a7,7,0,0,0,.49,1.35,4,4,0,0,1-5,5.45,4,4,0,0,1-2.25-2.07,6.31,6.31,0,0,0-.34-.63L134.92,164a8,8,0,0,0-13.84,0L88,221.05a6.31,6.31,0,0,0-.34.63,4,4,0,0,1-2.25,2.07,4,4,0,0,1-5-5.45,7,7,0,0,0,.49-1.35L103.74,130a8,8,0,0,0-4.51-9.36L42.3,95.61A4,4,0,0,1,44,88H212a4,4,0,0,1,1.73,7.61Z"/></svg><span data-t="Accessibility">Accessibility</span></button>
         <button type="button" class="tiroir-lien" data-vue="langues"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm87.62,96H175.79C174,83.49,159.94,57.67,148.41,42.4A88.19,88.19,0,0,1,215.63,120ZM96.23,136h63.54c-2.31,41.61-22.23,67.11-31.77,77C118.45,203.1,98.54,177.6,96.23,136Zm0-16C98.54,78.39,118.46,52.89,128,43c9.55,9.93,29.46,35.43,31.77,77Zm11.36-77.6C96.06,57.67,82,83.49,80.21,120H40.37A88.19,88.19,0,0,1,107.59,42.4ZM40.37,136H80.21c1.82,36.51,15.85,62.33,27.38,77.6A88.19,88.19,0,0,1,40.37,136Zm108,77.6c11.53-15.27,25.56-41.09,27.38-77.6h39.84A88.19,88.19,0,0,1,148.41,213.6Z"/></svg><span data-t="Language">Language</span><span class="tiroir-detail tiroir-langue" id="menuLangueActuelle"></span></button>
         <button type="button" class="tiroir-lien" data-vue-app="1" id="menuAppLigne"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"/></svg><span data-t="Install the app">Install the app</span></button>
         <p class="tiroir-section" data-t="About">About</p>
+        <button type="button" class="tiroir-lien" data-vue="nouveautes"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg><span data-t="What's new">What's new</span><span class="burger-point" id="menuNouveau" hidden></span></button>
         <button type="button" class="tiroir-lien" data-aller="legal"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M239.43,133l-32-80h0a8,8,0,0,0-9.16-4.84L136,62V40a8,8,0,0,0-16,0V65.58L54.26,80.19A8,8,0,0,0,48.57,85h0v.06L16.57,165a7.92,7.92,0,0,0-.57,3c0,23.31,24.54,32,40,32s40-8.69,40-32a7.92,7.92,0,0,0-.57-3L66.92,93.77,120,82V208H104a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16H136V78.42L187,67.1,160.57,133a7.92,7.92,0,0,0-.57,3c0,23.31,24.54,32,40,32s40-8.69,40-32A7.92,7.92,0,0,0,239.43,133ZM56,184c-7.53,0-22.76-3.61-23.93-14.64L56,109.54l23.93,59.82C78.76,180.39,63.53,184,56,184Zm144-32c-7.53,0-22.76-3.61-23.93-14.64L200,77.54l23.93,59.82C222.76,148.39,207.53,152,200,152Z"/></svg><span data-t="Legal notice">Legal notice</span></button>
         <button type="button" class="tiroir-lien" data-aller="privacy"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span data-t="Privacy">Privacy</span></button>
       </div>

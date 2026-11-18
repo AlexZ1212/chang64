@@ -132,3 +132,27 @@ CREATE INDEX IF NOT EXISTS enquetes_question ON enquetes (question, cree);
 --   les commentaires, du plus recent au plus ancien :
 --     SELECT datetime(e.cree / 1000, 'unixepoch') AS quand, c.pseudo, e.question, e.note, e.langue, e.commentaire
 --     FROM enquetes e JOIN comptes c ON c.id = e.compte_id WHERE e.commentaire IS NOT NULL ORDER BY e.cree DESC LIMIT 50;
+
+-- Ligues (2026-11-18) : cinq ligues, de 0 (Pion) a 4 (Dame). Une ligne par
+-- membre : sa ligue, son groupe de la semaine (-1 = pas encore range), ses
+-- exercices reussis dans la semaine, et s'il vient de monter (1) ou de
+-- descendre (-1). Rien de nouveau sur le joueur : le pseudo et les exercices
+-- de la semaine sont deja publics. Effacee avec le compte.
+CREATE TABLE IF NOT EXISTS ligues (
+  compte_id INTEGER PRIMARY KEY,
+  sem TEXT NOT NULL,
+  ligue INTEGER NOT NULL DEFAULT 0,
+  groupe INTEGER NOT NULL DEFAULT 0,
+  points INTEGER NOT NULL DEFAULT 0,
+  mouv INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS ligues_groupe ON ligues (sem, ligue, groupe);
+
+-- Une ligne par semaine : le changement de semaine a ete fait (ouvert = -1
+-- pendant le calcul), combien de membres actifs, ligues ouvertes ou non.
+CREATE TABLE IF NOT EXISTS ligues_semaines (
+  sem TEXT PRIMARY KEY,
+  cree INTEGER NOT NULL,
+  actifs INTEGER NOT NULL DEFAULT 0,
+  ouvert INTEGER NOT NULL DEFAULT 0
+);

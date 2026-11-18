@@ -47,8 +47,14 @@ setTimeout(async()=>{
   T("la modale vit dans le cadre de l'echiquier", cadre.contains($("promoModal")));
   T("elle se cale dessus et non sur l'ecran", style($("promoModal")).position==="absolute",
     style($("promoModal")).position);
-  T("meme retrait que les autres overlays", style($("promoModal")).inset==="10px"
-    ||style($("promoModal")).top==="10px", style($("promoModal")).top);
+  /* 2026-11-18 : le retrait n'est plus un 10px ecrit trois fois mais la
+     marge du cadre elle-meme (--cadre, 5 px sur telephone) : sans cela, un
+     cadre plus fin laissait depasser l'echiquier autour des voiles. jsdom ne
+     calcule pas var() : on lit la feuille. */
+  T("le cadre declare sa marge une seule fois", /\.board-frame\{[^}]*--cadre:10px;padding:var\(--cadre\)/.test(html));
+  T("meme retrait que les autres overlays : la marge du cadre", /#promoModal,#amiColorModal\{position:absolute;inset:var\(--cadre,10px\)/.test(html)
+    && /\.result\{\s*position:absolute;inset:var\(--cadre,10px\)/.test(html));
+  T("sur telephone le cadre s'affine sans toucher aux voiles", /\.board-frame\{--cadre:5px\}/.test(html) && !/\.board-frame\{padding:5px\}/.test(html));
   T("le cadre est bien le repere de positionnement", style(cadre).position==="relative");
   T("meme geometrie que l'overlay de resultat",
     style($("promoModal")).top===style($("resultBanner")).top,

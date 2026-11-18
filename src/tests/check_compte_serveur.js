@@ -456,6 +456,28 @@ const avancer = ms => { decalage += ms; };
     T("tableau complet : valeurs exactes, semaine passee comptee zero", j59 && j59.s === 59 && j59.n === 859 && j59.r === 177 && j60 && j60.s === 0 && j60.n === 860, JSON.stringify([j59, j60]));
     T("tableau complet : reunion des six tableaux, sans doublon", r.j.joueurs.length <= 300 && new Set(r.j.joueurs.map(x => x.p)).size === r.j.joueurs.length);
     T("critere inconnu : 400", (await tableau("pin_hash")).s === 400 && (await tableau("note;DROP")).s === 400);
+
+    /* Profil public (2026-11-18) : memes chiffres, rang dans chaque tableau. */
+    console.log("\nProfil d'un membre");
+    const profil = async p => {
+      const rep = await mod.onRequest({ request: new Request("https://chang64.com/api/compte/profil?p=" + encodeURIComponent(p)), env, params: { route: ["profil"] } });
+      const texte = await rep.text(); let j = null; try { j = JSON.parse(texte); } catch (e) {}
+      return { s: rep.status, j, texte, h: rep.headers };
+    };
+    r = await profil("j60");
+    T("profil : sans session, 200", r.s === 200 && r.j.p === "Joueur60", r.texte);
+    T("profil : rien d'autre que pseudo, mois, six chiffres et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,rangs" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
+    T("profil : premier a la note et aux exercices", r.j.n === 860 && r.j.rangs.n === 1 && r.j.r === 180 && r.j.rangs.r === 1);
+    T("profil : rang = 1 + ceux qui font strictement mieux", r.j.j === 6 && r.j.rangs.j === 13, JSON.stringify(r.j.rangs));
+    T("profil : hors tableau (zero, ou semaine passee) : pas de rang", r.j.s === 0 && r.j.rangs.s === null && r.j.rangs.b === null && r.j.rangs.k === null, JSON.stringify(r.j));
+    T("profil : mis en cache cinq minutes", /s-maxage=300/.test(r.h.get("Cache-Control")));
+    r = await profil("J10");
+    T("profil : rang au-dela des 50 premiers", r.s === 200 && r.j.rangs.r === 51 && r.j.rangs.n === 51, JSON.stringify(r.j));
+    ins.run("petit", "Petit", now, now, 2000, 3, 0, 0, 0, sem, 1);
+    r = await profil("petit");
+    T("profil : moins de 10 exercices, pas de rang a la note", r.s === 200 && r.j.rangs.n === null && r.j.n === 2000 && r.j.rangs.r === 60 && r.j.rangs.s === 30, JSON.stringify(r.j));
+    T("profil : pseudo inconnu ou invalide : 404", (await profil("personne")).s === 404 && (await profil("")).s === 404 && (await profil("<b>")).s === 404 && (await profil("a' OR 1=1 --")).s === 404);
+    T("profil : la route n'existe qu'en lecture", (await appel("POST", "profil", { p: "j1" })).s !== 200);
   }
 
   console.log("\n" + ok + " OK, " + ko + " FAIL");

@@ -2,6 +2,49 @@
  {
   "d": "2026-11-18",
   "en": [
+   "Player profiles and your rank",
+   "In Top players, tap a username to see that player's profile and challenge them. Not in the top 50 yet? Your rank now shows under each list."
+  ],
+  "fr": [
+   "Fiches de joueur et ton rang",
+   "Dans Meilleurs joueurs, touche un pseudo pour voir la fiche du joueur et le défier. Pas encore parmi les 50 en tête ? Ton rang s'affiche maintenant sous chaque liste."
+  ],
+  "es": [
+   "Perfiles de jugador y tu puesto",
+   "En Mejores jugadores, toca un nombre de usuario para ver el perfil del jugador y desafiarlo. ¿Aún no estás entre los 50 mejores? Tu puesto aparece ahora debajo de cada lista."
+  ],
+  "pt": [
+   "Perfis de jogador e sua posição",
+   "Em Melhores jogadores, toque em um nome de usuário para ver o perfil do jogador e desafiá-lo. Ainda não está entre os 50 melhores? Sua posição agora aparece abaixo de cada lista."
+  ],
+  "de": [
+   "Spielerprofile und dein Rang",
+   "Tippe unter Beste Spieler auf einen Benutzernamen, um das Profil zu sehen und den Spieler herauszufordern. Noch nicht unter den besten 50? Dein Rang steht jetzt unter jeder Liste."
+  ],
+  "ru": [
+   "Профили игроков и твоё место",
+   "В разделе «Лучшие игроки» нажми на имя пользователя, чтобы открыть профиль игрока и бросить ему вызов. Тебя пока нет в первой полусотне? Твоё место теперь показано под каждым списком."
+  ],
+  "it": [
+   "Profili dei giocatori e la tua posizione",
+   "In Migliori giocatori, tocca un nome utente per vedere il profilo del giocatore e sfidarlo. Non sei ancora tra i primi 50? La tua posizione ora compare sotto ogni lista."
+  ],
+  "tr": [
+   "Oyuncu profilleri ve sıran",
+   "En iyi oyuncular bölümünde bir kullanıcı adına dokun: oyuncunun profilini gör ve ona meydan oku. Henüz ilk 50'de değil misin? Sıran artık her listenin altında görünüyor."
+  ],
+  "pl": [
+   "Profile graczy i twoje miejsce",
+   "W sekcji Najlepsi gracze dotknij nazwy użytkownika, by zobaczyć profil gracza i rzucić mu wyzwanie. Nie ma cię jeszcze w pierwszej pięćdziesiątce? Twoje miejsce widać teraz pod każdą listą."
+  ],
+  "id": [
+   "Profil pemain dan peringkatmu",
+   "Di Pemain terbaik, ketuk nama pengguna untuk melihat profil pemain dan menantangnya. Belum masuk 50 besar? Peringkatmu kini tampil di bawah setiap daftar."
+  ]
+ },
+ {
+  "d": "2026-11-18",
+  "en": [
    "Challenge links show the score to beat",
    "When you send a challenge link, its preview now shows your score. Challenge puzzles count toward your daily goal, not your rating."
   ],

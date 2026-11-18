@@ -859,6 +859,7 @@ async function cpjVue(par){
     (p==="semaine"?'<p class="cp-note">'+cpE("Puzzles solved since Monday.")+"</p>":"");
   const pied='<p class="cp-note cp-centre cpj-astuce">'+cpE("Turn your phone sideways to see all the stats at once.")+"</p>"+
     '<button type="button" class="btn cp-large cpj-tout" data-cpj-tout>'+cpE("All the stats")+"</button>"+
+    (cp?'<button type="button" class="btn cp-large" data-cpp="'+echapper(cp.pseudo)+'">'+cpE("My profile")+"</button>":"")+
     (cp?"":'<p class="cp-note cp-centre">'+cpE("Create an account to appear here.")+'</p><button type="button" class="btn cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>");
   const dessiner=corps=>{if(p===cpjPar&&!v.hidden)poserHtml(v,onglets+corps+pied);};
   let c=cpjCache[p];
@@ -874,9 +875,16 @@ async function cpjVue(par){
   if(!l.length){dessiner('<p class="cp-note cp-centre">'+cpE("No one here yet. Be the first!")+"</p>");return;}
   const moi=cp?l.findIndex(x=>x.p===cp.pseudo):-1;
   dessiner('<ol class="cpj-liste">'+l.map((x,i)=>
-    '<li'+(i===moi?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom">'+echapper(String(x.p))+(i===moi?" <em>("+cpE("You")+")</em>":"")+
+    '<li'+(i===moi?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom">'+'<button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+(i===moi?" <em>("+cpE("You")+")</em>":"")+
     '</span><b>'+echapper(String(x.v))+"</b></li>").join("")+"</ol>"+
-    (cp&&moi<0?'<p class="cp-note cp-centre">'+cpE("You are not in the top 50 yet.")+"</p>":""));
+    (cp&&moi<0?'<p class="cp-note cp-centre" id="cpjMonRang">'+cpE("You are not in the top 50 yet.")+"</p>":""));
+  if(cp&&moi<0){
+    const cle=CPJ_COLONNES[CPJ.findIndex(x=>x[0]===p)][0];
+    cppLire(cp.pseudo).then(j=>{
+      const e=$("cpjMonRang"),rang=j&&j.rangs?j.rangs[cle]:null;
+      if(e&&p===cpjPar&&rang)e.textContent=t("Your rank: {n}",{n:rang});
+    }).catch(()=>{});
+  }
 }
 /* Le tableau complet (2026-11-17, demande d'Alexandre) : toutes les stats de
    tous les joueurs des six tableaux, triable en touchant un en-tete. Sur
@@ -894,7 +902,7 @@ function cpjGrandDessiner(){
   poserHtml(g,tete+'<div class="cpj-grand-corps"><table class="cpj-table"><thead><tr><th scope="col" class="cpj-rang">#</th><th scope="col">'+cpE("Username")+"</th>"+
     CPJ_COLONNES.map(([k,nom])=>'<th scope="col" aria-sort="'+(k===cpjTri?(cpjSens<0?"descending":"ascending"):"none")+'"><button type="button" data-cpj-tri="'+k+'">'+cpE(nom)+
       '<span aria-hidden="true">'+(k===cpjTri?(cpjSens<0?" ▾":" ▴"):"")+"</span></button></th>").join("")+"</tr></thead><tbody>"+
-    l.map((x,i)=>"<tr"+(cp&&x.p===cp.pseudo?' class="cpj-moi"':"")+'><td class="cpj-rang">'+(i+1)+'</td><th scope="row">'+echapper(String(x.p))+"</th>"+
+    l.map((x,i)=>"<tr"+(cp&&x.p===cp.pseudo?' class="cpj-moi"':"")+'><td class="cpj-rang">'+(i+1)+'</td><th scope="row">'+'<button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+"</th>"+
       CPJ_COLONNES.map(([k])=>"<td"+(k===cpjTri?' class="cpj-tri"':"")+">"+echapper(String(cpNombre(x[k])))+"</td>").join("")+"</tr>").join("")+"</tbody></table></div>");
 }
 async function cpjGrandCharger(){
@@ -939,6 +947,67 @@ document.addEventListener("click",e=>{
   const tri=e.target.closest("[data-cpj-tri]");
   if(tri){const k=tri.dataset.cpjTri;if(k===cpjTri)cpjSens=-cpjSens;else{cpjTri=k;cpjSens=-1;}cpjGrandDessiner();const n=document.querySelector('#cpjGrand [data-cpj-tri="'+k+'"]');if(n)n.focus();}
 });
+
+/* ---------- Fiche d'un membre ---------- */
+/* Toucher un pseudo dans les tableaux ouvre sa fiche (2026-11-18) : le mois
+   de creation du compte, les six chiffres des tableaux et le rang dans
+   chacun, lus dans /api/compte/profil. Rien de plus que ce que les tableaux
+   montrent deja, mais pour n'importe quel membre et pas seulement les 50
+   premiers ; c'est aussi la qu'un joueur trouve son rang au-dela du 50e.
+   Un joueur connecte peut defier le membre depuis sa fiche. */
+let cppCache={},cppAvant=null;
+async function cppLire(pseudo){
+  const k=String(pseudo).toLowerCase(),c=cppCache[k];
+  if(c&&Date.now()-c.t<60000)return c.j;
+  const r=await fetch("/api/compte/profil?p="+encodeURIComponent(pseudo));
+  if(r.status!==200)throw new Error("statut");
+  const j=await r.json();
+  cppCache[k]={t:Date.now(),j:j};
+  return j;
+}
+function cppMois(am){
+  const m=/^(\d{4})-(\d{2})$/.exec(String(am));if(!m)return "";
+  try{return new Intl.DateTimeFormat(LANG_INTL,{month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(Date.UTC(+m[1],+m[2]-1,15)));}catch(e){return m[0];}
+}
+function cppFermer(){
+  const f=$("cpProfil");if(!f||f.hidden)return;
+  f.hidden=true;
+  if(cppAvant&&cppAvant.focus&&document.contains(cppAvant))cppAvant.focus();
+}
+async function cppOuvrir(pseudo){
+  const f=$("cpProfil"),c=$("cpProfilContenu");if(!f||!c)return;
+  if(f.hidden)cppAvant=document.activeElement;
+  const tete=nom=>'<p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>";
+  const fermer='<button type="button" class="btn cpp-fermer" data-cpp-fermer>'+cpE("Close")+"</button>";
+  const poser=h=>{poserHtml(c,h);const b=c.querySelector("[data-cpp-premier]")||c.querySelector("[data-cpp-fermer]");if(b)b.focus();};
+  poserHtml(c,tete(pseudo)+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>"+fermer);
+  f.hidden=false;f.dataset.pseudo=String(pseudo);
+  const b0=c.querySelector("[data-cpp-fermer]");if(b0)b0.focus();
+  let j;
+  try{j=await cppLire(pseudo);}
+  catch(e){if(!f.hidden&&f.dataset.pseudo===String(pseudo))poser(tete(pseudo)+'<p class="cp-msg">'+cpE("Could not load this profile.")+"</p>"+fermer);return;}
+  if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
+  const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
+  poser(tete(j.p)+(mois?'<p class="bilan-sous">'+echapper(t("Member since {date}",{date:mois}))+"</p>":"")+
+    '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
+      const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
+      return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";
+    }).join("")+"</ul>"+
+    (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>":"")+fermer);
+}
+document.addEventListener("click",e=>{
+  const o=e.target.closest("[data-cpp]");
+  if(o){cppOuvrir(o.dataset.cpp);return;}
+  const d=e.target.closest("[data-cpp-defier]");
+  if(d){cpdRevanche=d.dataset.cppDefier||"";cppFermer();menuFermer();duelCreer();return;}
+  if(e.target.closest("[data-cpp-fermer]")||e.target.id==="cpProfil")cppFermer();
+});
+/* Echap ferme la fiche, et elle seule (le menu reste ouvert derriere). */
+document.addEventListener("keydown",e=>{
+  const f=$("cpProfil");
+  if(e.key==="Escape"&&f&&!f.hidden){e.stopPropagation();e.preventDefault();cppFermer();}
+},true);
+{const av=menuFermer;menuFermer=function(){cppFermer();return av.apply(this,arguments);};}
 
 /* ---------- Defis entre membres ---------- */
 /* Le defi par lien (duel.js) sans le lien (2026-11-17) : apres ses cinq

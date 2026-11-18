@@ -720,6 +720,22 @@ async function rEnqueteEcrire(s, d, env, now) {
   return r ? json({ ok: true }, 201) : erreur("trop", 429);
 }
 
+/* ---------- Recherche de membres (2026-11-18) ---------- */
+/* GET membres?q=<debut de pseudo> -> { membres: [pseudo, ...] }, huit au plus,
+   les plus recemment actifs d'abord. Avec session seulement. Le debut saisi
+   est ramene a la meme forme que la cle des pseudos (minuscules, sans
+   accents, sosies cyrilliques), et les jokers de LIKE sont neutralises. */
+async function rMembres(s, request, env) {
+  const brut = (new URL(request.url).searchParams.get("q") || "").normalize("NFC").trim();
+  const n = Array.from(brut).length;
+  if (n < 2 || n > PSEUDO_MAX || !/^[\p{L}0-9_-]+$/u.test(brut)) return json({ membres: [] });
+  const bas = brut.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase();
+  const cle = Array.from(bas).map(c => PSEUDO_SOSIES[c] || c).join("");
+  const motif = cle.replace(/[\\%_]/g, c => "\\" + c) + "%";
+  const l = (await env.DB.prepare("SELECT pseudo FROM comptes WHERE cle LIKE ?1 ESCAPE '\\' AND id <> ?2 ORDER BY vu DESC LIMIT 8").bind(motif, s.id).all()).results || [];
+  return json({ membres: l.map(x => x.pseudo) });
+}
+
 /* ---------- Pays de la fiche (2026-11-18) ---------- */
 /* Le joueur choisit son pays lui-meme, dans Mon compte : un code a deux
    lettres, ou rien. Rien n'est deduit de sa connexion. La lecture est a part
@@ -842,7 +858,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -852,6 +868,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
       if (route === "defis") return await rDefis(s, env);
       if (route === "enquete") return await rEnqueteLire(s, env, now);
       if (route === "amis") return await rAmis(s, env, now);
+      if (route === "membres") return await rMembres(s, request, env);
       return await rExporter(s, env);
     }
     const d = await corps(request);

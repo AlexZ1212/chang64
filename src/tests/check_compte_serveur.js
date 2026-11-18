@@ -582,7 +582,7 @@ const avancer = ms => { decalage += ms; };
     };
     r = await profil("j60");
     T("profil : sans session, 200", r.s === 200 && r.j.p === "Joueur60", r.texte);
-    T("profil : rien d'autre que pseudo, mois, six chiffres et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,rangs" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
+    T("profil : rien d'autre que pseudo, mois, six chiffres et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,rangs,bl" && Array.isArray(r.j.bl) && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
     T("profil : premier a la note et aux exercices", r.j.n === 860 && r.j.rangs.n === 1 && r.j.r === 180 && r.j.rangs.r === 1);
     T("profil : rang = 1 + ceux qui font strictement mieux", r.j.j === 6 && r.j.rangs.j === 13, JSON.stringify(r.j.rangs));
     T("profil : hors tableau (zero, ou semaine passee) : pas de rang", r.j.s === 0 && r.j.rangs.s === null && r.j.rangs.b === null && r.j.rangs.k === null, JSON.stringify(r.j));
@@ -593,6 +593,13 @@ const avancer = ms => { decalage += ms; };
     r = await profil("petit");
     T("profil : moins de 10 exercices, pas de rang a la note", r.s === 200 && r.j.rangs.n === null && r.j.n === 2000 && r.j.rangs.r === 60 && r.j.rangs.s === 30, JSON.stringify(r.j));
     T("profil : pseudo inconnu ou invalide : 404", (await profil("personne")).s === 404 && (await profil("")).s === 404 && (await profil("<b>")).s === 404 && (await profil("a' OR 1=1 --")).s === 404);
+    T("profil : sans progression gardee, liste de badges vide", Array.isArray((await profil("j10")).j.bl) && (await profil("j10")).j.bl.length === 0);
+    env.DB.brut.prepare("UPDATE comptes SET donnees = ? WHERE cle = 'j11'").run(JSON.stringify({ progress: { badges: ["solved_1", "days_3", "solved_1", "<img src=x>", 12, "MAJ", "ouv_italienne"], rating: 999 }, secret: "ne doit pas sortir" }));
+    r = await profil("j11");
+    T("profil : badges gagnes, dans l'ordre, sans doublon ni valeur douteuse", r.s === 200 && r.j.bl.join() === "solved_1,days_3,ouv_italienne", JSON.stringify(r.j.bl));
+    T("profil : rien d'autre de la progression ne sort", !/secret|ne doit pas sortir|999/.test(r.texte));
+    env.DB.brut.prepare("UPDATE comptes SET donnees = ? WHERE cle = 'j12'").run("{pas du json");
+    T("profil : progression illisible, la fiche repond quand meme", (await profil("j12")).s === 200 && (await profil("j12")).j.bl.length === 0);
     T("profil : la route n'existe qu'en lecture", (await appel("POST", "profil", { p: "j1" })).s !== 200);
   }
 

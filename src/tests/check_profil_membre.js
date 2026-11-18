@@ -17,7 +17,8 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
 const MECHANT = '<img src=x onerror="window.pirate=1">';
 const JOUEURS = [{ p: "Alice", v: 300 }, { p: MECHANT, v: 200 }, { p: "Bob", v: 100 }];
 const PROFILS = {
-  Alice: { p: "Alice", depuis: "2026-03", s: 12, n: 1450, r: 300, j: 9, b: 31, k: 14, rangs: { s: 2, n: 1, r: 1, j: 4, b: 3, k: 7 } },
+  Alice: { p: "Alice", depuis: "2026-03", s: 12, n: 1450, r: 300, j: 9, b: 31, k: 14, rangs: { s: 2, n: 1, r: 1, j: 4, b: 3, k: 7 },
+    bl: ["solved_1", "days_3", "inconnu_xyz", "_profil", "<img src=x onerror=\"window.pirate=1\">"].concat(["solved_10", "solved_25", "solved_50", "solved_64", "solved_100", "days_1", "days_7", "days_14", "days_30", "eg_kq", "eg_kr", "eg_krr", "eg_kp", "mb_compte", "duel_lien"]) },
   Moi: { p: "Moi", depuis: "2026-11", s: 0, n: 820, r: 15, j: 1, b: 2, k: 0, rangs: { s: null, n: 73, r: 68, j: 80, b: 91, k: null } }
 };
 const demandes = [];
@@ -74,6 +75,12 @@ function ouvrir(page) {
   const fiche = $("cpProfilContenu").textContent;
   T("la fiche s'ouvre sur le bon joueur", !$("cpProfil").hidden && $("cpProfilTitre").textContent === "Alice" && demandes.includes("Alice"));
   T("medaille de profil dans l'en-tete, or pour un premier rang, sans arc", !!d.querySelector("#cpProfilContenu .cpp-tete .cpp-medaille svg.bx-or") && !d.querySelector("#cpProfilContenu .cpp-avatar"));
+  {
+    const meds = [...d.querySelectorAll("#cpProfilContenu .cpp-badges li")];
+    T("badges du joueur : 13 medailles, les plus recentes d'abord, puis le reste en nombre", meds.length === 14 && meds.slice(0, 13).every(li => li.querySelector("svg.bx-medaille")) && meds[13].textContent === "+4", meds.length + " " + (meds[13] && meds[13].textContent));
+    T("badges du joueur : chaque medaille porte son nom", meds.slice(0, 13).every(li => li.getAttribute("title") && li.querySelector(".cp-sr").textContent.length > 1), meds[0] && meds[0].getAttribute("title"));
+    T("badges du joueur : identifiants inconnus ou pieges ignores", !d.querySelector("#cpProfilContenu .cpp-badges img") && !w.pirate);
+  }
   T("mois de creation en toutes lettres", /March 2026/.test(fiche), fiche.slice(0, 120));
   const lignes = [...d.querySelectorAll("#cpProfilContenu .cpp-liste li")].map(li => li.textContent);
   T("six chiffres avec leur rang", lignes.length === 6 && /1450/.test(lignes[1]) && /#1/.test(lignes[1]) && /14/.test(lignes[5]) && /#7/.test(lignes[5]), JSON.stringify(lignes));
@@ -106,6 +113,7 @@ function ouvrir(page) {
   d.querySelector("#cpProfilContenu [data-cpp-fermer]").click();
   d.querySelector('#menuJoueursVue button[data-cpp="Moi"]').click();
   await attendre(300);
+  T("joueur sans badge : pas de rangee de badges", !d.querySelector("#cpProfilContenu .cpp-badges"));
   T("sa propre fiche : pas de bouton de defi, rang absent note par un tiret", !d.querySelector("#cpProfilContenu [data-cpp-defier]") && /–/.test(d.querySelector("#cpProfilContenu .cpp-liste li").textContent));
   w.eval("cppFermer()");
 

@@ -751,7 +751,10 @@ async function rAmiRetirer(s, d, env) {
 
 /* ---------- Profil public d'un membre (2026-11-18) ---------- */
 /* GET /api/compte/profil?p=<pseudo>, sans session :
-     { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k } }
+     { p, depuis: "AAAA-MM", s, n, r, j, b, k, rangs: { s, n, r, j, b, k }, bl: [identifiants de badges] }
+   bl (2026-11-18) : les badges gagnes, du plus ancien au plus recent, lus dans
+   la progression gardee ; seuls des identifiants simples sortent (lettres
+   minuscules, chiffres, tiret bas), 400 au plus.
    Les six chiffres sont ceux des tableaux des joueurs (classement.js), avec
    le rang dans chacun : 1 + le nombre de comptes qui font strictement mieux,
    ou null si le joueur n'entre pas dans ce tableau (memes conditions que
@@ -773,15 +776,21 @@ async function rProfil(request, env, now, waitUntil) {
   const cache = typeof caches !== "undefined" && caches.default ? caches.default : null;
   const cle = new Request(new URL("/api/compte/profil?p=" + encodeURIComponent(v.cle), request.url).toString());
   if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
-  const c = await env.DB.prepare("SELECT pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus FROM comptes WHERE cle = ?1").bind(v.cle).first();
+  const c = await env.DB.prepare("SELECT pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees FROM comptes WHERE cle = ?1").bind(v.cle).first();
   if (!c) return erreur("inconnu", 404);
+  let bl = [];
+  try {
+    const liste = c.donnees ? (JSON.parse(c.donnees).progress || {}).badges : null;
+    if (Array.isArray(liste)) bl = Array.from(new Set(liste.filter(x => typeof x === "string" && /^[a-z0-9_]{2,40}$/.test(x)))).slice(-400);
+  } catch (e) {}
   const semaine = lundi(now), s = c.sem === semaine ? c.sem_resolus : 0;
   const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint).first();
   const rang = (dedans, devant) => dedans ? devant + 1 : null;
   const rep = json({
     p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
     s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint,
-    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k) }
+    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k) },
+    bl
   }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
   if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));
   return rep;

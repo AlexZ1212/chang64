@@ -1041,11 +1041,28 @@ async function cppOuvrir(pseudo){
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";
-    }).join("")+"</ul>"+
+    }).join("")+"</ul>"+cppBadges(j.bl)+
     (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
       '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Add to my friends")+"</button>"+
       '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer);
 }
+/* Les badges du joueur, en petites medailles (2026-11-18) : les treize
+   derniers gagnes (avec le nombre des autres, cela fait deux rangees pleines
+   de sept sur telephone), du plus recent au plus ancien, et le nombre des autres.
+   Le nom du badge est dit au survol et aux lecteurs d'ecran. Rien si les
+   dessins ne sont pas charges ou si le joueur n'a pas encore de badge. */
+const CPP_BADGES_MAX=13;
+function cppBadges(liste){
+  if(typeof bxMedailles==="undefined"||!bxMedailles||typeof bxMedaille!=="function")return "";
+  const l=cpListe(liste).filter(id=>typeof id==="string"&&id[0]!=="_"&&Array.isArray(bxMedailles[id])).reverse();
+  if(!l.length)return "";
+  const vus=l.slice(0,CPP_BADGES_MAX),reste=l.length-vus.length;
+  return '<p class="cpp-badges-titre">'+cpE("Badges")+'</p><ul class="cpp-badges">'+vus.map(id=>{
+    const nom=typeof bxTexte==="function"?bxTexte(id,0):"";
+    return '<li title="'+echapper(nom)+'">'+bxMedaille(id,true)+'<span class="cp-sr">'+echapper(nom)+"</span></li>";
+  }).join("")+(reste>0?'<li class="cpp-badges-reste" aria-label="'+echapper("+"+reste)+'">+'+reste+"</li>":"")+"</ul>";
+}
+
 /* ---------- Amis ---------- */
 /* Une liste privee de joueurs (2026-11-18), tenue par le serveur (routes amis,
    ami-ajouter, ami-retirer). On ajoute un joueur depuis sa fiche, sans

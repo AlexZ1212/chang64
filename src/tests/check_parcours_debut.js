@@ -113,9 +113,12 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
      anecdote, puis "Suivant" jusqu'a la derniere page, qui dit "Continuer". */
   const pages = $("bravoAutres").querySelectorAll(".bx-page").length;
   T("une page par badge gagne", pages >= 7, String(pages));
-  T("nom du badge affiche", $("bravoNoms").textContent === "Diplôme", $("bravoNoms").textContent);
+  /* Un jour a badge (le 19 novembre : Capablanca), ce badge-la passe en
+     premiere page : le test ne doit pas dependre de la date du jour. */
+  const jourSpecial = ev("prog.badges.some(b=>b.indexOf('fete_')===0)");
+  T("nom du badge affiche", jourSpecial || $("bravoNoms").textContent === "Diplôme", $("bravoNoms").textContent);
   T("anecdote du badge affichee", $("bravoTexte").textContent.length > 20, $("bravoTexte").textContent);
-  T("medaille gagnee affichee en grand", !!$("bravoSocle").querySelector(".bx-medaille.bx-or"));
+  T("medaille gagnee affichee en grand", !!$("bravoSocle").querySelector(jourSpecial ? ".bx-medaille" : ".bx-medaille.bx-or"));
   T("bouton Suivant tant qu'il reste des pages", $("bravoOk").textContent === "Suivant", $("bravoOk").textContent);
   T("focus sur le bouton", w.document.activeElement === $("bravoOk"));
   const vusPages = [$("bravoNoms").textContent];

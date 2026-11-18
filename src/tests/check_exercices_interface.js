@@ -491,7 +491,7 @@ setTimeout(async()=>{
     chips.map(c=>c.className).join(","));
   T("symboles corrects", chips[0].textContent==="✓"&&chips[1].textContent==="✗",
     chips.map(c=>c.textContent).join(","));
-  T("carre a bords arrondis, comme le selecteur de langue", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).borderRadius')==="6px");
+  T("carre a bords arrondis, comme le selecteur de langue", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).borderRadius')==="var(--r-s)");
   T("note expliquant qu'on peut toucher une pastille", !d.getElementById("rushHistoryNote").classList.contains("hide") &&
     /solved|resoudre|resolu/i.test(d.getElementById("rushHistoryNote").textContent), d.getElementById("rushHistoryNote").textContent);
   chips[1].click();

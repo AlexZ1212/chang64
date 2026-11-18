@@ -1248,6 +1248,7 @@ header>*{min-width:0}
 .select:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .linkbox{width:100%;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--chalk);background-color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:9px 10px;margin-bottom:10px}
 .linkbox:focus{outline:2px solid var(--brass);outline-offset:1px}
+.linkbox[hidden]{display:none}
 /* Bloc de partage modele (2026-11-18, choisi par Alexandre sur le defi du
    jour) : l'adresse dans son champ, puis la rangee de boutons, dans un cadre.
    Le meme partout : defi du jour, partie entre amis, defi par lien. */
@@ -3030,9 +3031,9 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
               <input class="linkbox" id="dailyChallengeLink" readonly aria-label="Challenge link">
               <div class="shareRow" id="dailyChallengeShare"></div>
             </div>
-            <!-- Meme bloc pour le resultat (2026-11-18) : le texte a partager dans son champ, puis les boutons communs. -->
+            <!-- Meme bloc pour le resultat (2026-11-18), sans apercu du texte : l'application choisie le montre deja avant l'envoi (retour d'Alexandre). Le champ reste dans la page, masque, pour le code. -->
             <div class="panel hide" id="dailyResultPanel" style="margin-top:8px">
-              <textarea class="linkbox" id="dailyResultText" readonly rows="6" style="resize:none" aria-label="Share my result"></textarea>
+              <textarea class="linkbox" id="dailyResultText" readonly hidden rows="6" aria-label="Share my result"></textarea>
               <div class="shareRow" id="dailyResultShare"></div>
             </div>
           </div>

@@ -368,3 +368,38 @@ and OG images.
 | `wordmark.svg` | Wordmark as live type with the exact spec baked in. |
 
 No raster assets. Everything is paths and hex values.
+
+## Règles ajoutées le 18 novembre 2026 (application)
+
+Décisions d'Alexandre, appliquées dans `src/template.html`. Elles complètent ce document sans le remplacer.
+
+### L'accent suit le thème, jamais un jaune fixe
+
+Tout ce qui porte l'accent se sert de `var(--brass)`, ou de `rgba(var(--brass-rgb), …)` pour une teinte translucide. Aucune valeur écrite en dur.
+
+| Élément | Couleur |
+|---|---|
+| Éléphant du message, sous l'échiquier d'un exercice | `var(--brass)`, le dessin sert de masque |
+| Bouton principal, au survol et à l'appui | `color-mix(in srgb, var(--brass) 86%, #fff)` |
+| Graphe d'analyse d'une partie, trait | `var(--brass)` |
+| Graphe d'analyse d'une partie, zone sous la courbe | `rgba(var(--brass-rgb), .18)` |
+
+### Trois polices, chacune son rôle
+
+- Source Serif 4 : les titres.
+- Archivo : tout le texte courant, y compris le deuxième paragraphe de l'accueil, en gras.
+- JetBrains Mono : uniquement les chiffres (statistiques), les tableaux de notation et les cadences.
+
+### Fenêtres
+
+- Une fenêtre qui n'est pas un badge suit un seul modèle : une médaille gravée en haut, le petit titre en capitales, le titre, le texte, un filet, les boutons.
+- L'arc de couleur est réservé à la fenêtre des badges (« Bravo »).
+- Un pictogramme de fenêtre est toujours une médaille gravée, comme celles des badges.
+
+### Séparateurs
+
+Dans les libellés et les pieds de page, les éléments d'une même ligne sont séparés par une barre verticale « | », pas par un point médian.
+
+### Partage
+
+Un seul bloc de partage sur tout le site : l'adresse dans son champ, puis Partager, WhatsApp, Messenger, Telegram, Copier, dans un cadre.

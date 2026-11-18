@@ -1,6 +1,6 @@
 {
  "/": {
-  "sceau": "3e6913e960775f84",
+  "sceau": "7611b8048cb431bd",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-18"
  },
@@ -1140,9 +1140,9 @@
   "modifiee": "2026-11-14"
  },
  "/de/regeln/dein-konto": {
-  "sceau": "2d6035c5b79f8957",
+  "sceau": "dc2a731961d71e8b",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/de/regeln/der-doppelangriff": {
   "sceau": "f9e423675686512d",
@@ -2070,9 +2070,9 @@
   "modifiee": "2026-11-17"
  },
  "/es/aprender/tu-cuenta": {
-  "sceau": "4cf53528bfdac73c",
+  "sceau": "b45b0ded62e6493d",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/es/finales/": {
   "sceau": "3acd9b3469529be5",
@@ -2580,9 +2580,9 @@
   "modifiee": "2026-11-14"
  },
  "/fr/apprendre/ton-compte": {
-  "sceau": "6a45e11205fa4a08",
+  "sceau": "871d40237d9f75b3",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/fr/exercices/": {
   "sceau": "cacae771855da42b",
@@ -4005,9 +4005,9 @@
   "modifiee": "2026-11-16"
  },
  "/id/aturan/akunmu": {
-  "sceau": "6c3da364587c875c",
+  "sceau": "f77e1ab50217efc6",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/id/aturan/bidak-menggantung": {
   "sceau": "93056913469865ff",
@@ -6290,9 +6290,9 @@
   "modifiee": "2026-11-14"
  },
  "/it/regole/il-tuo-account": {
-  "sceau": "d67ebd81fd07f18e",
+  "sceau": "643c5747ed652cb5",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/it/regole/l-arrocco": {
   "sceau": "1017425a7bd4675b",
@@ -6510,9 +6510,9 @@
   "modifiee": "2026-11-14"
  },
  "/learn/your-account": {
-  "sceau": "40a09ef03b0bb147",
+  "sceau": "3a2ac777d4c3d25b",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/openings/": {
   "sceau": "ab77f38e1d4cb216",
@@ -8415,9 +8415,9 @@
   "modifiee": "2026-11-14"
  },
  "/pl/zasady/twoje-konto": {
-  "sceau": "95e1f3be11b1391a",
+  "sceau": "b65824611c017c44",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/pl/zasady/widelki-pionem": {
   "sceau": "f95a91d9374e9057",
@@ -9255,9 +9255,9 @@
   "modifiee": "2026-11-17"
  },
  "/pt/aprender/sua-conta": {
-  "sceau": "434d0e4e4a7946db",
+  "sceau": "e15cd95446064570",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/pt/aprender/xeque-mate-e-afogamento": {
   "sceau": "a0a932d95d46add0",
@@ -10140,9 +10140,9 @@
   "modifiee": "2026-11-14"
  },
  "/ru/learn/your-account": {
-  "sceau": "ab724ada4c167134",
+  "sceau": "9577cecc1629ad82",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/ru/openings/": {
   "sceau": "82230f42d2d63be6",
@@ -11715,9 +11715,9 @@
   "modifiee": "2026-11-14"
  },
  "/tr/kurallar/hesabin": {
-  "sceau": "9ce318bd96b11cfd",
+  "sceau": "2c8b55c637c57474",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-17"
+  "modifiee": "2026-11-18"
  },
  "/tr/kurallar/notasyon": {
   "sceau": "83ec6f4478be2093",

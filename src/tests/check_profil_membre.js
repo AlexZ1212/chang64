@@ -73,6 +73,7 @@ function ouvrir(page) {
   await attendre(300);
   const fiche = $("cpProfilContenu").textContent;
   T("la fiche s'ouvre sur le bon joueur", !$("cpProfil").hidden && $("cpProfilTitre").textContent === "Alice" && demandes.includes("Alice"));
+  T("medaille de profil dans l'en-tete, or pour un premier rang, sans arc", !!d.querySelector("#cpProfilContenu .cpp-tete .cpp-medaille svg.bx-or") && !d.querySelector("#cpProfilContenu .cpp-avatar"));
   T("mois de creation en toutes lettres", /March 2026/.test(fiche), fiche.slice(0, 120));
   const lignes = [...d.querySelectorAll("#cpProfilContenu .cpp-liste li")].map(li => li.textContent);
   T("six chiffres avec leur rang", lignes.length === 6 && /1450/.test(lignes[1]) && /#1/.test(lignes[1]) && /14/.test(lignes[5]) && /#7/.test(lignes[5]), JSON.stringify(lignes));

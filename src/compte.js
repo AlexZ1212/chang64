@@ -1011,20 +1011,33 @@ async function cppOuvrir(pseudo){
      ne fete rien. Un pictogramme de profil (Phosphor "user", celui du menu),
      le nom et la date a sa droite, un filet dessous. L'arc reste aux fenetres
      qui ont un dessin a y poser : medaille de Bravo, elephant du bilan et des defis. */
-  const CPP_PICTO='<span class="cpp-picto" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" focusable="false"><path d="M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z"/></svg></span>';
-  const tete=(nom,sous)=>'<div class="cpp-tete">'+CPP_PICTO+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
+  /* La medaille de profil : meme dessin grave que les badges (bxMedaille,
+     badges.js), au metal du meilleur rang du joueur : or dans les 3 premiers
+     d'un tableau, argent dans les 10 premiers, bronze sinon. Tant que les
+     dessins ne sont pas charges (ou s'ils ne se chargent pas), un rond vide
+     tient la place : la mise en page ne bouge pas. */
+  const medaille=rangs=>{
+    const md=typeof bxMedailles!=="undefined"&&bxMedailles&&bxMedailles._profil;
+    if(!md||typeof bxMedaille!=="function")return '<span class="cpp-picto" aria-hidden="true"></span>';
+    const r=Object.values(cpObjet(rangs)).map(cpNombre).filter(x=>x>=1),meilleur=r.length?Math.min.apply(null,r):0;
+    const metal=meilleur>=1&&meilleur<=3?"or":meilleur>=1&&meilleur<=10?"argent":"bronze";
+    const avant=md[0];md[0]=metal;
+    try{return '<span class="cpp-picto cpp-medaille" aria-hidden="true">'+bxMedaille("_profil",true)+"</span>";}finally{md[0]=avant;}
+  };
+  const tete=(nom,sous,rangs)=>'<div class="cpp-tete">'+medaille(rangs)+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
   const fermer='<button type="button" class="btn cpp-fermer" data-cpp-fermer>'+cpE("Close")+"</button>";
   const poser=h=>{poserHtml(c,h);const b=c.querySelector("[data-cpp-premier]")||c.querySelector("[data-cpp-fermer]");if(b)b.focus();};
   poserHtml(c,tete(pseudo)+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>"+fermer);
   f.hidden=false;f.dataset.pseudo=String(pseudo);
   const b0=c.querySelector("[data-cpp-fermer]");if(b0)b0.focus();
   let j;
-  try{j=await cppLire(pseudo);}
+  if(typeof bxCharger==="function")bxCharger();
+  try{j=await cppLire(pseudo);if(typeof bxCharger==="function")await bxCharger();}
   catch(e){if(!f.hidden&&f.dataset.pseudo===String(pseudo))poser(tete(pseudo)+'<p class="cp-msg">'+cpE("Could not load this profile.")+"</p>"+fermer);return;}
   if(cp&&j.p!==cp.pseudo)await cpaCharger();
   if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
   const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
-  poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"")+
+  poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"",rangs)+
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";

@@ -769,6 +769,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    inchangee, elle assurait deja le contour visible sur fond tres sombre. */
 .clock .who>i.dark{background:#232B28;border-color:rgba(239,226,194,.5)}
 .clock time{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1}
+/* Le chronometre est centre sur toute la hauteur de la pendule (2026-11-18,
+   demande d'Alexandre), et non plus cale sur la ligne du nom. La partie
+   gauche (nom, pieces prises) ne change pas : on lui reserve seulement la
+   place du chronometre a droite. */
+.clock{position:relative}
+.clock:not(.untimed){padding-right:104px}
+.clock time{position:absolute;right:12px;top:0;bottom:0;display:flex;align-items:center}
 /* background en raccourci effacait le fond du bloc au lieu de le teinter :
    le laiton translucide se retrouvait pose sur le fond de page, plus sombre,
    et la pendule paraissait noircir en s'activant. On superpose donc un degrade
@@ -1739,7 +1746,7 @@ html[data-mouvement="calme"] .btn.coche::after{animation:none}
 @keyframes pivote{from{transform:rotate(-180deg)}to{transform:none}}
 /* Pendule : dans les dix dernieres secondes du joueur au trait, les
    chiffres battent doucement. */
-.clock.tres-bas time{display:inline-block;animation:battement 1s ease-in-out infinite}
+.clock.tres-bas time{display:flex;animation:battement 1s ease-in-out infinite}
 @keyframes battement{0%,100%{transform:none}50%{transform:scale(1.07)}}
 /* Carte de fin de partie : elle monte, puis le titre apparait. */
 .result-card{animation:carteMonte .45s var(--courbe-ressort)}
@@ -1759,7 +1766,7 @@ html[data-mouvement="calme"] .btn.coche::after{animation:none}
    l'elephant trop bas a cote du texte (remarque d'Alexandre). align-self :
    centre sur toute la hauteur du message, une ou deux lignes. */
 /* Couleur du theme (2026-11-18) : le dessin est un masque. */
-#exStatus::before{content:"";flex:none;align-self:center;width:30px;height:23px;margin-right:10px;transform-origin:50% 100%;
+#exStatus::before,#egStatus::before{content:"";flex:none;align-self:center;width:30px;height:23px;margin-right:10px;transform-origin:50% 100%;
   background-color:var(--brass);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 9 60 46'%3E%3Cpath fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 9 60 46'%3E%3Cpath fill-rule='evenodd' d='M51.5 22A12 12 0 1 0 45.5 32.39V38A12 12 0 0 0 57.5 50A3 3 0 0 0 57.5 44A6 6 0 0 1 51.5 38ZM46.5 19A2.25 2.25 0 0 1 42 19A2.25 2.25 0 0 1 46.5 19ZM25.6 14.08A24 24 0 0 0 3.5 38V54H11.5V46A8 8 0 0 1 27.5 46V54H35.5V37.49A16 16 0 0 1 25.6 14.08Z'/%3E%3C/svg%3E") center/contain no-repeat;}
 /* Serie en pastilles, sous le chiffre : une par exercice reussi d'affilee,
    jusqu'a cinq ; la derniere gagnee arrive en rebondissant. */
@@ -2253,7 +2260,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpp-liste li span:first-child{flex:1;min-width:0}
 .cpp-liste b{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--brass)}
 .cpp-rang{flex:none;min-width:44px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--sage)}
-.cpp-pays{margin:0}
+.cpp-drapeau{font-family:inherit;font-size:.8em;white-space:nowrap}
 .cpp-amis{margin:0 0 6px;text-align:left}
 .cp-champ select{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
 .cp-champ select:focus-visible{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
@@ -2283,6 +2290,30 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .membre-invite p{margin:0 0 10px;font-size:13.5px;line-height:1.5;color:var(--sage)}
 .graph.graph-invite{background:none;border:0;padding:0}
 .graph.graph-invite .membre-invite{margin:0}
+/* Coherence des exercices (2026-11-18). Les noms de finales sont du texte :
+   police courante, la chasse fixe reste aux chiffres et aux cadences. */
+#egChips .chip{font-family:inherit}
+/* Un seul entrainement a l'ecran : en Sprint, pas la carte des Coordonnees, et inversement. */
+body[data-entrainement="sprint"] #coordLauncher,body[data-entrainement="coord"] #rushLauncher{display:none}
+/* Pied de page : la barre voyage avec le lien qui la suit, jamais seule en fin de ligne. */
+/* Deux groupes de liens : sur une ligne quand la largeur le permet, sinon
+   l'un sous l'autre, et la barre du milieu disparait (jamais de barre seule
+   en debut ou en fin de ligne). */
+.foot-groupe,.foot-pair{display:inline-block;white-space:nowrap}
+@media(max-width:600px){.foot-milieu{display:none}.foot-groupe,.foot-pair{display:block}}
+/* Reflet sur "Creer un compte" (2026-11-18, idee d'Alexandre) : toutes les
+   douze secondes, un eclat discret traverse le bouton, comme sur le mot thai
+   et les medailles. Seulement la ou creer un compte est l'action principale
+   (ecran Mon compte, derniere etape de la presentation) : sur les petites
+   cartes d'invitation il deviendrait du bruit. Ces deux boutons ne
+   s'affichent qu'a un joueur sans compte. Aucun mouvement en mode calme. */
+.btn.reflet{position:relative;overflow:hidden}
+.btn.reflet::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:42%;pointer-events:none;
+  background-image:linear-gradient(105deg,rgba(255,255,255,0),rgba(255,255,255,.42),rgba(255,255,255,0));transform:skewX(-18deg);
+  animation:refletBouton 12s ease-in-out infinite}
+@keyframes refletBouton{0%,90%{left:-60%}100%{left:130%}}
+html[data-mouvement="calme"] .btn.reflet::after{display:none}
+@media(prefers-reduced-motion:reduce){.btn.reflet::after{display:none}}
 .cpj-cherche{margin-top:6px}
 .cpj-trouves{margin-top:-4px}
 .cpj-astuce{display:none}
@@ -3635,10 +3666,9 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 
   <footer>
     chang64 | no tracking | progress saved on this device<br>
-    <button class="linkbtn" id="footHome">Home</button> |
+    <span class="foot-groupe"><button class="linkbtn" id="footHome">Home</button> |
     <button class="linkbtn" id="footLegal">Legal notice</button> |
-    <button class="linkbtn" id="footPrivacy">Privacy</button> |
-    <span class="foot-pair"><button class="linkbtn" id="footPrefs">Preferences</button> |
+    <button class="linkbtn" id="footPrivacy">Privacy</button></span><span class="foot-milieu"> | </span><span class="foot-pair"><button class="linkbtn" id="footPrefs">Preferences</button> |
     <button class="linkbtn" id="footAccess">Accessibility</button></span><br>
     <span class="footdate" id="footDate" data-publiee="__APP_PUBLIEE__" data-modifiee="__APP_MODIFIEE__">__APP_DATES_EN__</span>
   </footer>

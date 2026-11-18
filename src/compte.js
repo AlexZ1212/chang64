@@ -495,7 +495,7 @@ function cpVue(ecran,donnees){
       '<ul class="app-avantages">'+["Your rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Your badge collection, your progress charts, the themes you earn and your full game history.","Your place in Top players, with your own profile and your rank.","Challenge other members by their username, and compare your week with your friends.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
       '<p class="tiroir-section">'+cpE("What we ask for")+"</p>"+
       '<p class="cp-note">'+cpE("A username and a code of 6 digits or more. That is all: today we ask for no name and no email address.")+"</p>"+
-      '<button type="button" class="btn primary cp-large" data-cp="creer1">'+cpE("Create an account")+"</button>"+
+      '<button type="button" class="btn primary cp-large reflet" data-cp="creer1">'+cpE("Create an account")+"</button>"+
       '<button type="button" class="btn cp-large" data-cp="connexion">'+cpE("Log in")+"</button>"+
       '<p class="cp-centre"><a class="cp-lien" href="'+echapper(cpPage())+'">'+cpE("How the account works")+"</a></p>";
   }else if(ecran==="creer1"){
@@ -974,8 +974,10 @@ document.addEventListener("click",e=>{
    ne les dessine pas (il affiche deux lettres), on s'y contente du nom. */
 const CPY_CODES="AD AE AF AG AI AL AM AO AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GT GU GW GY HK HN HR HT HU ID IE IL IM IN IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW".split(" ");
 function cpyNom(code){try{return new Intl.DisplayNames([LANG_INTL],{type:"region"}).of(code)||code;}catch(e){return code;}}
+/* Le drapeau seul, sans le nom du pays (2026-11-18, demande d'Alexandre) :
+   le nom reste dit au survol et aux lecteurs d'ecran. Windows ne dessine pas
+   ces emojis et montre les deux lettres du pays a la place. */
 function cpyDrapeau(code){
-  if(/Windows/i.test((typeof navigator!=="undefined"&&navigator.userAgent)||""))return "";
   try{return String.fromCodePoint(127397+code.charCodeAt(0),127397+code.charCodeAt(1));}catch(e){return "";}
 }
 function cpyLigne(code){
@@ -1041,7 +1043,7 @@ function cpiDessiner(){
   poserHtml(c,cpiMedaille()+'<p class="bilan-entete">'+cpE("Why create an account?")+'</p><h2 id="cpInviteTitre">'+cpE(titre)+"</h2>"+
     '<p class="cpi-texte">'+cpE(texte)+"</p>"+
     '<div class="popin-filet"></div><p class="cpi-points" role="img" aria-label="'+echapper(t("Step {n} of 3",{n:cpiEtape+1}))+'">'+CPI_ETAPES.map((x,i)=>"<i"+(i===cpiEtape?' class="ici"':"")+"></i>").join("")+"</p>"+
-    '<button type="button" class="btn primary" data-cpi="'+(fin?"creer":"suite")+'">'+cpE(fin?"Create an account":"Next")+"</button>"+
+    '<button type="button" class="btn primary'+(fin?" reflet":"")+'" data-cpi="'+(fin?"creer":"suite")+'">'+cpE(fin?"Create an account":"Next")+"</button>"+
     '<button type="button" class="btn" data-cpi="fermer">'+cpE("Not now")+"</button>");
   if(typeof popinMedailles==="function")popinMedailles();
   const b=c.querySelector("[data-cpi]");if(b)b.focus();
@@ -1182,7 +1184,7 @@ async function cppOuvrir(pseudo){
     const avant=md[0];md[0]=metal;
     try{return '<span class="cpp-picto cpp-medaille" aria-hidden="true">'+bxMedaille("_profil",true)+"</span>";}finally{md[0]=avant;}
   };
-  const tete=(nom,sous,rangs,pays)=>'<div class="cpp-tete">'+medaille(rangs)+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2 id="cpProfilTitre">'+echapper(String(nom))+"</h2>"+(pays&&cpyLigne(pays)?'<p class="bilan-sous cpp-pays">'+echapper(cpyLigne(pays))+"</p>":"")+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
+  const tete=(nom,sous,rangs,pays)=>'<div class="cpp-tete">'+medaille(rangs)+'<div class="cpp-qui"><p class="bilan-entete">'+cpE("Player profile")+'</p><h2><span id="cpProfilTitre">'+echapper(String(nom))+"</span>"+(pays&&cpyLigne(pays)?' <span class="cpp-drapeau" role="img" aria-label="'+echapper(cpyNom(pays))+'" title="'+echapper(cpyNom(pays))+'">'+cpyDrapeau(pays)+"</span>":"")+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"")+"</div></div>";
   const fermer='<button type="button" class="btn cpp-fermer" data-cpp-fermer>'+cpE("Close")+"</button>";
   const poser=h=>{poserHtml(c,h);const b=c.querySelector("[data-cpp-premier]")||c.querySelector("[data-cpp-fermer]");if(b)b.focus();};
   poserHtml(c,tete(pseudo)+'<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>"+fermer);

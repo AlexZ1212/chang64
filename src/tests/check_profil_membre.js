@@ -81,7 +81,7 @@ function ouvrir(page) {
     T("badges du joueur : chaque medaille porte son nom", meds.slice(0, 13).every(li => li.getAttribute("title") && li.querySelector(".cp-sr").textContent.length > 1), meds[0] && meds[0].getAttribute("title"));
     T("badges du joueur : identifiants inconnus ou pieges ignores", !d.querySelector("#cpProfilContenu .cpp-badges img") && !w.pirate);
   }
-  T("pays choisi par le joueur : affiche sous son nom", !!d.querySelector("#cpProfilContenu .cpp-pays") && /France/.test(d.querySelector("#cpProfilContenu .cpp-pays").textContent));
+  T("pays choisi par le joueur : le drapeau seul, le nom en infobulle", !!d.querySelector("#cpProfilContenu .cpp-drapeau") && /France/.test(d.querySelector("#cpProfilContenu .cpp-drapeau").getAttribute("title")) && !/France/.test(d.querySelector("#cpProfilContenu .cpp-tete").textContent) && $("cpProfilTitre").textContent === "Alice");
   T("code de pays inconnu : rien d'affiche", w.eval('cpyLigne("XX")') === "" && w.eval('cpyLigne("<b")') === "" && /France/.test(w.eval('cpyLigne("FR")')));
   T("mois de creation en toutes lettres", /March 2026/.test(fiche), fiche.slice(0, 120));
   const lignes = [...d.querySelectorAll("#cpProfilContenu .cpp-liste li")].map(li => li.textContent);

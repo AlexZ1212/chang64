@@ -529,7 +529,7 @@ module.exports = {
 "Ready when you are":"Siap kapan pun kamu siap",
 "Start":"Mulai",
 "Three minutes | three misses and it stops":"Tiga menit | tiga kali salah, selesai",
-"Thirty seconds · click the square that is named":"Tiga puluh detik · klik petak yang disebutkan",
+"Thirty seconds | click the square that is named":"Tiga puluh detik | klik petak yang disebutkan",
 "Start the game":"Mulai partai",
 "Change settings":"Ubah pengaturan",
 "Press “Start the game” when you are ready.":"Tekan “Mulai partai” saat kamu siap.",

@@ -529,7 +529,7 @@ module.exports = {
 "Ready when you are":"Quando quiser",
 "Start":"Começar",
 "Three minutes | three misses and it stops":"Três minutos | três erros e acaba",
-"Thirty seconds · click the square that is named":"Trinta segundos · clique na casa nomeada",
+"Thirty seconds | click the square that is named":"Trinta segundos | clique na casa nomeada",
 "Start the game":"Começar a partida",
 "Change settings":"Mudar as configurações",
 "Press “Start the game” when you are ready.":"Aperte \"Começar a partida\" quando estiver pronto.",

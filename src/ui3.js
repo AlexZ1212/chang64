@@ -357,6 +357,7 @@ $("btnEgNew").onclick=()=>{if(coord)stopCoord();startEndgame(eg?eg.scen.id:"kq",
    la seule des epreuves chronometrees ou le point de vue se choisit avant
    de commencer (voir showReadyFor, ui2.js). */
 function beginCoordFlow(){
+  document.body.dataset.entrainement="coord";
   /* Une seule epreuve a la fois : sans cela, un sprint en cours continuait de
      tourner en arriere-plan, son chronometre decomptait et son bandeau restait
      affiche au-dessus de celui des coordonnees. */
@@ -372,7 +373,7 @@ function beginCoordFlow(){
   /* Titre "Coordinates" plutot que le "Ready when you are" generique
      (2026-09-03), meme raison que beginRushFlow() (ui2.js). */
   if(typeof showReadyFor==="function")
-    showReadyFor(t("Thirty seconds · click the square that is named"),
+    showReadyFor(t("Thirty seconds | click the square that is named"),
       ()=>startCoord(), t("Start"), t("Coordinates"), null, null, true);
   else startCoord();
 }

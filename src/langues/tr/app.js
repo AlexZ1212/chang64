@@ -529,7 +529,7 @@ module.exports = {
 "Ready when you are":"Hazır olduğunda",
 "Start":"Başla",
 "Three minutes | three misses and it stops":"Üç dakika | üç hatada durur",
-"Thirty seconds · click the square that is named":"Otuz saniye · adı söylenen kareye tıkla",
+"Thirty seconds | click the square that is named":"Otuz saniye | adı söylenen kareye tıkla",
 "Start the game":"Oyunu başlat",
 "Change settings":"Ayarları değiştir",
 "Press “Start the game” when you are ready.":"Hazır olduğunda “Oyunu başlat” düğmesine bas.",

@@ -1322,6 +1322,11 @@ function refreshGame(){
     const midGame=gameStarted&&!finished;
     const gp=$("settingsPanel"); if(gp)gp.classList.toggle("hide",midGame);
     const pp=$("pgnPanel"); if(pp)pp.classList.toggle("hide",midGame);
+    /* Pertinence des blocs (2026-11-18, demande d'Alexandre) : la liste des
+       anciennes parties n'a pas sa place sous une partie qui se joue, et
+       "Abandonner" n'a plus de sens une fois la partie finie. */
+    const hp=$("historyPanel"); if(hp)hp.classList.toggle("hide",midGame);
+    $("btnResign").classList.toggle("hide",!gameStarted||!!finished);
   }
   /* (le verrouillage en cours de partie, plus bas, a le dernier mot) */
 

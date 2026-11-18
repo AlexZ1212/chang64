@@ -529,7 +529,7 @@ module.exports = {
 "Ready when you are":"Когда будешь готов",
 "Start":"Начать",
 "Three minutes | three misses and it stops":"Три минуты | три ошибки, и всё",
-"Thirty seconds · click the square that is named":"Тридцать секунд · щёлкни по названному полю",
+"Thirty seconds | click the square that is named":"Тридцать секунд | щёлкни по названному полю",
 "Start the game":"Начать партию",
 "Change settings":"Изменить настройки",
 "Press “Start the game” when you are ready.":"Нажми «Начать партию», когда будешь готов.",

@@ -1272,6 +1272,8 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    gouttieres -- deux mises en page differentes pour le meme pied de page
    se voyaient au passage d'une page a l'autre. */
 .footnav{margin-bottom:14px}
+.foot-groupe,.foot-pair{display:inline-block;white-space:nowrap}
+@media(max-width:600px){.foot-milieu{display:none}.foot-groupe,.foot-pair{display:block}}
 /* Le dernier lien se retrouvait seul sur sa ligne sur telephone. Les deux
    derniers passent a la ligne ensemble ou pas du tout. */
 .foot-pair{white-space:nowrap}
@@ -1660,10 +1662,9 @@ ${body}
        repeter en bas etait un doublon. Le pied de page garde son role
        classique, les liens legaux. -->
   <nav class="footnav" aria-label="${T(lang, "Legal information", "Informations légales")}">
-    <a href="${accueil}">${T(lang, "Home", "Accueil")}</a> |
+    <span class="foot-groupe"><a href="${accueil}">${T(lang, "Home", "Accueil")}</a> |
     <a href="${accueil}#legal">${T(lang, "Legal notice", "Mentions légales")}</a> |
-    <a href="${accueil}#privacy">${T(lang, "Privacy", "Confidentialité")}</a> |
-    <span class="foot-pair"><a href="${accueil}#prefs">${T(lang, "Preferences", "Préférences")}</a> |
+    <a href="${accueil}#privacy">${T(lang, "Privacy", "Confidentialité")}</a></span><span class="foot-milieu"> | </span><span class="foot-pair"><a href="${accueil}#prefs">${T(lang, "Preferences", "Préférences")}</a> |
     <a href="${accueil}#accessibilite">${T(lang, "Accessibility", "Accessibilité")}</a></span>
   </nav>
   <p class="footnote">${d.foot}</p>

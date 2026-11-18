@@ -77,7 +77,7 @@ function renderOpening(){
   if(!o){el.textContent="";return;}
   const family=o.name.split(":")[0].trim();
   const href=openingHref(family);
-  const label=o.eco+" \u00b7 "+o.name;
+  const label=o.eco+" | "+o.name;
   poserHtml(el,href
     ? '<a href="'+href+'">'+label.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</a>'
     : label.replace(/&/g,"&amp;").replace(/</g,"&lt;"));
@@ -164,7 +164,7 @@ function renderPlyInfo(){
     const bestSan=mv?g.san(mv):a.best;
     if(isBest)html+=' <span class="verdict">'+t("The engine agrees: best move.")+'</span>';
     else html+=' <span class="better">'+t("Engine preferred")+' <b>'+bestSan+'</b></span>'+
-      '<span class="verdict">'+t(VERDICT[a.tag])+" \u00b7 "+t("{n} advantage lost.",{n:fmtNum(a.loss/100)})+'</span>';
+      '<span class="verdict">'+t(VERDICT[a.tag])+" | "+t("{n} advantage lost.",{n:fmtNum(a.loss/100)})+'</span>';
   }
   poserHtml(box,html);
 }
@@ -970,7 +970,7 @@ function renderHistory(){
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
     poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
       '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" \u00b7 "+side+(g.tc?" \u00b7 "+g.tc:"")+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>');
+      '<span>'+fmtDate(g.t)+" | "+side+(g.tc?" | "+g.tc:"")+" | "+t("{n} moves",{n:moves})+'</span></span>');
     b.onclick=()=>openHistoryGame(i);
     box.appendChild(b);
   });
@@ -1086,7 +1086,7 @@ function renderAmiHistory(){
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
     poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
       '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" \u00b7 "+side+" \u00b7 "+t("{n} moves",{n:moves})+'</span></span>');
+      '<span>'+fmtDate(g.t)+" | "+side+" | "+t("{n} moves",{n:moves})+'</span></span>');
     b.onclick=()=>openAmiHistoryGame(i);
     box.appendChild(b);
   });
@@ -2729,6 +2729,7 @@ function desarmerRush(){
    de l'appeler aussi (il reste necessaire une fois un sprint en cours,
    pour abandonner -- voir plus bas, ce n'est pas un bouton mort). */
 function beginRushFlow(){
+  document.body.dataset.entrainement="sprint";
   if(typeof coord!=="undefined"&&coord&&typeof stopCoord==="function")stopCoord();
   /* Si Defis est visite avant Exercices, aucun exercice n'a jamais ete
      charge : exPanel affichait alors ses valeurs brutes du HTML ("Back-rank
@@ -3007,7 +3008,7 @@ function showReady(tcTxt){
   if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
   $("readyTitle").textContent=t("Ready when you are");
   $("readySub").textContent=
-    tcTxt+(force?" \u00b7 "+force:"")+" \u00b7 "+
+    tcTxt+(force?" | "+force:"")+" | "+
     (myColor===W?t("You play White."):t("You play Black."));
   $("readyStart").textContent=t("Start the game");
   $("readySettings").textContent=t("Change settings");
@@ -3182,8 +3183,8 @@ function showResumeChoice(){
   const {cat,item}=tcCurrent();
   const tcTxt=cat==="none"?t("No clock"):tcLabel(cat,item)+" "+t(cat.charAt(0).toUpperCase()+cat.slice(1));
   const nMoves=Math.ceil((d.uci||[]).length/2);
-  const sousTitre=tcTxt+" \u00b7 "+(d.myColor===1?t("You play Black."):t("You play White."))+
-    " \u00b7 "+t("Move {n}",{n:nMoves});
+  const sousTitre=tcTxt+" | "+(d.myColor===1?t("You play Black."):t("You play White."))+
+    " | "+t("Move {n}",{n:nMoves});
   showReadyFor(sousTitre,resumeSavedPlay,t("Resume the game"),
     t("You have an unfinished game"),t("New game instead"),discardSavedPlayAndSetup);
   const tb=$("tipResumeBtn"); if(tb)tb.classList.remove("hide");

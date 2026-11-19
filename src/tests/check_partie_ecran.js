@@ -61,7 +61,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   console.log("Membre : creer et attendre");
   w.eval("cp={pseudo:'Anna',cle:'anna',version:1,dev:'x',n:0,sync:0};directPanneau()");
   T("membre : le formulaire, trois cadences", cache("directInvite") && !cache("directNouveau") && [...$("directCadences").children].map(b => b.textContent.replace(/[  ]/g, " ")).join() === "10+0,5+3,15+10");
+  T("la cadence choisie est expliquee", $("directCadenceNote").textContent.replace(/[  ]/g, " ") === "10 minutes chacun pour toute la partie.", $("directCadenceNote").textContent);
   $("directCadences").children[2].click();
+  T("et l'explication suit le choix", $("directCadenceNote").textContent.replace(/[  ]/g, " ") === "15 minutes chacun, plus 10 secondes ajoutées après chaque coup.", $("directCadenceNote").textContent);
   $("directPseudo").value = " Bob ";
   $("btnDirectCreer").click();
   await pause(50);
@@ -74,6 +76,10 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("attente apres une invitation : l'invite est nomme", /^Bob est invité/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
   T("attente : le lien a envoyer, pas d'echiquier, bouton Quitter", !cache("directLienBloc") && /#partie=abcdefghjkmn$/.test($("directAdresse").value) && w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("btnDirectQuitter") && cache("btnDirectAbandon"));
   T("les panneaux de la partie par lien s'effacent", w.getComputedStyle($("amiNewGamePanel")).display === "none" && w.getComputedStyle($("amiStatusPanel")).display === "none");
+
+  T("l'historique entre amis s'efface aussi", w.getComputedStyle($("amiHistoryPanel")).display === "none");
+  recevoir(etat({ phase: "fin", nr: null, inv: "Bob", fin: { r: "", m: "refusee" }, la: { b: true, n: false } }));
+  T("invitation declinee : une phrase sobre, ni fenetre ni revanche, Quitter", $("directStatus").textContent.replace(/[  ]/g, " ") === "Bob ne peut pas jouer maintenant." && $("resultBanner").classList.contains("hide") && cache("btnDirectRevanche") && !cache("btnDirectQuitter"), $("directStatus").textContent);
 
   console.log("La partie");
   recevoir(etat());
@@ -101,6 +107,12 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("abandonner demande une confirmation", $("btnDirectAbandon").textContent.replace(/[  ]/g, " ") === "Confirmer l'abandon" && !fil.envois.includes('{"t":"abandon"}'));
   $("btnDirectAbandon").click();
   T("puis part au serveur", fil.envois.includes('{"t":"abandon"}'));
+
+  recevoir(etat({ phase: "fin", coups: ["e2e4", "e7e5"], fin: { r: "1-0", m: "abandon" } }));
+  T("abandon de l'adversaire : « Bob a abandonné. »", $("resultSub").textContent.replace(/[  ]/g, " ") === "Bob a abandonné.", $("resultSub").textContent);
+  recevoir(etat({ n: 5, phase: "fin", coups: ["e2e4", "e7e5"], fin: { r: "0-1", m: "temps" } }));
+  T("mon temps est tombe : « Tu n'as plus de temps. »", $("resultSub").textContent.replace(/[  ]/g, " ") === "Tu n'as plus de temps." && $("resultTitle").textContent.replace(/[  ]/g, " ") === "Tu perds");
+  recevoir(etat({ n: 1 }));
 
   console.log("La fin");
   const avant = w.eval("history.length");

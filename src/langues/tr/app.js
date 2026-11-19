@@ -1125,5 +1125,13 @@ module.exports = {
 "Too many invitations waiting for this member. Try again later.":"Bu üye için bekleyen çok fazla davet var. Daha sonra yeniden dene.",
 "{name} invites you to play":"{name} seni oynamaya davet ediyor",
 "Time control: {pace}. The game starts as soon as you join.":"Tempo: {pace}. Sen katılır katılmaz oyun başlar.",
-"Join the game":"Oyuna katıl"
+"Join the game":"Oyuna katıl",
+/* Partie en direct : fin dite clairement, cadences expliquees, refus (2026-11-19). */
+"{name} can't play right now.":"{name} şu anda oynayamıyor.",
+"{name} resigned.":"{name} terk etti.",
+"You resigned.":"Terk ettin.",
+"{name} ran out of time.":"{name} adlı oyuncunun süresi bitti.",
+"You ran out of time.":"Süren bitti.",
+"{n} minutes each, plus {s} seconds added after every move.":"Kişi başı {n} dakika, her hamleden sonra {s} saniye eklenir.",
+"{n} minutes each for the whole game.":"Tüm oyun için kişi başı {n} dakika."
 };

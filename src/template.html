@@ -427,7 +427,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .tc-cats button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .tc-chips{display:flex;gap:8px;flex-wrap:wrap}
 /* Partie en direct ouverte : les panneaux de la partie par lien s'effacent. */
-#pane-friend.en-direct #amiStatusPanel,#pane-friend.en-direct #amiLinkPanel,#pane-friend.en-direct #amiNewGamePanel,#pane-friend.en-direct #amiInvitePanel,#pane-friend.en-direct #directPanel>h2,#pane-friend.en-direct #directPanel>.sub{display:none}
+#pane-friend.en-direct #amiStatusPanel,#pane-friend.en-direct #amiLinkPanel,#pane-friend.en-direct #amiNewGamePanel,#pane-friend.en-direct #amiInvitePanel,#pane-friend.en-direct #amiHistoryPanel,#pane-friend.en-direct #directPanel>h2,#pane-friend.en-direct #directPanel>.sub{display:none}
 .chip{
   font:inherit;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;
   background-color:var(--ink);border:1px solid var(--rule);color:var(--chalk);
@@ -3491,6 +3491,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <div class="field">
               <div class="eyebrow">Time control</div>
               <div class="tc-chips" id="directCadences"></div>
+              <p class="note" id="directCadenceNote"></p>
             </div>
             <div class="field">
               <label class="eyebrow" for="directPseudo">Invite a member (optional)</label>
@@ -3579,7 +3580,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <div class="sheet-body" id="amiSheet"><div class="sheet-empty">No moves yet</div></div>
           </div>
         </div>
-        <div class="panel">
+        <div class="panel" id="amiHistoryPanel">
           <div class="eyebrow" id="amiHistoryTitle"><span>Your friend games</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipAmiHistory" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipAmiHistory">Saved in this browser. Without an account, clearing your browsing data or switching devices loses it.</p>
           <p class="note" id="amiHistoryNote" style="margin-top:0;margin-bottom:10px"></p>

@@ -49,17 +49,18 @@ function directPanneau() {
   $("btnDirectAccepter").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
   $("btnDirectRefuser").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
   $("btnDirectAbandon").classList.toggle("hide", !jouee);
-  $("btnDirectRevanche").classList.toggle("hide", !finie);
+  $("btnDirectRevanche").classList.toggle("hide", !finie || !e.fin.r);
   $("btnDirectRevanche").disabled = !!(finie && e.rev[e.moi]);
   $("btnDirectQuitter").classList.toggle("hide", !(enJeu && !jouee));
   const el = $("directCadences");
   if (!el.children.length) DIRECT_CADENCES.forEach((c, i) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "chip"; b.textContent = directTexteCadence(c);
-    b.onclick = () => { directCad = i; [...el.children].forEach((x, k) => x.setAttribute("aria-pressed", k === i)); };
+    b.onclick = () => { directCad = i; [...el.children].forEach((x, k) => x.setAttribute("aria-pressed", k === i)); directCadenceNote(); };
     b.setAttribute("aria-pressed", i === directCad);
     el.appendChild(b);
   });
+  directCadenceNote();
 }
 function directDire(texte, ton) {
   const st = $("directStatus"); if (!st) return;
@@ -68,13 +69,25 @@ function directDire(texte, ton) {
 }
 
 /* ---------- Etat recu ---------- */
-const DIRECT_MOTIFS = { mat: "Checkmate.", temps: "Time is up.", abandon: "Resignation.", accord: "Draw agreed.", pat: "Stalemate.",
+const DIRECT_MOTIFS = { mat: "Checkmate.", temps: "Time is up.", abandon: "Resignation.", refusee: "{name} can't play right now.", accord: "Draw agreed.", pat: "Stalemate.",
   repetition: "The same position came three times.", "50": "Fifty moves without a capture or a pawn move.",
   materiel: "Not enough pieces left to checkmate.", annulee: "Game cancelled: the first move was not played within a minute." };
 function directResultat(e) {
   if (!e.fin.r) return "annulee";
   if (e.fin.r === "1/2") return "draw";
   return (e.fin.r === "1-0") === (e.moi === "b") ? "win" : "loss";
+}
+/* Le motif de la fin, dit pour celui qui lit : qui a abandonne, qui a manque de temps. */
+function directMotif(e) {
+  const m = e.fin.m, r = directResultat(e), nom = { name: directAdv() };
+  if (m === "refusee") return t(DIRECT_MOTIFS.refusee, { name: e.inv || directInvite || t("Opponent") });
+  if (m === "abandon" && r !== "draw") return r === "win" ? t("{name} resigned.", nom) : t("You resigned.");
+  if (m === "temps" && r !== "draw") return r === "win" ? t("{name} ran out of time.", nom) : t("You ran out of time.");
+  return t(DIRECT_MOTIFS[m] || "");
+}
+function directCadenceNote() {
+  const n = $("directCadenceNote"), c = DIRECT_CADENCES[directCad]; if (!n) return;
+  n.textContent = c[1] ? t("{n} minutes each, plus {s} seconds added after every move.", { n: c[0] / 60, s: c[1] }) : t("{n} minutes each for the whole game.", { n: c[0] / 60 });
 }
 function directRecu(e) {
   const neuve = !directE || directE.n !== e.n, debutee = directE && directE.phase === "attente" && e.phase !== "attente";
@@ -107,11 +120,13 @@ function directMontrer() {
   directPendules();
   const trait = e.coups.length % 2 ? "n" : "b", autre = e.moi === "b" ? "n" : "b";
   if (e.phase === "attente") {
-    directDire(directInvite ? t("{name} is invited and will see it if the site is open. You can also send this link.", { name: directInvite }) : t("Send this link to your opponent. The game starts when they open it."));
+    directDire(e.inv || directInvite ? t("{name} is invited and will see it if the site is open. You can also send this link.", { name: e.inv || directInvite }) : t("Send this link to your opponent. The game starts when they open it."));
     $("directAdresse").value = directUrl();
     shareButtons($("directPartage"), directUrl(), t("Play me live on chang64:"), true);
   } else if (e.phase === "fin") {
-    const r = directResultat(e), motif = t(DIRECT_MOTIFS[e.fin.m] || "");
+    const r = directResultat(e), motif = directMotif(e);
+    /* Invitation declinee : une phrase, pas de fenetre de fin. */
+    if (e.fin.m === "refusee") { directDire(motif); renderResult(false); return; }
     directDire(e.rev[autre] && !e.rev[e.moi] ? t("Your opponent wants a rematch.") : e.rev[e.moi] ? t("You asked for a rematch.") : motif, r === "win" ? "win" : r === "loss" ? "lose" : "");
     resultInfo = { kind: r === "win" ? "win" : r === "loss" ? "lose" : "draw", title: r === "win" ? t("You win") : r === "loss" ? t("You lose") : r === "draw" ? t("Draw") : t("Game cancelled"), sub: motif };
     renderResult(true);

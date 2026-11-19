@@ -1165,16 +1165,18 @@ async function cpmChercher(q){
 }
 document.addEventListener("input",e=>{
   const c=e.target;
-  if(!c||(c.id!=="cpjCherche"&&c.id!=="duelMembre"))return;
+  if(!c||(c.id!=="cpjCherche"&&c.id!=="duelMembre"&&c.id!=="directPseudo"))return;
   clearTimeout(cpmMinuteur);
   const q=c.value;
   cpmMinuteur=setTimeout(async()=>{
     cpmDernier=q;
     const l=await cpmChercher(q);
     if(cpmDernier!==q)return;
-    if(c.id==="duelMembre"){
-      let d=$("duelMembres");
-      if(!d){d=document.createElement("datalist");d.id="duelMembres";c.after(d);c.setAttribute("list","duelMembres");}
+    if(c.id==="duelMembre"||c.id==="directPseudo"){
+      /* Meme liste de suggestions pour inviter a une partie en direct (2026-11-19). */
+      const lid=c.id==="duelMembre"?"duelMembres":"directMembres";
+      let d=$(lid);
+      if(!d){d=document.createElement("datalist");d.id=lid;c.after(d);c.setAttribute("list",lid);}
       poserHtml(d,l.map(p=>'<option value="'+echapper(p)+'"></option>').join(""));
       return;
     }

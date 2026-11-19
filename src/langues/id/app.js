@@ -1125,5 +1125,13 @@ module.exports = {
 "Too many invitations waiting for this member. Try again later.":"Terlalu banyak undangan yang menunggu anggota ini. Coba lagi nanti.",
 "{name} invites you to play":"{name} mengundangmu bermain",
 "Time control: {pace}. The game starts as soon as you join.":"Kontrol waktu: {pace}. Permainan dimulai begitu kamu bergabung.",
-"Join the game":"Gabung ke permainan"
+"Join the game":"Gabung ke permainan",
+/* Partie en direct : fin dite clairement, cadences expliquees, refus (2026-11-19). */
+"{name} can't play right now.":"{name} belum bisa bermain sekarang.",
+"{name} resigned.":"{name} menyerah.",
+"You resigned.":"Kamu menyerah.",
+"{name} ran out of time.":"Waktu {name} habis.",
+"You ran out of time.":"Waktumu habis.",
+"{n} minutes each, plus {s} seconds added after every move.":"Masing-masing {n} menit, ditambah {s} detik setelah setiap langkah.",
+"{n} minutes each for the whole game.":"Masing-masing {n} menit untuk seluruh permainan."
 };

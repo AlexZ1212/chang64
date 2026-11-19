@@ -1127,5 +1127,13 @@ module.exports = {
 "Too many invitations waiting for this member. Try again later.":"Zu viele offene Einladungen für dieses Mitglied. Versuch es später noch einmal.",
 "{name} invites you to play":"{name} lädt dich zu einer Partie ein",
 "Time control: {pace}. The game starts as soon as you join.":"Bedenkzeit: {pace}. Die Partie beginnt, sobald du beitrittst.",
-"Join the game":"Partie beitreten"
+"Join the game":"Partie beitreten",
+/* Partie en direct : fin dite clairement, cadences expliquees, refus (2026-11-19). */
+"{name} can't play right now.":"{name} kann gerade nicht spielen.",
+"{name} resigned.":"{name} hat aufgegeben.",
+"You resigned.":"Du hast aufgegeben.",
+"{name} ran out of time.":"{name} hat keine Zeit mehr.",
+"You ran out of time.":"Deine Zeit ist abgelaufen.",
+"{n} minutes each, plus {s} seconds added after every move.":"{n} Minuten für jeden, plus {s} Sekunden nach jedem Zug.",
+"{n} minutes each for the whole game.":"{n} Minuten für jeden für die ganze Partie."
 };

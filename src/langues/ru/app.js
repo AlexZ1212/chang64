@@ -1127,5 +1127,13 @@ module.exports = {
 "Too many invitations waiting for this member. Try again later.":"Слишком много приглашений ждут этого участника. Попробуй позже.",
 "{name} invites you to play":"{name} приглашает тебя сыграть",
 "Time control: {pace}. The game starts as soon as you join.":"Контроль времени: {pace}. Партия начнётся, как только ты присоединишься.",
-"Join the game":"Присоединиться к партии"
+"Join the game":"Присоединиться к партии",
+/* Partie en direct : fin dite clairement, cadences expliquees, refus (2026-11-19). */
+"{name} can't play right now.":"{name} сейчас не может играть.",
+"{name} resigned.":"{name} сдаётся.",
+"You resigned.":"Ты сдался.",
+"{name} ran out of time.":"У игрока {name} закончилось время.",
+"You ran out of time.":"У тебя закончилось время.",
+"{n} minutes each, plus {s} seconds added after every move.":"По {n} мин каждому и ещё {s} с после каждого хода.",
+"{n} minutes each for the whole game.":"По {n} мин каждому на всю партию."
 };

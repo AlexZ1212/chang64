@@ -49,6 +49,7 @@ const GARDE = 30 * 60e3;                 /* attente d'un adversaire, puis d'une 
 const CREATIONS_PAR_HEURE = 20;          /* par membre : un script ne vide pas le quota du jour */
 const HEURE = 3600e3;
 const INVITATIONS_MEME_MEMBRE = 3;       /* en attente, d'un meme membre vers un meme invite */
+const SALLE_ATTENTE = 40e3;              /* sans nouvelles d'un membre qui cherche, il sort de la salle */
 const INVITATIONS_BOITE = 10;            /* en attente chez un invite */
 const ID = /^[a-z2-9]{12}$/;
 const ALPHA_ID = "abcdefghjkmnpqrstuvwxyz23456789";   /* sans i, l, o, 0, 1 */
@@ -143,6 +144,38 @@ async function repondre(request, env) {
     });
     if (!r.ok) return erreur("indisponible", 503);
     return json(adv ? { id, adv: adv.pseudo } : { id });
+  }
+
+  /* Adversaire au hasard (2026-11-19) : une salle d'attente, tenue par un objet
+     a part ("salle-attente"). Le premier qui cherche cree une partie ordinaire
+     et s'y assoit ; le suivant, a la meme cadence, la rejoint. S'il y a
+     plusieurs membres en attente, on prend celui dont le niveau est le plus
+     proche. Le navigateur redemande toutes les 15 secondes tant qu'il attend. */
+  if (m === "POST" && (route === "chercher" || route === "chercher-fin")) {
+    if (!memeOrigine(request)) return erreur("origine", 403);
+    const s = await sessionLire(request, env, now);
+    if (!s) return erreur("session", 401);
+    const salle = objet("salle-attente");
+    if (route === "chercher-fin") {
+      await salle.fetch("https://partie/salle-fin", { method: "POST", body: JSON.stringify({ j: s.id }) });
+      return json({ ok: true });
+    }
+    let d = null;
+    try { d = JSON.parse((await request.text()).slice(0, 200)); } catch (e) {}
+    if (!d || !CADENCES[d.cad]) return erreur("requete", 400);
+    let note = 800, exclus = [];
+    try { const c = await env.DB.prepare("SELECT note FROM comptes WHERE id = ?1").bind(s.id).first(); if (c && c.note > 0) note = c.note; } catch (e) {}
+    try {
+      exclus = ((await env.DB.prepare("SELECT bloque_id AS x FROM blocages WHERE compte_id = ?1 UNION SELECT compte_id AS x FROM blocages WHERE bloque_id = ?1").bind(s.id).all()).results || []).map(x => x.x);
+    } catch (e) {}
+    const r = await (await salle.fetch("https://partie/salle", { method: "POST", body: JSON.stringify({ cad: d.cad, j: s.id, note, id: idTirer(), exclus }) })).json();
+    if (r.neuf) {
+      const lacher = () => salle.fetch("https://partie/salle-fin", { method: "POST", body: JSON.stringify({ j: s.id }) });
+      if ((await objet("membre-" + s.id).fetch("https://partie/quota")).status === 429) { await lacher(); return erreur("trop", 429); }
+      const cree = await objet(r.id).fetch("https://partie/creer", { method: "POST", body: JSON.stringify({ id: r.id, cad: d.cad, de: { id: s.id, p: s.pseudo }, pour: null, pourP: null }) });
+      if (!cree.ok) { await lacher(); return erreur("indisponible", 503); }
+    }
+    return json({ id: r.id, attente: !r.trouve });
   }
 
   if (m === "GET" && route === "invitations") {
@@ -295,6 +328,9 @@ export class Partie {
   vue(moi, now) {
     const p = this.p, la = { b: false, n: false };
     for (const ws of this.ctx.getWebSockets()) {
+      /* Le fil qui se ferme compte deja comme parti : sinon l'adversaire
+         n'apprenait le depart qu'au message suivant. */
+      if (ws === this.sortant || ws.readyState > 1) continue;
       const c = this.couleur((ws.deserializeAttachment() || {}).j);
       if (c) la[c] = true;
     }
@@ -307,6 +343,7 @@ export class Partie {
   }
   diffuser(now) {
     for (const ws of this.ctx.getWebSockets()) {
+      if (ws === this.sortant || ws.readyState > 1) continue;
       const c = this.couleur((ws.deserializeAttachment() || {}).j);
       try { ws.send(JSON.stringify(this.vue(c, now))); } catch (e) {}
     }
@@ -315,6 +352,34 @@ export class Partie {
   async fetch(request) {
     const url = new URL(request.url), now = Date.now();
     const p = await this.lire();
+
+    /* La salle d'attente : cet objet-la ne porte aucune partie, seulement la
+       liste de ceux qui cherchent (membre, cadence, niveau, partie ouverte). */
+    if (url.pathname === "/salle" || url.pathname === "/salle-fin") {
+      const d = await request.json();
+      let liste = ((await this.ctx.storage.get("salle")) || []).filter(x => now - x.t < SALLE_ATTENTE);
+      if (url.pathname === "/salle-fin") {
+        await this.ctx.storage.put("salle", liste.filter(x => x.j !== d.j));
+        return new Response("{}");
+      }
+      const exclus = Array.isArray(d.exclus) ? d.exclus : [];
+      const autres = liste.filter(x => x.cad === d.cad && x.j !== d.j && !exclus.includes(x.j));
+      autres.sort((a, b) => Math.abs(a.note - d.note) - Math.abs(b.note - d.note) || a.t - b.t);
+      const mien = liste.find(x => x.j === d.j && x.cad === d.cad);
+      let rep;
+      if (autres.length) {
+        liste = liste.filter(x => x.j !== d.j && x !== autres[0]);
+        rep = { id: autres[0].id, trouve: true };
+      } else if (mien) { mien.t = now; rep = { id: mien.id }; }
+      else {
+        /* Un membre n'attend que dans une cadence a la fois. */
+        liste = liste.filter(x => x.j !== d.j);
+        liste.push({ cad: d.cad, j: d.j, note: d.note, id: d.id, t: now });
+        rep = { id: d.id, neuf: true };
+      }
+      await this.ctx.storage.put("salle", liste);
+      return new Response(JSON.stringify(rep));
+    }
 
     if (url.pathname === "/creer") {
       if (p) return new Response(null, { status: 409 });
@@ -472,7 +537,8 @@ export class Partie {
 
   async webSocketClose(ws, code) {
     try { ws.close(code === 1005 || code === 1006 ? 1000 : code, ""); } catch (e) {}
-    if (await this.lire()) this.diffuser(Date.now());
+    this.sortant = ws;
+    try { if (await this.lire()) this.diffuser(Date.now()); } finally { this.sortant = null; }
   }
   async webSocketError() {
     if (await this.lire()) this.diffuser(Date.now());

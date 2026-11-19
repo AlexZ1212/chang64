@@ -75,6 +75,39 @@ function directPanneau() {
     el.appendChild(b);
   });
   directCadenceNote();
+  if (membre && !enJeu) directAmis();
+}
+/* Mes amis en pastilles : un appui choisit l'ami a inviter (un second l'enleve).
+   La liste vient du compte (cpaCharger, gardee une minute). */
+async function directAmis() {
+  const bloc = $("directAmisBloc"), el = $("directAmis");
+  if (!bloc || !el || typeof cpaCharger !== "function") return;
+  const a = await cpaCharger();
+  const noms = a && Array.isArray(a.amis) ? a.amis.map(x => String(x.p)).sort((x, y) => x.localeCompare(y)) : [];
+  bloc.classList.toggle("hide", !noms.length);
+  if (el.dataset.noms === noms.join("|")) return;
+  el.dataset.noms = noms.join("|");
+  el.textContent = "";
+  const champ = $("directPseudo");
+  const marquer = () => [...el.children].forEach(b => b.setAttribute("aria-pressed", b.textContent === champ.value.trim()));
+  for (const n of noms) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = n;
+    b.onclick = () => { champ.value = champ.value.trim() === n ? "" : n; marquer(); };
+    el.appendChild(b);
+  }
+  champ.oninput = marquer;
+  marquer();
+}
+/* Depuis « Mes amis » du menu : ouvre l'ecran et cree la partie avec cet ami. */
+function directInviterAmi(pseudo) {
+  if (!DIRECT_OUVERT || !pseudo) return;
+  setMode("friend");
+  if (directId) { if (directOccupe()) return; directQuitter(true); }
+  directPanneau();
+  $("directPseudo").value = pseudo;
+  if (typeof goTop === "function") goTop();
+  directCreerPartie();
 }
 function directDire(texte, ton) {
   const st = $("directStatus"); if (!st) return;

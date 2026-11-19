@@ -1149,5 +1149,8 @@ module.exports = {
 "With an account, your progress follows you by itself, with no code to copy.":"С аккаунтом прогресс переносится сам, без всякого кода.",
 "Yes, reset everything":"Да, сбросить всё",
 "Keep my progress":"Сохранить мой прогресс",
-"{name} has left the game. No rematch this time.":"{name} покинул партию. В этот раз без реванша."
+"{name} has left the game. No rematch this time.":"{name} покинул партию. В этот раз без реванша.",
+/* Amis dans le menu et dans la partie en direct (2026-11-19). */
+"Choose a friend":"Выбери друга",
+"Invite to play":"Пригласить сыграть"
 };

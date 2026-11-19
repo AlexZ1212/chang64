@@ -89,6 +89,7 @@ function menuResume(){
   /* Le code de transfert est la solution sans compte : un membre connecte
      n'en a pas besoin, sa progression suit son compte. */
   {const l=menuEl("menuTransfertLigne");if(l)l.hidden=typeof cp!=="undefined"&&!!cp;}
+  {const l=menuEl("menuAmisLigne");if(l)l.hidden=!(typeof cp!=="undefined"&&cp);}
   const la=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]'),ld=menuEl("menuLangueActuelle");if(la&&ld)ld.textContent=la.textContent;
   const b=menuEl("menuBadgesCompte");
   if(b){const vis=BADGES.filter(bxVisible);b.textContent=prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length;}

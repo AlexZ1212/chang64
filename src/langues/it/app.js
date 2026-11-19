@@ -1147,5 +1147,8 @@ module.exports = {
 "With an account, your progress follows you by itself, with no code to copy.":"Con un account i tuoi progressi ti seguono da soli, senza codici da copiare.",
 "Yes, reset everything":"Sì, azzera tutto",
 "Keep my progress":"Tieni i miei progressi",
-"{name} has left the game. No rematch this time.":"{name} ha lasciato la partita. Niente rivincita stavolta."
+"{name} has left the game. No rematch this time.":"{name} ha lasciato la partita. Niente rivincita stavolta.",
+/* Amis dans le menu et dans la partie en direct (2026-11-19). */
+"Choose a friend":"Scegli un amico",
+"Invite to play":"Invita a giocare"
 };

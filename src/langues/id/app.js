@@ -1147,5 +1147,8 @@ module.exports = {
 "With an account, your progress follows you by itself, with no code to copy.":"Dengan akun, kemajuanmu ikut sendiri, tanpa kode yang perlu disalin.",
 "Yes, reset everything":"Ya, atur ulang semuanya",
 "Keep my progress":"Simpan kemajuanku",
-"{name} has left the game. No rematch this time.":"{name} meninggalkan permainan. Kali ini tidak ada tanding ulang."
+"{name} has left the game. No rematch this time.":"{name} meninggalkan permainan. Kali ini tidak ada tanding ulang.",
+/* Amis dans le menu et dans la partie en direct (2026-11-19). */
+"Choose a friend":"Pilih teman",
+"Invite to play":"Ajak bermain"
 };

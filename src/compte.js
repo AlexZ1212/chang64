@@ -889,7 +889,9 @@ async function cpjVue(par){
     dessiner('<p class="cp-note">'+cpE("You and your friends, by puzzles solved since Monday.")+'</p><ol class="cpj-liste">'+la.map((x,i)=>{
       const m=cp&&x.p===cp.pseudo;
       return "<li"+(m?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+
-        (m?" <em>("+cpE("You")+")</em>":x.m?" <em>("+cpE("Friend")+")</em>":"")+"</span><b>"+echapper(String(cpNombre(x.s)))+"</b></li>";
+        (m?" <em>("+cpE("You")+")</em>":x.m?" <em>("+cpE("Friend")+")</em>":"")+"</span>"+
+        (!m&&typeof DIRECT_OUVERT!=="undefined"&&DIRECT_OUVERT?'<button type="button" class="cpj-inviter" data-direct-inviter="'+echapper(String(x.p))+'">'+cpE("Invite to play")+"</button>":"")+
+        "<b>"+echapper(String(cpNombre(x.s)))+"</b></li>";
     }).join("")+"</ol>");
     return;
   }
@@ -1000,6 +1002,11 @@ function cpjGrandFermer(){const g=$("cpjGrand");if(g)g.classList.remove("ouvert"
 }
 document.addEventListener("click",e=>{
   if(e.target.closest("[data-vue-joueurs]")){menuVue("joueurs");return;}
+  /* « Mes amis » du menu (2026-11-19) : la meme vue, ouverte sur la liste d'amis. */
+  if(e.target.closest("[data-vue-amis]")){cpjPar=cp?"amis":"semaine";menuVue("joueurs");if(cp)$("menuTitre").textContent=t("My friends");return;}
+  /* « Inviter a jouer » : ferme le menu et cree la partie en direct avec cet ami. */
+  {const inv=e.target.closest("[data-direct-inviter]");
+    if(inv&&typeof directInviterAmi==="function"){if(typeof menuFermer==="function")menuFermer();directInviterAmi(inv.dataset.directInviter);return;}}
   const b=e.target.closest("#menuJoueursVue [data-cpj]");
   if(b){cpjVue(b.dataset.cpj);return;}
   if(e.target.closest("[data-cpj-tout]")){const g=$("cpjGrand");if(g){g.classList.add("ouvert");cpjGrandCharger();const f=g.querySelector("[data-cpj-fermer]");if(f)f.focus();}return;}

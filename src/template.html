@@ -2310,6 +2310,11 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cp-carte .cp-alerte{color:var(--brick)}
 .cp-danger{border-color:var(--brick);color:var(--brick)}
 .menu-code{margin:0 8px 6px}
+.tiroir-lien[data-vue-amis]::after{content:"";width:7px;height:7px;margin-left:4px;border-right:1.5px solid var(--sage);border-top:1.5px solid var(--sage);transform:rotate(45deg)}
+.tiroir-lien[hidden]{display:none}
+.cpj-inviter{flex:none;min-height:32px;padding:4px 10px;border-radius:var(--r-s);border:1px solid rgba(var(--brass-rgb),.45);background:none;color:var(--brass);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.cpj-inviter:hover{background-color:rgba(var(--brass-rgb),.12)}
+.cpj-inviter:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .cp-qr{width:min(220px,70%);margin:0 auto 10px;border-radius:var(--r);overflow:hidden;background:#fff}
 .cp-qr svg{display:block;width:100%;height:auto}
 .cp-qr[hidden]{display:none}
@@ -3528,6 +3533,12 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
               <div class="tc-chips" id="directCadences"></div>
               <p class="note" id="directCadenceNote"></p>
             </div>
+            <!-- Choisir un ami dans sa liste (2026-11-19, direct_ecran.js) : un
+                 appui remplit le pseudo. Masque tant que la liste est vide. -->
+            <div class="field hide" id="directAmisBloc">
+              <div class="eyebrow">Choose a friend</div>
+              <div class="tc-chips" id="directAmis"></div>
+            </div>
             <div class="field">
               <label class="eyebrow" for="directPseudo">Invite a member (optional)</label>
               <input class="linkbox" id="directPseudo" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username">
@@ -3838,6 +3849,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <button type="button" class="tiroir-lien" data-vue="transfert" id="menuTransfertLigne"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M213.66,181.66l-32,32a8,8,0,0,1-11.32-11.32L188.69,184H48a8,8,0,0,1,0-16H188.69l-18.35-18.34a8,8,0,0,1,11.32-11.32l32,32A8,8,0,0,1,213.66,181.66Zm-139.32-64a8,8,0,0,0,11.32-11.32L67.31,88H208a8,8,0,0,0,0-16H67.31L85.66,53.66A8,8,0,0,0,74.34,42.34l-32,32a8,8,0,0,0,0,11.32Z"/></svg><span data-t="Continue on another device">Continue on another device</span></button>
         <!-- Meilleurs joueurs (2026-11-17, compte.js) : tableaux lus dans /api/classement. -->
         <button type="button" class="tiroir-lien" data-vue-joueurs="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z"/></svg><span data-t="Top players">Top players</span></button>
+        <!-- Amis (2026-11-19) : la liste d'amis, avec « Inviter a jouer ». Ligne
+             montree aux membres connectes seulement (menu.js). -->
+        <button type="button" class="tiroir-lien" data-vue-amis="1" id="menuAmisLigne" hidden><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"/></svg><span data-t="My friends">My friends</span></button>
         <!-- Defis entre membres (2026-11-17, compte.js) : le nombre a droite = defis a relever + reponses pas encore vues. -->
         <button type="button" class="tiroir-lien" data-vue-defis-membres="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,32H152a8,8,0,0,0-6.34,3.12l-64,83.21L72,108.69a16,16,0,0,0-22.64,0l-12.69,12.7a16,16,0,0,0,0,22.63l20,20-28,28a16,16,0,0,0,0,22.63l12.69,12.68a16,16,0,0,0,22.62,0l28-28,20,20a16,16,0,0,0,22.64,0l12.69-12.7a16,16,0,0,0,0-22.63l-9.64-9.64,83.21-64A8,8,0,0,0,224,104V40A8,8,0,0,0,216,32Zm-8,68.06-81.74,62.88L115.32,152l50.34-50.34a8,8,0,0,0-11.32-11.31L104,140.68,93.07,129.74,155.94,48H208Z"/></svg><span data-t="Member challenges">Member challenges</span><span class="tiroir-detail" id="menuDefisMembresDetail"></span></button>
         <p class="tiroir-section" data-t="My progress">My progress</p>

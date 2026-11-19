@@ -11,6 +11,7 @@
  *       cad : 0 = 10 min, 1 = 5 min + 3 s, 2 = 15 min + 10 s
  *       erreur : "session" (pas connecte), "adversaire" (pseudo inconnu),
  *                "trop" (trop de parties creees, reessayer plus tard),
+ *                "invitations" (trop d'invitations en attente chez ce membre),
  *                "limite" (parties fermees jusqu'a demain), "reseau"
  *   directOuvrir(id, sur)     -> fil
  *       sur.etat(e)     a chaque changement (voir vue() cote serveur)
@@ -40,9 +41,23 @@ async function directCreer(cad, pseudo) {
       body: JSON.stringify(pseudo ? { cad, adv: pseudo } : { cad })
     });
     const d = await r.json().catch(() => null);
-    if (r.ok && d && d.id) return { id: d.id };
+    if (r.ok && d && d.id) return { id: d.id, adv: typeof d.adv === "string" ? d.adv : "" };
     return { erreur: d && d.erreur || (r.status === 429 ? "trop" : "reseau") };
   } catch (e) { return { erreur: "reseau" }; }
+}
+/* Les invitations recues, les plus recentes d'abord : [{id, p, cad, cree}]. */
+async function directInvitations() {
+  try {
+    const r = await fetch(directAdresse("invitations"), { credentials: "same-origin", headers: directEntetes || {} });
+    const d = r.ok ? await r.json().catch(() => null) : null;
+    return d && Array.isArray(d.liste) ? d.liste : [];
+  } catch (e) { return []; }
+}
+function directRefuser(id) {
+  return fetch(directAdresse("refuser"), {
+    method: "POST", credentials: "same-origin",
+    headers: Object.assign({ "Content-Type": "application/json" }, directEntetes || {}), body: JSON.stringify({ id })
+  }).catch(() => {});
 }
 function directOuvrir(id, sur) {
   sur = sur || {};
@@ -115,5 +130,5 @@ function directOuvrir(id, sur) {
   return fil;
 }
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { directCreer, directOuvrir, DIRECT_CADENCES, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
+  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, DIRECT_CADENCES, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
 }

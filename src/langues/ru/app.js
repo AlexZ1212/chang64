@@ -1120,5 +1120,12 @@ module.exports = {
 "This game is over or no longer exists.":"Эта партия закончена или больше не существует.",
 "Live games are closed until tomorrow. The rest of the site still works.":"Партии в реальном времени закрыты до завтра. Остальной сайт работает.",
 "No member has this username.":"Участника с таким именем нет.",
-"You have created many games. Try again in an hour.":"Ты создал много партий. Попробуй снова через час."
+"You have created many games. Try again in an hour.":"Ты создал много партий. Попробуй снова через час.",
+/* Invitation a une partie en direct (2026-11-19). */
+"Invite a member (optional)":"Пригласить участника (необязательно)",
+"{name} is invited and will see it if the site is open. You can also send this link.":"{name} приглашён и увидит это, если сайт открыт. Можно также отправить эту ссылку.",
+"Too many invitations waiting for this member. Try again later.":"Слишком много приглашений ждут этого участника. Попробуй позже.",
+"{name} invites you to play":"{name} приглашает тебя сыграть",
+"Time control: {pace}. The game starts as soon as you join.":"Контроль времени: {pace}. Партия начнётся, как только ты присоединишься.",
+"Join the game":"Присоединиться к партии"
 };

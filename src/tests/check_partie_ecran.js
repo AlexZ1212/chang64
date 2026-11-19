@@ -21,19 +21,21 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
 function ouvrirLocal(reponseCreer) {
   const { JSDOM, VirtualConsole } = require("jsdom");
   const html = fs.readFileSync(path.join(SITE, "fr", "index.html"), "utf8");
-  const fils = [], appels = [];
+  const fils = [], appels = [], refus = [], invitations = { liste: [] };
   return new Promise(res => {
     const dom = new JSDOM(html, {
       runScripts: "dangerously", pretendToBeVisual: true, url: "http://localhost:8067/fr/", virtualConsole: new VirtualConsole(),
       beforeParse(w) {
         w.fetch = (u, o) => {
+          if (String(u).includes("/api/partie/invitations")) return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ liste: invitations.liste }) });
+          if (String(u).includes("/api/partie/refuser")) { refus.push(JSON.parse(o.body).id); return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ ok: true }) }); }
           if (String(u).includes("/api/partie/creer")) { appels.push(JSON.parse(o.body)); const r = reponseCreer(); return Promise.resolve({ ok: r.s === 200, status: r.s, json: () => Promise.resolve(r.j) }); }
           return new Promise(() => {});
         };
         w.WebSocket = class { constructor(u) { this.url = u; this.envois = []; fils.push(this); } send(m) { this.envois.push(m); } close() { if (this.onclose) this.onclose(); } };
       }
     });
-    setTimeout(() => res({ w: dom.window, fils, appels }), 1500);
+    setTimeout(() => res({ w: dom.window, fils, appels, refus, invitations }), 1500);
   });
 }
 const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [600, 0], moi: "b", b: "Anna", nr: "Bob", coups: [], tb: 600000, tn: 600000, maj: Date.now(), h: Date.now(), phase: "debut", fin: null, nulle: null, rev: { b: false, n: false }, la: { b: true, n: true } }, plus || {});
@@ -69,6 +71,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   const fil = p.fils[0], recevoir = e => fil.onmessage({ data: JSON.stringify(e) });
   fil.onopen();
   recevoir(etat({ phase: "attente", nr: null, la: { b: true, n: false } }));
+  T("attente apres une invitation : l'invite est nomme", /^Bob est invité/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
   T("attente : le lien a envoyer, pas d'echiquier, bouton Quitter", !cache("directLienBloc") && /#partie=abcdefghjkmn$/.test($("directAdresse").value) && w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("btnDirectQuitter") && cache("btnDirectAbandon"));
   T("les panneaux de la partie par lien s'effacent", w.getComputedStyle($("amiNewGamePanel")).display === "none" && w.getComputedStyle($("amiStatusPanel")).display === "none");
 
@@ -123,6 +126,26 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("la partie gardee se rouvre pour etre revue", rouverte === "5/true", rouverte);
   w.eval("setMode('friend')");
 
+  console.log("Invitation recue");
+  const dort = () => w.document.getElementById("duel").hidden, txtDuel = () => w.document.getElementById("duelContenu").textContent.replace(/[  ]/g, " ");
+  p.invitations.liste = [{ id: "zzzzzzzzzzzz", p: "Cleo", cad: 1, cree: Date.now() }];
+  w.eval("directGuet=0;directId='occupee1234x'"); await w.eval("directGuetter()");
+  T("pendant une partie en direct, aucune fenetre", dort());
+  w.eval("directId='';directGuet=0"); await w.eval("directGuetter()");
+  T("invitation recue : fenetre « Cleo t'invite à jouer », cadence dite", !dort() && /Cleo t'invite à jouer/.test(txtDuel()) && txtDuel().includes("Cadence : 5+3.") && /Rejoindre la partie/.test(txtDuel()) && /Refuser/.test(txtDuel()), txtDuel());
+  T("fenetre qui informe : une medaille et un filet, pas d'arc", !!w.document.querySelector("#duelContenu .popin-medaille") && !!w.document.querySelector("#duelContenu .popin-filet"));
+  w.document.getElementById("directInvRefuser").click();
+  T("refuser : la fenetre se ferme et le serveur est prevenu", dort() && p.refus.join() === "zzzzzzzzzzzz");
+  w.eval("directGuet=0"); await w.eval("directGuetter()");
+  T("la meme invitation n'est pas remontree", dort());
+  p.invitations.liste = [{ id: "yyyyyyyyyyyy", p: "Dan", cad: 0, cree: Date.now() }];
+  w.eval("directGuet=0;setMode('play')"); await w.eval("directGuetter()");
+  const avantFils = p.fils.length;
+  w.document.getElementById("directInvRejoindre").click();
+  T("rejoindre : onglet Inviter, fil ouvert sur la partie", dort() && w.eval("mode") === "friend" && w.eval("directId") === "yyyyyyyyyyyy" && p.fils.length === avantFils + 1 && /id=yyyyyyyyyyyy$/.test(p.fils[p.fils.length - 1].url) && p.refus.length === 1);
+  w.eval("directQuitter()");
+  p.invitations.liste = [];
+
   console.log("Refus");
   reponse = { s: 404, j: { erreur: "adversaire" } };
   $("btnDirectCreer").click(); await pause(50);
@@ -130,6 +153,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   reponse = { s: 429, j: { erreur: "trop" } };
   $("btnDirectCreer").click(); await pause(50);
   T("trop de parties creees : message", /Réessaie dans une heure/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
+  reponse = { s: 429, j: { erreur: "invitations" } };
+  $("btnDirectCreer").click(); await pause(50);
+  T("trop d'invitations en attente : message", /Trop d'invitations en attente/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
   reponse = { s: 503, j: { erreur: "limite" } };
   $("btnDirectCreer").click(); await pause(50);
   T("limite du jour a la creation : message, le reste du site marche", /fermées jusqu'à demain/.test($("directStatus").textContent.replace(/[  ]/g, " ")) && (w.eval("setMode('play')"), !w.document.getElementById("pane-play").classList.contains("hide")));

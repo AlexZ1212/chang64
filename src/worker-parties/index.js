@@ -12,6 +12,13 @@
  *   POST /api/partie/creer   {cad: 0|1|2, adv?: pseudo}  ->  {id}
  *        (20 creations par heure et par membre, sinon 429 « trop »)
  *   GET  /api/partie/ws?id=  (WebSocket)                  la partie elle-meme
+ *   GET  /api/partie/invitations                          ->  {liste:[{id, p, cad, cree}]}
+ *   POST /api/partie/refuser {id}                         l'invite decline
+ *
+ * Inviter un membre par son pseudo (adv) lui reserve la partie et pose une
+ * ligne dans la table invitations de la base du site (compte-schema.sql),
+ * gardee 30 minutes au plus : c'est ce que sa page vient lire. Elle part des
+ * qu'il rejoint ou refuse. Le code tolere l'absence de la table.
  *
  * Un objet Partie par partie. Il verifie chaque coup avec le moteur du site
  * (src/engine.js), tient la pendule, et dort entre deux messages (API
@@ -40,6 +47,8 @@ const PREMIER_COUP = 60e3;               /* sinon la partie est annulee */
 const GARDE = 30 * 60e3;                 /* attente d'un adversaire, puis d'une revanche */
 const CREATIONS_PAR_HEURE = 20;          /* par membre : un script ne vide pas le quota du jour */
 const HEURE = 3600e3;
+const INVITATIONS_MEME_MEMBRE = 3;       /* en attente, d'un meme membre vers un meme invite */
+const INVITATIONS_BOITE = 10;            /* en attente chez un invite */
 const ID = /^[a-z2-9]{12}$/;
 const ALPHA_ID = "abcdefghjkmnpqrstuvwxyz23456789";   /* sans i, l, o, 0, 1 */
 
@@ -115,12 +124,49 @@ async function repondre(request, env) {
        peut pas se confondre avec une partie (12 signes sans tiret). */
     if ((await objet("membre-" + s.id).fetch("https://partie/quota")).status === 429) return erreur("trop", 429);
     const id = idTirer();
+    if (adv) {
+      let pose = null;
+      try {
+        await env.DB.prepare("DELETE FROM invitations WHERE cree < ?1").bind(now - GARDE).run();
+        pose = await env.DB.prepare(
+          "INSERT INTO invitations (partie, de, a, cad, cree) SELECT ?1, ?2, ?3, ?4, ?5 " +
+          "WHERE (SELECT COUNT(*) FROM invitations WHERE de = ?2 AND a = ?3) < ?6 AND (SELECT COUNT(*) FROM invitations WHERE a = ?3) < ?7"
+        ).bind(id, s.id, adv.id, d.cad, now, INVITATIONS_MEME_MEMBRE, INVITATIONS_BOITE).run();
+      } catch (e) {}
+      /* Sans la table, la partie reste reservee : il suffira d'envoyer le lien. */
+      if (pose && pose.meta && pose.meta.changes === 0) return erreur("invitations", 429);
+    }
     const r = await objet(id).fetch("https://partie/creer", {
       method: "POST",
       body: JSON.stringify({ id, cad: d.cad, de: { id: s.id, p: s.pseudo }, pour: adv ? adv.id : null })
     });
     if (!r.ok) return erreur("indisponible", 503);
-    return json({ id });
+    return json(adv ? { id, adv: adv.pseudo } : { id });
+  }
+
+  if (m === "GET" && route === "invitations") {
+    const s = await sessionLire(request, env, now);
+    if (!s) return erreur("session", 401);
+    let liste = [];
+    try {
+      liste = (await env.DB.prepare(
+        "SELECT i.partie AS id, c.pseudo AS p, i.cad, i.cree FROM invitations i JOIN comptes c ON c.id = i.de WHERE i.a = ?1 AND i.cree > ?2 " +
+        "AND NOT EXISTS (SELECT 1 FROM blocages b WHERE (b.compte_id = i.a AND b.bloque_id = i.de) OR (b.compte_id = i.de AND b.bloque_id = i.a)) " +
+        "ORDER BY i.cree DESC LIMIT 5"
+      ).bind(s.id, now - GARDE).all()).results || [];
+    } catch (e) {}
+    return json({ liste });
+  }
+
+  if (m === "POST" && route === "refuser") {
+    if (!memeOrigine(request)) return erreur("origine", 403);
+    const s = await sessionLire(request, env, now);
+    if (!s) return erreur("session", 401);
+    let d = null;
+    try { d = JSON.parse((await request.text()).slice(0, 200)); } catch (e) {}
+    if (!d || typeof d.id !== "string" || !ID.test(d.id)) return erreur("requete", 400);
+    try { await env.DB.prepare("DELETE FROM invitations WHERE partie = ?1 AND a = ?2").bind(d.id, s.id).run(); } catch (e) {}
+    return json({ ok: true });
   }
 
   if (m === "GET" && route === "ws") {
@@ -134,7 +180,11 @@ async function repondre(request, env) {
     const siege = await (await o.fetch("https://partie/siege?j=" + s.id)).json();
     if (siege.etat === "absente") return erreur("partie", 404);
     if (siege.etat === "pleine") return erreur("pleine", 403);
-    if (siege.etat === "libre" && await bloques(env, s.id, siege.de)) return erreur("partie", 404);
+    if (siege.etat === "libre") {
+      if (await bloques(env, s.id, siege.de)) return erreur("partie", 404);
+      /* L'invite arrive : son invitation a fait son office. */
+      if (siege.pour) { try { await env.DB.prepare("DELETE FROM invitations WHERE partie = ?1").bind(id).run(); } catch (e) {} }
+    }
     const h = new Headers(request.headers);
     h.set("X-Joueur", String(s.id));
     h.set("X-Pseudo", encodeURIComponent(s.pseudo));
@@ -269,7 +319,7 @@ export class Partie {
       if (!p) return json({ etat: "absente" });
       if (this.couleur(j)) return json({ etat: "joueur" });
       if (p.phase !== "attente" || (p.pour && p.pour !== j)) return json({ etat: "pleine" });
-      return json({ etat: "libre", de: p.de });
+      return json({ etat: "libre", de: p.de, pour: !!p.pour });
     }
 
     if (url.pathname === "/ws") {

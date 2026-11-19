@@ -156,3 +156,17 @@ CREATE TABLE IF NOT EXISTS ligues_semaines (
   actifs INTEGER NOT NULL DEFAULT 0,
   ouvert INTEGER NOT NULL DEFAULT 0
 );
+
+-- Invitations a une partie en direct (2026-11-19, creee dans D1 le meme jour
+-- avec l'accord d'Alexandre). Ecrite par le Worker des parties
+-- (worker-parties/index.js) quand un membre en invite un autre par son pseudo.
+-- Gardee 30 minutes au plus ; effacee des que l'invite rejoint ou refuse, et
+-- avec l'un des deux comptes.
+CREATE TABLE IF NOT EXISTS invitations (
+  partie TEXT PRIMARY KEY,
+  de INTEGER NOT NULL,
+  a INTEGER NOT NULL,
+  cad INTEGER NOT NULL,
+  cree INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS invitations_a ON invitations (a, cree);

@@ -1118,5 +1118,12 @@ module.exports = {
 "This game is over or no longer exists.":"Permainan ini sudah selesai atau tidak ada lagi.",
 "Live games are closed until tomorrow. The rest of the site still works.":"Permainan langsung ditutup sampai besok. Bagian lain situs tetap berfungsi.",
 "No member has this username.":"Tidak ada anggota dengan nama pengguna itu.",
-"You have created many games. Try again in an hour.":"Kamu sudah membuat banyak permainan. Coba lagi satu jam lagi."
+"You have created many games. Try again in an hour.":"Kamu sudah membuat banyak permainan. Coba lagi satu jam lagi.",
+/* Invitation a une partie en direct (2026-11-19). */
+"Invite a member (optional)":"Undang seorang anggota (opsional)",
+"{name} is invited and will see it if the site is open. You can also send this link.":"{name} sudah diundang dan akan melihatnya jika situsnya terbuka. Kamu juga bisa mengirim tautan ini.",
+"Too many invitations waiting for this member. Try again later.":"Terlalu banyak undangan yang menunggu anggota ini. Coba lagi nanti.",
+"{name} invites you to play":"{name} mengundangmu bermain",
+"Time control: {pace}. The game starts as soon as you join.":"Kontrol waktu: {pace}. Permainan dimulai begitu kamu bergabung.",
+"Join the game":"Gabung ke permainan"
 };

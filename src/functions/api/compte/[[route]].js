@@ -513,6 +513,7 @@ async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 OR ami_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM invitations WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),

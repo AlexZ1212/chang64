@@ -19,6 +19,9 @@ const DIRECT_OUVERT = /^(localhost|127\.\d+\.\d+\.\d+)$/.test(location.hostname)
 const DIRECT_LIEN = /^#partie=([a-z2-9]{12})$/;
 let directF = null, directE = null, directId = "", directCad = 0;
 let directJeu = null, directSan = [], directVu = "", directCoupe = false, directMessage = "", directAttenteCoup = false;
+let directInvite = "";            /* pseudo du membre que je viens d'inviter */
+const directDeclinees = {};       /* invitations deja montrees ou refusees sur cette page */
+let directGuet = 0;
 
 function directActif() { return !!directId && mode === "friend"; }
 /* Une partie se joue en ce moment : ni felicitations ni defi recu avant la fin. */
@@ -104,7 +107,7 @@ function directMontrer() {
   directPendules();
   const trait = e.coups.length % 2 ? "n" : "b", autre = e.moi === "b" ? "n" : "b";
   if (e.phase === "attente") {
-    directDire(t("Send this link to your opponent. The game starts when they open it."));
+    directDire(directInvite ? t("{name} is invited and will see it if the site is open. You can also send this link.", { name: directInvite }) : t("Send this link to your opponent. The game starts when they open it."));
     $("directAdresse").value = directUrl();
     shareButtons($("directPartage"), directUrl(), t("Play me live on chang64:"), true);
   } else if (e.phase === "fin") {
@@ -193,7 +196,7 @@ function directJouer(m) {
 /* ---------- Entrer, sortir ---------- */
 function directBrancher(id) {
   directQuitter(true);
-  directId = id; directE = null; directMessage = "";
+  directId = id; directE = null; directMessage = ""; directInvite = "";
   /* L'adresse porte la partie : recharger la page y ramene. */
   if (!DIRECT_LIEN.test(location.hash) || location.hash.slice(8) !== id) { try { window.history.replaceState(null, "", location.pathname + location.search + "#partie=" + id); } catch (x) {} }
   directF = directOuvrir(id, {
@@ -222,10 +225,33 @@ async function directCreerPartie() {
   b.disabled = true;
   const r = await directCreer(directCad, pseudo || undefined);
   b.disabled = false;
-  if (r.id) return directBrancher(r.id);
+  if (r.id) { directBrancher(r.id); directInvite = r.adv || pseudo; return; }
   directMessage = t({ session: "Create a free account to play live against other members.", adversaire: "No member has this username.",
-    trop: "You have created many games. Try again in an hour.", limite: "Live games are closed until tomorrow. The rest of the site still works.", reseau: "No connection. Check your network and try again." }[r.erreur] || "Something went wrong. Try again later.");
+    trop: "You have created many games. Try again in an hour.", invitations: "Too many invitations waiting for this member. Try again later.", limite: "Live games are closed until tomorrow. The rest of the site still works.", reseau: "No connection. Check your network and try again." }[r.erreur] || "Something went wrong. Try again later.");
   directPanneau(); directDire(directMessage);
+}
+/* ---------- Invitation recue ---------- */
+/* La page vient voir : a l'ouverture, au retour sur l'onglet, puis une fois
+   par minute tant qu'elle est a l'ecran. Jamais pendant une partie ou un
+   exercice : la fenetre attend le passage suivant. */
+async function directGuetter() {
+  if (!DIRECT_OUVERT || document.hidden || directId || !(typeof estMembre === "function" && estMembre())) return;
+  if (Date.now() - directGuet < 20000) return;
+  directGuet = Date.now();
+  const liste = await directInvitations();
+  const inv = liste.find(x => x && !directDeclinees[x.id] && /^[a-z2-9]{12}$/.test(x.id));
+  if (!inv || directId || (typeof duelOccupe === "function" && duelOccupe())) return;
+  const r = $("duel"); if (!r || !r.hidden) return;
+  /* Une fenetre de felicitations est a l'ecran : on repassera. */
+  const br = $("bravo"); if (br && !br.hidden) { directGuet = 0; return; }
+  directDeclinees[inv.id] = true;
+  const cad = DIRECT_CADENCES[inv.cad] || DIRECT_CADENCES[0];
+  duelOuvrir(duelMedaille("duel_lien") + '<p class="bilan-entete">' + echapper(t("Live game")) + '</p><h2 id="duelTitre">' + echapper(t("{name} invites you to play", { name: inv.p })) + "</h2>" +
+    '<p class="bilan-sous">' + echapper(t("Time control: {pace}. The game starts as soon as you join.", { pace: directTexteCadence(cad) })) + "</p>" + DUEL_FILET +
+    '<div class="duel-boutons"><button type="button" class="btn primary" id="directInvRejoindre" data-duel-fermer data-duel-premier>' + echapper(t("Join the game")) +
+    '</button><button type="button" class="btn" id="directInvRefuser" data-duel-fermer>' + echapper(t("Decline")) + "</button></div>");
+  $("directInvRejoindre").addEventListener("click", () => { setMode("friend"); directBrancher(inv.id); if (typeof goTop === "function") goTop(); });
+  $("directInvRefuser").addEventListener("click", () => { directRefuser(inv.id); });
 }
 function directLire() {
   const m = location.hash.match(DIRECT_LIEN);
@@ -251,6 +277,9 @@ if (DIRECT_OUVERT && document.getElementById("directPanel")) {
     if (directF) directF.abandon();
   };
   window.addEventListener("hashchange", directLire);
+  setInterval(directGuetter, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) directGuetter(); });
+  setTimeout(directGuetter, 2500);
   /* Retour du reseau ou de l'onglet (telephone deverrouille) : on refait le fil sans attendre. */
   window.addEventListener("online", () => { if (directF) directF.couper(); });
   document.addEventListener("visibilitychange", () => { if (!document.hidden && directF && !directF.ouvert) directF.couper(); });

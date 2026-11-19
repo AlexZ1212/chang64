@@ -1118,5 +1118,12 @@ module.exports = {
 "This game is over or no longer exists.":"Bu oyun bitti ya da artık yok.",
 "Live games are closed until tomorrow. The rest of the site still works.":"Canlı oyunlar yarına kadar kapalı. Sitenin geri kalanı çalışmaya devam ediyor.",
 "No member has this username.":"Bu kullanıcı adına sahip bir üye yok.",
-"You have created many games. Try again in an hour.":"Çok fazla oyun oluşturdun. Bir saat sonra yeniden dene."
+"You have created many games. Try again in an hour.":"Çok fazla oyun oluşturdun. Bir saat sonra yeniden dene.",
+/* Invitation a une partie en direct (2026-11-19). */
+"Invite a member (optional)":"Bir üyeyi davet et (isteğe bağlı)",
+"{name} is invited and will see it if the site is open. You can also send this link.":"{name} davet edildi; site açıksa görecek. Bu bağlantıyı da gönderebilirsin.",
+"Too many invitations waiting for this member. Try again later.":"Bu üye için bekleyen çok fazla davet var. Daha sonra yeniden dene.",
+"{name} invites you to play":"{name} seni oynamaya davet ediyor",
+"Time control: {pace}. The game starts as soon as you join.":"Tempo: {pace}. Sen katılır katılmaz oyun başlar.",
+"Join the game":"Oyuna katıl"
 };

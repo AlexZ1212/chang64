@@ -23,7 +23,8 @@ class_name = "Partie"
 tag = "v1"
 new_sqlite_classes = ["Partie"]
 
-# La base du site : sessions (jetons), pseudos (comptes), blocages. Lecture seule ici.
+# La base du site : sessions (jetons), pseudos (comptes), blocages, lus seulement ;
+# la table invitations est la seule que ce Worker ecrit.
 [[d1_databases]]
 binding = "DB"
 database_name = "chang64-difficulte"

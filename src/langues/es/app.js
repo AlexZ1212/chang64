@@ -1120,5 +1120,12 @@ module.exports = {
 "This game is over or no longer exists.":"Esta partida ha terminado o ya no existe.",
 "Live games are closed until tomorrow. The rest of the site still works.":"Las partidas en directo están cerradas hasta mañana. El resto del sitio sigue funcionando.",
 "No member has this username.":"Ningún miembro tiene ese nombre de usuario.",
-"You have created many games. Try again in an hour.":"Has creado muchas partidas. Vuelve a intentarlo dentro de una hora."
+"You have created many games. Try again in an hour.":"Has creado muchas partidas. Vuelve a intentarlo dentro de una hora.",
+/* Invitation a une partie en direct (2026-11-19). */
+"Invite a member (optional)":"Invitar a un miembro (opcional)",
+"{name} is invited and will see it if the site is open. You can also send this link.":"{name} está invitado y lo verá si tiene el sitio abierto. También puedes enviar este enlace.",
+"Too many invitations waiting for this member. Try again later.":"Demasiadas invitaciones pendientes para este miembro. Inténtalo más tarde.",
+"{name} invites you to play":"{name} te invita a jugar",
+"Time control: {pace}. The game starts as soon as you join.":"Ritmo de juego: {pace}. La partida empieza en cuanto te unas.",
+"Join the game":"Unirse a la partida"
 };

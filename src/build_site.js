@@ -1094,8 +1094,6 @@ box-shadow:0 14px 14px -6px var(--ink)}
 .brand .names{display:flex;flex-direction:column;gap:2px}
 .brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}
 .brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
-.brand .tagline{font-family:'Archivo',sans-serif;font-weight:400;font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
-@media(max-width:620px){.brand .tagline{display:none}}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
 /* Le menu depassait la largeur d'un telephone : quatre entrees plus le
    selecteur de langue reclament environ 458 px pour 362 disponibles. Les
@@ -1658,7 +1656,7 @@ ${/* Lien d'evitement ajoute le 2026-09-06. L'application en avait un, ces
      pages, l'ajout ne change donc rien a la mise en page. */""}<a class="skiplink" href="#contenu">${T(lang, "Skip to main content", "Aller au contenu")}</a>
 <div class="wrap">
 <header>
-  <a class="brand" href="${accueil}">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${T(lang, "The elephant on 64 squares", "L'éléphant sur 64 cases")}</span></span></a>
+  <a class="brand" href="${accueil}">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span></span></a>
   <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
   ${langUrls ? selecteurLangue(lang, langUrls) : ""}
 </header>

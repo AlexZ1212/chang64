@@ -355,8 +355,6 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    pieds (viewBox 0 0 64 54). */
 .brand{align-items:baseline}
 .names{display:flex;flex-direction:column;gap:2px;min-width:0}
-.tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
-@media(max-width:620px){.tagline{display:none}}
 /* Deux colonnes des 700px, et non 860 : un telephone en paysage fait 844px
    de large (iPhone 12) et se retrouvait en colonne unique alors que c'est
    exactement l'orientation ou la place manque en hauteur, pas en largeur.
@@ -2528,8 +2526,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
     <button class="brand" id="brand" aria-label="chang64 home">
       <span class="glyph" id="brandmark">/*__BRANDMARK_ENTETE__*/</span>
       <span class="names">
+        <!-- Le slogan a quitte le logo le 2026-11-19 (choix d'Alexandre : il
+             desequilibrait le logo) : il titre desormais le bloc de l'histoire
+             du nom, sur l'accueil. -->
         <h1>chang<span class="sixtyfour">64</span></h1>
-        <span class="tagline">The elephant on 64 squares</span>
       </span>
     </button>
     <!-- Selecteur de langue (2026-10-25) : une liste de liens vers la page
@@ -2648,7 +2648,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
     <div class="panel origin" style="margin-bottom:16px">
       <span class="origin-mark" id="originMark" aria-hidden="true">/*__BRANDMARK__*/</span>
       <div class="origin-text">
-        <h2>The elephant on the board</h2>
+        <h2>The elephant on 64 squares</h2>
         <!-- Le mot thai ouvre le Makruk, les echecs thais (easter egg,
              2026-11-01) : il reste ecrit comme le texte qui l'entoure. -->
         <p>Chang (<button type="button" class="chang-porte" id="changPorte" lang="th" aria-label="Makruk, Thai chess">ช้าง</button>) is the Thai word for elephant. It is also, by a long detour, a chess piece. The game began in India as chaturanga, whose four divisions were infantry, cavalry, chariots and elephants.</p>

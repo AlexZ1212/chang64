@@ -69,13 +69,15 @@ console.log("\n--- Le logo reprend exactement celui de l'application ---");
     ["graisse du nom",".brand h1",".brand .bname","fontWeight"],
     ["police du nom",".brand h1",".brand .bname","fontFamily"],
     ["taille du 64",".brand h1 .sixtyfour",".brand .sixtyfour","fontSize"],
-    ["taille de la baseline",".tagline",".brand .tagline","fontSize"],
     ["ecart entre logo et nom",".brand",".brand","gap"]
   ]){
     const a=st(app,sa),b=st(pg,sb);
     T(nom+" identique", a&&b&&a[prop]===b[prop], a&&b ? a[prop]+" vs "+b[prop] : "selecteur introuvable");
   }
-  T("baseline presente sur les pages claires", !!pg.document.querySelector(".brand .tagline"));
+  /* Le slogan a quitte le logo le 2026-11-19 (choix d'Alexandre) : il titre le
+     bloc de l'histoire du nom, sur l'accueil. */
+  T("plus de slogan dans le logo, ni dans les pages ni dans l'application", !pg.document.querySelector(".tagline") && !app.document.querySelector(".tagline"));
+  T("le slogan titre le bloc de l'histoire du nom", /64/.test((app.document.querySelector(".origin-text h2")||{}).textContent||""));
   T("nom en gris fonce", (st(pg,".brand .bname")||{}).color==="var(--chalk)");
   T("64 en laiton", (st(pg,".brand .sixtyfour")||{}).color==="var(--brass)");
   T("elephant en laiton", (st(pg,".brandmark")||{}).color==="var(--brass)");

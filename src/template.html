@@ -426,6 +426,8 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .tc-cats button[aria-pressed="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
 .tc-cats button:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
 .tc-chips{display:flex;gap:8px;flex-wrap:wrap}
+/* Partie en direct ouverte : les panneaux de la partie par lien s'effacent. */
+#pane-friend.en-direct #amiStatusPanel,#pane-friend.en-direct #amiLinkPanel,#pane-friend.en-direct #amiNewGamePanel,#pane-friend.en-direct #amiInvitePanel,#pane-friend.en-direct #directPanel>h2,#pane-friend.en-direct #directPanel>.sub{display:none}
 .chip{
   font:inherit;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;
   background-color:var(--ink);border:1px solid var(--rule);color:var(--chalk);
@@ -3477,6 +3479,38 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         </div>
       </div>
       <div id="pane-friend" class="hide">
+        <!-- Partie en direct entre deux membres (2026-11-19, direct_ecran.js).
+             Reste masque tant que le serveur des parties n'est pas ouvert au
+             public : seul un poste de developpement l'affiche. -->
+        <div class="panel hide" id="directPanel">
+          <h2>Live game</h2>
+          <p class="sub">Play another member in real time, with a clock. Create the game, send the link, and it starts when your opponent opens it.</p>
+          <div class="status hide" id="directStatus" role="status"></div>
+          <div id="directInvite" class="hide"></div>
+          <div id="directNouveau">
+            <div class="field">
+              <div class="eyebrow">Time control</div>
+              <div class="tc-chips" id="directCadences"></div>
+            </div>
+            <div class="field">
+              <label class="eyebrow" for="directPseudo">Only for this member (optional)</label>
+              <input class="linkbox" id="directPseudo" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username">
+            </div>
+            <div class="btnrow"><button class="btn primary" id="btnDirectCreer">Create a live game</button></div>
+          </div>
+          <div id="directLienBloc" class="hide">
+            <input class="linkbox" id="directAdresse" readonly aria-label="Game link">
+            <div class="shareRow" id="directPartage"></div>
+          </div>
+          <div class="btnrow" style="margin-top:10px">
+            <button class="btn hide" id="btnDirectNulle">Offer a draw</button>
+            <button class="btn primary hide" id="btnDirectAccepter">Accept the draw</button>
+            <button class="btn hide" id="btnDirectRefuser">Decline</button>
+            <button class="btn danger hide" id="btnDirectAbandon">Resign</button>
+            <button class="btn primary hide" id="btnDirectRevanche">Rematch</button>
+            <button class="btn hide" id="btnDirectQuitter">Leave</button>
+          </div>
+        </div>
         <div class="panel" id="amiStatusPanel">
           <h2>Play a friend</h2>
           <p class="sub">Each move becomes a link. Send it, your friend plays, and the link comes back to you.</p>
@@ -3534,7 +3568,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <button class="btn primary" id="btnAmiNew">Create game</button>
           </div>
         </div>
-        <div class="panel">
+        <div class="panel" id="amiInvitePanel">
           <div class="eyebrow">Invite to chang64</div>
           <div class="shareRow" id="siteShare"></div>
         </div>

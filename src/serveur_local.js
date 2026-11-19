@@ -62,7 +62,7 @@ if (require.main === module) {
     return Buffer.concat([t, c]);
   };
   async function monter(q, prise) {
-    const u = new URL(q.url, "http://localhost:" + PORT);
+    const u = new URL(q.url, "http://" + (q.headers.host || "localhost:" + PORT));
     const refuser = statut => { prise.end("HTTP/1.1 " + statut + " Refus\r\nConnection: close\r\n\r\n"); };
     if (u.pathname !== "/api/partie/ws") return refuser(404);
     const rep = await (await worker()).fetch(await requete(q, u), env);
@@ -105,7 +105,7 @@ if (require.main === module) {
   const fonction = async nom => fonctions[nom] || (fonctions[nom] = await import(pathToFileURL(path.join(__dirname, "functions", "api", nom)).href));
   http.createServer(async (q, r) => {
     try {
-      const u = new URL(q.url, "http://localhost:" + PORT);
+      const u = new URL(q.url, "http://" + (q.headers.host || "localhost:" + PORT));
       if (u.pathname.startsWith("/api/partie/")) {
         const rep = await (await worker()).fetch(await requete(q, u), env);
         const h = {};

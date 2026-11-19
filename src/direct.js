@@ -22,7 +22,8 @@
  *       fil.revanche(), fil.fermer(), fil.reste(e, "b"|"n") (millisecondes)
  */
 const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10]];
-const DIRECT_ESSAIS = 5;          /* echecs de suite avant de renoncer */
+const DIRECT_ESSAIS = 5;          /* echecs de suite avant de renoncer, si la partie n'a jamais repondu */
+const DIRECT_ESSAIS_EN_JEU = 60;  /* partie deja vue : on insiste (telephone verrouille, tunnel), environ un quart d'heure */
 let directBase = "";              /* autre origine : essais hors navigateur */
 let directEntetes = null;
 let directDelai = 500;            /* premiere attente avant de reessayer, puis le double */
@@ -82,7 +83,7 @@ function directOuvrir(id, sur) {
   }
   function retenter() {
     echecs++;
-    if (echecs > DIRECT_ESSAIS) { voulu = false; return dire("perdu"); }
+    if (echecs > (fil.etat ? DIRECT_ESSAIS_EN_JEU : DIRECT_ESSAIS)) { voulu = false; return dire("perdu"); }
     dire("coupe");
     minuteur = setTimeout(brancher, Math.min(15000, directDelai * Math.pow(2, echecs - 1)));
   }
@@ -98,7 +99,10 @@ function directOuvrir(id, sur) {
     if (ws) { try { ws.close(1000); } catch (e) {} }
   };
   /* Fil a refaire tout de suite (retour du reseau, onglet reveille). */
-  fil.couper = () => { if (ws) { try { ws.close(); } catch (e) {} } };
+  fil.couper = () => {
+    if (ws) { try { ws.close(); } catch (e) {} }
+    else if (voulu && minuteur) { clearTimeout(minuteur); brancher(); }
+  };
   /* Temps restant a une couleur, maintenant. Seule la pendule du joueur au
      trait tourne, et seulement une fois que chacun a joue son premier coup. */
   fil.reste = (e, couleur) => {

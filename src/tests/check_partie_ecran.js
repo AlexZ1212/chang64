@@ -1,0 +1,140 @@
+/* Verification automatique de chang64.
+   Lancement : node tests/check_partie_ecran.js
+   Le site doit avoir ete construit au prealable : node build_site.js
+
+   Ce que ce test garde (2026-11-19) : l'ecran de la partie en direct
+   (direct_ecran.js), dans la page francaise ouverte par jsdom, avec un faux
+   WebSocket que le test pilote. Tant que le serveur des parties n'est pas
+   ouvert au public, le panneau reste masque sur chang64.com. Sur un poste de
+   developpement : invitation a creer un compte sans compte ; creation,
+   attente avec le lien, partie avec pendules et pseudo de l'adversaire, coup
+   envoye au serveur, nulle proposee, fin annoncee et rangee dans « Tes
+   parties », revanche, aucune fenetre pendant la partie, messages clairs. */
+const fs = require("fs"), path = require("path");
+const { ouvrir } = require("./outils/page_langue.js");
+const SITE = path.join(__dirname, "..", "site");
+
+let ok = 0, ko = 0;
+const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d !== undefined ? "  -> " + d : "")); } };
+const pause = ms => new Promise(r => setTimeout(r, ms));
+
+function ouvrirLocal(reponseCreer) {
+  const { JSDOM, VirtualConsole } = require("jsdom");
+  const html = fs.readFileSync(path.join(SITE, "fr", "index.html"), "utf8");
+  const fils = [], appels = [];
+  return new Promise(res => {
+    const dom = new JSDOM(html, {
+      runScripts: "dangerously", pretendToBeVisual: true, url: "http://localhost:8067/fr/", virtualConsole: new VirtualConsole(),
+      beforeParse(w) {
+        w.fetch = (u, o) => {
+          if (String(u).includes("/api/partie/creer")) { appels.push(JSON.parse(o.body)); const r = reponseCreer(); return Promise.resolve({ ok: r.s === 200, status: r.s, json: () => Promise.resolve(r.j) }); }
+          return new Promise(() => {});
+        };
+        w.WebSocket = class { constructor(u) { this.url = u; this.envois = []; fils.push(this); } send(m) { this.envois.push(m); } close() { if (this.onclose) this.onclose(); } };
+      }
+    });
+    setTimeout(() => res({ w: dom.window, fils, appels }), 1500);
+  });
+}
+const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [600, 0], moi: "b", b: "Anna", nr: "Bob", coups: [], tb: 600000, tn: 600000, maj: Date.now(), h: Date.now(), phase: "debut", fin: null, nulle: null, rev: { b: false, n: false }, la: { b: true, n: true } }, plus || {});
+
+(async () => {
+  console.log("Sur chang64.com : pas encore ouvert");
+  let w = await ouvrir("fr");
+  w.eval("setMode('friend')");
+  T("le panneau de la partie en direct reste masque", w.document.getElementById("directPanel").classList.contains("hide"));
+  T("la partie par lien entre amis est intacte", !w.document.getElementById("amiStatusPanel").classList.contains("hide") && w.getComputedStyle(w.document.getElementById("amiNewGamePanel")).display !== "none");
+  T("un lien de partie en direct n'y fait rien", (w.eval("location.hash='#partie=abcdefghjkmn'"), await pause(100), w.eval("directId") === ""));
+  w.close();
+
+  console.log("Poste de developpement, sans compte");
+  let reponse = { s: 200, j: { id: "abcdefghjkmn" } };
+  let p = await ouvrirLocal(() => reponse);
+  w = p.w;
+  const $ = id => w.document.getElementById(id), cache = id => $(id).classList.contains("hide");
+  w.eval("setMode('friend');directPanneau()");
+  T("le panneau s'affiche, en francais", !cache("directPanel") && $("directPanel").querySelector("h2").textContent.replace(/[  ]/g, " ") === "Partie en direct");
+  T("sans compte : une invitation a en creer un, pas de formulaire", !cache("directInvite") && cache("directNouveau") && /Crée un compte gratuit/.test($("directInvite").textContent.replace(/[  ]/g, " ")) && !!$("directInvite").querySelector("[data-vue-compte]"));
+
+  console.log("Membre : creer et attendre");
+  w.eval("cp={pseudo:'Anna',cle:'anna',version:1,dev:'x',n:0,sync:0};directPanneau()");
+  T("membre : le formulaire, trois cadences", cache("directInvite") && !cache("directNouveau") && [...$("directCadences").children].map(b => b.textContent.replace(/[  ]/g, " ")).join() === "10+0,5+3,15+10");
+  $("directCadences").children[2].click();
+  $("directPseudo").value = " Bob ";
+  $("btnDirectCreer").click();
+  await pause(50);
+  T("creer envoie la cadence et le pseudo", p.appels.length === 1 && p.appels[0].cad === 2 && p.appels[0].adv === "Bob", JSON.stringify(p.appels));
+  T("le fil s'ouvre sur la partie creee", p.fils.length === 1 && /\/api\/partie\/ws\?id=abcdefghjkmn$/.test(p.fils[0].url) && /^ws:/.test(p.fils[0].url));
+  T("l'adresse de la page porte la partie", w.location.hash === "#partie=abcdefghjkmn");
+  const fil = p.fils[0], recevoir = e => fil.onmessage({ data: JSON.stringify(e) });
+  fil.onopen();
+  recevoir(etat({ phase: "attente", nr: null, la: { b: true, n: false } }));
+  T("attente : le lien a envoyer, pas d'echiquier, bouton Quitter", !cache("directLienBloc") && /#partie=abcdefghjkmn$/.test($("directAdresse").value) && w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("btnDirectQuitter") && cache("btnDirectAbandon"));
+  T("les panneaux de la partie par lien s'effacent", w.getComputedStyle($("amiNewGamePanel")).display === "none" && w.getComputedStyle($("amiStatusPanel")).display === "none");
+
+  console.log("La partie");
+  recevoir(etat());
+  T("l'adversaire arrive : echiquier, pendules, son pseudo", !w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("clockTop") && $("clockTopName").textContent.replace(/[  ]/g, " ") === "Bob" && $("clockTopTime").textContent.replace(/[  ]/g, " ") === "10:00" && $("clockBottomName").textContent.replace(/[  ]/g, " ") === "Toi");
+  T("Abandonner visible, pas de nulle avant que chacun ait joue", !cache("btnDirectAbandon") && cache("btnDirectNulle") && cache("btnDirectQuitter"));
+  T("aucune fenetre de felicitations ni defi pendant la partie", w.eval("bravoOccupe()") === true && w.eval("duelOccupe()") === true);
+  T("aucune aide : ni jauge ni outils d'analyse", $("boardTools").classList.contains("hide"));
+  w.eval("directJouer(game.moves().find(m=>game.uci(m)==='e2e4'))");
+  T("mon coup part au serveur et se voit tout de suite", fil.envois.includes('{"t":"coup","c":"e2e4"}') && /e4/.test($("amiSheet").textContent.replace(/[  ]/g, " ")));
+  w.eval("directJouer(game.moves()[0])");
+  T("rien d'autre ne part tant que le serveur n'a pas repondu", fil.envois.filter(m => m.includes("coup")).length === 1);
+  recevoir(etat({ phase: "jeu", coups: ["e2e4", "e7e5"], maj: Date.now() - 5000, h: Date.now() }));
+  await pause(300);
+  T("ma pendule tourne, celle de l'adversaire attend", /^9:5[45]$/.test($("clockBottomTime").textContent) && $("clockTopTime").textContent.replace(/[  ]/g, " ") === "10:00" && $("clockBottom").classList.contains("active"), $("clockBottomTime").textContent.replace(/[  ]/g, " "));
+  T("à moi de jouer, nulle proposable", $("directStatus").textContent.replace(/[  ]/g, " ") === "À toi de jouer." && !cache("btnDirectNulle"));
+  recevoir(etat({ phase: "jeu", coups: ["e2e4", "e7e5"], nulle: "n" }));
+  T("l'adversaire propose la nulle : accepter ou refuser", /propose la nulle/.test($("directStatus").textContent.replace(/[  ]/g, " ")) && !cache("btnDirectAccepter") && !cache("btnDirectRefuser") && cache("btnDirectNulle"));
+  $("btnDirectRefuser").click();
+  T("refuser part au serveur", fil.envois.includes('{"t":"nulle-non"}'));
+  recevoir(etat({ phase: "jeu", coups: ["e2e4", "e7e5"], la: { b: true, n: false } }));
+  T("adversaire absent : c'est dit, la partie continue", /s'est absenté/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
+  fil.onmessage({ data: JSON.stringify({ t: "erreur", e: "limite" }) });
+  T("limite du jour : message clair", /fermées jusqu'à demain/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
+  $("btnDirectAbandon").click();
+  T("abandonner demande une confirmation", $("btnDirectAbandon").textContent.replace(/[  ]/g, " ") === "Confirmer l'abandon" && !fil.envois.includes('{"t":"abandon"}'));
+  $("btnDirectAbandon").click();
+  T("puis part au serveur", fil.envois.includes('{"t":"abandon"}'));
+
+  console.log("La fin");
+  const avant = w.eval("history.length");
+  recevoir(etat({ phase: "fin", coups: ["e2e4", "e7e5", "d1h5", "e8e7", "h5e5"], fin: { r: "1-0", m: "mat" } }));
+  T("fin : « Tu gagnes », le motif, bouton Revanche", $("resultTitle").textContent.replace(/[  ]/g, " ") === "Tu gagnes" && $("resultSub").textContent.replace(/[  ]/g, " ") === "Échec et mat." && $("resultNew").textContent.replace(/[  ]/g, " ") === "Revanche" && !$("resultBanner").classList.contains("hide"));
+  T("la partie rejoint « Tes parties » avec l'adversaire et la cadence", w.eval("history.length") === avant + 1 && w.eval("history[0].adv") === "Bob" && w.eval("history[0].r") === "win" && w.eval("history[0].tc") === "10+0" && w.eval("history[0].c") === "w");
+  recevoir(etat({ phase: "fin", coups: ["e2e4", "e7e5", "d1h5", "e8e7", "h5e5"], fin: { r: "1-0", m: "mat" }, rev: { b: false, n: true } }));
+  T("la ligne de « Tes parties » nomme l'adversaire", /| Bob | 10+0 |/.test(w.document.getElementById("historyList").textContent));
+  T("elle n'y entre qu'une fois", w.eval("history.length") === avant + 1);
+  T("l'adversaire veut une revanche : c'est dit", /veut une revanche/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
+  T("les fenetres peuvent revenir apres la fin", w.eval("directOccupe()") === false);
+  $("resultNew").click();
+  T("Revanche part au serveur", fil.envois.includes('{"t":"revanche"}'));
+  recevoir(etat({ n: 2, moi: "n", b: "Bob", nr: "Anna" }));
+  T("revanche : nouvelle partie, je joue les noirs, echiquier retourne", w.eval("flipped") === true && $("clockTopName").textContent.replace(/[  ]/g, " ") === "Bob" && $("resultBanner").classList.contains("hide") && /Aucun coup/.test($("amiSheet").textContent.replace(/[  ]/g, " ")));
+  recevoir(etat({ n: 2, moi: "n", b: "Bob", nr: "Anna", phase: "fin", fin: { r: "", m: "annulee" } }));
+  T("partie annulee : dite, et pas gardee", $("resultTitle").textContent.replace(/[  ]/g, " ") === "Partie annulée" && w.eval("history.length") === avant + 1);
+  $("btnDirectQuitter").click();
+  T("quitter : retour a l'onglet habituel, adresse nettoyee", w.eval("directId") === "" && w.location.hash === "" && cache("clockTop") && !cache("directNouveau") && w.getComputedStyle($("amiNewGamePanel")).display !== "none");
+
+  let rouverte = "";
+  try { w.eval("setMode('play');openHistoryGame(0)"); rouverte = w.eval("game.history.length+'/'+isReviewGame"); } catch (e) { rouverte = String(e); }
+  T("la partie gardee se rouvre pour etre revue", rouverte === "5/true", rouverte);
+  w.eval("setMode('friend')");
+
+  console.log("Refus");
+  reponse = { s: 404, j: { erreur: "adversaire" } };
+  $("btnDirectCreer").click(); await pause(50);
+  T("pseudo inconnu : message, le formulaire reste", $("directStatus").textContent.replace(/[  ]/g, " ") === "Aucun membre ne porte ce pseudo." && !cache("directNouveau"));
+  reponse = { s: 429, j: { erreur: "trop" } };
+  $("btnDirectCreer").click(); await pause(50);
+  T("trop de parties creees : message", /Réessaie dans une heure/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
+  reponse = { s: 503, j: { erreur: "limite" } };
+  $("btnDirectCreer").click(); await pause(50);
+  T("limite du jour a la creation : message, le reste du site marche", /fermées jusqu'à demain/.test($("directStatus").textContent.replace(/[  ]/g, " ")) && (w.eval("setMode('play')"), !w.document.getElementById("pane-play").classList.contains("hide")));
+  w.close();
+
+  console.log("\n" + ok + " OK, " + ko + " FAIL");
+  process.exit(ko ? 1 : 0);
+})().catch(e => { console.log("  FAIL exception : " + (e && e.stack || e)); process.exit(1); });

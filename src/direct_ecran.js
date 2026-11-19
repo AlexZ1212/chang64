@@ -1,0 +1,259 @@
+/* chang64 - partie en direct entre deux membres : l'ecran (2026-11-19)
+ *
+ * Copyright (C) 2026 AlexZ1212 - GNU GPL v3 ou ulterieure, voir /LICENSE
+ *
+ * S'installe dans l'onglet « Jouer avec un ami » (mode "friend") et se sert
+ * de son echiquier. Tant qu'une partie en direct est ouverte, trois fonctions
+ * de l'application lui passent la main (elles testent directActif()) :
+ * showAmi -> directMontrer, handleAmiClick -> directClic,
+ * renderClocks -> directPendules ; renderResult (ui2.js) lui demande
+ * d'enregistrer la partie et confie « Revanche » a son bouton.
+ * Le fil avec le serveur est dans direct.js. Le serveur decide de tout : un
+ * coup joue ici est montre tout de suite, puis l'etat recu fait foi.
+ *
+ * PAS ENCORE OUVERT AU PUBLIC : le panneau ne s'affiche que sur un poste de
+ * developpement (DIRECT_OUVERT), le temps que le serveur des parties soit
+ * essaye sur le vrai Cloudflare et que les ecrans soient valides.
+ */
+const DIRECT_OUVERT = /^(localhost|127\.\d+\.\d+\.\d+)$/.test(location.hostname);
+const DIRECT_LIEN = /^#partie=([a-z2-9]{12})$/;
+let directF = null, directE = null, directId = "", directCad = 0;
+let directJeu = null, directSan = [], directVu = "", directCoupe = false, directMessage = "", directAttenteCoup = false;
+
+function directActif() { return !!directId && mode === "friend"; }
+/* Une partie se joue en ce moment : ni felicitations ni defi recu avant la fin. */
+function directOccupe() { return !!(directE && (directE.phase === "debut" || directE.phase === "jeu")); }
+function directAdv() { const e = directE; return e ? (e.moi === "b" ? e.nr : e.b) || t("Opponent") : t("Opponent"); }
+function directUrl() { return location.origin + location.pathname + "#partie=" + directId; }
+function directTexteCadence(c) { return (c[0] / 60) + "+" + c[1]; }
+
+/* ---------- Panneau ---------- */
+function directPanneau() {
+  const p = $("directPanel"); if (!p) return;
+  p.classList.toggle("hide", !DIRECT_OUVERT);
+  if (!DIRECT_OUVERT) return;
+  const membre = typeof estMembre === "function" && estMembre();
+  const e = directE, enJeu = !!directId;
+  $("pane-friend").classList.toggle("en-direct", enJeu);
+  $("directInvite").classList.toggle("hide", membre || enJeu);
+  if (!membre && !enJeu) poserHtml($("directInvite"), inviteMembre("Create a free account to play live against other members."));
+  $("directNouveau").classList.toggle("hide", !membre || enJeu);
+  $("directLienBloc").classList.toggle("hide", !(enJeu && e && e.phase === "attente"));
+  $("directStatus").classList.toggle("hide", !enJeu && !directMessage);
+  const jouee = e && (e.phase === "debut" || e.phase === "jeu"), finie = e && e.phase === "fin";
+  $("btnDirectNulle").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle !== (e.moi === "b" ? "n" : "b")));
+  $("btnDirectNulle").disabled = !!(e && e.nulle);
+  $("btnDirectAccepter").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
+  $("btnDirectRefuser").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
+  $("btnDirectAbandon").classList.toggle("hide", !jouee);
+  $("btnDirectRevanche").classList.toggle("hide", !finie);
+  $("btnDirectRevanche").disabled = !!(finie && e.rev[e.moi]);
+  $("btnDirectQuitter").classList.toggle("hide", !(enJeu && !jouee));
+  const el = $("directCadences");
+  if (!el.children.length) DIRECT_CADENCES.forEach((c, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = directTexteCadence(c);
+    b.onclick = () => { directCad = i; [...el.children].forEach((x, k) => x.setAttribute("aria-pressed", k === i)); };
+    b.setAttribute("aria-pressed", i === directCad);
+    el.appendChild(b);
+  });
+}
+function directDire(texte, ton) {
+  const st = $("directStatus"); if (!st) return;
+  st.className = "status" + (ton ? " " + ton : "");
+  st.textContent = texte;
+}
+
+/* ---------- Etat recu ---------- */
+const DIRECT_MOTIFS = { mat: "Checkmate.", temps: "Time is up.", abandon: "Resignation.", accord: "Draw agreed.", pat: "Stalemate.",
+  repetition: "The same position came three times.", "50": "Fifty moves without a capture or a pawn move.",
+  materiel: "Not enough pieces left to checkmate.", annulee: "Game cancelled: the first move was not played within a minute." };
+function directResultat(e) {
+  if (!e.fin.r) return "annulee";
+  if (e.fin.r === "1/2") return "draw";
+  return (e.fin.r === "1-0") === (e.moi === "b") ? "win" : "loss";
+}
+function directRecu(e) {
+  const neuve = !directE || directE.n !== e.n, debutee = directE && directE.phase === "attente" && e.phase !== "attente";
+  directE = e; directCoupe = false; directAttenteCoup = false;
+  directJeu = new Game(); directSan = [];
+  for (const c of e.coups) {
+    const m = directJeu.moveFromUci ? directJeu.moveFromUci(c) : directJeu.moves().find(x => directJeu.uci(x) === c);
+    if (!m) break;
+    directSan.push(directJeu.san(m)); directJeu.makeMove(m);
+  }
+  if (neuve) { flipped = e.moi === "n"; resultDismissed = false; directVu = ""; }
+  if ((neuve && e.phase !== "attente") || debutee) { try { SON.debut(); } catch (x) {} }
+  if (mode === "friend") directMontrer();
+}
+function directMontrer() {
+  const e = directE;
+  directPanneau();
+  if (!e) return;
+  game = directJeu;
+  legalCache = e.phase === "debut" || e.phase === "jeu" ? game.moves() : [];
+  lastMove = game.history.length ? game.history[game.history.length - 1].m : null;
+  selected = -1; marks = {};
+  render();
+  renderSheetInto("amiSheet", directSan);
+  const assis = e.phase !== "attente";
+  const bw = document.querySelector(".board-wrap"); if (bw) bw.classList.toggle("hide", !assis);
+  const sp = $("amiScoresheetPanel"); if (sp) sp.classList.toggle("hide", !assis);
+  const bt = $("boardTools"); if (bt) bt.classList.add("hide");
+  majLayoutSolo();
+  directPendules();
+  const trait = e.coups.length % 2 ? "n" : "b", autre = e.moi === "b" ? "n" : "b";
+  if (e.phase === "attente") {
+    directDire(t("Send this link to your opponent. The game starts when they open it."));
+    $("directAdresse").value = directUrl();
+    shareButtons($("directPartage"), directUrl(), t("Play me live on chang64:"), true);
+  } else if (e.phase === "fin") {
+    const r = directResultat(e), motif = t(DIRECT_MOTIFS[e.fin.m] || "");
+    directDire(e.rev[autre] && !e.rev[e.moi] ? t("Your opponent wants a rematch.") : e.rev[e.moi] ? t("You asked for a rematch.") : motif, r === "win" ? "win" : r === "loss" ? "lose" : "");
+    resultInfo = { kind: r === "win" ? "win" : r === "loss" ? "lose" : "draw", title: r === "win" ? t("You win") : r === "loss" ? t("You lose") : r === "draw" ? t("Draw") : t("Game cancelled"), sub: motif };
+    renderResult(true);
+    return;
+  } else if (directCoupe) directDire(t("Connection lost. Reconnecting…"));
+  else if (e.nulle === autre) directDire(t("Your opponent offers a draw."));
+  else if (!e.la[autre]) directDire(t("Your opponent is away. Their clock keeps running."));
+  else if (e.phase === "debut") directDire(t("First moves: each player has one minute to play, then the clocks start.") + " " + (trait === e.moi ? t("Your move.") : ""));
+  else if (e.nulle === e.moi) directDire(t("Draw offered."));
+  else directDire(trait === e.moi ? t("Your move.") : t("Your opponent is playing."));
+  renderResult(false);
+}
+/* La partie finie rejoint « Tes parties », une seule fois. */
+function directEnregistrer() {
+  const e = directE; if (!e || e.phase !== "fin") return;
+  const cle = e.id + "/" + e.n, r = directResultat(e);
+  if (directVu === cle) return;
+  directVu = cle;
+  if (r === "annulee" || e.coups.length < 2) return;
+  history.unshift({ t: Date.now(), c: e.moi === "b" ? "w" : "b", r, tc: directTexteCadence(e.cad), adv: directAdv(), m: e.coups.join(" "), fen: null });
+  history = history.slice(0, 30);
+  saveHistory(); renderHistory();
+}
+function directCleFin() { return directE ? directE.id + "/" + directE.n : ""; }
+
+/* ---------- Pendules ---------- */
+function directPendules() {
+  const e = directE, voir = directActif() && e && e.phase !== "attente";
+  $("clockTop").classList.toggle("hide", !voir);
+  $("clockBottom").classList.toggle("hide", !voir);
+  if (!voir) return;
+  const moi = e.moi, autre = moi === "b" ? "n" : "b", trait = e.coups.length % 2 ? "n" : "b";
+  $("clockTop").classList.remove("untimed"); $("clockBottom").classList.remove("untimed");
+  $("clockTopName").textContent = directAdv();
+  $("clockBottomName").textContent = t("You");
+  $("clockTopSwatch").className = autre === "n" ? "dark" : "";
+  $("clockBottomSwatch").className = moi === "n" ? "dark" : "";
+  const poser = (el, temps, c) => {
+    const v = directF ? directF.reste(e, c) : (c === "b" ? e.tb : e.tn);
+    temps.textContent = fmtTime(v);
+    el.classList.toggle("active", e.phase === "jeu" && trait === c);
+    el.classList.toggle("low", v < 20000 && v > 0);
+    el.classList.toggle("tres-bas", e.phase === "jeu" && trait === c && v < 10000 && v > 0);
+    el.classList.toggle("flagged", e.phase === "fin" && e.fin.m === "temps" && v <= 0);
+  };
+  poser($("clockTop"), $("clockTopTime"), autre);
+  poser($("clockBottom"), $("clockBottomTime"), moi);
+  try {
+    const pr = prises(), solde = c => (c === "b" ? pr.solde : -pr.solde), cle = c => (c === "b" ? "w" : "b");
+    poserHtml($("takenTop"), rangeePrises(pr[cle(autre)], cle(autre) === "w" ? "b" : "w", solde(autre)));
+    poserHtml($("takenBottom"), rangeePrises(pr[cle(moi)], cle(moi) === "w" ? "b" : "w", solde(moi)));
+  } catch (x) {}
+}
+setInterval(() => { if (directActif() && directE && directE.phase === "jeu") directPendules(); }, 200);
+
+/* ---------- Coups ---------- */
+function directClic(sq) {
+  const e = directE;
+  if (!e || !directF || directAttenteCoup || (e.phase !== "debut" && e.phase !== "jeu")) return;
+  if ((e.coups.length % 2 ? "n" : "b") !== e.moi) return;
+  const p = game.board[sq];
+  if (selected >= 0) {
+    const r = pickMove(selected, sq);
+    if (r) {
+      if (r.promo) { askPromo(r.promo, m => directJouer(m)); selected = -1; render(); return; }
+      directJouer(r.move); return;
+    }
+  }
+  if (p && pC(p) === game.turn) selected = sq; else selected = -1;
+  render();
+}
+function directJouer(m) {
+  if (!directF || directAttenteCoup || !directF.coup(game.uci(m))) return;
+  /* Montre tout de suite ; l'etat du serveur confirmera (ou annulera). */
+  directAttenteCoup = true;
+  directSan.push(game.san(m));
+  game.makeMove(m); lastMove = m; selected = -1; marks = {}; legalCache = [];
+  render();
+  renderSheetInto("amiSheet", directSan);
+}
+
+/* ---------- Entrer, sortir ---------- */
+function directBrancher(id) {
+  directQuitter(true);
+  directId = id; directE = null; directMessage = "";
+  /* L'adresse porte la partie : recharger la page y ramene. */
+  if (!DIRECT_LIEN.test(location.hash) || location.hash.slice(8) !== id) { try { window.history.replaceState(null, "", location.pathname + location.search + "#partie=" + id); } catch (x) {} }
+  directF = directOuvrir(id, {
+    etat: directRecu,
+    coupe() { directCoupe = true; if (directActif()) directMontrer(); },
+    perdu() { directQuitter(true); directMessage = t("This game is over or no longer exists."); directPanneau(); directDire(directMessage); },
+    erreur(x) {
+      if (x === "limite") directDire(t("Live games are closed until tomorrow. The rest of the site still works."));
+      else if (directE) directRecu(directE);
+    }
+  });
+  directPanneau();
+}
+function directQuitter(silence) {
+  if (directF) directF.fermer();
+  const etait = !!directId;
+  directF = null; directE = null; directId = ""; directJeu = null; directSan = [];
+  if (DIRECT_LIEN.test(location.hash)) { try { window.history.replaceState(null, "", location.pathname + location.search); } catch (x) {} }
+  if (!etait || silence) return;
+  directMessage = "";
+  if (mode === "friend") { renderResult(false); renderClocks(); showAmi(); }
+  directPanneau();
+}
+async function directCreerPartie() {
+  const b = $("btnDirectCreer"), pseudo = $("directPseudo").value.trim();
+  b.disabled = true;
+  const r = await directCreer(directCad, pseudo || undefined);
+  b.disabled = false;
+  if (r.id) return directBrancher(r.id);
+  directMessage = t({ session: "Create a free account to play live against other members.", adversaire: "No member has this username.",
+    trop: "You have created many games. Try again in an hour.", limite: "Live games are closed until tomorrow. The rest of the site still works.", reseau: "No connection. Check your network and try again." }[r.erreur] || "Something went wrong. Try again later.");
+  directPanneau(); directDire(directMessage);
+}
+function directLire() {
+  const m = location.hash.match(DIRECT_LIEN);
+  if (!m || !DIRECT_OUVERT) return false;
+  if (m[1] !== directId) { setMode("friend"); directBrancher(m[1]); if (typeof goTop === "function") goTop(); }
+  return true;
+}
+if (DIRECT_OUVERT && document.getElementById("directPanel")) {
+  $("btnDirectCreer").onclick = directCreerPartie;
+  $("btnDirectNulle").onclick = () => { if (directF) directF.nulle(); };
+  $("btnDirectAccepter").onclick = () => { if (directF) directF.nulle(); };
+  $("btnDirectRefuser").onclick = () => { if (directF) directF.nulleNon(); };
+  $("btnDirectRevanche").onclick = () => { if (directF) directF.revanche(); };
+  $("btnDirectQuitter").onclick = () => directQuitter();
+  /* Abandonner se confirme d'un second appui, comme dans Jouer. */
+  $("btnDirectAbandon").onclick = function () {
+    if (!this.classList.contains("armed")) {
+      this.classList.add("armed"); this.textContent = t("Confirm resignation");
+      setTimeout(() => { this.classList.remove("armed"); this.textContent = t("Resign"); }, 5000);
+      return;
+    }
+    this.classList.remove("armed"); this.textContent = t("Resign");
+    if (directF) directF.abandon();
+  };
+  window.addEventListener("hashchange", directLire);
+  /* Retour du reseau ou de l'onglet (telephone deverrouille) : on refait le fil sans attendre. */
+  window.addEventListener("online", () => { if (directF) directF.couper(); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && directF && !directF.ouvert) directF.couper(); });
+  if (document.readyState === "complete") setTimeout(() => { directLire(); directPanneau(); }, 0);
+  else window.addEventListener("load", () => setTimeout(() => { directLire(); directPanneau(); }, 0));
+}

@@ -748,6 +748,8 @@ function gainFinitParMat(p){
   }catch(e){return false;}
 }
 function renderClocks(){
+  /* Partie en direct (2026-11-19) : ses pendules viennent du serveur. */
+  if(typeof directActif==="function"&&directActif()){directPendules();return;}
   /* Le bandeau (noms, pieces prises) vaut pour toute partie, avec ou sans
      pendule. Il etait masque en entier sans pendule : on perdait aussi les
      noms et les prises. Sans pendule, seul le temps disparait (classe
@@ -2822,6 +2824,9 @@ function updateAmiBoardVisibility(){
   majLayoutSolo();
 }
 function showAmi(){
+  /* Partie en direct ouverte : c'est elle qui occupe l'echiquier de l'onglet. */
+  if(typeof directPanneau==="function")directPanneau();
+  if(typeof directActif==="function"&&directActif()){directMontrer();return;}
   /* "flipped" n'est PAS remis a plat ici : showAmi() est appelee apres
      CHAQUE coup (voir handleAmiClick, undo, resign...), donc y remettre
      l'orientation par defaut a chaque fois effacerait tout retournement
@@ -2909,6 +2914,7 @@ function showAmi(){
   updateAmiNote();
 }
 function handleAmiClick(sq){
+  if(typeof directActif==="function"&&directActif()){directClic(sq);return;}
   if(!amiStarted)return;
   if(amiResigned!==null)return;
   if(!amiIsMyTurn())return;

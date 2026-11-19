@@ -424,8 +424,9 @@ function renderResult(show){
   const b=$("resultBanner"); if(!b)return;
   if(show&&resultInfo){
     if(mode==="play")saveFinishedGame();
+    else if(typeof directActif==="function"&&directActif())directEnregistrer();
     else if(mode==="friend"&&typeof saveFinishedAmiGame==="function")saveFinishedAmiGame();
-    const cleFin=mode==="friend"?amiUrl():game;
+    const cleFin=typeof directActif==="function"&&directActif()?directCleFin():mode==="friend"?amiUrl():game;
     if((mode==="play"||mode==="friend")&&!isReviewGame&&finSonnee!==cleFin){
       finSonnee=cleFin;
       SON.fin(resultInfo.kind,game.isCheckmate()?0.62:(mode==="play"&&isFlagged())?0.3:0.1);
@@ -442,8 +443,9 @@ function renderResult(show){
   b.className="result "+resultInfo.kind;
   $("resultTitle").textContent=resultInfo.title;
   $("resultSub").textContent=resultInfo.sub;
-  $("resultAnalyse").classList.toggle("hide",mode!=="play"&&mode!=="friend");
-  $("resultNew").textContent=mode==="friend"?t("Create game"):t("New game");
+  const enDirect=typeof directActif==="function"&&directActif();
+  $("resultAnalyse").classList.toggle("hide",(mode!=="play"&&mode!=="friend")||enDirect);
+  $("resultNew").textContent=enDirect?t("Rematch"):mode==="friend"?t("Create game"):t("New game");
   $("resultAnalyse").textContent=t("Review");
   $("resultClose").textContent=t("Dismiss");
 }
@@ -465,6 +467,7 @@ $("resultNew").onclick=()=>{
      depuis les reglages redevient un demarrage normal, l'overlay "Pret ?"
      d'une partie chronometree doit s'y proposer comme n'importe quelle
      autre fois. */
+  if(typeof directActif==="function"&&directActif()){$("btnDirectRevanche").click();return;}
   if(mode==="friend")newAmiGame();
   else setupGame();
 };
@@ -970,7 +973,7 @@ function renderHistory(){
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
     poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
       '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" | "+side+(g.tc?" | "+g.tc:"")+" | "+t("{n} moves",{n:moves})+'</span></span>');
+      '<span>'+fmtDate(g.t)+" | "+side+(g.adv?" | "+echapper(g.adv):"")+(g.tc?" | "+g.tc:"")+" | "+t("{n} moves",{n:moves})+'</span></span>');
     b.onclick=()=>openHistoryGame(i);
     box.appendChild(b);
   });
@@ -1251,6 +1254,8 @@ function bravoAnnoncer(liste){
 }
 function bravoOccupe(){
   if(rush||coord)return true;
+  /* Partie en direct : aucune fenetre avant la fin (2026-11-19). */
+  if(typeof directOccupe==="function"&&directOccupe())return true;
   if((mode==="play"||mode==="friend")&&clock.enabled&&clock.active!==null)return true;
   const mk=$("makruk");if(mk&&!mk.hidden)return true;
   return $("promoModal").className.includes("on");

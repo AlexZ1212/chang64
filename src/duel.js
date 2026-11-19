@@ -269,6 +269,7 @@ let duelRecuAttente=null;
 function duelOccupe(){
   try{
     if(duel||(typeof rush!=="undefined"&&rush))return true;
+    if(typeof directOccupe==="function"&&directOccupe())return true;
     if(mode==="play"&&gameStarted&&!resultInfo&&sanList.length)return true;
     if(mode==="puzzles"&&puzzle&&!puzzleDone&&(puzzleSolPly>0||puzzleTries>0||fautesExo>0))return true;
   }catch(e){}

@@ -32,7 +32,11 @@ function code() {
     fs.readFileSync(path.join(__dirname, "themes.js"), "utf8") + "\n" +
     fs.readFileSync(path.join(__dirname, "webapp.js"), "utf8") + "\n" +
     /* Compte (2026-11-16) : l'adresse de la page "Ton compte" par langue. */
-    fs.readFileSync(path.join(__dirname, "compte.js"), "utf8").replace("__COMPTE_PAGES__", JSON.stringify(COMPTE_PAGES));
+    fs.readFileSync(path.join(__dirname, "compte.js"), "utf8").replace("__COMPTE_PAGES__", JSON.stringify(COMPTE_PAGES)) + "\n" +
+    /* Partie en direct (2026-11-19) : le fil, puis l'ecran. Le fil sert aussi
+       aux tests dans node, d'ou son export final, sans effet dans une page. */
+    fs.readFileSync(path.join(__dirname, "direct.js"), "utf8") + "\n" +
+    fs.readFileSync(path.join(__dirname, "direct_ecran.js"), "utf8");
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir

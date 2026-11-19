@@ -214,6 +214,9 @@ export class Partie {
   }
   finir(r, motif, now) {
     const p = this.p;
+    /* La pendule s'arrete a l'instant de la fin : le temps du joueur au trait
+       est arrete ici (abandon, nulle par accord). Apres un coup, il l'est deja. */
+    if (p.phase === "jeu") { const c = this.trait(); p.t[c] = Math.max(0, p.t[c] - (now - p.maj)); p.maj = now; }
     p.phase = "fin"; p.fin = { r, m: motif }; p.finA = now; p.nulle = null;
   }
 

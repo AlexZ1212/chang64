@@ -24,7 +24,8 @@ tag = "v1"
 new_sqlite_classes = ["Partie"]
 
 # La base du site : sessions (jetons), pseudos (comptes), blocages, lus seulement ;
-# la table invitations est la seule que ce Worker ecrit.
+# ce Worker n'ecrit que la table invitations et, a la fin d'une partie, les
+# trois compteurs direct_v, direct_n, direct_d des deux joueurs.
 [[d1_databases]]
 binding = "DB"
 database_name = "chang64-difficulte"

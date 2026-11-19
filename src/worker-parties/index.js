@@ -13,7 +13,8 @@
  *        (20 creations par heure et par membre, sinon 429 « trop »)
  *   GET  /api/partie/ws?id=  (WebSocket)                  la partie elle-meme
  *   GET  /api/partie/invitations                          ->  {liste:[{id, p, cad, cree}]}
- *   POST /api/partie/refuser {id}                         l'invite decline
+ *   POST /api/partie/refuser {id}                         l'invite decline ; celui qui
+ *        a invite le voit (fin "refusee"), sans autre detail
  *
  * Inviter un membre par son pseudo (adv) lui reserve la partie et pose une
  * ligne dans la table invitations de la base du site (compte-schema.sql),
@@ -138,7 +139,7 @@ async function repondre(request, env) {
     }
     const r = await objet(id).fetch("https://partie/creer", {
       method: "POST",
-      body: JSON.stringify({ id, cad: d.cad, de: { id: s.id, p: s.pseudo }, pour: adv ? adv.id : null })
+      body: JSON.stringify({ id, cad: d.cad, de: { id: s.id, p: s.pseudo }, pour: adv ? adv.id : null, pourP: adv ? adv.pseudo : null })
     });
     if (!r.ok) return erreur("indisponible", 503);
     return json(adv ? { id, adv: adv.pseudo } : { id });
@@ -166,6 +167,9 @@ async function repondre(request, env) {
     try { d = JSON.parse((await request.text()).slice(0, 200)); } catch (e) {}
     if (!d || typeof d.id !== "string" || !ID.test(d.id)) return erreur("requete", 400);
     try { await env.DB.prepare("DELETE FROM invitations WHERE partie = ?1 AND a = ?2").bind(d.id, s.id).run(); } catch (e) {}
+    /* Celui qui a invite est prevenu, pour ne pas attendre en vain. La partie
+       ne reagit que si elle etait bien reservee a ce membre. */
+    try { await objet(d.id).fetch("https://partie/refus?j=" + s.id); } catch (e) {}
     return json({ ok: true });
   }
 
@@ -218,6 +222,8 @@ function seulRoi(g, couleur) {
 export class Partie {
   constructor(ctx, env) {
     this.ctx = ctx;
+    this.env = env;
+    this.aCompter = false;   /* une partie vient de finir avec un resultat */
     this.p = undefined;      /* l'etat, relu apres un sommeil */
     this.jeu = null;         /* la position, rejouee depuis les coups */
     try { ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong")); } catch (e) {}
@@ -268,6 +274,22 @@ export class Partie {
        est arrete ici (abandon, nulle par accord). Apres un coup, il l'est deja. */
     if (p.phase === "jeu") { const c = this.trait(); p.t[c] = Math.max(0, p.t[c] - (now - p.maj)); p.maj = now; }
     p.phase = "fin"; p.fin = { r, m: motif }; p.finA = now; p.nulle = null;
+    this.aCompter = !!r && p.coups.length >= 2 && !!p.j.b && !!p.j.n;
+  }
+
+  /* Victoires, nulles et defaites : comptees ICI, par le serveur, dans la
+     table des comptes (colonnes direct_v, direct_n, direct_d), jamais d'apres
+     ce qu'un navigateur declare. Une fois par partie finie ; une partie
+     annulee ou refusee ne compte pas. Un echec de la base ne gene pas la partie. */
+  async compter() {
+    if (!this.aCompter) return;
+    this.aCompter = false;
+    const p = this.p, r = p.fin && p.fin.r, db = this.env && this.env.DB;
+    if (!db || !r) return;
+    const col = c => (r === "1/2" ? "direct_n" : (r === "1-0") === (c === "b") ? "direct_v" : "direct_d");
+    try {
+      await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1 WHERE id = ?1").bind(p.j[c].id)));
+    } catch (e) {}
   }
 
   vue(moi, now) {
@@ -280,7 +302,7 @@ export class Partie {
       t: "etat", id: p.id, n: p.n, cad: CADENCES[p.cad], moi,
       b: p.j.b ? p.j.b.p : null, nr: p.j.n ? p.j.n.p : null,
       coups: p.coups, tb: p.t.b, tn: p.t.n, maj: p.maj, h: now,
-      phase: p.phase, fin: p.fin, nulle: p.nulle, rev: p.rev, la
+      phase: p.phase, fin: p.fin, nulle: p.nulle, rev: p.rev, la, inv: p.phase === "attente" || (p.fin && p.fin.m === "refusee") ? p.pourP || null : null
     };
   }
   diffuser(now) {
@@ -298,7 +320,7 @@ export class Partie {
       if (p) return new Response(null, { status: 409 });
       const d = await request.json();
       const blancs = crypto.getRandomValues(new Uint8Array(1))[0] & 1;
-      this.p = { id: d.id, n: 1, cad: d.cad, de: d.de.id, pour: d.pour, cree: now, j: { b: blancs ? d.de : null, n: blancs ? null : d.de }, alarme: 0 };
+      this.p = { id: d.id, n: 1, cad: d.cad, de: d.de.id, pour: d.pour, pourP: d.pourP || null, cree: now, j: { b: blancs ? d.de : null, n: blancs ? null : d.de }, alarme: 0 };
       this.nouvelle(now);
       this.p.phase = "attente";
       await this.planifier(this.echeance(), now);
@@ -311,6 +333,16 @@ export class Partie {
       if (q.length >= CREATIONS_PAR_HEURE) return new Response(null, { status: 429 });
       q.push(now);
       await this.ctx.storage.put("q", q);
+      return new Response(null, { status: 204 });
+    }
+
+    if (url.pathname === "/refus") {
+      if (p && p.phase === "attente" && p.pour && p.pour === +url.searchParams.get("j")) {
+        this.finir("", "refusee", now);
+        await this.planifier(this.echeance(), now);
+        await this.ecrire();
+        this.diffuser(now);
+      }
       return new Response(null, { status: 204 });
     }
 
@@ -399,6 +431,7 @@ export class Partie {
       await this.planifier(this.echeance(), now);
       await this.ecrire();
       this.diffuser(now);
+      await this.compter();
     } catch (e) {
       /* Ecriture refusee (limite du jour) : l'etat en memoire n'est plus sur. */
       this.p = undefined; this.jeu = null;
@@ -418,6 +451,7 @@ export class Partie {
     await this.planifier(this.echeance(), now);
     await this.ecrire();
     this.diffuser(now);
+    await this.compter();
   }
 
   async alarm() {

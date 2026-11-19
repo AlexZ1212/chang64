@@ -1,0 +1,30 @@
+# chang64 - Worker des parties en direct (2026-11-19)
+#
+# Projet Cloudflare a part du projet Pages (un projet Pages ne peut pas
+# definir de Durable Object). Aucune adresse workers.dev ni adresse d'apercu :
+# il n'est servi que sous chang64.com, par la route ci-dessous, qui passe
+# devant le projet Pages pour ce seul chemin.
+name = "chang64-parties"
+main = "index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+preview_urls = false
+
+routes = [
+  { pattern = "chang64.com/api/partie/*", zone_name = "chang64.com" }
+]
+
+# Un objet par partie, stockage SQLite (le seul permis en offre gratuite).
+[[durable_objects.bindings]]
+name = "PARTIES"
+class_name = "Partie"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Partie"]
+
+# La base du site : sessions (jetons), pseudos (comptes), blocages. Lecture seule ici.
+[[d1_databases]]
+binding = "DB"
+database_name = "chang64-difficulte"
+database_id = "b8194b59-e463-4902-9355-dac0ebf83755"

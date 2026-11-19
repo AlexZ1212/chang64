@@ -15,8 +15,21 @@
  * developpement (DIRECT_OUVERT), le temps que le serveur des parties soit
  * essaye sur le vrai Cloudflare et que les ecrans soient valides.
  */
-const DIRECT_OUVERT = /^(localhost|127\.\d+\.\d+\.\d+)$/.test(location.hostname);
 const DIRECT_LIEN = /^#partie=([a-z2-9]{12})$/;
+/* Acces reserve (2026-11-19, choix d'Alexandre) : avant l'ouverture a tous,
+   l'ecran s'affiche aussi sur le vrai site pour qui ouvre une fois l'adresse
+   avec ?direct=essai, ou pour qui recoit le lien d'une partie. Le navigateur
+   s'en souvient ; ?direct=non referme. Ce n'est pas une protection (le serveur
+   exige de toute facon un membre connecte), seulement un rideau. */
+const DIRECT_OUVERT = (() => {
+  if (/^(localhost|127\.\d+\.\d+\.\d+)$/.test(location.hostname)) return true;
+  try {
+    const q = (location.search.match(/[?&]direct=([a-z]+)/) || [])[1];
+    if (q === "non") localStorage.removeItem("chang64:direct");
+    else if (q === "essai" || DIRECT_LIEN.test(location.hash)) localStorage.setItem("chang64:direct", "1");
+    return localStorage.getItem("chang64:direct") === "1";
+  } catch (e) { return false; }
+})();
 let directF = null, directE = null, directId = "", directCad = 0;
 let directJeu = null, directSan = [], directVu = "", directCoupe = false, directMessage = "", directAttenteCoup = false;
 let directInvite = "";            /* pseudo du membre que je viens d'inviter */

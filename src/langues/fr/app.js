@@ -989,5 +989,8 @@ module.exports = {
 /* Resultats des parties en direct (2026-11-19). */
 "Live games won":"Parties en direct gagnées",
 "Live wins":"En direct",
-"Live games: {v} won, {n} drawn, {d} lost":"Parties en direct : {v} gagnées, {n} nulles, {d} perdues"
+"Live games: {v} won, {n} drawn, {d} lost":"Parties en direct : {v} gagnées, {n} nulles, {d} perdues",
+/* Onglet Jouer a deux cartes (2026-11-19). */
+"Against a friend":"Contre un ami",
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Une partie en direct, à la pendule, avec un autre membre. Invite-le par son pseudo ou envoie-lui un lien."
 };

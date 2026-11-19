@@ -1137,5 +1137,8 @@ module.exports = {
 /* Resultats des parties en direct (2026-11-19). */
 "Live games won":"Kazanılan canlı oyunlar",
 "Live wins":"Canlı",
-"Live games: {v} won, {n} drawn, {d} lost":"Canlı oyunlar: {v} galibiyet, {n} beraberlik, {d} mağlubiyet"
+"Live games: {v} won, {n} drawn, {d} lost":"Canlı oyunlar: {v} galibiyet, {n} beraberlik, {d} mağlubiyet",
+/* Onglet Jouer a deux cartes (2026-11-19). */
+"Against a friend":"Bir arkadaşa karşı",
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Başka bir üyeyle saatli, canlı bir oyun. Onu kullanıcı adıyla davet et ya da bir bağlantı gönder."
 };

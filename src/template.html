@@ -930,6 +930,39 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .solveCard:active{transform:scale(.99)}
 .solveCard:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .solveCard b{display:block;font-size:16px;color:var(--chalk);margin-bottom:4px}
+/* Pictogrammes des cartes (2026-11-19, jouer.js et pictos_build.js) : un carre
+   legerement teinte d'accent, un dessin en aplat. Trois tailles. --oeil est
+   la couleur des jours du dessin : celle du fond du carre. */
+.picto{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:var(--r);
+  background-color:rgba(var(--brass-rgb),.09);border:1px solid rgba(var(--brass-rgb),.26);color:var(--brass);
+  --oeil:color-mix(in srgb,var(--brass) 9%,var(--slate))}
+.picto svg{width:34px;height:34px;display:block}
+.picto.grand{width:84px;height:84px;border-radius:var(--r-l)}
+.picto.grand svg{width:62px;height:62px}
+.picto.petit{width:36px;height:36px}
+.picto.petit svg{width:26px;height:26px}
+.tabs button[hidden]{display:none}
+.solveCard.avec-picto{display:flex;gap:14px;align-items:flex-start}
+.solveCard.avec-picto.hide{display:none}
+.solveCard-texte{display:block;min-width:0;flex:1 1 auto}
+/* Jouer : deux grandes cartes, cote a cote sur ordinateur, empilees sur telephone. */
+.jouer-cartes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.jouer-carte{display:flex;flex-direction:column;gap:14px;text-align:left;background-color:var(--slate);border:1px solid var(--rule);
+  border-radius:var(--r-l);padding:24px;box-shadow:var(--e1);cursor:pointer;font:inherit;color:inherit;transition:border-color .16s}
+.jouer-carte:hover{border-color:var(--brass)}
+.jouer-carte:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.jouer-carte>span:first-child{display:block;flex:none}
+.jouer-texte{display:block;min-width:0;flex:1 1 auto}
+.jouer-carte b{display:block;font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.2;color:var(--chalk)}
+.jouer-desc{display:block;color:var(--sage);font-size:13.5px;line-height:1.5;margin-top:6px}
+.jouer-go{display:block;color:var(--brass);font-size:13px;font-weight:600;margin-top:12px}
+@media(max-width:760px){
+  .jouer-cartes{grid-template-columns:1fr;gap:10px}
+  .jouer-carte{flex-direction:row;align-items:flex-start;padding:16px}
+  .jouer-carte b{font-size:19px}
+  .jouer-carte .picto.grand{width:56px;height:56px;border-radius:var(--r)}
+  .jouer-carte .picto.grand svg{width:40px;height:40px}
+}
 .solveCard-desc{display:block;font-size:13px;color:var(--sage);line-height:1.4}
 .solveCard-sub{display:block;font-size:12px;color:var(--brass);margin-top:8px;min-height:1em}
 /* Grille des motifs. Deux colonnes des qu'il y a la place, une seule en
@@ -1451,6 +1484,9 @@ header>*{min-width:0}
 /* Descriptions des sections ("141 familles, 1758 variantes") : du texte a
    lire, donc au moins 12px. */
 .explore a span{display:block;color:var(--sage);font-size:12.5px;font-weight:400;margin-top:2px}
+.explore a.avec-picto{display:flex;gap:12px;align-items:center}
+.explore a .picto{display:grid;margin:0;color:var(--brass);--oeil:color-mix(in srgb,var(--brass) 9%,var(--ink))}
+.explore a .ex-t{color:inherit;font-size:inherit;font-weight:inherit;margin:0;min-width:0}
 .explore a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .history{display:flex;flex-direction:column;gap:6px}
 .history-item{
@@ -2553,10 +2589,14 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
          qu'il n'avait pas. Ces boutons naviguent entre des vues, ce que
          decrit exactement <nav> plus aria-current="page". -->
     <nav class="tabs" id="tabsNav" aria-label="Sections">
-      <button id="tab-play">Play</button>
+      <!-- Un seul onglet « Jouer » (2026-11-19, jouer.js) : il ouvre sur le
+           choix ordinateur / ami. Les deux anciens onglets restent la,
+           masques, pour tout ce qui les declenche encore. -->
+      <button id="tab-jouer">Play</button>
+      <button id="tab-play" hidden>Play</button>
       <button id="tab-puzzles">Solve</button>
       <button id="tab-edit">Analyse</button>
-      <button id="tab-friend">Invite</button>
+      <button id="tab-friend" hidden>Invite</button>
       <button id="tab-explore">Explore</button>
     </nav>
   </header>
@@ -3607,6 +3647,28 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
        6 liens vers les pages statiques (ouvertures, regles, lexique...),
        desormais leur propre onglet plutot qu'un pave de plus a faire
        defiler sur l'accueil. -->
+  <!-- ================= JOUER : LE CHOIX ================= -->
+  <div id="pane-jouer" class="hide">
+    <div class="jouer-cartes">
+      <button type="button" class="jouer-carte" id="jouerOrdi">
+        <span id="jouerOrdiPicto"></span>
+        <span class="jouer-texte">
+          <b>Against the computer</b>
+          <span class="jouer-desc">Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.</span>
+          <span class="jouer-go">Start a game &rarr;</span>
+        </span>
+      </button>
+      <button type="button" class="jouer-carte" id="jouerAmi">
+        <span id="jouerAmiPicto"></span>
+        <span class="jouer-texte">
+          <b>Against a friend</b>
+          <span class="jouer-desc" id="jouerAmiTexte">Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.</span>
+          <span class="jouer-go">Challenge a friend &rarr;</span>
+        </span>
+      </button>
+    </div>
+  </div>
+
   <div id="pane-explore" class="hide">
     <div class="panel">
       <div class="eyebrow" id="exploreTitle">Explore</div>

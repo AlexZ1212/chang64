@@ -1139,5 +1139,8 @@ module.exports = {
 /* Resultats des parties en direct (2026-11-19). */
 "Live games won":"Победы в реальном времени",
 "Live wins":"Победы",
-"Live games: {v} won, {n} drawn, {d} lost":"Партии в реальном времени: побед — {v}, ничьих — {n}, поражений — {d}"
+"Live games: {v} won, {n} drawn, {d} lost":"Партии в реальном времени: побед — {v}, ничьих — {n}, поражений — {d}",
+/* Onglet Jouer a deux cartes (2026-11-19). */
+"Against a friend":"Против друга",
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Партия в реальном времени, с часами, с другим участником. Пригласи его по имени или отправь ссылку."
 };

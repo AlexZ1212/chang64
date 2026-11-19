@@ -1137,5 +1137,8 @@ module.exports = {
 /* Resultats des parties en direct (2026-11-19). */
 "Live games won":"Permainan langsung dimenangkan",
 "Live wins":"Langsung",
-"Live games: {v} won, {n} drawn, {d} lost":"Permainan langsung: {v} menang, {n} remis, {d} kalah"
+"Live games: {v} won, {n} drawn, {d} lost":"Permainan langsung: {v} menang, {n} remis, {d} kalah",
+/* Onglet Jouer a deux cartes (2026-11-19). */
+"Against a friend":"Melawan teman",
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Permainan langsung, dengan jam catur, bersama anggota lain. Undang dia lewat nama pengguna atau kirimkan tautan."
 };

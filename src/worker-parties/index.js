@@ -10,6 +10,7 @@
  *
  * Routes :
  *   POST /api/partie/creer   {cad: 0|1|2, adv?: pseudo}  ->  {id}
+ *        (20 creations par heure et par membre, sinon 429 « trop »)
  *   GET  /api/partie/ws?id=  (WebSocket)                  la partie elle-meme
  *
  * Un objet Partie par partie. Il verifie chaque coup avec le moteur du site
@@ -37,6 +38,8 @@ const DUREE_JETON = 180 * JOUR;          /* comme le serveur du compte */
 const CADENCES = [[600, 0], [300, 3], [900, 10]];   /* secondes + secondes par coup */
 const PREMIER_COUP = 60e3;               /* sinon la partie est annulee */
 const GARDE = 30 * 60e3;                 /* attente d'un adversaire, puis d'une revanche */
+const CREATIONS_PAR_HEURE = 20;          /* par membre : un script ne vide pas le quota du jour */
+const HEURE = 3600e3;
 const ID = /^[a-z2-9]{12}$/;
 const ALPHA_ID = "abcdefghjkmnpqrstuvwxyz23456789";   /* sans i, l, o, 0, 1 */
 
@@ -108,6 +111,9 @@ async function repondre(request, env) {
       /* Un membre qui m'a bloque repond comme un pseudo inconnu : il n'est pas denonce. */
       if (!adv || adv.id === s.id || await bloques(env, s.id, adv.id)) return erreur("adversaire", 404);
     }
+    /* Le compteur du membre vit dans un objet a son nom ("membre-12"), qui ne
+       peut pas se confondre avec une partie (12 signes sans tiret). */
+    if ((await objet("membre-" + s.id).fetch("https://partie/quota")).status === 429) return erreur("trop", 429);
     const id = idTirer();
     const r = await objet(id).fetch("https://partie/creer", {
       method: "POST",
@@ -244,6 +250,14 @@ export class Partie {
       this.p.phase = "attente";
       await this.planifier(this.echeance(), now);
       await this.ecrire();
+      return new Response(null, { status: 204 });
+    }
+
+    if (url.pathname === "/quota") {
+      const q = ((await this.ctx.storage.get("q")) || []).filter(x => x > now - HEURE);
+      if (q.length >= CREATIONS_PAR_HEURE) return new Response(null, { status: 429 });
+      q.push(now);
+      await this.ctx.storage.put("q", q);
       return new Response(null, { status: 204 });
     }
 

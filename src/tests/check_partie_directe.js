@@ -214,6 +214,15 @@ const avancer = ms => { decalage += ms; };
   T("personne ne vient en 30 minutes : la partie est effacee", a.pair.ferme && faux.objets.get(c.id).donnees.size === 0 && (await ouvrir(c.id, "Bob")).s === 404);
   T("une partie finie est effacee apres 30 minutes", faux.objets.get(g.id).donnees.size > 0 && (await faux.envoyer(g.id, g.B, { t: "abandon" }), avancer(31 * 60e3), await faux.sonner(Date.now()), await faux.sonner(Date.now()), faux.objets.get(g.id).donnees.size === 0));
 
+  console.log("Plafond de creations");
+  avancer(3601e3);
+  let statuts = [];
+  for (let i = 0; i < 21; i++) statuts.push((await creer("Dan", 0)).s);
+  T("20 parties creees dans l'heure passent, la 21e est refusee (429)", statuts.slice(0, 20).every(x => x === 200) && statuts[20] === 429, statuts.join());
+  T("le plafond est par membre", (await creer("Cleo", 0)).s === 200);
+  avancer(3601e3);
+  T("une heure plus tard, on peut de nouveau creer", (await creer("Dan", 0)).s === 200);
+
   console.log("Limite du jour");
   g = await partie(0);
   faux.panne = true;

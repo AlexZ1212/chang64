@@ -10,6 +10,7 @@
  *   directCreer(cad, pseudo)  -> Promise {id} ou {erreur}
  *       cad : 0 = 10 min, 1 = 5 min + 3 s, 2 = 15 min + 10 s
  *       erreur : "session" (pas connecte), "adversaire" (pseudo inconnu),
+ *                "trop" (trop de parties creees, reessayer plus tard),
  *                "limite" (parties fermees jusqu'a demain), "reseau"
  *   directOuvrir(id, sur)     -> fil
  *       sur.etat(e)     a chaque changement (voir vue() cote serveur)
@@ -39,7 +40,7 @@ async function directCreer(cad, pseudo) {
     });
     const d = await r.json().catch(() => null);
     if (r.ok && d && d.id) return { id: d.id };
-    return { erreur: d && d.erreur || (r.status === 429 ? "limite" : "reseau") };
+    return { erreur: d && d.erreur || (r.status === 429 ? "trop" : "reseau") };
   } catch (e) { return { erreur: "reseau" }; }
 }
 function directOuvrir(id, sur) {

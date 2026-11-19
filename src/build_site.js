@@ -696,7 +696,7 @@ function animBoard(moveStr, size, labels, fenDepart) {
   const S = size / 8;
   let sq = "";
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++)
-    sq += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? "#4B6B63" : "#EDE4D2"}"/>`;
+    sq += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? "#4A6A68" : "#EDE3D5"}"/>`;
   const last = steps.length - 1;
   const groups = steps.map((st, i) =>
     `<g data-ply="${i}"${i === last ? "" : " hidden"}>${usesFor(st.fen, S)}</g>`).join("");
@@ -1072,9 +1072,10 @@ function metaDesc(raw, max) {
    couleur du fond sous l'entete : il adoucit la coupure quand le contenu
    defile sous la zone collante, au lieu d'un bord net. */
 const CSS = `*{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#EDE4D2;--slate:#F5F0E5;--raise:#E3DAC7;--chalk:#15201C;--sage:#5A6862;
---bone:#EDE4D2;--board:#4B6B63;--brass:#7E5409;--jade:#1E7A4C;--brick:#A3382A;
---rule:rgba(21,32,28,.14);--r-l:12px;--r:8px;--r-s:6px;--r-xs:3px}
+:root{--ink:#0F1414;--slate:#171E1F;--raise:#212A2B;--chalk:#EAECEA;--sage:#96A5A5;
+--bone:#EDE3D5;--board:#4A6A68;--brass:#DDAE95;--jade:#5FBF92;--brick:#EF6A6A;
+--rule:rgba(234,236,234,.12);--r-l:12px;--r:8px;--r-s:6px;--r-xs:3px}
+@media print{:root{--chalk:#15201C;--sage:#5A6862;--brass:#7E5409}}
 body{background:var(--ink);color:var(--chalk);
 font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}
 .wrap{max-width:880px;margin:0 auto}
@@ -1132,11 +1133,11 @@ p{margin-bottom:12px;max-width:66ch}
    un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
-.animctl button{background:var(--slate);color:var(--board);border:1px solid var(--board);border-radius:var(--r-s);
+.animctl button{background:var(--slate);color:var(--sage);border:1px solid var(--board);border-radius:var(--r-s);
   width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}
 .animctl button:hover{background:var(--board);color:var(--slate)}
 .animctl button:disabled{opacity:.38;cursor:default}
-.animctl button:disabled:hover{background:var(--slate);color:var(--board)}
+.animctl button:disabled:hover{background:var(--slate);color:var(--sage)}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}
@@ -1170,7 +1171,7 @@ table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px}
 th{text-align:left;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);padding:8px;border-bottom:1px solid var(--rule)}
 td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}
 td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk);white-space:nowrap}
-.cta{display:inline-block;background:var(--brass);color:#FFF;font-weight:600;font-size:14px;text-decoration:none;
+.cta{display:inline-block;background:var(--brass);color:#1c130e;font-weight:600;font-size:14px;text-decoration:none;
 padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}
 .cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);
@@ -1217,7 +1218,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   background:none;border:0;cursor:pointer;padding:7px 14px;border-radius:999px;
   white-space:nowrap;transition:background .18s,color .18s}
 .cotefiltre button:hover{color:var(--chalk)}
-.cotefiltre button[aria-pressed="true"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}
+.cotefiltre button[aria-pressed="true"]{background-color:var(--brass);color:#1c130e;font-weight:600}
 /* Menu principal : meme forme que les onglets de l'application, une pastille
    arrondie posee sur un fond legerement contraste, la section courante
    surlignee en laiton. Seules les couleurs changent, prises dans les jetons
@@ -1242,7 +1243,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
   text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;
   transition:background .18s,color .18s}
 .sitenav a:hover{color:var(--chalk)}
-.sitenav [aria-current="page"]{background-color:var(--brass);color:#FDF8EC;font-weight:600}
+.sitenav [aria-current="page"]{background-color:var(--brass);color:#1c130e;font-weight:600}
 @media(max-width:520px){.sitenav a,.sitenav span{padding:8px 11px;font-size:12.5px}}
 /* Bascule de langue : meme pastille que dans l'application, avec le meme
    rayon et le meme fond. Ici ce sont deux liens, chaque langue etant une page
@@ -2032,7 +2033,7 @@ fs.writeFileSync(OUT + "/manifest.webmanifest", JSON.stringify({
   name: "chang64 : chess and tactics", short_name: "chang64",
   description: "Play chess, solve verified tactics puzzles and train endgames. No account required.",
   start_url: "/", scope: "/", display: "standalone",
-  background_color: "#101413", theme_color: "#101413", orientation: "any",
+  background_color: "#0F1414", theme_color: "#0F1414", orientation: "any",
   icons: [
     { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
     { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

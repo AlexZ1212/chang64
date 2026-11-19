@@ -1240,7 +1240,7 @@ module.exports = function (H) {
   <div class="cols">${diagram(p.fen, u.sideToMove(sideLabel), side === "b")}
   <div>
     <p>${esc(expl)}</p>
-    <details><summary style="cursor:pointer;color:#D9A83F;font-weight:600">${u.solution}</summary>
+    <details><summary style="cursor:pointer;color:var(--brass);font-weight:600">${u.solution}</summary>
       <div class="moves" style="margin-top:10px">${esc(sans.join(" "))}</div></details>
     <a class="cta" href="${accueil(lang)}#puzzle=${p.id}">${T(lang, "Try it on the board", "Tester sur l'échiquier")}</a>
   </div></div>

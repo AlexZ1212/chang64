@@ -21,7 +21,7 @@
      Avant, les hreflang en et fr pointaient tous deux vers "/", et Google ne
      voyait jamais l'application en francais. Pose par build_site.js. -->
 <!--__HREFLANG__-->
-<meta name="theme-color" content="#101413">
+<meta name="theme-color" content="#0F1414">
 <script>try{var p=JSON.parse(localStorage.getItem("chang64:prefs")||"{}"),r=document.documentElement;if(p.theme)r.setAttribute("data-theme",p.theme);if(p.board)r.setAttribute("data-board",p.board);}catch(e){}</script>
 <title>Free chess for beginners, easy puzzles | chang64</title>
 <!-- 174 caracteres a l'origine : tronquee dans les resultats de recherche,
@@ -83,27 +83,30 @@
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/jetbrains-mono-v24-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/jetbrains-mono-v24-latin-ext-variable.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 :root{
-  --ink:#101413;
-  --slate:#191F1D;
-  --raise:#232B28;
-  --chalk:#ECEAE3;
-  --sage:#97A49D;
-  --bone:#EDE4D2;
-  --board:#4B6B63;
-  --brass:#E0A93B;
+  /* Palette « Cuivre doux » (2026-11-19, choix d'Alexandre : le laiton vif
+     faisait clinquant). Un accent chaud, clair et peu sature, sur des fonds
+     bleu-vert de la famille du damier. */
+  --ink:#0F1414;
+  --slate:#171E1F;
+  --raise:#212A2B;
+  --chalk:#EAECEA;
+  --sage:#96A5A5;
+  --bone:#EDE3D5;
+  --board:#4A6A68;
+  --brass:#DDAE95;
   /* Themes (2026-11-15, themes.js) : ce qui suit l'accent et l'ambiance de
      chaque theme. --brass-rgb sert aux rgba(), --on-brass au texte pose sur
      l'accent, --survol au survol des boutons, --arc-a/--arc-b aux arcs des
      fenetres (Bravo, bilan), --lueur au halo du fond, --bone-t/--board-t au
      damier assorti au theme. */
-  --brass-rgb:224,169,63;
-  --on-brass:#1b1508;
-  --survol:#33483e;
-  --arc-a:#2F4A3E;
-  --arc-b:#26382F;
-  --lueur:#17201D;
-  --bone-t:#EDE4D2;
-  --board-t:#4B6B63;
+  --brass-rgb:221,174,149;
+  --on-brass:#1c130e;
+  --survol:#2f4042;
+  --arc-a:#2d4446;
+  --arc-b:#233536;
+  --lueur:#151f20;
+  --bone-t:#EDE3D5;
+  --board-t:#4A6A68;
   --jade:#5FBF92;
   /* Eclairci le 2026-09-05 : #D9584A ne donnait que 3,76:1 sur --raise et
      4,34:1 sur --slate, sous le seuil WCAG AA de 4,5:1 pour du texte
@@ -113,8 +116,10 @@
      6,32:1 sur --ink, et reste lisible en fond avec du texte sombre
      dessus (6,32:1) pour les usages inverses (.btn.danger.armed,
      historique perdu). */
-  --brick:#E4776A;
-  --rule:rgba(236,234,227,.12);
+  /* Rougi le 2026-11-19 : a cote d'un accent cuivre, #E4776A se confondait
+     avec lui. #EF6A6A donne 4,85:1 sur --raise, 5,59:1 sur --slate. */
+  --brick:#EF6A6A;
+  --rule:rgba(234,236,234,.12);
   /* Echelle des arrondis (2026-11-19, demande d'Alexandre : des tailles
      differentes, mais chacune avec un role). Voir design-system/README.md.
      --r-l : ce qui contient (bloc d'accueil, cartes, panneaux, fenetres) ;
@@ -162,7 +167,7 @@ html[data-board="theme"]  { --bone:var(--bone-t); --board:var(--board-t); }
    sur le fond, gris >= 5,6:1 et accent >= 6,3:1 sur les cartes, texte sur
    l'accent >= 7:1. [data-apercu] sert aux apercus des Preferences et de la
    fenetre Bravo, qui montrent un theme sans l'appliquer. */
-[data-apercu="chang"]{--ink:#101413;--slate:#191F1D;--raise:#232B28;--chalk:#ECEAE3;--sage:#97A49D;--brass:#E0A93B;--brass-rgb:224,169,59;--on-brass:#1b1508;--survol:#33483e;--arc-a:#2F4A3E;--arc-b:#26382F;--lueur:#17201D;--bone-t:#EDE4D2;--board-t:#4B6B63;--rule:rgba(236,234,227,.12)}
+[data-apercu="chang"]{--ink:#0F1414;--slate:#171E1F;--raise:#212A2B;--chalk:#EAECEA;--sage:#96A5A5;--brass:#DDAE95;--brass-rgb:221,174,149;--on-brass:#1c130e;--survol:#2f4042;--arc-a:#2d4446;--arc-b:#233536;--lueur:#151f20;--bone-t:#EDE3D5;--board-t:#4A6A68;--rule:rgba(234,236,234,.12)}
 html[data-theme="glace"],[data-apercu="glace"]{--ink:#0D1418;--slate:#141E26;--raise:#1D2B36;--chalk:#E8F1F5;--sage:#93AABA;--brass:#7FCBEF;--brass-rgb:127,203,239;--on-brass:#0F181D;--survol:#374D5C;--arc-a:#394F5D;--arc-b:#2B3D48;--lueur:#172127;--bone-t:#DCE8EE;--board-t:#5D7F96;--rule:rgba(232,241,245,.12)}
 html[data-theme="jade"],[data-apercu="jade"]{--ink:#0E1512;--slate:#151F1B;--raise:#1E2C25;--chalk:#E6F0EA;--sage:#8FAD9E;--brass:#5FCF9C;--brass-rgb:95,207,156;--on-brass:#0B1913;--survol:#2B4F3F;--arc-a:#295240;--arc-b:#213F32;--lueur:#14221C;--bone-t:#E3EEDF;--board-t:#3F8466;--rule:rgba(230,240,234,.12)}
 html[data-theme="bibliotheque"],[data-apercu="bibliotheque"]{--ink:#15110D;--slate:#1E1913;--raise:#2A221B;--chalk:#EFE6D8;--sage:#AE9F8A;--brass:#DDA45C;--brass-rgb:221,164,92;--on-brass:#1B140B;--survol:#573F2C;--arc-a:#5E432C;--arc-b:#483322;--lueur:#251C14;--bone-t:#E8D3B0;--board-t:#9A6B45;--rule:rgba(239,230,216,.12)}
@@ -1106,16 +1111,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 }
 
 /* ---------- scoresheet ---------- */
-.sheet{background:#F4EEDC;border-radius:var(--r-s);overflow:hidden;color:#2A2A22}
-.sheet-head{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;background:#E2D9C0;color:#605844;padding:5px 0}
+/* Feuille de partie aux couleurs de l'application (2026-11-19, remarque
+   d'Alexandre : un rectangle creme au milieu d'un ecran sombre, « coherence
+   graphique »). Fond du site, filets --rule, coup en cours marque par une
+   teinte d'accent ET un rail a gauche : la position, pas la seule couleur. */
+.sheet{background:var(--ink);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;color:var(--chalk)}
+.sheet-head{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;background:var(--raise);color:var(--sage);padding:6px 0}
 .sheet-head span{text-align:center}
 .sheet-body{max-height:212px;overflow-y:auto}
-.sheet-row{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:13px;border-bottom:1px solid #DCD2B8}
+.sheet-row{display:grid;grid-template-columns:34px 1fr 1fr;font-family:'JetBrains Mono',monospace;font-size:13.5px;border-bottom:1px solid var(--rule)}
 .sheet-row:last-child{border-bottom:0}
 .sheet-row span{padding:4px 6px;text-align:center;border-radius:2px}
-.sheet-row .n{color:#8A8069;font-size:11px;background:#EAE2CB;display:flex;align-items:center;justify-content:center}
-.sheet-row .cur{background:#F7E4B0;font-weight:600}
-.sheet-empty{padding:22px 12px;text-align:center;color:#8A8069;font-size:12.5px;font-family:'Archivo',sans-serif}
+.sheet-row .n{color:var(--sage);font-size:11px;border-right:1px solid var(--rule);border-radius:0;display:flex;align-items:center;justify-content:center}
+.sheet-row .cur{background:rgba(var(--brass-rgb),.16);box-shadow:inset 2px 0 0 var(--brass);color:var(--brass);font-weight:600}
+.sheet-empty{padding:22px 12px;text-align:center;color:var(--sage);font-size:12.5px;font-family:'Archivo',sans-serif}
 
 /* ---------- status ---------- */
 .status{border-left:3px solid var(--brass);padding:9px 12px;background-color:var(--ink);border-radius:0 var(--r) var(--r) 0;font-size:13.5px;min-height:42px;display:flex;align-items:center}
@@ -1588,10 +1597,10 @@ header>*{min-width:0}
 .graph.ratinggraph svg{height:auto;aspect-ratio:300/90}
 .progressbar{height:6px;border-radius:999px;background-color:var(--ink);border:1px solid var(--rule);overflow:hidden;margin-top:12px}
 .progressbar i{display:block;height:100%;width:0;background-color:var(--brass);transition:width .2s}
-.sheet-row span.tag-blunder{color:#B23A22;font-weight:600}
-.sheet-row span.tag-mistake{color:#C4762A;font-weight:600}
-.sheet-row span.tag-inacc{color:#8A7A2A}
-.sheet-row span.view{background:#F7E4B0;font-weight:600}
+.sheet-row span.tag-blunder{color:var(--brick);font-weight:600}
+.sheet-row span.tag-mistake{color:var(--brick);font-weight:600}
+.sheet-row span.tag-inacc{color:var(--brass)}
+.sheet-row span.view{background:rgba(var(--brass-rgb),.16);box-shadow:inset 2px 0 0 var(--brass);color:var(--brass);font-weight:600}
 .sheet-row span[data-ply]{cursor:pointer}
 .rushbar{display:flex;gap:8px;margin-bottom:12px}
 .rushitem{flex:1;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);padding:8px 4px;text-align:center}

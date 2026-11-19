@@ -53,19 +53,19 @@ const PAGE = `<!doctype html>
 @font-face{font-family:"Source Serif 4";src:url(/fonts/source-serif-4-v14-latin-600.woff2) format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:"JetBrains Mono";src:url(/fonts/jetbrains-mono-v24-latin-700.woff2) format("woff2");font-weight:700;font-display:swap}
 *{box-sizing:border-box;margin:0}
-html,body{background:transparent;color:#ECEAE3;font-family:"Archivo","Golos Text",system-ui,sans-serif}
-.carte{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto;padding:12px;background-color:#191F1D;border:1px solid rgba(236,234,227,.12);border-radius:12px;color:inherit;text-decoration:none}
+html,body{background:transparent;color:#EAECEA;font-family:"Archivo","Golos Text",system-ui,sans-serif}
+.carte{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto;padding:12px;background-color:#171E1F;border:1px solid rgba(234,236,234,.12);border-radius:12px;color:inherit;text-decoration:none}
 .tete{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.marque{display:flex;align-items:baseline;gap:5px;font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:19px;letter-spacing:-.015em;color:#ECEAE3}
-.marque svg{width:20px;height:17px;fill:#E0A93B;align-self:center}
-.marque b{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.86em;letter-spacing:-.03em;color:#E0A93B}
-#titre{font-size:13px;font-weight:600;color:#97A49D;text-align:right}
+.marque{display:flex;align-items:baseline;gap:5px;font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:19px;letter-spacing:-.015em;color:#EAECEA}
+.marque svg{width:20px;height:17px;fill:#DDAE95;align-self:center}
+.marque b{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.86em;letter-spacing:-.03em;color:#DDAE95}
+#titre{font-size:13px;font-weight:600;color:#96A5A5;text-align:right}
 #plateau{border-radius:6px;overflow:hidden;line-height:0;aspect-ratio:1}
 #plateau svg{width:100%;height:auto;display:block}
 #consigne{font-size:15px;font-weight:600;line-height:1.35;min-height:20px}
-.bouton{display:block;text-align:center;padding:11px 14px;border-radius:8px;background-color:#E0A93B;color:#1b1508;font-weight:600;font-size:15px}
+.bouton{display:block;text-align:center;padding:11px 14px;border-radius:8px;background-color:#DDAE95;color:#1c130e;font-weight:600;font-size:15px}
 .carte:hover .bouton,.carte:focus-visible .bouton{background-color:#ECBB57}
-.carte:focus-visible{outline:2px solid #E0A93B;outline-offset:2px}
+.carte:focus-visible{outline:2px solid #DDAE95;outline-offset:2px}
 </style>
 </head>
 <body>

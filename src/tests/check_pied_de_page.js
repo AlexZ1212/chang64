@@ -41,7 +41,7 @@ console.log("\n--- Meme forme que les composants de l'application ---");
   T("menu en pastille arrondie", /\.sitenav\{[^}]*border-radius:999px/.test(css));
   T("menu sur fond contraste", /\.sitenav\{[^}]*background-color:var\(--slate\)/.test(css));
   T("section courante surlignee en laiton", /\.sitenav \[aria-current="page"\]\{[^}]*background-color:var\(--brass\)/.test(css));
-  T("texte clair sur le laiton", /\.sitenav \[aria-current="page"\]\{[^}]*color:#FDF8EC/.test(css));
+  T("texte fonce sur l accent, clair depuis la palette Cuivre doux", /\.sitenav \[aria-current="page"\]\{[^}]*color:#1c130e/.test(css));
   T("langue en pastille, meme rayon que l'application", /\.langsw\{[^}]*border-radius:var\(--r\)/.test(css));
   /* Depuis le 2026-10-25, la langue courante s'affiche seule (summary) et la
      liste des six langues s'ouvre dessous. */

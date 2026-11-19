@@ -45,7 +45,7 @@ function boardSvg(fen, size, flipped) {
   if (flipped) rows = rows.slice().reverse().map(row => row.split("").reverse().join(""));
   let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="Chess position">`;
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
-    svg += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? "#4B6B63" : "#EDE4D2"}"/>`;
+    svg += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? "#4A6A68" : "#EDE3D5"}"/>`;
   }
   /* Les formes de pieces sont declarees une fois en <defs> et posees par
      <use>. Auparavant chaque piece repetait ses chemins complets, ce qui

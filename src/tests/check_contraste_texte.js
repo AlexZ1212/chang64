@@ -95,8 +95,8 @@ for (const f of ["/puzzles/index.html", "/openings/index.html", "/fr/ouvertures/
 }
 
 console.log("\n--- Le bouton d'action reste lisible ---");
-const rCta = ratio("#ffffff", BRASS);
-T("texte blanc sur laiton : " + rCta.toFixed(2) + ":1", rCta >= 4.5);
+const rCta = ratio("#1c130e", BRASS);
+T("texte fonce sur l accent : " + rCta.toFixed(2) + ":1", rCta >= 4.5);
 
 console.log("\n--- Les legendes de diagramme suivent le theme ---");
 T("legende en jeton, pas en dur", /Position après[^<]*<\/p>/.test(page) === false || /color:var\(--sage\)[^>]*>Position après/.test(page),

@@ -99,6 +99,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("l'adversaire propose la nulle : accepter ou refuser", /propose la nulle/.test($("directStatus").textContent.replace(/[  ]/g, " ")) && !cache("btnDirectAccepter") && !cache("btnDirectRefuser") && cache("btnDirectNulle"));
   $("btnDirectRefuser").click();
   T("refuser part au serveur", fil.envois.includes('{"t":"nulle-non"}'));
+  /* 2026-11-19 : chaque message du serveur refaisait la partie, donc un nouvel
+     objet « dernier coup », et la piece rejouait son deplacement. */
+  T("un message sans nouveau coup ne rejoue pas l'animation", w.eval("lastAnimated === lastMove && !!lastMove"));
   recevoir(etat({ phase: "jeu", coups: ["e2e4", "e7e5"], la: { b: true, n: false } }));
   T("adversaire absent : c'est dit, la partie continue", /s'est absenté/.test($("directStatus").textContent.replace(/[  ]/g, " ")));
   fil.onmessage({ data: JSON.stringify({ t: "erreur", e: "limite" }) });
@@ -126,6 +129,8 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("les fenetres peuvent revenir apres la fin", w.eval("directOccupe()") === false);
   $("resultNew").click();
   T("Revanche part au serveur", fil.envois.includes('{"t":"revanche"}'));
+  recevoir(etat({ phase: "fin", coups: ["e2e4", "e7e5", "d1h5", "e8e7", "h5e5"], fin: { r: "1-0", m: "mat" }, rev: { b: true, n: false }, la: { b: true, n: false } }));
+  T("revanche demandee, l'adversaire est parti : c'est dit tout de suite", /Bob\sa\squitt.\sla\spartie\.\sPas\sde\srevanche/.test($("directStatus").textContent), $("directStatus").textContent);
   recevoir(etat({ n: 2, moi: "n", b: "Bob", nr: "Anna" }));
   T("revanche : nouvelle partie, je joue les noirs, echiquier retourne", w.eval("flipped") === true && $("clockTopName").textContent.replace(/[  ]/g, " ") === "Bob" && $("resultBanner").classList.contains("hide") && /Aucun coup/.test($("amiSheet").textContent.replace(/[  ]/g, " ")));
   recevoir(etat({ n: 2, moi: "n", b: "Bob", nr: "Anna", phase: "fin", fin: { r: "", m: "annulee" } }));

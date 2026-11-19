@@ -1146,5 +1146,6 @@ module.exports = {
 "With an account":"Con un account",
 "With an account, your progress follows you by itself, with no code to copy.":"Con un account i tuoi progressi ti seguono da soli, senza codici da copiare.",
 "Yes, reset everything":"Sì, azzera tutto",
-"Keep my progress":"Tieni i miei progressi"
+"Keep my progress":"Tieni i miei progressi",
+"{name} has left the game. No rematch this time.":"{name} ha lasciato la partita. Niente rivincita stavolta."
 };

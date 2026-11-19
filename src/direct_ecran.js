@@ -35,6 +35,7 @@ let directJeu = null, directSan = [], directVu = "", directCoupe = false, direct
 let directInvite = "";            /* pseudo du membre que je viens d'inviter */
 const directDeclinees = {};       /* invitations deja montrees ou refusees sur cette page */
 let directGuet = 0;
+let directAnime = "";              /* dernier coup deja anime : partie/manche/nombre de coups */
 
 function directActif() { return !!directId && mode === "friend"; }
 /* Une partie se joue en ce moment : ni felicitations ni defi recu avant la fin. */
@@ -123,6 +124,12 @@ function directMontrer() {
   legalCache = e.phase === "debut" || e.phase === "jeu" ? game.moves() : [];
   lastMove = game.history.length ? game.history[game.history.length - 1].m : null;
   selected = -1; marks = {};
+  /* Chaque etat recu refait la partie, donc un nouvel objet « dernier coup » :
+     sans ceci, render() rejouait l'animation du meme coup a chaque message du
+     serveur (confirmation de mon coup, nulle proposee, adversaire absent). */
+  { const cle = e.id + "/" + e.n + "/" + e.coups.length;
+    if (cle === directAnime && lastMove) lastAnimated = lastMove;
+    directAnime = cle; }
   render();
   renderSheetInto("amiSheet", directSan);
   const assis = e.phase !== "attente";
@@ -140,7 +147,9 @@ function directMontrer() {
     const r = directResultat(e), motif = directMotif(e);
     /* Invitation declinee : une phrase, pas de fenetre de fin. */
     if (e.fin.m === "refusee") { directDire(motif); renderResult(false); return; }
-    directDire(e.rev[autre] && !e.rev[e.moi] ? t("Your opponent wants a rematch.") : e.rev[e.moi] ? t("You asked for a rematch.") : motif, r === "win" ? "win" : r === "loss" ? "lose" : "");
+    /* L'adversaire a quitte la partie alors que j'attends sa reponse : le dire
+       tout de suite, sans laisser « Tu as demande une revanche » a l'ecran. */
+    directDire(e.rev[autre] && !e.rev[e.moi] ? t("Your opponent wants a rematch.") : e.rev[e.moi] ? (e.la[autre] ? t("You asked for a rematch.") : t("{name} has left the game. No rematch this time.", { name: directAdv() })) : motif, r === "win" ? "win" : r === "loss" ? "lose" : "");
     resultInfo = { kind: r === "win" ? "win" : r === "loss" ? "lose" : "draw", title: r === "win" ? t("You win") : r === "loss" ? t("You lose") : r === "draw" ? t("Draw") : t("Game cancelled"), sub: motif };
     renderResult(true);
     return;
@@ -217,6 +226,7 @@ function directJouer(m) {
   directAttenteCoup = true;
   directSan.push(game.san(m));
   game.makeMove(m); lastMove = m; selected = -1; marks = {}; legalCache = [];
+  if (directE) directAnime = directE.id + "/" + directE.n + "/" + (directE.coups.length + 1);
   render();
   renderSheetInto("amiSheet", directSan);
 }
@@ -263,12 +273,13 @@ async function directCreerPartie() {
    par minute tant qu'elle est a l'ecran. Jamais pendant une partie ou un
    exercice : la fenetre attend le passage suivant. */
 async function directGuetter() {
-  if (!DIRECT_OUVERT || document.hidden || directId || !(typeof estMembre === "function" && estMembre())) return;
+  /* Une partie finie encore a l'ecran n'empeche plus de recevoir une invitation. */
+  if (!DIRECT_OUVERT || document.hidden || (directId && !(directE && directE.phase === "fin")) || !(typeof estMembre === "function" && estMembre())) return;
   if (Date.now() - directGuet < 20000) return;
   directGuet = Date.now();
   const liste = await directInvitations();
   const inv = liste.find(x => x && !directDeclinees[x.id] && /^[a-z2-9]{12}$/.test(x.id));
-  if (!inv || directId || (typeof duelOccupe === "function" && duelOccupe())) return;
+  if (!inv || (directId && !(directE && directE.phase === "fin")) || (typeof duelOccupe === "function" && duelOccupe())) return;
   const r = $("duel"); if (!r || !r.hidden) return;
   /* Une fenetre de felicitations est a l'ecran : on repassera. */
   const br = $("bravo"); if (br && !br.hidden) { directGuet = 0; return; }
@@ -305,7 +316,7 @@ if (DIRECT_OUVERT && document.getElementById("directPanel")) {
     if (directF) directF.abandon();
   };
   window.addEventListener("hashchange", directLire);
-  setInterval(directGuetter, 60000);
+  setInterval(directGuetter, 30000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) directGuetter(); });
   setTimeout(directGuetter, 2500);
   /* Retour du reseau ou de l'onglet (telephone deverrouille) : on refait le fil sans attendre. */

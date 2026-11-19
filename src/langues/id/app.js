@@ -1146,5 +1146,6 @@ module.exports = {
 "With an account":"Dengan akun",
 "With an account, your progress follows you by itself, with no code to copy.":"Dengan akun, kemajuanmu ikut sendiri, tanpa kode yang perlu disalin.",
 "Yes, reset everything":"Ya, atur ulang semuanya",
-"Keep my progress":"Simpan kemajuanku"
+"Keep my progress":"Simpan kemajuanku",
+"{name} has left the game. No rematch this time.":"{name} meninggalkan permainan. Kali ini tidak ada tanding ulang."
 };

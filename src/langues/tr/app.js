@@ -1146,5 +1146,6 @@ module.exports = {
 "With an account":"Hesapla",
 "With an account, your progress follows you by itself, with no code to copy.":"Hesabın olursa ilerlemen kendiliğinden seninle gelir, kopyalanacak kod yok.",
 "Yes, reset everything":"Evet, her şeyi sıfırla",
-"Keep my progress":"İlerlememi koru"
+"Keep my progress":"İlerlememi koru",
+"{name} has left the game. No rematch this time.":"{name} oyundan ayrıldı. Bu sefer rövanş yok."
 };

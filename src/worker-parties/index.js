@@ -295,6 +295,9 @@ export class Partie {
   vue(moi, now) {
     const p = this.p, la = { b: false, n: false };
     for (const ws of this.ctx.getWebSockets()) {
+      /* Le fil qui se ferme compte deja comme parti : sinon l'adversaire
+         n'apprenait le depart qu'au message suivant. */
+      if (ws === this.sortant || ws.readyState > 1) continue;
       const c = this.couleur((ws.deserializeAttachment() || {}).j);
       if (c) la[c] = true;
     }
@@ -307,6 +310,7 @@ export class Partie {
   }
   diffuser(now) {
     for (const ws of this.ctx.getWebSockets()) {
+      if (ws === this.sortant || ws.readyState > 1) continue;
       const c = this.couleur((ws.deserializeAttachment() || {}).j);
       try { ws.send(JSON.stringify(this.vue(c, now))); } catch (e) {}
     }
@@ -472,7 +476,8 @@ export class Partie {
 
   async webSocketClose(ws, code) {
     try { ws.close(code === 1005 || code === 1006 ? 1000 : code, ""); } catch (e) {}
-    if (await this.lire()) this.diffuser(Date.now());
+    this.sortant = ws;
+    try { if (await this.lire()) this.diffuser(Date.now()); } finally { this.sortant = null; }
   }
   async webSocketError() {
     if (await this.lire()) this.diffuser(Date.now());

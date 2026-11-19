@@ -373,6 +373,7 @@ async function nettoyer(env, now) {
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id NOT IN (SELECT id FROM comptes) OR bloque_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id NOT IN (SELECT id FROM comptes) OR ami_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM demandes_amis WHERE cree < ?1 OR de NOT IN (SELECT id FROM comptes) OR a NOT IN (SELECT id FROM comptes)").bind(now - 60 * JOUR).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM creations WHERE jour < ?1").bind(new Date(now).toISOString().slice(0, 10)).run(); } catch (e) {}
   try {
@@ -513,6 +514,7 @@ async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 OR ami_id = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM demandes_amis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM invitations WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
@@ -777,25 +779,80 @@ const AMIS_CHIFFRES = "c.pseudo AS p, CASE WHEN c.sem = ?2 THEN c.sem_resolus EL
    voient alors comme amis. C'est le seul cas ou l'on apprend qu'un autre
    joueur vous a ajoute, et il faut l'avoir ajoute soi-meme. */
 const AMIS_RECIPROQUE = "EXISTS (SELECT 1 FROM amis x WHERE x.compte_id = a.ami_id AND x.ami_id = a.compte_id) AS m";
+/* Demandes d'amis (2026-11-19, decision d'Alexandre) : « Ajouter » envoie une
+   demande, que l'autre accepte ou refuse. Accepter rend les deux amis d'un
+   coup (une ligne dans chaque sens). Les amis ajoutes avant restent tels
+   quels. Une demande vit 60 jours. Sans la table demandes_amis (pas encore
+   creee), on retombe sur l'ajout direct d'avant.
+   GET amis -> { moi, amis, demandes: [pseudo], envoyees: [pseudo] }
+   POST ami-ajouter / ami-accepter / ami-refuser / ami-retirer { pseudo } */
+const DEMANDES_DUREE = 60 * JOUR;
+const DEMANDES_MAX = 30;             /* demandes envoyees en attente, par compte */
+async function amisBloques(env, a, b) {
+  try { return !!(await env.DB.prepare("SELECT 1 AS x FROM blocages WHERE (compte_id = ?1 AND bloque_id = ?2) OR (compte_id = ?2 AND bloque_id = ?1) LIMIT 1").bind(a, b).first()); } catch (e) { return false; }
+}
+/* Les deux deviennent amis ; le plafond de chacun est verifie dans l'insertion. */
+async function amisLier(env, a, b, now) {
+  const poser = "INSERT INTO amis (compte_id, ami_id, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM amis WHERE compte_id = ?1) < ?4 ON CONFLICT(compte_id, ami_id) DO NOTHING";
+  await env.DB.batch([env.DB.prepare(poser).bind(a, b, now, AMIS_MAX), env.DB.prepare(poser).bind(b, a, now, AMIS_MAX)]);
+  try { await env.DB.prepare("DELETE FROM demandes_amis WHERE (de = ?1 AND a = ?2) OR (de = ?2 AND a = ?1)").bind(a, b).run(); } catch (e) {}
+}
 async function rAmis(s, env, now) {
   const semaine = lundi(now);
   const moi = await env.DB.prepare("SELECT " + AMIS_CHIFFRES + " FROM comptes c WHERE c.id = ?1").bind(s.id, semaine).first();
   const amis = (await env.DB.prepare("SELECT " + AMIS_CHIFFRES + ", " + AMIS_RECIPROQUE + " FROM amis a JOIN comptes c ON c.id = a.ami_id WHERE a.compte_id = ?1 ORDER BY a.cree DESC LIMIT ?3").bind(s.id, semaine, AMIS_MAX).all()).results || [];
-  return json({ semaine, moi, amis });
+  let demandes = [], envoyees = [];
+  try {
+    await env.DB.prepare("DELETE FROM demandes_amis WHERE cree < ?1").bind(now - DEMANDES_DUREE).run();
+    demandes = ((await env.DB.prepare("SELECT c.pseudo AS p FROM demandes_amis d JOIN comptes c ON c.id = d.de WHERE d.a = ?1 " +
+      "AND NOT EXISTS (SELECT 1 FROM blocages b WHERE (b.compte_id = d.a AND b.bloque_id = d.de) OR (b.compte_id = d.de AND b.bloque_id = d.a)) ORDER BY d.cree DESC LIMIT 50").bind(s.id).all()).results || []).map(x => x.p);
+    envoyees = ((await env.DB.prepare("SELECT c.pseudo AS p FROM demandes_amis d JOIN comptes c ON c.id = d.a WHERE d.de = ?1 ORDER BY d.cree DESC LIMIT 50").bind(s.id).all()).results || []).map(x => x.p);
+  } catch (e) {}
+  return json({ semaine, moi, amis, demandes, envoyees });
 }
 async function rAmiAjouter(s, d, env, now) {
   const c = await compteParPseudo(env, d.pseudo);
   if (!c) return erreur("inconnu", 404);
   if (c.id === s.id) return erreur("soi", 400);
-  /* Le plafond est verifie dans l'insertion meme : deux requetes simultanees ne le depassent pas. */
-  await env.DB.prepare("INSERT INTO amis (compte_id, ami_id, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM amis WHERE compte_id = ?1) < ?4 " +
-    "ON CONFLICT(compte_id, ami_id) DO NOTHING").bind(s.id, c.id, now, AMIS_MAX).run();
-  const la = await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).first();
-  return la ? json({ ok: true, pseudo: c.pseudo }, 201) : erreur("trop", 429);
+  if (await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).first()) return json({ ok: true, pseudo: c.pseudo, etat: "amis" }, 201);
+  let table = true, recue = null;
+  try { recue = await env.DB.prepare("SELECT 1 AS x FROM demandes_amis WHERE de = ?1 AND a = ?2").bind(c.id, s.id).first(); } catch (e) { table = false; }
+  /* L'autre m'a deja demande, ou m'avait ajoute avant les demandes : on est amis. */
+  const dejaLa = await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(c.id, s.id).first();
+  if (!table || recue || dejaLa) {
+    if (table) await amisLier(env, s.id, c.id, now);
+    else await env.DB.prepare("INSERT INTO amis (compte_id, ami_id, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM amis WHERE compte_id = ?1) < ?4 ON CONFLICT(compte_id, ami_id) DO NOTHING").bind(s.id, c.id, now, AMIS_MAX).run();
+    const la = await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).first();
+    return la ? json({ ok: true, pseudo: c.pseudo, etat: "amis" }, 201) : erreur("trop", 429);
+  }
+  /* Un membre qui m'a bloque (ou que j'ai bloque) ne recoit rien, sans que cela se voie. */
+  if (await amisBloques(env, s.id, c.id)) return json({ ok: true, pseudo: c.pseudo, etat: "demande" }, 202);
+  await env.DB.prepare("INSERT INTO demandes_amis (de, a, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM demandes_amis WHERE de = ?1) < ?4 ON CONFLICT(de, a) DO NOTHING").bind(s.id, c.id, now, DEMANDES_MAX).run();
+  const posee = await env.DB.prepare("SELECT 1 AS x FROM demandes_amis WHERE de = ?1 AND a = ?2").bind(s.id, c.id).first();
+  return posee ? json({ ok: true, pseudo: c.pseudo, etat: "demande" }, 202) : erreur("trop", 429);
 }
+async function rAmiAccepter(s, d, env, now) {
+  const c = await compteParPseudo(env, d.pseudo);
+  if (!c) return erreur("inconnu", 404);
+  let recue = null;
+  try { recue = await env.DB.prepare("SELECT 1 AS x FROM demandes_amis WHERE de = ?1 AND a = ?2").bind(c.id, s.id).first(); } catch (e) {}
+  if (!recue) return erreur("inconnu", 404);
+  await amisLier(env, s.id, c.id, now);
+  const la = await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).first();
+  return la ? json({ ok: true, pseudo: c.pseudo, etat: "amis" }, 201) : erreur("trop", 429);
+}
+async function rAmiRefuser(s, d, env) {
+  const c = await compteParPseudo(env, d.pseudo);
+  if (c) { try { await env.DB.prepare("DELETE FROM demandes_amis WHERE de = ?1 AND a = ?2").bind(c.id, s.id).run(); } catch (e) {} }
+  return json({ ok: true });
+}
+/* Retirer un ami defait le lien des deux cotes, et annule une demande envoyee. */
 async function rAmiRetirer(s, d, env) {
   const c = await compteParPseudo(env, d.pseudo);
-  if (c) await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(s.id, c.id).run();
+  if (c) {
+    await env.DB.prepare("DELETE FROM amis WHERE (compte_id = ?1 AND ami_id = ?2) OR (compte_id = ?2 AND ami_id = ?1)").bind(s.id, c.id).run();
+    try { await env.DB.prepare("DELETE FROM demandes_amis WHERE de = ?1 AND a = ?2").bind(s.id, c.id).run(); } catch (e) {}
+  }
   return json({ ok: true });
 }
 
@@ -1010,7 +1067,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres", "ligue"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres", "ligue"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "ami-accepter", "ami-refuser", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
@@ -1040,6 +1097,8 @@ export async function onRequest({ request, env, params, waitUntil }) {
     if (route === "pays") return await rPays(s, d, env);
     if (route === "ami-ajouter") return await rAmiAjouter(s, d, env, now);
     if (route === "ami-retirer") return await rAmiRetirer(s, d, env);
+    if (route === "ami-accepter") return await rAmiAccepter(s, d, env, now);
+    if (route === "ami-refuser") return await rAmiRefuser(s, d, env);
     return await rLien(s, env, now);
   } catch (e) {
     /* Jamais de detail d'erreur dans la reponse. */

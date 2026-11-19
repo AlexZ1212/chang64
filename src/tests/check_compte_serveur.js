@@ -513,29 +513,59 @@ const avancer = ms => { decalage += ms; };
     T("liste vide au depart, avec ses propres chiffres", r.s === 200 && r.j.amis.length === 0 && r.j.moi.p === "Anna" && r.j.moi.n === 1000 && r.j.moi.r === 40, r.texte);
     T("sans session : refuse", (await appel("GET", "amis")).s === 401 && (await appel("POST", "ami-ajouter", { pseudo: "Boris" })).s === 401 && (await appel("POST", "ami-retirer", { pseudo: "Boris" })).s === 401);
     T("autre origine : refuse", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA, origine: "https://mechant.example" })).s === 403);
+    /* Demandes d'amis (2026-11-19) : « ajouter » envoie une demande ; l'autre
+       accepte ou refuse ; accepter rend les deux amis d'un coup. */
+    const amisDe = async c => (await appel("GET", "amis", undefined, { cookie: c })).j;
     r = await appel("POST", "ami-ajouter", { pseudo: "bORIS" }, { cookie: cA });
-    T("ajouter un ami par son pseudo, casse indifferente", r.s === 201 && r.j.pseudo === "Boris", r.texte);
-    T("ajouter deux fois : une seule ligne", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA })).s === 201 && lignes("SELECT COUNT(*) AS n FROM amis")[0].n === 1);
+    T("demander un joueur en ami par son pseudo, casse indifferente", r.s === 202 && r.j.pseudo === "Boris" && r.j.etat === "demande", r.texte);
+    T("demander deux fois : une seule demande, pas encore d'ami", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA })).s === 202 && lignes("SELECT COUNT(*) AS n FROM demandes_amis")[0].n === 1 && lignes("SELECT COUNT(*) AS n FROM amis")[0].n === 0);
     T("s'ajouter soi-meme : refuse", (await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cA })).s === 400);
     T("pseudo inconnu ou invalide : 404", (await appel("POST", "ami-ajouter", { pseudo: "Personne" }, { cookie: cA })).s === 404 && (await appel("POST", "ami-ajouter", { pseudo: "<b>" }, { cookie: cA })).s === 404 && (await appel("POST", "ami-ajouter", {}, { cookie: cA })).s === 404);
+    T("celui qui demande voit sa demande envoyee, celui qui recoit la voit arriver", (await amisDe(cA)).envoyees.join() === "Boris" && (await amisDe(cA)).demandes.length === 0 && (await amisDe(cB)).demandes.join() === "Anna" && (await amisDe(cB)).amis.length === 0);
+    T("un tiers ne voit rien de la demande", (await amisDe(cC)).demandes.length === 0 && (await amisDe(cC)).envoyees.length === 0);
+    T("accepter sans demande recue : 404", (await appel("POST", "ami-accepter", { pseudo: "Chloe" }, { cookie: cB })).s === 404 && (await appel("POST", "ami-accepter", { pseudo: "Boris" }, { cookie: cA })).s === 404);
+    T("accepter, refuser : sans session ou d'une autre origine, refuse", (await appel("POST", "ami-accepter", { pseudo: "Anna" })).s === 401 && (await appel("POST", "ami-refuser", { pseudo: "Anna" })).s === 401 && (await appel("POST", "ami-accepter", { pseudo: "Anna" }, { cookie: cB, origine: "https://mechant.example" })).s === 403);
+    r = await appel("POST", "ami-accepter", { pseudo: "anna" }, { cookie: cB });
+    T("accepter : les deux sont amis d'un coup, la demande disparait", r.s === 201 && r.j.etat === "amis" && (await amisDe(cA)).amis.find(x => x.p === "Boris").m === 1 && (await amisDe(cB)).amis.find(x => x.p === "Anna").m === 1 && lignes("SELECT COUNT(*) AS n FROM demandes_amis")[0].n === 0 && (await amisDe(cA)).envoyees.length === 0);
+    T("redemander un ami deja ami : rien ne change", (await appel("POST", "ami-ajouter", { pseudo: "Boris" }, { cookie: cA })).s === 201 && lignes("SELECT COUNT(*) AS n FROM amis")[0].n === 2 && lignes("SELECT COUNT(*) AS n FROM demandes_amis")[0].n === 0);
     await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA });
+    T("refuser : la demande disparait, personne n'est ami", (await appel("POST", "ami-refuser", { pseudo: "Anna" }, { cookie: cC })).s === 200 && (await amisDe(cC)).demandes.length === 0 && (await amisDe(cA)).envoyees.length === 0 && (await amisDe(cA)).amis.map(x => x.p).join() === "Boris");
+    await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA });
+    T("annuler sa propre demande", (await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA })).s === 200 && (await amisDe(cC)).demandes.length === 0);
+    await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA });
+    r = await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cC });
+    T("demandes croisees : la seconde vaut acceptation", r.s === 201 && r.j.etat === "amis" && (await amisDe(cA)).amis.length === 2 && (await amisDe(cC)).amis.map(x => x.p).join() === "Anna");
     r = await appel("GET", "amis", undefined, { cookie: cA });
     const boris = r.j.amis.find(x => x.p === "Boris");
     T("la liste donne les six chiffres de chaque ami, rien d'autre", r.j.amis.length === 2 && r.j.amis.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k,m") && boris.n === 1200 && boris.r === 80 && boris.j === 6 && boris.b === 2 && boris.k === 9, r.texte);
     T("la liste n'est pas mise en cache", /no-store/.test(r.h.get("Cache-Control")));
-    T("la liste est privee : l'ami ne voit rien chez lui", (await appel("GET", "amis", undefined, { cookie: cB })).j.amis.length === 0);
     r = await appel("GET", "exporter", undefined, { cookie: cA });
     T("l'export contient la liste d'amis", r.s === 200 && JSON.parse(r.texte).amis.sort().join() === "Boris,Chloe", r.texte.slice(0, 300));
-    T("l'export de l'ami ne dit pas qui l'a ajoute", !/Anna/.test((await appel("GET", "exporter", undefined, { cookie: cB })).texte));
-    T("retirer un ami", (await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA })).s === 200 && (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.map(x => x.p).join() === "Boris");
+    T("retirer un ami defait le lien des deux cotes", (await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA })).s === 200 && (await amisDe(cA)).amis.map(x => x.p).join() === "Boris" && (await amisDe(cC)).amis.length === 0);
     T("retirer un inconnu ne casse rien", (await appel("POST", "ami-retirer", { pseudo: "Personne" }, { cookie: cA })).s === 200);
-    /* Amis reciproques (2026-11-18) : m = 1 seulement quand l'autre a aussi ajoute. */
-    r = await appel("GET", "amis", undefined, { cookie: cA });
-    T("ami a sens unique : pas de marque", r.j.amis.find(x => x.p === "Boris").m === 0);
-    await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cB });
-    T("ajout dans les deux sens : chacun voit l'autre comme ami", (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.find(x => x.p === "Boris").m === 1 && (await appel("GET", "amis", undefined, { cookie: cB })).j.amis.find(x => x.p === "Anna").m === 1);
-    await appel("POST", "ami-retirer", { pseudo: "Anna" }, { cookie: cB });
-    T("l'un retire : la marque disparait chez l'autre", (await appel("GET", "amis", undefined, { cookie: cA })).j.amis.find(x => x.p === "Boris").m === 0);
+    /* Amis d'avant les demandes : une ligne a sens unique reste telle quelle,
+       et l'autre devient ami des qu'il ajoute a son tour. */
+    await appel("POST", "ami-retirer", { pseudo: "Boris" }, { cookie: cA });
+    env.DB.brut.prepare("INSERT INTO amis (compte_id, ami_id, cree) SELECT a.id, b.id, 1 FROM comptes a, comptes b WHERE a.pseudo = 'Anna' AND b.pseudo = 'Boris'").run();
+    T("ami d'avant, a sens unique : garde tel quel, sans marque", (await amisDe(cA)).amis.find(x => x.p === "Boris").m === 0 && (await amisDe(cB)).amis.length === 0);
+    r = await appel("POST", "ami-ajouter", { pseudo: "Anna" }, { cookie: cB });
+    T("l'autre l'ajoute a son tour : amis tout de suite, sans demande", r.s === 201 && r.j.etat === "amis" && (await amisDe(cA)).amis.find(x => x.p === "Boris").m === 1 && lignes("SELECT COUNT(*) AS n FROM demandes_amis")[0].n === 0);
+    /* Blocage : la demande ne part pas, sans que cela se voie. */
+    env.DB.brut.prepare("INSERT INTO blocages (compte_id, bloque_id, cree) SELECT a.id, b.id, 1 FROM comptes a, comptes b WHERE a.pseudo = 'Chloe' AND b.pseudo = 'Boris'").run();
+    r = await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cB });
+    T("demande a un membre qui m'a bloque : meme reponse, rien d'enregistre", r.s === 202 && lignes("SELECT COUNT(*) AS n FROM demandes_amis")[0].n === 0);
+    env.DB.brut.exec("DELETE FROM blocages");
+    /* Une demande vit 60 jours. */
+    await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cB });
+    avancer(61 * 864e5);
+    T("demande de plus de 60 jours : effacee", (await amisDe(cC)).demandes.length === 0 && lignes("SELECT COUNT(*) AS n FROM demandes_amis")[0].n === 0);
+    avancer(-61 * 864e5);
+    /* Sans la table (code publie avant sa creation) : l'ajout direct d'avant. */
+    await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA });
+    env.DB.brut.exec("DROP TABLE demandes_amis");
+    r = await appel("POST", "ami-ajouter", { pseudo: "Chloe" }, { cookie: cA });
+    T("sans la table des demandes : ajout direct, la liste se lit toujours", r.s === 201 && (await amisDe(cA)).amis.some(x => x.p === "Chloe") && (await amisDe(cA)).demandes.length === 0);
+    await appel("POST", "ami-retirer", { pseudo: "Chloe" }, { cookie: cA });
 
     /* Recherche de membres par le debut du pseudo (2026-11-18). */
     {

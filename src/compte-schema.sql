@@ -120,6 +120,17 @@ CREATE TABLE IF NOT EXISTS amis (
 );
 CREATE INDEX IF NOT EXISTS amis_ami ON amis (ami_id);
 
+-- Demandes d'amis (2026-11-19) : « Ajouter » envoie une demande, que l'autre
+-- accepte ou refuse. Effacee a la reponse, au bout de 60 jours, ou avec le
+-- compte de l'un ou de l'autre. 30 demandes en attente au plus par compte.
+CREATE TABLE IF NOT EXISTS demandes_amis (
+  de INTEGER NOT NULL,
+  a INTEGER NOT NULL,
+  cree INTEGER NOT NULL,
+  PRIMARY KEY (de, a)
+);
+CREATE INDEX IF NOT EXISTS demandes_amis_a ON demandes_amis (a, cree);
+
 -- Mini-enquetes de satisfaction (2026-11-17) : une question, une note de 1 a
 -- 5, un commentaire facultatif (500 caracteres au plus). Une reponse au plus
 -- par compte tous les 25 jours. Effacees avec le compte.

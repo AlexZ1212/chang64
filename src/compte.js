@@ -884,9 +884,14 @@ async function cpjVue(par){
     if(!cpaListe)dessiner('<p class="cp-note cp-centre">'+cpE("Loading…")+"</p>");
     const a=await cpaCharger();
     if(!a){dessiner('<p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
-    if(!cpListe(a.amis).length){dessiner('<p class="cp-note cp-centre">'+cpE("No friends yet. Open a player's profile to add them.")+"</p>");return;}
+    const recues=cpListe(a.demandes).filter(x=>typeof x==="string");
+    const demandes=recues.length?'<p class="tiroir-section">'+cpE("Friend requests")+'</p><ul class="cpj-liste cpa-demandes">'+recues.map(p=>
+      '<li><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(p)+'">'+echapper(p)+"</button></span>"+
+      '<button type="button" class="cpj-inviter" data-cpa-rep="accepter" data-pseudo="'+echapper(p)+'">'+cpE("Accept")+"</button>"+
+      '<button type="button" class="cpj-inviter cpa-non" data-cpa-rep="refuser" data-pseudo="'+echapper(p)+'">'+cpE("Decline")+"</button></li>").join("")+"</ul>":"";
+    if(!cpListe(a.amis).length){dessiner(demandes+'<p class="cp-note cp-centre">'+cpE("No friends yet. Open a player's profile to add them.")+"</p>");return;}
     const la=cpListe(a.amis).concat(a.moi?[a.moi]:[]).sort((x,y)=>cpNombre(y.s)-cpNombre(x.s)||cpNombre(y.r)-cpNombre(x.r)||String(x.p).localeCompare(String(y.p)));
-    dessiner('<p class="cp-note">'+cpE("You and your friends, by puzzles solved since Monday.")+'</p><ol class="cpj-liste">'+la.map((x,i)=>{
+    dessiner(demandes+'<p class="cp-note">'+cpE("You and your friends, by puzzles solved since Monday.")+'</p><ol class="cpj-liste">'+la.map((x,i)=>{
       const m=cp&&x.p===cp.pseudo;
       return "<li"+(m?' class="cpj-moi"':"")+'><span class="cpj-rang">'+(i+1)+'</span><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(String(x.p))+'">'+echapper(String(x.p))+"</button>"+
         (m?" <em>("+cpE("You")+")</em>":x.m?" <em>("+cpE("Friend")+")</em>":"")+"</span>"+
@@ -1263,7 +1268,8 @@ async function cppOuvrir(pseudo){
     cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+
     (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
-      '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Add to my friends")+"</button>"+
+      '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)||cpaEnvoyee(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":cpaEnvoyee(j.p)?"Cancel my friend request":cpaRecue(j.p)?"Accept the friend request":"Add to my friends")+"</button>"+
+      (cpaEnvoyee(j.p)?'<p class="cp-note cpp-amis">'+cpE("Friend request sent. {name} has to accept it.").replace("{name}",echapper(String(j.p)))+"</p>":"")+
       '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer);
 }
 /* Les badges du joueur, en petites medailles (2026-11-18) : les treize
@@ -1295,23 +1301,48 @@ async function cpaCharger(force){
   const r=await cpApi("GET","amis");
   if(r.s!==200||!cp)return null;
   cpaListe=r.j;cpaT=Date.now();cpaPour=cp.pseudo;
+  cpaPoint();
   return cpaListe;
 }
 /* Ami reciproque : l'autre joueur m'a ajoute lui aussi (m rendu par le serveur). */
 function cpaReciproque(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.amis).some(x=>x.p===pseudo&&x.m));}
 function cpaEst(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.amis).some(x=>x.p===pseudo));}
+/* Demandes d'amis (2026-11-19) : celles que j'ai envoyees, celles que j'ai recues. */
+function cpaEnvoyee(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.envoyees).includes(pseudo));}
+function cpaRecue(pseudo){return !!(cp&&cpaListe&&cpaPour===cp.pseudo&&cpListe(cpaListe.demandes).includes(pseudo));}
+function cpaDemandes(){return cp&&cpaListe&&cpaPour===cp.pseudo?cpListe(cpaListe.demandes).filter(x=>typeof x==="string"):[];}
+/* Le nombre de demandes recues, a droite de « Mes amis », et le point du menu. */
+function cpaPoint(){
+  const n=cpaDemandes().length,d=$("menuAmisDetail"),p=$("btnMenuPoint");
+  if(d)d.textContent=n?String(n):"";
+  if(p&&n)p.hidden=false;
+}
+/* Repondre a une demande depuis « Mes amis ». */
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-cpa-rep]");
+  if(!b||!cp)return;
+  b.disabled=true;
+  const oui=b.dataset.cpaRep==="accepter";
+  const r=await cpApi("POST",oui?"ami-accepter":"ami-refuser",{pseudo:b.dataset.pseudo||""});
+  if(oui&&(r.s===200||r.s===201))cpBadge("mb_ami");
+  await cpaCharger(true);
+  const v=$("menuJoueursVue");
+  if(cpjPar==="amis"&&v&&!v.hidden)cpjVue();
+});
+setTimeout(()=>{if(cp)cpaCharger();},6000);
 document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-cpa]");
   if(!b||!cp)return;
   const pseudo=b.dataset.pseudo||"",ajout=b.dataset.cpa==="ajouter";
   b.disabled=true;
   const r=await cpApi("POST",ajout?"ami-ajouter":"ami-retirer",{pseudo:pseudo});
-  if(r.s!==200&&r.s!==201){
+  if(r.s!==200&&r.s!==201&&r.s!==202){
     b.disabled=false;
     const m=$("cppMsg");if(m)m.textContent=t(r.s===429?"Your friends list is full.":"Could not load the list. Try again later.");
     return;
   }
-  if(ajout)cpBadge("mb_ami");
+  /* Le badge vient quand on est vraiment amis, pas a la simple demande. */
+  if(ajout&&r.j&&r.j.etat!=="demande")cpBadge("mb_ami");
   await cpaCharger(true);
   const f=$("cpProfil");
   if(f&&!f.hidden&&f.dataset.pseudo===pseudo)cppOuvrir(pseudo);

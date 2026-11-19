@@ -317,6 +317,53 @@ const avancer = ms => { decalage += ms; };
   await faux.envoyer(g.id, g.B, { t: "coup", c: "e2e4" });
   T("la limite levee, la partie reprend dans l'etat garde", g.N.dernier().coups.join() === "e2e4");
 
+  /* Adversaire au hasard (2026-11-19) : salle d'attente par cadence, priorite
+     au niveau le plus proche. */
+  console.log("Adversaire au hasard");
+  {
+    const chercher = async (qui, cad, origine) => { const r = await appel("POST", "chercher", { cad }, qui, origine); return Object.assign({ s: r.status }, r.status === 200 ? await r.json() : {}); };
+    const fin = qui => appel("POST", "chercher-fin", {}, qui);
+    const idEve = membre("Eve"), idFay = membre("Fay"), idGus = membre("Gus");
+    env.DB.brut.prepare("UPDATE comptes SET note = 800 WHERE id = ?").run(idEve);
+    env.DB.brut.prepare("UPDATE comptes SET note = 1500 WHERE id = ?").run(idFay);
+    env.DB.brut.prepare("UPDATE comptes SET note = 900 WHERE id = ?").run(idGus);
+    T("chercher sans session : refuse (401)", (await chercher(null, 0)).s === 401);
+    T("chercher depuis un autre site : refuse (403)", (await chercher("Eve", 0, "https://ailleurs.example")).s === 403);
+    T("cadence inconnue : refusee (400)", (await chercher("Eve", 9)).s === 400);
+    const e1 = await chercher("Eve", 0);
+    T("le premier qui cherche attend dans une partie ouverte", e1.s === 200 && e1.attente === true && /^[a-z2-9]{12}$/.test(e1.id), JSON.stringify(e1));
+    T("il peut s'y asseoir : la partie attend un adversaire", (await ouvrir(e1.id, "Eve")).ws.dernier().phase === "attente");
+    T("redemander en attendant : la meme partie, pas une nouvelle", (await chercher("Eve", 0)).id === e1.id);
+    T("une autre cadence ne se melange pas", (await chercher("Fay", 1)).attente === true);
+    await fin("Fay");
+    const g1 = await chercher("Gus", 0);
+    T("le second, a la meme cadence, recoit la partie du premier", g1.s === 200 && g1.attente === false && g1.id === e1.id, JSON.stringify(g1));
+    const wsG = (await ouvrir(e1.id, "Gus")).ws;
+    T("il la rejoint : la partie commence entre les deux", wsG && wsG.dernier().phase === "debut" && [wsG.dernier().b, wsG.dernier().nr].sort().join() === "Eve,Gus");
+    T("la salle est vide ensuite : le suivant attend a son tour", (await chercher("Fay", 0)).attente === true);
+    /* Deux membres attendent a des cadences... non : a la meme, c'est impossible
+       sans blocage. On pose donc deux attentes a la main pour verifier le choix. */
+    await fin("Fay");
+    const salle = faux.objets.get("salle-attente").donnees;
+    salle.set("salle", JSON.stringify([{ cad: 2, j: idFay, note: 1500, id: "aaaaaaaaaaaa", t: Date.now() }, { cad: 2, j: idGus, note: 900, id: "bbbbbbbbbbbb", t: Date.now() }]));
+    const lire = () => JSON.parse(faux.objets.get("salle-attente").donnees.get("salle") || "[]");
+    T("plusieurs en attente : le niveau le plus proche d'abord", (await chercher("Eve", 2)).id === "bbbbbbbbbbbb");
+    T("celui qui reste attend toujours", lire().length === 1 && lire()[0].j === idFay);
+    /* Blocage : deux membres qui se sont bloques ne sont jamais reunis. */
+    env.DB.brut.prepare("INSERT INTO blocages (compte_id, bloque_id, cree) VALUES (?, ?, 1)").run(idFay, idEve);
+    const e2 = await chercher("Eve", 2);
+    T("un membre qui m'a bloque n'est pas propose", e2.attente === true && e2.id !== "aaaaaaaaaaaa");
+    env.DB.brut.exec("DELETE FROM blocages");
+    await fin("Eve"); await fin("Fay");
+    /* Sans nouvelles pendant 40 secondes, on sort de la salle. */
+    const e3 = await chercher("Eve", 0);
+    avancer(41000);
+    const f3 = await chercher("Fay", 0);
+    T("quarante secondes sans nouvelles : on n'est plus propose", f3.attente === true && f3.id !== e3.id);
+    await fin("Fay");
+    T("arreter de chercher vide sa place", lire().length === 0);
+  }
+
   console.log("\n" + ok + " OK, " + ko + " FAIL");
   process.exit(ko ? 1 : 0);
 })().catch(e => { console.log("  FAIL exception : " + (e && e.stack || e)); process.exit(1); });

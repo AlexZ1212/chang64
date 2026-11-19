@@ -35,6 +35,7 @@ let directJeu = null, directSan = [], directVu = "", directCoupe = false, direct
 let directInvite = "";            /* pseudo du membre que je viens d'inviter */
 const directDeclinees = {};       /* invitations deja montrees ou refusees sur cette page */
 let directGuet = 0;
+let directHasard = null;          /* je cherche un adversaire au hasard : { cad, depuis } */
 let directAnime = "";              /* dernier coup deja anime : partie/manche/nombre de coups */
 
 function directActif() { return !!directId && mode === "friend"; }
@@ -146,6 +147,7 @@ function directRecu(e) {
     directSan.push(directJeu.san(m)); directJeu.makeMove(m);
   }
   if (neuve) { flipped = e.moi === "n"; resultDismissed = false; directVu = ""; }
+  if (e.phase !== "attente") directHasard = null;
   if ((neuve && e.phase !== "attente") || debutee) { try { SON.debut(); } catch (x) {} }
   if (mode === "friend") directMontrer();
 }
@@ -173,7 +175,8 @@ function directMontrer() {
   directPendules();
   const trait = e.coups.length % 2 ? "n" : "b", autre = e.moi === "b" ? "n" : "b";
   if (e.phase === "attente") {
-    directDire(e.inv || directInvite ? t("{name} is invited and will see it if the site is open. You can also send this link.", { name: e.inv || directInvite }) : t("Send this link to your opponent. The game starts when they open it."));
+    directDire(directHasard ? (Date.now() - directHasard.depuis > 60000 ? t("Nobody is looking right now. Keep this page open, or send this link to a friend.") : t("Looking for an opponent close to your level… You can also send this link to a friend."))
+      : e.inv || directInvite ? t("{name} is invited and will see it if the site is open. You can also send this link.", { name: e.inv || directInvite }) : t("Send this link to your opponent. The game starts when they open it."));
     $("directAdresse").value = directUrl();
     shareButtons($("directPartage"), directUrl(), t("Play me live on chang64:"), true);
   } else if (e.phase === "fin") {
@@ -282,6 +285,7 @@ function directBrancher(id) {
   directPanneau();
 }
 function directQuitter(silence) {
+  if (directHasard && !silence) { directHasard = null; directChercherFin(); }
   if (directF) directF.fermer();
   const etait = !!directId;
   directF = null; directE = null; directId = ""; directJeu = null; directSan = [];
@@ -301,6 +305,28 @@ async function directCreerPartie() {
     trop: "You have created many games. Try again in an hour.", invitations: "Too many invitations waiting for this member. Try again later.", limite: "Live games are closed until tomorrow. The rest of the site still works.", reseau: "No connection. Check your network and try again." }[r.erreur] || "Something went wrong. Try again later.");
   directPanneau(); directDire(directMessage);
 }
+/* ---------- Adversaire au hasard ---------- */
+const DIRECT_ERREURS = { session: "Create a free account to play live against other members.", adversaire: "No member has this username.",
+  trop: "You have created many games. Try again in an hour.", invitations: "Too many invitations waiting for this member. Try again later.", limite: "Live games are closed until tomorrow. The rest of the site still works.", reseau: "No connection. Check your network and try again." };
+async function directChercherPartie() {
+  const b = $("btnDirectHasard"); if (b) b.disabled = true;
+  const r = await directChercher(directCad);
+  if (b) b.disabled = false;
+  if (!r.id) { directMessage = t(DIRECT_ERREURS[r.erreur] || "Something went wrong. Try again later."); directPanneau(); directDire(directMessage); return; }
+  const h = { cad: directCad, depuis: Date.now() };
+  directBrancher(r.id);
+  directHasard = r.attente ? h : null;
+}
+/* Tant que j'attends, je me rappelle a la salle toutes les 15 secondes ; si
+   elle me donne une autre partie, c'est qu'un adversaire m'y attend. */
+setInterval(async () => {
+  const h = directHasard;
+  if (!h || !directId || !directE || directE.phase !== "attente") return;
+  const r = await directChercher(h.cad);
+  if (directHasard !== h) return;
+  if (r.id && r.id !== directId) { directBrancher(r.id); directHasard = r.attente ? h : null; }
+  else if (directActif()) directMontrer();
+}, 15000);
 /* ---------- Invitation recue ---------- */
 /* La page vient voir : a l'ouverture, au retour sur l'onglet, puis une fois
    par minute tant qu'elle est a l'ecran. Jamais pendant une partie ou un
@@ -333,6 +359,7 @@ function directLire() {
 }
 if (DIRECT_OUVERT && document.getElementById("directPanel")) {
   $("btnDirectCreer").onclick = directCreerPartie;
+  if ($("btnDirectHasard")) $("btnDirectHasard").onclick = directChercherPartie;
   $("btnDirectNulle").onclick = () => { if (directF) directF.nulle(); };
   $("btnDirectAccepter").onclick = () => { if (directF) directF.nulle(); };
   $("btnDirectRefuser").onclick = () => { if (directF) directF.nulleNon(); };

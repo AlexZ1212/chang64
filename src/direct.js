@@ -45,6 +45,25 @@ async function directCreer(cad, pseudo) {
     return { erreur: d && d.erreur || (r.status === 429 ? "trop" : "reseau") };
   } catch (e) { return { erreur: "reseau" }; }
 }
+/* Adversaire au hasard : { id, attente } (attente = personne encore, la partie
+   est ouverte et j'y attends), ou { erreur }. A redemander tant qu'on attend. */
+async function directChercher(cad) {
+  try {
+    const r = await fetch(directAdresse("chercher"), {
+      method: "POST", credentials: "same-origin",
+      headers: Object.assign({ "Content-Type": "application/json" }, directEntetes || {}), body: JSON.stringify({ cad })
+    });
+    const d = await r.json().catch(() => null);
+    if (r.ok && d && d.id) return { id: d.id, attente: !!d.attente };
+    return { erreur: d && d.erreur || (r.status === 429 ? "trop" : "reseau") };
+  } catch (e) { return { erreur: "reseau" }; }
+}
+function directChercherFin() {
+  return fetch(directAdresse("chercher-fin"), {
+    method: "POST", credentials: "same-origin",
+    headers: Object.assign({ "Content-Type": "application/json" }, directEntetes || {}), body: "{}"
+  }).catch(() => {});
+}
 /* Les invitations recues, les plus recentes d'abord : [{id, p, cad, cree}]. */
 async function directInvitations() {
   try {

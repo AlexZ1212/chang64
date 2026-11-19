@@ -1,0 +1,230 @@
+/* Verification automatique de chang64.
+   Lancement : node tests/check_partie_directe.js
+
+   Ce que ce test garde (2026-11-19) : la partie en direct entre deux membres
+   (worker-parties/index.js), executee contre une base SQLite en memoire et un
+   faux Cloudflare (worker-parties/faux_cloudflare.js). Membres seulement ;
+   blocage applique ; coups verifies par le serveur ; pendule tenue par le
+   serveur, avec increment ; premier coup dans la minute sinon partie annulee ;
+   abandon, nulle proposee et acceptee, revanche couleurs inversees ; l'objet
+   peut s'endormir entre deux messages ; peu d'ecritures ; message clair quand
+   la limite du jour est atteinte. */
+const path = require("path"), { pathToFileURL } = require("url"), crypto = require("crypto");
+process.removeAllListeners("warning"); process.on("warning", () => {});
+
+let ok = 0, ko = 0;
+const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d !== undefined ? "  -> " + d : "")); } };
+
+const { fausseD1 } = require("../serveur_local.js");
+const { fauxCloudflare } = require("../worker-parties/faux_cloudflare.js");
+const VRAI_NOW = Date.now;
+let decalage = 0;
+Date.now = () => VRAI_NOW() + decalage;
+const avancer = ms => { decalage += ms; };
+
+(async () => {
+  const mod = await import(pathToFileURL(path.join(__dirname, "..", "worker-parties", "index.js")).href);
+  const env = { DB: fausseD1() };
+  const faux = fauxCloudflare(mod.Partie, env);
+  env.PARTIES = faux.espace;
+
+  /* Membres poses directement dans la base, avec une session chacun. */
+  const cookies = {};
+  let numero = 0;
+  function membre(pseudo) {
+    const jeton = crypto.randomBytes(32).toString("base64url"), id = ++numero, now = Date.now();
+    env.DB.brut.prepare("INSERT INTO comptes (id, cle, pseudo, pin_hash, secours_hash, cree, vu) VALUES (?, ?, ?, 'x', 'x', ?, ?)").run(id, pseudo.toLowerCase(), pseudo, now, now);
+    env.DB.brut.prepare("INSERT INTO jetons (hash, compte_id, cree, vu) VALUES (?, ?, ?, ?)").run(crypto.createHash("sha256").update(jeton).digest("base64url"), id, now, now);
+    cookies[pseudo] = "__Secure-c64=" + jeton;
+    return id;
+  }
+  const idAnna = membre("Anna"), idBob = membre("Bob"), idCleo = membre("Cleo"), idDan = membre("Dan");
+
+  const appel = (methode, route, corps, qui, origine) => mod.default.fetch(new Request("https://chang64.com/api/partie/" + route, {
+    method: methode,
+    headers: Object.assign({ Origin: origine || "https://chang64.com" }, qui ? { Cookie: cookies[qui] } : {}, corps ? { "Content-Type": "application/json" } : {}),
+    body: corps ? JSON.stringify(corps) : undefined
+  }), env);
+  async function creer(qui, cad, adv) {
+    const r = await appel("POST", "creer", Object.assign({ cad }, adv ? { adv } : {}), qui);
+    return { s: r.status, id: r.status === 200 ? (await r.json()).id : "" };
+  }
+  async function ouvrir(id, qui, origine) {
+    const h = { Upgrade: "websocket" };
+    if (origine !== null) h.Origin = origine || "https://chang64.com";
+    if (qui) h.Cookie = cookies[qui];
+    const r = await mod.default.fetch(new Request("https://chang64.com/api/partie/ws?id=" + id, { headers: h }), env);
+    return { s: r.status, ws: r.webSocket || null };
+  }
+  /* Deux membres assis, rendus dans l'ordre [blancs, noirs]. */
+  async function partie(cad, a, b) {
+    const { id } = await creer(a || "Anna", cad);
+    const x = (await ouvrir(id, a || "Anna")).ws, y = (await ouvrir(id, b || "Bob")).ws;
+    return x.dernier().moi === "b" ? { id, B: x, N: y } : { id, B: y, N: x };
+  }
+  const jouer = (g, coups) => coups.split(" ").reduce((p, c, i) => p.then(() => faux.envoyer(g.id, i % 2 ? g.N : g.B, { t: "coup", c })), Promise.resolve());
+
+  console.log("Acces");
+  T("creer sans session : refuse (401)", (await creer(null, 0)).s === 401);
+  T("creer depuis un autre site : refuse (403)", (await appel("POST", "creer", { cad: 0 }, "Anna", "https://ailleurs.example")).status === 403);
+  T("cadence inconnue : refusee (400)", (await creer("Anna", 7)).s === 400);
+  let c = await creer("Anna", 0);
+  T("creer : rend un identifiant de 12 signes", c.s === 200 && /^[a-z2-9]{12}$/.test(c.id), c.id);
+  T("rejoindre sans session : refuse (401)", (await ouvrir(c.id, null)).s === 401);
+  T("WebSocket sans origine : refuse (403)", (await ouvrir(c.id, "Bob", null)).s === 403);
+  T("WebSocket depuis un autre site : refuse (403)", (await ouvrir(c.id, "Bob", "https://ailleurs.example")).s === 403);
+  T("partie inconnue : 404", (await ouvrir("aaaaaaaaaaaa", "Bob")).s === 404);
+  T("route inconnue : 404", (await appel("GET", "autre", null, "Anna")).status === 404);
+
+  console.log("Attente et arrivee");
+  let a = (await ouvrir(c.id, "Anna")).ws;
+  T("la creatrice attend son adversaire", a.dernier().phase === "attente" && a.dernier().cad.join("+") === "600+0");
+  let b = (await ouvrir(c.id, "Bob")).ws;
+  let e = a.dernier();
+  T("a l'arrivee du second, la partie commence", e.phase === "debut" && [e.b, e.nr].sort().join() === "Anna,Bob" && e.tb === 600000 && e.tn === 600000);
+  T("chacun connait sa couleur", a.dernier().moi !== b.dernier().moi && "bn".includes(b.dernier().moi));
+  T("les deux sont presents", e.la.b && e.la.n);
+  T("un troisieme membre est refuse (403)", (await ouvrir(c.id, "Cleo")).s === 403);
+  const a2 = (await ouvrir(c.id, "Anna")).ws;
+  T("un joueur peut ouvrir un second onglet", a2 && a2.dernier().moi === a.dernier().moi);
+
+  console.log("Blocage et invitation");
+  env.DB.brut.prepare("INSERT INTO blocages (compte_id, bloque_id, cree) VALUES (?, ?, ?)").run(idCleo, idDan, Date.now());
+  c = await creer("Dan", 0);
+  T("un membre bloque ne rejoint pas la partie (404)", (await ouvrir(c.id, "Cleo")).s === 404);
+  c = await creer("Cleo", 0);
+  T("ni dans l'autre sens", (await ouvrir(c.id, "Dan")).s === 404);
+  T("inviter quelqu'un qui m'a bloque : comme un pseudo inconnu (404)", (await creer("Dan", 0, "Cleo")).s === 404 && (await creer("Dan", 0, "Personne")).s === 404);
+  T("s'inviter soi-meme : refuse", (await creer("Dan", 0, "dan")).s === 404);
+  c = await creer("Anna", 1, "bob");
+  T("inviter par pseudo, sans tenir compte des majuscules", c.s === 200);
+  T("la place est reservee a l'invite", (await ouvrir(c.id, "Cleo")).s === 403 && (await ouvrir(c.id, "Bob")).s === 101);
+
+  console.log("Coups et pendule");
+  let g = await partie(1);
+  await faux.envoyer(g.id, g.N, { t: "coup", c: "e7e5" });
+  T("les noirs ne jouent pas en premier", g.B.dernier().coups.length === 0);
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "e2e5" });
+  T("un coup illegal est refuse", g.B.dernier().t === "erreur" && g.B.dernier().e === "coup" && g.N.dernier().coups.length === 0);
+  avancer(20e3);
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "e2e4" });
+  avancer(20e3);
+  await faux.envoyer(g.id, g.N, { t: "coup", c: "e7e5" });
+  e = g.B.dernier();
+  T("les deux premiers coups ne coutent pas de temps", e.phase === "jeu" && e.tb === 300000 && e.tn === 300000 && e.coups.join() === "e2e4,e7e5");
+  avancer(10e3);
+  faux.dormir();
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "g1f3" });
+  e = g.N.dernier();
+  T("apres un sommeil de l'objet, le coup passe et la pendule est juste (10 s jouees, 3 s rendues)", e.coups.length === 3 && Math.abs(e.tb - 293000) < 50 && e.tn === 300000, e.tb);
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "f3e5" });
+  T("on ne joue pas deux fois de suite", g.N.dernier().coups.length === 3);
+  await faux.envoyer(g.id, g.N, "pas du json");
+  await faux.envoyer(g.id, g.N, "x".repeat(300));
+  T("un message illisible est ignore", g.N.dernier().coups.length === 3);
+
+  console.log("Fin au temps");
+  avancer(301e3);
+  T("l'alarme sonne", (await faux.sonner(Date.now())) >= 1);
+  e = g.B.dernier();
+  T("temps ecoule : les noirs perdent", e.phase === "fin" && e.fin.r === "1-0" && e.fin.m === "temps" && e.tn === 0, JSON.stringify(e.fin));
+  await faux.envoyer(g.id, g.N, { t: "coup", c: "b8c6" });
+  T("plus de coup apres la fin", g.B.dernier().coups.length === 3);
+  g = await partie(0);
+  await jouer(g, "e2e4 e7e5");
+  avancer(601e3);
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "g1f3" });
+  e = g.N.dernier();
+  T("un coup arrive trop tard perd au temps, meme sans alarme", e.phase === "fin" && e.fin.r === "0-1" && e.fin.m === "temps" && e.coups.length === 2);
+
+  console.log("Premier coup dans la minute");
+  g = await partie(0);
+  avancer(61e3);
+  await faux.sonner(Date.now());
+  e = g.B.dernier();
+  T("pas de premier coup en une minute : partie annulee, personne ne perd", e.phase === "fin" && e.fin.m === "annulee" && e.fin.r === "");
+  g = await partie(0);
+  avancer(30e3);
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "d2d4" });
+  avancer(45e3);
+  await faux.sonner(Date.now());
+  T("la minute des noirs part du coup des blancs", g.B.dernier().phase === "debut");
+  avancer(20e3);
+  await faux.sonner(Date.now());
+  T("les noirs ne repondent pas : annulee aussi", g.B.dernier().fin && g.B.dernier().fin.m === "annulee");
+
+  console.log("Mat, abandon, nulle");
+  g = await partie(0);
+  await jouer(g, "f2f3 e7e5 g2g4 d8h4");
+  e = g.B.dernier();
+  T("mat : la partie est finie, les noirs gagnent", e.phase === "fin" && e.fin.r === "0-1" && e.fin.m === "mat");
+  g = await partie(0);
+  await faux.envoyer(g.id, g.B, { t: "abandon" });
+  T("quitter avant que chacun ait joue annule la partie", g.N.dernier().fin.m === "annulee");
+  g = await partie(0);
+  await jouer(g, "e2e4 e7e5");
+  await faux.envoyer(g.id, g.N, { t: "abandon" });
+  T("abandon des noirs : les blancs gagnent", g.B.dernier().fin.r === "1-0" && g.B.dernier().fin.m === "abandon");
+  g = await partie(0);
+  await jouer(g, "e2e4 e7e5");
+  await faux.envoyer(g.id, g.B, { t: "nulle" });
+  T("nulle proposee par les blancs", g.N.dernier().nulle === "b" && g.N.dernier().phase === "jeu");
+  await faux.envoyer(g.id, g.B, { t: "nulle" });
+  T("on n'accepte pas sa propre proposition", g.N.dernier().phase === "jeu");
+  await faux.envoyer(g.id, g.N, { t: "nulle-non" });
+  T("refusee : la proposition disparait", g.B.dernier().nulle === null);
+  await faux.envoyer(g.id, g.B, { t: "nulle" });
+  T("une seule proposition par coup", g.N.dernier().nulle === null);
+  await jouer(g, "g1f3");
+  await faux.envoyer(g.id, g.N, { t: "nulle" });
+  await faux.envoyer(g.id, g.B, { t: "nulle" });
+  T("proposee puis acceptee : nulle par accord", g.B.dernier().fin.r === "1/2" && g.B.dernier().fin.m === "accord");
+  g = await partie(0);
+  await jouer(g, "g1f3 g8f6 f3g1 f6g8 g1f3 g8f6 f3g1 f6g8");
+  T("trois fois la meme position : nulle", g.B.dernier().phase === "fin" && g.B.dernier().fin.m === "repetition", JSON.stringify(g.B.dernier().fin));
+
+  console.log("Revanche et reconnexion");
+  const blancsAvant = g.B.dernier().b;
+  await faux.envoyer(g.id, g.B, { t: "revanche" });
+  T("revanche demandee par un seul : on attend", g.N.dernier().phase === "fin" && g.N.dernier().rev.b === true);
+  faux.dormir();
+  await faux.envoyer(g.id, g.N, { t: "revanche" });
+  e = g.B.dernier();
+  T("revanche acceptee : nouvelle partie, couleurs inversees", e.phase === "debut" && e.n === 2 && e.coups.length === 0 && e.nr === blancsAvant && e.moi === "n" && e.tb === 600000);
+  await faux.envoyer(g.id, g.N, { t: "coup", c: "e2e4" });
+  T("l'ancien joueur des noirs joue maintenant les blancs", g.B.dernier().coups.join() === "e2e4");
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "e7e5" });
+  await faux.quitter(g.id, g.B);
+  T("un joueur parti est signale a l'autre, la partie continue", g.N.dernier().la.n === false && g.N.dernier().phase === "jeu");
+  const qui = g.N.dernier().nr;
+  avancer(5e3);
+  const retour = (await ouvrir(g.id, qui)).ws;
+  e = retour.dernier();
+  T("il revient pendant que la pendule tourne et retrouve la partie", e.moi === "n" && e.coups.length === 2 && e.la.n === true && e.h - e.maj >= 5000);
+
+  console.log("Ecritures et menage");
+  g = await partie(0);
+  const avant = faux.ecritures;
+  await jouer(g, "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6 d2d3 d7d6");
+  T("dix coups = dix lignes ecrites, pas d'alarme reposee", faux.ecritures - avant === 10, faux.ecritures - avant);
+  c = await creer("Anna", 0);
+  a = (await ouvrir(c.id, "Anna")).ws;
+  avancer(31 * 60e3);
+  await faux.sonner(Date.now());
+  T("personne ne vient en 30 minutes : la partie est effacee", a.pair.ferme && faux.objets.get(c.id).donnees.size === 0 && (await ouvrir(c.id, "Bob")).s === 404);
+  T("une partie finie est effacee apres 30 minutes", faux.objets.get(g.id).donnees.size > 0 && (await faux.envoyer(g.id, g.B, { t: "abandon" }), avancer(31 * 60e3), await faux.sonner(Date.now()), await faux.sonner(Date.now()), faux.objets.get(g.id).donnees.size === 0));
+
+  console.log("Limite du jour");
+  g = await partie(0);
+  faux.panne = true;
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "e2e4" });
+  T("ecriture refusee : le joueur recoit un message clair", g.B.dernier().t === "erreur" && g.B.dernier().e === "limite");
+  const r = await appel("POST", "creer", { cad: 0 }, "Anna");
+  T("creer une partie repond 503 « limite », sans planter", r.status === 503 && (await r.json()).erreur === "limite");
+  faux.panne = false;
+  await faux.envoyer(g.id, g.B, { t: "coup", c: "e2e4" });
+  T("la limite levee, la partie reprend dans l'etat garde", g.N.dernier().coups.join() === "e2e4");
+
+  console.log("\n" + ok + " OK, " + ko + " FAIL");
+  process.exit(ko ? 1 : 0);
+})().catch(e => { console.log("  FAIL exception : " + (e && e.stack || e)); process.exit(1); });

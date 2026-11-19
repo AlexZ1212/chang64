@@ -107,7 +107,16 @@ function menuStats(){
      "Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.",
      "It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's."].map(x=>"<p>"+echapper(t(x))+"</p>").join("")+"</details>"+
     (estMembre()?'<p class="tiroir-section">'+echapper(t("Puzzles solved, last 30 days"))+"</p>"+
-    '<div class="graph menu-graphe" id="menuJoursGraph"></div>':""));
+    '<div class="graph menu-graphe" id="menuJoursGraph"></div>':"")+
+    /* Parties en direct (2026-11-19) : comptees par le serveur, lues sur la fiche du membre. */
+    '<p class="cp-note" id="menuDirect" hidden></p>');
+  if(estMembre()&&typeof cppLire==="function"&&typeof cp!=="undefined"&&cp){
+    cppLire(cp.pseudo).then(j=>{
+      const e=menuEl("menuDirect"),d=j&&j.dir;
+      if(!e||!d||!(d.v+d.n+d.d>0))return;
+      e.textContent=t("Live games: {v} won, {n} drawn, {d} lost",{v:d.v,n:d.n,d:d.d});e.hidden=false;
+    }).catch(()=>{});
+  }
   drawRatingGraph(menuEl("menuRatingGraph"));
   if(estMembre())menuJoursGraphe(menuEl("menuJoursGraph"));
   menuChiffres();

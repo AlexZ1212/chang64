@@ -623,7 +623,7 @@ const avancer = ms => { decalage += ms; };
     T("moins de 10 exercices : absent du tableau des notes", !r.j.joueurs.some(x => ["Joueur1", "Joueur2", "Joueur3"].includes(x.p)));
     for (const par of ["resolus", "serie", "badges", "sprint"]) { r = await tableau(par); T("tableau " + par, r.s === 200 && r.j.joueurs.length > 0 && r.j.joueurs.every((x, i, l) => !i || l[i - 1].v >= x.v)); }
     r = await tableau("tout");
-    T("tableau complet : les six chiffres de chaque joueur, rien d'autre", r.s === 200 && r.j.par === "tout" && r.j.joueurs.length > 0 && r.j.joueurs.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k"), JSON.stringify(r.j && r.j.joueurs[0]));
+    T("tableau complet : les sept chiffres de chaque joueur, rien d'autre", r.s === 200 && r.j.par === "tout" && r.j.joueurs.length > 0 && r.j.joueurs.every(x => Object.keys(x).join() === "p,s,n,r,j,b,k,d"), JSON.stringify(r.j && r.j.joueurs[0]));
     const j59 = r.j.joueurs.find(x => x.p === "Joueur59"), j60 = r.j.joueurs.find(x => x.p === "Joueur60");
     T("tableau complet : valeurs exactes, semaine passee comptee zero", j59 && j59.s === 59 && j59.n === 859 && j59.r === 177 && j60 && j60.s === 0 && j60.n === 860, JSON.stringify([j59, j60]));
     T("tableau complet : reunion des six tableaux, sans doublon", r.j.joueurs.length <= 300 && new Set(r.j.joueurs.map(x => x.p)).size === r.j.joueurs.length);
@@ -638,7 +638,7 @@ const avancer = ms => { decalage += ms; };
     };
     r = await profil("j60");
     T("profil : sans session, 200", r.s === 200 && r.j.p === "Joueur60", r.texte);
-    T("profil : rien d'autre que pseudo, mois, six chiffres et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,rangs,bl,pays" && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
+    T("profil : rien d'autre que pseudo, mois, sept chiffres, parties en direct et rangs", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,d,dir,rangs,bl,pays" && Object.keys(r.j.dir).join() === "v,n,d" && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k,d" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
     T("profil : premier a la note et aux exercices", r.j.n === 860 && r.j.rangs.n === 1 && r.j.r === 180 && r.j.rangs.r === 1);
     T("profil : rang = 1 + ceux qui font strictement mieux", r.j.j === 6 && r.j.rangs.j === 13, JSON.stringify(r.j.rangs));
     T("profil : hors tableau (zero, ou semaine passee) : pas de rang", r.j.s === 0 && r.j.rangs.s === null && r.j.rangs.b === null && r.j.rangs.k === null, JSON.stringify(r.j));

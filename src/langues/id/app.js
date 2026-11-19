@@ -1133,5 +1133,9 @@ module.exports = {
 "{name} ran out of time.":"Waktu {name} habis.",
 "You ran out of time.":"Waktumu habis.",
 "{n} minutes each, plus {s} seconds added after every move.":"Masing-masing {n} menit, ditambah {s} detik setelah setiap langkah.",
-"{n} minutes each for the whole game.":"Masing-masing {n} menit untuk seluruh permainan."
+"{n} minutes each for the whole game.":"Masing-masing {n} menit untuk seluruh permainan.",
+/* Resultats des parties en direct (2026-11-19). */
+"Live games won":"Permainan langsung dimenangkan",
+"Live wins":"Langsung",
+"Live games: {v} won, {n} drawn, {d} lost":"Permainan langsung: {v} menang, {n} remis, {d} kalah"
 };

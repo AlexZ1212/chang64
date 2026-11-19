@@ -1135,5 +1135,9 @@ module.exports = {
 "{name} ran out of time.":"{name} se ha quedado sin tiempo.",
 "You ran out of time.":"Te has quedado sin tiempo.",
 "{n} minutes each, plus {s} seconds added after every move.":"{n} minutos cada uno, más {s} segundos añadidos tras cada jugada.",
-"{n} minutes each for the whole game.":"{n} minutos cada uno para toda la partida."
+"{n} minutes each for the whole game.":"{n} minutos cada uno para toda la partida.",
+/* Resultats des parties en direct (2026-11-19). */
+"Live games won":"Partidas en directo ganadas",
+"Live wins":"En directo",
+"Live games: {v} won, {n} drawn, {d} lost":"Partidas en directo: {v} ganadas, {n} tablas, {d} perdidas"
 };

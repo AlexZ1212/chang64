@@ -1133,5 +1133,9 @@ module.exports = {
 "{name} ran out of time.":"{name} adlı oyuncunun süresi bitti.",
 "You ran out of time.":"Süren bitti.",
 "{n} minutes each, plus {s} seconds added after every move.":"Kişi başı {n} dakika, her hamleden sonra {s} saniye eklenir.",
-"{n} minutes each for the whole game.":"Tüm oyun için kişi başı {n} dakika."
+"{n} minutes each for the whole game.":"Tüm oyun için kişi başı {n} dakika.",
+/* Resultats des parties en direct (2026-11-19). */
+"Live games won":"Kazanılan canlı oyunlar",
+"Live wins":"Canlı",
+"Live games: {v} won, {n} drawn, {d} lost":"Canlı oyunlar: {v} galibiyet, {n} beraberlik, {d} mağlubiyet"
 };

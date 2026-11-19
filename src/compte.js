@@ -861,7 +861,7 @@ setTimeout(cpDemarrer,1200);
    seuls les joueurs qui ont un compte y figurent. La ligne du joueur
    connecte est mise en avant. Chaque tableau est garde une minute ici, cinq
    sur le serveur. */
-const CPJ=[["semaine","This week"],["note","Rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"]];
+const CPJ=[["semaine","This week"],["note","Rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Live games won"]];
 let cpjPar="semaine",cpjCache={};
 const CPL=["Pawn","Knight","Bishop","Rook","Queen"];
 async function cpjVue(par){
@@ -957,7 +957,7 @@ async function cpjVue(par){
    telephone il s'ouvre en tournant l'appareil : c'est la seule exception a
    l'ecran "Redresse ton telephone" (html.joueurs-ouverts, voir le CSS). Sur
    ordinateur et tablette, le bouton "Toutes les stats" l'ouvre. */
-const CPJ_COLONNES=[["s","This week"],["n","Rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"]];
+const CPJ_COLONNES=[["s","This week"],["n","Rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Live wins"]];
 let cpjTout=null,cpjToutT=0,cpjTri="r",cpjSens=-1;
 function cpjGrandDessiner(){
   const g=$("cpjGrand");if(!g)return;
@@ -1250,7 +1250,10 @@ async function cppOuvrir(pseudo){
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";
-    }).join("")+"</ul>"+cppBadges(j.bl)+
+    }).join("")+"</ul>"+
+    /* Parties en direct : le detail, des qu'une partie a compte. */
+    (cpNombre(cpObjet(j.dir).v)+cpNombre(cpObjet(j.dir).n)+cpNombre(cpObjet(j.dir).d)>0?'<p class="cp-note cpp-direct">'+echapper(t("Live games: {v} won, {n} drawn, {d} lost",{v:cpNombre(j.dir.v),n:cpNombre(j.dir.n),d:cpNombre(j.dir.d)}))+"</p>":"")+
+    cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+
     (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
       '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Add to my friends")+"</button>"+

@@ -32,8 +32,17 @@ CREATE TABLE IF NOT EXISTS comptes (
   -- Date du dernier changement de pseudo (un par semaine au plus).
   pseudo_change INTEGER NOT NULL DEFAULT 0,
   -- Pays choisi par le joueur pour sa fiche (code a deux lettres), vide = non montre.
-  pays TEXT NOT NULL DEFAULT ''
+  pays TEXT NOT NULL DEFAULT '',
+  -- Parties en direct gagnees, nulles, perdues (2026-11-19) : comptees par le
+  -- Worker des parties a la fin de chaque partie, pas par le navigateur.
+  direct_v INTEGER NOT NULL DEFAULT 0,
+  direct_n INTEGER NOT NULL DEFAULT 0,
+  direct_d INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant le 2026-11-19 : les colonnes s'ajoutent par
+--   ALTER TABLE comptes ADD COLUMN direct_v INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_d INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant le 2026-11-18 : la colonne s'ajoute par
 --   ALTER TABLE comptes ADD COLUMN pays TEXT NOT NULL DEFAULT '';
 -- Base creee avant le 2026-11-17 : la colonne s'ajoute par

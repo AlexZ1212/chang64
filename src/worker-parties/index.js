@@ -222,6 +222,8 @@ function seulRoi(g, couleur) {
 export class Partie {
   constructor(ctx, env) {
     this.ctx = ctx;
+    this.env = env;
+    this.aCompter = false;   /* une partie vient de finir avec un resultat */
     this.p = undefined;      /* l'etat, relu apres un sommeil */
     this.jeu = null;         /* la position, rejouee depuis les coups */
     try { ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong")); } catch (e) {}
@@ -272,6 +274,22 @@ export class Partie {
        est arrete ici (abandon, nulle par accord). Apres un coup, il l'est deja. */
     if (p.phase === "jeu") { const c = this.trait(); p.t[c] = Math.max(0, p.t[c] - (now - p.maj)); p.maj = now; }
     p.phase = "fin"; p.fin = { r, m: motif }; p.finA = now; p.nulle = null;
+    this.aCompter = !!r && p.coups.length >= 2 && !!p.j.b && !!p.j.n;
+  }
+
+  /* Victoires, nulles et defaites : comptees ICI, par le serveur, dans la
+     table des comptes (colonnes direct_v, direct_n, direct_d), jamais d'apres
+     ce qu'un navigateur declare. Une fois par partie finie ; une partie
+     annulee ou refusee ne compte pas. Un echec de la base ne gene pas la partie. */
+  async compter() {
+    if (!this.aCompter) return;
+    this.aCompter = false;
+    const p = this.p, r = p.fin && p.fin.r, db = this.env && this.env.DB;
+    if (!db || !r) return;
+    const col = c => (r === "1/2" ? "direct_n" : (r === "1-0") === (c === "b") ? "direct_v" : "direct_d");
+    try {
+      await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1 WHERE id = ?1").bind(p.j[c].id)));
+    } catch (e) {}
   }
 
   vue(moi, now) {
@@ -413,6 +431,7 @@ export class Partie {
       await this.planifier(this.echeance(), now);
       await this.ecrire();
       this.diffuser(now);
+      await this.compter();
     } catch (e) {
       /* Ecriture refusee (limite du jour) : l'etat en memoire n'est plus sur. */
       this.p = undefined; this.jeu = null;
@@ -432,6 +451,7 @@ export class Partie {
     await this.planifier(this.echeance(), now);
     await this.ecrire();
     this.diffuser(now);
+    await this.compter();
   }
 
   async alarm() {

@@ -672,7 +672,15 @@ function drawGraph(plies){
    l'historique au-dela des cinq dernieres parties. Rien du jeu n'est ferme et
    rien n'est efface : a la place, une invitation a creer un compte. cp est
    le compte ouvert (compte.js, charge apres) : d'ou le try. */
-function estMembre(){try{return !!cp;}catch(e){return false;}}
+/* 2026-11-19 (signale par Alexandre : "Creer un compte" sous ses parties alors
+   qu'il etait connecte). "cp" n'est lu par compte.js qu'une bonne seconde
+   apres le chargement, et l'historique est dessine avant : on lit donc aussi
+   la session gardee par le navigateur, que compte.js tient toujours a jour
+   (ecrite a la connexion, retiree a la deconnexion). */
+function estMembre(){
+  try{if(cp)return true;}catch(e){}
+  try{const c=JSON.parse(localStorage.getItem("chang64:compte"));return !!(c&&typeof c.pseudo==="string"&&typeof c.cle==="string");}catch(e){return false;}
+}
 function inviteMembre(texte){
   return '<div class="membre-invite"><p>'+echapper(t(texte))+'</p><button type="button" class="btn primary" data-vue-compte="1">'+echapper(t("Create an account"))+"</button></div>";
 }

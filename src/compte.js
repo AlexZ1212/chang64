@@ -436,7 +436,7 @@ async function cpEcraser(){
 function cpOuvrir(pseudo,version){
   const v=pseudoValider(pseudo),ancien=cpLire("chang64:compte");
   cp={pseudo:pseudo,cle:v.ok?v.cle:pseudo.toLowerCase(),version:version,dev:(ancien&&ancien.dev)||Math.random().toString(36).slice(2,8),n:(ancien&&ancien.n)||0,sync:0};
-  cpEtatSync="";cpSauver();cpPoint();
+  cpEtatSync="";cpSauver();cpPoint();cpRedessiner();
 }
 /* Ferme la session locale. effacer : retire aussi la progression de cet
    appareil (appareil partage). */
@@ -450,13 +450,24 @@ function cpFermer(effacer){
     try{window.storage.delete("chang64:play");window.storage.delete("chang64:friend");}catch(e){}
     location.reload();
   }
-  cpPoint();
+  cpPoint();cpRedessiner();
 }
 
 /* ---------- Ecrans ---------- */
 let cpEcran="",cpBrouillon={},cpPseudoMinuteur=0,cpLienMinuteur=0;
 function cpVueOuverte(){const v=$("menuCompteVue"),r=$("menuTiroir");return !!(v&&r&&!r.hidden&&!v.hidden);}
 /* Le point du bouton de menu signale aussi une session a rouvrir. */
+/* Redessine ce qui change selon qu'on est connecte ou non (historique,
+   graphes, collection de badges, themes) : sans cela une connexion ou une
+   deconnexion laissait l'ecran dans l'etat d'avant (2026-11-19). */
+function cpRedessiner(){
+  [typeof renderHistory==="function"&&renderHistory,typeof renderBadges==="function"&&renderBadges,
+   typeof drawRatingGraph==="function"&&drawRatingGraph,typeof rendreThemes==="function"&&rendreThemes]
+    .forEach(f=>{if(f)try{f();}catch(e){}});
+  /* Les copies du menu, meme ferme : sinon une invitation d'avant y restait. */
+  try{const g=$("menuBadgeGrid");if(g&&g.firstChild)renderBadges(g);}catch(e){}
+  try{const g=$("menuRatingGraph");if(g&&g.firstChild)drawRatingGraph(g);}catch(e){}
+}
 function cpPoint(){
   const d=$("menuCompteDetail");
   if(d)d.textContent=cp?cp.pseudo:"";

@@ -1131,11 +1131,11 @@ p{margin-bottom:12px;max-width:66ch}
    un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
-.animctl button{background:var(--slate);color:var(--sage);border:1px solid var(--board);border-radius:var(--r-s);
+.animctl button{background:var(--slate);color:var(--sage);border:1px solid var(--sage);border-radius:var(--r-s);
   width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}
-.animctl button:hover{background:var(--board);color:var(--slate)}
+.animctl button:hover{background:var(--brass);border-color:var(--brass);color:var(--ink)}
 .animctl button:disabled{opacity:.38;cursor:default}
-.animctl button:disabled:hover{background:var(--slate);color:var(--sage)}
+.animctl button:disabled:hover{background:var(--slate);border-color:var(--sage);color:var(--sage)}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}

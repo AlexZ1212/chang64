@@ -19,7 +19,9 @@ function open_(url){
     const {d,errs}=open_("https://chang64.com/"+bad);
     await new Promise(r=>setTimeout(r,700));
     const board=d.getElementById("board");
-    const tabs=[...d.querySelectorAll('[role="tab"],.tabs button')];
+    /* Les deux anciens onglets restent dans la page, masques (jouer.js) : on ne
+       compte que les onglets visibles. */
+    const tabs=[...d.querySelectorAll('[role="tab"],.tabs button')].filter(t=>!t.hidden);
     const oneSelected=tabs.filter(t=>t.getAttribute("aria-current")==="page").length;
     T(bad.slice(0,20)+" : echiquier intact", !!board&&board.children.length===64, board?board.children.length:"absent");
     /* Repli sur l'accueil (lien totalement illisible) : plus aucun onglet ne

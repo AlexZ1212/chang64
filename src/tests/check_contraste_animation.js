@@ -15,21 +15,23 @@ const h=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
 
 /* jetons reels lus dans la page, pas recopies de memoire */
 const tok=n=>{const m=h.match(new RegExp("--"+n+":\\s*(#[0-9A-Fa-f]{6})"));return m?m[1]:null;};
-const slate=tok("slate"), board=tok("board"), sage=tok("sage"), brass=tok("brass");
+/* 2026-11-19 : pages passees en sombre (palette Cuivre doux). Symboles et
+   bordure en sauge, survol en accent avec texte encre. */
+const slate=tok("slate"), board=tok("board"), sage=tok("sage"), brass=tok("brass"), ink=tok("ink");
 console.log("\n--- Jetons lus dans la page ---");
 console.log("  slate "+slate+"   board "+board+"   sage "+sage);
 
 console.log("\n--- Les commandes sont lisibles ---");
 T("le beige illisible a disparu", !/\.animctl button\{[^}]*color:var\(--bone\)/.test(h));
-T("symboles en vert ardoise", /\.animctl button\{[^}]*color:var\(--board\)/.test(h));
+T("symboles et bordure en sauge", /\.animctl button\{[^}]*color:var\(--sage\)[^}]*border:1px solid var\(--sage\)/.test(h));
 T("bordure visible, plus var(--rule)", !/\.animctl button\{[^}]*border:1px solid var\(--rule\)/.test(h));
 
 console.log("\n--- Contrastes mesures ---");
-const c1=ratio(board,slate);
+const c1=ratio(sage,slate);
 T("symbole sur fond : "+c1.toFixed(2)+":1 (min 3:1)", c1>=3, c1.toFixed(2));
 const c2=ratio(sage,slate);
 T("libelle du coup : "+c2.toFixed(2)+":1 (min 4.5:1)", c2>=4.5, c2.toFixed(2));
-const c3=ratio(slate,board);
+const c3=ratio(ink,brass);
 T("survol inverse : "+c3.toFixed(2)+":1", c3>=3, c3.toFixed(2));
 const c4=ratio(brass,slate);
 T("anneau de focus : "+c4.toFixed(2)+":1", c4>=3, c4.toFixed(2));
@@ -44,7 +46,7 @@ let sansCorrection=[];
 for(const dir of ["/openings","/fr/ouvertures"])
   for(const f of fs.readdirSync(S+dir).filter(x=>x.endsWith(".html")&&x!=="index.html").slice(0,60)){
     const p=fs.readFileSync(S+dir+"/"+f,"utf8");
-    if(p.includes('class="anim"')&&!/\.animctl button\{[^}]*color:var\(--board\)/.test(p))sansCorrection.push(dir+"/"+f);
+    if(p.includes('class="anim"')&&!/\.animctl button\{[^}]*color:var\(--sage\)/.test(p))sansCorrection.push(dir+"/"+f);
   }
 T("120 pages verifiees, toutes corrigees", sansCorrection.length===0, sansCorrection.slice(0,3).join(", "));
 

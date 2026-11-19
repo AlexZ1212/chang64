@@ -43,11 +43,13 @@ setTimeout(async()=>{
        c'est elle qu'on verifie maintenant. */
   T("Puzzle du jour est une carte du menu, plus un bouton d'action",
     !d.getElementById("btnDaily") && !!d.getElementById("cardSolveDaily"));
-  T("Reinitialiser vit sur l'ecran menu, hors de la carte d'exercice",
-    d.getElementById("solveMenu").contains(d.getElementById("btnReset")) &&
-    !d.getElementById("exPanel").contains(d.getElementById("btnReset")));
-  T("et reste replie derriere un <details>",
-    !!d.getElementById("btnReset").closest("details"));
+  /* 2026-11-19 : Reinitialiser a quitte Resoudre pour le menu, tout en bas
+     des reglages, et ne s'offre qu'apres une premiere demande. */
+  T("Reinitialiser vit dans le menu, hors des exercices",
+    d.getElementById("menuResetVue").contains(d.getElementById("btnReset")) &&
+    !d.getElementById("pane-puzzles").contains(d.getElementById("btnReset")));
+  T("et ne s'offre qu'apres une premiere demande",
+    d.getElementById("resetConfirme").hidden && !!d.getElementById("btnResetDemande"));
 
   console.log("\n--- Aucun doublon, les boutons fonctionnent ---");
   for(const id of ["btnNext","btnHintEx","btnRetry","btnReset"])

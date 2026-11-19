@@ -1142,5 +1142,11 @@ module.exports = {
 "Live games: {v} won, {n} drawn, {d} lost":"Партии в реальном времени: побед — {v}, ничьих — {n}, поражений — {d}",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Против друга",
-"A live game, on the clock, with another member. Invite them by username or send them a link.":"Партия в реальном времени, с часами, с другим участником. Пригласи его по имени или отправь ссылку."
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Партия в реальном времени, с часами, с другим участником. Пригласи его по имени или отправь ссылку.",
+/* Code de transfert et remise a zero dans le menu (2026-11-19). */
+"Without an account":"Без аккаунта",
+"With an account":"С аккаунтом",
+"With an account, your progress follows you by itself, with no code to copy.":"С аккаунтом прогресс переносится сам, без всякого кода.",
+"Yes, reset everything":"Да, сбросить всё",
+"Keep my progress":"Сохранить мой прогресс"
 };

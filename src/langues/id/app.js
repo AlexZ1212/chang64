@@ -1140,5 +1140,11 @@ module.exports = {
 "Live games: {v} won, {n} drawn, {d} lost":"Permainan langsung: {v} menang, {n} remis, {d} kalah",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Melawan teman",
-"A live game, on the clock, with another member. Invite them by username or send them a link.":"Permainan langsung, dengan jam catur, bersama anggota lain. Undang dia lewat nama pengguna atau kirimkan tautan."
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Permainan langsung, dengan jam catur, bersama anggota lain. Undang dia lewat nama pengguna atau kirimkan tautan.",
+/* Code de transfert et remise a zero dans le menu (2026-11-19). */
+"Without an account":"Tanpa akun",
+"With an account":"Dengan akun",
+"With an account, your progress follows you by itself, with no code to copy.":"Dengan akun, kemajuanmu ikut sendiri, tanpa kode yang perlu disalin.",
+"Yes, reset everything":"Ya, atur ulang semuanya",
+"Keep my progress":"Simpan kemajuanku"
 };

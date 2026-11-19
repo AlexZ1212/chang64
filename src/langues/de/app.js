@@ -1142,5 +1142,11 @@ module.exports = {
 "Live games: {v} won, {n} drawn, {d} lost":"Live-Partien: {v} gewonnen, {n} remis, {d} verloren",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Gegen einen Freund",
-"A live game, on the clock, with another member. Invite them by username or send them a link.":"Eine Live-Partie mit Uhr gegen ein anderes Mitglied. Lade es per Benutzernamen ein oder schicke einen Link."
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Eine Live-Partie mit Uhr gegen ein anderes Mitglied. Lade es per Benutzernamen ein oder schicke einen Link.",
+/* Code de transfert et remise a zero dans le menu (2026-11-19). */
+"Without an account":"Ohne Konto",
+"With an account":"Mit einem Konto",
+"With an account, your progress follows you by itself, with no code to copy.":"Mit einem Konto folgt dir dein Fortschritt von selbst, ganz ohne Code.",
+"Yes, reset everything":"Ja, alles zurücksetzen",
+"Keep my progress":"Meinen Fortschritt behalten"
 };

@@ -40,16 +40,27 @@ function menuLangues(){
   ls.open=true;setTimeout(()=>{ls.open=true;},0);
 }
 function menuVue(nom){
-  const vues={accueil:"menuAccueil",stats:"menuStats",badges:"menuBadges",nouveautes:"menuNouveautes",langues:"menuLanguesVue"};
+  const vues={accueil:"menuAccueil",stats:"menuStats",badges:"menuBadges",nouveautes:"menuNouveautes",langues:"menuLanguesVue",transfert:"menuTransfertVue",reset:"menuResetVue"};
   for(const [k,id] of Object.entries(vues)){const e=menuEl(id);if(e)e.hidden=k!==nom;}
-  const titres={accueil:"Menu",stats:"Statistics",badges:"Badges",nouveautes:"What's new",langues:"Language"};
+  const titres={accueil:"Menu",stats:"Statistics",badges:"Badges",nouveautes:"What's new",langues:"Language",transfert:"Continue on another device",reset:"Reset my progress"};
   menuEl("menuTitre").textContent=t(titres[nom]);
   menuEl("menuRetour").hidden=nom==="accueil";
   if(nom==="stats")menuStats();
   if(nom==="badges")menuBadges();
+  /* La remise a zero se rearme a chaque ouverture : la confirmation ne reste
+     jamais deployee d'une visite a l'autre. */
+  menuResetArmer(false);
   if(nom==="nouveautes")menuListeNouveautes();
   if(nom==="langues"){menuLangues();const a=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]');if(a)setTimeout(()=>a.focus({preventScroll:true}),mouvementCalme()?0:280);}
   const v=menuEl(vues[nom]);if(v){v.scrollTop=0;if(nom!=="accueil"&&!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});}
+}
+/* Remise a zero en deux temps (2026-11-19) : depuis le menu, un seul appui
+   au mauvais endroit ne doit rien effacer. #btnReset garde son role (ui.js,
+   compte.js) ; il n'apparait qu'apres « Tout reinitialiser ». */
+function menuResetArmer(oui){
+  const d=menuEl("btnResetDemande"),c=menuEl("resetConfirme");
+  if(d)d.hidden=!!oui;
+  if(c)c.hidden=!oui;
 }
 function menuOuvrir(){
   const r=menuEl("menuTiroir");if(!r||!r.hidden)return;
@@ -75,6 +86,9 @@ function menuFermer(){
 function menuResume(){
   ensureProgFields();
   const s=menuEl("menuResume");if(s)s.textContent=String(prog.rating||800);
+  /* Le code de transfert est la solution sans compte : un membre connecte
+     n'en a pas besoin, sa progression suit son compte. */
+  {const l=menuEl("menuTransfertLigne");if(l)l.hidden=typeof cp!=="undefined"&&!!cp;}
   const la=document.querySelector('#menuTiroir .langmenu a[aria-current="true"]'),ld=menuEl("menuLangueActuelle");if(la&&ld)ld.textContent=la.textContent;
   const b=menuEl("menuBadgesCompte");
   if(b){const vis=BADGES.filter(bxVisible);b.textContent=prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length;}
@@ -201,6 +215,10 @@ function menuListeNouveautes(){
     b.addEventListener("click",()=>r.hidden?menuOuvrir():menuFermer());
     menuEl("menuFermer").addEventListener("click",menuFermer);
     menuEl("menuRetour").addEventListener("click",()=>menuVue("accueil"));
+    {const d=menuEl("btnResetDemande"),n=menuEl("btnResetNon"),o=menuEl("btnReset");
+      if(d)d.addEventListener("click",()=>{menuResetArmer(true);if(n)n.focus();});
+      if(n)n.addEventListener("click",()=>menuVue("accueil"));
+      if(o)o.addEventListener("click",()=>setTimeout(menuFermer,0));}
     r.addEventListener("click",e=>{
       if(e.target.closest("[data-fermer]")){menuFermer();return;}
       const v=e.target.closest("[data-vue]");if(v){menuVue(v.dataset.vue);return;}

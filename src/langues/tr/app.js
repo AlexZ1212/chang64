@@ -1140,5 +1140,11 @@ module.exports = {
 "Live games: {v} won, {n} drawn, {d} lost":"Canlı oyunlar: {v} galibiyet, {n} beraberlik, {d} mağlubiyet",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Bir arkadaşa karşı",
-"A live game, on the clock, with another member. Invite them by username or send them a link.":"Başka bir üyeyle saatli, canlı bir oyun. Onu kullanıcı adıyla davet et ya da bir bağlantı gönder."
+"A live game, on the clock, with another member. Invite them by username or send them a link.":"Başka bir üyeyle saatli, canlı bir oyun. Onu kullanıcı adıyla davet et ya da bir bağlantı gönder.",
+/* Code de transfert et remise a zero dans le menu (2026-11-19). */
+"Without an account":"Hesap olmadan",
+"With an account":"Hesapla",
+"With an account, your progress follows you by itself, with no code to copy.":"Hesabın olursa ilerlemen kendiliğinden seninle gelir, kopyalanacak kod yok.",
+"Yes, reset everything":"Evet, her şeyi sıfırla",
+"Keep my progress":"İlerlememi koru"
 };

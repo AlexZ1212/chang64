@@ -3428,7 +3428,9 @@ $("btnCodeCopy").onclick=()=>{if(!$("codeOut").value)showCode();copyText($("code
 $("btnCodeLoad").onclick=loadCode;
 $("btnReset").onclick=()=>{
   prog={level:1,solved:0,streak:0,best:0,correctRun:0,wrongRun:0,seen:[],echelle:ECHELLE};
-  saveProg();renderProgress();nextPuzzle();
+  /* Le bouton vit dans le menu depuis le 2026-11-19 : on ne charge un nouvel
+     exercice que si l'on est dans les exercices, pas au milieu d'une partie. */
+  saveProg();renderProgress();if(mode==="puzzles")nextPuzzle();
 };
 /* Choix de couleur pour une partie par correspondance, en overlay (voir
    amiColorModal, template.html) plutot qu'en ligne dans le panneau "New

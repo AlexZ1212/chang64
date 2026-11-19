@@ -38,10 +38,14 @@ console.log("\n--- Meme forme que les composants de l'application ---");
    sombre, et un texte fonce n'y donnerait que 2,7:1. */
 {
   const css=(fr.match(/<style>([\s\S]*?)<\/style>/)||[])[1]||"";
-  T("menu en pastille arrondie", /\.sitenav\{[^}]*border-radius:999px/.test(css));
-  T("menu sur fond contraste", /\.sitenav\{[^}]*background-color:var\(--slate\)/.test(css));
-  T("section courante surlignee en laiton", /\.sitenav \[aria-current="page"\]\{[^}]*background-color:var\(--brass\)/.test(css));
-  T("texte fonce sur l accent, clair depuis la palette Cuivre doux", /\.sitenav \[aria-current="page"\]\{[^}]*color:#1c130e/.test(css));
+  /* Menu refait le 2026-11-19 (choix d'Alexandre) : plus de pastille a moitie
+     vide, des liens sur la ligne du logo, la rubrique en cours soulignee de
+     l'accent, et un fil d'Ariane sous l'entete. */
+  const regleMenu=(css.match(/\.sitenav\{[^}]*\}/)||[""])[0];
+  T("menu sans pastille ni fond", regleMenu!=="" && !regleMenu.includes("border-radius:999px") && !regleMenu.includes("background-color"));
+  T("rubrique en cours soulignee de l'accent, texte clair", /\.sitenav \[aria-current="page"\]\{[^}]*color:var\(--chalk\)[^}]*border-bottom-color:var\(--brass\)/.test(css));
+  T("fil d'Ariane visible sous l'entete", /<\/header>\s*<nav class="fil" aria-label="Fil d'Ariane"><a href="\/fr\/">Accueil<\/a>/.test(fr));
+  T("indices de defilement : degrade et fleche des deux cotes", (css.match(/\.sitenav::(before|after)\{[^}]*linear-gradient/g)||[]).length===2 && css.includes('content:"‹"') && css.includes('content:"›"'));
   T("langue en pastille, meme rayon que l'application", /\.langsw\{[^}]*border-radius:var\(--r\)/.test(css));
   /* Depuis le 2026-10-25, la langue courante s'affiche seule (summary) et la
      liste des six langues s'ouvre dessous. */
@@ -55,13 +59,13 @@ console.log("\n--- Meme forme que les composants de l'application ---");
      generique "header nav" ne doit pas s'appliquer au menu, son flex-wrap
      annulerait le defilement. */
   T("menu en defilement horizontal", /\.sitenav\{[^}]*overflow-x:auto/.test(css));
-  T("menu sur sa propre ligne", /\.sitenav\{[^}]*flex:1 1 100%/.test(css));
+  T("sur ecran etroit, le menu passe sous le logo", css.includes("@media(max-width:900px)") && /\.sitenav\{grid-column:1\/-1/.test(css));
   T("regle generique neutralisee sur le menu", /header nav:not\(\.sitenav\)/.test(css));
   /* La langue vient juste apres le logo, comme dans l'application : l'entete
      est en space-between, donc elle se place a l'oppose. */
   const ordre=(fr.match(/<header>([\s\S]*?)<\/header>/)||[])[1]||"";
   const pLogo=ordre.indexOf('class="brand"'), pLang=ordre.indexOf('class="langsw"'), pNav=ordre.indexOf('class="sitenav"');
-  T("langue a l'oppose du logo", pLogo<pLang && pLang<pNav, "logo "+pLogo+" langue "+pLang+" menu "+pNav);
+  T("logo, menu, puis langue a l'oppose", pLogo<pNav && pNav<pLang, "logo "+pLogo+" menu "+pNav+" langue "+pLang);
   /* Le selecteur de langue des pages reprend exactement .langswitch summary
      de l'application : JetBrains Mono en 600, corps 11.5px, marges 7px 10px.
      Ce n'est pas la police du corps de texte mais celle du "64" de la marque.

@@ -71,6 +71,7 @@ module.exports = {
   "The elephant on 64 squares": "O elefante em 64 casas",
   "Language: {name}": "Idioma: {name}",
   "Legal information": "Informações legais",
+  "Breadcrumb": "Trilha de navegação",
   "Home": "Início",
   "Legal notice": "Aviso legal",
   "Privacy": "Privacidade",

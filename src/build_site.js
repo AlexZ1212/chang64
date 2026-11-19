@@ -1080,7 +1080,7 @@ body{background:var(--ink);color:var(--chalk);
 font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}
 .wrap{max-width:880px;margin:0 auto}
 a{color:var(--brass)}
-header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;
+header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px 20px;margin-bottom:22px;
 padding-bottom:14px;
 position:sticky;top:0;z-index:30;background-color:var(--ink);padding-top:10px;
 box-shadow:0 14px 14px -6px var(--ink)}
@@ -1094,7 +1094,7 @@ box-shadow:0 14px 14px -6px var(--ink)}
 .brand .names{display:flex;flex-direction:column;gap:2px}
 .brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}
 .brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
-.brand .tagline{font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
+.brand .tagline{font-family:'Archivo',sans-serif;font-weight:400;font-size:11px;letter-spacing:.06em;color:var(--sage);white-space:nowrap}
 @media(max-width:620px){.brand .tagline{display:none}}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
 /* Le menu depassait la largeur d'un telephone : quatre entrees plus le
@@ -1197,6 +1197,9 @@ html{
 .tile:hover{border-color:var(--brass)}
 .tile b{display:block;color:var(--chalk);font-size:15px;margin-bottom:3px}
 .tile span{color:var(--sage);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500}
+/* Une phrase n'est pas une notation : meme police que le texte courant, comme
+   dans l'application (la chasse fixe est reservee aux coups, codes et chiffres). */
+.tile .t{font-family:inherit;font-weight:400;line-height:1.4}
 /* Memes mesures typographiques que le pied de page de l'application
    (template.html) : 12.5px, letter-spacing .03em, interligne 1.7. Le trait
    de separation reste, lui : sur une page de contenu il marque la fin du
@@ -1224,27 +1227,35 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);color:v
    surlignee en laiton. Seules les couleurs changent, prises dans les jetons
    du theme clair. Sur ecran etroit la rangee defile plutot que d'elargir la
    page. */
-.sitenav{display:flex;gap:3px;background-color:var(--slate);padding:4px;
-  border-radius:999px;border:1px solid var(--rule);
-  overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+/* Menu des pages de contenu (2026-11-19, choix d'Alexandre) : plus de barre
+   en pastille, qui restait a moitie vide sur ordinateur. Les rubriques sont
+   des liens sur la ligne du logo, celle en cours soulignee de l'accent ; un
+   fil d'Ariane situe la page. Sur ecran etroit le menu passe sous le logo et
+   defile, avec les memes indices de defilement qu'avant. */
+.sitenav{display:flex;justify-content:flex-end;
+  overflow-x:auto;min-width:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-padding:0 30px}
 .sitenav::-webkit-scrollbar{display:none}
-/* Indice de defilement, allege pour ~1900 pages. */
-.sitenav::before,.sitenav::after{content:"";position:sticky;width:22px;
+.sitenav::before,.sitenav::after{content:"";position:sticky;width:30px;
   flex:none;pointer-events:none;z-index:2;opacity:0;display:flex;align-items:center;
-  font-size:13px;color:var(--sage)}
-.sitenav::before{left:-4px;order:-1;margin-right:-22px;border-radius:999px 0 0 999px;
-  background:linear-gradient(to right,var(--slate) 38%,transparent);content:"‹";padding-left:6px}
-.sitenav::after{right:-4px;order:999;margin-left:-22px;border-radius:0 999px 999px 0;
-  background:linear-gradient(to left,var(--slate) 38%,transparent);content:"›";
-  justify-content:flex-end;padding-right:6px}
+  font-size:17px;color:var(--chalk)}
+.sitenav::before{left:0;order:-1;margin-right:-30px;
+  background:linear-gradient(to right,var(--ink) 45%,transparent);content:"‹"}
+.sitenav::after{right:0;order:999;margin-left:-30px;
+  background:linear-gradient(to left,var(--ink) 45%,transparent);content:"›";
+  justify-content:flex-end}
 .sitenav.sl::before,.sitenav.sr::after{opacity:1}
-.sitenav a,.sitenav span{font-size:13px;font-weight:500;color:var(--sage);
-  text-decoration:none;padding:8px 15px;border-radius:999px;white-space:nowrap;
-  transition:background .18s,color .18s}
+.sitenav a,.sitenav span{font-size:14px;font-weight:500;color:var(--sage);
+  text-decoration:none;padding:9px 0;border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color .18s}
+.sitenav>:not(:first-child){margin-left:20px}
 .sitenav a:hover{color:var(--chalk)}
-.sitenav [aria-current="page"]{background-color:var(--brass);color:#1c130e;font-weight:600}
-@media(max-width:520px){.sitenav a,.sitenav span{padding:8px 11px;font-size:12.5px}}
+.sitenav [aria-current="page"]{color:var(--chalk);font-weight:600;border-bottom-color:var(--brass)}
+@media(max-width:900px){header{grid-template-columns:minmax(0,1fr) auto}
+.sitenav{grid-column:1/-1;grid-row:2;justify-content:flex-start}}
+.fil{font-size:13px;color:var(--sage);margin:-8px 0 18px}
+.fil a{color:inherit;text-decoration:none}
+.fil a:hover{color:var(--brass)}
+.fil b{color:var(--chalk);font-weight:500}
 /* Bascule de langue : meme pastille que dans l'application, avec le meme
    rayon et le meme fond. Ici ce sont deux liens, chaque langue etant une page
    distincte. */
@@ -1648,13 +1659,19 @@ ${/* Lien d'evitement ajoute le 2026-09-06. L'application en avait un, ces
 <div class="wrap">
 <header>
   <a class="brand" href="${accueil}">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span><span class="tagline">${T(lang, "The elephant on 64 squares", "L'éléphant sur 64 cases")}</span></span></a>
-  <!-- Un seul menu, les memes six sections qu'ailleurs. "Jouer" a ete retire :
-       le logo ramene deja a l'accueil, l'entree faisait doublon et prenait la
-       place du contenu. Sur ecran etroit la rangee defile horizontalement,
-       comme les onglets de l'application. -->
-  ${langUrls ? selecteurLangue(lang, langUrls) : ""}
   <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
+  ${langUrls ? selecteurLangue(lang, langUrls) : ""}
 </header>
+${(() => {
+  /* Fil d'Ariane visible : le meme que celui donne aux moteurs plus haut. */
+  const path = canonical.replace(SITE, "");
+  const sec = (SECTIONS[lang] || SECTIONS.en).find(x => path.startsWith(x[0]));
+  if (!sec) return "";
+  const index = path === sec[0] || path === sec[0] + "index.html";
+  const sep = " › ";
+  return '<nav class="fil" aria-label="' + T(lang, "Breadcrumb", "Fil d'Ariane") + '"><a href="' + accueil + '">' + T(lang, "Home", "Accueil") + "</a>" + sep +
+    (index ? "<b>" + sec[1] + "</b>" : '<a href="' + sec[0] + '">' + sec[1] + "</a>" + sep + "<b>" + nomCourtFil(title) + "</b>") + "</nav>";
+})()}
 <main id="contenu">
 ${body}
 </main>
@@ -2471,12 +2488,12 @@ ${oldFrRedirects}
 <h1>404</h1>
 <p class="lede">This page does not exist. Cette page n'existe pas.${LANGUES.filter(l => l.code !== "en" && l.code !== "fr").map(l => " " + tr(l.code, "This page does not exist.")).join("")}</p>
 <div class="grid">
-  <a class="tile" href="/"><b>Play chess</b><span>chang64.com</span></a>
-  <a class="tile" href="/openings/"><b>Openings</b><span>${NF} families</span></a>
-  <a class="tile" href="/fr/ouvertures/"><b>Ouvertures</b><span>${NF} familles</span></a>
-  <a class="tile" href="/puzzles/"><b>Puzzles</b><span>${puzzles.length} positions</span></a>
+  <a class="tile" href="/"><b>Play chess</b><span class="t">chang64.com</span></a>
+  <a class="tile" href="/openings/"><b>Openings</b><span class="t">${NF} families</span></a>
+  <a class="tile" href="/fr/ouvertures/"><b>Ouvertures</b><span class="t">${NF} familles</span></a>
+  <a class="tile" href="/puzzles/"><b>Puzzles</b><span class="t">${puzzles.length} positions</span></a>
 ${/* Une tuile par autre langue (2026-10-25), vers son application. */
-  LANGUES.filter(l => l.code !== "en").map(l => `  <a class="tile" href="${l.accueil}" lang="${l.html}"><b>${l.nom}</b><span>${esc(T(l.code, "Play chess", "Jouer aux échecs"))}</span></a>`).join("\n")}
+  LANGUES.filter(l => l.code !== "en").map(l => `  <a class="tile" href="${l.accueil}" lang="${l.html}"><b>${l.nom}</b><span class="t">${esc(T(l.code, "Play chess", "Jouer aux échecs"))}</span></a>`).join("\n")}
 </div>`;
   fs.writeFileSync(OUT + "/404.html",
     shell("Page not found | chang64", "This page does not exist on chang64.", SITE + "/404", body, null, "en", '<meta name="robots" content="noindex">', null));

@@ -71,6 +71,7 @@ module.exports = {
   "The elephant on 64 squares": "Gajah di atas 64 petak",
   "Language: {name}": "Bahasa: {name}",
   "Legal information": "Informasi hukum",
+  "Breadcrumb": "Jalur navigasi",
   "Home": "Beranda",
   "Legal notice": "Informasi hukum",
   "Privacy": "Privasi",

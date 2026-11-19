@@ -1025,7 +1025,7 @@ module.exports = function (H) {
        (les pages individuelles de chaque terme n'en dependent pas). */
     const sortedTerms = TERMS.map(x => terme(x, lang)).sort((a, b) => a.title.localeCompare(b.title, PAR_CODE[lang].intl));
     const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      sortedTerms.map(x => `<a class="tile" href="/${dir}/${x.slug}"><b>${esc(x.title)}</b><span>${esc(x.def.slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
+      sortedTerms.map(x => `<a class="tile" href="/${dir}/${x.slug}"><b>${esc(x.title)}</b><span class="t">${esc(x.def.slice(0, 60))}…</span></a>`).join("\n") + `</div>`;
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       urlsIndex("glossary"), `${SITE}/${dir}/`);

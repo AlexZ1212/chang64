@@ -71,6 +71,7 @@ module.exports = {
   "The elephant on 64 squares": "64 karedeki fil",
   "Language: {name}": "Dil: {name}",
   "Legal information": "Yasal bilgiler",
+  "Breadcrumb": "Sayfa yolu",
   "Home": "Ana sayfa",
   "Legal notice": "Yasal bilgiler",
   "Privacy": "Gizlilik",

@@ -493,6 +493,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .card:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .card .ico{display:block;width:40px;height:40px;margin-bottom:12px;flex:none}
 .card .ico svg{width:40px;height:40px;display:block}
+/* Cartes de l'accueil alignees sur la famille de pictos (2026-11-19). */
+.card .ico.avec-picto{width:auto;height:auto}
+/* Un bouton centre son contenu en hauteur : la carte au texte le plus court
+   descendait de quelques pixels. Les trois cartes partent du haut. */
+.cards .card{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start}
+.cards .card .go{margin-top:auto;padding-top:12px}
+.card .ico .picto svg{width:34px;height:34px}
 .card h3{font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-weight:600;margin-bottom:6px}
 .card p{color:var(--sage);font-size:13px;line-height:1.5}
 .card .go{color:var(--brass);font-size:12.5px;font-weight:600;margin-top:12px;display:block}

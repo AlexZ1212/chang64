@@ -88,6 +88,12 @@ for (const id in PICTOS_RESOUDRE) {
   c.appendChild(texte);
   c.classList.add("avec-picto");
 }
+/* Les trois cartes de l'accueil portent les memes pictos que les ecrans ou
+   elles menent : meme dessin pour « contre l'ordinateur » ici et dans Jouer. */
+for (const [id, nom] of [["icoPlay", "ordinateur"], ["icoPuzzles", "exercices"], ["icoFriend", "ami"]]) {
+  const e = $(id), h = pictoHtml(nom);
+  if (e && h) { poserHtml(e, h); e.classList.add("avec-picto"); }
+}
 /* Menu : « Defis entre membres » portait une epee seule, les fenetres de defi
    deux epees croisees. Un meme symbole, une meme forme. */
 {

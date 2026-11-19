@@ -73,6 +73,10 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
   T("menu : les epees croisees des fenetres de defi", !!menu && menu.getAttribute("viewBox") === "-24 -24 48 48" && menu.innerHTML === $("cardSolveDuel").querySelector(".picto svg").innerHTML);
   T("les dessins prennent la couleur du theme, aucune couleur en dur", !/#[0-9a-fA-F]{6}/.test(w.eval("JSON.stringify(PICTOS)")) && /currentColor/.test(w.eval("PICTOS.ami")));
 
+  const dessin = e => e.querySelector(".picto svg").innerHTML;
+  T("accueil : les trois cartes portent les pictos de la meme famille", ["icoPlay", "icoPuzzles", "icoFriend"].every(id => $(id).querySelectorAll(".picto svg").length === 1) &&
+    dessin($("icoPlay")) === dessin($("jouerOrdiPicto")) && dessin($("icoFriend")) === dessin($("jouerAmiPicto")) && dessin($("icoPuzzles")) === dessin($("cardSolvePuzzles")));
+
   w.close();
   console.log("\n" + ok + " OK, " + ko + " FAIL");
   process.exit(ko ? 1 : 0);

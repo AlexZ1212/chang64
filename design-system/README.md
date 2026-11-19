@@ -418,3 +418,61 @@ Quatre tailles d'arrondi, chacune avec un rôle. Ne plus écrire de valeur en du
 Hors échelle, et seulement là : `999px` (pilule : onglets, étiquettes), `50%` (rond), `2px` (cases de l'échiquier et ses voiles).
 
 Contours : un seul filet, `1px solid var(--rule)`. L'accent (`var(--brass)`) marque le choix en cours ou le survol, jamais un simple décor. Le focus au clavier est un `outline` de 2px en accent.
+
+## Règles ajoutées le 19 novembre 2026 (soir)
+
+Décisions d'Alexandre. Elles remplacent, là où elles les contredisent, la palette et les deux thèmes décrits plus haut.
+
+### L'application est l'exemple
+
+Couleurs, typographie, composants : tout le reste du site s'aligne sur l'application. Une page de contenu ne doit pas ressembler à un autre site.
+
+### Palette « Cuivre doux » (thème de base)
+
+Le laiton `#E0A93B` faisait clinquant : trop saturé, et chaud sur des fonds verts froids. L'accent est maintenant clair et peu saturé, et les fonds sont de la famille du damier.
+
+| Jeton | Valeur | Rôle |
+|---|---|---|
+| `--ink` | `#0F1414` | Fond de page |
+| `--slate` | `#171E1F` | Panneaux, cartes |
+| `--raise` | `#212A2B` | Boutons, champs, puces au repos |
+| `--chalk` | `#EAECEA` | Texte principal (15,6:1 sur le fond) |
+| `--sage` | `#96A5A5` | Texte secondaire (7,3:1) |
+| `--brass` | `#DDAE95` | Accent (9,3:1 sur le fond ; le nom du jeton reste `--brass`) |
+| `--on-brass` | `#1c130e` | Texte posé sur l'accent (9,2:1). Jamais de texte clair sur l'accent. |
+| `--bone` / `--board` | `#EDE3D5` / `#4A6A68` | Cases claires et sombres (4,7:1) |
+| `--brick` | `#EF6A6A` | Perte, erreur, échec. Rougi pour ne pas se confondre avec le cuivre. |
+| `--rule` | `rgba(234,236,234,.12)` | Tous les filets |
+
+Les treize thèmes à gagner gardent leurs valeurs.
+
+### Un seul thème : sombre partout
+
+Les pages de contenu ne sont plus claires. Leur bloc `:root` (CSS de `build_site.js`) porte les mêmes valeurs que l'application. Une règle `@media print` remet un texte foncé pour l'impression. Les images d'aperçu (`ogSvg`), les diagrammes statiques et la vignette utilisent la même palette.
+
+### Feuille de partie
+
+Aux couleurs de l'application : fond `--ink`, filets `--rule`, coup en cours marqué par une teinte d'accent à 16 % et un rail de 2 px à gauche. Plus de rectangle crème.
+
+### Typographie
+
+La chasse fixe (JetBrains Mono) est réservée aux coups, aux codes et aux chiffres. Une phrase, même courte, est en Archivo : descriptions des tuiles, textes d'aide.
+
+### Logo
+
+L'éléphant et « chang64 », sans slogan. Le slogan titre le bloc de l'histoire du nom, sur l'accueil.
+
+### Navigation
+
+- Application : quatre onglets, Jouer, Résoudre, Analyser, Explorer. « Jouer » ouvre sur deux cartes, « Contre l'ordinateur » et « Contre un ami » ; les deux jeux gardent chacun leur écran.
+- Pages de contenu : pas de barre en pastille. Les rubriques sont des liens sur la ligne du logo, celle en cours soulignée de l'accent, et un fil d'Ariane situe la page. Sous 900 px le menu passe sous le logo et défile, avec un dégradé et une flèche de chaque côté.
+
+### Pictogrammes des cartes
+
+Une seule famille (`src/pictos_build.js`), dans un carré de rayon `--r` légèrement teinté d'accent, en trois tailles (36, 48, 84 px).
+
+- Un même symbole a la même forme partout : chaque picto reprend tel quel le dessin d'une médaille (`badges-medailles.json`) quand il existe, épées croisées comprises.
+- Les pièces sont celles de l'auteur (`pieces_browser.js`), en aplat.
+- Un picto composé suit la grammaire des médailles : pièce principale en bas à gauche, accent en haut à droite.
+- Un dessin nouveau est en aplats, ses jours dans la couleur du fond (`--oeil`). Pas de dessin au trait.
+- Aucune couleur en dur : tout est en `currentColor`, donc suit le thème.

@@ -2311,13 +2311,13 @@ function ogSvg(title, subtitle, fen) {
   }
   if (line.trim() && lines.length < 3) lines.push(line.trim());
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-<rect width="1200" height="630" fill="#101413"/>
+<rect width="1200" height="630" fill="#0F1414"/>
 <g transform="translate(660,80)">${board}</g>
-${lines.map((l, i) => `<text x="70" y="${190 + i * 62}" font-family="Georgia,serif" font-size="52" font-weight="600" fill="#ECEAE3">${l}</text>`).join("")}
-<text x="70" y="${190 + lines.length * 62 + 26}" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#97A49D">${esc2(subtitle).slice(0, 46)}</text>
-<text x="70" y="96" font-family="Georgia,serif" font-size="34" font-weight="600" fill="#ECEAE3">chang<tspan fill="#E0A93B" font-family="monospace" font-size="30">64</tspan></text>
-<rect x="70" y="540" width="8" height="34" fill="#E0A93B"/>
-<text x="92" y="566" font-family="Helvetica,Arial,sans-serif" font-size="22" fill="#97A49D">chang64.com</text>
+${lines.map((l, i) => `<text x="70" y="${190 + i * 62}" font-family="Georgia,serif" font-size="52" font-weight="600" fill="#EAECEA">${l}</text>`).join("")}
+<text x="70" y="${190 + lines.length * 62 + 26}" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#96A5A5">${esc2(subtitle).slice(0, 46)}</text>
+<text x="70" y="96" font-family="Georgia,serif" font-size="34" font-weight="600" fill="#EAECEA">chang<tspan fill="#DDAE95" font-family="monospace" font-size="30">64</tspan></text>
+<rect x="70" y="540" width="8" height="34" fill="#DDAE95"/>
+<text x="92" y="566" font-family="Helvetica,Arial,sans-serif" font-size="22" fill="#96A5A5">chang64.com</text>
 </svg>`;
 }
 function queueOg(name, title, subtitle, fen) {

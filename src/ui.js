@@ -654,8 +654,12 @@ function fmtTime(ms){
    et le distinguer evite de croire qu'on joue contre la plateforme. */
 /* Niveau estime de chaque force (2026-11-18, demande d'Alexandre) : un ordre
    de grandeur, deduit de la profondeur de calcul et de la part de coups au
-   hasard, PAS une mesure contre des joueurs classes. D'ou le signe "environ". */
-const BOT_ELO={1:500,2:900,3:1300,4:1600};
+   hasard, PAS une mesure contre des joueurs classes. D'ou le signe "environ".
+   2026-11-19 : valeurs relevees apres mesure (20 parties par duel contre
+   Stockfish bride a 1320 et 1600, puis de force a force) : la force 4 sort
+   vers 1900, la force 3 vers 1700, les deux autres au moins 450 points plus
+   bas chacune. Valeurs arrondies, validees par Alexandre. */
+const BOT_ELO={1:700,2:1100,3:1600,4:1900};
 function botLabel(){
   const seg=document.getElementById("segLevel");
   let force="";

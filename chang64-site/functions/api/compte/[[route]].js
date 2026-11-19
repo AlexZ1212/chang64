@@ -468,7 +468,7 @@ async function rSynchroEcrire(s, d, env, now) {
 }
 
 async function rExporter(s, env) {
-  const l = await env.DB.prepare("SELECT pseudo, cree, vu, version, donnees, note, resolus, serie, badges, sprint, sem, sem_resolus FROM comptes WHERE id = ?1").bind(s.id).first();
+  const l = await env.DB.prepare("SELECT pseudo, cree, vu, version, donnees, note, resolus, serie, badges, sprint, sem, sem_resolus, direct_v, direct_n, direct_d FROM comptes WHERE id = ?1").bind(s.id).first();
   const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM jetons WHERE compte_id = ?1").bind(s.id).first();
   let defis = [];
   try {
@@ -494,6 +494,7 @@ async function rExporter(s, env) {
     derniere_activite: new Date(l.vu).toISOString(),
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
+    parties_en_direct: { gagnees: l.direct_v, nulles: l.direct_n, perdues: l.direct_d },
     version: l.version,
     ligue: ligue ? { semaine: ligue.sem, ligue: ["Pion", "Cavalier", "Fou", "Tour", "Dame"][ligue.ligue] || "Pion", exercices_de_la_semaine: ligue.points, dernier_mouvement: ligue.mouv } : null,
     joueurs_bloques: bloques.map(x => x.p),
@@ -513,6 +514,7 @@ async function effacer(env, id) {
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM amis WHERE compte_id = ?1 OR ami_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM invitations WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -953,14 +955,15 @@ const PROFIL_RANGS = "SELECT " +
   "(SELECT COUNT(*) FROM comptes WHERE resolus > ?4) AS r, " +
   "(SELECT COUNT(*) FROM comptes WHERE serie > ?5) AS j, " +
   "(SELECT COUNT(*) FROM comptes WHERE badges > ?6) AS b, " +
-  "(SELECT COUNT(*) FROM comptes WHERE sprint > ?7) AS k";
+  "(SELECT COUNT(*) FROM comptes WHERE sprint > ?7) AS k, " +
+  "(SELECT COUNT(*) FROM comptes WHERE direct_v > ?8) AS d";
 async function rProfil(request, env, now, waitUntil) {
   const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
   if (!v.ok) return erreur("inconnu", 404);
   const cache = typeof caches !== "undefined" && caches.default ? caches.default : null;
   const cle = new Request(new URL("/api/compte/profil?p=" + encodeURIComponent(v.cle), request.url).toString());
   if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
-  const c = await env.DB.prepare("SELECT id, pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees FROM comptes WHERE cle = ?1").bind(v.cle).first();
+  const c = await env.DB.prepare("SELECT id, pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees, direct_v, direct_n, direct_d FROM comptes WHERE cle = ?1").bind(v.cle).first();
   if (!c) return erreur("inconnu", 404);
   let bl = [];
   try {
@@ -968,12 +971,14 @@ async function rProfil(request, env, now, waitUntil) {
     if (Array.isArray(liste)) bl = Array.from(new Set(liste.filter(x => typeof x === "string" && /^[a-z0-9_]{2,40}$/.test(x)))).slice(-400);
   } catch (e) {}
   const semaine = lundi(now), s = c.sem === semaine ? c.sem_resolus : 0;
-  const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint).first();
+  const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint, c.direct_v).first();
   const rang = (dedans, devant) => dedans ? devant + 1 : null;
   const rep = json({
     p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
-    s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint,
-    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k) },
+    s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint, d: c.direct_v,
+    /* Parties en direct : gagnees, nulles, perdues, comptees par le serveur des parties. */
+    dir: { v: c.direct_v, n: c.direct_n, d: c.direct_d },
+    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k), d: rang(c.direct_v > 0, g.d) },
     bl, pays: await paysLire(env, c.id)
   }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
   if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));

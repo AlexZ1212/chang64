@@ -1,5 +1,91 @@
 [
  {
+  "d": "2026-11-19",
+  "en": [
+   "New colours",
+   "The bright yellow gives way to a soft copper on a blue-grey background. The opening, endgame and glossary pages turn dark too, like the rest of the site. The themes you earn do not change."
+  ],
+  "fr": [
+   "Nouvelles couleurs",
+   "Le jaune vif laisse place à un cuivre doux, sur un fond bleu-gris. Les pages d'ouvertures, de finales et du lexique passent elles aussi en sombre, comme le reste du site. Les thèmes que tu gagnes ne changent pas."
+  ],
+  "es": [
+   "Nuevos colores",
+   "El amarillo vivo deja paso a un cobre suave sobre un fondo gris azulado. Las páginas de aperturas, finales y glosario también pasan a oscuro, como el resto del sitio. Los temas que ganas no cambian."
+  ],
+  "pt": [
+   "Novas cores",
+   "O amarelo vivo dá lugar a um cobre suave sobre um fundo cinza-azulado. As páginas de aberturas, finais e glossário também ficam escuras, como o resto do site. Os temas que você ganha não mudam."
+  ],
+  "de": [
+   "Neue Farben",
+   "Das kräftige Gelb weicht einem sanften Kupfer auf blaugrauem Grund. Auch die Seiten zu Eröffnungen, Endspielen und Glossar sind jetzt dunkel, wie der Rest der Seite. Die Themen, die du gewinnst, bleiben unverändert."
+  ],
+  "ru": [
+   "Новые цвета",
+   "Яркий жёлтый уступил место мягкому медному на серо-голубом фоне. Страницы дебютов, эндшпилей и словаря тоже стали тёмными, как весь сайт. Темы, которые ты получаешь, не изменились."
+  ],
+  "it": [
+   "Nuovi colori",
+   "Il giallo acceso lascia il posto a un rame tenue su fondo grigio-azzurro. Anche le pagine di aperture, finali e glossario diventano scure, come il resto del sito. I temi che guadagni non cambiano."
+  ],
+  "tr": [
+   "Yeni renkler",
+   "Parlak sarı, mavi-gri bir zemin üzerinde yumuşak bir bakıra yerini bıraktı. Açılış, oyun sonu ve sözlük sayfaları da sitenin geri kalanı gibi koyu oldu. Kazandığın temalar değişmedi."
+  ],
+  "pl": [
+   "Nowe kolory",
+   "Jaskrawa żółć ustępuje łagodnej miedzi na niebieskoszarym tle. Strony debiutów, końcówek i słowniczka też są teraz ciemne, jak reszta serwisu. Motywy, które zdobywasz, się nie zmieniają."
+  ],
+  "id": [
+   "Warna baru",
+   "Kuning terang diganti tembaga lembut di atas latar abu-abu kebiruan. Halaman pembukaan, permainan akhir, dan glosarium kini juga gelap, seperti bagian lain situs. Tema yang kamu dapatkan tidak berubah."
+  ]
+ },
+ {
+  "d": "2026-11-19",
+  "en": [
+   "One Play tab, and pictograms",
+   "Play now opens on two cards: against the computer or against a friend. Every card on the site has its own pictogram. The transfer code and the progress reset have moved to the menu."
+  ],
+  "fr": [
+   "Un seul onglet Jouer, et des pictogrammes",
+   "Jouer ouvre maintenant sur deux cartes : contre l'ordinateur ou contre un ami. Chaque carte du site a reçu son pictogramme. Le code de reprise et la remise à zéro de la progression ont rejoint le menu."
+  ],
+  "es": [
+   "Una sola pestaña Jugar, y pictogramas",
+   "Jugar se abre ahora con dos tarjetas: contra el ordenador o contra un amigo. Cada tarjeta del sitio tiene su pictograma. El código de transferencia y el restablecimiento del progreso están ahora en el menú."
+  ],
+  "pt": [
+   "Uma só aba Jogar, e pictogramas",
+   "Jogar agora abre com dois cartões: contra o computador ou contra um amigo. Cada cartão do site ganhou seu pictograma. O código de transferência e a redefinição do progresso foram para o menu."
+  ],
+  "de": [
+   "Ein einziger Tab Spielen, und Piktogramme",
+   "Spielen öffnet jetzt zwei Karten: gegen den Computer oder gegen einen Freund. Jede Karte der Seite hat ihr eigenes Piktogramm. Der Übertragungscode und das Zurücksetzen des Fortschritts sind ins Menü gewandert."
+  ],
+  "ru": [
+   "Одна вкладка «Играть» и пиктограммы",
+   "«Играть» теперь открывает две карточки: против компьютера или против друга. У каждой карточки сайта появилась своя пиктограмма. Код переноса и сброс прогресса переехали в меню."
+  ],
+  "it": [
+   "Una sola scheda Gioca, e pittogrammi",
+   "Gioca ora si apre su due riquadri: contro il computer o contro un amico. Ogni riquadro del sito ha il suo pittogramma. Il codice di trasferimento e l'azzeramento dei progressi sono passati nel menu."
+  ],
+  "tr": [
+   "Tek bir Oyna sekmesi ve piktogramlar",
+   "Oyna artık iki kartla açılıyor: bilgisayara karşı ya da bir arkadaşa karşı. Sitedeki her kartın kendi piktogramı var. Aktarım kodu ve ilerlemeyi sıfırlama menüye taşındı."
+  ],
+  "pl": [
+   "Jedna zakładka Graj i piktogramy",
+   "Graj otwiera teraz dwie karty: przeciw komputerowi albo przeciw znajomemu. Każda karta w serwisie ma swój piktogram. Kod przeniesienia i reset postępów trafiły do menu."
+  ],
+  "id": [
+   "Satu tab Main, dan piktogram",
+   "Main kini dibuka dengan dua kartu: melawan komputer atau melawan teman. Setiap kartu di situs punya piktogramnya sendiri. Kode transfer dan pengaturan ulang kemajuan pindah ke menu."
+  ]
+ },
+ {
   "d": "2026-11-18",
   "en": [
    "Leagues are on their way",

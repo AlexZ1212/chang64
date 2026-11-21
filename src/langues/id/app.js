@@ -1180,5 +1180,8 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Rekor baru: {r}. Simpan di akunmu.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Elo antaranggota",
-"{r} between members":"{r} antaranggota"
+"{r} between members":"{r} antaranggota",
+/* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
+"Adapt to my level":"Sesuaikan dengan levelku",
+"Adapted":"Disesuaikan"
 };

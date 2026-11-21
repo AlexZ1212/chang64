@@ -1182,5 +1182,8 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Новый рекорд: {r}. Сохрани его в своём аккаунте.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Эло среди участников",
-"{r} between members":"{r} среди участников"
+"{r} between members":"{r} среди участников",
+/* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
+"Adapt to my level":"Под мой уровень",
+"Adapted":"Под мой уровень"
 };

@@ -139,8 +139,8 @@ module.exports = {
 "Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Cztery poziomy: od początkującego, który daje ci odetchnąć, po silnik, który niczego nie wybacza. Legalne ruchy są pokazane, żadnej pomocy podczas gry: reszta należy do ciebie.",
 "Play White":"Graj białymi",
 "Play Black":"Graj czarnymi",
-"Beginner":"Początkujący",
-"Casual":"Rekreacyjny",
+"Beginner":"Nowicjusz",
+"Casual":"Amator",
 "Solid":"Solidny",
 "Tough":"Twardy",
 "New game":"Nowa partia",
@@ -1180,5 +1180,8 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Nowy rekord: {r}. Zachowaj go na swoim koncie.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Elo wśród członków",
-"{r} between members":"{r} wśród członków"
+"{r} between members":"{r} wśród członków",
+/* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
+"Adapt to my level":"Dopasuj do mojego poziomu",
+"Adapted":"Dopasowany"
 };

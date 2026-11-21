@@ -1123,6 +1123,25 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    changeait bien, mais rien ne bougeait a l'ecran, ce qui se lit comme un
    bouton mort. */
 .seg button[aria-pressed="true"],.seg button[aria-checked="true"]{background-color:var(--raise);color:var(--chalk);font-weight:600}
+/* Force de l'ordinateur (2026-11-21) : le nom, et son Elo dessous. Le nom
+   trop long pour sa case est coupe par des points plutot que de passer a la
+   ligne ou d'elargir la page. */
+.seg-force button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 2px;line-height:1.25}
+.seg-nom{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.seg-elo{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--sage)}
+/* « S'adapter a mon niveau » allume : les quatre forces s'estompent, sans
+   etre desactivees (en choisir une eteint l'interrupteur). */
+.seg-force.estompe button{opacity:.45}
+.seg-force.estompe button[aria-pressed="true"]{background:none;color:var(--sage);font-weight:400}
+.adapte{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;margin-top:6px;padding:6px 4px;background:none;border:0;border-radius:var(--r-s);font:inherit;font-size:13px;color:var(--chalk);text-align:left;cursor:pointer}
+.adapte:disabled{opacity:.5;cursor:default}
+.adapte:focus-visible{outline:2px solid var(--brass);outline-offset:1px}
+.adapte-pastille{flex:none;position:relative;width:38px;height:22px;border-radius:999px;background-color:var(--ink);border:1px solid var(--rule);transition:background-color var(--duree-courte),border-color var(--duree-courte)}
+.adapte-pastille::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background-color:var(--sage);transition:transform var(--duree-courte),background-color var(--duree-courte)}
+.adapte[aria-checked="true"] .adapte-pastille{background-color:var(--brass);border-color:var(--brass)}
+.adapte[aria-checked="true"] .adapte-pastille::after{transform:translateX(16px);background-color:var(--ink)}
+.adapte-texte{min-width:0}
+.adapte-elo{flex:none;color:var(--sage);font-family:'JetBrains Mono',monospace;font-size:12px}
 /* Aucun traitement particulier pour "Au hasard" : le lisere laiton que
    portait ce bouton pendant une partie attirait l'oeil vers un controle
    verrouille et pale, ce qui jurait avec les deux autres. Le mode reste
@@ -2944,18 +2963,26 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="panel" id="settingsPanel">
           <div class="eyebrow">Settings<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipSettings" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipSettings">Choose your colour, the engine's strength and a time control, then start.</p>
+          <!-- Reglages de partie (2026-11-21, decisions d'Alexandre) : sur un
+               telephone de 360 px, dans les 10 langues, aucun libelle ne passe
+               sur deux lignes. D'ou la couleur en un mot (le titre dit deja
+               « Jouer »), et la force sur deux etages : le nom, son Elo. -->
           <div class="field"><div class="seg" id="segColor">
-            <button data-v="w" aria-pressed="true">Play White</button>
-            <button data-v="b" aria-pressed="false">Play Black</button>
+            <button data-v="w" aria-pressed="true">White</button>
+            <button data-v="b" aria-pressed="false">Black</button>
             <button data-v="r" aria-pressed="false">Random</button>
           </div></div>
-          <div class="field"><div class="seg" id="segLevel">
-            <button data-v="1" aria-pressed="false">Beginner</button>
-            <button data-v="2" aria-pressed="true">Casual</button>
-            <button data-v="3" aria-pressed="false">Solid</button>
-            <button data-v="4" aria-pressed="false">Tough</button>
-            <button data-v="5" aria-pressed="false" hidden>At my level</button>
-          </div></div>
+          <div class="field">
+            <div class="seg seg-force" id="segLevel">
+              <button data-v="1" aria-pressed="false"><span class="seg-nom">Beginner</span><span class="seg-elo" data-elo="1"></span></button>
+              <button data-v="2" aria-pressed="true"><span class="seg-nom">Casual</span><span class="seg-elo" data-elo="2"></span></button>
+              <button data-v="3" aria-pressed="false"><span class="seg-nom">Solid</span><span class="seg-elo" data-elo="3"></span></button>
+              <button data-v="4" aria-pressed="false"><span class="seg-nom">Tough</span><span class="seg-elo" data-elo="4"></span></button>
+            </div>
+            <!-- L'ordinateur joue a l'Elo du joueur (botLevel 5 dans le code).
+                 Un interrupteur a part : le 5e bouton passait sur deux lignes. -->
+            <button type="button" class="adapte" id="adapteNiveau" role="switch" aria-checked="false"><span class="adapte-pastille" aria-hidden="true"></span><span class="adapte-texte">Adapt to my level</span> <span class="adapte-elo" id="adapteElo"></span></button>
+          </div>
           <div class="field">
             <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl2" aria-label="More info">i</button></div>
             <p class="info-tip-pop hide" id="tipTimeControl2">Bullet, blitz, rapid, classical: just categories by starting time. The numbers (like 10+0) are minutes, then seconds added back after each move. Slower means more time to think.</p>

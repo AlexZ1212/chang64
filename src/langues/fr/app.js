@@ -1032,5 +1032,8 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Nouveau record : {r}. Garde-le dans ton compte.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Elo entre membres",
-"{r} between members":"{r} entre membres"
+"{r} between members":"{r} entre membres",
+/* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
+"Adapt to my level":"S'adapter à mon niveau",
+"Adapted":"Adapté"
 };

@@ -3060,9 +3060,7 @@ function showReady(tcTxt){
   /* Le libelle de force est lu directement sur le selecteur : il est deja
      traduit par applyI18n, inutile de maintenir une seconde liste qui
      divergerait. */
-  let force="";
-  const seg=$("segLevel");
-  if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
+  const force=forceNom();
   $("readyTitle").textContent=t("Ready when you are");
   $("readySub").textContent=
     tcTxt+(force?" | "+force+(botLevel===NIVEAU_MESURE?" ≈ "+eloPartie()+" Elo":""):"")+" | "+
@@ -3195,6 +3193,7 @@ function resumeSavedPlay(){
   myColor=d.myColor===1?B:W;
   if(TC_CATS.some(c=>c.id===d.tcCat)){tcCat=d.tcCat;tcIdx=d.tcIdx||0;}
   if(typeof d.botLevel==="number")botLevel=d.botLevel;
+  if(typeof syncForce==="function")syncForce();
   eloPartieFixe=typeof d.elo==="number"?d.elo:null;
   flipped=!!d.flipped;
   gameStarted=true;

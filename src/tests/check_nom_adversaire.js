@@ -41,7 +41,7 @@ setTimeout(async()=>{
   if(rb&&!rb.classList.contains("hide")){d.getElementById("readyStart").click();await wait(300);}
   T("le nom a change", nom()!==avant, avant+" -> "+nom());
   T("il reflete le niveau choisi",
-    nom().includes(seg.querySelector('[data-v="4"]').textContent.trim()), nom());
+    nom().includes(seg.querySelector('[data-v="4"] .seg-nom').textContent.trim()) && nom().includes(seg.querySelector('[data-v="4"] .seg-elo').textContent), nom());
 
   console.log("\n--- En francais ---");
   /* renderClocks sort immediatement si les pendules sont masquees : il faut

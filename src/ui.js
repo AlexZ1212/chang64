@@ -683,11 +683,39 @@ function niveauPartie(){
   for(const k of [1,2,3,4])if(Math.abs(NIVEAU_ELO[k]-e)<Math.abs(NIVEAU_ELO[n]-e))n=k;
   return n;
 }
+/* Nom de la force choisie : lu sur le selecteur (deja traduit), ou « Adapte »
+   quand l'ordinateur joue a l'Elo du joueur. */
+function forceNom(){
+  if(botLevel===NIVEAU_MESURE)return t("Adapted");
+  const seg=document.getElementById("segLevel"),b=seg&&seg.querySelector('[data-v="'+botLevel+'"] .seg-nom');
+  return b?b.textContent.trim():"";
+}
 function botLabel(){
-  const seg=document.getElementById("segLevel");
-  let force="";
-  if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
+  const force=forceNom();
   return force?"Chang | "+force+" \u2248 "+eloPartie()+" Elo":"Chang";
+}
+/* Le selecteur de force et l'interrupteur « S'adapter a mon niveau » suivent
+   botLevel (2026-11-21). L'interrupteur allume, les quatre forces s'estompent ;
+   en toucher une l'eteint. niveauNomme garde la derniere force nommee, pour la
+   retrouver en eteignant. */
+let niveauNomme=2;
+function syncForce(){
+  const seg=document.getElementById("segLevel"),inter=document.getElementById("adapteNiveau");
+  const adapte=botLevel===NIVEAU_MESURE;
+  if(!adapte&&NIVEAU_ELO[botLevel])niveauNomme=botLevel;
+  if(seg){
+    seg.classList.toggle("estompe",adapte);
+    for(const b of seg.children){
+      b.setAttribute("aria-pressed",String(!adapte&&+b.dataset.v===botLevel));
+      const e=b.querySelector("[data-elo]");
+      if(e)e.textContent=NIVEAU_ELO[+e.dataset.elo]||"";
+    }
+  }
+  if(inter){
+    inter.setAttribute("aria-checked",String(adapte));
+    const e=document.getElementById("adapteElo");
+    if(e)e.textContent="(\u2248 "+eloJoueurOrdi()+")";
+  }
 }
 /* Pieces capturees et solde materiel, affiches dans la pendule de chaque
    joueur. On reconstitue depuis l'historique plutot que de tenir un compteur
@@ -1407,6 +1435,9 @@ function refreshGame(){
     const g=$(seg);
     if(g)for(const b of g.children)b.disabled=enCours;
   }
+  { const a=$("adapteNiveau"); if(a)a.disabled=enCours; }
+  /* L'Elo du joueur bouge apres chaque partie classee : l'interrupteur le dit. */
+  syncForce();
   for(const seg of ["tcCats2","tcChips2"]){
     const g=$(seg);
     if(g)for(const b of g.children)b.disabled=enCours;
@@ -3486,12 +3517,22 @@ function syncColorSeg(){
 }
 $("segLevel").addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
-  for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
   botLevel=+b.dataset.v;
+  /* Les reglages ne se touchent qu'hors partie : la force figee de la partie
+     precedente ne doit plus etre affichee a cote du nouveau nom. */
+  eloPartieFixe=null;
+  syncForce();
   /* Le nom affiche au-dessus de la pendule porte la force : il doit suivre
      le changement, sinon il annoncerait l'ancien niveau. */
   if(typeof renderClocks==="function")renderClocks();
 });
+if($("adapteNiveau"))$("adapteNiveau").addEventListener("click",()=>{
+  botLevel=botLevel===NIVEAU_MESURE?niveauNomme:NIVEAU_MESURE;
+  eloPartieFixe=null;
+  syncForce();
+  if(typeof renderClocks==="function")renderClocks();
+});
+syncForce();
 $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
 /* plus de bouton Reprendre : la fonction reste pour l'historique du code */
 $("btnHint").onclick=hintGame;

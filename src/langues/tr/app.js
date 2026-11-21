@@ -1180,5 +1180,8 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Yeni rekor: {r}. Onu hesabında sakla.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Üyeler arası Elo",
-"{r} between members":"{r} üyeler arasında"
+"{r} between members":"{r} üyeler arasında",
+/* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
+"Adapt to my level":"Seviyeme uyarla",
+"Adapted":"Uyarlanmış"
 };

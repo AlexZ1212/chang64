@@ -2136,8 +2136,7 @@ function debutPremierePartie(){
   colorMode="w";myColor=W;
   if(typeof syncColorSeg==="function")syncColorSeg();
   botLevel=1;
-  const seg=$("segLevel");
-  if(seg)for(const x of seg.children)x.setAttribute("aria-pressed",x.dataset.v==="1");
+  if(typeof syncForce==="function")syncForce();
   pendingNoClock=true;
   setMode("play",{fresh:true});
   goTop();

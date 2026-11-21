@@ -1308,6 +1308,7 @@ async function cppOuvrir(pseudo){
     (cpNombre(cpObjet(j.dir).v)+cpNombre(cpObjet(j.dir).n)+cpNombre(cpObjet(j.dir).d)>0?'<p class="cp-note cpp-direct">'+echapper(t("Live games: {v} won, {n} drawn, {d} lost",{v:cpNombre(j.dir.v),n:cpNombre(j.dir.n),d:cpNombre(j.dir.d)}))+"</p>":"")+
     /* Elo contre l'ordinateur : calcule dans le navigateur du joueur, donc
        montre avec son signe "environ" et hors des tableaux. */
+    (cpNombre(cpObjet(j.em).n)>0?'<p class="cp-note cpp-elo cpp-elo-membres">'+echapper(t("{r} between members",{r:cpNombre(j.em.r)}))+"</p>":"")+
     (cpNombre(cpObjet(j.eo).n)>0?'<p class="cp-note cpp-elo">'+echapper(t("≈ {r} against the computer",{r:cpNombre(j.eo.r)}))+"</p>":"")+
     cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+

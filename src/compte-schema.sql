@@ -37,8 +37,16 @@ CREATE TABLE IF NOT EXISTS comptes (
   -- Worker des parties a la fin de chaque partie, pas par le navigateur.
   direct_v INTEGER NOT NULL DEFAULT 0,
   direct_n INTEGER NOT NULL DEFAULT 0,
-  direct_d INTEGER NOT NULL DEFAULT 0
+  direct_d INTEGER NOT NULL DEFAULT 0,
+  -- Elo entre membres (2026-11-21) : calcule par le Worker des parties a la fin
+  -- de chaque partie en direct, jamais par le navigateur. elo = 0 tant qu'aucune
+  -- partie n'a compte ; elo_n = nombre de parties comptees.
+  elo INTEGER NOT NULL DEFAULT 0,
+  elo_n INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant le 2026-11-21 : les colonnes s'ajoutent par
+--   ALTER TABLE comptes ADD COLUMN elo INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN elo_n INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant le 2026-11-19 : les colonnes s'ajoutent par
 --   ALTER TABLE comptes ADD COLUMN direct_v INTEGER NOT NULL DEFAULT 0;
 --   ALTER TABLE comptes ADD COLUMN direct_n INTEGER NOT NULL DEFAULT 0;

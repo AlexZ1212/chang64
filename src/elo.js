@@ -77,6 +77,14 @@ function eloRappel(){
 function eloCarte(){
   const l=$("resultElo"),n=$("resultEloNote");
   if(!l||!n)return;
+  /* Partie en direct : l'Elo entre membres, calcule par le serveur. */
+  if(typeof directActif==="function"&&directActif()){
+    const d=typeof directE!=="undefined"&&directE&&directE.phase==="fin"&&directE.elo?directE.elo[directE.moi]:null;
+    const la=!!(d&&resultInfo&&typeof d.d==="number"&&typeof d.r==="number");
+    l.classList.toggle("hide",!la);n.classList.add("hide");
+    if(la)poserHtml(l,"<b>"+(d.d<0?"\u2212":"+")+Math.abs(d.d)+" Elo</b> "+echapper(t("{r} between members",{r:d.r})));
+    return;
+  }
   const e=eloDernier;
   const ici=!!(e&&mode==="play"&&!isReviewGame&&resultInfo&&gameUci.join(" ")===e.m);
   l.classList.toggle("hide",!ici);
@@ -110,6 +118,19 @@ function eloBloc(){
      "A win earns points and a loss costs points. Beating a stronger computer earns more; losing to a weaker one costs more.",
      "Only finished games count: at least 4 moves, from the starting position. The first 20 games move it faster.",
      "It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's."].map(x=>"<p>"+echapper(t(x))+"</p>").join("")+"</details>";
+}
+/* Elo entre membres dans Ma progression : rempli par menu.js une fois la
+   fiche du membre lue (le chiffre vient du serveur). */
+function eloMembresBloc(){
+  return '<div id="menuEloMembres" hidden><p class="tiroir-section">'+echapper(t("Elo between members"))+"</p>"+
+    '<div class="menu-tuiles"><div class="menu-tuile"><b id="menuEloMembresR"></b><span>'+echapper(t("Elo"))+"</span></div>"+
+    '<div class="menu-tuile"><b id="menuEloMembresN"></b><span>'+echapper(t("Rated games"))+"</span></div></div></div>";
+}
+function eloMembresRemplir(j){
+  const b=$("menuEloMembres"),e=j&&j.em;
+  if(!b||!e||!(e.n>0))return;
+  $("menuEloMembresR").textContent=String(e.r);$("menuEloMembresN").textContent=String(e.n);
+  b.hidden=false;
 }
 function eloCourbe(el){
   if(!el||typeof traceCourbe!=="function")return;

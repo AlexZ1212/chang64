@@ -522,6 +522,7 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     parties_en_direct: { gagnees: l.direct_v, nulles: l.direct_n, perdues: l.direct_d },
+    elo_entre_membres: await eloMembreLire(env, s.id),
     version: l.version,
     ligue: ligue ? { semaine: ligue.sem, ligue: ["Pion", "Cavalier", "Fou", "Tour", "Dame"][ligue.ligue] || "Pion", exercices_de_la_semaine: ligue.points, dernier_mouvement: ligue.mouv } : null,
     joueurs_bloques: bloques.map(x => x.p),
@@ -1040,6 +1041,14 @@ const PROFIL_RANGS = "SELECT " +
   "(SELECT COUNT(*) FROM comptes WHERE badges > ?6) AS b, " +
   "(SELECT COUNT(*) FROM comptes WHERE sprint > ?7) AS k, " +
   "(SELECT COUNT(*) FROM comptes WHERE direct_v > ?8) AS d";
+/* Elo entre membres d'un compte, ou null s'il n'a pas encore joue de partie
+   comptee. Requete a part : la base peut ne pas avoir encore les colonnes. */
+async function eloMembreLire(env, id) {
+  try {
+    const l = await env.DB.prepare("SELECT elo, elo_n FROM comptes WHERE id = ?1").bind(id).first();
+    return l && l.elo > 0 && l.elo_n > 0 ? { r: l.elo, n: l.elo_n } : null;
+  } catch (e) { return null; }
+}
 async function rProfil(request, env, now, waitUntil) {
   const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
   if (!v.ok) return erreur("inconnu", 404);
@@ -1068,6 +1077,8 @@ async function rProfil(request, env, now, waitUntil) {
     rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k), d: rang(c.direct_v > 0, g.d) },
     /* Elo contre l'ordinateur : declare par le navigateur du joueur, non verifie. */
     eo,
+    /* Elo entre membres : calcule par le serveur des parties, donc verifie. */
+    em: await eloMembreLire(env, c.id),
     bl, pays: await paysLire(env, c.id)
   }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
   if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));

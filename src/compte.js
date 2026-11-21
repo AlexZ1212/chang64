@@ -1319,7 +1319,7 @@ async function cppOuvrir(pseudo){
     cppDirect(j.dir)+
     /* Elo contre l'ordinateur : calcule dans le navigateur du joueur, donc
        montre avec son signe "environ" et hors des tableaux. */
-    (cpNombre(cpObjet(j.em).n)>0?'<p class="cp-note cpp-elo cpp-elo-membres">'+echapper(t("{r} between members",{r:cpNombre(j.em.r)}))+"</p>":"")+
+    (typeof eloFamillesFiche==="function"?eloFamillesFiche(j):"")+
     (cpNombre(cpObjet(j.eo).n)>0?'<p class="cp-note cpp-elo">'+echapper(t("≈ {r} against the computer",{r:cpNombre(j.eo.r)}))+"</p>":"")+
     cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+

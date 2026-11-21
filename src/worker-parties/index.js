@@ -75,6 +75,14 @@ const CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0
   [180, 2]];
 const CORR = 6, CORR_FIN = 8;            /* cadences par correspondance : 6, 7, 8 */
 const corr = cad => cad >= CORR && cad <= CORR_FIN;
+/* Un Elo entre membres par FAMILLE de cadences (2026-11-21 au soir, decision
+   d'Alexandre) : r = Rapide, c = Classique, k = Correspondance, b = Blitz.
+   Une lettre par cadence, dans l'ordre de CADENCES : toute nouvelle cadence
+   doit y recevoir sa famille. Les colonnes elo et elo_n, les premieres, sont
+   restees celles du Rapide. */
+const FAMILLES = "rrrccckkkb";
+const ELO_COLONNES = { r: ["elo", "elo_n"], b: ["elo_blitz", "elo_blitz_n"], c: ["elo_classique", "elo_classique_n"], k: ["elo_corr", "elo_corr_n"] };
+const famille = cad => FAMILLES[cad] || "r";
 /* Une invitation garde aussi la couleur de l'invite, dans la meme colonne que
    la cadence, pour ne pas ajouter de colonne a la table : cad + 16 s'il joue
    les Blancs, cad + 32 s'il joue les Noirs. Une ancienne ligne (sans couleur)
@@ -140,12 +148,15 @@ async function bloques(env, a, b) {
 }
 
 /* Niveau d'un membre, pour rapprocher les adversaires tires au hasard : son
-   Elo entre membres des qu'il en a un, sinon sa note aux exercices. */
-async function niveau(env, id) {
+   Elo dans la famille de la cadence des qu'il en a un, sinon son Elo Rapide,
+   sinon sa note aux exercices. */
+async function niveau(env, id, cad) {
   let note = 800;
   try { const c = await env.DB.prepare("SELECT note FROM comptes WHERE id = ?1").bind(id).first(); if (c && c.note > 0) note = c.note; } catch (e) {}
   /* Requete a part : la base peut ne pas encore avoir la colonne. */
   try { const c = await env.DB.prepare("SELECT elo FROM comptes WHERE id = ?1").bind(id).first(); if (c && c.elo > 0) note = c.elo; } catch (e) {}
+  const col = ELO_COLONNES[famille(cad)][0];
+  if (col !== "elo") { try { const c = await env.DB.prepare("SELECT " + col + " AS f FROM comptes WHERE id = ?1").bind(id).first(); if (c && c.f > 0) note = c.f; } catch (e) {} }
   return note;
 }
 
@@ -321,7 +332,7 @@ async function repondre(request, env) {
     let d = null;
     try { d = JSON.parse((await request.text()).slice(0, 200)); } catch (e) {}
     if (!d || !CADENCES[d.cad]) return erreur("requete", 400);
-    const note = await niveau(env, s.id);
+    const note = await niveau(env, s.id, d.cad);
     let exclus = [];
     if (corr(d.cad)) {
       /* Par correspondance, pas de salle d'attente a tenir eveillee : les
@@ -636,17 +647,22 @@ export class Partie {
   async compterElo(db, p, r) {
     const ids = { b: p.j.b.id, n: p.j.n.id };
     if (ids.b === ids.n) return null;
-    const lire = id => db.prepare("SELECT elo, elo_n, CASE WHEN elo = 0 AND json_valid(donnees) THEN json_extract(donnees, '$.progress.eloOrdi.r') END AS eo FROM comptes WHERE id = ?1").bind(id).first();
+    /* L'Elo de la FAMILLE de la cadence (f, fn). Un joueur qui n'en a pas
+       encore part de son Elo Rapide s'il en a un, sinon comme avant de son
+       Elo contre l'ordinateur, borne. Les noms de colonnes viennent de la
+       table ELO_COLONNES, jamais de la requete. */
+    const fam = famille(p.cad), col = ELO_COLONNES[fam];
+    const lire = id => db.prepare("SELECT elo, " + col[0] + " AS f, " + col[1] + " AS fn, CASE WHEN elo = 0 AND json_valid(donnees) THEN json_extract(donnees, '$.progress.eloOrdi.r') END AS eo FROM comptes WHERE id = ?1").bind(id).first();
     const l = { b: await lire(ids.b), n: await lire(ids.n) };
     if (!l.b || !l.n) return null;
-    const depart = x => x.elo > 0 ? x.elo : eloDepart(x.eo);
+    const depart = x => x.f > 0 ? x.f : x.elo > 0 ? x.elo : eloDepart(x.eo);
     const avant = { b: depart(l.b), n: depart(l.n) }, sb = r === "1-0" ? 1 : r === "1/2" ? 0.5 : 0;
     const apres = {
-      b: eloApres(avant.b, avant.n, sb, l.b.elo_n),
-      n: eloApres(avant.n, avant.b, 1 - sb, l.n.elo_n)
+      b: eloApres(avant.b, avant.n, sb, l.b.fn),
+      n: eloApres(avant.n, avant.b, 1 - sb, l.n.fn)
     };
-    await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET elo = ?2, elo_n = elo_n + 1 WHERE id = ?1").bind(ids[c], apres[c])));
-    return { b: { d: apres.b - avant.b, r: apres.b }, n: { d: apres.n - avant.n, r: apres.n } };
+    await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col[0] + " = ?2, " + col[1] + " = " + col[1] + " + 1 WHERE id = ?1").bind(ids[c], apres[c])));
+    return { f: fam, b: { d: apres.b - avant.b, r: apres.b }, n: { d: apres.n - avant.n, r: apres.n } };
   }
 
   vue(moi, now) {
@@ -937,4 +953,4 @@ export class Partie {
 }
 
 /* Pour les tests : les fonctions pures de l'Elo, sans export de plus. */
-Partie._elo = { eloDepart, eloApres };
+Partie._elo = { eloDepart, eloApres, famille, ELO_COLONNES };

@@ -1275,5 +1275,12 @@ module.exports = {
 "{n} game is waiting for you":"{n} partia czeka na ciebie",
 "{n} games are waiting for you":{"one":"{n} partia czeka na ciebie","few":"{n} partie czekają na ciebie","many":"{n} partii czeka na ciebie","other":"{n} partii czeka na ciebie"},
 "Move prepared: {from} to {to}":"Ruch przygotowany: {from} na {to}",
-"Prepared moves cancelled.":"Przygotowane ruchy anulowane."
+"Prepared moves cancelled.":"Przygotowane ruchy anulowane.",
+/* Un Elo entre membres par famille de cadences (2026-11-21). */
+"{r} in Blitz":"{r} w blitzu",
+"{r} in Rapid":"{r} w rapidzie",
+"{r} in Classical":"{r} w klasycznych",
+"{r} in Correspondence":"{r} w korespondencyjnych",
+"{n} game":"{n} partia",
+"{n} games":{"one":"{n} partia","few":"{n} partie","many":"{n} partii","other":"{n} partii"}
 };

@@ -63,8 +63,8 @@ const avancer = ms => { decalage += ms; };
     return r.webSocket || null;
   }
   /* Deux membres assis ; rend les fils par couleur et le pseudo de chacun. */
-  async function partie(a, b) {
-    const r = await appel("POST", "creer", { cad: 0 }, a);
+  async function partie(a, b, cad) {
+    const r = await appel("POST", "creer", { cad: cad || 0 }, a);
     const id = (await r.json()).id;
     const x = await ouvrir(id, a), y = await ouvrir(id, b);
     const aBlanc = x.dernier().moi === "b";
@@ -134,6 +134,55 @@ const avancer = ms => { decalage += ms; };
   await jouer(g, MAT_NOIR);
   T("le pas depend de chacun : 10 pour l'ancien, 20 pour le nouveau", Math.abs(lire("Anna").elo - 1000) === 10 && Math.abs(lire("Bob").elo - 1000) === 20, dit([lire("Anna"), lire("Bob")]));
 
+  console.log("Un Elo par famille de cadences");
+  /* Decisions d'Alexandre du 2026-11-21 au soir : Blitz, Rapide, Classique,
+     Correspondance ont chacun leur Elo ; elo et elo_n sont le Rapide ; un
+     nouvel Elo part de l'Elo Rapide du joueur quand il en a un. */
+  T("chaque cadence a sa famille", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(E.famille).join("") === "rrrccckkkb" && E.famille(42) === "r");
+  T("les colonnes : elo et elo_n restent le Rapide", dit(E.ELO_COLONNES.r) === dit(["elo", "elo_n"]) && dit(E.ELO_COLONNES.c) === dit(["elo_classique", "elo_classique_n"]) && dit(E.ELO_COLONNES.b) === dit(["elo_blitz", "elo_blitz_n"]) && dit(E.ELO_COLONNES.k) === dit(["elo_corr", "elo_corr_n"]));
+  ids.Rapi = membre("Rapi"); ids.Vide = membre("Vide");
+  env.DB.brut.prepare("UPDATE comptes SET elo = 950, elo_n = 5 WHERE id = ?").run(ids.Rapi);
+  const tout = qui => env.DB.brut.prepare("SELECT elo, elo_n, elo_blitz, elo_blitz_n, elo_classique, elo_classique_n, elo_corr, elo_corr_n FROM comptes WHERE id = ?").get(ids[qui]);
+  g = await partie("Rapi", "Vide", 3);
+  await jouer(g, MAT_NOIR);
+  {
+    const sR = g.noir === "Rapi" ? 1 : 0, r = tout("Rapi"), v = tout("Vide");
+    T("premiere partie Classique : on part de son Elo Rapide (950), l'autre de 800", r.elo_classique === E.eloApres(950, 800, sR, 0) && v.elo_classique === E.eloApres(800, 950, 1 - sR, 0), dit([r, v]));
+    T("l'Elo Rapide ne bouge pas, ni les autres familles", r.elo === 950 && r.elo_n === 5 && v.elo === 0 && r.elo_blitz === 0 && r.elo_corr === 0 && v.elo_blitz === 0);
+    T("une partie comptee dans la famille, pour chacun", r.elo_classique_n === 1 && v.elo_classique_n === 1);
+    const e = g.B.dernier().elo;
+    T("l'etat dit la famille, et la variation depuis le depart", e && e.f === "c" && e[g.noir === "Rapi" ? "n" : "b"].d === r.elo_classique - 950 && e[g.noir === "Rapi" ? "n" : "b"].r === r.elo_classique, dit(e));
+  }
+  {
+    const avant = tout("Rapi").elo_classique;
+    env.DB.brut.prepare("UPDATE comptes SET elo = 1300 WHERE id = ?").run(ids.Rapi);
+    g = await partie("Rapi", "Vide", 4);
+    await jouer(g, "e2e4 e7e5");
+    await faux.envoyer(g.id, g.B, { t: "nulle" });
+    await faux.envoyer(g.id, g.N, { t: "nulle" });
+    T("deuxieme partie Classique : on repart de son Elo Classique, plus du Rapide", Math.abs(tout("Rapi").elo_classique - avant) <= 20 && tout("Rapi").elo_classique_n === 2 && tout("Rapi").elo === 1300, dit(tout("Rapi")));
+  }
+  g = await partie("Rapi", "Vide", 9);
+  await jouer(g, MAT_NOIR);
+  {
+    const sR = g.noir === "Rapi" ? 1 : 0, r = tout("Rapi"), v = tout("Vide");
+    T("Blitz 3+2 : son propre Elo, parti du Rapide (1300) et de 800", g.B.dernier().elo.f === "b" && r.elo_blitz === E.eloApres(1300, 800, sR, 0) && v.elo_blitz === E.eloApres(800, 1300, 1 - sR, 0) && r.elo_blitz_n === 1, dit([r, v]));
+    T("le Classique et le Rapide n'ont pas bouge", r.elo_classique_n === 2 && r.elo === 1300 && r.elo_n === 5);
+  }
+  {
+    /* Par correspondance : invitation, acceptation sans fil, puis la partie. */
+    const cree = await (await appel("POST", "creer", { cad: 6, adv: "Vide" }, "Rapi")).json();
+    const acc = await appel("POST", "accepter", { id: cree.id }, "Vide");
+    const x = await ouvrir(cree.id, "Rapi"), y = await ouvrir(cree.id, "Vide");
+    const rBlanc = x.dernier().moi === "b", gc = { id: cree.id, B: rBlanc ? x : y, N: rBlanc ? y : x, noir: rBlanc ? "Vide" : "Rapi" };
+    await jouer(gc, MAT_NOIR);
+    const sR = gc.noir === "Rapi" ? 1 : 0, r = tout("Rapi"), v = tout("Vide");
+    T("Correspondance : son propre Elo, parti du Rapide (1300) et de 800", acc.status === 200 && gc.B.dernier().elo && gc.B.dernier().elo.f === "k" && r.elo_corr === E.eloApres(1300, 800, sR, 0) && v.elo_corr === E.eloApres(800, 1300, 1 - sR, 0) && r.elo_corr_n === 1, dit([acc.status, gc.B.dernier().elo, r, v]));
+  }
+  g = await partie("Rapi", "Vide", 1);
+  await jouer(g, MAT_NOIR);
+  T("Rapide (5+3) : toujours les colonnes elo et elo_n", g.B.dernier().elo.f === "r" && tout("Rapi").elo_n === 6 && tout("Vide").elo_n === 1 && tout("Vide").elo > 0, dit([tout("Rapi"), tout("Vide")]));
+
   console.log("Base sans les colonnes");
   env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN elo TO elo_x");
   const vAvant = env.DB.brut.prepare("SELECT SUM(direct_v) AS v FROM comptes").get().v;
@@ -149,9 +198,15 @@ const avancer = ms => { decalage += ms; };
   console.log("Fiche publique");
   let f = await fiche("Bob");
   T("fiche : l'Elo entre membres et le nombre de parties", f.em && f.em.r === lire("Bob").elo && f.em.n === lire("Bob").n, dit(f.em));
+  T("fiche : les quatre familles, celles sans partie a null ; em reste le Rapide", f.ef && dit(f.ef.r) === dit(f.em) && f.ef.b === null && f.ef.c === null && f.ef.k === null, dit(f.ef));
+  f = await fiche("Rapi");
+  T("fiche d'un membre qui a joue dans les quatre familles", f.ef && f.ef.b.r === tout("Rapi").elo_blitz && f.ef.b.n === 1 && f.ef.c.n === 2 && f.ef.k.n === 1 && f.ef.r.r === tout("Rapi").elo && f.ef.r.n === 6, dit(f.ef));
   const idSeul = membre("Seul");
   f = await fiche("Seul");
-  T("fiche d'un membre qui n'a jamais joue en direct : pas d'Elo entre membres", f.em === null && idSeul > 0);
+  T("fiche d'un membre qui n'a jamais joue en direct : pas d'Elo entre membres", f.em === null && f.ef === null && idSeul > 0);
+  env.DB.brut.prepare("UPDATE comptes SET elo_blitz = 870, elo_blitz_n = 3 WHERE id = ?").run(idSeul);
+  f = await fiche("Seul");
+  T("un membre qui n'a joue qu'en Blitz : ef porte le Blitz, em (Rapide) reste vide", f.em === null && f.ef && f.ef.b.r === 870 && f.ef.b.n === 3 && f.ef.r === null, dit(f.ef));
 
   console.log("Ecran");
   const w = await ouvrirPage("fr", { attente: 2600, avant(win) {
@@ -161,7 +216,8 @@ const avancer = ms => { decalage += ms; };
       const rep = (statut, corps) => Promise.resolve({ ok: statut === 200, status: statut, json: () => Promise.resolve(corps), text: () => Promise.resolve(JSON.stringify(corps)) });
       if (url.pathname === "/api/compte/profil") {
         const p = url.searchParams.get("p");
-        return rep(200, { p, depuis: "2026-03", s: 1, n: 900, r: 5, j: 1, b: 1, k: 0, d: 2, dir: { v: 2, n: 0, d: 1 }, rangs: {}, bl: [], pays: null, eo: p === "Alice" ? { r: 1150, n: 25 } : null, em: p === "Bob" ? null : { r: 1012, n: 7 } });
+        return rep(200, { p, depuis: "2026-03", s: 1, n: 900, r: 5, j: 1, b: 1, k: 0, d: 2, dir: { v: 2, n: 0, d: 1 }, rangs: {}, bl: [], pays: null, eo: p === "Alice" ? { r: 1150, n: 25 } : null, em: p === "Bob" ? null : { r: 1012, n: 7 },
+          ef: p === "Carl" || p === "Moi" ? { b: null, r: { r: 1012, n: 7 }, c: { r: 980, n: 1 }, k: null } : undefined });
       }
       if (url.pathname.startsWith("/api/")) return Promise.reject(new Error("hors ligne"));
       const fichier = path.join(SITE, url.pathname);
@@ -173,22 +229,35 @@ const avancer = ms => { decalage += ms; };
   w.eval("cppOuvrir(\"Alice\")");
   await attendre(500);
   let lignes = [...d.querySelectorAll("#cpProfilContenu .cpp-elo")].map(x => x.textContent);
-  T("fiche : « 1012 entre membres » puis « ≈ 1150 contre l'ordinateur »", lignes.join(" | ") === "1012 entre membres | ≈ 1150 contre l'ordinateur", lignes.join(" | "));
+  T("fiche : le titre « Elo entre membres », puis « ≈ 1150 contre l'ordinateur »", d.querySelector("#cpProfilContenu .cpp-elo-membres .tiroir-section").textContent === "Elo entre membres" && lignes.join(" | ") === "≈ 1150 contre l'ordinateur", lignes.join(" | "));
+  /* Une ligne par famille : le nom, puis l'Elo ou un tiret. */
+  const familles = racine => [...d.querySelectorAll(racine + " .elo-familles li")].map(li => li.dataset.f + ":" + li.querySelector("span").textContent + ":" + (li.querySelector("b.vide") ? "-" : li.querySelector("b").textContent)).join(" | ");
+  T("reponse d'avant (em seul) : c'est le Rapide, les autres familles ont un tiret", familles("#cpProfilContenu") === "b:Blitz:- | r:Rapide:1012 | c:Classique:- | k:Correspondance:-", familles("#cpProfilContenu"));
+  T("le tiret est dit aux lecteurs d'ecran", /Aucune partie de cette sorte/.test(d.querySelector("#cpProfilContenu .elo-familles b.vide .visually-hidden").textContent.replace(/\s+/g, " ")) && d.querySelector("#cpProfilContenu .elo-familles b.vide [aria-hidden]").textContent === "–");
+  T("pas de nombre de parties sur la fiche d'un autre", !d.querySelector("#cpProfilContenu .elo-parties"));
+  w.eval("cppFermer();cppOuvrir(\"Carl\")");
+  await attendre(500);
+  T("fiche avec les quatre familles : Rapide 1012, Classique 980", familles("#cpProfilContenu") === "b:Blitz:- | r:Rapide:1012 | c:Classique:980 | k:Correspondance:-", familles("#cpProfilContenu"));
   w.eval("cppFermer();cppOuvrir(\"Bob\")");
   await attendre(500);
   T("fiche sans Elo : aucune ligne", d.querySelectorAll("#cpProfilContenu .cpp-elo").length === 0 && !!d.querySelector("#cpProfilContenu .cpp-liste"));
   w.eval("cppFermer();menuOuvrir();menuVue(\"stats\")");
   await attendre(900);
-  T("Ma progression : le bloc « Elo entre membres » avec 1012 et 7 parties", !$("menuEloMembres").hidden && $("menuEloMembresR").textContent === "1012" && $("menuEloMembresN").textContent === "7" && /Elo entre membres/.test($("menuEloMembres").textContent), $("menuEloMembres").textContent);
+  T("Ma progression : le bloc « Elo entre membres », une ligne par famille", !$("menuEloMembres").hidden && /Elo entre membres/.test($("menuEloMembres").textContent) && familles("#menuEloFamilles") === "b:Blitz:- | r:Rapide:1012 | c:Classique:980 | k:Correspondance:-", familles("#menuEloFamilles"));
+  const parties = [...d.querySelectorAll("#menuEloFamilles .elo-parties")].map(x => x.textContent.replace(/\s+/g, " "));
+  T("avec le nombre de parties comptees, au singulier et au pluriel", parties.join("|") === "|7 parties|1 partie|", parties.join("|"));
   w.eval("menuFermer()");
   /* Fin d'une partie en direct : l'etat envoye par le serveur porte la variation. */
   w.eval("mode=\"friend\";directId=\"aaaaaaaaaaaa\";isReviewGame=false;resultDismissed=false;" +
-    "directE={phase:\"fin\",moi:\"n\",fin:{r:\"0-1\",m:\"mat\"},elo:{b:{d:-20,r:780},n:{d:20,r:820}},coups:[],rev:{b:false,n:false},la:{b:true,n:true},b:\"Anna\",nr:\"Moi\",cad:[600,0],id:\"aaaaaaaaaaaa\",n:1};" +
+    "directE={phase:\"fin\",moi:\"n\",fin:{r:\"0-1\",m:\"mat\"},elo:{f:\"c\",b:{d:-20,r:780},n:{d:20,r:820}},coups:[],rev:{b:false,n:false},la:{b:true,n:true},b:\"Anna\",nr:\"Moi\",cad:[600,0],id:\"aaaaaaaaaaaa\",n:1};" +
     "resultInfo={kind:\"win\",title:\"x\",sub:\"y\"};eloCarte();");
   const carte = () => $("resultElo").textContent.replace(/\s+/g, " ");
-  T("carte de fin en direct : +20 Elo, 820 entre membres", !$("resultElo").classList.contains("hide") && carte() === "+20 Elo 820 entre membres", carte());
+  T("carte de fin en direct : +20 Elo, 820 en Classique", !$("resultElo").classList.contains("hide") && carte() === "+20 Elo 820 en Classique", carte());
   w.eval("directE.moi=\"b\";eloCarte();");
-  T("pour le perdant : la variation negative", carte() === "\u221220 Elo 780 entre membres", carte());
+  T("pour le perdant : la variation negative", carte() === "\u221220 Elo 780 en Classique", carte());
+  const carteDe = fam => { w.eval("directE.elo.f=" + JSON.stringify(fam) + ";eloCarte();"); return carte(); };
+  T("la famille est dite : Blitz, Rapide, Correspondance", carteDe("b") === "\u221220 Elo 780 en Blitz" && carteDe("r") === "\u221220 Elo 780 en Rapide" && carteDe("k") === "\u221220 Elo 780 par correspondance", [carteDe("b"), carteDe("r"), carteDe("k")].join(" | "));
+  T("etat d'un serveur d'avant, sans famille : « entre membres »", carteDe(undefined) === "\u221220 Elo 780 entre membres", carteDe(undefined));
   T("jamais de rappel vers le compte en direct", $("resultEloNote").classList.contains("hide"));
   w.eval("directE.elo=null;eloCarte();");
   T("partie non comptee (ou base sans colonnes) : pas de ligne", $("resultElo").classList.contains("hide"));

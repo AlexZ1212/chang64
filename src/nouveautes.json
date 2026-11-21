@@ -2,6 +2,49 @@
  {
   "d": "2026-11-21",
   "en": [
+   "An Elo for each kind of game between members",
+   "Between members, Blitz, Rapid, Classical and Correspondence games now each have their own Elo. The Elo you already had becomes your Rapid Elo. When you start another kind of game, you begin from your Rapid Elo. All four are on your player card and in My progress."
+  ],
+  "fr": [
+   "Un Elo par famille de cadences entre membres",
+   "Entre membres, le Blitz, le Rapide, le Classique et la Correspondance ont maintenant chacun leur Elo. L'Elo que tu avais déjà devient ton Elo Rapide. Quand tu commences une autre famille, tu pars de ton Elo Rapide. Les quatre sont sur ta fiche de joueur et dans Ma progression."
+  ],
+  "es": [
+   "Un Elo para cada tipo de partida entre miembros",
+   "Entre miembros, las partidas Blitz, Rápidas, Clásicas y por Correspondencia tienen ahora cada una su Elo. El Elo que ya tenías pasa a ser tu Elo de Rápidas. Cuando empiezas otro tipo de partida, partes de tu Elo de Rápidas. Los cuatro están en tu ficha de jugador y en Mi progreso."
+  ],
+  "pt": [
+   "Um Elo para cada tipo de partida entre membros",
+   "Entre membros, as partidas Blitz, Rápida, Clássica e por Correspondência têm agora cada uma o seu Elo. O Elo que você já tinha passa a ser o seu Elo de Rápida. Quando você começa outro tipo de partida, parte do seu Elo de Rápida. Os quatro estão na sua ficha de jogador e em Meu progresso."
+  ],
+  "de": [
+   "Ein Elo für jede Art von Partie zwischen Mitgliedern",
+   "Zwischen Mitgliedern haben Blitz, Schnellschach, klassische Partien und Fernpartien jetzt jeweils ein eigenes Elo. Dein bisheriges Elo wird dein Schnellschach-Elo. Beginnst du eine andere Art von Partie, startest du mit deinem Schnellschach-Elo. Alle vier stehen auf deiner Spielerkarte und unter Mein Fortschritt."
+  ],
+  "ru": [
+   "Отдельный Эло для каждого вида партий между участниками",
+   "У партий между участниками теперь свой Эло для блица, рапида, классики и игры по переписке. Эло, который у тебя уже был, становится твоим Эло в рапиде. Начиная другой вид партий, ты стартуешь со своего Эло в рапиде. Все четыре видны в твоей карточке игрока и в разделе «Мой прогресс»."
+  ],
+  "it": [
+   "Un Elo per ogni tipo di partita tra membri",
+   "Tra membri, le partite Blitz, Rapid, Classica e per Corrispondenza hanno ora ciascuna il proprio Elo. L'Elo che avevi già diventa il tuo Elo Rapid. Quando inizi un altro tipo di partita, parti dal tuo Elo Rapid. Li trovi tutti e quattro sulla tua scheda giocatore e in I miei progressi."
+  ],
+  "tr": [
+   "Üyeler arasında her oyun türü için ayrı Elo",
+   "Üyeler arasında Blitz, Rapid, Klasik ve Yazışmalı oyunların artık her birinin kendi Elo'su var. Zaten sahip olduğun Elo, Rapid Elo'n oluyor. Başka bir oyun türüne başladığında Rapid Elo'ndan başlarsın. Dördü de oyuncu kartında ve İlerlemem bölümünde."
+  ],
+  "pl": [
+   "Osobne Elo dla każdego rodzaju partii między członkami",
+   "Między członkami partie Blitz, Rapid, Klasyczne i Korespondencyjne mają teraz każda własne Elo. Elo, które już masz, staje się twoim Elo w Rapidzie. Gdy zaczynasz inny rodzaj partii, startujesz od swojego Elo w Rapidzie. Wszystkie cztery są na twojej karcie gracza i w Moje postępy."
+  ],
+  "id": [
+   "Elo tersendiri untuk tiap jenis partai antaranggota",
+   "Antaranggota, partai Blitz, Rapid, Klasik, dan Korespondensi kini masing-masing punya Elo sendiri. Elo yang sudah kamu miliki menjadi Elo Rapid-mu. Saat memulai jenis partai lain, kamu berangkat dari Elo Rapid-mu. Keempatnya ada di kartu pemainmu dan di Kemajuanku."
+  ]
+ },
+ {
+  "d": "2026-11-21",
+  "en": [
    "Moves prepared in advance, and arrows",
    "While your opponent is thinking, you can already play your next moves: each one is made as soon as it is your turn, if it is still allowed. Tap anywhere else to cancel them. On a computer, a right-click draws arrows and circles on the board, for your eyes only."
   ],

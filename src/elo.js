@@ -82,7 +82,8 @@ function eloCarte(){
     const d=typeof directE!=="undefined"&&directE&&directE.phase==="fin"&&directE.elo?directE.elo[directE.moi]:null;
     const la=!!(d&&resultInfo&&typeof d.d==="number"&&typeof d.r==="number");
     l.classList.toggle("hide",!la);n.classList.add("hide");
-    if(la)poserHtml(l,"<b>"+(d.d<0?"\u2212":"+")+Math.abs(d.d)+" Elo</b> "+echapper(t("{r} between members",{r:d.r})));
+    /* La famille de la cadence est dite : chaque famille a son Elo. */
+    if(la)poserHtml(l,"<b>"+(d.d<0?"\u2212":"+")+Math.abs(d.d)+" Elo</b> "+echapper(t(ELO_FAMILLE_PHRASE[directE.elo.f]||"{r} between members",{r:d.r})));
     return;
   }
   const e=eloDernier;
@@ -121,15 +122,38 @@ function eloBloc(){
 }
 /* Elo entre membres dans Ma progression : rempli par menu.js une fois la
    fiche du membre lue (le chiffre vient du serveur). */
+/* Un Elo entre membres par famille de cadences (2026-11-21 au soir, decision
+   d'Alexandre) : Blitz, Rapide, Classique, Correspondance, dans cet ordre.
+   La fiche du serveur les rend dans ef ; une reponse d'avant ne porte que em,
+   qui est le Rapide. */
+const ELO_FAMILLES=[["b","Blitz"],["r","Rapid"],["c","Classical"],["k","Correspondence"]];
+const ELO_FAMILLE_PHRASE={b:"{r} in Blitz",r:"{r} in Rapid",c:"{r} in Classical",k:"{r} in Correspondence"};
+function eloFamilles(j){
+  const f=j&&j.ef&&typeof j.ef==="object"?j.ef:(j&&j.em?{r:j.em}:null);
+  return f&&ELO_FAMILLES.some(([c])=>f[c]&&f[c].n>0)?f:null;
+}
+/* Les quatre lignes ; un tiret tant qu'aucune partie de la famille n'a compte.
+   avecParties : le nombre de parties comptees, pour Ma progression. */
+function eloFamillesHtml(f,avecParties){
+  return '<ul class="elo-familles">'+ELO_FAMILLES.map(([c,nom])=>{
+    const x=f[c],la=!!(x&&x.n>0);
+    return '<li data-f="'+c+'"><span>'+echapper(t(nom))+"</span>"+
+      (la?"<b>"+Math.round(x.r)+"</b>":'<b class="vide"><span aria-hidden="true">–</span><span class="visually-hidden">'+echapper(t("No game of this kind yet."))+"</span></b>")+
+      (avecParties?'<span class="elo-parties">'+(la?echapper(t(x.n===1?"{n} game":"{n} games",{n:x.n})):"")+"</span>":"")+"</li>";
+  }).join("")+"</ul>";
+}
+/* Fiche d'un joueur : le titre et les quatre lignes, ou rien. */
+function eloFamillesFiche(j){
+  const f=eloFamilles(j);
+  return f?'<div class="cpp-elo-membres"><p class="tiroir-section cpp-direct-titre">'+echapper(t("Elo between members"))+"</p>"+eloFamillesHtml(f,false)+"</div>":"";
+}
 function eloMembresBloc(){
-  return '<div id="menuEloMembres" hidden><p class="tiroir-section">'+echapper(t("Elo between members"))+"</p>"+
-    '<div class="menu-tuiles"><div class="menu-tuile"><b id="menuEloMembresR"></b><span>'+echapper(t("Elo"))+"</span></div>"+
-    '<div class="menu-tuile"><b id="menuEloMembresN"></b><span>'+echapper(t("Rated games"))+"</span></div></div></div>";
+  return '<div id="menuEloMembres" hidden><p class="tiroir-section">'+echapper(t("Elo between members"))+'</p><div id="menuEloFamilles"></div></div>';
 }
 function eloMembresRemplir(j){
-  const b=$("menuEloMembres"),e=j&&j.em;
-  if(!b||!e||!(e.n>0))return;
-  $("menuEloMembresR").textContent=String(e.r);$("menuEloMembresN").textContent=String(e.n);
+  const b=$("menuEloMembres"),f=eloFamilles(j);
+  if(!b||!f)return;
+  poserHtml($("menuEloFamilles"),eloFamillesHtml(f,true));
   b.hidden=false;
 }
 function eloCourbe(el){

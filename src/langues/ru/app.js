@@ -1277,5 +1277,12 @@ module.exports = {
 "{n} game is waiting for you":"{n} партия ждёт тебя",
 "{n} games are waiting for you":{"one":"{n} партия ждёт тебя","few":"{n} партии ждут тебя","many":"{n} партий ждут тебя","other":"{n} партии ждут тебя"},
 "Move prepared: {from} to {to}":"Ход подготовлен: {from} на {to}",
-"Prepared moves cancelled.":"Подготовленные ходы отменены."
+"Prepared moves cancelled.":"Подготовленные ходы отменены.",
+/* Un Elo entre membres par famille de cadences (2026-11-21). */
+"{r} in Blitz":"{r} в блице",
+"{r} in Rapid":"{r} в рапиде",
+"{r} in Classical":"{r} в классике",
+"{r} in Correspondence":"{r} по переписке",
+"{n} game":"{n} партия",
+"{n} games":{"one":"{n} партия","few":"{n} партии","many":"{n} партий","other":"{n} партии"}
 };

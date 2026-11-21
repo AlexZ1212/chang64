@@ -1275,5 +1275,12 @@ module.exports = {
 "{n} game is waiting for you":"{n} permainan menunggumu",
 "{n} games are waiting for you":"{n} permainan menunggumu",
 "Move prepared: {from} to {to}":"Langkah disiapkan: {from} ke {to}",
-"Prepared moves cancelled.":"Langkah yang disiapkan dibatalkan."
+"Prepared moves cancelled.":"Langkah yang disiapkan dibatalkan.",
+/* Un Elo entre membres par famille de cadences (2026-11-21). */
+"{r} in Blitz":"{r} di Blitz",
+"{r} in Rapid":"{r} di Rapid",
+"{r} in Classical":"{r} di Klasik",
+"{r} in Correspondence":"{r} di Korespondensi",
+"{n} game":"{n} partai",
+"{n} games":"{n} partai"
 };

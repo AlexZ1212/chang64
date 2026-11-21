@@ -159,7 +159,8 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
   x = await dans("Anna", id);
   T("Anna la trouve finie et gagnee", x && x.s === "fin" && x.r === "win", x);
   T("les resultats sont comptes par le serveur", sql("SELECT direct_v FROM comptes WHERE id = ?", ids.Anna)[0].direct_v === 1 && sql("SELECT direct_d FROM comptes WHERE id = ?", ids.Bob)[0].direct_d === 1);
-  T("l'Elo entre membres bouge comme en direct", sql("SELECT elo, elo_n FROM comptes WHERE id = ?", ids.Anna)[0].elo === 820 && sql("SELECT elo, elo_n FROM comptes WHERE id = ?", ids.Bob)[0].elo === 780, sql("SELECT pseudo, elo, elo_n FROM comptes WHERE id < 3"));
+  /* Depuis l'Elo par famille (2026-11-21 au soir) : c'est l'Elo Correspondance qui bouge, pas le Rapide. */
+  T("l'Elo Correspondance bouge, l'Elo Rapide non", sql("SELECT elo_corr FROM comptes WHERE id = ?", ids.Anna)[0].elo_corr === 820 && sql("SELECT elo_corr FROM comptes WHERE id = ?", ids.Bob)[0].elo_corr === 780 && sql("SELECT elo, elo_n, elo_corr_n FROM comptes WHERE id = ?", ids.Anna)[0].elo === 0 && sql("SELECT elo_corr_n FROM comptes WHERE id = ?", ids.Anna)[0].elo_corr_n === 1, sql("SELECT pseudo, elo, elo_corr, elo_corr_n FROM comptes WHERE id < 3"));
   a = (await ouvrir(id, "Anna")).ws;
   e = a.dernier();
   T("en l'ouvrant, Anna voit la fin : temps, 1-0, variation d'Elo", e.phase === "fin" && e.fin.r === "1-0" && e.fin.m === "temps" && e.elo && e.elo.b.d === 20, e.fin);
@@ -184,7 +185,7 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
   a = (await ouvrir(g, "Anna")).ws; await coup(g, a, "d2d4"); await faux.quitter(g, a);
   avancer(JOUR + 60e3);
   await faux.sonner(Date.now());
-  T("les Noirs n'ont pas joue leur premier coup : annulee aussi", ligne(g).res === "" && sql("SELECT elo_n FROM comptes WHERE id = ?", ids.Anna)[0].elo_n === 1);
+  T("les Noirs n'ont pas joue leur premier coup : annulee aussi", ligne(g).res === "" && sql("SELECT elo_corr_n FROM comptes WHERE id = ?", ids.Anna)[0].elo_corr_n === 1);
 
   console.log("Echeance verifiee meme sans alarme");
   g = await lancee(6, "Cleo", "Dan");

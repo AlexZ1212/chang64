@@ -1277,5 +1277,12 @@ module.exports = {
 "{n} game is waiting for you":"{n} partida te espera",
 "{n} games are waiting for you":"{n} partidas te esperan",
 "Move prepared: {from} to {to}":"Jugada preparada: {from} a {to}",
-"Prepared moves cancelled.":"Jugadas preparadas canceladas."
+"Prepared moves cancelled.":"Jugadas preparadas canceladas.",
+/* Un Elo entre membres par famille de cadences (2026-11-21). */
+"{r} in Blitz":"{r} en Blitz",
+"{r} in Rapid":"{r} en Rápidas",
+"{r} in Classical":"{r} en Clásicas",
+"{r} in Correspondence":"{r} por correspondencia",
+"{n} game":"{n} partida",
+"{n} games":"{n} partidas"
 };

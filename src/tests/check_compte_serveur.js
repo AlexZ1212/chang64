@@ -672,7 +672,7 @@ const avancer = ms => { decalage += ms; };
     };
     r = await profil("j60");
     T("profil : sans session, 200", r.s === 200 && r.j.p === "Joueur60", r.texte);
-    T("profil : rien d'autre que pseudo, mois, sept chiffres, parties en direct, rangs et Elo contre l'ordinateur", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,d,dir,rangs,eo,em,bl,pays" && r.j.eo === null && r.j.em === null && Object.keys(r.j.dir).join() === "v,n,d" && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k,d" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
+    T("profil : rien d'autre que pseudo, mois, sept chiffres, parties en direct, rangs et Elo contre l'ordinateur", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,d,dir,rangs,eo,em,ef,bl,pays" && r.j.eo === null && r.j.em === null && r.j.ef === null && Object.keys(r.j.dir).join() === "v,n,d" && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k,d" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
     T("profil : premier a la note et aux exercices", r.j.n === 860 && r.j.rangs.n === 1 && r.j.r === 180 && r.j.rangs.r === 1);
     T("profil : rang = 1 + ceux qui font strictement mieux", r.j.j === 6 && r.j.rangs.j === 13, JSON.stringify(r.j.rangs));
     T("profil : hors tableau (zero, ou semaine passee) : pas de rang", r.j.s === 0 && r.j.rangs.s === null && r.j.rangs.b === null && r.j.rangs.k === null, JSON.stringify(r.j));

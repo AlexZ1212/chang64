@@ -22,7 +22,9 @@
  *       fil.coup("e2e4"), fil.abandon(), fil.nulle(), fil.nulleNon(),
  *       fil.revanche(), fil.fermer(), fil.reste(e, "b"|"n") (millisecondes)
  */
-const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10]];
+/* Meme liste, dans le meme ordre, que CADENCES du Worker : rapides, puis classiques. */
+const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0]];
+const DIRECT_RAPIDES = [0, 1, 2], DIRECT_CLASSIQUES = [3, 4, 5];
 const DIRECT_ESSAIS = 5;          /* echecs de suite avant de renoncer, si la partie n'a jamais repondu */
 const DIRECT_ESSAIS_EN_JEU = 60;  /* partie deja vue : on insiste (telephone verrouille, tunnel), environ un quart d'heure */
 let directBase = "";              /* autre origine : essais hors navigateur */
@@ -33,12 +35,15 @@ function directAdresse(chemin, ws) {
   const base = directBase || (typeof location !== "undefined" ? location.origin : "");
   return (ws ? base.replace(/^http/, "ws") : base) + "/api/partie/" + chemin;
 }
-async function directCreer(cad, pseudo) {
+/* coul : "b" (je joue les Blancs), "n" (les Noirs), sinon au hasard. */
+async function directCreer(cad, pseudo, coul) {
   try {
+    const corps = pseudo ? { cad, adv: pseudo } : { cad };
+    if (coul === "b" || coul === "n") corps.coul = coul;
     const r = await fetch(directAdresse("creer"), {
       method: "POST", credentials: "same-origin",
       headers: Object.assign({ "Content-Type": "application/json" }, directEntetes || {}),
-      body: JSON.stringify(pseudo ? { cad, adv: pseudo } : { cad })
+      body: JSON.stringify(corps)
     });
     const d = await r.json().catch(() => null);
     if (r.ok && d && d.id) return { id: d.id, adv: typeof d.adv === "string" ? d.adv : "" };
@@ -149,5 +154,5 @@ function directOuvrir(id, sur) {
   return fil;
 }
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, DIRECT_CADENCES, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
+  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, DIRECT_CADENCES, DIRECT_RAPIDES, DIRECT_CLASSIQUES, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
 }

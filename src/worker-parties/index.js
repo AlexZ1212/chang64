@@ -12,7 +12,7 @@
  *   POST /api/partie/creer   {cad: 0|1|2, adv?: pseudo}  ->  {id}
  *        (20 creations par heure et par membre, sinon 429 « trop »)
  *   GET  /api/partie/ws?id=  (WebSocket)                  la partie elle-meme
- *   GET  /api/partie/invitations                          ->  {liste:[{id, p, cad, cree}]}
+ *   GET  /api/partie/invitations                          ->  {liste:[{id, p, cad, coul, cree}]}
  *   POST /api/partie/refuser {id}                         l'invite decline ; celui qui
  *        a invite le voit (fin "refusee"), sans autre detail
  *
@@ -43,7 +43,16 @@ const { Game, pType, pColor, K } = moteur;
 const COOKIE = "__Secure-c64";
 const JOUR = 864e5;
 const DUREE_JETON = 180 * JOUR;          /* comme le serveur du compte */
-const CADENCES = [[600, 0], [300, 3], [900, 10]];   /* secondes + secondes par coup */
+/* Secondes + secondes par coup. Les trois premieres sont les cadences rapides
+   d'origine ; les classiques (2026-11-21) s'ajoutent A LA SUITE : le numero
+   d'une cadence voyage dans les liens et les invitations, il ne doit jamais
+   changer. */
+const CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0]];
+/* Une invitation garde aussi la couleur de l'invite, dans la meme colonne que
+   la cadence, pour ne pas ajouter de colonne a la table : cad + 16 s'il joue
+   les Blancs, cad + 32 s'il joue les Noirs. Une ancienne ligne (sans couleur)
+   se lit comme avant. */
+const COULEUR_INVITE = { b: 16, n: 32 };
 const PREMIER_COUP = 60e3;               /* sinon la partie est annulee */
 const GARDE = 30 * 60e3;                 /* attente d'un adversaire, puis d'une revanche */
 const CREATIONS_PAR_HEURE = 20;          /* par membre : un script ne vide pas le quota du jour */
@@ -115,6 +124,10 @@ async function repondre(request, env) {
     let d = null;
     try { d = JSON.parse((await request.text()).slice(0, 500)); } catch (e) {}
     if (!d || !CADENCES[d.cad]) return erreur("requete", 400);
+    /* Couleur du createur (2026-11-21) : "b" Blancs, "n" Noirs, sinon au
+       hasard. Tiree ici, pour que l'invitation puisse dire la sienne a l'invite. */
+    if (d.coul !== undefined && d.coul !== "b" && d.coul !== "n" && d.coul !== "h") return erreur("requete", 400);
+    const blancs = d.coul === "b" ? true : d.coul === "n" ? false : !!(crypto.getRandomValues(new Uint8Array(1))[0] & 1);
     let adv = null;
     if (d.adv !== undefined) {
       if (typeof d.adv !== "string" || d.adv.length > 40) return erreur("requete", 400);
@@ -133,14 +146,14 @@ async function repondre(request, env) {
         pose = await env.DB.prepare(
           "INSERT INTO invitations (partie, de, a, cad, cree) SELECT ?1, ?2, ?3, ?4, ?5 " +
           "WHERE (SELECT COUNT(*) FROM invitations WHERE de = ?2 AND a = ?3) < ?6 AND (SELECT COUNT(*) FROM invitations WHERE a = ?3) < ?7"
-        ).bind(id, s.id, adv.id, d.cad, now, INVITATIONS_MEME_MEMBRE, INVITATIONS_BOITE).run();
+        ).bind(id, s.id, adv.id, d.cad + COULEUR_INVITE[blancs ? "n" : "b"], now, INVITATIONS_MEME_MEMBRE, INVITATIONS_BOITE).run();
       } catch (e) {}
       /* Sans la table, la partie reste reservee : il suffira d'envoyer le lien. */
       if (pose && pose.meta && pose.meta.changes === 0) return erreur("invitations", 429);
     }
     const r = await objet(id).fetch("https://partie/creer", {
       method: "POST",
-      body: JSON.stringify({ id, cad: d.cad, de: { id: s.id, p: s.pseudo }, pour: adv ? adv.id : null, pourP: adv ? adv.pseudo : null })
+      body: JSON.stringify({ id, cad: d.cad, blancs, de: { id: s.id, p: s.pseudo }, pour: adv ? adv.id : null, pourP: adv ? adv.pseudo : null })
     });
     if (!r.ok) return erreur("indisponible", 503);
     return json(adv ? { id, adv: adv.pseudo } : { id });
@@ -192,6 +205,8 @@ async function repondre(request, env) {
         "ORDER BY i.cree DESC LIMIT 5"
       ).bind(s.id, now - GARDE).all()).results || [];
     } catch (e) {}
+    /* La colonne cad porte aussi la couleur de l'invite : on les separe. */
+    liste = liste.map(x => ({ id: x.id, p: x.p, cad: x.cad % 16, coul: x.cad >= 32 ? "n" : x.cad >= 16 ? "b" : null, cree: x.cree }));
     return json({ liste });
   }
 
@@ -429,7 +444,8 @@ export class Partie {
     if (url.pathname === "/creer") {
       if (p) return new Response(null, { status: 409 });
       const d = await request.json();
-      const blancs = crypto.getRandomValues(new Uint8Array(1))[0] & 1;
+      /* Le createur a pu choisir sa couleur ; sinon (adversaire au hasard), tirage. */
+      const blancs = typeof d.blancs === "boolean" ? d.blancs : !!(crypto.getRandomValues(new Uint8Array(1))[0] & 1);
       this.p = { id: d.id, n: 1, cad: d.cad, de: d.de.id, pour: d.pour, pourP: d.pourP || null, cree: now, j: { b: blancs ? d.de : null, n: blancs ? null : d.de }, alarme: 0 };
       this.nouvelle(now);
       this.p.phase = "attente";

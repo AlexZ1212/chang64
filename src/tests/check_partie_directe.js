@@ -254,6 +254,34 @@ const avancer = ms => { decalage += ms; };
   T("sans les colonnes : la partie se finit normalement", g.B.dernier().phase === "fin" && g.B.dernier().fin.m === "mat");
   env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN direct_x TO direct_v");
 
+  console.log("Couleur au choix et cadences classiques");
+  {
+    /* Dan cree ces parties : le quota d'Anna (20 creations par heure) sert aux controles suivants. */
+    const creerAvec = async (qui, corps) => { const r = await appel("POST", "creer", corps, qui); return { s: r.status, id: r.status === 200 ? (await r.json()).id : "" }; };
+    let k = await creerAvec("Dan", { cad: 0, coul: "b" });
+    let x = (await ouvrir(k.id, "Dan")).ws, y = (await ouvrir(k.id, "Bob")).ws;
+    T("le createur choisit les Blancs : il les a, l'autre a les Noirs", k.s === 200 && x.dernier().moi === "b" && y.dernier().moi === "n", x.dernier().moi + "/" + y.dernier().moi);
+    k = await creerAvec("Dan", { cad: 0, coul: "n" });
+    x = (await ouvrir(k.id, "Dan")).ws; y = (await ouvrir(k.id, "Bob")).ws;
+    T("le createur choisit les Noirs : il les a", x.dernier().moi === "n" && y.dernier().moi === "b");
+    T("« au hasard » est accepte, une couleur inconnue est refusee (400)", (await creerAvec("Dan", { cad: 0, coul: "h" })).s === 200 && (await creerAvec("Dan", { cad: 0, coul: "rouge" })).s === 400);
+    k = await creerAvec("Dan", { cad: 3, coul: "b" });
+    x = (await ouvrir(k.id, "Dan")).ws; y = (await ouvrir(k.id, "Bob")).ws;
+    T("cadence classique 30+0 : trente minutes chacun", k.s === 200 && x.dernier().cad.join("+") === "1800+0" && x.dernier().tb === 1800e3 && x.dernier().tn === 1800e3, JSON.stringify(x.dernier().cad));
+    k = await creerAvec("Dan", { cad: 4 });
+    x = (await ouvrir(k.id, "Dan")).ws;
+    T("cadence classique 30+20 : l'increment est de 20 secondes", x.dernier().cad.join("+") === "1800+20");
+    T("60+0 existe, pas de septieme cadence", (await creerAvec("Dan", { cad: 5 })).s === 200 && (await creerAvec("Dan", { cad: 6 })).s === 400);
+    env.DB.brut.exec("DELETE FROM invitations");
+    k = await creerAvec("Dan", { cad: 4, coul: "b", adv: "Bob" });
+    const inv = (await (await appel("GET", "invitations", null, "Bob")).json()).liste;
+    T("l'invitation dit la cadence et la couleur de l'invite (Noirs)", inv.length === 1 && inv[0].id === k.id && inv[0].cad === 4 && inv[0].coul === "n", JSON.stringify(inv));
+    env.DB.brut.prepare("UPDATE invitations SET cad = 2 WHERE partie = ?").run(k.id);
+    const anc = (await (await appel("GET", "invitations", null, "Bob")).json()).liste;
+    T("une ancienne invitation, sans couleur, se lit toujours", anc.length === 1 && anc[0].cad === 2 && anc[0].coul === null, JSON.stringify(anc));
+    env.DB.brut.exec("DELETE FROM invitations");
+  }
+
   console.log("Invitations");
   const recues = async qui => (await (await appel("GET", "invitations", null, qui)).json()).liste;
   const enBase = () => env.DB.brut.prepare("SELECT COUNT(*) AS n FROM invitations").get().n;

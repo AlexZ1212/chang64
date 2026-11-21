@@ -115,6 +115,10 @@ const H = w => {
 
   console.log("\nPLAYING KEEPS REVIEW IN STEP");
   a.click(a.$("btnNew")); await wait(600);
+  /* 2026-11-21 : une partie importee en PGN est une partie a l'ecran (son
+     echiquier restait masque). « Nouvelle partie » ramene donc d'abord aux
+     reglages, comme apres toute partie ; un second appui la lance. */
+  if (!A.w.eval("gameStarted")) { a.click(a.$("btnNew")); await wait(600); }
   /* Partie chronometree : l'overlay de preparation attend le feu vert, sans
      quoi les clics sur l'echiquier ne jouent aucun coup. */
   {

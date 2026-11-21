@@ -799,7 +799,7 @@ function renderClocks(){
   /* Une partie relue depuis « Tes parties » nomme son adversaire d'alors
      (un membre, un ami, l'ordinateur a la force de ce jour-la). */
   $("clockTopName").textContent=(typeof isReviewGame!=="undefined"&&isReviewGame&&typeof revueAdv!=="undefined"&&revueAdv)?revueAdv:botLabel();
-  $("clockBottomName").textContent=t("You");
+  $("clockBottomName").textContent=(typeof isReviewGame!=="undefined"&&isReviewGame&&typeof revueMoi!=="undefined"&&revueMoi)?revueMoi:t("You");
   $("clockTopSwatch").className=topColor===B?"dark":"";
   $("clockBottomSwatch").className=botColor===B?"dark":"";
   $("clockTopTime").textContent=sansTemps?"":fmtTime(val(topColor));

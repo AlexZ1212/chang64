@@ -538,7 +538,9 @@ function renderResult(show){
       SON.fin(resultInfo.kind,game.isCheckmate()?0.62:(mode==="play"&&isFlagged())?0.3:0.1);
     }
   }
-  if(!show||!resultInfo||resultDismissed){b.className="result hide";return;}
+  /* Une partie relue (rouverte depuis Tes parties ou importee) ne rejoue pas
+     sa carte de fin par-dessus l'echiquier (2026-11-21). */
+  if(!show||!resultInfo||resultDismissed||isReviewGame){b.className="result hide";return;}
   /* Le bandeau est partage avec le bilan de Chang Sprint (showFin) : sans ce
      menage, une fin de partie jouee apres un sprint affichait encore ses
      pastilles et "Touche un ✓ ou un ✗..." (signale le 2026-10-25, capture
@@ -981,12 +983,23 @@ function loadPgn(text){
   }
   clearAnalysis();
   isReviewGame=true;
+  /* Une partie importee est une partie a l'ecran (2026-11-21) : sans cela,
+     un import fait depuis les reglages, avant toute partie, annoncait « N
+     demi-coups charges » sur un echiquier reste masque. Rien de la partie
+     precedente ne doit s'y meler : ni abandon, ni carte de fin, ni nom. */
+  if(typeof gameStarted!=="undefined")gameStarted=true;
+  if(typeof resigned!=="undefined")resigned=null;
+  resultInfo=null;gameSaved=true;
+  /* Les deux camps sont nommes par leur couleur : on ne sait pas qui jouait. */
+  revueAdv=t("Black");revueMoi=t("White");
   game=g;sanList=san;gameUci=uci;
   gameStartFen=null;
   lastMove=g.history.length?g.history[g.history.length-1].m:null;
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
+  if(typeof clockHist!=="undefined")clockHist=[];
   myColor=W;flipped=false;mainGame=null;
   refreshGame();
+  { const st=$("status"); if(st){st.className="status";st.textContent=t("Replaying a saved game. Step through it or run the review.");} }
   msg.textContent=stopped
     ? t("Loaded {n} half-moves, then stopped: \u201c{tok}\u201d is not legal in that position.",{n:san.length,tok:stopped})
     : t("Loaded {n} half-moves. Step through with the arrows, or analyse it.",{n:san.length});
@@ -1242,6 +1255,7 @@ function sanOf(uciStr,fen){
    setMode("play") restaure (mainGame, mainSan...) : meme chemin qu'un retour
    sur l'onglet, sans dupliquer setMode. */
 let revueAdv="";   /* l'adversaire de la partie relue, pour le bandeau au-dessus de l'echiquier */
+let revueMoi="";   /* le nom du bas quand ce n'est pas « Toi » : partie importee en PGN */
 function ouvrirPartieGardee(rec,source){
   if(!rec||typeof rec.m!=="string")return;
   const startFen=typeof rec.fen==="string"?rec.fen:null;
@@ -1256,7 +1270,7 @@ function ouvrirPartieGardee(rec,source){
   isReviewGame=true;gameSaved=true;
   gameUci=uci;gameStartFen=startFen;
   myColor=rec.c==="w"?W:B;
-  revueAdv=partieAdversaire(rec,partieSorte(rec,source));
+  revueAdv=partieAdversaire(rec,partieSorte(rec,source));revueMoi="";
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
   if(typeof clockHist!=="undefined")clockHist=[];
   if(typeof resigned!=="undefined")resigned=null;

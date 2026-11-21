@@ -145,7 +145,7 @@ const propre = s => String(s).replace(/[\u00a0\u202f]/g, " ");
   T("effacer demande une confirmation", w.eval("history.length") === 30 && propre($("btnHistoryClear").textContent) === "Confirmer");
   $("btnHistoryClear").click();
   await pause(50);
-  T("puis vide la liste entiere, les trois sortes", w.eval("history.length") === 0 && w.eval("amiHistory.length") === 0 && lignes().length === 0 && cache("historyFiltres") && cache("historyActions") && /partie terminée/.test(propre($("historyList").textContent)), $("historyList").textContent);
+  T("puis vide la liste entiere, les trois sortes", w.eval("history.length") === 0 && w.eval("amiHistory.length") === 0 && lignes().length === 0 && cache("historyFiltres") && cache("historyActions") && !!d.querySelector("#historyList .history-empty"), $("historyList").textContent);
   T("et les deux rangements du navigateur", w.localStorage.getItem("chang64:games") === "[]" && w.localStorage.getItem("chang64:friendgames") === "[]", w.localStorage.getItem("chang64:games") + " " + w.localStorage.getItem("chang64:friendgames"));
   w.close();
 

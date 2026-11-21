@@ -2,6 +2,49 @@
  {
   "d": "2026-11-21",
   "en": [
+   "Correspondence games between members",
+   "Members can now play by correspondence: each player has 1, 3 or 7 days for every move, and the game waits on the site. Invite a friend by username or find an opponent close to your level; your games in progress are listed at the top of Play."
+  ],
+  "fr": [
+   "Parties par correspondance entre membres",
+   "Les membres peuvent jouer par correspondance : chacun a 1, 3 ou 7 jours pour jouer chaque coup, et la partie attend sur le site. Invite un ami par son pseudo ou trouve un adversaire proche de ton niveau ; tes parties en cours sont en haut de Jouer."
+  ],
+  "es": [
+   "Partidas por correspondencia entre miembros",
+   "Los miembros ya pueden jugar por correspondencia: cada uno tiene 1, 3 o 7 días para cada jugada, y la partida espera en el sitio. Invita a un amigo por su nombre de usuario o encuentra un rival cercano a tu nivel; tus partidas en curso aparecen arriba en Jugar."
+  ],
+  "pt": [
+   "Partidas por correspondência entre membros",
+   "Os membros já podem jogar por correspondência: cada um tem 1, 3 ou 7 dias para cada lance, e a partida espera no site. Convide um amigo pelo nome de usuário ou encontre um adversário próximo do seu nível; suas partidas em andamento ficam no topo de Jogar."
+  ],
+  "de": [
+   "Fernpartien zwischen Mitgliedern",
+   "Mitglieder können jetzt Fernpartien spielen: Jeder hat 1, 3 oder 7 Tage für jeden Zug, und die Partie wartet auf der Seite. Lade einen Freund über seinen Benutzernamen ein oder finde einen Gegner in deiner Stärke; deine laufenden Partien stehen oben unter Spielen."
+  ],
+  "ru": [
+   "Партии по переписке между участниками",
+   "Участники теперь могут играть по переписке: у каждого 1, 3 или 7 дней на ход, а партия ждёт на сайте. Пригласи друга по нику или найди соперника близкого уровня; твои текущие партии показаны вверху раздела «Играть»."
+  ],
+  "it": [
+   "Partite per corrispondenza tra membri",
+   "I membri ora possono giocare per corrispondenza: ognuno ha 1, 3 o 7 giorni per ogni mossa, e la partita aspetta sul sito. Invita un amico col suo nome utente oppure trova un avversario vicino al tuo livello; le tue partite in corso sono in cima a Gioca."
+  ],
+  "tr": [
+   "Üyeler arasında yazışmalı oyunlar",
+   "Üyeler artık yazışmalı oynayabilir: herkesin her hamle için 1, 3 ya da 7 günü var ve oyun sitede bekler. Bir arkadaşını kullanıcı adıyla davet et ya da seviyene yakın bir rakip bul; devam eden oyunların Oyna bölümünün en üstünde."
+  ],
+  "pl": [
+   "Partie korespondencyjne między członkami",
+   "Członkowie mogą teraz grać korespondencyjnie: każdy ma 1, 3 lub 7 dni na każdy ruch, a partia czeka w serwisie. Zaproś znajomego po nazwie użytkownika albo znajdź przeciwnika o zbliżonym poziomie; twoje trwające partie są na górze zakładki Graj."
+  ],
+  "id": [
+   "Permainan korespondensi antaranggota",
+   "Anggota kini bisa bermain lewat korespondensi: setiap pemain punya 1, 3, atau 7 hari untuk setiap langkah, dan permainan menunggu di situs. Undang teman lewat nama pengguna atau cari lawan yang levelnya dekat denganmu; permainanmu yang sedang berjalan ada di bagian atas Main."
+  ]
+ },
+ {
+  "d": "2026-11-21",
+  "en": [
    "Live games between members",
    "Members can now play live, with a clock kept by the server: invite a friend by username or by link, or find an opponent close to your level. In Play, on the Against a friend card."
   ],

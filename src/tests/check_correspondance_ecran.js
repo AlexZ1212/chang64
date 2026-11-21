@@ -17,6 +17,8 @@ const SITE = path.join(__dirname, "..", "site");
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d !== undefined ? "  -> " + (typeof d === "string" ? d : JSON.stringify(d)) : "")); } };
 const pause = ms => new Promise(r => setTimeout(r, ms));
+/* Attendre un etat de la page plutot qu'une duree : une machine chargee ne fait pas echouer le test. */
+async function jusqua(f, ms) { const fin = Date.now() + (ms || 5000); while (Date.now() < fin) { try { if (f()) return true; } catch (e) {} await pause(15); } return false; }
 const net = s => String(s).replace(/[  ]/g, " ");
 const HEURE = 3600e3, JOUR = 24 * HEURE;
 
@@ -123,7 +125,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
     { id: "pas-un-id", s: "jeu", adv: "X", cad: 7, coul: "b", atoi: true, ech: Date.now() + JOUR }
   ];
   w.eval("setMode('jouer')");
-  await pause(80);
+  await jusqua(() => $("corrListe").children.length === 7);
   const lignes = () => [...$("corrListe").children];
   const texte = el => net(el.textContent);
   T("elle est en haut de l'onglet Jouer, avant les trois cartes", !cache("corrPanel") && $("corrPanel").parentNode === $("pane-jouer") && $("pane-jouer").firstElementChild === $("corrPanel") && net($("corrPanel").querySelector(".eyebrow").textContent) === "Tes parties en cours");

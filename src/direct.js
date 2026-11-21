@@ -81,22 +81,22 @@ function directChercherFin() {
   }).catch(() => {});
 }
 /* Les invitations recues, les plus recentes d'abord : [{id, p, cad, cree}].
-   La meme reponse porte les parties par correspondance du membre : elles sont
-   retenues au passage (directCorrLues), pour ne pas doubler la requete. */
-let directCorrLues = null;        /* null : la derniere lecture n'en a pas rendu */
+   La meme reponse porte les parties par correspondance du membre : elles
+   voyagent avec le tableau rendu (propriete corr), pour ne pas doubler la
+   requete ; deux lectures en meme temps ne se marchent pas dessus. */
 async function directInvitations() {
-  directCorrLues = null;
   try {
     const r = await fetch(directAdresse("invitations"), { credentials: "same-origin", headers: directEntetes || {} });
     const d = r.ok ? await r.json().catch(() => null) : null;
-    if (d && Array.isArray(d.corr)) directCorrLues = d.corr;
-    return d && Array.isArray(d.liste) ? d.liste : [];
+    const liste = d && Array.isArray(d.liste) ? d.liste : [];
+    if (d && Array.isArray(d.corr)) liste.corr = d.corr;
+    return liste;
   } catch (e) { return []; }
 }
 /* Invitations du direct ET parties par correspondance, en une seule requete. */
 async function directNouvelles() {
   const liste = await directInvitations();
-  return { liste, corr: directCorrLues || [], ok: !!directCorrLues };
+  return { liste, corr: liste && liste.corr || [], ok: !!(liste && liste.corr) };
 }
 async function directPoster(route, corps) {
   try {

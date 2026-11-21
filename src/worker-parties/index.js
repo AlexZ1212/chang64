@@ -33,6 +33,8 @@
  *   GET  /api/partie/invitations                          rend aussi corr:[...], les
  *        parties par correspondance du membre (voir corrListe)
  *   10 parties par correspondance en cours au plus par membre (erreur « plein »).
+ *   Une fois par heure, balayer() retire des parties tout ce qui reste d'un
+ *   compte supprime et reveille une partie dont l'alarme n'aurait pas sonne.
  *
  * Inviter un membre par son pseudo (adv) lui reserve la partie et pose une
  * ligne dans la table invitations de la base du site (compte-schema.sql),
@@ -166,11 +168,12 @@ async function corrListe(env, moi, now, objet) {
   ).bind(moi).all()).results || [];
   let l;
   try { l = await lire(); } catch (e) { return []; }
-  /* Rattrapage : echeance depassee, ou adversaire dont le compte a disparu. */
+  /* Rattrapage : echeance depassee, ou adversaire dont le compte a disparu
+     (le balayage de chaque heure l'aurait fait aussi : voir balayer). */
   let reveils = 0;
   for (const x of l) {
     if (reveils >= 4) break;
-    const adv = x.b === moi ? x.n : x.b, parti = x.etat === 1 && adv && !(x.b === moi ? x.pn : x.pb);
+    const adv = x.b === moi ? x.n : x.b, parti = x.etat >= 1 && adv && !(x.b === moi ? x.pn : x.pb);
     if (!(x.etat < 2 && x.ech < now - 5000) && !parti) continue;
     reveils++;
     try {
@@ -206,6 +209,28 @@ async function corrListe(env, moi, now, objet) {
     out.push(o);
   }
   return out;
+}
+
+/* Une fois par heure (declencheur de wrangler.toml), sans attendre qu'un
+   joueur revienne : les parties dont un joueur a supprime son compte n'en
+   gardent plus rien (la suppression d'un compte doit tout emporter, pseudo
+   compris), et celles dont l'echeance est passee sans que leur alarme ait
+   sonne sont reveillees. Une lecture de la base par passage, rien d'autre
+   quand tout est en ordre. */
+async function balayer(env, now) {
+  if (!env.DB || !env.PARTIES) return 0;
+  const l = (await env.DB.prepare(
+    "SELECT x.partie AS id, x.b, x.n, cb.id AS ib, cn.id AS ic FROM correspondances x LEFT JOIN comptes cb ON cb.id = x.b LEFT JOIN comptes cn ON cn.id = x.n " +
+    "WHERE (x.etat >= 1 AND ((x.b <> 0 AND cb.id IS NULL) OR (x.n <> 0 AND cn.id IS NULL))) OR (x.etat < 2 AND x.echeance < ?1) LIMIT 25"
+  ).bind(now - 60000).all()).results || [];
+  for (const x of l) {
+    const partis = [x.b && !x.ib ? x.b : 0, x.n && !x.ic ? x.n : 0].filter(Boolean);
+    try {
+      const r = await env.PARTIES.get(env.PARTIES.idFromName(x.id)).fetch("https://partie/annuaire?id=" + x.id + (partis.length ? "&parti=" + partis.join(",") : ""));
+      if (r.status === 404) await env.DB.prepare("DELETE FROM correspondances WHERE partie = ?1").bind(x.id).run();
+    } catch (e) {}
+  }
+  return l.length;
 }
 
 /* ---------- Entree du Worker ---------- */
@@ -436,6 +461,10 @@ export default {
          reste du site (pages statiques, compte) n'en depend pas. */
       return erreur("limite", 503);
     }
+  },
+  /* Le balayage de chaque heure (voir balayer). */
+  async scheduled(evenement, env) {
+    try { await balayer(env, Date.now()); } catch (e) {}
   }
 };
 
@@ -710,6 +739,9 @@ export class Partie {
     /* Correspondance : s'asseoir sans fil (invitation acceptee, adversaire au hasard). */
     if (url.pathname === "/rejoindre") {
       if (!p) return new Response(null, { status: 404 });
+      /* Seulement par correspondance : en direct on s'assoit en ouvrant le fil,
+         sinon la minute du premier coup partirait sans le joueur. */
+      if (!corr(p.cad)) return new Response(null, { status: 403 });
       const d = await request.json();
       if (!this.couleur(d.j)) {
         if (p.phase !== "attente" || (p.pour && p.pour !== d.j)) return new Response(null, { status: 403 });
@@ -730,9 +762,23 @@ export class Partie {
        partie est alors gagnee par celui qui reste). */
     if (url.pathname === "/annuaire") {
       if (!p) return new Response(null, { status: 404 });
-      const parti = +url.searchParams.get("parti"), c = parti ? this.couleur(parti) : null;
-      if (c && (p.phase === "debut" || p.phase === "jeu")) {
-        this.finir(p.phase === "debut" ? "" : c === "b" ? "0-1" : "1-0", p.phase === "debut" ? "annulee" : "abandon", now);
+      /* parti : les comptes supprimes (un ou deux numeros). La partie n'en
+         garde plus rien, ni numero ni pseudo ; en cours, elle est gagnee par
+         celui qui reste (annulee si personne ne reste, ou avant le premier
+         coup de chacun). */
+      const partis = (url.searchParams.get("parti") || "").split(",").map(Number).filter(Boolean).map(j => this.couleur(j)).filter(Boolean);
+      if (partis.length) {
+        const enCours = p.phase === "debut" || p.phase === "jeu", c = partis[0];
+        if (enCours) {
+          const nul = p.phase === "debut" || partis.length > 1;
+          this.finir(nul ? "" : c === "b" ? "0-1" : "1-0", nul ? "annulee" : "abandon", now);
+        }
+        for (const x of partis) {
+          const id = p.j[x].id;
+          if (p.pour === id) { p.pour = 0; p.pourP = null; }
+          if (p.de === id) p.de = 0;
+          p.j[x] = { id: 0, p: "" };
+        }
         await this.planifier(this.echeance(), now);
         await this.ecrire();
         this.diffuser(now);

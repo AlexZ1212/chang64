@@ -280,6 +280,15 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
   for (let i = 0; i < 3; i++) r = await post("creer", { cad: 8, adv: "G11" }, "G12");
   T("trois invitations en attente vers le meme membre, pas quatre", r.s === 200 && (await post("creer", { cad: 8, adv: "G11" }, "G12")).erreur === "invitations");
 
+  console.log("Le direct n'est pas concerne");
+  {
+    const d = await post("creer", { cad: 0 }, "G7");
+    const r1 = await post("accepter", { id: d.id }, "G8");
+    const f = (await ouvrir(d.id, "G7")).ws;
+    T("« accepter » ne permet pas de s'asseoir sans fil dans une partie en direct", r1.s === 403 && f.dernier().phase === "attente" && ![f.dernier().b, f.dernier().nr].includes("G8"), [r1.s, f.dernier().phase, f.dernier().b, f.dernier().nr]);
+    T("par le fil, la place reste libre pour lui", (await ouvrir(d.id, "G8")).s === 101 && f.dernier().phase === "debut");
+  }
+
   console.log("Compte supprime, annuaire abime");
   g = await lancee(7, "G1", "G2");
   a = (await ouvrir(g, "G1")).ws; await coup(g, a, "e2e4"); await faux.quitter(g, a);
@@ -293,6 +302,38 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
   T("une ligne disparue de l'annuaire est reposee au coup suivant", !!ligne(g) && ligne(g).etat === 1 && ligne(g).trait === ids.G4 && (await dans("G4", g)).atoi === true);
   env.DB.brut.prepare("INSERT INTO correspondances (partie, b, n, cad, etat, trait, echeance, cree) VALUES ('zzzzzzzzzzzz', ?, ?, 7, 1, ?, ?, ?)").run(ids.G3, ids.G4, ids.G3, Date.now() - HEURE, Date.now());
   T("une ligne sans partie derriere est effacee a la lecture", !(await dans("G3", "zzzzzzzzzzzz")) && !ligne("zzzzzzzzzzzz"));
+
+  console.log("Balayage de chaque heure");
+  {
+    const stock = id => [...faux.objets.get(id).donnees.values()].join(" ");
+    const g1 = await lancee(7, "G9", "G10");
+    let x1 = (await ouvrir(g1, "G9")).ws; await coup(g1, x1, "e2e4"); await faux.quitter(g1, x1);
+    x1 = (await ouvrir(g1, "G10")).ws; await coup(g1, x1, "e7e5"); await faux.quitter(g1, x1);
+    T("tant que tout va bien, le balayage ne touche a rien", await (async () => { const av = faux.ecritures; await mod.default.scheduled({}, env); return faux.ecritures === av && ligne(g1).etat === 1 && /G10/.test(stock(g1)); })());
+    env.DB.brut.prepare("DELETE FROM comptes WHERE id = ?").run(ids.G10);
+    await mod.default.scheduled({}, env);
+    T("compte supprime : sans attendre l'adversaire, la partie est finie et gagnee par celui qui reste", ligne(g1).etat === 2 && ligne(g1).res === "1-0" && ligne(g1).n === 0, ligne(g1));
+    T("la partie ne garde plus le pseudo du compte supprime", !/G10/.test(stock(g1)) && /G9/.test(stock(g1)), stock(g1).slice(0, 200));
+    x1 = (await ouvrir(g1, "G9")).ws;
+    T("celui qui reste voit la fin, sans le pseudo de l'autre", x1.dernier().phase === "fin" && x1.dernier().fin.m === "abandon" && !x1.dernier().nr && x1.dernier().b === "G9", [x1.dernier().b, x1.dernier().nr]);
+    T("un second passage ne refait rien", await (async () => { const av = faux.ecritures; await mod.default.scheduled({}, env); return faux.ecritures === av; })());
+    /* Une partie deja finie dont un joueur supprime ensuite son compte. */
+    const g2 = await lancee(7, "G11", "G12");
+    let y = (await ouvrir(g2, "G11")).ws; await coup(g2, y, "e2e4");
+    const y2 = (await ouvrir(g2, "G12")).ws; await coup(g2, y2, "e7e5");
+    await faux.envoyer(g2, y, { t: "abandon" });
+    env.DB.brut.prepare("DELETE FROM comptes WHERE id = ?").run(ids.G11);
+    await mod.default.scheduled({}, env);
+    T("partie deja finie : le pseudo du compte supprime en est retire aussi, le resultat reste", !/G11/.test(stock(g2)) && ligne(g2).b === 0 && ligne(g2).res === "0-1", stock(g2).slice(0, 200));
+    /* Une echeance manquee par l'alarme. */
+    const g3 = await lancee(6, "G5", "G6");
+    let z = (await ouvrir(g3, "G5")).ws; await coup(g3, z, "e2e4"); await faux.quitter(g3, z);
+    z = (await ouvrir(g3, "G6")).ws; await coup(g3, z, "e7e5"); await faux.quitter(g3, z);
+    avancer(JOUR + 5 * 60e3);
+    faux.objets.get(g3).alarme = null;
+    await mod.default.scheduled({}, env);
+    T("une echeance que l'alarme aurait manquee est rattrapee dans l'heure", ligne(g3).etat === 2 && ligne(g3).res === "0-1", ligne(g3));
+  }
 
   console.log("Economie des ecritures");
   g = await lancee(7, "G5", "G6");

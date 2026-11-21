@@ -226,3 +226,40 @@ CREATE TABLE IF NOT EXISTS pseudos_quittes (
   compte_id INTEGER NOT NULL DEFAULT 0,
   jusqu INTEGER NOT NULL
 );
+
+-- Parties par correspondance (2026-11-21) : l'annuaire des parties entre
+-- membres ou chacun joue quand il veut (1, 3 ou 7 jours par coup). Ecrit par
+-- le Worker des parties (worker-parties/index.js). Il sert a deux choses :
+-- montrer a un membre la liste de ses parties en cours, et lui dire quand
+-- c'est a lui de jouer. Les coups n'y sont pas : ils restent dans la partie
+-- elle-meme. Aucun texte libre. Une ligne par partie, effacee 14 jours apres
+-- la fin de la partie, a l'echeance d'une invitation restee sans reponse
+-- (7 jours), et avec le compte de l'un des deux joueurs (une partie en cours
+-- est d'abord donnee gagnee a celui qui reste).
+CREATE TABLE IF NOT EXISTS correspondances (
+  partie TEXT PRIMARY KEY,
+  -- Comptes qui jouent les Blancs et les Noirs ; 0 = place encore libre.
+  b INTEGER NOT NULL DEFAULT 0,
+  n INTEGER NOT NULL DEFAULT 0,
+  -- Membre invite, tant qu'il n'a pas repondu ; 0 = ouverte a un adversaire au hasard.
+  pour INTEGER NOT NULL DEFAULT 0,
+  -- Numero de la cadence : 6 = 1 jour par coup, 7 = 3 jours, 8 = 7 jours.
+  cad INTEGER NOT NULL,
+  -- 0 = en attente d'un adversaire, 1 = en cours, 2 = finie.
+  etat INTEGER NOT NULL DEFAULT 0,
+  -- Compte qui doit jouer ; 0 = personne.
+  trait INTEGER NOT NULL DEFAULT 0,
+  -- Date limite : de la reponse a l'invitation, du coup en cours, ou de l'effacement.
+  echeance INTEGER NOT NULL,
+  -- Une fois finie : 1-0, 0-1, 1/2, vide (annulee) ou refus (invitation declinee).
+  res TEXT NOT NULL DEFAULT '',
+  -- Qui a vu la fin : 1 = les Blancs, 2 = les Noirs, 3 = les deux.
+  vu INTEGER NOT NULL DEFAULT 0,
+  -- Niveau du createur, pour rapprocher les adversaires tires au hasard.
+  note INTEGER NOT NULL DEFAULT 0,
+  cree INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS correspondances_b ON correspondances (b);
+CREATE INDEX IF NOT EXISTS correspondances_n ON correspondances (n);
+CREATE INDEX IF NOT EXISTS correspondances_pour ON correspondances (pour);
+CREATE INDEX IF NOT EXISTS correspondances_ouvertes ON correspondances (etat, cad);

@@ -639,6 +639,11 @@ async function effacer(env, id, now) {
   try { await env.DB.prepare("DELETE FROM demandes_amis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM invitations WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
+  /* Parties par correspondance (2026-11-21) : invitations, recherches et
+     parties finies partent tout de suite. Une partie en cours reste le temps
+     que l'adversaire revienne : le serveur des parties la lui donne gagnee,
+     puis l'efface (worker-parties, corrListe). */
+  try { await env.DB.prepare("DELETE FROM correspondances WHERE etat <> 1 AND (b = ?1 OR n = ?1 OR pour = ?1)").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),

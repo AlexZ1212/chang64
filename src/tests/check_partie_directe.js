@@ -67,7 +67,7 @@ const avancer = ms => { decalage += ms; };
   console.log("Acces");
   T("creer sans session : refuse (401)", (await creer(null, 0)).s === 401);
   T("creer depuis un autre site : refuse (403)", (await appel("POST", "creer", { cad: 0 }, "Anna", "https://ailleurs.example")).status === 403);
-  T("cadence inconnue : refusee (400)", (await creer("Anna", 7)).s === 400);
+  T("cadence inconnue : refusee (400)", (await creer("Anna", 99)).s === 400);
   let c = await creer("Anna", 0);
   T("creer : rend un identifiant de 12 signes", c.s === 200 && /^[a-z2-9]{12}$/.test(c.id), c.id);
   T("rejoindre sans session : refuse (401)", (await ouvrir(c.id, null)).s === 401);

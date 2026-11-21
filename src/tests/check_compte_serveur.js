@@ -125,7 +125,7 @@ const avancer = ms => { decalage += ms; };
   r = await appel("POST", "connexion", { pseudo: "Alexandre", code: code(1) });
   T("apres le blocage, le bon code passe", r.s === 200);
   l = lignes("SELECT echecs, bloque_jusqu FROM comptes")[0];
-  T("compteur remis a zero", l.echecs === 0 && l.bloque_jusqu === 0);
+  T("compteur remis a zero", l.echecs === 0 && l.bloque_jusqu === 0 && lignes("SELECT COUNT(*) AS n FROM essais")[0].n === 0);
   /* 60 essais lances d'un coup, le bon code au milieu. */
   const salve = await Promise.all(Array.from({ length: 60 }, (_, i) => appel("POST", "connexion", { pseudo: "Alexandre", code: code(i === 40 ? 1 : 100 + i) })));
   const verifies = salve.filter(x => x.s === 401).length, passes = salve.filter(x => x.s === 200).length;
@@ -133,9 +133,11 @@ const avancer = ms => { decalage += ms; };
   avancer(E.BLOCAGE * 2000);
   r = await appel("POST", "connexion", { pseudo: "Alexandre", code: code(1) });
   T("blocage plafonne a 24 h", r.s === 200);
-  env.DB.brut.exec("UPDATE comptes SET echecs = 30");
+  /* Les essais sont comptes dans la table essais (2026-11-21), par connexion. */
   await appel("POST", "connexion", { pseudo: "Alexandre", code: code(9) });
-  l = lignes("SELECT bloque_jusqu FROM comptes")[0];
+  env.DB.brut.exec("UPDATE essais SET n = 30");
+  await appel("POST", "connexion", { pseudo: "Alexandre", code: code(9) });
+  l = lignes("SELECT MAX(jusqu) AS bloque_jusqu FROM essais")[0];
   T("meme apres 30 echecs, pas plus de 24 h", l.bloque_jusqu - Date.now() <= 864e5 && l.bloque_jusqu - Date.now() > 864e5 - 5000, String(l.bloque_jusqu - Date.now()));
   avancer(864e5 + 1000);
   await appel("POST", "connexion", { pseudo: "Alexandre", code: code(1) });
@@ -248,7 +250,9 @@ const avancer = ms => { decalage += ms; };
   T("plus rien en base : compte, sessions, liens", ["comptes", "jetons", "liens_appareil"].every(t => lignes("SELECT COUNT(*) AS n FROM " + t)[0].n === 0));
   T("la session ne marche plus", (await appel("GET", "etat", undefined, { cookie: cookieF })).s === 401);
   T("le code de secours ne ressuscite rien", (await appel("POST", "secours", { pseudo: "Alexandre", secours: secours3, code: code(7) })).s === 401);
-  T("le pseudo est de nouveau libre", (await appel("POST", "pseudo", { pseudo: "Alexandre" })).j.libre === true);
+  /* Reserve 30 jours (2026-11-21) : voir check_compte_securite.js. */
+  r = await appel("POST", "pseudo", { pseudo: "Alexandre" });
+  T("le pseudo du compte supprime reste reserve", r.j.libre === false && r.j.raison === "pris", r.texte);
 
   console.log("\nEffacement apres deux ans");
   r = await appel("POST", "creer", { pseudo: "Dormeur", code: code(1) });
@@ -300,7 +304,7 @@ const avancer = ms => { decalage += ms; };
     T("l'autre appareil reste connecte et apprend le nouveau pseudo par la synchronisation", (await appel("GET", "synchro", undefined, { cookie: cA2 })).j.pseudo === "Apres");
     T("l'ancien pseudo ne permet plus de se connecter", (await appel("POST", "connexion", { pseudo: "Avant", code: code(11) })).s === 401);
     T("le nouveau pseudo, avec le code etire pour lui, oui", (await appel("POST", "connexion", { pseudo: "apres", code: code(21) })).s === 200);
-    T("l'ancien pseudo est de nouveau libre", (await appel("POST", "pseudo", { pseudo: "Avant" })).j.libre === true);
+    T("l'ancien pseudo reste reserve : pris pour les autres, libre pour son ancien proprietaire", (await appel("POST", "pseudo", { pseudo: "Avant" })).j.libre === false && (await appel("POST", "pseudo", { pseudo: "Avant" }, { cookie: cA })).j.libre === true);
     T("le voisin n'a pas bouge", (await appel("GET", "etat", undefined, { cookie: cAutre })).j.pseudo === "Voisin");
     r = await appel("POST", "pseudo-changer", { pseudo: "Encore", ancien: code(21), nouveau: code(22) }, { cookie: cA });
     T("second changement dans la semaine : refuse", r.s === 429 && r.j.erreur === "pseudo_recent" && r.j.attendre > 6 * 86400 && r.j.attendre <= 7 * 86400, r.texte);

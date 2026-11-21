@@ -198,3 +198,31 @@ CREATE TABLE IF NOT EXISTS invitations (
   cree INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS invitations_a ON invitations (a, cree);
+
+-- Faux codes a la connexion (2026-11-21) : comptes par connexion Internet, pour
+-- que celui qui devine un code se bloque lui-meme sans fermer le compte a son
+-- proprietaire. Meme principe que la table creations : ni adresse ni compte en
+-- clair, une empreinte calculee avec le secret du serveur et la date du jour
+-- (illisible, differente chaque jour), un compteur, et la date jusqu'a
+-- laquelle cette connexion est bloquee. Deux sortes de lignes : une par
+-- (compte, connexion), une par compte (plafond du jour, toutes connexions
+-- confondues). Effacee le lendemain.
+CREATE TABLE IF NOT EXISTS essais (
+  empreinte TEXT NOT NULL,
+  jour TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 0,
+  jusqu INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (empreinte, jour)
+);
+
+-- Pseudos quittes (2026-11-21) : apres un changement de pseudo ou une
+-- suppression de compte, l'ancien pseudo reste reserve 30 jours, pour que
+-- personne ne se fasse passer pour son ancien proprietaire. La colonne cle ne
+-- garde pas le pseudo mais son empreinte (calculee avec le secret du serveur),
+-- qui suffit a le reconnaitre. compte_id : l'ancien proprietaire, qui peut le
+-- reprendre ; 0 apres une suppression de compte. Effacee a l'echeance.
+CREATE TABLE IF NOT EXISTS pseudos_quittes (
+  cle TEXT PRIMARY KEY,
+  compte_id INTEGER NOT NULL DEFAULT 0,
+  jusqu INTEGER NOT NULL
+);

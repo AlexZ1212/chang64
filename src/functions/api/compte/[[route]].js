@@ -71,7 +71,11 @@ const BLOCAGE = 15 * 60e3;
 const BLOCAGE_MAX = JOUR;
 const SESSIONS_MAX = 10;
 const TAILLE_MAX = 300000;           /* caracteres de la progression en JSON */
-const CREATIONS_PAR_HEURE = 300;     /* garde-fou global, sans adresse IP */
+const CREATIONS_PAR_HEURE = 300;     /* au-dela, seules les connexions nouvelles passent encore */
+const CREATIONS_SOUS_PRESSION = 2;   /* ...a raison de deux comptes par connexion et par jour */
+const CREATIONS_PAR_HEURE_MAX = 3000; /* plafond absolu, pour proteger la base */
+const ESSAIS_COMPTE_JOUR = 30;       /* faux codes par compte et par jour, toutes connexions confondues */
+const PSEUDO_RESERVE = 30 * JOUR;    /* un pseudo quitte reste reserve ce temps-la */
 const DELTA_SEMAINE_MAX = 300;
 /* Defis entre membres (table defis de compte-schema.sql). */
 const DEFIS_PAR_JOUR = 20;           /* envois par membre sur 24 h */
@@ -285,9 +289,10 @@ const cookieOter = () => ({ "Set-Cookie": COOKIE + "=; Path=/api/; Max-Age=0; Ht
    entiere passe ; un script, non). L'adresse n'est pas gardee : on en calcule
    une empreinte avec le secret du serveur et la date du jour, illisible et
    differente chaque jour, et on ne garde qu'un compteur, efface le lendemain.
-   Rend false si le plafond du jour est atteint. Sans adresse (essai local)
-   ou sans la table, on laisse passer : ce garde-fou ne doit jamais empecher
-   une creation legitime par sa propre panne. */
+   Rend false si le plafond du jour est atteint, sinon le nombre de creations
+   de cette connexion aujourd'hui (celle-ci comprise). Sans adresse (essai
+   local) ou sans la table, on laisse passer en rendant true : ce garde-fou ne
+   doit jamais empecher une creation legitime par sa propre panne. */
 async function adresseCompter(request, env, now) {
   const adresse = request.headers.get("CF-Connecting-IP") || "";
   if (!adresse) return true;
@@ -297,7 +302,7 @@ async function adresseCompter(request, env, now) {
     const r = await env.DB.prepare(
       "INSERT INTO creations (empreinte, jour, n) VALUES (?1, ?2, 1) ON CONFLICT(empreinte, jour) DO UPDATE SET n = n + 1 WHERE n < ?3 RETURNING n"
     ).bind(empreinte, jour, CREATIONS_PAR_ADRESSE).first();
-    return !!r;
+    return r ? r.n : false;
   } catch (e) { return true; }
 }
 
@@ -356,7 +361,55 @@ async function sessionLire(request, env, now) {
 
 /* ---------- Limite d'essais ---------- */
 /* Compte l'essai puis verifie. Rend "ok", "faux" ou {bloque: date}. */
-async function codeEssayer(env, id, code, now) {
+/* Faux codes (2026-11-21, decision d'Alexandre). Avant, cinq faux codes
+   bloquaient le COMPTE : il suffisait de connaitre un pseudo pour empecher
+   son proprietaire d'ouvrir une session. Desormais les essais sont comptes
+   par connexion Internet : celui qui devine se bloque lui-meme (5 essais,
+   puis 15 minutes, doublees a chaque nouvel echec, un jour au plus), et le
+   proprietaire entre toujours depuis chez lui. Un second compteur, par compte
+   et par jour, borne une attaque repartie sur beaucoup de connexions : au-dela
+   de 30 faux codes, le code ne suffit plus jusqu'au lendemain (le code de
+   secours, lui, ouvre toujours, et les sessions deja ouvertes continuent).
+   Rien de lisible n'est garde : voir la table essais (compte-schema.sql).
+   Sans la table, on retombe sur l'ancien blocage par compte. */
+async function essaiEmpreintes(request, env, id, now) {
+  const jour = new Date(now).toISOString().slice(0, 10);
+  const sel = "chang64-essai-v1:" + ((env && env.POIVRE) || "") + ":" + jour;
+  const adresse = (request && request.headers.get("CF-Connecting-IP")) || "";
+  return { jour, a: (await hmac(sel, "a:" + id + ":" + adresse)).slice(0, 22), c: (await hmac(sel, "c:" + id)).slice(0, 22) };
+}
+async function essaisOublier(env, e, lesquelles) {
+  try { await env.DB.batch(lesquelles.map(x => env.DB.prepare("DELETE FROM essais WHERE empreinte = ?1 AND jour = ?2").bind(e[x], e.jour))); } catch (err) {}
+}
+async function codeEssayer(env, id, code, now, request) {
+  let e, passe;
+  try {
+    e = await essaiEmpreintes(request, env, id, now);
+    passe = await env.DB.prepare(
+      "INSERT INTO essais (empreinte, jour, n, jusqu) VALUES (?1, ?2, 1, 0) ON CONFLICT(empreinte, jour) DO UPDATE SET n = n + 1, " +
+      "jusqu = CASE WHEN n + 1 >= ?4 THEN ?3 + MIN(?6, ?5 * (1 << MIN(n + 1 - ?4, 10))) ELSE 0 END WHERE jusqu <= ?3 RETURNING n"
+    ).bind(e.a, e.jour, now, ESSAIS_CODE, BLOCAGE, BLOCAGE_MAX).first();
+  } catch (err) { return codeEssayerCompte(env, id, code, now); }
+  if (!passe) {
+    const b = await env.DB.prepare("SELECT jusqu FROM essais WHERE empreinte = ?1 AND jour = ?2").bind(e.a, e.jour).first();
+    return { bloque: b ? b.jusqu : now + BLOCAGE };
+  }
+  const duCompte = await env.DB.prepare(
+    "INSERT INTO essais (empreinte, jour, n, jusqu) VALUES (?1, ?2, 1, 0) ON CONFLICT(empreinte, jour) DO UPDATE SET n = n + 1 WHERE n < ?3 RETURNING n"
+  ).bind(e.c, e.jour, ESSAIS_COMPTE_JOUR).first();
+  if (!duCompte) return { bloque: Date.parse(e.jour + "T00:00:00Z") + JOUR };
+  const r = await env.DB.prepare("SELECT pin_hash FROM comptes WHERE id = ?1").bind(id).first();
+  if (!r || !codeValide(code) || !(await codeComparer(code, r.pin_hash, env))) return "faux";
+  /* Bon code : les compteurs repartent de zero. Si le secret POIVRE a ete
+     ajoute depuis la creation, l'empreinte est refaite avec lui. */
+  const refaire = env.POIVRE && r.pin_hash.split(".")[1] === "p0";
+  await env.DB.prepare("UPDATE comptes SET echecs = 0, bloque_jusqu = 0, vu = ?2, pin_hash = ?3 WHERE id = ?1")
+    .bind(id, now, refaire ? await codeHacher(code, env) : r.pin_hash).run();
+  await essaisOublier(env, e, ["a", "c"]);
+  return "ok";
+}
+/* L'ancien blocage, par compte : garde pour une base sans la table essais. */
+async function codeEssayerCompte(env, id, code, now) {
   const r = await env.DB.prepare(
     "UPDATE comptes SET echecs = echecs + 1, " +
     "bloque_jusqu = CASE WHEN echecs + 1 >= ?3 THEN ?2 + MIN(?5, ?4 * (1 << MIN(echecs + 1 - ?3, 10))) ELSE 0 END " +
@@ -400,6 +453,8 @@ async function nettoyer(env, now) {
   try { await env.DB.prepare("DELETE FROM demandes_amis WHERE cree < ?1 OR de NOT IN (SELECT id FROM comptes) OR a NOT IN (SELECT id FROM comptes)").bind(now - 60 * JOUR).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id NOT IN (SELECT id FROM comptes)").run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM creations WHERE jour < ?1").bind(new Date(now).toISOString().slice(0, 10)).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM essais WHERE jour < ?1").bind(new Date(now).toISOString().slice(0, 10)).run(); } catch (e) {}
+  try { await env.DB.prepare("DELETE FROM pseudos_quittes WHERE jusqu < ?1").bind(now).run(); } catch (e) {}
   try {
     await env.DB.batch([
       env.DB.prepare("DELETE FROM defis WHERE cree < ?1").bind(now - DEFIS_DUREE),
@@ -409,11 +464,35 @@ async function nettoyer(env, now) {
 }
 
 /* ---------- Routes ---------- */
-async function rPseudo(d, env) {
+/* Pseudo quitte (2026-11-21, decision d'Alexandre) : apres un changement de
+   pseudo ou une suppression de compte, l'ancien pseudo reste reserve 30 jours.
+   Personne d'autre ne peut le prendre (on ne se fait pas passer pour son
+   ancien proprietaire) et celui-ci peut le reprendre. La base ne garde pas le
+   pseudo lui-meme mais son empreinte. Sans la table, tout se passe comme
+   avant : le pseudo est libre aussitot. */
+const pseudoEmpreinte = async (env, cle) => (await hmac("chang64-pseudo-v1:" + ((env && env.POIVRE) || ""), cle)).slice(0, 32);
+/* Vrai si ce pseudo est reserve a un autre que le compte "id" (0 = personne). */
+async function pseudoReserve(env, cle, id, now) {
+  try {
+    const l = await env.DB.prepare("SELECT compte_id FROM pseudos_quittes WHERE cle = ?1 AND jusqu > ?2").bind(await pseudoEmpreinte(env, cle), now).first();
+    return !!l && !(id > 0 && l.compte_id === id);
+  } catch (e) { return false; }
+}
+async function pseudoReserver(env, cle, id, now) {
+  try {
+    await env.DB.prepare("INSERT INTO pseudos_quittes (cle, compte_id, jusqu) VALUES (?1, ?2, ?3) ON CONFLICT(cle) DO UPDATE SET compte_id = ?2, jusqu = ?3")
+      .bind(await pseudoEmpreinte(env, cle), id, now + PSEUDO_RESERVE).run();
+  } catch (e) {}
+}
+async function rPseudo(d, env, now, request) {
   const v = pseudoValider(d.pseudo);
   if (!v.ok) return json({ libre: false, raison: v.raison });
   const pris = await env.DB.prepare("SELECT 1 AS x FROM comptes WHERE cle = ?1").bind(v.cle).first();
-  return json(pris ? { libre: false, raison: "pris" } : { libre: true });
+  if (pris) return json({ libre: false, raison: "pris" });
+  /* Reserve : meme reponse qu'un pseudo pris, sauf pour son ancien proprietaire. */
+  let moi = 0;
+  try { const s = await sessionLire(request, env, now); if (s) moi = s.id; } catch (e) {}
+  return json(await pseudoReserve(env, v.cle, moi, now) ? { libre: false, raison: "pris" } : { libre: true });
 }
 
 async function rCreer(d, env, now, request) {
@@ -426,9 +505,18 @@ async function rCreer(d, env, now, request) {
   const texte = donneesTexte(d.donnees);
   if (texte === null) return erreur("donnees", 413);
   await nettoyer(env, now);
-  if (!(await adresseCompter(request, env, now))) return erreur("adresse", 429);
+  const duJour = await adresseCompter(request, env, now);
+  if (duJour === false) return erreur("adresse", 429);
+  /* Plafond de l'heure (2026-11-21) : un script reparti sur une quinzaine de
+     connexions pouvait encore l'atteindre et fermer les inscriptions a tout
+     le monde. Une fois atteint, on ne refuse plus que les connexions qui ont
+     deja cree des comptes aujourd'hui : un nouveau venu passe toujours. Le
+     plafond absolu, dix fois plus haut, protege la base. */
   const recents = await env.DB.prepare("SELECT COUNT(*) AS n FROM comptes WHERE cree > ?1").bind(now - 3600e3).first();
-  if (recents && recents.n >= CREATIONS_PAR_HEURE) return erreur("plus_tard", 429);
+  const sousPression = !!recents && recents.n >= CREATIONS_PAR_HEURE;
+  if (recents && recents.n >= CREATIONS_PAR_HEURE_MAX) return erreur("plus_tard", 429);
+  if (sousPression && !(typeof duJour === "number" && duJour <= CREATIONS_SOUS_PRESSION)) return erreur("plus_tard", 429);
+  if (await pseudoReserve(env, v.cle, 0, now)) return erreur("pseudo", 409, { raison: "pris" });
   const secours = secoursCreer(), c = chiffres(d.donnees);
   let ligne;
   try {
@@ -453,12 +541,12 @@ async function compteParPseudo(env, pseudo) {
   return env.DB.prepare("SELECT id, pseudo, version, secours_hash FROM comptes WHERE cle = ?1").bind(v.cle).first();
 }
 
-async function rConnexion(d, env, now) {
+async function rConnexion(d, env, now, request) {
   if (Math.random() < 0.1) await nettoyer(env, now);
   const c = await compteParPseudo(env, d.pseudo);
   /* Pseudo inconnu : meme reponse qu'un mauvais code. */
   if (!c) { await codeHacher(codeValide(d.code) ? d.code : "x", env); return erreur("identifiants", 401); }
-  const r = await codeEssayer(env, c.id, d.code, now);
+  const r = await codeEssayer(env, c.id, d.code, now, request);
   if (r !== "ok") return reponseEssai(r, now);
   const jeton = await sessionOuvrir(env, c.id, now);
   return json({ pseudo: c.pseudo, version: c.version }, 200, cookiePoser(jeton));
@@ -536,7 +624,14 @@ async function rExporter(s, env) {
   });
 }
 
-async function effacer(env, id) {
+async function effacer(env, id, now) {
+  /* Le pseudo du compte supprime reste indisponible 30 jours, et les pseudos
+     que ce compte avait quittes aussi (ils ne reviennent a personne). */
+  try {
+    const c = await env.DB.prepare("SELECT cle FROM comptes WHERE id = ?1").bind(id).first();
+    if (c) await pseudoReserver(env, c.cle, 0, now || Date.now());
+    await env.DB.prepare("UPDATE pseudos_quittes SET compte_id = 0 WHERE compte_id = ?1").bind(id).run();
+  } catch (e) {}
   try { await env.DB.prepare("DELETE FROM defis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM enquetes WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM blocages WHERE compte_id = ?1 OR bloque_id = ?1").bind(id).run(); } catch (e) {}
@@ -550,18 +645,18 @@ async function effacer(env, id) {
     env.DB.prepare("DELETE FROM comptes WHERE id = ?1").bind(id)
   ]);
 }
-async function rSupprimer(s, d, env, now) {
-  const r = await codeEssayer(env, s.id, d.code, now);
+async function rSupprimer(s, d, env, now, request) {
+  const r = await codeEssayer(env, s.id, d.code, now, request);
   if (r !== "ok") return reponseEssai(r, now);
-  await effacer(env, s.id);
+  await effacer(env, s.id, now);
   return json({ ok: true }, 200, cookieOter());
 }
 
 /* Changer de code : l'ancien est exige, les autres appareils sont
    deconnectes. */
-async function rCode(s, d, env, now) {
+async function rCode(s, d, env, now, request) {
   if (!codeValide(d.nouveau)) return erreur("code", 400);
-  const r = await codeEssayer(env, s.id, d.ancien, now);
+  const r = await codeEssayer(env, s.id, d.ancien, now, request);
   if (r !== "ok") return reponseEssai(r, now);
   await env.DB.batch([
     env.DB.prepare("UPDATE comptes SET pin_hash = ?2 WHERE id = ?1").bind(s.id, await codeHacher(d.nouveau, env)),
@@ -576,12 +671,14 @@ async function rCode(s, d, env, now) {
    le code, le nouveau pour la suite. Les regles du pseudo sont celles de la
    creation ; l'unicite est garantie par la base. Les sessions, le code de
    secours et la progression ne bougent pas. */
-async function rPseudoChanger(s, d, env, now) {
+async function rPseudoChanger(s, d, env, now, request) {
   const v = pseudoValider(d.pseudo);
   if (!v.ok) return erreur("pseudo", 400, { raison: v.raison });
   if (!codeValide(d.nouveau)) return erreur("code", 400);
-  const r = await codeEssayer(env, s.id, d.ancien, now);
+  const r = await codeEssayer(env, s.id, d.ancien, now, request);
   if (r !== "ok") return reponseEssai(r, now);
+  if (await pseudoReserve(env, v.cle, s.id, now)) return erreur("pseudo", 409, { raison: "pris" });
+  const ancien = await env.DB.prepare("SELECT cle FROM comptes WHERE id = ?1").bind(s.id).first();
   /* Une fois par semaine au plus (2026-11-17) : sinon un joueur pourrait
      changer de nom a repetition dans les tableaux. La condition est dans la
      mise a jour elle-meme. */
@@ -597,6 +694,13 @@ async function rPseudoChanger(s, d, env, now) {
     const l = await env.DB.prepare("SELECT pseudo_change FROM comptes WHERE id = ?1").bind(s.id).first();
     return erreur("pseudo_recent", 429, { attendre: Math.max(1, Math.ceil(((l ? l.pseudo_change : now) + PSEUDO_DELAI - now) / 1000)) });
   }
+  /* L'ancien pseudo reste reserve a ce compte ; s'il reprend un pseudo qu'il
+     avait quitte, la reserve de celui-ci tombe. Un simple changement de
+     majuscules ou d'accents garde la meme cle : rien a reserver. */
+  if (ancien && ancien.cle !== v.cle) {
+    await pseudoReserver(env, ancien.cle, s.id, now);
+    try { await env.DB.prepare("DELETE FROM pseudos_quittes WHERE cle = ?1").bind(await pseudoEmpreinte(env, v.cle)).run(); } catch (e) {}
+  }
   return json({ pseudo: v.pseudo });
 }
 
@@ -605,7 +709,7 @@ async function rPseudoChanger(s, d, env, now) {
    de secours fait 80 bits tires au hasard : aucune limite d'essais n'est
    utile, et un compte bloque par un tiers reste recuperable par son
    proprietaire. */
-async function rSecours(d, env, now) {
+async function rSecours(d, env, now, request) {
   if (!codeValide(d.code)) return erreur("code", 400);
   const c = await compteParPseudo(env, d.pseudo);
   const donne = await secoursHacher(d.secours, env);
@@ -615,13 +719,14 @@ async function rSecours(d, env, now) {
     "UPDATE comptes SET pin_hash = ?2, secours_hash = ?3, echecs = 0, bloque_jusqu = 0, vu = ?5 WHERE id = ?1 AND secours_hash = ?4 RETURNING id"
   ).bind(c.id, await codeHacher(d.code, env), await secoursHacher(secours, env), c.secours_hash, now).first();
   if (!r) return erreur("identifiants", 401);
+  try { await essaisOublier(env, await essaiEmpreintes(request, env, c.id, now), ["a", "c"]); } catch (e) {}
   await env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(c.id).run();
   const jeton = await sessionOuvrir(env, c.id, now);
   return json({ pseudo: c.pseudo, secours, version: c.version }, 200, cookiePoser(jeton));
 }
 /* Code de secours perdu mais code connu : on en refait un. */
-async function rSecoursNouveau(s, d, env, now) {
-  const r = await codeEssayer(env, s.id, d.code, now);
+async function rSecoursNouveau(s, d, env, now, request) {
+  const r = await codeEssayer(env, s.id, d.code, now, request);
   if (r !== "ok") return reponseEssai(r, now);
   const secours = secoursCreer();
   await env.DB.prepare("UPDATE comptes SET secours_hash = ?2 WHERE id = ?1").bind(s.id, await secoursHacher(secours, env)).run();
@@ -1096,10 +1201,10 @@ export async function onRequest({ request, env, params, waitUntil }) {
     if (m === "POST" && ["pseudo", "creer", "connexion", "secours", "lien-connexion"].includes(route)) {
       const d = await corps(request);
       if (!d) return erreur("requete", 400);
-      if (route === "pseudo") return await rPseudo(d, env);
+      if (route === "pseudo") return await rPseudo(d, env, now, request);
       if (route === "creer") return await rCreer(d, env, now, request);
-      if (route === "connexion") return await rConnexion(d, env, now);
-      if (route === "secours") return await rSecours(d, env, now);
+      if (route === "connexion") return await rConnexion(d, env, now, request);
+      if (route === "secours") return await rSecours(d, env, now, request);
       return await rLienConnexion(d, env, now);
     }
     if (m === "GET" && route === "profil") return await rProfil(request, env, now, waitUntil);
@@ -1127,10 +1232,10 @@ export async function onRequest({ request, env, params, waitUntil }) {
     const d = await corps(request);
     if (!d) return erreur("requete", 400);
     if (route === "synchro") return await rSynchroEcrire(s, d, env, now);
-    if (route === "supprimer") return await rSupprimer(s, d, env, now);
-    if (route === "code") return await rCode(s, d, env, now);
-    if (route === "secours-nouveau") return await rSecoursNouveau(s, d, env, now);
-    if (route === "pseudo-changer") return await rPseudoChanger(s, d, env, now);
+    if (route === "supprimer") return await rSupprimer(s, d, env, now, request);
+    if (route === "code") return await rCode(s, d, env, now, request);
+    if (route === "secours-nouveau") return await rSecoursNouveau(s, d, env, now, request);
+    if (route === "pseudo-changer") return await rPseudoChanger(s, d, env, now, request);
     if (route === "enquete") return await rEnqueteEcrire(s, d, env, now);
     if (route === "defi-envoyer") return await rDefiEnvoyer(s, d, env, now);
     if (route === "defi-repondre") return await rDefiRepondre(s, d, env, now);
@@ -1150,4 +1255,4 @@ export async function onRequest({ request, env, params, waitUntil }) {
 }
 
 /* Pour les tests seulement : Pages ne fait de route que de onRequest*. */
-export const _essai = { eloOrdiPropre, liguesCalculer, liguesRepartir, liguesOublier: () => { liguesMemo = { sem: "" }; }, LIGUE_SEUIL, CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };
+export const _essai = { eloOrdiPropre, CREATIONS_PAR_HEURE, CREATIONS_SOUS_PRESSION, ESSAIS_COMPTE_JOUR, ESSAIS_CODE, PSEUDO_RESERVE, liguesCalculer, liguesRepartir, liguesOublier: () => { liguesMemo = { sem: "" }; }, LIGUE_SEUIL, CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };

@@ -610,7 +610,10 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     parties_en_direct: { gagnees: l.direct_v, nulles: l.direct_n, perdues: l.direct_d },
-    elo_entre_membres: await eloMembreLire(env, s.id),
+    elo_entre_membres: await (async () => {
+      const f = await eloFamillesLire(env, s.id), un = x => (x ? { elo: x.r, parties_comptees: x.n } : null);
+      return f ? { blitz: un(f.b), rapide: un(f.r), classique: un(f.c), correspondance: un(f.k) } : null;
+    })(),
     version: l.version,
     ligue: ligue ? { semaine: ligue.sem, ligue: ["Pion", "Cavalier", "Fou", "Tour", "Dame"][ligue.ligue] || "Pion", exercices_de_la_semaine: ligue.points, dernier_mouvement: ligue.mouv } : null,
     joueurs_bloques: bloques.map(x => x.p),
@@ -639,6 +642,11 @@ async function effacer(env, id, now) {
   try { await env.DB.prepare("DELETE FROM demandes_amis WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM ligues WHERE compte_id = ?1").bind(id).run(); } catch (e) {}
   try { await env.DB.prepare("DELETE FROM invitations WHERE de = ?1 OR a = ?1").bind(id).run(); } catch (e) {}
+  /* Parties par correspondance (2026-11-21) : invitations, recherches et
+     parties finies partent tout de suite. Une partie en cours reste le temps
+     que l'adversaire revienne : le serveur des parties la lui donne gagnee,
+     puis l'efface (worker-parties, corrListe). */
+  try { await env.DB.prepare("DELETE FROM correspondances WHERE etat <> 1 AND (b = ?1 OR n = ?1 OR pour = ?1)").bind(id).run(); } catch (e) {}
   await env.DB.batch([
     env.DB.prepare("DELETE FROM jetons WHERE compte_id = ?1").bind(id),
     env.DB.prepare("DELETE FROM liens_appareil WHERE compte_id = ?1").bind(id),
@@ -1154,6 +1162,20 @@ async function eloMembreLire(env, id) {
     return l && l.elo > 0 && l.elo_n > 0 ? { r: l.elo, n: l.elo_n } : null;
   } catch (e) { return null; }
 }
+/* Un Elo entre membres par famille de cadences (2026-11-21 au soir) :
+   { b: Blitz, r: Rapide, c: Classique, k: Correspondance }, chacun { r, n } ou
+   null tant qu'aucune partie de la famille n'a compte ; null si le membre n'en
+   a aucun. Une base sans les colonnes des familles ne rend que le Rapide. */
+async function eloFamillesLire(env, id) {
+  const un = (r, n) => (r > 0 && n > 0 ? { r, n } : null);
+  let f;
+  try {
+    const l = await env.DB.prepare("SELECT elo, elo_n, elo_blitz, elo_blitz_n, elo_classique, elo_classique_n, elo_corr, elo_corr_n FROM comptes WHERE id = ?1").bind(id).first();
+    if (!l) return null;
+    f = { b: un(l.elo_blitz, l.elo_blitz_n), r: un(l.elo, l.elo_n), c: un(l.elo_classique, l.elo_classique_n), k: un(l.elo_corr, l.elo_corr_n) };
+  } catch (e) { f = { b: null, r: await eloMembreLire(env, id), c: null, k: null }; }
+  return f.b || f.r || f.c || f.k ? f : null;
+}
 async function rProfil(request, env, now, waitUntil) {
   const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
   if (!v.ok) return erreur("inconnu", 404);
@@ -1174,6 +1196,7 @@ async function rProfil(request, env, now, waitUntil) {
   const semaine = lundi(now), s = c.sem === semaine ? c.sem_resolus : 0;
   const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint, c.direct_v).first();
   const rang = (dedans, devant) => dedans ? devant + 1 : null;
+  const ef = await eloFamillesLire(env, c.id);
   const rep = json({
     p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
     s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint, d: c.direct_v,
@@ -1183,7 +1206,10 @@ async function rProfil(request, env, now, waitUntil) {
     /* Elo contre l'ordinateur : declare par le navigateur du joueur, non verifie. */
     eo,
     /* Elo entre membres : calcule par le serveur des parties, donc verifie. */
-    em: await eloMembreLire(env, c.id),
+    em: ef ? ef.r : null,
+    /* Depuis l'Elo par famille : les quatre. em reste le Rapide, pour une
+       page ouverte avant la mise a jour. */
+    ef,
     bl, pays: await paysLire(env, c.id)
   }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
   if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));

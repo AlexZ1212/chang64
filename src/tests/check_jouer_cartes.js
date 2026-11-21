@@ -46,7 +46,7 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   await attendre(300);
   const p = $("pane-friend");
   T("« Contre un ami » : un visiteur arrive sur Par lien", w.eval("mode") === "friend" && p.dataset.ami === "lien" && d.querySelector('#amiModes [data-v="lien"]').getAttribute("aria-pressed") === "true");
-  T("le choix en haut propose En direct et Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Par lien");
+  T("le choix en haut propose En direct, Correspondance et Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Correspondance|Par lien");
   d.querySelector('#amiModes [data-v="direct"]').click();
   await attendre(200);
   T("En direct, pour un visiteur : l'invitation a creer un compte, pas le bloc de lancement", p.dataset.ami === "direct" && !$("directInvite").classList.contains("hide") && !!$("directInvite").querySelector("[data-vue-compte]") && $("directNouveau").classList.contains("hide"));
@@ -81,8 +81,10 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   const pf = $("pane-friend");
   T("« Contre un ami » : un membre arrive sur En direct", pf.dataset.ami === "direct" && !$("directNouveau").classList.contains("hide"));
   T("bloc de lancement : couleur, au hasard par defaut", [...$("directCouleur").children].map(b => b.dataset.v + (b.getAttribute("aria-pressed") === "true" ? "*" : "")).join() === "b,n,h*");
-  T("cadences : Rapide (10+0, 5+3, 15+10) par defaut", [...$("directCats").children].map(b => b.textContent.trim()).join("|") === "Rapide|Classique" && [...$("directCadences").children].map(b => b.textContent).join() === "10+0,5+3,15+10");
-  $("directCats").children[1].click();
+  T("cadences : Rapide (10+0, 5+3, 15+10) par defaut", [...$("directCats").children].map(b => b.textContent.trim()).join("|") === "Blitz|Rapide|Classique" && [...$("directCadences").children].map(b => b.textContent).join() === "10+0,5+3,15+10" && $("directCats").children[1].getAttribute("aria-pressed") === "true");
+  $("directCats").children[0].click();
+  T("Blitz : 3+2 seulement, explique", [...$("directCadences").children].map(b => b.textContent).join() === "3+2" && w.eval("directCad") === 9 && net($("directCadenceNote").textContent) === "3 minutes chacun, plus 2 secondes ajoutées après chaque coup.", $("directCadenceNote").textContent);
+  $("directCats").children[2].click();
   T("Classique : 30+0, 30+20, 60+0", [...$("directCadences").children].map(b => b.textContent).join() === "30+0,30+20,60+0" && w.eval("directCad") === 3);
   $("directCadences").children[1].click();
   d.querySelector('#directCouleur [data-v="b"]').click();
@@ -111,7 +113,7 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   await attendre(300);
   T("la carte ouvre l'ecran de recherche", w.eval("mode") === "friend" && pf.dataset.ami === "hasard" && net($("directTitre").textContent) === "Contre un joueur en ligne", $("directTitre").textContent);
   T("le site masque couleur, adversaire et invitation ; il garde « Trouver un adversaire »", /\[data-ami="hasard"\] \.direct-ami[^{]*\{display:none\}/.test(html) && $("btnDirectHasard").closest(".direct-hasard") !== null && $("directCouleur").closest(".direct-ami") !== null && $("directPseudo").closest(".direct-ami") !== null && $("btnDirectCreer").closest(".direct-ami") !== null);
-  $("directCats").children[0].click();
+  $("directCats").children[1].click();
   $("btnDirectHasard").click();
   await attendre(200);
   T("« Trouver un adversaire » : recherche lancee a la cadence choisie, sans couleur", JSON.stringify(w.__appels) === JSON.stringify([["chercher", 0]]), JSON.stringify(w.__appels));

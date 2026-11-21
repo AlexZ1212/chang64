@@ -134,7 +134,13 @@ const { fausseD1 } = require("../serveur_local.js");
     { bx: { c: { vic: 4, gels: 2, jour: "2026-11-16", jourN: 3, ouvFam: ["b"], defis: { lundi: "2026-11-16", p: [5, 2, 0], ok: [true, false, false], jours: ["b"], objJours: [] } } } },
     { bx: { c: { vic: 3, gels: 2, jour: "2026-11-16", jourN: 1 } } }, false);
   T("victoires additionnees, gel depense non rendu, objectif du jour additionne", f.bx.c.vic === 6 && f.bx.c.gels === 1 && f.bx.c.jourN === 6, JSON.stringify([f.bx.c.vic, f.bx.c.gels, f.bx.c.jourN]));
-  T("defis de la semaine : le meilleur de chaque", f.bx.c.defis.p.join() === "5,2,8" && f.bx.c.defis.ok.join() === "true,false,true" && f.bx.c.defis.jours.length === 2 && f.bx.c.ouvFam.length === 2);
+  /* 2026-11-21 (Alexandre) : premiere connexion d'un appareil plus recent a
+     0 gel, sans base : les 2 gels du compte restent. */
+  for (const recent of [false, true]) {
+    const g = F({ bx: { c: { gels: 0, objSerie: 1, objDernier: "2026-11-21" } } }, { bx: { c: { gels: 2, objSerie: 7, objDernier: "2026-11-21" } } }, null, recent);
+    T("premiere connexion : gels du compte gardes (distant recent " + recent + ")", g.bx.c.gels === 2 && g.bx.c.objSerie === 7, JSON.stringify(g.bx.c));
+  }
+  T("defis de la semaine : le meilleur de chaque",f.bx.c.defis.p.join() === "5,2,8" && f.bx.c.defis.ok.join() === "true,false,true" && f.bx.c.defis.jours.length === 2 && f.bx.c.ouvFam.length === 2);
   f = F({ bx: { c: { defis: { lundi: "2026-11-16", p: [1, 0, 0], ok: [false, false, false], jours: [], objJours: [], jourJours: ["2026-11-16"], fin: ["2026-11-17:kq"] } } } },
     { bx: { c: { defis: { lundi: "2026-11-16", p: [1, 0, 0], ok: [false, false, false], jours: [], objJours: [], jourJours: ["2026-11-17"], fin: ["2026-11-17:kq", "2026-11-17:kr"] } } } }, null, true);
   T("defis : finales deja comptees et jours de l'exercice du jour gardes", f.bx.c.defis.fin.length === 2 && f.bx.c.defis.jourJours.length === 2, JSON.stringify(f.bx.c.defis));

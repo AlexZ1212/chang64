@@ -39,14 +39,38 @@ const PIECE_SHAPES = (() => {
    toujours depuis les Blancs (2026-09-04, demande d'Alexandre sur les pages
    Motifs) -- range 0 devient la 1ere rangee et les colonnes se lisent h->a
    au lieu de a->h, l'inverse exact d'un retournement d'echiquier normal. */
-function boardSvg(fen, size, flipped) {
+/* Coordonnees (2026-11-21, demande d'Alexandre sur les echiquiers des pages
+   Explorer) : comme sur l'echiquier de l'appli, le chiffre de la rangee en
+   haut a gauche des cases de la colonne de gauche, la lettre de la colonne en
+   bas a droite des cases de la rangee du bas, dans la couleur de la case
+   opposee. flipped suit la meme orientation que boardSvg (vue des Noirs). */
+const CASE_CLAIRE = "#EDE3D5", CASE_FONCEE = "#4A6A68";
+function coordsSvg(size, flipped) {
+  const S = size / 8, m = S * 0.06;
+  const encre = (f, r) => (f + r) % 2 ? CASE_CLAIRE : CASE_FONCEE;
+  /* Quatre <text> en tout (un par couleur, pour les chiffres et pour les
+     lettres), chaque signe place par les listes x et y : seize balises
+     alourdissaient de 4 Ko les pages a plusieurs diagrammes. */
+  const n = v => String(Math.round(v * 10) / 10);
+  let t = `<g font-family="'JetBrains Mono',monospace" font-weight="600" font-size="${n(S * 0.22)}" aria-hidden="true">`;
+  for (const couleur of [CASE_FONCEE, CASE_CLAIRE]) {
+    const rangs = [0, 1, 2, 3, 4, 5, 6, 7].filter(r => encre(0, r) === couleur);
+    t += `<text x="${rangs.map(() => n(m)).join(" ")}" y="${rangs.map(r => n(r * S + S * 0.25)).join(" ")}" fill="${couleur}">${rangs.map(r => flipped ? r + 1 : 8 - r).join("")}</text>`;
+    const cols = [0, 1, 2, 3, 4, 5, 6, 7].filter(f => encre(f, 7) === couleur);
+    t += `<text x="${cols.map(f => n((f + 1) * S - m)).join(" ")}" y="${n(8 * S - m)}" text-anchor="end" fill="${couleur}">${cols.map(f => (flipped ? "hgfedcba" : "abcdefgh")[f]).join("")}</text>`;
+  }
+  return t + "</g>";
+}
+
+function boardSvg(fen, size, flipped, coords) {
   const S = size / 8;
   let rows = fen.split(" ")[0].split("/");
   if (flipped) rows = rows.slice().reverse().map(row => row.split("").reverse().join(""));
   let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="Chess position">`;
   for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
-    svg += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? "#4A6A68" : "#EDE3D5"}"/>`;
+    svg += `<rect x="${f * S}" y="${r * S}" width="${S}" height="${S}" fill="${(f + r) % 2 ? CASE_FONCEE : CASE_CLAIRE}"/>`;
   }
+  if (coords) svg += coordsSvg(size, flipped);
   /* Les formes de pieces sont declarees une fois en <defs> et posees par
      <use>. Auparavant chaque piece repetait ses chemins complets, ce qui
      faisait 19 Ko par diagramme, soit 40 Mo pour les seules pages
@@ -72,4 +96,4 @@ function boardSvg(fen, size, flipped) {
   return svg + "</svg>";
 }
 
-module.exports = { PIECE_FILL, PIECE_STROKE, PIECE_SHAPES, pieceShapes, boardSvg };
+module.exports = { PIECE_FILL, PIECE_STROKE, PIECE_SHAPES, pieceShapes, boardSvg, coordsSvg, CASE_CLAIRE, CASE_FONCEE };

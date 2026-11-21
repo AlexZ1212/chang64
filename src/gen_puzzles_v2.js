@@ -371,14 +371,22 @@ function classifyBase(gBefore, mv, isMate, mateLen) {
         behind: { sq: sqName(kingSq(gBefore, them)), piece: "k" }
       } };
     }
+    /* « Rien ne defend X » seulement si personne ne peut reprendre
+       (2026-11-21, verif_explications.js : faux pour 9 prises sur 10). */
+    if (after.moves().some(m => m.to === to)) return { theme: "Winning capture", detail: {} };
     return { theme: "Winning capture", detail: { sq: sqName(to), piece: letter(pType(gBefore.board[to])) } };
   }
+  /* Clouage et enfilade (2026-11-21, #G59I2) : la geometrie ne suffit pas,
+     la piece visee doit pouvoir etre prise sans perte (non defendue, ou plus
+     chere que la piece qui la prend). Sinon le gain est ailleurs et la
+     phrase « X ne peut pas bouger sans exposer Y » serait fausse. */
+  const prenable = s => !defended(after, s, them) || (VAL[pType(after.board[s])] || 0) >= (VAL[t] || 0);
   if (t === BI || t === R || t === Q) {
     const ks = kingSq(after, them);
     const ln = lineBetween(to, ks);
     if (ln) {
       const occ = ln.between.filter(s => after.board[s]);
-      if (occ.length === 1 && pColor(after.board[occ[0]]) === them) {
+      if (occ.length === 1 && pColor(after.board[occ[0]]) === them && prenable(occ[0])) {
         const pinned = VAL[pType(after.board[occ[0]])] || 0;
         const detail = { from: sqName(to), pinned: { sq: sqName(occ[0]), piece: letter(pType(after.board[occ[0]])) }, behind: { sq: sqName(ks), piece: "k" } };
         return { theme: pinned >= VAL[R] ? "Skewer" : "Pin", detail };
@@ -393,7 +401,7 @@ function classifyBase(gBefore, mv, isMate, mateLen) {
       while (onB(nx)) {
         const p2 = after.board[nx];
         if (p2) {
-          if (pColor(p2) === them) {
+          if (pColor(p2) === them && prenable(nx)) {
             const frontVal = VAL[pType(pc)] || 0, backVal = VAL[pType(p2)] || 0;
             const detail = { from: sqName(to), pinned: { sq: sqName(s), piece: letter(pType(pc)) }, behind: { sq: sqName(nx), piece: letter(pType(p2)) } };
             /* Meme correctif que gen_puzzles.js : le clouage relatif (hors

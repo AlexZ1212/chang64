@@ -22,7 +22,7 @@
      voyait jamais l'application en francais. Pose par build_site.js. -->
 <!--__HREFLANG__-->
 <meta name="theme-color" content="#0F1414">
-<script>try{var p=JSON.parse(localStorage.getItem("chang64:prefs")||"{}"),r=document.documentElement;if(p.theme)r.setAttribute("data-theme",p.theme);if(p.board)r.setAttribute("data-board",p.board);}catch(e){}</script>
+<script>try{var p=JSON.parse(localStorage.getItem("chang64:prefs")||"{}"),r=document.documentElement;if(p.theme)r.setAttribute("data-theme",p.theme);if(p.board)r.setAttribute("data-board",p.board);if(p.anim===false)r.setAttribute("data-mouvement","calme");}catch(e){}</script>
 <title>Free chess for beginners, easy puzzles | chang64</title>
 <!-- 174 caracteres a l'origine : tronquee dans les resultats de recherche,
      ce qui coupait les arguments de fin. Ramenee sous 155. -->
@@ -949,6 +949,19 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .picto.grand svg{width:62px;height:62px}
 .picto.petit{width:36px;height:36px}
 .picto.petit svg{width:26px;height:26px}
+/* Apparition (2026-11-21, demande d'Alexandre) : le dessin monte et se pose
+   dans son carre, qui reste immobile. Une animation CSS rejoue chaque fois
+   qu'un panneau passe de masque a visible : chaque ouverture d'onglet ou du
+   menu la relance, sans script. Leger decalage d'une carte a l'autre. Coupee
+   avec le reste par le reglage Animations et le mouvement reduit. */
+.picto svg{animation:pictoArrive .42s var(--courbe-ressort) both}
+.card .ico .picto svg{animation:none}
+@keyframes pictoArrive{from{opacity:0;transform:translateY(5px) scale(.72) rotate(-6deg)}to{opacity:1;transform:none}}
+:where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(2) .picto svg{animation-delay:.05s}
+:where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(3) .picto svg{animation-delay:.1s}
+:where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(4) .picto svg{animation-delay:.15s}
+:where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(5) .picto svg{animation-delay:.2s}
+:where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(n+6) .picto svg{animation-delay:.25s}
 .tabs button[hidden]{display:none}
 .solveCard.avec-picto{display:flex;gap:14px;align-items:flex-start}
 .solveCard.avec-picto.hide{display:none}
@@ -1616,6 +1629,7 @@ header>*{min-width:0}
   font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap;
   padding:4px 5px;color:var(--sage);cursor:pointer;border-radius:var(--r-s);scroll-snap-align:center}
 .navchip .navnum{color:var(--sage);opacity:.7;margin-right:1px;font-size:10.5px}
+.navchip.lu{cursor:default}
 /* Le picto de piece porte deja la distinction visuelle voulue (piece +
    camp) : le coup courant se signale par un fond discret et du gras,
    plutot que par un aplat brass qui n'apportait rien de plus. */
@@ -1901,13 +1915,16 @@ html[data-mouvement="calme"] .stats .stat[data-ecart]::after{animation:none;disp
 .cal-day.coche{animation:jourCoche .5s var(--courbe-ressort)}
 @keyframes jourCoche{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:none}}
 .hide{display:none!important}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}
 .sq.hint{box-shadow:inset 0 0 0 2px rgba(var(--brass-rgb),.7)}}
 /* Animations coupees dans les Preferences (2026-11-14) : exactement le meme
    effet que le mouvement reduit du systeme ci-dessus, pour que les deux
    chemins restent identiques et deja eprouves. L'attribut est pose sur
-   <html> par appliquerMouvement() (ui3.js). */
-html[data-mouvement="calme"] *{animation:none!important;transition:none!important}
+   <html> par appliquerMouvement() (ui3.js), et des la tete de la page par le
+   petit script du theme (2026-11-21) : les preferences se lisent apres le
+   premier affichage, et les animations d'arrivee (logo, cartes, panneaux)
+   avaient deja joue. ::before et ::after en plus : * ne les atteint pas. */
+html[data-mouvement="calme"] *,html[data-mouvement="calme"] *::before,html[data-mouvement="calme"] *::after{animation:none!important;transition:none!important}
 html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(var(--brass-rgb),.7)}
 
 /* Medailles illustrees (2026-11-15, voir badges.js). Le socle de la fenetre
@@ -2428,6 +2445,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpp-badges-reste{display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sage)}
 .cp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .cpp .btn{display:block;width:100%;margin-top:8px}
+.cpp-retrait{margin:6px 0 0}
 .cpp-msg{position:relative;margin:8px 0 0}
 .cpp-msg:empty{display:none}
 .cpj-joueur{background:none;border:0;margin:0;padding:6px 0;min-height:32px;color:inherit;font:inherit;text-align:left;cursor:pointer;overflow-wrap:anywhere}
@@ -2918,6 +2936,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <button data-v="2" aria-pressed="true">Casual</button>
             <button data-v="3" aria-pressed="false">Solid</button>
             <button data-v="4" aria-pressed="false">Tough</button>
+            <button data-v="5" aria-pressed="false">At my level</button>
           </div></div>
           <div class="field">
             <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl2" aria-label="More info">i</button></div>

@@ -20,7 +20,7 @@
    _headers, voir build_site.js. */
 const fs = require("fs");
 const path = require("path");
-const { PIECE_FILL, PIECE_STROKE, PIECE_SHAPES, pieceShapes, boardSvg } = require("./plateau_svg.js");
+const { PIECE_FILL, PIECE_STROKE, PIECE_SHAPES, pieceShapes, boardSvg, coordsSvg, CASE_CLAIRE, CASE_FONCEE } = require("./plateau_svg.js");
 const { LANGUES } = require("./langues/registre.js");
 
 const CLES = [
@@ -93,6 +93,8 @@ var PIECE_FILL = ${JSON.stringify(PIECE_FILL)};
 var PIECE_STROKE = ${JSON.stringify(PIECE_STROKE)};
 var PIECE_SHAPES = ${JSON.stringify(PIECE_SHAPES)};
 ${pieceShapes.toString()}
+var CASE_CLAIRE = ${JSON.stringify(CASE_CLAIRE)}, CASE_FONCEE = ${JSON.stringify(CASE_FONCEE)};
+${coordsSvg.toString()}
 ${boardSvg.toString()}
 var DICTS = ${JSON.stringify(dicts)};
 var ACCUEILS = ${JSON.stringify(accueils)};

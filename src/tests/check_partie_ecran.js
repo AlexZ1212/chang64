@@ -86,7 +86,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("l'adversaire arrive : echiquier, pendules, son pseudo", !w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("clockTop") && $("clockTopName").textContent.replace(/[  ]/g, " ") === "Bob" && $("clockTopTime").textContent.replace(/[  ]/g, " ") === "10:00" && $("clockBottomName").textContent.replace(/[  ]/g, " ") === "Toi");
   T("Abandonner visible, pas de nulle avant que chacun ait joue", !cache("btnDirectAbandon") && cache("btnDirectNulle") && cache("btnDirectQuitter"));
   T("aucune fenetre de felicitations ni defi pendant la partie", w.eval("bravoOccupe()") === true && w.eval("duelOccupe()") === true);
-  T("aucune aide : ni jauge ni outils d'analyse", $("boardTools").classList.contains("hide"));
+  /* 2026-11-21 : #boardTools porte le bandeau de coups, en lecture seule ; le
+     bouton de retournement reste masque, et aucune puce ne ramene en arriere. */
+  T("aucune aide : ni jauge ni outils d'analyse", $("btnFlip").hidden && !w.document.querySelector("#navScroll [data-ply]"));
   w.eval("directJouer(game.moves().find(m=>game.uci(m)==='e2e4'))");
   T("mon coup part au serveur et se voit tout de suite", fil.envois.includes('{"t":"coup","c":"e2e4"}') && /e4/.test($("amiSheet").textContent.replace(/[  ]/g, " ")));
   w.eval("directJouer(game.moves()[0])");
@@ -94,6 +96,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   recevoir(etat({ phase: "jeu", coups: ["e2e4", "e7e5"], maj: Date.now() - 5000, h: Date.now() }));
   await pause(300);
   T("ma pendule tourne, celle de l'adversaire attend", /^9:5[45]$/.test($("clockBottomTime").textContent) && $("clockTopTime").textContent.replace(/[  ]/g, " ") === "10:00" && $("clockBottom").classList.contains("active"), $("clockBottomTime").textContent.replace(/[  ]/g, " "));
+  T("bandeau de coups sous l'echiquier, dernier coup en avant", !$("navRow").classList.contains("hide") && /e4.*e5/.test($("navScroll").textContent) && /e5/.test(($("navScroll").querySelector(".cur") || {}).textContent || ""), $("navScroll").textContent);
   T("à moi de jouer, nulle proposable", $("directStatus").textContent.replace(/[  ]/g, " ") === "À toi de jouer." && !cache("btnDirectNulle"));
   recevoir(etat({ phase: "jeu", coups: ["e2e4", "e7e5"], nulle: "n" }));
   T("l'adversaire propose la nulle : accepter ou refuser", /propose la nulle/.test($("directStatus").textContent.replace(/[  ]/g, " ")) && !cache("btnDirectAccepter") && !cache("btnDirectRefuser") && cache("btnDirectNulle"));

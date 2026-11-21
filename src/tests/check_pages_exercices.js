@@ -58,7 +58,10 @@ for(const f of en){const s=fs.statSync(S+"/puzzles/"+f).size; if(s>max){max=s;ma
    produit. */
 T("page la plus lourde sous 80 Ko", max<81920, Math.round(max/1024)+" Ko ("+maxf+")");
 const tot=en.reduce((a,f)=>a+fs.statSync(S+"/puzzles/"+f).size,0);
-T("moyenne sous 70 Ko", tot/en.length<71680, Math.round(tot/en.length/1024)+" Ko de moyenne");
+/* 70 -> 75 Ko le 2026-11-21 : coordonnees sur chaque diagramme (demande
+   d'Alexandre), deja compactees a 0,4 Ko par diagramme ; ces pages en ont
+   plusieurs. */
+T("moyenne sous 75 Ko", tot/en.length<76800, Math.round(tot/en.length/1024)+" Ko de moyenne");
 
 console.log("\n--- Toutes au sitemap ---");
 const sm=fs.readFileSync(S+"/sitemap.xml","utf8");

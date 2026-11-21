@@ -279,6 +279,101 @@ function search(g,maxDepth,timeMs){
   }
   return {move:best,score:bestScore};
 }
+/* Note de chaque coup jouable (2026-11-21) : chaque coup est joue, puis la
+   meilleure reponse adverse cherchee a depth-1. Plus cher qu'une recherche
+   simple, mais c'est ce qui permet a l'ordinateur faible de choisir une
+   erreur PLAUSIBLE (un coup un peu moins bon) plutot qu'un coup au hasard. */
+function notesRacine(g,depth,timeMs){
+  const t0=Date.now(),ms=g.moves(),out=[];
+  for(let i=0;i<ms.length;i++){
+    const m=ms[i];
+    g.makeMove(m);
+    let sc;
+    if(!g.moves().length)sc=g.inCheck()?MATE:0;
+    else if(g.isRepetition()||g.half>=100||g.isInsufficient())sc=0;
+    else{
+      const reste=Math.max(15,(timeMs-(Date.now()-t0))/(ms.length-i));
+      sc=-search(g,Math.max(1,depth-1),reste).score;
+    }
+    g.undoMove();
+    out.push({move:m,score:sc});
+  }
+  return out.sort((a,b)=>b.score-a.score);
+}
+/* Coup de l'ordinateur selon sa force (2026-11-21, retour d'Alexandre :
+   « un joueur a 1100 ne gaffe pas sa dame comme ca »). Les forces 1 et 2
+   jouaient 35 % et 15 % de coups tires au hasard parmi tous les coups
+   legaux : une dame donnee pour rien tous les quelques coups. Elles se
+   trompent desormais comme un debutant : un coup un peu moins bon pris
+   parmi ceux qui ne perdent pas plus que perte (centipions, mesure par
+   leur propre recherche), les petites pertes etant les plus probables.
+   Jamais la dame ni une tour pour rien ; la force 1 peut encore laisser
+   une piece mineure. Les forces 3 et 4 ne changent pas. */
+/* Echelle continue de force (2026-11-21, accord d'Alexandre) : la force de
+   l'ordinateur est un Elo cible de 600 a 1900 et non plus quatre paliers.
+   Points de calage ci-dessous, mesures contre Stockfish bride et entre eux
+   (scratchpad mesure_*) ; entre deux points, les reglages continus sont
+   interpoles, les profondeurs prises au point du dessous.
+   d : profondeur du meilleur coup ; dv : profondeur de la reponse adverse
+   cherchee pour verifier une erreur avant de la jouer (en dessous de 1000,
+   l'ordinateur peut encore tomber dans un piege en deux coups) ; erreur :
+   part des coups ou il s'autorise une erreur d'au plus perte centipions ;
+   grosse : part des coups ou il s'autorise jusqu'a perteGrosse ; t : temps
+   de calcul en ms. Les quatre forces nommees sont des points de l'echelle. */
+const ECHELLE_ORDI=[
+  {elo:600, d:2,dv:1,erreur:.50,perte:420,grosse:0,  perteGrosse:0,  t:400},
+  {elo:700, d:2,dv:1,erreur:.40,perte:340,grosse:0,  perteGrosse:0,  t:500},
+  {elo:900, d:2,dv:2,erreur:.30,perte:240,grosse:0,  perteGrosse:0,  t:700},
+  {elo:1000,d:3,dv:3,erreur:.28,perte:220,grosse:.05,perteGrosse:330,t:1100},
+  {elo:1200,d:3,dv:3,erreur:.18,perte:160,grosse:.04,perteGrosse:330,t:1200},
+  {elo:1400,d:3,dv:3,erreur:.08,perte:120,grosse:.02,perteGrosse:250,t:1000},
+  {elo:1600,d:3,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:700},
+  {elo:1750,d:4,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:1200},
+  {elo:1900,d:5,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:2000}
+];
+const ELO_ORDI_MIN=600,ELO_ORDI_MAX=1900;
+const NIVEAU_ELO={1:700,2:1100,3:1600,4:1900};
+function profilOrdi(elo){
+  const E=ECHELLE_ORDI;
+  elo=Math.max(ELO_ORDI_MIN,Math.min(ELO_ORDI_MAX,+elo||NIVEAU_ELO[2]));
+  let i=0;while(i<E.length-2&&E[i+1].elo<=elo)i++;
+  const a=E[i],b=E[i+1],k=b.elo>a.elo?Math.max(0,Math.min(1,(elo-a.elo)/(b.elo-a.elo))):0;
+  const mix=n=>a[n]+(b[n]-a[n])*k;
+  const bas=k>=1?b:a;
+  return {elo:elo,d:bas.d,dv:bas.dv,erreur:mix("erreur"),perte:mix("perte"),grosse:mix("grosse"),perteGrosse:mix("perteGrosse"),t:Math.round(mix("t"))};
+}
+/* Nombre de demi-coups suivis dans le repertoire d'ouvertures, selon la force. */
+function livreOrdi(elo){return elo<900?4:elo<1400?6:elo<1750?10:12;}
+function coupOrdinateur(g,elo,budget,hasard){
+  const rnd=hasard||Math.random;
+  const p=profilOrdi(elo);
+  budget=budget||p.t;
+  if(!p.erreur&&!p.grosse)return search(g,p.d,budget).move;
+  const t0=Date.now();
+  const r0=search(g,p.d,budget*.5),meilleur=r0.move,S=r0.score;
+  if(!meilleur)return null;
+  if(Math.abs(S)>MATE-1000)return meilleur;          /* un mat a donner ou a parer */
+  const r=rnd();
+  const plafond=r<p.erreur?p.perte:(p.grosse&&r<p.erreur+p.grosse?p.perteGrosse:0);
+  if(!plafond)return meilleur;
+  /* Candidats : notes rapides (reponse adverse a 1 coup), puis le candidat
+     tire au sort est verifie plus profondement avant d'etre joue. */
+  const notes=notesRacine(g,1,Math.max(30,budget*.15));
+  const top=notes.length?notes[0].score:S;
+  let cands=notes.filter(n=>top-n.score>10&&top-n.score<=plafond&&!(n.move.from===meilleur.from&&n.move.to===meilleur.to));
+  for(let essai=0;essai<4&&cands.length&&Date.now()-t0<budget;essai++){
+    let tot=0;const poids=cands.map(n=>{const w=1/(1+(top-n.score)/60);tot+=w;return w;});
+    let x=rnd()*tot,k=cands.length-1;
+    for(let i=0;i<cands.length;i++){x-=poids[i];if(x<0){k=i;break;}}
+    const c=cands[k].move;
+    g.makeMove(c);
+    const v=g.moves().length?-search(g,p.dv,Math.max(40,(budget-(Date.now()-t0))*.6)).score:(g.inCheck()?MATE:0);
+    g.undoMove();
+    if(S-v<=plafond+40)return c;
+    cands.splice(k,1);
+  }
+  return meilleur;
+}
 /* mats forcés : utilisé pour valider les exercices en direct */
 function forcesMateIn(g,n){
   if(n<=0)return false;

@@ -22,6 +22,9 @@ const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko+
 const debut = src.indexOf("const BOT_OUVERTURES="), fin = src.indexOf("function botMove(){", debut);
 T("le repertoire est dans ui.js", debut > 0 && fin > debut);
 const ctx = { Math, game: null, sanList: [], botLevel: 4 };
+/* 2026-11-21 : le livre suit la force en Elo (livreOrdi, engine_browser.js). */
+ctx.livreOrdi = e => e < 900 ? 4 : e < 1400 ? 6 : e < 1750 ? 10 : 12;
+ctx.eloPartie = () => ({ 1: 700, 2: 1100, 3: 1600, 4: 1900 })[ctx.botLevel];
 vm.createContext(ctx);
 vm.runInContext(src.slice(debut, fin).replace("const BOT_OUVERTURES=", "var BOT_OUVERTURES=").replace("const BOT_LIVRE_MAX=", "var BOT_LIVRE_MAX="), ctx);
 const LIVRE = ctx.BOT_OUVERTURES, propre = x => x.replace(/[+#!?]/g, "");

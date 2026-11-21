@@ -211,8 +211,12 @@ function cpFusionProg(l,d,b,distantRecent){
     for(const k of ["langues","ouvFam"])if(cl[k]||cd[k])c[k]=cpUnion(cl[k],cd[k]);
     if(cl.jour&&cl.jour===cd.jour)c.jourN=cpPlus(cl.jourN,cd.jourN,cb.jour===cl.jour?cb.jourN:0,avecBase);
     else if(cl.jour||cd.jour){const src=String(cl.jour||"")>=String(cd.jour||"")?cl:cd;c.jour=src.jour;c.jourN=cpNombre(src.jourN);}
-    /* Gels : gagnes et depenses s'additionnent quand on connait la base. */
+    /* Gels : gagnes et depenses s'additionnent quand on connait la base.
+       Sans base (premiere connexion d'un appareil, « Fusionner »), le plus
+       grand des deux (2026-11-21, signale par Alexandre : l'appareil, plus
+       recent mais a 0 gel, effacait les 2 gels du compte). */
     if(avecBase&&typeof cl.gels==="number"&&typeof cd.gels==="number")c.gels=Math.max(0,Math.min(2,cl.gels+cd.gels-cpNombre(cb.gels)));
+    else if(!avecBase&&(typeof cl.gels==="number"||typeof cd.gels==="number"))c.gels=Math.min(2,Math.max(cpNombre(cl.gels),cpNombre(cd.gels)));
     if(cl.objDernier||cd.objDernier){
       const src=String(cl.objDernier||"")===String(cd.objDernier||"")?(cpNombre(cl.objSerie)>=cpNombre(cd.objSerie)?cl:cd):String(cl.objDernier||"")>String(cd.objDernier||"")?cl:cd;
       c.objDernier=src.objDernier;c.objSerie=cpNombre(src.objSerie);
@@ -558,7 +562,10 @@ function cpVue(ecran,donnees){
     h='<div class="cp-carte"><b>'+echapper(cp.pseudo)+'</b><span class="'+(perdue||cpEtatSync==="hors-ligne"?"cp-alerte":"")+'">'+echapper(etat)+"</span></div>"+msg+
       (perdue?'<button type="button" class="btn primary cp-large" data-cp="connexion">'+cpE("Log in")+"</button>":
       '<button type="button" class="btn cp-large" id="cpSync">'+cpE("Sync now")+"</button>"+
-      '<p class="tiroir-section">'+cpE("My profile")+"</p>"+cpyChoix(cp.pays||"")+
+      '<p class="tiroir-section">'+cpE("My profile")+"</p>"+
+      /* Sa propre fiche, comme dans Mes amis (2026-11-21). */
+      '<button type="button" class="tiroir-lien" data-cpp="'+echapper(cp.pseudo)+'"><span>'+cpE("See my profile")+"</span></button>"+
+      cpyChoix(cp.pays||"")+
       '<p class="tiroir-section">'+cpE("My devices")+"</p>"+
       '<button type="button" class="tiroir-lien" data-cp="appareil"><span>'+cpE("Add a device")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("Security")+"</p>"+
@@ -1258,6 +1265,12 @@ async function cppOuvrir(pseudo){
   if(cp&&j.p!==cp.pseudo)await cpaCharger();
   if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
   const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
+  /* Retirer un ami ou annuler sa demande (2026-11-21, demande d'Alexandre) :
+     un simple lien sous Defier et Fermer, comme « Ne plus recevoir de defis
+     de ce joueur ». Ajouter et accepter restent de vrais boutons. */
+  const retrait=cp&&!moi&&(cpaEst(j.p)||cpaEnvoyee(j.p));
+  const boutonAmi=retrait?'<p class="cp-centre cpp-retrait"><button type="button" class="linkbtn cp-lien" data-cpa="retirer" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Cancel my friend request")+"</button></p>"
+    :'<button type="button" class="btn" data-cpa="ajouter" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaRecue(j.p)?"Accept the friend request":"Add to my friends")+"</button>";
   poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"",rangs,j.pays)+
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
@@ -1268,9 +1281,9 @@ async function cppOuvrir(pseudo){
     cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+
     (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
-      '<button type="button" class="btn" data-cpa="'+(cpaEst(j.p)||cpaEnvoyee(j.p)?"retirer":"ajouter")+'" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":cpaEnvoyee(j.p)?"Cancel my friend request":cpaRecue(j.p)?"Accept the friend request":"Add to my friends")+"</button>"+
+      (retrait?"":boutonAmi)+
       (cpaEnvoyee(j.p)?'<p class="cp-note cpp-amis">'+cpE("Friend request sent. {name} has to accept it.").replace("{name}",echapper(String(j.p)))+"</p>":"")+
-      '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer);
+      '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer+(retrait?boutonAmi:""));
 }
 /* Les badges du joueur, en petites medailles (2026-11-18) : les treize
    derniers gagnes (avec le nombre des autres, cela fait deux rangees pleines

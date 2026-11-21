@@ -88,7 +88,7 @@ module.exports = function (H) {
     urls.push({ loc: canonical, pri: "0.6", alts: urlsLang });
   }
   function diagram(fen, caption, flipped) {
-    return `<div class="diagram">${boardSvg(fen, 300, flipped)}${caption ? `<p style="font-size:12px;color:var(--sage);margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
+    return `<div class="diagram">${boardSvg(fen, 300, flipped, true)}${caption ? `<p style="font-size:12px;color:var(--sage);margin:8px 0 0">${esc(caption)}</p>` : ""}</div>`;
   }
   function sanLine(moves) {
     const g = new Game();

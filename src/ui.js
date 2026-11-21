@@ -659,12 +659,35 @@ function fmtTime(ms){
    Stockfish bride a 1320 et 1600, puis de force a force) : la force 4 sort
    vers 1900, la force 3 vers 1700, les deux autres au moins 450 points plus
    bas chacune. Valeurs arrondies, validees par Alexandre. */
-const BOT_ELO={1:700,2:1100,3:1600,4:1900};
+/* 2026-11-21 : les forces sont des points de l'echelle continue du moteur
+   (NIVEAU_ELO, engine_browser.js), et une cinquieme, \u00ab A ma mesure \u00bb
+   (botLevel 5), joue a l'Elo du joueur contre l'ordinateur. */
+const BOT_ELO=NIVEAU_ELO,NIVEAU_MESURE=5;
+/* Elo du joueur contre l'ordinateur : prog.eloOrdi.r (classement tenu par le
+   chantier Elo, conversation Fable) ; a defaut, son classement d'exercices,
+   ramene entre 600 et 1500 ; a defaut, 800. Arrondi a 50. */
+function eloJoueurOrdi(){
+  const e=prog&&prog.eloOrdi&&typeof prog.eloOrdi.r==="number"?prog.eloOrdi.r:
+    prog&&typeof prog.rating==="number"?Math.max(600,Math.min(1500,prog.rating)):800;
+  return Math.max(ELO_ORDI_MIN,Math.min(ELO_ORDI_MAX,Math.round(e/50)*50));
+}
+function eloSouhaite(){return botLevel===NIVEAU_MESURE?eloJoueurOrdi():(NIVEAU_ELO[botLevel]||NIVEAU_ELO[2]);}
+/* Force de la partie en cours : fixee au debut de la partie (newGame) pour
+   qu'un classement qui bouge ne change pas l'adversaire en cours de route. */
+let eloPartieFixe=null;
+function eloPartie(){return eloPartieFixe||eloSouhaite();}
+/* Force nommee la plus proche, pour les badges propres a chaque force. */
+function niveauPartie(){
+  if(botLevel!==NIVEAU_MESURE)return botLevel;
+  const e=eloPartie();let n=1;
+  for(const k of [1,2,3,4])if(Math.abs(NIVEAU_ELO[k]-e)<Math.abs(NIVEAU_ELO[n]-e))n=k;
+  return n;
+}
 function botLabel(){
   const seg=document.getElementById("segLevel");
   let force="";
   if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
-  return force?"Chang | "+force+(BOT_ELO[botLevel]?" \u2248 "+BOT_ELO[botLevel]+" Elo":""):"Chang";
+  return force?"Chang | "+force+" \u2248 "+eloPartie()+" Elo":"Chang";
 }
 /* Pieces capturees et solde materiel, affiches dans la pendule de chaque
    joueur. On reconstitue depuis l'historique plutot que de tenir un compteur
@@ -1444,7 +1467,7 @@ function playUser(m){
   $("status").className="status";
   $("status").textContent=t("The computer is thinking…");
   $("btnHint").disabled=true;
-  setTimeout(botMove,60);
+  lancerOrdi();
 }
 /* Repertoire d'ouvertures de l'ordinateur (2026-11-17, demande d'Alexandre :
    des ouvertures plus habituelles, plus humaines, et variees). Jusqu'ici il
@@ -1605,10 +1628,10 @@ const BOT_OUVERTURES={
 };
 /* Nombre de demi-coups (les deux camps) pendant lesquels l'ordinateur suit
    le repertoire, selon sa force. */
-const BOT_LIVRE_MAX={1:4,2:6,3:10,4:12};
+/* Remplace par livreOrdi(elo) dans engine_browser.js (2026-11-21). */
 function botLivre(){
   if(typeof gameStartFen!=="undefined"&&gameStartFen)return null;
-  if(sanList.length>=(BOT_LIVRE_MAX[botLevel]||0))return null;
+  if(sanList.length>=livreOrdi(eloPartie()))return null;
   const propre=x=>x.replace(/[+#!?]/g,"");
   const e=BOT_OUVERTURES[sanList.map(propre).join(" ")];
   if(!e)return null;
@@ -1617,25 +1640,57 @@ function botLivre(){
   for(const c of choix){tirage-=c.poids;if(tirage<0){voulu=c.san;break;}}
   return game.moves().find(m=>propre(game.san(m))===voulu)||null;
 }
+/* Temps de reflexion de l'ordinateur (2026-11-21, demande d'Alexandre : il
+   jouait instantanement). Un delai au hasard, comme un joueur : 1 a 3 s en
+   rapide et lente, 0,7 a 2 s en blitz, 0,3 a 1 s en bullet, moitie moins
+   dans les premiers coups, presque rien quand un seul coup est possible. Il
+   est pris sur la pendule de l'ordinateur (elle tourne deja) et plafonne a
+   1/30 de son temps restant : il ne perd jamais au temps a cause de lui. Le
+   temps de calcul est deduit. Sous jsdom (tests), aucun delai. */
+const calculOrdi=()=>Math.round(profilOrdi(eloPartie()).t*.5);
+function delaiOrdi(){
+  if(/jsdom/i.test((navigator&&navigator.userAgent)||""))return 60;
+  const depart=clock.enabled&&clockHist&&clockHist[0]?clockHist[0].w:0;
+  let a=1000,b=3000;
+  if(clock.enabled&&depart<180000){a=300;b=1000;}
+  else if(clock.enabled&&depart<600000){a=700;b=2000;}
+  if(sanList.length<6){a/=2;b/=2;}
+  if(game.moves().length===1){a=Math.min(a,300);b=Math.min(b,500);}
+  let d=a+Math.random()*(b-a);
+  if(clock.enabled){const reste=myColor===W?clock.b:clock.w;d=Math.min(d,reste/30);}
+  return Math.max(sanList.length<6?500:250,Math.round(d-calculOrdi()));
+}
+/* Programme le coup de l'ordinateur. Si, pendant le delai, la partie a
+   change (nouvelle partie, autre onglet), le coup n'est pas joue : il le
+   sera au retour sur cette partie (voir ordiEnSuspens dans setMode). */
+let ordiEnSuspens=null;
+function lancerOrdi(){
+  const g0=game;
+  busy=true;
+  setTimeout(()=>{
+    if(game!==g0||mode!=="play"){ordiEnSuspens=g0;return;}
+    botMove();
+  },delaiOrdi());
+}
 function botMove(){
   if(isFlagged()){busy=false;refreshGame();return;}
+  if(resigned!==null||game.turn===myColor||!game.moves().length){busy=false;return;}
   /* Profondeurs relevees apres optimisation du moteur. Auparavant, le niveau
      4 demandait 3,7 s pour atteindre la profondeur 4 mais n'en avait que 1,5 :
      il etait coupe en cours de route et jouait en realite comme le niveau 3.
      Le moteur atteint desormais la profondeur 4,8 en moyenne dans ce meme
      budget, ce qui rend le palier 5 accessible et l'echelle enfin croissante.
      Mesure : profondeur 5 bat profondeur 4 par 5,5 a 2,5. */
-  const conf={1:{d:1,t:120},2:{d:2,t:280},3:{d:3,t:700},4:{d:5,t:2000}}[botLevel];
+  const conf={t:profilOrdi(eloPartie()).t};
   let budget=conf.t;
   if(clock.enabled){
     const left=(myColor===W?clock.b:clock.w);
     budget=Math.max(50,Math.min(conf.t,left/25));
   }
+  /* Forces 1 et 2 : erreur plausible plutot que coup au hasard, voir
+     coupOrdinateur dans engine_browser.js (2026-11-21). */
   let mv=botLivre();
-  const rnd=botLevel===1?0.35:botLevel===2?0.15:0;
-  if(mv){/* coup du repertoire */}
-  else if(rnd&&Math.random()<rnd){const l=game.moves();mv=l[Math.floor(Math.random()*l.length)];}
-  else mv=search(game,conf.d,budget).move;
+  if(!mv)mv=coupOrdinateur(game,eloPartie(),budget);
   if(!mv){busy=false;refreshGame();return;}
   sanList.push(game.san(mv));
   game.makeMove(mv);lastMove=mv;busy=false;
@@ -1668,7 +1723,7 @@ function renderSheetInto(id,list){
   scrollSheetToCurrent(el,curEl?curEl.closest(".sheet-row"):null);
 }
 function setupGame(){
-  gameStarted=false;
+  gameStarted=false;eloPartieFixe=null;
   resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
   if(typeof clearAnalysis==="function")clearAnalysis();
@@ -1689,6 +1744,7 @@ function newGame(){
      le bon etat. */
   if(colorMode==="r")myColor=Math.random()<0.5?W:B;
   gameStarted=true;
+  eloPartieFixe=eloSouhaite();   /* force de l'ordinateur pour toute la partie */
   ticTemps=false;
   if(typeof gameSaved!=="undefined")gameSaved=false;
   resultInfo=null;resultDismissed=false;resigned=null;disarmResign();
@@ -1736,7 +1792,7 @@ function newGame(){
   awaitingStart=false;
   skipReady=false;
   SON.debut();
-  if(myColor===B){busy=true;$("status").textContent=t("The computer is thinking…");setTimeout(botMove,220);}
+  if(myColor===B){$("status").textContent=t("The computer is thinking…");lancerOrdi();}
 }
 let resignTimer=null;
 function disarmResign(){
@@ -2227,11 +2283,22 @@ function nounPhrase(ch,sq,cap){
    exercices. Un theme sans detail exploitable (mat en un, coup gagnant sans
    motif nomme...) n'affiche rien : mieux vaut se taire que de remplir avec
    une phrase creuse. */
+/* Une piece adverse peut-elle reprendre sur cette case apres le premier coup
+   de la solution ? (2026-11-21) « Rien ne defend X » etait affiche pour
+   toute prise gagnante, defendue ou non : faux pour 9 prises sur 10. */
+function repriseApres(p,sq){
+  try{
+    const g=new Game(p.fen),m=g.moves().find(x=>g.uci(x)===p.sol[0]);if(!m)return true;
+    g.makeMove(m);const i=(8-+sq[1])*16+(sq.charCodeAt(0)-97);
+    return g.moves().some(x=>x.to===i);
+  }catch(e){return true;}
+}
 function explainSentence(p){
   const ex=p.explain||{};
   switch(p.theme){
     case "Winning capture":
-      return ex.piece?t("Nothing defends {piece}.",{piece:groupe(ex.piece,ex.sq)}):"";
+      if(ex.piece&&!repriseApres(p,ex.sq))return t("Nothing defends {piece}.",{piece:groupe(ex.piece,ex.sq)});
+      return phraseLigne(p);
     case "Knight fork":
     case "Pawn fork":
     case "Double attack": {
@@ -2242,6 +2309,7 @@ function explainSentence(p){
     }
     case "Pin":
     case "Skewer":
+      if(ex.captured&&ex.pinned&&repriseApres(p,ex.captured.sq))return phraseLigne(p);
       if(ex.captured&&ex.pinned){
         /* Accord de genre : {pinned} peut etre n'importe quelle piece (dame,
            tour = feminin ; les quatre autres = masculin), donc un gabarit
@@ -2324,11 +2392,21 @@ function phraseGain(b){
   return p?GRAMMAIRE.contre(LANG,g,p):g;
 }
 function phraseLigne(p){
+  /* explain.taire (verif_explications.js, 2026-11-21) : la verification
+     Stockfish n'a rien trouve de sur a dire ; mieux vaut se taire que de
+     reprendre le gain de la seule solution, faux pour cet exercice. */
+  if(p.explain&&p.explain.taire)return "";
   const b=bilanLigne(p);
   if(!b)return "";
-  const gain=phraseGain(b),premier=b.san[0],dernier=b.san[b.san.length-1],plusieurs=b.san.length>1;
+  /* Suite verifiee par Stockfish (explain.suite) : elle passe AVANT le gain
+     de la seule solution, qui peut etre repris aussitot (2026-11-21,
+     verif_explications.js : « gagne la dame » alors que la suite en rend
+     une partie). */
+  const suiteV=p.explain&&p.explain.suite&&p.explain.suite.san?p.explain.suite:null;
+  const gain=suiteV?"":phraseGain(b),premier=b.san[0],dernier=b.san[b.san.length-1],plusieurs=b.san.length>1;
   if(p.theme==="Quiet move"){
     const base=t("{move} captures nothing and gives no check.",{move:premier});
+    if(suiteV&&!b.mat){const ps=phraseSuite(suiteV);if(ps)return base+" "+ps;}
     if(b.mat)return base+" "+t("It prepares checkmate.");
     if(gain&&plusieurs)return base+" "+t("It prepares {last}, which wins {gain}.",{last:dernier,gain:gain});
     if(gain)return base+" "+t("Yet it wins {gain}.",{gain:gain});
@@ -2341,7 +2419,7 @@ function phraseLigne(p){
   /* Un seul coup, un echec, rien de pris dans la solution (7 498 exercices) :
      le gain vient apres, hors de la ligne. La seule chose sure a en dire est
      que l'echec doit etre pare avant tout le reste. */
-  if(!parts.length&&/\+$/.test(premier))parts.push(t("{move} gives check: the opponent must answer it before anything else.",{move:premier}));
+  if(!parts.length&&!suiteV&&/\+$/.test(premier))parts.push(t("{move} gives check: the opponent must answer it before anything else.",{move:premier}));
   /* Ni prise, ni echec, ni promotion, ni mat (1 037 exercices au 25/10) :
      la solution seule ne dit rien. La phrase vient alors de la menace du
      premier coup, relevee hors ligne par Stockfish (menaces_coups_gagnants.js) :
@@ -2359,21 +2437,20 @@ function phraseLigne(p){
      Stockfish apres le coup (explain.suite, meme outil, mode --suites),
      coupee au premier coup a nous qui mate ou gagne du materiel et le garde
      apres la reponse adverse. Sans elle, silence. */
-  const su=!parts.length&&p.explain&&p.explain.suite;
-  if(su&&su.san&&(su.san.length>=2||su.matEn)){
-    const reponse=su.san[0],ligne=su.san.slice(1).join(" ");
-    /* Repli des coups de position au gain lointain (2026-10-26) : mat force
-       annonce par Stockfish, ou avantage d'au moins deux pions apres la
-       meilleure defense. */
-    if(su.matEn)parts.push(t("Even against the best defence, {reply}, mate is forced in {n} moves.",{reply:reponse,n:su.matEn}));
-    else if(su.avantage)parts.push(t("The best defence is {reply}; after {next}, the advantage stays decisive.",{reply:reponse,next:su.san[1]}));
-    else if(su.mat)parts.push(t("The best defence is {reply}; the continuation {line} mates.",{reply:reponse,line:ligne}));
-    else{
-      const g=phraseGain({gagne:su.gagne||{},perdu:su.perdu||{}});
-      if(g)parts.push(t("The best defence is {reply}; the continuation {line} wins {gain}.",{reply:reponse,line:ligne,gain:g}));
-    }
-  }
+  if(!b.mat&&(!parts.length||suiteV)&&p.explain&&p.explain.suite){const ps=phraseSuite(p.explain.suite);if(ps)parts.push(ps);}
   return parts.join(" ");
+}
+function phraseSuite(su){
+  if(!su||!su.san||!(su.san.length>=2||su.matEn))return "";
+  const reponse=su.san[0],ligne=su.san.slice(1).join(" ");
+  /* Repli des coups de position au gain lointain (2026-10-26) : mat force
+     annonce par Stockfish, ou avantage d'au moins deux pions apres la
+     meilleure defense. */
+  if(su.matEn)return t("Even against the best defence, {reply}, mate is forced in {n} moves.",{reply:reponse,n:su.matEn});
+  if(su.avantage)return t("The best defence is {reply}; after {next}, the advantage stays decisive.",{reply:reponse,next:su.san[1]});
+  if(su.mat)return t("The best defence is {reply}; the continuation {line} mates.",{reply:reponse,line:ligne});
+  const g=phraseGain({gagne:su.gagne||{},perdu:su.perdu||{}});
+  return g?t("The best defence is {reply}; the continuation {line} wins {gain}.",{reply:reponse,line:ligne,gain:g}):"";
 }
 /* Pedagogie coup juste / coup faute (exercices mines depuis de vraies
    parties via mine_puzzles.js -- absent sur les exercices generes par
@@ -2837,7 +2914,7 @@ function showAmi(){
   legalCache=game.moves();
   lastMove=game.history.length?game.history[game.history.length-1].m:null;
   selected=-1;marks={};
-  render();updateEval();renderSheetInto("amiSheet",amiSan);
+  render();updateEval();renderSheetInto("amiSheet",amiSan);renderNavLecture(amiSan);{const fb=$("btnFlip");if(fb)fb.hidden=false;}
   updateAmiBoardVisibility();
   const st=$("amiStatus");
   if(!amiStarted){
@@ -3301,7 +3378,7 @@ function setMode(m,opts){
      #boardTools (pas seulement le bouton) : il doit rester visible meme
      quand le bandeau de coups interne est masque (avant le premier coup,
      ou en mode Entre amis qui n'a pas de bandeau de coups du tout). */
-  { const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",m!=="play"&&m!=="friend"); }
+  { const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",m!=="play"&&m!=="friend"); const fb=$("btnFlip"); if(fb)fb.hidden=false; }
   /* Pour tout mode autre que Jouer/Entre amis, le plateau doit toujours
      etre visible (Exercices, Defis, Analyser en ont besoin des l'entree).
      Pour Jouer/Entre amis specifiquement, on laisse la decision a
@@ -3318,7 +3395,9 @@ function setMode(m,opts){
   if(m==="home"){renderProgress();syncTC();return;}
   if(m==="play"){
     if(opts.fresh)newGame();
-    else if(mainGame&&mainStarted){game=mainGame;sanList=mainSan;lastMove=mainLast;gameStarted=true;flipped=mainFlipped;selected=-1;marks={};refreshGame();}
+    else if(mainGame&&mainStarted){game=mainGame;sanList=mainSan;lastMove=mainLast;gameStarted=true;flipped=mainFlipped;selected=-1;marks={};refreshGame();
+      /* Coup de l'ordinateur interrompu par le changement d'onglet (lancerOrdi). */
+      if(ordiEnSuspens===game&&game.turn!==myColor&&!gameOver()){ordiEnSuspens=null;lancerOrdi();}}
     else if(pendingPlaySave&&typeof showResumeChoice==="function")showResumeChoice();
     else setupGame();
     syncTC();

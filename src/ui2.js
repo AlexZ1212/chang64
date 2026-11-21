@@ -254,6 +254,26 @@ function renderNavStrip(at){
   recenterNavChip(el);
   updateNavScrollHint();
 }
+/* Le meme bandeau entre deux humains (2026-11-21, signale par Alexandre) :
+   Entre amis par lien et partie en direct n'en avaient pas, seule la feuille
+   de partie suivait les coups. Ici en lecture seule : la partie est vivante
+   chez les deux joueurs, on ne la parcourt pas en arriere. Le dernier coup
+   est la puce courante ; rien tant qu'aucun coup n'est joue. */
+function renderNavLecture(san){
+  const row=$("navRow"),el=$("navScroll"); if(!row||!el)return;
+  row.classList.toggle("hide",!san.length);
+  if(!san.length)return;
+  let h='<span class="navchip lu start">'+t("Game start")+'</span>';
+  for(let i=0;i<san.length;i++){
+    const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
+    const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+(i%2===0?"w":"b")+'">'+pieceSVG(sanPieceType(san[i]),"w",true)+'</i>':"";
+    h+='<span class="navchip lu'+(i===san.length-1?" cur":"")+'" role="listitem">'+num+icon+echapperSan(san[i])+'</span>';
+  }
+  poserHtml(el,h);
+  recenterNavChip(el);
+  updateNavScrollHint();
+}
+function echapperSan(s){return String(s).replace(/[<>&"]/g,"");}
 /* Etat partage du defilement manuel du bandeau de coups (2026-09-04,
    demande d'Alexandre) : scroller/glisser #navScroll a la main doit mettre
    a jour l'echiquier sur la PREMIERE position que le bandeau affiche
@@ -948,6 +968,7 @@ function saveFinishedGame(){
     r:resultCode(),
     tc:cat==="none"?"":tcLabel(cat,item),
     lvl:botLevel,
+    elo:eloPartie(),
     m:gameUci.join(" "),
     fen:gameStartFen||null
   });
@@ -3035,7 +3056,7 @@ function showReady(tcTxt){
   if(seg){const b=seg.querySelector('[data-v="'+botLevel+'"]');if(b)force=b.textContent.trim();}
   $("readyTitle").textContent=t("Ready when you are");
   $("readySub").textContent=
-    tcTxt+(force?" | "+force:"")+" | "+
+    tcTxt+(force?" | "+force+(botLevel===NIVEAU_MESURE?" ≈ "+eloPartie()+" Elo":""):"")+" | "+
     (myColor===W?t("You play White."):t("You play Black."));
   $("readyStart").textContent=t("Start the game");
   $("readySettings").textContent=t("Change settings");
@@ -3064,7 +3085,7 @@ function startReadyGame(){
   if(clock&&clock.enabled)clock.last=Date.now();
   const s=$("status");
   if(s)s.textContent=myColor===B?t("The computer is thinking…"):(readyStatus||t("Your move."));
-  if(myColor===B){busy=true;setTimeout(botMove,220);}
+  if(myColor===B)lancerOrdi();
   /* refreshGame est ce qui verrouille les reglages pendant une partie. Sans
      cet appel, une partie lancee depuis l'overlay laissait couleur, force et
      cadence modifiables, alors qu'une partie relancee apres un abandon les
@@ -3121,6 +3142,7 @@ async function savePlay(){
       startFen:gameStartFen,
       myColor:myColor===B?1:0,
       botLevel:botLevel,
+      elo:eloPartieFixe,
       flipped:!!flipped,
       tcCat:tcCat,tcIdx:tcIdx,
       clock:clock
@@ -3164,6 +3186,7 @@ function resumeSavedPlay(){
   myColor=d.myColor===1?B:W;
   if(TC_CATS.some(c=>c.id===d.tcCat)){tcCat=d.tcCat;tcIdx=d.tcIdx||0;}
   if(typeof d.botLevel==="number")botLevel=d.botLevel;
+  eloPartieFixe=typeof d.elo==="number"?d.elo:null;
   flipped=!!d.flipped;
   gameStarted=true;
   if(typeof isReviewGame!=="undefined")isReviewGame=false;
@@ -3189,7 +3212,7 @@ function resumeSavedPlay(){
   if(s){s.className="status";s.textContent=game.turn===myColor?t("Your move."):t("The computer is thinking…");}
   refreshGame();
   if(typeof focusBoard==="function")focusBoard();
-  if(!gameFinished_safe()&&game.turn!==myColor){busy=true;setTimeout(botMove,220);}
+  if(!gameFinished_safe()&&game.turn!==myColor)lancerOrdi();
 }
 function gameFinished_safe(){
   try{return (typeof gameOver==="function")&&gameOver();}catch(e){return false;}

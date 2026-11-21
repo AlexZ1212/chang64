@@ -217,20 +217,21 @@ if(typeof registerWrong==="function"){const av=registerWrong;registerWrong=funct
       bxActivite();
       if(k==="draw")bxMarquer("jeu_nulle");
       /* Lecons apprises (2026-11-15) : la defaite devient un apprentissage. */
-      if(botLevel===4)bxMarquer("lec_courage");
+      const niv=typeof niveauPartie==="function"?niveauPartie():botLevel;
+      if(niv===4)bxMarquer("lec_courage");
       b.c.perduNiv=b.c.perduNiv&&typeof b.c.perduNiv==="object"?b.c.perduNiv:{};
       if(k==="lose"){
         bxMarquer("lec_premiere");
-        b.c.perduNiv[botLevel]=1;
+        b.c.perduNiv[niv]=1;
         b.c.defaite=Date.now();
         if(isFlagged())bxMarquer("lec_temps");
         if(game.isCheckmate()&&Math.ceil(gameUci.length/2)<10)bxMarquer("lec_berger");
       }
-      if(k==="win"&&b.c.perduNiv[botLevel])bxMarquer("lec_remontada");
+      if(k==="win"&&b.c.perduNiv[niv])bxMarquer("lec_remontada");
       if(k==="win"){
         b.c.vic=(b.c.vic||0)+1;
         bxMarquer("jeu_victoire");
-        bxMarquer("jeu_niv"+botLevel);
+        bxMarquer("jeu_niv"+niv);
         if(myColor===B)bxMarquer("jeu_noirs");
         const cat=(tcCurrent()||{}).cat;
         if(cat==="bullet")bxMarquer("jeu_bullet");

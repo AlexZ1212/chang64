@@ -46,7 +46,10 @@ function lier(x){
     });
     if(out===avant)break;
   }
-  return out;
+  /* Ponctuation haute (2026-11-21, regle d'Alexandre) : « : », « ; », « ! »,
+     « ? », « » » ne commencent jamais une ligne, ils restent avec le mot qui
+     les precede ; pareil pour le mot qui suit « «. Espace insecable. */
+  return out.replace(/ ([:;!?»])/g," $1").replace(/« /g,"« ");
 }
 /* Gabarits a variables : pluriels, cas et accords, voir GRAMMAIRE.gabarit
    (grammaire.js), qui sert aussi aux pages statiques. */

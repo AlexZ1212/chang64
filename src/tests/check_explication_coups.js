@@ -70,7 +70,9 @@ function reference(p) {
     let cassees = [], fausses = [], matsTus = [], vides = { "Winning move": 0, "Quiet move": 0 };
     for (const p of cibles) {
       const s = nbsp(w.explainSentence(p));
-      if (!s) { vides[p.theme]++; continue; }
+      /* explain.taire (verif_explications.js, 2026-11-21) : silence voulu, la
+         verification n'a rien trouve de sur a dire. */
+      if (!s) { if (!(p.explain && p.explain.taire)) vides[p.theme]++; continue; }
       if (/undefined|NaN|\{|\}/.test(s)) cassees.push(p.code + " " + s);
       const r = reference(p);
       if (/gagne|wins/.test(s) && !r.mat && r.net <= 0 && !(p.explain && p.explain.suite)) fausses.push(p.code + " net " + r.net + " : " + s);
@@ -89,7 +91,7 @@ function reference(p) {
        restent muets les coups de position sans menace. */
     const muetsAttendus = banque.filter(p => {
       if (p.theme !== "Winning move" || p.sol.length !== 1 || reference(p).net > 0) return false;
-      if (p.explain && (p.explain.menace || p.explain.suite)) return false;
+      if (p.explain && (p.explain.menace || p.explain.suite || p.explain.taire)) return false;
       const g = new Game(p.fen), m = g.moves().find(x => g.uci(x) === p.sol[0]);
       if (m.promo) return false;
       g.makeMove(m); return !g.inCheck();
@@ -113,6 +115,9 @@ function reference(p) {
        en n coups, ou avantage decisif apres la meilleure defense. */
     const malSuites = avecSuite.filter(p => {
       const s = nbsp(w.explainSentence(p)), su = p.explain.suite;
+      /* Solution qui mate (2026-11-21) : « la ligne se termine par un mat »
+         prime sur la suite, sans objet. */
+      if (reference(p).mat) return !att.mat.test(s);
       if (!su.san.every(x => s.includes(x))) return true;
       if (su.matEn) return !att.repliMat.test(s) || !s.includes(String(su.matEn));
       if (su.avantage) return !att.repliAvantage.test(s);

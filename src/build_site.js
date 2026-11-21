@@ -614,7 +614,7 @@ const slug = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase
 
 /* Pieces et diagrammes d'echiquier : voir plateau_svg.js (partage avec
    bluesky_jour.js depuis le 2026-11-07). */
-const { pieceShapes, boardSvg } = require("./plateau_svg.js");
+const { pieceShapes, boardSvg, coordsSvg } = require("./plateau_svg.js");
 
 /* ----------------------------------------------------------------------
    Echiquier anime des pages d'ouverture.
@@ -704,7 +704,7 @@ function animBoard(moveStr, size, labels, fenDepart) {
     st.san ? st.n + (st.w ? "." : "\u2026") + st.san : labels.start);
   return `<div class="anim" data-plies='${JSON.stringify(plyLabels).replace(/'/g, "&#39;")}'>
   <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="${esc(labels.aria)}">
-    ${pieceDefs()}<g>${sq}</g>${groups}
+    ${pieceDefs()}<g>${sq}</g>${coordsSvg(size)}${groups}
   </svg>
   <div class="animctl" hidden>
     <button type="button" data-act="prev" aria-label="${esc(labels.prev)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -1077,13 +1077,19 @@ const CSS = `*{box-sizing:border-box;margin:0;padding:0}
 --rule:rgba(234,236,234,.12);--r-l:12px;--r:8px;--r-s:6px;--r-xs:3px}
 @media print{:root{--chalk:#15201C;--sage:#5A6862;--brass:#7E5409}}
 body{background:var(--ink);color:var(--chalk);
-font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:20px 16px 60px}
+font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:18px 14px 60px}
 .wrap{max-width:880px;margin:0 auto}
 a{color:var(--brass)}
-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px 20px;margin-bottom:22px;
-padding-bottom:14px;
-position:sticky;top:0;z-index:30;background-color:var(--ink);padding-top:10px;
+/* Logo a la meme taille et a la meme place que dans l'application, qui fait
+   reference (2026-11-21, demande d'Alexandre) : l'entete vit dans son propre
+   bandeau de 1080 px (largeur de l'application) au-dessus de la colonne de
+   texte de 880 px, avec les memes marges de page (18/14, et 8 sur telephone). */
+.tete{max-width:1080px;margin:0 auto 22px;position:sticky;top:0;z-index:30;background-color:var(--ink);
 box-shadow:0 14px 14px -6px var(--ink)}
+header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px 20px;
+padding-bottom:14px;padding-top:11px}
+@media(max-width:599px){body{padding:8px 8px 60px}.wrap:not(.tete){padding:0 8px}
+header{padding-top:4px;padding-bottom:8px}header .brand{align-self:start}}
 /* Meme logo que l'application : memes tailles, memes proportions, meme
    position relative des elements. Seules les couleurs changent, pour un fond
    clair : l'elephant et le 64 en laiton, "chang" et la baseline en gris
@@ -1095,6 +1101,7 @@ box-shadow:0 14px 14px -6px var(--ink)}
 .brand .bname{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,5vw,32px);letter-spacing:-.015em;line-height:1.1;color:var(--chalk)}
 .brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
+@media(max-width:599px){.brandmark{width:26px;height:calc(26px * 54 / 64)}.brand .bname{font-size:22px}}
 /* Le menu depassait la largeur d'un telephone : quatre entrees plus le
    selecteur de langue reclament environ 458 px pour 362 disponibles. Les
    marges a gauche empechaient un retour a la ligne propre. On passe en
@@ -1495,6 +1502,16 @@ function selecteurLangue(lang, urls) {
 /* langUrls : adresse de la page dans chaque langue ou elle existe,
    {en: ..., fr: ..., es: ...}. Sert aux hreflang et au selecteur de langue.
    null pour une page sans equivalent (404, profils). */
+/* Ponctuation haute en francais (2026-11-21, regle d'Alexandre) : « : »,
+   « ; », « ! », « ? », « » » jamais en debut de ligne, ni le mot apres « « ».
+   Espace insecable, dans le texte seulement (pas dans les balises, scripts
+   ni styles). Applique a la page finie : la date de contenu, calculee sur
+   le corps avant, ne bouge pas. Meme regle que lier() dans i18n.js. */
+function insecablesFr(lang, html) {
+  if (lang !== "fr") return html;
+  return html.split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>)/).map((bout, i) => i % 2 ? bout :
+    bout.replace(/>([^<]+)</g, (m, txt) => ">" + txt.replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") + "<")).join("");
+}
 function shell(title, desc, canonical, body, jsonld, lang, alts, langUrls, ogImage, noindex) {
   const dates = datesDe(canonical.replace(SITE, ""), body);
   /* Une page non indexable n'est pas du contenu : 404 et le profil ne portent
@@ -1506,7 +1523,7 @@ function shell(title, desc, canonical, body, jsonld, lang, alts, langUrls, ogIma
   lang = lang || "en";
   const d = libellesOuvertures(lang);
   const accueil = PAR_CODE[lang].accueil;
-  return `<!DOCTYPE html>
+  return insecablesFr(lang, `<!DOCTYPE html>
 <html lang="${PAR_CODE[lang].html}">
 <head>
 <meta charset="utf-8">
@@ -1654,12 +1671,14 @@ ${/* Lien d'evitement ajoute le 2026-09-06. L'application en avait un, ces
      La cible est le <main id="contenu"> pose plus bas, qui sert aussi de
      repere de region principale. Aucune regle CSS ne vise main dans ces
      pages, l'ajout ne change donc rien a la mise en page. */""}<a class="skiplink" href="#contenu">${T(lang, "Skip to main content", "Aller au contenu")}</a>
-<div class="wrap">
+<div class="wrap tete">
 <header>
   <a class="brand" href="${accueil}">${brandMark(true)}<span class="names"><span class="bname">chang<span class="sixtyfour">64</span></span></span></a>
   <nav class="sitenav">${sectionLinks(lang, canonical)}</nav>
   ${langUrls ? selecteurLangue(lang, langUrls) : ""}
 </header>
+</div>
+<div class="wrap">
 ${(() => {
   /* Fil d'Ariane visible : le meme que celui donne aux moteurs plus haut. */
   const path = canonical.replace(SITE, "");
@@ -1833,6 +1852,8 @@ ${!/id="grille"/.test(body) ? "" : `
   /* Une personne qui a demande moins d'animation garde la position finale
      et pilote elle-meme. Les autres voient la ligne se jouer une fois. */
   var calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* Animations coupees dans les Preferences de l'appli (2026-11-21) : meme effet. */
+  try{if(JSON.parse(localStorage.getItem("chang64:prefs")||"{}").anim===false)calm=true;}catch(e){}
   if(calm){show(groups.length-1);return;}
   show(0);
   var started=false;
@@ -1847,7 +1868,7 @@ ${!/id="grille"/.test(body) ? "" : `
 </script>
 ${BALISE_AUDIENCE}
 </body>
-</html>`;
+</html>`);
 }
 
 const L = {
@@ -1946,7 +1967,7 @@ for (const { code: lang } of LANGUES) {
       prev:  T(lang, "Previous move", "Coup précédent"),
       play:  T(lang, "Replay the line", "Rejouer la ligne"),
       next:  T(lang, "Next move", "Coup suivant")
-    }) || boardSvg(p.fen, 300)}
+    }) || boardSvg(p.fen, 300, false, true)}
     <p style="font-size:12px;color:var(--sage);margin:8px 0 0">${d.posAfter} ${esc(moves)}</p>
     <p style="font-size:12px;color:var(--sage);margin:4px 0 0">${T(lang,
       "The arrows above replay this line, move by move. To try it yourself, use the button on the right.",

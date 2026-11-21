@@ -1160,5 +1160,7 @@ module.exports = {
 /* Adversaire au hasard (2026-11-19). */
 "Find an opponent":"Znajdź przeciwnika",
 "Looking for an opponent close to your level… You can also send this link to a friend.":"Szukamy przeciwnika o zbliżonym poziomie… Możesz też wysłać ten link znajomemu.",
-"Nobody is looking right now. Keep this page open, or send this link to a friend.":"Teraz nikt nie szuka. Zostaw tę stronę otwartą albo wyślij ten link znajomemu."
+"Nobody is looking right now. Keep this page open, or send this link to a friend.":"Teraz nikt nie szuka. Zostaw tę stronę otwartą albo wyślij ten link znajomemu.",
+"See my profile":"Zobacz mój profil",
+"At my level":"Mój poziom"
 };

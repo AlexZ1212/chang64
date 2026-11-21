@@ -166,11 +166,14 @@ function directMontrer() {
     if (cle === directAnime && lastMove) lastAnimated = lastMove;
     directAnime = cle; }
   render();
-  renderSheetInto("amiSheet", directSan);
+  renderSheetInto("amiSheet", directSan); renderNavLecture(directSan);
   const assis = e.phase !== "attente";
   const bw = document.querySelector(".board-wrap"); if (bw) bw.classList.toggle("hide", !assis);
   const sp = $("amiScoresheetPanel"); if (sp) sp.classList.toggle("hide", !assis);
-  const bt = $("boardTools"); if (bt) bt.classList.add("hide");
+  /* Le bandeau de coups vit dans #boardTools (2026-11-21) : on le garde, sans
+     le bouton de retournement, inutile ici (chacun voit sa couleur en bas). */
+  const bt = $("boardTools"); if (bt) bt.classList.toggle("hide", !assis);
+  const fb = $("btnFlip"); if (fb) fb.hidden = true;
   majLayoutSolo();
   directPendules();
   const trait = e.coups.length % 2 ? "n" : "b", autre = e.moi === "b" ? "n" : "b";
@@ -264,7 +267,7 @@ function directJouer(m) {
   game.makeMove(m); lastMove = m; selected = -1; marks = {}; legalCache = [];
   if (directE) directAnime = directE.id + "/" + directE.n + "/" + (directE.coups.length + 1);
   render();
-  renderSheetInto("amiSheet", directSan);
+  renderSheetInto("amiSheet", directSan); renderNavLecture(directSan);
 }
 
 /* ---------- Entrer, sortir ---------- */

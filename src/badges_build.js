@@ -88,6 +88,11 @@ function textes(code) {
 function ecrire(OUT) {
   fs.mkdirSync(OUT + "/data", { recursive: true });
   fs.copyFileSync(path.join(__dirname, "badges-medailles.json"), OUT + "/data/badges-medailles.json");
+  /* Ponctuation haute en francais (2026-11-21, regle d Alexandre) : espace
+     insecable avant « : ; ! ? » » et apres « « », comme lier() dans i18n.js :
+     ces textes ne passent pas par t(). */
+  const ponct = (c, x) => c !== "fr" ? x : typeof x === "string" ? x.replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") :
+    Array.isArray(x) ? x.map(y => ponct(c, y)) : x && typeof x === "object" ? Object.fromEntries(Object.entries(x).map(([k, y]) => [k, ponct(c, y)])) : x;
   const en = textes("en"), manques = [];
   for (const c of CODES) {
     const t = c === "en" ? en : textes(c), sortie = { _ui: Object.assign({}, en._ui || {}, t._ui || {}) };
@@ -98,12 +103,12 @@ function ecrire(OUT) {
       sortie[b[0]] = v || [b[3], b[2], b[5]];
     }
     if (absents) manques.push(c + " (" + absents + ")");
-    fs.writeFileSync(OUT + "/data/badges-" + c + ".json", JSON.stringify(sortie));
+    fs.writeFileSync(OUT + "/data/badges-" + c + ".json", JSON.stringify(ponct(c, sortie)));
   }
   /* Nouveautes du menu, de la plus recente a la plus ancienne, par langue
      (repli sur l'anglais). */
   for (const c of CODES) fs.writeFileSync(OUT + "/data/nouveautes-" + c + ".json",
-    JSON.stringify(NOUVEAUTES.map(n => { const v = n[c] || n.en; return { d: n.d, t: v[0], x: v[1] }; })));
+    JSON.stringify(ponct(c, NOUVEAUTES.map(n => { const v = n[c] || n.en; return { d: n.d, t: v[0], x: v[1] }; }))));
   console.log("Badges illustres  : " + CATALOGUE.length + " badges, " + CODES.length + " langues" +
     (manques.length ? " ; textes manquants : " + manques.join(", ") : ", textes complets"));
 }

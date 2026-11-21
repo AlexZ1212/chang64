@@ -44,7 +44,7 @@ console.log("\n--- Meme forme que les composants de l'application ---");
   const regleMenu=(css.match(/\.sitenav\{[^}]*\}/)||[""])[0];
   T("menu sans pastille ni fond", regleMenu!=="" && !regleMenu.includes("border-radius:999px") && !regleMenu.includes("background-color"));
   T("rubrique en cours soulignee de l'accent, texte clair", /\.sitenav \[aria-current="page"\]\{[^}]*color:var\(--chalk\)[^}]*border-bottom-color:var\(--brass\)/.test(css));
-  T("fil d'Ariane visible sous l'entete", /<\/header>\s*<nav class="fil" aria-label="Fil d'Ariane"><a href="\/fr\/">Accueil<\/a>/.test(fr));
+  T("fil d'Ariane visible sous l'entete", /<\/header>\s*<\/div>\s*<div class="wrap">\s*<nav class="fil" aria-label="Fil d'Ariane"><a href="\/fr\/">Accueil<\/a>/.test(fr));
   T("indices de defilement : degrade et fleche des deux cotes", (css.match(/\.sitenav::(before|after)\{[^}]*linear-gradient/g)||[]).length===2 && css.includes('content:"‹"') && css.includes('content:"›"'));
   T("langue en pastille, meme rayon que l'application", /\.langsw\{[^}]*border-radius:var\(--r\)/.test(css));
   /* Depuis le 2026-10-25, la langue courante s'affiche seule (summary) et la

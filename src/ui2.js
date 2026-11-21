@@ -140,11 +140,24 @@ let analysis=null;       // per-ply analysis once computed
 let gameStartFen=null;
 
 function recordUci(m){gameUci.push(sqN(m.from)+sqN(m.to)+(m.promo?SYM[m.promo]:""));}
+/* Les coups de la partie a l'ecran, quelle que soit sa sorte (2026-11-21) :
+   contre l'ordinateur, entre amis par lien ou en direct. La partie elle-meme
+   les porte (game.history), ce qui evite de tenir une liste par mode ; les
+   parties entre humains partent toujours de la position de depart. */
+function uciDe(m){return sqN(m.from)+sqN(m.to)+(m.promo?SYM[m.promo]:"");}
+function vueUci(){
+  try{return game.history.map(h=>uciDe(h.m));}catch(e){return [];}
+}
+function vueSan(){
+  if(mode!=="friend")return sanList;
+  return typeof directActif==="function"&&directActif()?directSan:amiSan;
+}
 function rebuildTo(ply){
-  const g=gameStartFen?new Game(gameStartFen):new Game();
+  const uci=vueUci();
+  const g=(mode==="play"&&gameStartFen)?new Game(gameStartFen):new Game();
   let last=null;
-  for(let i=0;i<ply&&i<gameUci.length;i++){
-    const mv=g.moves().find(x=>g.uci(x)===gameUci[i]);
+  for(let i=0;i<ply&&i<uci.length;i++){
+    const mv=g.moves().find(x=>g.uci(x)===uci[i]);
     if(!mv)break;
     last=mv;g.makeMove(mv);
   }
@@ -191,23 +204,81 @@ function evalFromAnalysis(){
   const a=analysis.plies[reviewPly-1];
   return a?{cp:a.cp,cpTrue:(a.cpTrue!=null?a.cpTrue:a.cp),mate:a.mate}:null;
 }
+/* Regarder un coup passe (2026-11-21, decision d'Alexandre) : possible en
+   revue ET pendant une partie en cours, dans les trois sortes de parties. La
+   pendule ne s'arrete jamais, l'echiquier ne joue pas tant qu'on n'est pas
+   revenu (voir handleGameClick et handleAmiClick), et un coup adverse qui
+   arrive ramene a la position actuelle (botMove, showAmi, directMontrer). */
 function gotoPly(ply){
-  ply=Math.max(0,Math.min(gameUci.length,ply));
-  if(ply===gameUci.length){exitReview();return;}
+  const n=game.history.length;
+  ply=Math.max(0,Math.min(n,ply));
+  if(ply===n){exitReview();return;}
   reviewPly=ply;
   const r=rebuildTo(ply);
   reviewGame=r.game;reviewLast=r.last;
   selected=-1;marks={};
   markBestMove();
-  render();updateEval();renderSheetPlay();renderNav();renderPlyInfo();renderClocks();
+  render();updateEval();vueSuivre();
+  direCoup(ply);
 }
 function exitReview(){
+  const etait=reviewPly!==null;
   reviewPly=null;reviewGame=null;reviewLast=null;
   selected=-1;marks={};
-  render();updateEval();renderSheetPlay();renderNav();renderPlyInfo();renderClocks();
+  render();updateEval();vueSuivre();
+  if(etait)direCoup(game.history.length);
+}
+/* Ce qui suit le coup affiche : feuille de partie, bandeau de coups, et pour
+   une partie contre l'ordinateur le commentaire de l'analyse et les pendules. */
+function vueSuivre(){
+  if(mode==="play"){renderSheetPlay();renderNav();renderPlyInfo();renderClocks();}
+  else if(mode==="friend"){const san=vueSan();renderSheetInto("amiSheet",san,reviewPly);renderNavLecture(san);}
+}
+/* Quitte le coup passe sans rien redessiner : pour qui s'apprete a montrer
+   la position actuelle (coup de l'ordinateur, etat recu du serveur). */
+function vueActuelle(){reviewPly=null;reviewGame=null;reviewLast=null;}
+/* Le coup affiche est lu par le lecteur d'ecran : « Coup 12, Cavalier f3 ».
+   La piece est dite en toutes lettres, la lettre anglaise seule ne dit rien. */
+function sanEnMots(san){
+  const m=/^([NBRQK])(.*)$/.exec(san||"");
+  if(!m)return san||"";
+  let mot="";
+  try{mot=pieceWord(m[1].toLowerCase());}catch(e){}
+  if(!mot)return san;
+  return mot.charAt(0).toUpperCase()+mot.slice(1)+" "+m[2];
+}
+function direCoup(ply){
+  if(typeof announce!=="function")return;
+  const san=vueSan()[ply-1];
+  if(!ply||!san){announce(t("Game start"),"move");return;}
+  announce(t("Move {n}, {move}",{n:Math.ceil(ply/2),move:sanEnMots(san)}),"move");
+}
+/* Une partie se joue-t-elle en ce moment sur l'echiquier ? */
+function partieEnCours(){
+  try{
+    if(mode==="play")return !!gameStarted&&!isReviewGame&&!gameFinished();
+    if(mode!=="friend")return false;
+    if(typeof directActif==="function"&&directActif())return directOccupe();
+    return !!amiStarted&&amiResigned===null&&amiGame.moves().length>0&&!amiGame.isDraw();
+  }catch(e){return false;}
+}
+/* L'ecran de partie : Jouer ou Contre un ami, echiquier affiche. C'est la
+   seule place ou les touches du clavier parcourent les coups. */
+function ecranDePartie(){
+  if(mode!=="play"&&mode!=="friend")return false;
+  const bw=document.querySelector(".board-wrap");
+  return !!bw&&!bw.classList.contains("hide");
+}
+/* Bandeau « Retour à la partie » : seulement quand on regarde un coup passe
+   d'une partie en cours. Appele a la fin de chaque render() (ui.js). */
+function majRetourPartie(){
+  const b=$("retourPartie");
+  if(b)b.classList.toggle("hide",!(reviewGame&&partieEnCours()));
+  const c=$("clavierLigne");
+  if(c)c.classList.toggle("hide",!ecranDePartie());
 }
 function renderNav(){
-  const n=gameUci.length;
+  const n=game.history.length;
   const at=reviewPly===null?n:reviewPly;
   const row=$("navRow");
   if(row)row.classList.toggle("hide",mode!=="play");
@@ -232,7 +303,8 @@ function sanPieceType(san){
 function sanSansPiece(san){return /^[NBRQK]/.test(san||"")?String(san).slice(1):san;}
 function renderNavStrip(at){
   const el=$("navScroll"); if(!el)return;
-  let h='<span class="navchip start'+(at===0?" cur":"")+'" data-ply="0">'+t("Game start")+'</span>';
+  /* aria-current : le coup affiche, pour qui ne voit pas la puce en avant. */
+  let h='<span class="navchip start'+(at===0?" cur":"")+'" role="listitem" data-ply="0"'+(at===0?' aria-current="true"':"")+'>'+t("Game start")+'</span>';
   for(let i=0;i<sanList.length;i++){
     const a=analysis&&analysis.plies[i];
     const tag=a&&a.tag?TAGS[a.tag]:"";
@@ -250,7 +322,7 @@ function renderNavStrip(at){
     const side=i%2===0?"w":"b";
     const icon=typeof pieceSVG==="function"
       ?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
-    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+(icon?sanSansPiece(sanList[i]):sanList[i])+tag+'</span>';
+    h+='<span class="'+cls+'" role="listitem" data-ply="'+(i+1)+'"'+(i===at-1?' aria-current="true"':"")+'>'+num+icon+(icon?sanSansPiece(sanList[i]):sanList[i])+tag+'</span>';
   }
   poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
@@ -259,20 +331,23 @@ function renderNavStrip(at){
 }
 /* Le meme bandeau entre deux humains (2026-11-21, signale par Alexandre) :
    Entre amis par lien et partie en direct n'en avaient pas, seule la feuille
-   de partie suivait les coups. Ici en lecture seule : la partie est vivante
-   chez les deux joueurs, on ne la parcourt pas en arriere. Le dernier coup
-   est la puce courante ; rien tant qu'aucun coup n'est joue. */
+   de partie suivait les coups. D'abord en lecture seule, il se parcourt
+   depuis la decision du 21/11 au soir : toucher une puce ou presser une
+   fleche montre ce coup, sans arreter la pendule ni rien jouer. Ni marque
+   d'analyse ni evaluation : aucune aide pendant la partie. */
 function renderNavLecture(san){
   const row=$("navRow"),el=$("navScroll"); if(!row||!el)return;
   row.classList.toggle("hide",!san.length);
   if(!san.length)return;
-  let h='<span class="navchip lu start">'+t("Game start")+'</span>';
+  const at=reviewPly===null?san.length:Math.min(reviewPly,san.length);
+  let h='<span class="navchip start'+(at===0?" cur":"")+'" role="listitem" data-ply="0"'+(at===0?' aria-current="true"':"")+'>'+t("Game start")+'</span>';
   for(let i=0;i<san.length;i++){
     const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
     const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+(i%2===0?"w":"b")+'">'+pieceSVG(sanPieceType(san[i]),"w",true)+'</i>':"";
-    h+='<span class="navchip lu'+(i===san.length-1?" cur":"")+'" role="listitem">'+num+icon+echapperSan(icon?sanSansPiece(san[i]):san[i])+'</span>';
+    h+='<span class="navchip'+(i===at-1?" cur":"")+'" role="listitem" data-ply="'+(i+1)+'"'+(i===at-1?' aria-current="true"':"")+'>'+num+icon+echapperSan(icon?sanSansPiece(san[i]):san[i])+'</span>';
   }
   poserHtml(el,h);
+  el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
   recenterNavChip(el);
   updateNavScrollHint();
 }
@@ -453,6 +528,9 @@ function renderResult(show){
     const cleFin=typeof directActif==="function"&&directActif()?directCleFin():mode==="friend"?amiUrl():game;
     if((mode==="play"||mode==="friend")&&!isReviewGame&&finSonnee!==cleFin){
       finSonnee=cleFin;
+      /* La partie finit pendant qu'on regardait un coup passe (abandon,
+         temps) : la carte de fin se pose sur la position finale. */
+      if(reviewGame){vueActuelle();render();updateEval();vueSuivre();}
       SON.fin(resultInfo.kind,game.isCheckmate()?0.62:(mode==="play"&&isFlagged())?0.3:0.1);
     }
   }
@@ -468,7 +546,9 @@ function renderResult(show){
   $("resultTitle").textContent=resultInfo.title;
   $("resultSub").textContent=resultInfo.sub;
   const enDirect=typeof directActif==="function"&&directActif();
-  $("resultAnalyse").classList.toggle("hide",(mode!=="play"&&mode!=="friend")||enDirect);
+  /* En direct aussi la partie se revoit (2026-11-21), des qu'elle est gardee
+     dans « Tes parties » : pas une partie annulee ou sans coups. */
+  $("resultAnalyse").classList.toggle("hide",(mode!=="play"&&mode!=="friend")||(enDirect&&!directPartieGardee()));
   $("resultNew").textContent=enDirect?t("Rematch"):mode==="friend"?t("Create game"):t("New game");
   $("resultAnalyse").textContent=t("Review");
   $("resultClose").textContent=t("Dismiss");
@@ -550,6 +630,13 @@ function showFin(titre,sousTitre,libelleRejouer,action){
 $("resultAnalyse").onclick=()=>{
   resultDismissed=true;
   $("resultBanner").className="result hide";
+  if(typeof directActif==="function"&&directActif()){
+    /* La partie en direct qui vient de finir est dans « Tes parties »
+       (directEnregistrer) : elle se rouvre en revue comme les autres. */
+    const g=directPartieGardee();
+    if(g)ouvrirPartieGardee(g,"jeu");
+    return;
+  }
   if(mode==="friend"){
     /* saveFinishedAmiGame() vient de s'executer (voir renderResult) : la
        partie qui se termine est deja en tete de l'historique Entre amis,
@@ -559,19 +646,45 @@ $("resultAnalyse").onclick=()=>{
   }
   if($("btnAnalyse")){$("btnAnalyse").scrollIntoView&&$("btnAnalyse").scrollIntoView({block:"center"});analyseGame();}
 };
+/* ---------- clavier : parcourir les coups (2026-11-21) ----------
+   Convention de Lichess et Chess.com, dans l'ecran de partie, en revue comme
+   en partie en cours et dans les trois sortes de parties : ← coup precedent,
+   → coup suivant, ↑ ou Origine debut de la partie, ↓ ou Fin position
+   actuelle, Echap retour a la partie. Quand le focus est SUR l'echiquier,
+   c'est lui qui prend les fleches (grille de ui3.js, qui arrete l'evenement) :
+   elles y deplacent la case. Aucune touche n'agit dans un champ de texte, ni
+   derriere une fenetre ouverte, ni avec Ctrl, Alt ou Cmd (Alt+← reste le
+   retour du navigateur). « ? » et « F » sont des raccourcis a une seule
+   touche : ils se coupent dans Accessibilite (WCAG 2.1.4, prefTouches). */
+function champDeTexte(el){
+  return !!el&&!!el.tagName&&(/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)||!!el.isContentEditable);
+}
+function fenetreOuverte(){
+  for(const id of ["duel","bravo","bilan","cpInvite","cpProfil","menuTiroir","makruk"]){const e=$(id);if(e&&!e.hidden)return true;}
+  for(const id of ["promoModal","amiColorModal"]){const e=$(id);if(e&&e.classList.contains("on"))return true;}
+  return false;
+}
 document.addEventListener("keydown",e=>{
-  if(mode!=="play")return;
-  const tag=e.target.tagName;
-  if(tag==="INPUT"||tag==="TEXTAREA")return;
-  /* si le focus est sur une case, les fleches deplacent le curseur :
-     c'est l'echiquier qui les traite, pas la navigation dans la partie */
-  if(e.target&&e.target.classList&&e.target.classList.contains("sq"))return;
-  const at=reviewPly===null?gameUci.length:reviewPly;
-  if(e.key==="ArrowLeft"){e.preventDefault();gotoPly(at-1);}
-  else if(e.key==="ArrowRight"){e.preventDefault();gotoPly(at+1);}
-  else if(e.key==="Home"){e.preventDefault();gotoPly(0);}
-  else if(e.key==="End"){e.preventDefault();exitReview();}
+  if(e.defaultPrevented||e.ctrlKey||e.altKey||e.metaKey)return;
+  if(!ecranDePartie()||champDeTexte(e.target)||fenetreOuverte())return;
+  const k=e.key;
+  if(k==="?"||k==="f"||k==="F"){
+    if(typeof prefTouches!=="undefined"&&!prefTouches)return;
+    if(k==="?"){e.preventDefault();if(typeof clavierOuvrir==="function")clavierOuvrir();return;}
+    /* F suit le bouton de retournement : sans effet la ou il est masque. */
+    const fb=$("btnFlip");
+    if(fb&&!fb.hidden&&typeof toggleFlip==="function"){e.preventDefault();toggleFlip();}
+    return;
+  }
+  const n=game.history.length,at=reviewPly===null?n:reviewPly;
+  if(k==="Escape"){if(reviewPly!==null){e.preventDefault();exitReview();}return;}
+  if(!n||e.shiftKey)return;
+  if(k==="ArrowLeft"){e.preventDefault();if(at>0)gotoPly(at-1);}
+  else if(k==="ArrowRight"){e.preventDefault();if(at<n)gotoPly(at+1);}
+  else if(k==="ArrowUp"||k==="Home"){e.preventDefault();if(at>0)gotoPly(0);}
+  else if(k==="ArrowDown"||k==="End"){e.preventDefault();if(at<n)exitReview();}
 });
+if($("btnRetourPartie"))$("btnRetourPartie").onclick=()=>exitReview();
 
 /* ==========================================================
    8. GAME ANALYSIS
@@ -950,7 +1063,27 @@ $("lichessIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefau
 /* ==========================================================
    9b. HISTORIQUE DES PARTIES (dans le navigateur)
    ========================================================== */
+/* Un seul « Tes parties » (2026-11-21, decision d'Alexandre) : la meme liste,
+   le meme bloc de page, pour les trois sortes de parties. Le bloc
+   #historyPanel suit l'ecran (placerHistorique) : il est sous l'ecran contre
+   l'ordinateur comme sous l'ecran contre un ami.
+   Deux rangements restent dans le navigateur, pour ne rien perdre de ce qui
+   est deja garde ni changer la synchronisation du compte : chang64:games
+   (ordinateur et direct) et chang64:friendgames (entre amis par lien). La
+   liste les reunit, de la plus recente a la plus ancienne, 30 au plus.
+   Sorte d'une partie, champ k : "o" ordinateur, "l" entre amis par lien,
+   "d" en direct, "c" correspondance (prevue, pas encore proposee). Les
+   parties gardees avant ce champ sont reconnues a ce qu'elles portent :
+   lvl pour l'ordinateur, adv pour le direct, le rangement pour le lien. */
 let history=[],gameSaved=false;
+const PARTIES_SORTES=[
+  {k:"o",nom:"Computer"},
+  {k:"l",nom:"Friends"},
+  {k:"d",nom:"Live"},
+  {k:"c",nom:"Correspondence",cache:true}
+];
+const PARTIES_MAX=30;
+let partiesFiltre="";   /* "" : toutes les sortes */
 async function loadHistory(){
   try{
     const r=await window.storage.get("chang64:games");
@@ -973,6 +1106,7 @@ function saveFinishedGame(){
   const {cat,item}=tcCurrent();
   history.unshift({
     t:Date.now(),
+    k:"o",
     c:myColor===W?"w":"b",
     r:resultCode(),
     tc:cat==="none"?"":tcLabel(cat,item),
@@ -991,32 +1125,102 @@ function fmtDate(ts){
   return `${day}/${mon} ${hh}:${mm}`;
 }
 const RES_LABEL={win:"W",loss:"L",draw:"D"};
+function partieSorte(g,source){
+  if(g&&PARTIES_SORTES.some(s=>s.k===g.k))return g.k;
+  if(source==="ami")return "l";
+  return g&&g.adv?"d":"o";
+}
+/* Toutes les parties gardees, la plus recente d'abord. Chaque entree dit ou
+   elle est rangee (source) pour pouvoir la rouvrir. */
+function toutesParties(){
+  const l=[];
+  const prendre=(liste,source)=>{
+    if(Array.isArray(liste))liste.forEach(g=>{if(g&&typeof g.m==="string")l.push({g,source,k:partieSorte(g,source)});});
+  };
+  prendre(history,"jeu");
+  prendre(typeof amiHistory!=="undefined"?amiHistory:null,"ami");
+  l.sort((a,b)=>(Number(b.g.t)||0)-(Number(a.g.t)||0));
+  return l.slice(0,PARTIES_MAX);
+}
+/* L'adversaire, nomme : l'ordinateur avec sa force, le pseudo du membre en
+   direct ; une partie par lien ne connait pas le nom de l'ami. */
+function partieAdversaire(g,k){
+  if(k==="o"){
+    const b=g.lvl!=null&&document.querySelector('#segLevel [data-v="'+Number(g.lvl)+'"]');
+    const force=b?b.textContent.trim():"";
+    return force?"Chang | "+force:"Chang";
+  }
+  return g.adv?String(g.adv):t("A friend");
+}
+function partieCadence(g,k){
+  if(g.tc)return String(g.tc);
+  if(k==="l")return g.p?t(g.p===1?"{n} day/move":"{n} days/move",{n:g.p}):"";
+  return k==="o"?t("No clock"):"";
+}
+/* Les filtres : Toutes, puis une puce par sorte proposee. */
+function partiesFiltres(liste){
+  const box=$("historyList"); if(!box)return;
+  let f=$("historyFiltres");
+  if(!f){
+    f=document.createElement("div");
+    f.id="historyFiltres";f.className="tc-chips history-filtres";
+    f.setAttribute("role","group");f.setAttribute("aria-labelledby","historyTitleTxt");
+    box.parentNode.insertBefore(f,box);
+  }
+  f.classList.toggle("hide",!liste.length);
+  const choix=[{k:"",nom:"All (games)"}].concat(PARTIES_SORTES.filter(s=>!s.cache));
+  if(!choix.some(s=>s.k===partiesFiltre))partiesFiltre="";
+  poserHtml(f,"");
+  for(const s of choix){
+    const b=document.createElement("button");
+    b.type="button";b.className="chip";
+    /* « Toutes » : cle a part, le mot s'accorde avec « parties » ; une langue
+       sans cette cle, l'anglais compris, dit « All ». */
+    const txt=t(s.nom);
+    b.textContent=s.k===""&&txt===s.nom?"All":txt;
+    b.dataset.sorte=s.k;
+    b.setAttribute("aria-pressed",String(s.k===partiesFiltre));
+    b.onclick=()=>{
+      partiesFiltre=s.k;renderHistory();
+      const a=$("historyFiltres").querySelector('[aria-pressed="true"]');if(a)a.focus();
+    };
+    f.appendChild(b);
+  }
+}
 function renderHistory(){
   const box=$("historyList"); if(!box)return;
   const htt=$("historyTitleTxt"); if(htt)htt.textContent=t("Your games");
-  $("historyActions").classList.toggle("hide",history.length===0);
-  if(!history.length){
+  const toutes=toutesParties();
+  $("historyActions").classList.toggle("hide",toutes.length===0);
+  partiesFiltres(toutes);
+  if(!toutes.length){
     $("historyNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
     poserHtml(box,'<p class="history-empty">'+t("No finished game yet.")+'</p>');
     return;
   }
-  $("historyNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:history.length});
+  $("historyNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:toutes.length});
   poserHtml(box,"");
-  const montrees=estMembre()?history:history.slice(0,HISTORIQUE_SANS_COMPTE);
-  montrees.forEach((g,i)=>{
+  const triees=partiesFiltre?toutes.filter(e=>e.k===partiesFiltre):toutes;
+  if(!triees.length){poserHtml(box,'<p class="history-empty">'+t("No game of this kind yet.")+'</p>');return;}
+  const montrees=estMembre()?triees:triees.slice(0,HISTORIQUE_SANS_COMPTE);
+  montrees.forEach(e=>{
+    const g=e.g;
     const b=document.createElement("button");
-    b.className="history-item";
+    b.className="history-item";b.type="button";
+    b.dataset.sorte=e.k;
     const san=sanOf(g.m,g.fen);
     const op=detectOpening(san);
     const side=g.c==="w"?t("White"):t("Black");
     const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
+    const cad=partieCadence(g,e.k);
     poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
-      '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" | "+side+(g.adv?" | "+echapper(g.adv):"")+(g.tc?" | "+g.tc:"")+" | "+t("{n} moves",{n:moves})+'</span></span>');
-    b.onclick=()=>openHistoryGame(i);
+      '<span class="meta"><b>'+echapper(partieAdversaire(g,e.k))+'</b>'+
+      '<span>'+fmtDate(g.t)+(cad?" | "+echapper(cad):"")+" | "+side+" | "+t("{n} moves",{n:moves})+'</span>'+
+      (op?'<span class="ouv">'+echapper(op.name)+'</span>':"")+'</span>');
+    b.onclick=()=>ouvrirPartieGardee(g,e.source);
     box.appendChild(b);
   });
-  if(montrees.length<history.length)box.insertAdjacentHTML("beforeend",inviteMembre("Without an account, the last five games are shown. Create a free account to keep your whole history."));
+  if(montrees.length<triees.length)box.insertAdjacentHTML("beforeend",inviteMembre("Without an account, the last five games are shown. Create a free account to keep your whole history."));
 }
 function sanOf(uciStr,fen){
   const g=fen?new Game(fen):new Game(),out=[];
@@ -1027,12 +1231,15 @@ function sanOf(uciStr,fen){
   }
   return out;
 }
-/* Ouvrir une ancienne partie du journal reste dans Jouer, dans la meme
-   interface de revue que juste apres avoir joue (bandeau, jauge, panneau
-   Revue) -- appelee uniquement depuis l'onglet Jouer lui-meme (le journal y
-   vit), aucun changement de mode n'est necessaire. */
-function openHistoryGame(i){
-  const rec=history[i]; if(!rec)return;
+/* Rouvrir une partie gardee, quelle que soit sa sorte : toujours dans
+   l'interface de revue de Jouer (bandeau de coups, jauge, panneau Revue avec
+   l'analyse de Stockfish), la meme que juste apres une partie contre
+   l'ordinateur. Depuis l'ecran contre un ami, on passe par le cache que
+   setMode("play") restaure (mainGame, mainSan...) : meme chemin qu'un retour
+   sur l'onglet, sans dupliquer setMode. */
+let revueAdv="";   /* l'adversaire de la partie relue, pour le bandeau au-dessus de l'echiquier */
+function ouvrirPartieGardee(rec,source){
+  if(!rec||typeof rec.m!=="string")return;
   const startFen=typeof rec.fen==="string"?rec.fen:null;
   const g=startFen?new Game(startFen):new Game(),san=[],uci=[];
   for(const u of rec.m.split(" ").filter(Boolean)){
@@ -1043,19 +1250,64 @@ function openHistoryGame(i){
   if(!san.length)return;
   clearAnalysis();
   isReviewGame=true;gameSaved=true;
-  game=g;sanList=san;gameUci=uci;
-  gameStartFen=startFen;
-  myColor=rec.c==="w"?W:B;flipped=myColor===B;
-  lastMove=g.history.length?g.history[g.history.length-1].m:null;
+  gameUci=uci;gameStartFen=startFen;
+  myColor=rec.c==="w"?W:B;
+  revueAdv=partieAdversaire(rec,partieSorte(rec,source));
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
+  if(typeof clockHist!=="undefined")clockHist=[];
   if(typeof resigned!=="undefined")resigned=null;
-  if(typeof gameStarted!=="undefined")gameStarted=true;
-  resultInfo=null;mainGame=null;
-  refreshGame();
+  resultInfo=null;
+  const dernier=g.history.length?g.history[g.history.length-1].m:null;
+  if(mode==="play"){
+    game=g;sanList=san;lastMove=dernier;flipped=myColor===B;
+    if(typeof gameStarted!=="undefined")gameStarted=true;
+    mainGame=null;
+    refreshGame();
+  }else{
+    mainGame=g;mainSan=san;mainLast=dernier;mainStarted=true;mainFlipped=myColor===B;
+    setMode("play");
+  }
   gotoPly(0);
-  const st=$("status");st.className="status";
-  st.textContent=t("Replaying a saved game. Step through it or run the review.");
+  const st=$("status");
+  if(st){st.className="status";st.textContent=t("Replaying a saved game. Step through it or run the review.");}
   if(typeof focusBoard==="function")focusBoard();
+}
+function openHistoryGame(i){ouvrirPartieGardee(history[i],"jeu");}
+function openAmiHistoryGame(i){ouvrirPartieGardee(amiHistory[i],"ami");}
+/* La partie en direct qui vient de finir, telle que gardee dans « Tes
+   parties » (directEnregistrer, direct_ecran.js) ; null si elle ne l'est pas. */
+function directPartieGardee(){
+  try{
+    const e=directE; if(!e||e.phase!=="fin")return null;
+    const m=e.coups.join(" ");
+    return history.find(g=>g&&g.m===m&&partieSorte(g,"jeu")==="d")||null;
+  }catch(x){return null;}
+}
+/* Une partie contre l'ordinateur attend-elle, en cours, pendant qu'on est sur
+   un autre ecran ? Rouvrir une ancienne partie la remplacerait : la liste
+   s'efface alors, comme sous une partie qui se joue. */
+function partieOrdiEnAttente(){
+  try{
+    return mode!=="play"&&!!mainGame&&!!mainStarted&&!isReviewGame&&resigned===null&&!isFlagged()&&mainGame.moves().length>0&&!mainGame.isDraw();
+  }catch(e){return false;}
+}
+/* Le bloc « Tes parties » suit l'ecran : un seul bloc dans la page, pose sous
+   l'ecran contre l'ordinateur ou sous l'ecran contre un ami. Appele par
+   setMode (ui.js). Dans Jouer, refreshGame decide de sa visibilite (cache
+   pendant une partie) : on lui rend l'etat qu'il avait en partant. */
+function placerHistorique(m){
+  const hp=$("historyPanel"); if(!hp)return;
+  if(m==="friend"){
+    const pf=$("pane-friend"); if(!pf)return;
+    if(hp.parentNode!==pf){hp.dataset.cacheJeu=hp.classList.contains("hide")?"1":"";pf.appendChild(hp);}
+    hp.classList.toggle("hide",partieOrdiEnAttente());
+  }else if(m==="play"){
+    const pp=$("pane-play"),ref=$("pgnPanel"); if(!pp)return;
+    if(hp.parentNode!==pp){
+      pp.insertBefore(hp,ref&&ref.parentNode===pp?ref:null);
+      hp.classList.toggle("hide",hp.dataset.cacheJeu==="1");
+    }
+  }
 }
 $("btnHistoryClear").onclick=()=>{
   const b=$("btnHistoryClear");
@@ -1065,17 +1317,15 @@ $("btnHistoryClear").onclick=()=>{
     return;
   }
   b.classList.remove("armed");b.textContent=t("Clear history");
-  history=[];saveHistory();renderHistory();
+  history=[];amiHistory=[];saveHistory();saveAmiHistory();renderHistory();
 };
 
 /* ==========================================================
-   HISTORIQUE ENTRE AMIS
+   PARTIES ENTRE AMIS PAR LIEN : leur rangement
    ========================================================== */
-/* Meme principe que l'historique de Jouer (chang64:games) juste au-dessus,
-   mais separe : contrairement a une partie Jouer, une partie Entre amis
-   n'avait jusqu'ici aucune trace persistante au-dela de la plus recente
-   (chang64:friend, ecrasee a chaque nouvelle partie) -- impossible de
-   retrouver une ancienne partie une fois la suivante commencee. */
+/* Rangees a part (chang64:friendgames) depuis l'origine, et montrees depuis
+   le 21/11/2026 dans la liste unique « Tes parties » ci-dessus : il n'y a plus
+   de seconde liste a l'ecran. */
 let amiHistory=[],amiGameSaved=false;
 async function loadAmiHistory(){
   try{const r=await window.storage.get("chang64:friendgames");
@@ -1105,73 +1355,13 @@ function saveFinishedAmiGame(){
   }
   if(uci.length<2)return;
   amiGameSaved=true;
-  amiHistory.unshift({t:Date.now(),c:amiColor===W?"w":"b",r:amiResultCode(),m:uci.join(" ")});
+  amiHistory.unshift({t:Date.now(),k:"l",c:amiColor===W?"w":"b",r:amiResultCode(),p:amiPace,m:uci.join(" ")});
   amiHistory=amiHistory.slice(0,30);
-  saveAmiHistory();renderAmiHistory();
+  saveAmiHistory();renderHistory();
 }
-function renderAmiHistory(){
-  const box=$("amiHistoryList"); if(!box)return;
-  $("amiHistoryActions").classList.toggle("hide",amiHistory.length===0);
-  if(!amiHistory.length){
-    $("amiHistoryNote").textContent=t("Finished games are stored in this browser so you can replay and review them later.");
-    poserHtml(box,'<p class="history-empty">'+t("No finished game yet.")+'</p>');
-    return;
-  }
-  $("amiHistoryNote").textContent=t("{n} game(s) kept on this device. Pick one to replay and review it.",{n:amiHistory.length});
-  poserHtml(box,"");
-  amiHistory.forEach((g,i)=>{
-    const b=document.createElement("button");
-    b.className="history-item";
-    const san=sanOf(g.m,null);
-    const op=detectOpening(san);
-    const side=g.c==="w"?t("White"):t("Black");
-    const moves=Math.ceil(g.m.split(" ").filter(Boolean).length/2);
-    poserHtml(b,'<span class="res '+g.r+'">'+t(RES_LABEL[g.r])+'</span>'+
-      '<span class="meta"><b>'+(op?op.name:t("Game"))+'</b>'+
-      '<span>'+fmtDate(g.t)+" | "+side+" | "+t("{n} moves",{n:moves})+'</span></span>');
-    b.onclick=()=>openAmiHistoryGame(i);
-    box.appendChild(b);
-  });
-}
-/* Meme principe que openHistoryGame juste au-dessus, "idem pour inviter" :
-   reste dans l'interface de revue de Jouer plutot que de basculer vers
-   Analyser. mainGame/mainSan/mainStarted sont le cache que setMode("play")
-   restaure normalement en y revenant depuis un autre onglet -- les
-   pre-remplir ici avec la partie choisie fait prendre exactement ce
-   chemin, sans dupliquer la logique de setMode(). */
-function openAmiHistoryGame(i){
-  const rec=amiHistory[i]; if(!rec)return;
-  const g=new Game(),san=[],uci=[];
-  for(const u of rec.m.split(" ").filter(Boolean)){
-    const mv=g.moves().find(x=>g.uci(x)===u);
-    if(!mv)break;
-    san.push(g.san(mv));uci.push(u);g.makeMove(mv);
-  }
-  if(!san.length)return;
-  if(typeof clearAnalysis==="function")clearAnalysis();
-  gameUci=uci;gameStartFen=null;
-  isReviewGame=true;gameSaved=true;
-  myColor=rec.c==="w"?W:B;
-  if(typeof resigned!=="undefined")resigned=null;
-  resultInfo=null;
-  mainGame=g;mainSan=san;
-  mainLast=g.history.length?g.history[g.history.length-1].m:null;
-  mainStarted=true;mainFlipped=myColor===B;
-  setMode("play");
-  gotoPly(0);
-  const st=$("status"); if(st){st.className="status";st.textContent=t("Replaying a saved game. Step through it or run the review.");}
-  if(typeof focusBoard==="function")focusBoard();
-}
-$("btnAmiHistoryClear").onclick=()=>{
-  const b=$("btnAmiHistoryClear");
-  if(!b.classList.contains("armed")){
-    b.classList.add("armed");b.textContent=t("Confirm");
-    setTimeout(()=>{b.classList.remove("armed");b.textContent=t("Clear history");},5000);
-    return;
-  }
-  b.classList.remove("armed");b.textContent=t("Clear history");
-  amiHistory=[];saveAmiHistory();renderAmiHistory();
-};
+/* L'ancienne seconde liste n'existe plus : son nom reste pour qui l'appelle
+   encore (setMode, synchronisation du compte). */
+function renderAmiHistory(){renderHistory();}
 
 /* ==========================================================
    10. PUZZLE RATING, DAY STREAK, PUZZLE RUSH

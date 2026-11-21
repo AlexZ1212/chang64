@@ -37,7 +37,7 @@ function appliquerTheme(){
 /* Le damier assorti rejoint les cinq damiers offerts. */
 if(!BOARD_THEMES.some(x=>x.id==="theme"))BOARD_THEMES.unshift({id:"theme",en:"Matching the theme",fr:"Assorti au thème"});
 savePrefs=async function(){
-  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn,son:sonOn,theme:prefTheme}));}catch(e){}
+  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn,son:sonOn,touches:prefTouches,theme:prefTheme}));}catch(e){}
 };
 /* loadPrefs (ui3.js) est deja lance quand ce script s'execute : le theme
    enregistre est relu ici. */

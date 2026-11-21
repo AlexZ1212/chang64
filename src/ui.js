@@ -785,14 +785,20 @@ function renderClocks(){
   $("clockTop").classList.toggle("untimed",sansTemps);
   $("clockBottom").classList.toggle("untimed",sansTemps);
   const topColor=myColor^1,botColor=myColor;
-  const snap=(typeof reviewPly!=="undefined"&&reviewPly!==null&&typeof clockHist!=="undefined"&&clockHist[reviewPly])
+  /* Le temps du coup regarde ne s'affiche que pour une partie finie : tant
+     que la partie se joue, la pendule montre le temps qui court, meme quand
+     on regarde un coup passe (2026-11-21). */
+  const snap=(typeof reviewPly!=="undefined"&&reviewPly!==null&&typeof clockHist!=="undefined"&&clockHist[reviewPly]
+      &&!(typeof partieEnCours==="function"&&partieEnCours()))
     ? clockHist[reviewPly] : clock;
   const val=c=>c===W?snap.w:snap.b;
   /* L'adversaire s'appelait "Ordinateur", ce qui ne dit rien. On le nomme,
      et on rappelle sa force : battre "Chang · Coriace" veut dire quelque
      chose, et on sait en permanence contre quoi on joue. Le libelle de force
      est lu sur le selecteur, deja traduit, plutot que maintenu en double. */
-  $("clockTopName").textContent=botLabel();
+  /* Une partie relue depuis « Tes parties » nomme son adversaire d'alors
+     (un membre, un ami, l'ordinateur a la force de ce jour-la). */
+  $("clockTopName").textContent=(typeof isReviewGame!=="undefined"&&isReviewGame&&typeof revueAdv!=="undefined"&&revueAdv)?revueAdv:botLabel();
   $("clockBottomName").textContent=t("You");
   $("clockTopSwatch").className=topColor===B?"dark":"";
   $("clockBottomSwatch").className=botColor===B?"dark":"";
@@ -971,6 +977,8 @@ function render(){
     {let etat=0;if(checkSq>=0)etat=g.moves().length?1:(ecranExercice()||mode==="debut"?0:2);SON.coup(mv,etat);}}
   else if(!mv)lastAnimated=null;
   else if(mv&&animEnCours)animateMove(mv,true);   /* rendu pendant l'animation */
+  /* Bandeau « Retour à la partie » et lien « Clavier » (ui2.js). */
+  if(typeof majRetourPartie==="function")majRetourPartie();
 }
 /* Glissement de la piece jouee, de sa case de depart vers son arrivee.
    render() ayant recree le HTML, on positionne la nouvelle piece a l'endroit
@@ -1369,7 +1377,11 @@ function refreshGame(){
        pas, l'analyse reste bloquee tant que la partie n'est pas finie, mais
        aux echecs le soupcon de triche suffit a poser probleme : mieux vaut
        lever toute ambiguite. */
-  const enCours=gameStarted&&!over;
+  /* Une partie relue depuis « Tes parties » n'est jamais « en cours », meme
+     si sa derniere position a encore des coups (abandon, temps ecoule) :
+     sans cela « Analyser la partie » et « Nouvelle partie » restaient grises
+     pendant sa relecture (2026-11-21). */
+  const enCours=gameStarted&&!over&&!(typeof isReviewGame!=="undefined"&&isReviewGame);
   /* Sauvegarde/effacement de la partie en cours (mode Jouer uniquement,
      jamais pendant une revue de PGN importe). Voir la section 20 de ui2.js
      pour le detail : un coup vient d'etre joue -> on sauvegarde ; la partie
@@ -1692,6 +1704,9 @@ function botMove(){
   let mv=botLivre();
   if(!mv)mv=coupOrdinateur(game,eloPartie(),budget);
   if(!mv){busy=false;refreshGame();return;}
+  /* Le joueur regardait un coup passe : la reponse de l'ordinateur le ramene
+     a la position actuelle, avec son deplacement et son son (2026-11-21). */
+  if(reviewGame&&typeof vueActuelle==="function")vueActuelle();
   sanList.push(game.san(mv));
   game.makeMove(mv);lastMove=mv;busy=false;
   clockAfterMove(myColor^1);
@@ -1701,12 +1716,14 @@ function botMove(){
     s.textContent=game.inCheck()?t("Check. Your move."):t("Your move.");
   }
 }
-function renderSheetInto(id,list){
+/* at : le nombre de coups joues dans la position affichee, quand on regarde
+   un coup passe (2026-11-21) ; sans lui, le dernier coup. */
+function renderSheetInto(id,list,at){
   const el=$(id); if(!el)return;
   if(!list||!list.length){poserHtml(el,'<div class="sheet-empty">'+t("No moves yet")+'</div>');return;}
   let h="";
   for(let i=0;i<list.length;i+=2){
-    const last=list.length-1;
+    const last=(at==null?list.length:Math.min(at,list.length))-1;
     h+='<div class="sheet-row"><span class="n">'+(i/2+1)+'</span>'+
        '<span class="'+(i===last?"cur":"")+'">'+(list[i]||"")+'</span>'+
        '<span class="'+(i+1===last?"cur":"")+'">'+(list[i+1]||"")+'</span></div>';
@@ -2914,6 +2931,9 @@ function showAmi(){
   legalCache=game.moves();
   lastMove=game.history.length?game.history[game.history.length-1].m:null;
   selected=-1;marks={};
+  /* showAmi suit chaque changement de la partie (coup joue, annule, recu
+     par lien, abandon) : on revient toujours a la position actuelle. */
+  if(typeof vueActuelle==="function")vueActuelle();
   render();updateEval();renderSheetInto("amiSheet",amiSan);renderNavLecture(amiSan);{const fb=$("btnFlip");if(fb)fb.hidden=false;}
   updateAmiBoardVisibility();
   const st=$("amiStatus");
@@ -2991,6 +3011,9 @@ function showAmi(){
   updateAmiNote();
 }
 function handleAmiClick(sq){
+  /* On regardait un coup passe : le premier appui ramene a la partie, sans
+     rien jouer (2026-11-21), par lien comme en direct. */
+  if(reviewGame){exitReview();return;}
   if(typeof directActif==="function"&&directActif()){directClic(sq);return;}
   if(!amiStarted)return;
   if(amiResigned!==null)return;
@@ -3340,6 +3363,7 @@ function setMode(m,opts){
     fragmentSuivi=null;
   }
   reviewGame=null;reviewLast=null;
+  if(typeof vueActuelle==="function")vueActuelle();
   const rb=$("resultBanner"); if(rb)rb.classList.add("hide");
   /* Tant que cette modale couvrait tout le navigateur, la barre d'onglets
      etait hors d'atteinte et on ne pouvait pas changer de section en la
@@ -3367,6 +3391,8 @@ function setMode(m,opts){
   $("pane-play").classList.toggle("hide",m!=="play");
   $("pane-puzzles").classList.toggle("hide",m!=="puzzles");
   $("pane-friend").classList.toggle("hide",m!=="friend");
+  /* Un seul bloc « Tes parties », pose sous l'ecran ou l'on est (ui2.js). */
+  if(typeof placerHistorique==="function")placerHistorique(m);
   $("pane-debut").classList.toggle("hide",m!=="debut");
   $("evalwrap").classList.toggle("hide",m!=="play");
   /* Bouton de retournement : visible en Jouer et Entre amis (les deux

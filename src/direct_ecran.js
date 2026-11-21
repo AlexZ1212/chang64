@@ -154,10 +154,15 @@ function directMontrer() {
      sans ceci, render() rejouait l'animation du meme coup a chaque message du
      serveur (confirmation de mon coup, nulle proposee, adversaire absent). */
   { const cle = e.id + "/" + e.n + "/" + e.coups.length;
-    if (cle === directAnime && lastMove) lastAnimated = lastMove;
+    /* Un coup arrive pendant qu'on regardait un coup passe : retour a la
+       position actuelle, avec son deplacement et son son. Un message sans
+       nouveau coup (nulle proposee, adversaire absent) laisse la vue ou elle
+       est (2026-11-21). */
+    if (cle !== directAnime) vueActuelle();
+    else if (lastMove && !reviewGame) lastAnimated = lastMove;
     directAnime = cle; }
   render();
-  renderSheetInto("amiSheet", directSan); renderNavLecture(directSan);
+  renderSheetInto("amiSheet", directSan, reviewPly); renderNavLecture(directSan);
   const assis = e.phase !== "attente";
   const bw = document.querySelector(".board-wrap"); if (bw) bw.classList.toggle("hide", !assis);
   const sp = $("amiScoresheetPanel"); if (sp) sp.classList.toggle("hide", !assis);
@@ -198,7 +203,7 @@ function directEnregistrer() {
   if (directVu === cle) return;
   directVu = cle;
   if (r === "annulee" || e.coups.length < 2) return;
-  history.unshift({ t: Date.now(), c: e.moi === "b" ? "w" : "b", r, tc: directTexteCadence(e.cad), adv: directAdv(), m: e.coups.join(" "), fen: null });
+  history.unshift({ t: Date.now(), k: "d", c: e.moi === "b" ? "w" : "b", r, tc: directTexteCadence(e.cad), adv: directAdv(), m: e.coups.join(" "), fen: null });
   history = history.slice(0, 30);
   saveHistory(); renderHistory();
 }

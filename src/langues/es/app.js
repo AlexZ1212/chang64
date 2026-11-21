@@ -1182,5 +1182,28 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Nuevo récord: {r}. Guárdalo en tu cuenta.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Elo entre miembros",
-"{r} between members":"{r} entre miembros"
+"{r} between members":"{r} entre miembros",
+/* Historique unique et navigation au clavier (2026-11-21). */
+"You are looking at an earlier move.":"Estás viendo una jugada anterior.",
+"Back to the game":"Volver a la partida",
+"Move {n}, {move}":"Jugada {n}, {move}",
+"All (games)":"Todas",
+"Live":"En directo",
+"Correspondence":"Correspondencia",
+"A friend":"Un amigo",
+"No game of this kind yet.":"Todavía no hay partidas de este tipo.",
+"Keyboard shortcuts":"Atajos de teclado",
+"Previous move, next move":"Jugada anterior, jugada siguiente",
+"Start of the game":"Inicio de la partida",
+"Current position":"Posición actual",
+"Show this list":"Mostrar esta lista",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Durante una partida y al repasar una. El reloj sigue corriendo mientras miras una jugada anterior.",
+"When the cursor is on the board, the arrows move it from square to square.":"Cuando el cursor está en el tablero, las flechas lo mueven de casilla en casilla.",
+"Home (key)":"Inicio",
+"End (key)":"Fin",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Fuera del tablero, durante una partida o al repasar una, las teclas recorren las jugadas:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Con un lector de pantalla, activa los anuncios de arriba: cada jugada que miras se lee en voz alta, con su número, su pieza y su casilla.",
+"Single-key shortcuts":"Atajos de una sola tecla",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Las teclas ? y F. Desactívalos si molestan a tu lector de pantalla o a tu control por voz."
 };

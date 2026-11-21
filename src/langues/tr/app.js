@@ -1180,5 +1180,28 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Yeni rekor: {r}. Onu hesabında sakla.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Üyeler arası Elo",
-"{r} between members":"{r} üyeler arasında"
+"{r} between members":"{r} üyeler arasında",
+/* Historique unique et navigation au clavier (2026-11-21). */
+"You are looking at an earlier move.":"Önceki bir hamleye bakıyorsun.",
+"Back to the game":"Oyuna dön",
+"Move {n}, {move}":"Hamle {n}, {move}",
+"All (games)":"Tümü",
+"Live":"Canlı",
+"Correspondence":"Yazışmalı",
+"A friend":"Bir arkadaş",
+"No game of this kind yet.":"Bu türden henüz oyun yok.",
+"Keyboard shortcuts":"Klavye kısayolları",
+"Previous move, next move":"Önceki hamle, sonraki hamle",
+"Start of the game":"Oyunun başı",
+"Current position":"Şimdiki konum",
+"Show this list":"Bu listeyi göster",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Oyun sırasında ve bir oyunu incelerken. Önceki bir hamleye bakarken saat işlemeye devam eder.",
+"When the cursor is on the board, the arrows move it from square to square.":"İmleç tahtadayken ok tuşları onu kareden kareye taşır.",
+"Home (key)":"Home",
+"End (key)":"End",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Tahtanın dışında, oyun sırasında ya da bir oyunu incelerken tuşlar hamleler arasında gezinir:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Ekran okuyucuyla, yukarıdaki duyuruları aç: baktığın her hamle numarası, taşı ve karesiyle sesli okunur.",
+"Single-key shortcuts":"Tek tuşlu kısayollar",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"? ve F tuşları. Ekran okuyucunu ya da sesli komutunu engelliyorlarsa kapat."
 };

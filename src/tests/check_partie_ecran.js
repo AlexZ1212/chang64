@@ -78,7 +78,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("attente : le lien a envoyer, pas d'echiquier, bouton Quitter", !cache("directLienBloc") && /#partie=abcdefghjkmn$/.test($("directAdresse").value) && w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("btnDirectQuitter") && cache("btnDirectAbandon"));
   T("les panneaux de la partie par lien s'effacent", w.getComputedStyle($("amiNewGamePanel")).display === "none" && w.getComputedStyle($("amiStatusPanel")).display === "none");
 
-  T("l'historique entre amis s'efface aussi", w.getComputedStyle($("amiHistoryPanel")).display === "none");
+  /* 2026-11-21 : une seule liste « Tes parties », le bloc #historyPanel, pose
+     sous cet ecran ; il s'efface pendant la partie en direct. */
+  T("« Tes parties » est sous cet ecran, et s'efface pendant le direct", $("historyPanel").parentNode === $("pane-friend") && !$("amiHistoryPanel") && w.getComputedStyle($("historyPanel")).display === "none");
   recevoir(etat({ phase: "fin", nr: null, inv: "Bob", fin: { r: "", m: "refusee" }, la: { b: true, n: false } }));
   T("invitation declinee : une phrase sobre, ni fenetre ni revanche, Quitter", $("directStatus").textContent.replace(/[  ]/g, " ") === "Bob ne peut pas jouer maintenant." && $("resultBanner").classList.contains("hide") && cache("btnDirectRevanche") && !cache("btnDirectQuitter"), $("directStatus").textContent);
 
@@ -87,9 +89,10 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("l'adversaire arrive : echiquier, pendules, son pseudo", !w.document.querySelector(".board-wrap").classList.contains("hide") && !cache("clockTop") && $("clockTopName").textContent.replace(/[  ]/g, " ") === "Bob" && $("clockTopTime").textContent.replace(/[  ]/g, " ") === "10:00" && $("clockBottomName").textContent.replace(/[  ]/g, " ") === "Toi");
   T("Abandonner visible, pas de nulle avant que chacun ait joue", !cache("btnDirectAbandon") && cache("btnDirectNulle") && cache("btnDirectQuitter"));
   T("aucune fenetre de felicitations ni defi pendant la partie", w.eval("bravoOccupe()") === true && w.eval("duelOccupe()") === true);
-  /* 2026-11-21 : #boardTools porte le bandeau de coups, en lecture seule ; le
-     bouton de retournement reste masque, et aucune puce ne ramene en arriere. */
-  T("aucune aide : ni jauge ni outils d'analyse", $("btnFlip").hidden && !w.document.querySelector("#navScroll [data-ply]"));
+  /* 2026-11-21 : #boardTools porte le bandeau de coups ; le bouton de
+     retournement reste masque. Depuis le soir du 21/11 le bandeau se parcourt
+     (check_clavier_direct.js), mais sans jauge ni marque d'analyse. */
+  T("aucune aide : ni jauge ni outils d'analyse", $("btnFlip").hidden && $("evalwrap").classList.contains("hide") && !w.document.querySelector("#navScroll [class*='tag-']") && $("plyInfo").classList.contains("hide"));
   w.eval("directJouer(game.moves().find(m=>game.uci(m)==='e2e4'))");
   T("mon coup part au serveur et se voit tout de suite", fil.envois.includes('{"t":"coup","c":"e2e4"}') && /e4/.test($("amiSheet").textContent.replace(/[  ]/g, " ")));
   w.eval("directJouer(game.moves()[0])");

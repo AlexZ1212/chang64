@@ -1182,5 +1182,28 @@ module.exports = {
 "New record: {r}. Keep it in your account.":"Новый рекорд: {r}. Сохрани его в своём аккаунте.",
 /* Elo entre membres (2026-11-21). */
 "Elo between members":"Эло среди участников",
-"{r} between members":"{r} среди участников"
+"{r} between members":"{r} среди участников",
+/* Historique unique et navigation au clavier (2026-11-21). */
+"You are looking at an earlier move.":"Ты смотришь один из прошлых ходов.",
+"Back to the game":"Вернуться к партии",
+"Move {n}, {move}":"Ход {n}, {move}",
+"All (games)":"Все",
+"Live":"Вживую",
+"Correspondence":"По переписке",
+"A friend":"Друг",
+"No game of this kind yet.":"Таких партий пока нет.",
+"Keyboard shortcuts":"Горячие клавиши",
+"Previous move, next move":"Предыдущий ход, следующий ход",
+"Start of the game":"Начало партии",
+"Current position":"Текущая позиция",
+"Show this list":"Показать этот список",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Во время партии и при просмотре. Часы продолжают идти, пока ты смотришь прошлый ход.",
+"When the cursor is on the board, the arrows move it from square to square.":"Когда курсор стоит на доске, стрелки двигают его с поля на поле.",
+"Home (key)":"Home",
+"End (key)":"End",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Вне доски, во время партии или при просмотре, клавиши листают ходы:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"С экранным диктором включи объявления выше: каждый ход, который ты смотришь, зачитывается вслух, с номером, фигурой и полем.",
+"Single-key shortcuts":"Клавиши из одного символа",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Клавиши ? и F. Отключи их, если они мешают экранному диктору или голосовому управлению."
 };

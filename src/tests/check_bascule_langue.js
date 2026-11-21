@@ -29,7 +29,12 @@ function motifs(D) {
   const ech = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   /* Les cles d'un seul caractere sont ecartees : W/L/D (resultat d'une
      partie) valent aussi comme initiales de jours dans le calendrier. */
-  return Object.entries(D).filter(([k, v]) => typeof v === "string" && k !== v && k.length > 1 && v.length > 1 && !k.startsWith("@"))
+  /* Les gabarits qui n'ont presque que des variables, comme les durees
+     « {d}d {h}h » (2026-11-21), sont ecartes aussi : leur motif attraperait
+     n'importe quel mot finissant par la bonne lettre (« English », « Deutsch »,
+     « Au hasard »). Meme regle que tests/check_traductions.js. */
+  const lettres = k => k.replace(/\{[a-z]+\}/gi, "").replace(/\s/g, "").length;
+  return Object.entries(D).filter(([k, v]) => typeof v === "string" && k !== v && k.length > 1 && v.length > 1 && !k.startsWith("@") && (!k.includes("{") || lettres(k) > 4))
     .map(([k]) => k.includes("{") ? { re: new RegExp("^" + ech(k).replace(/\\\{[a-z]+\\\}/gi, "[^ ]{1,20}") + "$") } : { exact: k });
 }
 const restant = (txt, liste) => liste.some(m => m.exact !== undefined ? m.exact === txt : m.re.test(txt));

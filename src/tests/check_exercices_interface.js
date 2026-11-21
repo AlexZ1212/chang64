@@ -152,7 +152,10 @@ setTimeout(async()=>{
     String(d.querySelectorAll("#board .sq.hint").length));
   /* Trois tournures en alternance depuis le 2026-11-15 (ton de l'app) :
      on verifie que le coup lui-meme est annonce, en notation. */
-  T("la reponse est annoncee", /\b([KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h](x[a-h])?[1-8](=[QRBN])?|O-O(-O)?)[+#]?/.test(d.getElementById("exStatus").textContent),
+  /* La notation figurine remplace la lettre de la piece par son dessin : une
+     prise par une piece se lit alors « xg7# » dans le texte (2026-11-21, le
+     controle echouait selon l'exercice tire). */
+  T("la reponse est annoncee", /\b([KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h](x[a-h])?[1-8](=[QRBN])?|O-O(-O)?)[+#]?|(^|\s)[a-h]?[1-8]?x[a-h][1-8][+#]?/.test(d.getElementById("exStatus").textContent),
     d.getElementById("exStatus").textContent.slice(0,50));
   d.getElementById("btnNext").click(); await new Promise(r=>setTimeout(r,600));
   T("revient a Indice a l'exercice suivant", /Hint|Indice/i.test(aide.textContent), aide.textContent);

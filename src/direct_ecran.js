@@ -28,7 +28,7 @@ const directDeclinees = {};       /* invitations deja montrees ou refusees sur c
 let directGuet = 0;
 let directHasard = null;          /* je cherche un adversaire au hasard : { cad, depuis } */
 let directCoul = "h";             /* couleur demandee pour la partie que je cree : b, n ou h (au hasard) */
-let directCat = 0;                /* 0 = cadences rapides, 1 = classiques */
+let directCat = 1;                /* famille choisie dans DIRECT_FAMILLES : 0 = blitz, 1 = rapides (par defaut), 2 = classiques */
 /* Ecran « Contre un ami » : direct, corr (par correspondance, 2026-11-21), lien,
    ou hasard (« Contre un joueur en ligne », lui-meme en direct ou par
    correspondance : hasardCorr). */
@@ -61,7 +61,7 @@ function amiModeRegler(m) {
     : c ? "Everyone plays when they like, with no clock to watch. The game waits for you here, even if you close the site."
     : "Play a friend in real time, with a clock. Invite them by username, or send them a link.");
   /* La cadence suit le choix : un delai en jours, ou une cadence a la pendule. */
-  if (c !== directCadCorr(directCad)) directCad = c ? DIRECT_CORR[1] : [DIRECT_RAPIDES, DIRECT_CLASSIQUES][directCat][0];
+  if (c !== directCadCorr(directCad)) directCad = c ? DIRECT_CORR[1] : DIRECT_FAMILLES[directCat][1][0];
   directMessage = "";
   if (mode === "friend" && !directId) showAmi(); else directPanneau();
 }
@@ -173,11 +173,11 @@ function directMotif(e) {
   if (m === "annulee" && directEstCorr()) return t("Game cancelled: the first move was not played in time.");
   return t(DIRECT_MOTIFS[m] || "");
 }
-/* Cadences du bloc de lancement : deux familles, Rapide et Classique, puis
+/* Cadences du bloc de lancement : trois familles, Blitz, Rapide et Classique, puis
    les cadences de la famille choisie. Reconstruit seulement quand la famille change. */
 function directCadencesRendre() {
   const cats = $("directCats"), el = $("directCadences"); if (!cats || !el) return;
-  const familles = [["Rapid", DIRECT_RAPIDES], ["Classical", DIRECT_CLASSIQUES]];
+  const familles = DIRECT_FAMILLES;
   /* Par correspondance : pas de familles, trois delais par coup. */
   const c = amiCorr(), titre = $("directCadenceTitre");
   if (titre) titre.textContent = t(c ? "Time per move" : "Time control");

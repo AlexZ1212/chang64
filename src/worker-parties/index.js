@@ -69,9 +69,12 @@ const DUREE_JETON = 180 * JOUR;          /* comme le serveur du compte */
    changer. */
 const CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0],
   /* Correspondance (2026-11-21) : un delai PAR COUP, en secondes (1, 3, 7 jours). */
-  [86400, 0], [259200, 0], [604800, 0]];
-const CORR = 6;                          /* premiere cadence par correspondance */
-const corr = cad => cad >= CORR;
+  [86400, 0], [259200, 0], [604800, 0],
+  /* Blitz (2026-11-21, decision d'Alexandre : 3+2 seulement, jamais sans
+     increment, qui absorbe le temps de trajet des coups). A la suite, numero 9. */
+  [180, 2]];
+const CORR = 6, CORR_FIN = 8;            /* cadences par correspondance : 6, 7, 8 */
+const corr = cad => cad >= CORR && cad <= CORR_FIN;
 /* Une invitation garde aussi la couleur de l'invite, dans la meme colonne que
    la cadence, pour ne pas ajouter de colonne a la table : cad + 16 s'il joue
    les Blancs, cad + 32 s'il joue les Noirs. Une ancienne ligne (sans couleur)

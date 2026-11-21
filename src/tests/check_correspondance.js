@@ -77,7 +77,22 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
     for (const cad of [6, 7, 8]) { const c = await post("creer", { cad, adv: "Eve" }, "Fred"); jours.push((await ouvrir(c.id, "Fred")).ws.dernier().cad[0] / 86400); await post("retirer", { id: c.id }, "Fred"); }
     return jours.join() === "1,3,7";
   })());
-  T("cadence inconnue : refusee (400)", (await post("creer", { cad: 9, adv: "Bob" }, "Anna")).s === 400);
+  T("cadence inconnue : refusee (400)", (await post("creer", { cad: 10, adv: "Bob" }, "Anna")).s === 400);
+  {
+    /* Blitz 3+2 (2026-11-21) : numero 9, apres la correspondance ; c'est une partie EN DIRECT. */
+    const d = await post("creer", { cad: 9, coul: "b" }, "Fred");
+    const fb = (await ouvrir(d.id, "Fred")).ws, fn = (await ouvrir(d.id, "Eve")).ws;
+    T("le blitz 3+2 porte le numero 9 et se joue en direct", d.s === 200 && fb.dernier().cad.join("+") === "180+2" && fb.dernier().tb === 180000 && !ligne(d.id), fb.dernier().cad);
+    await coup(d.id, fb, "e2e4"); await coup(d.id, fn, "e7e5");
+    avancer(10e3);
+    await coup(d.id, fb, "g1f3");
+    T("sa pendule court et gagne 2 secondes par coup", Math.abs(fb.dernier().tb - 172000) < 500 && fb.dernier().phase === "jeu", fb.dernier().tb);
+    await faux.envoyer(d.id, fb, { t: "revanche" });
+    avancer(181e3);
+    await faux.sonner(Date.now());
+    T("le temps tombe en minutes, pas en jours", fb.dernier().phase === "fin" && fb.dernier().fin.m === "temps" && fb.dernier().fin.r === "1-0", fb.dernier().fin);
+    T("l'adversaire au hasard existe aussi en blitz", (await post("chercher", { cad: 9 }, "Fred")).attente === true && (await post("chercher-fin", {}, "Fred")).s === 200);
+  }
   T("par correspondance, creer demande un adversaire (400 sans pseudo)", (await post("creer", { cad: 7 }, "Anna")).s === 400);
   T("sans session : refuse (401)", (await post("creer", { cad: 7, adv: "Bob" }, null)).s === 401 && (await appel("POST", "accepter", { id: "aaaaaaaaaaaa" }, null)).status === 401);
 

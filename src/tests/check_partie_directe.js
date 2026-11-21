@@ -357,7 +357,7 @@ const avancer = ms => { decalage += ms; };
     env.DB.brut.prepare("UPDATE comptes SET note = 900 WHERE id = ?").run(idGus);
     T("chercher sans session : refuse (401)", (await chercher(null, 0)).s === 401);
     T("chercher depuis un autre site : refuse (403)", (await chercher("Eve", 0, "https://ailleurs.example")).s === 403);
-    T("cadence inconnue : refusee (400)", (await chercher("Eve", 9)).s === 400);
+    T("cadence inconnue : refusee (400)", (await chercher("Eve", 99)).s === 400);
     const e1 = await chercher("Eve", 0);
     T("le premier qui cherche attend dans une partie ouverte", e1.s === 200 && e1.attente === true && /^[a-z2-9]{12}$/.test(e1.id), JSON.stringify(e1));
     T("il peut s'y asseoir : la partie attend un adversaire", (await ouvrir(e1.id, "Eve")).ws.dernier().phase === "attente");

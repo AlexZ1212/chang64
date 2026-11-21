@@ -8,7 +8,8 @@
  * qu'envoyer une intention et afficher l'etat recu.
  *
  *   directCreer(cad, pseudo)  -> Promise {id} ou {erreur}
- *       cad : 0 = 10 min, 1 = 5 min + 3 s, 2 = 15 min + 10 s
+ *       cad : 0 = 10 min, 1 = 5 min + 3 s, 2 = 15 min + 10 s, 3 a 5 = classiques,
+ *             6 a 8 = correspondance, 9 = blitz 3 min + 2 s
  *       erreur : "session" (pas connecte), "adversaire" (pseudo inconnu),
  *                "trop" (trop de parties creees, reessayer plus tard),
  *                "invitations" (trop d'invitations en attente chez ce membre),
@@ -31,11 +32,15 @@
  *   directRetirer(id)   retire mon invitation ou ma recherche
  */
 /* Meme liste, dans le meme ordre, que CADENCES du Worker : rapides, puis classiques. */
-const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0], [86400, 0], [259200, 0], [604800, 0]];
+const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0], [86400, 0], [259200, 0], [604800, 0], [180, 2]];
 const DIRECT_RAPIDES = [0, 1, 2], DIRECT_CLASSIQUES = [3, 4, 5];
 /* Correspondance : un delai par coup, 1, 3 ou 7 jours. */
 const DIRECT_CORR = [6, 7, 8];
-function directCadCorr(i) { return i >= DIRECT_CORR[0]; }
+/* Blitz (2026-11-21) : 3+2 seulement, numero 9, a la suite. */
+const DIRECT_BLITZ = [9];
+/* Les familles du choix de cadence, dans l'ordre de l'ecran (le meme que contre l'ordinateur). */
+const DIRECT_FAMILLES = [["Blitz", DIRECT_BLITZ], ["Rapid", DIRECT_RAPIDES], ["Classical", DIRECT_CLASSIQUES]];
+function directCadCorr(i) { return DIRECT_CORR.includes(i); }
 const DIRECT_ESSAIS = 5;          /* echecs de suite avant de renoncer, si la partie n'a jamais repondu */
 const DIRECT_ESSAIS_EN_JEU = 60;  /* partie deja vue : on insiste (telephone verrouille, tunnel), environ un quart d'heure */
 let directBase = "";              /* autre origine : essais hors navigateur */
@@ -190,5 +195,5 @@ function directOuvrir(id, sur) {
   return fil;
 }
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, directChercher, directNouvelles, directAccepter, directRetirer, DIRECT_CADENCES, DIRECT_RAPIDES, DIRECT_CLASSIQUES, DIRECT_CORR, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
+  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, directChercher, directNouvelles, directAccepter, directRetirer, DIRECT_CADENCES, DIRECT_RAPIDES, DIRECT_CLASSIQUES, DIRECT_CORR, DIRECT_BLITZ, DIRECT_FAMILLES, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
 }

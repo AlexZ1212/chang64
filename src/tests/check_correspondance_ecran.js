@@ -63,6 +63,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   w.eval("cp={pseudo:'Anna',cle:'anna',version:1,dev:'x',n:0,sync:0};setMode('friend');amiModeRegler(amiModeDefaut())");
   T("le choix du haut : En direct, Correspondance, Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Correspondance|Par lien");
   T("le direct garde ses cadences a la pendule", [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,5+3,15+10" && !cache("directCats"));
+  T("trois familles : Blitz, Rapide (par defaut), Classique", [...$("directCats").children].map(b => net(b.textContent)).join("|") === "Blitz|Rapide|Classique" && [...$("directCats").children].map(b => b.getAttribute("aria-pressed")).join() === "false,true,false");
   d.querySelector('#amiModes [data-v="corr"]').click();
   const pf = $("pane-friend");
   T("Correspondance reprend le bloc du direct", pf.dataset.ami === "direct" && pf.dataset.corr === "1" && !cache("directPanel") && d.querySelector('#amiModes [data-v="corr"]').getAttribute("aria-pressed") === "true");

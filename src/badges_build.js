@@ -41,7 +41,10 @@ function code() {
     fs.readFileSync(path.join(__dirname, "direct_ecran.js"), "utf8") + "\n" +
     /* Onglet Jouer et pictogrammes des cartes (2026-11-19). */
     require("./pictos_build.js").pictosSource() + "\n" +
-    fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8");
+    fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +
+    /* Bouton Retour du navigateur et repere de la partie en cours (2026-11-21) :
+       en dernier, il enveloppe setMode apres tous les autres. */
+    fs.readFileSync(path.join(__dirname, "navigation.js"), "utf8");
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir

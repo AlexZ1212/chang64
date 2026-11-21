@@ -1202,5 +1202,8 @@ module.exports = {
 "Live games":"Partai langsung",
 "Won":"Menang",
 "Drawn":"Seri",
-"Lost":"Kalah"
+"Lost":"Kalah",
+/* Bouton Retour et repere de la partie en cours (2026-11-21). */
+"Back to the game":"Kembali ke partai",
+"Game in progress":"Partai sedang berlangsung"
 };

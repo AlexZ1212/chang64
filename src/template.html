@@ -973,6 +973,13 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 :where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(5) .picto svg{animation-delay:.2s}
 :where(.solveCard,.jouer-carte,#explore>*,li,a):nth-child(n+6) .picto svg{animation-delay:.25s}
 .tabs button[hidden]{display:none}
+/* Une partie attend ailleurs (2026-11-21) : pastille sur l'onglet Jouer, sans
+   changer sa largeur, et une ligne discrete en haut des ecrans de reglages. */
+.tabs button.partie-en-cours{position:relative}
+.tabs button.partie-en-cours::after{content:"";position:absolute;top:7px;right:9px;width:8px;height:8px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 2px var(--slate)}
+.retour-partie{margin:0 0 10px}
+.retour-partie .linkbtn{padding-left:0}
+.retour-partie .linkbtn::before{content:"\2190\00a0"}
 .solveCard.avec-picto{display:flex;gap:14px;align-items:flex-start}
 .solveCard.avec-picto.hide{display:none}
 .solveCard-texte{display:block;min-width:0;flex:1 1 auto}
@@ -3823,6 +3830,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
          legales. Chaque titre est donc une cible de defilement, focalisable
          par programme pour que les lecteurs d'ecran suivent aussi. -->
     <div class="panel">
+      <p class="retour-partie" hidden><button type="button" class="linkbtn" data-retour-partie>Back to the game</button></p>
       <h2 id="legalTitle" tabindex="-1">Legal notice</h2>
       <p class="sub">Publisher and hosting details.</p>
       <div class="prose" id="legalBody"></div>
@@ -3835,6 +3843,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
 
   <div id="pane-prefs" class="hide">
     <div class="panel">
+      <p class="retour-partie" hidden><button type="button" class="linkbtn" data-retour-partie>Back to the game</button></p>
       <h2 id="prefsTitle">Preferences</h2>
       <p class="sub" id="prefsSub">Kept on this device. Nothing is sent anywhere.</p>
 

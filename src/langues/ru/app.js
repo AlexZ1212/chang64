@@ -1204,5 +1204,8 @@ module.exports = {
 "Live games":"Партии вживую",
 "Won":{"one":"Победа","few":"Победы","many":"Побед","other":"Победы"},
 "Drawn":{"one":"Ничья","few":"Ничьи","many":"Ничьих","other":"Ничьи"},
-"Lost":{"one":"Поражение","few":"Поражения","many":"Поражений","other":"Поражения"}
+"Lost":{"one":"Поражение","few":"Поражения","many":"Поражений","other":"Поражения"},
+/* Bouton Retour et repere de la partie en cours (2026-11-21). */
+"Back to the game":"Вернуться к партии",
+"Game in progress":"Партия идёт"
 };

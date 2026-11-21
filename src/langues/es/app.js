@@ -1204,5 +1204,8 @@ module.exports = {
 "Live games":"Partidas en directo",
 "Won":{"one":"Ganada","other":"Ganadas"},
 "Drawn":"Tablas",
-"Lost":{"one":"Perdida","other":"Perdidas"}
+"Lost":{"one":"Perdida","other":"Perdidas"},
+/* Bouton Retour et repere de la partie en cours (2026-11-21). */
+"Back to the game":"Volver a la partida",
+"Game in progress":"Partida en curso"
 };

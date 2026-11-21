@@ -1202,5 +1202,8 @@ module.exports = {
 "Live games":"Partie na żywo",
 "Won":{"one":"Wygrana","few":"Wygrane","many":"Wygranych","other":"Wygranej"},
 "Drawn":{"one":"Remis","few":"Remisy","many":"Remisów","other":"Remisu"},
-"Lost":{"one":"Przegrana","few":"Przegrane","many":"Przegranych","other":"Przegranej"}
+"Lost":{"one":"Przegrana","few":"Przegrane","many":"Przegranych","other":"Przegranej"},
+/* Bouton Retour et repere de la partie en cours (2026-11-21). */
+"Back to the game":"Wróć do partii",
+"Game in progress":"Partia trwa"
 };

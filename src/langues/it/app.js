@@ -1202,5 +1202,8 @@ module.exports = {
 "Live games":"Partite in diretta",
 "Won":{"one":"Vinta","other":"Vinte"},
 "Drawn":{"one":"Patta","other":"Patte"},
-"Lost":{"one":"Persa","other":"Perse"}
+"Lost":{"one":"Persa","other":"Perse"},
+/* Bouton Retour et repere de la partie en cours (2026-11-21). */
+"Back to the game":"Torna alla partita",
+"Game in progress":"Partita in corso"
 };

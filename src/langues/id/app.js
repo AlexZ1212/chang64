@@ -1205,5 +1205,7 @@ module.exports = {
 "Lost":"Kalah",
 /* Bouton Retour et repere de la partie en cours (2026-11-21). */
 "Back to the game":"Kembali ke partai",
-"Game in progress":"Partai sedang berlangsung"
+"Game in progress":"Partai sedang berlangsung",
+/* Reglages rapides (2026-11-21). */
+"Quick settings":"Pengaturan cepat"
 };

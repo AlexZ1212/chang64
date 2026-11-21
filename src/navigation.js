@@ -37,7 +37,7 @@ function navRepere() {
     onglet.classList.toggle("partie-en-cours", ailleurs);
     if (ailleurs) onglet.setAttribute("aria-description", t("Game in progress")); else onglet.removeAttribute("aria-description");
   }
-  for (const el of document.querySelectorAll(".retour-partie")) el.hidden = !ailleurs;
+  for (const el of document.querySelectorAll(".retour-jeu")) el.hidden = !ailleurs;
 }
 {
   const avant = setMode;
@@ -68,7 +68,7 @@ window.addEventListener("popstate", e => {
   navRetour = false;
 });
 document.addEventListener("click", e => {
-  if (!e.target.closest || !e.target.closest("[data-retour-partie]")) return;
+  if (!e.target.closest || !e.target.closest("[data-retour-jeu]")) return;
   const p = navPartie();
   if (!p) return;
   setMode(p);

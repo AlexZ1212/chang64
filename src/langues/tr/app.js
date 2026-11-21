@@ -1205,5 +1205,7 @@ module.exports = {
 "Lost":"Mağlubiyet",
 /* Bouton Retour et repere de la partie en cours (2026-11-21). */
 "Back to the game":"Oyuna dön",
-"Game in progress":"Oyun sürüyor"
+"Game in progress":"Oyun sürüyor",
+/* Reglages rapides (2026-11-21). */
+"Quick settings":"Hızlı ayarlar"
 };

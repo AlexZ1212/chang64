@@ -977,9 +977,9 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    changer sa largeur, et une ligne discrete en haut des ecrans de reglages. */
 .tabs button.partie-en-cours{position:relative}
 .tabs button.partie-en-cours::after{content:"";position:absolute;top:7px;right:9px;width:8px;height:8px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 2px var(--slate)}
-.retour-partie{margin:0 0 10px}
-.retour-partie .linkbtn{padding-left:0}
-.retour-partie .linkbtn::before{content:"\2190\00a0"}
+.retour-jeu{margin:0 0 10px}
+.retour-jeu .linkbtn{padding-left:0}
+.retour-jeu .linkbtn::before{content:"\2190\00a0"}
 .solveCard.avec-picto{display:flex;gap:14px;align-items:flex-start}
 .solveCard.avec-picto.hide{display:none}
 .solveCard-texte{display:block;min-width:0;flex:1 1 auto}
@@ -1650,6 +1650,30 @@ header>*{min-width:0}
    rester disponible independamment du nombre de coups. */
 .board-tools{display:flex;align-items:stretch;gap:6px}
 .flip-btn{flex:none;margin-left:auto;height:29px}
+/* La roue dentee des reglages rapides prend la place de droite ; le bouton de
+   retournement, quand il est la, se range juste apres elle. */
+.reglages-btn{flex:none;margin-left:auto;height:29px}
+.reglages-btn+.flip-btn{margin-left:0}
+.reglages-btn svg{width:18px;height:18px}
+/* Feuille des reglages rapides : par-dessus la partie, en bas de l'ecran sur
+   telephone, au milieu sur grand ecran. Au-dessus du menu (200), sous Bravo (210). */
+.rr{position:fixed;inset:0;z-index:205;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,14,13,.55)}
+.rr[hidden]{display:none}
+.rr-feuille{width:min(560px,100%);max-height:82vh;overflow-y:auto;box-sizing:border-box;padding:14px 16px 18px;background-color:var(--slate);
+  border:1px solid var(--rule);border-bottom:0;border-radius:var(--r-l) var(--r-l) 0 0;box-shadow:var(--e2);animation:rrMonte .26s var(--courbe-ressort,ease-out)}
+.rr-tete{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.rr-tete h2{font-family:'Source Serif 4',Georgia,serif;font-size:20px;font-weight:600;margin:0}
+.rr-fermer{flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);
+  color:var(--chalk);font:inherit;font-size:22px;line-height:1;cursor:pointer}
+.rr-fermer:hover{border-color:var(--brass)}
+.rr-fermer:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+@keyframes rrMonte{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+html[data-mouvement="calme"] .rr-feuille{animation:none}
+@media(prefers-reduced-motion:reduce){.rr-feuille{animation:none}}
+@media(min-width:761px){
+  .rr{align-items:center}
+  .rr-feuille{border-bottom:1px solid var(--rule);border-radius:var(--r-l)}
+}
 .navstrip{display:flex;align-items:stretch;gap:6px;flex:1;min-width:0}
 /* color:var(--sage) plutot que --chalk (2026-09-04) : les fleches de
    retournement sont le seul element de ce bandeau en texte clair/appuye,
@@ -2973,6 +2997,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="navstrip hide" id="navRow">
           <div class="navscroll" id="navScroll" role="list"></div>
         </div>
+        <!-- Reglages rapides (2026-11-21) : theme, couleurs, animations, sons,
+             sans quitter la partie. Meme trait fin que le chevron du menu. -->
+        <button type="button" class="navchev reglages-btn" id="btnReglages" aria-label="Quick settings" aria-haspopup="dialog"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.24 4.92L10.72 2.49L13.28 2.49L13.76 4.92L15.77 5.75L17.82 4.37L19.63 6.18L18.25 8.23L19.08 10.24L21.51 10.72L21.51 13.28L19.08 13.76L18.25 15.77L19.63 17.82L17.82 19.63L15.77 18.25L13.76 19.08L13.28 21.51L10.72 21.51L10.24 19.08L8.23 18.25L6.18 19.63L4.37 17.82L5.75 15.77L4.92 13.76L2.49 13.28L2.49 10.72L4.92 10.24L5.75 8.23L4.37 6.18L6.18 4.37L8.23 5.75z"/><circle cx="12" cy="12" r="3"/></svg></button>
         <button type="button" class="navchev flip-btn" id="btnFlip" aria-label="Flip the board"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7-6 7 6"/><path d="M5 15l7 6 7-6"/></svg></button>
       </div>
       <div class="plyinfo hide" id="plyInfo"></div>
@@ -3824,13 +3851,25 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
   </div>
 
   <!-- ================= LEGAL ================= -->
+  <!-- Reglages rapides (2026-11-21, reglages_rapides.js) : les blocs des
+       Preferences y sont deplaces le temps qu'elle est ouverte. -->
+  <div class="rr" id="reglagesRapides" role="dialog" aria-modal="true" aria-labelledby="rrTitre" hidden>
+    <div class="rr-feuille">
+      <div class="rr-tete">
+        <h2 id="rrTitre">Quick settings</h2>
+        <button type="button" class="rr-fermer" id="rrFermer" aria-label="Close">&times;</button>
+      </div>
+      <div id="rrCorps"></div>
+    </div>
+  </div>
+
   <div id="pane-legal" class="hide">
     <!-- Les deux sections vivent dans le meme panneau : sans ancre, cliquer
          sur "Confidentialite" amenait en haut, donc sur les mentions
          legales. Chaque titre est donc une cible de defilement, focalisable
          par programme pour que les lecteurs d'ecran suivent aussi. -->
     <div class="panel">
-      <p class="retour-partie" hidden><button type="button" class="linkbtn" data-retour-partie>Back to the game</button></p>
+      <p class="retour-jeu" hidden><button type="button" class="linkbtn" data-retour-jeu>Back to the game</button></p>
       <h2 id="legalTitle" tabindex="-1">Legal notice</h2>
       <p class="sub">Publisher and hosting details.</p>
       <div class="prose" id="legalBody"></div>
@@ -3843,7 +3882,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
 
   <div id="pane-prefs" class="hide">
     <div class="panel">
-      <p class="retour-partie" hidden><button type="button" class="linkbtn" data-retour-partie>Back to the game</button></p>
+      <p class="retour-jeu" hidden><button type="button" class="linkbtn" data-retour-jeu>Back to the game</button></p>
       <h2 id="prefsTitle">Preferences</h2>
       <p class="sub" id="prefsSub">Kept on this device. Nothing is sent anywhere.</p>
 

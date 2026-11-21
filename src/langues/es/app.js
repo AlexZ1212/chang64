@@ -1207,5 +1207,7 @@ module.exports = {
 "Lost":{"one":"Perdida","other":"Perdidas"},
 /* Bouton Retour et repere de la partie en cours (2026-11-21). */
 "Back to the game":"Volver a la partida",
-"Game in progress":"Partida en curso"
+"Game in progress":"Partida en curso",
+/* Reglages rapides (2026-11-21). */
+"Quick settings":"Ajustes rápidos"
 };

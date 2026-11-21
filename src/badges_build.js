@@ -44,7 +44,9 @@ function code() {
     fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +
     /* Bouton Retour du navigateur et repere de la partie en cours (2026-11-21) :
        en dernier, il enveloppe setMode apres tous les autres. */
-    fs.readFileSync(path.join(__dirname, "navigation.js"), "utf8");
+    fs.readFileSync(path.join(__dirname, "navigation.js"), "utf8") + "\n" +
+    /* Reglages rapides pendant une partie (2026-11-21). */
+    fs.readFileSync(path.join(__dirname, "reglages_rapides.js"), "utf8");
 }
 /* Conditions qui citent un nom deja traduit ailleurs dans le site (motif,
    niveau, finale, etape de Je debute) : elles sont recomposees ici a partir

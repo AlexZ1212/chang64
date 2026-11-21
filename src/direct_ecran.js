@@ -52,6 +52,8 @@ function amiModeRegler(m) {
   if (mode === "friend" && !directId) showAmi(); else directPanneau();
 }
 let directAnime = "";              /* dernier coup deja anime : partie/manche/nombre de coups */
+let directRefus = "";              /* ma nulle vient d'etre declinee : partie/manche/nombre de coups */
+let directTic = "";                /* alerte des 10 secondes deja sonnee pour cette partie/manche */
 
 function directActif() { return !!directId && mode === "friend"; }
 /* Une partie se joue en ce moment : ni felicitations ni defi recu avant la fin. */
@@ -78,6 +80,8 @@ function directPanneau() {
   $("btnDirectNulle").disabled = !!(e && e.nulle);
   $("btnDirectAccepter").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
   $("btnDirectRefuser").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
+  /* Nulle proposee par l'adversaire : Accepter et Refuser sur leur rangee, Abandonner dessous (360 px). */
+  p.classList.toggle("nulle-recue", !!(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
   $("btnDirectAbandon").classList.toggle("hide", !jouee);
   $("btnDirectRevanche").classList.toggle("hide", !finie || !e.fin.r);
   $("btnDirectRevanche").disabled = !!(finie && e.rev[e.moi]);
@@ -171,8 +175,30 @@ function directCadenceNote() {
   const n = $("directCadenceNote"), c = DIRECT_CADENCES[directCad]; if (!n) return;
   n.textContent = c[1] ? t("{n} minutes each, plus {s} seconds added after every move.", { n: c[0] / 60, s: c[1] }) : t("{n} minutes each for the whole game.", { n: c[0] / 60 });
 }
+/* Sons de la partie en direct (2026-11-21) : ce qui vient de changer entre
+   l'etat d'avant et celui qu'on recoit. Une nouvelle partie ou une revanche
+   qui commence a deja son son de debut ; la fin de partie (mat, temps, nulle,
+   abandon) sonne dans renderResult, comme contre l'ordinateur. */
+function directSons(avant, e) {
+  if (!avant || avant.id !== e.id || avant.n !== e.n) return;
+  const moi = e.moi, autre = moi === "b" ? "n" : "b";
+  try {
+    if (e.phase === "debut" || e.phase === "jeu") {
+      /* Nulle proposee par l'adversaire : son d'appel. */
+      if (e.nulle === autre && avant.nulle !== autre) SON.appel();
+      /* Ma proposition a disparu sans que la partie finisse : declinee (par un refus ou par un coup). */
+      else if (avant.nulle === moi && !e.nulle) { SON.refus(); directRefus = e.id + "/" + e.n + "/" + e.coups.length; }
+      /* Adversaire parti, puis revenu (pas a son arrivee dans la partie). */
+      if (avant.phase === e.phase && avant.la && e.la && !!avant.la[autre] !== !!e.la[autre]) (e.la[autre] ? SON.retour : SON.depart)();
+    } else if (e.phase === "fin" && avant.phase === "fin") {
+      /* Revanche demandee par l'adversaire. */
+      if (e.rev && e.rev[autre] && !(avant.rev && avant.rev[autre]) && !e.rev[moi]) SON.appel();
+    }
+  } catch (x) {}
+}
 function directRecu(e) {
   const neuve = !directE || directE.n !== e.n, debutee = directE && directE.phase === "attente" && e.phase !== "attente";
+  directSons(directE, e);
   directE = e; directCoupe = false; directAttenteCoup = false;
   directJeu = new Game(); directSan = [];
   for (const c of e.coups) {
@@ -227,8 +253,9 @@ function directMontrer() {
     renderResult(true);
     return;
   } else if (directCoupe) directDire(t("Connection lost. Reconnecting…"));
-  else if (e.nulle === autre) directDire(t("Your opponent offers a draw."));
+  else if (e.nulle === autre) directDire(t("Your opponent offers a draw."), "appel");
   else if (!e.la[autre]) directDire(t("Your opponent is away. Their clock keeps running."));
+  else if (directRefus === e.id + "/" + e.n + "/" + e.coups.length) directDire(t("Your opponent declined the draw."));
   else if (e.phase === "debut") directDire(t("First moves: each player has one minute to play, then the clocks start.") + " " + (trait === e.moi ? t("Your move.") : ""));
   else if (e.nulle === e.moi) directDire(t("Draw offered."));
   else directDire(trait === e.moi ? t("Your move.") : t("Your opponent is playing."));
@@ -266,6 +293,11 @@ function directPendules() {
     el.classList.toggle("low", v < 20000 && v > 0);
     el.classList.toggle("tres-bas", e.phase === "jeu" && trait === c && v < 10000 && v > 0);
     el.classList.toggle("flagged", e.phase === "fin" && e.fin.m === "temps" && v <= 0);
+    /* Alerte des 10 secondes : une fois par partie, a mon tour, comme contre l'ordinateur. */
+    if (c === moi && e.phase === "jeu" && trait === moi && v > 0 && v <= 10000 && directTic !== e.id + "/" + e.n) {
+      directTic = e.id + "/" + e.n;
+      try { SON.tic(); } catch (x) {}
+    }
   };
   poser($("clockTop"), $("clockTopTime"), autre);
   poser($("clockBottom"), $("clockBottomTime"), moi);
@@ -394,6 +426,8 @@ async function directGuetter() {
       (inv.coul === "b" || inv.coul === "n" ? " " + t(inv.coul === "b" ? "You play White." : "You play Black.") : "")) + "</p>" + DUEL_FILET +
     '<div class="duel-boutons"><button type="button" class="btn primary" id="directInvRejoindre" data-duel-fermer data-duel-premier>' + echapper(t("Join the game")) +
     '</button><button type="button" class="btn" id="directInvRefuser" data-duel-fermer>' + echapper(t("Decline")) + "</button></div>");
+  /* Invitation recue : le meme son d'appel que pour une nulle ou une revanche. */
+  try { SON.appel(); } catch (x) {}
   $("directInvRejoindre").addEventListener("click", () => { setMode("friend"); directBrancher(inv.id); if (typeof goTop === "function") goTop(); });
   $("directInvRefuser").addEventListener("click", () => { directRefuser(inv.id); });
 }

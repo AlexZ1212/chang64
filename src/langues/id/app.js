@@ -1195,5 +1195,7 @@ module.exports = {
 "or send a link":"atau kirim tautan",
 "Type a username, or send a link.":"Ketik nama pengguna, atau kirim tautan.",
 "Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Main melawan teman secara langsung, dengan jam. Undang dia lewat nama pengguna, atau kirimi dia tautan.",
-"Game by link":"Partai lewat tautan"
+"Game by link":"Partai lewat tautan",
+/* Sons de la partie en direct (2026-11-21). */
+"Your opponent declined the draw.":"Lawanmu menolak remis."
 };

@@ -1197,5 +1197,7 @@ module.exports = {
 "or send a link":"oder einen Link senden",
 "Type a username, or send a link.":"Gib einen Benutzernamen ein oder sende einen Link.",
 "Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Spiele in Echtzeit gegen einen Freund, mit Uhr. Lade ihn per Benutzername ein oder sende ihm einen Link.",
-"Game by link":"Partie per Link"
+"Game by link":"Partie per Link",
+/* Sons de la partie en direct (2026-11-21). */
+"Your opponent declined the draw.":"Dein Gegner hat das Remis abgelehnt."
 };

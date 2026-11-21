@@ -1209,6 +1209,35 @@ const SON=(function(){
     drapeau(){
       if(!pret())return;
       note(ctx.currentTime+0.01,311.13,0.07,0.2,"sine");
+    },
+    /* Partie en direct (2026-11-21, demande d'Alexandre) : jusque-la, seul le
+       debut de partie sonnait, et une nulle proposee ne se voyait que par un
+       texte discret. Quatre sons de plus, tous soumis au reglage Sons.
+       appel : on attend ma reponse (nulle proposee, revanche demandee,
+       invitation recue). Deux tintements montants, deux fois : il ne
+       ressemble a aucun son de coup ni de fin de partie. */
+    appel(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.02;
+      for(const d of [0,0.36]){note(t0+d,880,0.06,0.2,"triangle");note(t0+d+0.11,1174.66,0.06,0.3,"triangle");}
+    },
+    /* refus : ma proposition de nulle est declinee. Deux notes graves, egales. */
+    refus(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.02;
+      note(t0,293.66,0.055,0.16,"sine");note(t0+0.15,293.66,0.055,0.26,"sine");
+    },
+    /* depart et retour de l'adversaire : deux notes douces, qui descendent
+       quand il s'en va et remontent quand il revient. */
+    depart(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.02;
+      note(t0,659.25,0.035,0.2,"sine");note(t0+0.13,493.88,0.035,0.34,"sine");
+    },
+    retour(){
+      if(!pret())return;
+      const t0=ctx.currentTime+0.02;
+      note(t0,493.88,0.035,0.2,"sine");note(t0+0.13,659.25,0.035,0.34,"sine");
     }
   };
 })();

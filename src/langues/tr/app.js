@@ -1195,5 +1195,7 @@ module.exports = {
 "or send a link":"ya da bağlantı gönder",
 "Type a username, or send a link.":"Bir kullanıcı adı yaz ya da bağlantı gönder.",
 "Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Bir arkadaşınla gerçek zamanlı, saatli oyna. Onu kullanıcı adıyla davet et ya da ona bir bağlantı gönder.",
-"Game by link":"Bağlantıyla oyun"
+"Game by link":"Bağlantıyla oyun",
+/* Sons de la partie en direct (2026-11-21). */
+"Your opponent declined the draw.":"Rakibin beraberliği reddetti."
 };

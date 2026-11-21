@@ -1233,6 +1233,14 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .reviewNav button{padding:6px 12px}
 .reviewNav #btnRushSummary{padding:2px;margin-left:auto}
 .status.win{border-color:var(--jade)}
+/* Partie en direct : l'adversaire attend ma reponse (nulle proposee). Le
+   message passe en avant, juste au-dessus de ses boutons Accepter et Refuser. */
+/* Les deux reponses tiennent seules sur leur rangee : a trois boutons, « Accepter
+   la nulle » passait sur deux lignes sur un telephone de 360 px. */
+#directPanel.nulle-recue .btnrow{flex-wrap:wrap}
+#directPanel.nulle-recue #btnDirectAccepter,#directPanel.nulle-recue #btnDirectRefuser{flex:1 1 40%}
+#directPanel.nulle-recue #btnDirectAbandon{flex:1 1 100%}
+.status.appel{border-color:var(--brass);background-color:color-mix(in srgb,var(--brass) 16%,var(--ink));color:var(--chalk);font-weight:600}
 .status.lose{border-color:var(--brick)}
 
 /* ---------- puzzles ---------- */

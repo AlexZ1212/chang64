@@ -150,6 +150,20 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   presser(w, "Escape");
   T("Echap revient a la position finale", vu() === null);
 
+  console.log("Partie importee en PGN");
+  /* Garde par uitest7 aussi : une partie importee se parcourt aux fleches,
+     meme chargee depuis l'ecran des reglages. */
+  w.eval("setupGame()");
+  presser(w, "?");
+  T("ecran des reglages, sans partie : « ? » n'ouvre rien", $("duel").hidden && cache("clavierLigne"));
+  $("pgnIn").value = "1. e4 c5 2. Nf3 d6 3. d4 cxd4";
+  $("btnPgnLoad").click();
+  w.eval("gotoPly(2)");
+  presser(w, "ArrowRight", d);
+  T("→ avance dans la partie importee, touche recue par le document", vu() === 3, vu());
+  presser(w, "End", d);
+  T("Fin revient a sa derniere position", vu() === null);
+
   console.log("Accessibilite");
   w.eval("setMode('prefs')");
   const aide = propre($("kbdHelp").textContent);

@@ -262,10 +262,14 @@ function partieEnCours(){
     return !!amiStarted&&amiResigned===null&&amiGame.moves().length>0&&!amiGame.isDraw();
   }catch(e){return false;}
 }
-/* L'ecran de partie : Jouer ou Contre un ami, echiquier affiche. C'est la
-   seule place ou les touches du clavier parcourent les coups. */
+/* L'ecran de partie : c'est la seule place ou les touches du clavier
+   parcourent les coups. Dans Jouer, des qu'une partie existe (en cours,
+   finie, relue ou importee en PGN) ; contre un ami, des que l'echiquier est
+   affiche (partie par lien creee, partie en direct commencee). L'ecran des
+   reglages, avant toute partie, n'en est pas un. */
 function ecranDePartie(){
-  if(mode!=="play"&&mode!=="friend")return false;
+  if(mode==="play")return !!gameStarted||!!isReviewGame;
+  if(mode!=="friend")return false;
   const bw=document.querySelector(".board-wrap");
   return !!bw&&!bw.classList.contains("hide");
 }

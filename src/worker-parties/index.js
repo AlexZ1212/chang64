@@ -165,6 +165,9 @@ async function repondre(request, env) {
     if (!d || !CADENCES[d.cad]) return erreur("requete", 400);
     let note = 800, exclus = [];
     try { const c = await env.DB.prepare("SELECT note FROM comptes WHERE id = ?1").bind(s.id).first(); if (c && c.note > 0) note = c.note; } catch (e) {}
+    /* Des qu'il a un Elo entre membres, c'est lui qui rapproche les adversaires
+       (requete a part : la base peut ne pas encore avoir la colonne). */
+    try { const c = await env.DB.prepare("SELECT elo FROM comptes WHERE id = ?1").bind(s.id).first(); if (c && c.elo > 0) note = c.elo; } catch (e) {}
     try {
       exclus = ((await env.DB.prepare("SELECT bloque_id AS x FROM blocages WHERE compte_id = ?1 UNION SELECT compte_id AS x FROM blocages WHERE bloque_id = ?1").bind(s.id).all()).results || []).map(x => x.x);
     } catch (e) {}
@@ -252,6 +255,16 @@ function seulRoi(g, couleur) {
   return true;
 }
 
+/* Elo entre membres : fonctions pures (testees dans check_elo_membres.js). */
+const ELO_DEPART = 800, ELO_DEPART_MIN = 600, ELO_DEPART_MAX = 1400, ELO_PROVISOIRE = 20;
+function eloDepart(declare) {
+  return Number.isFinite(declare) ? Math.max(ELO_DEPART_MIN, Math.min(ELO_DEPART_MAX, Math.round(declare))) : ELO_DEPART;
+}
+function eloApres(joueur, adversaire, resultat, parties) {
+  const k = parties < ELO_PROVISOIRE ? 40 : 20, attendu = 1 / (1 + Math.pow(10, (adversaire - joueur) / 400));
+  return Math.max(100, Math.min(3000, joueur + Math.round(k * (resultat - attendu))));
+}
+
 export class Partie {
   constructor(ctx, env) {
     this.ctx = ctx;
@@ -299,6 +312,7 @@ export class Partie {
     const p = this.p, base = CADENCES[p.cad][0] * 1000;
     p.coups = []; p.t = { b: base, n: base }; p.maj = now; p.phase = "debut";
     p.fin = null; p.finA = 0; p.nulle = null; p.nulleA = { b: -1, n: -1 }; p.rev = { b: false, n: false };
+    p.elo = null;
     this.jeu = null;
   }
   finir(r, motif, now) {
@@ -323,6 +337,35 @@ export class Partie {
     try {
       await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1 WHERE id = ?1").bind(p.j[c].id)));
     } catch (e) {}
+    /* Elo entre membres : a part, pour qu'une base sans les colonnes elo
+       continue de compter les resultats ci-dessus. La variation est ensuite
+       montree aux deux joueurs. */
+    try {
+      const elo = await this.compterElo(db, p, r);
+      if (elo) { p.elo = elo; await this.ecrire(); this.diffuser(Date.now()); }
+    } catch (e) {}
+  }
+  /* Elo entre membres (2026-11-21, decision d'Alexandre) : toutes les parties
+     en direct comptent, entre amis comme au hasard. Formule habituelle :
+     attendu = 1 / (1 + 10^((adversaire - joueur) / 400)), K = 40 pendant les
+     20 premieres parties du joueur, 20 ensuite. Depart : l'Elo contre
+     l'ordinateur que son navigateur a declare, ramene entre 600 et 1400 pour
+     qu'une valeur gonflee ne donne pas d'avance ; 800 sinon.
+     Rend { b: { d, r }, n: { d, r } } (variation et nouveau classement). */
+  async compterElo(db, p, r) {
+    const ids = { b: p.j.b.id, n: p.j.n.id };
+    if (ids.b === ids.n) return null;
+    const lire = id => db.prepare("SELECT elo, elo_n, CASE WHEN elo = 0 AND json_valid(donnees) THEN json_extract(donnees, '$.progress.eloOrdi.r') END AS eo FROM comptes WHERE id = ?1").bind(id).first();
+    const l = { b: await lire(ids.b), n: await lire(ids.n) };
+    if (!l.b || !l.n) return null;
+    const depart = x => x.elo > 0 ? x.elo : eloDepart(x.eo);
+    const avant = { b: depart(l.b), n: depart(l.n) }, sb = r === "1-0" ? 1 : r === "1/2" ? 0.5 : 0;
+    const apres = {
+      b: eloApres(avant.b, avant.n, sb, l.b.elo_n),
+      n: eloApres(avant.n, avant.b, 1 - sb, l.n.elo_n)
+    };
+    await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET elo = ?2, elo_n = elo_n + 1 WHERE id = ?1").bind(ids[c], apres[c])));
+    return { b: { d: apres.b - avant.b, r: apres.b }, n: { d: apres.n - avant.n, r: apres.n } };
   }
 
   vue(moi, now) {
@@ -338,7 +381,9 @@ export class Partie {
       t: "etat", id: p.id, n: p.n, cad: CADENCES[p.cad], moi,
       b: p.j.b ? p.j.b.p : null, nr: p.j.n ? p.j.n.p : null,
       coups: p.coups, tb: p.t.b, tn: p.t.n, maj: p.maj, h: now,
-      phase: p.phase, fin: p.fin, nulle: p.nulle, rev: p.rev, la, inv: p.phase === "attente" || (p.fin && p.fin.m === "refusee") ? p.pourP || null : null
+      phase: p.phase, fin: p.fin, nulle: p.nulle, rev: p.rev, la,
+      /* Elo entre membres : la variation de chacun, une fois la partie comptee. */
+      elo: p.phase === "fin" && p.elo ? p.elo : null, inv: p.phase === "attente" || (p.fin && p.fin.m === "refusee") ? p.pourP || null : null
     };
   }
   diffuser(now) {
@@ -544,3 +589,6 @@ export class Partie {
     if (await this.lire()) this.diffuser(Date.now());
   }
 }
+
+/* Pour les tests : les fonctions pures de l'Elo, sans export de plus. */
+Partie._elo = { eloDepart, eloApres };

@@ -1185,5 +1185,17 @@ module.exports = {
 "{r} between members":"{r} unter Mitgliedern",
 /* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
 "Adapt to my level":"An mein Niveau anpassen",
-"Adapted":"Angepasst"
+"Adapted":"Angepasst",
+/* Onglet Jouer en trois cartes, ecran « Contre un ami » (2026-11-21). */
+"Live":"Live",
+"By link":"Per Link",
+"Against a player online":"Gegen einen Online-Spieler",
+"A live game against an opponent picked at random, close to your level. Colours are drawn at random.":"Eine Live-Partie gegen einen zufälligen Gegner nahe an deinem Niveau. Die Farben werden ausgelost.",
+"Find an opponent →":"Gegner finden →",
+"Free with an account →":"Kostenlos mit Konto →",
+"Colour":"Farbe",
+"or send a link":"oder einen Link senden",
+"Type a username, or send a link.":"Gib einen Benutzernamen ein oder sende einen Link.",
+"Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Spiele in Echtzeit gegen einen Freund, mit Uhr. Lade ihn per Benutzername ein oder sende ihm einen Link.",
+"Game by link":"Partie per Link"
 };

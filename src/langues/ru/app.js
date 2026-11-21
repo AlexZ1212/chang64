@@ -1185,5 +1185,17 @@ module.exports = {
 "{r} between members":"{r} среди участников",
 /* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
 "Adapt to my level":"Под мой уровень",
-"Adapted":"Под мой уровень"
+"Adapted":"Под мой уровень",
+/* Onglet Jouer en trois cartes, ecran « Contre un ami » (2026-11-21). */
+"Live":"Вживую",
+"By link":"По ссылке",
+"Against a player online":"Против игрока онлайн",
+"A live game against an opponent picked at random, close to your level. Colours are drawn at random.":"Партия в реальном времени против случайного соперника, близкого к твоему уровню. Цвета определяются жребием.",
+"Find an opponent →":"Найти соперника →",
+"Free with an account →":"Бесплатно с аккаунтом →",
+"Colour":"Цвет",
+"or send a link":"или отправить ссылку",
+"Type a username, or send a link.":"Введи имя пользователя или отправь ссылку.",
+"Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Играй с другом в реальном времени, с часами. Пригласи его по имени пользователя или отправь ему ссылку.",
+"Game by link":"Партия по ссылке"
 };

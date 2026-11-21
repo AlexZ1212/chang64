@@ -1183,5 +1183,17 @@ module.exports = {
 "{r} between members":"{r} üyeler arasında",
 /* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
 "Adapt to my level":"Seviyeme uyarla",
-"Adapted":"Uyarlanmış"
+"Adapted":"Uyarlanmış",
+/* Onglet Jouer en trois cartes, ecran « Contre un ami » (2026-11-21). */
+"Live":"Canlı",
+"By link":"Bağlantıyla",
+"Against a player online":"Çevrimiçi bir oyuncuya karşı",
+"A live game against an opponent picked at random, close to your level. Colours are drawn at random.":"Seviyene yakın, rastgele seçilen bir rakibe karşı canlı bir oyun. Renkler kurayla belirlenir.",
+"Find an opponent →":"Rakip bul →",
+"Free with an account →":"Hesapla ücretsiz →",
+"Colour":"Renk",
+"or send a link":"ya da bağlantı gönder",
+"Type a username, or send a link.":"Bir kullanıcı adı yaz ya da bağlantı gönder.",
+"Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Bir arkadaşınla gerçek zamanlı, saatli oyna. Onu kullanıcı adıyla davet et ya da ona bir bağlantı gönder.",
+"Game by link":"Bağlantıyla oyun"
 };

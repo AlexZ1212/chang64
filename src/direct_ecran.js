@@ -27,6 +27,30 @@ let directInvite = "";            /* pseudo du membre que je viens d'inviter */
 const directDeclinees = {};       /* invitations deja montrees ou refusees sur cette page */
 let directGuet = 0;
 let directHasard = null;          /* je cherche un adversaire au hasard : { cad, depuis } */
+let directCoul = "h";             /* couleur demandee pour la partie que je cree : b, n ou h (au hasard) */
+let directCat = 0;                /* 0 = cadences rapides, 1 = classiques */
+/* Ecran « Contre un ami » : direct, lien, ou hasard (« Contre un joueur en ligne »). */
+let amiMode = "lien";
+function amiModeDefaut() {
+  const membre = typeof estMembre === "function" && estMembre();
+  let lienEnCours = false; try { lienEnCours = !!amiStarted; } catch (e) {}
+  return membre && !lienEnCours ? "direct" : "lien";
+}
+/* Vrai quand l'ecran ne montre pas la partie par lien (et qu'aucune partie en direct n'est ouverte). */
+function amiHorsLien() { return amiMode !== "lien" && !directId; }
+function amiModeRegler(m) {
+  amiMode = m === "direct" || m === "hasard" ? m : "lien";
+  const p = $("pane-friend"); if (!p) return;
+  p.dataset.ami = amiMode;
+  const seg = $("amiModes");
+  if (seg) for (const b of seg.children) b.setAttribute("aria-pressed", String(b.dataset.v === amiMode));
+  const ti = $("directTitre"), so = $("directSous");
+  if (ti) ti.textContent = t(amiMode === "hasard" ? "Against a player online" : "Live game");
+  if (so) so.textContent = t(amiMode === "hasard" ? "A live game against an opponent picked at random, close to your level. Colours are drawn at random."
+    : "Play a friend in real time, with a clock. Invite them by username, or send them a link.");
+  directMessage = "";
+  if (mode === "friend" && !directId) showAmi(); else directPanneau();
+}
 let directAnime = "";              /* dernier coup deja anime : partie/manche/nombre de coups */
 
 function directActif() { return !!directId && mode === "friend"; }
@@ -58,15 +82,9 @@ function directPanneau() {
   $("btnDirectRevanche").classList.toggle("hide", !finie || !e.fin.r);
   $("btnDirectRevanche").disabled = !!(finie && e.rev[e.moi]);
   $("btnDirectQuitter").classList.toggle("hide", !(enJeu && !jouee));
-  const el = $("directCadences");
-  if (!el.children.length) DIRECT_CADENCES.forEach((c, i) => {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "chip"; b.textContent = directTexteCadence(c);
-    b.onclick = () => { directCad = i; [...el.children].forEach((x, k) => x.setAttribute("aria-pressed", k === i)); directCadenceNote(); };
-    b.setAttribute("aria-pressed", i === directCad);
-    el.appendChild(b);
-  });
-  directCadenceNote();
+  directCadencesRendre();
+  { const seg = $("directCouleur"); if (seg) for (const b of seg.children) b.setAttribute("aria-pressed", String(b.dataset.v === directCoul)); }
+  { const r = $("directResume"); if (r) r.textContent = e && e.phase === "attente" ? directTexteCadence(e.cad) + " | " + t(e.moi === "b" ? "You play White." : "You play Black.") : ""; }
   if (membre && !enJeu) directAmis();
 }
 /* Mes amis en pastilles : un appui choisit l'ami a inviter (un second l'enleve).
@@ -96,7 +114,7 @@ function directInviterAmi(pseudo) {
   if (!DIRECT_OUVERT || !pseudo) return;
   setMode("friend");
   if (directId) { if (directOccupe()) return; directQuitter(true); }
-  directPanneau();
+  amiModeRegler("direct");
   $("directPseudo").value = pseudo;
   if (typeof goTop === "function") goTop();
   directCreerPartie();
@@ -123,6 +141,31 @@ function directMotif(e) {
   if (m === "abandon" && r !== "draw") return r === "win" ? t("{name} resigned.", nom) : t("You resigned.");
   if (m === "temps" && r !== "draw") return r === "win" ? t("{name} ran out of time.", nom) : t("You ran out of time.");
   return t(DIRECT_MOTIFS[m] || "");
+}
+/* Cadences du bloc de lancement : deux familles, Rapide et Classique, puis
+   les cadences de la famille choisie. Reconstruit seulement quand la famille change. */
+function directCadencesRendre() {
+  const cats = $("directCats"), el = $("directCadences"); if (!cats || !el) return;
+  const familles = [["Rapid", DIRECT_RAPIDES], ["Classical", DIRECT_CLASSIQUES]];
+  if (!cats.children.length) familles.forEach(([nom], k) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = t(nom);
+    b.onclick = () => { directCat = k; directCad = familles[k][1][0]; directCadencesRendre(); };
+    cats.appendChild(b);
+  });
+  [...cats.children].forEach((b, k) => b.setAttribute("aria-pressed", String(k === directCat)));
+  if (el.dataset.cat !== String(directCat)) {
+    el.dataset.cat = String(directCat);
+    el.textContent = "";
+    for (const i of familles[directCat][1]) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.dataset.cad = String(i); b.textContent = directTexteCadence(DIRECT_CADENCES[i]);
+      b.onclick = () => { directCad = i; directCadencesRendre(); };
+      el.appendChild(b);
+    }
+  }
+  [...el.children].forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.cad === directCad)));
+  directCadenceNote();
 }
 function directCadenceNote() {
   const n = $("directCadenceNote"), c = DIRECT_CADENCES[directCad]; if (!n) return;
@@ -289,10 +332,18 @@ function directQuitter(silence) {
   if (mode === "friend") { renderResult(false); renderClocks(); showAmi(); }
   directPanneau();
 }
-async function directCreerPartie() {
-  const b = $("btnDirectCreer"), pseudo = $("directPseudo").value.trim();
+/* avecLien : « ou envoyer un lien », la partie se cree sans inviter personne.
+   « Inviter » demande un pseudo : sans lui, on le dit et on y mene. */
+async function directCreerPartie(avecLien) {
+  const b = $("btnDirectCreer"), pseudo = avecLien === true ? "" : $("directPseudo").value.trim();
+  if (avecLien !== true && !pseudo) {
+    directMessage = t("Type a username, or send a link.");
+    directPanneau(); directDire(directMessage);
+    try { $("directPseudo").focus(); } catch (e) {}
+    return;
+  }
   b.disabled = true;
-  const r = await directCreer(directCad, pseudo || undefined);
+  const r = await directCreer(directCad, pseudo || undefined, directCoul);
   b.disabled = false;
   if (r.id) { directBrancher(r.id); directInvite = r.adv || pseudo; return; }
   directMessage = t({ session: "Create a free account to play live against other members.", adversaire: "No member has this username.",
@@ -339,7 +390,8 @@ async function directGuetter() {
   directDeclinees[inv.id] = true;
   const cad = DIRECT_CADENCES[inv.cad] || DIRECT_CADENCES[0];
   duelOuvrir(duelMedaille("duel_lien") + '<p class="bilan-entete">' + echapper(t("Live game")) + '</p><h2 id="duelTitre">' + echapper(t("{name} invites you to play", { name: inv.p })) + "</h2>" +
-    '<p class="bilan-sous">' + echapper(t("Time control: {pace}. The game starts as soon as you join.", { pace: directTexteCadence(cad) })) + "</p>" + DUEL_FILET +
+    '<p class="bilan-sous">' + echapper(t("Time control: {pace}. The game starts as soon as you join.", { pace: directTexteCadence(cad) }) +
+      (inv.coul === "b" || inv.coul === "n" ? " " + t(inv.coul === "b" ? "You play White." : "You play Black.") : "")) + "</p>" + DUEL_FILET +
     '<div class="duel-boutons"><button type="button" class="btn primary" id="directInvRejoindre" data-duel-fermer data-duel-premier>' + echapper(t("Join the game")) +
     '</button><button type="button" class="btn" id="directInvRefuser" data-duel-fermer>' + echapper(t("Decline")) + "</button></div>");
   $("directInvRejoindre").addEventListener("click", () => { setMode("friend"); directBrancher(inv.id); if (typeof goTop === "function") goTop(); });
@@ -352,8 +404,28 @@ function directLire() {
   return true;
 }
 if (DIRECT_OUVERT && document.getElementById("directPanel")) {
-  $("btnDirectCreer").onclick = directCreerPartie;
+  $("btnDirectCreer").onclick = () => directCreerPartie(false);
+  if ($("btnDirectLien")) $("btnDirectLien").onclick = () => directCreerPartie(true);
   if ($("btnDirectHasard")) $("btnDirectHasard").onclick = directChercherPartie;
+  if ($("directCouleur")) $("directCouleur").addEventListener("click", e => {
+    const b = e.target.closest("button[data-v]"); if (!b) return;
+    directCoul = b.dataset.v; directPanneau();
+  });
+  if ($("amiModes")) $("amiModes").addEventListener("click", e => {
+    const b = e.target.closest("button[data-v]"); if (!b) return;
+    amiModeRegler(b.dataset.v);
+  });
+  /* Une partie par lien qui commence ou qu'on rejoint ramene sous « Par lien ». */
+  for (const nom of ["newAmiGame", "readHash"]) {
+    if (typeof window[nom] !== "function") continue;
+    const av = window[nom];
+    window[nom] = function () {
+      const r = av.apply(this, arguments);
+      try { if (amiStarted && !directId && amiMode !== "lien" && (nom === "newAmiGame" || mode === "friend")) amiModeRegler("lien"); } catch (e) {}
+      return r;
+    };
+  }
+  amiModeRegler(amiModeDefaut());
   $("btnDirectNulle").onclick = () => { if (directF) directF.nulle(); };
   $("btnDirectAccepter").onclick = () => { if (directF) directF.nulle(); };
   $("btnDirectRefuser").onclick = () => { if (directF) directF.nulleNon(); };

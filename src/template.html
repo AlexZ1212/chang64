@@ -977,7 +977,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .solveCard.avec-picto.hide{display:none}
 .solveCard-texte{display:block;min-width:0;flex:1 1 auto}
 /* Jouer : deux grandes cartes, cote a cote sur ordinateur, empilees sur telephone. */
-.jouer-cartes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.jouer-cartes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+/* Carte reservee aux membres : visible, mais en retrait. */
+.jouer-carte.verrou b,.jouer-carte.verrou .jouer-desc,.jouer-carte.verrou>span:first-child{opacity:.55}
+/* Ecran « Contre un ami » (2026-11-21) : un choix en haut, un seul bloc a la
+   fois. data-ami vaut direct, lien ou hasard (« Contre un joueur en ligne »,
+   qui reprend le bloc du direct sans couleur ni adversaire). */
+.ami-modes{margin-bottom:12px}
+#pane-friend.en-direct .ami-modes,#pane-friend[data-ami="hasard"] .ami-modes{display:none}
+#pane-friend[data-ami="lien"]:not(.en-direct) #directPanel{display:none}
+#pane-friend[data-ami="direct"] #amiStatusPanel,#pane-friend[data-ami="direct"] #amiLinkPanel,#pane-friend[data-ami="direct"] #amiNewGamePanel,#pane-friend[data-ami="direct"] #amiScoresheetPanel,
+#pane-friend[data-ami="hasard"] #amiStatusPanel,#pane-friend[data-ami="hasard"] #amiLinkPanel,#pane-friend[data-ami="hasard"] #amiNewGamePanel,#pane-friend[data-ami="hasard"] #amiScoresheetPanel,#pane-friend[data-ami="hasard"] #amiInvitePanel{display:none}
+#pane-friend.en-direct #amiScoresheetPanel{display:block}
+#pane-friend[data-ami="hasard"] .direct-ami,#pane-friend:not([data-ami="hasard"]) .direct-hasard{display:none}
+.direct-lien{margin:10px 0 0;text-align:center}
 .jouer-carte{display:flex;flex-direction:column;gap:14px;text-align:left;background-color:var(--slate);border:1px solid var(--rule);
   border-radius:var(--r-l);padding:24px;box-shadow:var(--e1);cursor:pointer;font:inherit;color:inherit;transition:border-color .16s}
 .jouer-carte:hover{border-color:var(--brass)}
@@ -2926,8 +2939,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <div class="box">
             <h3>Choose your colour</h3>
             <div class="btnrow" id="amiColorBtns">
-              <button type="button" class="btn primary" data-v="w">Play White</button>
-              <button type="button" class="btn" data-v="b">Play Black</button>
+              <button type="button" class="btn primary" data-v="w">White</button>
+              <button type="button" class="btn" data-v="b">Black</button>
+              <button type="button" class="btn" data-v="r">Random</button>
             </div>
           </div>
         </div>
@@ -3588,30 +3602,50 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <!-- Partie en direct entre deux membres (2026-11-19, direct_ecran.js).
              Reste masque tant que le serveur des parties n'est pas ouvert au
              public : seul un poste de developpement l'affiche. -->
+        <div class="ami-modes" id="amiModesPanel">
+          <div class="seg" id="amiModes">
+            <button type="button" data-v="direct" aria-pressed="false">Live</button>
+            <button type="button" data-v="lien" aria-pressed="true">By link</button>
+          </div>
+        </div>
         <div class="panel hide" id="directPanel">
-          <h2>Live game</h2>
-          <p class="sub">Play another member in real time, with a clock. Create the game, send the link, and it starts when your opponent opens it.</p>
+          <h2 id="directTitre">Live game</h2>
+          <p class="sub" id="directSous">Play a friend in real time, with a clock. Invite them by username, or send them a link.</p>
           <div class="status hide" id="directStatus" role="status"></div>
           <div id="directInvite" class="hide"></div>
           <div id="directNouveau">
+            <!-- Bloc de lancement (2026-11-21) : couleur, cadence, adversaire,
+                 puis « Inviter ». Les memes libelles que contre l'ordinateur. -->
+            <div class="field direct-ami">
+              <div class="eyebrow">Colour</div>
+              <div class="seg" id="directCouleur">
+                <button type="button" data-v="b" aria-pressed="false">White</button>
+                <button type="button" data-v="n" aria-pressed="false">Black</button>
+                <button type="button" data-v="h" aria-pressed="true">Random</button>
+              </div>
+            </div>
             <div class="field">
               <div class="eyebrow">Time control</div>
+              <div class="seg" id="directCats"></div>
               <div class="tc-chips" id="directCadences"></div>
               <p class="note" id="directCadenceNote"></p>
             </div>
             <!-- Choisir un ami dans sa liste (2026-11-19, direct_ecran.js) : un
                  appui remplit le pseudo. Masque tant que la liste est vide. -->
-            <div class="field hide" id="directAmisBloc">
+            <div class="field hide direct-ami" id="directAmisBloc">
               <div class="eyebrow">Choose a friend</div>
               <div class="tc-chips" id="directAmis"></div>
             </div>
-            <div class="field">
-              <label class="eyebrow" for="directPseudo">Invite a member (optional)</label>
+            <div class="field direct-ami">
+              <label class="eyebrow" for="directPseudo">Opponent</label>
               <input class="linkbox" id="directPseudo" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username">
             </div>
-            <div class="btnrow"><button class="btn primary" id="btnDirectCreer">Create a live game</button><button class="btn" id="btnDirectHasard">Find an opponent</button></div>
+            <div class="btnrow direct-ami"><button class="btn primary" id="btnDirectCreer">Invite</button></div>
+            <p class="direct-lien direct-ami"><button type="button" class="linkbtn" id="btnDirectLien">or send a link</button></p>
+            <div class="btnrow direct-hasard"><button class="btn primary" id="btnDirectHasard">Find an opponent</button></div>
           </div>
           <div id="directLienBloc" class="hide">
+            <p class="note" id="directResume"></p>
             <input class="linkbox" id="directAdresse" readonly aria-label="Game link">
             <div class="shareRow" id="directPartage"></div>
           </div>
@@ -3625,7 +3659,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           </div>
         </div>
         <div class="panel" id="amiStatusPanel">
-          <h2>Play a friend</h2>
+          <h2>Game by link</h2>
           <p class="sub">Each move becomes a link. Send it, your friend plays, and the link comes back to you.</p>
           <div class="status" id="amiStatus">Start a game.</div>
           <!-- "Annuler mon coup" et "Abandonner" vivaient dans
@@ -3727,6 +3761,16 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <b>Against a friend</b>
           <span class="jouer-desc" id="jouerAmiTexte">Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.</span>
           <span class="jouer-go">Challenge a friend &rarr;</span>
+        </span>
+      </button>
+      <!-- Troisieme carte (2026-11-21) : un adversaire au hasard, proche de son
+           Elo. Reservee aux membres : un visiteur la voit, verrouillee. -->
+      <button type="button" class="jouer-carte" id="jouerEnLigne">
+        <span id="jouerEnLignePicto"></span>
+        <span class="jouer-texte">
+          <b>Against a player online</b>
+          <span class="jouer-desc">A live game against an opponent picked at random, close to your level. Colours are drawn at random.</span>
+          <span class="jouer-go" id="jouerEnLigneGo">Find an opponent &rarr;</span>
         </span>
       </button>
     </div>

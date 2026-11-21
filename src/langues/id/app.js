@@ -1183,5 +1183,17 @@ module.exports = {
 "{r} between members":"{r} antaranggota",
 /* Reglages de partie (2026-11-21) : interrupteur de force adaptee. */
 "Adapt to my level":"Sesuaikan dengan levelku",
-"Adapted":"Disesuaikan"
+"Adapted":"Disesuaikan",
+/* Onglet Jouer en trois cartes, ecran « Contre un ami » (2026-11-21). */
+"Live":"Langsung",
+"By link":"Lewat tautan",
+"Against a player online":"Melawan pemain daring",
+"A live game against an opponent picked at random, close to your level. Colours are drawn at random.":"Partai langsung melawan lawan acak yang levelnya dekat denganmu. Warna diundi.",
+"Find an opponent →":"Cari lawan →",
+"Free with an account →":"Gratis dengan akun →",
+"Colour":"Warna",
+"or send a link":"atau kirim tautan",
+"Type a username, or send a link.":"Ketik nama pengguna, atau kirim tautan.",
+"Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Main melawan teman secara langsung, dengan jam. Undang dia lewat nama pengguna, atau kirimi dia tautan.",
+"Game by link":"Partai lewat tautan"
 };

@@ -40,8 +40,15 @@ function jouerRendre() {
   const d = $("jouerAmiTexte");
   if (d) d.textContent = t(direct ? "A live game, on the clock, with another member. Invite them by username or send them a link."
     : "Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.");
-  for (const [id, nom] of [["jouerOrdiPicto", "ordinateur"], ["jouerAmiPicto", "ami"]]) {
+  for (const [id, nom] of [["jouerOrdiPicto", "ordinateur"], ["jouerAmiPicto", "ami"], ["jouerEnLignePicto", "enligne"]]) {
     const e = $(id); if (e && !e.firstChild) poserHtml(e, pictoHtml(nom, "grand"));
+  }
+  /* « Contre un joueur en ligne » : reservee aux membres. Un visiteur la voit
+     verrouillee, et elle le mene a la creation de compte. */
+  const c = $("jouerEnLigne"), go = $("jouerEnLigneGo");
+  if (c && go) {
+    c.classList.toggle("verrou", !direct);
+    go.textContent = t(direct ? "Find an opponent →" : "Free with an account →");
   }
 }
 
@@ -75,7 +82,13 @@ if ($("tab-jouer")) {
     goTop();
   };
   $("jouerOrdi").onclick = () => { setMode("play"); goTop(); };
-  $("jouerAmi").onclick = () => { setMode("friend"); goTop(); };
+  $("jouerAmi").onclick = () => { setMode("friend"); if (typeof amiModeRegler === "function") amiModeRegler(amiModeDefaut()); goTop(); };
+  if ($("jouerEnLigne")) $("jouerEnLigne").onclick = () => {
+    if (!(typeof estMembre === "function" && estMembre())) { if (typeof menuOuvrir === "function") { menuOuvrir(); menuVue("compte"); } return; }
+    setMode("friend"); if (typeof amiModeRegler === "function") amiModeRegler("hasard"); goTop();
+  };
+  /* La carte de l'accueil mene au meme ecran, dans son etat par defaut. */
+  if ($("cardFriend")) $("cardFriend").addEventListener("click", () => { if (typeof amiModeRegler === "function") amiModeRegler(amiModeDefaut()); });
 }
 
 /* Les cartes de Resoudre recoivent leur picto a gauche ; leur texte est

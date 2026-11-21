@@ -2925,10 +2925,14 @@ function amiIsMyTurn(){return amiGame.turn===amiColor;}
    caches tant qu'aucune partie n'a ete creee ou rejointe. */
 function updateAmiBoardVisibility(){
   if(mode!=="friend")return;
+  /* L'echiquier de la partie par lien ne se montre que sous « Par lien » :
+     sous « En direct » ou « Contre un joueur en ligne », sans partie en
+     direct ouverte, l'ecran ne porte que le bloc de lancement (2026-11-21). */
+  const montre=amiStarted&&!(typeof amiHorsLien==="function"&&amiHorsLien());
   const bw=document.querySelector(".board-wrap");
-  if(bw)bw.classList.toggle("hide",!amiStarted);
-  const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",!amiStarted);
-  const sp=$("amiScoresheetPanel"); if(sp)sp.classList.toggle("hide",!amiStarted);
+  if(bw)bw.classList.toggle("hide",!montre);
+  const bt=$("boardTools"); if(bt)bt.classList.toggle("hide",!montre);
+  const sp=$("amiScoresheetPanel"); if(sp)sp.classList.toggle("hide",!montre);
   majLayoutSolo();
 }
 function showAmi(){
@@ -3583,7 +3587,8 @@ $("btnAmiNew").onclick=()=>{
 $("amiColorModal").addEventListener("click",e=>{
   if(e.target.id==="amiColorModal"){fermerAmiColor();return;}
   const b=e.target.closest("button[data-v]"); if(!b)return;
-  amiColor=b.dataset.v==="w"?W:B;
+  /* « Au hasard » (2026-11-21) : tire au moment de creer la partie. */
+  amiColor=b.dataset.v==="r"?(Math.random()<0.5?W:B):b.dataset.v==="w"?W:B;
   $("amiColorModal").classList.remove("on");
   newAmiGame();
 });

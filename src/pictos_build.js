@@ -46,10 +46,13 @@ const DESSINS = {
   /* Fiches : deux cartes empilees, un cavalier sur celle du dessus. */
   fiches: '<rect x="-9" y="-19" width="27" height="25" rx="4" fill="currentColor" opacity=".5"/><rect x="-18" y="-10.500" width="29" height="29" rx="4.500" fill="currentColor" stroke="var(--oeil)" stroke-width="2.400"/>'
 };
+/* Globe : un disque, l'equateur et deux meridiens (joueur en ligne, 2026-11-21). */
+DESSINS.globe = '<circle cx="0" cy="0" r="18" fill="currentColor"/><path d="M-18 0h36M0 -18c-9.500 6-9.500 30 0 36M0 -18c9.500 6 9.500 30 0 36" ' + O + '2.600"/>';
 const accentDessin = (d, s) => '<g transform="translate(14.5 -14.5) scale(' + s + ')">' + d + "</g>";
 const P = {
   ordinateur: '<g transform="scale(1.06)">' + piece("n", -5.5, 5.5, .82) + accentDessin(DESSINS.puce, .56) + "</g>",
   ami: piece("p", -10, 1.5, .92) + piece("p", 10, 1.5, .92),
+  enligne: '<g transform="scale(1.06)">' + piece("p", -5.5, 5.5, .82) + accentDessin(DESSINS.globe, .5) + "</g>",
   exercices: glyphe("solved_1"),
   jour: '<g transform="scale(.94)">' + DESSINS.calendrier + "</g>",
   defi: glyphe("duel_gagne"),

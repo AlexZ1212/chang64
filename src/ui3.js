@@ -1617,7 +1617,7 @@ function renderAnalyseNav(){
     const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
     const side=i%2===0?"w":"b";
     const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
-    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+'</span>';
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+(icon?sanSansPiece(sanList[i]):sanList[i])+'</span>';
   }
   poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>analyseGoto(+sp.dataset.ply);});
@@ -2526,4 +2526,66 @@ if(typeof debutCharger==="function"){
     });
     return r;
   };
+}
+
+/* ---------- Notation figurine (2026-11-21, demande d'Alexandre) ----------
+   Les coups etaient ecrits en notation anglaise dans les 10 langues : en
+   francais, « Rg1+ » se lisait « roi en g1 » alors que R y est la tour (rook),
+   exercice #G59I2. Chaque lettre de piece d'un coup affiche (N, B, R, Q, K,
+   et la piece d'une promotion) devient le dessin de la piece, LES MEMES
+   pieces que l'echiquier (pieceSVG, pieces_browser.js), lu par les lecteurs
+   d'ecran sous son nom dans la langue (« Cavalier »). Le PGN (zones de texte,
+   copie, partage) garde les lettres anglaises : c'est le format que les autres
+   logiciels lisent. Tout passe par sanFigurines() ; un observateur convertit
+   le texte des coups ou qu'il apparaisse, sans toucher a chaque gabarit. */
+const FIG_TYPE={K:"k",Q:"q",R:"r",B:"b",N:"n"};
+const FIG_NOM={k:"King",q:"Queen",r:"Rook",b:"Bishop",n:"Knight"};
+function figurine(lettre){
+  const ty=FIG_TYPE[lettre];
+  if(!ty||typeof pieceSVG!=="function")return lettre;
+  /* Largeur explicite, tiree du cadre serre de la piece : une largeur
+     « auto » donnait 0 dans un conteneur flex (ligne de statut). */
+  const svg=pieceSVG(ty,"w",true),vb=/viewBox="[0-9.]+ [0-9.]+ ([0-9.]+) ([0-9.]+)"/.exec(svg);
+  const l=vb?(1.08*vb[1]/vb[2]).toFixed(2):"0.7";
+  return '<i class="fig" role="img" aria-label="'+t(FIG_NOM[ty])+'" style="width:'+l+'em">'+svg+"</i>";
+}
+/* Un coup : piece au debut (Nf3, Qxd8+, Rae1) et/ou promotion (e8=Q). */
+const FIG_COUP=/(^|[^A-Za-z0-9])([KQRBN])([a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?)(?![A-Za-z0-9])/g;
+const FIG_PROMO=/([a-h][18])=([QRBN])/g;
+function sanFigurines(texte){
+  const ech=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  return ech(texte)
+    .replace(FIG_COUP,(m,av,p,reste)=>av+'<i class="coup">'+figurine(p)+reste+"</i>")
+    .replace(FIG_PROMO,(m,cs,p)=>'<i class="coup">'+cs+"="+figurine(p)+"</i>");
+}
+function aFigurines(s){FIG_COUP.lastIndex=0;FIG_PROMO.lastIndex=0;const r=FIG_COUP.test(s)||FIG_PROMO.test(s);FIG_COUP.lastIndex=0;FIG_PROMO.lastIndex=0;return r;}
+const FIG_HORS="INPUT,TEXTAREA,SCRIPT,STYLE,svg,CODE,.fig,[data-sans-figurines]";
+function figurinerNoeud(n){
+  if(n.nodeType!==3||!n.nodeValue||!aFigurines(n.nodeValue))return;
+  const p=n.parentElement;
+  if(!p||p.closest(FIG_HORS))return;
+  /* Un seul element a la place du texte : dans un conteneur flex, des
+     morceaux separes deviendraient chacun un bloc. */
+  const enveloppe=document.createElement("i");
+  enveloppe.className="fig-texte";
+  enveloppe.innerHTML=sanFigurines(n.nodeValue);
+  p.replaceChild(enveloppe,n);
+}
+function figurinerSous(racine){
+  if(!racine)return;
+  if(racine.nodeType===3){figurinerNoeud(racine);return;}
+  if(racine.nodeType!==1||racine.closest&&racine.closest(FIG_HORS))return;
+  const w=document.createTreeWalker(racine,NodeFilter.SHOW_TEXT,null),l=[];
+  let n;while((n=w.nextNode()))if(n.nodeValue&&aFigurines(n.nodeValue))l.push(n);
+  l.forEach(figurinerNoeud);
+}
+if(typeof MutationObserver!=="undefined"&&document.body){
+  const app=document.querySelector("main")||document.body;
+  figurinerSous(app);
+  new MutationObserver(ms=>{
+    for(const m of ms){
+      if(m.type==="characterData")figurinerNoeud(m.target);
+      else m.addedNodes.forEach(figurinerSous);
+    }
+  }).observe(document.body,{childList:true,subtree:true,characterData:true});
 }

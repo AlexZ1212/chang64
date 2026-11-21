@@ -180,11 +180,13 @@ module.exports = function (H) {
         en: ["Every square has a name: files a to h from White's left, ranks 1 to 8 from White's side. The bottom-left square is a1, the top-right is h8.",
              "A move is written as the piece letter plus the arrival square: Nf3, Bb5, Qd2, Rae1, Kg1. Pawns have no letter, so e4 means a pawn to e4. A capture adds an x (Nxe5), a pawn capture names its file first (exd5). Castling is O-O short and O-O-O long. Check is +, checkmate is #, promotion is written =Q.",
              "When two identical pieces could reach the same square, add the file or rank that tells them apart: Nbd2, R1e2. Symbols like ! and ? are commentary, not part of the move.",
-             "This is the international standard, so a scoresheet written in Paris is readable in Tokyo. Only the piece letters change with the language: in French the knight is C for cavalier, the bishop F for fou."],
+             "This is the international standard, so a scoresheet written in Paris is readable in Tokyo. Only the piece letters change with the language: in French the knight is C for cavalier, the bishop F for fou.",
+             "On chang64, moves show the piece itself instead of its letter: [[N]]f3 for Nf3, [[B]]b5 for Bb5. This is called figurine notation, and it reads the same in every language. When you copy a game as PGN, the letters come back: it is the format every chess program reads."],
         fr: ["Chaque case a un nom : les colonnes a à h depuis la gauche des Blancs, les rangées 1 à 8 depuis leur côté. La case en bas à gauche est a1, celle en haut à droite h8.",
              "Un coup s'écrit avec la lettre de la pièce suivie de la case d'arrivée : Nf3, Bb5, Qd2, Rae1, Kg1. Ces lettres viennent des noms anglais, et c'est la forme utilisée partout en ligne : N pour le cavalier (knight), B pour le fou (bishop), R pour la tour (rook), Q pour la dame (queen), K pour le roi (king). Les pions n'ont pas de lettre : e4 signifie un pion en e4. Une prise ajoute un x (Nxe5), une prise de pion nomme d'abord sa colonne (exd5). Le roque s'écrit O-O pour le petit, O-O-O pour le grand. L'échec est +, le mat #, la promotion =Q.",
              "Quand deux pièces identiques peuvent atteindre la même case, on ajoute la colonne ou la rangée qui les distingue : Nbd2, R1e2. Les symboles ! et ? sont des commentaires, pas une partie du coup.",
-             "C'est une norme internationale : une feuille de partie écrite à Paris se lit à Tokyo. Les livres et revues en français emploient encore les lettres françaises (C pour cavalier, F pour fou, T pour tour, D pour dame, R pour roi), et tu les rencontreras forcément. Les cases, elles, ne changent jamais : c'est ce qui rend les deux formes interchangeables."] } },
+             "C'est une norme internationale : une feuille de partie écrite à Paris se lit à Tokyo. Les livres et revues en français emploient encore les lettres françaises (C pour cavalier, F pour fou, T pour tour, D pour dame, R pour roi), et tu les rencontreras forcément. Les cases, elles, ne changent jamais : c'est ce qui rend les deux formes interchangeables.",
+             "Sur chang64, les coups montrent la pièce elle-même au lieu de sa lettre : [[N]]f3 pour Nf3, [[B]]b5 pour Bb5. C'est la notation figurine, qui se lit de la même façon dans toutes les langues. Quand tu copies une partie en PGN, les lettres reviennent : c'est le format que lisent tous les logiciels d'échecs."] } },
     { slug: { en: "time-controls", fr: "les-cadences-aux-echecs" },
       fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
       title: { en: "Time controls: what blitz, rapid and 10+0 mean", fr: "Les cadences aux échecs : bullet, blitz, rapide, classique" },
@@ -450,7 +452,9 @@ module.exports = function (H) {
 <h1>${esc(R.title)}</h1>
 <div class="cols">
   ${diagram(r.fen, "")}
-  <div>${R.body.map(p => `<p>${p}</p>`).join("\n")}
+  <div>${/* La lecon de notation enseigne les lettres : elle reste en lettres
+          (notation figurine, 2026-11-21 ; balises lues par figurinesStatiques
+          dans build_site.js). */ r.slug.en === "chess-notation" ? "<!--fig:non-->" : ""}${R.body.map(p => `<p>${p}</p>`).join("\n")}${r.slug.en === "chess-notation" ? "<!--fig:oui-->" : ""}
     ${r.slug.en === "for-teachers-and-clubs" ? sectionVignette(lang) : ""}
     ${/* Trois boutons possibles, jamais tous les trois par hasard.
           "Entraine-toi" quand la banque connait le motif : apres avoir lu ce

@@ -227,6 +227,9 @@ function sanPieceType(san){
   const c=s[0];
   return "NBRQK".indexOf(c)>=0?c.toLowerCase():"p";
 }
+/* Le bandeau dessine deja la piece devant le coup (notation figurine,
+   2026-11-21) : la lettre anglaise qui la doublait est retiree (Nf3 -> f3). */
+function sanSansPiece(san){return /^[NBRQK]/.test(san||"")?String(san).slice(1):san;}
 function renderNavStrip(at){
   const el=$("navScroll"); if(!el)return;
   let h='<span class="navchip start'+(at===0?" cur":"")+'" data-ply="0">'+t("Game start")+'</span>';
@@ -247,7 +250,7 @@ function renderNavStrip(at){
     const side=i%2===0?"w":"b";
     const icon=typeof pieceSVG==="function"
       ?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
-    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+sanList[i]+tag+'</span>';
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+(icon?sanSansPiece(sanList[i]):sanList[i])+tag+'</span>';
   }
   poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
@@ -267,7 +270,7 @@ function renderNavLecture(san){
   for(let i=0;i<san.length;i++){
     const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
     const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+(i%2===0?"w":"b")+'">'+pieceSVG(sanPieceType(san[i]),"w",true)+'</i>':"";
-    h+='<span class="navchip lu'+(i===san.length-1?" cur":"")+'" role="listitem">'+num+icon+echapperSan(san[i])+'</span>';
+    h+='<span class="navchip lu'+(i===san.length-1?" cur":"")+'" role="listitem">'+num+icon+echapperSan(icon?sanSansPiece(san[i]):san[i])+'</span>';
   }
   poserHtml(el,h);
   recenterNavChip(el);

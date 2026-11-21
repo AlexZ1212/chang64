@@ -81,7 +81,9 @@ setTimeout(async () => {
   T("on ne peut pas reculer depuis le depart", $("solPrev").disabled === true);
   T("on peut avancer", $("solNext").disabled === false);
   T("le bandeau annonce quand meme la solution complete",
-    /Cxe2|Nxe2/.test($("exStatus").textContent), $("exStatus").textContent);
+    /* Notation figurine (2026-11-21) : le cavalier est dessine, son nom lu
+       par les lecteurs d'ecran (aria-label), la case reste en texte. */
+    /Cxe2|Nxe2/.test($("exStatus").textContent) || (/xe2/.test($("exStatus").textContent) && !!$("exStatus").querySelector('.fig[aria-label="Cavalier"],.fig[aria-label="Knight"]')), $("exStatus").textContent);
 
   console.log("\n--- On avance dans la solution ---");
   $("solNext").click(); await wait(300);

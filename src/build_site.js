@@ -1102,6 +1102,9 @@ header{padding-top:4px;padding-bottom:8px}header .brand{align-self:start}}
 .brand .sixtyfour{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.86em;letter-spacing:-.03em}
 .brand span{color:var(--brass);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78em}
 @media(max-width:599px){.brandmark{width:26px;height:calc(26px * 54 / 64)}.brand .bname{font-size:22px}}
+/* Notation figurine (2026-11-21) : la piece du site a la place de la lettre. */
+.fig{display:inline-block;height:1.08em;vertical-align:-.2em;margin-right:.04em;background:no-repeat center/contain;font-style:normal}
+.coup{white-space:nowrap;font-style:normal}
 /* Le menu depassait la largeur d'un telephone : quatre entrees plus le
    selecteur de langue reclament environ 458 px pour 362 disponibles. Les
    marges a gauche empechaient un retour a la ligne propre. On passe en
@@ -1512,6 +1515,57 @@ function insecablesFr(lang, html) {
   return html.split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>)/).map((bout, i) => i % 2 ? bout :
     bout.replace(/>([^<]+)</g, (m, txt) => ">" + txt.replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") + "<")).join("");
 }
+/* Notation figurine des pages statiques (2026-11-21, demande d'Alexandre) :
+   meme regle que sanFigurines() dans ui3.js. La lettre anglaise d'un coup
+   (Nf3, Qxd8+, e8=Q) devient la piece du site, dessinee une fois par page
+   (<symbol>) et posee par <use> ; son nom dans la langue est lu par les
+   lecteurs d'ecran. Texte seulement (ni balises, ni scripts, ni styles, ni
+   <head>) ; ce qui est entre <!--fig:non--> et <!--fig:oui--> garde ses
+   lettres (lecon de notation). [[N]] (et K Q R B) pose une figurine a la
+   main, meme la. Applique a la page finie : la date de contenu ne bouge pas. */
+const FIG_BB = new Function(fs.readFileSync(path.join(__dirname, "pieces_browser.js"), "utf8").match(/const PIECE_BB=\{[^}]*\};/)[0] + "return PIECE_BB;")();
+function figurinesStatiques(lang, html) {
+  const debut = html.indexOf("<body");
+  if (debut < 0) return html;
+  const vus = new Set();
+  const fig = L => {
+    const ty = L.toLowerCase(), bb = FIG_BB[ty], w = bb[1] - bb[0];
+    vus.add(ty);
+    const nom = TRAD.GRAMMAIRE.mot(lang, ty), Nom = nom.charAt(0).toUpperCase() + nom.slice(1);
+    /* Balise courte : le dessin est une image de fond, ecrite une fois par
+       page dans le style (une page d'index en compte 155). */
+    return `<i class="fig f-${ty}" role="img" aria-label="${Nom}"></i>`;
+  };
+  const texte = (t, san) => {
+    let s = t.replace(/\[\[([KQRBN])\]\]/g, (m, L) => fig(L));
+    if (!san) return s;
+    return s.replace(/(^|[^A-Za-z0-9#-])([KQRBN])([a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?)(?![A-Za-z0-9])/g,
+      (m, av, L, reste) => av + '<i class="coup">' + fig(L) + reste + "</i>")
+      .replace(/([a-h][18])=([QRBN])(?![A-Za-z0-9])/g, (m, cs, L) => '<i class="coup">' + cs + "=" + fig(L) + "</i>");
+  };
+  let san = true;
+  const corps = html.slice(debut).split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<pre[\s\S]*?<\/pre>|<code[\s\S]*?<\/code>|<!--fig:non-->|<!--fig:oui-->)/).map((bout, i) => {
+    if (i % 2) { if (bout === "<!--fig:non-->") san = false; else if (bout === "<!--fig:oui-->") san = true; return bout; }
+    return bout.replace(/>([^<]+)</g, (m, t) => ">" + texte(t, san) + "<");
+  }).join("");
+  if (!vus.size) return html.slice(0, debut) + corps;
+  /* Les dessins vivent dans /fig.css, commun a toutes les pages et mis en
+     cache : chaque page n'ajoute que ses balises <i>. */
+  if (!figCssEcrit) { fs.writeFileSync(path.join(OUT, "fig.css"), figCss()); figCssEcrit = true; }
+  return html.slice(0, debut).replace("</head>", '<link rel="stylesheet" href="/fig.css"></head>') + corps;
+}
+let figCssEcrit = false;
+function figCss() {
+  const { PIECE_SHAPES, PIECE_FILL, PIECE_STROKE } = require("./plateau_svg.js");
+  return "/* chang64 - notation figurine des pages statiques (build_site.js, figurinesStatiques) */\n" + ["k", "q", "r", "b", "n"].map(ty => {
+    const bb = FIG_BB[ty], w = bb[1] - bb[0];
+    /* Meme dessin que pieceShapes(), attributs communs regroupes une fois. */
+    const formes = PIECE_SHAPES[ty].map(f => "<" + f.t + " " + (f.t === "circle" ? `cx="${f.cx}" cy="${f.cy}" r="${f.r}"` : `d="${f.d}"`) +
+      (f.fixe ? ` fill="${PIECE_STROKE}" stroke="none"` : (f.st ? ` stroke="${f.st}"` : "") + (f.sw ? ` stroke-width="${f.sw}"` : "")) + "/>").join("");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${bb[0]} 0 ${w} 45"><g fill="${PIECE_FILL.w}" stroke="${PIECE_STROKE}" stroke-linecap="round" stroke-linejoin="round">${formes}</g></svg>`;
+    return `.f-${ty}{width:${(1.08 * w / 45).toFixed(2)}em;background-image:url("data:image/svg+xml,${svg.replace(/"/g, "'").replace(/#/g, "%23").replace(/</g, "%3C").replace(/>/g, "%3E")}")}`;
+  }).join("\n") + "\n";
+}
 function shell(title, desc, canonical, body, jsonld, lang, alts, langUrls, ogImage, noindex) {
   const dates = datesDe(canonical.replace(SITE, ""), body);
   /* Une page non indexable n'est pas du contenu : 404 et le profil ne portent
@@ -1523,7 +1577,7 @@ function shell(title, desc, canonical, body, jsonld, lang, alts, langUrls, ogIma
   lang = lang || "en";
   const d = libellesOuvertures(lang);
   const accueil = PAR_CODE[lang].accueil;
-  return insecablesFr(lang, `<!DOCTYPE html>
+  return figurinesStatiques(lang, insecablesFr(lang, `<!DOCTYPE html>
 <html lang="${PAR_CODE[lang].html}">
 <head>
 <meta charset="utf-8">
@@ -1868,7 +1922,7 @@ ${!/id="grille"/.test(body) ? "" : `
 </script>
 ${BALISE_AUDIENCE}
 </body>
-</html>`);
+</html>`));
 }
 
 const L = {

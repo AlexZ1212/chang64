@@ -319,14 +319,23 @@ function notesRacine(g,depth,timeMs){
    l'ordinateur peut encore tomber dans un piege en deux coups) ; erreur :
    part des coups ou il s'autorise une erreur d'au plus perte centipions ;
    grosse : part des coups ou il s'autorise jusqu'a perteGrosse ; t : temps
-   de calcul en ms. Les quatre forces nommees sont des points de l'echelle. */
+   de calcul en ms. Les quatre forces nommees sont des points de l'echelle.
+   Calage du 21/11 (180 parties, 20 par duel, scratchpad mesure_echelle_*) :
+   echelle du site, le point sans erreur a profondeur 3 valant 1600 et celui
+   a profondeur 5 valant 1900 (mesures Stockfish du 19/11, validees par
+   Alexandre). Elo des points = force mesuree, pas la force visee : 585,
+   850, 960, 1050, 1220, 1600, 1790, 1830 (ecart type d'un duel de 20
+   parties : environ 80). L'ancien point « 1400 » (erreur 8 %) jouait a
+   1260 : retire, remplace par un point a erreur 3 %, mesure a 1435 contre
+   1220 et 1530 contre 1600, place a 1480. Verification des forces nommees :
+   Debutant (700) mesure 720, Tranquille (1100) mesure 1150. */
 const ECHELLE_ORDI=[
   {elo:600, d:2,dv:1,erreur:.50,perte:420,grosse:0,  perteGrosse:0,  t:400},
-  {elo:700, d:2,dv:1,erreur:.40,perte:340,grosse:0,  perteGrosse:0,  t:500},
-  {elo:900, d:2,dv:2,erreur:.30,perte:240,grosse:0,  perteGrosse:0,  t:700},
-  {elo:1000,d:3,dv:3,erreur:.28,perte:220,grosse:.05,perteGrosse:330,t:1100},
-  {elo:1200,d:3,dv:3,erreur:.18,perte:160,grosse:.04,perteGrosse:330,t:1200},
-  {elo:1400,d:3,dv:3,erreur:.08,perte:120,grosse:.02,perteGrosse:250,t:1000},
+  {elo:850, d:2,dv:1,erreur:.40,perte:340,grosse:0,  perteGrosse:0,  t:500},
+  {elo:960, d:2,dv:2,erreur:.30,perte:240,grosse:0,  perteGrosse:0,  t:700},
+  {elo:1050,d:3,dv:3,erreur:.28,perte:220,grosse:.05,perteGrosse:330,t:1100},
+  {elo:1220,d:3,dv:3,erreur:.18,perte:160,grosse:.04,perteGrosse:330,t:1200},
+  {elo:1480,d:3,dv:3,erreur:.03,perte:100,grosse:.005,perteGrosse:220,t:900},
   {elo:1600,d:3,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:700},
   {elo:1750,d:4,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:1200},
   {elo:1900,d:5,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:2000}

@@ -1207,5 +1207,27 @@ module.exports = {
 "Back to the game":"Kembali ke partai",
 "Game in progress":"Partai sedang berlangsung",
 /* Reglages rapides (2026-11-21). */
-"Quick settings":"Pengaturan cepat"
+"Quick settings":"Pengaturan cepat",
+/* Historique unique des parties et clavier en partie (2026-11-21, branche historique-clavier). */
+"You are looking at an earlier move.":"Kamu sedang melihat langkah sebelumnya.",
+"Move {n}, {move}":"Langkah {n}, {move}",
+"All (games)":"Semua",
+"Correspondence":"Korespondensi",
+"A friend":"Seorang teman",
+"No game of this kind yet.":"Belum ada partai jenis ini.",
+"Keyboard shortcuts":"Pintasan papan ketik",
+"Previous move, next move":"Langkah sebelumnya, langkah berikutnya",
+"Start of the game":"Awal partai",
+"Current position":"Posisi saat ini",
+"Show this list":"Tampilkan daftar ini",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Selama partai dan saat meninjaunya. Jam tetap berjalan saat kamu melihat langkah sebelumnya.",
+"When the cursor is on the board, the arrows move it from square to square.":"Saat kursor ada di papan, tombol panah memindahkannya dari petak ke petak.",
+"Home (key)":"Home",
+"End (key)":"End",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Di luar papan, selama partai atau saat meninjaunya, tombol-tombol menelusuri langkah:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Dengan pembaca layar, aktifkan pengumuman di atas: setiap langkah yang kamu lihat dibacakan, dengan nomornya, bidaknya, dan petaknya.",
+"Single-key shortcuts":"Pintasan satu tombol",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Tombol ? dan F. Matikan jika mengganggu pembaca layar atau kendali suaramu.",
+"Live (games)":"Langsung"
 };

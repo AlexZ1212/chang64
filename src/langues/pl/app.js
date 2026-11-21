@@ -1207,5 +1207,27 @@ module.exports = {
 "Back to the game":"Wróć do partii",
 "Game in progress":"Partia trwa",
 /* Reglages rapides (2026-11-21). */
-"Quick settings":"Szybkie ustawienia"
+"Quick settings":"Szybkie ustawienia",
+/* Historique unique des parties et clavier en partie (2026-11-21, branche historique-clavier). */
+"You are looking at an earlier move.":"Oglądasz wcześniejszy ruch.",
+"Move {n}, {move}":"Ruch {n}, {move}",
+"All (games)":"Wszystkie",
+"Correspondence":"Korespondencyjne",
+"A friend":"Znajomy",
+"No game of this kind yet.":"Nie ma jeszcze partii tego rodzaju.",
+"Keyboard shortcuts":"Skróty klawiszowe",
+"Previous move, next move":"Poprzedni ruch, następny ruch",
+"Start of the game":"Początek partii",
+"Current position":"Aktualna pozycja",
+"Show this list":"Pokaż tę listę",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"W trakcie partii i podczas jej przeglądania. Zegar nadal chodzi, gdy oglądasz wcześniejszy ruch.",
+"When the cursor is on the board, the arrows move it from square to square.":"Gdy kursor jest na szachownicy, strzałki przesuwają go z pola na pole.",
+"Home (key)":"Home",
+"End (key)":"End",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Poza szachownicą, w trakcie partii lub podczas jej przeglądania, klawisze przechodzą po ruchach:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Z czytnikiem ekranu włącz komunikaty powyżej: każdy oglądany ruch jest odczytywany na głos, z numerem, bierką i polem.",
+"Single-key shortcuts":"Skróty jednoklawiszowe",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Klawisze ? i F. Wyłącz je, jeśli przeszkadzają twojemu czytnikowi ekranu lub sterowaniu głosem.",
+"Live (games)":"Na żywo"
 };

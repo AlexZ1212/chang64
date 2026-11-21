@@ -1209,5 +1209,27 @@ module.exports = {
 "Back to the game":"Voltar à partida",
 "Game in progress":"Partida em andamento",
 /* Reglages rapides (2026-11-21). */
-"Quick settings":"Ajustes rápidos"
+"Quick settings":"Ajustes rápidos",
+/* Historique unique des parties et clavier en partie (2026-11-21, branche historique-clavier). */
+"You are looking at an earlier move.":"Você está vendo um lance anterior.",
+"Move {n}, {move}":"Lance {n}, {move}",
+"All (games)":"Todas",
+"Correspondence":"Correspondência",
+"A friend":"Um amigo",
+"No game of this kind yet.":"Ainda não há partidas desse tipo.",
+"Keyboard shortcuts":"Atalhos de teclado",
+"Previous move, next move":"Lance anterior, lance seguinte",
+"Start of the game":"Início da partida",
+"Current position":"Posição atual",
+"Show this list":"Mostrar esta lista",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Durante uma partida e ao rever uma. O relógio continua correndo enquanto você olha um lance anterior.",
+"When the cursor is on the board, the arrows move it from square to square.":"Quando o cursor está no tabuleiro, as setas o movem de casa em casa.",
+"Home (key)":"Home",
+"End (key)":"End",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Fora do tabuleiro, durante uma partida ou ao rever uma, as teclas percorrem os lances:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Com um leitor de tela, ative os anúncios acima: cada lance que você olha é lido em voz alta, com seu número, sua peça e sua casa.",
+"Single-key shortcuts":"Atalhos de uma só tecla",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"As teclas ? e F. Desative-os se atrapalharem seu leitor de tela ou seu controle por voz.",
+"Live (games)":"Ao vivo"
 };

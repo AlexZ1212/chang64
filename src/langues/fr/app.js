@@ -1059,5 +1059,27 @@ module.exports = {
 "Back to the game":"Retour à la partie",
 "Game in progress":"Partie en cours",
 /* Reglages rapides (2026-11-21). */
-"Quick settings":"Réglages rapides"
+"Quick settings":"Réglages rapides",
+/* Historique unique des parties et clavier en partie (2026-11-21, branche historique-clavier). */
+"You are looking at an earlier move.":"Tu regardes un coup passé.",
+"Move {n}, {move}":"Coup {n}, {move}",
+"All (games)":"Toutes",
+"Live (games)":"Direct",
+"Correspondence":"Correspondance",
+"A friend":"Un ami",
+"No game of this kind yet.":"Aucune partie de cette sorte pour l'instant.",
+"Keyboard shortcuts":"Raccourcis clavier",
+"Previous move, next move":"Coup précédent, coup suivant",
+"Start of the game":"Début de la partie",
+"Current position":"Position actuelle",
+"Show this list":"Afficher cette liste",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Pendant une partie et quand tu en revois une. La pendule continue de tourner quand tu regardes un coup passé.",
+"When the cursor is on the board, the arrows move it from square to square.":"Quand le curseur est sur l'échiquier, les flèches le déplacent de case en case.",
+"Home (key)":"Origine",
+"End (key)":"Fin",
+"Esc (key)":"Échap",
+"Away from the board, during a game or in review, the keys step through the moves:":"Hors de l'échiquier, pendant une partie ou quand tu en revois une, les touches parcourent les coups :",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Avec un lecteur d'écran, active les annonces ci-dessus : chaque coup que tu regardes est lu à voix haute, avec son numéro, sa pièce et sa case.",
+"Single-key shortcuts":"Raccourcis à une seule touche",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Les touches ? et F. Coupe-les si elles gênent ton lecteur d'écran ou ta commande vocale."
 };

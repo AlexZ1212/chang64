@@ -1209,5 +1209,27 @@ module.exports = {
 "Back to the game":"Zurück zur Partie",
 "Game in progress":"Partie läuft",
 /* Reglages rapides (2026-11-21). */
-"Quick settings":"Schnelleinstellungen"
+"Quick settings":"Schnelleinstellungen",
+/* Historique unique des parties et clavier en partie (2026-11-21, branche historique-clavier). */
+"You are looking at an earlier move.":"Du siehst dir einen früheren Zug an.",
+"Move {n}, {move}":"Zug {n}, {move}",
+"All (games)":"Alle",
+"Correspondence":"Fernpartie",
+"A friend":"Ein Freund",
+"No game of this kind yet.":"Noch keine Partie dieser Art.",
+"Keyboard shortcuts":"Tastaturkürzel",
+"Previous move, next move":"Vorheriger Zug, nächster Zug",
+"Start of the game":"Partiebeginn",
+"Current position":"Aktuelle Stellung",
+"Show this list":"Diese Liste anzeigen",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Während einer Partie und beim Nachspielen. Die Uhr läuft weiter, während du dir einen früheren Zug ansiehst.",
+"When the cursor is on the board, the arrows move it from square to square.":"Wenn der Cursor auf dem Brett steht, bewegen ihn die Pfeiltasten von Feld zu Feld.",
+"Home (key)":"Pos1",
+"End (key)":"Ende",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Außerhalb des Bretts, während einer Partie oder beim Nachspielen, blättern die Tasten durch die Züge:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Mit einem Screenreader: Schalte oben die Ansagen ein. Jeder Zug, den du dir ansiehst, wird vorgelesen, mit Nummer, Figur und Feld.",
+"Single-key shortcuts":"Kürzel mit nur einer Taste",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Die Tasten ? und F. Schalte sie aus, wenn sie deinen Screenreader oder deine Sprachsteuerung stören.",
+"Live (games)":"Live"
 };

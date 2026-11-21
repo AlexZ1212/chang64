@@ -992,6 +992,9 @@ const BOARD_THEMES=[
   {id:"moss",  en:"Moss",   fr:"Mousse"}
 ];
 let prefBoard="olive",prefAnnounce="off";
+/* Raccourcis a une seule touche (« ? » et « F », 2026-11-21) : actifs tant
+   qu'on ne les a pas coupes dans Accessibilite (WCAG 2.1.4). */
+let prefTouches=true;
 
 async function loadPrefs(){
   try{
@@ -1005,6 +1008,7 @@ async function loadPrefs(){
       if(typeof d.anim==="boolean")animOn=d.anim;
       /* Sons : meme regle, actives tant qu'on ne les a pas coupes. */
       if(typeof d.son==="boolean")sonOn=d.son;
+      if(typeof d.touches==="boolean")prefTouches=d.touches;
     }
   }catch(e){}
   applyBoardTheme();
@@ -1020,7 +1024,7 @@ function appliquerMouvement(){
   else if(accueilFige){accueilFige=false;partieAccueil=null;demarrerAccueil();}
 }
 async function savePrefs(){
-  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn,son:sonOn}));}catch(e){}
+  try{await window.storage.set("chang64:prefs",JSON.stringify({board:prefBoard,announce:prefAnnounce,anim:animOn,son:sonOn,touches:prefTouches}));}catch(e){}
 }
 function applyBoardTheme(){
   document.documentElement.setAttribute("data-board",prefBoard);
@@ -1185,6 +1189,50 @@ if(typeof botMove==="function"){
   };
 }
 
+/* ---------- raccourcis clavier de l'ecran de partie (2026-11-21) ----------
+   Une seule liste, pour la fenetre « Raccourcis clavier » (lien « Clavier »
+   sous l'echiquier, touche « ? ») et pour la section Accessibilite. Les
+   touches elles-memes sont ecoutees dans ui2.js. Le nom d'une touche se
+   traduit par une cle a part ("Home (key)") : « Home » seul veut deja dire
+   « Accueil ». */
+const RACCOURCIS=[
+  [["←","→"],"Previous move, next move"],
+  [["↑","Home"],"Start of the game"],
+  [["↓","End"],"Current position"],
+  [["Esc"],"Back to the game"],
+  [["F"],"Flip the board",true],
+  [["?"],"Show this list",true]
+];
+function toucheNom(k){const s=t(k+" (key)");return s===k+" (key)"?k:s;}
+function clavierListeHtml(){
+  return '<dl class="clavier-liste" data-sans-figurines>'+RACCOURCIS.filter(r=>!r[2]||prefTouches).map(r=>
+    "<div><dt>"+r[0].map(k=>"<kbd>"+echapper(toucheNom(k))+"</kbd>").join("")+"</dt><dd>"+echapper(t(r[1]))+"</dd></div>").join("")+"</dl>";
+}
+/* Fenetre qui informe : le modele commun (medaille gravee, petit titre,
+   titre, texte, filet, bouton), dans la fenetre partagee de duel.js. */
+function clavierOuvrir(){
+  const r=$("duel");
+  if(!r||typeof duelOuvrir!=="function"||!r.hidden)return;
+  duelOuvrir(duelMedaille("_clavier")+'<p class="bilan-entete">'+echapper(t("Keyboard"))+'</p><h2 id="duelTitre">'+echapper(t("Keyboard shortcuts"))+"</h2>"+
+    '<p class="bilan-sous">'+echapper(t("During a game and in review. The clock keeps running while you look at an earlier move."))+"</p>"+
+    clavierListeHtml()+
+    '<p class="clavier-note">'+echapper(t("When the cursor is on the board, the arrows move it from square to square."))+"</p>"+
+    DUEL_FILET+'<div class="duel-boutons"><button type="button" class="btn primary" data-duel-fermer data-duel-premier>'+echapper(t("Close"))+"</button></div>");
+  /* La fenetre partagee s'appelle « Défier un ami » pour un lecteur d'ecran :
+     on lui donne le bon nom le temps qu'elle montre cette liste. */
+  const avant=r.getAttribute("aria-label");
+  r.setAttribute("aria-label",t("Keyboard shortcuts"));
+  if(typeof MutationObserver==="function"){
+    const mo=new MutationObserver(()=>{
+      if(!r.hidden&&r.querySelector(".clavier-liste"))return;
+      if(avant!==null)r.setAttribute("aria-label",avant);
+      mo.disconnect();
+    });
+    mo.observe(r,{attributes:true,attributeFilter:["hidden"],childList:true,subtree:true});
+  }
+}
+if($("btnClavier"))$("btnClavier").onclick=clavierOuvrir;
+
 /* ---------- interface des preferences ---------- */
 function renderPrefs(){
   const set=(id,txt)=>{const e=$(id);if(e)e.textContent=txt;};
@@ -1196,6 +1244,8 @@ function renderPrefs(){
   set("prefsA11yLabel",t("Screen reader announcements"));
   set("prefsA11yNote",t("Off by default. Once on, moves and game state are read aloud by your screen reader."));
   set("prefsKbdLabel",t("Keyboard"));
+  set("prefsTouchesLabel",t("Single-key shortcuts"));
+  set("prefsTouchesNote",t("The ? and F keys. Turn them off if they get in the way of your screen reader or voice control."));
   set("footAccess",t("Accessibility"));
   set("footPrefs",t("Preferences"));
 
@@ -1295,9 +1345,29 @@ function renderPrefs(){
       seg.appendChild(b);
     }
   }
+  const segT=$("segTouches");
+  if(segT){
+    /* « Raccourcis » est au masculin pluriel, comme « Sons » : memes cles. */
+    const tT=k=>{const s=t(k+" (sounds)");return s===k+" (sounds)"?t(k):s;};
+    poserHtml(segT,"");
+    for(const v of ["on","off"]){
+      const b=document.createElement("button");
+      b.type="button";
+      b.setAttribute("data-v",v);
+      b.setAttribute("role","radio");
+      b.setAttribute("aria-checked",String((v==="on")===prefTouches));
+      b.textContent=tT(v==="on"?"On":"Off");
+      b.onclick=()=>{prefTouches=(v==="on");savePrefs();renderPrefs();};
+      segT.appendChild(b);
+    }
+  }
   const help=$("kbdHelp");
   if(help){
-    poserHtml(help,DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>");
+    /* La meme liste que la fenetre « Raccourcis clavier », puis l'usage au
+       lecteur d'ecran (2026-11-21). */
+    poserHtml(help,(DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>")+
+      "<p>"+echapper(t("Away from the board, during a game or in review, the keys step through the moves:"))+"</p>"+clavierListeHtml()+
+      "<p>"+echapper(t("With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square."))+"</p>");
   }
 }
 if($("homeStartBtn"))$("homeStartBtn").onclick=()=>setMode("puzzles");

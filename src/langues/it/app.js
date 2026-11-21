@@ -1207,5 +1207,27 @@ module.exports = {
 "Back to the game":"Torna alla partita",
 "Game in progress":"Partita in corso",
 /* Reglages rapides (2026-11-21). */
-"Quick settings":"Impostazioni rapide"
+"Quick settings":"Impostazioni rapide",
+/* Historique unique des parties et clavier en partie (2026-11-21, branche historique-clavier). */
+"You are looking at an earlier move.":"Stai guardando una mossa precedente.",
+"Move {n}, {move}":"Mossa {n}, {move}",
+"All (games)":"Tutte",
+"Correspondence":"Corrispondenza",
+"A friend":"Un amico",
+"No game of this kind yet.":"Ancora nessuna partita di questo tipo.",
+"Keyboard shortcuts":"Scorciatoie da tastiera",
+"Previous move, next move":"Mossa precedente, mossa successiva",
+"Start of the game":"Inizio della partita",
+"Current position":"Posizione attuale",
+"Show this list":"Mostra questo elenco",
+"During a game and in review. The clock keeps running while you look at an earlier move.":"Durante una partita e quando ne rivedi una. L'orologio continua a correre mentre guardi una mossa precedente.",
+"When the cursor is on the board, the arrows move it from square to square.":"Quando il cursore è sulla scacchiera, le frecce lo spostano di casa in casa.",
+"Home (key)":"Home",
+"End (key)":"Fine",
+"Esc (key)":"Esc",
+"Away from the board, during a game or in review, the keys step through the moves:":"Fuori dalla scacchiera, durante una partita o quando ne rivedi una, i tasti scorrono le mosse:",
+"With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Con un lettore di schermo, attiva gli annunci qui sopra: ogni mossa che guardi viene letta ad alta voce, con il suo numero, il suo pezzo e la sua casa.",
+"Single-key shortcuts":"Scorciatoie a un solo tasto",
+"The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"I tasti ? e F. Disattivali se disturbano il tuo lettore di schermo o i comandi vocali.",
+"Live (games)":"In diretta"
 };

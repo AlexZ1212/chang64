@@ -53,6 +53,14 @@ const net = x => String(x).replace(/\s+/g, " ").trim();
   T("changer les couleurs de l'echiquier : c'est fait aussitot", w.eval("prefBoard") !== avantDamier && dans("boardThemes", "rrCorps"), w.eval("prefBoard"));
   T("les blocs restent dans la feuille apres un changement", BLOCS.every(id => dans(id, "rrCorps")));
 
+  /* Les raccourcis clavier de la partie ne passent pas sous la feuille. */
+  w.eval("gotoPly&&0");
+  const plyAvant = w.eval("reviewPly");
+  d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true }));
+  d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "?", bubbles: true, cancelable: true }));
+  await attendre(80);
+  T("fleches et « ? » n'agissent pas derriere la feuille", w.eval("reviewPly") === plyAvant && w.eval("fenetreOuverte()") === true && !feuille.hidden && $("duel").hidden === true);
+
   console.log("--- Fermeture ---");
   d.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }));
   await attendre(80);

@@ -30,7 +30,9 @@ function jouerPartieOrdi() {
     return !!(mainGame && mainStarted);
   } catch (e) { return false; }
 }
-function jouerPartieAmi() { return typeof directOccupe === "function" && directOccupe(); }
+/* Une partie par correspondance ouverte a l'ecran ne retient pas l'onglet :
+   elle attend sur le serveur, et « Jouer » ramene a la liste des parties. */
+function jouerPartieAmi() { return typeof directOccupe === "function" && directOccupe() && !(typeof directEstCorr === "function" && directEstCorr()); }
 
 function jouerRendre() {
   const p = $("pane-jouer"); if (!p) return;
@@ -38,7 +40,7 @@ function jouerRendre() {
      qu'il peut jouer tout de suite (2026-11-21, ouverture a tous). */
   const direct = typeof DIRECT_OUVERT !== "undefined" && DIRECT_OUVERT && typeof estMembre === "function" && estMembre();
   const d = $("jouerAmiTexte");
-  if (d) d.textContent = t(direct ? "A live game, on the clock, with another member. Invite them by username or send them a link."
+  if (d) d.textContent = t(direct ? "Live on the clock, or by correspondence over several days, with another member. Invite them by username or send them a link."
     : "Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.");
   for (const [id, nom] of [["jouerOrdiPicto", "ordinateur"], ["jouerAmiPicto", "ami"], ["jouerEnLignePicto", "enligne"]]) {
     const e = $(id); if (e && !e.firstChild) poserHtml(e, pictoHtml(nom, "grand"));

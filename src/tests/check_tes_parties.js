@@ -9,7 +9,7 @@
    - elle montre les trois sortes de parties (ordinateur, entre amis par
      lien, en direct), de la plus recente a la plus ancienne, avec les
      filtres Toutes, Ordinateur, Entre amis, Direct ; « Correspondance » est
-     prevue dans le code sans etre proposee ;
+     proposee depuis qu'elle existe (2026-11-21) ;
    - chaque ligne nomme l'adversaire et donne le resultat, la cadence et la
      date ; la sorte des parties gardees avant ce chantier est deduite ;
    - la limite reste : 5 parties sans compte puis l'invitation, 30 au plus ;
@@ -59,8 +59,8 @@ const propre = s => String(s).replace(/[\u00a0\u202f]/g, " ");
   T("le nombre de parties gardees est dit", /^5 partie/.test(propre($("historyNote").textContent)), $("historyNote").textContent);
 
   console.log("Les filtres");
-  T("Toutes, Ordinateur, Entre amis, Direct ; pas de Correspondance", filtres().map(b => propre(b.textContent)).join(" | ") === "Toutes | Ordinateur | Entre amis | Direct", filtres().map(b => b.textContent).join(" | "));
-  T("« Correspondance » est prevue dans le code, sans etre proposee", w.eval("PARTIES_SORTES.some(s=>s.k==='c'&&s.cache)") && w.eval("partieSorte({k:'c',m:'e2e4'},'jeu')") === "c");
+  T("Toutes, Ordinateur, Entre amis, Direct, Correspondance", filtres().map(b => propre(b.textContent)).join(" | ") === "Toutes | Ordinateur | Entre amis | Direct | Correspondance", filtres().map(b => b.textContent).join(" | "));
+  T("« Correspondance » est une sorte de partie proposee (2026-11-21)", w.eval("PARTIES_SORTES.some(s=>s.k==='c'&&!s.cache)") && w.eval("partieSorte({k:'c',m:'e2e4'},'jeu')") === "c");
   T("« Toutes » est choisi au depart", filtre("").getAttribute("aria-pressed") === "true" && filtres().filter(b => b.getAttribute("aria-pressed") === "true").length === 1);
   filtre("d").click();
   T("Direct : la partie contre Bob seule", lignes().length === 1 && noms() === "Bob" && filtre("d").getAttribute("aria-pressed") === "true" && filtre("").getAttribute("aria-pressed") === "false", noms());

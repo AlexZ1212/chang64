@@ -1124,7 +1124,7 @@ $("lichessIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefau
    (ordinateur et direct) et chang64:friendgames (entre amis par lien). La
    liste les reunit, de la plus recente a la plus ancienne, 30 au plus.
    Sorte d'une partie, champ k : "o" ordinateur, "l" entre amis par lien,
-   "d" en direct, "c" correspondance (prevue, pas encore proposee). Les
+   "d" en direct, "c" correspondance (2026-11-21). Les
    parties gardees avant ce champ sont reconnues a ce qu'elles portent :
    lvl pour l'ordinateur, adv pour le direct, le rangement pour le lien. */
 let history=[],gameSaved=false;
@@ -1134,7 +1134,7 @@ const PARTIES_SORTES=[
   /* Cle a part : « Live » seul est le choix « En direct » de l'ecran Contre un
      ami ; ici le mot designe une sorte de partie (« Direct » en francais). */
   {k:"d",nom:"Live (games)"},
-  {k:"c",nom:"Correspondence",cache:true}
+  {k:"c",nom:"Correspondence"}
 ];
 const PARTIES_MAX=30;
 let partiesFiltre="";   /* "" : toutes les sortes */
@@ -1335,7 +1335,8 @@ function directPartieGardee(){
   try{
     const e=directE; if(!e||e.phase!=="fin")return null;
     const m=e.coups.join(" ");
-    return history.find(g=>g&&g.m===m&&partieSorte(g,"jeu")==="d")||null;
+    /* Meme chemin pour une partie par correspondance (sorte "c"). */
+    return history.find(g=>g&&g.m===m&&(partieSorte(g,"jeu")==="d"||partieSorte(g,"jeu")==="c"))||null;
   }catch(x){return null;}
 }
 /* Une partie contre l'ordinateur attend-elle, en cours, pendant qu'on est sur

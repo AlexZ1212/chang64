@@ -21,10 +21,21 @@
  *       sur.erreur(e)   "coup" (refuse) ou "limite"
  *       fil.coup("e2e4"), fil.abandon(), fil.nulle(), fil.nulleNon(),
  *       fil.revanche(), fil.fermer(), fil.reste(e, "b"|"n") (millisecondes)
+ *
+ * Par correspondance (2026-11-21) : cadences 6, 7, 8 = 1, 3, 7 jours PAR COUP.
+ * Meme fil, memes messages ; le temps restant (fil.reste) est alors celui du
+ * coup en cours. En plus :
+ *   directNouvelles()   -> { liste, corr } : invitations du direct, et mes
+ *       parties par correspondance (voir corrListe cote serveur)
+ *   directAccepter(id)  -> { id } ou { erreur } ("plein" : deja 10 parties)
+ *   directRetirer(id)   retire mon invitation ou ma recherche
  */
 /* Meme liste, dans le meme ordre, que CADENCES du Worker : rapides, puis classiques. */
-const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0]];
+const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0], [86400, 0], [259200, 0], [604800, 0]];
 const DIRECT_RAPIDES = [0, 1, 2], DIRECT_CLASSIQUES = [3, 4, 5];
+/* Correspondance : un delai par coup, 1, 3 ou 7 jours. */
+const DIRECT_CORR = [6, 7, 8];
+function directCadCorr(i) { return i >= DIRECT_CORR[0]; }
 const DIRECT_ESSAIS = 5;          /* echecs de suite avant de renoncer, si la partie n'a jamais repondu */
 const DIRECT_ESSAIS_EN_JEU = 60;  /* partie deja vue : on insiste (telephone verrouille, tunnel), environ un quart d'heure */
 let directBase = "";              /* autre origine : essais hors navigateur */
@@ -69,14 +80,37 @@ function directChercherFin() {
     headers: Object.assign({ "Content-Type": "application/json" }, directEntetes || {}), body: "{}"
   }).catch(() => {});
 }
-/* Les invitations recues, les plus recentes d'abord : [{id, p, cad, cree}]. */
+/* Les invitations recues, les plus recentes d'abord : [{id, p, cad, cree}].
+   La meme reponse porte les parties par correspondance du membre : elles sont
+   retenues au passage (directCorrLues), pour ne pas doubler la requete. */
+let directCorrLues = null;        /* null : la derniere lecture n'en a pas rendu */
 async function directInvitations() {
+  directCorrLues = null;
   try {
     const r = await fetch(directAdresse("invitations"), { credentials: "same-origin", headers: directEntetes || {} });
     const d = r.ok ? await r.json().catch(() => null) : null;
+    if (d && Array.isArray(d.corr)) directCorrLues = d.corr;
     return d && Array.isArray(d.liste) ? d.liste : [];
   } catch (e) { return []; }
 }
+/* Invitations du direct ET parties par correspondance, en une seule requete. */
+async function directNouvelles() {
+  const liste = await directInvitations();
+  return { liste, corr: directCorrLues || [], ok: !!directCorrLues };
+}
+async function directPoster(route, corps) {
+  try {
+    const r = await fetch(directAdresse(route), {
+      method: "POST", credentials: "same-origin",
+      headers: Object.assign({ "Content-Type": "application/json" }, directEntetes || {}), body: JSON.stringify(corps)
+    });
+    const d = await r.json().catch(() => null);
+    if (r.ok && d) return d;
+    return { erreur: d && d.erreur || "reseau" };
+  } catch (e) { return { erreur: "reseau" }; }
+}
+function directAccepter(id) { return directPoster("accepter", { id }); }
+function directRetirer(id) { return directPoster("retirer", { id }); }
 function directRefuser(id) {
   return fetch(directAdresse("refuser"), {
     method: "POST", credentials: "same-origin",
@@ -147,12 +181,14 @@ function directOuvrir(id, sur) {
   fil.reste = (e, couleur) => {
     const t = couleur === "b" ? e.tb : e.tn;
     const trait = e.coups.length % 2 ? "n" : "b";
-    if (e.phase !== "jeu" || trait !== couleur) return t;
+    /* Par correspondance le delai court des le premier coup (pas de minute de grace). */
+    const court = e.phase === "jeu" || (e.phase === "debut" && e.cad[0] >= 86400);
+    if (!court || trait !== couleur) return t;
     return Math.max(0, t - (Date.now() - fil.decalage - e.maj));
   };
   brancher();
   return fil;
 }
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, DIRECT_CADENCES, DIRECT_RAPIDES, DIRECT_CLASSIQUES, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
+  module.exports = { directCreer, directOuvrir, directInvitations, directRefuser, directChercher, directNouvelles, directAccepter, directRetirer, DIRECT_CADENCES, DIRECT_RAPIDES, DIRECT_CLASSIQUES, DIRECT_CORR, directRegler(base, entetes, delai) { directBase = base; directEntetes = entetes; if (delai) directDelai = delai; } };
 }

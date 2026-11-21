@@ -46,7 +46,7 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   await attendre(300);
   const p = $("pane-friend");
   T("« Contre un ami » : un visiteur arrive sur Par lien", w.eval("mode") === "friend" && p.dataset.ami === "lien" && d.querySelector('#amiModes [data-v="lien"]').getAttribute("aria-pressed") === "true");
-  T("le choix en haut propose En direct et Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Par lien");
+  T("le choix en haut propose En direct, Correspondance et Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Correspondance|Par lien");
   d.querySelector('#amiModes [data-v="direct"]').click();
   await attendre(200);
   T("En direct, pour un visiteur : l'invitation a creer un compte, pas le bloc de lancement", p.dataset.ami === "direct" && !$("directInvite").classList.contains("hide") && !!$("directInvite").querySelector("[data-vue-compte]") && $("directNouveau").classList.contains("hide"));

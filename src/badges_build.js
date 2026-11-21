@@ -39,6 +39,8 @@ function code() {
        aux tests dans node, d'ou son export final, sans effet dans une page. */
     fs.readFileSync(path.join(__dirname, "direct.js"), "utf8") + "\n" +
     fs.readFileSync(path.join(__dirname, "direct_ecran.js"), "utf8") + "\n" +
+    /* Parties par correspondance (2026-11-21) : la liste et la pastille. */
+    fs.readFileSync(path.join(__dirname, "corr.js"), "utf8") + "\n" +
     /* Onglet Jouer et pictogrammes des cartes (2026-11-19). */
     require("./pictos_build.js").pictosSource() + "\n" +
     fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +

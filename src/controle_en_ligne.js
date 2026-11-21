@@ -102,8 +102,14 @@ const correspond = (motif, u) => new RegExp("^" + motif.split("*").map(s => s.re
     fichiers = fichiers.filter(r => !lourd(r)).concat(lourds.filter((_, i) => i % 20 === 0));
   }
   let octets = 0;
+  /* makruk.js (2026-11-21) : la page le charge a une adresse qui porte une
+     empreinte de son contenu (makruk.js?v=...), et le fichier a un cache d'un
+     an. L'adresse nue /makruk.js, que personne ne charge, gardait donc une
+     ancienne copie dans le cache de Cloudflare et le controle la signalait a
+     chaque publication. On controle l'adresse que les visiteurs chargent. */
+  const vMakruk = (/makruk\.js\?v=([a-z0-9]+)/.exec(fs.readFileSync(path.join(REF, "index.html"), "utf8")) || [])[1];
   await parLots(fichiers, async rel => {
-    const u = urlDe(rel);
+    const u = urlDe(rel) + (rel === "makruk.js" && vMakruk ? "?v=" + vMakruk : "");
     try {
       const r = await lire(BASE + u);
       if (r.status !== 200) { T(u, false, "statut " + r.status + (r.headers.get("location") ? " vers " + r.headers.get("location") : "")); return; }

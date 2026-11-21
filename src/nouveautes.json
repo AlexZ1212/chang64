@@ -2,6 +2,49 @@
  {
   "d": "2026-11-21",
   "en": [
+   "Moves prepared in advance, and arrows",
+   "While your opponent is thinking, you can already play your next moves: each one is made as soon as it is your turn, if it is still allowed. Tap anywhere else to cancel them. On a computer, a right-click draws arrows and circles on the board, for your eyes only."
+  ],
+  "fr": [
+   "Coups préparés à l'avance, et flèches",
+   "Pendant que ton adversaire réfléchit, tu peux déjà jouer tes prochains coups : chacun part dès que c'est ton tour, s'il est encore permis. Touche ailleurs pour les annuler. Sur ordinateur, le clic droit trace des flèches et des cercles sur l'échiquier, que toi seul vois."
+  ],
+  "es": [
+   "Jugadas preparadas de antemano, y flechas",
+   "Mientras tu rival piensa, ya puedes hacer tus próximas jugadas: cada una sale en cuanto te toca, si sigue siendo legal. Toca en otro sitio para cancelarlas. En el ordenador, el clic derecho dibuja flechas y círculos en el tablero, que solo ves tú."
+  ],
+  "pt": [
+   "Lances preparados com antecedência, e setas",
+   "Enquanto seu adversário pensa, você já pode fazer seus próximos lances: cada um sai assim que for a sua vez, se ainda for permitido. Toque em outro lugar para cancelar. No computador, o clique direito desenha setas e círculos no tabuleiro, que só você vê."
+  ],
+  "de": [
+   "Vorbereitete Züge und Pfeile",
+   "Während dein Gegner überlegt, kannst du deine nächsten Züge schon eingeben: Jeder wird gespielt, sobald du am Zug bist, wenn er dann noch erlaubt ist. Tippe woandershin, um sie zu verwerfen. Am Computer zeichnet ein Rechtsklick Pfeile und Kreise aufs Brett, die nur du siehst."
+  ],
+  "ru": [
+   "Подготовленные ходы и стрелки",
+   "Пока соперник думает, ты уже можешь сделать свои следующие ходы: каждый будет сыгран, как только наступит твоя очередь, если он ещё возможен. Нажми в другом месте, чтобы их отменить. На компьютере правой кнопкой мыши можно рисовать на доске стрелки и кружки, которые видишь только ты."
+  ],
+  "it": [
+   "Mosse preparate in anticipo, e frecce",
+   "Mentre l'avversario pensa, puoi già fare le tue prossime mosse: ognuna parte appena tocca a te, se è ancora permessa. Tocca altrove per annullarle. Al computer, il clic destro disegna frecce e cerchi sulla scacchiera, che vedi solo tu."
+  ],
+  "tr": [
+   "Önceden hazırlanan hamleler ve oklar",
+   "Rakibin düşünürken sonraki hamlelerini şimdiden yapabilirsin: sıra sana gelir gelmez, hâlâ kurala uygunsa her biri oynanır. İptal etmek için başka bir yere dokun. Bilgisayarda sağ tıklama, tahtaya yalnızca senin gördüğün oklar ve daireler çizer."
+  ],
+  "pl": [
+   "Ruchy przygotowane z wyprzedzeniem i strzałki",
+   "Gdy przeciwnik myśli, możesz już wykonać swoje kolejne ruchy: każdy zostanie zagrany, gdy tylko przyjdzie twoja kolej, jeśli nadal będzie dozwolony. Dotknij innego miejsca, żeby je anulować. Na komputerze prawy przycisk myszy rysuje na szachownicy strzałki i kółka, które widzisz tylko ty."
+  ],
+  "id": [
+   "Langkah yang disiapkan lebih dulu, dan panah",
+   "Saat lawan berpikir, kamu sudah bisa memainkan langkah-langkah berikutnya: tiap langkah dimainkan begitu giliranmu tiba, jika masih diperbolehkan. Ketuk tempat lain untuk membatalkannya. Di komputer, klik kanan menggambar panah dan lingkaran di papan, yang hanya terlihat olehmu."
+  ]
+ },
+ {
+  "d": "2026-11-21",
+  "en": [
    "Blitz 3+2 between members",
    "A faster live time control: 3 minutes each, plus 2 seconds added after every move. In Play, Against a friend or Against a player online, under Blitz."
   ],

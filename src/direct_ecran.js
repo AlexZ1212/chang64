@@ -258,7 +258,11 @@ function directMontrer() {
   game = directJeu;
   legalCache = e.phase === "debut" || e.phase === "jeu" ? game.moves() : [];
   lastMove = game.history.length ? game.history[game.history.length - 1].m : null;
-  selected = -1; marks = {};
+  /* Une de mes pieces prise en main pendant le tour adverse reste en main
+     quand son coup arrive (2026-11-21, premove.js) ; sinon rien n'est choisi. */
+  { const mienne = selected >= 0 ? game.board[selected] : 0;
+    if (!(mienne && pC(mienne) === (e.moi === "b" ? W : B) && (e.phase === "debut" || e.phase === "jeu"))) selected = -1; }
+  marks = {};
   /* Chaque etat recu refait la partie, donc un nouvel objet « dernier coup » :
      sans ceci, render() rejouait l'animation du meme coup a chaque message du
      serveur (confirmation de mon coup, nulle proposee, adversaire absent). */

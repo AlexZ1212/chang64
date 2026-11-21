@@ -1273,5 +1273,7 @@ module.exports = {
 "Game over: you lost.":"Partita finita: hai perso.",
 "Game over: a draw.":"Partita finita: patta.",
 "{n} game is waiting for you":"{n} partita ti aspetta",
-"{n} games are waiting for you":"{n} partite ti aspettano"
+"{n} games are waiting for you":"{n} partite ti aspettano",
+"Move prepared: {from} to {to}":"Mossa preparata: da {from} a {to}",
+"Prepared moves cancelled.":"Mosse preparate annullate."
 };

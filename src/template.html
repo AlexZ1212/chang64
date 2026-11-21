@@ -1016,6 +1016,17 @@ div.corr-item:hover{border-color:var(--rule)}
 .corr-boutons{display:flex;gap:6px;flex:none;margin-left:auto}
 .corr-boutons .btn{padding:8px 12px;min-height:44px;white-space:nowrap}
 .corr-fleche{color:var(--sage);flex:none}
+/* Coups prepares a l'avance et fleches (2026-11-21, premove.js). Les cases
+   d'un coup prepare sont teintees en bleu, pour ne se confondre ni avec le
+   dernier coup (cuivre) ni avec la piece choisie. Les fleches et cercles du
+   clic droit sont un calque vert au-dessus des cases, qui ne prend aucun clic. */
+.sq.pre:not(.sel)::before{content:"";position:absolute;inset:0;background:rgba(110,150,200,.55);pointer-events:none}
+/* Au-dessus des pieces (z-index 5) et des reperes de cases (7), avec assez
+   de transparence pour que la piece se lise dessous (demande d’Alexandre). */
+.fleches{position:absolute;pointer-events:none;opacity:.7;z-index:8}
+.fleches line{stroke:#2E8B3D;stroke-width:.16;stroke-linecap:round}
+.fleches polygon{fill:#2E8B3D}
+.fleches circle{fill:none;stroke:#2E8B3D;stroke-width:.07}
 /* Sous une partie par correspondance, « Retour a mes parties » et « Annuler
    l'invitation » prennent chacun leur rangee : trois boutons cote a cote
    passaient sur deux lignes a 360 px. */

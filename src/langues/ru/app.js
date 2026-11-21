@@ -1275,5 +1275,7 @@ module.exports = {
 "Game over: you lost.":"Партия окончена: поражение.",
 "Game over: a draw.":"Партия окончена: ничья.",
 "{n} game is waiting for you":"{n} партия ждёт тебя",
-"{n} games are waiting for you":{"one":"{n} партия ждёт тебя","few":"{n} партии ждут тебя","many":"{n} партий ждут тебя","other":"{n} партии ждут тебя"}
+"{n} games are waiting for you":{"one":"{n} партия ждёт тебя","few":"{n} партии ждут тебя","many":"{n} партий ждут тебя","other":"{n} партии ждут тебя"},
+"Move prepared: {from} to {to}":"Ход подготовлен: {from} на {to}",
+"Prepared moves cancelled.":"Подготовленные ходы отменены."
 };

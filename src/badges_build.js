@@ -41,6 +41,8 @@ function code() {
     fs.readFileSync(path.join(__dirname, "direct_ecran.js"), "utf8") + "\n" +
     /* Parties par correspondance (2026-11-21) : la liste et la pastille. */
     fs.readFileSync(path.join(__dirname, "corr.js"), "utf8") + "\n" +
+    /* Coups prepares a l'avance et fleches au clic droit (2026-11-21). */
+    fs.readFileSync(path.join(__dirname, "premove.js"), "utf8") + "\n" +
     /* Onglet Jouer et pictogrammes des cartes (2026-11-19). */
     require("./pictos_build.js").pictosSource() + "\n" +
     fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +

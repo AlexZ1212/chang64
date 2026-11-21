@@ -42,8 +42,28 @@ CREATE TABLE IF NOT EXISTS comptes (
   -- de chaque partie en direct, jamais par le navigateur. elo = 0 tant qu'aucune
   -- partie n'a compte ; elo_n = nombre de parties comptees.
   elo INTEGER NOT NULL DEFAULT 0,
-  elo_n INTEGER NOT NULL DEFAULT 0
+  elo_n INTEGER NOT NULL DEFAULT 0,
+  -- Un Elo par famille de cadences (decision d'Alexandre du 2026-11-21 au
+  -- soir) : elo et elo_n ci-dessus sont desormais l'Elo RAPIDE (10 min, 5+3,
+  -- 15+10) ; s'y ajoutent le Blitz (3+2), le Classique (30 min, 30+20, 60 min)
+  -- et la Correspondance (1, 3, 7 jours par coup). Meme regle : 0 tant
+  -- qu'aucune partie de la famille n'a compte, _n = nombre de parties comptees.
+  -- Un nouvel Elo part de l'Elo Rapide du joueur quand il en a un.
+  elo_blitz INTEGER NOT NULL DEFAULT 0,
+  elo_blitz_n INTEGER NOT NULL DEFAULT 0,
+  elo_classique INTEGER NOT NULL DEFAULT 0,
+  elo_classique_n INTEGER NOT NULL DEFAULT 0,
+  elo_corr INTEGER NOT NULL DEFAULT 0,
+  elo_corr_n INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant l'Elo par famille (2026-11-21 au soir, SQL accepte par
+-- Alexandre) : les colonnes s'ajoutent par
+--   ALTER TABLE comptes ADD COLUMN elo_blitz INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN elo_blitz_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN elo_classique INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN elo_classique_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN elo_corr INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN elo_corr_n INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant le 2026-11-21 : les colonnes s'ajoutent par
 --   ALTER TABLE comptes ADD COLUMN elo INTEGER NOT NULL DEFAULT 0;
 --   ALTER TABLE comptes ADD COLUMN elo_n INTEGER NOT NULL DEFAULT 0;

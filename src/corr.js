@@ -23,12 +23,13 @@ let corrRecuA = 0;           /* quand (horloge d'ici), pour le temps restant */
 let corrMessage = "";
 let corrMinuteur = 0;
 
-/* Une duree en jours et heures, heures et minutes, ou minutes. */
+/* Une duree en jours et heures, heures et minutes, ou minutes. Le chiffre
+   et son unite sont colles : « 2j 4h », « 5h 12min » (demande d'Alexandre). */
 function corrDuree(ms) {
   const J = 86400000, H = 3600000, M = 60000;
-  if (ms >= J) { const d = Math.floor(ms / J), h = Math.floor((ms % J) / H); return h ? t("{d} d {h} h", { d, h }) : t("{d} d", { d }); }
-  if (ms >= H) { const h = Math.floor(ms / H), m = Math.floor((ms % H) / M); return m ? t("{h} h {m} min", { h, m }) : t("{h} h", { h }); }
-  return t("{m} min", { m: ms <= 0 ? 0 : Math.max(1, Math.ceil(ms / M)) });
+  if (ms >= J) { const d = Math.floor(ms / J), h = Math.floor((ms % J) / H); return h ? t("{d}d {h}h", { d, h }) : t("{d}d", { d }); }
+  if (ms >= H) { const h = Math.floor(ms / H), m = Math.floor((ms % H) / M); return m ? t("{h}h {m}min", { h, m }) : t("{h}h", { h }); }
+  return t("{m}min", { m: ms <= 0 ? 0 : Math.max(1, Math.ceil(ms / M)) });
 }
 /* Temps restant d'une ligne, d'apres l'heure du serveur recue avec elle. */
 function corrReste(x) { return x.ech - (x.h + (Date.now() - corrRecuA)); }

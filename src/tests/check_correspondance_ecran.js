@@ -129,17 +129,17 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("elle est en haut de l'onglet Jouer, avant les trois cartes", !cache("corrPanel") && $("corrPanel").parentNode === $("pane-jouer") && $("pane-jouer").firstElementChild === $("corrPanel") && net($("corrPanel").querySelector(".eyebrow").textContent) === "Tes parties en cours");
   T("une ligne par partie ; un identifiant douteux est ecarte", lignes().length === 7, lignes().length);
   T("a moi de jouer d'abord, la plus pressee en tete", lignes().slice(0, 2).map(l => l.dataset.id).join() === "eeeeeeeeeeee,dddddddddddd" && lignes()[2].dataset.s === "invite" && lignes()[3].dataset.s === "fin");
-  T("« À toi », l'adversaire, le temps restant et le delai", texte(lignes()[1]) === "À toiContre LéaIl te reste 2 j 4 h | 3 jours/coup›", texte(lignes()[1]));
-  T("moins d'un jour : le temps est en rouge", !!lignes()[0].querySelector(".corr-urgent") && /Il te reste 5 h/.test(texte(lignes()[0])) && !lignes()[1].querySelector(".corr-urgent"), texte(lignes()[0]));
-  T("au tour de l'autre : dit sans « À toi »", texte(d.querySelector('[data-id="aaaaaaaaaaaa"]')) === "Contre TomAu tour de Tom | encore 6 j 1 h›" || texte(d.querySelector('[data-id="aaaaaaaaaaaa"]')) === "Contre TomAu tour de Tom | encore 6 j 2 h›", texte(d.querySelector('[data-id="aaaaaaaaaaaa"]')));
+  T("« À toi », l'adversaire, le temps restant et le delai", texte(lignes()[1]) === "À toiContre LéaIl te reste 2j 4h | 3 jours/coup›", texte(lignes()[1]));
+  T("moins d'un jour : le temps est en rouge", !!lignes()[0].querySelector(".corr-urgent") && /Il te reste 5h/.test(texte(lignes()[0])) && !lignes()[1].querySelector(".corr-urgent"), texte(lignes()[0]));
+  T("au tour de l'autre : dit sans « À toi »", texte(d.querySelector('[data-id="aaaaaaaaaaaa"]')) === "Contre TomAu tour de Tom | encore 6j 1h›" || texte(d.querySelector('[data-id="aaaaaaaaaaaa"]')) === "Contre TomAu tour de Tom | encore 6j 2h›", texte(d.querySelector('[data-id="aaaaaaaaaaaa"]')));
   T("invitation recue : delai, ma couleur, Accepter et Refuser", /^Nadia t'invite7 jours\/coup \| Tu joues les Noirs\.AccepterRefuser$/.test(texte(d.querySelector('[data-id="cccccccccccc"]'))), texte(d.querySelector('[data-id="cccccccccccc"]')));
   T("invitation envoyee : en attente, Annuler", texte(d.querySelector('[data-id="bbbbbbbbbbbb"]')) === "En attente de BobInvitation envoyée | 7 jours/coupAnnuler", texte(d.querySelector('[data-id="bbbbbbbbbbbb"]')));
-  T("recherche d'adversaire : dite, Annuler", /^Recherche d'un adversaire1 jour\/coup \| encore 3 j( 1 h)?Annuler$/.test(texte(d.querySelector('[data-id="gggggggggggg"]'))), texte(d.querySelector('[data-id="gggggggggggg"]')));
+  T("recherche d'adversaire : dite, Annuler", /^Recherche d'un adversaire1 jour\/coup \| encore 3j( 1h)?Annuler$/.test(texte(d.querySelector('[data-id="gggggggggggg"]'))), texte(d.querySelector('[data-id="gggggggggggg"]')));
   T("partie finie pas encore vue : resultat annonce", texte(d.querySelector('[data-id="ffffffffffff"]')) === "GContre ZoéPartie terminée : tu as gagné.›", texte(d.querySelector('[data-id="ffffffffffff"]')));
   T("le nombre « a toi » sur l'onglet Jouer : 2 tours + 1 invitation + 1 fin", !$("corrPastille").hidden && $("corrPastille").parentNode === $("tab-jouer") && $("corrPastille").firstChild.textContent === "4" && /4 parties t'attendent/.test(net($("corrPastille").textContent)), $("corrPastille").textContent);
   T("le meme nombre dans le menu, ligne « Parties en cours »", !$("menuCorrLigne").hidden && $("menuCorrDetail").textContent === "4" && /Parties en cours/.test(net($("menuCorrLigne").textContent)));
   T("les lignes sont des boutons, les actions aussi (clavier)", lignes()[0].tagName === "BUTTON" && d.querySelector('[data-id="cccccccccccc"]').tagName === "DIV" && d.querySelectorAll('[data-id="cccccccccccc"] button').length === 2);
-  T("durees : jours et heures, heures et minutes, minutes", w.eval("[corrDuree(3*86400000),corrDuree(86400000+3*3600000+5),corrDuree(5*3600000+12*60000),corrDuree(2*3600000),corrDuree(90000),corrDuree(20000),corrDuree(-5)].join('|')").replace(/[  ]/g, " ") === "3 j|1 j 3 h|5 h 12 min|2 h|2 min|1 min|0 min", w.eval("[corrDuree(3*86400000),corrDuree(86400000+3*3600000+5),corrDuree(5*3600000+12*60000),corrDuree(2*3600000),corrDuree(90000),corrDuree(20000),corrDuree(-5)].join('|')"));
+  T("durees : jours et heures, heures et minutes, minutes", w.eval("[corrDuree(3*86400000),corrDuree(86400000+3*3600000+5),corrDuree(5*3600000+12*60000),corrDuree(2*3600000),corrDuree(90000),corrDuree(20000),corrDuree(-5)].join('|')").replace(/[  ]/g, " ") === "3j|1j 3h|5h 12min|2h|2min|1min|0min", w.eval("[corrDuree(3*86400000),corrDuree(86400000+3*3600000+5),corrDuree(5*3600000+12*60000),corrDuree(2*3600000),corrDuree(90000),corrDuree(20000),corrDuree(-5)].join('|')"));
 
   console.log("Refuser, annuler, accepter");
   d.querySelector('[data-id="cccccccccccc"] [data-corr="refuser"]').click();
@@ -167,7 +167,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   fil.onopen();
   recevoir(etat({ id: "dddddddddddd", phase: "jeu", coups: ["e2e4", "e7e5"], maj: Date.now() - (19 * HEURE + 30 * 60e3), h: Date.now() }));
   T("echiquier, feuille de partie, pseudo de l'adversaire", !d.querySelector(".board-wrap").classList.contains("hide") && net($("clockTopName").textContent) === "Bob" && /e4/.test(net($("amiSheet").textContent)));
-  T("le temps du coup en cours, en jours et en heures", net($("clockBottomTime").textContent) === "2 j 4 h" && net($("clockTopTime").textContent) === "3 j" && $("clockBottom").classList.contains("active") && $("clockBottom").classList.contains("corr"), $("clockBottomTime").textContent + " / " + $("clockTopTime").textContent);
+  T("le temps du coup en cours, en jours et en heures", net($("clockBottomTime").textContent) === "2j 4h" && net($("clockTopTime").textContent) === "3j" && $("clockBottom").classList.contains("active") && $("clockBottom").classList.contains("corr"), $("clockBottomTime").textContent + " / " + $("clockTopTime").textContent);
   T("a moi de jouer, sans phrase sur l'absence de l'adversaire", net($("directStatus").textContent) === "À toi de jouer.", $("directStatus").textContent);
   T("Abandonner, Proposer la nulle, et Retour a mes parties", !cache("btnDirectAbandon") && !cache("btnDirectNulle") && !cache("btnDirectQuitter") && net($("btnDirectQuitter").textContent) === "Retour à mes parties" && cache("btnDirectAnnuler") && cache("directLienBloc"));
   T("aucune fenetre pendant qu'on joue", w.eval("bravoOccupe()") === true);
@@ -176,11 +176,11 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("mon coup part au serveur", fil.envois.includes('{"t":"coup","c":"g1f3"}'));
   recevoir(etat({ id: "dddddddddddd", phase: "jeu", coups: ["e2e4", "e7e5", "g1f3"], maj: Date.now(), h: Date.now() }));
   T("apres mon coup : au tour de l'autre, je peux fermer le site", net($("directStatus").textContent) === "Au tour de Bob. Tu peux fermer le site : la partie t'attend.", $("directStatus").textContent);
-  T("son delai repart entier", net($("clockTopTime").textContent) === "3 j" || net($("clockTopTime").textContent) === "2 j 23 h", $("clockTopTime").textContent);
+  T("son delai repart entier", net($("clockTopTime").textContent) === "3j" || net($("clockTopTime").textContent) === "2j 23h", $("clockTopTime").textContent);
   recevoir(etat({ id: "dddddddddddd", phase: "jeu", coups: ["e2e4", "e7e5", "g1f3", "b8c6"], maj: Date.now() - (2 * JOUR + 5 * HEURE - 30e3), h: Date.now() }));
-  T("le dernier jour : pendule en alerte, sans son de compte a rebours", net($("clockBottomTime").textContent) === "19 h" && $("clockBottom").classList.contains("low") && !$("clockBottom").classList.contains("tres-bas"), $("clockBottomTime").textContent);
+  T("le dernier jour : pendule en alerte, sans son de compte a rebours", net($("clockBottomTime").textContent) === "19h" && $("clockBottom").classList.contains("low") && !$("clockBottom").classList.contains("tres-bas"), $("clockBottomTime").textContent);
   recevoir(etat({ id: "dddddddddddd", phase: "debut", coups: [], maj: Date.now() - (5 * HEURE - 30e3), h: Date.now() }));
-  T("des le premier coup le delai court (pas de minute de grace)", net($("clockBottomTime").textContent) === "2 j 19 h" && $("clockBottom").classList.contains("active") && net($("directStatus").textContent) === "À toi de jouer.", $("clockBottomTime").textContent + " / " + $("directStatus").textContent);
+  T("des le premier coup le delai court (pas de minute de grace)", net($("clockBottomTime").textContent) === "2j 19h" && $("clockBottom").classList.contains("active") && net($("directStatus").textContent) === "À toi de jouer.", $("clockBottomTime").textContent + " / " + $("directStatus").textContent);
 
   console.log("Quitter l'ecran");
   recevoir(etat({ id: "dddddddddddd", phase: "jeu", coups: ["e2e4", "e7e5", "g1f3", "b8c6"], maj: Date.now(), h: Date.now() }));

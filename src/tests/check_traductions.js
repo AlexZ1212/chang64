@@ -138,9 +138,13 @@ async function parcourir(w) {
     /* Un texte visible qui est encore une phrase anglaise du dictionnaire
        (traduite autrement) n'a pas ete traduit. Les gabarits ({n}
        exercices) sont compares par motif, pour attraper aussi les
-       decomptes. Les cles de moins de 4 lettres sont ecartees (W/L/D). */
+       decomptes. Les cles de moins de 4 lettres sont ecartees (W/L/D), de
+       meme que les gabarits qui n'ont presque que des variables, comme les
+       durees « {d}d {h}h » (2026-11-21) : leur motif attraperait n'importe
+       quel mot finissant par la bonne lettre (« hasard », « Stockfish »). */
     const ech = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const motifs = Object.entries(D).filter(([k, v]) => typeof v === "string" && k !== v && k.length > 3 && !k.startsWith("@"))
+    const lettres = k => k.replace(/\{[a-z]+\}/gi, "").replace(/\s/g, "").length;
+    const motifs = Object.entries(D).filter(([k, v]) => typeof v === "string" && k !== v && k.length > 3 && lettres(k) > 4 && !k.startsWith("@"))
       .map(([k]) => k.includes("{") ? new RegExp("^" + ech(k).replace(/\\\{[a-z]+\\\}/gi, "[^ ]{1,20}") + "$") : k);
     /* Un texte qui est aussi une traduction de cette langue n'est pas un
        reste ("Start" est l'allemand de "Home"). L'aide du clavier, ecartee

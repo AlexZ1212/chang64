@@ -67,8 +67,9 @@ setTimeout(async()=>{
   T("la modale est marquee ouverte",mod.classList.contains("on"));
   T("aucun ancetre ne la masque",!cacheur(mod),cacheur(mod));
   T("le plateau est devoile derriere elle",!cacheur(d.querySelector(".board-wrap")));
-  T("les deux couleurs sont proposees",
-    $("amiColorBtns").querySelectorAll("button[data-v]").length===2);
+  /* Depuis le 2026-11-21, « Au hasard » s'ajoute aux deux couleurs. */
+  T("Blancs, Noirs et Au hasard sont proposes",
+    [...$("amiColorBtns").querySelectorAll("button[data-v]")].map(b=>b.dataset.v).join()==="w,b,r");
 
   console.log("\n--- Fermeture sans choisir : on remet tout comme avant ---");
   mod.dispatchEvent(new w.MouseEvent("click",{bubbles:true}));

@@ -31,8 +31,9 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
   T("Jouer ouvre le choix, sans echiquier", w.eval("mode") === "jouer" && !cache("pane-jouer") && cache("appLayout"));
   T("l'onglet Jouer est allume, Explorer ne l'est pas", allume("tab-jouer") && !allume("tab-explore") && cache("pane-explore"));
   const titres = [...w.document.querySelectorAll("#pane-jouer .jouer-carte b")].map(b => b.textContent.replace(/[  ]/g, " "));
-  T("deux cartes : contre l'ordinateur, contre un ami", titres.join("|") === "Contre l'ordinateur|Contre un ami", titres.join("|"));
-  T("chaque carte porte son grand picto", w.document.querySelectorAll("#pane-jouer .picto.grand svg").length === 2 && $("jouerOrdiPicto").innerHTML.length > 200);
+  /* Depuis le 2026-11-21, une troisieme carte : contre un joueur en ligne. */
+  T("trois cartes : ordinateur, ami, joueur en ligne", titres.join("|") === "Contre l'ordinateur|Contre un ami|Contre un joueur en ligne", titres.join("|"));
+  T("chaque carte porte son grand picto", w.document.querySelectorAll("#pane-jouer .picto.grand svg").length === 3 && $("jouerOrdiPicto").innerHTML.length > 200);
   T("le texte de la carte « ami » decrit ce qui est ouvert au public", /lien/.test($("jouerAmiTexte").textContent) && !/pendule/.test($("jouerAmiTexte").textContent));
 
   console.log("Les deux ecrans");

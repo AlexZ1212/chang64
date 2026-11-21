@@ -64,7 +64,7 @@ function ouvrir(rep){
      bandeau #status) : la ligne suivante couvre deja la traduction
      dynamique d'un message d'etat en francais. */
   T("new game status", /Nouvelle partie/.test($("status").textContent), $("status").textContent);
-  T("settings translated", nb($("segColor").children[0].textContent)==="Jouer les Blancs", $("segColor").children[0].textContent);
+  T("settings translated", nb($("segColor").children[0].textContent)==="Blancs", $("segColor").children[0].textContent);
   /* Vocabulaire consacre en francais : Classique et non "Longue",
      Correspondance et non "Par jour", pour rester coherent avec le texte
      d'accueil qui parle de jeu par correspondance. */

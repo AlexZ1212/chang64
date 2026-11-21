@@ -1197,5 +1197,10 @@ module.exports = {
 "Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Bir arkadaşınla gerçek zamanlı, saatli oyna. Onu kullanıcı adıyla davet et ya da ona bir bağlantı gönder.",
 "Game by link":"Bağlantıyla oyun",
 /* Sons de la partie en direct (2026-11-21). */
-"Your opponent declined the draw.":"Rakibin beraberliği reddetti."
+"Your opponent declined the draw.":"Rakibin beraberliği reddetti.",
+/* Parties en direct : trois cases chiffrees (2026-11-21). */
+"Live games":"Canlı oyunlar",
+"Won":"Galibiyet",
+"Drawn":"Beraberlik",
+"Lost":"Mağlubiyet"
 };

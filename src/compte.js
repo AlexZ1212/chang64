@@ -1260,6 +1260,17 @@ function cppFermer(){
   f.hidden=true;
   if(cppAvant&&cppAvant.focus&&document.contains(cppAvant))cppAvant.focus();
 }
+/* Parties en direct : trois cases, sous leur titre (2026-11-21, remarque
+   d'Alexandre : la phrase donnait « 1 perdues »). Chaque libelle porte ses
+   formes plurielles dans le dictionnaire, choisies sur le nombre de la case.
+   Sert a la fiche d'un joueur et aux Statistiques du menu. Vide tant qu'aucune
+   partie n'a compte. */
+function cppDirect(dir){
+  const d=cpObjet(dir),cases=[["Won",cpNombre(d.v)],["Drawn",cpNombre(d.n)],["Lost",cpNombre(d.d)]];
+  if(cases.reduce((s,x)=>s+x[1],0)<=0)return "";
+  return '<p class="tiroir-section cpp-direct-titre">'+echapper(t("Live games"))+'</p><div class="menu-tuiles trois cpp-direct">'+
+    cases.map(([k,n])=>'<div class="menu-tuile"><b>'+n+"</b><span>"+echapper(t(k,{n:n}))+"</span></div>").join("")+"</div>";
+}
 async function cppOuvrir(pseudo){
   const f=$("cpProfil"),c=$("cpProfilContenu");if(!f||!c)return;
   if(f.hidden)cppAvant=document.activeElement;
@@ -1305,7 +1316,7 @@ async function cppOuvrir(pseudo){
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";
     }).join("")+"</ul>"+
     /* Parties en direct : le detail, des qu'une partie a compte. */
-    (cpNombre(cpObjet(j.dir).v)+cpNombre(cpObjet(j.dir).n)+cpNombre(cpObjet(j.dir).d)>0?'<p class="cp-note cpp-direct">'+echapper(t("Live games: {v} won, {n} drawn, {d} lost",{v:cpNombre(j.dir.v),n:cpNombre(j.dir.n),d:cpNombre(j.dir.d)}))+"</p>":"")+
+    cppDirect(j.dir)+
     /* Elo contre l'ordinateur : calcule dans le navigateur du joueur, donc
        montre avec son signe "environ" et hors des tableaux. */
     (cpNombre(cpObjet(j.em).n)>0?'<p class="cp-note cpp-elo cpp-elo-membres">'+echapper(t("{r} between members",{r:cpNombre(j.em.r)}))+"</p>":"")+

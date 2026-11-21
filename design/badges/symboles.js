@@ -67,11 +67,10 @@ const evide = "fill:none;stroke:var(--oeil);stroke-linecap:round;stroke-linejoin
 
 const PERSO = {
   hibou: `<path fill="currentColor" d="M-15 -19c3 3 5 5 7 6 5-2 11-2 16 0 2-1 4-3 7-6 2 7 3 13 3 20 0 12-7 21-18 22-11-1-18-10-18-22 0-7 1-13 3-20z"/>
-    <path style="fill:var(--oeil)" opacity=".35" d="M0 -5c-3-3-8-5-14-4 1 5 4 9 8 10 3 1 5-2 6-6zM0 -5c3-3 8-5 14-4-1 5-4 9-8 10-3 1-5-2-6-6z"/>
     <circle cx="-7" cy="-2" r="5.6" style="fill:var(--oeil)"/><circle cx="7" cy="-2" r="5.6" style="fill:var(--oeil)"/>
     <circle cx="-6.2" cy="-1.4" r="2.7" fill="currentColor"/><circle cx="7.8" cy="-1.4" r="2.7" fill="currentColor"/>
     <path style="fill:var(--oeil)" d="M-2.4 4h4.8L0 8.6z"/>
-    <path style="${evide};stroke-width:1.6" opacity=".55" d="M-6 12l2 1.6 2-1.6M2 12l2 1.6 2-1.6M-2 16.5l2 1.6 2-1.6"/>`,
+    <path style="${evide};stroke-width:1.3" d="M-6 12l2 1.6 2-1.6M2 12l2 1.6 2-1.6M-2 16.5l2 1.6 2-1.6"/>`,
   fourchette: `<g transform="rotate(38)" fill="currentColor">
     <rect x="-8" y="-24" width="3.6" height="12" rx="1.8"/><rect x="-1.8" y="-24" width="3.6" height="12" rx="1.8"/><rect x="4.4" y="-24" width="3.6" height="12" rx="1.8"/>
     <path d="M-8 -14h16v1c0 5-3 8-5.5 9v24a2.5 2.5 0 0 1-5 0v-24c-2.5-1-5.5-4-5.5-9z"/></g>`,
@@ -106,7 +105,7 @@ const PERSO = {
       ? '<ellipse cx="2" cy="-1" rx="15" ry="10"/>'
       : '<circle cx="-8" cy="-3" r="7.5"/><circle cx="-1" cy="-8" r="7.5"/><circle cx="7" cy="-7" r="7.5"/><circle cx="12" cy="0" r="7"/><circle cx="5" cy="4" r="7.5"/><circle cx="-4" cy="4" r="7.5"/><circle cx="16" cy="-6" r="3.2"/>'}
     <rect x="-9" y="6" width="3.8" height="11" rx="1.9"/><rect x="-3.6" y="6" width="3.8" height="11" rx="1.9"/><rect x="5.6" y="6" width="3.8" height="11" rx="1.9"/><rect x="11" y="6" width="3.8" height="11" rx="1.9"/>
-    ${tondu ? "" : '<path style="fill:none;stroke:var(--oeil);stroke-width:1.3;stroke-linecap:round" opacity=".7" d="M-6 -4a2.4 2.4 0 1 1 3 2.6M3 -9a2.4 2.4 0 1 1 3 2.6M8 0a2.4 2.4 0 1 1 3 2.6M-1 3a2.4 2.4 0 1 1 3 2.6"/>'}
+    ${tondu ? "" : '<path style="fill:none;stroke:var(--oeil);stroke-width:1.1;stroke-linecap:round" d="M-6 -4a2.4 2.4 0 1 1 3 2.6M3 -9a2.4 2.4 0 1 1 3 2.6M8 0a2.4 2.4 0 1 1 3 2.6M-1 3a2.4 2.4 0 1 1 3 2.6"/>'}
     <ellipse cx="-17" cy="0" rx="7.2" ry="8.6" transform="rotate(-18 -17 0)" style="fill:var(--oeil)"/>
     <ellipse cx="-18" cy="1" rx="5.4" ry="7" transform="rotate(-18 -18 1)"/>
     <ellipse cx="-21.5" cy="-6" rx="3.6" ry="1.8" transform="rotate(-35 -21.5 -6)"/>
@@ -120,7 +119,7 @@ const PERSO = {
     <rect x="8.4" y="-18" width="4.4" height="19" rx="1.4" transform="rotate(17 10.6 -1)"/>
     <path d="M-17 -4h34l-2 1.5h-30z" style="fill:var(--oeil)"/>
     <path d="M-15.5 -3h31l-9.5 26h-12z"/>
-    <path style="fill:none;stroke:var(--oeil);stroke-width:1.4;stroke-linecap:round" opacity=".55" d="M-9 2l4.5 17M9 2l-4.5 17"/></g>`,
+    <path style="fill:none;stroke:var(--oeil);stroke-width:1.2;stroke-linecap:round" d="M-9 2l4.5 17M9 2l-4.5 17"/></g>`,
   /* Brochette : une pique en biais, des pions enfiles. */
   pique: n => `<g transform="rotate(-35)"><rect x="-24" y="-1.6" width="48" height="3.2" rx="1.6" fill="currentColor"/>${
     [0, 1, 2].slice(0, n).map(i => P("p", `translate(${(i - (n - 1) / 2) * (n === 3 ? 14 : 17)} 0) rotate(35) scale(${n === 3 ? .62 : .74}) translate(0 -4)`)).join("")}</g>`,

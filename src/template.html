@@ -2511,6 +2511,13 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .membre-invite{margin:10px 0 14px;padding:14px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule);text-align:center;grid-column:1/-1;flex-basis:100%}
 .membre-large{grid-column:1/-1;flex-basis:100%;width:100%;margin-left:0;margin-right:0}
 .membre-large .menu-tuile{grid-column:1/-1;text-align:center}
+/* Trois cases sur une rangee (parties en direct) : un peu plus serrees, pour
+   que le libelle le plus long tienne sur un telephone de 360 px. */
+.menu-tuiles.trois{grid-template-columns:repeat(3,1fr)}
+.menu-tuiles.trois .menu-tuile{padding:12px 8px;min-width:0}
+.menu-tuiles.trois .menu-tuile span{font-size:12px}
+#cpProfilContenu .cpp-direct-titre{margin:14px 0 6px}
+#cpProfilContenu .cpp-direct{padding-top:0;margin-bottom:10px}
 .membre-invite p{margin:0 0 10px;font-size:13.5px;line-height:1.5;color:var(--sage)}
 .graph.graph-invite{background:none;border:0;padding:0}
 .graph.graph-invite .membre-invite{margin:0}
@@ -3051,6 +3058,12 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <p class="note" id="analysisNote"></p>
           </div>
           <div class="progressbar hide" id="anaProgress"><i></i></div>
+          <!-- La suite, une fois la partie revue (2026-11-21) : les reglages
+               sont masques pendant la revue, ces deux boutons en tiennent lieu. -->
+          <div class="btnrow" id="revueSuite" style="margin-top:12px">
+            <button class="btn" id="btnRevueNouvelle">New game</button>
+            <button class="btn" id="btnRevanche">Rematch</button>
+          </div>
         </div>
 
         <div class="panel" id="historyPanel">

@@ -1406,7 +1406,13 @@ function refreshGame(){
        la partie ne commence, ou une fois qu'elle est terminee (choisir la
        suivante, exporter celle qui vient de se jouer). */
     const midGame=gameStarted&&!finished;
-    const gp=$("settingsPanel"); if(gp)gp.classList.toggle("hide",midGame);
+    /* 2026-11-21 (remarque d'Alexandre) : en revue aussi, les reglages
+       s'effacent. Ils restaient affiches sous la feuille de partie, sans
+       servir, et allongeaient l'ecran. « Nouvelle partie », dans le bloc de la
+       revue, les ramene ; « Revanche » relance avec les memes, mais seulement
+       pour la partie qu'on vient de finir (pas pour une partie rouverte). */
+    const gp=$("settingsPanel"); if(gp)gp.classList.toggle("hide",midGame||finished);
+    { const rv=$("btnRevanche"); if(rv)rv.classList.toggle("hide",!!(typeof isReviewGame!=="undefined"&&isReviewGame)); }
     const pp=$("pgnPanel"); if(pp)pp.classList.toggle("hide",midGame);
     /* Pertinence des blocs (2026-11-18, demande d'Alexandre) : la liste des
        anciennes parties n'a pas sa place sous une partie qui se joue, et
@@ -3567,6 +3573,12 @@ if($("adapteNiveau"))$("adapteNiveau").addEventListener("click",()=>{
 });
 syncForce();
 $("btnNew").onclick=()=>{if(gameStarted)setupGame();else newGame();};
+/* Depuis la revue : revenir aux reglages, ou rejouer tout de suite avec les memes. */
+if($("btnRevueNouvelle"))$("btnRevueNouvelle").onclick=()=>{
+  setupGame();
+  const p=$("settingsPanel"); if(p){try{p.scrollIntoView({behavior:"smooth",block:"center"});}catch(e){p.scrollIntoView();}}
+};
+if($("btnRevanche"))$("btnRevanche").onclick=()=>{newGame();if(typeof goTop==="function")goTop();};
 /* plus de bouton Reprendre : la fonction reste pour l'historique du code */
 $("btnHint").onclick=hintGame;
 $("btnNext").onclick=nextPuzzle;

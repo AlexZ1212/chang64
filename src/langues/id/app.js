@@ -1197,5 +1197,10 @@ module.exports = {
 "Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Main melawan teman secara langsung, dengan jam. Undang dia lewat nama pengguna, atau kirimi dia tautan.",
 "Game by link":"Partai lewat tautan",
 /* Sons de la partie en direct (2026-11-21). */
-"Your opponent declined the draw.":"Lawanmu menolak remis."
+"Your opponent declined the draw.":"Lawanmu menolak remis.",
+/* Parties en direct : trois cases chiffrees (2026-11-21). */
+"Live games":"Partai langsung",
+"Won":"Menang",
+"Drawn":"Seri",
+"Lost":"Kalah"
 };

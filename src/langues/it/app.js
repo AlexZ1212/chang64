@@ -1197,5 +1197,10 @@ module.exports = {
 "Play a friend in real time, with a clock. Invite them by username, or send them a link.":"Gioca contro un amico in tempo reale, con l'orologio. Invitalo con il suo nome utente oppure mandagli un link.",
 "Game by link":"Partita con link",
 /* Sons de la partie en direct (2026-11-21). */
-"Your opponent declined the draw.":"Il tuo avversario ha rifiutato la patta."
+"Your opponent declined the draw.":"Il tuo avversario ha rifiutato la patta.",
+/* Parties en direct : trois cases chiffrees (2026-11-21). */
+"Live games":"Partite in diretta",
+"Won":{"one":"Vinta","other":"Vinte"},
+"Drawn":{"one":"Patta","other":"Patte"},
+"Lost":{"one":"Persa","other":"Perse"}
 };

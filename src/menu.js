@@ -128,13 +128,13 @@ function menuStats(){
     (estMembre()?'<p class="tiroir-section">'+echapper(t("Puzzles solved, last 30 days"))+"</p>"+
     '<div class="graph menu-graphe" id="menuJoursGraph"></div>':"")+
     /* Parties en direct (2026-11-19) : comptees par le serveur, lues sur la fiche du membre. */
-    '<p class="cp-note" id="menuDirect" hidden></p>');
+    '<div id="menuDirect" hidden></div>');
   if(estMembre()&&typeof cppLire==="function"&&typeof cp!=="undefined"&&cp){
     cppLire(cp.pseudo).then(j=>{
       if(typeof eloMembresRemplir==="function")eloMembresRemplir(j);
-      const e=menuEl("menuDirect"),d=j&&j.dir;
-      if(!e||!d||!(d.v+d.n+d.d>0))return;
-      e.textContent=t("Live games: {v} won, {n} drawn, {d} lost",{v:d.v,n:d.n,d:d.d});e.hidden=false;
+      const e=menuEl("menuDirect"),h=j&&typeof cppDirect==="function"?cppDirect(j.dir):"";
+      if(!e||!h)return;
+      poserHtml(e,h);e.hidden=false;
     }).catch(()=>{});
   }
   drawRatingGraph(menuEl("menuRatingGraph"));

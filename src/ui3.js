@@ -1685,9 +1685,7 @@ function renderAnalyseNav(){
   for(let i=0;i<sanList.length;i++){
     const cls="navchip"+(i===at-1?" cur":"");
     const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
-    const side=i%2===0?"w":"b";
-    const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
-    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+icon+(icon?sanSansPiece(sanList[i]):sanList[i])+'</span>';
+    h+='<span class="'+cls+'" data-ply="'+(i+1)+'">'+num+coupHtml(sanList[i],i)+'</span>';
   }
   poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>analyseGoto(+sp.dataset.ply);});

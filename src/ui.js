@@ -1784,6 +1784,8 @@ function botMove(){
 }
 /* at : le nombre de coups joues dans la position affichee, quand on regarde
    un coup passe (2026-11-21) ; sans lui, le dernier coup. */
+/* Meme rendu que le bandeau de coups (coupHtml, ui2.js). */
+function coupFeuille(san,i){return !san?"":typeof coupHtml==="function"?coupHtml(san,i):san;}
 function renderSheetInto(id,list,at){
   const el=$(id); if(!el)return;
   if(!list||!list.length){poserHtml(el,'<div class="sheet-empty">'+t("No moves yet")+'</div>');return;}
@@ -1791,8 +1793,8 @@ function renderSheetInto(id,list,at){
   for(let i=0;i<list.length;i+=2){
     const last=(at==null?list.length:Math.min(at,list.length))-1;
     h+='<div class="sheet-row"><span class="n">'+(i/2+1)+'</span>'+
-       '<span class="'+(i===last?"cur":"")+'">'+(list[i]||"")+'</span>'+
-       '<span class="'+(i+1===last?"cur":"")+'">'+(list[i+1]||"")+'</span></div>';
+       '<span class="'+(i===last?"cur":"")+'">'+coupFeuille(list[i],i)+'</span>'+
+       '<span class="'+(i+1===last?"cur":"")+'">'+coupFeuille(list[i+1],i+1)+'</span></div>';
   }
   poserHtml(el,h);
   /* En haut plutot qu'en bas (2026-09-04) : meme raison et meme fonction

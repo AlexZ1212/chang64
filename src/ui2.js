@@ -307,6 +307,23 @@ function sanPieceType(san){
 /* Le bandeau dessine deja la piece devant le coup (notation figurine,
    2026-11-21) : la lettre anglaise qui la doublait est retiree (Nf3 -> f3). */
 function sanSansPiece(san){return /^[NBRQK]/.test(san||"")?String(san).slice(1):san;}
+/* UN SEUL rendu d'un coup pour le bandeau, la feuille de partie et la liste
+   d'Analyser (2026-11-21, releve par Alexandre : la feuille dessinait toujours
+   la piece blanche, meme pour un coup des Noirs, et rien pour un coup de pion).
+   La piece du coup, pion compris, devant sa case ; les Noirs en retrait
+   (opacite reduite, voir .navpiece.side-b). i : rang du demi-coup, 0 pour le
+   premier coup des Blancs. Le pion est un simple decor ; les autres pieces
+   sont dites aux lecteurs d'ecran sous leur nom. */
+const COUP_NOMS={k:"King",q:"Queen",r:"Rook",b:"Bishop",n:"Knight"};
+function coupPicto(san,i){
+  if(typeof pieceSVG!=="function")return "";
+  const ty=sanPieceType(san),nom=COUP_NOMS[ty];
+  return '<i class="navpiece side-'+(i%2===0?"w":"b")+'"'+(nom?' role="img" aria-label="'+t(nom)+'"':' aria-hidden="true"')+'>'+pieceSVG(ty,"w",true)+"</i>";
+}
+function coupHtml(san,i){
+  const picto=coupPicto(san,i);
+  return picto+echapperSan(picto?sanSansPiece(san):san);
+}
 function renderNavStrip(at){
   const el=$("navScroll"); if(!el)return;
   /* aria-current : le coup affiche, pour qui ne voit pas la puce en avant. */
@@ -325,10 +342,7 @@ function renderNavStrip(at){
        apportent le contraste. Blancs/Noirs restent distingues par le
        numero de coup (present uniquement cote Blancs) et une opacite
        reduite cote Noirs. */
-    const side=i%2===0?"w":"b";
-    const icon=typeof pieceSVG==="function"
-      ?'<i class="navpiece side-'+side+'">'+pieceSVG(sanPieceType(sanList[i]),"w",true)+'</i>':"";
-    h+='<span class="'+cls+'" role="listitem" data-ply="'+(i+1)+'"'+(i===at-1?' aria-current="true"':"")+'>'+num+icon+(icon?sanSansPiece(sanList[i]):sanList[i])+tag+'</span>';
+    h+='<span class="'+cls+'" role="listitem" data-ply="'+(i+1)+'"'+(i===at-1?' aria-current="true"':"")+'>'+num+coupHtml(sanList[i],i)+tag+'</span>';
   }
   poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
@@ -349,8 +363,7 @@ function renderNavLecture(san){
   let h='<span class="navchip start'+(at===0?" cur":"")+'" role="listitem" data-ply="0"'+(at===0?' aria-current="true"':"")+'>'+t("Game start")+'</span>';
   for(let i=0;i<san.length;i++){
     const num=i%2===0?'<span class="navnum">'+(i/2+1)+'.</span>':"";
-    const icon=typeof pieceSVG==="function"?'<i class="navpiece side-'+(i%2===0?"w":"b")+'">'+pieceSVG(sanPieceType(san[i]),"w",true)+'</i>':"";
-    h+='<span class="navchip'+(i===at-1?" cur":"")+'" role="listitem" data-ply="'+(i+1)+'"'+(i===at-1?' aria-current="true"':"")+'>'+num+icon+echapperSan(icon?sanSansPiece(san[i]):san[i])+'</span>';
+    h+='<span class="navchip'+(i===at-1?" cur":"")+'" role="listitem" data-ply="'+(i+1)+'"'+(i===at-1?' aria-current="true"':"")+'>'+num+coupHtml(san[i],i)+'</span>';
   }
   poserHtml(el,h);
   el.querySelectorAll("[data-ply]").forEach(sp=>{sp.onclick=()=>gotoPly(+sp.dataset.ply);});
@@ -518,7 +531,7 @@ function renderSheetPlay(){
       const a=analysis&&analysis.plies[j];
       const tag=a&&a.tag?TAGS[a.tag]:"";
       const cls=[(j===at-1?"view":""),(a&&a.tag?"tag-"+a.tag:"")].filter(Boolean).join(" ");
-      h+='<span class="'+cls+'" data-ply="'+(j+1)+'">'+sanList[j]+tag+'</span>';
+      h+='<span class="'+cls+'" data-ply="'+(j+1)+'">'+coupHtml(sanList[j],j)+tag+'</span>';
     }
     h+='</div>';
   }

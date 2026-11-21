@@ -25,7 +25,8 @@ new_sqlite_classes = ["Partie"]
 
 # La base du site : sessions (jetons), pseudos (comptes), blocages, lus seulement ;
 # ce Worker n'ecrit que la table invitations et, a la fin d'une partie, les
-# trois compteurs direct_v, direct_n, direct_d des deux joueurs.
+# trois compteurs direct_v, direct_n, direct_d des deux joueurs, ainsi que leur
+# Elo entre membres (colonnes elo et elo_n, 2026-11-21).
 [[d1_databases]]
 binding = "DB"
 database_name = "chang64-difficulte"

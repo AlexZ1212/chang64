@@ -220,6 +220,30 @@ function chiffres(donnees) {
     sprint: n(p.rushBest, 0, 500, 0)
   };
 }
+/* Elo contre l'ordinateur (2026-11-21) : calcule dans le navigateur, donc
+   inverifiable ici. On le borne seulement : entre 100 et 3000, et jamais a
+   plus de 40 points du depart (800) par partie comptee, ce qui est le plus
+   grand saut possible d'une partie. Un champ mal forme est retire. Rend
+   l'objet propre, ou null. */
+const ELO_DEPART = 800, ELO_SAUT = 40, ELO_PARTIES_MAX = 100000;
+function eloOrdiPropre(e) {
+  if (!e || typeof e !== "object" || Array.isArray(e) || !Number.isFinite(e.r) || !Number.isFinite(e.n)) return null;
+  const n = Math.max(0, Math.min(ELO_PARTIES_MAX, Math.floor(e.n)));
+  if (!n) return null;
+  const bas = Math.max(100, ELO_DEPART - ELO_SAUT * n), haut = Math.min(3000, ELO_DEPART + ELO_SAUT * n);
+  const borne = v => Math.max(bas, Math.min(haut, Math.round(v)));
+  const r = borne(e.r);
+  const h = (Array.isArray(e.h) ? e.h : []).filter(x => Array.isArray(x) && x.length === 2 && Number.isFinite(x[0]) && Number.isFinite(x[1]))
+    .slice(-50).map(x => [Math.round(x[0]), borne(x[1])]);
+  return { r, n, pic: Math.max(r, borne(Number.isFinite(e.pic) ? e.pic : r)), h };
+}
+/* Applique la borne a la progression recue, sur place. */
+function eloOrdiBorner(donnees) {
+  const p = donnees && typeof donnees.progress === "object" && donnees.progress && !Array.isArray(donnees.progress) ? donnees.progress : null;
+  if (!p || p.eloOrdi === undefined) return;
+  const e = eloOrdiPropre(p.eloOrdi);
+  if (e) p.eloOrdi = e; else delete p.eloOrdi;
+}
 /* Rend le JSON a garder, ou null : un objet, pas un tableau, pas trop gros. */
 function donneesTexte(donnees) {
   if (donnees === undefined || donnees === null) return "";
@@ -398,6 +422,7 @@ async function rCreer(d, env, now, request) {
   if (!codeValide(d.code)) return erreur("code", 400);
   const dejaCrees = await appareilLire(request, env, now);
   if (dejaCrees.length >= COMPTES_PAR_APPAREIL) return erreur("appareil", 429, { attendre: Math.max(1, Math.ceil((dejaCrees[0] + APPAREIL_DUREE - now) / 1000)) });
+  eloOrdiBorner(d.donnees);
   const texte = donneesTexte(d.donnees);
   if (texte === null) return erreur("donnees", 413);
   await nettoyer(env, now);
@@ -445,6 +470,7 @@ async function rSynchroLire(s, env) {
 }
 async function rSynchroEcrire(s, d, env, now) {
   if (!Number.isInteger(d.version) || d.version < 0) return erreur("version", 400);
+  eloOrdiBorner(d.donnees);
   const texte = donneesTexte(d.donnees);
   if (!texte) return erreur("donnees", texte === null ? 413 : 400);
   const c = chiffres(d.donnees), sem = lundi(now);
@@ -496,6 +522,7 @@ async function rExporter(s, env) {
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
     parties_en_direct: { gagnees: l.direct_v, nulles: l.direct_n, perdues: l.direct_d },
+    elo_entre_membres: await eloMembreLire(env, s.id),
     version: l.version,
     ligue: ligue ? { semaine: ligue.sem, ligue: ["Pion", "Cavalier", "Fou", "Tour", "Dame"][ligue.ligue] || "Pion", exercices_de_la_semaine: ligue.points, dernier_mouvement: ligue.mouv } : null,
     joueurs_bloques: bloques.map(x => x.p),
@@ -1014,6 +1041,14 @@ const PROFIL_RANGS = "SELECT " +
   "(SELECT COUNT(*) FROM comptes WHERE badges > ?6) AS b, " +
   "(SELECT COUNT(*) FROM comptes WHERE sprint > ?7) AS k, " +
   "(SELECT COUNT(*) FROM comptes WHERE direct_v > ?8) AS d";
+/* Elo entre membres d'un compte, ou null s'il n'a pas encore joue de partie
+   comptee. Requete a part : la base peut ne pas avoir encore les colonnes. */
+async function eloMembreLire(env, id) {
+  try {
+    const l = await env.DB.prepare("SELECT elo, elo_n FROM comptes WHERE id = ?1").bind(id).first();
+    return l && l.elo > 0 && l.elo_n > 0 ? { r: l.elo, n: l.elo_n } : null;
+  } catch (e) { return null; }
+}
 async function rProfil(request, env, now, waitUntil) {
   const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
   if (!v.ok) return erreur("inconnu", 404);
@@ -1022,7 +1057,11 @@ async function rProfil(request, env, now, waitUntil) {
   if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
   const c = await env.DB.prepare("SELECT id, pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees, direct_v, direct_n, direct_d FROM comptes WHERE cle = ?1").bind(v.cle).first();
   if (!c) return erreur("inconnu", 404);
-  let bl = [];
+  let bl = [], eo = null;
+  try {
+    const e = c.donnees ? eloOrdiPropre((JSON.parse(c.donnees).progress || {}).eloOrdi) : null;
+    if (e) eo = { r: e.r, n: e.n };
+  } catch (e) {}
   try {
     const liste = c.donnees ? (JSON.parse(c.donnees).progress || {}).badges : null;
     if (Array.isArray(liste)) bl = Array.from(new Set(liste.filter(x => typeof x === "string" && /^[a-z0-9_]{2,40}$/.test(x)))).slice(-400);
@@ -1036,6 +1075,10 @@ async function rProfil(request, env, now, waitUntil) {
     /* Parties en direct : gagnees, nulles, perdues, comptees par le serveur des parties. */
     dir: { v: c.direct_v, n: c.direct_n, d: c.direct_d },
     rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k), d: rang(c.direct_v > 0, g.d) },
+    /* Elo contre l'ordinateur : declare par le navigateur du joueur, non verifie. */
+    eo,
+    /* Elo entre membres : calcule par le serveur des parties, donc verifie. */
+    em: await eloMembreLire(env, c.id),
     bl, pays: await paysLire(env, c.id)
   }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
   if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));
@@ -1107,4 +1150,4 @@ export async function onRequest({ request, env, params, waitUntil }) {
 }
 
 /* Pour les tests seulement : Pages ne fait de route que de onRequest*. */
-export const _essai = { liguesCalculer, liguesRepartir, liguesOublier: () => { liguesMemo = { sem: "" }; }, LIGUE_SEUIL, CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };
+export const _essai = { eloOrdiPropre, liguesCalculer, liguesRepartir, liguesOublier: () => { liguesMemo = { sem: "" }; }, LIGUE_SEUIL, CREATIONS_PAR_ADRESSE, COMPTES_PAR_APPAREIL, APPAREIL_DUREE, pseudoValider, nettoyer, lundi, chiffres, secoursNormaliser, codeHacher, codeComparer, egal, INACTIF, DUREE_JETON, DUREE_LIEN, BLOCAGE, CREATIONS_PAR_HEURE, TAILLE_MAX };

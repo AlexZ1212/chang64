@@ -231,7 +231,9 @@ function exitReview(){
 /* Ce qui suit le coup affiche : feuille de partie, bandeau de coups, et pour
    une partie contre l'ordinateur le commentaire de l'analyse et les pendules. */
 function vueSuivre(){
-  if(mode==="play"){renderSheetPlay();renderNav();renderPlyInfo();renderClocks();}
+  /* renderSheetPlay redessine deja le bandeau de coups (renderNav) : une
+     seule fois, sinon il se recentre deux fois de suite. */
+  if(mode==="play"){renderSheetPlay();renderPlyInfo();renderClocks();}
   else if(mode==="friend"){const san=vueSan();renderSheetInto("amiSheet",san,reviewPly);renderNavLecture(san);}
 }
 /* Quitte le coup passe sans rien redessiner : pour qui s'apprete a montrer
@@ -362,7 +364,7 @@ function echapperSan(s){return String(s).replace(/[<>&"]/g,"");}
    desormais, sans attendre un clic sur une puce precise. Deux soucis a
    eviter avec une simple ecoute de "scroll" :
    1. renderNavStrip()/renderAnalyseNav() recentrent deja la puce courante
-      au clic ou au clavier (scrollIntoView) -- sans garde, ce recentrage
+      au clic ou au clavier (recenterNavChip) -- sans garde, ce recentrage
       programme declencherait a son tour la synchro, qui rappellerait
       gotoPly(), qui rappellerait renderNavStrip(), qui recentrerait a
       nouveau : boucle. navScrollSuppressed coupe la synchro pendant cette
@@ -449,13 +451,30 @@ function updateNavScrollHint(){
    partie depuis un defilement manuel (voir plus haut) : deplacer le
    bandeau sous les doigts de la personne qui vient tout juste de le
    positionner elle-meme annulerait son geste. Pose navScrollSuppressed
-   pendant l'animation pour eviter la boucle de rappel decrite plus haut. */
+   pendant l'animation pour eviter la boucle de rappel decrite plus haut.
+   Seul le bandeau defile, a l'horizontale (2026-11-21, signale par
+   Alexandre) : scrollIntoView sur la puce faisait aussi defiler la PAGE.
+   Sur telephone, toucher un coup de la feuille de partie, plus bas, la
+   faisait remonter jusqu'au bandeau au lieu de montrer l'echiquier. On
+   deplace donc le conteneur lui-meme ; la page ne bouge pas d'ici, c'est
+   focusBoard() qui ramene l'echiquier sous les yeux quand il le faut. */
+function navChipCible(el,curEl){
+  const p=curEl.getBoundingClientRect(),c=el.getBoundingClientRect();
+  const voulu=el.scrollLeft+(p.left-c.left)-(c.width-p.width)/2;
+  return Math.max(0,Math.min(el.scrollWidth-el.clientWidth,voulu));
+}
 function recenterNavChip(el){
   if(navSyncFromScroll){navSyncFromScroll=false;return;}
   const curEl=el.querySelector(".cur");
-  if(!curEl||typeof curEl.scrollIntoView!=="function")return;
+  if(!curEl)return;
+  const cible=navChipCible(el,curEl);
+  /* Deja centree : rien ne defilera, donc aucun evenement a ignorer. */
+  if(Math.abs(cible-el.scrollLeft)<1)return;
   navScrollSuppressed=true;
-  try{curEl.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}catch(e){}
+  try{
+    if(typeof el.scrollTo==="function")el.scrollTo({left:cible,behavior:mouvementCalme()?"auto":"smooth"});
+    else el.scrollLeft=cible;
+  }catch(e){el.scrollLeft=cible;}
   if("onscrollend" in el)el.addEventListener("scrollend",()=>{navScrollSuppressed=false;},{once:true});
   else setTimeout(()=>{navScrollSuppressed=false;},400);
 }
@@ -504,8 +523,11 @@ function renderSheetPlay(){
     h+='</div>';
   }
   poserHtml(el,h);
+  /* La feuille est sous l'echiquier sur telephone : apres avoir choisi un
+     coup, on ramene l'echiquier sous les yeux pour voir sa position
+     (focusBoard ne bouge rien quand il est deja bien visible). */
   el.querySelectorAll("[data-ply]").forEach(sp=>{
-    sp.onclick=()=>gotoPly(+sp.dataset.ply);
+    sp.onclick=()=>{gotoPly(+sp.dataset.ply);if(typeof focusBoard==="function")focusBoard();};
   });
   const viewEl=el.querySelector(".view");
   scrollSheetToCurrent(el,viewEl?viewEl.closest(".sheet-row"):null);

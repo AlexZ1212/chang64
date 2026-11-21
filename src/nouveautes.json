@@ -1,5 +1,134 @@
 [
  {
+  "d": "2026-11-21",
+  "en": [
+   "Live games between members",
+   "Members can now play live, with a clock kept by the server: invite a friend by username or by link, or find an opponent close to your level. In Play, on the Against a friend card."
+  ],
+  "fr": [
+   "Parties en direct entre membres",
+   "Les membres peuvent jouer en direct, avec une pendule tenue par le serveur : invite un ami par son pseudo ou par un lien, ou trouve un adversaire proche de ton niveau. Dans Jouer, carte Contre un ami."
+  ],
+  "es": [
+   "Partidas en directo entre miembros",
+   "Los miembros ya pueden jugar en directo, con un reloj llevado por el servidor: invita a un amigo por su nombre de usuario o por enlace, o encuentra un rival cercano a tu nivel. En Jugar, tarjeta Contra un amigo."
+  ],
+  "pt": [
+   "Partidas ao vivo entre membros",
+   "Os membros já podem jogar ao vivo, com um relógio controlado pelo servidor: convide um amigo pelo nome de usuário ou por link, ou encontre um adversário próximo do seu nível. Em Jogar, cartão Contra um amigo."
+  ],
+  "de": [
+   "Live-Partien zwischen Mitgliedern",
+   "Mitglieder können jetzt live spielen, mit einer Uhr, die der Server führt: Lade einen Freund über seinen Benutzernamen oder per Link ein, oder finde einen Gegner in deiner Stärke. Unter Spielen, Karte Gegen einen Freund."
+  ],
+  "ru": [
+   "Живые партии между участниками",
+   "Участники теперь могут играть вживую, часы ведёт сервер: пригласи друга по нику или по ссылке или найди соперника близкого уровня. В разделе «Играть», карточка «С другом»."
+  ],
+  "it": [
+   "Partite dal vivo tra membri",
+   "I membri ora possono giocare dal vivo, con un orologio tenuto dal server: invita un amico col suo nome utente o con un link, oppure trova un avversario vicino al tuo livello. In Gioca, scheda Contro un amico."
+  ],
+  "tr": [
+   "Üyeler arasında canlı oyunlar",
+   "Üyeler artık sunucunun tuttuğu bir saatle canlı oynayabilir: bir arkadaşını kullanıcı adıyla ya da bağlantıyla davet et veya seviyene yakın bir rakip bul. Oyna bölümünde, Bir arkadaşa karşı kartında."
+  ],
+  "pl": [
+   "Partie na żywo między członkami",
+   "Członkowie mogą teraz grać na żywo, z zegarem prowadzonym przez serwer: zaproś znajomego po nazwie użytkownika lub przez link albo znajdź przeciwnika o podobnym poziomie. W zakładce Graj, karta Ze znajomym."
+  ],
+  "id": [
+   "Permainan langsung antar anggota",
+   "Anggota kini bisa bermain langsung, dengan jam yang dijaga server: undang teman lewat nama pengguna atau tautan, atau cari lawan yang setara levelmu. Di Main, kartu Melawan teman."
+  ]
+ },
+ {
+  "d": "2026-11-21",
+  "en": [
+   "Your pieces in the moves",
+   "Moves now show the pieces of the board instead of English letters: the knight is drawn rather than written N, in every language. Copied as PGN, a game keeps the letters every chess program reads."
+  ],
+  "fr": [
+   "Tes pièces dans les coups",
+   "Les coups montrent maintenant les pièces de l'échiquier au lieu des lettres anglaises : le cavalier est dessiné au lieu d'être écrit N, dans toutes les langues. Copiée en PGN, une partie garde les lettres que lisent tous les logiciels d'échecs."
+  ],
+  "es": [
+   "Tus piezas en las jugadas",
+   "Las jugadas muestran ahora las piezas del tablero en lugar de letras inglesas: el caballo aparece dibujado en vez de escrito N, en todos los idiomas. Copiada en PGN, una partida conserva las letras que leen todos los programas de ajedrez."
+  ],
+  "pt": [
+   "Suas peças nos lances",
+   "Os lances agora mostram as peças do tabuleiro em vez das letras inglesas: o cavalo aparece desenhado em vez de escrito N, em todos os idiomas. Copiada em PGN, uma partida mantém as letras que todos os programas de xadrez leem."
+  ],
+  "de": [
+   "Deine Figuren in den Zügen",
+   "Die Züge zeigen jetzt die Figuren des Bretts statt englischer Buchstaben: Der Springer ist gezeichnet statt als N geschrieben, in jeder Sprache. Als PGN kopiert, behält eine Partie die Buchstaben, die alle Schachprogramme lesen."
+  ],
+  "ru": [
+   "Твои фигуры в записи ходов",
+   "В записи ходов теперь нарисованы фигуры с доски вместо английских букв: конь изображён, а не записан буквой N, на любом языке. При копировании в PGN партия сохраняет буквы, которые понимают все шахматные программы."
+  ],
+  "it": [
+   "I tuoi pezzi nelle mosse",
+   "Le mosse ora mostrano i pezzi della scacchiera invece delle lettere inglesi: il cavallo è disegnato invece di essere scritto N, in tutte le lingue. Copiata in PGN, una partita conserva le lettere che leggono tutti i programmi di scacchi."
+  ],
+  "tr": [
+   "Hamlelerde senin taşların",
+   "Hamleler artık İngilizce harfler yerine tahtadaki taşları gösteriyor: at, N yazılmak yerine çiziliyor, her dilde. PGN olarak kopyalanan bir oyun, tüm satranç programlarının okuduğu harfleri korur."
+  ],
+  "pl": [
+   "Twoje bierki w zapisie ruchów",
+   "Ruchy pokazują teraz bierki z szachownicy zamiast angielskich liter: skoczek jest narysowany zamiast zapisany literą N, w każdym języku. Skopiowana jako PGN partia zachowuje litery, które czytają wszystkie programy szachowe."
+  ],
+  "id": [
+   "Bidakmu dalam langkah",
+   "Langkah kini menampilkan bidak papan, bukan huruf Inggris: kuda digambar, bukan ditulis N, dalam semua bahasa. Saat disalin sebagai PGN, permainan tetap memakai huruf yang dibaca semua program catur."
+  ]
+ },
+ {
+  "d": "2026-11-21",
+  "en": [
+   "A more human computer",
+   "At the Beginner and Casual levels, the computer no longer gives away its queen at random: it makes the kind of mistakes a player of its level makes. It also takes a moment to think before moving. And the explanations under the puzzles have been checked one by one by Stockfish."
+  ],
+  "fr": [
+   "Un ordinateur plus humain",
+   "Aux niveaux Débutant et Tranquille, l'ordinateur ne donne plus sa dame au hasard : il se trompe comme un joueur de son niveau. Il prend aussi un temps de réflexion avant de jouer. Et les explications sous les exercices ont été vérifiées une à une par Stockfish."
+  ],
+  "es": [
+   "Un ordenador más humano",
+   "En los niveles Principiante y Tranquilo, el ordenador ya no regala su dama al azar: se equivoca como un jugador de su nivel. También se toma un momento para pensar antes de jugar. Y las explicaciones bajo los ejercicios han sido comprobadas una a una por Stockfish."
+  ],
+  "pt": [
+   "Um computador mais humano",
+   "Nos níveis Iniciante e Tranquilo, o computador não entrega mais a dama ao acaso: erra como um jogador do seu nível. Ele também leva um tempo para pensar antes de jogar. E as explicações sob os exercícios foram verificadas uma a uma pelo Stockfish."
+  ],
+  "de": [
+   "Ein menschlicherer Computer",
+   "Auf den Stufen Anfänger und Locker verschenkt der Computer seine Dame nicht mehr zufällig: Er macht die Fehler eines Spielers seiner Stärke. Er nimmt sich auch einen Moment Bedenkzeit vor jedem Zug. Und die Erklärungen unter den Aufgaben wurden einzeln von Stockfish geprüft."
+  ],
+  "ru": [
+   "Более человечный компьютер",
+   "На уровнях «Новичок» и «Спокойный» компьютер больше не отдаёт ферзя наугад: он ошибается как игрок своего уровня. Перед ходом он теперь немного думает. А пояснения под задачами проверены Stockfish одно за другим."
+  ],
+  "it": [
+   "Un computer più umano",
+   "Ai livelli Principiante e Amatore il computer non regala più la donna a caso: sbaglia come un giocatore del suo livello. Prende anche un momento per pensare prima di muovere. E le spiegazioni sotto gli esercizi sono state verificate una a una da Stockfish."
+  ],
+  "tr": [
+   "Daha insansı bir bilgisayar",
+   "Acemi ve Rahat seviyelerinde bilgisayar artık vezirini rastgele vermiyor: kendi seviyesindeki bir oyuncu gibi hata yapıyor. Oynamadan önce biraz da düşünüyor. Ve bulmacaların altındaki açıklamalar Stockfish tarafından tek tek kontrol edildi."
+  ],
+  "pl": [
+   "Bardziej ludzki komputer",
+   "Na poziomach Początkujący i Rekreacyjny komputer nie oddaje już hetmana przypadkiem: myli się jak gracz na swoim poziomie. Przed ruchem chwilę się też zastanawia. A objaśnienia pod zadaniami zostały sprawdzone jedno po drugim przez Stockfisha."
+  ],
+  "id": [
+   "Komputer yang lebih manusiawi",
+   "Di level Pemula dan Santai, komputer tidak lagi memberikan menterinya secara acak: ia salah langkah seperti pemain selevelnya. Ia juga berpikir sejenak sebelum melangkah. Dan penjelasan di bawah soal telah diperiksa satu per satu oleh Stockfish."
+  ]
+ },
+ {
   "d": "2026-11-19",
   "en": [
    "New colours",

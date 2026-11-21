@@ -1,4 +1,7 @@
 const fs=require("fs"),path=require("path");
+/* Notation figurine (2026-11-21) : la piece dessinee redevient sa lettre
+   anglaise avant la lecture des coups. */
+const sansFig = s => s.replace(/<i class="fig f-([kqrbn])"[^>]*><\/i>/g, (m, p) => p.toUpperCase()).replace(/<i class="coup">|<\/i>/g, "");
 const {JSDOM}=require("jsdom");
 const {Game}=require("./engine.js");
 const OUT=require("path").join(__dirname,"site");
@@ -9,7 +12,7 @@ T("opening pages generated", files.length===142, files.length+" files");
 
 let badTitle=0,badDesc=0,badCanon=0,noSvg=0,noJsonld=0,dupTitles=new Map();
 for(const f of files){
-  const h=fs.readFileSync(OUT+"/openings/"+f,"utf8");
+  const h=sansFig(fs.readFileSync(OUT+"/openings/"+f,"utf8"));
   const t=(h.match(/<title>(.*?)<\/title>/)||[])[1]||"";
   const d=(h.match(/name="description" content="(.*?)"/)||[])[1]||"";
   if(t.length<20||t.length>75)badTitle++;
@@ -30,7 +33,7 @@ T("no duplicate titles", [...dupTitles.values()].every(v=>v===1));
 let checked=0,wrong=0;
 for(const f of files.slice(0,200)){
   if(f==="index.html")continue;
-  const h=fs.readFileSync(OUT+"/openings/"+f,"utf8");
+  const h=sansFig(fs.readFileSync(OUT+"/openings/"+f,"utf8"));
   const m=h.match(/Position after ([^<]+)</);
   if(!m)continue;
   const san=m[1].replace(/\d+\./g," ").split(/\s+/).filter(Boolean);

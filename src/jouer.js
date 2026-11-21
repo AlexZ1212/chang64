@@ -34,7 +34,9 @@ function jouerPartieAmi() { return typeof directOccupe === "function" && directO
 
 function jouerRendre() {
   const p = $("pane-jouer"); if (!p) return;
-  const direct = typeof DIRECT_OUVERT !== "undefined" && DIRECT_OUVERT;
+  /* Le direct est reserve aux membres : un visiteur lit la partie par lien,
+     qu'il peut jouer tout de suite (2026-11-21, ouverture a tous). */
+  const direct = typeof DIRECT_OUVERT !== "undefined" && DIRECT_OUVERT && typeof estMembre === "function" && estMembre();
   const d = $("jouerAmiTexte");
   if (d) d.textContent = t(direct ? "A live game, on the clock, with another member. Invite them by username or send them a link."
     : "Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.");

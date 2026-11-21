@@ -41,12 +41,13 @@ function ouvrirLocal(reponseCreer) {
 const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [600, 0], moi: "b", b: "Anna", nr: "Bob", coups: [], tb: 600000, tn: 600000, maj: Date.now(), h: Date.now(), phase: "debut", fin: null, nulle: null, rev: { b: false, n: false }, la: { b: true, n: true } }, plus || {});
 
 (async () => {
-  console.log("Sur chang64.com : pas encore ouvert");
+  /* Ouvert a tous depuis le 21/11/2026 (decision d'Alexandre). */
+  console.log("Sur chang64.com : ouvert a tous");
   let w = await ouvrir("fr");
   w.eval("setMode('friend')");
-  T("le panneau de la partie en direct reste masque", w.document.getElementById("directPanel").classList.contains("hide"));
+  T("le panneau de la partie en direct est visible pour tous", !w.document.getElementById("directPanel").classList.contains("hide"));
+  T("un visiteur sans compte y voit l'invitation a en creer un", !w.document.getElementById("directInvite").classList.contains("hide") && /compte/.test(w.document.getElementById("directInvite").textContent));
   T("la partie par lien entre amis est intacte", !w.document.getElementById("amiStatusPanel").classList.contains("hide") && w.getComputedStyle(w.document.getElementById("amiNewGamePanel")).display !== "none");
-  T("un lien de partie en direct n'y fait rien", (w.eval("location.hash='#partie=abcdefghjkmn'"), await pause(100), w.eval("directId") === ""));
   w.close();
 
   console.log("Poste de developpement, sans compte");

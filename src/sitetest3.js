@@ -79,7 +79,9 @@ T("language links reciprocal and resolving", broken===0, broken+" broken");
 const traps=[["scholars-mate",true],["legals-mate",true],["blackburne-shilling-trap",true],["englund-gambit-trap",true],["fried-liver-attack",false],["damiano-defence-punished",false]];
 let trapBad=0;
 for(const [sl,shouldMate] of traps){
-  const h=read(`traps/${sl}.html`);
+  /* Notation figurine (2026-11-21) : la piece dessinee redevient sa lettre
+     anglaise avant la lecture des coups. */
+  const h=read(`traps/${sl}.html`).replace(/<i class="fig f-([kqrbn])"[^>]*><\/i>/g,(x,p)=>p.toUpperCase()).replace(/<i class="coup">|<\/i>/g,"");
   const m=h.match(/<div class="moves">([^<]+)</);
   if(!m){trapBad++;continue;}
   const san=m[1].replace(/\d+\./g," ").split(/\s+/).filter(Boolean);

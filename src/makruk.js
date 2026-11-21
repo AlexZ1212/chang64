@@ -525,6 +525,9 @@ html.mk-ouvert{overflow:hidden}
 `;
 
 let racine=null,plateau=null,P=null,legaux=[],sel=-1,dernier=0,fini=null;
+/* campChoisi : le reglage (1 Blancs, -1 Noirs, 0 au hasard, tire a chaque
+   nouvelle partie) ; camp : le camp reellement joue. */
+let campChoisi=1;
 let mode="ordi",niveau=1,camp=1,attente=false,demande=0,focale=-1,porte=null,moteur=null,enCours=null;
 
 function construire(){
@@ -558,7 +561,8 @@ function construire(){
           ["Easy","Medium","Hard"].map((n,i)=>'<button type="button" class="chip" data-niveau="'+i+'">'+echappe(tr(n))+"</button>").join("")+"</span>"+
         '<span class="chips" role="group" aria-label="'+echappe(tr("Your side"))+'">'+
           '<button type="button" class="chip" data-camp="1">'+echappe(tr("White"))+'</button>'+
-          '<button type="button" class="chip" data-camp="-1">'+echappe(tr("Black"))+"</button></span></div>"+
+          '<button type="button" class="chip" data-camp="-1">'+echappe(tr("Black"))+"</button>"+
+          '<button type="button" class="chip" data-camp="0">'+echappe(tr("Random"))+"</button></span></div>"+
       '<p class="mk-etat" id="mkEtat" aria-live="polite"></p>'+
       '<p class="mk-compte" id="mkCompte"></p>'+
       '<div class="board-frame"><div class="board" id="mkPlateau" role="group" aria-label="'+echappe(tr("Makruk board"))+'"></div></div>'+
@@ -609,7 +613,7 @@ function construire(){
   });
   racine.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;nouvelle();}));
   racine.querySelectorAll("[data-niveau]").forEach(b=>b.addEventListener("click",()=>{niveau=+b.dataset.niveau;nouvelle();}));
-  racine.querySelectorAll("[data-camp]").forEach(b=>b.addEventListener("click",()=>{camp=+b.dataset.camp;nouvelle();}));
+  racine.querySelectorAll("[data-camp]").forEach(b=>b.addEventListener("click",()=>{campChoisi=+b.dataset.camp;nouvelle();}));
   racine.querySelector("#mkNouvelle").addEventListener("click",nouvelle);
   racine.querySelector("#mkAnnuler").addEventListener("click",reprendre);
   try{if(SCRIPT&&typeof Worker==="function"){moteur=new Worker(SCRIPT);moteur.onmessage=recu;moteur.onerror=()=>{moteur=null;};}}catch(e){moteur=null;}
@@ -621,6 +625,7 @@ const versCase=d=>retourne()?63-d:d;
 
 function nouvelle(){
   demande++;attente=false;
+  camp=campChoisi||(Math.random()<0.5?1:-1);
   P=new Partie();sel=-1;dernier=0;fini=null;legaux=P.coups();
   if(focale<0)focale=52;
   dessiner();
@@ -740,7 +745,7 @@ function dessiner(){
   if(!racine)return;
   racine.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
   racine.querySelectorAll("[data-niveau]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.niveau===niveau)));
-  racine.querySelectorAll("[data-camp]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.camp===camp)));
+  racine.querySelectorAll("[data-camp]").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.camp===campChoisi)));
   racine.querySelector("#mkOptions").hidden=mode!=="ordi";
   racine.querySelector("#mkEtat").textContent=texteEtat();
   racine.querySelector("#mkCompte").textContent=texteCompte();

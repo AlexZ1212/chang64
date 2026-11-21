@@ -688,7 +688,13 @@ function usesFor(fen, S) {
    reecrire le balisage a chaque clic -- ce lecteur vit aussi sur les pages
    d'exercices (1000 pages), dont le budget de poids moyen est deja serre :
    dupliquer un SVG verbeux dans le JS de bascule l'avait fait deraper. */
-const PLAYPAUSE_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7V5Z"/><path d="M5 5h4v14H5zM15 5h4v14h-4z" style="display:none"/></svg>';
+/* Lecteur de coups (2026-11-21, remarque d'Alexandre : boutons grossiers).
+   Meme trait fin que le chevron du menu de l'application : 1,5 px a l'ecran,
+   bouts arrondis, aucun aplat. Lecture = un triangle au contour, Pause = deux
+   traits. Les deux dessins vivent dans le meme bouton (le script montre l'un
+   ou l'autre) : deux elements path, dans cet ordre. */
+const LECTEUR_TRAIT = 'width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+const PLAYPAUSE_SVG = '<svg ' + LECTEUR_TRAIT + '><path d="M8.5 5.8l9.6 6.2-9.6 6.2z"/><path d="M8.5 6v12M15.5 6v12" style="display:none"/></svg>';
 
 function animBoard(moveStr, size, labels, fenDepart) {
   const steps = fensAlong(moveStr, fenDepart);
@@ -707,9 +713,9 @@ function animBoard(moveStr, size, labels, fenDepart) {
     ${pieceDefs()}<g>${sq}</g>${coordsSvg(size)}${groups}
   </svg>
   <div class="animctl" hidden>
-    <button type="button" data-act="prev" aria-label="${esc(labels.prev)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <button type="button" data-act="prev" aria-label="${esc(labels.prev)}"><svg ${LECTEUR_TRAIT}><path d="M14.5 6l-6 6 6 6"/></svg></button>
     <button type="button" data-act="play" aria-label="${esc(labels.play)}">${PLAYPAUSE_SVG}</button>
-    <button type="button" data-act="next" aria-label="${esc(labels.next)}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    <button type="button" data-act="next" aria-label="${esc(labels.next)}"><svg ${LECTEUR_TRAIT}><path d="M9.5 6l6 6-6 6"/></svg></button>
     <span class="animply"></span>
   </div>
 </div>`;
@@ -1134,18 +1140,21 @@ p{margin-bottom:12px;max-width:66ch}
    etait bien pose, et la recherche semblait ne rien faire.
    Meme piege que sur les groupes SVG de l'echiquier anime. */
 [hidden],.tile[hidden],[data-theme][hidden],.toc[hidden]{display:none!important}
-.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
+.animctl{display:flex;align-items:center;gap:2px;margin-top:6px}
 /* Ces commandes avaient herite des jetons du theme sombre de l'application,
    posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
    symboles etaient beiges sur blanc casse, soit un contraste de 1,11:1 pour
    un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
-.animctl button{background:var(--slate);color:var(--sage);border:1px solid var(--sage);border-radius:var(--r-s);
-  width:30px;height:28px;cursor:pointer;padding:0;display:grid;place-items:center}
-.animctl button:hover{background:var(--brass);border-color:var(--brass);color:var(--ink)}
+/* 2026-11-21 : plus de cadre au repos (il alourdissait trois petits boutons
+   colles), un filet au survol seulement. La zone de toucher fait 44 px. */
+.animctl button{background:none;color:var(--sage);border:1px solid transparent;border-radius:var(--r);
+  width:44px;height:44px;cursor:pointer;padding:0;display:grid;place-items:center;transition:color .14s,border-color .14s}
+.animctl button:hover{border-color:var(--rule);color:var(--chalk)}
 .animctl button:disabled{opacity:.38;cursor:default}
-.animctl button:disabled:hover{background:var(--slate);border-color:var(--sage);color:var(--sage)}
+.animctl button:disabled:hover{border-color:transparent;color:var(--sage)}
+.animply{margin-left:8px}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
 .diagram svg{width:100%;height:auto;display:block;border-radius:2px}

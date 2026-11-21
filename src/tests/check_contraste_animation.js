@@ -23,8 +23,17 @@ console.log("  slate "+slate+"   board "+board+"   sage "+sage);
 
 console.log("\n--- Les commandes sont lisibles ---");
 T("le beige illisible a disparu", !/\.animctl button\{[^}]*color:var\(--bone\)/.test(h));
-T("symboles et bordure en sauge", /\.animctl button\{[^}]*color:var\(--sage\)[^}]*border:1px solid var\(--sage\)/.test(h));
-T("bordure visible, plus var(--rule)", !/\.animctl button\{[^}]*border:1px solid var\(--rule\)/.test(h));
+T("symboles en sauge", /\.animctl button\{[^}]*color:var\(--sage\)/.test(h));
+/* 2026-11-21 (remarque d'Alexandre : boutons grossiers) : plus de cadre au
+   repos, un trait fin sans aplat, et une zone de toucher de 44 px. */
+T("pas de cadre au repos, un filet au survol", /\.animctl button\{[^}]*border:1px solid transparent/.test(h) && /\.animctl button:hover\{[^}]*border-color:var\(--rule\)/.test(h));
+T("zone de toucher de 44 px", /\.animctl button\{[^}]*width:44px;height:44px/.test(h));
+{
+  const svgs = (h.match(/<div class="animctl"[\s\S]*?<\/div>/) || [""])[0].match(/<svg[^>]*>/g) || [];
+  T("trois dessins au trait fin, sans aplat", svgs.length === 3 && svgs.every(x => /fill="none"/.test(x) && /stroke-width="1\.8"/.test(x) && /stroke-linecap="round"/.test(x)), svgs.join(" "));
+  const jouer = (h.match(/data-act="play"[^>]*>(<svg[\s\S]*?<\/svg>)/) || ["", ""])[1];
+  T("Lecture et Pause : deux dessins dans le meme bouton, Pause masquee au depart", (jouer.match(/<path/g) || []).length === 2 && /<path d="[^"]*" style="display:none"\/><\/svg>$/.test(jouer), jouer);
+}
 
 console.log("\n--- Contrastes mesures ---");
 const c1=ratio(sage,slate);

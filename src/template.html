@@ -1016,6 +1016,10 @@ div.corr-item:hover{border-color:var(--rule)}
 .corr-boutons{display:flex;gap:6px;flex:none;margin-left:auto}
 .corr-boutons .btn{padding:8px 12px;min-height:44px;white-space:nowrap}
 .corr-fleche{color:var(--sage);flex:none}
+/* Sous une partie par correspondance, « Retour a mes parties » et « Annuler
+   l'invitation » prennent chacun leur rangee : trois boutons cote a cote
+   passaient sur deux lignes a 360 px. */
+#directPanel.corr-partie #btnDirectQuitter,#directPanel.corr-partie #btnDirectAnnuler{flex:1 1 100%}
 /* Pendule d'une partie par correspondance : « 2 j 4 h » au lieu de « 10:00 ». */
 .clock.corr .time{font-size:17px;letter-spacing:0}
 #pane-friend[data-ami="lien"]:not(.en-direct) #directPanel{display:none}

@@ -100,6 +100,8 @@ function directPanneau() {
   $("btnDirectRefuser").classList.toggle("hide", !(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
   /* Nulle proposee par l'adversaire : Accepter et Refuser sur leur rangee, Abandonner dessous (360 px). */
   p.classList.toggle("nulle-recue", !!(e && e.phase === "jeu" && e.nulle && e.nulle !== e.moi));
+  /* Par correspondance, « Retour a mes parties » a sa propre rangee (360 px). */
+  p.classList.toggle("corr-partie", parCorr);
   $("btnDirectAbandon").classList.toggle("hide", !jouee);
   $("btnDirectRevanche").classList.toggle("hide", !finie || !e.fin.r);
   $("btnDirectRevanche").disabled = !!(finie && (e.rev[e.moi] || directRevancheCorr === e.id));

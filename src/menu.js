@@ -123,6 +123,7 @@ function menuStats(){
      "Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.",
      "Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.",
      "It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's."].map(x=>"<p>"+echapper(t(x))+"</p>").join("")+"</details>"+
+    (typeof eloBloc==="function"?eloBloc():"")+
     (estMembre()?'<p class="tiroir-section">'+echapper(t("Puzzles solved, last 30 days"))+"</p>"+
     '<div class="graph menu-graphe" id="menuJoursGraph"></div>':"")+
     /* Parties en direct (2026-11-19) : comptees par le serveur, lues sur la fiche du membre. */
@@ -135,6 +136,7 @@ function menuStats(){
     }).catch(()=>{});
   }
   drawRatingGraph(menuEl("menuRatingGraph"));
+  if(typeof eloCourbe==="function")eloCourbe(menuEl("menuEloGraph"));
   if(estMembre())menuJoursGraphe(menuEl("menuJoursGraph"));
   menuChiffres();
 }

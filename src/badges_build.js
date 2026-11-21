@@ -33,6 +33,8 @@ function code() {
     fs.readFileSync(path.join(__dirname, "webapp.js"), "utf8") + "\n" +
     /* Compte (2026-11-16) : l'adresse de la page "Ton compte" par langue. */
     fs.readFileSync(path.join(__dirname, "compte.js"), "utf8").replace("__COMPTE_PAGES__", JSON.stringify(COMPTE_PAGES)) + "\n" +
+    /* Elo du joueur contre l'ordinateur (2026-11-21). */
+    fs.readFileSync(path.join(__dirname, "elo.js"), "utf8") + "\n" +
     /* Partie en direct (2026-11-19) : le fil, puis l'ecran. Le fil sert aussi
        aux tests dans node, d'ou son export final, sans effet dans une page. */
     fs.readFileSync(path.join(__dirname, "direct.js"), "utf8") + "\n" +

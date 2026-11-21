@@ -136,6 +136,30 @@ function cpSerie(l,d){
   if(dx<=cpJour(y.k)+1)return {n:cpJour(x.k)-Math.min(dx,dy)+1,k:x.k};
   return x;
 }
+/* Elo contre l'ordinateur (2026-11-21). Avec une base (appareil deja relie),
+   chaque cote apporte ses parties jouees depuis : les variations et les
+   comptes s'additionnent. Sans base (premiere connexion, "Fusionner"), on ne
+   prend PAS le plus haut, trop facile a gonfler : on garde le classement qui
+   repose sur le plus de parties classees. Les courbes sont reunies. */
+function cpEloValide(e){return !!(e&&typeof e==="object"&&typeof e.r==="number"&&isFinite(e.r)&&typeof e.n==="number"&&e.n>=0);}
+function cpFusionElo(l,d,b,distantRecent){
+  const vl=cpEloValide(l),vd=cpEloValide(d);
+  if(!vl&&!vd)return undefined;
+  const borne=r=>Math.max(100,Math.min(3000,Math.round(r)));
+  const pts=e=>cpListe(e&&e.h).filter(x=>Array.isArray(x)&&typeof x[0]==="number"&&typeof x[1]==="number");
+  const vus=new Map();
+  for(const x of pts(distantRecent?l:d).concat(pts(distantRecent?d:l)))vus.set(x[0],x);
+  const h=Array.from(vus.values()).sort((x,y)=>x[0]-y[0]).slice(-50);
+  const pic=e=>typeof e.pic==="number"?e.pic:e.r;
+  if(!vl||!vd){const s=vl?l:d;return {r:borne(s.r),n:Math.floor(s.n),pic:borne(Math.max(pic(s),s.r)),h:h};}
+  if(cpEloValide(b)&&l.n>=b.n&&d.n>=b.n){
+    const r=borne(l.r+d.r-b.r);
+    return {r:r,n:Math.floor(l.n+d.n-b.n),pic:borne(Math.max(pic(l),pic(d),r)),h:h};
+  }
+  const fin=e=>{const p=pts(e);return p.length?p[p.length-1][0]:0;};
+  const s=l.n!==d.n?(l.n>d.n?l:d):fin(l)!==fin(d)?(fin(l)>fin(d)?l:d):(distantRecent?d:l);
+  return {r:borne(s.r),n:Math.floor(s.n),pic:borne(Math.max(pic(s),s.r)),h:h};
+}
 function cpFusionProg(l,d,b,distantRecent){
   l=cpObjet(l);d=cpObjet(d);
   /* Remise a zero ("Recommencer la progression") : elle porte une date, raz.
@@ -193,6 +217,10 @@ function cpFusionProg(l,d,b,distantRecent){
       out.push(!x?y:!y?x:(cpNombre(x.box)-cpNombre(y.box)||cpNombre(x.due)-cpNombre(y.due))>=0?x:y);
     }
     o.mistakeQueue=out.sort((x,y)=>cpNombre(x.ts)-cpNombre(y.ts)).slice(-200);
+  }
+  {
+    const e=cpFusionElo(l.eloOrdi,d.eloOrdi,avecBase?b.eloOrdi:null,distantRecent);
+    if(e)o.eloOrdi=e;else delete o.eloOrdi;
   }
   const s=cpSerie(l,d);
   if(s.k){o.days=s.n;o.lastDay=s.k;}
@@ -1278,6 +1306,9 @@ async function cppOuvrir(pseudo){
     }).join("")+"</ul>"+
     /* Parties en direct : le detail, des qu'une partie a compte. */
     (cpNombre(cpObjet(j.dir).v)+cpNombre(cpObjet(j.dir).n)+cpNombre(cpObjet(j.dir).d)>0?'<p class="cp-note cpp-direct">'+echapper(t("Live games: {v} won, {n} drawn, {d} lost",{v:cpNombre(j.dir.v),n:cpNombre(j.dir.n),d:cpNombre(j.dir.d)}))+"</p>":"")+
+    /* Elo contre l'ordinateur : calcule dans le navigateur du joueur, donc
+       montre avec son signe "environ" et hors des tableaux. */
+    (cpNombre(cpObjet(j.eo).n)>0?'<p class="cp-note cpp-elo">'+echapper(t("≈ {r} against the computer",{r:cpNombre(j.eo.r)}))+"</p>":"")+
     cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+
     (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+

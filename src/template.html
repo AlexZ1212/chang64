@@ -731,6 +731,16 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @keyframes pop{from{opacity:0;transform:scale(.9)}}
 .result b{display:block;font-family:'Source Serif 4',Georgia,serif;font-size:23px;font-weight:600;line-height:1.15;margin-bottom:4px}
 .result span{display:block;font-size:12.5px;color:var(--sage);margin-bottom:14px}
+/* Elo contre l'ordinateur (2026-11-21) : la variation de la partie, puis au
+   besoin une ligne vers le compte. Un paragraphe, pas un span : la regle
+   ".result span" ci-dessus est celle du sous-titre. La ligne vers le compte
+   vit sous l'echiquier, dans le panneau du message : dans la carte, elle la
+   faisait deborder de l'echiquier sur un telephone de 360 px. */
+.result-elo{margin:-6px 0 14px;font-size:13px;color:var(--sage)}
+.result .result-elo b{display:inline;font-family:inherit;font-size:15px;font-weight:700;color:var(--chalk);margin:0 4px 0 0}
+.elo-rappel{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--sage)}
+.elo-rappel .linkbtn{display:inline;padding:0;font-size:13px}
+#menuEloGraph{margin-top:8px}
 .result-actions{display:flex;gap:8px;justify-content:center}
 .result-actions .btn{flex:1;padding:9px 12px;font-size:13px}
 /* Sur telephone, "Changer les réglages" se coupait en plein milieu d'un mot.
@@ -2858,6 +2868,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <div class="result-card">
             <b id="resultTitle"></b>
             <span id="resultSub"></span>
+            <p class="result-elo hide" id="resultElo"></p>
             <div class="rushHistory hide" id="rushHistory"></div>
             <p class="note hide" id="rushHistoryNote">Tap ✓ or ✗ to see how it was solved.</p>
             <div class="result-actions">
@@ -2925,6 +2936,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="panel" id="statusPanel">
           <p class="opening" id="opening"></p>
           <div class="status" id="status">Pick a colour, pick a strength, and off you go.</div>
+          <p class="elo-rappel hide" id="resultEloNote"></p>
           <div class="btnrow" style="margin-top:10px">
             <button class="btn danger" id="btnResign">Resign</button>
           </div>

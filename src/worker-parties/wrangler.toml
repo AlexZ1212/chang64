@@ -14,6 +14,12 @@ routes = [
   { pattern = "chang64.com/api/partie/*", zone_name = "chang64.com" }
 ]
 
+# Une fois par heure : les parties par correspondance d'un compte supprime
+# n'en gardent plus rien, et une echeance manquee est rattrapee (balayer(),
+# index.js). Une lecture de la base par passage.
+[triggers]
+crons = ["17 * * * *"]
+
 # Un objet par partie, stockage SQLite (le seul permis en offre gratuite).
 [[durable_objects.bindings]]
 name = "PARTIES"

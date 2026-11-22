@@ -51,7 +51,10 @@ const MESURE = `(function(nom){
   const noter = (r, nom, unEcran) => { ecrans++; for (const p of r.pb) tout.push(p); if (unEcran && r.h > H) { tout.push(nom + " : ne tient pas sur un ecran (" + r.h + " px pour " + H + ")"); } if (unEcran) pire = Math.max(pire, r.h); };
   const mesurer = async (nom, unEcran) => noter(await c.js(MESURE + "(" + JSON.stringify(nom) + ")"), nom, unEcran);
   const attendre = ms => c.js("new Promise(r=>setTimeout(r," + ms + "))");
+  /* LANGUES=id,pl pour ne remesurer que quelques langues. */
+  const voulues = process.env.LANGUES ? process.env.LANGUES.split(",") : CODES;
   for (const l of CODES) {
+    if (!voulues.includes(l)) continue;
     const url = BASE + "/" + (l === "en" ? "" : l + "/");
     const poser = async o => {
       await c.aller(url);
@@ -105,7 +108,7 @@ const MESURE = `(function(nom){
     console.log(l + " : mesure faite");
   }
   await c.fermer();
-  console.log("\n" + ecrans + " ecrans mesures a " + L + " x " + H + " px, " + CODES.length + " langues ; ecran de lecon le plus haut : " + pire + " px.");
+  console.log("\n" + ecrans + " ecrans mesures a " + L + " x " + H + " px, " + (process.env.LANGUES ? process.env.LANGUES.split(",").length : CODES.length) + " langue(s) ; ecran de lecon le plus haut : " + pire + " px.");
   if (tout.length) { console.log(tout.length + " defaut(s) :"); for (const p of tout) console.log("  - " + p); process.exit(1); }
   console.log("Aucun debordement, aucun bouton sur deux lignes, chaque lecon tient sur un ecran.");
 })().catch(e => { console.error(e); process.exit(1); });

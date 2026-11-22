@@ -1,8 +1,16 @@
 {
   "id": "regles",
   "titre": {
-    "en": "All the rules", "fr": "Toutes les règles", "es": "Todas las reglas", "pt": "Todas as regras", "de": "Alle Regeln",
-    "ru": "Все правила", "it": "Tutte le regole", "tr": "Bütün kurallar", "pl": "Wszystkie zasady", "id": "Semua aturan"
+    "en": "All the rules",
+    "fr": "Toutes les règles",
+    "es": "Todas las reglas",
+    "pt": "Todas as regras",
+    "de": "Alle Regeln",
+    "ru": "Все правила",
+    "it": "Tutte le regole",
+    "tr": "Bütün kurallar",
+    "pl": "Wszystkie zasady",
+    "id": "Semua aturan"
   },
   "desc": {
     "en": "Check and the ways out of it, castling, promotion, en passant, stalemate.",
@@ -19,9 +27,16 @@
   "etapes": [
     {
       "titre": {
-        "en": "Check, and three ways out", "fr": "L'échec et ses trois parades", "es": "El jaque y sus tres salidas", "pt": "O xeque e as três saídas",
-        "de": "Schach und die drei Auswege", "ru": "Шах и три способа защиты", "it": "Lo scacco e le tre parate", "tr": "Şah ve üç kurtuluş yolu",
-        "pl": "Szach i trzy sposoby obrony", "id": "Skak dan tiga jalan keluarnya"
+        "en": "Check, and three ways out",
+        "fr": "L'échec et ses trois parades",
+        "es": "El jaque y sus tres salidas",
+        "pt": "O xeque e as três saídas",
+        "de": "Schach und die drei Auswege",
+        "ru": "Шах и три способа защиты",
+        "it": "Lo scacco e le tre parate",
+        "tr": "Şah ve üç kurtuluş yolu",
+        "pl": "Szach i trzy sposoby obrony",
+        "id": "Skak dan tiga jalan keluarnya"
       },
       "intro": {
         "en": "When your king is attacked, it is in check, and you must deal with it at once. There are three ways: move the king, take the attacking piece, or put a piece in between.",
@@ -38,7 +53,12 @@
       "exos": [
         {
           "fen": "4r1k1/8/8/8/8/8/8/4K3 w - - 0 1",
-          "sol": ["e1d1", "e1d2", "e1f1", "e1f2"],
+          "sol": [
+            "e1d1",
+            "e1d2",
+            "e1f1",
+            "e1f2"
+          ],
           "consigne": {
             "en": "The rook is giving check and nothing can stop it. Move your king out of its line.",
             "fr": "La tour donne échec et rien ne peut l'arrêter. Sors ton roi de sa ligne.",
@@ -66,7 +86,9 @@
         },
         {
           "fen": "4k3/8/8/8/1b6/P7/2P5/4K3 w - - 0 1",
-          "sol": ["a3b4"],
+          "sol": [
+            "a3b4"
+          ],
           "controle": "meilleur",
           "consigne": {
             "en": "The bishop is giving check, and one of your pawns can take it. Take it.",
@@ -109,7 +131,9 @@
         },
         {
           "fen": "6k1/8/1b6/8/8/5N2/3P2PP/3Q2K1 w - - 0 1",
-          "sol": ["d2d4"],
+          "sol": [
+            "d2d4"
+          ],
           "cible": "d4",
           "controle": "bon",
           "consigne": {
@@ -155,25 +179,35 @@
     },
     {
       "titre": {
-        "en": "Castling", "fr": "Le roque", "es": "El enroque", "pt": "O roque", "de": "Die Rochade",
-        "ru": "Рокировка", "it": "L'arrocco", "tr": "Rok", "pl": "Roszada", "id": "Rokade"
+        "en": "Castling",
+        "fr": "Le roque",
+        "es": "El enroque",
+        "pt": "O roque",
+        "de": "Die Rochade",
+        "ru": "Рокировка",
+        "it": "L'arrocco",
+        "tr": "Rok",
+        "pl": "Roszada",
+        "id": "Rokade"
       },
       "intro": {
-        "en": "Castling tucks your king away and brings a rook out, in a single move. The king goes two squares towards the rook, and the rook jumps over it. It is only allowed if neither of them has moved yet, nothing stands between them, and the king is not in check and does not cross an attacked square.",
-        "fr": "Le roque met ton roi à l'abri et sort une tour, en un seul coup. Le roi fait deux cases vers la tour, et la tour saute par-dessus lui. Il n'est permis que si aucun des deux n'a encore bougé, si rien ne les sépare, et si le roi n'est pas en échec et ne traverse pas une case attaquée.",
-        "es": "El enroque pone a tu rey a salvo y saca una torre, en una sola jugada. El rey avanza dos casillas hacia la torre, y la torre salta por encima de él. Solo se permite si ninguno de los dos se ha movido todavía, si no hay nada entre ellos, y si el rey no está en jaque ni pasa por una casilla atacada.",
-        "pt": "O roque coloca seu rei em segurança e traz uma torre para o jogo, em um único lance. O rei anda duas casas em direção à torre, e a torre pula por cima dele. Só é permitido se nenhum dos dois tiver se movido, se não houver nada entre eles, e se o rei não estiver em xeque nem passar por uma casa atacada.",
-        "de": "Die Rochade bringt deinen König in Sicherheit und einen Turm ins Spiel, in einem einzigen Zug. Der König geht zwei Felder auf den Turm zu, und der Turm springt über ihn. Erlaubt ist sie nur, wenn beide noch nicht gezogen haben, nichts zwischen ihnen steht und der König weder im Schach steht noch über ein angegriffenes Feld zieht.",
-        "ru": "Рокировка прячет короля и вводит в игру ладью, и всё это одним ходом. Король идёт на два поля к ладье, а ладья перепрыгивает через него. Рокировка разрешена, только если ни король, ни эта ладья ещё не ходили, между ними пусто, король не под шахом и не проходит через поле под ударом.",
-        "it": "L'arrocco mette il re al sicuro e porta in gioco una torre, in una sola mossa. Il re fa due case verso la torre, e la torre lo scavalca. È permesso solo se nessuno dei due si è ancora mosso, se non c'è niente tra loro, e se il re non è sotto scacco e non attraversa una casa attaccata.",
-        "tr": "Rok, tek hamlede şahını güvenceye alır ve bir kaleyi oyuna sokar. Şah kaleye doğru iki kare gider, kale de onun üzerinden atlar. Yalnızca ikisi de daha önce oynamadıysa, aralarında taş yoksa, şah tehdit altında değilse ve saldırı altındaki bir kareden geçmiyorsa yapılabilir.",
-        "pl": "Roszada chowa króla i wprowadza wieżę do gry, w jednym ruchu. Król idzie o dwa pola w stronę wieży, a wieża przeskakuje nad nim. Wolno ją wykonać tylko wtedy, gdy ani król, ani ta wieża jeszcze się nie ruszały, nic między nimi nie stoi, a król nie jest w szachu i nie przechodzi przez atakowane pole.",
-        "id": "Rokade mengamankan rajamu dan mengeluarkan benteng, dalam satu langkah. Raja bergeser dua petak ke arah benteng, lalu benteng melompatinya. Rokade hanya boleh jika keduanya belum pernah bergerak, tak ada bidak di antara mereka, dan raja tidak sedang terkena skak serta tidak melewati petak yang diserang."
+        "en": "Castling tucks your king away and brings a rook out, in a single move: the king goes two squares towards the rook, which jumps over it. Neither of them may have moved before, and nothing may stand between them.",
+        "fr": "Le roque met ton roi à l'abri et sort une tour, en un seul coup : le roi fait deux cases vers la tour, qui saute par-dessus lui. Aucun des deux ne doit avoir déjà bougé, et rien ne doit les séparer.",
+        "es": "El enroque pone a tu rey a salvo y saca una torre, en una sola jugada: el rey avanza dos casillas hacia la torre, que salta por encima de él. Ninguno de los dos puede haberse movido antes, y no puede haber nada entre ellos.",
+        "pt": "O roque coloca seu rei em segurança e traz uma torre para o jogo, em um único lance: o rei anda duas casas em direção à torre, que pula por cima dele. Nenhum dos dois pode ter se movido antes, e não pode haver nada entre eles.",
+        "de": "Die Rochade bringt deinen König in Sicherheit und einen Turm ins Spiel, in einem einzigen Zug: Der König geht zwei Felder auf den Turm zu, der über ihn springt. Beide dürfen noch nicht gezogen haben, und zwischen ihnen darf nichts stehen.",
+        "ru": "Рокировка прячет короля и вводит в игру ладью одним ходом: король идёт на два поля к ладье, а она перепрыгивает через него. Ни король, ни эта ладья не должны были ходить раньше, и между ними должно быть пусто.",
+        "it": "L'arrocco mette il re al sicuro e porta in gioco una torre, in una sola mossa: il re fa due case verso la torre, che lo scavalca. Nessuno dei due deve essersi già mosso, e tra loro non deve esserci niente.",
+        "tr": "Rok, tek hamlede şahını güvenceye alır ve bir kaleyi oyuna sokar: şah kaleye doğru iki kare gider, kale de onun üzerinden atlar. İkisi de daha önce oynamamış olmalı ve aralarında taş bulunmamalı.",
+        "pl": "Roszada chowa króla i wprowadza wieżę do gry w jednym ruchu: król idzie o dwa pola w stronę wieży, a ona przeskakuje nad nim. Ani król, ani ta wieża nie mogły się wcześniej ruszać, a między nimi nie może nic stać.",
+        "id": "Rokade mengamankan rajamu dan mengeluarkan benteng dalam satu langkah: raja bergeser dua petak ke arah benteng, lalu benteng melompatinya. Keduanya harus belum pernah bergerak, dan tak boleh ada bidak di antara mereka."
       },
       "exos": [
         {
           "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1",
-          "sol": ["e1g1"],
+          "sol": [
+            "e1g1"
+          ],
           "cible": "g1",
           "controle": "bon",
           "consigne": {
@@ -217,7 +251,9 @@
         },
         {
           "fen": "r3kbnr/pppqpppp/2n5/3p1b2/3P1B2/2N5/PPPQPPPP/R3KBNR w KQkq - 0 1",
-          "sol": ["e1c1"],
+          "sol": [
+            "e1c1"
+          ],
           "cible": "c1",
           "controle": "bon",
           "consigne": {
@@ -247,31 +283,35 @@
             }
           },
           "apres": {
-            "en": "Same idea on the other side: the rook lands next to the king.",
-            "fr": "Même idée de l'autre côté : la tour se pose à côté du roi.",
-            "es": "La misma idea por el otro lado: la torre queda junto al rey.",
-            "pt": "A mesma ideia do outro lado: a torre fica ao lado do rei.",
-            "de": "Dieselbe Idee auf der anderen Seite: Der Turm landet neben dem König.",
-            "ru": "Та же идея с другой стороны: ладья встаёт рядом с королём.",
-            "it": "Stessa idea dall'altro lato: la torre finisce accanto al re.",
-            "tr": "Öbür tarafta da aynı fikir: kale şahın yanına yerleşir.",
-            "pl": "Ten sam pomysł po drugiej stronie: wieża staje obok króla.",
-            "id": "Gagasan yang sama di sisi lain: benteng mendarat di sebelah raja."
+            "en": "Same idea on the other side. One more rule: you can never castle while your king is in check.",
+            "fr": "Même idée de l'autre côté. Une règle de plus : on ne roque jamais quand son roi est en échec.",
+            "es": "La misma idea por el otro lado. Una regla más: nunca se puede enrocar con el rey en jaque.",
+            "pt": "A mesma ideia do outro lado. Mais uma regra: nunca se pode rocar com o rei em xeque.",
+            "de": "Dieselbe Idee auf der anderen Seite. Noch eine Regel: Steht dein König im Schach, darfst du nicht rochieren.",
+            "ru": "Та же идея с другой стороны. И ещё одно правило: под шахом рокировать нельзя.",
+            "it": "Stessa idea dall'altro lato. Una regola in più: non si arrocca mai con il re sotto scacco.",
+            "tr": "Öbür tarafta da aynı fikir. Bir kural daha: şahın tehdit altındayken rok yapamazsın.",
+            "pl": "Ten sam pomysł po drugiej stronie. Jeszcze jedna zasada: nie wolno roszować, gdy król stoi w szachu.",
+            "id": "Gagasan yang sama di sisi lain. Satu aturan lagi: rokade tidak boleh dilakukan saat rajamu terkena skak."
           }
         },
         {
           "fen": "4k3/pppp1ppp/b7/8/8/8/PPPQ1PPP/R3K2R w KQ - 0 1",
-          "sol": ["e1c1"],
+          "sol": [
+            "e1c1"
+          ],
           "cible": "c1",
-          "interdit": ["e1g1"],
+          "interdit": [
+            "e1g1"
+          ],
           "controle": "bon",
           "consigne": {
             "en": "The black bishop watches a square your king would cross on the short side: castling there is not allowed. Castle on the other side.",
             "fr": "Le fou noir surveille une case que ton roi traverserait du petit côté : ce roque est interdit. Roque de l'autre côté.",
             "es": "El alfil negro vigila una casilla por la que pasaría tu rey en el lado corto: ese enroque está prohibido. Enroca por el otro lado.",
             "pt": "O bispo preto vigia uma casa por onde seu rei passaria no lado pequeno: esse roque é proibido. Faça o roque do outro lado.",
-            "de": "Der schwarze Läufer bewacht ein Feld, über das dein König auf der kurzen Seite ziehen müsste: Diese Rochade ist verboten. Rochiere zur anderen Seite.",
-            "ru": "Чёрный слон держит под ударом поле, через которое король прошёл бы при короткой рокировке: она запрещена. Рокируй в другую сторону.",
+            "de": "Der schwarze Läufer bewacht ein Feld auf dem Weg deines Königs: Die kurze Rochade ist verboten. Rochiere zur anderen Seite.",
+            "ru": "Чёрный слон бьёт поле на пути короля: короткая рокировка запрещена. Рокируй в другую сторону.",
             "it": "L'alfiere nero controlla una casa che il tuo re attraverserebbe sul lato corto: quell'arrocco è vietato. Arrocca dall'altro lato.",
             "tr": "Siyah fil, kısa tarafta şahının geçeceği bir kareyi gözlüyor: o rok yasak. Diğer tarafa rok yap.",
             "pl": "Czarny goniec pilnuje pola, przez które twój król przeszedłby przy krótkiej roszadzie: jest ona zabroniona. Zrób roszadę w drugą stronę.",
@@ -308,8 +348,16 @@
     },
     {
       "titre": {
-        "en": "Promotion", "fr": "La promotion", "es": "La coronación", "pt": "A promoção", "de": "Die Umwandlung",
-        "ru": "Превращение пешки", "it": "La promozione", "tr": "Terfi", "pl": "Promocja", "id": "Promosi"
+        "en": "Promotion",
+        "fr": "La promotion",
+        "es": "La coronación",
+        "pt": "A promoção",
+        "de": "Die Umwandlung",
+        "ru": "Превращение пешки",
+        "it": "La promozione",
+        "tr": "Terfi",
+        "pl": "Promocja",
+        "id": "Promosi"
       },
       "intro": {
         "en": "A pawn that reaches the last rank turns into another piece: you choose a queen, a rook, a bishop or a knight. Almost always the queen, the strongest of them.",
@@ -326,7 +374,9 @@
       "exos": [
         {
           "fen": "8/4P1k1/8/8/8/8/8/4K3 w - - 0 1",
-          "sol": ["e7e8q"],
+          "sol": [
+            "e7e8q"
+          ],
           "cible": "e8",
           "controle": "meilleur",
           "consigne": {
@@ -342,9 +392,42 @@
             "id": "Majukan pionmu ke baris terakhir dan pilih menteri."
           },
           "faux": {
-            "e7e8r": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
-            "e7e8b": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
-            "e7e8n": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." }
+            "e7e8r": {
+              "en": "That is allowed, but the queen is far stronger. Choose the queen.",
+              "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.",
+              "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.",
+              "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.",
+              "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.",
+              "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.",
+              "it": "È permesso, ma la donna è molto più forte. Scegli la donna.",
+              "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.",
+              "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.",
+              "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri."
+            },
+            "e7e8b": {
+              "en": "That is allowed, but the queen is far stronger. Choose the queen.",
+              "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.",
+              "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.",
+              "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.",
+              "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.",
+              "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.",
+              "it": "È permesso, ma la donna è molto più forte. Scegli la donna.",
+              "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.",
+              "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.",
+              "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri."
+            },
+            "e7e8n": {
+              "en": "That is allowed, but the queen is far stronger. Choose the queen.",
+              "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.",
+              "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.",
+              "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.",
+              "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.",
+              "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.",
+              "it": "È permesso, ma la donna è molto più forte. Scegli la donna.",
+              "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.",
+              "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.",
+              "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri."
+            }
           },
           "apres": {
             "en": "A pawn has become a queen: that is how many games are won.",
@@ -361,7 +444,9 @@
         },
         {
           "fen": "rn4k1/1P6/8/8/8/8/8/4K3 w - - 0 1",
-          "sol": ["b7a8q"],
+          "sol": [
+            "b7a8q"
+          ],
           "controle": "meilleur",
           "consigne": {
             "en": "The knight blocks your pawn, but a pawn takes diagonally. Take the rook and choose the queen.",
@@ -376,9 +461,42 @@
             "id": "Kuda menghalangi pionmu, tapi pion memakan secara diagonal. Makan benteng itu dan pilih menteri."
           },
           "faux": {
-            "b7a8r": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
-            "b7a8b": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
-            "b7a8n": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." }
+            "b7a8r": {
+              "en": "That is allowed, but the queen is far stronger. Choose the queen.",
+              "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.",
+              "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.",
+              "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.",
+              "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.",
+              "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.",
+              "it": "È permesso, ma la donna è molto più forte. Scegli la donna.",
+              "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.",
+              "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.",
+              "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri."
+            },
+            "b7a8b": {
+              "en": "That is allowed, but the queen is far stronger. Choose the queen.",
+              "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.",
+              "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.",
+              "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.",
+              "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.",
+              "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.",
+              "it": "È permesso, ma la donna è molto più forte. Scegli la donna.",
+              "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.",
+              "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.",
+              "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri."
+            },
+            "b7a8n": {
+              "en": "That is allowed, but the queen is far stronger. Choose the queen.",
+              "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.",
+              "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.",
+              "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.",
+              "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.",
+              "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.",
+              "it": "È permesso, ma la donna è molto più forte. Scegli la donna.",
+              "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.",
+              "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.",
+              "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri."
+            }
           },
           "apres": {
             "en": "A capture and a promotion in the same move.",
@@ -395,7 +513,9 @@
         },
         {
           "fen": "7b/5Ppk/8/6P1/2B5/8/8/6K1 w - - 0 1",
-          "sol": ["f7f8n"],
+          "sol": [
+            "f7f8n"
+          ],
           "mat": true,
           "consigne": {
             "en": "Checkmate in one move. Careful: this time the queen is not the right choice.",
@@ -440,8 +560,16 @@
     },
     {
       "titre": {
-        "en": "En passant", "fr": "La prise en passant", "es": "La captura al paso", "pt": "O en passant", "de": "En passant",
-        "ru": "Взятие на проходе", "it": "L'en passant", "tr": "Geçerken alma", "pl": "Bicie w przelocie", "id": "En passant"
+        "en": "En passant",
+        "fr": "La prise en passant",
+        "es": "La captura al paso",
+        "pt": "O en passant",
+        "de": "En passant",
+        "ru": "Взятие на проходе",
+        "it": "L'en passant",
+        "tr": "Geçerken alma",
+        "pl": "Bicie w przelocie",
+        "id": "En passant"
       },
       "intro": {
         "en": "When a pawn moves two squares at once and lands right beside one of your pawns, you may take it as if it had moved only one square. This is en passant, and it is only allowed on the very next move.",
@@ -459,7 +587,9 @@
         {
           "fen": "4k3/3p4/8/4P3/8/8/8/4K3 b - - 0 1",
           "avant": "d7d5",
-          "sol": ["e5d6"],
+          "sol": [
+            "e5d6"
+          ],
           "cible": "d6",
           "consigne": {
             "en": "The black pawn has just moved two squares, right beside yours. Take it en passant: your pawn goes to the marked square.",
@@ -503,7 +633,9 @@
         {
           "fen": "6k1/2p5/8/1P6/8/8/8/6K1 b - - 0 1",
           "avant": "c7c5",
-          "sol": ["b5c6"],
+          "sol": [
+            "b5c6"
+          ],
           "consigne": {
             "en": "Same thing on the other side. The black pawn has just jumped two squares: take it en passant.",
             "fr": "Même chose de l'autre côté. Le pion noir vient de sauter deux cases : prends-le en passant.",
@@ -546,7 +678,10 @@
         {
           "fen": "4k3/3p4/8/2P1P3/8/8/8/4K3 b - - 0 1",
           "avant": "d7d5",
-          "sol": ["e5d6", "c5d6"],
+          "sol": [
+            "e5d6",
+            "c5d6"
+          ],
           "consigne": {
             "en": "Two of your pawns can take it en passant. Pick one.",
             "fr": "Deux de tes pions peuvent le prendre en passant. Choisis-en un.",
@@ -590,27 +725,44 @@
     },
     {
       "titre": {
-        "en": "Stalemate and draws", "fr": "Le pat et les nulles", "es": "El ahogado y las tablas", "pt": "O afogamento e os empates", "de": "Patt und Remis",
-        "ru": "Пат и ничьи", "it": "Lo stallo e le patte", "tr": "Pat ve beraberlik", "pl": "Pat i remisy", "id": "Pat dan remis"
+        "en": "Stalemate and draws",
+        "fr": "Le pat et les nulles",
+        "es": "El ahogado y las tablas",
+        "pt": "O afogamento e os empates",
+        "de": "Patt und Remis",
+        "ru": "Пат и ничьи",
+        "it": "Lo stallo e le patte",
+        "tr": "Pat ve beraberlik",
+        "pl": "Pat i remisy",
+        "id": "Pat dan remis"
       },
       "intro": {
-        "en": "If your opponent has no legal move left and their king is not in check, it is stalemate: the game is a draw, even if you are a queen up. Before you play, make sure they still have a move, or that you are giving checkmate. A game can also be drawn by agreement, when the same position comes back three times, or when neither side has enough left to mate.",
-        "fr": "Si ton adversaire n'a plus aucun coup permis et que son roi n'est pas en échec, c'est pat : la partie est nulle, même si tu as une dame de plus. Avant de jouer, vérifie qu'il lui reste un coup, ou que tu fais mat. Une partie peut aussi être nulle par accord, quand la même position revient trois fois, ou quand plus personne n'a de quoi mater.",
-        "es": "Si tu rival no tiene ninguna jugada legal y su rey no está en jaque, es ahogado: la partida es tablas, aunque tengas una dama de más. Antes de jugar, comprueba que le queda una jugada, o que das mate. Una partida también puede acabar en tablas por acuerdo, cuando la misma posición se repite tres veces o cuando a nadie le queda material para dar mate.",
-        "pt": "Se o adversário não tem mais nenhum lance legal e o rei dele não está em xeque, é afogamento: a partida empata, mesmo que você tenha uma dama a mais. Antes de jogar, confira se ele ainda tem um lance, ou se você dá mate. Uma partida também pode empatar por acordo, quando a mesma posição se repete três vezes ou quando ninguém tem material para dar mate.",
-        "de": "Hat dein Gegner keinen legalen Zug mehr und steht sein König nicht im Schach, ist es Patt: Die Partie ist remis, selbst wenn du eine Dame mehr hast. Prüf vor deinem Zug, ob ihm noch ein Zug bleibt oder ob du mattsetzt. Remis gibt es auch durch Einigung, wenn dieselbe Stellung dreimal entsteht oder wenn keiner mehr genug Material zum Mattsetzen hat.",
-        "ru": "Если у соперника не осталось ни одного допустимого хода, а его король не под шахом, это пат: ничья, даже если у тебя лишний ферзь. Перед ходом проверь, что у него есть ход или что ты ставишь мат. Ничья бывает и по соглашению, при троекратном повторении позиции или когда ни у кого не хватает фигур для мата.",
-        "it": "Se il tuo avversario non ha più mosse legali e il suo re non è sotto scacco, è stallo: la partita è patta, anche se hai una donna in più. Prima di muovere, controlla che gli resti una mossa, o che tu stia dando matto. Una partita può finire patta anche per accordo, quando la stessa posizione si ripete tre volte o quando nessuno ha più materiale per dare matto.",
-        "tr": "Rakibinin kurala uygun hiçbir hamlesi kalmadıysa ve şahı tehdit altında değilse bu pattır: bir vezir fazlan olsa bile oyun berabere biter. Oynamadan önce rakibinin bir hamlesi kaldığından ya da mat ettiğinden emin ol. Oyun anlaşmayla, aynı konum üç kez tekrarlandığında ya da kimsenin mat edecek taşı kalmadığında da berabere biter.",
-        "pl": "Jeśli przeciwnik nie ma żadnego dozwolonego ruchu, a jego król nie jest w szachu, to pat: partia kończy się remisem, nawet gdy masz hetmana więcej. Przed ruchem sprawdź, czy zostaje mu jakiś ruch albo czy dajesz mata. Remis bywa też za zgodą obu stron, po trzykrotnym powtórzeniu pozycji albo gdy nikt nie ma już czym dać mata.",
-        "id": "Jika lawan tidak punya langkah sah lagi dan rajanya tidak terkena skak, itu pat: permainan remis, meskipun kamu unggul satu menteri. Sebelum melangkah, pastikan lawan masih punya langkah, atau kamu memang memberi skakmat. Permainan juga bisa remis karena kesepakatan, saat posisi yang sama muncul tiga kali, atau saat tak ada lagi yang punya cukup bidak untuk skakmat."
+        "en": "If your opponent has no legal move left and their king is not in check, it is stalemate: the game is a draw, even if you are a queen up. Before you play, make sure they still have a move, or that you are giving checkmate.",
+        "fr": "Si ton adversaire n'a plus aucun coup permis et que son roi n'est pas en échec, c'est pat : la partie est nulle, même si tu as une dame de plus. Avant de jouer, vérifie qu'il lui reste un coup, ou que tu fais mat.",
+        "es": "Si tu rival no tiene ninguna jugada legal y su rey no está en jaque, es ahogado: la partida es tablas, aunque tengas una dama de más. Antes de jugar, comprueba que le queda una jugada, o que das mate.",
+        "pt": "Se o adversário não tem mais nenhum lance legal e o rei dele não está em xeque, é afogamento: a partida empata, mesmo que você tenha uma dama a mais. Antes de jogar, confira se ele ainda tem um lance, ou se você dá mate.",
+        "de": "Hat dein Gegner keinen legalen Zug mehr und steht sein König nicht im Schach, ist es Patt: Die Partie ist remis, selbst wenn du eine Dame mehr hast. Prüf vor deinem Zug, ob ihm noch ein Zug bleibt oder ob du mattsetzt.",
+        "ru": "Если у соперника не осталось ни одного допустимого хода, а его король не под шахом, это пат: ничья, даже если у тебя лишний ферзь. Перед ходом проверь, что у него есть ход или что ты ставишь мат.",
+        "it": "Se il tuo avversario non ha più mosse legali e il suo re non è sotto scacco, è stallo: la partita è patta, anche se hai una donna in più. Prima di muovere, controlla che gli resti una mossa, o che tu stia dando matto.",
+        "tr": "Rakibinin kurala uygun hiçbir hamlesi kalmadıysa ve şahı tehdit altında değilse bu pattır: bir vezir fazlan olsa bile oyun berabere biter. Oynamadan önce rakibinin bir hamlesi kaldığından ya da mat ettiğinden emin ol.",
+        "pl": "Jeśli przeciwnik nie ma żadnego dozwolonego ruchu, a jego król nie jest w szachu, to pat: partia kończy się remisem, nawet gdy masz hetmana więcej. Przed ruchem sprawdź, czy zostaje mu jakiś ruch albo czy dajesz mata.",
+        "id": "Jika lawan tidak punya langkah sah lagi dan rajanya tidak terkena skak, itu pat: permainan remis, meskipun kamu unggul satu menteri. Sebelum melangkah, pastikan lawan masih punya langkah, atau kamu memang memberi skakmat."
       },
       "exos": [
         {
           "fen": "7k/5K2/8/6Q1/8/8/8/8 w - - 0 1",
-          "sol": ["g5g7", "g5g8", "g5h6", "g5h5", "g5h4"],
+          "sol": [
+            "g5g7",
+            "g5g8",
+            "g5h6",
+            "g5h5",
+            "g5h4"
+          ],
           "mat": true,
-          "pat": ["g5g6", "g5f5"],
+          "pat": [
+            "g5g6",
+            "g5f5"
+          ],
           "consigne": {
             "en": "Checkmate in one move. Careful: two of the queen's moves give stalemate instead.",
             "fr": "Fais mat en un coup. Attention : deux coups de dame font pat à la place.",
@@ -624,15 +776,46 @@
             "id": "Skakmat dalam satu langkah. Hati-hati: dua langkah menteri justru membuat pat."
           },
           "faux": {
-            "g5g6": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." },
-            "g5f5": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." }
+            "g5g6": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "g5f5": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            }
           }
         },
         {
           "fen": "k7/3Q4/1K6/8/8/8/8/8 w - - 0 1",
-          "sol": ["d7c8", "d7d8", "d7e8", "d7b7", "d7a7"],
+          "sol": [
+            "d7c8",
+            "d7d8",
+            "d7e8",
+            "d7b7",
+            "d7a7"
+          ],
           "mat": true,
-          "pat": ["d7c7", "d7d6"],
+          "pat": [
+            "d7c7",
+            "d7d6"
+          ],
           "consigne": {
             "en": "Same trap in the corner. Find a checkmate, not a stalemate.",
             "fr": "Même piège dans le coin. Trouve un mat, pas un pat.",
@@ -646,16 +829,57 @@
             "id": "Jebakan yang sama di pojok. Temukan skakmat, bukan pat."
           },
           "faux": {
-            "d7c7": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." },
-            "d7d6": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." }
+            "d7c7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "d7d6": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            }
+          },
+          "apres": {
+            "en": "Checkmate. A game can also be drawn by agreement, or when the same position comes back three times.",
+            "fr": "Mat. Une partie peut aussi être nulle par accord, ou quand la même position revient trois fois.",
+            "es": "Mate. Una partida también puede acabar en tablas por acuerdo, o cuando la misma posición se repite tres veces.",
+            "pt": "Mate. Uma partida também pode empatar por acordo, ou quando a mesma posição se repete três vezes.",
+            "de": "Matt. Remis gibt es auch durch Einigung, oder wenn dieselbe Stellung dreimal entsteht.",
+            "ru": "Мат. Ничья бывает и по соглашению, и при троекратном повторении позиции.",
+            "it": "Matto. Una partita può finire patta anche per accordo, o quando la stessa posizione si ripete tre volte.",
+            "tr": "Mat. Oyun anlaşmayla ya da aynı konum üç kez tekrarlandığında da berabere biter.",
+            "pl": "Mat. Remis bywa też za zgodą obu stron albo po trzykrotnym powtórzeniu pozycji.",
+            "id": "Skakmat. Permainan juga bisa remis karena kesepakatan, atau saat posisi yang sama muncul tiga kali."
           }
         },
         {
           "fen": "8/k1P5/2K5/8/8/8/8/8 w - - 0 1",
-          "sol": ["c7c8r"],
+          "sol": [
+            "c7c8r"
+          ],
           "controle": "meilleur",
-          "pat": ["c7c8q"],
-          "suite": ["a7a6", "c8a8"],
+          "pat": [
+            "c7c8q"
+          ],
+          "suite": [
+            "a7a6",
+            "c8a8"
+          ],
           "suiteMat": true,
           "consigne": {
             "en": "Your pawn is about to promote, but a queen would give stalemate. Choose the piece that leaves the black king a move.",
@@ -682,8 +906,30 @@
               "pl": "Pat! Z hetmanem na tym polu czarny król nie ma ruchu i nie jest w szachu.",
               "id": "Pat! Dengan menteri di petak itu, raja hitam tak punya langkah dan tidak terkena skak."
             },
-            "c7c8b": { "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.", "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.", "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.", "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.", "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.", "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.", "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.", "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.", "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.", "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup." },
-            "c7c8n": { "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.", "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.", "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.", "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.", "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.", "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.", "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.", "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.", "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.", "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup." }
+            "c7c8b": {
+              "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.",
+              "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.",
+              "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.",
+              "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.",
+              "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.",
+              "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.",
+              "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.",
+              "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.",
+              "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.",
+              "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup."
+            },
+            "c7c8n": {
+              "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.",
+              "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.",
+              "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.",
+              "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.",
+              "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.",
+              "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.",
+              "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.",
+              "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.",
+              "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.",
+              "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup."
+            }
           },
           "apres": {
             "en": "The rook left the king one square, then gave mate. Stalemate avoided.",
@@ -705,9 +951,16 @@
     "fen": "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "niveau": 1,
     "titre": {
-      "en": "The boss: the computer without its queen", "fr": "Le boss : l'ordinateur sans sa dame", "es": "El jefe: el ordenador sin su dama",
-      "pt": "O chefão: o computador sem a dama", "de": "Der Boss: der Computer ohne Dame", "ru": "Босс: компьютер без ферзя",
-      "it": "Il boss: il computer senza la donna", "tr": "Boss: vezirsiz bilgisayar", "pl": "Boss: komputer bez hetmana", "id": "Bos: komputer tanpa menteri"
+      "en": "The boss: the computer without its queen",
+      "fr": "Le boss : l'ordinateur sans sa dame",
+      "es": "El jefe: el ordenador sin su dama",
+      "pt": "O chefão: o computador sem a dama",
+      "de": "Der Boss: der Computer ohne Dame",
+      "ru": "Босс: компьютер без ферзя",
+      "it": "Il boss: il computer senza la donna",
+      "tr": "Boss: vezirsiz bilgisayar",
+      "pl": "Boss: komputer bez hetmana",
+      "id": "Bos: komputer tanpa menteri"
     },
     "intro": {
       "en": "You now know all the rules. To finish the chapter, beat the computer at its easiest level: it plays without its queen. No clock, and you can take a move back.",
@@ -722,9 +975,16 @@
       "id": "Sekarang kamu tahu semua aturannya. Untuk menyelesaikan bab ini, kalahkan komputer di tingkat termudah: ia bermain tanpa menteri. Tanpa jam, dan kamu boleh membatalkan langkah."
     },
     "gagne": {
-      "en": "Boss beaten. You know every rule of the game.", "fr": "Boss battu. Tu connais toutes les règles du jeu.", "es": "Jefe derrotado. Conoces todas las reglas del juego.",
-      "pt": "Chefão derrotado. Você conhece todas as regras do jogo.", "de": "Boss besiegt. Du kennst alle Regeln des Spiels.", "ru": "Босс побеждён. Ты знаешь все правила игры.",
-      "it": "Boss battuto. Conosci tutte le regole del gioco.", "tr": "Boss yenildi. Oyunun bütün kurallarını biliyorsun.", "pl": "Boss pokonany. Znasz wszystkie zasady gry.", "id": "Bos dikalahkan. Kamu tahu semua aturan permainan."
+      "en": "Boss beaten. You know every rule of the game.",
+      "fr": "Boss battu. Tu connais toutes les règles du jeu.",
+      "es": "Jefe derrotado. Conoces todas las reglas del juego.",
+      "pt": "Chefão derrotado. Você conhece todas as regras do jogo.",
+      "de": "Boss besiegt. Du kennst alle Regeln des Spiels.",
+      "ru": "Босс побеждён. Ты знаешь все правила игры.",
+      "it": "Boss battuto. Conosci tutte le regole del gioco.",
+      "tr": "Boss yenildi. Oyunun bütün kurallarını biliyorsun.",
+      "pl": "Boss pokonany. Znasz wszystkie zasady gry.",
+      "id": "Bos dikalahkan. Kamu tahu semua aturan permainan."
     }
   }
 }

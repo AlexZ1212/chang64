@@ -699,6 +699,10 @@ html[data-mouvement="calme"] .lecon-barre i{transition:none}
 .test-ligne{display:block;border-left:3px solid var(--brass);padding:9px 12px;background-color:var(--ink);border-radius:0 var(--r) var(--r) 0;font-size:13.5px;margin-bottom:8px}
 .test-ligne b{display:block;color:var(--chalk)}
 .lecon-entrainement{margin:8px 0 0}
+/* Fin de « Je debute » : trois boutons sur une ligne passaient sur deux lignes
+   a 360 px en turc, en polonais et en indonesien (mesure du 2026-11-22). Le
+   premier prend sa ligne, les deux autres se partagent la suivante. */
+@media(max-width:599px){#debutFin .btn.primary{flex-basis:100%}}
 .lecon-chap{color:var(--brass);margin-bottom:2px}
 .lecon-chap:empty{display:none}
 @media(max-width:599px){.lecon-chap{display:none}}

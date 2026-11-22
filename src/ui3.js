@@ -602,6 +602,10 @@ async function analyseWithStockfish(){
      moteur : il n'a rien a y chercher. Le calcul des plis (perte, etiquette,
      mat annonce) est dans COACH.plis (coach.js), le meme code que le controle
      du coach sur un lot de parties (coach_controle.js). */
+  /* La partie analysee : si une autre est ouverte pendant le calcul, son
+     resultat ne doit pas se poser sur elle (2026-11-22). */
+  const partie=gameUci;
+  const abandon=()=>{btn.disabled=false;btn.textContent=t("Analyse this game");bar.classList.add("hide");};
   const g=gameStartFen?new Game(gameStartFen):new Game(),fens=[g.fen()];
   for(let i=0;i<gameUci.length;i++){
     const mv=g.moves().find(x=>g.uci(x)===gameUci[i]);
@@ -614,6 +618,7 @@ async function analyseWithStockfish(){
     let e;
     if(!gk.moves().length)e=gk.inCheck()?{cp:-20000,mate:0,best:null,pv:null}:{cp:0,mate:null,best:null,pv:null};
     else e=await sfEvalFen(fens[k],12);
+    if(gameUci!==partie){abandon();return;}
     if(!e||(e.cp===null&&e.mate===null))break;
     evals.push(e);
     bar.firstElementChild.style.width=(100*(k+1)/fens.length).toFixed(0)+"%";
@@ -628,6 +633,7 @@ async function analyseWithStockfish(){
      encore inactif : le controle de l'exigence stricte demande Stockfish, qui
      ne sert qu'une demande a la fois. */
   const prep=typeof coachPreparer==="function"?await coachPreparer(plies,true):null;
+  if(gameUci!==partie){abandon();return;}
   finishAnalysis(plies,prep);
   $("analysisNote").textContent=$("analysisNote").textContent.replace(
     t("Accuracy here is a rough guide from a shallow search, not a rating."),

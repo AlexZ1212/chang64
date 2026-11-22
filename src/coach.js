@@ -153,14 +153,23 @@ const COACH=(function(){
          si la piece qui vient de prendre etait reprise, des qu'une piece
          adverse l'attaque. */
       let reprise=0;
-      if(a2){g.makeMove(a2);fait++;}
+      if(a2){
+        g.makeMove(a2);fait++;
+        /* Tant que la suite du moteur continue de prendre, on la suit : le
+           bilan se lit une fois les echanges finis (une piece prise par
+           l'adversaire au passage peut etre reprise au coup suivant). */
+        for(let k=4;k<pv.length&&k<10&&a2.captured;k++){
+          const mk=trouver(g,pv[k]);
+          if(!mk||!mk.captured)break;
+          g.makeMove(mk);fait++;
+        }
+      }
       else if(attaquants(g,j2.to,camp^1).length)reprise=VAL[tp];
       const apres=materiel(g);
       const net=(apres[camp]-avant[camp])-(apres[camp^1]-avant[camp^1])-reprise;
       if(net<1)return null;
-      while(fait>3){g.undoMove();fait--;}
       /* Les cibles sont relues sur la position juste apres mv. */
-      g.undoMove();g.undoMove();fait=1;
+      while(fait>1){g.undoMove();fait--;}
       const tri=cibles.slice().sort((x,y)=>(typ(g.board[y])===6?99:VAL[typ(g.board[y])])-(typ(g.board[x])===6?99:VAL[typ(g.board[x])]));
       /* La cible prise par la suite est toujours citee. */
       let deux=tri.slice(0,2);
@@ -317,17 +326,22 @@ const COACH=(function(){
     return {type:"gain",n:1,sol:[d.meilleur],theme:theme,net:false};
   }
   /* Exigence stricte, la meme que pour la banque (filtre_stockfish.js) : le
-     meilleur coup devance le deuxieme d'au moins 200 centipions. Et le
-     meilleur coup ne laisse pas une position deja perdue (au moins -100).
+     meilleur coup devance le deuxieme d'au moins 200 centipions. Deux
+     garde-fous propres aux parties : apres le meilleur coup la position
+     n'est pas deja perdue (pas pire que -500, soit une tour de retard :
+     « trouve mieux » n'a pas de sens quand tout perd), et le deuxieme coup
+     ne mate pas lui aussi (deux mats de longueurs differentes ne font pas
+     un seul bon coup).
      l1, l2 : { cp, mate } des deux premieres lignes du moteur, vues du camp
      au trait ; l2 null s'il n'y a qu'un coup legal. */
-  const MARGE=200,PLANCHER=-100;
+  const MARGE=200,PLANCHER=-500;
   const enCp=l=>l.mate!=null?(l.mate>0?1:-1)*(20000-Math.abs(l.mate)*100):l.cp;
   function net(l1,l2){
     if(!l1||(l1.cp==null&&l1.mate==null))return false;
     const a=enCp(l1);
     if(a<PLANCHER)return false;
     if(!l2||(l2.cp==null&&l2.mate==null))return true;
+    if(l2.mate!=null&&l2.mate>0)return false;
     return a-enCp(l2)>=MARGE;
   }
   /* --- La relecture d'une partie entiere --- */
@@ -404,6 +418,12 @@ const COACH=(function(){
    plus, qui comptent pour l'objectif du jour et les resolus, pas pour le
    Niveau exercices. AUCUNE aide pendant une partie : rien ici ne s'execute
    avant finishAnalysis, qui n'existe que pour une partie finie. */
+/* Garde-fou : jamais pendant une partie en cours, quelle que soit sa sorte
+   (ordinateur, lien, direct, correspondance). L'analyse n'existe deja que
+   pour une partie finie ; ceci le redit au cas ou un chemin l'oublierait. */
+function coachInterdit(){
+  try{return typeof partieEnCours==="function"&&partieEnCours();}catch(e){return true;}
+}
 function coachSan(fen,u){
   try{const g=new Game(fen),m=g.moves().find(x=>g.uci(x)===u);return m?g.san(m):u;}catch(e){return u;}
 }
@@ -447,7 +467,7 @@ function coachPhrase(e,fen,coup,mots){
 /* Ce que le coach dit d'un pli (rang a partir de 0), ou null s'il n'a rien
    a en dire : fautes du joueur et compliments seulement. */
 function coachPli(i,mots){
-  if(typeof analysis==="undefined"||!analysis||!analysis.coach)return null;
+  if(typeof analysis==="undefined"||!analysis||!analysis.coach||coachInterdit())return null;
   const a=analysis.plies[i],x=analysis.coach[i];
   if(!a||!x||a.mover!==myColor)return null;
   const faute=a.tag==="blunder"||a.tag==="mistake";
@@ -495,6 +515,7 @@ function coachCandidats(plies,coach){
 }
 /* Sans Stockfish : seuls les mats, dont la solution est nette par nature. */
 function coachPreparerSansMoteur(plies){
+  if(coachInterdit())return null;
   let coach;
   try{coach=COACH.relire(Game,gameStartFen,gameUci,plies,myColor);}catch(e){return null;}
   return {coach:coach,exos:coachCandidats(plies,coach).filter(c=>c.ex.net).slice(0,COACH_EXOS_PAR_PARTIE)};
@@ -504,6 +525,7 @@ function coachPreparerSansMoteur(plies){
    lignes (sfDeuxLignes, ui3.js). Le meilleur coup reste celui de la
    recherche a une ligne, comme dans filtre_stockfish.js. */
 async function coachPreparer(plies){
+  if(coachInterdit())return null;
   let coach;
   try{coach=COACH.relire(Game,gameStartFen,gameUci,plies,myColor);}catch(e){return null;}
   const exos=[];let mesures=0;

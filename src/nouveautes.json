@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "A coach to review your games",
+   "After a game, run the review: for each blunder or mistake, the coach tells you why in one sentence (\"the bishop on g5 was attacked and nothing defends it\") and shows the move it recommends. Positions where one move was clearly better join your Mistakes to review, so you can replay them. Free, with no limit."
+  ],
+  "fr": [
+   "Un coach pour relire tes parties",
+   "Après une partie, lance l'analyse : pour chaque gaffe ou erreur, le coach te dit pourquoi en une phrase (« le fou en g5 était attaqué et rien ne le défend ») et montre le coup qu'il conseille. Les positions où un seul coup était nettement meilleur rejoignent tes Erreurs à revoir, pour les rejouer. Gratuit et sans limite."
+  ],
+  "es": [
+   "Un entrenador para repasar tus partidas",
+   "Después de una partida, lanza el análisis: por cada error grave o error, el entrenador te dice por qué en una frase («el alfil en g5 estaba atacado y nada lo defiende») y muestra la jugada que recomienda. Las posiciones donde una sola jugada era claramente mejor pasan a tus Errores para repasar, para volver a jugarlas. Gratis y sin límite."
+  ],
+  "pt": [
+   "Um treinador para rever suas partidas",
+   "Depois de uma partida, rode a análise: para cada erro grave ou erro, o treinador diz o porquê em uma frase (\"o bispo em g5 estava atacado e nada o defende\") e mostra o lance que ele recomenda. As posições em que um único lance era claramente melhor vão para os seus Erros para revisar, para você jogá-las de novo. Grátis e sem limite."
+  ],
+  "de": [
+   "Ein Trainer für deine Partien",
+   "Starte nach einer Partie die Analyse: Zu jedem Patzer oder Fehler sagt dir der Trainer in einem Satz, warum („der Läufer auf g5 war angegriffen und nichts deckt ihn“), und zeigt den Zug, den er empfiehlt. Stellungen, in denen ein einziger Zug klar besser war, kommen in deine Fehler zum Wiederholen, damit du sie noch einmal spielen kannst. Kostenlos und ohne Limit."
+  ],
+  "ru": [
+   "Тренер для разбора твоих партий",
+   "После партии запусти анализ: о каждом зевке или ошибке тренер одной фразой говорит, в чём дело («слон на g5 был под ударом, и его ничто не защищает»), и показывает ход, который он советует. Позиции, где один ход был явно лучше остальных, попадают в твои Ошибки для повторения, чтобы сыграть их ещё раз. Бесплатно и без ограничений."
+  ],
+  "it": [
+   "Un allenatore per rivedere le tue partite",
+   "Dopo una partita, avvia l'analisi: per ogni errore grave o errore, l'allenatore ti dice perché in una frase («l'alfiere in g5 era attaccato e niente lo difende») e mostra la mossa che consiglia. Le posizioni in cui una sola mossa era nettamente migliore finiscono nei tuoi Errori da ripassare, per rigiocarle. Gratis e senza limiti."
+  ],
+  "tr": [
+   "Oyunlarını inceleyen bir antrenör",
+   "Bir oyundan sonra analizi başlat: her vahim hata ya da hata için antrenör nedenini tek cümleyle söyler (\"g5'teki fil saldırı altındaydı ve hiçbir taş onu korumuyor\") ve önerdiği hamleyi gösterir. Tek bir hamlenin açıkça daha iyi olduğu konumlar, yeniden oynaman için Tekrar edilecek hatalar listene eklenir. Ücretsiz ve sınırsız."
+  ],
+  "pl": [
+   "Trener do przeglądania twoich partii",
+   "Po partii uruchom analizę: przy każdym grubym błędzie lub błędzie trener mówi w jednym zdaniu, dlaczego („goniec na g5 był atakowany i nic go nie broni”), i pokazuje ruch, który poleca. Pozycje, w których jeden ruch był wyraźnie lepszy, trafiają do twoich Błędów do powtórki, żeby zagrać je jeszcze raz. Za darmo i bez limitu."
+  ],
+  "id": [
+   "Pelatih untuk meninjau partaimu",
+   "Setelah satu partai, jalankan analisis: untuk setiap blunder atau kesalahan, pelatih memberi tahu alasannya dalam satu kalimat (\"gajah di g5 diserang dan tidak ada yang melindunginya\") dan menunjukkan langkah yang ia sarankan. Posisi yang hanya punya satu langkah yang jelas lebih baik masuk ke Kesalahan untuk diulang, supaya kamu bisa memainkannya lagi. Gratis dan tanpa batas."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "Clearer names",
    "\"Challenge a friend\" is now called Puzzle duel, and your puzzle score is now your Puzzle rating, so you no longer mix it up with your Elo. Puzzles in a duel count toward your daily goal, but they move neither your puzzle rating nor your level."
   ],

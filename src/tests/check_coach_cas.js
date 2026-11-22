@@ -164,6 +164,14 @@ console.log("--- Fourchette permise ---");
   const e = E({ fen, coup: "h2h3", meilleur: "e1d2", reponse: "b4c2", pvr: ["b4c2", "e1d2", "c2a1", "d2c1"] });
   T("h3 laisse Cc2+ sur le roi et la tour : reconnue", cas(e) === "fourchette_permise" && e.coup === "b4c2" && e.cibles[0].p === "k" && e.cibles[1].p === "r" && e.mieux === "e1d2", e);
   T("sans la suite du moteur : aucune phrase", E({ fen, coup: "h2h3", meilleur: "e1d2", reponse: "b4c2" }) === null);
+  /* Fourchette de pion, avec des prises intercalees : e5 attaque le fou d6 et
+     le cavalier f6 ; les Noirs prennent d4 puis f3 au passage, les Blancs
+     reprennent. Le bilan se lit une fois les echanges finis. */
+  const pion = "r1bqkb1r/ppp2ppp/2n1pn2/3p4/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 1 5";
+  const e2 = E({ fen: pion, coup: "f8d6", meilleur: "f8b4", reponse: "e4e5", pvr: ["e4e5", "c6d4", "e5d6", "d4f3", "d1f3", "d8d6"] });
+  T("fourchette de pion avec prises intercalees : reconnue", cas(e2) === "fourchette_permise" && e2.cibles.map(c => c.p + c.sq).sort().join() === "bd6,nf6", e2);
+  const e3 = E({ fen: pion, coup: "f8d6", meilleur: "f8b4", reponse: "e4e5", pvr: ["e4e5", "c6d4", "e5d6", "d4f3"] });
+  T("la suite s'arrete sur une prise adverse, bilan negatif : aucune phrase", e3 === null, e3);
 }
 
 console.log("--- Compliment ---");
@@ -194,7 +202,10 @@ console.log("--- Exercice tire d'une faute ---");
   T("sans explication : pas d'exercice", COACH.exercice({ coup: "a2a3", meilleur: "d2d4" }, null) === null);
   T("exigence stricte : 250 d'ecart, position tenable", COACH.net({ cp: 150, mate: null }, { cp: -100, mate: null }) === true);
   T("exigence stricte : 150 d'ecart, refuse", COACH.net({ cp: 150, mate: null }, { cp: 0, mate: null }) === false);
-  T("exigence stricte : meilleur coup deja perdant, refuse", COACH.net({ cp: -300, mate: null }, { cp: -900, mate: null }) === false);
+  T("exigence stricte : meilleur coup deja perdant (-600), refuse", COACH.net({ cp: -600, mate: null }, { cp: -1200, mate: null }) === false);
+  T("exigence stricte : en retard mais jouable (-300), accepte", COACH.net({ cp: -300, mate: null }, { cp: -900, mate: null }) === true);
+  T("exigence stricte : mat force contre soi apres le meilleur coup, refuse", COACH.net({ cp: null, mate: -5 }, { cp: null, mate: -1 }) === false);
+  T("exigence stricte : le deuxieme coup mate aussi, refuse", COACH.net({ cp: null, mate: 1 }, { cp: null, mate: 4 }) === false);
   T("exigence stricte : un seul coup legal, accepte", COACH.net({ cp: 0, mate: null }, null) === true);
   T("exigence stricte : mat contre simple avantage, accepte", COACH.net({ cp: null, mate: 3 }, { cp: 500, mate: null }) === true);
   T("exigence stricte : deux mats, refuse", COACH.net({ cp: null, mate: 2 }, { cp: null, mate: 3 }) === false);

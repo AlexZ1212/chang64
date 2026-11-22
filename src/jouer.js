@@ -36,11 +36,14 @@ function jouerPartieAmi() { return typeof directOccupe === "function" && directO
 
 function jouerRendre() {
   const p = $("pane-jouer"); if (!p) return;
+  /* « Tes parties en cours » : la liste se redessine a chaque arrivee sur cet
+     ecran, pour un visiteur aussi (sa partie par lien y figure, 2026-11-22). */
+  if (typeof corrRendre === "function") corrRendre();
   /* Le direct est reserve aux membres : un visiteur lit la partie par lien,
      qu'il peut jouer tout de suite (2026-11-21, ouverture a tous). */
   const direct = typeof DIRECT_OUVERT !== "undefined" && DIRECT_OUVERT && typeof estMembre === "function" && estMembre();
   const d = $("jouerAmiTexte");
-  if (d) d.textContent = t(direct ? "Live on the clock, or by correspondence over several days, with another member. Invite them by username or send them a link."
+  if (d) d.textContent = t(direct ? "You choose your opponent: invite a member by username, live on the clock or by correspondence."
     : "Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.");
   for (const [id, nom] of [["jouerOrdiPicto", "ordinateur"], ["jouerAmiPicto", "ami"], ["jouerEnLignePicto", "enligne"]]) {
     const e = $(id); if (e && !e.firstChild) poserHtml(e, pictoHtml(nom, "grand"));
@@ -110,6 +113,15 @@ for (const id in PICTOS_RESOUDRE) {
 for (const [id, nom] of [["icoPlay", "ordinateur"], ["icoPuzzles", "exercices"], ["icoFriend", "ami"]]) {
   const e = $(id), h = pictoHtml(nom);
   if (e && h) { poserHtml(e, h); e.classList.add("avec-picto"); }
+}
+/* Parties entre membres qui attendent : le carre de notification et la ligne
+   « Parties en cours » du menu portent les deux pions de la carte « Contre un
+   ami » (2026-11-22, choix d'Alexandre : l'enveloppe faisait penser a un message). */
+if (typeof PICTOS !== "undefined" && PICTOS.ami) {
+  const c = $("carreDessin");
+  if (c && !c.firstChild) poserHtml(c, '<svg viewBox="-24 -24 48 48" focusable="false">' + PICTOS.ami + "</svg>");
+  const s = document.querySelector("#menuCorrLigne svg.tiroir-ico");
+  if (s) { s.setAttribute("viewBox", "-24 -24 48 48"); poserHtml(s, PICTOS.ami); }
 }
 /* Menu : « Defis entre membres » portait une epee seule, les fenetres de defi
    deux epees croisees. Un meme symbole, une meme forme. */

@@ -45,13 +45,17 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   $("jouerAmi").click();
   await attendre(300);
   const p = $("pane-friend");
-  T("« Contre un ami » : un visiteur arrive sur Par lien", w.eval("mode") === "friend" && p.dataset.ami === "lien" && d.querySelector('#amiModes [data-v="lien"]').getAttribute("aria-pressed") === "true");
-  T("le choix en haut propose En direct, Correspondance et Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Correspondance|Par lien");
-  d.querySelector('#amiModes [data-v="direct"]').click();
+  /* Refonte du 2026-11-22 : plus de bandeau En direct | Correspondance | Par lien. */
+  T("« Contre un ami » : un visiteur arrive sur la partie par lien, sans bandeau au-dessus", w.eval("mode") === "friend" && p.dataset.ami === "lien" && !$("amiModes") && !$("amiModesPanel"));
+  T("l'ecran s'appelle « Partie par lien », sans le mot « direct »", net($("amiStatusPanel").querySelector("h2").textContent) === "Partie par lien" && !/direct/i.test(net($("amiStatusPanel").textContent) + net($("amiNewGamePanel").textContent)));
+  T("le bloc des membres est masque pour lui (regle de style), l'echiquier aussi", /#pane-friend\[data-ami="lien"\]:not\(\.en-direct\) #directPanel\{display:none\}/.test(html) && d.querySelector(".board-wrap").classList.contains("hide"));
+  T("sous la partie par lien : ce qu'un compte apporte, et le bouton pour en creer un", !$("amiComptePanel").classList.contains("hide") && net($("amiComptePanel").querySelector(".eyebrow").textContent) === "Avec un compte gratuit" && !!$("amiComptePanel").querySelector("[data-vue-compte]") && /en direct à la pendule/.test(net($("amiComptePanel").textContent)));
+  T("pas de retour « Inviter plutôt un membre » pour un visiteur", $("amiRetourMembre").classList.contains("hide"));
+  T("le rythme tient en trois mots courts : 1 jour, 3 jours, 7 jours", [...$("dailyChips").children].map(b => net(b.textContent)).join("|") === "1 jour|3 jours|7 jours" && net($("dailyChips").previousElementSibling.textContent) === "Délai par coup", [...$("dailyChips").children].map(b => b.textContent).join("|"));
+  /* Le beau bug : choisir un rythme ne cree pas de partie. */
+  $("dailyChips").children[0].click();
   await attendre(200);
-  T("En direct, pour un visiteur : l'invitation a creer un compte, pas le bloc de lancement", p.dataset.ami === "direct" && !$("directInvite").classList.contains("hide") && !!$("directInvite").querySelector("[data-vue-compte]") && $("directNouveau").classList.contains("hide"));
-  d.querySelector('#amiModes [data-v="lien"]').click();
-  await attendre(200);
+  T("choisir un rythme ne cree aucune partie : l'echiquier reste cache", w.eval("amiStarted") === false && d.querySelector(".board-wrap").classList.contains("hide") && w.eval("amiPace") === 1);
   /* Partie par lien : trois couleurs. */
   const coul = [...d.querySelectorAll("#amiColorBtns button")];
   T("partie par lien : Blancs, Noirs, Au hasard", coul.map(b => b.dataset.v).join() === "w,b,r" && coul.map(b => b.textContent.replace(/\s+/g, " ").trim()).join("|") === "Blancs|Noirs|Au hasard", coul.map(b => b.textContent).join("|"));
@@ -61,12 +65,11 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   await attendre(400);
   T("« Au hasard » lance la partie avec une couleur tiree", w.eval("amiStarted") === true && [w.eval("W"), w.eval("B")].includes(w.eval("amiColor")) && p.dataset.ami === "lien");
   T("l'echiquier de la partie par lien est montre", !d.querySelector(".board-wrap").classList.contains("hide"));
-  d.querySelector('#amiModes [data-v="direct"]').click();
-  await attendre(200);
-  T("sous En direct, l'echiquier de la partie par lien s'efface", d.querySelector(".board-wrap").classList.contains("hide"));
-  d.querySelector('#amiModes [data-v="lien"]').click();
-  await attendre(200);
-  T("et revient sous Par lien", !d.querySelector(".board-wrap").classList.contains("hide"));
+  T("la partie est marquee creee dans ce qui est garde", JSON.parse(w.localStorage.getItem("chang64:friend")).s === 1, w.localStorage.getItem("chang64:friend"));
+  w.eval("setMode('jouer')"); await attendre(300);
+  T("la partie par lien en cours est dans « Tes parties en cours », pour un visiteur aussi", !$("corrPanel").classList.contains("hide") && !!d.querySelector('#corrListe [data-s="lien"]') && /Partie par lien/.test(net($("corrListe").textContent)), net($("corrListe").textContent));
+  d.querySelector('#corrListe [data-s="lien"]').click(); await attendre(300);
+  T("un appui la rouvre", w.eval("mode") === "friend" && p.dataset.ami === "lien" && !d.querySelector(".board-wrap").classList.contains("hide"));
   w.close();
 
   console.log("--- Membre ---");
@@ -79,9 +82,12 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   $("jouerAmi").click();
   await attendre(300);
   const pf = $("pane-friend");
-  T("« Contre un ami » : un membre arrive sur En direct", pf.dataset.ami === "direct" && !$("directNouveau").classList.contains("hide"));
+  T("« Contre un ami » : un membre arrive sur le bloc de lancement, titre « Contre un ami »", pf.dataset.ami === "direct" && !$("directNouveau").classList.contains("hide") && net($("directTitre").textContent) === "Contre un ami" && d.querySelector(".board-wrap").classList.contains("hide"));
+  T("la cadence est le premier reglage, la couleur le deuxieme, l'adversaire le troisieme", [...$("directNouveau").querySelectorAll(":scope > .field")].map(f => (f.querySelector("#directCats") ? "cadence" : f.querySelector("#directCouleur") ? "couleur" : f.querySelector("#directPseudo") ? "adversaire" : "?")).join() === "cadence,couleur,adversaire");
+  T("sous « Inviter » : « ou envoyer un lien », puis « Mon ami n'a pas de compte »", net($("btnDirectLien").textContent) === "ou envoyer un lien" && net($("btnAmiSansCompte").textContent) === "Mon ami n'a pas de compte" && !!($("btnDirectLien").compareDocumentPosition($("btnAmiSansCompte")) & 4));
   T("bloc de lancement : couleur, au hasard par defaut", [...$("directCouleur").children].map(b => b.dataset.v + (b.getAttribute("aria-pressed") === "true" ? "*" : "")).join() === "b,n,h*");
-  T("cadences : Rapide (10+0, 5+3, 15+10) par defaut", [...$("directCats").children].map(b => b.textContent.trim()).join("|") === "Blitz|Rapide|Classique" && [...$("directCadences").children].map(b => b.textContent).join() === "10+0,5+3,15+10" && $("directCats").children[1].getAttribute("aria-pressed") === "true");
+  T("les familles sont sur une seule rangee qui defile (pas un bloc sur deux lignes)", $("directCats").classList.contains("tc-cats") && $("directCats").parentNode.classList.contains("defile") && /\.defile>\.tc-cats button\{flex:1 0 auto\}/.test(html) && /\.tc-cats\{[^}]*overflow-x:auto/.test(html));
+  T("cadences : Rapide (10+0, 5+3, 15+10) par defaut", [...$("directCats").children].map(b => b.textContent.trim()).join("|") === "Blitz|Rapide|Classique|Correspondance" && [...$("directCadences").children].map(b => b.textContent).join() === "10+0,5+3,15+10" && $("directCats").children[1].getAttribute("aria-pressed") === "true");
   $("directCats").children[0].click();
   T("Blitz : 3+2 seulement, explique", [...$("directCadences").children].map(b => b.textContent).join() === "3+2" && w.eval("directCad") === 9 && net($("directCadenceNote").textContent) === "3 minutes chacun, plus 2 secondes ajoutées après chaque coup.", $("directCadenceNote").textContent);
   $("directCats").children[2].click();
@@ -103,8 +109,21 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   w.eval("directId='aaaaaaaaaaaa';directRecu({t:'etat',id:'aaaaaaaaaaaa',n:1,cad:[1800,20],moi:'b',b:'Moi',nr:null,coups:[],tb:1800000,tn:1800000,maj:Date.now(),h:Date.now(),phase:'attente',fin:null,nulle:null,rev:{b:false,n:false},la:{b:true,n:false},inv:'Lea',elo:null})");
   await attendre(200);
   T("en attente : le resume « 30+20 | Tu joues les Blancs. »", $("directResume").textContent.replace(/\s+/g, " ") === "30+20 | Tu joues les Blancs.", $("directResume").textContent);
-  T("le choix du haut disparait pendant la partie", pf.classList.contains("en-direct"));
+  T("le titre et le sous-titre s'effacent pendant la partie", pf.classList.contains("en-direct"));
   w.eval("directQuitter(true);directPanneau()");
+  /* La cadence choisie est retenue ; la couleur revient au hasard a chaque visite. */
+  T("la derniere cadence est gardee sur l'appareil", w.localStorage.getItem("chang64:amiCadence") === "4", w.localStorage.getItem("chang64:amiCadence"));
+  $("directCats").children[3].click();
+  await attendre(100);
+  T("Correspondance : trois delais, 3 jours choisi, plus de lien a envoyer", [...$("directCadences").children].map(b => net(b.textContent)).join("|") === "1 jour|3 jours|7 jours" && w.eval("directCad") === 7 && pf.dataset.corr === "1" && net($("directCadenceTitre").textContent) === "Délai par coup" && /#pane-friend\[data-corr="1"\] #directLienLigne\{display:none\}/.test(html));
+  T("« Mon ami n'a pas de compte » reste propose par correspondance", !$("btnAmiSansCompte").closest("#directLienLigne"));
+  $("btnAmiSansCompte").click();
+  await attendre(200);
+  T("il mene a la partie par lien, avec un retour vers l'invitation d'un membre", pf.dataset.ami === "lien" && !$("amiRetourMembre").classList.contains("hide") && net($("btnAmiRetourMembre").textContent) === "Inviter plutôt un membre" && $("amiComptePanel").classList.contains("hide"));
+  $("btnAmiRetourMembre").click();
+  await attendre(200);
+  T("et le retour ramene au bloc de lancement", pf.dataset.ami === "direct" && !$("directNouveau").classList.contains("hide"));
+  $("directCats").children[2].click(); $("directCadences").children[1].click();
 
   console.log("--- Contre un joueur en ligne ---");
   w.__appels.length = 0;
@@ -120,7 +139,24 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   w.eval("setMode('jouer')");
   $("jouerAmi").click();
   await attendre(200);
-  T("revenir par « Contre un ami » remet l'ecran d'un ami", pf.dataset.ami === "direct" && net($("directTitre").textContent) === "Partie en direct");
+  T("revenir par « Contre un ami » remet l'ecran d'un ami", pf.dataset.ami === "direct" && net($("directTitre").textContent) === "Contre un ami");
+  w.close();
+
+  console.log("--- Le beau bug : une vieille partie par lien ne rouvre plus l'echiquier ---");
+  /* Ce que gardait le navigateur d'Alexandre : un rythme touche un jour, ou une partie finie. */
+  for (const [nom, garde] of [["un rythme choisi autrefois, sans partie", { m: [], c: 0, p: 3, r: null }], ["une partie par lien abandonnee", { m: [{ from64: 52, to64: 36, promo: 0 }], c: 0, p: 3, r: 0, s: 1 }]]) {
+    w = await ouvrir("fr", { attente: 2400, avant(x) { MEMBRE(x); x.localStorage.setItem("chang64:friend", JSON.stringify(garde)); } });
+    d = w.document; $ = id => d.getElementById(id);
+    w.eval("setMode('jouer')"); await attendre(300);
+    $("jouerAmi").click(); await attendre(400);
+    T(nom + " : un membre arrive sur les reglages, pas sur l'echiquier", $("pane-friend").dataset.ami === "direct" && !$("directNouveau").classList.contains("hide") && d.querySelector(".board-wrap").classList.contains("hide") && net($("directTitre").textContent) === "Contre un ami", $("pane-friend").dataset.ami);
+    T(nom + " : Rapide 10+0 la premiere fois", w.eval("directCat") === 1 && w.eval("directCad") === 0 && $("directCats").children[1].getAttribute("aria-pressed") === "true");
+    w.close();
+  }
+  w = await ouvrir("fr", { attente: 2400, avant(x) { MEMBRE(x); x.localStorage.setItem("chang64:amiCadence", "9"); } });
+  d = w.document; $ = id => d.getElementById(id);
+  w.eval("setMode('jouer')"); $("jouerAmi").click(); await attendre(400);
+  T("la cadence retenue revient a la visite suivante (Blitz 3+2)", w.eval("directCat") === 0 && w.eval("directCad") === 9 && $("directCats").children[0].getAttribute("aria-pressed") === "true" && [...$("directCouleur").children].find(b => b.getAttribute("aria-pressed") === "true").dataset.v === "h");
   w.close();
 
   console.log("--- Invitation recue ---");

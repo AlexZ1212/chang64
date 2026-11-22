@@ -61,20 +61,21 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
 
   console.log("Lancer une partie par correspondance");
   w.eval("cp={pseudo:'Anna',cle:'anna',version:1,dev:'x',n:0,sync:0};setMode('friend');amiModeRegler(amiModeDefaut())");
-  T("le choix du haut : En direct, Correspondance, Par lien", [...$("amiModes").children].map(b => net(b.textContent)).join("|") === "En direct|Correspondance|Par lien");
+  /* Refonte du 2026-11-22 : plus de bandeau ; la correspondance est la quatrieme famille de cadences. */
+  T("plus de bandeau au-dessus du bloc", !$("amiModes") && !$("amiModesPanel"));
   T("le direct garde ses cadences a la pendule", [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,5+3,15+10" && !cache("directCats"));
-  T("trois familles : Blitz, Rapide (par defaut), Classique", [...$("directCats").children].map(b => net(b.textContent)).join("|") === "Blitz|Rapide|Classique" && [...$("directCats").children].map(b => b.getAttribute("aria-pressed")).join() === "false,true,false");
-  d.querySelector('#amiModes [data-v="corr"]').click();
+  T("quatre familles : Blitz, Rapide (par defaut), Classique, Correspondance", [...$("directCats").children].map(b => net(b.textContent)).join("|") === "Blitz|Rapide|Classique|Correspondance" && [...$("directCats").children].map(b => b.getAttribute("aria-pressed")).join() === "false,true,false,false");
+  $("directCats").children[3].click();
   const pf = $("pane-friend");
-  T("Correspondance reprend le bloc du direct", pf.dataset.ami === "direct" && pf.dataset.corr === "1" && !cache("directPanel") && d.querySelector('#amiModes [data-v="corr"]').getAttribute("aria-pressed") === "true");
-  T("son titre et sa phrase", net($("directTitre").textContent) === "Partie par correspondance" && /Chacun joue quand il veut, sans pendule à surveiller/.test(net($("directSous").textContent)), $("directSous").textContent);
-  T("trois delais par coup, 3 jours choisi", net($("directCadenceTitre").textContent) === "Délai par coup" && cache("directCats")
+  T("Correspondance reprend le bloc du direct", pf.dataset.ami === "direct" && pf.dataset.corr === "1" && !cache("directPanel") && $("directCats").children[3].getAttribute("aria-pressed") === "true");
+  T("son titre et sa phrase", net($("directTitre").textContent) === "Contre un ami" && /Chacun joue quand il veut, sans pendule à surveiller/.test(net($("directSous").textContent)), $("directSous").textContent);
+  T("trois delais par coup, 3 jours choisi", net($("directCadenceTitre").textContent) === "Délai par coup" && !cache("directCats")
     && [...$("directCadences").children].map(b => net(b.textContent)).join() === "1 jour,3 jours,7 jours"
     && [...$("directCadences").children].map(b => b.getAttribute("aria-pressed")).join() === "false,true,false");
   T("le delai est explique, avec la regle du temps depasse", net($("directCadenceNote").textContent) === "Chacun a 3 jours pour jouer chaque coup. Passé ce délai, la partie est perdue.", $("directCadenceNote").textContent);
   $("directCadences").children[0].click();
   T("au singulier pour 1 jour", net($("directCadenceNote").textContent) === "Chacun a 1 jour pour jouer chaque coup. Passé ce délai, la partie est perdue.", $("directCadenceNote").textContent);
-  T("pas de lien a envoyer par correspondance", !vu(d.querySelector(".direct-lien")) && vu($("btnDirectCreer")));
+  T("pas de lien a envoyer par correspondance", !vu($("directLienLigne")) && vu($("btnDirectCreer")));
   $("directCadences").children[2].click();
   $("btnDirectCreer").click();
   await pause(30);
@@ -94,13 +95,13 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   $("btnDirectCreer").click();
   await pause(60);
   T("dix parties deja en cours : c'est dit clairement", /Tu as déjà 10 parties par correspondance en cours/.test(net($("directStatus").textContent)), $("directStatus").textContent);
-  d.querySelector('#amiModes [data-v="direct"]').click();
-  T("retour a « En direct » : cadences a la pendule, lien propose", pf.dataset.corr === "" && [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,5+3,15+10" && vu(d.querySelector(".direct-lien")) && net($("directCadenceTitre").textContent) === "Cadence" && w.eval("directCad") < 6);
+  $("directCats").children[1].click();
+  T("retour a Rapide : cadences a la pendule, lien propose", pf.dataset.corr === "" && [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,5+3,15+10" && vu($("directLienLigne")) && net($("directCadenceTitre").textContent) === "Cadence" && w.eval("directCad") < 6);
 
   console.log("Contre un joueur en ligne");
   w.eval("amiModeRegler('hasard')");
-  T("le meme choix, sans « Par lien »", vu($("amiModesPanel")) && vu(d.querySelector('#amiModes [data-v="corr"]')) && !vu(d.querySelector('#amiModes [data-v="lien"]')) && d.querySelector('#amiModes [data-v="direct"]').getAttribute("aria-pressed") === "true");
-  d.querySelector('#amiModes [data-v="corr"]').click();
+  T("les memes quatre familles, sans couleur ni adversaire", $("directCats").children.length === 4 && !vu($("btnDirectCreer").parentNode) && !vu($("btnAmiSansCompte").parentNode) && net($("directTitre").textContent) === "Contre un joueur en ligne");
+  $("directCats").children[3].click();
   T("par correspondance : delais en jours, adversaire au hasard", pf.dataset.ami === "hasard" && pf.dataset.corr === "1" && /partie par correspondance contre un adversaire tiré au hasard/.test(net($("directSous").textContent))
     && [...$("directCadences").children].map(b => net(b.textContent)).join() === "1 jour,3 jours,7 jours" && vu($("btnDirectHasard").parentNode) && !vu($("btnDirectCreer").parentNode));
   p.reponses.chercher = { s: 200, j: { id: "cccccccccccc", attente: true } };
@@ -139,7 +140,8 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("invitation envoyee : en attente, Annuler", texte(d.querySelector('[data-id="bbbbbbbbbbbb"]')) === "En attente de BobInvitation envoyée | 7 jours/coupAnnuler", texte(d.querySelector('[data-id="bbbbbbbbbbbb"]')));
   T("recherche d'adversaire : dite, Annuler", /^Recherche d'un adversaire1 jour\/coup \| encore 3j( 1h)?Annuler$/.test(texte(d.querySelector('[data-id="gggggggggggg"]'))), texte(d.querySelector('[data-id="gggggggggggg"]')));
   T("partie finie pas encore vue : resultat annonce", texte(d.querySelector('[data-id="ffffffffffff"]')) === "GContre ZoéPartie terminée : tu as gagné.›", texte(d.querySelector('[data-id="ffffffffffff"]')));
-  T("le nombre « a toi » sur l'onglet Jouer : 2 tours + 1 invitation + 1 fin", !$("corrPastille").hidden && $("corrPastille").parentNode === $("tab-jouer") && $("corrPastille").firstChild.textContent === "4" && /4 parties t'attendent/.test(net($("corrPastille").textContent)), $("corrPastille").textContent);
+  /* 2026-11-22 : le nombre n'est plus sur l'onglet Jouer mais sur le carre de notification (tests/check_carre_parties.js). */
+  T("le nombre « a toi » : 2 tours + 1 invitation + 1 fin, sur le carre et plus sur l'onglet", !$("corrPastille") && !$("tab-jouer").classList.contains("a-toi") && $("carreParties").dataset.n === "4" && $("carreNombre").textContent === "4" && /4 parties t'attendent/.test(net($("carreParties").getAttribute("aria-label"))), $("carreParties").getAttribute("aria-label"));
   T("le meme nombre dans le menu, ligne « Parties en cours »", !$("menuCorrLigne").hidden && $("menuCorrDetail").textContent === "4" && /Parties en cours/.test(net($("menuCorrLigne").textContent)));
   T("les lignes sont des boutons, les actions aussi (clavier)", lignes()[0].tagName === "BUTTON" && d.querySelector('[data-id="cccccccccccc"]').tagName === "DIV" && d.querySelectorAll('[data-id="cccccccccccc"] button').length === 2);
   T("durees : jours et heures, heures et minutes, minutes", w.eval("[corrDuree(3*86400000),corrDuree(86400000+3*3600000+5),corrDuree(5*3600000+12*60000),corrDuree(2*3600000),corrDuree(90000),corrDuree(20000),corrDuree(-5)].join('|')").replace(/[  ]/g, " ") === "3j|1j 3h|5h 12min|2h|2min|1min|0min", w.eval("[corrDuree(3*86400000),corrDuree(86400000+3*3600000+5),corrDuree(5*3600000+12*60000),corrDuree(2*3600000),corrDuree(90000),corrDuree(20000),corrDuree(-5)].join('|')"));
@@ -247,7 +249,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("le filtre Correspondance de « Tes parties » existe", [...d.querySelectorAll("#historyFiltres button")].some(b => net(b.textContent) === "Correspondance"));
 
   console.log("Le direct n'a pas change");
+  /* 2026-11-22 : c'est la famille de cadences qui dit direct ou correspondance. */
   w.eval("amiModeRegler('direct')");
+  $("directCats").children[1].click();
   p.reponses.creer = { s: 200, j: { id: "jjjjjjjjjjjj" } };
   $("btnDirectLien").click();
   await pause(60);

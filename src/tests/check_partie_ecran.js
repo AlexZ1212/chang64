@@ -56,7 +56,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   w = p.w;
   const $ = id => w.document.getElementById(id), cache = id => $(id).classList.contains("hide");
   w.eval("setMode('friend');directPanneau()");
-  T("le panneau s'affiche, en francais", !cache("directPanel") && $("directPanel").querySelector("h2").textContent.replace(/[  ]/g, " ") === "Partie en direct");
+  T("le panneau s'affiche, en francais", !cache("directPanel") && $("directPanel").querySelector("h2").textContent.replace(/[  ]/g, " ") === "Contre un ami");
   T("sans compte : une invitation a en creer un, pas de formulaire", !cache("directInvite") && cache("directNouveau") && /Crée un compte gratuit/.test($("directInvite").textContent.replace(/[  ]/g, " ")) && !!$("directInvite").querySelector("[data-vue-compte]"));
 
   console.log("Membre : creer et attendre");

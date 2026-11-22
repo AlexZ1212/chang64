@@ -2,7 +2,9 @@
 /* Mesure a 360 px, dans les 10 langues, des ecrans touches par les corrections
    du 2026-11-22 (liste d'Alexandre) : accueil (trois chiffres et lien),
    statistiques par categorie, barre sous l'echiquier, reglages rapides,
-   Analyser (chargement d'une partie), lien des finales, aide clavier.
+   Analyser (chargement d'une partie), lien des finales, aide clavier,
+   ecran Contre un ami refondu (membre, correspondance, joueur en ligne,
+   partie par lien sans compte) et carre de notification.
 
    Usage :  node serveur_local.js 8071      (dans une autre fenetre)
             node mesure_corrections.js [http://localhost:8071] [dossier des captures]
@@ -30,7 +32,7 @@ const MESURE = `(function(nom,zone){
   if(de.scrollWidth>${L})pb.push(nom+" : la page deborde en largeur ("+de.scrollWidth+" px)");
   const lignes=el=>{const r=document.createRange();r.selectNodeContents(el);return new Set([...r.getClientRects()].filter(x=>x.width>0).map(x=>Math.round(x.top/4))).size;};
   const visible=el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=="hidden";};
-  for(const b of racine.querySelectorAll("button.btn,button.linkbtn,button.chip,.seg button")){
+  for(const b of racine.querySelectorAll("button.btn,button.linkbtn,button.chip,.seg button,.tc-cats button")){
     if(!visible(b)||!b.textContent.trim())continue;
     if(lignes(b)>1)pb.push(nom+" : bouton sur deux lignes « "+b.textContent.trim()+" »");
     if(b.scrollWidth>b.clientWidth+1)pb.push(nom+" : libelle coupe « "+b.textContent.trim()+" »");
@@ -125,6 +127,52 @@ const MESURE = `(function(nom,zone){
     const lignesLien = await c.js(`(function(){const a=document.querySelector("#egArticle a");if(!a)return 0;const r=document.createRange();r.selectNodeContents(a);return new Set([...r.getClientRects()].map(x=>Math.round(x.top/4))).size;})()`);
     if (lignesLien !== 1) tout.push(l + " finale : le lien vers l'article tient sur " + lignesLien + " ligne(s)");
     if (l === "fr") await capture("finale-" + l);
+
+    /* Contre un ami, membre : un seul bloc, les familles de cadences sur UNE ligne. */
+    const uneLigne = async (id, nom) => {
+      const r = await c.js(`(function(){const b=[...document.getElementById("${id}").children].filter(x=>x.getBoundingClientRect().width>0);return new Set(b.map(x=>Math.round(x.getBoundingClientRect().top))).size;})()`);
+      if (r !== 1) tout.push(l + " " + nom + " : sur " + r + " lignes");
+    };
+    await c.js(`localStorage.removeItem("chang64:amiCadence");setMode("friend");amiCadenceLire();amiModeRegler("direct");window.scrollTo(0,0);1`); await c.attendre(500);
+    await noter(l + " contre un ami (membre)", "#pane-friend");
+    await uneLigne("directCats", "familles de cadences"); await uneLigne("directCadences", "cadences rapides"); await uneLigne("directCouleur", "couleurs");
+    const defile = await c.js(`(function(){const e=document.getElementById("directCats");return [e.scrollWidth,e.clientWidth,document.getElementById("directCatsDefile").className].join(" ");})()`);
+    const [sw, cw] = defile.split(" ").map(Number);
+    if (sw > cw + 2 && !/has-scroll-right/.test(defile)) tout.push(l + " familles de cadences : la rangee defile (" + sw + " > " + cw + ") sans indice a droite");
+    if (l === "fr" || l === "de" || l === "ru" || l === "id") await capture("ami-membre-" + l);
+    await c.js(`document.getElementById("directCats").children[3].click();1`); await c.attendre(350);
+    await noter(l + " contre un ami (correspondance)", "#pane-friend");
+    await uneLigne("directCats", "familles de cadences (correspondance)"); await uneLigne("directCadences", "delais par coup");
+    const gauche = await c.js(`document.getElementById("directCatsDefile").className+" "+document.getElementById("directCats").scrollLeft`);
+    if (sw > cw + 2 && !/has-scroll-left/.test(gauche)) tout.push(l + " familles de cadences : Correspondance choisie, pas d'indice a gauche (" + gauche + ")");
+    if (l === "fr" || l === "de") await capture("ami-correspondance-" + l);
+    await c.js(`document.getElementById("directCats").children[1].click();amiModeRegler("hasard");window.scrollTo(0,0);1`); await c.attendre(350);
+    await noter(l + " contre un joueur en ligne", "#pane-friend");
+    if (l === "fr") await capture("ami-en-ligne-" + l);
+    await c.js(`amiModeRegler("lien");window.scrollTo(0,0);1`); await c.attendre(350);
+    await noter(l + " partie par lien (membre)", "#pane-friend");
+    await uneLigne("dailyChips", "rythme de la partie par lien");
+    if (l === "fr") await capture("ami-lien-membre-" + l);
+    /* Le carre de notification, sur un autre ecran. */
+    await c.js(`setMode("puzzles");corrRecu([{id:"aaaaaaaaaaaa",s:"jeu",atoi:true,adv:"Lea",cad:7,ech:Date.now()+2*864e5,h:Date.now()},{id:"bbbbbbbbbbbb",s:"invite",adv:"Tom",cad:8,coul:"n",ech:Date.now()+6*864e5,h:Date.now()}]);window.scrollTo(0,0);1`); await c.attendre(400);
+    const carre = await c.js(`(function(){const b=document.getElementById("carreParties"),r=b.getBoundingClientRect();return [b.hidden,Math.round(r.right),Math.round(r.bottom),Math.round(r.width),Math.round(r.height),document.getElementById("carreNombre").textContent].join(" ");})()`);
+    if (!/^false 346 726 56 56 2$/.test(carre)) tout.push(l + " carre de notification : " + carre);
+    if (l === "fr") await capture("carre-" + l);
+    await c.js(`setMode("jouer");window.scrollTo(0,0);1`); await c.attendre(400);
+    await noter(l + " jouer (parties en cours)", "#pane-jouer");
+    if (l === "fr" || l === "de") await capture("jouer-" + l);
+    /* Sans compte : la partie par lien et ce qu'un compte apporte. */
+    /* Le compte de test est aussi en memoire : la page le reecrirait en partant. */
+    await c.js(`try{cp=null;}catch(e){};localStorage.removeItem("chang64:compte");1`);
+    await c.aller("about:blank"); await c.aller(url);
+    await c.js(`localStorage.removeItem("chang64:compte");1`);
+    await c.aller(url); await c.attendre(800);
+    if (await c.js(`estMembre()`)) tout.push(l + " : la mesure sans compte se fait encore avec un compte");
+    await c.js(`(function(){const s=document.createElement("style");s.textContent="#bravo,#bilan{display:none!important}";document.head.appendChild(s);})();setMode("jouer");1`); await c.attendre(300);
+    await c.js(`document.getElementById("jouerAmi").click();window.scrollTo(0,0);1`); await c.attendre(500);
+    await noter(l + " contre un ami (sans compte)", "#pane-friend");
+    await uneLigne("dailyChips", "rythme de la partie par lien (sans compte)");
+    if (l === "fr" || l === "de" || l === "ru") await capture("ami-sans-compte-" + l);
   }
   await c.fermer();
   console.log(ecrans + " ecrans mesures a " + L + " px, " + LANGUES.length + " langues");

@@ -1087,19 +1087,44 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 /* Ecran « Contre un ami » (2026-11-21) : un choix en haut, un seul bloc a la
    fois. data-ami vaut direct, lien ou hasard (« Contre un joueur en ligne »,
    qui reprend le bloc du direct sans couleur ni adversaire). */
-.ami-modes{margin-bottom:12px}
-#pane-friend.en-direct .ami-modes{display:none}
-/* Correspondance (2026-11-21, corr.js et direct_ecran.js). Le choix du haut
-   devient En direct | Correspondance | Par lien ; « Contre un joueur en ligne »
-   garde les deux premiers. Par correspondance, pas de lien a envoyer. */
-#pane-friend[data-ami="hasard"] #amiModes [data-v="lien"],#pane-friend[data-corr="1"] .direct-lien{display:none}
+/* Refonte du 2026-11-22 : plus de bandeau au-dessus du bloc ; par
+   correspondance, pas de lien a envoyer (l'invite est prevenu dans sa liste). */
+#pane-friend[data-corr="1"] #directLienLigne{display:none}
+/* Une rangee qui defile de cote (les familles de cadences) : un degrade et
+   un chevron au bord disent qu'il y a plus a voir, du cote ou c'est vrai
+   seulement. Meme dessin que la barre d'onglets ; le degrade est sur
+   l'enveloppe, car ::before de .tc-cats sert deja au repere glissant. */
+.defile{position:relative;margin-bottom:8px}
+.defile>.tc-cats{margin-bottom:0;scrollbar-width:none}
+.defile>.tc-cats::-webkit-scrollbar{display:none}
+.defile>.tc-cats button{flex:1 0 auto}
+.defile::before,.defile::after{content:"";position:absolute;top:1px;bottom:1px;width:30px;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+  background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%}
+.defile::before{left:1px;border-radius:var(--r) 0 0 var(--r);background-position:7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 45%,transparent)}
+.defile::after{right:1px;border-radius:0 var(--r) var(--r) 0;background-position:right 7px center,0 0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 45%,transparent)}
+.defile.has-scroll-left::before,.defile.has-scroll-right::after{opacity:1}
+#directAmisBloc{margin-bottom:8px}
+.ami-retour{margin:0 0 6px}
+.ami-retour .linkbtn{padding-left:0;font-size:13px}
+/* Le carre de notification : opaque, coins arrondis, au-dessus de la page et
+   sous les fenetres et le menu. */
+.carre-parties{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:90;width:56px;height:56px;display:grid;place-items:center;padding:0;
+  border-radius:14px;border:1px solid var(--rule);background-color:var(--raise);color:var(--chalk);box-shadow:var(--e2);cursor:pointer;
+  transition:background-color .16s,transform var(--duree-appui) var(--courbe-ressort)}
+.carre-parties[hidden]{display:none}
+.carre-parties:hover{background-color:var(--survol)}
+.carre-parties:active{transform:scale(.96)}
+.carre-parties:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.carre-dessin{display:grid;place-items:center;--oeil:var(--raise)}
+.carre-dessin svg{display:block;width:32px;height:32px}
+.carre-nombre{position:absolute;top:-7px;right:-7px;min-width:22px;height:22px;padding:0 6px;box-sizing:border-box;border-radius:999px;background-color:var(--brass);color:var(--on-brass);
+  font:700 12.5px/22px 'JetBrains Mono',monospace;text-align:center}
 /* Les cadences ne collent plus a la rangee Rapide | Classique (remarque d'Alexandre). */
 #directCats{margin-bottom:8px}
-/* Le nombre « a toi » sur l'onglet Jouer ; il remplace le point « partie en cours ». */
-.tabs button.a-toi{position:relative}
-.tab-pastille{position:absolute;top:2px;right:4px;min-width:17px;height:17px;border-radius:9px;background-color:var(--brass);color:var(--on-brass);
-  font:700 11px/17px 'JetBrains Mono',monospace;text-align:center;padding:0 4px;box-shadow:0 0 0 2px var(--slate)}
-.tab-pastille[hidden],.tabs button.partie-en-cours.a-toi::after{display:none}
+/* 2026-11-22 : le nombre « a toi » n'est plus sur l'onglet Jouer (mal place,
+   retour d'Alexandre) ; il est sur le carre de notification (.carre-parties). */
 /* La liste « Tes parties en cours », en haut de l'onglet Jouer. */
 #corrPanel{margin-bottom:12px}
 #corrPanel .eyebrow{margin-bottom:8px}
@@ -1132,7 +1157,8 @@ div.corr-item:hover{border-color:var(--rule)}
 .clock.corr .time{font-size:17px;letter-spacing:0}
 #pane-friend[data-ami="lien"]:not(.en-direct) #directPanel{display:none}
 #pane-friend[data-ami="direct"] #amiStatusPanel,#pane-friend[data-ami="direct"] #amiLinkPanel,#pane-friend[data-ami="direct"] #amiNewGamePanel,#pane-friend[data-ami="direct"] #amiScoresheetPanel,
-#pane-friend[data-ami="hasard"] #amiStatusPanel,#pane-friend[data-ami="hasard"] #amiLinkPanel,#pane-friend[data-ami="hasard"] #amiNewGamePanel,#pane-friend[data-ami="hasard"] #amiScoresheetPanel,#pane-friend[data-ami="hasard"] #amiInvitePanel{display:none}
+#pane-friend[data-ami="hasard"] #amiStatusPanel,#pane-friend[data-ami="hasard"] #amiLinkPanel,#pane-friend[data-ami="hasard"] #amiNewGamePanel,#pane-friend[data-ami="hasard"] #amiScoresheetPanel,
+#pane-friend[data-ami="direct"] #amiComptePanel,#pane-friend[data-ami="hasard"] #amiComptePanel,#pane-friend.en-direct #amiComptePanel{display:none}
 #pane-friend.en-direct #amiScoresheetPanel{display:block}
 #pane-friend[data-ami="hasard"] .direct-ami,#pane-friend:not([data-ami="hasard"]) .direct-hasard{display:none}
 .direct-lien{margin:10px 0 0;text-align:center}
@@ -3979,21 +4005,27 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <!-- Partie en direct entre deux membres (2026-11-19, direct_ecran.js).
              Reste masque tant que le serveur des parties n'est pas ouvert au
              public : seul un poste de developpement l'affiche. -->
-        <div class="ami-modes" id="amiModesPanel">
-          <div class="seg" id="amiModes">
-            <button type="button" data-v="direct" aria-pressed="false">Live</button>
-            <button type="button" data-v="corr" aria-pressed="false">Correspondence</button>
-            <button type="button" data-v="lien" aria-pressed="true">By link</button>
-          </div>
-        </div>
+        <!-- Refonte du 2026-11-22 (retours d'Alexandre) : plus de bandeau
+             En direct | Correspondance | Par lien au-dessus du bloc. Un seul
+             bloc de lancement, ou la CADENCE choisit tout : Blitz, Rapide,
+             Classique (a la pendule) ou Correspondance (un delai par coup).
+             La partie par lien est l'ecran d'un visiteur sans compte ; un
+             membre y vient par « Mon ami n'a pas de compte ». -->
         <div class="panel hide" id="directPanel">
-          <h2 id="directTitre">Live game</h2>
+          <h2 id="directTitre">Against a friend</h2>
           <p class="sub" id="directSous">Play a friend in real time, with a clock. Invite them by username, or send them a link.</p>
           <div class="status hide" id="directStatus" role="status"></div>
           <div id="directInvite" class="hide"></div>
           <div id="directNouveau">
-            <!-- Bloc de lancement (2026-11-21) : couleur, cadence, adversaire,
-                 puis « Inviter ». Les memes libelles que contre l'ordinateur. -->
+            <!-- La cadence d'abord : ses familles tiennent sur UNE ligne, qui
+                 defile de cote quand l'ecran est etroit (.defile : degrade et
+                 chevron au bord, comme la barre d'onglets). -->
+            <div class="field">
+              <div class="eyebrow" id="directCadenceTitre">Time control</div>
+              <div class="defile" id="directCatsDefile"><div class="tc-cats" id="directCats"></div></div>
+              <div class="tc-chips" id="directCadences"></div>
+              <p class="note" id="directCadenceNote"></p>
+            </div>
             <div class="field direct-ami">
               <div class="eyebrow">Colour</div>
               <div class="seg" id="directCouleur">
@@ -4002,24 +4034,16 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                 <button type="button" data-v="h" aria-pressed="true">Random</button>
               </div>
             </div>
-            <div class="field">
-              <div class="eyebrow" id="directCadenceTitre">Time control</div>
-              <div class="seg" id="directCats"></div>
-              <div class="tc-chips" id="directCadences"></div>
-              <p class="note" id="directCadenceNote"></p>
-            </div>
-            <!-- Choisir un ami dans sa liste (2026-11-19, direct_ecran.js) : un
-                 appui remplit le pseudo. Masque tant que la liste est vide. -->
-            <div class="field hide direct-ami" id="directAmisBloc">
-              <div class="eyebrow">Choose a friend</div>
-              <div class="tc-chips" id="directAmis"></div>
-            </div>
+            <!-- L'adversaire : ses amis en pastilles (un appui remplit le
+                 pseudo), ou le pseudo d'un autre membre. -->
             <div class="field direct-ami">
               <label class="eyebrow" for="directPseudo">Opponent</label>
+              <div class="hide" id="directAmisBloc"><div class="tc-chips" id="directAmis"></div></div>
               <input class="linkbox" id="directPseudo" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username">
             </div>
             <div class="btnrow direct-ami"><button class="btn primary" id="btnDirectCreer">Invite</button></div>
-            <p class="direct-lien direct-ami"><button type="button" class="linkbtn" id="btnDirectLien">or send a link</button></p>
+            <p class="direct-lien direct-ami" id="directLienLigne"><button type="button" class="linkbtn" id="btnDirectLien">or send a link</button></p>
+            <p class="direct-lien direct-ami"><button type="button" class="linkbtn" id="btnAmiSansCompte">My friend has no account</button></p>
             <div class="btnrow direct-hasard"><button class="btn primary" id="btnDirectHasard">Find an opponent</button></div>
           </div>
           <div id="directLienBloc" class="hide">
@@ -4038,6 +4062,8 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           </div>
         </div>
         <div class="panel" id="amiStatusPanel">
+          <!-- Un membre arrive ici par « Mon ami n'a pas de compte » : le retour vers l'invitation d'un membre. -->
+          <p class="ami-retour hide" id="amiRetourMembre"><button type="button" class="linkbtn" id="btnAmiRetourMembre">Invite a member instead</button></p>
           <h2>Game by link</h2>
           <p class="sub">Each move becomes a link. Send it, your friend plays, and the link comes back to you.</p>
           <div class="status" id="amiStatus">Start a game.</div>
@@ -4078,7 +4104,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="panel" id="amiNewGamePanel">
           <div class="eyebrow">New game</div>
           <div class="field">
-            <div class="eyebrow">Pace</div>
+            <div class="eyebrow">Time per move</div>
             <div class="tc-chips" id="dailyChips"></div>
           </div>
           <!-- Choix de couleur passe en overlay (2026-09-04, voir amiColorModal
@@ -4098,6 +4124,12 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
              ici : il n'existait que sur cet ecran, sans rapport avec la partie
              qu'on y prepare. Il est dans le menu, section A propos
              (2026-11-22, retour d'Alexandre). -->
+        <!-- Sans compte : ce qu'un compte apporte, sous la partie par lien. -->
+        <div class="panel hide" id="amiComptePanel">
+          <div class="eyebrow">With a free account</div>
+          <p class="sub">Play live on the clock, or by correspondence over several days, against another member.</p>
+          <div class="btnrow"><button type="button" class="btn" data-vue-compte="1">Create an account</button></div>
+        </div>
         <div class="panel" id="amiScoresheetPanel">
           <div class="eyebrow">Scoresheet</div>
           <div class="sheet">
@@ -4150,7 +4182,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <span id="jouerEnLignePicto"></span>
         <span class="jouer-texte">
           <b>Against a player online</b>
-          <span class="jouer-desc">Live or by correspondence, against an opponent picked at random, close to your level. Colours are drawn at random.</span>
+          <span class="jouer-desc">The site finds you an opponent close to your level, live or by correspondence. Colours are drawn at random.</span>
           <span class="jouer-go" id="jouerEnLigneGo">Find an opponent &rarr;</span>
         </span>
       </button>
@@ -4216,6 +4248,12 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
   <!-- ================= LEGAL ================= -->
   <!-- Reglages rapides (2026-11-21, reglages_rapides.js) : les blocs des
        Preferences y sont deplaces le temps qu'elle est ouverte. -->
+  <!-- Carre de notification (2026-11-22, demande d'Alexandre) : des parties
+       attendent le membre (son tour, une invitation, une fin a voir). En bas
+       a droite de tous les ecrans, sauf pendant une partie ; un appui mene a
+       « Tes parties en cours ». Rempli par corr.js ; le dessin (deux pions,
+       celui de la carte « Contre un ami ») est pose par jouer.js. -->
+  <button type="button" class="carre-parties" id="carreParties" hidden><span class="carre-dessin" id="carreDessin" aria-hidden="true"></span><span class="carre-nombre" id="carreNombre" aria-hidden="true"></span></button>
   <div class="rr" id="reglagesRapides" role="dialog" aria-modal="true" aria-labelledby="rrTitre" hidden>
     <div class="rr-feuille">
       <div class="rr-tete">

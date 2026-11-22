@@ -3129,10 +3129,21 @@ function newAmiGame(){
     updateAmiNote();
   }
 }
-async function saveAmi(){try{await window.storage.set("chang64:friend",JSON.stringify({m:amiMoves,c:amiColor,p:amiPace,r:amiResigned}));}catch(e){}}
+/* s : une partie a vraiment ete creee ou rejointe (2026-11-22). Choisir un
+   rythme enregistre aussi (pour le retrouver), mais ne cree aucune partie. */
+async function saveAmi(){try{await window.storage.set("chang64:friend",JSON.stringify({m:amiMoves,c:amiColor,p:amiPace,r:amiResigned,s:amiStarted?1:0}));}catch(e){}}
+/* Une partie par lien est en cours : creee, ni finie ni abandonnee. */
+function amiPartieEnCours(){
+  try{return !!amiStarted&&amiResigned===null&&amiGame.moves().length>0&&!amiGame.isDraw();}catch(e){return false;}
+}
 async function loadAmi(){
   try{const r=await window.storage.get("chang64:friend");
-    if(r&&r.value){const d=JSON.parse(r.value);amiMoves=d.m||[];amiColor=d.c===1?B:W;amiPace=d.p||3;amiResigned=(d.r===0||d.r===1)?d.r:null;amiStarted=true;}}catch(e){}
+    if(r&&r.value){const d=JSON.parse(r.value);amiMoves=d.m||[];amiColor=d.c===1?B:W;amiPace=d.p||3;amiResigned=(d.r===0||d.r===1)?d.r:null;
+      /* Le beau bug du 2026-11-22 : ce fichier existe des qu'on touche au
+         rythme, et toute trace passait pour une partie. Il y a partie si elle
+         est marquee creee (s), ou, pour ce qui a ete garde avant, si un coup
+         a ete joue ou si l'on a pris les Noirs (le lien est parti). */
+      amiStarted=d.s===1||(d.s===undefined&&(amiMoves.length>0||amiColor===B));}}catch(e){}
 }
 function readDeepLink(){
   const h=location.hash||"";
@@ -3409,7 +3420,9 @@ function renderDailyChips(){
   for(const d of [1,3,7]){
     const b=document.createElement("button");
     b.className="chip";
-    b.textContent=t(d===1?"{n} day/move":"{n} days/move",{n:d});
+    /* « 1 jour », « 3 jours », « 7 jours » : les trois tiennent sur une ligne
+       a 360 px, sous le titre « Delai par coup » (retour d'Alexandre). */
+    b.textContent=t(d===1?"{n} day":"{n} days",{n:d});
     b.setAttribute("aria-pressed",d===amiPace);
     b.onclick=()=>{amiPace=d;renderDailyChips();saveAmi();if(mode==="friend")showAmi();};
     el.appendChild(b);

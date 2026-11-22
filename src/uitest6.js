@@ -167,7 +167,9 @@ const T = (label, ok, extra) => console.log((ok ? "  ok  " : " FAIL ") + label +
   a.click(a.$("tab-friend"));
   await wait(500);
   const paces = Array.from(a.$("dailyChips").children).map(b => b.textContent);
-  T("daily pace options", paces.join(" ") === "1 day/move 3 days/move 7 days/move", paces.join(" "));
+  /* 2026-11-22 : « 1 day », « 3 days », « 7 days » sous le titre « Time per
+     move », pour tenir sur une ligne a 360 px (retour d'Alexandre). */
+  T("daily pace options", paces.join(" ") === "1 day 3 days 7 days", paces.join(" "));
   /* Mis a jour le 2026-09-06 : "Create game" ouvre desormais la modale de
      choix de couleur (04/09), c'est le clic sur la couleur qui cree la
      partie. Sans ce clic, amiLink restait vide et la suite plantait. */

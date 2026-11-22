@@ -28,42 +28,71 @@ const directDeclinees = {};       /* invitations deja montrees ou refusees sur c
 let directGuet = 0;
 let directHasard = null;          /* je cherche un adversaire au hasard : { cad, depuis } */
 let directCoul = "h";             /* couleur demandee pour la partie que je cree : b, n ou h (au hasard) */
-let directCat = 1;                /* famille choisie dans DIRECT_FAMILLES : 0 = blitz, 1 = rapides (par defaut), 2 = classiques */
-/* Ecran « Contre un ami » : direct, corr (par correspondance, 2026-11-21), lien,
-   ou hasard (« Contre un joueur en ligne », lui-meme en direct ou par
-   correspondance : hasardCorr). */
+let directCat = 1;                /* famille choisie dans AMI_FAMILLES : 0 = blitz, 1 = rapides (par defaut), 2 = classiques, 3 = correspondance */
+/* Les familles de l'ecran (2026-11-22) : les trois a la pendule, puis la
+   correspondance. C'est la CADENCE qui dit si la partie est en direct ou par
+   correspondance : il n'y a plus de bandeau pour le choisir. */
+const AMI_FAMILLES = DIRECT_FAMILLES.concat([["Correspondence", DIRECT_CORR]]);
+const AMI_CORR = AMI_FAMILLES.length - 1;
+/* Ecran « Contre un ami » : direct (le bloc de lancement entre membres, a la
+   pendule ou par correspondance selon la cadence), lien (la partie par lien,
+   sans compte), ou hasard (« Contre un joueur en ligne », meme bloc sans
+   couleur ni adversaire). */
 let amiMode = "lien";
-let hasardCorr = false;
 /* Le bloc de lancement prepare une partie par correspondance. */
-function amiCorr() { return amiMode === "corr" || (amiMode === "hasard" && hasardCorr); }
+function amiCorr() { return amiMode !== "lien" && directCat === AMI_CORR; }
 /* La partie ouverte a l'ecran est une partie par correspondance. */
 function directEstCorr() { return !!(directE && directE.cad && directE.cad[0] >= 86400); }
-function amiModeDefaut() {
-  const membre = typeof estMembre === "function" && estMembre();
-  let lienEnCours = false; try { lienEnCours = !!amiStarted; } catch (e) {}
-  return membre && !lienEnCours ? "direct" : "lien";
-}
+/* Un membre arrive sur le bloc de lancement, toujours ; un visiteur sur la
+   partie par lien. Une partie par lien deja commencee ne s'impose plus : elle
+   est dans « Tes parties en cours » (corr.js). Avant le 2026-11-22, toute
+   trace d'une partie par lien, meme finie, rouvrait l'echiquier d'office. */
+function amiModeDefaut() { return typeof estMembre === "function" && estMembre() ? "direct" : "lien"; }
 /* Vrai quand l'ecran ne montre pas la partie par lien (et qu'aucune partie en direct n'est ouverte). */
 function amiHorsLien() { return amiMode !== "lien" && !directId; }
+/* La derniere cadence choisie est retenue sur l'appareil ; Rapide 10+0 la premiere fois. */
+function amiCadenceGarder() { try { localStorage.setItem("chang64:amiCadence", String(directCad)); } catch (e) {} }
+function amiCadenceLire() {
+  let v = NaN;
+  try { v = parseInt(localStorage.getItem("chang64:amiCadence"), 10); } catch (e) {}
+  const k = AMI_FAMILLES.findIndex(f => f[1].includes(v));
+  if (k < 0) { directCat = 1; directCad = AMI_FAMILLES[1][1][0]; return; }
+  directCat = k; directCad = v;
+}
 function amiModeRegler(m) {
-  amiMode = m === "direct" || m === "corr" || m === "hasard" ? m : "lien";
+  /* « corr » etait un choix du bandeau : c'est desormais la famille Correspondance. */
+  if (m === "corr") { directCat = AMI_CORR; m = "direct"; }
+  amiMode = m === "direct" || m === "hasard" ? m : "lien";
   const p = $("pane-friend"); if (!p) return;
-  /* Par correspondance, le bloc est celui du direct : seul data-corr le distingue. */
   const c = amiCorr();
-  p.dataset.ami = amiMode === "corr" ? "direct" : amiMode;
+  p.dataset.ami = amiMode;
   p.dataset.corr = c ? "1" : "";
-  const seg = $("amiModes"), choisi = amiMode === "hasard" ? (c ? "corr" : "direct") : amiMode;
-  if (seg) for (const b of seg.children) b.setAttribute("aria-pressed", String(b.dataset.v === choisi));
   const ti = $("directTitre"), so = $("directSous");
-  if (ti) ti.textContent = t(amiMode === "hasard" ? "Against a player online" : c ? "Correspondence game" : "Live game");
+  if (ti) ti.textContent = t(amiMode === "hasard" ? "Against a player online" : "Against a friend");
   if (so) so.textContent = t(amiMode === "hasard" ? (c ? "A correspondence game against an opponent picked at random, close to your level. Colours are drawn at random."
       : "A live game against an opponent picked at random, close to your level. Colours are drawn at random.")
     : c ? "Everyone plays when they like, with no clock to watch. The game waits for you here, even if you close the site."
     : "Play a friend in real time, with a clock. Invite them by username, or send them a link.");
-  /* La cadence suit le choix : un delai en jours, ou une cadence a la pendule. */
-  if (c !== directCadCorr(directCad)) directCad = c ? DIRECT_CORR[1] : DIRECT_FAMILLES[directCat][1][0];
+  /* La cadence suit la famille : un delai en jours, ou une cadence a la pendule. */
+  if (!AMI_FAMILLES[directCat][1].includes(directCad)) directCad = directCat === AMI_CORR ? DIRECT_CORR[1] : AMI_FAMILLES[directCat][1][0];
   directMessage = "";
+  amiAnnexes();
   if (mode === "friend" && !directId) showAmi(); else directPanneau();
+}
+/* Autour de la partie par lien : le retour vers l'invitation d'un membre, ou,
+   pour un visiteur, ce qu'un compte apporte. */
+function amiAnnexes() {
+  const membre = typeof estMembre === "function" && estMembre();
+  const r = $("amiRetourMembre"), c = $("amiComptePanel");
+  if (r) r.classList.toggle("hide", !membre);
+  if (c) c.classList.toggle("hide", membre);
+}
+/* Indices de defilement d'une rangee .defile : de quel cote il reste a voir. */
+function defileMaj(enveloppe) {
+  const el = enveloppe && enveloppe.firstElementChild; if (!el) return;
+  const max = el.scrollWidth - el.clientWidth;
+  enveloppe.classList.toggle("has-scroll-left", el.scrollLeft > 2);
+  enveloppe.classList.toggle("has-scroll-right", el.scrollLeft < max - 2);
 }
 let directAnime = "";              /* dernier coup deja anime : partie/manche/nombre de coups */
 let directRefus = "";              /* ma nulle vient d'etre declinee : partie/manche/nombre de coups */
@@ -125,6 +154,8 @@ async function directAmis() {
   const a = await cpaCharger();
   const noms = a && Array.isArray(a.amis) ? a.amis.map(x => String(x.p)).sort((x, y) => x.localeCompare(y)) : [];
   bloc.classList.toggle("hide", !noms.length);
+  /* Avec des amis en pastilles, le champ sert a « un autre pseudo ». */
+  { const champ = $("directPseudo"); if (champ) champ.placeholder = t(noms.length ? "or another username" : "Username"); }
   if (el.dataset.noms === noms.join("|")) return;
   el.dataset.noms = noms.join("|");
   el.textContent = "";
@@ -173,31 +204,46 @@ function directMotif(e) {
   if (m === "annulee" && directEstCorr()) return t("Game cancelled: the first move was not played in time.");
   return t(DIRECT_MOTIFS[m] || "");
 }
-/* Cadences du bloc de lancement : trois familles, Blitz, Rapide et Classique, puis
-   les cadences de la famille choisie. Reconstruit seulement quand la famille change. */
+/* Cadences du bloc de lancement : quatre familles sur une ligne (Blitz, Rapide,
+   Classique, Correspondance), puis les cadences de la famille choisie.
+   Reconstruit seulement quand la famille change. */
 function directCadencesRendre() {
   const cats = $("directCats"), el = $("directCadences"); if (!cats || !el) return;
-  const familles = DIRECT_FAMILLES;
-  /* Par correspondance : pas de familles, trois delais par coup. */
   const c = amiCorr(), titre = $("directCadenceTitre");
   if (titre) titre.textContent = t(c ? "Time per move" : "Time control");
-  cats.classList.toggle("hide", c);
-  if (!cats.children.length) familles.forEach(([nom], k) => {
-    const b = document.createElement("button");
-    b.type = "button"; b.textContent = t(nom);
-    b.onclick = () => { directCat = k; directCad = familles[k][1][0]; directCadencesRendre(); };
-    cats.appendChild(b);
-  });
+  if (!cats.children.length) {
+    AMI_FAMILLES.forEach(([nom], k) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = t(nom); b.dataset.fam = String(k);
+      b.onclick = () => {
+        directCat = k; directCad = k === AMI_CORR ? DIRECT_CORR[1] : AMI_FAMILLES[k][1][0];
+        amiCadenceGarder();
+        /* Le sous-titre, le lien a envoyer et les cadences suivent la famille. */
+        amiModeRegler(amiMode);
+      };
+      cats.appendChild(b);
+    });
+    const enveloppe = $("directCatsDefile");
+    if (enveloppe) {
+      cats.addEventListener("scroll", () => defileMaj(enveloppe), { passive: true });
+      window.addEventListener("resize", () => defileMaj(enveloppe));
+    }
+  }
   [...cats.children].forEach((b, k) => b.setAttribute("aria-pressed", String(k === directCat)));
-  const famille = c ? "corr" : String(directCat);
+  /* La famille choisie reste visible dans la rangee, puis les indices du bord. */
+  { const actif = cats.children[directCat], enveloppe = $("directCatsDefile");
+    if (actif && cats.clientWidth && (actif.offsetLeft < cats.scrollLeft || actif.offsetLeft + actif.offsetWidth > cats.scrollLeft + cats.clientWidth))
+      cats.scrollLeft = Math.max(0, actif.offsetLeft - (cats.clientWidth - actif.offsetWidth) / 2);
+    if (enveloppe) defileMaj(enveloppe); }
+  const famille = String(directCat);
   if (el.dataset.cat !== famille) {
     el.dataset.cat = famille;
     el.textContent = "";
-    for (const i of c ? DIRECT_CORR : familles[directCat][1]) {
+    for (const i of AMI_FAMILLES[directCat][1]) {
       const b = document.createElement("button"), jours = DIRECT_CADENCES[i][0] / 86400;
       b.type = "button"; b.className = "chip"; b.dataset.cad = String(i);
       b.textContent = c ? t(jours === 1 ? "{n} day" : "{n} days", { n: jours }) : directTexteCadence(DIRECT_CADENCES[i]);
-      b.onclick = () => { directCad = i; directCadencesRendre(); };
+      b.onclick = () => { directCad = i; amiCadenceGarder(); directCadencesRendre(); };
       el.appendChild(b);
     }
   }
@@ -555,12 +601,9 @@ if (DIRECT_OUVERT && document.getElementById("directPanel")) {
     const b = e.target.closest("button[data-v]"); if (!b) return;
     directCoul = b.dataset.v; directPanneau();
   });
-  if ($("amiModes")) $("amiModes").addEventListener("click", e => {
-    const b = e.target.closest("button[data-v]"); if (!b) return;
-    /* « Contre un joueur en ligne » : le meme choix, sans « Par lien ». */
-    if (amiMode === "hasard") { if (b.dataset.v === "lien") return; hasardCorr = b.dataset.v === "corr"; amiModeRegler("hasard"); }
-    else amiModeRegler(b.dataset.v);
-  });
+  /* « Mon ami n'a pas de compte » : la partie par lien ; et le retour. */
+  if ($("btnAmiSansCompte")) $("btnAmiSansCompte").onclick = () => { amiModeRegler("lien"); if (typeof goTop === "function") goTop(); };
+  if ($("btnAmiRetourMembre")) $("btnAmiRetourMembre").onclick = () => { amiModeRegler("direct"); if (typeof goTop === "function") goTop(); };
   /* Une partie par lien qui commence ou qu'on rejoint ramene sous « Par lien ». */
   for (const nom of ["newAmiGame", "readHash"]) {
     if (typeof window[nom] !== "function") continue;
@@ -571,6 +614,7 @@ if (DIRECT_OUVERT && document.getElementById("directPanel")) {
       return r;
     };
   }
+  amiCadenceLire();
   amiModeRegler(amiModeDefaut());
   $("btnDirectNulle").onclick = () => { if (directF) directF.nulle(); };
   $("btnDirectAccepter").onclick = () => { if (directF) directF.nulle(); };

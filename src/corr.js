@@ -96,17 +96,42 @@ function corrLigne(x) {
   if (el.tagName === "BUTTON") { el.type = "button"; el.onclick = () => corrOuvrir(x.id); }
   return el;
 }
+/* La partie par lien en cours (ui.js) : une ligne de la liste, pour un
+   membre comme pour un visiteur. Elle ne s'impose plus a l'ouverture de
+   « Contre un ami » ; on la retrouve ici. */
+function corrLigneLien() {
+  const el = document.createElement("button"), atoi = typeof amiIsMyTurn === "function" && amiIsMyTurn();
+  el.type = "button"; el.className = "history-item corr-item"; el.dataset.s = "lien";
+  poserHtml(el, (atoi ? '<span class="res corr-atoi">' + echapper(t("Your turn")) + "</span>" : "") +
+    '<span class="meta"><b>' + echapper(t("Game by link")) + "</b><span>" + echapper(t(atoi ? "Your move, then send the link." : "Move saved. Send this link to your friend.")) + "</span></span>" +
+    '<span class="corr-fleche" aria-hidden="true">›</span>');
+  el.onclick = () => { setMode("friend"); amiModeRegler("lien"); if (typeof goTop === "function") goTop(); };
+  return el;
+}
+/* Une partie se joue a l'ecran : contre l'ordinateur, ou en direct a la pendule. */
+function corrEnPartie() {
+  try {
+    if (mode === "play" && gameStarted && !resultInfo && !isReviewGame) return true;
+    return typeof directOccupe === "function" && directOccupe() && !directEstCorr();
+  } catch (e) { return false; }
+}
+/* Le carre de notification : le nombre de parties qui attendent le membre.
+   Jamais pendant une partie (rien ne la derange), ni sur l'ecran qui montre
+   deja la liste. */
+function corrCarre() {
+  const b = $("carreParties"); if (!b) return;
+  const n = corrNombre(), montrer = n > 0 && !corrEnPartie() && mode !== "jouer";
+  if (b.hidden === !montrer && b.dataset.n === String(n)) return;
+  b.hidden = !montrer; b.dataset.n = String(n);
+  const nb = $("carreNombre"); if (nb) nb.textContent = n ? String(n) : "";
+  b.setAttribute("aria-label", t(n === 1 ? "{n} game is waiting for you" : "{n} games are waiting for you", { n }));
+}
 function corrRendre() {
   const n = corrNombre();
-  /* La pastille de l'onglet Jouer : un nombre, lu aussi par les lecteurs d'ecran. */
-  const onglet = $("tab-jouer");
-  if (onglet) {
-    let p = $("corrPastille");
-    if (!p) { p = document.createElement("span"); p.id = "corrPastille"; p.className = "tab-pastille"; onglet.appendChild(p); }
-    p.hidden = !n;
-    onglet.classList.toggle("a-toi", !!n);
-    if (n) poserHtml(p, '<span aria-hidden="true">' + n + '</span><span class="visually-hidden"> ' + echapper(t(n === 1 ? "{n} game is waiting for you" : "{n} games are waiting for you", { n })) + "</span>");
-  }
+  /* 2026-11-22 : plus de pastille sur l'onglet Jouer (mal placee, retour
+     d'Alexandre) ; le nombre est sur le carre de notification. */
+  { const p = $("corrPastille"); if (p) p.remove(); const o = $("tab-jouer"); if (o) o.classList.remove("a-toi"); }
+  corrCarre();
   /* La ligne du menu : visible des qu'il y a au moins une partie. */
   const ligne = $("menuCorrLigne"), detail = $("menuCorrDetail");
   if (ligne) ligne.hidden = !corrParties.length;
@@ -116,12 +141,14 @@ function corrRendre() {
   /* La liste, en haut de l'onglet Jouer. */
   const panneau = $("corrPanel"), boite = $("corrListe");
   if (!panneau || !boite) return;
-  panneau.classList.toggle("hide", !corrParties.length);
+  const lien = typeof amiPartieEnCours === "function" && amiPartieEnCours();
+  panneau.classList.toggle("hide", !corrParties.length && !lien);
   const msg = $("corrMessage");
   if (msg) { msg.textContent = corrMessage; msg.classList.toggle("hide", !corrMessage); }
   boite.textContent = "";
   const rang = x => (x.s === "jeu" && x.atoi ? 0 : x.s === "invite" ? 1 : x.s === "fin" ? 2 : x.s === "jeu" ? 3 : 4);
   for (const x of corrParties.slice().sort((a, b) => rang(a) - rang(b) || a.ech - b.ech)) boite.appendChild(corrLigne(x));
+  if (lien) boite.appendChild(corrLigneLien());
 }
 async function corrAction(quoi, id) {
   corrMessage = "";
@@ -147,6 +174,11 @@ if (typeof DIRECT_OUVERT !== "undefined" && DIRECT_OUVERT && document.getElement
     if (typeof menuFermer === "function") menuFermer();
     setMode("jouer"); if (typeof goTop === "function") goTop();
   });
+  /* Le carre : un appui mene a la liste ; il suit l'ecran et la partie en cours. */
+  if ($("carreParties")) {
+    $("carreParties").addEventListener("click", () => { setMode("jouer"); if (typeof goTop === "function") goTop(); });
+    setInterval(corrCarre, 1000);
+  }
   /* Le temps restant avance tout seul, une fois par minute. */
   setInterval(() => { if (corrParties.length && !document.hidden && mode === "jouer") corrRendre(); }, 60000);
   const avant = setMode;
@@ -156,6 +188,7 @@ if (typeof DIRECT_OUVERT !== "undefined" && DIRECT_OUVERT && document.getElement
     if (m !== "friend" && directId && directEstCorr()) directQuitter(mode !== "friend");
     const r = avant.apply(this, arguments);
     if (m === "jouer") { corrRendre(); corrActualiser(); }
+    corrCarre();
     return r;
   };
 }

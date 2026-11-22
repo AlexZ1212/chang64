@@ -115,7 +115,7 @@ const MESURE = `(function(nom){
           /* Le message le plus long qu'un coup faux peut afficher, puis la reussite. */
           await c.js("(function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];let long='';for(const k in (ex.faux||{}))if(ex.faux[k].length>long.length)long=ex.faux[k];if(long)debutStatut('lose',long);})()");
           await mesurer(nom + ", coup faux", true);
-          await c.js("(async function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];if(ex.avant)await new Promise(r=>setTimeout(r,800));const m=legalCache.find(q=>game.uci(q)===ex.sol[0]);debutEssai(m,ex);await new Promise(r=>setTimeout(r,(ex.suite?ex.suite.length*800:0)+120));})()");
+          await c.js("(async function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];if(ex.avant)await new Promise(r=>setTimeout(r,800));const m=legalCache.find(q=>game.uci(q)===ex.sol[0]);debutEssai(m,ex);await new Promise(r=>setTimeout(r,(ex.suite?ex.suite.length*800:0)+120));if(ex.reponse){await new Promise(r=>setTimeout(r,900));const mm=legalCache.find(q=>{game.makeMove(q);const k=game.isCheckmate();game.undoMove();return k;});if(mm)debutEssai(mm,ex);await new Promise(r=>setTimeout(r,150));}})()");
           await mesurer(nom + ", reussi", true);
         }
       }

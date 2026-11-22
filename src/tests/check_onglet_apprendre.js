@@ -67,7 +67,10 @@ const CHAPITRES = require("../chemin/plan.json").chapitres;
   T("chapitre 1 ouvert et en cours, les suivants verrouilles", chap[0].classList.contains("encours") && !chap[0].classList.contains("verrou") && chap.slice(1).every(b => b.classList.contains("verrou")));
   T("un chapitre verrouille le dit aux lecteurs d'ecran", chap[1].getAttribute("aria-disabled") === "true" && /chapitre 1/.test(net(chap[1].getAttribute("aria-label"))) && !chap[0].hasAttribute("aria-disabled"), chap[1].getAttribute("aria-label"));
   T("chaque chapitre a un nom lisible : numero, titre, etat", /^Chapitre 1 : Je débute\. /.test(net(chap[0].getAttribute("aria-label"))), chap[0].getAttribute("aria-label"));
-  T("la ligne « A venir » annonce la suite", /venir/.test($("apVenir").textContent) && !cache("apVenir"));
+  /* Tant que des chapitres restent a sortir, une ligne les annonce ; quand le
+     chemin est complet (22/11, chapitre 9), elle disparait. */
+  if (require("../chemin/plan.json").aVenir) T("la ligne « A venir » annonce la suite", /venir/.test($("apVenir").textContent) && !cache("apVenir"));
+  else T("chemin complet : pas de ligne « A venir »", cache("apVenir") && !$("apVenir").textContent);
   T("deux titres de section pour la navigation par titres", [...w.document.querySelectorAll("#pane-apprendre h2")].map(h => net(h.textContent)).join("|") === "Ton chemin|Fiches de règles", [...w.document.querySelectorAll("#pane-apprendre h2")].map(h => h.textContent).join("|"));
   chap[1].click(); await pause(300);
   T("un chapitre verrouille ne s'ouvre pas", w.eval("mode") === "apprendre");

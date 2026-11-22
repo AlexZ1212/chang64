@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Chapter 9: mate in two, and the path is complete",
+   "The last chapter of the Learn tab: two checks in a row, the back-rank sacrifice, the smothered mate in two, taking away the last square and the quiet move. This time you play both moves: the computer answers your first one, then you mate. The boss is a stronger computer, a knight down."
+  ],
+  "fr": [
+   "Chapitre 9 : le mat en deux, et le chemin est complet",
+   "Le dernier chapitre de l'onglet Apprendre : deux échecs de suite, le sacrifice sur la dernière rangée, le mat étouffé en deux, enlever la dernière case et le coup tranquille. Cette fois, tu joues les deux coups : l'ordinateur répond au premier, puis tu fais mat. Le boss est un ordinateur plus fort, avec un cavalier de moins."
+  ],
+  "es": [
+   "Capítulo 9: el mate en dos, y el camino está completo",
+   "El último capítulo de la pestaña Aprender: dos jaques seguidos, el sacrificio en la última fila, el mate de la coz en dos, quitar la última casilla y la jugada tranquila. Esta vez juegas las dos jugadas: el ordenador responde a la primera y luego das mate. El jefe es un ordenador más fuerte, con un caballo de menos."
+  ],
+  "pt": [
+   "Capítulo 9: o mate em dois, e o caminho está completo",
+   "O último capítulo da aba Aprender: dois xeques seguidos, o sacrifício na última fileira, o mate sufocado em dois, tirar a última casa e o lance tranquilo. Desta vez você joga os dois lances: o computador responde ao primeiro, e depois você dá mate. O chefão é um computador mais forte, com um cavalo a menos."
+  ],
+  "de": [
+   "Kapitel 9: Matt in zwei, und der Weg ist vollständig",
+   "Das letzte Kapitel im Tab Lernen: zwei Schachs hintereinander, das Opfer auf der Grundreihe, das erstickte Matt in zwei, das letzte Feld nehmen und der stille Zug. Diesmal spielst du beide Züge: Der Computer antwortet auf den ersten, dann setzt du matt. Der Boss ist ein stärkerer Computer mit einem Springer weniger."
+  ],
+  "ru": [
+   "Глава 9: мат в два хода, и путь пройден целиком",
+   "Последняя глава вкладки «Учиться»: два шаха подряд, жертва на последней горизонтали, спёртый мат в два хода, как отнять последнее поле, и тихий ход. На этот раз ты делаешь оба хода: компьютер отвечает на первый, а потом ты ставишь мат. Босс: компьютер посильнее, но без коня."
+  ],
+  "it": [
+   "Capitolo 9: il matto in due, e il percorso è completo",
+   "L'ultimo capitolo della scheda Impara: due scacchi di fila, il sacrificio sull'ultima traversa, il matto affogato in due, togliere l'ultima casa e la mossa tranquilla. Stavolta giochi tu tutte e due le mosse: il computer risponde alla prima, poi dai matto. Il boss è un computer più forte, con un cavallo in meno."
+  ],
+  "tr": [
+   "Bölüm 9: iki hamlede mat ve yol tamamlandı",
+   "Öğren sekmesinin son bölümü: art arda iki şah, son sırada fedakârlık, iki hamlede boğmaca mat, son kareyi elinden almak ve sessiz hamle. Bu kez iki hamleyi de sen oynuyorsun: bilgisayar ilkine cevap veriyor, sonra sen mat ediyorsun. Boss, bir atı eksik ama daha güçlü bir bilgisayar."
+  ],
+  "pl": [
+   "Rozdział 9: mat w dwóch ruchach, a ścieżka jest kompletna",
+   "Ostatni rozdział zakładki Ucz się: dwa szachy z rzędu, poświęcenie na ostatniej linii, mat zduszony w dwóch ruchach, odbieranie ostatniego pola i cichy ruch. Tym razem wykonujesz oba ruchy: komputer odpowiada na pierwszy, a potem dajesz mata. Boss to silniejszy komputer bez jednego skoczka."
+  ],
+  "id": [
+   "Bab 9: skakmat dua langkah, dan jalurnya lengkap",
+   "Bab terakhir di tab Belajar: dua skak berturut-turut, pengorbanan di baris terakhir, skakmat tercekik dua langkah, mengambil petak terakhir, dan langkah tenang. Kali ini kamu memainkan kedua langkah: komputer menjawab langkah pertamamu, lalu kamu skakmat. Bosnya komputer yang lebih kuat, dengan kekurangan satu kuda."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "Chapter 8: basic endgames",
    "A new chapter in the Learn tab: mating with the queen and with the rook without stalemating, the square of the pawn, the opposition, and the king leading its pawn. The boss: mate the computer's lone king with your king and queen."
   ],

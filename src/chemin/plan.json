@@ -1,15 +1,3 @@
 {
-  "chapitres": ["debut", "regles", "securite", "mats", "menaces", "clouer", "ouverture", "finales"],
-  "aVenir": {
-    "en": "Coming next: mate in two.",
-    "fr": "À venir : le mat en deux.",
-    "es": "Próximamente: el mate en dos.",
-    "pt": "Em breve: o mate em dois.",
-    "de": "Demnächst: Matt in zwei.",
-    "ru": "Скоро: мат в два хода.",
-    "it": "In arrivo: il matto in due.",
-    "tr": "Yakında: iki hamlede mat.",
-    "pl": "Wkrótce: mat w dwóch ruchach.",
-    "id": "Segera hadir: skakmat dalam dua langkah."
-  }
+  "chapitres": ["debut", "regles", "securite", "mats", "menaces", "clouer", "ouverture", "finales", "mat2"]
 }

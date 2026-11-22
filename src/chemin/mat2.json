@@ -1,0 +1,640 @@
+{
+  "id": "mat2",
+  "theme": "Mate in two",
+  "titre": {
+    "en": "Mate in two",
+    "fr": "Le mat en deux",
+    "es": "El mate en dos",
+    "pt": "O mate em dois",
+    "de": "Matt in zwei",
+    "ru": "Мат в два хода",
+    "it": "Il matto in due",
+    "tr": "İki hamlede mat",
+    "pl": "Mat w dwóch ruchach",
+    "id": "Skakmat dalam dua langkah"
+  },
+  "desc": {
+    "en": "A first move that forces everything, then the mate. This time, you play both moves.",
+    "fr": "Un premier coup qui force tout, puis le mat. Cette fois, tu joues les deux coups.",
+    "es": "Una primera jugada que lo fuerza todo, y luego el mate. Esta vez juegas las dos jugadas.",
+    "pt": "Um primeiro lance que força tudo, e depois o mate. Desta vez, você joga os dois lances.",
+    "de": "Ein erster Zug, der alles erzwingt, dann das Matt. Diesmal spielst du beide Züge.",
+    "ru": "Первый ход, который всё вынуждает, а затем мат. На этот раз ты делаешь оба хода.",
+    "it": "Una prima mossa che forza tutto, poi il matto. Stavolta giochi tu tutte e due le mosse.",
+    "tr": "Her şeyi zorlayan ilk hamle, ardından mat. Bu kez iki hamleyi de sen oynuyorsun.",
+    "pl": "Pierwszy ruch, który wszystko wymusza, a potem mat. Tym razem wykonujesz oba ruchy.",
+    "id": "Langkah pertama yang memaksa segalanya, lalu skakmat. Kali ini kamu memainkan kedua langkah."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "Two checks in a row",
+        "fr": "Deux échecs de suite",
+        "es": "Dos jaques seguidos",
+        "pt": "Dois xeques seguidos",
+        "de": "Zwei Schachs hintereinander",
+        "ru": "Два шаха подряд",
+        "it": "Due scacchi di fila",
+        "tr": "Art arda iki şah",
+        "pl": "Dwa szachy z rzędu",
+        "id": "Dua skak berturut-turut"
+      },
+      "intro": {
+        "en": "In a mate in two, your first move leaves your opponent no choice, then your second move mates. The simplest way: a first check that drives the king to the edge, a second one that mates it.",
+        "fr": "Dans un mat en deux, ton premier coup ne laisse aucun choix à l'adversaire, puis ton second fait mat. Le plus simple : un premier échec qui chasse le roi vers le bord, un second qui le mate.",
+        "es": "En un mate en dos, tu primera jugada no deja elección al rival, y la segunda da mate. Lo más sencillo: un primer jaque que empuja al rey hacia el borde y un segundo que le da mate.",
+        "pt": "Num mate em dois, seu primeiro lance não deixa escolha ao adversário, e o segundo dá mate. O mais simples: um primeiro xeque que empurra o rei para a borda e um segundo que dá mate.",
+        "de": "Bei einem Matt in zwei lässt dein erster Zug dem Gegner keine Wahl, und dein zweiter setzt matt. Am einfachsten: ein erstes Schach, das den König an den Rand treibt, und ein zweites, das ihn mattsetzt.",
+        "ru": "В мате в два хода твой первый ход не оставляет сопернику выбора, а второй ставит мат. Проще всего так: первый шах гонит короля к краю, второй его матует.",
+        "it": "In un matto in due, la tua prima mossa non lascia scelta all'avversario e la seconda dà matto. Il modo più semplice: un primo scacco che spinge il re verso il bordo, un secondo che lo matta.",
+        "tr": "İki hamlede matta ilk hamlen rakibe seçenek bırakmaz, ikincisi mat eder. En basiti: şahı kenara süren bir ilk şah ve onu mat eden ikinci bir şah.",
+        "pl": "W macie w dwóch ruchach pierwszy ruch nie zostawia przeciwnikowi wyboru, a drugi daje mata. Najprościej: pierwszy szach spycha króla na brzeg, drugi go matuje.",
+        "id": "Dalam skakmat dua langkah, langkah pertamamu tidak memberi pilihan kepada lawan, lalu langkah kedua skakmat. Cara paling mudah: skak pertama mendorong raja ke tepi, skak kedua mematikannya."
+      },
+      "exos": [
+        {
+          "fen": "8/3k4/7R/8/8/8/8/R5K1 w - - 0 1",
+          "sol": [
+            "a1a7"
+          ],
+          "reponse": "d7d8",
+          "consigne": {
+            "en": "Mate in two. Start with a check that pushes the king back to the last rank.",
+            "fr": "Mat en deux coups. Commence par un échec qui repousse le roi sur la dernière rangée.",
+            "es": "Mate en dos jugadas. Empieza con un jaque que empuje al rey a la última fila.",
+            "pt": "Mate em dois lances. Comece com um xeque que empurre o rei para a última fileira.",
+            "de": "Matt in zwei Zügen. Beginne mit einem Schach, das den König auf die letzte Reihe zurücktreibt.",
+            "ru": "Мат в два хода. Начни с шаха, который загонит короля на последнюю горизонталь.",
+            "it": "Matto in due mosse. Comincia con uno scacco che respinge il re sull'ultima traversa.",
+            "tr": "İki hamlede mat. Şahı son sıraya iten bir şahla başla.",
+            "pl": "Mat w dwóch ruchach. Zacznij od szacha, który zepchnie króla na ostatnią linię.",
+            "id": "Skakmat dalam dua langkah. Mulailah dengan skak yang mendorong raja ke baris terakhir."
+          },
+          "ensuite": {
+            "en": "The king stepped back. Now mate.",
+            "fr": "Le roi a reculé. Maintenant, fais mat.",
+            "es": "El rey ha retrocedido. Ahora, da mate.",
+            "pt": "O rei recuou. Agora, dê mate.",
+            "de": "Der König ist zurückgewichen. Jetzt setze matt.",
+            "ru": "Король отступил. Теперь поставь мат.",
+            "it": "Il re è indietreggiato. Ora dai matto.",
+            "tr": "Şah geri çekildi. Şimdi mat et.",
+            "pl": "Król się cofnął. Teraz daj mata.",
+            "id": "Raja sudah mundur. Sekarang, skakmat."
+          },
+          "apres": {
+            "en": "One rook closes a rank, the other mates: the two-rook ladder, in two moves.",
+            "fr": "Une tour ferme la rangée, l'autre fait mat : l'escalier des deux tours, en deux coups.",
+            "es": "Una torre cierra la fila, la otra da mate: la escalera de las dos torres, en dos jugadas.",
+            "pt": "Uma torre fecha a fileira, a outra dá mate: a escada das duas torres, em dois lances.",
+            "de": "Ein Turm sperrt die Reihe, der andere setzt matt: die Treppe der zwei Türme, in zwei Zügen.",
+            "ru": "Одна ладья закрывает горизонталь, другая ставит мат: лесенка двух ладей в два хода.",
+            "it": "Una torre chiude la traversa, l'altra dà matto: la scala delle due torri, in due mosse.",
+            "tr": "Bir kale sırayı kapatıyor, öteki mat ediyor: iki hamlede iki kalenin merdiveni.",
+            "pl": "Jedna wieża zamyka linię, druga daje mata: schodki dwóch wież w dwóch ruchach.",
+            "id": "Satu benteng menutup baris, yang lain skakmat: tangga dua benteng, dalam dua langkah."
+          }
+        },
+        {
+          "fen": "8/3k4/7Q/8/8/R3K3/8/8 w - - 0 1",
+          "sol": [
+            "a3a7"
+          ],
+          "reponse": "d7c8",
+          "consigne": {
+            "en": "Mate in two. Your rook gives check first, your queen finishes the job.",
+            "fr": "Mat en deux coups. Ta tour donne d'abord échec, ta dame finit le travail.",
+            "es": "Mate en dos jugadas. Tu torre da jaque primero y tu dama termina el trabajo.",
+            "pt": "Mate em dois lances. Sua torre dá xeque primeiro, e sua dama termina o trabalho.",
+            "de": "Matt in zwei Zügen. Dein Turm gibt zuerst Schach, deine Dame vollendet.",
+            "ru": "Мат в два хода. Сначала шах даёт ладья, а ферзь завершает дело.",
+            "it": "Matto in due mosse. La tua torre dà scacco per prima, la donna finisce il lavoro.",
+            "tr": "İki hamlede mat. Önce kalen şah çekiyor, işi vezirin bitiriyor.",
+            "pl": "Mat w dwóch ruchach. Najpierw szacha daje wieża, hetman kończy robotę.",
+            "id": "Skakmat dalam dua langkah. Bentengmu memberi skak lebih dulu, menterimu menyelesaikannya."
+          },
+          "ensuite": {
+            "en": "Mate with your queen.",
+            "fr": "Fais mat avec ta dame.",
+            "es": "Da mate con tu dama.",
+            "pt": "Dê mate com sua dama.",
+            "de": "Setze mit deiner Dame matt.",
+            "ru": "Поставь мат ферзём.",
+            "it": "Dai matto con la donna.",
+            "tr": "Vezirinle mat et.",
+            "pl": "Daj mata hetmanem.",
+            "id": "Skakmat dengan menterimu."
+          },
+          "apres": {
+            "en": "The rook holds one rank, the queen mates on the next.",
+            "fr": "La tour tient une rangée, la dame fait mat sur la suivante.",
+            "es": "La torre sujeta una fila y la dama da mate en la siguiente.",
+            "pt": "A torre segura uma fileira, e a dama dá mate na seguinte.",
+            "de": "Der Turm hält eine Reihe, die Dame setzt auf der nächsten matt.",
+            "ru": "Ладья держит одну горизонталь, ферзь матует на следующей.",
+            "it": "La torre tiene una traversa, la donna dà matto sulla successiva.",
+            "tr": "Kale bir sırayı tutuyor, vezir bir sonrakinde mat ediyor.",
+            "pl": "Wieża trzyma jedną linię, hetman matuje na następnej.",
+            "id": "Benteng menahan satu baris, menteri skakmat di baris berikutnya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The back-rank sacrifice",
+        "fr": "Le sacrifice sur la dernière rangée",
+        "es": "El sacrificio en la última fila",
+        "pt": "O sacrifício na última fileira",
+        "de": "Das Opfer auf der Grundreihe",
+        "ru": "Жертва на последней горизонтали",
+        "it": "Il sacrificio sull'ultima traversa",
+        "tr": "Son sırada fedakârlık",
+        "pl": "Poświęcenie na ostatniej linii",
+        "id": "Pengorbanan di baris terakhir"
+      },
+      "intro": {
+        "en": "Sometimes the first move gives a piece away. Here the queen sacrifices herself: the black rook has to take her, and your rook takes back with mate on the last rank.",
+        "fr": "Parfois, le premier coup donne une pièce. Ici, la dame se sacrifie : la tour noire est obligée de la prendre, et ta tour reprend en faisant mat sur la dernière rangée.",
+        "es": "A veces la primera jugada entrega una pieza. Aquí la dama se sacrifica: la torre negra está obligada a capturarla, y tu torre recaptura dando mate en la última fila.",
+        "pt": "Às vezes o primeiro lance entrega uma peça. Aqui a dama se sacrifica: a torre preta é obrigada a capturá-la, e sua torre recaptura dando mate na última fileira.",
+        "de": "Manchmal gibt der erste Zug eine Figur her. Hier opfert sich die Dame: Der schwarze Turm muss sie schlagen, und dein Turm schlägt zurück und setzt auf der Grundreihe matt.",
+        "ru": "Иногда первый ход отдаёт фигуру. Здесь ферзь жертвует собой: чёрная ладья обязана его взять, а твоя ладья берёт в ответ с матом по последней горизонтали.",
+        "it": "A volte la prima mossa regala un pezzo. Qui la donna si sacrifica: la torre nera è costretta a catturarla, e la tua torre riprende dando matto sull'ultima traversa.",
+        "tr": "Bazen ilk hamle bir taş verir. Burada vezir kendini feda ediyor: siyah kale onu almak zorunda, kalen de geri alırken son sırada mat ediyor.",
+        "pl": "Czasem pierwszy ruch oddaje bierkę. Tutaj hetman się poświęca: czarna wieża musi go zbić, a twoja wieża odbija z matem na ostatniej linii.",
+        "id": "Kadang langkah pertama memberikan sebuah bidak. Di sini menteri mengorbankan diri: benteng hitam terpaksa memakannya, dan bentengmu memakan balik sambil skakmat di baris terakhir."
+      },
+      "exos": [
+        {
+          "fen": "r5k1/5ppp/8/8/8/8/3Q1PPP/3R2K1 w - - 0 1",
+          "sol": [
+            "d2d8"
+          ],
+          "reponse": "a8d8",
+          "consigne": {
+            "en": "Mate in two. Your queen and rook are on the same file. Give up your queen with check.",
+            "fr": "Mat en deux coups. Ta dame et ta tour sont sur la même colonne. Donne ta dame en faisant échec.",
+            "es": "Mate en dos jugadas. Tu dama y tu torre están en la misma columna. Entrega tu dama dando jaque.",
+            "pt": "Mate em dois lances. Sua dama e sua torre estão na mesma coluna. Entregue sua dama dando xeque.",
+            "de": "Matt in zwei Zügen. Deine Dame und dein Turm stehen auf derselben Linie. Gib deine Dame mit Schach her.",
+            "ru": "Мат в два хода. Твои ферзь и ладья стоят на одной вертикали. Отдай ферзя с шахом.",
+            "it": "Matto in due mosse. La tua donna e la tua torre sono sulla stessa colonna. Sacrifica la donna dando scacco.",
+            "tr": "İki hamlede mat. Vezirin ve kalen aynı sütunda. Şah çekerek vezirini ver.",
+            "pl": "Mat w dwóch ruchach. Twój hetman i wieża stoją na tej samej kolumnie. Oddaj hetmana z szachem.",
+            "id": "Skakmat dalam dua langkah. Menteri dan bentengmu ada di kolom yang sama. Korbankan menterimu sambil memberi skak."
+          },
+          "ensuite": {
+            "en": "The black rook took your queen. Take back with mate.",
+            "fr": "La tour noire a pris ta dame. Reprends en faisant mat.",
+            "es": "La torre negra ha capturado tu dama. Recaptura dando mate.",
+            "pt": "A torre preta capturou sua dama. Recapture dando mate.",
+            "de": "Der schwarze Turm hat deine Dame geschlagen. Schlag zurück und setze matt.",
+            "ru": "Чёрная ладья взяла твоего ферзя. Возьми в ответ с матом.",
+            "it": "La torre nera ha catturato la tua donna. Riprendi dando matto.",
+            "tr": "Siyah kale vezirini aldı. Mat ederek geri al.",
+            "pl": "Czarna wieża zbiła twojego hetmana. Odbij z matem.",
+            "id": "Benteng hitam memakan menterimu. Makan balik sambil skakmat."
+          },
+          "apres": {
+            "en": "A queen given for mate: the best trade there is.",
+            "fr": "Une dame donnée pour un mat : le meilleur échange qui soit.",
+            "es": "Una dama entregada a cambio de un mate: el mejor cambio posible.",
+            "pt": "Uma dama entregue por um mate: a melhor troca que existe.",
+            "de": "Eine Dame für ein Matt: der beste Tausch überhaupt.",
+            "ru": "Ферзь за мат: лучший размен на свете.",
+            "it": "Una donna data per un matto: il miglior cambio che ci sia.",
+            "tr": "Bir mat için verilen vezir: en iyi değiş tokuş.",
+            "pl": "Hetman oddany za mata: najlepsza wymiana, jaka istnieje.",
+            "id": "Menteri ditukar dengan skakmat: pertukaran terbaik yang ada."
+          }
+        },
+        {
+          "fen": "1k5r/ppp5/8/8/8/8/PPP1Q3/1K2R3 w - - 0 1",
+          "sol": [
+            "e2e8"
+          ],
+          "reponse": "h8e8",
+          "consigne": {
+            "en": "Same idea on the other side: mate in two.",
+            "fr": "Même idée de l'autre côté : mat en deux coups.",
+            "es": "La misma idea del otro lado: mate en dos jugadas.",
+            "pt": "A mesma ideia do outro lado: mate em dois lances.",
+            "de": "Dieselbe Idee auf der anderen Seite: Matt in zwei Zügen.",
+            "ru": "Та же идея с другой стороны: мат в два хода.",
+            "it": "Stessa idea dall'altro lato: matto in due mosse.",
+            "tr": "Öteki tarafta aynı fikir: iki hamlede mat.",
+            "pl": "Ten sam pomysł po drugiej stronie: mat w dwóch ruchach.",
+            "id": "Ide yang sama di sisi lain: skakmat dalam dua langkah."
+          },
+          "ensuite": {
+            "en": "Take back with mate.",
+            "fr": "Reprends en faisant mat.",
+            "es": "Recaptura dando mate.",
+            "pt": "Recapture dando mate.",
+            "de": "Schlag zurück und setze matt.",
+            "ru": "Возьми в ответ с матом.",
+            "it": "Riprendi dando matto.",
+            "tr": "Mat ederek geri al.",
+            "pl": "Odbij z matem.",
+            "id": "Makan balik sambil skakmat."
+          },
+          "apres": {
+            "en": "The black king is shut in behind its pawns: the last rank is fatal.",
+            "fr": "Le roi noir est enfermé derrière ses pions : la dernière rangée lui est fatale.",
+            "es": "El rey negro está encerrado detrás de sus peones: la última fila le resulta fatal.",
+            "pt": "O rei preto está preso atrás dos peões: a última fileira é fatal para ele.",
+            "de": "Der schwarze König ist hinter seinen Bauern eingesperrt: Die Grundreihe wird ihm zum Verhängnis.",
+            "ru": "Чёрный король заперт за своими пешками: последняя горизонталь для него смертельна.",
+            "it": "Il re nero è chiuso dietro i suoi pedoni: l'ultima traversa gli è fatale.",
+            "tr": "Siyah şah piyonlarının arkasına kapanmış: son sıra onun sonu oluyor.",
+            "pl": "Czarny król jest zamknięty za pionami: ostatnia linia okazuje się zabójcza.",
+            "id": "Raja hitam terkurung di balik pionnya: baris terakhir berakibat fatal baginya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The smothered mate in two",
+        "fr": "Le mat étouffé en deux",
+        "es": "El mate de la coz en dos",
+        "pt": "O mate sufocado em dois",
+        "de": "Das erstickte Matt in zwei",
+        "ru": "Спёртый мат в два хода",
+        "it": "Il matto affogato in due",
+        "tr": "İki hamlede boğmaca mat",
+        "pl": "Mat zduszony w dwóch ruchach",
+        "id": "Skakmat tercekik dalam dua langkah"
+      },
+      "intro": {
+        "en": "You know the smothered mate from chapter 4. To set it up, your queen sacrifices herself right next to the king: the black rook has to take her and blocks the king's last square. Then the knight mates.",
+        "fr": "Tu connais le mat étouffé du chapitre 4. Pour le préparer, ta dame se sacrifie juste à côté du roi : la tour noire doit la prendre, et elle bouche la dernière case du roi. Le cavalier n'a plus qu'à faire mat.",
+        "es": "Ya conoces el mate de la coz del capítulo 4. Para prepararlo, tu dama se sacrifica justo al lado del rey: la torre negra tiene que capturarla y tapa la última casilla del rey. Al caballo solo le queda dar mate.",
+        "pt": "Você já conhece o mate sufocado do capítulo 4. Para prepará-lo, sua dama se sacrifica bem ao lado do rei: a torre preta precisa capturá-la e tapa a última casa do rei. Ao cavalo só resta dar mate.",
+        "de": "Das erstickte Matt kennst du aus Kapitel 4. Um es vorzubereiten, opfert sich deine Dame direkt neben dem König: Der schwarze Turm muss sie schlagen und versperrt das letzte Feld des Königs. Der Springer muss nur noch mattsetzen.",
+        "ru": "Спёртый мат ты знаешь по главе 4. Чтобы его подготовить, твой ферзь жертвует собой рядом с королём: чёрная ладья вынуждена его взять и закрывает королю последнее поле. Коню остаётся поставить мат.",
+        "it": "Conosci il matto affogato del capitolo 4. Per prepararlo, la tua donna si sacrifica proprio accanto al re: la torre nera deve catturarla e chiude l'ultima casa del re. Al cavallo non resta che dare matto.",
+        "tr": "Boğmaca matı 4. bölümden biliyorsun. Onu hazırlamak için vezirin şahın hemen yanında kendini feda eder: siyah kale onu almak zorundadır ve şahın son karesini kapatır. Ata da yalnızca mat etmek kalır.",
+        "pl": "Mata zduszonego znasz z rozdziału 4. Żeby go przygotować, twój hetman poświęca się tuż obok króla: czarna wieża musi go zbić i zatyka ostatnie pole króla. Skoczkowi zostaje tylko dać mata.",
+        "id": "Kamu sudah mengenal skakmat tercekik dari bab 4. Untuk menyiapkannya, menterimu berkorban tepat di samping raja: benteng hitam harus memakannya dan menutup petak terakhir raja. Kuda tinggal memberi skakmat."
+      },
+      "exos": [
+        {
+          "fen": "5r1k/6pp/7N/3Q4/8/8/6PP/6K1 w - - 0 1",
+          "sol": [
+            "d5g8"
+          ],
+          "reponse": "f8g8",
+          "consigne": {
+            "en": "Mate in two, with a queen sacrifice and a smothered mate. Your knight protects the square next to the king.",
+            "fr": "Mat en deux coups, avec un sacrifice de dame et un mat étouffé. Ton cavalier protège la case voisine du roi.",
+            "es": "Mate en dos jugadas, con un sacrificio de dama y un mate de la coz. Tu caballo protege la casilla vecina del rey.",
+            "pt": "Mate em dois lances, com um sacrifício de dama e um mate sufocado. Seu cavalo protege a casa vizinha do rei.",
+            "de": "Matt in zwei Zügen, mit einem Damenopfer und einem erstickten Matt. Dein Springer deckt das Feld neben dem König.",
+            "ru": "Мат в два хода, с жертвой ферзя и спёртым матом. Твой конь защищает поле рядом с королём.",
+            "it": "Matto in due mosse, con un sacrificio di donna e un matto affogato. Il tuo cavallo protegge la casa accanto al re.",
+            "tr": "Vezir fedası ve boğmaca matla iki hamlede mat. Atın şahın yanındaki kareyi koruyor.",
+            "pl": "Mat w dwóch ruchach, z poświęceniem hetmana i matem zduszonym. Twój skoczek broni pola obok króla.",
+            "id": "Skakmat dalam dua langkah, dengan pengorbanan menteri dan skakmat tercekik. Kudamu melindungi petak di samping raja."
+          },
+          "ensuite": {
+            "en": "The rook took your queen and walled in its king. Mate with your knight.",
+            "fr": "La tour a pris ta dame et muré son roi. Fais mat avec ton cavalier.",
+            "es": "La torre ha capturado tu dama y ha emparedado a su rey. Da mate con tu caballo.",
+            "pt": "A torre capturou sua dama e emparedou o próprio rei. Dê mate com seu cavalo.",
+            "de": "Der Turm hat deine Dame geschlagen und seinen König eingemauert. Setze mit deinem Springer matt.",
+            "ru": "Ладья взяла твоего ферзя и замуровала своего короля. Поставь мат конём.",
+            "it": "La torre ha catturato la tua donna e ha murato il suo re. Dai matto con il tuo cavallo.",
+            "tr": "Kale vezirini aldı ve kendi şahını duvarla çevirdi. Atınla mat et.",
+            "pl": "Wieża zbiła twojego hetmana i zamurowała swojego króla. Daj mata skoczkiem.",
+            "id": "Benteng memakan menterimu dan mengurung rajanya sendiri. Skakmat dengan kudamu."
+          },
+          "apres": {
+            "en": "The smothered mate: the king is walled in by its own pieces.",
+            "fr": "Le mat étouffé : le roi est muré par ses propres pièces.",
+            "es": "El mate de la coz: el rey está emparedado por sus propias piezas.",
+            "pt": "O mate sufocado: o rei está emparedado pelas próprias peças.",
+            "de": "Das erstickte Matt: Der König ist von seinen eigenen Figuren eingemauert.",
+            "ru": "Спёртый мат: короля замуровали его же фигуры.",
+            "it": "Il matto affogato: il re è murato dai suoi stessi pezzi.",
+            "tr": "Boğmaca mat: şah kendi taşlarıyla duvarlanmış.",
+            "pl": "Mat zduszony: króla zamurowały jego własne bierki.",
+            "id": "Skakmat tercekik: raja terkurung oleh bidaknya sendiri."
+          }
+        },
+        {
+          "fen": "k1r5/pp6/N7/4Q3/8/8/PP6/1K6 w - - 0 1",
+          "sol": [
+            "e5b8"
+          ],
+          "reponse": "c8b8",
+          "consigne": {
+            "en": "Same thing in the other corner: mate in two.",
+            "fr": "Même chose dans l'autre coin : mat en deux coups.",
+            "es": "Lo mismo en el otro rincón: mate en dos jugadas.",
+            "pt": "A mesma coisa no outro canto: mate em dois lances.",
+            "de": "Dasselbe in der anderen Ecke: Matt in zwei Zügen.",
+            "ru": "То же самое в другом углу: мат в два хода.",
+            "it": "Stessa cosa nell'altro angolo: matto in due mosse.",
+            "tr": "Aynısı öteki köşede: iki hamlede mat.",
+            "pl": "To samo w drugim rogu: mat w dwóch ruchach.",
+            "id": "Sama saja di sudut lain: skakmat dalam dua langkah."
+          },
+          "ensuite": {
+            "en": "Mate with your knight.",
+            "fr": "Fais mat avec ton cavalier.",
+            "es": "Da mate con tu caballo.",
+            "pt": "Dê mate com seu cavalo.",
+            "de": "Setze mit deinem Springer matt.",
+            "ru": "Поставь мат конём.",
+            "it": "Dai matto con il tuo cavallo.",
+            "tr": "Atınla mat et.",
+            "pl": "Daj mata skoczkiem.",
+            "id": "Skakmat dengan kudamu."
+          },
+          "apres": {
+            "en": "Smothered mate. The queen sacrifice was worth it.",
+            "fr": "Mat étouffé. Le sacrifice de la dame en valait la peine.",
+            "es": "Mate de la coz. El sacrificio de la dama valió la pena.",
+            "pt": "Mate sufocado. O sacrifício da dama valeu a pena.",
+            "de": "Ersticktes Matt. Das Damenopfer hat sich gelohnt.",
+            "ru": "Спёртый мат. Жертва ферзя того стоила.",
+            "it": "Matto affogato. Il sacrificio della donna ne valeva la pena.",
+            "tr": "Boğmaca mat. Vezir fedası buna değdi.",
+            "pl": "Mat zduszony. Poświęcenie hetmana było tego warte.",
+            "id": "Skakmat tercekik. Pengorbanan menteri itu sepadan."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Taking away the last square",
+        "fr": "Enlever la dernière case",
+        "es": "Quitar la última casilla",
+        "pt": "Tirar a última casa",
+        "de": "Das letzte Feld nehmen",
+        "ru": "Отними последнее поле",
+        "it": "Togliere l'ultima casa",
+        "tr": "Son kareyi elinden al",
+        "pl": "Odbierz ostatnie pole",
+        "id": "Ambil petak terakhir"
+      },
+      "intro": {
+        "en": "The first move is not always a check. Here your king comes closer and takes away every square from the black king but one. It has a single move left, and then it is mate.",
+        "fr": "Le premier coup n'est pas toujours un échec. Ici, ton roi s'approche et enlève au roi noir toutes ses cases sauf une. Il n'a plus qu'un coup, et ensuite c'est mat.",
+        "es": "La primera jugada no siempre es un jaque. Aquí tu rey se acerca y le quita al rey negro todas sus casillas menos una. Solo le queda una jugada, y después es mate.",
+        "pt": "O primeiro lance nem sempre é um xeque. Aqui seu rei se aproxima e tira do rei preto todas as casas menos uma. Ele só tem mais um lance, e depois é mate.",
+        "de": "Der erste Zug ist nicht immer ein Schach. Hier kommt dein König näher und nimmt dem schwarzen König alle Felder bis auf eines. Er hat nur noch einen Zug, und dann ist es Matt.",
+        "ru": "Первый ход не всегда шах. Здесь твой король подходит ближе и отнимает у чёрного короля все поля, кроме одного. У него остаётся единственный ход, а потом мат.",
+        "it": "La prima mossa non è sempre uno scacco. Qui il tuo re si avvicina e toglie al re nero tutte le case tranne una. Gli resta una sola mossa, e poi è matto.",
+        "tr": "İlk hamle her zaman şah değildir. Burada şahın yaklaşır ve siyah şahın bir kare dışında bütün karelerini elinden alır. Tek bir hamlesi kalır, sonra mat.",
+        "pl": "Pierwszy ruch nie zawsze jest szachem. Tutaj twój król podchodzi i odbiera czarnemu królowi wszystkie pola oprócz jednego. Zostaje mu jeden ruch, a potem mat.",
+        "id": "Langkah pertama tidak selalu skak. Di sini rajamu mendekat dan mengambil semua petak raja hitam kecuali satu. Ia hanya punya satu langkah, lalu skakmat."
+      },
+      "exos": [
+        {
+          "fen": "8/8/8/8/5K2/5R2/8/6k1 w - - 0 1",
+          "sol": [
+            "f4g3"
+          ],
+          "reponse": "g1h1",
+          "consigne": {
+            "en": "Mate in two. Start with a king move that leaves the black king a single square.",
+            "fr": "Mat en deux coups. Commence par un coup de roi qui ne laisse qu'une case au roi noir.",
+            "es": "Mate en dos jugadas. Empieza con una jugada de rey que solo deje una casilla al rey negro.",
+            "pt": "Mate em dois lances. Comece com um lance de rei que deixe só uma casa ao rei preto.",
+            "de": "Matt in zwei Zügen. Beginne mit einem Königszug, der dem schwarzen König nur ein Feld lässt.",
+            "ru": "Мат в два хода. Начни с хода королём, после которого у чёрного короля останется одно поле.",
+            "it": "Matto in due mosse. Comincia con una mossa di re che lasci al re nero una sola casa.",
+            "tr": "İki hamlede mat. Siyah şaha tek bir kare bırakan bir şah hamlesiyle başla.",
+            "pl": "Mat w dwóch ruchach. Zacznij od ruchu królem, który zostawi czarnemu królowi tylko jedno pole.",
+            "id": "Skakmat dalam dua langkah. Mulailah dengan langkah raja yang hanya menyisakan satu petak untuk raja hitam."
+          },
+          "ensuite": {
+            "en": "The black king had only one square. Now mate.",
+            "fr": "Le roi noir n'avait qu'une case. Maintenant, fais mat.",
+            "es": "El rey negro solo tenía una casilla. Ahora, da mate.",
+            "pt": "O rei preto só tinha uma casa. Agora, dê mate.",
+            "de": "Der schwarze König hatte nur ein Feld. Jetzt setze matt.",
+            "ru": "У чёрного короля было только одно поле. Теперь поставь мат.",
+            "it": "Il re nero aveva una sola casa. Ora dai matto.",
+            "tr": "Siyah şahın yalnızca bir karesi vardı. Şimdi mat et.",
+            "pl": "Czarny król miał tylko jedno pole. Teraz daj mata.",
+            "id": "Raja hitam hanya punya satu petak. Sekarang, skakmat."
+          },
+          "apres": {
+            "en": "Your king closed the squares, your rook mated.",
+            "fr": "Ton roi a fermé les cases, ta tour a fait mat.",
+            "es": "Tu rey cerró las casillas y tu torre dio mate.",
+            "pt": "Seu rei fechou as casas, e sua torre deu mate.",
+            "de": "Dein König hat die Felder gesperrt, dein Turm hat mattgesetzt.",
+            "ru": "Твой король закрыл поля, ладья поставила мат.",
+            "it": "Il tuo re ha chiuso le case, la torre ha dato matto.",
+            "tr": "Şahın kareleri kapattı, kalen mat etti.",
+            "pl": "Twój król zamknął pola, wieża dała mata.",
+            "id": "Rajamu menutup petak-petaknya, bentengmu skakmat."
+          }
+        },
+        {
+          "fen": "8/8/8/8/2K5/4Q3/8/1k6 w - - 0 1",
+          "sol": [
+            "c4b3"
+          ],
+          "reponse": "b1a1",
+          "consigne": {
+            "en": "Same idea with the queen: bring your king closer so the black king has only one square left.",
+            "fr": "Même idée avec la dame : approche ton roi pour ne laisser qu'une case au roi noir.",
+            "es": "La misma idea con la dama: acerca tu rey para que al rey negro solo le quede una casilla.",
+            "pt": "A mesma ideia com a dama: aproxime seu rei para deixar só uma casa ao rei preto.",
+            "de": "Dieselbe Idee mit der Dame: Bring deinen König näher, damit der schwarze König nur noch ein Feld hat.",
+            "ru": "Та же идея с ферзём: подведи короля, чтобы у чёрного короля осталось одно поле.",
+            "it": "Stessa idea con la donna: avvicina il re perché al re nero resti una sola casa.",
+            "tr": "Vezirle aynı fikir: şahını yaklaştır ki siyah şaha tek bir kare kalsın.",
+            "pl": "Ten sam pomysł z hetmanem: podprowadź króla, żeby czarnemu zostało jedno pole.",
+            "id": "Ide yang sama dengan menteri: dekatkan rajamu agar raja hitam hanya punya satu petak."
+          },
+          "ensuite": {
+            "en": "Now mate.",
+            "fr": "Maintenant, fais mat.",
+            "es": "Ahora, da mate.",
+            "pt": "Agora, dê mate.",
+            "de": "Jetzt setze matt.",
+            "ru": "Теперь поставь мат.",
+            "it": "Ora dai matto.",
+            "tr": "Şimdi mat et.",
+            "pl": "Teraz daj mata.",
+            "id": "Sekarang, skakmat."
+          },
+          "apres": {
+            "en": "Your queen mates while your king guards the squares.",
+            "fr": "Ta dame fait mat pendant que ton roi garde les cases.",
+            "es": "Tu dama da mate mientras tu rey vigila las casillas.",
+            "pt": "Sua dama dá mate enquanto seu rei vigia as casas.",
+            "de": "Deine Dame setzt matt, während dein König die Felder bewacht.",
+            "ru": "Ферзь ставит мат, а король держит поля.",
+            "it": "La tua donna dà matto mentre il re sorveglia le case.",
+            "tr": "Şahın kareleri tutarken vezirin mat ediyor.",
+            "pl": "Hetman daje mata, a król pilnuje pól.",
+            "id": "Menterimu skakmat sementara rajamu menjaga petak-petaknya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The quiet move",
+        "fr": "Le coup tranquille",
+        "es": "La jugada tranquila",
+        "pt": "O lance tranquilo",
+        "de": "Der stille Zug",
+        "ru": "Тихий ход",
+        "it": "La mossa tranquilla",
+        "tr": "Sessiz hamle",
+        "pl": "Cichy ruch",
+        "id": "Langkah tenang"
+      },
+      "intro": {
+        "en": "The strongest move is sometimes a calm one: no check, no capture. It leaves the black king a single move, and that move leads to mate.",
+        "fr": "Le coup le plus fort est parfois un coup calme : pas d'échec, pas de prise. Il ne laisse au roi noir qu'un seul coup, et ce coup mène au mat.",
+        "es": "La jugada más fuerte a veces es tranquila: ni jaque ni captura. Solo deja una jugada al rey negro, y esa jugada lleva al mate.",
+        "pt": "O lance mais forte às vezes é calmo: nem xeque, nem captura. Ele deixa ao rei preto um único lance, e esse lance leva ao mate.",
+        "de": "Der stärkste Zug ist manchmal ein ruhiger: kein Schach, kein Schlagen. Er lässt dem schwarzen König nur einen Zug, und dieser Zug führt ins Matt.",
+        "ru": "Самый сильный ход иногда тихий: ни шаха, ни взятия. Он оставляет чёрному королю единственный ход, и этот ход ведёт к мату.",
+        "it": "La mossa più forte a volte è calma: niente scacco, niente cattura. Lascia al re nero una sola mossa, e quella mossa porta al matto.",
+        "tr": "En güçlü hamle bazen sakin bir hamledir: ne şah ne de alış. Siyah şaha tek bir hamle bırakır ve o hamle mata götürür.",
+        "pl": "Najsilniejszy ruch bywa spokojny: bez szacha, bez bicia. Zostawia czarnemu królowi jeden ruch, a ten ruch prowadzi do mata.",
+        "id": "Langkah terkuat kadang langkah yang tenang: tanpa skak, tanpa memakan. Ia hanya menyisakan satu langkah untuk raja hitam, dan langkah itu berujung skakmat."
+      },
+      "exos": [
+        {
+          "fen": "3k4/6Q1/1K6/8/8/8/8/8 w - - 0 1",
+          "sol": [
+            "g7f7"
+          ],
+          "reponse": "d8c8",
+          "consigne": {
+            "en": "Mate in two. The first move does not give check: it shuts the black king in.",
+            "fr": "Mat en deux coups. Le premier coup ne donne pas échec : il enferme le roi noir.",
+            "es": "Mate en dos jugadas. La primera jugada no da jaque: encierra al rey negro.",
+            "pt": "Mate em dois lances. O primeiro lance não dá xeque: ele prende o rei preto.",
+            "de": "Matt in zwei Zügen. Der erste Zug gibt kein Schach: Er sperrt den schwarzen König ein.",
+            "ru": "Мат в два хода. Первый ход не шах: он запирает чёрного короля.",
+            "it": "Matto in due mosse. La prima mossa non dà scacco: chiude il re nero.",
+            "tr": "İki hamlede mat. İlk hamle şah çekmiyor: siyah şahı kapatıyor.",
+            "pl": "Mat w dwóch ruchach. Pierwszy ruch nie daje szacha: zamyka czarnego króla.",
+            "id": "Skakmat dalam dua langkah. Langkah pertama tidak memberi skak: ia mengurung raja hitam."
+          },
+          "ensuite": {
+            "en": "Now mate.",
+            "fr": "Maintenant, fais mat.",
+            "es": "Ahora, da mate.",
+            "pt": "Agora, dê mate.",
+            "de": "Jetzt setze matt.",
+            "ru": "Теперь поставь мат.",
+            "it": "Ora dai matto.",
+            "tr": "Şimdi mat et.",
+            "pl": "Teraz daj mata.",
+            "id": "Sekarang, skakmat."
+          },
+          "apres": {
+            "en": "A calm move, then mate: the black king had no way out.",
+            "fr": "Un coup calme, puis le mat : le roi noir n'avait aucune issue.",
+            "es": "Una jugada tranquila y luego el mate: el rey negro no tenía salida.",
+            "pt": "Um lance calmo, e depois o mate: o rei preto não tinha saída.",
+            "de": "Ein ruhiger Zug, dann Matt: Der schwarze König hatte keinen Ausweg.",
+            "ru": "Тихий ход, затем мат: у чёрного короля не было выхода.",
+            "it": "Una mossa calma, poi il matto: il re nero non aveva via d'uscita.",
+            "tr": "Sakin bir hamle, ardından mat: siyah şahın kaçış yolu yoktu.",
+            "pl": "Spokojny ruch, a potem mat: czarny król nie miał wyjścia.",
+            "id": "Satu langkah tenang, lalu skakmat: raja hitam tidak punya jalan keluar."
+          }
+        },
+        {
+          "fen": "8/8/k7/2K5/8/8/5Q2/8 w - - 0 1",
+          "sol": [
+            "f2f7"
+          ],
+          "reponse": "a6a5",
+          "consigne": {
+            "en": "Another quiet move: mate in two.",
+            "fr": "Encore un coup tranquille : mat en deux coups.",
+            "es": "Otra jugada tranquila: mate en dos jugadas.",
+            "pt": "Mais um lance tranquilo: mate em dois lances.",
+            "de": "Noch ein stiller Zug: Matt in zwei Zügen.",
+            "ru": "Ещё один тихий ход: мат в два хода.",
+            "it": "Un'altra mossa tranquilla: matto in due mosse.",
+            "tr": "Bir sessiz hamle daha: iki hamlede mat.",
+            "pl": "Jeszcze jeden cichy ruch: mat w dwóch ruchach.",
+            "id": "Satu langkah tenang lagi: skakmat dalam dua langkah."
+          },
+          "ensuite": {
+            "en": "Now mate.",
+            "fr": "Maintenant, fais mat.",
+            "es": "Ahora, da mate.",
+            "pt": "Agora, dê mate.",
+            "de": "Jetzt setze matt.",
+            "ru": "Теперь поставь мат.",
+            "it": "Ora dai matto.",
+            "tr": "Şimdi mat et.",
+            "pl": "Teraz daj mata.",
+            "id": "Sekarang, skakmat."
+          },
+          "apres": {
+            "en": "Your queen cut the king off, your king came close: mate.",
+            "fr": "Ta dame a coupé la route au roi, ton roi s'est approché : mat.",
+            "es": "Tu dama le cortó el paso al rey y tu rey se acercó: mate.",
+            "pt": "Sua dama cortou o caminho do rei, e seu rei se aproximou: mate.",
+            "de": "Deine Dame hat dem König den Weg abgeschnitten, dein König ist näher gekommen: Matt.",
+            "ru": "Ферзь отрезал королю путь, твой король подошёл ближе: мат.",
+            "it": "La tua donna ha tagliato la strada al re, il tuo re si è avvicinato: matto.",
+            "tr": "Vezirin şahın yolunu kesti, şahın yaklaştı: mat.",
+            "pl": "Hetman odciął królowi drogę, twój król podszedł: mat.",
+            "id": "Menterimu memotong jalan raja, rajamu mendekat: skakmat."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "rnbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "niveau": 2,
+    "titre": {
+      "en": "The boss: a stronger computer",
+      "fr": "Le boss : l'ordinateur plus fort",
+      "es": "El jefe: un ordenador más fuerte",
+      "pt": "O chefão: um computador mais forte",
+      "de": "Der Boss: ein stärkerer Computer",
+      "ru": "Босс: компьютер сильнее",
+      "it": "Il boss: un computer più forte",
+      "tr": "Boss: daha güçlü bilgisayar",
+      "pl": "Boss: silniejszy komputer",
+      "id": "Bos: komputer yang lebih kuat"
+    },
+    "intro": {
+      "en": "The last boss of the path: the computer plays one level stronger, but starts a knight down. Look at checks, captures and threats, and watch for a mate in two. No clock, and you can take back a move.",
+      "fr": "Dernier boss du chemin : l'ordinateur joue un cran plus fort, mais commence avec un cavalier de moins. Regarde les échecs, les prises et les menaces, et guette le mat en deux. Pas de pendule, et tu peux reprendre un coup.",
+      "es": "El último jefe del camino: el ordenador juega un nivel más fuerte, pero empieza con un caballo de menos. Mira los jaques, las capturas y las amenazas, y busca el mate en dos. Sin reloj, y puedes deshacer una jugada.",
+      "pt": "O último chefão do caminho: o computador joga um nível acima, mas começa com um cavalo a menos. Olhe os xeques, as capturas e as ameaças, e fique atento ao mate em dois. Sem relógio, e você pode voltar um lance.",
+      "de": "Der letzte Boss des Weges: Der Computer spielt eine Stufe stärker, beginnt aber mit einem Springer weniger. Achte auf Schachs, Schlagzüge und Drohungen, und halte Ausschau nach einem Matt in zwei. Keine Uhr, und du darfst einen Zug zurücknehmen.",
+      "ru": "Последний босс пути: компьютер играет на уровень сильнее, но начинает без одного коня. Смотри на шахи, взятия и угрозы и ищи мат в два хода. Без часов, и ход можно взять назад.",
+      "it": "L'ultimo boss del percorso: il computer gioca un livello più forte, ma parte con un cavallo in meno. Guarda scacchi, catture e minacce, e cerca il matto in due. Niente orologio, e puoi ritirare una mossa.",
+      "tr": "Yolun son bossu: bilgisayar bir seviye daha güçlü oynuyor ama oyuna bir atı eksik başlıyor. Şahlara, alışlara ve tehditlere bak, iki hamlede matı kolla. Saat yok ve hamleni geri alabilirsin.",
+      "pl": "Ostatni boss ścieżki: komputer gra o poziom mocniej, ale zaczyna bez jednego skoczka. Patrz na szachy, bicia i groźby i wypatruj mata w dwóch ruchach. Bez zegara, a ruch można cofnąć.",
+      "id": "Bos terakhir di jalur ini: komputer bermain satu tingkat lebih kuat, tetapi mulai dengan kekurangan satu kuda. Perhatikan skak, makan bidak, dan ancaman, dan cari skakmat dua langkah. Tanpa jam, dan kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You have finished the path: you have all the basics.",
+      "fr": "Boss battu. Tu as fini le chemin : tu as toutes les bases.",
+      "es": "Jefe derrotado. Has terminado el camino: tienes todas las bases.",
+      "pt": "Chefão derrotado. Você terminou o caminho: já tem todas as bases.",
+      "de": "Boss besiegt. Du hast den Weg geschafft: Du kennst alle Grundlagen.",
+      "ru": "Босс побеждён. Ты прошёл весь путь: у тебя есть все основы.",
+      "it": "Boss battuto. Hai finito il percorso: hai tutte le basi.",
+      "tr": "Boss yenildi. Yolu bitirdin: bütün temelleri biliyorsun.",
+      "pl": "Boss pokonany. Ścieżka ukończona: znasz już wszystkie podstawy.",
+      "id": "Bos dikalahkan. Kamu sudah menyelesaikan jalur ini: kamu menguasai semua dasarnya."
+    }
+  }
+}

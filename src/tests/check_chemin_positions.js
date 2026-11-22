@@ -128,7 +128,8 @@ async function controlerExo(sf, ex, nom) {
     { const n = compte(depart, "b").length - compte(g, "b").length, pions = compte(depart, "b").replace(/[^p]/g, "").length - compte(g, "b").replace(/[^p]/g, "").length;
       T(c.id + " boss : il manque aux Noirs une piece ou deux pions, ou rien (chapitre 7, a egalite)", n === 1 || (n === 2 && pions === 2) || (n === 0 && c.id === "ouverture"), compte(g, "b")); }
     T(c.id + " boss : la partie est jouable (20 coups au depart)", g.moves().length === 20);
-    T(c.id + " boss : niveau le plus facile", c.boss.niveau === 1);
+    /* Le dernier boss (chapitre 9) joue un cran plus fort. */
+    T(c.id + " boss : niveau le plus facile (niveau 2 pour le dernier chapitre)", c.boss.niveau === 1 || (c.boss.niveau === 2 && c.id === "mat2"));
   }
 
   console.log("\n--- Test de placement ---");

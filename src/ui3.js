@@ -2152,7 +2152,7 @@ function debutCharger(){
   const E=leconEtapes();
   if(!E[lecon.e]){lecon.e=0;lecon.x=0;}
   const et=E[lecon.e],ex=et.exos[lecon.x];
-  lecon.gen++;lecon.ok=false;lecon.occupe=false;
+  lecon.gen++;lecon.ok=false;lecon.occupe=false;lecon.deux=false;
   game=ex?new Game(ex.fen):et.fen?new Game(et.fen):new Game();
   flipped=false;selected=-1;lastMove=null;marks=debutMarques(ex);
   legalCache=ex?game.moves():[];
@@ -2215,8 +2215,11 @@ function handleDebutClick(sq){
 }
 function debutEssai(m,ex){
   const uci=game.uci(m);
-  let bon=ex.sol.includes(uci);
-  if(ex.mat){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
+  /* Mat en deux (chapitre 9, 2026-11-22) : ex.reponse est le coup noir joue
+     apres un bon premier coup ; le joueur doit ensuite faire mat lui-meme. */
+  const second=!!(ex.reponse&&lecon.deux);
+  let bon=second?false:ex.sol.includes(uci);
+  if(ex.mat||second){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
   selected=-1;
   if(!bon){
     const g=lecon.gen;
@@ -2225,12 +2228,25 @@ function debutEssai(m,ex){
     boardEl.classList.add("shake");
     setTimeout(()=>boardEl.classList.remove("shake"),340);
     /* faux : la raison propre a ce coup, ou "*" pour tout autre coup faux. */
-    debutStatut("lose",(ex.faux&&(ex.faux[uci]||ex.faux["*"]))||t("Not quite. Try again.")+" "+ex.consigne);
+    debutStatut("lose",second?t("Not quite. Try again.")+" "+(ex.ensuite||ex.consigne):(ex.faux&&(ex.faux[uci]||ex.faux["*"]))||t("Not quite. Try again.")+" "+ex.consigne);
     setTimeout(()=>{if(g===lecon.gen&&mode==="debut"&&!lecon.ok){marks=debutMarques(ex);render();}},700);
     return;
   }
   game.makeMove(m);lastMove=m;marks={};legalCache=[];lecon.occupe=true;
   render();
+  if(ex.reponse&&!second){
+    const g=lecon.gen;
+    setTimeout(()=>{
+      if(g!==lecon.gen||mode!=="debut")return;
+      const r=game.moves().find(x=>game.uci(x)===ex.reponse);
+      if(!r){debutReussi(ex);return;}
+      game.makeMove(r);lastMove=r;lecon.deux=true;lecon.occupe=false;
+      legalCache=game.moves();marks={};
+      debutStatut("",ex.ensuite||ex.consigne);
+      render();
+    },750);
+    return;
+  }
   debutSuite(ex,0,lecon.gen);
 }
 /* Rejoue la fin de la combinaison (le roi s'ecarte, le cavalier prend) : voir
@@ -2280,7 +2296,9 @@ function debutIndice(){
   if(lecon.ok||lecon.occupe)return;
   const ex=leconEtapes()[lecon.e].exos[lecon.x];
   if(!ex)return;
-  const u=ex.sol[0];
+  /* Second coup d'un mat en deux : l'indice montre un mat. */
+  let u=ex.sol[0];
+  if(ex.reponse&&lecon.deux){const mm=game.moves().find(x=>{game.makeMove(x);const k=game.isCheckmate();game.undoMove();return k;});if(mm)u=game.uci(mm);}
   selected=debutCase(u.slice(0,2));
   marks=debutMarques(ex);marks[debutCase(u.slice(2,4))]="hint";
   render();

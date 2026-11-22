@@ -45,6 +45,32 @@ function controlerExo(ex, ou) {
   }
   for (const u of Object.keys(ex.faux || {})) if (u !== "*" && !coup(g, u)) erreur("coup faux illegal " + u);
   for (const u of Object.keys(ex.faux || {})) if (ex.sol.includes(u)) erreur("le coup " + u + " est a la fois juste et faux");
+  /* Mat en deux (chapitre 9) : les solutions sont exactement les premiers
+     coups qui forcent le mat au coup suivant contre toute defense ; il n'y a
+     pas de mat en un ; la reponse noire prevue est legale apres chaque
+     solution, et le joueur a bien un mat ensuite. */
+  if (ex.reponse) {
+    if (ex.mat || ex.suite) erreur("un mat en deux n'a ni mat ni suite");
+    const matEnUn = () => g.moves().some(m => { g.makeMove(m); const k = g.isCheckmate(); g.undoMove(); return k; });
+    if (matEnUn()) erreur("il y a un mat en un : ce n'est pas un mat en deux");
+    const forcent = [];
+    for (const m of g.moves()) {
+      g.makeMove(m);
+      const rep = g.moves();
+      const ok = rep.length > 0 && rep.every(r => { g.makeMove(r); const k = matEnUn(); g.undoMove(); return k; });
+      g.undoMove();
+      if (ok) forcent.push(g.uci(m));
+    }
+    const tries = x => x.slice().sort().join(",");
+    if (tries(forcent) !== tries(ex.sol)) erreur("les coups qui forcent le mat en deux (" + forcent.join(" ") + ") ne sont pas les solutions (" + ex.sol.join(" ") + ")");
+    for (const u of ex.sol) {
+      g.makeMove(coup(g, u));
+      const r = coup(g, ex.reponse);
+      if (!r) erreur("reponse " + ex.reponse + " illegale apres " + u);
+      g.makeMove(r); if (!matEnUn()) erreur("pas de mat apres " + u + " " + ex.reponse); g.undoMove();
+      g.undoMove();
+    }
+  }
   if (ex.suite) {
     const s = coup(g, ex.sol[0]); g.makeMove(s);
     for (const u of ex.suite) { const m = coup(g, u); if (!m) erreur("suite illegale " + u); g.makeMove(m); }
@@ -91,7 +117,8 @@ function ecrire(OUT, ponct) {
     };
     const exo = ex => {
       const o = { fen: ex.fen, sol: ex.sol, consigne: tx(ex.consigne) };
-      for (const k of ["cible", "avant", "mat", "suite"]) if (ex[k] !== undefined) o[k] = ex[k];
+      for (const k of ["cible", "avant", "mat", "suite", "reponse"]) if (ex[k] !== undefined) o[k] = ex[k];
+      if (ex.ensuite) o.ensuite = tx(ex.ensuite);
       if (ex.apres) o.apres = tx(ex.apres);
       if (ex.faux) o.faux = Object.fromEntries(Object.entries(ex.faux).map(([u, v]) => [u, tx(v)]));
       return o;

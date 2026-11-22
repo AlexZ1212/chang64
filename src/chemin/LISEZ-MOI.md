@@ -8,9 +8,9 @@ on construit le site.
 
 | Fichier | Rôle |
 |---|---|
-| `plan.json` | L'ordre des chapitres (`chapitres`) et la phrase « À venir » (`aVenir`, 10 langues). |
+| `plan.json` | L'ordre des chapitres (`chapitres`) et, tant que des chapitres restent à sortir, la phrase « À venir » (`aVenir`, 10 langues). Le chemin est complet depuis le 22/11 : `aVenir` a été retiré, la ligne ne s'affiche plus. |
 | `debut.json` | Le chapitre 1, « Je débute ». Son contenu est dans l'application (`ui3.js`, `debutEtapes`) : ce fichier ne porte que son titre et sa description (`"integre": true`). |
-| `regles.json`, `securite.json` | Un chapitre chacun. |
+| `regles.json`, `securite.json`, `mats.json`, `menaces.json`, `clouer.json`, `ouverture.json`, `finales.json`, `mat2.json` | Un chapitre chacun (chapitres 2 à 9). |
 | `placement.json` | Les dix positions du test de placement. |
 
 Tout texte est un objet aux dix langues : `{ "en": "…", "fr": "…", "es": "…",
@@ -38,6 +38,9 @@ Une langue absente retombe sur l'anglais, et la construction le signale.
 - `etapes` : 3 à 6 leçons, chacune de 2 à 4 exercices.
 - `boss` : la partie de fin de chapitre contre l'ordinateur, depuis la position
   `fen`, sans pendule. `niveau` : 1 (700), 2 (1100), 3 (1600) ou 4 (1900).
+  Le contrôle admet : une pièce ou deux pions de moins chez les Noirs, la
+  position de départ à égalité (chapitre 7), une finale (`"finale": true`,
+  chapitre 8 : roi et dame contre roi seul), et le niveau 2 pour le dernier boss.
 
 Ne jamais retirer ni déplacer une leçon d'un chapitre déjà publié : la
 progression des joueurs est notée par numéro de leçon. On peut en ajouter à la
@@ -71,6 +74,8 @@ fin, et retoucher textes et positions.
 | `apres` | L'explication affichée après la réussite. |
 | `suite` | Les coups rejoués ensuite, un par camp, pour montrer la fin de l'idée. |
 | `mat` | `true` : tout coup qui fait mat est accepté ; `sol` doit les lister tous. |
+| `reponse` | Mat en deux (chapitre 9) : le coup noir joué après un bon premier coup. Le joueur doit ensuite faire mat lui-même (tout mat est accepté). La construction vérifie que `sol` contient exactement les premiers coups qui forcent le mat en deux, qu'il n'y a pas de mat en un, et que `reponse` est légale et laisse un mat. |
+| `ensuite` | Mat en deux : la consigne affichée après la réponse noire (10 langues). |
 
 Champs lus seulement par les contrôles, pour que **tout ce que dit une leçon
 soit vrai** :
@@ -109,5 +114,7 @@ position. Quand un chapitre sort, donner son `id` à deux positions.
    langues, aucun bouton sur deux lignes, chaque leçon sur un seul écran.
 7. Une entrée en tête de `nouveautes.json`.
 
-Les tests `check_chemin_progression.js` et `check_test_placement.js` comptent
-aujourd'hui trois chapitres : ils sont à mettre à jour avec le nouveau.
+Les tests lisent le nombre de chapitres et de positions dans `plan.json` et
+`placement.json` : ajouter un chapitre ne demande plus de les retoucher.
+Le barème du test de placement suit la part de positions trouvées : plus le
+test est long, moins quelques bonnes réponses rapportent.

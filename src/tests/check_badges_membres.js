@@ -51,6 +51,10 @@ const vider = w => w.eval("prog.badges=[];prog.badgeDates={};prog.bx={f:{},j:{},
     const fams = ["parties_membres", "ligues"].map(f => CATALOGUE.map((b, i) => (b[1] === f ? i : -1)).filter(i => i >= 0));
     T("les deux familles nouvelles sont d'un seul tenant", fams.every(l => l.length && l[l.length - 1] - l[0] === l.length - 1), dit(fams.map(l => l.length)));
     T("15 badges de parties entre membres, 4 de ligue", fams[0].length === 15 && fams[1].length === 4);
+    /* Toutes les familles (2026-11-22) : « Jouer avec un ami » et « Lecons apprises » etaient en deux morceaux. */
+    const morceaux = {}; let avant = "";
+    for (const b of CATALOGUE) { if (b[1] !== avant) { morceaux[b[1]] = (morceaux[b[1]] || 0) + 1; avant = b[1]; } }
+    T("aucune famille n'est coupee en deux dans le catalogue", Object.values(morceaux).every(n => n === 1), Object.keys(morceaux).filter(k => morceaux[k] > 1).join(", "));
   }
   const M = JSON.parse(fs.readFileSync(path.join(SITE, "data", "badges-medailles.json"), "utf8"));
   T("chaque badge nouveau a sa medaille", NOUVEAUX.every(id => Array.isArray(M[id]) && ["bronze", "argent", "or"].includes(M[id][0]) && M[id][1].length > 40), NOUVEAUX.filter(id => !M[id]).join(","));
@@ -139,6 +143,13 @@ const vider = w => w.eval("prog.badges=[];prog.badgeDates={};prog.bx={f:{},j:{},
   let w = await ouvrir("en", { attente: 2700, fetch: true });
   let d = w.document, $ = id => d.getElementById(id);
   T("les 30 badges sont dans la liste de l'application", NOUVEAUX.every(id => w.eval("BADGES.some(b=>b.id===" + dit(id) + ")")));
+  {
+    w.eval('cp={pseudo:"Moi"};bxEtat().c.ligues=1;menuOuvrir();menuVue("badges");');
+    await attendre(400);
+    const titres = Array.from(d.querySelectorAll("#menuBadgeGrid .bx-famille")).map(h => h.textContent);
+    T("dans la collection, chaque titre de famille n'apparait qu'une fois", titres.length > 15 && new Set(titres).size === titres.length, titres.filter((x, i) => titres.indexOf(x) !== i).join(", "));
+    w.eval("menuFermer();cp=null;delete bxEtat().c.ligues;");
+  }
   const nombres = x => { w.__x = x; return w.eval("bxmNombres(window.__x)"); };
   T("rien pour un membre qui n'a jamais joue", nombres({ v: 0, n: 0, d: 0, f: [0, 0, 0, 0], r: 0 }).length === 0);
   T("une nulle : la premiere partie seulement", dit(nombres({ v: 0, n: 1, d: 0, f: [0, 1, 0, 0], r: 800 })) === dit(["mp_1"]));

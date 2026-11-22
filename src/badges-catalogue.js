@@ -249,6 +249,13 @@ const BADGES_CATALOGUE = [
    "Gagner, perdre, faire nulle : à la fin, on se serre la main. C'est aussi ça, les échecs."],
   ["ami_revanche","ami","Jouer une revanche","Revanche !","deux flèches en boucle",
    "Le match Fischer contre Spassky, en 1972, a duré 21 parties. Vous n'en êtes qu'au début."],
+  /* Defi entre amis, par lien ou entre membres (3, 2026-11-18). */
+  ["duel_lien","ami","Terminer un défi à envoyer","Gant jeté","deux maillons",
+   "Cinq exercices, un score, un lien à envoyer. Jeter son gant, c'était autrefois la façon de provoquer quelqu'un en duel."],
+  ["duel_gagne","ami","Battre le score de l'adversaire dans un défi","Touché !","deux épées croisées",
+   "Tu as fait mieux sur les cinq mêmes exercices. Aux échecs, pas de hasard : mêmes positions, mêmes chances pour les deux."],
+  ["duel_parfait","ami","5 sur 5 du premier coup dans un défi","Cinq sur cinq","cinq étoiles",
+   "Cinq exercices, cinq fois le bon coup du premier essai. Bobby Fischer a gagné le championnat des États-Unis 1963-1964 sur un score parfait : 11 victoires en 11 parties."],
 
   /* ---------- 8 bis. Ouvertures (20, parties contre l'ordinateur ou un ami ; seuls tes propres coups comptent) ---------- */
   ["ouv_italienne","ouvertures","Jouer la partie italienne avec les Blancs (3.Bc4)","Partie italienne","un fou et une part de pizza",
@@ -524,14 +531,10 @@ const BADGES_CATALOGUE = [
    "Perdre arrive à tout le monde. Même Emanuel Lasker, champion du monde pendant 27 ans, un record, a fini par céder son titre en 1921."],
   ["lec_membre_temps","lecons","Perdre au temps contre un membre","La pendule a gagné","une pendule à rebours",
    "Dans les années 1860, on mesurait le temps de réflexion avec des sabliers ; la pendule à deux cadrans les a remplacés vers 1883. Depuis, elle fait partie du jeu."],
-
-  /* Defi entre amis, par lien ou entre membres (3, 2026-11-18). */
-  ["duel_lien","ami","Terminer un défi à envoyer","Gant jeté","deux maillons",
-   "Cinq exercices, un score, un lien à envoyer. Jeter son gant, c'était autrefois la façon de provoquer quelqu'un en duel."],
-  ["duel_gagne","ami","Battre le score de l'adversaire dans un défi","Touché !","deux épées croisées",
-   "Tu as fait mieux sur les cinq mêmes exercices. Aux échecs, pas de hasard : mêmes positions, mêmes chances pour les deux."],
-  ["duel_parfait","ami","5 sur 5 du premier coup dans un défi","Cinq sur cinq","cinq étoiles",
-   "Cinq exercices, cinq fois le bon coup du premier essai. Bobby Fischer a gagné le championnat des États-Unis 1963-1964 sur un score parfait : 11 victoires en 11 parties."],
+  ["lec_sot","lecons","Se faire mater en deux coups","Mat du sot","un roi aux yeux en croix",
+   "Le mat le plus rapide possible : 1.f3 e5 2.g4 Qh4#. Il fallait le vivre une fois pour ne plus jamais le revoir."],
+  ["lec_tondu","lecons","Subir le coup du berger","Tondu","un mouton et des ciseaux",
+   "Le coup du berger vise f7, défendu par le seul roi. La parade : protéger e5 et f7, puis chasser la dame en sortant tes pièces."],
 
   /* ---------- 8 ter. Membres (5, 2026-11-18 : compte, defis entre membres, amis, tableaux, enquetes) ---------- */
   ["mb_compte","membres","Créer un compte","Carte de membre","une carte de membre",
@@ -597,11 +600,6 @@ const BADGES_CATALOGUE = [
    "Une tour sur la septième rangée attaque les pions restés chez eux et enferme le roi adverse. C'est l'une de ses meilleures places, et tu n'es plus qu'à une ligue du sommet."],
   ["ligue_dame","ligues","Atteindre la ligue Dame","Vingt-sept cases","une dame et une couronne",
    "Au centre d'un échiquier vide, une dame contrôle 27 cases : aucune pièce ne fait mieux. Tu es dans la plus haute ligue."],
-
-  ["lec_sot","lecons","Se faire mater en deux coups","Mat du sot","un roi aux yeux en croix",
-   "Le mat le plus rapide possible : 1.f3 e5 2.g4 Qh4#. Il fallait le vivre une fois pour ne plus jamais le revoir."],
-  ["lec_tondu","lecons","Subir le coup du berger","Tondu","un mouton et des ciseaux",
-   "Le coup du berger vise f7, défendu par le seul roi. La parade : protéger e5 et f7, puis chasser la dame en sortant tes pièces."],
 
   /* ---------- 17. Défis de la semaine (5, avec les défis) ---------- */
   ["defi_1","defis","Premier défi de la semaine réussi","Défi relevé","un gant",

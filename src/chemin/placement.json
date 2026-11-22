@@ -1,0 +1,24 @@
+{
+  "positions": [
+    { "idee": "prendre une piece non defendue", "chapitre": "debut", "controle": "meilleur",
+      "fen": "6k1/5ppp/8/3r4/8/8/5PPP/3R2K1 w - - 0 1", "sol": ["d1d5"] },
+    { "idee": "mat en un, dame soutenue par le roi", "chapitre": "debut", "mat": true,
+      "fen": "7k/8/5K2/8/8/8/8/6Q1 w - - 0 1", "sol": ["g1g7"] },
+    { "idee": "mat du couloir", "chapitre": "debut", "mat": true,
+      "fen": "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1", "sol": ["d1d8"] },
+    { "idee": "prise en passant, seul coup qui sauve les deux pieces attaquees", "chapitre": "regles", "controle": "meilleur",
+      "fen": "3r2k1/3p1ppp/8/4P3/2B1N3/8/5PPP/6K1 b - - 0 1", "avant": "d7d5", "sol": ["e5d6"] },
+    { "idee": "promotion en cavalier qui fait mat", "chapitre": "regles", "mat": true,
+      "fen": "b7/kpP5/8/1P6/5B2/8/8/6K1 w - - 0 1", "sol": ["c7c8n"] },
+    { "idee": "trois pieces attaquees, une seule non defendue", "chapitre": "securite", "controle": "meilleur",
+      "fen": "6k1/5ppp/1p4n1/2b5/r7/8/2Q2PPP/6K1 w - - 0 1", "sol": ["c2a4"] },
+    { "idee": "deux attaquants contre un defenseur, prendre avec la piece la moins chere", "chapitre": "securite", "controle": "meilleur",
+      "fen": "3r2k1/pp3ppp/2n5/4p3/8/5N1P/PP3PP1/4R1K1 w - - 0 1", "sol": ["f3e5"] },
+    { "idee": "fourchette de cavalier roi et dame", "controle": "meilleur",
+      "fen": "4k3/1p3ppp/q7/3N4/8/8/PP3PPP/6K1 w - - 0 1", "sol": ["d5c7"] },
+    { "idee": "clouage de la dame sur le roi", "controle": "meilleur",
+      "fen": "4k3/ppp2ppp/8/4q3/8/8/5PPP/R4RK1 w - - 0 1", "sol": ["a1e1", "f1e1"] },
+    { "idee": "mat en deux par sacrifice de dame sur la derniere rangee", "controle": "meilleur",
+      "fen": "r5k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1", "sol": ["e2e8"] }
+  ]
+}

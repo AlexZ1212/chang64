@@ -23,7 +23,9 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
 
   console.log("La barre");
   const visibles = [...w.document.querySelectorAll("#tabsNav button")].filter(b => !b.hidden).map(b => b.id);
-  T("quatre onglets visibles : Jouer, Resoudre, Analyser, Explorer", visibles.join() === "tab-jouer,tab-puzzles,tab-edit,tab-explore", visibles.join());
+  /* Cinq onglets depuis le 2026-11-22 : « Apprendre » en deuxieme position
+     (apprendre.js, garde par check_onglet_apprendre.js). */
+  T("cinq onglets visibles : Jouer, Apprendre, Resoudre, Analyser, Explorer", visibles.join() === "tab-jouer,tab-apprendre,tab-puzzles,tab-edit,tab-explore", visibles.join());
   T("les deux anciens onglets restent dans la page, masques", $("tab-play").hidden && $("tab-friend").hidden);
 
   console.log("Le choix");
@@ -68,7 +70,9 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
   T("une carte masquee le reste", w.getComputedStyle($("cardSolveMistakes")).display === ($("cardSolveMistakes").classList.contains("hide") ? "none" : "flex"));
   $("tab-explore").click(); await pause(300);
   const liens = [...w.document.querySelectorAll("#exploreLinks a")];
-  T("un picto sur chacune des six rubriques d'Explorer", liens.length === 6 && liens.every(a => a.querySelectorAll(".picto.petit svg").length === 1), liens.filter(a => !a.querySelector(".picto svg")).map(a => a.getAttribute("href")).join());
+  /* Cinq rubriques depuis le 2026-11-22 : les fiches de regles ont quitte
+     Explorer pour l'onglet Apprendre (leurs pages gardent leur adresse). */
+  T("un picto sur chacune des cinq rubriques d'Explorer", liens.length === 5 && liens.every(a => a.querySelectorAll(".picto.petit svg").length === 1), liens.filter(a => !a.querySelector(".picto svg")).map(a => a.getAttribute("href")).join());
   T("les finales ont le meme dessin dans Resoudre et dans Explorer", $("cardSolveEndgames").querySelector(".picto svg").innerHTML === liens.find(a => /finales/.test(a.getAttribute("href"))).querySelector(".picto svg").innerHTML);
   const menu = w.document.querySelector("[data-vue-defis-membres] svg.tiroir-ico");
   T("menu : les epees croisees des fenetres de defi", !!menu && menu.getAttribute("viewBox") === "-24 -24 48 48" && menu.innerHTML === $("cardSolveDuel").querySelector(".picto svg").innerHTML);

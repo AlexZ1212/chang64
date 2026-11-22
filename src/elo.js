@@ -33,7 +33,7 @@ function eloEtat(){return typeof prog!=="undefined"&&prog&&eloValide(prog.eloOrd
 /* Compte une partie finie. p : l'entree de l'historique ({c,r,elo,m,fen}).
    Rend ce qui a change, ou null si la partie ne compte pas. */
 function eloCompter(p){
-  if(!p||p.fen||typeof p.elo!=="number"||typeof p.m!=="string")return null;
+  if(!p||p.fen||p.ent||typeof p.elo!=="number"||typeof p.m!=="string")return null;
   const demi=p.m.split(" ").filter(Boolean).length;
   if((p.c==="w"?Math.ceil(demi/2):Math.floor(demi/2))<ELO_COUPS_MIN)return null;
   const s=p.r==="win"?1:p.r==="draw"?0.5:p.r==="loss"?0:null;

@@ -110,7 +110,7 @@ async function cpEtirer(cle,code){
      Je debute) : celui de l'appareil qui a joue en dernier ;
    - un champ inconnu (ajoute plus tard) : celui de l'appareil le plus recent ;
    - remise a zero : la plus recente efface tout ce qui la precede, partout. */
-const CP_NOMS=["progress","prefs","debut","games","friendgames","duels","duelNom"];
+const CP_NOMS=["progress","prefs","debut","chemin","games","friendgames","duels","duelNom"];
 function cpNombre(x){return typeof x==="number"&&isFinite(x)?x:0;}
 function cpObjet(x){return x&&typeof x==="object"&&!Array.isArray(x)?x:{};}
 function cpListe(x){return Array.isArray(x)?x:[];}
@@ -283,6 +283,19 @@ function cpFusion(L,D,B){
     const R=recent("debut")?D.debut||L.debut:L.debut||D.debut,x=cpObjet(L.debut),y=cpObjet(D.debut);
     out.debut=Object.assign({},R,{f:cpUnion(x.f,y.f).filter(Number.isInteger).sort((p,q)=>p-q)});
   }
+  /* Chemin d'apprentissage (apprendre.js, 2026-11-22) : les etapes reussies
+     s'additionnent, l'endroit ou l'on est suit l'appareil le plus recent, le
+     test de placement le plus recent l'emporte. */
+  if(L.chemin||D.chemin){
+    const l=cpObjet(L.chemin),d=cpObjet(D.chemin),R=recent("chemin")?d:l,A=recent("chemin")?l:d,c={};
+    for(const id of cpCles(l.c,d.c)){
+      const x=cpObjet(cpObjet(R.c)[id]),y=cpObjet(cpObjet(A.c)[id]),src=cpObjet(R.c)[id]?x:y;
+      c[id]={e:cpNombre(src.e),x:cpNombre(src.x),f:cpUnion(x.f,y.f).filter(Number.isInteger).sort((p,q)=>p-q)};
+    }
+    const pl=cpObjet(l.p),pd=cpObjet(d.p),p=cpNombre(pd.t)>cpNombre(pl.t)?d.p:cpNombre(pl.t)>cpNombre(pd.t)?l.p:(R.p||A.p);
+    out.chemin={v:1,c:c,o:cpUnion(l.o,d.o).filter(x=>typeof x==="string")};
+    if(p)out.chemin.p=p;
+  }
   for(const n of ["games","friendgames"])if(L[n]||D[n])out[n]=cpUnion(L[n],D[n]).filter(g=>g&&typeof g==="object").sort((x,y)=>cpNombre(y.t)-cpNombre(x.t)).slice(0,30);
   if(L.duels||D.duels)out.duels=cpUnion(D.duels,L.duels).slice(-20);
   return out;
@@ -296,7 +309,7 @@ function cpContenu(e){const c=Object.assign({},e);delete c.t;delete c.vv;return 
    chang64:compteMaj    {nom: date} : dernier changement de chaque morceau ;
    chang64:compteBase   {cle, env} : dernier etat partage avec le serveur ;
    chang64:compteEnvois [{n, env}] : envois dont la reponse n'est pas arrivee. */
-const CP_STOCK={"chang64:progress":"progress","chang64:prefs":"prefs","chang64:debut":"debut","chang64:games":"games","chang64:friendgames":"friendgames","chang64:duels":"duels","chang64:duelNom":"duelNom"};
+const CP_STOCK={"chang64:progress":"progress","chang64:prefs":"prefs","chang64:debut":"debut","chang64:chemin":"chemin","chang64:games":"games","chang64:friendgames":"friendgames","chang64:duels":"duels","chang64:duelNom":"duelNom"};
 let cp=null,cpMaj={},cpSilence=false,cpEnCours=false,cpEncore=false,cpMinuteur=0,cpEtatSync="",cpDernier={};
 function cpLire(k){try{const v=localStorage.getItem(k);return v===null?null:JSON.parse(v);}catch(e){return null;}}
 function cpEcrire(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}}
@@ -357,6 +370,10 @@ function cpAppliquer(env){
       }else{
         window.storage.set(k,nom==="duelNom"?String(v):JSON.stringify(v));
         if(nom==="games"&&typeof history!=="undefined"&&Array.isArray(history))history=v;
+        /* Le chemin et « Je debute » se relisent tout de suite : l'onglet
+           Apprendre et le bouton de l'accueil suivent sans recharger. */
+        if(nom==="chemin"&&typeof cheminAdopter==="function")cheminAdopter(v);
+        if(nom==="debut"&&typeof debutAdopter==="function")debutAdopter(v);
         if(nom==="friendgames"&&typeof amiHistory!=="undefined"&&Array.isArray(amiHistory))amiHistory=v;
       }
       cpDernier[k]=nom==="duelNom"?String(v):cpTexte(nom==="progress"?prog:v);

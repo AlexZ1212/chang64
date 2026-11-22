@@ -87,7 +87,8 @@ function renderOpening(){
    une langue de plus n'a rien a ajouter ici. */
 const EXPLORE=[
   ["openings","Openings","{nf} families, {nl} named lines"],
-  ["learn","Learn the rules","Castling, en passant, notation"],
+  /* Les fiches de regles ont quitte cette liste pour l'onglet Apprendre
+     (2026-11-22) : leurs pages gardent leur adresse, seul l'acces change. */
   ["glossary","Glossary","Forks, pins, zugzwang"],
   ["endgames","Endgames","The five you must know"],
   ["traps","Opening traps","Scholar's, Legal's, Fried Liver"],
@@ -1211,7 +1212,10 @@ function saveFinishedGame(){
     lvl:botLevel,
     elo:eloPartie(),
     m:gameUci.join(" "),
-    fen:gameStartFen||null
+    fen:gameStartFen||null,
+    /* Entrainement (apprendre.js, 2026-11-22) : partie du chemin a handicap
+       ou avec un coup repris. Elle ne compte ni pour l'Elo ni pour les badges. */
+    ent:typeof partieEntrainement==="function"&&partieEntrainement()?1:undefined
   });
   history=history.slice(0,30);
   saveHistory();renderHistory();

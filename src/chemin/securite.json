@@ -1,0 +1,678 @@
+{
+  "id": "securite",
+  "theme": "Winning capture",
+  "titre": {
+    "en": "Give nothing away", "fr": "Ne rien donner", "es": "No regalar nada", "pt": "Não entregar nada", "de": "Nichts verschenken",
+    "ru": "Ничего не отдавать даром", "it": "Non regalare niente", "tr": "Hiçbir şey hediye etme", "pl": "Niczego nie oddawaj", "id": "Jangan beri apa pun"
+  },
+  "desc": {
+    "en": "What each piece is worth, spotting what is hanging, saving an attacked piece, counting defenders, good trades.",
+    "fr": "Ce que vaut chaque pièce, voir ce qui est en prise, sauver une pièce attaquée, compter les défenseurs, les bons échanges.",
+    "es": "Cuánto vale cada pieza, ver lo que está colgando, salvar una pieza atacada, contar defensores, los buenos cambios.",
+    "pt": "Quanto vale cada peça, ver o que está solto, salvar uma peça atacada, contar defensores, as boas trocas.",
+    "de": "Was jede Figur wert ist, Hängendes erkennen, eine angegriffene Figur retten, Verteidiger zählen, gute Tausche.",
+    "ru": "Сколько стоит каждая фигура, что висит без защиты, как спасти атакованную фигуру, счёт защитников, выгодные размены.",
+    "it": "Quanto vale ogni pezzo, vedere cosa è in presa, salvare un pezzo attaccato, contare i difensori, i buoni cambi.",
+    "tr": "Her taşın değeri, askıdaki taşları görmek, saldırı altındaki taşı kurtarmak, savunucuları saymak, iyi değişimler.",
+    "pl": "Ile warta jest każda figura, co wisi bez obrony, jak ratować atakowaną figurę, liczenie obrońców, dobre wymiany.",
+    "id": "Nilai tiap bidak, melihat bidak yang tergantung, menyelamatkan bidak yang diserang, menghitung pelindung, pertukaran yang bagus."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "What each piece is worth", "fr": "Ce que vaut chaque pièce", "es": "Cuánto vale cada pieza", "pt": "Quanto vale cada peça", "de": "Was jede Figur wert ist",
+        "ru": "Сколько стоит каждая фигура", "it": "Quanto vale ogni pezzo", "tr": "Her taşın değeri", "pl": "Ile warta jest każda figura", "id": "Nilai tiap bidak"
+      },
+      "intro": {
+        "en": "To tell whether a trade is good, players count in points: pawn 1, knight 3, bishop 3, rook 5, queen 9. The king has no price: lose it and you lose the game.",
+        "fr": "Pour savoir si un échange est bon, on compte en points : pion 1, cavalier 3, fou 3, tour 5, dame 9. Le roi n'a pas de prix : le perdre, c'est perdre la partie.",
+        "es": "Para saber si un cambio es bueno, se cuenta en puntos: peón 1, caballo 3, alfil 3, torre 5, dama 9. El rey no tiene precio: perderlo es perder la partida.",
+        "pt": "Para saber se uma troca é boa, contamos em pontos: peão 1, cavalo 3, bispo 3, torre 5, dama 9. O rei não tem preço: perdê-lo é perder a partida.",
+        "de": "Um zu wissen, ob ein Tausch gut ist, zählt man in Punkten: Bauer 1, Springer 3, Läufer 3, Turm 5, Dame 9. Der König hat keinen Preis: Wer ihn verliert, verliert die Partie.",
+        "ru": "Чтобы понять, выгоден ли размен, фигуры считают в очках: пешка 1, конь 3, слон 3, ладья 5, ферзь 9. У короля цены нет: потерять его значит проиграть партию.",
+        "it": "Per capire se un cambio è buono si conta in punti: pedone 1, cavallo 3, alfiere 3, torre 5, donna 9. Il re non ha prezzo: perderlo significa perdere la partita.",
+        "tr": "Bir değişimin iyi olup olmadığını anlamak için puanla sayılır: piyon 1, at 3, fil 3, kale 5, vezir 9. Şahın fiyatı yoktur: onu kaybeden oyunu kaybeder.",
+        "pl": "Aby ocenić, czy wymiana jest dobra, liczy się w punktach: pion 1, skoczek 3, goniec 3, wieża 5, hetman 9. Król nie ma ceny: jego utrata to przegrana partia.",
+        "id": "Untuk tahu apakah sebuah pertukaran bagus, bidak dihitung dengan poin: pion 1, kuda 3, gajah 3, benteng 5, menteri 9. Raja tak ternilai: kehilangan raja berarti kalah."
+      },
+      "exos": [
+        {
+          "fen": "6k1/5ppp/8/3n4/r7/7P/5PP1/3Q2K1 w - - 0 1",
+          "sol": ["d1a4"],
+          "controle": "meilleur",
+          "nonDefendues": ["a4", "d5"],
+          "consigne": {
+            "en": "Your queen can take two black pieces, and neither is defended. Take the one worth more.",
+            "fr": "Ta dame peut prendre deux pièces noires, et aucune n'est défendue. Prends celle qui vaut le plus.",
+            "es": "Tu dama puede capturar dos piezas negras, y ninguna está defendida. Captura la que vale más.",
+            "pt": "Sua dama pode capturar duas peças pretas, e nenhuma está defendida. Capture a que vale mais.",
+            "de": "Deine Dame kann zwei schwarze Figuren schlagen, und keine ist gedeckt. Schlage die wertvollere.",
+            "ru": "Твой ферзь может взять две чёрные фигуры, и ни одна не защищена. Возьми ту, что стоит дороже.",
+            "it": "La tua donna può catturare due pezzi neri, e nessuno è difeso. Cattura quello che vale di più.",
+            "tr": "Vezirin iki siyah taşı alabilir ve hiçbiri korunmuyor. Daha değerli olanı al.",
+            "pl": "Twój hetman może zbić dwie czarne figury i żadna nie jest broniona. Zbij tę, która jest warta więcej.",
+            "id": "Menterimu bisa memakan dua bidak hitam, dan tak satu pun dilindungi. Makan yang nilainya lebih besar."
+          },
+          "faux": {
+            "d1d5": {
+              "en": "The knight is worth 3 points, the rook 5. Take the rook.",
+              "fr": "Le cavalier vaut 3 points, la tour 5. Prends la tour.",
+              "es": "El caballo vale 3 puntos, la torre 5. Captura la torre.",
+              "pt": "O cavalo vale 3 pontos, a torre 5. Capture a torre.",
+              "de": "Der Springer ist 3 Punkte wert, der Turm 5. Schlage den Turm.",
+              "ru": "Конь стоит 3 очка, ладья 5. Возьми ладью.",
+              "it": "Il cavallo vale 3 punti, la torre 5. Cattura la torre.",
+              "tr": "At 3 puan, kale 5 puan eder. Kaleyi al.",
+              "pl": "Skoczek jest wart 3 punkty, wieża 5. Zbij wieżę.",
+              "id": "Kuda bernilai 3 poin, benteng 5. Makan bentengnya."
+            }
+          },
+          "apres": {
+            "en": "Five points instead of three. When you have the choice, take the bigger piece.",
+            "fr": "Cinq points au lieu de trois. Quand tu as le choix, prends la plus grosse pièce.",
+            "es": "Cinco puntos en vez de tres. Cuando puedas elegir, captura la pieza mayor.",
+            "pt": "Cinco pontos em vez de três. Quando puder escolher, capture a peça maior.",
+            "de": "Fünf Punkte statt drei. Wenn du die Wahl hast, nimm die größere Figur.",
+            "ru": "Пять очков вместо трёх. Когда есть выбор, бери фигуру подороже.",
+            "it": "Cinque punti invece di tre. Quando puoi scegliere, cattura il pezzo più grosso.",
+            "tr": "Üç yerine beş puan. Seçme şansın varsa büyük taşı al.",
+            "pl": "Pięć punktów zamiast trzech. Gdy masz wybór, bij większą figurę.",
+            "id": "Lima poin, bukan tiga. Kalau bisa memilih, makan bidak yang lebih besar."
+          }
+        },
+        {
+          "fen": "7k/2p3pp/n7/5p2/8/3B4/5PPP/6K1 w - - 0 1",
+          "sol": ["d3a6"],
+          "controle": "meilleur",
+          "nonDefendues": ["a6", "f5"],
+          "consigne": {
+            "en": "Your bishop can take a pawn or a knight, and neither is defended. Which one is worth more?",
+            "fr": "Ton fou peut prendre un pion ou un cavalier, et aucun n'est défendu. Lequel vaut le plus ?",
+            "es": "Tu alfil puede capturar un peón o un caballo, y ninguno está defendido. ¿Cuál vale más?",
+            "pt": "Seu bispo pode capturar um peão ou um cavalo, e nenhum está defendido. Qual vale mais?",
+            "de": "Dein Läufer kann einen Bauern oder einen Springer schlagen, und keiner ist gedeckt. Welcher ist mehr wert?",
+            "ru": "Твой слон может взять пешку или коня, и они не защищены. Что стоит дороже?",
+            "it": "Il tuo alfiere può catturare un pedone o un cavallo, e nessuno è difeso. Quale vale di più?",
+            "tr": "Filin bir piyonu ya da bir atı alabilir ve ikisi de korunmuyor. Hangisi daha değerli?",
+            "pl": "Twój goniec może zbić piona albo skoczka i żaden nie jest broniony. Który jest wart więcej?",
+            "id": "Gajahmu bisa memakan pion atau kuda, dan keduanya tidak dilindungi. Mana yang nilainya lebih besar?"
+          },
+          "faux": {
+            "d3f5": {
+              "en": "A pawn is worth 1 point, a knight 3. Take the knight.",
+              "fr": "Un pion vaut 1 point, un cavalier 3. Prends le cavalier.",
+              "es": "Un peón vale 1 punto, un caballo 3. Captura el caballo.",
+              "pt": "Um peão vale 1 ponto, um cavalo 3. Capture o cavalo.",
+              "de": "Ein Bauer ist 1 Punkt wert, ein Springer 3. Schlage den Springer.",
+              "ru": "Пешка стоит 1 очко, конь 3. Возьми коня.",
+              "it": "Un pedone vale 1 punto, un cavallo 3. Cattura il cavallo.",
+              "tr": "Piyon 1 puan, at 3 puan eder. Atı al.",
+              "pl": "Pion jest wart 1 punkt, skoczek 3. Zbij skoczka.",
+              "id": "Pion bernilai 1 poin, kuda 3. Makan kudanya."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "What is hanging", "fr": "Ce qui est en prise", "es": "Lo que está colgando", "pt": "O que está solto", "de": "Was hängt",
+        "ru": "Что висит", "it": "Che cosa è in presa", "tr": "Askıdaki taşlar", "pl": "Co wisi", "id": "Bidak yang tergantung"
+      },
+      "intro": {
+        "en": "A piece is hanging when it can be taken for nothing: no one defends it. Before each move, look over your opponent's pieces: is one of them left unprotected?",
+        "fr": "Une pièce est en prise quand on peut la prendre sans rien perdre : personne ne la défend. Avant chaque coup, fais le tour des pièces adverses : y en a-t-il une que personne ne protège ?",
+        "es": "Una pieza está colgando cuando se puede capturar gratis: nadie la defiende. Antes de cada jugada, repasa las piezas del rival: ¿hay alguna sin protección?",
+        "pt": "Uma peça está solta quando pode ser capturada de graça: ninguém a defende. Antes de cada lance, passe os olhos pelas peças do adversário: alguma ficou sem proteção?",
+        "de": "Eine Figur hängt, wenn man sie umsonst schlagen kann: Niemand deckt sie. Schau dir vor jedem Zug die gegnerischen Figuren an: Steht eine ungedeckt?",
+        "ru": "Фигура висит, если её можно взять даром: её никто не защищает. Перед каждым ходом осмотри фигуры соперника: нет ли среди них беззащитной?",
+        "it": "Un pezzo è in presa quando si può catturare gratis: nessuno lo difende. Prima di ogni mossa, passa in rassegna i pezzi avversari: ce n'è uno senza protezione?",
+        "tr": "Bir taş bedavaya alınabiliyorsa askıdadır: onu kimse korumuyordur. Her hamleden önce rakibinin taşlarına göz gezdir: korumasız kalan var mı?",
+        "pl": "Figura wisi, gdy można ją zbić za darmo: nikt jej nie broni. Przed każdym ruchem przejrzyj figury przeciwnika: czy któraś została bez obrony?",
+        "id": "Sebuah bidak tergantung jika bisa dimakan secara cuma-cuma: tak ada yang melindunginya. Sebelum tiap langkah, periksa bidak-bidak lawan: adakah yang tidak terlindungi?"
+      },
+      "exos": [
+        {
+          "fen": "6k1/5ppp/4p3/1p1n4/b5r1/8/5PPP/3Q2K1 w - - 0 1",
+          "sol": ["d1g4"],
+          "controle": "meilleur",
+          "nonDefendues": ["g4"],
+          "defendues": ["a4", "d5"],
+          "consigne": {
+            "en": "Your queen attacks three black pieces. Only one is not defended: take it.",
+            "fr": "Ta dame attaque trois pièces noires. Une seule n'est pas défendue : prends-la.",
+            "es": "Tu dama ataca tres piezas negras. Solo una no está defendida: captúrala.",
+            "pt": "Sua dama ataca três peças pretas. Só uma não está defendida: capture-a.",
+            "de": "Deine Dame greift drei schwarze Figuren an. Nur eine ist nicht gedeckt: Schlage sie.",
+            "ru": "Твой ферзь нападает на три чёрные фигуры. Не защищена только одна: возьми её.",
+            "it": "La tua donna attacca tre pezzi neri. Solo uno non è difeso: catturalo.",
+            "tr": "Vezirin üç siyah taşa saldırıyor. Yalnızca biri korunmuyor: onu al.",
+            "pl": "Twój hetman atakuje trzy czarne figury. Tylko jedna nie jest broniona: zbij ją.",
+            "id": "Menterimu menyerang tiga bidak hitam. Hanya satu yang tidak dilindungi: makan bidak itu."
+          },
+          "faux": {
+            "d1a4": {
+              "en": "The bishop is defended by a pawn: your queen would be taken back.",
+              "fr": "Le fou est défendu par un pion : ta dame serait reprise.",
+              "es": "El alfil está defendido por un peón: te capturarían la dama.",
+              "pt": "O bispo está defendido por um peão: sua dama seria capturada.",
+              "de": "Der Läufer ist von einem Bauern gedeckt: Deine Dame würde zurückgeschlagen.",
+              "ru": "Слон защищён пешкой: твоего ферзя заберут в ответ.",
+              "it": "L'alfiere è difeso da un pedone: la tua donna verrebbe ripresa.",
+              "tr": "Fili bir piyon koruyor: vezirin geri alınır.",
+              "pl": "Gońca broni pion: twój hetman zostałby zbity.",
+              "id": "Gajah itu dilindungi pion: menterimu akan dimakan balik."
+            },
+            "d1d5": {
+              "en": "The knight is defended by a pawn: your queen would be taken back.",
+              "fr": "Le cavalier est défendu par un pion : ta dame serait reprise.",
+              "es": "El caballo está defendido por un peón: te capturarían la dama.",
+              "pt": "O cavalo está defendido por um peão: sua dama seria capturada.",
+              "de": "Der Springer ist von einem Bauern gedeckt: Deine Dame würde zurückgeschlagen.",
+              "ru": "Конь защищён пешкой: твоего ферзя заберут в ответ.",
+              "it": "Il cavallo è difeso da un pedone: la tua donna verrebbe ripresa.",
+              "tr": "Atı bir piyon koruyor: vezirin geri alınır.",
+              "pl": "Skoczka broni pion: twój hetman zostałby zbity.",
+              "id": "Kuda itu dilindungi pion: menterimu akan dimakan balik."
+            }
+          },
+          "apres": {
+            "en": "A rook for nothing. That is what looking before you move pays.",
+            "fr": "Une tour pour rien. Voilà ce que rapporte un coup d'œil avant de jouer.",
+            "es": "Una torre gratis. Eso es lo que da mirar antes de jugar.",
+            "pt": "Uma torre de graça. É isso que rende olhar antes de jogar.",
+            "de": "Ein Turm umsonst. Das bringt ein Blick vor dem Zug.",
+            "ru": "Ладья даром. Вот что даёт привычка осмотреться перед ходом.",
+            "it": "Una torre gratis. Ecco cosa rende uno sguardo prima di muovere.",
+            "tr": "Bedavaya bir kale. Oynamadan önce bakmanın kazancı bu.",
+            "pl": "Wieża za darmo. Tyle daje rzut oka przed ruchem.",
+            "id": "Satu benteng secara cuma-cuma. Itulah hasil melihat dulu sebelum melangkah."
+          }
+        },
+        {
+          "fen": "4k3/pp1n2pp/6b1/4N3/2bP4/8/PP3PPP/2B3K1 w - - 0 1",
+          "sol": ["e5c4"],
+          "controle": "meilleur",
+          "nonDefendues": ["c4"],
+          "defendues": ["d7", "g6"],
+          "consigne": {
+            "en": "Your knight attacks three black pieces. Only one is not defended: take it.",
+            "fr": "Ton cavalier attaque trois pièces noires. Une seule n'est pas défendue : prends-la.",
+            "es": "Tu caballo ataca tres piezas negras. Solo una no está defendida: captúrala.",
+            "pt": "Seu cavalo ataca três peças pretas. Só uma não está defendida: capture-a.",
+            "de": "Dein Springer greift drei schwarze Figuren an. Nur eine ist nicht gedeckt: Schlage sie.",
+            "ru": "Твой конь нападает на три чёрные фигуры. Не защищена только одна: возьми её.",
+            "it": "Il tuo cavallo attacca tre pezzi neri. Solo uno non è difeso: catturalo.",
+            "tr": "Atın üç siyah taşa saldırıyor. Yalnızca biri korunmuyor: onu al.",
+            "pl": "Twój skoczek atakuje trzy czarne figury. Tylko jedna nie jest broniona: zbij ją.",
+            "id": "Kudamu menyerang tiga bidak hitam. Hanya satu yang tidak dilindungi: makan bidak itu."
+          },
+          "faux": {
+            "e5d7": {
+              "en": "That piece is defended: you would give your knight in return. Look for the one nobody protects.",
+              "fr": "Cette pièce est défendue : tu donnerais ton cavalier en échange. Cherche celle que personne ne protège.",
+              "es": "Esa pieza está defendida: darías tu caballo a cambio. Busca la que nadie protege.",
+              "pt": "Essa peça está defendida: você daria seu cavalo em troca. Procure a que ninguém protege.",
+              "de": "Diese Figur ist gedeckt: Du würdest deinen Springer dafür hergeben. Such die, die niemand deckt.",
+              "ru": "Эта фигура защищена: взамен ты отдашь коня. Найди ту, которую никто не защищает.",
+              "it": "Quel pezzo è difeso: daresti in cambio il tuo cavallo. Cerca quello che nessuno protegge.",
+              "tr": "O taş korunuyor: karşılığında atını verirsin. Kimsenin korumadığı taşı bul.",
+              "pl": "Ta figura jest broniona: w zamian stracisz skoczka. Poszukaj tej, której nikt nie broni.",
+              "id": "Bidak itu dilindungi: kamu akan menukarnya dengan kudamu. Cari yang tidak dilindungi siapa pun."
+            },
+            "e5g6": {
+              "en": "That piece is defended: you would give your knight in return. Look for the one nobody protects.",
+              "fr": "Cette pièce est défendue : tu donnerais ton cavalier en échange. Cherche celle que personne ne protège.",
+              "es": "Esa pieza está defendida: darías tu caballo a cambio. Busca la que nadie protege.",
+              "pt": "Essa peça está defendida: você daria seu cavalo em troca. Procure a que ninguém protege.",
+              "de": "Diese Figur ist gedeckt: Du würdest deinen Springer dafür hergeben. Such die, die niemand deckt.",
+              "ru": "Эта фигура защищена: взамен ты отдашь коня. Найди ту, которую никто не защищает.",
+              "it": "Quel pezzo è difeso: daresti in cambio il tuo cavallo. Cerca quello che nessuno protegge.",
+              "tr": "O taş korunuyor: karşılığında atını verirsin. Kimsenin korumadığı taşı bul.",
+              "pl": "Ta figura jest broniona: w zamian stracisz skoczka. Poszukaj tej, której nikt nie broni.",
+              "id": "Bidak itu dilindungi: kamu akan menukarnya dengan kudamu. Cari yang tidak dilindungi siapa pun."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Saving an attacked piece", "fr": "Sauver une pièce attaquée", "es": "Salvar una pieza atacada", "pt": "Salvar uma peça atacada", "de": "Eine angegriffene Figur retten",
+        "ru": "Как спасти атакованную фигуру", "it": "Salvare un pezzo attaccato", "tr": "Saldırı altındaki taşı kurtarmak", "pl": "Jak ratować atakowaną figurę", "id": "Menyelamatkan bidak yang diserang"
+      },
+      "intro": {
+        "en": "When one of your pieces is attacked, you have four answers: move it away, take the attacker, put a piece in between, or defend it. Start with the first two: they are the safest.",
+        "fr": "Quand une de tes pièces est attaquée, tu as quatre réponses : la déplacer, prendre l'attaquant, mettre une pièce entre les deux, ou la défendre. Commence par les deux premières : ce sont les plus sûres.",
+        "es": "Cuando atacan una de tus piezas, tienes cuatro respuestas: moverla, capturar al atacante, poner una pieza en medio o defenderla. Empieza por las dos primeras: son las más seguras.",
+        "pt": "Quando uma peça sua é atacada, você tem quatro respostas: tirá-la dali, capturar o atacante, colocar uma peça no meio ou defendê-la. Comece pelas duas primeiras: são as mais seguras.",
+        "de": "Wird eine deiner Figuren angegriffen, hast du vier Antworten: wegziehen, den Angreifer schlagen, eine Figur dazwischenstellen oder sie decken. Fang mit den ersten beiden an: Sie sind die sichersten.",
+        "ru": "Когда на твою фигуру напали, есть четыре ответа: увести её, взять нападающего, закрыться другой фигурой или защитить её. Начинай с первых двух: они самые надёжные.",
+        "it": "Quando un tuo pezzo è attaccato, hai quattro risposte: spostarlo, catturare l'attaccante, mettere un pezzo in mezzo o difenderlo. Comincia dalle prime due: sono le più sicure.",
+        "tr": "Taşlarından birine saldırıldığında dört cevabın var: onu kaçırmak, saldıranı almak, araya bir taş koymak ya da onu korumak. İlk ikisiyle başla: en güvenlileri onlar.",
+        "pl": "Gdy twoja figura jest atakowana, masz cztery odpowiedzi: odejść nią, zbić napastnika, zasłonić się inną figurą albo jej bronić. Zacznij od dwóch pierwszych: są najbezpieczniejsze.",
+        "id": "Saat salah satu bidakmu diserang, ada empat jawaban: memindahkannya, memakan penyerangnya, menaruh bidak di antaranya, atau melindunginya. Mulailah dari dua yang pertama: itulah yang paling aman."
+      },
+      "exos": [
+        {
+          "fen": "3q2k1/pp3ppp/3b4/3p4/4p3/5N2/PPP1QPPP/6K1 w - - 0 1",
+          "sol": ["f3d4", "f3e1", "f3d2"],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The black pawn attacks your knight. Move it to a square where nothing can take it.",
+            "fr": "Le pion noir attaque ton cavalier. Mets-le sur une case où rien ne peut le prendre.",
+            "es": "El peón negro ataca tu caballo. Llévalo a una casilla donde nada pueda capturarlo.",
+            "pt": "O peão preto ataca seu cavalo. Leve-o a uma casa onde nada possa capturá-lo.",
+            "de": "Der schwarze Bauer greift deinen Springer an. Zieh ihn auf ein Feld, auf dem ihn nichts schlagen kann.",
+            "ru": "Чёрная пешка напала на твоего коня. Уведи его на поле, где его нечем взять.",
+            "it": "Il pedone nero attacca il tuo cavallo. Portalo su una casa dove niente può catturarlo.",
+            "tr": "Siyah piyon atına saldırıyor. Onu hiçbir taşın alamayacağı bir kareye götür.",
+            "pl": "Czarny pion atakuje twojego skoczka. Przestaw go na pole, na którym nic go nie zbije.",
+            "id": "Pion hitam menyerang kudamu. Pindahkan ke petak yang tak bisa diserang bidak mana pun."
+          },
+          "faux": {
+            "*": {
+              "en": "Your knight would be taken on the next move. Find it a square no black piece attacks.",
+              "fr": "Ton cavalier serait pris au coup suivant. Trouve-lui une case qu'aucune pièce noire n'attaque.",
+              "es": "Tu caballo sería capturado en la jugada siguiente. Búscale una casilla que ninguna pieza negra ataque.",
+              "pt": "Seu cavalo seria capturado no lance seguinte. Encontre para ele uma casa que nenhuma peça preta ataque.",
+              "de": "Dein Springer würde im nächsten Zug geschlagen. Such ihm ein Feld, das keine schwarze Figur angreift.",
+              "ru": "Следующим ходом твоего коня заберут. Найди ему поле, на которое не нападает ни одна чёрная фигура.",
+              "it": "Il tuo cavallo verrebbe catturato alla mossa successiva. Trovagli una casa che nessun pezzo nero attacca.",
+              "tr": "Atın bir sonraki hamlede alınır. Ona hiçbir siyah taşın saldırmadığı bir kare bul.",
+              "pl": "W następnym ruchu twój skoczek zostałby zbity. Znajdź mu pole, którego nie atakuje żadna czarna figura.",
+              "id": "Kudamu akan dimakan pada langkah berikutnya. Carikan petak yang tidak diserang bidak hitam mana pun."
+            }
+          },
+          "apres": {
+            "en": "The knight is safe. Before you settle on a square, check what the black pieces are watching.",
+            "fr": "Le cavalier est à l'abri. Avant de choisir une case, regarde ce que surveillent les pièces noires.",
+            "es": "El caballo está a salvo. Antes de elegir una casilla, mira qué vigilan las piezas negras.",
+            "pt": "O cavalo está a salvo. Antes de escolher uma casa, veja o que as peças pretas vigiam.",
+            "de": "Der Springer steht sicher. Bevor du ein Feld wählst, schau, was die schwarzen Figuren bewachen.",
+            "ru": "Конь в безопасности. Прежде чем выбрать поле, посмотри, что держат под ударом чёрные фигуры.",
+            "it": "Il cavallo è al sicuro. Prima di scegliere una casa, guarda che cosa controllano i pezzi neri.",
+            "tr": "At güvende. Bir kare seçmeden önce siyah taşların nereleri gözlediğine bak.",
+            "pl": "Skoczek jest bezpieczny. Zanim wybierzesz pole, sprawdź, czego pilnują czarne figury.",
+            "id": "Kudamu aman. Sebelum memilih petak, lihat dulu apa saja yang diawasi bidak-bidak hitam."
+          }
+        },
+        {
+          "fen": "r5k1/pp3ppp/8/4b3/8/5N2/P1P2PPP/R5K1 w - - 0 1",
+          "sol": ["f3e5"],
+          "controle": "meilleur",
+          "nonDefendues": ["e5"],
+          "consigne": {
+            "en": "The black bishop attacks your rook. Simplest of all: take the bishop.",
+            "fr": "Le fou noir attaque ta tour. Le plus simple : prends le fou.",
+            "es": "El alfil negro ataca tu torre. Lo más sencillo: captura el alfil.",
+            "pt": "O bispo preto ataca sua torre. O mais simples: capture o bispo.",
+            "de": "Der schwarze Läufer greift deinen Turm an. Am einfachsten: Schlage den Läufer.",
+            "ru": "Чёрный слон напал на твою ладью. Проще всего взять слона.",
+            "it": "L'alfiere nero attacca la tua torre. La cosa più semplice: cattura l'alfiere.",
+            "tr": "Siyah fil kalene saldırıyor. En kolayı: fili al.",
+            "pl": "Czarny goniec atakuje twoją wieżę. Najprościej: zbij gońca.",
+            "id": "Gajah hitam menyerang bentengmu. Cara paling mudah: makan gajah itu."
+          },
+          "faux": {
+            "*": {
+              "en": "There is better: the bishop that attacks your rook is not defended. Take it.",
+              "fr": "Il y a mieux : le fou qui attaque ta tour n'est pas défendu. Prends-le.",
+              "es": "Hay algo mejor: el alfil que ataca tu torre no está defendido. Captúralo.",
+              "pt": "Há coisa melhor: o bispo que ataca sua torre não está defendido. Capture-o.",
+              "de": "Es geht besser: Der Läufer, der deinen Turm angreift, ist nicht gedeckt. Schlage ihn.",
+              "ru": "Есть ход лучше: слон, напавший на твою ладью, не защищён. Возьми его.",
+              "it": "C'è di meglio: l'alfiere che attacca la tua torre non è difeso. Catturalo.",
+              "tr": "Daha iyisi var: kalene saldıran fil korunmuyor. Onu al.",
+              "pl": "Jest lepszy ruch: goniec atakujący twoją wieżę nie jest broniony. Zbij go.",
+              "id": "Ada yang lebih baik: gajah yang menyerang bentengmu tidak dilindungi. Makan gajah itu."
+            }
+          },
+          "apres": {
+            "en": "The danger is gone and you are a piece up.",
+            "fr": "Le danger a disparu et tu as une pièce de plus.",
+            "es": "El peligro ha desaparecido y tienes una pieza de más.",
+            "pt": "O perigo sumiu e você tem uma peça a mais.",
+            "de": "Die Gefahr ist vorbei, und du hast eine Figur mehr.",
+            "ru": "Опасности больше нет, и у тебя лишняя фигура.",
+            "it": "Il pericolo è sparito e hai un pezzo in più.",
+            "tr": "Tehlike geçti ve bir taş öndesin.",
+            "pl": "Zagrożenie minęło, a ty masz figurę więcej.",
+            "id": "Bahayanya hilang dan kamu unggul satu bidak."
+          }
+        },
+        {
+          "fen": "3r2k1/pp2bppp/2n5/8/3Q4/8/PPP2PPP/5RK1 w - - 0 1",
+          "sol": ["d4e3", "d4f4", "d4a4", "d4g4", "d4e4", "d4c3", "d4c4"],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Your queen is under attack. Move her to a square where nothing can take her.",
+            "fr": "Ta dame est attaquée. Mets-la sur une case où rien ne peut la prendre.",
+            "es": "Tu dama está atacada. Llévala a una casilla donde nada pueda capturarla.",
+            "pt": "Sua dama está atacada. Leve-a a uma casa onde nada possa capturá-la.",
+            "de": "Deine Dame ist angegriffen. Zieh sie auf ein Feld, auf dem sie nichts schlagen kann.",
+            "ru": "Твой ферзь под ударом. Уведи его на поле, где его нечем взять.",
+            "it": "La tua donna è attaccata. Portala su una casa dove niente può catturarla.",
+            "tr": "Vezirin saldırı altında. Onu hiçbir taşın alamayacağı bir kareye götür.",
+            "pl": "Twój hetman jest atakowany. Przestaw go na pole, na którym nic go nie zbije.",
+            "id": "Menterimu diserang. Pindahkan ke petak yang tak bisa diserang bidak mana pun."
+          },
+          "faux": {
+            "*": {
+              "en": "Your queen would be lost. She is worth 9 points: find her a square no black piece attacks.",
+              "fr": "Ta dame serait perdue. Elle vaut 9 points : trouve-lui une case qu'aucune pièce noire n'attaque.",
+              "es": "Perderías la dama. Vale 9 puntos: búscale una casilla que ninguna pieza negra ataque.",
+              "pt": "Você perderia a dama. Ela vale 9 pontos: encontre uma casa que nenhuma peça preta ataque.",
+              "de": "Deine Dame ginge verloren. Sie ist 9 Punkte wert: Such ihr ein Feld, das keine schwarze Figur angreift.",
+              "ru": "Ты потеряешь ферзя. Он стоит 9 очков: найди ему поле, на которое не нападает ни одна чёрная фигура.",
+              "it": "Perderesti la donna. Vale 9 punti: trovale una casa che nessun pezzo nero attacca.",
+              "tr": "Vezirini kaybedersin. 9 puan eder: ona hiçbir siyah taşın saldırmadığı bir kare bul.",
+              "pl": "Stracisz hetmana. Jest wart 9 punktów: znajdź mu pole, którego nie atakuje żadna czarna figura.",
+              "id": "Menterimu akan hilang. Nilainya 9 poin: carikan petak yang tidak diserang bidak hitam mana pun."
+            }
+          },
+          "apres": {
+            "en": "Safe. The more a piece is worth, the more carefully you look after it.",
+            "fr": "À l'abri. Plus une pièce vaut cher, plus on veille sur elle.",
+            "es": "A salvo. Cuanto más vale una pieza, más hay que cuidarla.",
+            "pt": "A salvo. Quanto mais vale uma peça, mais cuidado ela merece.",
+            "de": "In Sicherheit. Je wertvoller eine Figur, desto besser passt man auf sie auf.",
+            "ru": "В безопасности. Чем дороже фигура, тем внимательнее за ней следят.",
+            "it": "Al sicuro. Più un pezzo vale, più bisogna badarci.",
+            "tr": "Güvende. Bir taş ne kadar değerliyse ona o kadar iyi bakılır.",
+            "pl": "Bezpieczny. Im cenniejsza figura, tym uważniej trzeba jej pilnować.",
+            "id": "Aman. Makin tinggi nilai sebuah bidak, makin hati-hati kamu menjaganya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Counting attackers and defenders", "fr": "Compter attaquants et défenseurs", "es": "Contar atacantes y defensores", "pt": "Contar atacantes e defensores",
+        "de": "Angreifer und Verteidiger zählen", "ru": "Считаем нападающих и защитников", "it": "Contare attaccanti e difensori", "tr": "Saldıranları ve savunanları saymak",
+        "pl": "Liczenie atakujących i obrońców", "id": "Menghitung penyerang dan pelindung"
+      },
+      "intro": {
+        "en": "A defended piece can still fall. Count: how many of your pieces attack it, and how many defend it? With more attackers than defenders, and starting with your cheapest piece, you come out ahead.",
+        "fr": "Une pièce défendue peut quand même tomber. Compte : combien de tes pièces l'attaquent, et combien la défendent ? Avec plus d'attaquants que de défenseurs, et en commençant par ta pièce la moins chère, tu en sors gagnant.",
+        "es": "Una pieza defendida también puede caer. Cuenta: ¿cuántas de tus piezas la atacan y cuántas la defienden? Con más atacantes que defensores, y empezando por tu pieza más barata, sales ganando.",
+        "pt": "Uma peça defendida também pode cair. Conte: quantas peças suas a atacam, e quantas a defendem? Com mais atacantes do que defensores, e começando pela sua peça mais barata, você sai ganhando.",
+        "de": "Auch eine gedeckte Figur kann fallen. Zähl nach: Wie viele deiner Figuren greifen sie an, und wie viele decken sie? Mit mehr Angreifern als Verteidigern, und wenn du mit deiner billigsten Figur anfängst, gewinnst du dabei.",
+        "ru": "Защищённая фигура тоже может пасть. Посчитай: сколько твоих фигур на неё нападает и сколько её защищает? Если нападающих больше и ты начинаешь с самой дешёвой фигуры, ты остаёшься в выигрыше.",
+        "it": "Anche un pezzo difeso può cadere. Conta: quanti tuoi pezzi lo attaccano, e quanti lo difendono? Con più attaccanti che difensori, e cominciando dal tuo pezzo meno prezioso, ci guadagni.",
+        "tr": "Korunan bir taş da düşebilir. Say: kaç taşın ona saldırıyor, kaç taş onu koruyor? Saldıran sayısı savunandan fazlaysa ve en ucuz taşınla başlarsan kârlı çıkarsın.",
+        "pl": "Broniona figura też może paść. Policz: ile twoich figur ją atakuje, a ile jej broni? Gdy atakujących jest więcej niż obrońców i zaczynasz od najtańszej figury, wychodzisz na plus.",
+        "id": "Bidak yang dilindungi pun bisa jatuh. Hitung: berapa bidakmu yang menyerangnya, dan berapa yang melindunginya? Jika penyerang lebih banyak daripada pelindung, dan kamu mulai dengan bidak termurah, kamu yang untung."
+      },
+      "exos": [
+        {
+          "fen": "r5k1/pp3ppp/5n2/3p4/8/2N4P/PP3PP1/3R2K1 w - - 0 1",
+          "sol": ["c3d5"],
+          "suite": ["f6d5", "d1d5"],
+          "controle": "premier",
+          "compte": { "case": "d5", "attaquants": 2, "defenseurs": 1 },
+          "consigne": {
+            "en": "The black pawn in the centre is attacked twice and defended only once. Take it, starting with your cheapest piece.",
+            "fr": "Le pion noir du centre est attaqué deux fois et défendu une seule fois. Prends-le, en commençant par ta pièce la moins chère.",
+            "es": "El peón negro del centro está atacado dos veces y defendido solo una. Captúralo, empezando por tu pieza más barata.",
+            "pt": "O peão preto do centro está atacado duas vezes e defendido só uma. Capture-o, começando pela sua peça mais barata.",
+            "de": "Der schwarze Bauer im Zentrum ist zweimal angegriffen und nur einmal gedeckt. Schlage ihn, und fang mit deiner billigsten Figur an.",
+            "ru": "Чёрная пешка в центре атакована дважды, а защищена только один раз. Возьми её, начиная с самой дешёвой фигуры.",
+            "it": "Il pedone nero al centro è attaccato due volte e difeso una sola. Catturalo, cominciando dal tuo pezzo meno prezioso.",
+            "tr": "Merkezdeki siyah piyona iki taş saldırıyor, onu yalnızca bir taş koruyor. En ucuz taşınla başlayarak onu al.",
+            "pl": "Czarny pion w centrum jest atakowany dwa razy, a broniony tylko raz. Zbij go, zaczynając od najtańszej figury.",
+            "id": "Pion hitam di tengah diserang dua kali dan hanya dilindungi satu kali. Makan pion itu, mulai dengan bidakmu yang paling murah."
+          },
+          "faux": {
+            "d1d5": {
+              "en": "Start with the cheapest piece: if your rook takes first, you give a rook for a knight and a pawn, and lose on the deal.",
+              "fr": "Commence par la pièce la moins chère : si ta tour prend d'abord, tu donnes une tour pour un cavalier et un pion, et tu y perds.",
+              "es": "Empieza por la pieza más barata: si captura primero la torre, das una torre por un caballo y un peón, y sales perdiendo.",
+              "pt": "Comece pela peça mais barata: se a torre capturar primeiro, você dá uma torre por um cavalo e um peão, e sai perdendo.",
+              "de": "Fang mit der billigsten Figur an: Schlägt zuerst dein Turm, gibst du einen Turm für Springer und Bauer und verlierst dabei.",
+              "ru": "Начинай с самой дешёвой фигуры: если первой возьмёт ладья, ты отдашь ладью за коня и пешку и останешься в убытке.",
+              "it": "Comincia dal pezzo meno prezioso: se cattura prima la torre, dai una torre per un cavallo e un pedone, e ci perdi.",
+              "tr": "En ucuz taşla başla: önce kale alırsa bir at ve bir piyon için kale verirsin, zararlı çıkarsın.",
+              "pl": "Zacznij od najtańszej figury: jeśli najpierw zbije wieża, oddasz wieżę za skoczka i piona i na tym stracisz.",
+              "id": "Mulailah dengan bidak termurah: jika bentengmu yang makan lebih dulu, kamu menukar benteng dengan kuda dan pion, dan kamu rugi."
+            }
+          },
+          "apres": {
+            "en": "Two attackers against one defender: the pawn is yours.",
+            "fr": "Deux attaquants contre un défenseur : le pion est à toi.",
+            "es": "Dos atacantes contra un defensor: el peón es tuyo.",
+            "pt": "Dois atacantes contra um defensor: o peão é seu.",
+            "de": "Zwei Angreifer gegen einen Verteidiger: Der Bauer gehört dir.",
+            "ru": "Два нападающих против одного защитника: пешка твоя.",
+            "it": "Due attaccanti contro un difensore: il pedone è tuo.",
+            "tr": "Bir savunana karşı iki saldıran: piyon senin.",
+            "pl": "Dwóch atakujących na jednego obrońcę: pion jest twój.",
+            "id": "Dua penyerang melawan satu pelindung: pion itu milikmu."
+          }
+        },
+        {
+          "fen": "r4rk1/pp3ppp/4bn2/3p4/8/2N1B2P/PP1R1PP1/R5K1 w - - 0 1",
+          "sol": ["a1d1"],
+          "cible": "d1",
+          "controle": "bon",
+          "compte": { "case": "d5", "attaquants": 2, "defenseurs": 2 },
+          "consigne": {
+            "en": "Two attackers, two defenders: taking now would cost you material. Bring a third attacker to the marked square.",
+            "fr": "Deux attaquants, deux défenseurs : prendre maintenant te coûterait du matériel. Amène un troisième attaquant sur la case marquée.",
+            "es": "Dos atacantes, dos defensores: capturar ahora te costaría material. Lleva un tercer atacante a la casilla marcada.",
+            "pt": "Dois atacantes, dois defensores: capturar agora custaria material. Leve um terceiro atacante até a casa marcada.",
+            "de": "Zwei Angreifer, zwei Verteidiger: Jetzt zu schlagen würde dich Material kosten. Bring einen dritten Angreifer auf das markierte Feld.",
+            "ru": "Два нападающих и два защитника: взятие сейчас обойдётся тебе в материал. Подведи третьего нападающего на отмеченное поле.",
+            "it": "Due attaccanti, due difensori: catturare ora ti costerebbe materiale. Porta un terzo attaccante sulla casa segnata.",
+            "tr": "İki saldıran, iki savunan: şimdi almak sana malzeme kaybettirir. İşaretli kareye üçüncü bir saldıran getir.",
+            "pl": "Dwóch atakujących, dwóch obrońców: bicie teraz kosztowałoby cię materiał. Sprowadź trzeciego atakującego na zaznaczone pole.",
+            "id": "Dua penyerang, dua pelindung: memakan sekarang akan membuatmu rugi materi. Bawa penyerang ketiga ke petak yang ditandai."
+          },
+          "faux": {
+            "c3d5": {
+              "en": "Two against two is not enough: after the trades, you come out behind.",
+              "fr": "Deux contre deux, ça ne suffit pas : après les échanges, c'est toi qui y perds.",
+              "es": "Dos contra dos no basta: tras los cambios, sales perdiendo.",
+              "pt": "Dois contra dois não basta: depois das trocas, quem sai perdendo é você.",
+              "de": "Zwei gegen zwei reicht nicht: Nach dem Abtausch stehst du schlechter da.",
+              "ru": "Двух против двух мало: после разменов в убытке окажешься ты.",
+              "it": "Due contro due non basta: dopo i cambi sei tu a rimetterci.",
+              "tr": "İkiye karşı iki yetmez: değişimlerden sonra zararlı çıkan sen olursun.",
+              "pl": "Dwóch na dwóch to za mało: po wymianach to ty na tym stracisz.",
+              "id": "Dua lawan dua belum cukup: setelah pertukaran, kamulah yang rugi."
+            },
+            "d2d5": {
+              "en": "Two against two is not enough: after the trades, you come out behind.",
+              "fr": "Deux contre deux, ça ne suffit pas : après les échanges, c'est toi qui y perds.",
+              "es": "Dos contra dos no basta: tras los cambios, sales perdiendo.",
+              "pt": "Dois contra dois não basta: depois das trocas, quem sai perdendo é você.",
+              "de": "Zwei gegen zwei reicht nicht: Nach dem Abtausch stehst du schlechter da.",
+              "ru": "Двух против двух мало: после разменов в убытке окажешься ты.",
+              "it": "Due contro due non basta: dopo i cambi sei tu a rimetterci.",
+              "tr": "İkiye karşı iki yetmez: değişimlerden sonra zararlı çıkan sen olursun.",
+              "pl": "Dwóch na dwóch to za mało: po wymianach to ty na tym stracisz.",
+              "id": "Dua lawan dua belum cukup: setelah pertukaran, kamulah yang rugi."
+            }
+          },
+          "apres": {
+            "en": "Three attackers against two defenders: now the pawn is really in danger.",
+            "fr": "Trois attaquants contre deux défenseurs : maintenant, le pion est vraiment en danger.",
+            "es": "Tres atacantes contra dos defensores: ahora el peón sí está en peligro.",
+            "pt": "Três atacantes contra dois defensores: agora o peão está mesmo em perigo.",
+            "de": "Drei Angreifer gegen zwei Verteidiger: Jetzt ist der Bauer wirklich in Gefahr.",
+            "ru": "Три нападающих против двух защитников: теперь пешка действительно в опасности.",
+            "it": "Tre attaccanti contro due difensori: ora il pedone è davvero in pericolo.",
+            "tr": "İki savunana karşı üç saldıran: piyon artık gerçekten tehlikede.",
+            "pl": "Trzech atakujących na dwóch obrońców: teraz pion naprawdę jest w niebezpieczeństwie.",
+            "id": "Tiga penyerang melawan dua pelindung: sekarang pion itu benar-benar dalam bahaya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Good trades", "fr": "Les bons échanges", "es": "Los buenos cambios", "pt": "As boas trocas", "de": "Gute Tausche",
+        "ru": "Выгодные размены", "it": "I buoni cambi", "tr": "İyi değişimler", "pl": "Dobre wymiany", "id": "Pertukaran yang bagus"
+      },
+      "intro": {
+        "en": "To trade is to take a piece and be taken back. If you give less than you get, the trade is good: a knight (3) for a rook (5), for example. If you give more, keep your piece.",
+        "fr": "Échanger, c'est prendre une pièce et se faire reprendre. Si tu donnes moins que tu ne prends, l'échange est bon : un cavalier (3) contre une tour (5), par exemple. Si tu donnes plus, garde ta pièce.",
+        "es": "Cambiar es capturar una pieza y que te capturen la tuya. Si das menos de lo que tomas, el cambio es bueno: un caballo (3) por una torre (5), por ejemplo. Si das más, conserva tu pieza.",
+        "pt": "Trocar é capturar uma peça e ser capturado de volta. Se você dá menos do que leva, a troca é boa: um cavalo (3) por uma torre (5), por exemplo. Se dá mais, fique com a sua peça.",
+        "de": "Tauschen heißt: eine Figur schlagen und zurückgeschlagen werden. Gibst du weniger, als du bekommst, ist der Tausch gut: ein Springer (3) für einen Turm (5) zum Beispiel. Gibst du mehr, behalte deine Figur.",
+        "ru": "Размен: ты берёшь фигуру, а твою берут в ответ. Если отдаёшь меньше, чем получаешь, размен выгоден: например, конь (3) за ладью (5). Если больше, оставь фигуру себе.",
+        "it": "Cambiare vuol dire catturare un pezzo e farsi ricatturare. Se dai meno di quello che prendi, il cambio è buono: un cavallo (3) per una torre (5), per esempio. Se dai di più, tieniti il pezzo.",
+        "tr": "Değişim, bir taş alıp karşılığında taşını vermektir. Aldığından azını veriyorsan değişim iyidir: örneğin bir kaleye (5) karşılık bir at (3). Daha fazlasını veriyorsan taşını elinde tut.",
+        "pl": "Wymiana to zbicie figury i utrata własnej w odpowiedzi. Jeśli oddajesz mniej, niż bierzesz, wymiana jest dobra: na przykład skoczek (3) za wieżę (5). Jeśli więcej, zachowaj swoją figurę.",
+        "id": "Bertukar berarti memakan satu bidak lalu bidakmu dimakan balik. Jika yang kamu berikan lebih kecil daripada yang kamu dapat, pertukarannya bagus: misalnya kuda (3) ditukar benteng (5). Jika lebih besar, simpan bidakmu."
+      },
+      "exos": [
+        {
+          "fen": "r2q2k1/p4ppp/8/8/8/5B2/PP2QPPP/6K1 w - - 0 1",
+          "sol": ["f3a8"],
+          "suite": ["d8a8"],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Your bishop can take the rook. It will be taken back, but a rook is worth more than a bishop: make the trade.",
+            "fr": "Ton fou peut prendre la tour. Il sera repris, mais une tour vaut plus qu'un fou : fais l'échange.",
+            "es": "Tu alfil puede capturar la torre. Lo capturarán después, pero una torre vale más que un alfil: haz el cambio.",
+            "pt": "Seu bispo pode capturar a torre. Ele será capturado de volta, mas uma torre vale mais que um bispo: faça a troca.",
+            "de": "Dein Läufer kann den Turm schlagen. Er wird zurückgeschlagen, aber ein Turm ist mehr wert als ein Läufer: Tausch ab.",
+            "ru": "Твой слон может взять ладью. Его возьмут в ответ, но ладья дороже слона: иди на размен.",
+            "it": "Il tuo alfiere può catturare la torre. Verrà ripreso, ma una torre vale più di un alfiere: fai il cambio.",
+            "tr": "Filin kaleyi alabilir. Geri alınacak ama kale filden değerlidir: değişimi yap.",
+            "pl": "Twój goniec może zbić wieżę. Zostanie odbity, ale wieża jest warta więcej niż goniec: wymień.",
+            "id": "Gajahmu bisa memakan benteng. Ia akan dimakan balik, tapi benteng lebih bernilai daripada gajah: lakukan pertukaran itu."
+          },
+          "apres": {
+            "en": "You gave a bishop (3) and took a rook (5): two points gained.",
+            "fr": "Tu as donné un fou (3) et pris une tour (5) : deux points de gagnés.",
+            "es": "Has dado un alfil (3) y tomado una torre (5): dos puntos ganados.",
+            "pt": "Você deu um bispo (3) e levou uma torre (5): dois pontos ganhos.",
+            "de": "Du hast einen Läufer (3) gegeben und einen Turm (5) genommen: zwei Punkte gewonnen.",
+            "ru": "Слон (3) отдан, ладья (5) взята: два очка в плюсе.",
+            "it": "Hai dato un alfiere (3) e preso una torre (5): due punti guadagnati.",
+            "tr": "Bir fil (3) verdin, bir kale (5) aldın: iki puan kazandın.",
+            "pl": "Goniec (3) oddany, wieża (5) zdobyta: dwa punkty zysku.",
+            "id": "Kamu memberi gajah (3) dan mengambil benteng (5): untung dua poin."
+          }
+        },
+        {
+          "fen": "3q2k1/p2r1ppp/8/4N3/8/7P/PP2QPP1/6K1 w - - 0 1",
+          "sol": ["e5d7"],
+          "suite": ["d8d7"],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Your knight can take the rook, which the queen defends. Is it worth it? Count the points, then play.",
+            "fr": "Ton cavalier peut prendre la tour, que la dame défend. Est-ce que ça vaut le coup ? Compte les points, puis joue.",
+            "es": "Tu caballo puede capturar la torre, que la dama defiende. ¿Merece la pena? Cuenta los puntos y juega.",
+            "pt": "Seu cavalo pode capturar a torre, que a dama defende. Vale a pena? Conte os pontos e jogue.",
+            "de": "Dein Springer kann den Turm schlagen, den die Dame deckt. Lohnt sich das? Zähl die Punkte, dann zieh.",
+            "ru": "Твой конь может взять ладью, которую защищает ферзь. Стоит ли? Посчитай очки и ходи.",
+            "it": "Il tuo cavallo può catturare la torre, difesa dalla donna. Ne vale la pena? Conta i punti, poi gioca.",
+            "tr": "Atın, vezirin koruduğu kaleyi alabilir. Değer mi? Puanları say, sonra oyna.",
+            "pl": "Twój skoczek może zbić wieżę, której broni hetman. Czy warto? Policz punkty i zagraj.",
+            "id": "Kudamu bisa memakan benteng yang dilindungi menteri. Apakah sepadan? Hitung poinnya, lalu melangkah."
+          },
+          "faux": {
+            "*": {
+              "en": "The trade is worth it: a knight (3) for a rook (5). Take the rook.",
+              "fr": "L'échange vaut le coup : un cavalier (3) contre une tour (5). Prends la tour.",
+              "es": "El cambio merece la pena: un caballo (3) por una torre (5). Captura la torre.",
+              "pt": "A troca vale a pena: um cavalo (3) por uma torre (5). Capture a torre.",
+              "de": "Der Tausch lohnt sich: ein Springer (3) für einen Turm (5). Schlage den Turm.",
+              "ru": "Размен выгоден: конь (3) за ладью (5). Возьми ладью.",
+              "it": "Il cambio conviene: un cavallo (3) per una torre (5). Cattura la torre.",
+              "tr": "Değişim değer: bir at (3) karşılığında bir kale (5). Kaleyi al.",
+              "pl": "Wymiana się opłaca: skoczek (3) za wieżę (5). Zbij wieżę.",
+              "id": "Pertukarannya sepadan: kuda (3) ditukar benteng (5). Makan bentengnya."
+            }
+          },
+          "apres": {
+            "en": "Three points given, five taken. Players call this winning the exchange.",
+            "fr": "Trois points donnés, cinq de pris. Les joueurs appellent ça gagner la qualité.",
+            "es": "Tres puntos dados, cinco tomados. Los jugadores lo llaman ganar la calidad.",
+            "pt": "Três pontos dados, cinco levados. Os jogadores chamam isso de ganhar a qualidade.",
+            "de": "Drei Punkte gegeben, fünf genommen. Schachspieler nennen das: die Qualität gewinnen.",
+            "ru": "Три очка отдано, пять взято. Шахматисты называют это выигрышем качества.",
+            "it": "Tre punti dati, cinque presi. I giocatori lo chiamano guadagnare la qualità.",
+            "tr": "Üç puan verdin, beş puan aldın. Satranççılar buna kalite kazanmak der.",
+            "pl": "Trzy punkty oddane, pięć zdobytych. Szachiści nazywają to wygraniem jakości.",
+            "id": "Tiga poin diberikan, lima poin diambil. Para pecatur menyebutnya menang kualitas."
+          }
+        },
+        {
+          "fen": "4r1k1/1p2nppp/8/8/p3R3/7P/1P3PPB/6K1 w - - 0 1",
+          "sol": ["e4a4"],
+          "controle": "bon",
+          "nonDefendues": ["a4"],
+          "defendues": ["e7"],
+          "consigne": {
+            "en": "Your rook can take the knight, but it is defended: you would give 5 points for 3. Take the pawn nobody defends instead.",
+            "fr": "Ta tour peut prendre le cavalier, mais il est défendu : tu donnerais 5 points pour 3. Prends plutôt le pion que personne ne défend.",
+            "es": "Tu torre puede capturar el caballo, pero está defendido: darías 5 puntos por 3. Captura mejor el peón que nadie defiende.",
+            "pt": "Sua torre pode capturar o cavalo, mas ele está defendido: você daria 5 pontos por 3. Capture, em vez disso, o peão que ninguém defende.",
+            "de": "Dein Turm kann den Springer schlagen, aber der ist gedeckt: Du würdest 5 Punkte für 3 geben. Schlage lieber den Bauern, den niemand deckt.",
+            "ru": "Твоя ладья может взять коня, но он защищён: ты отдашь 5 очков за 3. Лучше возьми пешку, которую никто не защищает.",
+            "it": "La tua torre può catturare il cavallo, ma è difeso: daresti 5 punti per 3. Cattura piuttosto il pedone che nessuno difende.",
+            "tr": "Kalen atı alabilir ama at korunuyor: 3 puan için 5 puan verirsin. Onun yerine kimsenin korumadığı piyonu al.",
+            "pl": "Twoja wieża może zbić skoczka, ale jest on broniony: oddasz 5 punktów za 3. Zbij raczej piona, którego nikt nie broni.",
+            "id": "Bentengmu bisa memakan kuda, tapi kuda itu dilindungi: kamu memberi 5 poin untuk 3. Lebih baik makan pion yang tidak dilindungi siapa pun."
+          },
+          "faux": {
+            "e4e7": {
+              "en": "The knight is defended by the rook: you would give 5 points to take 3.",
+              "fr": "Le cavalier est défendu par la tour : tu donnerais 5 points pour en prendre 3.",
+              "es": "El caballo está defendido por la torre: darías 5 puntos para tomar 3.",
+              "pt": "O cavalo está defendido pela torre: você daria 5 pontos para levar 3.",
+              "de": "Der Springer ist vom Turm gedeckt: Du würdest 5 Punkte geben, um 3 zu nehmen.",
+              "ru": "Коня защищает ладья: ты отдашь 5 очков, чтобы взять 3.",
+              "it": "Il cavallo è difeso dalla torre: daresti 5 punti per prenderne 3.",
+              "tr": "Atı kale koruyor: 3 puan almak için 5 puan verirsin.",
+              "pl": "Skoczka broni wieża: oddasz 5 punktów, żeby zdobyć 3.",
+              "id": "Kuda itu dilindungi benteng: kamu memberi 5 poin untuk mengambil 3."
+            }
+          },
+          "apres": {
+            "en": "A pawn for free beats a losing trade.",
+            "fr": "Un pion gratuit vaut mieux qu'un échange perdant.",
+            "es": "Un peón gratis vale más que un cambio perdedor.",
+            "pt": "Um peão de graça vale mais que uma troca ruim.",
+            "de": "Ein Bauer umsonst ist besser als ein schlechter Tausch.",
+            "ru": "Бесплатная пешка лучше невыгодного размена.",
+            "it": "Un pedone gratis vale più di un cambio in perdita.",
+            "tr": "Bedava bir piyon, zararlı bir değişimden iyidir.",
+            "pl": "Darmowy pion jest lepszy niż stratna wymiana.",
+            "id": "Pion gratis lebih baik daripada pertukaran yang merugikan."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "1nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk - 0 1",
+    "niveau": 1,
+    "titre": {
+      "en": "The boss: the computer without a rook", "fr": "Le boss : l'ordinateur sans une tour", "es": "El jefe: el ordenador sin una torre",
+      "pt": "O chefão: o computador sem uma torre", "de": "Der Boss: der Computer ohne einen Turm", "ru": "Босс: компьютер без ладьи",
+      "it": "Il boss: il computer senza una torre", "tr": "Boss: bir kalesi eksik bilgisayar", "pl": "Boss: komputer bez wieży", "id": "Bos: komputer tanpa satu benteng"
+    },
+    "intro": {
+      "en": "Beat the computer at its easiest level: it starts a rook down. Keep your lead: give nothing away, and trade pieces whenever you can. No clock, and you can take a move back.",
+      "fr": "Bats l'ordinateur à son niveau le plus facile : il commence avec une tour de moins. Garde ton avance : ne donne rien, et échange les pièces dès que tu peux. Pas de pendule, et tu peux reprendre un coup.",
+      "es": "Gana al ordenador en su nivel más fácil: empieza con una torre de menos. Conserva tu ventaja: no regales nada y cambia piezas siempre que puedas. Sin reloj, y puedes deshacer una jugada.",
+      "pt": "Vença o computador no nível mais fácil: ele começa com uma torre a menos. Mantenha a vantagem: não entregue nada e troque peças sempre que puder. Sem relógio, e você pode voltar um lance.",
+      "de": "Schlag den Computer auf der leichtesten Stufe: Er beginnt mit einem Turm weniger. Halte deinen Vorsprung: Verschenke nichts und tausche Figuren, wann immer es geht. Keine Uhr, und du darfst einen Zug zurücknehmen.",
+      "ru": "Обыграй компьютер на самом лёгком уровне: он начинает без одной ладьи. Береги перевес: ничего не отдавай даром и меняй фигуры при каждой возможности. Без часов, и ход можно взять назад.",
+      "it": "Batti il computer al livello più facile: parte con una torre in meno. Conserva il vantaggio: non regalare niente e cambia i pezzi appena puoi. Niente orologio, e puoi ritirare una mossa.",
+      "tr": "En kolay seviyedeki bilgisayarı yen: oyuna bir kalesi eksik başlıyor. Üstünlüğünü koru: hiçbir şey hediye etme ve fırsat buldukça taş değiş. Saat yok ve hamleni geri alabilirsin.",
+      "pl": "Pokonaj komputer na najłatwiejszym poziomie: zaczyna bez jednej wieży. Utrzymaj przewagę: niczego nie oddawaj i wymieniaj figury, kiedy tylko możesz. Bez zegara, a ruch można cofnąć.",
+      "id": "Kalahkan komputer di tingkat termudah: ia mulai dengan kekurangan satu benteng. Jaga keunggulanmu: jangan beri apa pun, dan tukar bidak setiap ada kesempatan. Tanpa jam, dan kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You know how to keep what you have.", "fr": "Boss battu. Tu sais garder ce que tu as.", "es": "Jefe derrotado. Sabes conservar lo que tienes.",
+      "pt": "Chefão derrotado. Você sabe guardar o que tem.", "de": "Boss besiegt. Du weißt, wie man behält, was man hat.", "ru": "Босс побеждён. Ты умеешь беречь то, что имеешь.",
+      "it": "Boss battuto. Sai tenerti quello che hai.", "tr": "Boss yenildi. Elindekini korumayı biliyorsun.", "pl": "Boss pokonany. Umiesz utrzymać to, co masz.", "id": "Bos dikalahkan. Kamu tahu cara menjaga apa yang kamu punya."
+    }
+  }
+}

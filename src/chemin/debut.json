@@ -1,0 +1,28 @@
+{
+  "id": "debut",
+  "integre": true,
+  "titre": {
+    "en": "I'm a beginner",
+    "fr": "Je débute",
+    "es": "Soy principiante",
+    "pt": "Sou iniciante",
+    "de": "Ich bin Anfänger",
+    "ru": "Я новичок",
+    "it": "Sono principiante",
+    "tr": "Yeni başlıyorum",
+    "pl": "Jestem początkujący",
+    "id": "Saya pemula"
+  },
+  "desc": {
+    "en": "The pieces, capturing, checkmate and your first tactics.",
+    "fr": "Les pièces, la prise, le mat et tes premières tactiques.",
+    "es": "Las piezas, la captura, el mate y tus primeras tácticas.",
+    "pt": "As peças, a captura, o mate e suas primeiras táticas.",
+    "de": "Die Figuren, das Schlagen, das Matt und deine ersten Taktiken.",
+    "ru": "Фигуры, взятие, мат и первые тактические приёмы.",
+    "it": "I pezzi, la cattura, il matto e le tue prime tattiche.",
+    "tr": "Taşlar, taş alma, mat ve ilk taktiklerin.",
+    "pl": "Figury, bicie, mat i twoje pierwsze taktyki.",
+    "id": "Bidak-bidak, cara memakan, skakmat, dan taktik pertamamu."
+  }
+}

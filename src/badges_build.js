@@ -51,6 +51,9 @@ function code() {
     /* Onglet Jouer et pictogrammes des cartes (2026-11-19). */
     require("./pictos_build.js").pictosSource() + "\n" +
     fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +
+    /* Onglet Apprendre : chemin de chapitres, test de placement (2026-11-22).
+       Apres jouer.js (il enveloppe setMode a son tour), avant navigation.js. */
+    fs.readFileSync(path.join(__dirname, "apprendre.js"), "utf8").replace("__CHEMIN_PLAN__", require("./chemin_build.js").plan()) + "\n" +
     /* Bouton Retour du navigateur et repere de la partie en cours (2026-11-21) :
        en dernier, il enveloppe setMode apres tous les autres. */
     fs.readFileSync(path.join(__dirname, "navigation.js"), "utf8") + "\n" +
@@ -112,6 +115,9 @@ function ecrire(OUT) {
      ces textes ne passent pas par t(). */
   const ponct = (c, x) => c !== "fr" ? x : typeof x === "string" ? x.replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") :
     Array.isArray(x) ? x.map(y => ponct(c, y)) : x && typeof x === "object" ? Object.fromEntries(Object.entries(x).map(([k, y]) => [k, ponct(c, y)])) : x;
+  /* Chemin d'apprentissage : data/chemin-<langue>.json (chemin_build.js),
+     avec la meme ponctuation francaise que les badges. */
+  require("./chemin_build.js").ecrire(OUT, (c, x) => ponct(c, x));
   const en = textes("en"), manques = [];
   for (const c of CODES) {
     const t = c === "en" ? en : textes(c), sortie = { _ui: Object.assign({}, en._ui || {}, t._ui || {}) };

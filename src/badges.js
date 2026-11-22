@@ -252,6 +252,9 @@ if(typeof registerWrong==="function"){const av=registerWrong;registerWrong=funct
   const av=saveFinishedGame;
   saveFinishedGame=function(){
     const avant=gameSaved,r=av.apply(this,arguments);
+    /* Une partie d'entrainement du chemin (handicap, coup repris) compte
+       comme une activite du jour, mais ne donne aucun badge de partie. */
+    if(!avant&&gameSaved&&resultInfo&&typeof partieEntrainement==="function"&&partieEntrainement()){bxActivite();bxVerifier();return r;}
     if(!avant&&gameSaved&&resultInfo){
       const b=bxEtat(),k=resultInfo.kind;
       bxActivite();
@@ -494,7 +497,10 @@ function bxVisibleEl(id){const e=$(id);return !!(e&&e.offsetParent);}
     if(mode==="friend"&&amiStarted&&!resultInfo&&amiMoves.length>0)return true;
     if(mode==="puzzles"&&puzzle&&!puzzleDone&&bxVisibleEl("exStatus"))return true;
     if(eg&&!eg.done&&bxVisibleEl("egStatus"))return true;
-    if(mode==="debut"&&debut&&!debut.ok&&debutEtapes()[debut.e]&&debutEtapes()[debut.e].exos[debut.x])return true;
+    /* lecon : l'etape a l'ecran, de « Je debute » ou d'un autre chapitre du
+       chemin ; le test de placement attend lui aussi sa derniere position. */
+    if(mode==="debut"&&typeof testEnCours==="function"&&testEnCours())return true;
+    if(mode==="debut"&&lecon&&!lecon.ok&&leconEtapes()[lecon.e]&&leconEtapes()[lecon.e].exos[lecon.x])return true;
     return false;
   };
 }

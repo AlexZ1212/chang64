@@ -327,6 +327,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    onglets restants tiennent alors sans defiler jusqu'a 360 px de large
    (331 px de libelles mesures sur iPhone SE a 11 px, 301 a 8). */
 @media(max-width:520px){.tabs button{padding:8px 8px;font-size:12.5px}}
+/* Cinq onglets depuis l'onglet Apprendre (2026-11-22) : a 360 px, le francais
+   (353 px de libelles a 8 px de marge) et l'allemand (351) depassaient les
+   342 px de la barre. A 5 px, les dix langues tiennent sans defiler. */
+@media(max-width:400px){.tabs button{padding:8px 5px}}
 
 /* ---------- home ---------- */
 .hero{
@@ -682,6 +686,59 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 .debut-titre{font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;line-height:1.2;margin:0 0 8px}
 .debut p{margin:0 0 12px}
 .debut-actions{margin-top:12px}
+/* Chemin d'apprentissage (2026-11-22, apprendre.js). La pastille du boss
+   porte une dame ; le test de placement remplace les pastilles par une
+   barre, et son resultat se lit sans echiquier. */
+.debut-pas button.boss{display:inline-grid;place-items:center;padding:0}
+.debut-pas button.boss svg{width:22px;height:22px;display:block}
+.lecon-barre{display:block;height:6px;border-radius:3px;background-color:var(--raise);margin:8px 0 14px;overflow:hidden}
+.lecon-barre i{display:block;height:100%;width:0;background-color:var(--brass);border-radius:3px;transition:width var(--duree-moyenne) var(--courbe-sortie)}
+html[data-mouvement="calme"] .lecon-barre i{transition:none}
+#appLayout[data-test="resultat"] .board-side{display:none}
+#appLayout[data-test="resultat"]{grid-template-columns:minmax(0,640px)!important;justify-content:center}
+.test-ligne{display:block;border-left:3px solid var(--brass);padding:9px 12px;background-color:var(--ink);border-radius:0 var(--r) var(--r) 0;font-size:13.5px;margin-bottom:8px}
+.test-ligne b{display:block;color:var(--chalk)}
+.lecon-entrainement{margin:8px 0 0}
+.lecon-chap{color:var(--brass);margin-bottom:2px}
+.lecon-chap:empty{display:none}
+@media(max-width:599px){.lecon-chap{display:none}}
+/* L'onglet Apprendre. */
+.ap-carte{display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;background-color:var(--slate);border:1px solid var(--rule);
+  border-radius:var(--r-l);padding:16px;color:inherit;font:inherit;box-shadow:var(--e1);margin-bottom:12px}
+button.ap-carte{cursor:pointer;transition:border-color .16s}
+button.ap-carte:hover{border-color:var(--brass)}
+button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.ap-test{background-color:color-mix(in srgb,var(--brass) 10%,var(--slate));border-color:color-mix(in srgb,var(--brass) 45%,var(--rule))}
+.ap-carte b,.ap-chap b{display:block;font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--chalk);line-height:1.2;margin-bottom:4px}
+.ap-chap b{font-size:17px}
+.ap-txt{display:block;min-width:0;flex:1 1 auto}
+.ap-desc{display:block;font-size:13px;color:var(--sage);line-height:1.4}
+.ap-sub{display:block;font-size:12px;color:var(--brass);margin-top:8px}
+.ap-test-row{margin-top:12px}
+.ap-bloc{margin-bottom:12px}
+.ap-bloc h2.eyebrow,.ap-fiches-bloc h2.eyebrow{font-family:inherit;font-size:13px;line-height:inherit;margin-top:0}
+.ap-chemin{display:flex;flex-direction:column;gap:10px;list-style:none;margin:0;padding:0}
+.ap-chap{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background-color:var(--ink);border:1px solid var(--rule);
+  border-radius:var(--r);padding:12px;color:inherit;font:inherit;cursor:pointer;transition:border-color .16s}
+.ap-chap:hover{border-color:var(--brass)}
+.ap-chap.encours{border-color:var(--brass)}
+.ap-chap.verrou{cursor:default}
+.ap-chap.verrou:hover{border-color:var(--rule)}
+.ap-chap.verrou b,.ap-chap.verrou .ap-desc{opacity:.6}
+.ap-num{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rule);font-weight:700;font-size:14px;background-color:var(--slate)}
+.ap-chap.encours .ap-num{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass)}
+.ap-chap.fait .ap-num{border-color:var(--jade);color:var(--jade)}
+.ap-barre{display:block;height:6px;border-radius:3px;background-color:var(--raise);margin:9px 0 0;overflow:hidden}
+.ap-barre i{display:block;height:100%;background-color:var(--brass);border-radius:3px}
+.ap-venir{font-size:13px;color:var(--sage);margin:12px 0 0;line-height:1.5}
+.ap-refaire{margin:10px 0 0}
+.ap-fiches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ap-fiches a{display:block;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);color:var(--chalk);
+  text-decoration:none;font-size:13.5px;font-weight:600;line-height:1.3;overflow-wrap:anywhere;transition:border-color .16s}
+.ap-fiches a:hover{border-color:var(--brass)}
+#apPartiesBloc{margin-bottom:12px}
+@media(max-width:860px){.ap-fiches{grid-template-columns:1fr 1fr}}
+@media(min-width:861px){#pane-apprendre{max-width:860px;margin-inline:auto}}
 /* Jouer et Inviter (suite de l'audit UX, 2026-10-24) : meme probleme que
    Resoudre, avec en plus une pendule au-dessus et une au-dessous du
    plateau. Sur iPad, plateau de 718 px de 249 a 967 : la pendule du joueur,
@@ -2825,6 +2882,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
            choix ordinateur / ami. Les deux anciens onglets restent la,
            masques, pour tout ce qui les declenche encore. -->
       <button id="tab-jouer">Play</button>
+      <!-- Cinquieme onglet, en deuxieme position (2026-11-22, apprendre.js) :
+           le chemin d'apprentissage, le test de placement, les fiches de
+           regles et « Revoir tes parties ». -->
+      <button id="tab-apprendre">Learn</button>
       <button id="tab-play" hidden>Play</button>
       <button id="tab-puzzles">Solve</button>
       <button id="tab-edit">Analyse</button>
@@ -2985,7 +3046,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
   </div>
   <div class="layout hide" id="appLayout">
     <!-- Haut de la fenetre du parcours "Je debute", sur telephone seulement. -->
-    <div class="debut-tete"><h2>I'm a beginner</h2><button type="button" class="debut-fermer" id="btnDebutFermer" aria-label="Leave">×</button></div>
+    <div class="debut-tete"><h2 id="debutTeteTitre">I'm a beginner</h2><button type="button" class="debut-fermer" id="btnDebutFermer" aria-label="Leave">×</button></div>
     <div class="board-side">
       <!-- Au-dessus de l'echiquier, comme le bandeau des coordonnees : le
            temps restant doit rester sous les yeux pendant qu'on joue, pas
@@ -3133,7 +3194,13 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <p class="opening" id="opening"></p>
           <div class="status" id="status">Pick a colour, pick a strength, and off you go.</div>
           <p class="elo-rappel hide" id="resultEloNote"></p>
+          <!-- Parties du chemin d'apprentissage (premiere partie, boss) : on
+               peut y reprendre un coup. Une partie ou l'on reprend un coup, ou
+               jouee avec un handicap, est un entrainement : ni Elo ni badges
+               (apprendre.js, 2026-11-22). Jamais dans une partie ordinaire. -->
+          <p class="note hide" id="entrainementNote" style="margin-top:8px;margin-bottom:0">Training game: it counts for neither your Elo nor your badges.</p>
           <div class="btnrow" style="margin-top:10px">
+            <button class="btn hide" id="btnReprendre">Take back</button>
             <button class="btn danger" id="btnResign">Resign</button>
           </div>
         </div>
@@ -3761,12 +3828,17 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
       <!-- Parcours "Je debute" (2026-11-08), voir la fin de ui3.js. -->
       <div id="pane-debut" class="hide">
         <div class="panel debut">
+          <!-- Le chapitre du chemin : sur telephone, il est deja dans le
+               bandeau du haut (.debut-tete). -->
+          <div class="eyebrow lecon-chap" id="leconChap"></div>
           <div class="eyebrow" id="debutEtape"></div>
           <div class="debut-pas" id="debutPas"></div>
+          <!-- Test de placement : la barre remplace les pastilles. -->
+          <div class="lecon-barre hide" id="leconBarre" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><i></i></div>
           <h2 class="debut-titre" id="debutTitre">I'm a beginner</h2>
           <p id="debutIntro"></p>
           <div class="status" id="debutStatus"></div>
-          <div class="btnrow debut-actions">
+          <div class="btnrow debut-actions" id="debutActions">
             <button class="btn" id="btnDebutIndice">Hint</button>
             <button class="btn primary hide" id="btnDebutSuite">Next</button>
           </div>
@@ -3774,6 +3846,29 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <button class="btn primary" id="btnDebutPartie">Play my first game</button>
             <button class="btn" id="btnDebutJour">Puzzle of the day</button>
             <button class="btn" id="btnDebutRegles">Read the rules</button>
+          </div>
+          <!-- Fin d'un autre chapitre du chemin : son boss, puis la suite. -->
+          <div class="hide" id="leconBoss">
+            <div class="status win hide" id="leconBossFait"></div>
+            <div class="btnrow debut-actions">
+              <button class="btn primary" id="btnLeconBoss">Face the boss</button>
+              <button class="btn" id="btnLeconSuite">Next chapter</button>
+            </div>
+            <p class="note lecon-entrainement hide" id="leconTheme"><button type="button" class="linkbtn" id="btnLeconTheme">Practise this theme in Solve →</button></p>
+          </div>
+          <!-- Test de placement : une position, un seul essai. -->
+          <div class="btnrow debut-actions hide" id="testActions">
+            <button class="btn" id="btnTestPasse">I don't know</button>
+          </div>
+          <div class="hide" id="testResultat">
+            <div id="testLignes"></div>
+            <p class="note" id="testNote"></p>
+            <div class="btnrow debut-actions">
+              <button class="btn primary" id="btnTestAppliquer">Start</button>
+            </div>
+            <div class="btnrow" style="margin-top:8px">
+              <button class="btn" id="btnTestGarder">Keep my current settings</button>
+            </div>
           </div>
         </div>
       </div>
@@ -3956,6 +4051,43 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <span class="jouer-go" id="jouerEnLigneGo">Find an opponent &rarr;</span>
         </span>
       </button>
+    </div>
+  </div>
+
+  <!-- ================= APPRENDRE (2026-11-22, apprendre.js) ================= -->
+  <!-- La progression guidee : le test de placement, le chemin de chapitres,
+       « Revoir tes parties » (la liste existante, pas une seconde) et les
+       fiches de regles, qui gardent leur adresse. -->
+  <div id="pane-apprendre" class="hide">
+    <div class="ap-carte ap-test hide" id="apTest">
+      <span class="ap-txt">
+        <b>Already know how to play?</b>
+        <span class="ap-desc">Ten positions, three minutes. We set the puzzle level, the computer's strength and your starting chapter for you.</span>
+        <span class="btnrow ap-test-row">
+          <button type="button" class="btn primary" id="apTestGo">Take the test</button>
+          <button type="button" class="btn" id="apTestPlusTard">Not now</button>
+        </span>
+      </span>
+    </div>
+    <div class="panel ap-bloc">
+      <h2 class="eyebrow">Your path</h2>
+      <ol class="ap-chemin" id="apChemin"></ol>
+      <p class="ap-venir hide" id="apVenir"></p>
+      <p class="note ap-refaire hide" id="apRefaire"><button type="button" class="linkbtn" id="apTestRefaire">Take the placement test</button></p>
+    </div>
+    <button type="button" class="ap-carte" id="apParties" aria-expanded="false" aria-controls="apPartiesBloc">
+      <span id="apPartiesPicto"></span>
+      <span class="ap-txt">
+        <b>Review your games</b>
+        <span class="ap-desc">The coach shows you your blunders, one sentence at a time, and the move it preferred.</span>
+        <span class="ap-sub" id="apPartiesSub"></span>
+      </span>
+    </button>
+    <div id="apPartiesBloc" hidden></div>
+    <div class="panel ap-fiches-bloc">
+      <h2 class="eyebrow">Rule sheets</h2>
+      <div class="ap-fiches" id="apFiches"></div>
+      <p class="note" style="margin-bottom:0"><a id="apFichesToutes" href="/learn/">All the rule sheets →</a></p>
     </div>
   </div>
 

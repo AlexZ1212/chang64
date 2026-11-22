@@ -1,0 +1,730 @@
+{
+  "id": "regles",
+  "titre": {
+    "en": "All the rules", "fr": "Toutes les règles", "es": "Todas las reglas", "pt": "Todas as regras", "de": "Alle Regeln",
+    "ru": "Все правила", "it": "Tutte le regole", "tr": "Bütün kurallar", "pl": "Wszystkie zasady", "id": "Semua aturan"
+  },
+  "desc": {
+    "en": "Check and the ways out of it, castling, promotion, en passant, stalemate.",
+    "fr": "L'échec et ses parades, le roque, la promotion, la prise en passant, le pat.",
+    "es": "El jaque y cómo salir de él, el enroque, la coronación, la captura al paso, el ahogado.",
+    "pt": "O xeque e como sair dele, o roque, a promoção, o en passant, o afogamento.",
+    "de": "Schach und wie man es abwehrt, Rochade, Umwandlung, en passant, Patt.",
+    "ru": "Шах и защита от него, рокировка, превращение пешки, взятие на проходе, пат.",
+    "it": "Lo scacco e come pararlo, l'arrocco, la promozione, l'en passant, lo stallo.",
+    "tr": "Şah ve kurtulma yolları, rok, terfi, geçerken alma, pat.",
+    "pl": "Szach i obrona przed nim, roszada, promocja, bicie w przelocie, pat.",
+    "id": "Skak dan cara lolos darinya, rokade, promosi, en passant, pat."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "Check, and three ways out", "fr": "L'échec et ses trois parades", "es": "El jaque y sus tres salidas", "pt": "O xeque e as três saídas",
+        "de": "Schach und die drei Auswege", "ru": "Шах и три способа защиты", "it": "Lo scacco e le tre parate", "tr": "Şah ve üç kurtuluş yolu",
+        "pl": "Szach i trzy sposoby obrony", "id": "Skak dan tiga jalan keluarnya"
+      },
+      "intro": {
+        "en": "When your king is attacked, it is in check, and you must deal with it at once. There are three ways: move the king, take the attacking piece, or put a piece in between.",
+        "fr": "Quand ton roi est attaqué, il est en échec, et tu dois y répondre tout de suite. Il y a trois façons : déplacer le roi, prendre la pièce qui attaque, ou mettre une pièce entre les deux.",
+        "es": "Cuando atacan a tu rey, está en jaque y tienes que resolverlo enseguida. Hay tres maneras: mover el rey, capturar la pieza que ataca o poner una pieza en medio.",
+        "pt": "Quando seu rei é atacado, ele está em xeque, e você precisa resolver isso na hora. Há três maneiras: mover o rei, capturar a peça que ataca ou colocar uma peça no meio.",
+        "de": "Wird dein König angegriffen, steht er im Schach, und du musst sofort reagieren. Es gibt drei Wege: den König wegziehen, die angreifende Figur schlagen oder eine Figur dazwischenstellen.",
+        "ru": "Когда на твоего короля нападают, это шах, и отвечать нужно сразу. Способов три: уйти королём, взять нападающую фигуру или закрыться своей фигурой.",
+        "it": "Quando il tuo re è attaccato, è sotto scacco e devi rimediare subito. Ci sono tre modi: spostare il re, catturare il pezzo che attacca o mettere un pezzo in mezzo.",
+        "tr": "Şahın saldırı altındaysa şah çekilmiştir ve hemen karşılık vermen gerekir. Üç yol var: şahı kaçırmak, saldıran taşı almak ya da araya bir taş koymak.",
+        "pl": "Gdy twój król jest atakowany, stoi w szachu i musisz od razu zareagować. Są trzy sposoby: odejść królem, zbić atakującą bierkę albo zasłonić się własną.",
+        "id": "Saat rajamu diserang, ia terkena skak, dan kamu harus langsung mengatasinya. Ada tiga cara: memindahkan raja, memakan bidak yang menyerang, atau menaruh bidak di antaranya."
+      },
+      "exos": [
+        {
+          "fen": "4r1k1/8/8/8/8/8/8/4K3 w - - 0 1",
+          "sol": ["e1d1", "e1d2", "e1f1", "e1f2"],
+          "consigne": {
+            "en": "The rook is giving check and nothing can stop it. Move your king out of its line.",
+            "fr": "La tour donne échec et rien ne peut l'arrêter. Sors ton roi de sa ligne.",
+            "es": "La torre da jaque y nada puede detenerla. Saca a tu rey de su línea.",
+            "pt": "A torre dá xeque e nada pode detê-la. Tire seu rei da linha dela.",
+            "de": "Der Turm gibt Schach, und nichts kann ihn aufhalten. Zieh deinen König aus seiner Linie.",
+            "ru": "Ладья даёт шах, и её ничем не остановить. Уведи короля с её линии.",
+            "it": "La torre dà scacco e niente può fermarla. Togli il re dalla sua linea.",
+            "tr": "Kale şah çekiyor ve onu hiçbir şey durduramıyor. Şahını kalenin hattından çıkar.",
+            "pl": "Wieża daje szacha i nic jej nie zatrzyma. Zejdź królem z jej linii.",
+            "id": "Benteng memberi skak dan tak ada yang bisa menghentikannya. Keluarkan rajamu dari garisnya."
+          },
+          "apres": {
+            "en": "Out of check. Moving the king always works when a square is free.",
+            "fr": "Plus d'échec. Déplacer le roi marche toujours, tant qu'il lui reste une case.",
+            "es": "Ya no hay jaque. Mover el rey siempre funciona mientras le quede una casilla.",
+            "pt": "Acabou o xeque. Mover o rei sempre funciona enquanto houver uma casa livre.",
+            "de": "Kein Schach mehr. Den König wegzuziehen klappt immer, solange er ein Feld hat.",
+            "ru": "Шаха больше нет. Уйти королём можно всегда, пока у него есть свободное поле.",
+            "it": "Niente più scacco. Spostare il re funziona sempre, finché gli resta una casa.",
+            "tr": "Şah kalktı. Şahın gidebileceği bir kare oldukça onu kaçırmak her zaman işe yarar.",
+            "pl": "Szacha już nie ma. Odejście królem działa zawsze, dopóki ma on wolne pole.",
+            "id": "Skak sudah lepas. Memindahkan raja selalu berhasil selama masih ada petak kosong."
+          }
+        },
+        {
+          "fen": "4k3/8/8/8/1b6/P7/2P5/4K3 w - - 0 1",
+          "sol": ["a3b4"],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The bishop is giving check, and one of your pawns can take it. Take it.",
+            "fr": "Le fou donne échec, et un de tes pions peut le prendre. Prends-le.",
+            "es": "El alfil da jaque y uno de tus peones puede capturarlo. Captúralo.",
+            "pt": "O bispo dá xeque, e um dos seus peões pode capturá-lo. Capture-o.",
+            "de": "Der Läufer gibt Schach, und einer deiner Bauern kann ihn schlagen. Schlage ihn.",
+            "ru": "Слон даёт шах, а одна из твоих пешек может его взять. Возьми его.",
+            "it": "L'alfiere dà scacco e uno dei tuoi pedoni può catturarlo. Catturalo.",
+            "tr": "Fil şah çekiyor ve piyonlarından biri onu alabiliyor. Onu al.",
+            "pl": "Goniec daje szacha, a jeden z twoich pionów może go zbić. Zbij go.",
+            "id": "Gajah memberi skak, dan salah satu pionmu bisa memakannya. Makan gajah itu."
+          },
+          "faux": {
+            "*": {
+              "en": "That move does stop the check, but taking the bishop is even better: you win a piece.",
+              "fr": "Ce coup pare bien l'échec, mais prendre le fou est encore mieux : tu gagnes une pièce.",
+              "es": "Esa jugada evita el jaque, pero capturar el alfil es aún mejor: ganas una pieza.",
+              "pt": "Esse lance evita o xeque, mas capturar o bispo é ainda melhor: você ganha uma peça.",
+              "de": "Dieser Zug wehrt das Schach ab, aber den Läufer zu schlagen ist noch besser: Du gewinnst eine Figur.",
+              "ru": "Этот ход спасает от шаха, но взять слона ещё лучше: ты выигрываешь фигуру.",
+              "it": "Questa mossa para lo scacco, ma catturare l'alfiere è ancora meglio: guadagni un pezzo.",
+              "tr": "Bu hamle şahı karşılıyor ama fili almak daha da iyi: bir taş kazanırsın.",
+              "pl": "Ten ruch broni przed szachem, ale zbicie gońca jest jeszcze lepsze: zyskujesz figurę.",
+              "id": "Langkah itu memang mengatasi skak, tapi memakan gajah lebih baik lagi: kamu menang satu bidak."
+            }
+          },
+          "apres": {
+            "en": "The attacker is gone, and so is the check.",
+            "fr": "L'attaquant a disparu, et l'échec avec lui.",
+            "es": "El atacante ha desaparecido, y el jaque con él.",
+            "pt": "O atacante sumiu, e o xeque também.",
+            "de": "Der Angreifer ist weg, und das Schach auch.",
+            "ru": "Нападавшей фигуры нет, а с ней исчез и шах.",
+            "it": "L'attaccante è sparito, e lo scacco con lui.",
+            "tr": "Saldıran taş gitti, şah da onunla birlikte.",
+            "pl": "Atakującej figury już nie ma, a z nią zniknął szach.",
+            "id": "Penyerangnya hilang, skaknya pun ikut hilang."
+          }
+        },
+        {
+          "fen": "6k1/8/1b6/8/8/5N2/3P2PP/3Q2K1 w - - 0 1",
+          "sol": ["d2d4"],
+          "cible": "d4",
+          "controle": "bon",
+          "consigne": {
+            "en": "The bishop is giving check from far away. Push your pawn to the marked square, between the bishop and your king.",
+            "fr": "Le fou donne échec de loin. Avance ton pion sur la case marquée, entre le fou et ton roi.",
+            "es": "El alfil da jaque desde lejos. Avanza tu peón a la casilla marcada, entre el alfil y tu rey.",
+            "pt": "O bispo dá xeque de longe. Avance seu peão até a casa marcada, entre o bispo e o seu rei.",
+            "de": "Der Läufer gibt aus der Ferne Schach. Zieh deinen Bauern auf das markierte Feld, zwischen Läufer und König.",
+            "ru": "Слон даёт шах издалека. Поставь пешку на отмеченное поле, между слоном и королём.",
+            "it": "L'alfiere dà scacco da lontano. Avanza il pedone sulla casa segnata, tra l'alfiere e il tuo re.",
+            "tr": "Fil uzaktan şah çekiyor. Piyonunu işaretli kareye, fil ile şahının arasına sür.",
+            "pl": "Goniec daje szacha z daleka. Przesuń piona na zaznaczone pole, między gońca a króla.",
+            "id": "Gajah memberi skak dari jauh. Majukan pionmu ke petak yang ditandai, di antara gajah dan rajamu."
+          },
+          "faux": {
+            "*": {
+              "en": "That gets out of check too. Here, try the third way: block with the pawn.",
+              "fr": "Ce coup sort aussi de l'échec. Ici, essaie la troisième façon : bloque avec le pion.",
+              "es": "Esa jugada también sale del jaque. Aquí prueba la tercera manera: tapa con el peón.",
+              "pt": "Esse lance também sai do xeque. Aqui, tente a terceira maneira: bloqueie com o peão.",
+              "de": "Auch das wehrt das Schach ab. Probier hier den dritten Weg: Stell den Bauern dazwischen.",
+              "ru": "Так тоже можно уйти от шаха. Но здесь попробуй третий способ: закройся пешкой.",
+              "it": "Anche così esci dallo scacco. Qui prova il terzo modo: blocca con il pedone.",
+              "tr": "Bu da şahtan kurtarır. Burada üçüncü yolu dene: piyonla araya gir.",
+              "pl": "Tak też można uciec przed szachem. Tutaj wypróbuj trzeci sposób: zasłoń się pionem.",
+              "id": "Itu juga lolos dari skak. Di sini, coba cara ketiga: halangi dengan pion."
+            }
+          },
+          "apres": {
+            "en": "The pawn blocks the line, and your knight protects it. Blocking only works against a queen, a rook or a bishop: nothing blocks a knight.",
+            "fr": "Le pion coupe la ligne, et ton cavalier le protège. On ne peut s'interposer que face à une dame, une tour ou un fou : rien n'arrête un cavalier.",
+            "es": "El peón corta la línea y tu caballo lo protege. Solo se puede tapar ante una dama, una torre o un alfil: nada detiene a un caballo.",
+            "pt": "O peão corta a linha, e seu cavalo o protege. Só dá para bloquear contra dama, torre ou bispo: nada bloqueia um cavalo.",
+            "de": "Der Bauer unterbricht die Linie, und dein Springer deckt ihn. Dazwischenstellen geht nur gegen Dame, Turm oder Läufer: Einen Springer hält nichts auf.",
+            "ru": "Пешка перекрыла линию, а твой конь её защищает. Закрыться можно только от ферзя, ладьи или слона: коня ничем не перекрыть.",
+            "it": "Il pedone taglia la linea e il tuo cavallo lo protegge. Ci si può interporre solo contro donna, torre o alfiere: niente ferma un cavallo.",
+            "tr": "Piyon hattı kesti, atın da onu koruyor. Araya girmek yalnızca vezire, kaleye ya da file karşı işe yarar: atı hiçbir şey durduramaz.",
+            "pl": "Pion przeciął linię, a twój skoczek go broni. Zasłonić się można tylko przed hetmanem, wieżą lub gońcem: skoczka nic nie zatrzyma.",
+            "id": "Pion memotong garis itu, dan kudamu melindunginya. Menghalangi hanya bisa terhadap menteri, benteng, atau gajah: kuda tak bisa dihalangi."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Castling", "fr": "Le roque", "es": "El enroque", "pt": "O roque", "de": "Die Rochade",
+        "ru": "Рокировка", "it": "L'arrocco", "tr": "Rok", "pl": "Roszada", "id": "Rokade"
+      },
+      "intro": {
+        "en": "Castling tucks your king away and brings a rook out, in a single move. The king goes two squares towards the rook, and the rook jumps over it. It is only allowed if neither of them has moved yet, nothing stands between them, and the king is not in check and does not cross an attacked square.",
+        "fr": "Le roque met ton roi à l'abri et sort une tour, en un seul coup. Le roi fait deux cases vers la tour, et la tour saute par-dessus lui. Il n'est permis que si aucun des deux n'a encore bougé, si rien ne les sépare, et si le roi n'est pas en échec et ne traverse pas une case attaquée.",
+        "es": "El enroque pone a tu rey a salvo y saca una torre, en una sola jugada. El rey avanza dos casillas hacia la torre, y la torre salta por encima de él. Solo se permite si ninguno de los dos se ha movido todavía, si no hay nada entre ellos, y si el rey no está en jaque ni pasa por una casilla atacada.",
+        "pt": "O roque coloca seu rei em segurança e traz uma torre para o jogo, em um único lance. O rei anda duas casas em direção à torre, e a torre pula por cima dele. Só é permitido se nenhum dos dois tiver se movido, se não houver nada entre eles, e se o rei não estiver em xeque nem passar por uma casa atacada.",
+        "de": "Die Rochade bringt deinen König in Sicherheit und einen Turm ins Spiel, in einem einzigen Zug. Der König geht zwei Felder auf den Turm zu, und der Turm springt über ihn. Erlaubt ist sie nur, wenn beide noch nicht gezogen haben, nichts zwischen ihnen steht und der König weder im Schach steht noch über ein angegriffenes Feld zieht.",
+        "ru": "Рокировка прячет короля и вводит в игру ладью, и всё это одним ходом. Король идёт на два поля к ладье, а ладья перепрыгивает через него. Рокировка разрешена, только если ни король, ни эта ладья ещё не ходили, между ними пусто, король не под шахом и не проходит через поле под ударом.",
+        "it": "L'arrocco mette il re al sicuro e porta in gioco una torre, in una sola mossa. Il re fa due case verso la torre, e la torre lo scavalca. È permesso solo se nessuno dei due si è ancora mosso, se non c'è niente tra loro, e se il re non è sotto scacco e non attraversa una casa attaccata.",
+        "tr": "Rok, tek hamlede şahını güvenceye alır ve bir kaleyi oyuna sokar. Şah kaleye doğru iki kare gider, kale de onun üzerinden atlar. Yalnızca ikisi de daha önce oynamadıysa, aralarında taş yoksa, şah tehdit altında değilse ve saldırı altındaki bir kareden geçmiyorsa yapılabilir.",
+        "pl": "Roszada chowa króla i wprowadza wieżę do gry, w jednym ruchu. Król idzie o dwa pola w stronę wieży, a wieża przeskakuje nad nim. Wolno ją wykonać tylko wtedy, gdy ani król, ani ta wieża jeszcze się nie ruszały, nic między nimi nie stoi, a król nie jest w szachu i nie przechodzi przez atakowane pole.",
+        "id": "Rokade mengamankan rajamu dan mengeluarkan benteng, dalam satu langkah. Raja bergeser dua petak ke arah benteng, lalu benteng melompatinya. Rokade hanya boleh jika keduanya belum pernah bergerak, tak ada bidak di antara mereka, dan raja tidak sedang terkena skak serta tidak melewati petak yang diserang."
+      },
+      "exos": [
+        {
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1",
+          "sol": ["e1g1"],
+          "cible": "g1",
+          "controle": "bon",
+          "consigne": {
+            "en": "Castle on the short side: move your king two squares, to the marked square.",
+            "fr": "Fais le petit roque : déplace ton roi de deux cases, sur la case marquée.",
+            "es": "Haz el enroque corto: mueve tu rey dos casillas, a la casilla marcada.",
+            "pt": "Faça o roque pequeno: mova seu rei duas casas, até a casa marcada.",
+            "de": "Rochiere kurz: Zieh deinen König zwei Felder weit auf das markierte Feld.",
+            "ru": "Сделай короткую рокировку: переставь короля на два поля, на отмеченное поле.",
+            "it": "Fai l'arrocco corto: sposta il re di due case, sulla casa segnata.",
+            "tr": "Kısa rok yap: şahını iki kare oynat, işaretli kareye götür.",
+            "pl": "Zrób krótką roszadę: przesuń króla o dwa pola, na zaznaczone pole.",
+            "id": "Lakukan rokade pendek: geser rajamu dua petak ke petak yang ditandai."
+          },
+          "faux": {
+            "*": {
+              "en": "To castle, it is the king you move, two squares at once. Take it to the marked square.",
+              "fr": "Pour roquer, c'est le roi qu'on déplace, de deux cases d'un coup. Amène-le sur la case marquée.",
+              "es": "Para enrocar se mueve el rey, dos casillas de una vez. Llévalo a la casilla marcada.",
+              "pt": "Para rocar, é o rei que se move, duas casas de uma vez. Leve-o até a casa marcada.",
+              "de": "Bei der Rochade ziehst du den König, gleich zwei Felder weit. Bring ihn auf das markierte Feld.",
+              "ru": "При рокировке ходит король, сразу на два поля. Поставь его на отмеченное поле.",
+              "it": "Per arroccare si muove il re, di due case in una volta. Portalo sulla casa segnata.",
+              "tr": "Rok yaparken şah oynatılır, bir seferde iki kare. Onu işaretli kareye götür.",
+              "pl": "Przy roszadzie rusza się król, od razu o dwa pola. Postaw go na zaznaczonym polu.",
+              "id": "Untuk rokade, rajalah yang digerakkan, dua petak sekaligus. Bawa ke petak yang ditandai."
+            }
+          },
+          "apres": {
+            "en": "The king is safe behind its pawns, and the rook is ready to play.",
+            "fr": "Le roi est à l'abri derrière ses pions, et la tour est prête à jouer.",
+            "es": "El rey está a salvo detrás de sus peones y la torre está lista para jugar.",
+            "pt": "O rei está seguro atrás dos peões, e a torre está pronta para jogar.",
+            "de": "Der König steht sicher hinter seinen Bauern, und der Turm ist spielbereit.",
+            "ru": "Король в безопасности за пешками, а ладья готова к игре.",
+            "it": "Il re è al sicuro dietro i suoi pedoni e la torre è pronta a giocare.",
+            "tr": "Şah piyonlarının arkasında güvende, kale de oyuna hazır.",
+            "pl": "Król jest bezpieczny za pionami, a wieża gotowa do gry.",
+            "id": "Raja aman di belakang pion-pionnya, dan benteng siap bermain."
+          }
+        },
+        {
+          "fen": "r3kbnr/pppqpppp/2n5/3p1b2/3P1B2/2N5/PPPQPPPP/R3KBNR w KQkq - 0 1",
+          "sol": ["e1c1"],
+          "cible": "c1",
+          "controle": "bon",
+          "consigne": {
+            "en": "Now the long side: move your king two squares towards the other rook.",
+            "fr": "Maintenant le grand roque : déplace ton roi de deux cases vers l'autre tour.",
+            "es": "Ahora el enroque largo: mueve tu rey dos casillas hacia la otra torre.",
+            "pt": "Agora o roque grande: mova seu rei duas casas em direção à outra torre.",
+            "de": "Jetzt die lange Rochade: Zieh deinen König zwei Felder auf den anderen Turm zu.",
+            "ru": "Теперь длинная рокировка: переставь короля на два поля к другой ладье.",
+            "it": "Ora l'arrocco lungo: sposta il re di due case verso l'altra torre.",
+            "tr": "Şimdi uzun rok: şahını diğer kaleye doğru iki kare oynat.",
+            "pl": "Teraz długa roszada: przesuń króla o dwa pola w stronę drugiej wieży.",
+            "id": "Sekarang rokade panjang: geser rajamu dua petak ke arah benteng yang satunya."
+          },
+          "faux": {
+            "*": {
+              "en": "To castle, it is the king you move, two squares at once. Take it to the marked square.",
+              "fr": "Pour roquer, c'est le roi qu'on déplace, de deux cases d'un coup. Amène-le sur la case marquée.",
+              "es": "Para enrocar se mueve el rey, dos casillas de una vez. Llévalo a la casilla marcada.",
+              "pt": "Para rocar, é o rei que se move, duas casas de uma vez. Leve-o até a casa marcada.",
+              "de": "Bei der Rochade ziehst du den König, gleich zwei Felder weit. Bring ihn auf das markierte Feld.",
+              "ru": "При рокировке ходит король, сразу на два поля. Поставь его на отмеченное поле.",
+              "it": "Per arroccare si muove il re, di due case in una volta. Portalo sulla casa segnata.",
+              "tr": "Rok yaparken şah oynatılır, bir seferde iki kare. Onu işaretli kareye götür.",
+              "pl": "Przy roszadzie rusza się król, od razu o dwa pola. Postaw go na zaznaczonym polu.",
+              "id": "Untuk rokade, rajalah yang digerakkan, dua petak sekaligus. Bawa ke petak yang ditandai."
+            }
+          },
+          "apres": {
+            "en": "Same idea on the other side: the rook lands next to the king.",
+            "fr": "Même idée de l'autre côté : la tour se pose à côté du roi.",
+            "es": "La misma idea por el otro lado: la torre queda junto al rey.",
+            "pt": "A mesma ideia do outro lado: a torre fica ao lado do rei.",
+            "de": "Dieselbe Idee auf der anderen Seite: Der Turm landet neben dem König.",
+            "ru": "Та же идея с другой стороны: ладья встаёт рядом с королём.",
+            "it": "Stessa idea dall'altro lato: la torre finisce accanto al re.",
+            "tr": "Öbür tarafta da aynı fikir: kale şahın yanına yerleşir.",
+            "pl": "Ten sam pomysł po drugiej stronie: wieża staje obok króla.",
+            "id": "Gagasan yang sama di sisi lain: benteng mendarat di sebelah raja."
+          }
+        },
+        {
+          "fen": "4k3/pppp1ppp/b7/8/8/8/PPPQ1PPP/R3K2R w KQ - 0 1",
+          "sol": ["e1c1"],
+          "cible": "c1",
+          "interdit": ["e1g1"],
+          "controle": "bon",
+          "consigne": {
+            "en": "The black bishop watches a square your king would cross on the short side: castling there is not allowed. Castle on the other side.",
+            "fr": "Le fou noir surveille une case que ton roi traverserait du petit côté : ce roque est interdit. Roque de l'autre côté.",
+            "es": "El alfil negro vigila una casilla por la que pasaría tu rey en el lado corto: ese enroque está prohibido. Enroca por el otro lado.",
+            "pt": "O bispo preto vigia uma casa por onde seu rei passaria no lado pequeno: esse roque é proibido. Faça o roque do outro lado.",
+            "de": "Der schwarze Läufer bewacht ein Feld, über das dein König auf der kurzen Seite ziehen müsste: Diese Rochade ist verboten. Rochiere zur anderen Seite.",
+            "ru": "Чёрный слон держит под ударом поле, через которое король прошёл бы при короткой рокировке: она запрещена. Рокируй в другую сторону.",
+            "it": "L'alfiere nero controlla una casa che il tuo re attraverserebbe sul lato corto: quell'arrocco è vietato. Arrocca dall'altro lato.",
+            "tr": "Siyah fil, kısa tarafta şahının geçeceği bir kareyi gözlüyor: o rok yasak. Diğer tarafa rok yap.",
+            "pl": "Czarny goniec pilnuje pola, przez które twój król przeszedłby przy krótkiej roszadzie: jest ona zabroniona. Zrób roszadę w drugą stronę.",
+            "id": "Gajah hitam mengawasi petak yang akan dilewati rajamu di sisi pendek: rokade itu dilarang. Lakukan rokade ke sisi yang lain."
+          },
+          "faux": {
+            "*": {
+              "en": "To castle, it is the king you move, two squares at once. Take it to the marked square.",
+              "fr": "Pour roquer, c'est le roi qu'on déplace, de deux cases d'un coup. Amène-le sur la case marquée.",
+              "es": "Para enrocar se mueve el rey, dos casillas de una vez. Llévalo a la casilla marcada.",
+              "pt": "Para rocar, é o rei que se move, duas casas de uma vez. Leve-o até a casa marcada.",
+              "de": "Bei der Rochade ziehst du den König, gleich zwei Felder weit. Bring ihn auf das markierte Feld.",
+              "ru": "При рокировке ходит король, сразу на два поля. Поставь его на отмеченное поле.",
+              "it": "Per arroccare si muove il re, di due case in una volta. Portalo sulla casa segnata.",
+              "tr": "Rok yaparken şah oynatılır, bir seferde iki kare. Onu işaretli kareye götür.",
+              "pl": "Przy roszadzie rusza się król, od razu o dwa pola. Postaw go na zaznaczonym polu.",
+              "id": "Untuk rokade, rajalah yang digerakkan, dua petak sekaligus. Bawa ke petak yang ditandai."
+            }
+          },
+          "apres": {
+            "en": "The king never crosses an attacked square. The rook may: only the king's path counts.",
+            "fr": "Le roi ne traverse jamais une case attaquée. La tour, elle, en a le droit : seul le chemin du roi compte.",
+            "es": "El rey nunca pasa por una casilla atacada. La torre sí puede: solo cuenta el camino del rey.",
+            "pt": "O rei nunca passa por uma casa atacada. A torre pode: só o caminho do rei conta.",
+            "de": "Der König zieht nie über ein angegriffenes Feld. Der Turm darf das: Nur der Weg des Königs zählt.",
+            "ru": "Король никогда не проходит через поле под ударом. А ладье можно: важен только путь короля.",
+            "it": "Il re non attraversa mai una casa attaccata. La torre invece può: conta solo il percorso del re.",
+            "tr": "Şah saldırı altındaki bir kareden asla geçmez. Kale geçebilir: yalnızca şahın yolu önemlidir.",
+            "pl": "Król nigdy nie przechodzi przez atakowane pole. Wieża może: liczy się tylko droga króla.",
+            "id": "Raja tidak pernah melewati petak yang diserang. Benteng boleh: yang dihitung hanya jalur raja."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Promotion", "fr": "La promotion", "es": "La coronación", "pt": "A promoção", "de": "Die Umwandlung",
+        "ru": "Превращение пешки", "it": "La promozione", "tr": "Terfi", "pl": "Promocja", "id": "Promosi"
+      },
+      "intro": {
+        "en": "A pawn that reaches the last rank turns into another piece: you choose a queen, a rook, a bishop or a knight. Almost always the queen, the strongest of them.",
+        "fr": "Un pion qui atteint la dernière rangée se transforme : tu choisis une dame, une tour, un fou ou un cavalier. Presque toujours la dame, la plus forte.",
+        "es": "Un peón que llega a la última fila se transforma en otra pieza: eliges dama, torre, alfil o caballo. Casi siempre la dama, la más fuerte.",
+        "pt": "Um peão que chega à última fileira se transforma em outra peça: você escolhe dama, torre, bispo ou cavalo. Quase sempre a dama, a mais forte.",
+        "de": "Ein Bauer, der die letzte Reihe erreicht, verwandelt sich: Du wählst Dame, Turm, Läufer oder Springer. Fast immer die Dame, die stärkste Figur.",
+        "ru": "Пешка, дошедшая до последней горизонтали, превращается в другую фигуру: ты выбираешь ферзя, ладью, слона или коня. Почти всегда ферзя, он сильнее всех.",
+        "it": "Un pedone che raggiunge l'ultima traversa si trasforma: scegli donna, torre, alfiere o cavallo. Quasi sempre la donna, la più forte.",
+        "tr": "Son yataya ulaşan piyon başka bir taşa dönüşür: vezir, kale, fil ya da at seçersin. Neredeyse her zaman vezir, çünkü en güçlüsü o.",
+        "pl": "Pion, który dojdzie do ostatniej linii, zamienia się w inną figurę: wybierasz hetmana, wieżę, gońca albo skoczka. Prawie zawsze hetmana, najsilniejszego z nich.",
+        "id": "Pion yang mencapai baris terakhir berubah menjadi bidak lain: kamu memilih menteri, benteng, gajah, atau kuda. Hampir selalu menteri, yang paling kuat."
+      },
+      "exos": [
+        {
+          "fen": "8/4P1k1/8/8/8/8/8/4K3 w - - 0 1",
+          "sol": ["e7e8q"],
+          "cible": "e8",
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Push your pawn to the last rank and choose the queen.",
+            "fr": "Pousse ton pion jusqu'à la dernière rangée et choisis la dame.",
+            "es": "Lleva tu peón hasta la última fila y elige la dama.",
+            "pt": "Leve seu peão até a última fileira e escolha a dama.",
+            "de": "Zieh deinen Bauern auf die letzte Reihe und wähle die Dame.",
+            "ru": "Доведи пешку до последней горизонтали и выбери ферзя.",
+            "it": "Spingi il pedone fino all'ultima traversa e scegli la donna.",
+            "tr": "Piyonunu son yataya sür ve veziri seç.",
+            "pl": "Doprowadź piona do ostatniej linii i wybierz hetmana.",
+            "id": "Majukan pionmu ke baris terakhir dan pilih menteri."
+          },
+          "faux": {
+            "e7e8r": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
+            "e7e8b": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
+            "e7e8n": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." }
+          },
+          "apres": {
+            "en": "A pawn has become a queen: that is how many games are won.",
+            "fr": "Un pion est devenu une dame : c'est ainsi que se gagnent bien des parties.",
+            "es": "Un peón se ha convertido en dama: así se ganan muchas partidas.",
+            "pt": "Um peão virou dama: é assim que muitas partidas são vencidas.",
+            "de": "Aus einem Bauern ist eine Dame geworden: So werden viele Partien gewonnen.",
+            "ru": "Пешка стала ферзём: так выигрывается множество партий.",
+            "it": "Un pedone è diventato una donna: è così che si vincono molte partite.",
+            "tr": "Bir piyon vezir oldu: pek çok oyun böyle kazanılır.",
+            "pl": "Pion stał się hetmanem: tak wygrywa się wiele partii.",
+            "id": "Sebuah pion menjadi menteri: begitulah banyak permainan dimenangkan."
+          }
+        },
+        {
+          "fen": "rn4k1/1P6/8/8/8/8/8/4K3 w - - 0 1",
+          "sol": ["b7a8q"],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The knight blocks your pawn, but a pawn takes diagonally. Take the rook and choose the queen.",
+            "fr": "Le cavalier bloque ton pion, mais un pion prend en diagonale. Prends la tour et choisis la dame.",
+            "es": "El caballo bloquea tu peón, pero un peón captura en diagonal. Captura la torre y elige la dama.",
+            "pt": "O cavalo bloqueia seu peão, mas um peão captura na diagonal. Capture a torre e escolha a dama.",
+            "de": "Der Springer blockiert deinen Bauern, aber ein Bauer schlägt schräg. Schlage den Turm und wähle die Dame.",
+            "ru": "Конь стоит на пути пешки, но пешка бьёт наискосок. Возьми ладью и выбери ферзя.",
+            "it": "Il cavallo blocca il pedone, ma un pedone cattura in diagonale. Cattura la torre e scegli la donna.",
+            "tr": "At piyonunun önünü kapatıyor ama piyon çapraz alır. Kaleyi al ve veziri seç.",
+            "pl": "Skoczek blokuje piona, ale pion bije po skosie. Zbij wieżę i wybierz hetmana.",
+            "id": "Kuda menghalangi pionmu, tapi pion memakan secara diagonal. Makan benteng itu dan pilih menteri."
+          },
+          "faux": {
+            "b7a8r": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
+            "b7a8b": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." },
+            "b7a8n": { "en": "That is allowed, but the queen is far stronger. Choose the queen.", "fr": "C'est permis, mais la dame est bien plus forte. Choisis la dame.", "es": "Está permitido, pero la dama es mucho más fuerte. Elige la dama.", "pt": "É permitido, mas a dama é muito mais forte. Escolha a dama.", "de": "Das ist erlaubt, aber die Dame ist viel stärker. Wähle die Dame.", "ru": "Так можно, но ферзь гораздо сильнее. Выбери ферзя.", "it": "È permesso, ma la donna è molto più forte. Scegli la donna.", "tr": "Buna izin var ama vezir çok daha güçlü. Veziri seç.", "pl": "To dozwolone, ale hetman jest znacznie silniejszy. Wybierz hetmana.", "id": "Itu boleh, tapi menteri jauh lebih kuat. Pilih menteri." }
+          },
+          "apres": {
+            "en": "A capture and a promotion in the same move.",
+            "fr": "Une prise et une promotion dans le même coup.",
+            "es": "Una captura y una coronación en la misma jugada.",
+            "pt": "Uma captura e uma promoção no mesmo lance.",
+            "de": "Schlagen und Umwandeln in einem Zug.",
+            "ru": "Взятие и превращение одним ходом.",
+            "it": "Una cattura e una promozione nella stessa mossa.",
+            "tr": "Aynı hamlede hem alış hem terfi.",
+            "pl": "Bicie i promocja w jednym ruchu.",
+            "id": "Memakan dan promosi dalam satu langkah."
+          }
+        },
+        {
+          "fen": "7b/5Ppk/8/6P1/2B5/8/8/6K1 w - - 0 1",
+          "sol": ["f7f8n"],
+          "mat": true,
+          "consigne": {
+            "en": "Checkmate in one move. Careful: this time the queen is not the right choice.",
+            "fr": "Fais mat en un coup. Attention : cette fois, la dame n'est pas le bon choix.",
+            "es": "Da mate en una jugada. Cuidado: esta vez la dama no es la buena elección.",
+            "pt": "Dê mate em um lance. Atenção: desta vez a dama não é a escolha certa.",
+            "de": "Setze in einem Zug matt. Achtung: Diesmal ist die Dame nicht die richtige Wahl.",
+            "ru": "Поставь мат в один ход. Осторожно: на этот раз ферзь не лучший выбор.",
+            "it": "Dai matto in una mossa. Attenzione: stavolta la donna non è la scelta giusta.",
+            "tr": "Tek hamlede mat et. Dikkat: bu kez vezir doğru seçim değil.",
+            "pl": "Daj mata w jednym ruchu. Uwaga: tym razem hetman nie jest dobrym wyborem.",
+            "id": "Skakmat dalam satu langkah. Hati-hati: kali ini menteri bukan pilihan yang tepat."
+          },
+          "faux": {
+            "f7f8q": {
+              "en": "With a queen, the black king is not even in check. Try another piece.",
+              "fr": "Avec une dame, le roi noir n'est même pas en échec. Essaie une autre pièce.",
+              "es": "Con una dama, el rey negro ni siquiera está en jaque. Prueba con otra pieza.",
+              "pt": "Com uma dama, o rei preto nem fica em xeque. Tente outra peça.",
+              "de": "Mit einer Dame steht der schwarze König nicht einmal im Schach. Probier eine andere Figur.",
+              "ru": "С ферзём чёрный король даже не под шахом. Попробуй другую фигуру.",
+              "it": "Con una donna il re nero non è nemmeno sotto scacco. Prova un altro pezzo.",
+              "tr": "Vezirle siyah şaha şah bile çekilmiyor. Başka bir taş dene.",
+              "pl": "Z hetmanem czarny król nie jest nawet w szachu. Spróbuj innej figury.",
+              "id": "Dengan menteri, raja hitam bahkan tidak terkena skak. Coba bidak lain."
+            }
+          },
+          "apres": {
+            "en": "The knight gives check where a queen could not, and the king has no square left. It is rare, but it wins games.",
+            "fr": "Le cavalier donne échec là où une dame ne le pouvait pas, et le roi n'a plus de case. C'est rare, mais ça gagne des parties.",
+            "es": "El caballo da jaque donde una dama no podía, y al rey no le queda casilla. Es raro, pero gana partidas.",
+            "pt": "O cavalo dá xeque onde uma dama não conseguiria, e o rei fica sem casa. É raro, mas ganha partidas.",
+            "de": "Der Springer gibt Schach, wo eine Dame es nicht könnte, und der König hat kein Feld mehr. Selten, aber es gewinnt Partien.",
+            "ru": "Конь даёт шах там, где ферзь не смог бы, и королю некуда идти. Редкость, но так выигрывают партии.",
+            "it": "Il cavallo dà scacco dove una donna non poteva, e il re non ha più case. È raro, ma fa vincere partite.",
+            "tr": "At, vezirin veremeyeceği şahı veriyor ve şahın gidecek karesi kalmıyor. Nadirdir ama oyun kazandırır.",
+            "pl": "Skoczek daje szacha tam, gdzie hetman by nie mógł, a król nie ma już pola. To rzadkie, ale wygrywa partie.",
+            "id": "Kuda memberi skak yang tak bisa diberikan menteri, dan raja tak punya petak lagi. Jarang terjadi, tapi bisa memenangkan permainan."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "En passant", "fr": "La prise en passant", "es": "La captura al paso", "pt": "O en passant", "de": "En passant",
+        "ru": "Взятие на проходе", "it": "L'en passant", "tr": "Geçerken alma", "pl": "Bicie w przelocie", "id": "En passant"
+      },
+      "intro": {
+        "en": "When a pawn moves two squares at once and lands right beside one of your pawns, you may take it as if it had moved only one square. This is en passant, and it is only allowed on the very next move.",
+        "fr": "Quand un pion avance de deux cases d'un coup et se pose juste à côté d'un de tes pions, tu peux le prendre comme s'il n'avait avancé que d'une case. C'est la prise en passant, et elle n'est permise qu'au coup suivant.",
+        "es": "Cuando un peón avanza dos casillas de una vez y queda justo al lado de uno de tus peones, puedes capturarlo como si solo hubiera avanzado una. Es la captura al paso, y solo se permite en la jugada siguiente.",
+        "pt": "Quando um peão avança duas casas de uma vez e para bem ao lado de um peão seu, você pode capturá-lo como se ele tivesse avançado só uma. É o en passant, e só é permitido no lance seguinte.",
+        "de": "Zieht ein Bauer zwei Felder auf einmal und landet direkt neben einem deiner Bauern, darfst du ihn schlagen, als wäre er nur ein Feld gezogen. Das ist en passant, und es ist nur im nächsten Zug erlaubt.",
+        "ru": "Если пешка идёт сразу на два поля и встаёт рядом с твоей пешкой, её можно взять так, будто она прошла только одно поле. Это взятие на проходе, и оно разрешено только следующим ходом.",
+        "it": "Quando un pedone avanza di due case in una volta e si ferma proprio accanto a un tuo pedone, puoi catturarlo come se fosse avanzato di una sola. È la presa en passant, ed è permessa solo alla mossa successiva.",
+        "tr": "Bir piyon bir seferde iki kare ilerleyip piyonlarından birinin tam yanına gelirse, onu tek kare ilerlemiş gibi alabilirsin. Buna geçerken alma denir ve yalnızca hemen sonraki hamlede yapılabilir.",
+        "pl": "Gdy pion idzie od razu o dwa pola i staje tuż obok twojego piona, możesz go zbić tak, jakby przeszedł tylko jedno pole. To bicie w przelocie, dozwolone tylko w następnym ruchu.",
+        "id": "Saat sebuah pion maju dua petak sekaligus dan berhenti tepat di samping pionmu, kamu boleh memakannya seolah-olah ia hanya maju satu petak. Ini disebut en passant, dan hanya boleh dilakukan pada langkah berikutnya."
+      },
+      "exos": [
+        {
+          "fen": "4k3/3p4/8/4P3/8/8/8/4K3 b - - 0 1",
+          "avant": "d7d5",
+          "sol": ["e5d6"],
+          "cible": "d6",
+          "consigne": {
+            "en": "The black pawn has just moved two squares, right beside yours. Take it en passant: your pawn goes to the marked square.",
+            "fr": "Le pion noir vient d'avancer de deux cases, juste à côté du tien. Prends-le en passant : ton pion va sur la case marquée.",
+            "es": "El peón negro acaba de avanzar dos casillas, justo al lado del tuyo. Captúralo al paso: tu peón va a la casilla marcada.",
+            "pt": "O peão preto acabou de avançar duas casas, bem ao lado do seu. Capture-o en passant: seu peão vai para a casa marcada.",
+            "de": "Der schwarze Bauer ist gerade zwei Felder gezogen, direkt neben deinen. Schlage ihn en passant: Dein Bauer geht auf das markierte Feld.",
+            "ru": "Чёрная пешка только что прошла два поля и встала рядом с твоей. Возьми её на проходе: твоя пешка идёт на отмеченное поле.",
+            "it": "Il pedone nero è appena avanzato di due case, proprio accanto al tuo. Catturalo en passant: il tuo pedone va sulla casa segnata.",
+            "tr": "Siyah piyon az önce iki kare ilerledi ve seninkinin tam yanına geldi. Onu geçerken al: piyonun işaretli kareye gider.",
+            "pl": "Czarny pion właśnie przeszedł dwa pola i stanął tuż obok twojego. Zbij go w przelocie: twój pion idzie na zaznaczone pole.",
+            "id": "Pion hitam baru saja maju dua petak, tepat di samping pionmu. Makan secara en passant: pionmu pindah ke petak yang ditandai."
+          },
+          "faux": {
+            "*": {
+              "en": "That move is allowed, but we are after en passant: your pawn takes diagonally and lands behind the black pawn.",
+              "fr": "Ce coup est permis, mais on cherche la prise en passant : ton pion prend en diagonale et se pose derrière le pion noir.",
+              "es": "Esa jugada está permitida, pero buscamos la captura al paso: tu peón captura en diagonal y queda detrás del peón negro.",
+              "pt": "Esse lance é permitido, mas queremos o en passant: seu peão captura na diagonal e para atrás do peão preto.",
+              "de": "Der Zug ist erlaubt, aber gesucht ist en passant: Dein Bauer schlägt schräg und landet hinter dem schwarzen Bauern.",
+              "ru": "Так ходить можно, но мы ищем взятие на проходе: твоя пешка бьёт наискосок и встаёт позади чёрной пешки.",
+              "it": "Questa mossa è permessa, ma cerchiamo la presa en passant: il tuo pedone cattura in diagonale e finisce dietro il pedone nero.",
+              "tr": "Bu hamle serbest ama aradığımız geçerken alma: piyonun çapraz alır ve siyah piyonun arkasına geçer.",
+              "pl": "Ten ruch jest dozwolony, ale szukamy bicia w przelocie: twój pion bije po skosie i staje za czarnym pionem.",
+              "id": "Langkah itu boleh, tapi yang kita cari adalah en passant: pionmu memakan secara diagonal dan mendarat di belakang pion hitam."
+            }
+          },
+          "apres": {
+            "en": "The black pawn is gone, even though your pawn did not land on its square. It is the only capture in chess that works this way.",
+            "fr": "Le pion noir a disparu, alors que ton pion ne s'est pas posé sur sa case. C'est la seule prise des échecs qui marche ainsi.",
+            "es": "El peón negro ha desaparecido, aunque tu peón no ha caído en su casilla. Es la única captura del ajedrez que funciona así.",
+            "pt": "O peão preto sumiu, mesmo sem o seu peão parar na casa dele. É a única captura do xadrez que funciona assim.",
+            "de": "Der schwarze Bauer ist weg, obwohl dein Bauer nicht auf seinem Feld gelandet ist. Es ist der einzige Schlagzug im Schach, der so funktioniert.",
+            "ru": "Чёрная пешка исчезла, хотя твоя пешка не встала на её поле. Это единственное взятие в шахматах, которое так устроено.",
+            "it": "Il pedone nero è sparito, anche se il tuo pedone non è finito sulla sua casa. È l'unica cattura degli scacchi che funziona così.",
+            "tr": "Piyonun onun karesine gitmediği hâlde siyah piyon tahtadan kalktı. Satrançta böyle işleyen tek alış budur.",
+            "pl": "Czarny pion zniknął, choć twój pion nie stanął na jego polu. To jedyne bicie w szachach, które tak działa.",
+            "id": "Pion hitam hilang, padahal pionmu tidak mendarat di petaknya. Ini satu-satunya cara memakan dalam catur yang seperti itu."
+          }
+        },
+        {
+          "fen": "6k1/2p5/8/1P6/8/8/8/6K1 b - - 0 1",
+          "avant": "c7c5",
+          "sol": ["b5c6"],
+          "consigne": {
+            "en": "Same thing on the other side. The black pawn has just jumped two squares: take it en passant.",
+            "fr": "Même chose de l'autre côté. Le pion noir vient de sauter deux cases : prends-le en passant.",
+            "es": "Lo mismo por el otro lado. El peón negro acaba de saltar dos casillas: captúralo al paso.",
+            "pt": "A mesma coisa do outro lado. O peão preto acabou de pular duas casas: capture-o en passant.",
+            "de": "Dasselbe auf der anderen Seite. Der schwarze Bauer ist gerade zwei Felder vorgerückt: Schlage ihn en passant.",
+            "ru": "То же самое с другой стороны. Чёрная пешка только что прыгнула на два поля: возьми её на проходе.",
+            "it": "Stessa cosa dall'altro lato. Il pedone nero è appena avanzato di due case: catturalo en passant.",
+            "tr": "Aynı şey öbür tarafta. Siyah piyon az önce iki kare atladı: onu geçerken al.",
+            "pl": "To samo z drugiej strony. Czarny pion właśnie przeskoczył dwa pola: zbij go w przelocie.",
+            "id": "Hal yang sama di sisi lain. Pion hitam baru saja melompat dua petak: makan secara en passant."
+          },
+          "faux": {
+            "*": {
+              "en": "That move is allowed, but we are after en passant: your pawn takes diagonally and lands behind the black pawn.",
+              "fr": "Ce coup est permis, mais on cherche la prise en passant : ton pion prend en diagonale et se pose derrière le pion noir.",
+              "es": "Esa jugada está permitida, pero buscamos la captura al paso: tu peón captura en diagonal y queda detrás del peón negro.",
+              "pt": "Esse lance é permitido, mas queremos o en passant: seu peão captura na diagonal e para atrás do peão preto.",
+              "de": "Der Zug ist erlaubt, aber gesucht ist en passant: Dein Bauer schlägt schräg und landet hinter dem schwarzen Bauern.",
+              "ru": "Так ходить можно, но мы ищем взятие на проходе: твоя пешка бьёт наискосок и встаёт позади чёрной пешки.",
+              "it": "Questa mossa è permessa, ma cerchiamo la presa en passant: il tuo pedone cattura in diagonale e finisce dietro il pedone nero.",
+              "tr": "Bu hamle serbest ama aradığımız geçerken alma: piyonun çapraz alır ve siyah piyonun arkasına geçer.",
+              "pl": "Ten ruch jest dozwolony, ale szukamy bicia w przelocie: twój pion bije po skosie i staje za czarnym pionem.",
+              "id": "Langkah itu boleh, tapi yang kita cari adalah en passant: pionmu memakan secara diagonal dan mendarat di belakang pion hitam."
+            }
+          },
+          "apres": {
+            "en": "Well taken. Remember: it is now or never, on the next move the right is gone.",
+            "fr": "Bien pris. Retiens-le : c'est maintenant ou jamais, au coup suivant ce droit est perdu.",
+            "es": "Bien capturado. Recuerda: es ahora o nunca; en la jugada siguiente ese derecho se pierde.",
+            "pt": "Boa captura. Lembre-se: é agora ou nunca; no lance seguinte esse direito se perde.",
+            "de": "Gut geschlagen. Merk dir: jetzt oder nie, im nächsten Zug ist das Recht verfallen.",
+            "ru": "Хорошо взято. Запомни: сейчас или никогда, следующим ходом это право пропадает.",
+            "it": "Ben catturato. Ricorda: ora o mai più, alla mossa dopo il diritto è perso.",
+            "tr": "Güzel aldın. Unutma: ya şimdi ya hiç, bir sonraki hamlede bu hak kaybolur.",
+            "pl": "Dobre bicie. Zapamiętaj: teraz albo nigdy, w następnym ruchu to prawo przepada.",
+            "id": "Bagus. Ingat: sekarang atau tidak sama sekali, pada langkah berikutnya hak itu hilang."
+          }
+        },
+        {
+          "fen": "4k3/3p4/8/2P1P3/8/8/8/4K3 b - - 0 1",
+          "avant": "d7d5",
+          "sol": ["e5d6", "c5d6"],
+          "consigne": {
+            "en": "Two of your pawns can take it en passant. Pick one.",
+            "fr": "Deux de tes pions peuvent le prendre en passant. Choisis-en un.",
+            "es": "Dos de tus peones pueden capturarlo al paso. Elige uno.",
+            "pt": "Dois dos seus peões podem capturá-lo en passant. Escolha um.",
+            "de": "Zwei deiner Bauern können ihn en passant schlagen. Such dir einen aus.",
+            "ru": "Взять её на проходе могут две твои пешки. Выбери любую.",
+            "it": "Due dei tuoi pedoni possono catturarlo en passant. Scegline uno.",
+            "tr": "Piyonlarından ikisi onu geçerken alabilir. Birini seç.",
+            "pl": "Dwa twoje piony mogą go zbić w przelocie. Wybierz jednego.",
+            "id": "Dua pionmu bisa memakannya secara en passant. Pilih salah satu."
+          },
+          "faux": {
+            "*": {
+              "en": "That move is allowed, but we are after en passant: your pawn takes diagonally and lands behind the black pawn.",
+              "fr": "Ce coup est permis, mais on cherche la prise en passant : ton pion prend en diagonale et se pose derrière le pion noir.",
+              "es": "Esa jugada está permitida, pero buscamos la captura al paso: tu peón captura en diagonal y queda detrás del peón negro.",
+              "pt": "Esse lance é permitido, mas queremos o en passant: seu peão captura na diagonal e para atrás do peão preto.",
+              "de": "Der Zug ist erlaubt, aber gesucht ist en passant: Dein Bauer schlägt schräg und landet hinter dem schwarzen Bauern.",
+              "ru": "Так ходить можно, но мы ищем взятие на проходе: твоя пешка бьёт наискосок и встаёт позади чёрной пешки.",
+              "it": "Questa mossa è permessa, ma cerchiamo la presa en passant: il tuo pedone cattura in diagonale e finisce dietro il pedone nero.",
+              "tr": "Bu hamle serbest ama aradığımız geçerken alma: piyonun çapraz alır ve siyah piyonun arkasına geçer.",
+              "pl": "Ten ruch jest dozwolony, ale szukamy bicia w przelocie: twój pion bije po skosie i staje za czarnym pionem.",
+              "id": "Langkah itu boleh, tapi yang kita cari adalah en passant: pionmu memakan secara diagonal dan mendarat di belakang pion hitam."
+            }
+          },
+          "apres": {
+            "en": "Either pawn would do: en passant belongs to any pawn standing right beside.",
+            "fr": "L'un ou l'autre convenait : la prise en passant appartient à tout pion placé juste à côté.",
+            "es": "Cualquiera de los dos servía: la captura al paso vale para todo peón que esté justo al lado.",
+            "pt": "Qualquer um dos dois servia: o en passant vale para todo peão que esteja bem ao lado.",
+            "de": "Beide waren richtig: En passant darf jeder Bauer, der direkt daneben steht.",
+            "ru": "Подходила любая: на проходе может взять каждая пешка, стоящая рядом.",
+            "it": "Andava bene l'uno o l'altro: l'en passant spetta a ogni pedone che sta proprio accanto.",
+            "tr": "İkisi de olurdu: geçerken alma, tam yanda duran her piyonun hakkıdır.",
+            "pl": "Oba były dobre: w przelocie może bić każdy pion stojący tuż obok.",
+            "id": "Yang mana pun boleh: en passant berlaku bagi setiap pion yang berdiri tepat di sampingnya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Stalemate and draws", "fr": "Le pat et les nulles", "es": "El ahogado y las tablas", "pt": "O afogamento e os empates", "de": "Patt und Remis",
+        "ru": "Пат и ничьи", "it": "Lo stallo e le patte", "tr": "Pat ve beraberlik", "pl": "Pat i remisy", "id": "Pat dan remis"
+      },
+      "intro": {
+        "en": "If your opponent has no legal move left and their king is not in check, it is stalemate: the game is a draw, even if you are a queen up. Before you play, make sure they still have a move, or that you are giving checkmate. A game can also be drawn by agreement, when the same position comes back three times, or when neither side has enough left to mate.",
+        "fr": "Si ton adversaire n'a plus aucun coup permis et que son roi n'est pas en échec, c'est pat : la partie est nulle, même si tu as une dame de plus. Avant de jouer, vérifie qu'il lui reste un coup, ou que tu fais mat. Une partie peut aussi être nulle par accord, quand la même position revient trois fois, ou quand plus personne n'a de quoi mater.",
+        "es": "Si tu rival no tiene ninguna jugada legal y su rey no está en jaque, es ahogado: la partida es tablas, aunque tengas una dama de más. Antes de jugar, comprueba que le queda una jugada, o que das mate. Una partida también puede acabar en tablas por acuerdo, cuando la misma posición se repite tres veces o cuando a nadie le queda material para dar mate.",
+        "pt": "Se o adversário não tem mais nenhum lance legal e o rei dele não está em xeque, é afogamento: a partida empata, mesmo que você tenha uma dama a mais. Antes de jogar, confira se ele ainda tem um lance, ou se você dá mate. Uma partida também pode empatar por acordo, quando a mesma posição se repete três vezes ou quando ninguém tem material para dar mate.",
+        "de": "Hat dein Gegner keinen legalen Zug mehr und steht sein König nicht im Schach, ist es Patt: Die Partie ist remis, selbst wenn du eine Dame mehr hast. Prüf vor deinem Zug, ob ihm noch ein Zug bleibt oder ob du mattsetzt. Remis gibt es auch durch Einigung, wenn dieselbe Stellung dreimal entsteht oder wenn keiner mehr genug Material zum Mattsetzen hat.",
+        "ru": "Если у соперника не осталось ни одного допустимого хода, а его король не под шахом, это пат: ничья, даже если у тебя лишний ферзь. Перед ходом проверь, что у него есть ход или что ты ставишь мат. Ничья бывает и по соглашению, при троекратном повторении позиции или когда ни у кого не хватает фигур для мата.",
+        "it": "Se il tuo avversario non ha più mosse legali e il suo re non è sotto scacco, è stallo: la partita è patta, anche se hai una donna in più. Prima di muovere, controlla che gli resti una mossa, o che tu stia dando matto. Una partita può finire patta anche per accordo, quando la stessa posizione si ripete tre volte o quando nessuno ha più materiale per dare matto.",
+        "tr": "Rakibinin kurala uygun hiçbir hamlesi kalmadıysa ve şahı tehdit altında değilse bu pattır: bir vezir fazlan olsa bile oyun berabere biter. Oynamadan önce rakibinin bir hamlesi kaldığından ya da mat ettiğinden emin ol. Oyun anlaşmayla, aynı konum üç kez tekrarlandığında ya da kimsenin mat edecek taşı kalmadığında da berabere biter.",
+        "pl": "Jeśli przeciwnik nie ma żadnego dozwolonego ruchu, a jego król nie jest w szachu, to pat: partia kończy się remisem, nawet gdy masz hetmana więcej. Przed ruchem sprawdź, czy zostaje mu jakiś ruch albo czy dajesz mata. Remis bywa też za zgodą obu stron, po trzykrotnym powtórzeniu pozycji albo gdy nikt nie ma już czym dać mata.",
+        "id": "Jika lawan tidak punya langkah sah lagi dan rajanya tidak terkena skak, itu pat: permainan remis, meskipun kamu unggul satu menteri. Sebelum melangkah, pastikan lawan masih punya langkah, atau kamu memang memberi skakmat. Permainan juga bisa remis karena kesepakatan, saat posisi yang sama muncul tiga kali, atau saat tak ada lagi yang punya cukup bidak untuk skakmat."
+      },
+      "exos": [
+        {
+          "fen": "7k/5K2/8/6Q1/8/8/8/8 w - - 0 1",
+          "sol": ["g5g7", "g5g8", "g5h6", "g5h5", "g5h4"],
+          "mat": true,
+          "pat": ["g5g6", "g5f5"],
+          "consigne": {
+            "en": "Checkmate in one move. Careful: two of the queen's moves give stalemate instead.",
+            "fr": "Fais mat en un coup. Attention : deux coups de dame font pat à la place.",
+            "es": "Da mate en una jugada. Cuidado: dos jugadas de dama dan ahogado en su lugar.",
+            "pt": "Dê mate em um lance. Atenção: dois lances de dama dão afogamento em vez disso.",
+            "de": "Setze in einem Zug matt. Achtung: Zwei Damenzüge führen stattdessen zum Patt.",
+            "ru": "Поставь мат в один ход. Осторожно: два хода ферзём ведут к пату.",
+            "it": "Dai matto in una mossa. Attenzione: due mosse di donna danno invece stallo.",
+            "tr": "Tek hamlede mat et. Dikkat: vezirin iki hamlesi mat yerine pat yapar.",
+            "pl": "Daj mata w jednym ruchu. Uwaga: dwa ruchy hetmanem dają zamiast tego pata.",
+            "id": "Skakmat dalam satu langkah. Hati-hati: dua langkah menteri justru membuat pat."
+          },
+          "faux": {
+            "g5g6": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." },
+            "g5f5": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." }
+          }
+        },
+        {
+          "fen": "k7/3Q4/1K6/8/8/8/8/8 w - - 0 1",
+          "sol": ["d7c8", "d7d8", "d7e8", "d7b7", "d7a7"],
+          "mat": true,
+          "pat": ["d7c7", "d7d6"],
+          "consigne": {
+            "en": "Same trap in the corner. Find a checkmate, not a stalemate.",
+            "fr": "Même piège dans le coin. Trouve un mat, pas un pat.",
+            "es": "La misma trampa en el rincón. Encuentra un mate, no un ahogado.",
+            "pt": "A mesma armadilha no canto. Encontre um mate, não um afogamento.",
+            "de": "Dieselbe Falle in der Ecke. Finde ein Matt, kein Patt.",
+            "ru": "Та же ловушка в углу. Найди мат, а не пат.",
+            "it": "Stessa trappola nell'angolo. Trova un matto, non uno stallo.",
+            "tr": "Köşede aynı tuzak. Pat değil, mat bul.",
+            "pl": "Ta sama pułapka w rogu. Znajdź mata, nie pata.",
+            "id": "Jebakan yang sama di pojok. Temukan skakmat, bukan pat."
+          },
+          "faux": {
+            "d7c7": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." },
+            "d7d6": { "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.", "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.", "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.", "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.", "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.", "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.", "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.", "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.", "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.", "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis." }
+          }
+        },
+        {
+          "fen": "8/k1P5/2K5/8/8/8/8/8 w - - 0 1",
+          "sol": ["c7c8r"],
+          "controle": "meilleur",
+          "pat": ["c7c8q"],
+          "suite": ["a7a6", "c8a8"],
+          "suiteMat": true,
+          "consigne": {
+            "en": "Your pawn is about to promote, but a queen would give stalemate. Choose the piece that leaves the black king a move.",
+            "fr": "Ton pion va faire promotion, mais une dame ferait pat. Choisis la pièce qui laisse un coup au roi noir.",
+            "es": "Tu peón va a coronar, pero una dama daría ahogado. Elige la pieza que le deja una jugada al rey negro.",
+            "pt": "Seu peão vai promover, mas uma dama daria afogamento. Escolha a peça que deixa um lance para o rei preto.",
+            "de": "Dein Bauer wandelt sich gleich um, aber eine Dame würde Patt geben. Wähle die Figur, die dem schwarzen König einen Zug lässt.",
+            "ru": "Твоя пешка вот-вот превратится, но ферзь дал бы пат. Выбери фигуру, которая оставит чёрному королю ход.",
+            "it": "Il tuo pedone sta per promuovere, ma una donna darebbe stallo. Scegli il pezzo che lascia una mossa al re nero.",
+            "tr": "Piyonun terfi etmek üzere ama vezir pat yapar. Siyah şaha bir hamle bırakan taşı seç.",
+            "pl": "Twój pion zaraz się promuje, ale hetman dałby pata. Wybierz figurę, która zostawia czarnemu królowi ruch.",
+            "id": "Pionmu akan promosi, tapi menteri akan membuat pat. Pilih bidak yang menyisakan satu langkah bagi raja hitam."
+          },
+          "faux": {
+            "c7c8q": {
+              "en": "Stalemate! With a queen on that square, the black king has no move and is not in check.",
+              "fr": "Pat ! Avec une dame sur cette case, le roi noir n'a plus aucun coup et n'est pas en échec.",
+              "es": "¡Ahogado! Con una dama en esa casilla, el rey negro no tiene jugadas y no está en jaque.",
+              "pt": "Afogamento! Com uma dama nessa casa, o rei preto não tem lance e não está em xeque.",
+              "de": "Patt! Mit einer Dame auf diesem Feld hat der schwarze König keinen Zug und steht nicht im Schach.",
+              "ru": "Пат! С ферзём на этом поле у чёрного короля нет ходов, и он не под шахом.",
+              "it": "Stallo! Con una donna su quella casa il re nero non ha mosse e non è sotto scacco.",
+              "tr": "Pat! O karede vezir olursa siyah şahın hamlesi kalmaz ve şah tehdit altında da olmaz.",
+              "pl": "Pat! Z hetmanem na tym polu czarny król nie ma ruchu i nie jest w szachu.",
+              "id": "Pat! Dengan menteri di petak itu, raja hitam tak punya langkah dan tidak terkena skak."
+            },
+            "c7c8b": { "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.", "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.", "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.", "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.", "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.", "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.", "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.", "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.", "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.", "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup." },
+            "c7c8n": { "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.", "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.", "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.", "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.", "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.", "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.", "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.", "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.", "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.", "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup." }
+          },
+          "apres": {
+            "en": "The rook left the king one square, then gave mate. Stalemate avoided.",
+            "fr": "La tour a laissé une case au roi, puis elle a fait mat. Pat évité.",
+            "es": "La torre le dejó una casilla al rey y luego dio mate. Ahogado evitado.",
+            "pt": "A torre deixou uma casa para o rei e depois deu mate. Afogamento evitado.",
+            "de": "Der Turm ließ dem König ein Feld und setzte dann matt. Patt vermieden.",
+            "ru": "Ладья оставила королю одно поле, а потом поставила мат. Пата удалось избежать.",
+            "it": "La torre ha lasciato una casa al re, poi ha dato matto. Stallo evitato.",
+            "tr": "Kale şaha bir kare bıraktı, sonra mat etti. Pat önlendi.",
+            "pl": "Wieża zostawiła królowi jedno pole, a potem dała mata. Pata udało się uniknąć.",
+            "id": "Benteng menyisakan satu petak bagi raja, lalu memberi skakmat. Pat terhindar."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "niveau": 1,
+    "titre": {
+      "en": "The boss: the computer without its queen", "fr": "Le boss : l'ordinateur sans sa dame", "es": "El jefe: el ordenador sin su dama",
+      "pt": "O chefão: o computador sem a dama", "de": "Der Boss: der Computer ohne Dame", "ru": "Босс: компьютер без ферзя",
+      "it": "Il boss: il computer senza la donna", "tr": "Boss: vezirsiz bilgisayar", "pl": "Boss: komputer bez hetmana", "id": "Bos: komputer tanpa menteri"
+    },
+    "intro": {
+      "en": "You now know all the rules. To finish the chapter, beat the computer at its easiest level: it plays without its queen. No clock, and you can take a move back.",
+      "fr": "Tu connais maintenant toutes les règles. Pour finir le chapitre, bats l'ordinateur à son niveau le plus facile : il joue sans sa dame. Pas de pendule, et tu peux reprendre un coup.",
+      "es": "Ya conoces todas las reglas. Para terminar el capítulo, gana al ordenador en su nivel más fácil: juega sin su dama. Sin reloj, y puedes deshacer una jugada.",
+      "pt": "Agora você conhece todas as regras. Para terminar o capítulo, vença o computador no nível mais fácil: ele joga sem a dama. Sem relógio, e você pode voltar um lance.",
+      "de": "Du kennst jetzt alle Regeln. Zum Abschluss des Kapitels schlägst du den Computer auf der leichtesten Stufe: Er spielt ohne Dame. Keine Uhr, und du darfst einen Zug zurücknehmen.",
+      "ru": "Теперь ты знаешь все правила. Чтобы закончить главу, обыграй компьютер на самом лёгком уровне: он играет без ферзя. Без часов, и ход можно взять назад.",
+      "it": "Ora conosci tutte le regole. Per finire il capitolo, batti il computer al livello più facile: gioca senza la donna. Niente orologio, e puoi ritirare una mossa.",
+      "tr": "Artık bütün kuralları biliyorsun. Bölümü bitirmek için en kolay seviyedeki bilgisayarı yen: vezirsiz oynuyor. Saat yok ve hamleni geri alabilirsin.",
+      "pl": "Znasz już wszystkie zasady. Na koniec rozdziału pokonaj komputer na najłatwiejszym poziomie: gra bez hetmana. Bez zegara, a ruch można cofnąć.",
+      "id": "Sekarang kamu tahu semua aturannya. Untuk menyelesaikan bab ini, kalahkan komputer di tingkat termudah: ia bermain tanpa menteri. Tanpa jam, dan kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You know every rule of the game.", "fr": "Boss battu. Tu connais toutes les règles du jeu.", "es": "Jefe derrotado. Conoces todas las reglas del juego.",
+      "pt": "Chefão derrotado. Você conhece todas as regras do jogo.", "de": "Boss besiegt. Du kennst alle Regeln des Spiels.", "ru": "Босс побеждён. Ты знаешь все правила игры.",
+      "it": "Boss battuto. Conosci tutte le regole del gioco.", "tr": "Boss yenildi. Oyunun bütün kurallarını biliyorsun.", "pl": "Boss pokonany. Znasz wszystkie zasady gry.", "id": "Bos dikalahkan. Kamu tahu semua aturan permainan."
+    }
+  }
+}

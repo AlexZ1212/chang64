@@ -430,7 +430,7 @@ function modeClick(sq){
 boardEl.addEventListener("pointerdown",e=>{
   if(busy||pendingPromo||coord)return;
   if(e.button>0)return;
-  if(mode==="debut"&&(debut.ok||debut.occupe))return;
+  if(mode==="debut"&&(typeof leconBloquee==="function"?leconBloquee():(lecon.ok||lecon.occupe)))return;
   const sq=squareFromPoint(e.clientX,e.clientY);
   if(sq<0)return;
   const g=viewGame();
@@ -2054,6 +2054,17 @@ function updateTabsScrollHint(){
    Ces declarations sont en var et en function : l'initialisation de ui.js
    peut y arriver avant la fin de l'execution de ce fichier. */
 var debut={e:0,x:0,faites:[],ok:false,occupe:false,gen:0,charge:false};
+/* Chemin d'apprentissage (2026-11-22, apprendre.js) : « Je debute » est le
+   chapitre 1 d'un chemin qui en compte d'autres. `debut` reste SA progression
+   (cle chang64:debut, badges debut_*, compte) ; `lecon` est ce qui est a
+   l'ecran : `debut` lui-meme pour le chapitre 1, l'etat d'un autre chapitre
+   sinon. Le moteur ci-dessous ne parle qu'a `lecon` et a leconEtapes(). */
+var lecon=debut;
+var leconCh="debut";
+function leconEtapes(){
+  if(lecon!==debut&&typeof cheminEtapes==="function"){const E=cheminEtapes(leconCh);if(E&&E.length)return E;}
+  return debutEtapes();
+}
 function debutEtapes(){
   const mat1=t("White to play. Find the checkmate in one move.");
   const fourchette=t("Find the knight move that attacks two pieces at once.");
@@ -2103,23 +2114,30 @@ function debutEtapes(){
 function debutCase(n){return (8-Number(n[1]))*16+n.charCodeAt(0)-97;}
 function debutMarques(ex){const m={};if(ex&&ex.cible)m[debutCase(ex.cible)]="cible";return m;}
 async function debutSauver(){
+  if(lecon!==debut){if(typeof cheminSauver==="function")cheminSauver();return;}
   try{await window.storage.set("chang64:debut",JSON.stringify({e:debut.e,x:debut.x,f:debut.faites}));}catch(e){}
+  if(typeof cheminMaj==="function")cheminMaj();
+}
+/* La progression gardee de « Je debute », lue une seule fois. A part de
+   debutOuvrir : l'onglet Apprendre et le bouton de l'accueil en ont besoin
+   sans ouvrir le parcours. */
+async function debutLire(){
+  if(debut.charge)return;
+  debut.charge=true;
+  try{
+    const r=await window.storage.get("chang64:debut");
+    if(r&&r.value){
+      const d=JSON.parse(r.value),E=debutEtapes();
+      if(Number.isInteger(d.e)&&d.e>=0&&d.e<E.length){
+        debut.e=d.e;
+        debut.x=Number.isInteger(d.x)&&d.x>=0&&d.x<E[d.e].exos.length?d.x:0;
+      }
+      if(Array.isArray(d.f))debut.faites=d.f.filter(i=>Number.isInteger(i)&&i>=0&&i<E.length);
+    }
+  }catch(e){}
 }
 async function debutOuvrir(){
-  if(!debut.charge){
-    debut.charge=true;
-    try{
-      const r=await window.storage.get("chang64:debut");
-      if(r&&r.value){
-        const d=JSON.parse(r.value),E=debutEtapes();
-        if(Number.isInteger(d.e)&&d.e>=0&&d.e<E.length){
-          debut.e=d.e;
-          debut.x=Number.isInteger(d.x)&&d.x>=0&&d.x<E[d.e].exos.length?d.x:0;
-        }
-        if(Array.isArray(d.f))debut.faites=d.f.filter(i=>Number.isInteger(i)&&i>=0&&i<E.length);
-      }
-    }catch(e){}
-  }
+  await debutLire();
   if(mode!=="debut")return;
   debutCharger();
   /* Parcours termine avant l'arrivee du badge : il est attribue ici. */
@@ -2131,23 +2149,29 @@ function debutStatut(cls,txt){
   if(txt&&typeof announce==="function")announce(txt,"status");
 }
 function debutCharger(){
-  const E=debutEtapes(),et=E[debut.e],ex=et.exos[debut.x];
-  debut.gen++;debut.ok=false;debut.occupe=false;
-  game=ex?new Game(ex.fen):new Game();
+  const E=leconEtapes();
+  if(!E[lecon.e]){lecon.e=0;lecon.x=0;}
+  const et=E[lecon.e],ex=et.exos[lecon.x];
+  lecon.gen++;lecon.ok=false;lecon.occupe=false;
+  game=ex?new Game(ex.fen):et.fen?new Game(et.fen):new Game();
   flipped=false;selected=-1;lastMove=null;marks=debutMarques(ex);
   legalCache=ex?game.moves():[];
-  const n=debut.e+1,total=E.length;
+  const n=lecon.e+1,total=E.length;
   $("debutEtape").textContent=ex
-    ?t("Step {n} of {total}, exercise {x} of {y}",{n:n,total:total,x:debut.x+1,y:et.exos.length})
+    ?t("Step {n} of {total}, exercise {x} of {y}",{n:n,total:total,x:lecon.x+1,y:et.exos.length})
     :t("Step {n} of {total}",{n:n,total:total});
   const pas=$("debutPas");poserHtml(pas,"");
-  E.forEach((_,i)=>{
+  pas.classList.remove("hide");
+  E.forEach((p,i)=>{
     const b=document.createElement("button");
-    b.type="button";b.textContent=String(i+1);
-    b.className=debut.faites.includes(i)?"fait":"";
-    b.setAttribute("aria-label",t("Go to step {n}",{n:i+1}));
-    if(i===debut.e)b.setAttribute("aria-current","step");
-    b.onclick=()=>{debut.e=i;debut.x=0;debutSauver();debutCharger();};
+    b.type="button";
+    /* Le boss d'un chapitre porte une dame, la piece du site, pas un chiffre. */
+    if(p.boss&&typeof pieceSVG==="function"){poserHtml(b,pieceSVG("q","w",true));b.classList.add("boss");}
+    else b.textContent=String(i+1);
+    if(lecon.faites.includes(i))b.classList.add("fait");
+    b.setAttribute("aria-label",p.boss?t("The boss of the chapter"):t("Go to step {n}",{n:i+1}));
+    if(i===lecon.e)b.setAttribute("aria-current","step");
+    b.onclick=()=>{lecon.e=i;lecon.x=0;debutSauver();debutCharger();};
     pas.appendChild(b);
   });
   $("debutTitre").textContent=et.titre;
@@ -2156,14 +2180,32 @@ function debutCharger(){
   if(ex)debutStatut("",ex.consigne);
   $("btnDebutIndice").classList.toggle("hide",!ex);
   $("btnDebutSuite").classList.add("hide");
-  $("debutFin").classList.toggle("hide",!!ex);
+  /* Derniere etape : la premiere partie de « Je debute », le boss ailleurs
+     (leconFinRendre, apprendre.js). */
+  $("debutFin").classList.toggle("hide",!!ex||lecon!==debut);
+  if(typeof leconFinRendre==="function")leconFinRendre(et,ex);
+  /* Un coup de l'adversaire d'abord (prise en passant : il faut voir le pion
+     avancer de deux cases). La main revient au joueur ensuite. */
+  if(ex&&ex.avant){
+    const g=lecon.gen;
+    legalCache=[];lecon.occupe=true;
+    setTimeout(()=>{
+      if(g!==lecon.gen||mode!=="debut")return;
+      const m=game.moves().find(x=>game.uci(x)===ex.avant);
+      if(m){game.makeMove(m);lastMove=m;if(typeof SON!=="undefined"&&SON.coup)try{SON.coup(m,0);}catch(e){}}
+      legalCache=game.moves();lecon.occupe=false;
+      render();
+    },650);
+  }
   render();
 }
 function handleDebutClick(sq){
-  if(debut.ok||debut.occupe||!legalCache.length)return;
-  const ex=debutEtapes()[debut.e].exos[debut.x];
+  if(lecon.ok||lecon.occupe||!legalCache.length)return;
+  const ex=leconEtapes()[lecon.e].exos[lecon.x];
   if(selected>=0){
     const r=pickMove(selected,sq);
+    /* Promotion : le meme choix de piece que dans une partie. */
+    if(r&&r.promo){askPromo(r.promo,m=>debutEssai(m,ex));selected=-1;render();return;}
     if(r&&r.move){debutEssai(r.move,ex);return;}
   }
   const p=game.board[sq];
@@ -2177,25 +2219,26 @@ function debutEssai(m,ex){
   if(ex.mat){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
   selected=-1;
   if(!bon){
-    const g=debut.gen;
+    const g=lecon.gen;
     SON.erreur();
     marks=debutMarques(ex);marks[m.to]="bad";render();
     boardEl.classList.add("shake");
     setTimeout(()=>boardEl.classList.remove("shake"),340);
-    debutStatut("lose",(ex.faux&&ex.faux[uci])||t("Not quite. Try again.")+" "+ex.consigne);
-    setTimeout(()=>{if(g===debut.gen&&mode==="debut"&&!debut.ok){marks=debutMarques(ex);render();}},700);
+    /* faux : la raison propre a ce coup, ou "*" pour tout autre coup faux. */
+    debutStatut("lose",(ex.faux&&(ex.faux[uci]||ex.faux["*"]))||t("Not quite. Try again.")+" "+ex.consigne);
+    setTimeout(()=>{if(g===lecon.gen&&mode==="debut"&&!lecon.ok){marks=debutMarques(ex);render();}},700);
     return;
   }
-  game.makeMove(m);lastMove=m;marks={};legalCache=[];debut.occupe=true;
+  game.makeMove(m);lastMove=m;marks={};legalCache=[];lecon.occupe=true;
   render();
-  debutSuite(ex,0,debut.gen);
+  debutSuite(ex,0,lecon.gen);
 }
 /* Rejoue la fin de la combinaison (le roi s'ecarte, le cavalier prend) : voir
    la piece tomber explique la fourchette mieux qu'une phrase. */
 function debutSuite(ex,i,g){
   if(!ex.suite||i>=ex.suite.length){debutReussi(ex);return;}
   setTimeout(()=>{
-    if(g!==debut.gen||mode!=="debut")return;
+    if(g!==lecon.gen||mode!=="debut")return;
     const m=game.moves().find(x=>game.uci(x)===ex.suite[i]);
     if(!m){debutReussi(ex);return;}
     game.makeMove(m);lastMove=m;render();
@@ -2203,11 +2246,11 @@ function debutSuite(ex,i,g){
   },750);
 }
 function debutReussi(ex){
-  debut.ok=true;debut.occupe=false;
+  lecon.ok=true;lecon.occupe=false;
   SON.reussite();
   debutStatut("win",ex.apres||(ex.mat?t("Checkmate. Well done."):t("Well done.")));
-  const et=debutEtapes()[debut.e],dernier=debut.x>=et.exos.length-1;
-  if(dernier&&!debut.faites.includes(debut.e))debut.faites.push(debut.e);
+  const et=leconEtapes()[lecon.e],dernier=lecon.x>=et.exos.length-1;
+  if(dernier&&!lecon.faites.includes(lecon.e))lecon.faites.push(lecon.e);
   const b=$("btnDebutSuite");
   b.textContent=dernier?t("Next step"):t("Next");
   b.classList.remove("hide");
@@ -2215,10 +2258,10 @@ function debutReussi(ex){
   debutSauver();
 }
 function debutSuivant(){
-  if(!debut.ok)return;
-  const et=debutEtapes()[debut.e];
-  if(debut.x<et.exos.length-1)debut.x++;
-  else{debut.e++;debut.x=0;}
+  if(!lecon.ok)return;
+  const E=leconEtapes(),et=E[lecon.e];
+  if(lecon.x<et.exos.length-1)lecon.x++;
+  else if(lecon.e<E.length-1){lecon.e++;lecon.x=0;}
   debutSauver();
   debutCharger();
   debutBadge();
@@ -2234,8 +2277,9 @@ function debutBadge(){
   if(debutFini()&&!prog.badges.includes("debut_fini")){checkBadges();saveProg();}
 }
 function debutIndice(){
-  if(debut.ok||debut.occupe)return;
-  const ex=debutEtapes()[debut.e].exos[debut.x];
+  if(lecon.ok||lecon.occupe)return;
+  const ex=leconEtapes()[lecon.e].exos[lecon.x];
+  if(!ex)return;
   const u=ex.sol[0];
   selected=debutCase(u.slice(0,2));
   marks=debutMarques(ex);marks[debutCase(u.slice(2,4))]="hint";
@@ -2252,7 +2296,8 @@ function debutPremierePartie(){
   setMode("play",{fresh:true});
   goTop();
 }
-if($("btnDebutFermer"))$("btnDebutFermer").onclick=()=>{setMode("home");goTop();};
+/* La croix ramene d'ou l'on vient : l'accueil ou l'onglet Apprendre. */
+if($("btnDebutFermer"))$("btnDebutFermer").onclick=()=>{setMode(typeof cheminRetour==="function"?cheminRetour():"home");goTop();};
 if($("btnDebutIndice"))$("btnDebutIndice").onclick=debutIndice;
 if($("btnDebutSuite"))$("btnDebutSuite").onclick=debutSuivant;
 if($("btnDebutPartie"))$("btnDebutPartie").onclick=debutPremierePartie;
@@ -2623,8 +2668,10 @@ if(typeof debutCharger==="function"){
   debutCharger=function(){
     const prec=debutVu;
     const r=debutChargerAvant.apply(this,arguments);
-    debutVu={e:debut.e,x:debut.x};
+    debutVu={c:leconCh,e:lecon.e,x:lecon.x};
     if(!prec||mouvementCalme()||mode!=="debut")return r;
+    /* Autre chapitre : rien ne glisse, ce n'est pas un pas dans le meme. */
+    if(prec.c!==debutVu.c)return r;
     if(prec.e===debutVu.e&&prec.x===debutVu.x)return r;
     const sens=(debutVu.e>prec.e||(debutVu.e===prec.e&&debutVu.x>prec.x))?1:-1;
     const ids=prec.e===debutVu.e?["debutStatus"]:["debutTitre","debutIntro","debutStatus","debutFin"];

@@ -494,6 +494,14 @@ module.exports = function (H) {
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       urlsIndex("learn"), idxUrl);
+    /* Onglet Apprendre (apprendre.js, 2026-11-22) : les fiches de regles y
+       sont listees. Leurs pages gardent leur adresse ; seul l'acces change
+       (elles quittent la rubrique d'Explorer). La page pour les enseignants
+       n'est pas une fiche de regles : elle reste sur l'index. */
+    fs.writeFileSync(`${OUT}/data/fiches-${lang}.json`, JSON.stringify({
+      index: `/${dir}/`,
+      fiches: RULES.filter(r => r.slug.en !== "for-teachers-and-clubs").map(r => { const R = regle(r, lang); return { t: R.title, u: `/${dir}/${R.slug}` }; })
+    }));
   }
 
   /* ================= 2. GLOSSARY ================= */

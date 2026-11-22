@@ -72,7 +72,9 @@ async function passer(w, reponses) {
   const avantStock = w.localStorage.getItem("chang64:chemin");
   $("btnTestPasse").click(); await pause(50);
   T("apres une reponse, la position est fermee : un seul essai", ev("test.occupe") === true && ev("legalCache.length") === 0 && cache("btnTestPasse") && ev("leconBloquee()") === true);
-  T("position passee : c'est dit, sans reproche", /Position passée/.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
+  T("position passee : c'est dit, sans reproche", /^Position passée\. /.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
+  T("et l'idee est expliquee en une phrase", net($("debutStatus").textContent).endsWith(net(ev("cheminD.placement[0].ex"))) && /cavalier en b7/.test(net($("debutStatus").textContent)), $("debutStatus").textContent);
+  T("le bon coup est montre sur l'echiquier", ev("selected===debutCase('f3')") && ev("marks[debutCase('b7')]") === "hint");
   T("la pastille de la position est marquee manquee, avec une croix", pastilles() === "rate - - - - - - - - -" && !!$("testPastilles").firstChild.querySelector("svg"), pastilles());
   T("un bouton « Suivant » apparait", !cache("btnTestSuite") && net($("btnTestSuite").textContent) === "Suivant" && $("btnTestSuite").classList.contains("primary"));
   await pause(1600);
@@ -81,6 +83,8 @@ async function passer(w, reponses) {
   T("« Suivant » amene la position 2", ev("test.i") === 1 && /Position 2 sur 10/.test(net($("debutEtape").textContent)) && pastilles() === "rate ici - - - - - - - -" && cache("btnTestSuite") && !cache("btnTestPasse"), pastilles());
   ev("(function(){const p=cheminD.placement[test.i];testReponse(legalCache.find(x=>!p.sol.includes(game.uci(x))));})()");
   T("un mauvais coup : dit nettement, la case jouee est marquee", /pas le meilleur coup/.test(net($("debutStatus").textContent)) && $("debutStatus").classList.contains("lose") && ev("Object.values(marks).includes('bad')"), $("debutStatus").textContent);
+  T("le mauvais coup est repris, le bon est montre, et la phrase dit pourquoi", ev("game.history.length") === 0 && ev("selected===debutCase('g1')") && ev("marks[debutCase('g7')]") === "hint" && /protégée par ton roi/.test(net($("debutStatus").textContent)), $("debutStatus").textContent);
+  T("la position reste fermee pendant l'explication", ev("legalCache.length") === 0 && ev("leconBloquee()") === true);
   T("deuxieme erreur de suite : le bouton annonce le resultat", net($("btnTestSuite").textContent) === "Voir le résultat", $("btnTestSuite").textContent);
   $("btnTestSuite").click(); await pause(100);
   T("deux erreurs de suite : le test s'arrete a la deuxieme position", ev("test.fin") === true && ev("test.rep.length") === 2);
@@ -175,6 +179,12 @@ async function passer(w, reponses) {
     await pause(ev("!!cheminD.placement[" + i + "].avant") ? 800 : 30);
     T("position " + (i + 1) + " : le camp qui repond est en bas", ev("flipped") === (ev("game.turn===B")) && ev("game.turn===W"), "flipped " + ev("flipped") + ", trait " + ev("game.turn"));
   }
+  ev("test.i=3;test.rep.length=3;test.rep[0]=1;test.rep[1]=1;test.rep[2]=1;testRendre()"); await pause(800);
+  ev("(function(){const p=cheminD.placement[3];testReponse(legalCache.find(x=>p.sol.includes(game.uci(x))));})()");
+  T("une bonne reponse recoit aussi son explication", /^Bonne réponse\. /.test(net($("debutStatus").textContent)) && /prise en passant/.test(net($("debutStatus").textContent)) && $("debutStatus").classList.contains("win") && ev("game.history.length") === 2, $("debutStatus").textContent);
+  $("btnTestSuite").click(); await pause(60);
+  ev("(function(){const p=cheminD.placement[4];testReponse(legalCache.find(x=>game.uci(x)==='c7c8q'));})()");
+  T("promotion manquee : le pion revient, la case d'arrivee est montree, la phrase nomme le cavalier", ev("game.history.length") === 0 && ev("selected===debutCase('c7')") && ev("marks[debutCase('c8')]") === "hint" && /promotion en cavalier/.test(net($("debutStatus").textContent)), $("debutStatus").textContent);
   w.close();
 
   console.log("--- Quitter en cours de test ---");

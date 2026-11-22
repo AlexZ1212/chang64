@@ -108,7 +108,7 @@ function ecrire(OUT, ponct) {
       }),
       aVenir: tx(D.plan.aVenir) || "",
       placement: D.placement.positions.map(p => {
-        const o = { fen: p.fen, sol: p.sol, ch: p.chapitre || "" };
+        const o = { fen: p.fen, sol: p.sol, ch: p.chapitre || "", ex: tx(p.explication) || "" };
         for (const k of ["avant", "mat"]) if (p[k] !== undefined) o[k] = p[k];
         return o;
       })

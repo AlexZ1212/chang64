@@ -137,7 +137,8 @@ async function controlerExo(sf, ex, nom) {
     if (typeof o.en === "string") { textes.push([ou, o]); return; }
     for (const k in o) voir(o[k], ou + "." + k);
   };
-  voir(D.plan, "plan"); D.chapitres.forEach(c => voir(c, c.id));
+  voir(D.plan, "plan"); D.chapitres.forEach(c => voir(c, c.id)); voir(D.placement, "placement");
+  T("chaque position du test a son explication", D.placement.positions.every(p => p.explication && typeof p.explication.en === "string"));
   T("des textes a controler", textes.length > 100, String(textes.length));
   const incomplets = textes.filter(([, o]) => CODES.some(c => typeof o[c] !== "string" || !o[c].trim()));
   T("chaque texte existe dans les 10 langues", incomplets.length === 0, incomplets.slice(0, 3).map(x => x[0]).join(" ; "));
@@ -158,6 +159,7 @@ async function controlerExo(sf, ex, nom) {
     T("site : pas de « : ; ! ? » precede d'une espace ordinaire en francais", !/[a-zà-ÿ0-9)] [:;!?]/i.test(brut), (brut.match(/.{12}[a-zà-ÿ0-9)] [:;!?].{6}/i) || [""])[0]);
     for (const l of CODES) {
       const j = JSON.parse(fs.readFileSync(path.join(site, "chemin-" + l + ".json"), "utf8"));
+      T("site " + l + " : chaque position du test porte son explication", j.placement.every(p => typeof p.ex === "string" && p.ex.length > 20 && p.ex.length < 200));
       T("site " + l + " : 3 chapitres, 10 positions, boss en derniere etape", j.chapitres.length === 3 && j.placement.length === 10 &&
         j.chapitres.slice(1).every(c => c.etapes[c.etapes.length - 1].boss && c.etapes[c.etapes.length - 1].exos.length === 0));
     }

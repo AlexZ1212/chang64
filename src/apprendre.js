@@ -393,8 +393,8 @@ function testClic(sq) {
   render();
 }
 /* Un seul essai par position ; m absent : « Je ne sais pas ». Le resultat est
-   dit nettement (demande d'Alexandre, 22/11), sans montrer la solution : c'est
-   une mesure, pas une lecon. On passe a la suite quand on le decide. */
+   dit nettement, avec une phrase qui explique l'idee (demandes d'Alexandre,
+   22/11). On passe a la suite quand on le decide. */
 function testReponse(m) {
   if (!testEnCours() || test.occupe) return;
   const p = cheminD.placement[test.i];
@@ -407,9 +407,17 @@ function testReponse(m) {
   }
   test.rep[test.i] = bon ? 1 : 0;
   test.occupe = true; legalCache = []; selected = -1; marks = {};
-  if (m && !bon) marks[m.to] = "bad";
+  if (!bon) {
+    /* Pourquoi ce n'etait pas le bon coup (demande d'Alexandre, 22/11) : le
+       coup joue est repris, sa case reste marquee, et le meilleur coup est
+       montre sur l'echiquier comme un indice. La phrase dit l'idee. */
+    if (m) { game.undoMove(); lastMove = game.history.length ? game.history[game.history.length - 1].m : null; marks[m.to] = "bad"; }
+    const u = p.sol[0];
+    selected = debutCase(u.slice(0, 2));
+    marks[debutCase(u.slice(2, 4))] = "hint";
+  }
   if (bon) { try { SON.reussite(); } catch (e) {} }
-  debutStatut(bon ? "win" : m ? "lose" : "", bon ? t("Correct.") : m ? t("That was not the best move.") : t("Position skipped."));
+  debutStatut(bon ? "win" : m ? "lose" : "", (bon ? t("Correct.") : m ? t("That was not the best move.") : t("Position skipped.")) + (p.ex ? " " + p.ex : ""));
   testPastilles();
   $("btnTestPasse").classList.add("hide");
   const suite = $("btnTestSuite");

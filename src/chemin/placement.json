@@ -10,7 +10,19 @@
       "fen": "6k1/1n3ppp/p7/8/8/5B2/5PPP/6K1 w - - 0 1",
       "sol": [
         "f3b7"
-      ]
+      ],
+      "explication": {
+        "en": "The knight on b7 was not defended: the bishop takes it for free.",
+        "fr": "Le cavalier en b7 n'était pas défendu : le fou le prend gratuitement.",
+        "es": "El caballo de b7 no estaba defendido: el alfil lo captura gratis.",
+        "pt": "O cavalo em b7 não estava defendido: o bispo o captura de graça.",
+        "de": "Der Springer auf b7 war nicht gedeckt: Der Läufer schlägt ihn umsonst.",
+        "ru": "Конь на b7 не был защищён: слон берёт его даром.",
+        "it": "Il cavallo in b7 non era difeso: l'alfiere lo cattura gratis.",
+        "tr": "b7'deki at korunmuyordu: fil onu bedavaya alır.",
+        "pl": "Skoczek na b7 nie był broniony: goniec bije go za darmo.",
+        "id": "Kuda di b7 tidak dilindungi: gajah memakannya secara cuma-cuma."
+      }
     },
     {
       "idee": "mat en un, dame soutenue par le roi",
@@ -19,7 +31,19 @@
       "fen": "7k/8/5K2/8/8/8/8/6Q1 w - - 0 1",
       "sol": [
         "g1g7"
-      ]
+      ],
+      "explication": {
+        "en": "The queen goes right next to the king, protected by your own king: checkmate.",
+        "fr": "La dame se pose contre le roi, protégée par ton roi : échec et mat.",
+        "es": "La dama se coloca junto al rey, protegida por tu rey: jaque mate.",
+        "pt": "A dama encosta no rei, protegida pelo seu rei: xeque-mate.",
+        "de": "Die Dame stellt sich direkt neben den König, gedeckt von deinem König: Schachmatt.",
+        "ru": "Ферзь встаёт вплотную к королю под защитой твоего короля: мат.",
+        "it": "La donna si mette accanto al re, protetta dal tuo re: scacco matto.",
+        "tr": "Vezir, kendi şahının korumasıyla rakip şahın yanına gelir: şah mat.",
+        "pl": "Hetman staje tuż przy królu, broniony przez twojego króla: mat.",
+        "id": "Menteri menempel pada raja lawan, dilindungi rajamu sendiri: skakmat."
+      }
     },
     {
       "idee": "mat du couloir",
@@ -28,7 +52,19 @@
       "fen": "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
       "sol": [
         "d1d8"
-      ]
+      ],
+      "explication": {
+        "en": "The king is shut in behind its pawns: the rook mates on the last rank.",
+        "fr": "Le roi est enfermé derrière ses pions : la tour fait mat sur la dernière rangée.",
+        "es": "El rey está encerrado detrás de sus peones: la torre da mate en la última fila.",
+        "pt": "O rei está preso atrás dos próprios peões: a torre dá mate na última fileira.",
+        "de": "Der König ist hinter seinen Bauern eingesperrt: Der Turm setzt auf der letzten Reihe matt.",
+        "ru": "Король заперт за своими пешками: ладья ставит мат на последней горизонтали.",
+        "it": "Il re è chiuso dietro i suoi pedoni: la torre dà matto sull'ultima traversa.",
+        "tr": "Şah kendi piyonlarının arkasında sıkışmış: kale son yatayda mat eder.",
+        "pl": "Król jest zamknięty za własnymi pionami: wieża daje mata na ostatniej linii.",
+        "id": "Raja terkurung di belakang pion-pionnya sendiri: benteng memberi skakmat di baris terakhir."
+      }
     },
     {
       "idee": "prise en passant, seul coup qui sauve les deux pieces attaquees",
@@ -38,7 +74,19 @@
       "avant": "d7d5",
       "sol": [
         "e5d6"
-      ]
+      ],
+      "explication": {
+        "en": "The pawn that just moved two squares attacked your bishop and your knight. Taking it en passant removes it, and your knight protects your pawn.",
+        "fr": "Le pion qui vient d'avancer de deux cases attaquait ton fou et ton cavalier. La prise en passant le fait disparaître, et ton cavalier protège ton pion.",
+        "es": "El peón que acaba de avanzar dos casillas atacaba tu alfil y tu caballo. La captura al paso lo elimina, y tu caballo protege tu peón.",
+        "pt": "O peão que acabou de avançar duas casas atacava seu bispo e seu cavalo. O en passant o elimina, e seu cavalo protege o seu peão.",
+        "de": "Der Bauer, der gerade zwei Felder gezogen ist, griff deinen Läufer und deinen Springer an. En passant beseitigt ihn, und dein Springer deckt deinen Bauern.",
+        "ru": "Пешка, только что прошедшая два поля, напала на твоего слона и коня. Взятие на проходе её убирает, а твой конь защищает пешку.",
+        "it": "Il pedone appena avanzato di due case attaccava il tuo alfiere e il tuo cavallo. La presa en passant lo elimina, e il tuo cavallo protegge il tuo pedone.",
+        "tr": "Az önce iki kare ilerleyen piyon filine ve atına saldırıyordu. Geçerken alma onu tahtadan kaldırır, atın da piyonunu korur.",
+        "pl": "Pion, który właśnie przeszedł dwa pola, atakował twojego gońca i skoczka. Bicie w przelocie go usuwa, a twój skoczek broni twojego piona.",
+        "id": "Pion yang baru saja maju dua petak menyerang gajah dan kudamu. En passant menyingkirkannya, dan kudamu melindungi pionmu."
+      }
     },
     {
       "idee": "promotion en cavalier qui fait mat",
@@ -47,7 +95,19 @@
       "fen": "b7/kpP5/8/1P6/5B2/8/8/6K1 w - - 0 1",
       "sol": [
         "c7c8n"
-      ]
+      ],
+      "explication": {
+        "en": "Promoting to a knight gives check, and the king has no square left: checkmate. A queen would not even have given check.",
+        "fr": "La promotion en cavalier donne échec et le roi n'a plus de case : mat. Une dame n'aurait même pas donné échec.",
+        "es": "La coronación en caballo da jaque y al rey no le queda casilla: mate. Una dama ni siquiera habría dado jaque.",
+        "pt": "A promoção a cavalo dá xeque e o rei fica sem casa: mate. Uma dama nem teria dado xeque.",
+        "de": "Die Umwandlung in einen Springer gibt Schach, und der König hat kein Feld mehr: Matt. Eine Dame hätte nicht einmal Schach gegeben.",
+        "ru": "Превращение в коня даёт шах, и королю некуда идти: мат. Ферзь даже не дал бы шаха.",
+        "it": "La promozione a cavallo dà scacco e il re non ha più case: matto. Una donna non avrebbe nemmeno dato scacco.",
+        "tr": "Ata terfi şah çeker ve şahın gidecek karesi kalmaz: mat. Vezir şah bile çekmezdi.",
+        "pl": "Promocja na skoczka daje szacha, a król nie ma już pola: mat. Hetman nie dałby nawet szacha.",
+        "id": "Promosi menjadi kuda memberi skak dan raja tak punya petak lagi: skakmat. Menteri bahkan tidak akan memberi skak."
+      }
     },
     {
       "idee": "trois pieces attaquees, une seule non defendue",
@@ -56,6 +116,25 @@
       "fen": "6k1/5ppp/1p4n1/2b5/r7/8/2Q2PPP/6K1 w - - 0 1",
       "sol": [
         "c2a4"
+      ],
+      "explication": {
+        "en": "Of the three pieces your queen attacked, only the rook was not defended.",
+        "fr": "Des trois pièces que ta dame attaquait, seule la tour n'était pas défendue.",
+        "es": "De las tres piezas que atacaba tu dama, solo la torre no estaba defendida.",
+        "pt": "Das três peças que sua dama atacava, só a torre não estava defendida.",
+        "de": "Von den drei Figuren, die deine Dame angriff, war nur der Turm ungedeckt.",
+        "ru": "Из трёх фигур, на которые нападал твой ферзь, не была защищена только ладья.",
+        "it": "Dei tre pezzi che la tua donna attaccava, solo la torre non era difesa.",
+        "tr": "Vezirinin saldırdığı üç taştan yalnızca kale korunmuyordu.",
+        "pl": "Z trzech figur atakowanych przez twojego hetmana tylko wieża nie była broniona.",
+        "id": "Dari tiga bidak yang diserang menterimu, hanya benteng yang tidak dilindungi."
+      },
+      "nonDefendues": [
+        "a4"
+      ],
+      "defendues": [
+        "c5",
+        "g6"
       ]
     },
     {
@@ -65,6 +144,27 @@
       "fen": "3r2k1/pp3ppp/2n5/4p3/8/5N1P/PP3PP1/4R1K1 w - - 0 1",
       "sol": [
         "f3e5"
+      ],
+      "explication": {
+        "en": "The pawn was attacked twice and defended only once. Taking with the knight first wins it.",
+        "fr": "Le pion était attaqué deux fois et défendu une seule fois. En prenant d'abord avec le cavalier, tu le gagnes.",
+        "es": "El peón estaba atacado dos veces y defendido solo una. Capturando primero con el caballo, lo ganas.",
+        "pt": "O peão estava atacado duas vezes e defendido só uma. Capturando primeiro com o cavalo, você o ganha.",
+        "de": "Der Bauer war zweimal angegriffen und nur einmal gedeckt. Schlägst du zuerst mit dem Springer, gewinnst du ihn.",
+        "ru": "Пешка была атакована дважды, а защищена один раз. Если сначала взять конём, она твоя.",
+        "it": "Il pedone era attaccato due volte e difeso una sola. Catturando prima con il cavallo, lo guadagni.",
+        "tr": "Piyona iki taş saldırıyor, onu tek taş koruyordu. Önce atla alırsan piyonu kazanırsın.",
+        "pl": "Pion był atakowany dwa razy, a broniony tylko raz. Bijąc najpierw skoczkiem, zdobywasz go.",
+        "id": "Pion itu diserang dua kali dan hanya dilindungi satu kali. Dengan memakan lebih dulu memakai kuda, pion itu jadi milikmu."
+      },
+      "compte": {
+        "case": "e5",
+        "attaquants": 2,
+        "defenseurs": 1
+      },
+      "suite": [
+        "c6e5",
+        "e1e5"
       ]
     },
     {
@@ -73,6 +173,22 @@
       "fen": "4k3/1p3ppp/q7/3N4/8/8/PP3PPP/6K1 w - - 0 1",
       "sol": [
         "d5c7"
+      ],
+      "explication": {
+        "en": "The knight gives check and attacks the queen at the same time: a fork. The king must move, and the queen falls.",
+        "fr": "Le cavalier donne échec et attaque la dame en même temps : c'est une fourchette. Le roi doit bouger, et la dame tombe.",
+        "es": "El caballo da jaque y ataca la dama a la vez: es una horquilla. El rey tiene que moverse y la dama cae.",
+        "pt": "O cavalo dá xeque e ataca a dama ao mesmo tempo: é um garfo. O rei precisa sair, e a dama cai.",
+        "de": "Der Springer gibt Schach und greift zugleich die Dame an: eine Gabel. Der König muss ziehen, und die Dame fällt.",
+        "ru": "Конь даёт шах и одновременно нападает на ферзя: это вилка. Король вынужден уйти, и ферзь теряется.",
+        "it": "Il cavallo dà scacco e attacca la donna nello stesso momento: è una forchetta. Il re deve spostarsi e la donna cade.",
+        "tr": "At hem şah çeker hem de vezire saldırır: bu bir çatal. Şah kaçmak zorunda, vezir de düşer.",
+        "pl": "Skoczek daje szacha i jednocześnie atakuje hetmana: to widełki. Król musi odejść, a hetman pada.",
+        "id": "Kuda memberi skak sekaligus menyerang menteri: ini garpu. Raja harus pindah, dan menteri pun jatuh."
+      },
+      "suite": [
+        "e8d7",
+        "c7a6"
       ]
     },
     {
@@ -81,7 +197,19 @@
       "fen": "4k3/pp3ppp/2q5/8/P7/8/1PP2PPP/5BK1 w - - 0 1",
       "sol": [
         "f1b5"
-      ]
+      ],
+      "explication": {
+        "en": "The bishop attacks the queen, which cannot step aside: her king is right behind her. This is a pin, and the queen is lost.",
+        "fr": "Le fou attaque la dame, qui ne peut pas s'écarter : son roi est juste derrière elle. C'est un clouage, et la dame est perdue.",
+        "es": "El alfil ataca la dama, que no puede apartarse: su rey está justo detrás. Es una clavada, y la dama está perdida.",
+        "pt": "O bispo ataca a dama, que não pode sair do caminho: o rei dela está logo atrás. É uma cravada, e a dama está perdida.",
+        "de": "Der Läufer greift die Dame an, die nicht ausweichen kann: Ihr König steht direkt dahinter. Das ist eine Fesselung, und die Dame geht verloren.",
+        "ru": "Слон нападает на ферзя, а тот не может уйти: за ним стоит его король. Это связка, и ферзь потерян.",
+        "it": "L'alfiere attacca la donna, che non può scansarsi: il suo re è proprio dietro di lei. È un'inchiodatura, e la donna è persa.",
+        "tr": "Fil vezire saldırıyor ve vezir kaçamıyor: hemen arkasında kendi şahı var. Bu bir açmaz ve vezir kaybedilir.",
+        "pl": "Goniec atakuje hetmana, który nie może odejść: tuż za nim stoi jego król. To związanie i hetman jest stracony.",
+        "id": "Gajah menyerang menteri, yang tidak bisa menyingkir: rajanya tepat di belakangnya. Ini pin, dan menteri itu hilang."
+      }
     },
     {
       "idee": "mat en deux par sacrifice de dame sur la derniere rangee",
@@ -89,7 +217,24 @@
       "fen": "r5k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1",
       "sol": [
         "e2e8"
-      ]
+      ],
+      "explication": {
+        "en": "The queen gives herself up on the last rank: the rook must take her, and your rook takes back with checkmate.",
+        "fr": "La dame se sacrifie sur la dernière rangée : la tour doit la prendre, et ta tour reprend en faisant mat.",
+        "es": "La dama se sacrifica en la última fila: la torre tiene que capturarla, y tu torre recaptura dando mate.",
+        "pt": "A dama se sacrifica na última fileira: a torre é obrigada a capturar, e sua torre recaptura dando mate.",
+        "de": "Die Dame opfert sich auf der letzten Reihe: Der Turm muss schlagen, und dein Turm schlägt mit Matt zurück.",
+        "ru": "Ферзь жертвует собой на последней горизонтали: ладья вынуждена взять, и твоя ладья берёт в ответ с матом.",
+        "it": "La donna si sacrifica sull'ultima traversa: la torre deve catturarla, e la tua torre riprende dando matto.",
+        "tr": "Vezir son yatayda kendini feda eder: kale onu almak zorunda, senin kalen de geri alırken mat eder.",
+        "pl": "Hetman poświęca się na ostatniej linii: wieża musi go zbić, a twoja wieża odbija z matem.",
+        "id": "Menteri mengorbankan diri di baris terakhir: benteng terpaksa memakannya, dan bentengmu memakan balik sambil memberi skakmat."
+      },
+      "suite": [
+        "a8e8",
+        "e1e8"
+      ],
+      "suiteMat": true
     }
   ]
 }

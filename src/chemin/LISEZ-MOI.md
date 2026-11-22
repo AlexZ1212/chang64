@@ -87,8 +87,11 @@ soit vrai** :
 ## Le test de placement
 
 `placement.json` : dix positions, de la plus simple à la plus dure, chacune
-avec `fen`, `sol`, éventuellement `avant` et `mat`, et `chapitre` (l'`id` du
-chapitre qu'elle représente). Une position sans `chapitre` est au-delà des
+avec `fen`, `sol`, éventuellement `avant` et `mat`, `chapitre` (l'`id` du
+chapitre qu'elle représente) et `explication` (10 langues) : la phrase affichée
+après la réponse, qui dit l'idée du bon coup. Ce qu'elle affirme doit être
+couvert par un champ de contrôle (`mat`, `controle`, `nonDefendues`, `compte`,
+`suite`…). Varier les pièces d'une position à l'autre. Une position sans `chapitre` est au-delà des
 chapitres sortis. Le joueur entre dans le premier chapitre dont il a manqué une
 position. Quand un chapitre sort, donner son `id` à deux positions.
 

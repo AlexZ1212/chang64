@@ -253,7 +253,7 @@ module.exports = {
 "Next puzzle":"Teka-teki berikutnya",
 "Hint":"Petunjuk",
 "Show solution":"Tunjukkan solusi",
-"Restart puzzle":"Ulangi teka-teki",
+"Restart puzzle":"Ulangi",
 "Reset my progress":"Atur ulang kemajuanku",
 "Find the winning move.":"Temukan langkah kemenangan.",
 "Loading…":"Memuat…",

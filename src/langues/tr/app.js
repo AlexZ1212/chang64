@@ -253,7 +253,7 @@ module.exports = {
 "Next puzzle":"Sonraki bulmaca",
 "Hint":"İpucu",
 "Show solution":"Çözümü göster",
-"Restart puzzle":"Bulmacayı yeniden başlat",
+"Restart puzzle":"Yeniden başla",
 "Reset my progress":"İlerlememi sıfırla",
 "Find the winning move.":"Kazandıran hamleyi bul.",
 "Loading…":"Yükleniyor…",

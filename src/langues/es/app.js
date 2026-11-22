@@ -253,7 +253,7 @@ module.exports = {
 "Next puzzle":"Siguiente ejercicio",
 "Hint":"Pista",
 "Show solution":"Ver la solución",
-"Restart puzzle":"Reiniciar el ejercicio",
+"Restart puzzle":"Reiniciar",
 "Reset my progress":"Restablecer mi progreso",
 "Find the winning move.":"Encuentra la jugada ganadora.",
 "Loading…":"Cargando…",

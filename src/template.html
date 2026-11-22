@@ -628,9 +628,12 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   @media(max-width:599px){
     #appLayout[data-mode="puzzles"]{padding-bottom:68px;row-gap:8px}
     #appLayout[data-mode="puzzles"] .ex-actions{padding-top:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
-    /* L'action principale tient sur une ligne : elle prend un peu plus de place que les deux autres. */
-    #appLayout[data-mode="puzzles"] .ex-actions #btnNext,#appLayout[data-mode="puzzles"] .ex-actions #btnDailyNext{flex:1.35 1 0}
-    #appLayout[data-mode="puzzles"] .ex-actions .btn{font-size:13.5px;padding:8px 4px}
+    /* L'action principale tient sur une ligne : elle prend un peu plus de place que les deux autres.
+       Largeur de depart = celle du texte (2026-11-22) : a parts egales, « Следующая задача »
+       ou « Teka-teki berikutnya » passaient sur deux lignes a 360 px alors que « Indice »
+       avait de la place en trop. */
+    #appLayout[data-mode="puzzles"] .ex-actions #btnNext,#appLayout[data-mode="puzzles"] .ex-actions #btnDailyNext{flex:1.35 1 auto}
+    #appLayout[data-mode="puzzles"] .ex-actions .btn{flex:1 1 auto;font-size:13.5px;padding:8px 4px}
     #pane-puzzles .panel{padding:10px 12px 12px}
   }
 }

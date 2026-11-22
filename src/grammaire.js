@@ -105,7 +105,9 @@ const GRAMMAIRE=(function(){
       case "it":{const el=/^[aeiou]/.test(w),
           art=g==="f"?(el?"l'":"la "):(el?"l'":"il "),a=g==="f"?(el?"all'":"alla "):(el?"all'":"al "),
           di=g==="f"?(el?"dell'":"della "):(el?"dell'":"del ");
-        const o=tous(art+w+" in "+sq);o.dat=a+w+" in "+sq;o.gen=di+w+" in "+sq;return o;}
+        const o=tous(art+w+" in "+sq);o.dat=a+w+" in "+sq;o.gen=di+w+" in "+sq;
+        /* « da » + article (2026-11-22) : dal cavallo, dalla torre, dall'alfiere. */
+        o.da=(g==="f"?(el?"dall'":"dalla "):(el?"dall'":"dal "))+w+" in "+sq;return o;}
       case "pl":{const f=PL[k]||PL.p,o={g:g};
         for(const c of ["nom","acc","gen","dat","ins"])o[c]=f[c]+" na "+sq;return o;}
       case "tr":{const f=TR[k]||TR.p,o={g:g};

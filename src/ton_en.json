@@ -187,5 +187,12 @@
   "Not quite. Try again.",
   "Almost! Have another go.",
   "Not that one. Another try?"
+ ],
+ "{n} game(s) kept on this device. Pick one to replay and review it.": {
+  "one": "{n} game kept on this device. Pick it to replay and review it.",
+  "other": "{n} games kept on this device. Pick one to replay and review it."
+ },
+ "Your side: {b} blunder(s), {m} mistake(s), {i} inaccuracy(ies).": [
+  "Your side: blunders {b}, mistakes {m}, inaccuracies {i}."
  ]
 }

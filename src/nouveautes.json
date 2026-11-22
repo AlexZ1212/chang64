@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Clearer statistics, a simpler Against a friend screen",
+   "Your statistics are now grouped by category, and members get a won, drawn, lost bar. The Against a friend screen fits in one block: pick a time control, from Blitz to correspondence, then invite. And a square at the bottom right tells you when a game is waiting for you."
+  ],
+  "fr": [
+   "Des statistiques plus claires, un écran Contre un ami plus simple",
+   "Tes statistiques sont maintenant rangées par catégorie, et les membres ont une barre gagnées, nulles, perdues. L'écran Contre un ami tient en un seul bloc : choisis une cadence, du Blitz à la correspondance, puis invite. Et un carré en bas à droite te prévient quand une partie t'attend."
+  ],
+  "es": [
+   "Estadísticas más claras, una pantalla Contra un amigo más sencilla",
+   "Tus estadísticas están ahora ordenadas por categoría, y los miembros tienen una barra de ganadas, tablas y perdidas. La pantalla Contra un amigo cabe en un solo bloque: elige un ritmo de juego, del Blitz a la correspondencia, y luego invita. Y un cuadro abajo a la derecha te avisa cuando una partida te espera."
+  ],
+  "pt": [
+   "Estatísticas mais claras, uma tela Contra um amigo mais simples",
+   "Suas estatísticas agora estão organizadas por categoria, e os membros têm uma barra de vitórias, empates e derrotas. A tela Contra um amigo cabe em um único bloco: escolha um ritmo de jogo, do Blitz à correspondência, e depois convide. E um quadrado no canto inferior direito avisa quando uma partida espera por você."
+  ],
+  "de": [
+   "Klarere Statistiken, ein einfacherer Bildschirm „Gegen einen Freund“",
+   "Deine Statistiken sind jetzt nach Kategorien geordnet, und Mitglieder sehen einen Balken mit Siegen, Remis und Niederlagen. Der Bildschirm „Gegen einen Freund“ passt in einen einzigen Block: Wähle eine Bedenkzeit, von Blitz bis Fernpartie, und lade dann ein. Und ein Quadrat unten rechts sagt dir, wenn eine Partie auf dich wartet."
+  ],
+  "ru": [
+   "Понятнее статистика, проще экран «Против друга»",
+   "Статистика теперь разложена по категориям, а у участников появилась полоса побед, ничьих и поражений. Экран «Против друга» умещается в один блок: выбери контроль времени, от блица до игры по переписке, и пригласи. А квадрат внизу справа подскажет, когда тебя ждёт партия."
+  ],
+  "it": [
+   "Statistiche più chiare, una schermata Contro un amico più semplice",
+   "Le tue statistiche ora sono ordinate per categoria, e i membri hanno una barra di vinte, patte e perse. La schermata Contro un amico sta in un solo blocco: scegli una cadenza, dal Blitz alla corrispondenza, poi invita. E un quadrato in basso a destra ti avvisa quando una partita ti aspetta."
+  ],
+  "tr": [
+   "Daha anlaşılır istatistikler, daha sade bir Bir arkadaşa karşı ekranı",
+   "İstatistiklerin artık kategorilere ayrılmış durumda; üyeler kazanılan, berabere ve kaybedilen oyunları tek bir çubukta görüyor. Bir arkadaşa karşı ekranı tek bir bloğa sığıyor: Blitz'den yazışmalıya bir tempo seç, sonra davet et. Sağ alttaki bir kare de seni bir oyun beklediğinde haber veriyor."
+  ],
+  "pl": [
+   "Czytelniejsze statystyki, prostszy ekran Przeciw znajomemu",
+   "Twoje statystyki są teraz ułożone według kategorii, a członkowie mają pasek wygranych, remisów i przegranych. Ekran Przeciw znajomemu mieści się w jednym bloku: wybierz tempo gry, od blitza po grę korespondencyjną, a potem zaproś. A kwadrat w prawym dolnym rogu da ci znać, gdy czeka na ciebie partia."
+  ],
+  "id": [
+   "Statistik lebih jelas, layar Melawan teman lebih sederhana",
+   "Statistikmu kini dikelompokkan per kategori, dan anggota mendapat batang menang, remis, kalah. Layar Melawan teman muat dalam satu blok: pilih kontrol waktu, dari Blitz sampai korespondensi, lalu undang. Dan sebuah kotak di kanan bawah memberi tahu saat ada partai yang menunggumu."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "The learning path is complete: six new chapters",
    "Six chapters join the Learn tab: The checkmates to know, Double threats, Pins and skewers, Starting a game well, Basic endgames, Mate in two. The path now has nine chapters, from your very first moves to mate in two."
   ],

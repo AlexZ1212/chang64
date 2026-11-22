@@ -211,6 +211,7 @@
     },
     {
       "idee": "fourchette de cavalier roi et dame",
+      "chapitre": "menaces",
       "controle": "meilleur",
       "fen": "4k3/1p3ppp/q7/3N4/8/8/PP3PPP/6K1 w - - 0 1",
       "sol": [
@@ -234,6 +235,27 @@
       ]
     },
     {
+      "idee": "echec de la dame qui attaque aussi un cavalier",
+      "chapitre": "menaces",
+      "controle": "meilleur",
+      "fen": "8/1Q6/8/8/3n2K1/k7/8/8 w - - 0 1",
+      "sol": [
+        "b7a7"
+      ],
+      "explication": {
+        "en": "The queen gives check on the king's file and attacks the knight along the diagonal: the king moves, the knight falls.",
+        "fr": "La dame donne échec sur la colonne du roi et attaque le cavalier en diagonale : le roi bouge, le cavalier tombe.",
+        "es": "La dama da jaque en la columna del rey y ataca al caballo en diagonal: el rey se mueve y el caballo cae.",
+        "pt": "A dama dá xeque na coluna do rei e ataca o cavalo na diagonal: o rei se move e o cavalo cai.",
+        "de": "Die Dame gibt Schach auf der Linie des Königs und greift den Springer auf der Diagonale an: Der König zieht, der Springer fällt.",
+        "ru": "Ферзь шахует по вертикали короля и нападает на коня по диагонали: король уходит, конь гибнет.",
+        "it": "La donna dà scacco sulla colonna del re e attacca il cavallo in diagonale: il re si sposta, il cavallo cade.",
+        "tr": "Vezir şahın sütununda şah çekiyor ve atı çaprazdan tehdit ediyor: şah kaçar, at düşer.",
+        "pl": "Hetman daje szacha na kolumnie króla i atakuje skoczka po przekątnej: król ucieka, skoczek pada.",
+        "id": "Menteri memberi skak di kolom raja dan menyerang kuda lewat diagonal: raja bergerak, kuda jatuh."
+      }
+    },
+    {
       "idee": "clouage de la dame sur le roi par le fou, defendu par un pion",
       "controle": "meilleur",
       "fen": "4k3/pp3ppp/2q5/8/P7/8/1PP2PPP/5BK1 w - - 0 1",
@@ -251,6 +273,28 @@
         "tr": "Fil vezire saldırıyor ve vezir kaçamıyor: hemen arkasında kendi şahı var. Bu bir açmaz ve vezir kaybedilir.",
         "pl": "Goniec atakuje hetmana, który nie może odejść: tuż za nim stoi jego król. To związanie i hetman jest stracony.",
         "id": "Gajah menyerang menteri, yang tidak bisa menyingkir: rajanya tepat di belakangnya. Ini pin, dan menteri itu hilang."
+      },
+      "chapitre": "clouer"
+    },
+    {
+      "idee": "enfilade : echec de la tour, la tour noire derriere le roi",
+      "chapitre": "clouer",
+      "controle": "meilleur",
+      "fen": "4R3/4K3/8/3k4/8/8/8/3r4 w - - 0 1",
+      "sol": [
+        "e8d8"
+      ],
+      "explication": {
+        "en": "The rook gives check on the king's file, and the black rook is behind it: the king steps aside, the rook falls. That is a skewer.",
+        "fr": "La tour donne échec sur la colonne du roi, et la tour noire est derrière lui : le roi s'écarte, la tour tombe. C'est une enfilade.",
+        "es": "La torre da jaque en la columna del rey y la torre negra está detrás: el rey se aparta y la torre cae. Es un pincho.",
+        "pt": "A torre dá xeque na coluna do rei, e a torre preta está atrás dele: o rei sai do caminho e a torre cai. É um espeto.",
+        "de": "Der Turm gibt Schach auf der Linie des Königs, und der schwarze Turm steht dahinter: Der König weicht aus, der Turm fällt. Das ist ein Spieß.",
+        "ru": "Ладья шахует по вертикали короля, а чёрная ладья стоит за ним: король отходит, ладья гибнет. Это сквозной удар.",
+        "it": "La torre dà scacco sulla colonna del re e la torre nera è dietro di lui: il re si sposta, la torre cade. È un'infilata.",
+        "tr": "Kale şahın sütununda şah çekiyor ve siyah kale onun arkasında: şah kenara çekilir, kale düşer. Buna şiş denir.",
+        "pl": "Wieża daje szacha na kolumnie króla, a czarna wieża stoi za nim: król się odsuwa, wieża pada. To przeszycie.",
+        "id": "Benteng memberi skak di kolom raja, dan benteng hitam ada di belakangnya: raja menyingkir, benteng jatuh. Inilah tusuk sate."
       }
     },
     {

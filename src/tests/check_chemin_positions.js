@@ -115,7 +115,9 @@ async function controlerExo(sf, ex, nom) {
     const g = new Game(c.boss.fen), depart = new Game();
     const compte = (x, coul) => x.fen().split(" ")[0].replace(/[^a-zA-Z]/g, "").split("").filter(p => (p === p.toUpperCase()) === (coul === "w")).sort().join("");
     T(c.id + " boss : les Blancs ont toutes leurs pieces et commencent", g.turn === 0 && compte(g, "w") === compte(depart, "w"));
-    T(c.id + " boss : il manque exactement une piece aux Noirs", compte(g, "b").length === compte(depart, "b").length - 1, compte(g, "b"));
+    /* Handicap : une piece (chapitres 2 a 5) ou deux pions (chapitre 6). */
+    { const n = compte(depart, "b").length - compte(g, "b").length, pions = compte(depart, "b").replace(/[^p]/g, "").length - compte(g, "b").replace(/[^p]/g, "").length;
+      T(c.id + " boss : il manque aux Noirs une piece ou deux pions", n === 1 || (n === 2 && pions === 2), compte(g, "b")); }
     T(c.id + " boss : la partie est jouable (20 coups au depart)", g.moves().length === 20);
     T(c.id + " boss : niveau le plus facile", c.boss.niveau === 1);
   }

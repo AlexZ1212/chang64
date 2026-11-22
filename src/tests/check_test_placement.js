@@ -212,7 +212,7 @@ async function passer(w, reponses) {
   T("une erreur au chapitre 1 puis rien de plus dur trouve : chapitre 1", entree([1, 0, 1, 0, 0]) === 0);
   T("les deux positions du chapitre 2 manquees : chapitre 2", entree([1, 1, 1, 0, 0]) === 1);
   T("une erreur au chapitre 2, une seule position plus dure trouvee : chapitre 2", entree([1, 1, 1, 1, 0, 1, 0, 0]) === 1);
-  T("une erreur au chapitre 3, deux positions plus dures trouvees : au-dela", entree([1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0]) === NC);
+  T("une erreur au chapitre 3, deux positions plus dures trouvees : au-dela", entree(sauf(7)) === NC);
   T("une erreur au chapitre 4, des positions plus dures trouvees : au-dela", entree(sauf(8)) === NC);
   T("les deux positions du chapitre 4 manquees : chapitre 4", entree([1, 1, 1, 1, 1, 1, 1, 0, 0]) === 3);
   T("une erreur au chapitre 3, une seule position plus dure trouvee : chapitre 3", entree([1, 1, 1, 1, 1, 0, 1, 1, 0, 0]) === 2);

@@ -1,15 +1,15 @@
 {
-  "chapitres": ["debut", "regles", "securite", "mats"],
+  "chapitres": ["debut", "regles", "securite", "mats", "menaces", "clouer"],
   "aVenir": {
-    "en": "Coming next: double threats, pins and skewers, starting a game well, basic endgames, mate in two.",
-    "fr": "À venir : les doubles menaces, clouer et enfiler, bien commencer une partie, les finales de base, le mat en deux.",
-    "es": "Próximamente: las amenazas dobles, clavadas y pinchos, empezar bien una partida, los finales básicos, el mate en dos.",
-    "pt": "Em breve: as ameaças duplas, cravadas e espetos, começar bem uma partida, os finais básicos, o mate em dois.",
-    "de": "Demnächst: Doppelangriffe, Fesselungen und Spieße, der gute Partiebeginn, einfache Endspiele, Matt in zwei.",
-    "ru": "Скоро: двойные удары, связки и сквозные удары, как начинать партию, простые эндшпили, мат в два хода.",
-    "it": "In arrivo: le doppie minacce, inchiodature e infilate, come iniziare bene una partita, i finali di base, il matto in due.",
-    "tr": "Yakında: çifte tehditler, açmazlar ve şişler, oyuna iyi başlamak, temel oyun sonları, iki hamlede mat.",
-    "pl": "Wkrótce: podwójne groźby, związania i przeszycia, dobry początek partii, podstawowe końcówki, mat w dwóch ruchach.",
-    "id": "Segera hadir: ancaman ganda, pin dan tusuk sate, memulai permainan dengan baik, akhir permainan dasar, skakmat dalam dua langkah."
+    "en": "Coming next: starting a game well, basic endgames, mate in two.",
+    "fr": "À venir : bien commencer une partie, les finales de base, le mat en deux.",
+    "es": "Próximamente: empezar bien una partida, los finales básicos, el mate en dos.",
+    "pt": "Em breve: começar bem uma partida, os finais básicos, o mate em dois.",
+    "de": "Demnächst: der gute Partiebeginn, einfache Endspiele, Matt in zwei.",
+    "ru": "Скоро: как начинать партию, простые эндшпили, мат в два хода.",
+    "it": "In arrivo: come iniziare bene una partita, i finali di base, il matto in due.",
+    "tr": "Yakında: oyuna iyi başlamak, temel oyun sonları, iki hamlede mat.",
+    "pl": "Wkrótce: dobry początek partii, podstawowe końcówki, mat w dwóch ruchach.",
+    "id": "Segera hadir: memulai permainan dengan baik, akhir permainan dasar, skakmat dalam dua langkah."
   }
 }

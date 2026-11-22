@@ -2,6 +2,92 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Chapter 6: pins and skewers",
+   "A new chapter in the Learn tab: attacking a pinned piece, the pinned piece that no longer defends, the pin on the queen, the skewer and removing the defender. The boss is the computer two pawns down."
+  ],
+  "fr": [
+   "Chapitre 6 : clouer et enfiler",
+   "Un nouveau chapitre dans l'onglet Apprendre : attaquer la pièce clouée, la pièce clouée qui ne défend plus, le clouage sur la dame, l'enfilade et chasser le défenseur. Le boss est l'ordinateur avec deux pions de moins."
+  ],
+  "es": [
+   "Capítulo 6: clavadas y pinchos",
+   "Un capítulo nuevo en la pestaña Aprender: atacar la pieza clavada, la pieza clavada que ya no defiende, la clavada sobre la dama, el pincho y eliminar al defensor. El jefe es el ordenador con dos peones de menos."
+  ],
+  "pt": [
+   "Capítulo 6: cravadas e espetos",
+   "Um capítulo novo na aba Aprender: atacar a peça cravada, a peça cravada que não defende mais, a cravada na dama, o espeto e eliminar o defensor. O chefão é o computador com dois peões a menos."
+  ],
+  "de": [
+   "Kapitel 6: Fesselung und Spieß",
+   "Ein neues Kapitel im Tab Lernen: die gefesselte Figur angreifen, die gefesselte Figur, die nicht mehr deckt, die Fesselung an die Dame, der Spieß und den Verteidiger beseitigen. Der Boss ist der Computer mit zwei Bauern weniger."
+  ],
+  "ru": [
+   "Глава 6: связки и сквозные удары",
+   "Новая глава во вкладке «Учиться»: нападение на связанную фигуру, связанная фигура, которая не защищает, связка с ферзём, сквозной удар и устранение защитника. Босс: компьютер без двух пешек."
+  ],
+  "it": [
+   "Capitolo 6: inchiodature e infilate",
+   "Un nuovo capitolo nella scheda Impara: attaccare il pezzo inchiodato, il pezzo inchiodato che non difende più, l'inchiodatura sulla donna, l'infilata ed eliminare il difensore. Il boss è il computer con due pedoni in meno."
+  ],
+  "tr": [
+   "Bölüm 6: açmazlar ve şişler",
+   "Öğren sekmesinde yeni bir bölüm: açmazdaki taşa saldırmak, artık korumayan açmazdaki taş, vezire açmaz, şiş ve koruyucuyu kovmak. Boss, iki piyonu eksik bilgisayar."
+  ],
+  "pl": [
+   "Rozdział 6: związania i przeszycia",
+   "Nowy rozdział w zakładce Ucz się: atak na związaną bierkę, związana bierka, która już nie broni, związanie z hetmanem, przeszycie i usuwanie obrońcy. Boss to komputer bez dwóch pionów."
+  ],
+  "id": [
+   "Bab 6: pin dan tusuk sate",
+   "Bab baru di tab Belajar: menyerang bidak yang terkena pin, bidak terkena pin yang tidak lagi melindungi, pin ke menteri, tusuk sate, dan menyingkirkan pelindung. Bosnya adalah komputer dengan dua pion lebih sedikit."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
+   "Chapter 5: double threats",
+   "A new chapter in the Learn tab: the knight fork with check, the pawn fork, the queen attacking two pieces, the check that also attacks, and the discovered attack. The boss is the computer without a bishop."
+  ],
+  "fr": [
+   "Chapitre 5 : les doubles menaces",
+   "Un nouveau chapitre dans l'onglet Apprendre : la fourchette du cavalier avec échec, la fourchette du pion, la dame qui attaque deux pièces, l'échec qui attaque aussi et l'attaque à la découverte. Le boss est l'ordinateur sans un fou."
+  ],
+  "es": [
+   "Capítulo 5: las amenazas dobles",
+   "Un capítulo nuevo en la pestaña Aprender: la horquilla de caballo con jaque, la horquilla de peón, la dama que ataca dos piezas, el jaque que también ataca y el ataque a la descubierta. El jefe es el ordenador sin un alfil."
+  ],
+  "pt": [
+   "Capítulo 5: as ameaças duplas",
+   "Um capítulo novo na aba Aprender: o garfo de cavalo com xeque, o garfo de peão, a dama que ataca duas peças, o xeque que também ataca e o ataque descoberto. O chefão é o computador sem um bispo."
+  ],
+  "de": [
+   "Kapitel 5: Doppelangriffe",
+   "Ein neues Kapitel im Tab Lernen: die Springergabel mit Schach, die Bauerngabel, die Dame, die zwei Figuren angreift, das Schach, das auch angreift, und der Abzugsangriff. Der Boss ist der Computer ohne einen Läufer."
+  ],
+  "ru": [
+   "Глава 5: двойные удары",
+   "Новая глава во вкладке «Учиться»: вилка конём с шахом, вилка пешкой, ферзь против двух фигур, шах, который ещё и нападает, и вскрытое нападение. Босс: компьютер без слона."
+  ],
+  "it": [
+   "Capitolo 5: le doppie minacce",
+   "Un nuovo capitolo nella scheda Impara: la forchetta di cavallo con scacco, la forchetta di pedone, la donna che attacca due pezzi, lo scacco che attacca anche e l'attacco di scoperta. Il boss è il computer senza un alfiere."
+  ],
+  "tr": [
+   "Bölüm 5: çifte tehditler",
+   "Öğren sekmesinde yeni bir bölüm: şahlı at çatalı, piyon çatalı, iki taşa saldıran vezir, saldıran şah ve açarak saldırı. Boss, bir fili eksik bilgisayar."
+  ],
+  "pl": [
+   "Rozdział 5: podwójne groźby",
+   "Nowy rozdział w zakładce Ucz się: widełki skoczkiem z szachem, widełki pionem, hetman atakujący dwie bierki, szach, który też atakuje, i atak z odsłony. Boss to komputer bez gońca."
+  ],
+  "id": [
+   "Bab 5: ancaman ganda",
+   "Bab baru di tab Belajar: garpu kuda dengan skak, garpu pion, menteri yang menyerang dua bidak, skak yang juga menyerang, dan serangan tersingkap. Bosnya adalah komputer tanpa satu gajah."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "Chapter 4: the checkmates to know",
    "A new chapter in the Learn tab: the queen's kiss, the two-rook ladder, the back rank when it is guarded, the smothered mate, and why you look at checks before taking. The boss is the computer without a knight. In lessons, the board is now as large as your screen allows and no longer changes size after a move."
   ],

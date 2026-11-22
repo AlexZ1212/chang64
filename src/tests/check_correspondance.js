@@ -333,6 +333,20 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
     x1 = (await ouvrir(g1, "G9")).ws;
     T("celui qui reste voit la fin, sans le pseudo de l'autre", x1.dernier().phase === "fin" && x1.dernier().fin.m === "abandon" && !x1.dernier().nr && x1.dernier().b === "G9", [x1.dernier().b, x1.dernier().nr]);
     T("un second passage ne refait rien", await (async () => { const av = faux.ecritures; await mod.default.scheduled({}, env); return faux.ecritures === av; })());
+    /* Temoin du balayage (2026-11-22) : une seule ligne, l'heure du dernier passage. */
+    {
+      const lire = () => sql("SELECT id, dernier, traitees FROM balayages");
+      const avant = lire();
+      avancer(5000);
+      await mod.default.scheduled({}, env);
+      const apres = lire();
+      T("chaque passage note son heure dans la table balayages, sur une seule ligne", avant.length === 1 && apres.length === 1 && apres[0].id === 1 && Date.now() - apres[0].dernier >= 0 && Date.now() - apres[0].dernier < 3000 && apres[0].dernier - avant[0].dernier >= 5000 && apres[0].traitees === 0, JSON.stringify([avant, apres, Date.now()]));
+      env.DB.brut.exec("ALTER TABLE balayages RENAME TO balayages_x");
+      let plante = false;
+      try { await mod.default.scheduled({}, env); } catch (e) { plante = true; }
+      env.DB.brut.exec("ALTER TABLE balayages_x RENAME TO balayages");
+      T("une base sans la table ne gene pas le balayage", !plante);
+    }
     /* Une partie deja finie dont un joueur supprime ensuite son compte. */
     const g2 = await lancee(7, "G11", "G12");
     let y = (await ouvrir(g2, "G11")).ws; await coup(g2, y, "e2e4");

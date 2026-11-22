@@ -283,3 +283,15 @@ CREATE INDEX IF NOT EXISTS correspondances_b ON correspondances (b);
 CREATE INDEX IF NOT EXISTS correspondances_n ON correspondances (n);
 CREATE INDEX IF NOT EXISTS correspondances_pour ON correspondances (pour);
 CREATE INDEX IF NOT EXISTS correspondances_ouvertes ON correspondances (etat, cad);
+
+-- Temoin du balayage horaire du Worker des parties (2026-11-22, SQL accepte
+-- par Alexandre) : une seule ligne, reecrite a chaque passage. Elle sert a
+-- savoir si le declencheur horaire tourne vraiment (la page « Cron events »
+-- de Cloudflare n'en montrait aucun). Aucun pseudo, aucun numero de compte.
+CREATE TABLE IF NOT EXISTS balayages (
+  id INTEGER PRIMARY KEY CHECK (id = 1),
+  -- Heure du dernier passage.
+  dernier INTEGER NOT NULL,
+  -- Nombre de parties qu'il a eu a traiter a ce passage.
+  traitees INTEGER NOT NULL DEFAULT 0
+);

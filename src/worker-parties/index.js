@@ -478,7 +478,16 @@ export default {
   },
   /* Le balayage de chaque heure (voir balayer). */
   async scheduled(evenement, env) {
-    try { await balayer(env, Date.now()); } catch (e) {}
+    let traitees = 0;
+    try { traitees = await balayer(env, Date.now()); } catch (e) {}
+    /* Temoin (2026-11-22) : l'heure du dernier passage, dans la table
+       balayages (une seule ligne). Cloudflare n'affichait aucune execution du
+       declencheur : c'est le moyen de savoir s'il tourne. Rien de personnel.
+       Une base sans la table ne gene pas le balayage. */
+    try {
+      await env.DB.prepare("INSERT INTO balayages (id, dernier, traitees) VALUES (1, ?1, ?2) ON CONFLICT(id) DO UPDATE SET dernier = ?1, traitees = ?2")
+        .bind(Date.now(), traitees || 0).run();
+    } catch (e) {}
   }
 };
 

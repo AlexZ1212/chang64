@@ -1327,7 +1327,7 @@ module.exports = {
 /* Onglet Apprendre : chemin de chapitres, test de placement (2026-11-22). */
 "Learn":"Belajar",
 "Already know how to play?":"Sudah bisa bermain?",
-"Ten positions, three minutes. We set the puzzle level, the computer's strength and your starting chapter for you.":"Sepuluh posisi, tiga menit. Kami atur untukmu tingkat teka-teki, kekuatan komputer, dan bab awalmu.",
+"A short series of positions, harder and harder. We set the puzzle level, the computer's strength and your starting chapter for you.":"Serangkaian posisi singkat yang makin sulit. Kami atur untukmu tingkat teka-teki, kekuatan komputer, dan bab awalmu.",
 "Take the test":"Ikuti tes",
 "Your path":"Jalurmu",
 "Take the placement test":"Ikuti tes penempatan",

@@ -1327,7 +1327,7 @@ module.exports = {
 /* Onglet Apprendre : chemin de chapitres, test de placement (2026-11-22). */
 "Learn":"Impara",
 "Already know how to play?":"Sai già giocare?",
-"Ten positions, three minutes. We set the puzzle level, the computer's strength and your starting chapter for you.":"Dieci posizioni, tre minuti. Regoliamo per te il livello degli esercizi, la forza del computer e il capitolo di partenza.",
+"A short series of positions, harder and harder. We set the puzzle level, the computer's strength and your starting chapter for you.":"Una breve serie di posizioni, sempre più difficili. Regoliamo per te il livello degli esercizi, la forza del computer e il capitolo di partenza.",
 "Take the test":"Fai il test",
 "Your path":"Il tuo percorso",
 "Take the placement test":"Fai il test di livello",

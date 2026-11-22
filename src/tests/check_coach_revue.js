@@ -133,6 +133,18 @@ const poser = (w, n, fautes) => w.eval("(function(){const F=" + JSON.stringify(f
   T("meme en regardant un coup passe", G("plyInfo").classList.contains("hide") && !gd.querySelector(".coach-phrase"));
   g.close();
 
+  console.log("Sans Stockfish : le moteur de secours fait aussi parler le coach");
+  /* jsdom n'a pas de Worker : « Analyser cette partie » retombe sur le moteur
+     integre, exactement comme dans un navigateur ou Stockfish ne demarre pas. */
+  w.eval("ouvrirPartieGardee({m:'e2e4 e7e5 f1c4 b8c6 d1h5 g8f6 h5f3 c6d4',c:'w',t:Date.UTC(2026,10,21,12),k:'o'},'jeu');analyseGame()");
+  for (let k = 0; k < 150 && !w.eval("!!analysis"); k++) await pause(100);
+  T("l'analyse de secours aboutit", w.eval("!!analysis&&analysis.plies.length") === 8, w.eval("analysis&&analysis.plies.length"));
+  T("le mat en un manque est explique", w.eval("analysis.coach&&analysis.coach[6].e&&analysis.coach[6].e.cas") === "mat1_manque" && lignes().some(l => /Il y avait mat en un coup/.test(lu(l))), w.eval("JSON.stringify(analysis.coach&&analysis.coach[6])"));
+  /* Sans cette indication, le coach chercherait un mat en deux sur chaque
+     faute : 0,4 s par faute sur un PC, un gel de plusieurs secondes sur un
+     telephone (mesure du 22/11). */
+  T("chaque pli dit si le moteur annonce un mat (le mat en deux n'est cherche que la)", w.eval("analysis.plies.every(p=>'mateAvant' in p&&'mateApres' in p)") === true && w.eval("analysis.plies[6].mateAvant") === 1, w.eval("JSON.stringify(analysis.plies.map(p=>[p.mateAvant,p.mateApres]))"));
+
   console.log("Partie importee : pas d'exercice tire des fautes d'un autre");
   w.eval("ouvrirPartieGardee({m:'e2e4 e7e5 f1c4 b8c6 d1h5 g8f6 h5f3 c6d4',c:'w',t:Date.UTC(2026,10,21,12),k:'o'},'jeu');revueMoi='Anna'");
   T("aucun candidat", w.eval("(function(){const P=[];for(let i=0;i<8;i++)P.push({cp:0,cpTrue:0,mate:null,loss:i===6?1200:0,tag:i===6?'blunder':null,best:i===6?'h5f7':gameUci[i],mover:i%2,rep:null});const r=coachPreparerSansMoteur(P);return r.coach[6].e.cas+'/'+r.exos.length;})()") === "mat1_manque/0");

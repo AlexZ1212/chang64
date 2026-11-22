@@ -809,8 +809,16 @@ function analyseGame(){
     const cpTrue=mate==null?(mover===W?afterForMover:-afterForMover):null;
     plies.push({cp:mover===W?afterForMover:-afterForMover,cpTrue:cpTrue,mate:mate,loss:loss,
       tag:classify(loss,bestUci===gameUci[i]),best:bestUci,mover:mover,
-      /* rep : la meilleure reponse adverse apres le coup, pour le coach. */
-      rep:r2.move?g.uci(r2.move):null});
+      /* rep : la meilleure reponse adverse apres le coup, pour le coach.
+         mateAvant, mateApres : le mat que ce moteur annonce pour le camp au
+         trait avant et apres le coup (null s'il n'en voit pas). Sans ces
+         deux champs, le coach chercherait un mat en deux sur CHAQUE faute :
+         0,4 s par faute sur un PC, plusieurs secondes de gel sur un
+         telephone (mesure du 22/11). Ce moteur ne voit que le mat en un :
+         en repli, le coach n'explique donc pas les mats en deux. */
+      rep:r2.move?g.uci(r2.move):null,
+      mateAvant:Math.abs(r.score)>MATE-100?(r.score>0?1:-1)*Math.max(1,Math.ceil((MATE-Math.abs(r.score))/2)):null,
+      mateApres:Math.abs(r2.score)>MATE-100?(r2.score>0?1:-1)*Math.max(1,Math.ceil((MATE-Math.abs(r2.score))/2)):null});
     i++;
     bar.firstElementChild.style.width=(100*i/gameUci.length).toFixed(0)+"%";
     setTimeout(step,0);

@@ -98,7 +98,8 @@ async function controlerExo(sf, ex, nom) {
 (async () => {
   const D = CHEMIN.charger();
   T("le chemin se charge et passe le controle du moteur de regles", (() => { try { CHEMIN.controler(D); return true; } catch (e) { return e.message; } })() === true);
-  T("trois chapitres : Je debute, Toutes les regles, Ne rien donner", D.chapitres.map(c => c.id).join() === "debut,regles,securite", D.chapitres.map(c => c.id).join());
+  /* Les chapitres publies gardent leur place ; les suivants s'ajoutent derriere. */
+  T("le chemin commence par Je debute, Toutes les regles, Ne rien donner", D.chapitres.map(c => c.id).slice(0, 3).join() === "debut,regles,securite", D.chapitres.map(c => c.id).join());
   T("le chapitre 1 est celui de l'application (integre)", D.chapitres[0].integre === true && !D.chapitres[0].etapes);
 
   const sf = await ouvrir("check-chemin");
@@ -121,7 +122,7 @@ async function controlerExo(sf, ex, nom) {
 
   console.log("\n--- Test de placement ---");
   const P = D.placement.positions;
-  T("dix positions", P.length === 10, String(P.length));
+  T("au moins dix positions", P.length >= 10, String(P.length));
   const rang = p => p.chapitre ? D.chapitres.findIndex(c => c.id === p.chapitre) : D.chapitres.length;
   T("les positions suivent l'ordre des chapitres", P.every((p, i) => i === 0 || rang(p) >= rang(P[i - 1])), P.map(rang).join(""));
   T("chaque chapitre sorti a au moins deux positions", D.chapitres.every(c => P.filter(p => p.chapitre === c.id).length >= 2));
@@ -160,7 +161,7 @@ async function controlerExo(sf, ex, nom) {
     for (const l of CODES) {
       const j = JSON.parse(fs.readFileSync(path.join(site, "chemin-" + l + ".json"), "utf8"));
       T("site " + l + " : chaque position du test porte son explication", j.placement.every(p => typeof p.ex === "string" && p.ex.length > 20 && p.ex.length < 200));
-      T("site " + l + " : 3 chapitres, 10 positions, boss en derniere etape", j.chapitres.length === 3 && j.placement.length === 10 &&
+      T("site " + l + " : tous les chapitres et toutes les positions, boss en derniere etape", j.chapitres.length === D.chapitres.length && j.placement.length === P.length &&
         j.chapitres.slice(1).every(c => c.etapes[c.etapes.length - 1].boss && c.etapes[c.etapes.length - 1].exos.length === 0));
     }
     const plan = /const CHEMIN_PLAN=(\[[^\]]*\])/.exec(fs.readFileSync(path.join(SRC, "site", "index.html"), "utf8"));

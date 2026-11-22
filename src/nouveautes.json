@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Chapter 4: the checkmates to know",
+   "A new chapter in the Learn tab: the queen's kiss, the two-rook ladder, the back rank when it is guarded, the smothered mate, and why you look at checks before taking. The boss is the computer without a knight. In lessons, the board is now as large as your screen allows and no longer changes size after a move."
+  ],
+  "fr": [
+   "Chapitre 4 : les mats à connaître",
+   "Un nouveau chapitre dans l'onglet Apprendre : le baiser de la dame, l'escalier des deux tours, le couloir quand il se défend, le mat étouffé, et pourquoi on regarde les échecs avant de prendre. Le boss est l'ordinateur sans un cavalier. Dans les leçons, l'échiquier est maintenant aussi grand que ton écran le permet et ne change plus de taille après un coup."
+  ],
+  "es": [
+   "Capítulo 4: los mates que hay que conocer",
+   "Un capítulo nuevo en la pestaña Aprender: el beso de la dama, la escalera de las dos torres, el pasillo cuando se defiende, el mate de la coz, y por qué se miran los jaques antes de capturar. El jefe es el ordenador sin un caballo. En las lecciones, el tablero es ahora tan grande como lo permite tu pantalla y ya no cambia de tamaño después de una jugada."
+  ],
+  "pt": [
+   "Capítulo 4: os mates que você precisa conhecer",
+   "Um capítulo novo na aba Aprender: o beijo da dama, a escada das duas torres, o corredor quando ele se defende, o mate sufocado, e por que olhar os xeques antes de capturar. O chefão é o computador sem um cavalo. Nas lições, o tabuleiro agora é tão grande quanto a sua tela permite e não muda mais de tamanho depois de um lance."
+  ],
+  "de": [
+   "Kapitel 4: die wichtigsten Mattbilder",
+   "Ein neues Kapitel im Tab Lernen: der Kuss der Dame, die Treppe der zwei Türme, die verteidigte Grundreihe, das erstickte Matt und warum man vor dem Schlagen auf Schachgebote schaut. Der Boss ist der Computer ohne einen Springer. In den Lektionen ist das Brett jetzt so groß, wie dein Bildschirm es erlaubt, und ändert nach einem Zug nicht mehr seine Größe."
+  ],
+  "ru": [
+   "Глава 4: маты, которые надо знать",
+   "Новая глава во вкладке «Учиться»: поцелуй ферзя, лесенка двух ладей, последняя горизонталь под защитой, спёртый мат и почему сначала смотрят на шахи, а потом берут. Босс: компьютер без коня. В уроках доска теперь такая большая, как позволяет экран, и больше не меняет размер после хода."
+  ],
+  "it": [
+   "Capitolo 4: i matti da conoscere",
+   "Un nuovo capitolo nella scheda Impara: il bacio della donna, la scala delle due torri, il corridoio quando si difende, il matto affogato, e perché si guardano gli scacchi prima di catturare. Il boss è il computer senza un cavallo. Nelle lezioni la scacchiera ora è grande quanto lo schermo permette e non cambia più dimensione dopo una mossa."
+  ],
+  "tr": [
+   "Bölüm 4: bilinmesi gereken matlar",
+   "Öğren sekmesinde yeni bir bölüm: vezirin öpücüğü, iki kalenin merdiveni, savunulan arka sıra, boğmaca mat ve taş almadan önce neden şahlara bakılır. Boss, bir atı eksik bilgisayar. Derslerde tahta artık ekranının izin verdiği kadar büyük ve bir hamleden sonra boyut değiştirmiyor."
+  ],
+  "pl": [
+   "Rozdział 4: maty, które trzeba znać",
+   "Nowy rozdział w zakładce Ucz się: pocałunek hetmana, schodki dwóch wież, broniona ostatnia linia, mat zduszony i to, dlaczego przed biciem sprawdza się szachy. Boss to komputer bez skoczka. W lekcjach szachownica jest teraz tak duża, jak pozwala ekran, i nie zmienia już rozmiaru po ruchu."
+  ],
+  "id": [
+   "Bab 4: skakmat yang perlu diketahui",
+   "Bab baru di tab Belajar: ciuman menteri, tangga dua benteng, baris belakang yang dijaga, skakmat tercekik, dan alasan melihat skak sebelum memakan bidak. Bosnya adalah komputer tanpa satu kuda. Dalam pelajaran, papan kini sebesar yang dimungkinkan layarmu dan tidak lagi berubah ukuran setelah satu langkah."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "A Learn tab, with a path to follow",
    "The new Learn tab gathers everything you need to get started: a path of chapters made of short lessons on the board, each ending with a boss, the computer playing with a handicap. \"I'm a beginner\" becomes chapter 1 and your progress is kept; two new chapters follow, All the rules and Give nothing away. A ten-position test can choose your starting chapter, your puzzle level and the computer's strength. The rule sheets have moved there from Explore."
   ],

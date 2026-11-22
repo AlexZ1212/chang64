@@ -168,6 +168,48 @@
       ]
     },
     {
+      "idee": "mat en un, escalier des deux tours",
+      "fen": "6k1/1R6/8/8/8/8/5PPP/R5K1 w - - 0 1",
+      "sol": [
+        "a1a8"
+      ],
+      "mat": true,
+      "chapitre": "mats",
+      "explication": {
+        "en": "One rook closes the rank in front of the king, the other gives check on the edge: mate. This is the two-rook ladder.",
+        "fr": "Une tour ferme la rangée devant le roi, l'autre donne échec sur le bord : mat. C'est l'escalier des deux tours.",
+        "es": "Una torre cierra la fila delante del rey y la otra da jaque en el borde: mate. Es la escalera de las dos torres.",
+        "pt": "Uma torre fecha a fileira na frente do rei e a outra dá xeque na borda: mate. É a escada das duas torres.",
+        "de": "Ein Turm sperrt die Reihe vor dem König, der andere gibt am Rand Schach: Matt. Das ist die Treppe der zwei Türme.",
+        "ru": "Одна ладья закрывает горизонталь перед королём, другая шахует на краю: мат. Это лесенка двух ладей.",
+        "it": "Una torre chiude la traversa davanti al re, l'altra dà scacco sul bordo: matto. È la scala delle due torri.",
+        "tr": "Bir kale şahın önündeki sırayı kapatıyor, öteki kenarda şah çekiyor: mat. Bu, iki kalenin merdiveni.",
+        "pl": "Jedna wieża zamyka linię przed królem, druga daje szacha na brzegu: mat. To schodki dwóch wież.",
+        "id": "Satu benteng menutup baris di depan raja, yang lain memberi skak di tepi: skakmat. Inilah tangga dua benteng."
+      }
+    },
+    {
+      "idee": "mat etouffe en un (cavalier)",
+      "fen": "1r4rk/6pp/3N4/8/8/8/5PPP/6K1 w - - 0 1",
+      "sol": [
+        "d6f7"
+      ],
+      "mat": true,
+      "chapitre": "mats",
+      "explication": {
+        "en": "The knight gives check and the king is shut in by its own rook and pawns: smothered mate.",
+        "fr": "Le cavalier donne échec, et le roi est enfermé par sa propre tour et ses pions : mat étouffé.",
+        "es": "El caballo da jaque y el rey está encerrado por su propia torre y sus peones: mate de la coz.",
+        "pt": "O cavalo dá xeque e o rei está preso pela própria torre e pelos peões: mate sufocado.",
+        "de": "Der Springer gibt Schach, und der König ist von seinem eigenen Turm und seinen Bauern eingesperrt: ersticktes Matt.",
+        "ru": "Конь шахует, а король заперт своей же ладьёй и пешками: спёртый мат.",
+        "it": "Il cavallo dà scacco e il re è chiuso dalla sua torre e dai suoi pedoni: matto affogato.",
+        "tr": "At şah çekiyor ve şah kendi kalesi ve piyonlarıyla kapanmış: boğmaca mat.",
+        "pl": "Skoczek daje szacha, a król jest zamknięty przez własną wieżę i piony: mat zduszony.",
+        "id": "Kuda memberi skak dan raja terkurung oleh benteng dan pionnya sendiri: skakmat tercekik."
+      }
+    },
+    {
       "idee": "fourchette de cavalier roi et dame",
       "controle": "meilleur",
       "fen": "4k3/1p3ppp/q7/3N4/8/8/PP3PPP/6K1 w - - 0 1",

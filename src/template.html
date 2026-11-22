@@ -645,14 +645,17 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   /* Tablette en portrait : le plateau large de 718 px repoussait tout. */
   #appLayout[data-mode="puzzles"] .board-frame{max-width:calc(100vh - 440px);max-width:calc(100svh - 440px)}
 }
-/* Parcours "Je debute" : meme taille d'echiquier que les exercices. */
+/* Lecons du chemin (2026-11-22, Alexandre) : l'echiquier le plus grand
+   possible, et de taille FIXE pendant toute la lecon. Il ne retrecit plus
+   quand un message s'affiche : c'est la page qui defile. Sa taille ne
+   depend que de l'ecran (hauteur moins l'en-tete et les onglets). */
 @media(min-width:861px){
-  #appLayout[data-mode="debut"] .board-frame{max-width:calc(100vh - 200px);max-width:calc(100svh - 200px);margin-inline:auto}
+  #appLayout[data-mode="debut"] .board-frame{max-width:calc(100vh - 180px);max-width:calc(100svh - 180px);margin-inline:auto}
 }
 @media(max-width:860px){
-  /* Le panneau du parcours est plus haut que celui des exercices : la consigne
-     doit rester visible sous le plateau sans faire defiler. */
-  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 480px));max-width:max(240px,calc(100svh - 480px));margin-inline:auto}
+  /* Toute la largeur, sans depasser la hauteur de l'ecran ; la consigne
+     se lit sous l'echiquier, quitte a faire defiler. */
+  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 180px));max-width:max(240px,calc(100svh - 180px));margin-inline:auto}
   #appLayout[data-mode="debut"]{row-gap:12px}
 }
 /* Parcours en plein ecran sur telephone (2026-11-08, idee d'Alexandre) : sur
@@ -673,16 +676,21 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
   #appLayout[data-mode="debut"] .panel.debut{padding:0;background:none;border:0;box-shadow:none}
   #appLayout[data-mode="debut"] .debut-pas{margin:6px 0 10px}
   #appLayout[data-mode="debut"] .debut-titre{font-size:22px}
-  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 385px));max-width:max(240px,calc(100svh - 385px))}
+  #appLayout[data-mode="debut"] .board-frame{max-width:max(240px,calc(100vh - 90px));max-width:max(240px,calc(100svh - 90px))}
 }
 /* Sans ceci, un glissement au doigt faisait defiler la page et annulait le
    deplacement. Les cases vides et les pieces adverses laissent defiler. */
 .sq.prenable{touch-action:none}
 .sq.cible::before{content:"";position:absolute;inset:0;background:rgba(var(--brass-rgb),.6);pointer-events:none}
 .debut-pas{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
-.debut-pas button{width:36px;height:36px;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);color:inherit;font:inherit;font-size:14px;cursor:pointer}
-.debut-pas button.fait{border-color:var(--jade)}
-.debut-pas button[aria-current="step"]{background-color:var(--brass);border-color:var(--brass);color:var(--ink);font-weight:700}
+/* Bulles des etapes, sur le modele du test de placement (harmonisation du
+   2026-11-22, demande d'Alexandre) : meme taille, fait = disque vert coche,
+   en cours = anneau laiton, a faire = disque sombre au chiffre discret. La
+   coche est un masque teinte par --ink : elle suit les themes. */
+.debut-pas button{position:relative;width:28px;height:28px;padding:0;display:inline-grid;place-items:center;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);color:var(--sage);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.debut-pas button.fait,.ap-chap.fait .ap-num{background-color:var(--jade);border-color:var(--jade);color:transparent}
+.debut-pas button.fait::after,.ap-chap.fait .ap-num::after{content:"";position:absolute;inset:0;margin:auto;width:62%;height:62%;background-color:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
+.debut-pas button[aria-current="step"]{border-color:var(--brass);box-shadow:0 0 0 2px rgba(var(--brass-rgb),.35);color:var(--chalk);font-weight:700}
 .debut-titre{font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;line-height:1.2;margin:0 0 8px}
 .debut p{margin:0 0 12px}
 .debut-actions{margin-top:12px}
@@ -690,7 +698,8 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    porte une dame ; le test de placement a ses propres pastilles (une par
    position), et son resultat se lit sans echiquier. */
 .debut-pas button.boss{display:inline-grid;place-items:center;padding:0}
-.debut-pas button.boss svg{width:22px;height:22px;display:block}
+.debut-pas button.boss svg{width:18px;height:18px;display:block}
+.debut-pas button.boss.fait svg{visibility:hidden}
 .test-pastilles{display:flex;gap:6px;margin:8px 0 12px}
 .test-pastilles i{flex:1 1 0;max-width:28px;aspect-ratio:1;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);display:grid;place-items:center;color:var(--ink)}
 .test-pastilles i svg{width:62%;height:62%;display:block}
@@ -732,9 +741,8 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .ap-chap.verrou{cursor:default}
 .ap-chap.verrou:hover{border-color:var(--rule)}
 .ap-chap.verrou b,.ap-chap.verrou .ap-desc{opacity:.6}
-.ap-num{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rule);font-weight:700;font-size:14px;background-color:var(--slate)}
-.ap-chap.encours .ap-num{background-color:var(--brass);border-color:var(--brass);color:var(--on-brass)}
-.ap-chap.fait .ap-num{border-color:var(--jade);color:var(--jade)}
+.ap-num{position:relative;flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rule);font-weight:700;font-size:14px;background-color:var(--ink);color:var(--sage)}
+.ap-chap.encours .ap-num{border-color:var(--brass);box-shadow:0 0 0 2px rgba(var(--brass-rgb),.35);color:var(--chalk)}
 .ap-barre{display:block;height:6px;border-radius:3px;background-color:var(--raise);margin:9px 0 0;overflow:hidden}
 .ap-barre i{display:block;height:100%;background-color:var(--brass);border-radius:3px}
 .ap-venir{font-size:13px;color:var(--sage);margin:12px 0 0;line-height:1.5}
@@ -780,7 +788,8 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
      240 px = son haut (217) et une marge. Il depassait le bas d'un ecran de
      768 px de haut. */
   #appLayout[data-mode="edit"]:not(.solo){grid-template-columns:minmax(0,min(608px,max(300px,calc(100vh - 240px)))) minmax(300px,1fr);grid-template-columns:minmax(0,min(608px,max(300px,calc(100svh - 240px)))) minmax(300px,1fr)}
-  #appLayout[data-mode="puzzles"]:not(.solo),#appLayout[data-mode="debut"]:not(.solo){grid-template-columns:minmax(0,min(608px,max(300px,calc(100vh - 200px)))) minmax(300px,1fr);grid-template-columns:minmax(0,min(608px,max(300px,calc(100svh - 200px)))) minmax(300px,1fr)}
+  #appLayout[data-mode="puzzles"]:not(.solo){grid-template-columns:minmax(0,min(608px,max(300px,calc(100vh - 200px)))) minmax(300px,1fr);grid-template-columns:minmax(0,min(608px,max(300px,calc(100svh - 200px)))) minmax(300px,1fr)}
+  #appLayout[data-mode="debut"]:not(.solo){grid-template-columns:minmax(0,max(300px,calc(100vh - 180px))) minmax(300px,1fr);grid-template-columns:minmax(0,max(300px,calc(100svh - 180px))) minmax(300px,1fr)}
 }
 /* La barre suit les rangees qu'elle contient : absente en Sprint et pendant
    la revue d'un Sprint. Sans ces regles, le display:flex ci-dessus, plus
@@ -2027,9 +2036,10 @@ footer .linkbtn{padding:4px 2px}
 /* Etapes de "Je debute" (2026-11-15) : le disque laiton passe sous les
    numeros d'une etape a l'autre. */
 .debut-pas{position:relative}
-.debut-pas.glisse::before{content:"";position:absolute;left:0;top:0;width:var(--gw);height:var(--gh);transform:translate(var(--gx),var(--gy));pointer-events:none;border-radius:50%;background-color:var(--brass);z-index:0;transition:transform var(--duree-moyenne) var(--courbe-ressort)}
+/* L'anneau laiton glisse d'une bulle a l'autre, par-dessus les bulles. */
+.debut-pas.glisse::before{content:"";position:absolute;left:0;top:0;width:var(--gw);height:var(--gh);box-sizing:border-box;transform:translate(var(--gx),var(--gy));pointer-events:none;border-radius:50%;border:1px solid var(--brass);box-shadow:0 0 0 2px rgba(var(--brass-rgb),.35);z-index:2;transition:transform var(--duree-moyenne) var(--courbe-ressort)}
 .debut-pas.glisse button{position:relative;z-index:1}
-.debut-pas.glisse button[aria-current="step"]{background-color:transparent;border-color:transparent}
+.debut-pas.glisse button[aria-current="step"]{box-shadow:none}
 .tabs.glisse .tabs-marque{opacity:1}
 .tabs.glisse button{position:relative;z-index:1}
 .tabs.glisse button[aria-current="page"]{background-color:transparent}

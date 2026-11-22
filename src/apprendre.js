@@ -521,24 +521,14 @@ if ($("btnTestPasse")) $("btnTestPasse").onclick = () => testReponse(null);
 if ($("btnTestSuite")) $("btnTestSuite").onclick = () => testSuivant();
 if ($("btnTestAppliquer")) $("btnTestAppliquer").onclick = () => testSortir(true);
 if ($("btnTestGarder")) $("btnTestGarder").onclick = () => testSortir(false);
-/* Un seul ecran sur telephone : les lecons du chemin ont des textes plus longs
-   que « Je debute ». Quand le tout depasse la hauteur de l'ecran, l'echiquier
-   cede la place qui manque (jamais sous 240 px). Pendant un exercice il ne
-   fait que retrecir : il ne bouge pas sous le doigt a chaque message. */
-function leconAjuster(depuisZero) {
-  const L = $("appLayout"), cadre = L && L.querySelector(".board-frame"); if (!cadre) return;
-  if (depuisZero || mode !== "debut") cadre.style.maxWidth = "";
-  if (mode !== "debut" || window.innerWidth >= 600) return;
-  const trop = document.documentElement.scrollHeight - window.innerHeight;
-  if (trop <= 0) return;
-  const l = cadre.getBoundingClientRect().width;
-  if (l > 240) cadre.style.maxWidth = Math.max(240, Math.floor(l - trop)) + "px";
+/* L'echiquier des lecons garde la meme taille et la meme place (2026-11-22,
+   Alexandre : « je prefere scroller que diminuer ou agrandir l'echiquier a
+   chaque clic »). Sa taille vient seulement de la feuille de style ; on efface
+   ici une largeur posee a la main par une ancienne version. */
+function leconAjuster() {
+  const L = $("appLayout"), cadre = L && L.querySelector(".board-frame");
+  if (cadre && cadre.style.maxWidth) cadre.style.maxWidth = "";
 }
-if (typeof debutStatut === "function") {
-  const av = debutStatut;
-  debutStatut = function () { const r = av.apply(this, arguments); leconAjuster(false); return r; };
-}
-window.addEventListener("resize", () => { if (mode === "debut") leconAjuster(true); });
 /* Le moteur des lecons cede l'ecran au test tant qu'il est ouvert. */
 if (typeof debutCharger === "function") {
   const av = debutCharger;

@@ -22,6 +22,8 @@ const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko+
 const pause = ms => new Promise(r => setTimeout(r, ms));
 const net = s => String(s).replace(/[  ]/g, " ");
 const dit = x => JSON.stringify(x);
+/* Les chapitres viennent du fichier : le test suit ceux qui sortent. */
+const CHAPITRES = require("../chemin/plan.json").chapitres;
 const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.setItem(k, typeof o[k] === "string" ? o[k] : JSON.stringify(o[k])); } });
 
 (async () => {
@@ -30,7 +32,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   let $ = id => w.document.getElementById(id), ev = s => w.eval(s);
   T("accueil : « Je debute »", net($("heroDebut").textContent) === "Je débute" && !$("heroDebut").classList.contains("hide"), $("heroDebut").textContent);
   T("rien n'est commence, le chapitre 1 est le chapitre a suivre", ev("cheminCourant()") === 0 && ev("cheminCommence()") === false);
-  T("le plan pose dans le script : trois chapitres", ev("CHEMIN_PLAN.map(c=>c.id).join()") === "debut,regles,securite" && ev("CHEMIN_PLAN[1].n") === 5 && ev("CHEMIN_PLAN[2].n") === 5);
+  T("le plan pose dans le script : les chapitres du fichier, cinq lecons chacun apres le premier", ev("CHEMIN_PLAN.map(c=>c.id).join()") === CHAPITRES.join() && CHAPITRES.slice(1).every((c, i) => ev("CHEMIN_PLAN[" + (i + 1) + "].n") === 5), ev("CHEMIN_PLAN.map(c=>c.id+':'+c.n).join()"));
   w.close();
 
   console.log("--- Une ancienne progression « Je debute » est gardee ---");
@@ -162,7 +164,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
 
   console.log("--- Apres une partie avec les Noirs, les lecons reviennent a l'endroit ---");
   ev("flipped=true;mainFlipped=true");
-  for (const [id, n] of [["debut", 6], ["regles", 5], ["securite", 5]]) {
+  for (const [id, n] of CHAPITRES.map(c => [c, c === "debut" ? 6 : 5])) {
     ev("cheminActiver('" + id + "');setMode('apprendre');setMode('debut')"); await pause(200);
     let envers = [];
     for (let e = 0; e <= n; e++) { ev("flipped=true;lecon.e=" + e + ";lecon.x=0;debutCharger()"); if (ev("flipped") !== false) envers.push(e + 1); }
@@ -188,7 +190,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   ev("setupGame()");
 
   console.log("--- Tout est fini : le bouton de l'accueil s'efface ---");
-  ev("chemin.c.securite={e:5,x:0,f:[0,1,2,3,4]};cheminEcrire()");
+  ev(CHAPITRES.slice(1).map(c => "chemin.c." + c + "={e:5,x:0,f:[0,1,2,3,4]};").join("") + "cheminEcrire()");
   $("brand").click(); await pause(200);
   T("chemin fini : plus de bouton", $("heroDebut").classList.contains("hide") && ev("cheminCourant()") === -1);
   T("« Exercice du jour » reste", !$("heroPuzzle").classList.contains("hide"));

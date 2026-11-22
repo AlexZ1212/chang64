@@ -557,7 +557,7 @@ function construire(){
         '<button type="button" class="chip" data-mode="ordi">'+echappe(tr("Against the computer"))+'</button>'+
         '<button type="button" class="chip" data-mode="deux">'+echappe(tr("Two players"))+'</button></div>'+
       '<div class="chips" id="mkOptions">'+
-        '<span class="chips" role="group" aria-label="'+echappe(tr("Level"))+'">'+
+        '<span class="chips" role="group" aria-label="'+echappe(tr("Difficulty"))+'">'+
           ["Easy","Medium","Hard"].map((n,i)=>'<button type="button" class="chip" data-niveau="'+i+'">'+echappe(tr(n))+"</button>").join("")+"</span>"+
         '<span class="chips" role="group" aria-label="'+echappe(tr("Your side"))+'">'+
           '<button type="button" class="chip" data-camp="1">'+echappe(tr("White"))+'</button>'+

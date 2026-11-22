@@ -102,7 +102,7 @@ function menuStats(){
   const bx=bxEtat(),vis=BADGES.filter(bxVisible);
   const finales=["kq","kr","krr","kbn","kp"].filter(e=>(prog.endgames||{})[e]!==undefined).length;
   const tuiles=[
-    ["Rating",prog.rating||800],
+    ["Puzzle rating",prog.rating||800],
     ["Puzzles solved",prog.solved||0],
     ["Days in a row",prog.days||0],
     ["Days played",Object.keys(bx.j).length],
@@ -116,10 +116,10 @@ function menuStats(){
      reussis par jour sur 30 jours. */
   poserHtml(menuEl("menuStats"),'<div class="menu-tuiles">'+tuiles.map(([l,v])=>
     '<div class="menu-tuile"><b>'+echapper(String(v))+'</b><span>'+echapper(t(l))+"</span></div>").join("")+"</div>"+
-    '<p class="tiroir-section">'+echapper(t("Rating over time"))+"</p>"+
+    '<p class="tiroir-section">'+echapper(t("Puzzle rating over time"))+"</p>"+
     '<div class="graph ratinggraph menu-graphe" id="menuRatingGraph"></div>'+
-    '<details class="menu-explication"><summary>'+echapper(t("How does the rating work?"))+"</summary>"+
-    ["Your rating estimates your level at puzzles. You start at 800.",
+    '<details class="menu-explication"><summary>'+echapper(t("How does the puzzle rating work?"))+"</summary>"+
+    ["Your puzzle rating estimates your strength at puzzles. You start at 800.",
      "Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.",
      "Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.",
      "It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's."].map(x=>"<p>"+echapper(t(x))+"</p>").join("")+"</details>"+

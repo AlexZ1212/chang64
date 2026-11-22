@@ -134,7 +134,22 @@ function duelBandeau(){
   };
 }
 if(typeof eloEchec==="function"){const av=eloEchec;eloEchec=function(){if(duelIci())return;return av.apply(this,arguments);};}
-{const av=registerWrong;registerWrong=function(){if(duelIci())duel.faute=true;return av.apply(this,arguments);};}
+/* Le palier de l'echelle ne bouge pas non plus pendant un duel (2026-11-22,
+   decision d'Alexandre) : ni montee, ni descente, et les suites de reussites
+   ou d'erreurs reprennent apres le duel la ou elles en etaient. Resolus,
+   serie, objectif du jour et file « a revoir » comptent toujours. */
+function duelSansEchelle(av){
+  return function(){
+    if(!duelIci())return av.apply(this,arguments);
+    const c=prog.correctRun,w=prog.wrongRun;
+    echelleGelee=true;
+    try{return av.apply(this,arguments);}
+    finally{echelleGelee=false;prog.correctRun=c;prog.wrongRun=w;}
+  };
+}
+registerSolved=duelSansEchelle(registerSolved);
+registerPartial=duelSansEchelle(registerPartial);
+{const av=duelSansEchelle(registerWrong);registerWrong=function(){if(duelIci())duel.faute=true;return av.apply(this,arguments);};}
 if(typeof noterPremierEssai==="function"){const av=noterPremierEssai;noterPremierEssai=function(ok){if(!ok&&duelIci())duel.faute=true;return av.apply(this,arguments);};}
 {const av=setMode;setMode=function(m,o){if(duel&&m!=="puzzles")duelAbandonner();return av.apply(this,arguments);};}
 {const av=showSolveScreen;showSolveScreen=function(s){if(duel&&s!=="puzzles")duelAbandonner();return av.apply(this,arguments);};}
@@ -213,7 +228,7 @@ function duelFermer(){
 const duelMedaille=id=>'<span class="popin-medaille" data-medaille="'+id+'" aria-hidden="true"></span>';
 const DUEL_FILET='<div class="popin-filet"></div>';
 function duelTete(titre,sous,medaille){
-  return duelMedaille(medaille||"duel_gagne")+'<p class="bilan-entete">'+echapper(t("Challenge a friend"))+'</p><h2 id="duelTitre">'+echapper(titre)+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"");
+  return duelMedaille(medaille||"duel_gagne")+'<p class="bilan-entete">'+echapper(t("Puzzle duel"))+'</p><h2 id="duelTitre">'+echapper(titre)+"</h2>"+(sous?'<p class="bilan-sous">'+echapper(sous)+"</p>":"");
 }
 function duelTuiles(j){
   return '<div class="bilan-tuiles"><div class="bilan-tuile" style="--i:0"><b>'+duelPremiers(j.r)+"/"+DUEL_N+"</b><span>"+echapper(t("First try"))+'</span></div><div class="bilan-tuile" style="--i:1"><b>'+duelTemps(j.t)+"</b><span>"+echapper(t("Time"))+"</span></div></div>";
@@ -229,7 +244,7 @@ function duelPartage(texte){
      de nom a saisir : son pseudo part avec le defi. */
   const membre=typeof cp!=="undefined"&&cp&&cp.pseudo;
   return (membre?"":'<label class="duel-nom"><span>'+echapper(t("Your username (optional)"))+'</span><input type="text" id="duelNomChamp" maxlength="20" autocomplete="nickname" autocapitalize="off" spellcheck="false" value="'+echapper(duelNom)+'"></label>')+
-    '<div class="panel duel-envoi"><input class="linkbox" id="duelLienChamp" readonly aria-label="'+echapper(t("Challenge link"))+'"><div class="shareRow" id="duelPartage"></div></div>'+
+    '<div class="panel duel-envoi"><input class="linkbox" id="duelLienChamp" readonly aria-label="'+echapper(t("Duel link"))+'"><div class="shareRow" id="duelPartage"></div></div>'+
     '<p class="duel-note" id="duelNote" aria-live="polite" data-texte="'+echapper(texte)+'"></p>';
 }
 let duelLienCourant=null;
@@ -245,11 +260,11 @@ function duelMajLien(){
 }
 function duelVueCree(ids,moi){
   const pc=duelPremiers(moi.r);
-  const titre=pc===DUEL_N?t("Flawless!"):pc>=3?t("Well played!"):t("Challenge ready");
+  const titre=pc===DUEL_N?t("Flawless!"):pc>=3?t("Well played!"):t("Duel ready");
   duelLienCourant=()=>duelLien(ids,Object.assign({},moi,{n:duelNomCourant()}),null);
   duelOuvrir(duelTete(titre,t("Send the link: your friend plays the same five puzzles and tries to beat you."),"duel_lien")+
     duelTuiles(moi)+'<div class="duel-seul">'+duelPoints(moi.r)+"</div>"+DUEL_FILET+
-    duelPartage(t("I challenge you on chang64: five puzzles, can you beat my score?"))+
+    duelPartage(t("A puzzle duel on chang64: five puzzles, can you beat my score?"))+
     '<button type="button" class="btn duel-fermer" data-duel-fermer>'+echapper(t("Close"))+"</button>");
   duelMajLien();
 }
@@ -259,8 +274,8 @@ function duelVueReponse(ids,adv,moi){
   duelLienCourant=()=>duelLien(ids,adv,Object.assign({},moi,{n:duelNomCourant()}));
   duelOuvrir(duelTete(titre,t("Send your answer so {name} sees the result.",{name:nomAdv}))+
     '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(nomAdv,adv,c<0)+"</ul>"+DUEL_FILET+
-    duelPartage(t("I took up your chang64 challenge, here is my result:"))+
-    '<div class="duel-boutons"><button type="button" class="btn" data-duel-nouveau>'+echapper(t("New challenge"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Close"))+"</button></div>");
+    duelPartage(t("I played your chang64 puzzle duel, here is my result:"))+
+    '<div class="duel-boutons"><button type="button" class="btn" data-duel-nouveau>'+echapper(t("New duel"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Close"))+"</button></div>");
   duelMajLien();
 }
 /* Lien recu : un defi a relever, ou une reponse a un defi. */
@@ -294,17 +309,17 @@ function duelRecu(d){
     const c=duelComparer(d.a,d.b);
     const titre=c===0?t("Perfect tie!"):moiA?(c>0?t("You win!"):t("{name} wins!",{name:nomB})):t("{name} wins!",{name:c>0?nomA:nomB});
     duelLienCourant=null;
-    duelOuvrir(duelTete(titre,moiA?t("{name} took up your challenge.",{name:nomB}):t("Challenge result"))+
+    duelOuvrir(duelTete(titre,moiA?t("{name} played your duel.",{name:nomB}):t("Duel result"))+
       '<ul class="duel-tableau">'+duelLigne(nomA,d.a,c>0)+duelLigne(nomB,d.b,c<0)+"</ul>"+DUEL_FILET+
       '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-nouveau data-duel-premier>'+echapper(t("Rematch"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Close"))+"</button></div>");
     return;
   }
   const nom=d.a.n;
-  duelOuvrir(duelTete(nom?t("{name} challenges you!",{name:nom}):t("A friend challenges you!"),
+  duelOuvrir(duelTete(nom?t("{name} invites you to a puzzle duel",{name:nom}):t("A friend invites you to a puzzle duel"),
       t("Five puzzles, the same for both of you. The score to beat:"))+
     duelTuiles(d.a)+'<div class="duel-seul">'+duelPoints(d.a.r)+"</div>"+
     '<p class="duel-regle">'+echapper(t("A puzzle found on the first try scores a point. If you are level, the faster player wins."))+"</p>"+DUEL_FILET+
-    '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-relever data-duel-premier>'+echapper(t("Take the challenge"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Not now"))+"</button></div>");
+    '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-relever data-duel-premier>'+echapper(t("Play the duel"))+'</button><button type="button" class="btn" data-duel-fermer>'+echapper(t("Not now"))+"</button></div>");
   $("duel").dataset.ids=duelEnc(d.ids);
   $("duel")._adv=d.a;
 }
@@ -332,7 +347,7 @@ function duelRecu(d){
 function duelCarte(){
   const s=$("subSolveDuel");if(!s)return;
   const e=duelEnvoyes[duelEnvoyes.length-1];
-  s.textContent=e?t("Last challenge: {n}/{total} on the first try",{n:duelPremiers(e.r),total:DUEL_N}):"";
+  s.textContent=e?t("Last duel: {n}/{total} on the first try",{n:duelPremiers(e.r),total:DUEL_N}):"";
 }
 function duelOuvert(){const r=$("duel");return !!(r&&!r.hidden);}
 /* Lien profond : lu avant les autres routes de readDeepLink (ui.js). */

@@ -67,7 +67,7 @@ function bilanOuvrir(){
   const tuiles=[
     [s.reussis+"/"+s.faits,"Solved"],
     [String(s.premier),"First try"],
-    [(delta>=0?"+":"−")+Math.abs(delta),"Rating"],
+    [(delta>=0?"+":"−")+Math.abs(delta),"Puzzle rating"],
     [String(s.meilleure),"Best run"]
   ];
   poserHtml($("bilanTuiles"),tuiles.map(([v,l],i)=>'<div class="bilan-tuile" style="--i:'+i+'"><b>'+echapper(v)+"</b><span>"+echapper(t(l))+"</span></div>").join(""));

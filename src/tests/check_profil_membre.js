@@ -248,7 +248,7 @@ function ouvrir(page) {
   for (const l of LANGUES) {
     if (l.code === "en") continue;
     const dict = require("../langues/" + l.code + "/app.js");
-    const cles = ["My friends", "Add to my friends", "Remove from my friends", "No friends yet. Open a player's profile to add them.", "You and your friends, by puzzles solved since Monday.", "Your friends list is full.", "Player profile", "Member since {date}", "Could not load this profile.", "Challenge this player", "Your rank: {n}", "My profile"];
+    const cles = ["My friends", "Add to my friends", "Remove from my friends", "No friends yet. Open a player's profile to add them.", "You and your friends, by puzzles solved since Monday.", "Your friends list is full.", "Player profile", "Member since {date}", "Could not load this profile.", "Invite to a duel", "Your rank: {n}", "My profile"];
     T(l.code + " : textes de la fiche traduits, variables gardees", cles.every(k => typeof dict[k] === "string" && dict[k] !== k) && dict["Member since {date}"].includes("{date}") && dict["Your rank: {n}"].includes("{n}"));
   }
 

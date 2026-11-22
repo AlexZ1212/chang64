@@ -333,6 +333,9 @@ function motifPropose(theme){return ((THEME_COUNTS||COMPTES_MOTIFS)[theme]||0)>=
    cette liste (2026-09-13) : sans ca le mode s'arretait au premier niveau et
    laissait les trois quarts du motif hors d'atteinte. */
 let motifEnCours=null,motifNiveau=1,motifNiveaux=[1];
+/* Echelle gelee le temps d'un exercice de Duel d'exercices (duel.js,
+   2026-11-22, decision d'Alexandre) : ni montee ni descente de palier. */
+let echelleGelee=false;
 /* Huit niveaux depuis le 2026-10-18 (voir BANDES dans build_site.js) : les
    quatre paliers de prises ont disparu avec les prises en un coup. */
 const LEVELS=[
@@ -2614,7 +2617,7 @@ function finishPuzzle(won,msg){
      d'appeler updateRating() dans ce cas, la notation ne bouge pas pendant
      un sprint -- donc rien a afficher, comportement correct par defaut
      sans code special ici. */
-  st.textContent=msg+(typeof lastRatingDelta==="number"?" "+t("({delta} rating)",{delta:(lastRatingDelta>=0?"+":"\u2212")+Math.abs(lastRatingDelta)}):"");
+  st.textContent=msg+(typeof lastRatingDelta==="number"?" "+t("({delta} puzzle rating)",{delta:(lastRatingDelta>=0?"+":"\u2212")+Math.abs(lastRatingDelta)}):"");
   const ex=$("exExplain");if(ex)ex.textContent=won?explainSentence(puzzle):"";
   const pg=$("exPedagogy");if(pg)pg.textContent=won?pedagogySentence(puzzle):"";
   if(rejoue){/* deja compte aujourd'hui */}
@@ -2723,7 +2726,7 @@ function registerSolved(){
      annonce -- exactement le defaut de l'ancien filtre par menu deroulant.
      Le reste (compteur resolu, serie, badges, file de revision) continue de
      compter normalement : travailler un motif reste du travail. */
-  if(!motifEnCours&&prog.correctRun>=3&&prog.level<LEVELS.length){
+  if(!motifEnCours&&!echelleGelee&&prog.correctRun>=3&&prog.level<LEVELS.length){
     prog.level++;prog.correctRun=0;
     setTimeout(()=>{
       const st=$("exStatus");st.className="status win";
@@ -2734,7 +2737,7 @@ function registerSolved(){
 function registerPartial(){prog.solved++;prog.correctRun=0;prog.streak=0;}
 function registerWrong(){
   prog.streak=0;prog.correctRun=0;prog.wrongRun++;
-  if(!motifEnCours&&prog.wrongRun>=4&&prog.level>1){prog.level--;prog.wrongRun=0;}
+  if(!motifEnCours&&!echelleGelee&&prog.wrongRun>=4&&prog.level>1){prog.level--;prog.wrongRun=0;}
   /* File de revision persistante, avec repetition espacee (paliers de type
      Leitner) depuis cette session -- voir SRS_DELAYS_DAYS (ui2.js) pour le
      detail des delais. Ici : un echec, qu'il s'agisse d'un premier rate ou
@@ -3124,7 +3127,7 @@ function newAmiGame(){
   if(amiColor===B){
     $("amiLinkPanel").classList.remove("hide");
     $("amiLink").value=amiUrl();
-    shareButtons($("amiShare"),amiUrl(),t("I challenge you on chang64, you play White:"),true);
+    shareButtons($("amiShare"),amiUrl(),t("I invite you to play on chang64, you have White:"),true);
     updateAmiNote();
   }
 }

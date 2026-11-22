@@ -2891,7 +2891,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <span class="ico" id="icoFriend"></span>
         <h3>Play a friend</h3>
         <p>Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.</p>
-        <span class="go">Challenge a friend &rarr;</span>
+        <span class="go">Invite a friend &rarr;</span>
       </button>
     </div>
 
@@ -2919,7 +2919,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
          n'expliquait encore ici meme. -->
     <div class="panel" id="homeProgressPanel">
       <div class="eyebrow">My progress<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipHomeProgress" aria-label="More info">i</button></div>
-      <p class="info-tip-pop hide" id="tipHomeProgress">Level and rating come from the Puzzles ladder alone. Solved and best streak also count the puzzle of the day. Day streak counts only the puzzle of the day. Chang Sprint and Coordinates keep their own records, on their own cards, and never move these numbers.</p>
+      <p class="info-tip-pop hide" id="tipHomeProgress">Level and puzzle rating come from the Puzzles ladder alone. Solved and best streak also count the puzzle of the day. Day streak counts only the puzzle of the day. Chang Sprint and Coordinates keep their own records, on their own cards, and never move these numbers.</p>
       <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
            n'afficherait que des zeros, ce qu'un premier visiteur lit comme
            "le site est vide" alors qu'il s'agit de sa propre progression.
@@ -2938,7 +2938,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="stat"><b id="hLevel">1</b><span>Level</span><em>Puzzles</em></div>
         <div class="stat"><b id="hSolved">0</b><span>Solved</span><em>Puzzles, daily</em></div>
         <div class="stat"><b id="hBest">0</b><span>Best streak</span><em>Puzzles, daily</em></div>
-        <div class="stat"><b id="hRating">800</b><span>Rating</span><em>Puzzles</em></div>
+        <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span><em>Puzzles</em></div>
         <div class="stat"><b id="hStreak">0</b><span>Day streak</span><em>Puzzle of the day</em></div>
       </div>
       <div class="startline hide" id="homeStart">
@@ -3299,7 +3299,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           </button>
           <!-- Defi entre amis par lien (2026-11-15, voir duel.js). -->
           <button type="button" class="solveCard" id="cardSolveDuel">
-            <b>Challenge a friend</b>
+            <b>Puzzle duel</b>
             <span class="solveCard-desc">Five puzzles at your level. Play them, send the link: your friend gets the same ones and has to do better. Good luck to them.</span>
             <span class="solveCard-sub" id="subSolveDuel"></span>
           </button>
@@ -3396,7 +3396,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                n'existe qu'ENTRE deux elements, jamais comme marge de tete
                d'un element replie seul sur sa ligne. -->
           <div class="duel-bandeau hide" id="duelBandeau">
-            <div><b data-t="Challenge a friend">Challenge a friend</b><span id="duelBandeauNum"></span></div>
+            <div><b data-t="Puzzle duel">Puzzle duel</b><span id="duelBandeauNum"></span></div>
             <span class="duel-bandeau-points" id="duelBandeauPoints" aria-hidden="true"></span>
             <span class="duel-bandeau-adv" id="duelBandeauAdv"></span>
             <button type="button" class="btn" id="duelBandeauQuitter">Leave</button>
@@ -3496,11 +3496,11 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                  carre par coup, sans rien devoiler de la solution. -->
             <div class="btnrow">
               <button class="btn" id="btnShareDaily">Share my result</button>
-              <button class="btn" id="btnChallengeDaily">Challenge a friend</button>
+              <button class="btn" id="btnChallengeDaily">Send to a friend</button>
             </div>
             <p class="note" id="dailyShareNote" aria-live="polite"></p>
             <div class="panel hide" id="dailyChallengePanel" style="margin-top:8px">
-              <input class="linkbox" id="dailyChallengeLink" readonly aria-label="Challenge link">
+              <input class="linkbox" id="dailyChallengeLink" readonly aria-label="Puzzle link">
               <div class="shareRow" id="dailyChallengeShare"></div>
             </div>
             <!-- Meme bloc pour le resultat (2026-11-18), sans apercu du texte : l'application choisie le montre deja avant l'envoi (retour d'Alexandre). Le champ reste dans la page, masque, pour le code. -->
@@ -3547,12 +3547,12 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <div class="stat"><b id="stSolved">0</b><span>Solved</span></div>
             <div class="stat"><b id="stStreak">0</b><span>Streak</span></div>
             <div class="stat"><b id="stBest">0</b><span>Best</span></div>
-            <div class="stat"><b id="stRating">800</b><span>Rating</span></div>
+            <div class="stat"><b id="stRating">800</b><span>Puzzle rating</span></div>
           </div>
           <!-- Graphique garde visible en permanence (decision du 2026-09-03,
                "c'est stimulant de le voir") -- seuls les records et les
                badges rejoignent le repli ci-dessous. -->
-          <div class="eyebrow">Rating over time<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipRatingGraph" aria-label="More info">i</button></div>
+          <div class="eyebrow">Puzzle rating over time<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipRatingGraph" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipRatingGraph">One point per exercise you complete. It only tracks your own progress against past-you, not a certified skill level. See the "Elo rating" glossary entry for more.</p>
           <div class="graph ratinggraph" id="ratingGraph"></div>
           <div class="hide" id="mistakeSection">
@@ -3597,7 +3597,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
               <div class="stat"><b id="stBestDay">0</b><span>Best day</span></div>
             </div>
             <div class="eyebrow">Badges<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipBadges" aria-label="More info">i</button></div>
-            <p class="info-tip-pop hide" id="tipBadges">Milestones for volume, daily streaks and rating. Once unlocked, a badge stays unlocked even if the number behind it later drops.</p>
+            <p class="info-tip-pop hide" id="tipBadges">Milestones for volume, daily streaks and puzzle rating. Once unlocked, a badge stays unlocked even if the number behind it later drops.</p>
             <!-- margin-bottom ajoute (2026-09-04) : sans lui, ce paragraphe
                  (margin-top deja mis a 0 pour coller a l'eyebrow juste
                  au-dessus) touchait directement la premiere rangee de
@@ -3911,7 +3911,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <span class="jouer-texte">
           <b>Against a friend</b>
           <span class="jouer-desc" id="jouerAmiTexte">Every move becomes a link. Send it on WhatsApp or Messenger, your friend replies whenever they like. Nothing to install, and no excuse not to play.</span>
-          <span class="jouer-go">Challenge a friend &rarr;</span>
+          <span class="jouer-go">Invite a friend &rarr;</span>
         </span>
       </button>
       <!-- Troisieme carte (2026-11-21) : un adversaire au hasard, proche de son
@@ -4108,7 +4108,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
   <div class="bilan cpp" id="cpProfil" role="dialog" aria-modal="true" aria-label="Player profile" hidden>
     <div class="bilan-fenetre" id="cpProfilContenu"></div>
   </div>
-  <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-label="Challenge a friend" hidden>
+  <div class="bilan duel" id="duel" role="dialog" aria-modal="true" aria-label="Puzzle duel" hidden>
     <div class="bilan-fenetre" id="duelContenu"></div>
   </div>
 
@@ -4141,7 +4141,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
              Montree seulement quand il a au moins une partie. -->
         <button type="button" class="tiroir-lien" id="menuCorrLigne" hidden><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span data-t="Games in progress">Games in progress</span><span class="tiroir-detail" id="menuCorrDetail"></span></button>
         <!-- Defis entre membres (2026-11-17, compte.js) : le nombre a droite = defis a relever + reponses pas encore vues. -->
-        <button type="button" class="tiroir-lien" data-vue-defis-membres="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,32H152a8,8,0,0,0-6.34,3.12l-64,83.21L72,108.69a16,16,0,0,0-22.64,0l-12.69,12.7a16,16,0,0,0,0,22.63l20,20-28,28a16,16,0,0,0,0,22.63l12.69,12.68a16,16,0,0,0,22.62,0l28-28,20,20a16,16,0,0,0,22.64,0l12.69-12.7a16,16,0,0,0,0-22.63l-9.64-9.64,83.21-64A8,8,0,0,0,224,104V40A8,8,0,0,0,216,32Zm-8,68.06-81.74,62.88L115.32,152l50.34-50.34a8,8,0,0,0-11.32-11.31L104,140.68,93.07,129.74,155.94,48H208Z"/></svg><span data-t="Member challenges">Member challenges</span><span class="tiroir-detail" id="menuDefisMembresDetail"></span></button>
+        <button type="button" class="tiroir-lien" data-vue-defis-membres="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,32H152a8,8,0,0,0-6.34,3.12l-64,83.21L72,108.69a16,16,0,0,0-22.64,0l-12.69,12.7a16,16,0,0,0,0,22.63l20,20-28,28a16,16,0,0,0,0,22.63l12.69,12.68a16,16,0,0,0,22.62,0l28-28,20,20a16,16,0,0,0,22.64,0l12.69-12.7a16,16,0,0,0,0-22.63l-9.64-9.64,83.21-64A8,8,0,0,0,224,104V40A8,8,0,0,0,216,32Zm-8,68.06-81.74,62.88L115.32,152l50.34-50.34a8,8,0,0,0-11.32-11.31L104,140.68,93.07,129.74,155.94,48H208Z"/></svg><span data-t="Member duels">Member duels</span><span class="tiroir-detail" id="menuDefisMembresDetail"></span></button>
         <p class="tiroir-section" data-t="My progress">My progress</p>
         <button type="button" class="tiroir-lien" data-vue-objectif="1"><svg class="obj-anneau tiroir-ico" id="menuObjectifAnneau" viewBox="0 0 36 36" aria-hidden="true"><circle class="obj-fond" cx="18" cy="18" r="15"/><circle class="obj-plein" cx="18" cy="18" r="15" pathLength="100"/><path class="obj-coche" d="M12 18.5l4 4 8-9" pathLength="1"/></svg><span data-t="Daily goal">Daily goal</span><span class="tiroir-detail" id="menuObjectif"></span></button>
         <button type="button" class="tiroir-lien" data-vue-defis="1"><svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M227.32,48.75A8,8,0,0,0,218.76,50c-28,24.22-51.72,12.48-79.21-1.13C111.07,34.76,78.78,18.79,42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,28.49,14.09,60.77,30.06,96.79-1.13a8,8,0,0,0,2.76-6V56A8,8,0,0,0,227.32,48.75ZM216,71.6v40.65c-14,11.06-27,13.22-40,10.88V79.34A60.05,60.05,0,0,0,216,71.6Zm-56,3.76v43c-6.66-2.67-13.43-6-20.45-9.48-8.82-4.37-18-8.91-27.55-12.18v-43c6.66,2.66,13.43,6,20.45,9.48C141.27,67.55,150.46,72.09,160,75.36ZM96,48.91V92.69a60.06,60.06,0,0,0-40,7.75V59.78C70,48.72,83,46.57,96,48.91ZM86.58,152A60.06,60.06,0,0,0,56,160.43V119.78c14-11.06,27-13.22,40-10.88v43.8A65.61,65.61,0,0,0,86.58,152ZM112,156.67v-43c6.66,2.66,13.43,6,20.45,9.48,8.82,4.37,18,8.9,27.55,12.17v43c-6.66-2.67-13.43-6-20.45-9.48C130.73,164.47,121.54,159.94,112,156.67Zm64,26.45v-43.8a65.61,65.61,0,0,0,9.42.72A60.11,60.11,0,0,0,216,131.57v40.68C202,183.31,189,185.46,176,183.12Z"/></svg><span data-t="Weekly challenges">Weekly challenges</span><span class="tiroir-detail" id="menuDefis"></span></button>

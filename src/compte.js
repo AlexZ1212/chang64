@@ -542,7 +542,7 @@ function cpVue(ecran,donnees){
   const retour=(vers,texte)=>'<button type="button" class="linkbtn cp-lien" data-cp="'+vers+'">'+cpE(texte||"Back")+"</button>";
   if(ecran==="accueil"){
     h='<p class="app-intro">'+cpE("An account keeps your progress safe and follows you from one device to another.")+"</p>"+
-      '<ul class="app-avantages">'+["Your rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Your badge collection, your progress charts, the themes you earn and your full game history.","Your place in Top players, with your own profile and your rank.","Challenge other members by their username, and compare your week with your friends.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
+      '<ul class="app-avantages">'+["Your puzzle rating, badges, streak and games on your phone, tablet and computer.","Nothing is lost if you clear your browser or change device.","Your badge collection, your progress charts, the themes you earn and your full game history.","Your place in Top players, with your own profile and your rank.","Invite other members to a puzzle duel by their username, and compare your week with your friends.","Free, and optional: everything stays playable without an account."].map(x=>"<li>"+cpE(x)+"</li>").join("")+"</ul>"+
       '<p class="tiroir-section">'+cpE("What we ask for")+"</p>"+
       '<p class="cp-note">'+cpE("A username and a code of 6 digits or more. That is all: today we ask for no name and no email address.")+"</p>"+
       '<button type="button" class="btn primary cp-large reflet" data-cp="creer1">'+cpE("Create an account")+"</button>"+
@@ -903,7 +903,7 @@ setTimeout(cpDemarrer,1200);
    seuls les joueurs qui ont un compte y figurent. La ligne du joueur
    connecte est mise en avant. Chaque tableau est garde une minute ici, cinq
    sur le serveur. */
-const CPJ=[["semaine","This week"],["note","Rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Live games won"]];
+const CPJ=[["semaine","This week"],["note","Puzzle rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Live games won"]];
 let cpjPar="semaine",cpjCache={};
 const CPL=["Pawn","Knight","Bishop","Rook","Queen"];
 async function cpjVue(par){
@@ -1008,7 +1008,7 @@ async function cpjVue(par){
    telephone il s'ouvre en tournant l'appareil : c'est la seule exception a
    l'ecran "Redresse ton telephone" (html.joueurs-ouverts, voir le CSS). Sur
    ordinateur et tablette, le bouton "Toutes les stats" l'ouvre. */
-const CPJ_COLONNES=[["s","This week"],["n","Rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Live wins"]];
+const CPJ_COLONNES=[["s","This week"],["n","Puzzle rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Live wins"]];
 let cpjTout=null,cpjToutT=0,cpjTri="r",cpjSens=-1;
 function cpjGrandDessiner(){
   const g=$("cpjGrand");if(!g)return;
@@ -1123,8 +1123,8 @@ document.addEventListener("change",async e=>{
    autre fenetre. Deux fois au plus, a quatorze jours d'ecart ; plus jamais
    une fois le compte cree. */
 const CPI_ETAPES=[
-  ["Keep your progress","Your rating, your badges and your streak follow you on your phone, tablet and computer. Nothing is lost if you change device."],
-  ["Play with the others","Appear in Top players, challenge a member on five puzzles, and compare your week with your friends."],
+  ["Keep your progress","Your puzzle rating, your badges and your streak follow you on your phone, tablet and computer. Nothing is lost if you change device."],
+  ["Play with the others","Appear in Top players, invite a member to a puzzle duel, and compare your week with your friends."],
   ["A username and a code","That is all we ask: no name, no email address. It is free, and you can delete your account at any time."]];
 const CPI_FOIS=2,CPI_ECART=14*864e5,CPI_EXERCICES=5;
 /* Une medaille par etape, gravee comme celles des badges (retour d'Alexandre
@@ -1332,7 +1332,7 @@ async function cppOuvrir(pseudo){
     (cpNombre(cpObjet(j.eo).n)>0?'<p class="cp-note cpp-elo">'+echapper(t("≈ {r} against the computer",{r:cpNombre(j.eo.r)}))+"</p>":"")+
     cppBadges(j.bl)+
     (cp&&!moi&&cpaReciproque(j.p)?'<p class="cp-note cpp-amis">'+cpE("You are friends: you have each added the other.")+"</p>":"")+
-    (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Challenge this player")+"</button>"+
+    (cp&&!moi?'<button type="button" class="btn primary" data-cpp-defier="'+echapper(String(j.p))+'" data-cpp-premier>'+cpE("Invite to a duel")+"</button>"+
       (retrait?"":boutonAmi)+
       (cpaEnvoyee(j.p)?'<p class="cp-note cpp-amis">'+cpE("Friend request sent. {name} has to accept it.").replace("{name}",echapper(String(j.p)))+"</p>":"")+
       '<p class="cp-msg cpp-msg" id="cppMsg" aria-live="polite"></p>':"")+fermer+(retrait?boutonAmi:""));
@@ -1470,7 +1470,7 @@ function cpdResultat(x,recu){
 async function cpdVue(){
   const v=$("menuDefisMembresVue");if(!v)return;
   if(!cp){
-    poserHtml(v,'<p class="app-intro">'+cpE("Create an account to challenge other members by their username.")+"</p>"+
+    poserHtml(v,'<p class="app-intro">'+cpE("Create an account to invite other members to a duel by their username.")+"</p>"+
       '<button type="button" class="btn primary cp-large" data-vue-compte="1">'+cpE("Create an account")+"</button>");
     return;
   }
@@ -1482,18 +1482,18 @@ async function cpdVue(){
   const finis=cpListe(l.recus).filter(x=>x.r2!==null).map(x=>[x,true]).concat(cpListe(l.envoyes).filter(x=>x.r2!==null).map(x=>[x,false]))
     .sort((a,b)=>cpNombre(b[0].repondu)-cpNombre(a[0].repondu)).slice(0,20);
   let h="";
-  if(aRelever.length)h+='<p class="tiroir-section">'+cpE("To take up")+"</p>"+aRelever.map(x=>
-    '<div class="cpd-carte"><p class="cpd-titre">'+echapper(t("{name} challenges you!",{name:x.p}))+"</p>"+
+  if(aRelever.length)h+='<p class="tiroir-section">'+cpE("To play")+"</p>"+aRelever.map(x=>
+    '<div class="cpd-carte"><p class="cpd-titre">'+echapper(t("{name} invites you to a puzzle duel",{name:x.p}))+"</p>"+
     '<p class="cp-note">'+echapper(t("Score to beat: {n}/{total}",{n:duelPremiers(x.r1),total:DUEL_N}))+" "+duelPoints(x.r1)+" "+duelTemps(x.t1)+"</p>"+
-    '<div class="cpd-boutons"><button type="button" class="btn primary" data-cpd-relever="'+x.id+'">'+cpE("Take the challenge")+'</button><button type="button" class="btn" data-cpd-supprimer="'+x.id+'">'+cpE("Decline")+"</button></div>"+
-    '<button type="button" class="linkbtn cp-lien cpd-bloquer" data-cpd-bloquer="'+x.id+'">'+cpE("Stop receiving challenges from this player")+"</button></div>").join("");
+    '<div class="cpd-boutons"><button type="button" class="btn primary" data-cpd-relever="'+x.id+'">'+cpE("Play the duel")+'</button><button type="button" class="btn" data-cpd-supprimer="'+x.id+'">'+cpE("Decline")+"</button></div>"+
+    '<button type="button" class="linkbtn cp-lien cpd-bloquer" data-cpd-bloquer="'+x.id+'">'+cpE("Stop receiving duels from this player")+"</button></div>").join("");
   if(finis.length)h+='<p class="tiroir-section">'+cpE("Results")+"</p>"+finis.map(([x,recu])=>
     '<div class="cpd-carte">'+cpdResultat(x,recu)+"</div>").join("");
   if(attente.length)h+='<p class="tiroir-section">'+cpE("Waiting for an answer")+"</p>"+attente.map(x=>
     '<div class="cpd-carte cpd-attente"><p class="cp-note">'+echapper(t("{name} has not answered yet.",{name:x.p}))+"</p>"+
     '<button type="button" class="linkbtn cp-lien" data-cpd-supprimer="'+x.id+'">'+cpE("Withdraw")+"</button></div>").join("");
-  if(!h)h='<p class="cp-note cp-centre">'+cpE("No challenge for now. Play five puzzles and send them to a member.")+"</p>";
-  h+='<button type="button" class="btn cp-large" data-cpd-nouveau>'+cpE("New challenge")+"</button>";
+  if(!h)h='<p class="cp-note cp-centre">'+cpE("No duel for now. Play five puzzles and send them to a member.")+"</p>";
+  h+='<button type="button" class="btn cp-large" data-cpd-nouveau>'+cpE("New duel")+"</button>";
   /* Joueurs bloques : on peut revenir sur sa decision. */
   if(cpListe(l.bloques).length)h+='<p class="tiroir-section">'+cpE("Blocked players")+"</p>"+cpListe(l.bloques).map(p=>
     '<div class="cpd-carte cpd-attente"><p class="cp-note">'+echapper(String(p))+'</p><button type="button" class="linkbtn cp-lien" data-cpd-debloquer="'+echapper(String(p))+'">'+cpE("Unblock")+"</button></div>").join("");
@@ -1511,7 +1511,7 @@ async function cpdVue(){
     av.call(this,"accueil");
     for(const e of document.querySelectorAll("#menuTiroir .tiroir-vue"))e.hidden=e!==v;
     $("menuRetour").hidden=false;
-    $("menuTitre").textContent=t("Member challenges");
+    $("menuTitre").textContent=t("Member duels");
     cpdVue();
     if(v){v.scrollTop=0;if(!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});}
   };
@@ -1539,7 +1539,7 @@ async function cpdVue(){
    un lien. */
 async function cpdRepondre(ids,adv,moi){
   const c=duelComparer(moi,adv);
-  duelOuvrir(duelTete(c>0?t("You win!"):c<0?t("{name} wins!",{name:adv.n}):t("Perfect tie!"),"").replace(echapper(t("Challenge a friend")),echapper(t("Member challenges")))+
+  duelOuvrir(duelTete(c>0?t("You win!"):c<0?t("{name} wins!",{name:adv.n}):t("Perfect tie!"),"").replace(echapper(t("Puzzle duel")),echapper(t("Member duels")))+
     '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(adv.n,adv,c<0)+"</ul>"+
     '<p class="duel-note" id="cpdRepMsg" aria-live="polite">'+cpE("Syncing…")+"</p>"+
     '<div class="duel-boutons"><button type="button" class="btn primary" data-duel-nouveau data-cpd-revanche="'+echapper(adv.n)+'" data-duel-premier>'+cpE("Rematch")+
@@ -1586,8 +1586,8 @@ document.addEventListener("click",async e=>{
     env.disabled=true;msg.textContent=t("Syncing…");
     const r=await cpApi("POST","defi-envoyer",{a:v.pseudo,exos:duelEnc(cpdEnvoi.ids),r:cpdEnvoi.moi.r,t:cpdEnvoi.moi.t});
     env.disabled=false;
-    if(r.s===201){msg.textContent=t("Challenge sent to {name}.",{name:r.j.a||v.pseudo});env.disabled=true;cpdT=0;cpBadge("mb_defi");return;}
-    msg.textContent=r.s===404?t("No member has this username."):r.s===400&&r.j.erreur==="soi"?t("You cannot challenge yourself."):r.s===429&&r.j.erreur==="trop"?t("Too many challenges waiting. Try again later."):cpErreur(r);
+    if(r.s===201){msg.textContent=t("Duel invitation sent to {name}.",{name:r.j.a||v.pseudo});env.disabled=true;cpdT=0;cpBadge("mb_defi");return;}
+    msg.textContent=r.s===404?t("No member has this username."):r.s===400&&r.j.erreur==="soi"?t("You cannot invite yourself."):r.s===429&&r.j.erreur==="trop"?t("Too many duels waiting. Try again later."):cpErreur(r);
   }
 });
 /* Au demarrage, une fois la session lue : y a-t-il un defi a relever ? */

@@ -87,7 +87,7 @@ const BLOCS = `(function(){
     if (l === "fr") await capture("explorer-" + l);
 
     /* Apprendre : chapitre fini dont le boss attend, chapitre suivant ferme. */
-    await c.js(`(async()=>{await window.storage.set("chang64:debut",JSON.stringify({e:7,x:0,f:[0,1,2,3,4,5,6]}));await window.storage.set("chang64:chemin",JSON.stringify({v:1,c:{regles:{e:5,x:0,f:[0,1,2,3,4],b:1}},o:[],p:{x:1}}));return 1;})()`);
+    await c.js(`(async()=>{await window.storage.set("chang64:debut",JSON.stringify({e:7,x:0,f:[0,1,2,3,4,5,6]}));await window.storage.set("chang64:chemin",JSON.stringify({v:2,c:{regles:{e:5,x:0,f:[0,1,2,3,4],b:1}},o:[],p:{x:1}}));return 1;})()`);
     await c.aller(url); await c.attendre(700);
     await c.js(`document.getElementById("tab-apprendre").click();window.scrollTo(0,0);1`); await c.attendre(1300);
     const ap = await c.js(`(function(){const pb=[],de=document.documentElement;if(de.scrollWidth>360)pb.push("la page deborde ("+de.scrollWidth+" px)");

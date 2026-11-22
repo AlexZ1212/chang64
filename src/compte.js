@@ -285,15 +285,21 @@ function cpFusion(L,D,B){
   }
   /* Chemin d'apprentissage (apprendre.js, 2026-11-22) : les etapes reussies
      s'additionnent, l'endroit ou l'on est suit l'appareil le plus recent, le
-     test de placement le plus recent l'emporte. */
+     test de placement le plus recent l'emporte. Les parties perdues contre un
+     boss (b) : le plus grand des deux nombres. Une progression ecrite avant
+     que le boss n'ouvre la suite (v different de 2) garde ouverts les
+     chapitres qui l'etaient (cheminHerite, apprendre.js). */
   if(L.chemin||D.chemin){
     const l=cpObjet(L.chemin),d=cpObjet(D.chemin),R=recent("chemin")?d:l,A=recent("chemin")?l:d,c={};
     for(const id of cpCles(l.c,d.c)){
       const x=cpObjet(cpObjet(R.c)[id]),y=cpObjet(cpObjet(A.c)[id]),src=cpObjet(R.c)[id]?x:y;
       c[id]={e:cpNombre(src.e),x:cpNombre(src.x),f:cpUnion(x.f,y.f).filter(Number.isInteger).sort((p,q)=>p-q)};
+      const perdues=Math.max(cpNombre(x.b),cpNombre(y.b));
+      if(perdues>0)c[id].b=Math.min(3,Math.floor(perdues));
     }
+    const herite=o=>typeof cheminHerite==="function"?cheminHerite(o):[];
     const pl=cpObjet(l.p),pd=cpObjet(d.p),p=cpNombre(pd.t)>cpNombre(pl.t)?d.p:cpNombre(pl.t)>cpNombre(pd.t)?l.p:(R.p||A.p);
-    out.chemin={v:1,c:c,o:cpUnion(l.o,d.o).filter(x=>typeof x==="string")};
+    out.chemin={v:2,c:c,o:cpUnion(cpUnion(l.o,d.o),cpUnion(herite(l),herite(d))).filter(x=>typeof x==="string")};
     if(p)out.chemin.p=p;
   }
   for(const n of ["games","friendgames"])if(L[n]||D[n])out[n]=cpUnion(L[n],D[n]).filter(g=>g&&typeof g==="object").sort((x,y)=>cpNombre(y.t)-cpNombre(x.t)).slice(0,30);

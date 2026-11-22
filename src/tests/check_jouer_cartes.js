@@ -51,7 +51,8 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   T("le bloc des membres est masque pour lui (regle de style), l'echiquier aussi", /#pane-friend\[data-ami="lien"\]:not\(\.en-direct\) #directPanel\{display:none\}/.test(html) && d.querySelector(".board-wrap").classList.contains("hide"));
   T("sous la partie par lien : ce qu'un compte apporte, et le bouton pour en creer un", !$("amiComptePanel").classList.contains("hide") && net($("amiComptePanel").querySelector(".eyebrow").textContent) === "Avec un compte gratuit" && !!$("amiComptePanel").querySelector("[data-vue-compte]") && /en direct à la pendule/.test(net($("amiComptePanel").textContent)));
   T("pas de retour « Inviter plutôt un membre » pour un visiteur", $("amiRetourMembre").classList.contains("hide"));
-  T("le rythme tient en trois mots courts : 1 jour, 3 jours, 7 jours", [...$("dailyChips").children].map(b => net(b.textContent)).join("|") === "1 jour|3 jours|7 jours" && net($("dailyChips").previousElementSibling.textContent) === "Délai par coup", [...$("dailyChips").children].map(b => b.textContent).join("|"));
+  T("le rythme tient en trois mots courts : 1 jour, 3 jours, 7 jours", [...$("dailyChips").children].map(b => net(b.textContent)).join("|") === "1 jour|3 jours|7 jours" && net($("dailyChips").parentNode.querySelector(".eyebrow").firstChild.textContent) === "Délai par coup", [...$("dailyChips").children].map(b => b.textContent).join("|"));
+  T("une infobulle dit ce qu'est ce delai, et qu'ici rien ne le fait respecter", !!d.querySelector('#amiNewGamePanel .info-tip[aria-controls="tipAmiDelai"]') && /rien ne le fait respecter/.test(net($("tipAmiDelai").textContent)) && $("tipAmiDelai").classList.contains("hide"));
   /* Le beau bug : choisir un rythme ne cree pas de partie. */
   $("dailyChips").children[0].click();
   await attendre(200);
@@ -86,6 +87,32 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   T("la cadence est le premier reglage, la couleur le deuxieme, l'adversaire le troisieme", [...$("directNouveau").querySelectorAll(":scope > .field")].map(f => (f.querySelector("#directCats") ? "cadence" : f.querySelector("#directCouleur") ? "couleur" : f.querySelector("#directPseudo") ? "adversaire" : "?")).join() === "cadence,couleur,adversaire");
   T("sous « Inviter » : « ou envoyer un lien », puis « Mon ami n'a pas de compte »", net($("btnDirectLien").textContent) === "ou envoyer un lien" && net($("btnAmiSansCompte").textContent) === "Mon ami n'a pas de compte" && !!($("btnDirectLien").compareDocumentPosition($("btnAmiSansCompte")) & 4));
   T("bloc de lancement : couleur, au hasard par defaut", [...$("directCouleur").children].map(b => b.dataset.v + (b.getAttribute("aria-pressed") === "true" ? "*" : "")).join() === "b,n,h*");
+  /* Retours d'Alexandre sur les captures : infobulle de la cadence, recherche de membre visible. */
+  {
+    const bouton = d.querySelector('#directNouveau .info-tip[aria-controls="tipAmiCadence"]');
+    T("une infobulle a cote du titre « Cadence » dit ce qu'est une cadence", !!bouton && net($("directCadenceTitre").textContent) === "Cadence" && $("tipAmiCadence").classList.contains("hide") && /à la pendule/.test(net($("tipAmiCadence").textContent)) && /Par correspondance/.test(net($("tipAmiCadence").textContent)));
+    bouton.click();
+    T("un appui l'ouvre", !$("tipAmiCadence").classList.contains("hide") && bouton.getAttribute("aria-expanded") === "true");
+    bouton.click();
+  }
+  w.eval("cpApi=async(m,r)=>/^membres\\?q=/.test(r)?{s:200,j:{membres:['Lea','Leandre','Leo64']}}:{s:404,j:{}}");
+  $("directPseudo").value = "Le";
+  $("directPseudo").dispatchEvent(new w.Event("input", { bubbles: true }));
+  await attendre(500);
+  T("recherche de membre : des deux premieres lettres, les pseudos trouves en pastilles sous le champ", [...$("directTrouves").querySelectorAll("button.chip")].map(b => b.textContent).join("|") === "Lea|Leandre|Leo64" && $("directTrouves").previousElementSibling === $("directPseudo") && !d.querySelector("#directMembres"), $("directTrouves").innerHTML.slice(0, 120));
+  $("directTrouves").querySelectorAll("button")[1].click();
+  T("un appui sur une pastille remplit le champ et referme la liste", $("directPseudo").value === "Leandre" && $("directTrouves").children.length === 0);
+  w.eval("cpApi=async()=>({s:200,j:{membres:[]}})");
+  $("directPseudo").value = "Zz";
+  $("directPseudo").dispatchEvent(new w.Event("input", { bubbles: true }));
+  await attendre(500);
+  T("aucun membre : c'est dit", /Aucun membre trouvé/.test(net($("directTrouves").textContent)), $("directTrouves").textContent);
+  $("directPseudo").value = "L";
+  $("directPseudo").dispatchEvent(new w.Event("input", { bubbles: true }));
+  await attendre(500);
+  T("une seule lettre : pas de recherche, la liste se vide", $("directTrouves").children.length === 0);
+  $("directPseudo").value = "";
+  T("toute rangee de familles de cadences a son enveloppe qui defile, sans barre (accueil et contre l'ordinateur compris)", [...d.querySelectorAll(".tc-cats")].length >= 3 && [...d.querySelectorAll(".tc-cats")].every(r => r.parentNode.classList.contains("defile")) && /\.defile>\.tc-cats\{[^}]*scrollbar-width:none/.test(html) && /\.defile>\.tc-cats::-webkit-scrollbar\{display:none\}/.test(html));
   T("les familles sont sur une seule rangee qui defile (pas un bloc sur deux lignes)", $("directCats").classList.contains("tc-cats") && $("directCats").parentNode.classList.contains("defile") && /\.defile>\.tc-cats button\{flex:1 0 auto\}/.test(html) && /\.tc-cats\{[^}]*overflow-x:auto/.test(html));
   T("cadences : Rapide (10+0, 5+3, 15+10) par defaut", [...$("directCats").children].map(b => b.textContent.trim()).join("|") === "Blitz|Rapide|Classique|Correspondance" && [...$("directCadences").children].map(b => b.textContent).join() === "10+0,5+3,15+10" && $("directCats").children[1].getAttribute("aria-pressed") === "true");
   $("directCats").children[0].click();

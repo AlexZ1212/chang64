@@ -1094,7 +1094,7 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    un chevron au bord disent qu'il y a plus a voir, du cote ou c'est vrai
    seulement. Meme dessin que la barre d'onglets ; le degrade est sur
    l'enveloppe, car ::before de .tc-cats sert deja au repere glissant. */
-.defile{position:relative;margin-bottom:8px}
+.defile{position:relative;margin-bottom:10px;flex:1 1 100%;min-width:0}
 .defile>.tc-cats{margin-bottom:0;scrollbar-width:none}
 .defile>.tc-cats::-webkit-scrollbar{display:none}
 .defile>.tc-cats button{flex:1 0 auto}
@@ -1106,6 +1106,10 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 45%,transparent)}
 .defile.has-scroll-left::before,.defile.has-scroll-right::after{opacity:1}
 #directAmisBloc{margin-bottom:8px}
+.membres-trouves{margin-top:8px}
+.membres-trouves:empty{display:none}
+.membres-trouves .note{margin:0}
+#duelTrouves{justify-content:center;margin-bottom:8px}
 .ami-retour{margin:0 0 6px}
 .ami-retour .linkbtn{padding-left:0;font-size:13px}
 /* Le carre de notification : opaque, coins arrondis, au-dessus de la page et
@@ -1119,8 +1123,10 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .carre-parties:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .carre-dessin{display:grid;place-items:center;--oeil:var(--raise)}
 .carre-dessin svg{display:block;width:32px;height:32px}
-.carre-nombre{position:absolute;top:-7px;right:-7px;min-width:22px;height:22px;padding:0 6px;box-sizing:border-box;border-radius:999px;background-color:var(--brass);color:var(--on-brass);
-  font:700 12.5px/22px 'JetBrains Mono',monospace;text-align:center}
+/* Toujours un rond, jamais un ovale (retour d'Alexandre) : largeur et hauteur
+   egales ; au-dela de neuf parties, « 9+ ». */
+.carre-nombre{position:absolute;top:-8px;right:-8px;width:24px;height:24px;padding:0;box-sizing:border-box;border-radius:50%;background-color:var(--brass);color:var(--on-brass);
+  font:700 12.5px/24px 'JetBrains Mono',monospace;letter-spacing:-.04em;text-align:center;white-space:nowrap;overflow:hidden}
 /* Les cadences ne collent plus a la rangee Rapide | Classique (remarque d'Alexandre). */
 #directCats{margin-bottom:8px}
 /* 2026-11-22 : le nombre « a toi » n'est plus sur l'onglet Jouer (mal place,
@@ -4021,7 +4027,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                  defile de cote quand l'ecran est etroit (.defile : degrade et
                  chevron au bord, comme la barre d'onglets). -->
             <div class="field">
-              <div class="eyebrow" id="directCadenceTitre">Time control</div>
+              <!-- L'infobulle dit ce qu'est une cadence, comme sur l'accueil (retour d'Alexandre). -->
+              <div class="eyebrow"><span id="directCadenceTitre">Time control</span><button type="button" class="info-tip" aria-expanded="false" aria-controls="tipAmiCadence" aria-label="More info">i</button></div>
+              <p class="info-tip-pop hide" id="tipAmiCadence">Blitz, rapid and classical are games on the clock: the numbers (like 10+0) are minutes each, then seconds added after every move. By correspondence there is no clock: each player has one or several days for every move.</p>
               <div class="defile" id="directCatsDefile"><div class="tc-cats" id="directCats"></div></div>
               <div class="tc-chips" id="directCadences"></div>
               <p class="note" id="directCadenceNote"></p>
@@ -4039,7 +4047,11 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <div class="field direct-ami">
               <label class="eyebrow" for="directPseudo">Opponent</label>
               <div class="hide" id="directAmisBloc"><div class="tc-chips" id="directAmis"></div></div>
-              <input class="linkbox" id="directPseudo" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username">
+              <input class="linkbox" id="directPseudo" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Username" aria-describedby="directTrouves">
+              <!-- Recherche de membre : des deux premieres lettres, les pseudos
+                   qui commencent ainsi (huit au plus), en pastilles ; un appui
+                   remplit le champ. Rempli par compte.js (cpmChercher). -->
+              <div class="tc-chips membres-trouves" id="directTrouves" data-pour="directPseudo" aria-live="polite"></div>
             </div>
             <div class="btnrow direct-ami"><button class="btn primary" id="btnDirectCreer">Invite</button></div>
             <p class="direct-lien direct-ami" id="directLienLigne"><button type="button" class="linkbtn" id="btnDirectLien">or send a link</button></p>
@@ -4104,7 +4116,8 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="panel" id="amiNewGamePanel">
           <div class="eyebrow">New game</div>
           <div class="field">
-            <div class="eyebrow">Time per move</div>
+            <div class="eyebrow">Time per move<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipAmiDelai" aria-label="More info">i</button></div>
+            <p class="info-tip-pop hide" id="tipAmiDelai">The time each player has to play a move. Nothing enforces it here: it is a pace you agree on with your friend.</p>
             <div class="tc-chips" id="dailyChips"></div>
           </div>
           <!-- Choix de couleur passe en overlay (2026-09-04, voir amiColorModal

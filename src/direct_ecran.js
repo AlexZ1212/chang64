@@ -94,6 +94,25 @@ function defileMaj(enveloppe) {
   enveloppe.classList.toggle("has-scroll-left", el.scrollLeft > 2);
   enveloppe.classList.toggle("has-scroll-right", el.scrollLeft < max - 2);
 }
+/* Toute rangee de familles de cadences (accueil, contre l'ordinateur, contre
+   un ami) tient sur une ligne qui defile de cote, SANS barre de defilement
+   (retour d'Alexandre : pas de barre dans le navigateur), avec le degrade et
+   le chevron au bord. La rangee recoit son enveloppe .defile si elle n'en a
+   pas, et ses indices se tiennent a jour seuls. */
+function defileBrancher(rangee) {
+  let enveloppe = rangee.parentNode;
+  if (!enveloppe || !enveloppe.classList.contains("defile")) {
+    enveloppe = document.createElement("div"); enveloppe.className = "defile";
+    rangee.parentNode.insertBefore(enveloppe, rangee); enveloppe.appendChild(rangee);
+  }
+  if (enveloppe.dataset.branche) return;
+  enveloppe.dataset.branche = "1";
+  const maj = () => defileMaj(enveloppe);
+  rangee.addEventListener("scroll", maj, { passive: true });
+  window.addEventListener("resize", maj);
+  if (typeof MutationObserver === "function") new MutationObserver(maj).observe(rangee, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-pressed", "class"] });
+  maj();
+}
 let directAnime = "";              /* dernier coup deja anime : partie/manche/nombre de coups */
 let directRefus = "";              /* ma nulle vient d'etre declinee : partie/manche/nombre de coups */
 let directTic = "";                /* alerte des 10 secondes deja sonnee pour cette partie/manche */
@@ -223,11 +242,6 @@ function directCadencesRendre() {
       };
       cats.appendChild(b);
     });
-    const enveloppe = $("directCatsDefile");
-    if (enveloppe) {
-      cats.addEventListener("scroll", () => defileMaj(enveloppe), { passive: true });
-      window.addEventListener("resize", () => defileMaj(enveloppe));
-    }
   }
   [...cats.children].forEach((b, k) => b.setAttribute("aria-pressed", String(k === directCat)));
   /* La famille choisie reste visible dans la rangee, puis les indices du bord. */
@@ -490,6 +504,7 @@ async function directCreerPartie(avecLien) {
     return;
   }
   b.disabled = true;
+  { const z = $("directTrouves"); if (z) z.textContent = ""; }
   const r = await directCreer(directCad, pseudo || undefined, directCoul);
   b.disabled = false;
   if (r.id && directCadCorr(directCad)) {
@@ -615,6 +630,7 @@ if (DIRECT_OUVERT && document.getElementById("directPanel")) {
     };
   }
   amiCadenceLire();
+  document.querySelectorAll(".tc-cats").forEach(defileBrancher);
   amiModeRegler(amiModeDefaut());
   $("btnDirectNulle").onclick = () => { if (directF) directF.nulle(); };
   $("btnDirectAccepter").onclick = () => { if (directF) directF.nulle(); };

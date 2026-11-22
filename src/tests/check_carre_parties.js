@@ -31,6 +31,8 @@ const LISTE = [
   console.log("--- La forme ---");
   T("un carre opaque a coins arrondis, fixe en bas a droite", /position:fixed/.test(regle(".carre-parties")) && /right:14px/.test(regle(".carre-parties")) && /bottom:calc\(14px/.test(regle(".carre-parties")) && /width:56px;height:56px/.test(regle(".carre-parties")) && /border-radius:14px/.test(regle(".carre-parties")) && /background-color:var\(--raise\)/.test(regle(".carre-parties")), regle(".carre-parties"));
   T("il passe sous le menu et les fenetres", /z-index:90/.test(regle(".carre-parties")));
+  /* Retour d'Alexandre : la pastille du nombre est ronde, jamais ovale. */
+  T("la pastille du nombre est un rond : largeur et hauteur egales, sans marge interieure", /width:24px;height:24px;padding:0/.test(regle(".carre-nombre")) && /border-radius:50%/.test(regle(".carre-nombre")) && !/min-width/.test(regle(".carre-nombre")), regle(".carre-nombre"));
   T("la pastille de l'onglet Jouer n'a plus de style", !/\.tab-pastille\{/.test(page));
 
   const w = await ouvrir("fr", { attente: 2400, avant: MEMBRE });
@@ -57,6 +59,12 @@ const LISTE = [
   T("au tour de l'autre seulement : rien n'attend, le carre s'efface", carre.hidden === true);
   w.__l = LISTE; w.eval("corrRecu(window.__l)"); await attendre(60);
 
+  {
+    const beaucoup = Array.from({ length: 12 }, (x, i) => ({ id: "aaaaaaaaaaa" + "abcdefghjkmn"[i], s: "jeu", atoi: true, adv: "X", cad: 7, ech: Date.now() + J, h: Date.now() }));
+    w.__l = beaucoup; w.eval("corrRecu(window.__l)"); await attendre(60);
+    T("douze parties : « 9+ » dans le rond, le vrai nombre pour les lecteurs d'ecran", $("carreNombre").textContent === "9+" && /^12 parties t'attendent$/.test(net(carre.getAttribute("aria-label"))), $("carreNombre").textContent + " / " + carre.getAttribute("aria-label"));
+    w.__l = LISTE; w.eval("corrRecu(window.__l)"); await attendre(60);
+  }
   console.log("--- Un appui ---");
   carre.click(); await attendre(250);
   T("il mene a « Tes parties en cours », dans Jouer", w.eval("mode") === "jouer" && !$("corrPanel").classList.contains("hide") && d.querySelectorAll("#corrListe .corr-item").length === 3);

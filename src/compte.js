@@ -1245,18 +1245,33 @@ document.addEventListener("input",e=>{
     cpmDernier=q;
     const l=await cpmChercher(q);
     if(cpmDernier!==q)return;
+    /* 2026-11-22 (demande d'Alexandre) : les membres trouves s'affichent en
+       pastilles sous le champ, pour inviter a une partie comme pour envoyer
+       un duel. La liste native (datalist) ne se voyait pas sur tous les
+       navigateurs. Un appui sur une pastille remplit le champ (plus bas). */
     if(c.id==="duelMembre"||c.id==="directPseudo"){
-      /* Meme liste de suggestions pour inviter a une partie en direct (2026-11-19). */
-      const lid=c.id==="duelMembre"?"duelMembres":"directMembres";
-      let d=$(lid);
-      if(!d){d=document.createElement("datalist");d.id=lid;c.after(d);c.setAttribute("list",lid);}
-      poserHtml(d,l.map(p=>'<option value="'+echapper(p)+'"></option>').join(""));
+      const z=$(c.id==="duelMembre"?"duelTrouves":"directTrouves");
+      if(!z)return;
+      const saisi=q.trim().toLowerCase();
+      poserHtml(z,Array.from(q.trim()).length<2?"":l.length?l.filter(p=>!(l.length===1&&p.toLowerCase()===saisi)).map(p=>'<button type="button" class="chip" data-p="'+echapper(p)+'">'+echapper(p)+"</button>").join(""):
+        '<p class="note">'+cpE("No member found.")+"</p>");
       return;
     }
     const z=$("cpjTrouves");if(!z)return;
     poserHtml(z,Array.from(q.trim()).length<2?"":l.length?l.map(p=>'<li><span class="cpj-nom"><button type="button" class="cpj-joueur" data-cpp="'+echapper(p)+'">'+echapper(p)+"</button></span></li>").join(""):
       '<li><span class="cpj-nom">'+cpE("No member found.")+"</span></li>");
   },250);
+});
+
+/* Un membre trouve par la recherche : un appui remplit le champ voisin. */
+document.addEventListener("click",e=>{
+  const b=e.target&&e.target.closest?e.target.closest(".membres-trouves button[data-p]"):null;
+  if(!b)return;
+  const z=b.closest(".membres-trouves"),champ=$(z.dataset.pour);
+  if(!champ)return;
+  champ.value=b.dataset.p;poserHtml(z,"");cpmDernier=b.dataset.p;
+  if(typeof champ.oninput==="function")champ.oninput();
+  try{champ.focus();}catch(x){}
 });
 
 /* ---------- Fiche d'un membre ---------- */
@@ -1545,7 +1560,8 @@ async function cpdVue(){
     if(cp&&fermer){
       cpdEnvoi={ids:ids,moi:moi};
       fermer.insertAdjacentHTML("beforebegin",'<div class="duel-membre"><label class="duel-nom" for="duelMembre"><span>'+cpE("Or send it to a member")+"</span>"+
-        '<input type="text" id="duelMembre" maxlength="24" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+cpE("Username")+'" value="'+echapper(cpdRevanche)+'"></label>'+
+        '<input type="text" id="duelMembre" maxlength="24" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+cpE("Username")+'" value="'+echapper(cpdRevanche)+'" aria-describedby="duelTrouves"></label>'+
+        '<div class="tc-chips membres-trouves" id="duelTrouves" data-pour="duelMembre" aria-live="polite"></div>'+
         '<button type="button" class="btn" data-duel-membre>'+cpE("Send to this member")+'</button><p class="duel-note" id="duelMembreMsg" aria-live="polite"></p></div>');
     }
     cpdRevanche="";

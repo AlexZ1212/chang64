@@ -15,9 +15,15 @@ function focusBoard(){
     const headerH=header&&header.getBoundingClientRect?header.getBoundingClientRect().height:0;
     if(r&&r.height>0&&vh>headerH){
       const visible=Math.min(r.bottom,vh)-Math.max(r.top,headerH);
-      if(visible>=Math.min(r.height,vh-headerH)*0.7)return;   // déjà bien visible : on ne bouge pas
+      /* Deja bien visible : on ne bouge pas. « Bien visible » veut dire aussi
+         que le HAUT de l'echiquier n'est pas glisse sous l'en-tete (mesure
+         du 2026-11-22 : il pouvait en rester 15 a 110 px dessous, les 70 %
+         visibles suffisant a ne rien faire). */
+      if(r.top>=headerH-2&&visible>=Math.min(r.height,vh-headerH)*0.7)return;
     }
     const smooth=!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    /* La marge se mesure a l'instant du defilement : l'ecran vient souvent de changer. */
+    if(typeof majMargeDefilement==="function")majMargeDefilement();
     el.scrollIntoView(smooth?{behavior:"smooth",block:"start"}:{block:"start"});
   }catch(e){}
 }
@@ -43,6 +49,8 @@ function goToSection(id){
   try{el.focus({preventScroll:true});}catch(e){try{el.focus();}catch(e2){}}
   if(typeof el.scrollIntoView!=="function")return;
   const calme=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* La marge se mesure a l'instant du defilement : l'ecran vient de changer. */
+  if(typeof majMargeDefilement==="function")majMargeDefilement();
   try{el.scrollIntoView(calme?{block:"start"}:{behavior:"smooth",block:"start"});}
   catch(e){el.scrollIntoView();}
 }
@@ -2028,6 +2036,28 @@ function editApplyDrop(drag,targetIdx){
    chaque bord (voir le CSS de .tabs) signale qu'il y a plus a voir en
    glissant -- uniquement quand c'est vrai, jamais du cote ou il n'y a
    effectivement plus rien. */
+/* ==========================================================
+   MARGE DE DEFILEMENT SOUS L'EN-TETE (2026-11-22)
+   ========================================================== */
+/* L'en-tete reste colle en haut. Un contenu qu'on amene sous les yeux
+   (focusBoard, goToSection, une ancre) doit arriver juste dessous. La marge
+   etait fixe, 145 px, calee sur l'en-tete le plus haut ; or il mesure de 93
+   a 126 px selon la largeur : sur telephone, tout arrivait 50 px trop bas
+   (retour d'Alexandre : « arrivee trop bas, trop haut »). On pose donc sa
+   hauteur reelle, plus un petit jour ; la valeur fixe de la feuille de style
+   reste le repli sans JavaScript. */
+function majMargeDefilement(){
+  const h=document.querySelector("header"); if(!h||!h.getBoundingClientRect)return;
+  const haut=h.getBoundingClientRect().height;
+  if(haut>0)document.documentElement.style.scrollPaddingTop=Math.round(haut+12)+"px";
+}
+{
+  majMargeDefilement();
+  window.addEventListener("resize",majMargeDefilement);
+  window.addEventListener("load",majMargeDefilement);
+  const h=document.querySelector("header");
+  if(h&&typeof ResizeObserver==="function"){try{new ResizeObserver(majMargeDefilement).observe(h);}catch(e){}}
+}
 function updateTabsScrollHint(){
   const el=$("tabsNav"); if(!el)return;
   const max=el.scrollWidth-el.clientWidth;

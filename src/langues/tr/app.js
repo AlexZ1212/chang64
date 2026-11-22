@@ -1227,6 +1227,8 @@ module.exports = {
 "Home (key)":"Home",
 "End (key)":"End",
 "Esc (key)":"Esc",
+"Blitz, rapid and classical are games on the clock: the numbers (like 10+0) are minutes each, then seconds added after every move. By correspondence there is no clock: each player has one or several days for every move.":"Blitz, hızlı ve klasik oyunlar saatle oynanır: sayılar (10+0 gibi) önce her oyuncunun dakikasını, sonra her hamleden sonra eklenen saniyeleri gösterir. Yazışmalı oyunda saat yoktur: her oyuncunun her hamle için bir ya da birkaç günü vardır.",
+"The time each player has to play a move. Nothing enforces it here: it is a pace you agree on with your friend.":"Her oyuncunun bir hamle için sahip olduğu süre. Burada bunu denetleyen bir şey yok: arkadaşınla kararlaştırdığın bir tempo.",
 "My friend has no account":"Arkadaşımın hesabı yok",
 "Invite a member instead":"Bunun yerine bir üye davet et",
 "or another username":"ya da başka bir kullanıcı adı",

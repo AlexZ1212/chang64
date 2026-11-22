@@ -1795,6 +1795,10 @@ ${body}
    chaque visite d'une page claire, dans le meme format qu'attend loadLang
    (chaine "fr" ou "en", pas de JSON). */
 try{localStorage.setItem("chang64:lang","${lang}");var c=document.getElementById("cn"),sn=c.parentElement;c.scrollIntoView({block:"nearest"});var u=function(){sn.classList.toggle("sl",sn.scrollLeft>2);sn.classList.toggle("sr",sn.scrollLeft<sn.scrollWidth-sn.clientWidth-2);};u();sn.onscroll=u;}catch(e){}
+/* Marge de defilement (2026-11-22) : une ancre du sommaire doit amener son
+   titre juste sous l'en-tete colle, qui mesure de 67 a 119 px selon l'ecran.
+   La marge fixe de la feuille de style (150 px) reste le repli sans script. */
+try{var eh=document.querySelector("header");while(eh&&getComputedStyle(eh).position!=="sticky")eh=eh.parentElement;if(eh){var mh=function(){var x=eh.getBoundingClientRect().height;if(x>0)document.documentElement.style.scrollPaddingTop=Math.round(x+12)+"px";};mh();addEventListener("resize",mh);addEventListener("load",mh);}}catch(e){}
 ${!/id="grille"/.test(body) ? "" : `
 /* Filtrage de la liste des ouvertures.
    Le champ n'est revele qu'ici : sans JavaScript, il reste masque et la page

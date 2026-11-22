@@ -1227,6 +1227,8 @@ module.exports = {
 "Home (key)":"Home",
 "End (key)":"End",
 "Esc (key)":"Esc",
+"Blitz, rapid and classical are games on the clock: the numbers (like 10+0) are minutes each, then seconds added after every move. By correspondence there is no clock: each player has one or several days for every move.":"Blitz, cepat, dan klasik dimainkan dengan jam catur: angkanya (misalnya 10+0) adalah menit untuk tiap pemain, lalu detik yang ditambahkan setelah tiap langkah. Lewat korespondensi tidak ada jam: tiap pemain punya satu atau beberapa hari untuk setiap langkah.",
+"The time each player has to play a move. Nothing enforces it here: it is a pace you agree on with your friend.":"Waktu yang dimiliki tiap pemain untuk satu langkah. Di sini tidak ada yang mengawasinya: ini tempo yang kamu sepakati dengan temanmu.",
 "My friend has no account":"Temanku tidak punya akun",
 "Invite a member instead":"Undang anggota saja",
 "or another username":"atau nama pengguna lain",

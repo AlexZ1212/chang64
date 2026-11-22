@@ -1227,6 +1227,8 @@ module.exports = {
 "Home (key)":"Home",
 "End (key)":"End",
 "Esc (key)":"Esc",
+"Blitz, rapid and classical are games on the clock: the numbers (like 10+0) are minutes each, then seconds added after every move. By correspondence there is no clock: each player has one or several days for every move.":"Blitz, szybkie i klasyczne to partie z zegarem: liczby (np. 10+0) to minuty dla każdego, a potem sekundy dodawane po każdym ruchu. W grze korespondencyjnej nie ma zegara: każdy ma jeden lub kilka dni na każdy ruch.",
+"The time each player has to play a move. Nothing enforces it here: it is a pace you agree on with your friend.":"Czas, jaki każdy ma na wykonanie ruchu. Tutaj nic go nie pilnuje: to tempo, na które umawiasz się ze znajomym.",
 "My friend has no account":"Mój znajomy nie ma konta",
 "Invite a member instead":"Zaproś raczej członka",
 "or another username":"lub inna nazwa użytkownika",

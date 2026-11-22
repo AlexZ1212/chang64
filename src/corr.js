@@ -123,7 +123,7 @@ function corrCarre() {
   const n = corrNombre(), montrer = n > 0 && !corrEnPartie() && mode !== "jouer";
   if (b.hidden === !montrer && b.dataset.n === String(n)) return;
   b.hidden = !montrer; b.dataset.n = String(n);
-  const nb = $("carreNombre"); if (nb) nb.textContent = n ? String(n) : "";
+  const nb = $("carreNombre"); if (nb) nb.textContent = n > 9 ? "9+" : n ? String(n) : "";
   b.setAttribute("aria-label", t(n === 1 ? "{n} game is waiting for you" : "{n} games are waiting for you", { n }));
 }
 function corrRendre() {

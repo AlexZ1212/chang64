@@ -24,11 +24,15 @@ const ELEPHANT = fs.readFileSync(path.join(RACINE, "src/ds/signe.svg"), "utf8").
 
 const formes = l => l.map(f => {
   const a = Object.entries(f).filter(([k]) => !["t", "fixe", "sw"].includes(k)).map(([k, v]) => `${k}="${v}"`).join(" ");
-  return f.fixe ? `<${f.t || "path"} ${a} style="fill:var(--oeil)"/>` : `<${f.t || "path"} ${a}/>`;
+  return f.fixe ? `<${f.t || "path"} ${a} style="fill:var(--oeil);stroke:none"/>` : `<${f.t || "path"} ${a}/>`;
 }).join("");
-/* Repere 45 -> 48, centre. */
-const P = (l, tr = "") => `<g fill="currentColor" transform="${tr} translate(-24 -24) scale(1.0667)">${formes(ctx.PIECES[l])}</g>`;
-const MK = (l, tr = "") => `<g fill="currentColor" transform="${tr} translate(-24 -24) scale(1.0667)">${formes(ctx.FORMES[l])}</g>`;
+/* Repere 45 -> 48, centre. Chaque forme de la piece porte un trait de la
+   couleur des jours, peint sous son aplat : on voit le socle, le col, la tete,
+   comme sur l'echiquier (2026-11-22, voir contours.js, qui tient la regle et
+   l'epaisseur). */
+const { TRAIT } = require("./contours.js");
+const P = (l, tr = "") => `<g fill="currentColor"${TRAIT} transform="${tr} translate(-24 -24) scale(1.0667)">${formes(ctx.PIECES[l])}</g>`;
+const MK = (l, tr = "") => `<g fill="currentColor"${TRAIT} transform="${tr} translate(-24 -24) scale(1.0667)">${formes(ctx.FORMES[l])}</g>`;
 const E = (tr = "") => `<g fill="currentColor" transform="${tr} translate(-24 -22) scale(.75)"><path fill-rule="evenodd" d="${ELEPHANT}"/></g>`;
 const manque = new Set();
 /* Les fleches en graisse "bold" : en "fill", leur tige est un simple trait

@@ -30,7 +30,7 @@ function niveau1(m) {
   return parties.map(p => p.m);
 }
 async function masque(m) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${TAILLE}" height="${TAILLE}" viewBox="-24 -24 48 48" style="color:#000;--oeil:#000">${m.replace(/var\(--oeil\)/g, "#000")}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${TAILLE}" height="${TAILLE}" viewBox="-24 -24 48 48" style="color:#000;--oeil:#000">${require("./contours.js").sansContours(m).replace(/var\(--oeil\)/g, "#000")}</svg>`;
   const { data } = await sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const a = new Uint8Array(TAILLE * TAILLE);
   for (let i = 0; i < a.length; i++) a[i] = data[i * 4 + 3] > 60 ? 1 : 0;

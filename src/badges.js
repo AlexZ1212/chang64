@@ -57,9 +57,15 @@ const BX_METAUX={
   ombre:{face:["#2C3532","#232B28","#1A201E"],tranche:["#2A3230","#141917"],grave:"rgba(236,234,227,.16)"}
 };
 let bxN=0;
-/* Symbole grave : une copie claire decalee d'un demi-pixel fait le relief ;
-   --oeil donne aux details creuses la couleur de la face. Une medaille pas
-   encore gagnee est sombre, son symbole a peine visible. */
+/* Symbole grave : une copie claire decalee d'un demi-pixel fait le relief.
+   Une medaille pas encore gagnee est sombre, son symbole a peine visible.
+   Les jours du dessin (--oeil : oeil du cavalier, contours des pieces, tete
+   du mouton) sont de VRAIS creux depuis le 2026-11-22 : le symbole sert de
+   masque (blanc = grave, noir = creux) a un aplat de la couleur de gravure.
+   Avant, un jour etait peint d'une couleur unie, celle du milieu de la face :
+   sur le degrade du metal il faisait une tache, comme un voile (badge
+   « Tondu », remarque d'Alexandre). Un jour qui deborde de la silhouette ne
+   se voit donc plus du tout. */
 function bxMedaille(id,gagne){
   const md=bxMedailles&&bxMedailles[id];
   const metal=gagne&&md?md[0]:"ombre",m=BX_METAUX[metal],sym=md?md[1]:"",i="bxm"+(++bxN);
@@ -67,13 +73,14 @@ function bxMedaille(id,gagne){
     '<radialGradient id="'+i+'f" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="'+m.face[0]+'"/><stop offset=".45" stop-color="'+m.face[1]+'"/><stop offset="1" stop-color="'+m.face[2]+'"/></radialGradient>'+
     '<linearGradient id="'+i+'t" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+m.tranche[0]+'"/><stop offset="1" stop-color="'+m.tranche[1]+'"/></linearGradient>'+
     '<linearGradient id="'+i+'r" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'+
-    '<clipPath id="'+i+'c"><circle r="54"/></clipPath></defs>'+
+    '<clipPath id="'+i+'c"><circle r="54"/></clipPath>'+
+    '<mask id="'+i+'m" maskUnits="userSpaceOnUse" x="-60" y="-60" width="120" height="120"><g transform="scale(1.45)" style="color:#fff;--oeil:#000">'+sym+'</g></mask></defs>'+
     (gagne?'<circle r="56" cy="3" fill="rgba(0,0,0,.45)"/>':"")+
     '<circle r="55" fill="url(#'+i+'t)"/><circle r="47" fill="url(#'+i+'f)"/>'+
     '<circle r="43" fill="none" stroke="'+m.grave+'" stroke-opacity=".35" stroke-width="1"/>'+
     '<circle r="47" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.2"/>'+
-    (gagne?'<g opacity=".45" transform="translate(0 .9) scale(1.45)" style="color:#fff;--oeil:transparent">'+sym+'</g>':"")+
-    '<g transform="scale(1.45)" style="color:'+m.grave+';--oeil:'+m.face[1]+'">'+sym+'</g>'+
+    (gagne?'<rect class="bx-relief" x="-60" y="-60" width="120" height="120" transform="translate(0 .9)" fill="#fff" opacity=".45" mask="url(#'+i+'m)"/>':"")+
+    '<rect class="bx-grave" x="-60" y="-60" width="120" height="120" fill="'+m.grave+'" mask="url(#'+i+'m)"/>'+
     (gagne?'<g clip-path="url(#'+i+'c)"><rect class="bx-reflet" x="-22" y="-80" width="30" height="160" fill="url(#'+i+'r)" transform="rotate(22)" opacity=".7"/></g>':"")+
     "</svg>";
 }

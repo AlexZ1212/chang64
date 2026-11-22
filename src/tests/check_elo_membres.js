@@ -138,7 +138,8 @@ const avancer = ms => { decalage += ms; };
   /* Decisions d'Alexandre du 2026-11-21 au soir : Blitz, Rapide, Classique,
      Correspondance ont chacun leur Elo ; elo et elo_n sont le Rapide ; un
      nouvel Elo part de l'Elo Rapide du joueur quand il en a un. */
-  T("chaque cadence a sa famille", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(E.famille).join("") === "rrrccckkkb" && E.famille(42) === "r");
+  /* 2026-11-22 : le 5+3 (numero 1) est un Blitz, le 10+5 (numero 10) un Rapide. */
+  T("chaque cadence a sa famille", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(E.famille).join("") === "rbrccckkkbr" && E.famille(42) === "r");
   T("les colonnes : elo et elo_n restent le Rapide", dit(E.ELO_COLONNES.r) === dit(["elo", "elo_n"]) && dit(E.ELO_COLONNES.c) === dit(["elo_classique", "elo_classique_n"]) && dit(E.ELO_COLONNES.b) === dit(["elo_blitz", "elo_blitz_n"]) && dit(E.ELO_COLONNES.k) === dit(["elo_corr", "elo_corr_n"]));
   ids.Rapi = membre("Rapi"); ids.Vide = membre("Vide");
   env.DB.brut.prepare("UPDATE comptes SET elo = 950, elo_n = 5 WHERE id = ?").run(ids.Rapi);
@@ -179,9 +180,22 @@ const avancer = ms => { decalage += ms; };
     const sR = gc.noir === "Rapi" ? 1 : 0, r = tout("Rapi"), v = tout("Vide");
     T("Correspondance : son propre Elo, parti du Rapide (1300) et de 800", acc.status === 200 && gc.B.dernier().elo && gc.B.dernier().elo.f === "k" && r.elo_corr === E.eloApres(1300, 800, sR, 0) && v.elo_corr === E.eloApres(800, 1300, 1 - sR, 0) && r.elo_corr_n === 1, dit([acc.status, gc.B.dernier().elo, r, v]));
   }
-  g = await partie("Rapi", "Vide", 1);
+  g = await partie("Rapi", "Vide", 10);
   await jouer(g, MAT_NOIR);
-  T("Rapide (5+3) : toujours les colonnes elo et elo_n", g.B.dernier().elo.f === "r" && tout("Rapi").elo_n === 6 && tout("Vide").elo_n === 1 && tout("Vide").elo > 0, dit([tout("Rapi"), tout("Vide")]));
+  T("Rapide (10+5, la cadence ajoutee) : toujours les colonnes elo et elo_n", g.B.dernier().elo.f === "r" && tout("Rapi").elo_n === 6 && tout("Vide").elo_n === 1 && tout("Vide").elo > 0, dit([tout("Rapi"), tout("Vide")]));
+  T("la partie se joue bien en 10 minutes plus 5 secondes", dit(g.B.dernier().cad) === "[600,5]", dit(g.B.dernier().cad));
+  {
+    const avant = tout("Rapi");
+    g = await partie("Rapi", "Vide", 1);
+    await jouer(g, MAT_NOIR);
+    const r = tout("Rapi");
+    T("5+3 : c'est un Blitz desormais, il compte pour l'Elo Blitz", g.B.dernier().elo.f === "b" && dit(g.B.dernier().cad) === "[300,3]" && r.elo_blitz_n === avant.elo_blitz_n + 1, dit([avant, r]));
+    T("et plus pour l'Elo Rapide, qui ne bouge pas", r.elo === avant.elo && r.elo_n === avant.elo_n);
+  }
+  {
+    const refus = await appel("POST", "creer", { cad: 11 }, "Rapi");
+    T("une cadence qui n'existe pas est refusee", refus.status === 400, refus.status);
+  }
 
   console.log("Base sans les colonnes");
   env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN elo TO elo_x");
@@ -200,7 +214,7 @@ const avancer = ms => { decalage += ms; };
   T("fiche : l'Elo entre membres et le nombre de parties", f.em && f.em.r === lire("Bob").elo && f.em.n === lire("Bob").n, dit(f.em));
   T("fiche : les quatre familles, celles sans partie a null ; em reste le Rapide", f.ef && dit(f.ef.r) === dit(f.em) && f.ef.b === null && f.ef.c === null && f.ef.k === null, dit(f.ef));
   f = await fiche("Rapi");
-  T("fiche d'un membre qui a joue dans les quatre familles", f.ef && f.ef.b.r === tout("Rapi").elo_blitz && f.ef.b.n === 1 && f.ef.c.n === 2 && f.ef.k.n === 1 && f.ef.r.r === tout("Rapi").elo && f.ef.r.n === 6, dit(f.ef));
+  T("fiche d'un membre qui a joue dans les quatre familles", f.ef && f.ef.b.r === tout("Rapi").elo_blitz && f.ef.b.n === 2 && f.ef.c.n === 2 && f.ef.k.n === 1 && f.ef.r.r === tout("Rapi").elo && f.ef.r.n === 6, dit(f.ef));
   const idSeul = membre("Seul");
   f = await fiche("Seul");
   T("fiche d'un membre qui n'a jamais joue en direct : pas d'Elo entre membres", f.em === null && f.ef === null && idSeul > 0);

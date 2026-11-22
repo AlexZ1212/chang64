@@ -7,8 +7,12 @@
  * - un cinquieme onglet, en deuxieme position ; Jouer reste l'accueil ;
  * - « Je debute » est le chapitre 1 du chemin : sa progression (chang64:debut),
  *   son badge et l'adresse #start ne changent pas ;
- * - le chapitre suivant s'ouvre quand les lecons du precedent sont finies ; le
- *   boss est facultatif ; seul le test de placement fait sauter des chapitres ;
+ * - le chapitre suivant s'ouvre quand les lecons du precedent sont finies ET
+ *   que son boss est battu (decision du 22/11 au soir, qui remplace « le boss
+ *   est facultatif ») ; apres trois defaites contre un boss, la suite s'ouvre
+ *   quand meme, pour que personne ne reste bloque ; un chapitre deja ouvert
+ *   chez un joueur le reste ; seul le test de placement fait sauter des
+ *   chapitres ;
  * - le test se propose par une carte dans l'onglet, jamais par une fenetre ; il
  *   s'arrete apres deux erreurs de suite ;
  * - le boss des chapitres 2 et 3 est l'ordinateur debutant avec un handicap ;
@@ -25,14 +29,19 @@
  * Colle apres jouer.js et avant navigation.js (badges_build.js). */
 const CHEMIN_PLAN = __CHEMIN_PLAN__;   /* [{id:"debut"},{id,n,boss}] dans l'ordre du chemin */
 const CHEMIN_CLE = "chang64:chemin";
+/* Defaites contre un boss apres lesquelles le chapitre suivant s'ouvre quand meme. */
+const BOSS_ESSAIS = 3;
 
 /* Progression du chemin, hors chapitre 1 :
-   c : par chapitre, { e, x, f } (etape et exercice ou l'on est, etapes
-       reussies ; l'indice n, celui du boss, y entre quand il est battu) ;
-   o : chapitres ouverts par le test de placement ;
+   v : 2 depuis que le boss ouvre la suite (2026-11-22) ;
+   c : par chapitre, { e, x, f, b } (etape et exercice ou l'on est, etapes
+       reussies ; l'indice n, celui du boss, y entre quand il est battu ;
+       b : parties perdues contre le boss, de 1 a BOSS_ESSAIS, absent sinon) ;
+   o : chapitres ouverts d'office : par le test de placement, ou parce qu'ils
+       l'etaient deja sous la regle d'avant (voir cheminHerite) ;
    p : le test, { t: date, n: bonnes reponses, e: chapitre d'entree ou "fin",
        f: force de l'ordinateur retenue } ou { x: 1 } s'il a ete ecarte. */
-let chemin = { v: 1, c: {}, o: [], p: null };
+let chemin = { v: 2, c: {}, o: [], p: null };
 let cheminD = null;            /* data/chemin-<langue>.json */
 let cheminFiches = null;       /* data/fiches-<langue>.json */
 let cheminLu = false;
@@ -43,8 +52,21 @@ function cheminIndex(id) { return CHEMIN_PLAN.findIndex(c => c.id === id); }
 function cheminCh(id) { return cheminD ? cheminD.chapitres.find(c => c.id === id) || null : null; }
 function cheminEtapes(id) { const c = cheminCh(id); return c && c.etapes ? c.etapes : null; }
 
+/* Les chapitres ouverts sous la regle d'avant le 2026-11-22 (les lecons du
+   precedent finies, boss battu ou non), pour une progression ecrite avant
+   (v different de 2) : ils restent ouverts. Sert aussi a la fusion du compte
+   (cpFusion, compte.js), qui recoit la progression d'un autre appareil. */
+function cheminHerite(d) {
+  const out = [];
+  if (!d || typeof d !== "object" || d.v === 2 || !d.c || typeof d.c !== "object") return out;
+  for (let i = 2; i < CHEMIN_PLAN.length; i++) {
+    const av = CHEMIN_PLAN[i - 1], s = d.c[av.id];
+    if (s && Array.isArray(s.f) && new Set(s.f.filter(k => Number.isInteger(k) && k >= 0 && k < av.n)).size >= av.n) out.push(CHEMIN_PLAN[i].id);
+  }
+  return out;
+}
 function cheminNormaliser(d) {
-  const o = { v: 1, c: {}, o: [], p: null };
+  const o = { v: 2, c: {}, o: [], p: null };
   if (!d || typeof d !== "object") return o;
   if (d.c && typeof d.c === "object") for (const id in d.c) {
     const i = cheminIndex(id), s = d.c[id];
@@ -52,8 +74,10 @@ function cheminNormaliser(d) {
     const n = CHEMIN_PLAN[i].n;
     o.c[id] = { e: Number.isInteger(s.e) && s.e >= 0 && s.e <= n ? s.e : 0, x: Number.isInteger(s.x) && s.x >= 0 ? s.x : 0,
       f: Array.isArray(s.f) ? Array.from(new Set(s.f.filter(k => Number.isInteger(k) && k >= 0 && k <= n))).sort((a, b) => a - b) : [] };
+    if (Number.isInteger(s.b) && s.b > 0) o.c[id].b = Math.min(s.b, BOSS_ESSAIS);
   }
   if (Array.isArray(d.o)) o.o = d.o.filter(id => cheminIndex(id) >= 0);
+  o.o = Array.from(new Set(o.o.concat(cheminHerite(d))));
   if (d.p && typeof d.p === "object") o.p = d.p;
   return o;
 }
@@ -69,7 +93,9 @@ function cheminEcrire() {
 /* Appele par debutSauver (ui3.js) quand la lecon a l'ecran n'est pas « Je debute ». */
 function cheminSauver() {
   if (lecon === debut || !leconCh) return;
+  const perdues = (chemin.c[leconCh] || {}).b;
   chemin.c[leconCh] = { e: lecon.e, x: lecon.x, f: lecon.faites.slice().sort((a, b) => a - b) };
+  if (perdues) chemin.c[leconCh].b = perdues;
   cheminEcrire();
 }
 /* Une progression venue du compte (compte.js) : on l'adopte sans l'ecrire. */
@@ -96,23 +122,32 @@ function cheminEtat(i) {
   if (c.id === "debut") {
     const E = debutEtapes(), avec = E.map((et, k) => et.exos.length ? k : -1).filter(k => k >= 0);
     const faits = avec.filter(k => debut.faites.includes(k)).length;
-    return { total: avec.length, faits: faits, fini: faits >= avec.length, boss: debut.faites.includes(E.length - 1),
+    return { total: avec.length, faits: faits, fini: faits >= avec.length, boss: debut.faites.includes(E.length - 1), defaites: 0,
       etape: Math.min(debut.e, E.length - 1) + 1, etapes: E.length, commence: debut.faites.length > 0 || debut.e > 0 || debut.x > 0 };
   }
   const s = chemin.c[c.id] || { e: 0, x: 0, f: [] }, faits = s.f.filter(k => k < c.n).length;
-  return { total: c.n, faits: faits, fini: faits >= c.n, boss: s.f.includes(c.n),
+  return { total: c.n, faits: faits, fini: faits >= c.n, boss: s.f.includes(c.n), defaites: s.b || 0,
     etape: Math.min(s.e, c.n) + 1, etapes: c.n + (c.boss ? 1 : 0), commence: s.f.length > 0 || s.e > 0 || s.x > 0 };
+}
+/* Un chapitre est passe quand ses lecons sont finies et son boss battu, ou
+   perdu BOSS_ESSAIS fois. « Je debute » n'a pas de boss. */
+function cheminPasse(i) {
+  const c = CHEMIN_PLAN[i], e = cheminEtat(i);
+  return e.fini && (!c.boss || e.boss || e.defaites >= BOSS_ESSAIS);
 }
 function cheminOuvert(i) {
   if (i <= 0) return true;
-  return chemin.o.includes(CHEMIN_PLAN[i].id) || cheminEtat(i - 1).fini;
+  return chemin.o.includes(CHEMIN_PLAN[i].id) || cheminPasse(i - 1);
 }
+/* Les lecons du chapitre sont finies, mais son boss tient encore la suite fermee. */
+function cheminBossBarre(i) { return i + 1 < CHEMIN_PLAN.length && cheminEtat(i).fini && !cheminOuvert(i + 1); }
 /* Le chapitre a continuer : le premier non fini a partir de l'entree donnee
-   par le test ; -1 quand il n'en reste pas. */
+   par le test, ou celui dont le boss barre la suite ; -1 quand il n'en reste
+   pas. */
 function cheminCourant() {
   let d = 0;
   if (chemin.p && chemin.p.e) d = chemin.p.e === "fin" ? CHEMIN_PLAN.length : Math.max(0, cheminIndex(chemin.p.e));
-  for (let i = d; i < CHEMIN_PLAN.length; i++) if (!cheminEtat(i).fini) return i;
+  for (let i = d; i < CHEMIN_PLAN.length; i++) if (!cheminEtat(i).fini || cheminBossBarre(i)) return i;
   return -1;
 }
 function cheminCommence() {
@@ -187,9 +222,18 @@ function leconFinRendre(et, ex) {
   fait.classList.toggle("hide", !battu);
   fait.textContent = battu ? (et.boss.gagne || t("Boss beaten")) : "";
   $("btnLeconBoss").textContent = battu ? t("Play the boss again") : t("Face the boss");
-  $("btnLeconBoss").classList.toggle("primary", !battu);
+  /* Ce que le boss ouvre, dit sous les boutons. Le dernier chapitre n'ouvre rien. */
+  const dernier = i + 1 >= CHEMIN_PLAN.length, perdues = cheminEtat(i).defaites, passe = suivant && perdues >= BOSS_ESSAIS;
+  const note = $("leconBossNote");
+  if (note) {
+    const texte = battu || dernier ? "" : !suivant ? (perdues ? t("Losses against this boss: {n} of 3. At three, the next chapter opens anyway.", { n: perdues }) : t("Beat the boss to open the next chapter."))
+      : passe ? t("The next chapter is open. Come back and beat this boss whenever you like.") : "";
+    note.textContent = texte;
+    note.classList.toggle("hide", !texte);
+  }
+  $("btnLeconBoss").classList.toggle("primary", !battu && !passe);
   $("btnLeconSuite").textContent = suivant ? t("Next chapter") : t("Back to the path");
-  $("btnLeconSuite").classList.toggle("primary", battu);
+  $("btnLeconSuite").classList.toggle("primary", battu || passe);
   const th = (cheminCh(leconCh) || {}).theme;
   $("leconTheme").classList.toggle("hide", !th);
 }
@@ -278,7 +322,8 @@ if ($("btnReprendre")) $("btnReprendre").onclick = () => {
   if (typeof focusBoard === "function") focusBoard();
 };
 /* Le boss est battu : la marque entre dans la progression, une fois la
-   partie enregistree (jamais pendant qu'elle se joue). */
+   partie enregistree (jamais pendant qu'elle se joue). Une partie perdue
+   contre lui se compte : a la troisieme, le chapitre suivant s'ouvre. */
 if (typeof saveFinishedGame === "function") {
   const av = saveFinishedGame;
   saveFinishedGame = function () {
@@ -289,11 +334,20 @@ if (typeof saveFinishedGame === "function") {
   };
 }
 function bossFin() {
-  if (!cheminPartie || !cheminPartie.fen || !cheminPartieActive() || resultInfo.kind !== "win") return;
+  if (!cheminPartie || !cheminPartie.fen || !cheminPartieActive() || (resultInfo.kind !== "win" && resultInfo.kind !== "lose")) return;
   const i = cheminIndex(cheminPartie.ch); if (i < 1) return;
   const id = CHEMIN_PLAN[i].id, n = CHEMIN_PLAN[i].n;
   const s = chemin.c[id] || (chemin.c[id] = { e: n, x: 0, f: [] });
   if (s.f.includes(n)) return;
+  if (resultInfo.kind === "lose") {
+    if ((s.b || 0) >= BOSS_ESSAIS) return;
+    const fermee = i + 1 < CHEMIN_PLAN.length && !cheminOuvert(i + 1);
+    s.b = (s.b || 0) + 1;
+    cheminEcrire();
+    if (fermee && cheminOuvert(i + 1) && typeof objAnnoncer === "function") objAnnoncer("defi", t("Chapter {n} is open", { n: i + 2 }),
+      t("Three tries against the boss: you can move on, and come back to beat it later. Tap to see the path."), () => { setMode("apprendre"); goTop(); });
+    return;
+  }
   s.f.push(n); s.f.sort((a, b) => a - b);
   if (leconsEtat[id] && !leconsEtat[id].faites.includes(n)) leconsEtat[id].faites.push(n);
   cheminEcrire();
@@ -561,9 +615,11 @@ function apRendre() {
     b.dataset.ch = c.id;
     if (!ouvert) b.setAttribute("aria-disabled", "true");
     const titre = d ? d.titre : c.id === "debut" ? t("I'm a beginner") : "…";
-    const sous = !ouvert ? t("Opens once chapter {n} is finished", { n: i })
+    /* Ferme : par les lecons du chapitre d'avant, ou par son boss seulement. */
+    const sous = !ouvert ? (cheminEtat(i - 1).fini ? t("Beat the boss of chapter {n} to open this one", { n: i }) : t("Opens once chapter {n} is finished", { n: i }))
       /* « Je debute » finit par une premiere partie a jouer, pas par un boss a battre. */
-      : e.fini ? (c.id === "debut" || !c.boss ? t("Chapter completed") : e.boss ? t("Chapter completed, boss beaten") : t("Chapter completed. The boss is waiting →"))
+      : e.fini ? (c.id === "debut" || !c.boss ? t("Chapter completed") : e.boss ? t("Chapter completed, boss beaten")
+        : cheminBossBarre(i) ? t("Lessons done. Beat the boss to open the next chapter →") : t("Chapter completed. The boss is waiting →"))
       : e.commence ? t("Step {n} of {total}", { n: e.etape, total: e.etapes }) + " | " + t("Continue →")
       : t("Start →");
     poserHtml(b, '<span class="ap-num" aria-hidden="true">' + (i + 1) + '</span><span class="ap-txt"><b>' + echapper(titre) + "</b>" +

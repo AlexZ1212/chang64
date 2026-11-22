@@ -7,7 +7,9 @@
      chang64:debut deja acquise reste acquise, le badge y reste attache,
      #start mene au chapitre 1 ;
    - le bouton de l'accueil suit la progression, puis disparait ;
-   - finir les lecons d'un chapitre ouvre le suivant, le boss est facultatif ;
+   - le chapitre suivant s'ouvre quand les lecons sont finies ET le boss battu
+     (2026-11-22, decision d'Alexandre) ; apres trois defaites contre le boss,
+     il s'ouvre quand meme ; un chapitre deja ouvert chez un joueur le reste ;
    - un chapitre du chemin se joue de bout en bout (chaque solution passee par
      l'interface), y compris le coup prealable de la prise en passant, la
      promotion et le pat ;
@@ -114,16 +116,22 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("« Je debute » n'a pas ete touche", dit(JSON.parse(w.localStorage.getItem("chang64:debut")).f) === "[0,1,2,3,4,5]");
   T("aucun badge d'etape de « Je debute » gagne par un autre chapitre", ev("debut.faites.length") === 6);
 
-  console.log("--- La fin du chapitre : le boss, facultatif ---");
+  console.log("--- La fin du chapitre : le boss, qui ouvre la suite ---");
   T("derniere etape : le boss, sans exercice", !$("leconBoss").classList.contains("hide") && $("debutStatus").classList.contains("hide") && /dame/.test($("debutTitre").textContent), $("debutTitre").textContent);
-  T("deux boutons : affronter le boss, ou le chapitre suivant", net($("btnLeconBoss").textContent) === "Affronter le boss" && net($("btnLeconSuite").textContent) === "Chapitre suivant" && $("leconBossFait").classList.contains("hide"));
-  T("les lecons finies ouvrent le chapitre 3, boss ou non", ev("cheminEtat(1).fini") === true && ev("cheminEtat(1).boss") === false && ev("cheminOuvert(2)") === true);
+  T("deux boutons : affronter le boss, ou revenir au chemin", net($("btnLeconBoss").textContent) === "Affronter le boss" && net($("btnLeconSuite").textContent) === "Retour au chemin" && $("leconBossFait").classList.contains("hide"));
+  T("c'est dit : battre le boss ouvre le chapitre suivant", !$("leconBossNote").classList.contains("hide") && net($("leconBossNote").textContent) === "Bats le boss pour ouvrir le chapitre suivant.", $("leconBossNote").textContent);
+  T("les lecons finies ne suffisent plus : le chapitre 3 attend le boss", ev("cheminEtat(1).fini") === true && ev("cheminEtat(1).boss") === false && ev("cheminPasse(1)") === false && ev("cheminOuvert(2)") === false && ev("cheminBossBarre(1)") === true);
   T("l'echiquier montre la position du boss, du cote des Blancs", ev("game.fen().split(' ')[0]") === "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" && ev("flipped") === false);
   $("btnDebutFermer").click(); await pause(200);
-  T("accueil : « Continuer : chapitre 3 »", net($("heroDebut").textContent) === "Continuer : chapitre 3", $("heroDebut").textContent);
+  T("accueil : « Continuer : chapitre 2 », celui dont le boss attend", net($("heroDebut").textContent) === "Continuer : chapitre 2" && ev("cheminCourant()") === 1, $("heroDebut").textContent);
   $("tab-apprendre").click(); await pause(300);
   chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
-  T("onglet : chapitre 2 termine, son boss attend ; chapitre 3 en cours", chap[1].classList.contains("fait") && /boss t'attend/.test(net(chap[1].textContent)) && chap[2].classList.contains("encours") && !chap[2].classList.contains("verrou"), net(chap[1].textContent));
+  T("onglet : lecons du chapitre 2 finies, son boss ouvre la suite ; il reste le chapitre en cours", chap[1].classList.contains("fait") && chap[1].classList.contains("encours") && /Leçons finies\. Bats le boss pour ouvrir la suite/.test(net(chap[1].textContent)), net(chap[1].textContent));
+  T("la coche du chapitre fait et en cours n'est pas recouverte par son numero", /.ap-chap.fait.encours .ap-num{color:transparent}/.test(w.document.documentElement.innerHTML));
+  T("onglet : le chapitre 3 est ferme, et dit pourquoi", chap[2].classList.contains("verrou") && chap[2].getAttribute("aria-disabled") === "true" && /Bats le boss du chapitre 2 pour ouvrir celui-ci/.test(net(chap[2].textContent)), net(chap[2].textContent));
+  chap[2].click(); await pause(200);
+  T("un chapitre ferme ne s'ouvre pas", ev("mode") === "apprendre");
+  T("le chapitre 4, lui, attend encore les lecons du 3", /S'ouvre une fois le chapitre 3 fini/.test(net(chap[3].textContent)), net(chap[3].textContent));
 
   console.log("--- La partie contre le boss ---");
   const eloAvant = dit(ev("prog.eloOrdi")), vicAvant = ev("(bxEtat().c.vic||0)"), badgesAvant = ev("prog.badges.length");
@@ -145,20 +153,36 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   $("btnReprendre").click(); await pause(100);
   T("les deux coups sont repris", ev("game.history.length") === 0 && ev("gameUci.length") === 0 && ev("sanList.length") === 0);
   T("la reprise est notee sur la partie", JSON.parse(w.localStorage.getItem("chang64:cheminPartie")).r === 1);
+  /* Une defaite d'abord, posee comme le fait l'application en fin de partie. */
+  const FIN = (issue, abandon) => "(function(){const g=new Game(gameStartFen);for(const u of ['e2e4','e7e5','g1f3','b8c6']){g.makeMove(g.moves().find(x=>g.uci(x)===u));}game=g;gameUci=['e2e4','e7e5','g1f3','b8c6'];" +
+    "resigned=" + abandon + ";resultInfo={kind:'" + issue + "',title:'x',sub:'y'};gameSaved=false;resultDismissed=false;renderResult(true);})()";
+  ev("window.__annonces=[];(function(){const av=objAnnoncer;objAnnoncer=function(a,b){window.__annonces.push(b);return av.apply(this,arguments);};})()");
+  ev(FIN("lose", "W")); await pause(200);
+  T("une partie perdue contre le boss est comptee", ev("cheminEtat(1).defaites") === 1 && JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.b === 1, w.localStorage.getItem("chang64:chemin"));
+  T("une seule defaite n'ouvre rien, et n'annonce rien", ev("cheminOuvert(2)") === false && ev("cheminEtat(1).boss") === false && ev("__annonces.length") === 0, ev("__annonces.join()"));
+  $("tab-apprendre").click(); await pause(300);
+  w.document.querySelectorAll("#apChemin .ap-chap")[1].click(); await pause(400);
+  T("ecran du boss : « Défaites contre ce boss : 1 sur 3 », et la suite promise a la troisieme", /Défaites contre ce boss : 1 sur 3\. À la troisième, le chapitre suivant s'ouvre quand même\./.test(net($("leconBossNote").textContent)) && net($("btnLeconSuite").textContent) === "Retour au chemin", $("leconBossNote").textContent);
+  ev("lecon.x=0;debutSauver()");
+  T("la suite des lecons ne fait pas oublier la defaite", JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.b === 1);
+  $("btnLeconBoss").click(); await pause(500);
   /* La victoire, posee comme le fait l'application en fin de partie. */
   ev("(function(){const g=new Game(gameStartFen);for(const u of ['e2e4','e7e5','g1f3','b8c6']){g.makeMove(g.moves().find(x=>g.uci(x)===u));}game=g;gameUci=['e2e4','e7e5','g1f3','b8c6'];" +
     "resigned=B;resultInfo={kind:'win',title:'x',sub:'y'};gameSaved=false;resultDismissed=false;renderResult(true);})()");
   await pause(200);
-  T("la partie est gardee dans « Tes parties », marquee entrainement", ev("history.length") === 1 && ev("history[0].ent") === 1 && ev("history[0].r") === "win");
+  T("les deux parties sont gardees dans « Tes parties », marquees entrainement", ev("history.length") === 2 && ev("history[0].ent") === 1 && ev("history[0].r") === "win" && ev("history[1].ent") === 1 && ev("history[1].r") === "loss", ev("JSON.stringify(history.map(p=>[p.r,p.ent]))"));
   T("elle ne compte pas pour l'Elo", dit(ev("prog.eloOrdi")) === eloAvant, dit(ev("prog.eloOrdi")));
   T("ni pour les badges de partie", ev("(bxEtat().c.vic||0)") === vicAvant && !ev("prog.badges.includes('jeu_victoire')") && !ev("prog.badges.includes('jeu_niv1')"), ev("prog.badges.slice(" + badgesAvant + ").join()"));
   T("le boss est marque battu", ev("cheminEtat(1).boss") === true && JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.f.includes(5));
+  T("le boss battu ouvre le chapitre 3", ev("cheminPasse(1)") === true && ev("cheminOuvert(2)") === true && ev("cheminCourant()") === 2 && ev("__annonces.join()") === "Boss battu", ev("__annonces.join()"));
+  T("la progression gardee porte la marque de la nouvelle regle", JSON.parse(w.localStorage.getItem("chang64:chemin")).v === 2);
   T("partie finie : plus de reprise", $("btnReprendre").classList.contains("hide"));
   $("tab-apprendre").click(); await pause(300);
   chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
   T("onglet : « Chapitre termine, boss battu »", /boss battu/.test(net(chap[1].textContent)), net(chap[1].textContent));
   chap[1].click(); await pause(400);
   T("ecran du boss : la reussite est dite, on peut le rejouer", !$("leconBossFait").classList.contains("hide") && /Boss battu/.test($("leconBossFait").textContent) && net($("btnLeconBoss").textContent) === "Rejouer le boss" && $("debutPas").lastChild.classList.contains("fait"));
+  T("boss battu : plus de phrase sur les defaites, « Chapitre suivant » en avant", $("leconBossNote").classList.contains("hide") && net($("btnLeconSuite").textContent) === "Chapitre suivant" && $("btnLeconSuite").classList.contains("primary") && !$("btnLeconBoss").classList.contains("primary"));
   $("btnLeconSuite").click(); await pause(500);
   T("« Chapitre suivant » ouvre le chapitre 3", ev("mode") === "debut" && ev("leconCh") === "securite" && /pièce/.test($("debutTitre").textContent), $("debutTitre").textContent);
 
@@ -190,9 +214,11 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   ev("setupGame()");
 
   console.log("--- Tout est fini : le bouton de l'accueil s'efface ---");
-  ev(CHAPITRES.slice(1).map(c => "chemin.c." + c + "={e:5,x:0,f:[0,1,2,3,4]};").join("") + "cheminEcrire()");
+  /* Toutes les lecons, tous les boss sauf le dernier : il n'ouvre rien, il ne retient donc personne. */
+  ev(CHAPITRES.slice(1).map((c, k, l) => "chemin.c." + c + "={e:5,x:0,f:[0,1,2,3,4" + (k < l.length - 1 ? ",5" : "") + "]};").join("") + "cheminEcrire()");
   $("brand").click(); await pause(200);
   T("chemin fini : plus de bouton", $("heroDebut").classList.contains("hide") && ev("cheminCourant()") === -1);
+  T("le boss du dernier chapitre ne barre rien", ev("cheminEtat(CHEMIN_PLAN.length-1).boss") === false && ev("cheminBossBarre(CHEMIN_PLAN.length-1)") === false);
   T("« Exercice du jour » reste", !$("heroPuzzle").classList.contains("hide"));
   w.close();
 
@@ -202,7 +228,54 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("accueil : « Continuer : chapitre 2 »", net($("heroDebut").textContent) === "Continuer : chapitre 2");
   $("heroDebut").click(); await pause(600);
   T("on reprend a la lecon et a l'exercice gardes", ev("leconCh") === "regles" && ev("lecon.e") === 2 && ev("lecon.x") === 1 && [...$("debutPas").children].map(b => b.classList.contains("fait") ? 1 : 0).join("") === "110000");
-  T("une progression abimee ne casse rien", (() => { ev("chemin=cheminNormaliser({c:{regles:{e:99,x:-3,f:['a',2,2,77]},inconnu:{f:[1]}},o:['regles','zzz'],p:7})"); return dit(ev("chemin")) === dit({ v: 1, c: { regles: { e: 0, x: 0, f: [2] } }, o: ["regles"], p: null }); })(), dit(ev("chemin")));
+  T("une progression abimee ne casse rien", (() => { ev("chemin=cheminNormaliser({c:{regles:{e:99,x:-3,f:['a',2,2,77]},inconnu:{f:[1]}},o:['regles','zzz'],p:7})"); return dit(ev("chemin")) === dit({ v: 2, c: { regles: { e: 0, x: 0, f: [2] } }, o: ["regles"], p: null }); })(), dit(ev("chemin")));
+  T("un nombre de defaites abime est borne ou ecarte", ev("cheminNormaliser({v:2,c:{regles:{f:[],b:99},securite:{f:[],b:-2},mats:{f:[],b:'x'}}}).c.regles.b") === 3 && ev("'b' in cheminNormaliser({v:2,c:{securite:{f:[],b:-2}}}).c.securite") === false && ev("'b' in cheminNormaliser({v:2,c:{mats:{f:[],b:'x'}}}).c.mats") === false);
+  w.close();
+
+  console.log("--- Trois defaites contre le boss ouvrent la suite quand meme ---");
+  w = await ouvrir("fr", avec({ "chang64:debut": { e: 6, x: 0, f: [0, 1, 2, 3, 4, 5] }, "chang64:chemin": { v: 2, c: { regles: { e: 5, x: 0, f: [0, 1, 2, 3, 4] } }, o: [], p: { x: 1 } } }));
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  ev("window.__annonces=[];(function(){const av=objAnnoncer;objAnnoncer=function(a,b,c){window.__annonces.push(b+' / '+c);return av.apply(this,arguments);};})()");
+  const BOSS = "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  const perdre = async () => {
+    ev("cheminLancerPartie('regles'," + JSON.stringify(BOSS) + ",1)"); await pause(400);
+    ev("(function(){const g=new Game(gameStartFen);for(const u of ['e2e4','e7e5','g1f3','b8c6']){g.makeMove(g.moves().find(x=>g.uci(x)===u));}game=g;gameUci=['e2e4','e7e5','g1f3','b8c6'];" +
+      "resigned=W;resultInfo={kind:'lose',title:'x',sub:'y'};gameSaved=false;resultDismissed=false;renderResult(true);})()");
+    await pause(200);
+  };
+  T("au depart : chapitre 3 ferme", ev("cheminOuvert(2)") === false && ev("cheminCourant()") === 1);
+  await perdre(); await perdre();
+  T("deux defaites : toujours ferme, rien n'est annonce", ev("cheminEtat(1).defaites") === 2 && ev("cheminOuvert(2)") === false && ev("__annonces.length") === 0, ev("__annonces.join()"));
+  await perdre();
+  T("troisieme defaite : le chapitre 3 s'ouvre", ev("cheminEtat(1).defaites") === 3 && ev("cheminPasse(1)") === true && ev("cheminOuvert(2)") === true && ev("cheminCourant()") === 2);
+  T("c'est annonce une fois, en fin de partie, sans reproche", ev("__annonces.length") === 1 && /^Le chapitre 3 est ouvert \/ Trois essais contre le boss : tu peux continuer, et revenir le battre plus tard\. Touche pour voir le chemin\.$/.test(net(ev("__annonces[0]"))), ev("__annonces.join()"));
+  T("le boss n'est pas marque battu pour autant", ev("cheminEtat(1).boss") === false);
+  await perdre();
+  T("une quatrieme defaite ne change plus rien", ev("cheminEtat(1).defaites") === 3 && ev("__annonces.length") === 1 && JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.b === 3);
+  ev("setupGame()");
+  $("tab-apprendre").click(); await pause(300);
+  chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
+  T("onglet : le boss du chapitre 2 attend toujours, le chapitre 3 est en cours", /Chapitre terminé\. Le boss t'attend/.test(net(chap[1].textContent)) && chap[2].classList.contains("encours") && !chap[2].classList.contains("verrou"), net(chap[1].textContent));
+  chap[1].click(); await pause(400);
+  T("ecran du boss : la suite est ouverte, on peut revenir le battre", /Le chapitre suivant est ouvert\. Reviens battre ce boss quand tu veux\./.test(net($("leconBossNote").textContent)) && net($("btnLeconSuite").textContent) === "Chapitre suivant" && $("btnLeconSuite").classList.contains("primary") && !$("btnLeconBoss").classList.contains("primary"), $("leconBossNote").textContent);
+  T("une nulle contre le boss ne compte ni comme victoire ni comme defaite", (() => {
+    ev("chemin.c.regles.b=1;cheminLancerPartie('regles'," + JSON.stringify(BOSS) + ",1)");
+    ev("(function(){const g=new Game(gameStartFen);for(const u of ['e2e4','e7e5','g1f3','b8c6']){g.makeMove(g.moves().find(x=>g.uci(x)===u));}game=g;gameUci=['e2e4','e7e5','g1f3','b8c6'];" +
+      "resultInfo={kind:'draw',title:'x',sub:'y'};gameSaved=false;resultDismissed=false;renderResult(true);})()");
+    return ev("cheminEtat(1).defaites") === 1 && ev("cheminEtat(1).boss") === false;
+  })());
+  ev("setupGame()");
+  w.close();
+
+  console.log("--- Un chapitre deja ouvert sous l'ancienne regle le reste ---");
+  w = await ouvrir("fr", avec({ "chang64:debut": { e: 6, x: 0, f: [0, 1, 2, 3, 4, 5] }, "chang64:chemin": { v: 1, c: { regles: { e: 5, x: 0, f: [0, 1, 2, 3, 4] }, securite: { e: 2, x: 0, f: [0, 1] } }, o: [], p: null } }));
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  T("progression d'avant : le chapitre 3, ouvert par les seules lecons du 2, reste ouvert", ev("cheminEtat(1).boss") === false && ev("cheminOuvert(2)") === true && ev("chemin.o.includes('securite')") && ev("chemin.v") === 2, dit(ev("chemin")));
+  T("accueil : « Continuer : chapitre 3 »", net($("heroDebut").textContent) === "Continuer : chapitre 3", $("heroDebut").textContent);
+  ev("chemin.c.securite={e:5,x:0,f:[0,1,2,3,4]};cheminEcrire()");
+  T("le chapitre 4, qui n'etait pas ouvert, suit la nouvelle regle", ev("cheminOuvert(3)") === false && ev("cheminCourant()") === 2);
+  T("une fois ecrite, la progression garde ce chapitre ouvert pour de bon", (() => { const g = JSON.parse(w.localStorage.getItem("chang64:chemin")); return g.v === 2 && g.o.includes("securite") && !g.o.includes("mats"); })(), w.localStorage.getItem("chang64:chemin"));
+  T("cheminHerite ne dit rien d'une progression deja a la nouvelle regle", ev("cheminHerite({v:2,c:{regles:{f:[0,1,2,3,4]}}}).length") === 0 && ev("cheminHerite({v:1,c:{regles:{f:[0,1,2,3,4]}}}).join()") === "securite" && ev("cheminHerite({c:{regles:{f:[0,1,2,3]}}}).length") === 0 && ev("cheminHerite(null).length") === 0);
 
   console.log("--- Le compte fusionne deux appareils ---");
   const f = ev("JSON.parse(JSON.stringify(cpFusion(" +
@@ -213,8 +286,20 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("les chapitres ouverts par le test s'additionnent", f.chemin.o.slice().sort().join() === "debut,regles");
   T("un test passe l'emporte sur un test ecarte", f.chemin.p && f.chemin.p.t === 50 && f.chemin.p.e === "securite");
   T("le chemin fait partie de ce que le compte garde", ev("CP_STOCK['chang64:chemin']") === "chemin" && ev("CP_NOMS.includes('chemin')"));
+  T("la fusion porte la marque de la nouvelle regle", f.chemin.v === 2);
+  const g = ev("JSON.parse(JSON.stringify(cpFusion(" +
+    "{t:{chemin:200},chemin:{v:2,c:{regles:{e:5,x:0,f:[0,1,2,3,4],b:1},securite:{e:5,x:0,f:[0,1,2,3,4],b:2}},o:[],p:null}}," +
+    "{t:{chemin:100},chemin:{v:1,c:{regles:{e:5,x:0,f:[0,1,2,3,4]},securite:{e:1,x:0,f:[0],b:3}},o:[],p:null}},null)))");
+  T("les defaites contre un boss : le plus grand des deux nombres", g.chemin.c.regles.b === 1 && g.chemin.c.securite.b === 3, dit(g.chemin));
+  T("l'appareil reste a l'ancienne regle garde ouvert le chapitre qu'il avait ouvert", g.chemin.o.join() === "securite" && g.chemin.v === 2, dit(g.chemin.o));
+  const h = ev("JSON.parse(JSON.stringify(cpFusion(" +
+    "{t:{chemin:200},chemin:{v:2,c:{regles:{e:5,x:0,f:[0,1,2,3,4]}},o:[],p:null}}," +
+    "{t:{chemin:100},chemin:{v:2,c:{regles:{e:2,x:0,f:[0,1]}},o:[],p:null}},null)))");
+  T("deux appareils a la nouvelle regle : rien ne s'ouvre sans le boss, pas de champ en trop", h.chemin.o.length === 0 && !("b" in h.chemin.c.regles), dit(h.chemin));
   ev("cheminAdopter({v:1,c:{regles:{e:5,x:0,f:[0,1,2,3,4]}},o:[],p:null})");
   T("une progression venue du compte est adoptee sans recharger", ev("cheminEtat(1).fini") === true && ev("cheminCourant()") === 2);
+  ev("cheminAdopter({v:2,c:{regles:{e:5,x:0,f:[0,1,2,3,4]}},o:[],p:null})");
+  T("venue du compte a la nouvelle regle : le boss du chapitre 2 retient la suite", ev("cheminOuvert(2)") === false && ev("cheminCourant()") === 1 && net($("heroDebut").textContent) === "Continuer : chapitre 2", $("heroDebut").textContent);
   w.close();
 
   console.log("\n" + ok + " OK, " + ko + " FAIL");

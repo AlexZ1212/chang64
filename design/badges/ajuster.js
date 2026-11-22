@@ -6,11 +6,12 @@
    Usage : node design/badges/ajuster.js  (apres symboles.js, avant verif et planche) */
 const fs = require("fs"), path = require("path");
 const sharp = require(path.join(__dirname, "..", "..", "src", "node_modules", "sharp"));
+const { sansContours } = require("./contours.js");
 const F = path.join(__dirname, "symboles.json");
 const S = JSON.parse(fs.readFileSync(F, "utf8"));
 const PX = 4, T = 48 * PX, RAYON = 23.5, MAXI = 1.5;
 async function masque(m) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${T}" height="${T}" viewBox="-24 -24 48 48" style="color:#000">${m.replace(/var\(--oeil\)/g, "#000")}</svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${T}" height="${T}" viewBox="-24 -24 48 48" style="color:#000">${sansContours(m).replace(/var\(--oeil\)/g, "#000")}</svg>`;
   const { data } = await sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const pts = [];
   for (let i = 0; i < T * T; i++) if (data[i * 4 + 3] > 60) pts.push([i % T, (i / T) | 0]);
@@ -45,7 +46,7 @@ async function rapprocher(s) {
   for (const [id, v] of Object.entries(S)) {
     let s = v.s.replace(/^<g data-cale="1"[^>]*>([\s\S]*)<\/g>$/, "$1");   // idempotent
     s = await rapprocher(s);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${T}" height="${T}" viewBox="-24 -24 48 48" style="color:#000">${s.replace(/var\(--oeil\)/g, "#000")}</svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${T}" height="${T}" viewBox="-24 -24 48 48" style="color:#000">${sansContours(s).replace(/var\(--oeil\)/g, "#000")}</svg>`;
     const { data } = await sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     let x0 = T, y0 = T, x1 = -1, y1 = -1;
     for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) if (data[(y * T + x) * 4 + 3] > 60) {

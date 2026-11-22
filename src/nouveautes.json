@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "The boss opens the next chapter, and matching time controls",
+   "In Learn, beating a chapter's boss now opens the next chapter. After three losses against it, the next chapter opens anyway, and the chapters you had already opened stay open. Between members, time controls now match the ones against the computer: 5+3 is a Blitz, and Rapid gains 10+5."
+  ],
+  "fr": [
+   "Le boss ouvre le chapitre suivant, et des cadences accordées",
+   "Dans Apprendre, battre le boss d'un chapitre ouvre maintenant le chapitre suivant. Après trois défaites contre lui, la suite s'ouvre quand même, et les chapitres que tu avais déjà ouverts le restent. Entre membres, les cadences sont celles que tu connais contre l'ordinateur : le 5+3 est un Blitz, et le Rapide gagne le 10+5."
+  ],
+  "es": [
+   "El jefe abre el capítulo siguiente, y ritmos de juego iguales",
+   "En Aprender, vencer al jefe de un capítulo abre ahora el capítulo siguiente. Tras tres derrotas contra él, el siguiente se abre igualmente, y los capítulos que ya habías abierto siguen abiertos. Entre miembros, los ritmos de juego son los mismos que contra el ordenador: el 5+3 es un Blitz, y las Rápidas suman el 10+5."
+  ],
+  "pt": [
+   "O chefão abre o próximo capítulo, e ritmos de jogo iguais",
+   "Em Aprender, vencer o chefão de um capítulo agora abre o próximo capítulo. Depois de três derrotas contra ele, o próximo abre mesmo assim, e os capítulos que você já tinha aberto continuam abertos. Entre membros, os ritmos de jogo são os mesmos que contra o computador: o 5+3 é um Blitz, e a Rápida ganha o 10+5."
+  ],
+  "de": [
+   "Der Boss öffnet das nächste Kapitel, und einheitliche Bedenkzeiten",
+   "In Lernen öffnet jetzt der Sieg über den Boss eines Kapitels das nächste Kapitel. Nach drei Niederlagen gegen ihn öffnet es sich trotzdem, und Kapitel, die du schon geöffnet hattest, bleiben offen. Unter Mitgliedern gelten dieselben Bedenkzeiten wie gegen den Computer: 5+3 ist ein Blitz, und im Schnellschach kommt 10+5 dazu."
+  ],
+  "ru": [
+   "Босс открывает следующую главу, и единые контроли времени",
+   "В разделе «Учиться» победа над боссом главы теперь открывает следующую главу. После трёх поражений от него она всё равно откроется, а главы, которые ты уже открыл, останутся открытыми. Между участниками контроли времени теперь те же, что и против компьютера: 5+3 считается блицем, а в рапиде появился 10+5."
+  ],
+  "it": [
+   "Il boss apre il capitolo successivo, e cadenze uguali",
+   "In Impara, battere il boss di un capitolo ora apre il capitolo successivo. Dopo tre sconfitte contro di lui, il successivo si apre comunque, e i capitoli che avevi già aperto restano aperti. Tra membri, le cadenze sono le stesse che contro il computer: il 5+3 è un Blitz, e il Rapid guadagna il 10+5."
+  ],
+  "tr": [
+   "Boss sonraki bölümü açıyor, tempolar da aynı",
+   "Öğren sekmesinde bir bölümün boss'unu yenmek artık sonraki bölümü açıyor. Ona karşı üç yenilgiden sonra sonraki bölüm yine de açılıyor; daha önce açtığın bölümler de açık kalıyor. Üyeler arasındaki tempolar artık bilgisayara karşı olanlarla aynı: 5+3 bir Blitz, Rapid'e de 10+5 eklendi."
+  ],
+  "pl": [
+   "Boss otwiera następny rozdział, a tempa gry są takie same",
+   "W zakładce Ucz się pokonanie bossa rozdziału otwiera teraz następny rozdział. Po trzech porażkach z nim następny i tak się otworzy, a rozdziały, które już były otwarte, takie pozostają. Między członkami tempa gry są takie same jak z komputerem: 5+3 to Blitz, a w Rapid doszło 10+5."
+  ],
+  "id": [
+   "Bos membuka bab berikutnya, dan kontrol waktu yang sama",
+   "Di Belajar, mengalahkan bos sebuah bab kini membuka bab berikutnya. Setelah tiga kali kalah melawannya, bab berikutnya tetap terbuka, dan bab yang sudah kamu buka tetap terbuka. Antaranggota, kontrol waktu kini sama dengan saat melawan komputer: 5+3 adalah Blitz, dan Rapid mendapat 10+5."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "Clearer statistics, a simpler Against a friend screen",
    "Your statistics are now grouped by category, and members get a won, drawn, lost bar. The Against a friend screen fits in one block: pick a time control, from Blitz to correspondence, then invite. And a square at the bottom right tells you when a game is waiting for you."
   ],

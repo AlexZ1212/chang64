@@ -18,11 +18,12 @@ function medaille(sym, metal, id = "") {
   const m = METAUX[metal], i = "m" + (++n);
   return `<svg class="medaille" data-id="${id}" viewBox="-60 -60 120 120" aria-hidden="true"><defs>
 <radialGradient id="${i}f" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="${m.face[0]}"/><stop offset=".45" stop-color="${m.face[1]}"/><stop offset="1" stop-color="${m.face[2]}"/></radialGradient>
-<linearGradient id="${i}t" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${m.tranche[0]}"/><stop offset="1" stop-color="${m.tranche[1]}"/></linearGradient></defs>
+<linearGradient id="${i}t" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${m.tranche[0]}"/><stop offset="1" stop-color="${m.tranche[1]}"/></linearGradient>
+<mask id="${i}m" maskUnits="userSpaceOnUse" x="-60" y="-60" width="120" height="120"><g transform="scale(1.45)" style="color:#fff;--oeil:#000">${sym}</g></mask></defs>
 <circle r="56" cy="3" fill="rgba(0,0,0,.45)"/><circle r="55" fill="url(#${i}t)"/><circle r="47" fill="url(#${i}f)"/>
 <circle r="43" fill="none" stroke="${m.grave}" stroke-opacity=".35" stroke-width="1"/><circle r="47" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.2"/>
-<g opacity=".45" transform="translate(0 .9) scale(1.45)" style="color:#fff;--oeil:transparent">${sym}</g>
-<g transform="scale(1.45)" style="color:${m.grave};--oeil:${m.face[1]}">${sym}</g></svg>`;
+<rect x="-60" y="-60" width="120" height="120" transform="translate(0 .9)" fill="#fff" opacity=".45" mask="url(#${i}m)"/>
+<rect x="-60" y="-60" width="120" height="120" fill="${m.grave}" mask="url(#${i}m)"/></svg>`;
 }
 let corps = "";
 for (const f of Object.keys(NOMS)) {

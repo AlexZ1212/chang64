@@ -77,7 +77,8 @@ const HEURE = 3600e3, JOUR = 24 * HEURE;
     for (const cad of [6, 7, 8]) { const c = await post("creer", { cad, adv: "Eve" }, "Fred"); jours.push((await ouvrir(c.id, "Fred")).ws.dernier().cad[0] / 86400); await post("retirer", { id: c.id }, "Fred"); }
     return jours.join() === "1,3,7";
   })());
-  T("cadence inconnue : refusee (400)", (await post("creer", { cad: 10, adv: "Bob" }, "Anna")).s === 400);
+  /* Le numero 10 est le Rapide 10+5 depuis le 2026-11-22 : on prend plus loin. */
+  T("cadence inconnue : refusee (400)", (await post("creer", { cad: 11, adv: "Bob" }, "Anna")).s === 400 && (await post("creer", { cad: 99, adv: "Bob" }, "Anna")).s === 400);
   {
     /* Blitz 3+2 (2026-11-21) : numero 9, apres la correspondance ; c'est une partie EN DIRECT. */
     const d = await post("creer", { cad: 9, coul: "b" }, "Fred");

@@ -425,7 +425,12 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 @media(max-width:480px){.hero .cta .btn{font-size:13px;padding:10px 14px;min-height:44px}}
 
 .tc-block{margin-bottom:22px;position:relative}
-.tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:var(--r);border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto}
+/* overflow-y:hidden (2026-11-22, remarque d'Alexandre : sur telephone la rangee
+   se laissait tirer au doigt de haut en bas). overflow-x:auto seul rend aussi
+   l'axe vertical defilant, et la zone tactile de 44 px des boutons depasse la
+   rangee d'un pixel : il y avait donc un pixel a faire defiler. La rangee ne
+   glisse plus que de cote, et seulement quand elle est plus large que l'ecran. */
+.tc-cats{display:flex;gap:4px;background-color:var(--ink);padding:4px;border-radius:var(--r);border:1px solid var(--rule);margin-bottom:10px;overflow-x:auto;overflow-y:hidden}
 .tc-cats button{
   flex:1;font:inherit;font-size:12.5px;color:var(--sage);background:none;border:0;padding:8px 10px;
   border-radius:var(--r-s);cursor:pointer;white-space:nowrap
@@ -757,6 +762,10 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .ap-chap.verrou b,.ap-chap.verrou .ap-desc{opacity:.6}
 .ap-num{position:relative;flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--rule);font-weight:700;font-size:14px;background-color:var(--ink);color:var(--sage)}
 .ap-chap.encours .ap-num{border-color:var(--brass);box-shadow:0 0 0 2px rgba(var(--brass-rgb),.35);color:var(--chalk)}
+/* Chapitre dont les lecons sont finies mais dont le boss retient la suite
+   (2026-11-22) : il est a la fois fait et en cours. La coche reste seule,
+   sans le numero par-dessus. */
+.ap-chap.fait.encours .ap-num{color:transparent}
 .ap-barre{display:block;height:6px;border-radius:3px;background-color:var(--raise);margin:9px 0 0;overflow:hidden}
 .ap-barre i{display:block;height:100%;background-color:var(--brass);border-radius:3px}
 .ap-venir{font-size:13px;color:var(--sage);margin:12px 0 0;line-height:1.5}
@@ -866,9 +875,17 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    le nom vers le haut et le desalignait de la pendule. Ici la premiere ligne
    ne bouge jamais, avec ou sans prises. */
 .clock{display:flex;flex-direction:column;align-items:stretch;gap:0;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:7px 12px;
-  max-width:100%;box-sizing:border-box;min-width:0
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:0 12px;
+  max-width:100%;box-sizing:border-box;min-width:0;
+  /* 2026-11-22, demande d'Alexandre (choix B sur maquette,
+     design/ajustements-2211) : le bloc gagne 10 % de hauteur (49 -> 54 px) et
+     tout y est centre sur la hauteur, comme la pendule. Sans prise, le nom est
+     seul au milieu ; a la premiere prise, le nom et la rangee des pieces
+     forment un groupe centre. La hauteur est FIXE (min-height) : rien ne
+     bouge autour du bloc quand la rangee apparait. */
+  min-height:54px;justify-content:center
 }
+.taken:empty{display:none}
 /* Pieces capturees dans la pendule. La contrainte est de ne pas faire grandir
    le bloc : le nom passe sur une premiere ligne et les pieces sur une seconde,
    tres basse, et le chronometre descend de 28 a 24px pour compenser. Les
@@ -887,7 +904,7 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    de la pastille plus son ecart, calcules depuis les memes variables pour que
    l'alignement suive si l'un des deux change. La bordure est comprise dans la
    largeur (box-sizing:border-box global), il n'y a donc rien a ajouter. */
-.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:20px;margin-top:0;
+.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:20px;margin-top:3px;
   padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
 /* La largeur est posee en ligne, proportionnelle a la boite englobante de
    chaque piece : un pion reste plus etroit qu'une dame. L'espacement entre
@@ -1448,7 +1465,7 @@ div.corr-item:hover{border-color:var(--rule)}
    gardait la largeur de son contenu et elargissait toute la page. flex-basis
    a 100 % la force a prendre la ligne entiere et rien de plus, ce qui rend
    enfin son defilement interne operant. */
-.tabs{overflow-x:auto;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none;position:relative}
+.tabs{overflow-x:auto;overflow-y:hidden;max-width:100%;min-width:0;flex:1 1 100%;scrollbar-width:none;position:relative}
 .tabs::-webkit-scrollbar{display:none}
 /* Indice discret "il y a plus a voir en glissant" : un fin degrade colle au
    bord grace a position:sticky (reste a sa place pendant le defilement,
@@ -2051,7 +2068,7 @@ footer .linkbtn{padding:4px 2px}
      directement le plateau, et pendules et ecarts se resserrent un peu. */
   body[data-mode="play"] .board-side,body[data-mode="friend"] .board-side{gap:6px}
   body[data-mode="play"] #boardTools,body[data-mode="friend"] #boardTools{order:1}
-  body[data-mode="play"] .clock,body[data-mode="friend"] .clock{padding-top:3px;padding-bottom:3px}
+  body[data-mode="play"] .clock,body[data-mode="friend"] .clock{min-height:45px}
 }
 /* Cibles tactiles (audit UX du 2026-10-24) : onglets et cadences a 35 px,
    pastilles a 41, EN/FR a 33 x 28, boutons d'info a 24 x 24 et "Voir le
@@ -3987,6 +4004,8 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
               <button class="btn primary" id="btnLeconBoss">Face the boss</button>
               <button class="btn" id="btnLeconSuite">Next chapter</button>
             </div>
+            <!-- Ce que le boss ouvre (2026-11-22) : rempli par leconFinRendre, apprendre.js. -->
+            <p class="note hide" id="leconBossNote"></p>
             <p class="note lecon-entrainement hide" id="leconTheme"><button type="button" class="linkbtn" id="btnLeconTheme">Practise this theme in Solve →</button></p>
           </div>
           <!-- Test de placement : une position, un seul essai. -->

@@ -61,7 +61,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
 
   console.log("Membre : creer et attendre");
   w.eval("cp={pseudo:'Anna',cle:'anna',version:1,dev:'x',n:0,sync:0};directPanneau()");
-  T("membre : le formulaire, trois cadences", cache("directInvite") && !cache("directNouveau") && [...$("directCadences").children].map(b => b.textContent.replace(/[  ]/g, " ")).join() === "10+0,5+3,15+10");
+  T("membre : le formulaire, trois cadences", cache("directInvite") && !cache("directNouveau") && [...$("directCadences").children].map(b => b.textContent.replace(/[  ]/g, " ")).join() === "10+0,10+5,15+10");
   T("la cadence choisie est expliquee", $("directCadenceNote").textContent.replace(/[  ]/g, " ") === "10 minutes chacun pour toute la partie.", $("directCadenceNote").textContent);
   $("directCadences").children[2].click();
   T("et l'explication suit le choix", $("directCadenceNote").textContent.replace(/[  ]/g, " ") === "15 minutes chacun, plus 10 secondes ajoutées après chaque coup.", $("directCadenceNote").textContent);

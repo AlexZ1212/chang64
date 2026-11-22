@@ -19,8 +19,21 @@ const fs = require("fs"), path = require("path");
 const M = require("./badges-medailles.json");
 const src = fs.readFileSync(path.join(__dirname, "pieces_browser.js"), "utf8");
 const PIECES = new Function(src.slice(src.indexOf("const PIECES="), src.indexOf("const PIECE_COLORS")) + ";return PIECES;")();
-const piece = (t, x, y, s, creux) => '<g fill="' + (creux ? "var(--oeil)" : "currentColor") + '" transform="translate(' + x + " " + y + ") scale(" + s + ') translate(-24 -24) scale(1.0667)">' +
-  PIECES[t].map(f => (f.t === "circle" ? '<circle cx="' + f.cx + '" cy="' + f.cy + '" r="' + f.r + '"' : '<path d="' + f.d + '"') + (f.fixe ? ' style="fill:var(--oeil)"' : "") + "/>").join("") + "</g>";
+/* Contours (2026-11-22, remarque d'Alexandre : en aplat, la piece n'etait plus
+   qu'une silhouette, sans le socle, le col ni la tete qu'on voit sur
+   l'echiquier). Chaque forme de la piece porte un trait de la couleur des
+   jours, peint SOUS son aplat (paint-order) : seule la moitie exterieure du
+   trait se voit, la ou la forme recouvre la precedente, et la silhouette garde
+   sa taille. Meme regle et meme epaisseur que les pieces des medailles
+   (design/badges/contours.js ; tests/check_contours_pieces.js les compare).
+   Piece « en creux » (creux) : les deux couleurs s'echangent. */
+const CONTOUR = 1.4;   /* epaisseur visible, dans le repere de la piece (boite de 45) */
+const trait = c => ' stroke="' + c + '" stroke-width="' + (2 * CONTOUR) + '" stroke-linejoin="round" paint-order="stroke"';
+const piece = (t, x, y, s, creux) => {
+  const plein = creux ? "var(--oeil)" : "currentColor", jour = creux ? "currentColor" : "var(--oeil)";
+  return '<g fill="' + plein + '"' + trait(jour) + ' transform="translate(' + x + " " + y + ") scale(" + s + ') translate(-24 -24) scale(1.0667)">' +
+    PIECES[t].map(f => (f.t === "circle" ? '<circle cx="' + f.cx + '" cy="' + f.cy + '" r="' + f.r + '"' : '<path d="' + f.d + '"') + (f.fixe ? ' style="fill:' + jour + ';stroke:none"' : "") + "/>").join("") + "</g>";
+};
 /* Le dessin nu d'une medaille, sans son calage propre a la medaille ronde. */
 /* Meme poids visuel partout : un dessin seul occupe 80 % de la boite, un dessin compose (piece + accent) toute la boite. */
 const nu = k => M[k][1].replace(/<g data-cale="1" transform="[^"]*">/, "<g>");
@@ -73,7 +86,11 @@ const P = {
   ouvertures: glyphe("ouv_5"),
   regles: glyphe("debut_fini"),
   lexique: '<g transform="scale(.92)">' + DESSINS.lexique + "</g>",
-  pieges: '<g transform="scale(1.06)">' + piece("b", -5.5, 5.5, .82) + accentDessin(DESSINS.attention, .46, 13.4) + "</g>",
+  /* Le triangle arrive au bord de sa propre boite (± 19,6 sur 24) : centre a
+     13,4 il touchait le bord droit du cadre et y etait rogne (remarque
+     d'Alexandre, 2026-11-22). A 12, comme le globe et la puce, il garde une
+     marge. */
+  pieges: '<g transform="scale(1.06)">' + piece("b", -5.5, 5.5, .82) + accentDessin(DESSINS.attention, .46, 12) + "</g>",
   biblio: '<g transform="scale(.96)">' + DESSINS.fiches + piece("n", -3.500, 4.200, .52, true) + "</g>"
 };
 function pictosSource() { return "const PICTOS=" + JSON.stringify(P) + ";"; }

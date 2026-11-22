@@ -166,14 +166,29 @@ function rebuildTo(ply){
 const VERDICT={blunder:"Blunder",mistake:"Mistake",inacc:"Inaccuracy"};
 function renderPlyInfo(){
   const box=$("plyInfo"); if(!box)return;
-  if(reviewPly===null||!analysis||!analysis.plies[reviewPly-1]){box.className="plyinfo hide";return;}
-  const a=analysis.plies[reviewPly-1];
-  const played=sanList[reviewPly-1];
+  /* Sur la position finale d'une partie analysee, le commentaire est celui
+     du dernier coup (2026-11-22) : sans cela, la phrase du coach sur le coup
+     qui finit la partie (un pat, par exemple) ne se voyait jamais sous
+     l'echiquier. Une analyse n'existe que pour une partie finie. */
+  const plyVu=reviewPly!==null?reviewPly:(analysis&&mode==="play"?analysis.plies.length:null);
+  if(plyVu===null||!analysis||!analysis.plies[plyVu-1]){box.className="plyinfo hide";return;}
+  const a=analysis.plies[plyVu-1];
+  const played=sanList[plyVu-1];
   const isBest=!a.tag;
   box.className="plyinfo "+(a.tag||"best");
   let html='<span class="played">'+t("Played")+' <b>'+played+'</b></span>';
+  /* Le coach (coach.js, 2026-11-22) : pour une gaffe ou une erreur du
+     joueur, la phrase qui dit pourquoi, puis le coup conseille ; pour un bon
+     coup qui punit une faute adverse, un compliment. Sinon, l'affichage
+     d'avant. */
+  const co=typeof coachPli==="function"?coachPli(plyVu-1):null;
+  if(co){
+    if(co.bien)box.className="plyinfo best";
+    poserHtml(box,html+(a.tag&&!co.bien?' <span class="coach-verdict">'+t(VERDICT[a.tag])+'</span>':"")+co.html);
+    return;
+  }
   if(a.best){
-    const g=rebuildTo(reviewPly-1).game;
+    const g=rebuildTo(plyVu-1).game;
     const mv=g.moves().find(m=>g.uci(m)===a.best);
     const bestSan=mv?g.san(mv):a.best;
     if(isBest)html+=' <span class="verdict">'+t("The engine agrees: best move.")+'</span>';
@@ -253,7 +268,10 @@ function direCoup(ply){
   if(typeof announce!=="function")return;
   const san=vueSan()[ply-1];
   if(!ply||!san){announce(t("Game start"),"move");return;}
-  announce(t("Move {n}, {move}",{n:Math.ceil(ply/2),move:sanEnMots(san)}),"move");
+  /* La phrase du coach est lue avec le coup (2026-11-22) : pieces en toutes
+     lettres, comme le coup lui-meme. */
+  const co=mode==="play"&&(reviewPly===ply||(reviewPly===null&&ply===game.history.length))&&typeof coachPli==="function"?coachPli(ply-1,true):null;
+  announce(t("Move {n}, {move}",{n:Math.ceil(ply/2),move:sanEnMots(san)})+(co&&co.texte?". "+co.texte:""),"move");
 }
 /* Une partie se joue-t-elle en ce moment sur l'echiquier ? */
 function partieEnCours(){
@@ -732,6 +750,7 @@ if($("btnRetourPartie"))$("btnRetourPartie").onclick=()=>exitReview();
    ========================================================== */
 function clearAnalysis(){
   analysis=null;gameUci=[];reviewPly=null;
+  if(typeof coachEffacer==="function")coachEffacer();
   const o=$("analysisOut"); if(o)o.classList.add("hide");
   const p=$("anaProgress"); if(p)p.classList.add("hide");
 }
@@ -756,13 +775,17 @@ function analyseGame(){
   const plies=[];
   let i=0;
   const CLAMP=1200;
+  /* Le coach (coach.js) : sans Stockfish, il n'a ni la suite du moteur ni la
+     mesure de l'ecart entre les deux meilleurs coups. Il explique donc moins
+     de fautes (pas de fourchette) et ne tire des parties que les mats. */
+  const finir=()=>finishAnalysis(plies,typeof coachPreparerSansMoteur==="function"?coachPreparerSansMoteur(plies):null);
   function step(){
-    if(i>=gameUci.length){finishAnalysis(plies);return;}
+    if(i>=gameUci.length){finir();return;}
     const r=search(g,2,140);
     const before=Math.max(-CLAMP,Math.min(CLAMP,r.score));
     const bestUci=r.move?g.uci(r.move):null;
     const mv=g.moves().find(x=>g.uci(x)===gameUci[i]);
-    if(!mv){finishAnalysis(plies);return;}
+    if(!mv){finir();return;}
     const mover=g.turn;
     g.makeMove(mv);
     const r2=search(g,2,140);
@@ -785,15 +808,19 @@ function analyseGame(){
     }
     const cpTrue=mate==null?(mover===W?afterForMover:-afterForMover):null;
     plies.push({cp:mover===W?afterForMover:-afterForMover,cpTrue:cpTrue,mate:mate,loss:loss,
-      tag:classify(loss,bestUci===gameUci[i]),best:bestUci,mover:mover});
+      tag:classify(loss,bestUci===gameUci[i]),best:bestUci,mover:mover,
+      /* rep : la meilleure reponse adverse apres le coup, pour le coach. */
+      rep:r2.move?g.uci(r2.move):null});
     i++;
     bar.firstElementChild.style.width=(100*i/gameUci.length).toFixed(0)+"%";
     setTimeout(step,0);
   }
   setTimeout(step,30);
 }
-function finishAnalysis(plies){
+function finishAnalysis(plies,prep){
   analysis={plies:plies};
+  /* prep : ce que le coach a prepare (phrases, exercices), voir coach.js. */
+  if(prep){analysis.coach=prep.coach;analysis.exos=prep.exos||[];}
   const btn=$("btnAnalyse");btn.disabled=false;btn.textContent=t("Analyse this game");
   $("anaProgress").classList.add("hide");
   $("analysisOut").classList.remove("hide");
@@ -807,15 +834,24 @@ function finishAnalysis(plies){
   $("accBlunders").textContent=blunders;
   $("accMistakes").textContent=mistakes;
   let note=t("Your side: {b} blunder(s), {m} mistake(s), {i} inaccuracy(ies).",{b:blunders,m:mistakes,i:inacc});
-  const worst=mine.filter(p=>p.tag).sort((a,b)=>b.loss-a.loss)[0];
-  if(worst){
-    const idx=plies.indexOf(worst);
-    note+=" "+t("The costliest was move {n} ({san}); the engine preferred {best}.",{n:Math.floor(idx/2+1),san:sanList[idx],best:worst.best});
+  /* Le coup le plus couteux n'est plus cite ici (2026-11-22) : le bloc « Le
+     coach », juste au-dessus, le montre avec sa raison. La phrase d'avant
+     donnait le coup prefere en notation brute (« g5h4 »). */
+  if(!prep){
+    const worst=mine.filter(p=>p.tag).sort((a,b)=>b.loss-a.loss)[0];
+    if(worst){
+      const idx=plies.indexOf(worst);
+      note+=" "+t("The costliest was move {n} ({san}); the engine preferred {best}.",{n:Math.floor(idx/2+1),san:sanList[idx],best:worst.best});
+    }
   }
   note+=" "+t("Accuracy here is a rough guide from a shallow search, not a rating.");
   $("analysisNote").textContent=note;
   drawGraph(plies);
+  if(typeof coachAfficher==="function")coachAfficher();
   renderSheetPlay();
+  /* Le coup regarde pendant l'analyse recoit sa phrase sans attendre qu'on
+     en change. */
+  if(typeof renderPlyInfo==="function")renderPlyInfo();
 }
 function drawGraph(plies){
   const w=300,h=96,mid=h/2,CLAMP=1200;
@@ -1293,6 +1329,7 @@ function sanOf(uciStr,fen){
    sur l'onglet, sans dupliquer setMode. */
 let revueAdv="";   /* l'adversaire de la partie relue, pour le bandeau au-dessus de l'echiquier */
 let revueMoi="";   /* le nom du bas quand ce n'est pas « Toi » : partie importee en PGN */
+let revueDate=0;   /* quand la partie relue a ete jouee (exercices tires des parties, coach.js) */
 function ouvrirPartieGardee(rec,source){
   if(!rec||typeof rec.m!=="string")return;
   const startFen=typeof rec.fen==="string"?rec.fen:null;
@@ -1308,6 +1345,7 @@ function ouvrirPartieGardee(rec,source){
   gameUci=uci;gameStartFen=startFen;
   myColor=rec.c==="w"?W:B;
   revueAdv=partieAdversaire(rec,partieSorte(rec,source));revueMoi="";
+  revueDate=typeof rec.t==="number"?rec.t:0;
   clock={enabled:false,w:0,b:0,inc:0,active:null,last:0,flagged:null};
   if(typeof clockHist!=="undefined")clockHist=[];
   if(typeof resigned!=="undefined")resigned=null;

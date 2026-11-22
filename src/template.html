@@ -1702,6 +1702,24 @@ header>*{min-width:0}
 .plyinfo.mistake{border-left-color:var(--brick)}
 .plyinfo.inacc{border-left-color:var(--brass)}
 .plyinfo.best{border-left-color:var(--jade)}
+/* Le coach de relecture (2026-11-22, coach.js) : la phrase qui dit pourquoi,
+   sous l'echiquier, puis le bloc « Le coach » du panneau Revue. Les lignes du
+   bloc sont des boutons (44 px au moins) qui menent au coup. */
+.plyinfo .coach-verdict{margin-left:6px;font-size:12.5px;color:var(--sage)}
+.plyinfo .coach-phrase{display:block;margin-top:8px;font-size:14.5px;line-height:1.45;color:var(--chalk)}
+.plyinfo .coach-mieux{display:block;margin-top:6px;font-size:13.5px;color:var(--brass)}
+.coach-bloc{margin-top:16px}
+.coach-bloc .note{margin:4px 0 0}
+.coach-liste{list-style:none;margin:10px 0 0;padding:0}
+.coach-liste li{margin:0 0 8px}
+.coach-ligne{display:block;width:100%;min-height:44px;text-align:left;background:none;border:0;
+  border-left:3px solid var(--brick);border-radius:0;padding:8px 0 8px 12px;
+  font:inherit;font-size:14px;line-height:1.4;color:var(--chalk);cursor:pointer}
+.coach-ligne b{display:block;margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--brass)}
+.coach-ligne.sans{border-left-color:var(--brass)}
+.coach-ligne.bien{border-left-color:var(--jade)}
+.coach-ligne:hover span{text-decoration:underline}
+#coachExoNote{margin:10px 0 8px}
 .opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(var(--brass-rgb),.35)}
 .opening a:hover{border-bottom-color:var(--brass)}
 .opening{font-size:12.5px;color:var(--brass);margin-top:2px;margin-bottom:12px;min-height:18px}
@@ -3181,6 +3199,16 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
               <div class="stat"><b id="accMistakes">0</b><span>Mistakes</span></div>
             </div>
             <div class="graph" id="evalGraph"></div>
+            <!-- Le coach (2026-11-22, coach.js) : les moments les plus couteux
+                 de la partie, chacun avec sa raison, puis les positions
+                 gardees dans « Erreurs a revoir ». Rempli par coachAfficher. -->
+            <div class="coach-bloc hide" id="coachBloc">
+              <div class="eyebrow">The coach</div>
+              <p class="note" id="coachIntro"></p>
+              <ul class="coach-liste" id="coachListe"></ul>
+              <p class="note hide" id="coachExoNote"></p>
+              <div class="btnrow"><button type="button" class="btn primary hide" id="btnCoachRejouer">Replay now</button></div>
+            </div>
             <p class="note" id="analysisNote"></p>
           </div>
           <div class="progressbar hide" id="anaProgress"><i></i></div>

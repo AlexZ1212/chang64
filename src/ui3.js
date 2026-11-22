@@ -533,10 +533,17 @@ function sfEvalFen(fen,depth){
        la distance signee telle que rendue par Stockfish (positif = le
        camp au trait mate en n coups, negatif = il est mate en n coups) :
        c'est cette valeur, et non score, qui doit atteindre l'affichage. */
-    let score=null,mate=null,best=null,done=false;
-    const finish=()=>{if(!done){done=true;sf.worker.onmessage=prev;resolve({cp:score,mate:mate,best:best});}};
+    /* pv (2026-11-22) : la suite que le moteur prevoit, en coups UCI. Le
+       coach de relecture (coach.js) s'en sert pour savoir quel coup compte,
+       jamais pour affirmer un fait. */
+    let score=null,mate=null,best=null,pv=null,done=false;
+    const finish=()=>{if(!done){done=true;clearTimeout(timer);clearTimeout(secours);sf.worker.onmessage=prev;resolve({cp:score,mate:mate,best:best,pv:pv});}};
     const prev=sf.worker.onmessage;
-    const timer=setTimeout(finish,4000);
+    /* Delai depasse (telephone lent) : on demande au moteur de s'arreter et on
+       attend son bestmove, au lieu de le laisser chercher pendant que la
+       position suivante lui est deja envoyee. */
+    let secours=null;
+    const timer=setTimeout(()=>{try{sf.worker.postMessage("stop");}catch(e){}secours=setTimeout(finish,1500);},4000);
     sf.worker.onmessage=ev=>{
       const line=typeof ev.data==="string"?ev.data:(ev.data&&ev.data.data)||"";
       let m=line.match(/score cp (-?\d+)/);
@@ -547,9 +554,36 @@ function sfEvalFen(fen,depth){
         mate=n;
         score=(n>0?1:-1)*(20000-Math.abs(n)*100);
       }
+      if(/ score /.test(line)){m=line.match(/ pv (.+)$/);if(m)pv=m[1].trim().split(/\s+/);}
       m=line.match(/^bestmove (\S+)/);
-      if(m){best=m[1];clearTimeout(timer);finish();}
+      if(m){best=m[1]==="(none)"?null:m[1];finish();}
     };
+    sf.worker.postMessage("position fen "+fen);
+    sf.worker.postMessage("go depth "+(depth||12));
+  });
+}
+/* Les deux meilleures lignes d'une position (2026-11-22), pour l'exigence
+   stricte des exercices tires des parties : un seul bon coup, nettement
+   au-dessus du deuxieme (COACH.net, meme marge que filtre_stockfish.js).
+   Rend [{cp, mate, coup}, {…} ou null], vus du camp au trait, ou null si le
+   moteur n'a pas repondu. MultiPV est remis a 1 aussitot. */
+function sfDeuxLignes(fen,depth){
+  return new Promise(resolve=>{
+    if(!sf.ready){resolve(null);return;}
+    const out=[null,null];let done=false,secours=null;
+    const prev=sf.worker.onmessage;
+    const finish=ok=>{if(done)return;done=true;clearTimeout(timer);clearTimeout(secours);sf.worker.onmessage=prev;
+      try{sf.worker.postMessage("setoption name MultiPV value 1");}catch(e){}
+      resolve(ok?out:null);};
+    const timer=setTimeout(()=>{try{sf.worker.postMessage("stop");}catch(e){}secours=setTimeout(()=>finish(false),1500);},6000);
+    sf.worker.onmessage=ev=>{
+      const line=typeof ev.data==="string"?ev.data:(ev.data&&ev.data.data)||"";
+      const k=line.match(/ multipv (\d) /),sc=line.match(/score (cp|mate) (-?\d+)/),v=line.match(/ pv (\S+)/);
+      if(k&&sc&&+k[1]<=2)out[+k[1]-1]=sc[1]==="mate"?{cp:null,mate:parseInt(sc[2],10),coup:v?v[1]:null}:{cp:parseInt(sc[2],10),mate:null,coup:v?v[1]:null};
+      /* Un bestmove apres un arret force ne vaut pas mesure. */
+      if(/^bestmove /.test(line))finish(secours===null);
+    };
+    sf.worker.postMessage("setoption name MultiPV value 2");
     sf.worker.postMessage("position fen "+fen);
     sf.worker.postMessage("go depth "+(depth||12));
   });
@@ -561,37 +595,40 @@ async function analyseWithStockfish(){
      personnalisee) sortait de la boucle des le premier coup, et la liste
      vide etait lue comme "le moteur n'a pas repondu" : on affichait
      "Stockfish ne repond plus" alors que Stockfish allait tres bien. */
-  const g=gameStartFen?new Game(gameStartFen):new Game(),plies=[],CLAMP=1200;
+  /* Chaque position n'est evaluee qu'UNE fois (2026-11-22) : l'evaluation
+     d'apres un coup est celle d'avant le coup suivant. Avant, la meme
+     position etait calculee deux fois de suite, d'ou une relecture deux fois
+     plus longue. Une position sans coup legal (mat, pat) ne passe pas par le
+     moteur : il n'a rien a y chercher. Le calcul des plis (perte, etiquette,
+     mat annonce) est dans COACH.plis (coach.js), le meme code que le controle
+     du coach sur un lot de parties (coach_controle.js). */
+  const g=gameStartFen?new Game(gameStartFen):new Game(),fens=[g.fen()];
   for(let i=0;i<gameUci.length;i++){
-    const before=await sfEvalFen(g.fen(),12);
-    if(!before){break;}
-    const bestUci=before.best;
     const mv=g.moves().find(x=>g.uci(x)===gameUci[i]);
     if(!mv)break;
-    const mover=g.turn;
-    g.makeMove(mv);
-    const after=await sfEvalFen(g.fen(),12);
-    const b=Math.max(-CLAMP,Math.min(CLAMP,before.cp||0));
-    const a=Math.max(-CLAMP,Math.min(CLAMP,-(after&&after.cp||0)));
-    /* cpTrue : la vraie valeur en centipawns (non ecretee, non substituee par
-       la grande valeur synthetique d'un mat), pour l'affichage numerique.
-       mate : distance de mat, perspective Blancs (positif = les Blancs
-       matent), null hors mat force. after.mate est donne du point de vue du
-       camp au trait APRES le coup (l'adversaire du mover), d'ou l'inversion
-       de signe, comme pour after.cp plus haut. */
-    const afterMateForMover=(after&&after.mate!=null)?-after.mate:null;
-    const mate=afterMateForMover==null?null:(mover===W?afterMateForMover:-afterMateForMover);
-    const cpTrue=(after&&after.mate==null)?(mover===W?-(after.cp||0):(after.cp||0)):null;
-    plies.push({cp:mover===W?a:-a,cpTrue:cpTrue,mate:mate,loss:Math.max(0,b-a),
-      tag:classify(Math.max(0,b-a),bestUci===gameUci[i]),best:bestUci,mover:mover});
-    bar.firstElementChild.style.width=(100*(i+1)/gameUci.length).toFixed(0)+"%";
+    g.makeMove(mv);fens.push(g.fen());
   }
+  const evals=[];
+  for(let k=0;k<fens.length;k++){
+    const gk=new Game(fens[k]);
+    let e;
+    if(!gk.moves().length)e=gk.inCheck()?{cp:-20000,mate:0,best:null,pv:null}:{cp:0,mate:null,best:null,pv:null};
+    else e=await sfEvalFen(fens[k],12);
+    if(!e||(e.cp===null&&e.mate===null))break;
+    evals.push(e);
+    bar.firstElementChild.style.width=(100*(k+1)/fens.length).toFixed(0)+"%";
+  }
+  const plies=COACH.plis(Game,gameStartFen,gameUci,evals);
   if(!plies.length){btn.disabled=false;btn.textContent=t("Analyse this game");bar.classList.add("hide");
     /* baseAnalyseGame(), pas analyseGame() : sf.ready=false ferait sinon
        relancer un telechargement de Stockfish au lieu du repli immediat sur
        le moteur integre qu'annonce le message. */
     sfStatus(t("Stockfish stopped responding, falling back to the built-in engine."));sf.ready=false;baseAnalyseGame();return;}
-  finishAnalysis(plies);
+  /* Le coach et ses exercices se preparent ici, pendant que le bouton est
+     encore inactif : le controle de l'exigence stricte demande Stockfish, qui
+     ne sert qu'une demande a la fois. */
+  const prep=typeof coachPreparer==="function"?await coachPreparer(plies,true):null;
+  finishAnalysis(plies,prep);
   $("analysisNote").textContent=$("analysisNote").textContent.replace(
     t("Accuracy here is a rough guide from a shallow search, not a rating."),
     t("Analysed with Stockfish at depth 12."));

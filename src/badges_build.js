@@ -45,6 +45,9 @@ function code() {
     fs.readFileSync(path.join(__dirname, "premove.js"), "utf8") + "\n" +
     /* Badges des parties entre membres et des nouvelles fonctions (2026-11-22). */
     fs.readFileSync(path.join(__dirname, "badges_membres.js"), "utf8") + "\n" +
+    /* Coach de relecture et exercices tires des parties (2026-11-22). Apres
+       duel.js : il enveloppe a son tour finishPuzzle et registerSolved. */
+    fs.readFileSync(path.join(__dirname, "coach.js"), "utf8") + "\n" +
     /* Onglet Jouer et pictogrammes des cartes (2026-11-19). */
     require("./pictos_build.js").pictosSource() + "\n" +
     fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +

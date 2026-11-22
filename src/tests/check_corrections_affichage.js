@@ -98,9 +98,9 @@ const SITE = path.join(__dirname, "..", "site");
   d.body.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Tab", bubbles: true }));
   T("apres la touche Tab, la saisie au clavier", racine.dataset.saisie === "clavier", racine.dataset.saisie);
   {
-    const r = (page.match(/html\[data-saisie="pointeur"\] button:focus-visible[^{]*\{[^}]*\}/) || [""])[0];
-    T("la feuille de style retire le contour apres un clic, pas au clavier", /\{outline:none!important\}$/.test(r) && !/html\[data-saisie="clavier"\][^{]*\{[^}]*outline:none/.test(page), r.slice(0, 120));
-    T("boutons, liens et cases a choix sont couverts, chacun sous <html> (un espace les separe)", ["button", "a", "summary", '[role="button"]', '[role="radio"]', "[tabindex]"].every(x => r.includes('html[data-saisie="pointeur"] ' + x + ":focus-visible")), r);
+    const r = (page.match(/html:not\(\[data-saisie="clavier"\]\) button:focus-visible[^{]*\{[^}]*\}/) || [""])[0];
+    T("la feuille de style retire le contour tant qu'aucune touche n'a servi, jamais au clavier", /\{outline:none!important\}$/.test(r) && !/html\[data-saisie="clavier"\][^{]*\{[^}]*outline:none/.test(page), r.slice(0, 120));
+    T("boutons, liens et cases a choix sont couverts, chacun sous <html> (un espace les separe)", ["button", "a", "summary", '[role="button"]', '[role="radio"]', "[tabindex]"].every(x => r.includes('html:not([data-saisie="clavier"]) ' + x + ":focus-visible")), r);
     T("les champs de texte ne sont pas concernes", !/input|textarea|select/.test(r));
   }
   w.close();

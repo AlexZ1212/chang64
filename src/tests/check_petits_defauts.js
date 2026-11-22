@@ -56,7 +56,9 @@ function serveur(dir) {
   w.eval("menuOuvrir();menuVue('stats')");
   await attendre(900);
   const menu = $("menuDirect");
-  T("Statistiques : les trois cases, plus la phrase d'avant", !menu.hidden && menu.querySelectorAll(".menu-tuile").length === 3 && !/gagnées,/.test(menu.textContent) && /Parties en direct/.test(net(menu.textContent)), net(menu.textContent));
+  /* 2026-11-22 : dans les statistiques, les trois nombres sont une barre
+     gagnees / nulles / perdues avec sa legende (statsBilan, menu.js). */
+  T("Statistiques : une barre et ses trois nombres, sous « Parties en direct »", !menu.hidden && !!menu.querySelector(".stats-barre") && [...menu.querySelectorAll(".stats-legende li")].map(x => net(x.textContent)).join(" | ") === "2 Gagnées | 0 Nulle | 1 Perdue" && /Parties en direct/.test(net(menu.textContent)), net(menu.textContent));
   w.eval("menuFermer();cppOuvrir('Alice')");
   await attendre(600);
   const fiche = $("cpProfilContenu");

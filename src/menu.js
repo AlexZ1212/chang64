@@ -97,49 +97,96 @@ function menuResume(){
   if(b){const vis=BADGES.filter(bxVisible);b.textContent=prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length;}
   menuPoint();
 }
+/* Statistiques rangees par categorie (2026-11-22, demande d'Alexandre) :
+   Exercices, Parties contre l'ordinateur, Parties entre membres, Activite.
+   Chaque categorie a son titre (.stats-cat) ; a l'interieur, toujours les
+   memes briques : des tuiles pour les chiffres (statsTuiles), un cadre pour
+   chaque graphe (.menu-graphe) sous son petit titre (.tiroir-section), une
+   barre pour gagnees / nulles / perdues (statsBilan), un depliant pour
+   l'explication (.menu-explication). */
+function statsCat(nom){return '<h3 class="stats-cat">'+echapper(t(nom))+"</h3>";}
+function statsSous(nom){return '<p class="tiroir-section">'+echapper(t(nom))+"</p>";}
+function statsTuiles(tuiles,opt){
+  return '<div class="menu-tuiles'+(opt&&opt.trois?" trois":"")+'"'+(opt&&opt.id?' id="'+opt.id+'"':"")+">"+tuiles.map(([l,v])=>
+    '<div class="menu-tuile"><b>'+echapper(String(v))+"</b><span>"+echapper(t(l))+"</span></div>").join("")+"</div>";
+}
+/* Gagnees, nulles, perdues en une barre : la part des victoires se lit d'un
+   coup d'oeil, les trois nombres restent ecrits dessous. Rien sans partie. */
+function statsBilan(v,n,d){
+  const tot=v+n+d;
+  if(!(tot>0))return "";
+  let pc=Math.round(100*v/tot)+"%";
+  try{pc=new Intl.NumberFormat(LANG_INTL,{style:"percent",maximumFractionDigits:0}).format(v/tot);}catch(e){}
+  const cases=[["g","Won",v],["n","Drawn",n],["p","Lost",d]];
+  return '<div class="stats-bilan"><p class="stats-bilan-tete">'+echapper(t("{pc} of games won",{pc:"\u0001"})).replace("\u0001","<b>"+echapper(pc)+"</b>")+"</p>"+
+    '<div class="stats-barre" role="img" aria-label="'+echapper(cases.map(([,k,x])=>x+" "+t(k,{n:x})).join(", "))+'">'+
+    cases.filter(c=>c[2]>0).map(([c,,x])=>'<i class="'+c+'" style="flex-grow:'+x+'"></i>').join("")+"</div>"+
+    '<ul class="stats-legende">'+cases.map(([c,k,x])=>'<li class="'+c+'"><b>'+x+"</b> "+echapper(t(k,{n:x}))+"</li>").join("")+"</ul></div>";
+}
+/* Contre l'ordinateur : les parties gardees dans « Tes parties » (30 au plus,
+   toutes sortes confondues). Ni les parties d'entrainement du chemin, ni
+   celles parties d'une position preparee : elles ne comptent pas non plus
+   pour l'Elo. */
+function statsOrdiBilan(){
+  let v=0,n=0,d=0;
+  const l=typeof history!=="undefined"&&Array.isArray(history)?history:[];
+  for(const g of l){
+    if(!g||g.ent||g.fen||(typeof partieSorte==="function"?partieSorte(g,"jeu"):g.k)!=="o")continue;
+    if(g.r==="win")v++;else if(g.r==="draw")n++;else if(g.r==="loss")d++;
+  }
+  return statsBilan(v,n,d);
+}
 function menuStats(){
   ensureProgFields();
-  const bx=bxEtat(),vis=BADGES.filter(bxVisible);
+  const bx=bxEtat(),vis=BADGES.filter(bxVisible),membre=estMembre();
   const finales=["kq","kr","krr","kbn","kp"].filter(e=>(prog.endgames||{})[e]!==undefined).length;
-  const tuiles=[
-    ["Puzzle rating",prog.rating||800],
-    ["Puzzles solved",prog.solved||0],
-    ["Days in a row",prog.days||0],
-    ["Days played",Object.keys(bx.j).length],
-    ["Badges",prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length],
-    ["Sprint record",prog.rushBest||0],
-    ["Coordinates record",prog.coordBest||0],
-    ["Endgames won",finales+"/5"]
-  ];
-  /* Graphes (2026-11-16, demande d'Alexandre) : le classement dans le temps
-     (meme dessin que dans Exercices) avec son explication, et les exercices
-     reussis par jour sur 30 jours. */
-  poserHtml(menuEl("menuStats"),'<div class="menu-tuiles">'+tuiles.map(([l,v])=>
-    '<div class="menu-tuile"><b>'+echapper(String(v))+'</b><span>'+echapper(t(l))+"</span></div>").join("")+"</div>"+
-    '<p class="tiroir-section">'+echapper(t("Puzzle rating over time"))+"</p>"+
+  const ordi=membre?statsOrdiBilan():"";
+  poserHtml(menuEl("menuStats"),
+    statsCat("Puzzles")+
+    statsTuiles([
+      ["Puzzle rating",prog.rating||800],
+      ["Puzzles solved",prog.solved||0],
+      ["Best streak",prog.best||0],
+      ["Sprint record",prog.rushBest||0],
+      ["Coordinates record",prog.coordBest||0],
+      ["Endgames won",finales+"/5"]
+    ])+
+    statsSous("Puzzle rating over time")+
     '<div class="graph ratinggraph menu-graphe" id="menuRatingGraph"></div>'+
     '<details class="menu-explication"><summary>'+echapper(t("How does the puzzle rating work?"))+"</summary>"+
     ["Your puzzle rating estimates your strength at puzzles. You start at 800.",
      "Each puzzle has its own rating, set by its difficulty. Solving it on the first try earns points, more if it is harder than your level. A mistake, a hint or the solution costs points, once per puzzle, even if you move on.",
      "Only the puzzles in Puzzles count. The puzzle of the day and the Sprint do not change it.",
      "It is a chang64 measure: it cannot be compared directly with a FIDE rating or another site's."].map(x=>"<p>"+echapper(t(x))+"</p>").join("")+"</details>"+
-    (typeof eloBloc==="function"?eloBloc():"")+
-    (typeof eloMembresBloc==="function"?eloMembresBloc():"")+
-    (estMembre()?'<p class="tiroir-section">'+echapper(t("Puzzles solved, last 30 days"))+"</p>"+
+    (membre?statsSous("Puzzles solved, last 30 days")+
     '<div class="graph menu-graphe" id="menuJoursGraph"></div>':"")+
-    /* Parties en direct (2026-11-19) : comptees par le serveur, lues sur la fiche du membre. */
-    '<div id="menuDirect" hidden></div>');
-  if(estMembre()&&typeof cppLire==="function"&&typeof cp!=="undefined"&&cp){
+    statsCat("Games against the computer")+
+    (typeof eloBloc==="function"?eloBloc(ordi?statsSous("Your latest games")+'<div id="menuOrdiBilan">'+ordi+"</div>":""):"")+
+    /* Parties entre membres : chiffres du serveur, lus sur la fiche du membre.
+       La categorie reste cachee tant qu'il n'y a rien a y montrer. */
+    '<div id="menuMembres" hidden>'+statsCat("Games between members")+
+    (typeof eloMembresBloc==="function"?eloMembresBloc():"")+
+    '<div id="menuDirect" hidden></div></div>'+
+    statsCat("Activity")+
+    statsTuiles([
+      ["Days in a row",prog.days||0],
+      ["Days played",Object.keys(bx.j).length],
+      ["Badges",prog.badges.filter(id=>vis.some(x=>x.id===id)).length+"/"+vis.length]
+    ],{trois:true}));
+  if(membre&&typeof cppLire==="function"&&typeof cp!=="undefined"&&cp){
     cppLire(cp.pseudo).then(j=>{
+      const bloc=menuEl("menuMembres");if(!bloc)return;
       if(typeof eloMembresRemplir==="function")eloMembresRemplir(j);
-      const e=menuEl("menuDirect"),h=j&&typeof cppDirect==="function"?cppDirect(j.dir):"";
-      if(!e||!h)return;
-      poserHtml(e,h);e.hidden=false;
+      const e=menuEl("menuDirect"),d=j&&j.dir&&typeof j.dir==="object"?j.dir:{};
+      const nb=x=>Math.max(0,Math.floor(+x||0)),h=statsBilan(nb(d.v),nb(d.n),nb(d.d));
+      if(e&&h){poserHtml(e,statsSous("Live games")+h);e.hidden=false;}
+      const elo=menuEl("menuEloMembres");
+      bloc.hidden=!((elo&&!elo.hidden)||(e&&!e.hidden));
     }).catch(()=>{});
   }
   drawRatingGraph(menuEl("menuRatingGraph"));
   if(typeof eloCourbe==="function")eloCourbe(menuEl("menuEloGraph"));
-  if(estMembre())menuJoursGraphe(menuEl("menuJoursGraph"));
+  if(membre)menuJoursGraphe(menuEl("menuJoursGraph"));
   menuChiffres();
 }
 /* Les chiffres des tuiles montent a l'ouverture des statistiques, comme ceux

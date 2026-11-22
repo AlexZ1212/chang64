@@ -105,7 +105,10 @@ if(typeof renderResult==="function"){
 }
 /* Ma progression : chiffres, courbe et explication. Sans compte, la courbe
    ne montre que les 10 dernieres parties, avec une ligne qui le dit. */
-function eloBloc(){
+/* apresTuiles : ce que l'ecran des statistiques pose entre les chiffres et la
+   courbe (la barre gagnees / nulles / perdues). Le titre de la categorie est
+   pose par menu.js ; ce bloc ne porte que ses petits titres. */
+function eloBloc(apresTuiles){
   const e=eloEtat(),membre=typeof estMembre==="function"&&estMembre();
   const der=e&&Array.isArray(e.h)&&e.h.length>1?e.h[e.h.length-1][1]-e.h[e.h.length-2][1]:null;
   const tuiles=[
@@ -114,9 +117,10 @@ function eloBloc(){
     ["Rated games",e?Math.floor(e.n):0],
     ["Last game",der===null?"–":(der<0?"−":"+")+Math.abs(der)]
   ];
-  return '<p class="tiroir-section">'+echapper(t("Elo against the computer"))+"</p>"+
-    '<div class="menu-tuiles" id="menuEloTuiles">'+tuiles.map(([l,v])=>
+  return '<div class="menu-tuiles" id="menuEloTuiles">'+tuiles.map(([l,v])=>
       '<div class="menu-tuile"><b>'+echapper(String(v))+"</b><span>"+echapper(t(l))+"</span></div>").join("")+"</div>"+
+    (apresTuiles||"")+
+    '<p class="tiroir-section">'+echapper(t("Elo over time"))+"</p>"+
     '<div class="graph ratinggraph menu-graphe" id="menuEloGraph"></div>'+
     (membre?"":'<p class="cp-note" id="menuEloSansCompte">'+echapper(t("Without an account, the last 10 games are shown."))+"</p>")+
     '<details class="menu-explication"><summary>'+echapper(t("How does this Elo work?"))+"</summary>"+
@@ -152,13 +156,25 @@ function eloFamillesFiche(j){
   const f=eloFamilles(j);
   return f?'<div class="cpp-elo-membres"><p class="tiroir-section cpp-direct-titre">'+echapper(t("Elo between members"))+"</p>"+eloFamillesHtml(f,false)+"</div>":"";
 }
+/* Dans les statistiques, les quatre Elo sont des tuiles, comme l'Elo contre
+   l'ordinateur (2026-11-22 : un meme aspect pour un meme type de chiffre). La
+   liste a lignes reste celle de la fiche d'un joueur. */
+function eloFamillesTuiles(f){
+  return '<div class="menu-tuiles">'+ELO_FAMILLES.map(([c,nom])=>{
+    const x=f[c],la=!!(x&&x.n>0);
+    return '<div class="menu-tuile" data-f="'+c+'">'+
+      (la?"<b>"+Math.round(x.r)+"</b>":'<b class="vide"><span aria-hidden="true">–</span><span class="visually-hidden">'+echapper(t("No game of this kind yet."))+"</span></b>")+
+      "<span>"+echapper(t(nom))+"</span>"+
+      '<small class="elo-parties">'+(la?echapper(t(x.n===1?"{n} game":"{n} games",{n:x.n})):"")+"</small></div>";
+  }).join("")+"</div>";
+}
 function eloMembresBloc(){
   return '<div id="menuEloMembres" hidden><p class="tiroir-section">'+echapper(t("Elo between members"))+'</p><div id="menuEloFamilles"></div></div>';
 }
 function eloMembresRemplir(j){
   const b=$("menuEloMembres"),f=eloFamilles(j);
   if(!b||!f)return;
-  poserHtml($("menuEloFamilles"),eloFamillesHtml(f,true));
+  poserHtml($("menuEloFamilles"),eloFamillesTuiles(f));
   b.hidden=false;
 }
 function eloCourbe(el){

@@ -2401,6 +2401,8 @@ function renderExtraStats(){
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
   set("stRating",prog.rating);set("stDays",prog.days);
   set("hRating",prog.rating);set("hStreak",prog.days);
+  /* L'Elo contre l'ordinateur (elo.js) : un tiret tant qu'aucune partie n'a compte. */
+  { const e=typeof eloEtat==="function"?eloEtat():null; set("hElo",e?Math.round(e.r):"–"); }
   set("rushBestTrain",prog.rushBest);   /* meme record, affiche dans Defis */
   /* Records personnels : "–" tant qu'aucun record n'existe encore (distinct
      d'un vrai "0:00", qui laisserait croire a un exercice resolu en temps
@@ -2417,10 +2419,12 @@ function renderExtraStats(){
   /* Rien de resolu : la bande n'afficherait que des zeros, ce qu'un premier
      visiteur lit comme "le site est vide" plutot que comme sa propre
      progression encore vierge. On lui propose de commencer a la place. */
-  const vierge=!prog.solved;
+  /* 2026-11-22 : la bande porte aussi l'Elo ; une partie classee suffit a la montrer. */
+  const vierge=!prog.solved&&!(typeof eloEtat==="function"&&eloEtat());
   const strip=$("homeStrip"), start=$("homeStart");
   if(strip)strip.classList.toggle("hide",vierge);
   if(start)start.classList.toggle("hide",!vierge);
+  { const l=$("homeStatsBtn"); if(l&&l.parentNode)l.parentNode.classList.toggle("hide",vierge); }
 }
 /* Recap hebdo (item 3, "pour plus tard") : une ligne discrete sur l'ecran
    d'accueil, pas de popup -- coherent avec "No account. No ads. No distractions."

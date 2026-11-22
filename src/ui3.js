@@ -1450,6 +1450,8 @@ function renderPrefs(){
   }
 }
 if($("homeStartBtn"))$("homeStartBtn").onclick=()=>setMode("puzzles");
+/* « Toutes mes statistiques » : le menu, ouvert sur ses statistiques. */
+if($("homeStatsBtn"))$("homeStatsBtn").onclick=()=>{if(typeof menuOuvrir==="function"){menuOuvrir();menuVue("stats");}};
 if($("footPrefs"))$("footPrefs").onclick=()=>{setMode("prefs");goTop();};
 /* Lien dedie : "Preferences" est trop generique pour qui cherche des reglages
    d'accessibilite. Le second lien mene au meme panneau mais amene directement
@@ -2512,7 +2514,7 @@ if(window.IntersectionObserver){
    renderProgress et renderExtraStats ecrivent toujours la vraie valeur :
    on la releve juste apres eux (data-cible), si bien qu'un chiffre qui
    change pendant le defilement finit quand meme sur le bon nombre. */
-const TUILES_CHIFFRES=["hLevel","hSolved","hBest","hRating","hStreak"];
+const TUILES_CHIFFRES=["hElo","hRating","hStreak"];
 let vusChiffres=null,rafChiffres=0;
 (async()=>{
   try{const r=await window.storage.get("chang64:vus");vusChiffres=r&&r.value?JSON.parse(r.value):{};}

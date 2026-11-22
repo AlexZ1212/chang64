@@ -243,7 +243,13 @@ const avancer = ms => { decalage += ms; };
   T("fiche sans Elo : aucune ligne", d.querySelectorAll("#cpProfilContenu .cpp-elo").length === 0 && !!d.querySelector("#cpProfilContenu .cpp-liste"));
   w.eval("cppFermer();menuOuvrir();menuVue(\"stats\")");
   await attendre(900);
-  T("Ma progression : le bloc « Elo entre membres », une ligne par famille", !$("menuEloMembres").hidden && /Elo entre membres/.test($("menuEloMembres").textContent) && familles("#menuEloFamilles") === "b:Blitz:- | r:Rapide:1012 | c:Classique:980 | k:Correspondance:-", familles("#menuEloFamilles"));
+  /* 2026-11-22 : dans les statistiques, les quatre Elo sont des tuiles (meme
+     aspect que l'Elo contre l'ordinateur), sous le titre de categorie
+     « Parties entre membres » ; la liste a lignes reste celle de la fiche. */
+  const tuiles = racine => [...d.querySelectorAll(racine + " .menu-tuile")].map(x => x.dataset.f + ":" + x.querySelector(":scope > span").textContent + ":" + (x.querySelector("b.vide") ? "-" : x.querySelector("b").textContent)).join(" | ");
+  T("Statistiques : le bloc « Elo entre membres », une tuile par famille", !$("menuEloMembres").hidden && !$("menuMembres").hidden && /Elo entre membres/.test($("menuEloMembres").textContent) && tuiles("#menuEloFamilles") === "b:Blitz:- | r:Rapide:1012 | c:Classique:980 | k:Correspondance:-" && !d.querySelector("#menuEloFamilles .elo-familles"), tuiles("#menuEloFamilles"));
+  T("la categorie porte son titre", $("menuMembres").querySelector(".stats-cat").textContent.replace(/\s+/g, " ") === "Parties entre membres");
+  T("le tiret d'une famille sans partie est dit aux lecteurs d'ecran", /Aucune partie de cette sorte/.test(d.querySelector("#menuEloFamilles b.vide .visually-hidden").textContent.replace(/\s+/g, " ")));
   const parties = [...d.querySelectorAll("#menuEloFamilles .elo-parties")].map(x => x.textContent.replace(/\s+/g, " "));
   T("avec le nombre de parties comptees, au singulier et au pluriel", parties.join("|") === "|7 parties|1 partie|", parties.join("|"));
   w.eval("menuFermer()");

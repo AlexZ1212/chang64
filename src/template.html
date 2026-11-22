@@ -543,6 +543,20 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    passerait sur trois lignes. Trois colonnes puis deux, comme avant. */
 @media(max-width:860px){.strip{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:620px){.strip{grid-template-columns:repeat(2,1fr)}}
+/* Accueil (2026-11-22, decision d'Alexandre) : trois chiffres et un lien vers
+   les statistiques, sur une seule rangee a toutes les largeurs. */
+.strip.trois{grid-template-columns:repeat(3,1fr)}
+/* Un libelle long (« Aufgabenwertung ») se coupe proprement plutot que de
+   sortir de sa tuile : mesure a 360 px dans les dix langues. */
+.strip.trois .stat{min-width:0}
+.strip.trois .stat span,.strip.trois .stat em{overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:620px){.strip.trois{gap:8px}.strip.trois .stat{padding:12px 4px}.strip.trois .stat span,.strip.trois .stat em{letter-spacing:.03em}}
+/* Analyser, sur telephone : « Analyser cette position » et « Jouer contre
+   l'ordinateur depuis ici » chacun sur sa rangee, pour qu'aucun des deux
+   libelles ne passe sur deux lignes (mesure du 2026-11-22, dix langues). */
+@media(max-width:599px){#editAnalyse,#editPlay{flex:1 1 100%}}
+.home-stats-lien{margin:10px 0 0;text-align:right}
+.home-stats-lien .linkbtn{font-size:13.5px;padding-right:0}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
 .strip .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1.2}
 .strip .stat span{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
@@ -1829,10 +1843,12 @@ header>*{min-width:0}
 /* Le contour de focus sert a qui navigue au clavier (touche Tab). Apres un
    clic ou un appui, une fenetre qui donne le focus a son bouton principal ne
    doit pas l'entourer (2026-11-22, retour d'Alexandre) : ui3.js note sur
-   <html> le dernier moyen de saisie, clavier ou pointeur. Les champs de texte
-   gardent leur contour. Selecteurs ecrits en toutes lettres : la construction
+   <html> le dernier moyen de saisie, clavier ou pointeur. Tant qu'aucune
+   touche n'a servi (page qui vient de s'ouvrir, souris, doigt), pas de
+   contour ; des la premiere touche, il est la. Les champs de texte gardent
+   le leur. Selecteurs ecrits en toutes lettres : la construction
    du site retire l'espace devant « :is( », ce qui changerait le sens. */
-html[data-saisie="pointeur"] button:focus-visible,html[data-saisie="pointeur"] a:focus-visible,html[data-saisie="pointeur"] summary:focus-visible,html[data-saisie="pointeur"] [role="button"]:focus-visible,html[data-saisie="pointeur"] [role="radio"]:focus-visible,html[data-saisie="pointeur"] [tabindex]:focus-visible{outline:none!important}
+html:not([data-saisie="clavier"]) button:focus-visible,html:not([data-saisie="clavier"]) a:focus-visible,html:not([data-saisie="clavier"]) summary:focus-visible,html:not([data-saisie="clavier"]) [role="button"]:focus-visible,html:not([data-saisie="clavier"]) [role="radio"]:focus-visible,html:not([data-saisie="clavier"]) [tabindex]:focus-visible{outline:none!important}
 /* Feuille des reglages rapides : par-dessus la partie, en bas de l'ecran sur
    telephone, au milieu sur grand ecran. Au-dessus du menu (200), sous Bravo (210). */
 .rr{position:fixed;inset:0;z-index:205;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,14,13,.55)}
@@ -2313,6 +2329,26 @@ html.menu-ouvert{overflow:hidden}
 .menu-tuile{display:flex;flex-direction:column;gap:4px;padding:14px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .menu-tuile b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
 .menu-tuile span{font-size:12px;color:var(--sage);line-height:1.3}
+.menu-tuile small{font-size:11.5px;line-height:1.3;color:var(--sage);min-height:15px}
+.menu-tuile b.vide{color:var(--sage);font-weight:400}
+/* Statistiques par categorie (2026-11-22) : un titre par categorie, et la
+   barre gagnees / nulles / perdues. Les perdues sont le reste de la barre,
+   sans rouge : on informe, on ne gronde pas. */
+.stats-cat{margin:26px 8px 0;padding-top:16px;border-top:1px solid var(--rule);font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600;letter-spacing:-.01em;line-height:1.25;color:var(--chalk)}
+#menuStats>.stats-cat:first-child{margin-top:10px;padding-top:0;border-top:0}
+.stats-cat+.menu-tuiles{padding-top:12px}
+.stats-bilan{margin:0 2px;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
+.stats-bilan-tete{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;margin:0 0 10px;font-size:13px;line-height:1.3;color:var(--sage)}
+.stats-bilan-tete b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
+.stats-barre{display:flex;gap:2px;height:12px;border-radius:999px;overflow:hidden}
+.stats-barre i{display:block;min-width:4px;flex-basis:0}
+.stats-barre .g,.stats-legende .g::before{background-color:var(--brass)}
+.stats-barre .n,.stats-legende .n::before{background-color:var(--sage)}
+.stats-barre .p,.stats-legende .p::before{background-color:var(--survol)}
+.stats-legende{display:flex;flex-wrap:wrap;gap:6px 14px;list-style:none;margin:10px 0 0;padding:0;font-size:12.5px;color:var(--sage)}
+.stats-legende li{display:flex;align-items:center;gap:6px}
+.stats-legende li::before{content:"";flex:none;width:9px;height:9px;border-radius:2px}
+.stats-legende b{font-family:'JetBrains Mono',monospace;color:var(--chalk)}
 /* Statistiques : graphes et explication du classement (2026-11-16). */
 .menu-graphe{margin:0 2px;padding:10px 8px 6px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .menu-graphe svg{display:block;width:100%;height:auto;aspect-ratio:300/90}
@@ -2715,7 +2751,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .elo-familles b{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--brass)}
 .elo-familles b.vide{color:var(--sage);font-weight:400}
 .elo-familles li .elo-parties{flex:none;min-width:72px;white-space:nowrap;text-align:right;font-size:12.5px;color:var(--sage)}
-#menuEloFamilles{margin:0 8px}
+#menuEloFamilles{margin:0}
 .cpp-drapeau{font-family:inherit;font-size:.8em;white-space:nowrap}
 .cpp-amis{margin:0 0 6px;text-align:left}
 .cp-champ select{display:block;width:100%;box-sizing:border-box;min-height:46px;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);color:var(--chalk);font:inherit;font-size:16px}
@@ -3043,7 +3079,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
          n'expliquait encore ici meme. -->
     <div class="panel" id="homeProgressPanel">
       <div class="eyebrow">My progress<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipHomeProgress" aria-label="More info">i</button></div>
-      <p class="info-tip-pop hide" id="tipHomeProgress">Level and puzzle rating come from the Puzzles ladder alone. Solved and best streak also count the puzzle of the day. Day streak counts only the puzzle of the day. Chang Sprint and Coordinates keep their own records, on their own cards, and never move these numbers.</p>
+      <p class="info-tip-pop hide" id="tipHomeProgress">Elo measures your games against the computer. The puzzle rating comes from Puzzles alone. The day streak counts only the puzzle of the day. Everything else is in Statistics, in the menu.</p>
       <!-- Deux etats. Tant qu'aucun exercice n'a ete resolu, la bande
            n'afficherait que des zeros, ce qu'un premier visiteur lit comme
            "le site est vide" alors qu'il s'agit de sa propre progression.
@@ -3058,13 +3094,16 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
            donc portee par la tuile elle-meme. Le Chang Sprint et les
            Coordonnees n'apparaissent pas ici du tout : leurs records vivent
            sur leurs propres cartes, et c'est ce que l'infobulle rappelle. -->
-      <div class="strip" id="homeStrip">
-        <div class="stat"><b id="hLevel">1</b><span>Level</span><em>Puzzles</em></div>
-        <div class="stat"><b id="hSolved">0</b><span>Solved</span><em>Puzzles, daily</em></div>
-        <div class="stat"><b id="hBest">0</b><span>Best streak</span><em>Puzzles, daily</em></div>
-        <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span><em>Puzzles</em></div>
+      <!-- 2026-11-22 (decision d'Alexandre) : trois chiffres seulement, un par
+           grande activite (parties, exercices, exercice du jour), et un lien
+           vers Statistiques, qui reunit tout le reste. Palier, resolus et
+           meilleure serie n'y sont plus : ils sont dans Statistiques. -->
+      <div class="strip trois" id="homeStrip">
+        <div class="stat"><b id="hElo">–</b><span>Elo</span><em>Against the computer</em></div>
+        <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
         <div class="stat"><b id="hStreak">0</b><span>Day streak</span><em>Puzzle of the day</em></div>
       </div>
+      <p class="home-stats-lien"><button type="button" class="linkbtn" id="homeStatsBtn">All my statistics →</button></p>
       <div class="startline hide" id="homeStart">
         <span>Your progress will show up here. It is waiting for your first move.</span>
         <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>

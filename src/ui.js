@@ -2788,9 +2788,6 @@ function renderProgress(){
       if(note)note.textContent=t("Your level stays at {n} while you train this.",{n:prog.level});
     }
   }
-  $("hLevel").textContent=prog.level;
-  $("hSolved").textContent=prog.solved;
-  $("hBest").textContent=prog.best;
   /* renderExtraStats decide d'afficher la bande ou l'invitation : il faut
      la rappeler ici, sinon l'invitation resterait affichee apres le premier
      exercice resolu. Declaree dans ui2.js, concatene apres. */

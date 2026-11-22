@@ -45,7 +45,9 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   T("quatre coups joues, la partie continue", w.eval("game.history.length") === 4 && w.eval("partieEnCours()") === true, w.eval("game.history.length"));
   T("le dernier coup porte aria-current", courante() === "4" && d.querySelectorAll('#navScroll [aria-current]').length === 1, courante());
   T("pas de bandeau « Retour à la partie » en position actuelle", cache("retourPartie"));
-  T("le lien « Clavier » est sous l'echiquier", !cache("clavierLigne") && propre($("btnClavier").textContent) === "Clavier");
+  /* 2026-11-22 : un pictogramme a gauche de la roue dentee, plus le mot en toutes lettres. */
+  T("le bouton du clavier est sous l'echiquier, a gauche de la roue dentee", !cache("btnClavier") && $("btnClavier").parentElement === $("boardTools") && $("btnClavier").nextElementSibling === $("btnReglages") && $("btnReglages").nextElementSibling === $("btnFlip"));
+  T("c'est un pictogramme nomme pour les lecteurs d'ecran, sans texte", propre($("btnClavier").getAttribute("aria-label")) === "Raccourcis clavier" && !!$("btnClavier").querySelector("svg[aria-hidden='true']") && propre($("btnClavier").textContent).trim() === "" && !$("clavierLigne"), $("btnClavier").getAttribute("aria-label"));
 
   let e = presser(w, "ArrowLeft");
   T("← montre le coup precedent", vu() === 3 && e.defaultPrevented && courante() === "3", vu());
@@ -115,7 +117,9 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   T("« ? » ouvre la fenetre", !$("duel").hidden && /Raccourcis clavier/.test(txt()));
   T("fenetre qui informe : une medaille et un filet, ni arc ni elephant", !!d.querySelector("#duelContenu .popin-medaille[data-medaille='_clavier']") && !!d.querySelector("#duelContenu .popin-filet") && !d.querySelector("#duelContenu .bravo-arc"));
   const lignes = [...d.querySelectorAll("#duelContenu .clavier-liste > div")].map(x => propre(x.textContent));
-  T("elle liste les six touches", lignes.length === 6 && /Coup précédent, coup suivant/.test(lignes[0]) && /Origine.*Début de la partie/.test(lignes[1]) && /Fin.*Position actuelle/.test(lignes[2]) && /Échap.*Retour à la partie/.test(lignes[3]) && /F.*Retourner l'échiquier/.test(lignes[4]) && /\?.*Afficher cette liste/.test(lignes[5]), lignes.join(" / "));
+  /* 2026-11-22 (question d'Alexandre) : la touche Tab et les touches qui activent un bouton y sont dites, en tete. */
+  T("elle commence par Tab, puis Entree et Espace", /^Tab\s*Passer d'un bouton au suivant/.test(lignes[0]) && /^Entrée\s*Espace\s*Activer le bouton choisi/.test(lignes[1]), lignes.slice(0, 2).join(" / "));
+  T("elle liste ensuite les six touches de la partie", lignes.length === 8 && /Coup précédent, coup suivant/.test(lignes[2]) && /Origine.*Début de la partie/.test(lignes[3]) && /Fin.*Position actuelle/.test(lignes[4]) && /Échap.*Retour à la partie/.test(lignes[5]) && /F.*Retourner l'échiquier/.test(lignes[6]) && /\?.*Afficher cette liste/.test(lignes[7]), lignes.join(" / "));
   T("la fenetre porte son nom pour un lecteur d'ecran", propre($("duel").getAttribute("aria-label")) === "Raccourcis clavier");
   presser(w, "ArrowLeft");
   T("derriere la fenetre, les fleches n'agissent pas", vu() === null);
@@ -123,7 +127,7 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   await pause(50);
   T("Echap la ferme, sans piege au clavier, et elle reprend son nom", $("duel").hidden && propre($("duel").getAttribute("aria-label")) !== "Raccourcis clavier");
   $("btnClavier").click();
-  T("le lien « Clavier » ouvre la meme fenetre", !$("duel").hidden && /Raccourcis clavier/.test(txt()));
+  T("le bouton du clavier ouvre la meme fenetre", !$("duel").hidden && /Raccourcis clavier/.test(txt()));
   d.querySelector("#duelContenu [data-duel-fermer]").click();
   const sens = w.eval("flipped");
   presser(w, "f");
@@ -155,7 +159,7 @@ const propre = s => String(s).replace(/[  ]/g, " ");
      meme chargee depuis l'ecran des reglages. */
   w.eval("setupGame()");
   presser(w, "?");
-  T("ecran des reglages, sans partie : « ? » n'ouvre rien", $("duel").hidden && cache("clavierLigne"));
+  T("ecran des reglages, sans partie : « ? » n'ouvre rien", $("duel").hidden && cache("btnClavier"));
   $("pgnIn").value = "1. e4 c5 2. Nf3 d6 3. d4 cxd4";
   $("btnPgnLoad").click();
   w.eval("gotoPly(2)");
@@ -167,11 +171,12 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   console.log("Accessibilite");
   w.eval("setMode('prefs')");
   const aide = propre($("kbdHelp").textContent);
-  T("la section Accessibilite reprend la meme liste", $("kbdHelp").querySelectorAll(".clavier-liste > div").length === 6 && /Coup précédent, coup suivant/.test(aide));
+  const listes = [...$("kbdHelp").querySelectorAll(".clavier-liste")].map(l => l.querySelectorAll(":scope > div").length);
+  T("la section Accessibilite commence par Tab, Entree et Espace, puis reprend les touches de la partie", listes.join() === "2,6" && /Coup précédent, coup suivant/.test(aide) && /^\s*Tab\s*Passer d'un bouton au suivant/.test(aide), listes.join() + " " + aide.slice(0, 60));
   T("avec l'usage au lecteur d'ecran", /lecteur d'écran/.test(aide) && /lu à voix haute/.test(aide));
   T("et le reglage des raccourcis a une seule touche", propre($("prefsTouchesLabel").textContent) === "Raccourcis à une seule touche" && $("segTouches").querySelectorAll("[role=radio]").length === 2 && $("segTouches").querySelector('[data-v="on"]').getAttribute("aria-checked") === "true");
   $("segTouches").querySelector('[data-v="off"]').click();
-  T("le couper retire « ? » et « F » de la liste", w.eval("prefTouches") === false && $("kbdHelp").querySelectorAll(".clavier-liste > div").length === 4 && /"touches":false/.test(w.localStorage.getItem("chang64:prefs") || ""), w.localStorage.getItem("chang64:prefs"));
+  T("le couper retire « ? » et « F » de la liste", w.eval("prefTouches") === false && $("kbdHelp").querySelectorAll(".clavier-liste > div").length === 6 && $("kbdHelp").querySelectorAll(".clavier-liste")[1].querySelectorAll(":scope > div").length === 4 && /"touches":false/.test(w.localStorage.getItem("chang64:prefs") || ""), w.localStorage.getItem("chang64:prefs"));
   w.close();
 
   console.log("\n" + ok + " OK, " + ko + " FAIL");

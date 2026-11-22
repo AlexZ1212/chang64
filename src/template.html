@@ -1759,9 +1759,6 @@ header>*{min-width:0}
 .retour-partie .btn{flex:none;min-height:44px;white-space:nowrap}
 /* Lien « Clavier » : pour qui a un clavier. Masque au doigt, ou il n'ouvre
    rien d'utile ; la touche « ? » reste. */
-.clavier-ligne{margin:-4px 0 0;text-align:right;line-height:1}
-.clavier-ligne .linkbtn{min-height:32px}
-@media (hover:none),(pointer:coarse){.clavier-ligne{display:none}}
 /* Liste des touches, dans la fenetre « Raccourcis clavier » et dans
    Accessibilite. */
 .clavier-liste{display:grid;gap:8px;margin:0 0 14px;text-align:left}
@@ -1819,20 +1816,31 @@ header>*{min-width:0}
    masque (aucun coup joue, ou mode Entre amis qui n'a pas de bandeau) --
    sinon le bouton de retournement disparaitrait avec lui, alors qu'il doit
    rester disponible independamment du nombre de coups. */
-.board-tools{display:flex;align-items:stretch;gap:6px}
-.flip-btn{flex:none;margin-left:auto;height:29px}
-/* La roue dentee des reglages rapides prend la place de droite ; le bouton de
-   retournement, quand il est la, se range juste apres elle. */
-.reglages-btn{flex:none;margin-left:auto;height:29px}
-.reglages-btn+.flip-btn{margin-left:0}
-.reglages-btn svg,.flip-btn svg{width:18px;height:18px}
+/* Les trois carres (clavier, reglages rapides, retournement) se rangent a
+   droite, toujours au meme endroit ; le bandeau de coups prend la place qui
+   reste (2026-11-22). Sans bandeau (Analyser), ils restent a droite. */
+.board-tools{display:flex;align-items:stretch;justify-content:flex-end;gap:6px}
+.flip-btn,.reglages-btn,.clavier-btn{flex:none;height:29px}
+.reglages-btn svg,.flip-btn svg,.clavier-btn svg{width:18px;height:18px}
+/* Les raccourcis ne servent a rien sans clavier : masque au doigt. */
+@media (hover:none),(pointer:coarse){.board-tools .clavier-btn{display:none}}
+/* Le contour de focus sert a qui navigue au clavier (touche Tab). Apres un
+   clic ou un appui, une fenetre qui donne le focus a son bouton principal ne
+   doit pas l'entourer (2026-11-22, retour d'Alexandre) : ui3.js note sur
+   <html> le dernier moyen de saisie, clavier ou pointeur. Les champs de texte
+   gardent leur contour. Selecteurs ecrits en toutes lettres : la construction
+   du site retire l'espace devant « :is( », ce qui changerait le sens. */
+html[data-saisie="pointeur"] button:focus-visible,html[data-saisie="pointeur"] a:focus-visible,html[data-saisie="pointeur"] summary:focus-visible,html[data-saisie="pointeur"] [role="button"]:focus-visible,html[data-saisie="pointeur"] [role="radio"]:focus-visible,html[data-saisie="pointeur"] [tabindex]:focus-visible{outline:none!important}
 /* Feuille des reglages rapides : par-dessus la partie, en bas de l'ecran sur
    telephone, au milieu sur grand ecran. Au-dessus du menu (200), sous Bravo (210). */
 .rr{position:fixed;inset:0;z-index:205;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,14,13,.55)}
 .rr[hidden]{display:none}
-.rr-feuille{width:min(560px,100%);max-height:82vh;overflow-y:auto;box-sizing:border-box;padding:14px 16px 18px;background-color:var(--slate);
+/* Le titre et la croix restent en place (2026-11-22, retour d'Alexandre) :
+   comme dans le menu, seule la liste des reglages defile, sous l'en-tete. */
+.rr-feuille{width:min(560px,100%);max-height:82vh;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;background-color:var(--slate);
   border:1px solid var(--rule);border-bottom:0;border-radius:var(--r-l) var(--r-l) 0 0;box-shadow:var(--e2);animation:rrMonte .26s var(--courbe-ressort,ease-out)}
-.rr-tete{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.rr-tete{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px 8px 16px;border-bottom:1px solid var(--rule)}
+#rrCorps{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:10px 16px 18px}
 .rr-tete h2{font-family:'Source Serif 4',Georgia,serif;font-size:20px;font-weight:600;margin:0}
 .rr-fermer{flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background-color:var(--ink);border:1px solid var(--rule);border-radius:var(--r);
   color:var(--chalk);font:inherit;font-size:22px;line-height:1;cursor:pointer}
@@ -1931,6 +1939,13 @@ html[data-mouvement="calme"] .rr-feuille{animation:none}
    cliquable en pied de page, sous le plancher WCAG 2.2 (2.5.8). Le padding
    agrandit la cible sans toucher a la taille du texte ni a l'alignement,
    les boutons etant en ligne. */
+/* Liens de texte sans style propre (« Voir le calendrier complet », « Retour »,
+   mentions legales) : ils gardaient le bleu du navigateur, etranger a tous les
+   themes (2026-11-22, retour d'Alexandre). :where() ne pese rien : toute regle
+   qui donne deja sa couleur a un lien passe devant celle-ci. */
+:where(a){color:var(--brass);text-decoration-color:rgba(var(--brass-rgb),.45);text-underline-offset:2px}
+:where(a):hover{text-decoration-color:currentColor}
+:where(a):focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .linkbtn{background:none;border:0;color:var(--sage);font:inherit;font-size:11.5px;text-decoration:underline;cursor:pointer;padding:6px 2px}
 .linkbtn:hover{color:var(--brass)}
 .linkbtn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
@@ -3188,6 +3203,12 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         </div>
         <!-- Reglages rapides (2026-11-21) : theme, couleurs, animations, sons,
              sans quitter la partie. Meme trait fin que le chevron du menu. -->
+        <!-- Aide « Raccourcis clavier » (2026-11-22, retour d'Alexandre) : un
+             pictogramme a gauche de la roue dentee, dans le meme carre, a la
+             place du lien « Clavier » en toutes lettres. Sur un ecran de
+             partie seulement (majRetourPartie, ui2.js), masque au doigt.
+             Dessin : Phosphor « keyboard » (licence MIT). -->
+        <button type="button" class="navchev clavier-btn hide" id="btnClavier" aria-label="Keyboard shortcuts" aria-haspopup="dialog"><svg aria-hidden="true" focusable="false" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,144H32V64H224V192Zm-16-64a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16H200A8,8,0,0,1,208,128Zm0-32a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16H200A8,8,0,0,1,208,96ZM72,160a8,8,0,0,1-8,8H56a8,8,0,0,1,0-16h8A8,8,0,0,1,72,160Zm96,0a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,160Zm40,0a8,8,0,0,1-8,8h-8a8,8,0,0,1,0-16h8A8,8,0,0,1,208,160Z"/></svg></button>
         <button type="button" class="navchev reglages-btn" id="btnReglages" aria-label="Quick settings" aria-haspopup="dialog"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.24 4.92L10.72 2.49L13.28 2.49L13.76 4.92L15.77 5.75L17.82 4.37L19.63 6.18L18.25 8.23L19.08 10.24L21.51 10.72L21.51 13.28L19.08 13.76L18.25 15.77L19.63 17.82L17.82 19.63L15.77 18.25L13.76 19.08L13.28 21.51L10.72 21.51L10.24 19.08L8.23 18.25L6.18 19.63L4.37 17.82L5.75 15.77L4.92 13.76L2.49 13.28L2.49 10.72L4.92 10.24L5.75 8.23L4.37 6.18L6.18 4.37L8.23 5.75z"/><circle cx="12" cy="12" r="3"/></svg></button>
         <button type="button" class="navchev flip-btn" id="btnFlip" aria-label="Flip the board"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6-5.5 6 5.5"/><path d="M6 14.5l6 5.5 6-5.5"/></svg></button>
       </div>
@@ -3206,9 +3227,6 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         </div>
         <span class="taken-slot" id="takenBottom"></span>
       </div>
-      <!-- Aide « Raccourcis clavier » (2026-11-21) : lien discret, sur un
-           ecran de partie seulement, masque au doigt (voir .clavier-ligne). -->
-      <p class="clavier-ligne hide" id="clavierLigne"><button type="button" class="linkbtn" id="btnClavier" aria-haspopup="dialog">Keyboard</button></p>
     </div>
 
     <div>

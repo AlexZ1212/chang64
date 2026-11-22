@@ -299,7 +299,7 @@ function ecranDePartie(){
 function majRetourPartie(){
   const b=$("retourPartie");
   if(b)b.classList.toggle("hide",!(reviewGame&&partieEnCours()));
-  const c=$("clavierLigne");
+  const c=$("btnClavier");
   if(c)c.classList.toggle("hide",!ecranDePartie());
 }
 function renderNav(){

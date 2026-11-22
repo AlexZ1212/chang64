@@ -17,27 +17,35 @@ const h=fs.readFileSync(S+"/openings/sicilian-defense.html","utf8");
 const tok=n=>{const m=h.match(new RegExp("--"+n+":\\s*(#[0-9A-Fa-f]{6})"));return m?m[1]:null;};
 /* 2026-11-19 : pages passees en sombre (palette Cuivre doux). Symboles et
    bordure en sauge, survol en accent avec texte encre. */
-const slate=tok("slate"), board=tok("board"), sage=tok("sage"), brass=tok("brass"), ink=tok("ink");
+const slate=tok("slate"), board=tok("board"), sage=tok("sage"), brass=tok("brass"), ink=tok("ink"), raise=tok("raise"), chalk=tok("chalk"), survol=tok("survol");
 console.log("\n--- Jetons lus dans la page ---");
 console.log("  slate "+slate+"   board "+board+"   sage "+sage);
 
 console.log("\n--- Les commandes sont lisibles ---");
 T("le beige illisible a disparu", !/\.animctl button\{[^}]*color:var\(--bone\)/.test(h));
-T("symboles en sauge", /\.animctl button\{[^}]*color:var\(--sage\)/.test(h));
-/* 2026-11-21 (remarque d'Alexandre : boutons grossiers) : plus de cadre au
-   repos, un trait fin sans aplat, et une zone de toucher de 44 px. */
-T("pas de cadre au repos, un filet au survol", /\.animctl button\{[^}]*border:1px solid transparent/.test(h) && /\.animctl button:hover\{[^}]*border-color:var\(--rule\)/.test(h));
+T("symboles en craie", /\.animctl button\{[^}]*color:var\(--chalk\)/.test(h));
+/* 2026-11-22 (choix d'Alexandre sur planche) : des carres a bord arrondi
+   (fond releve, filet), un fond plus clair au survol, des pictogrammes pleins,
+   et toujours une zone de toucher de 44 px. Le trait fin sans cadre du
+   2026-11-21 est abandonne. */
+T("un carre a bord arrondi au repos : fond releve, filet, coins arrondis", /\.animctl button\{[^}]*background:var\(--raise\)[^}]*border:1px solid var\(--rule\)[^}]*border-radius:var\(--r\)/.test(h));
+T("le fond change au survol, comme les boutons de l'application", /\.animctl button:hover\{background:var\(--survol\)\}/.test(h) && !!survol);
+/* « .anim svg{width:100%} » (l'echiquier) etirait aussi les trois dessins a
+   42 px : leur taille est fixee par une regle plus precise. */
+T("les dessins gardent leur taille (22 px), l'echiquier ne les etire plus", /\.animctl button svg\{width:22px;height:22px/.test(h) && h.indexOf(".animctl button svg{") > h.indexOf(".anim svg{"));
 T("zone de toucher de 44 px", /\.animctl button\{[^}]*width:44px;height:44px/.test(h));
 {
   const svgs = (h.match(/<div class="animctl"[\s\S]*?<\/div>/) || [""])[0].match(/<svg[^>]*>/g) || [];
-  T("trois dessins au trait fin, sans aplat", svgs.length === 3 && svgs.every(x => /fill="none"/.test(x) && /stroke-width="1\.8"/.test(x) && /stroke-linecap="round"/.test(x)), svgs.join(" "));
+  T("trois dessins pleins (Phosphor), sans trait", svgs.length === 3 && svgs.every(x => /viewBox="0 0 256 256"/.test(x) && /fill="currentColor"/.test(x) && !/stroke/.test(x)), svgs.join(" "));
   const jouer = (h.match(/data-act="play"[^>]*>(<svg[\s\S]*?<\/svg>)/) || ["", ""])[1];
   T("Lecture et Pause : deux dessins dans le meme bouton, Pause masquee au depart", (jouer.match(/<path/g) || []).length === 2 && /<path d="[^"]*" style="display:none"\/><\/svg>$/.test(jouer), jouer);
 }
 
 console.log("\n--- Contrastes mesures ---");
-const c1=ratio(sage,slate);
-T("symbole sur fond : "+c1.toFixed(2)+":1 (min 3:1)", c1>=3, c1.toFixed(2));
+const c1=ratio(chalk,raise);
+T("symbole sur son carre : "+c1.toFixed(2)+":1 (min 3:1)", c1>=3, c1.toFixed(2));
+const c1b=ratio(chalk,survol);
+T("symbole sur le carre survole : "+c1b.toFixed(2)+":1 (min 3:1)", c1b>=3, c1b.toFixed(2));
 const c2=ratio(sage,slate);
 T("libelle du coup : "+c2.toFixed(2)+":1 (min 4.5:1)", c2>=4.5, c2.toFixed(2));
 const c3=ratio(ink,brass);
@@ -55,7 +63,7 @@ let sansCorrection=[];
 for(const dir of ["/openings","/fr/ouvertures"])
   for(const f of fs.readdirSync(S+dir).filter(x=>x.endsWith(".html")&&x!=="index.html").slice(0,60)){
     const p=fs.readFileSync(S+dir+"/"+f,"utf8");
-    if(p.includes('class="anim"')&&!/\.animctl button\{[^}]*color:var\(--sage\)/.test(p))sansCorrection.push(dir+"/"+f);
+    if(p.includes('class="anim"')&&!/\.animctl button\{[^}]*color:var\(--chalk\)/.test(p))sansCorrection.push(dir+"/"+f);
   }
 T("120 pages verifiees, toutes corrigees", sansCorrection.length===0, sansCorrection.slice(0,3).join(", "));
 

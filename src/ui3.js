@@ -1240,12 +1240,31 @@ if(typeof botMove==="function"){
   };
 }
 
+/* ---------- contour de focus : au clavier seulement (2026-11-22) ----------
+   Le contour cuivre qui entoure un bouton est le repere de qui navigue au
+   clavier. Quand une fenetre donne elle-meme le focus a son bouton principal
+   juste apres un clic, le navigateur peut l'entourer aussi : on note donc le
+   dernier moyen de saisie sur <html>, et la feuille de style retire le
+   contour apres un clic ou un appui (voir html[data-saisie="pointeur"]). */
+{
+  const racine=document.documentElement;
+  document.addEventListener("keydown",e=>{if(!/^(Shift|Control|Alt|Meta)$/.test(e.key))racine.dataset.saisie="clavier";},true);
+  for(const ev of ["pointerdown","mousedown","touchstart"])
+    document.addEventListener(ev,()=>{racine.dataset.saisie="pointeur";},{capture:true,passive:true});
+}
+
 /* ---------- raccourcis clavier de l'ecran de partie (2026-11-21) ----------
    Une seule liste, pour la fenetre « Raccourcis clavier » (lien « Clavier »
    sous l'echiquier, touche « ? ») et pour la section Accessibilite. Les
    touches elles-memes sont ecoutees dans ui2.js. Le nom d'une touche se
    traduit par une cle a part ("Home (key)") : « Home » seul veut deja dire
    « Accueil ». */
+/* La convention de tout le site, dite en tete de l'aide (2026-11-22, question
+   d'Alexandre) : Tab passe d'un bouton au suivant, Entree ou Espace l'active. */
+const RACCOURCIS_NAV=[
+  [["Tab"],"Move from one button to the next"],
+  [["Enter","Space"],"Press the selected button"]
+];
 const RACCOURCIS=[
   [["←","→"],"Previous move, next move"],
   [["↑","Home"],"Start of the game"],
@@ -1255,8 +1274,11 @@ const RACCOURCIS=[
   [["?"],"Show this list",true]
 ];
 function toucheNom(k){const s=t(k+" (key)");return s===k+" (key)"?k:s;}
-function clavierListeHtml(){
-  return '<dl class="clavier-liste" data-sans-figurines>'+RACCOURCIS.filter(r=>!r[2]||prefTouches).map(r=>
+/* quoi : "nav" (Tab, Entree, Espace), "partie" (les touches de la partie), ou
+   rien pour les deux a la suite. */
+function clavierListeHtml(quoi){
+  const l=quoi==="nav"?RACCOURCIS_NAV:quoi==="partie"?RACCOURCIS:RACCOURCIS_NAV.concat(RACCOURCIS);
+  return '<dl class="clavier-liste" data-sans-figurines>'+l.filter(r=>!r[2]||prefTouches).map(r=>
     "<div><dt>"+r[0].map(k=>"<kbd>"+echapper(toucheNom(k))+"</kbd>").join("")+"</dt><dd>"+echapper(t(r[1]))+"</dd></div>").join("")+"</dl>";
 }
 /* Fenetre qui informe : le modele commun (medaille gravee, petit titre,
@@ -1416,8 +1438,8 @@ function renderPrefs(){
   if(help){
     /* La meme liste que la fenetre « Raccourcis clavier », puis l'usage au
        lecteur d'ecran (2026-11-21). */
-    poserHtml(help,(DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>")+
-      "<p>"+echapper(t("Away from the board, during a game or in review, the keys step through the moves:"))+"</p>"+clavierListeHtml()+
+    poserHtml(help,clavierListeHtml("nav")+(DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>")+
+      "<p>"+echapper(t("Away from the board, during a game or in review, the keys step through the moves:"))+"</p>"+clavierListeHtml("partie")+
       "<p>"+echapper(t("With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square."))+"</p>");
   }
 }
@@ -1643,14 +1665,12 @@ setMode=function(m,opts){
     if(typeof majLayoutSolo==="function")majLayoutSolo();
     $("evalwrap").classList.add("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
-    /* Le bouton de retournement rejoint la bande "Editeur de position" : en
-       edition, il n'y a pas de bandeau de coups a cote de lui dans
-       #boardTools, qui se serait donc reduit a une ligne entiere pour ce
-       seul bouton -- de la place perdue, precieuse sur mobile pour loger
-       le plateau et la palette sur un seul ecran. #boardTools n'a alors
-       plus rien a montrer : masque. */
-    { const eir=document.querySelector("#editIntro .edit-intro-row"),fb=$("btnFlip"); if(eir&&fb&&fb.parentElement!==eir)eir.appendChild(fb); }
-    { const bt=$("boardTools"); if(bt)bt.classList.add("hide"); }
+    /* 2026-11-22 (retour d'Alexandre) : le bouton de retournement reste en
+       bas a droite de l'echiquier, comme partout ailleurs, a cote de la roue
+       dentee des reglages rapides. Il montait auparavant dans la bande
+       « Editeur de position », pour ne pas occuper une ligne a lui seul : ce
+       n'est plus le cas depuis que la roue dentee l'accompagne. */
+    { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb){ if(fb.parentElement!==bt)bt.appendChild(fb); fb.hidden=false; bt.classList.remove("hide"); } }
     { const nr=$("navRow"); if(nr)nr.classList.add("hide"); }
     game=editGame||new Game();
     editTurnVal=editGame?editGameTurn:"w";
@@ -1661,10 +1681,6 @@ setMode=function(m,opts){
   }
   const pe=$("pane-edit"); if(pe)pe.classList.add("hide");
   { const ei=$("editIntro"); if(ei)ei.classList.add("hide"); }
-  /* Le bouton de retournement reprend sa place habituelle a droite du
-     bandeau de coups, avant que le code de la chaine plus bas ne decide de
-     l'afficher ou non pour la destination reelle (m). */
-  { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
   markTab($("tab-edit"),false);
   if(mode==="edit"&&game){editGame=game;editGameTurn=editTurnVal;}
   prevSetModeEdit(m,opts);
@@ -1845,7 +1861,6 @@ setMode=function(m,opts){
     $("evalwrap").classList.remove("hide");
     $("clockTop").classList.add("hide");$("clockBottom").classList.add("hide");
     { const bt=$("boardTools"); if(bt)bt.classList.remove("hide"); }
-    { const bt=$("boardTools"),fb=$("btnFlip"); if(bt&&fb&&fb.parentElement!==bt)bt.appendChild(fb); }
     legalCache=game.moves();selected=-1;marks={};
     render();
     renderAnalyseNav();

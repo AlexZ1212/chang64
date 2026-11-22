@@ -688,13 +688,19 @@ function usesFor(fen, S) {
    reecrire le balisage a chaque clic -- ce lecteur vit aussi sur les pages
    d'exercices (1000 pages), dont le budget de poids moyen est deja serre :
    dupliquer un SVG verbeux dans le JS de bascule l'avait fait deraper. */
-/* Lecteur de coups (2026-11-21, remarque d'Alexandre : boutons grossiers).
-   Meme trait fin que le chevron du menu de l'application : 1,5 px a l'ecran,
-   bouts arrondis, aucun aplat. Lecture = un triangle au contour, Pause = deux
-   traits. Les deux dessins vivent dans le meme bouton (le script montre l'un
-   ou l'autre) : deux elements path, dans cet ordre. */
-const LECTEUR_TRAIT = 'width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
-const PLAYPAUSE_SVG = '<svg ' + LECTEUR_TRAIT + '><path d="M8.5 5.8l9.6 6.2-9.6 6.2z"/><path d="M8.5 6v12M15.5 6v12" style="display:none"/></svg>';
+/* Lecteur de coups (2026-11-22, choix d'Alexandre sur planche,
+   design/pictos/planche-pictos.png) : pictogrammes pleins de Phosphor (licence
+   MIT, graisse « fill » : caret-left, play, pause, caret-right) dans des carres
+   a bord arrondi. Le trait fin sans cadre du 2026-11-21 ne lui plaisait pas :
+   la regle « .anim svg{width:100%} » etirait en plus chaque dessin a 42 px,
+   d'ou un trait epais ; « .animctl button svg » fixe desormais leur taille.
+   Lecture et Pause vivent dans le meme bouton (le script montre l'un ou
+   l'autre) : deux elements path, dans cet ordre. */
+const LECTEUR_PLEIN = 'width="20" height="20" viewBox="0 0 256 256" fill="currentColor"';
+const LECTEUR_PREC = '<svg ' + LECTEUR_PLEIN + '><path d="M168,48V208a8,8,0,0,1-13.66,5.66l-80-80a8,8,0,0,1,0-11.32l80-80A8,8,0,0,1,168,48Z"/></svg>';
+const LECTEUR_SUIV = '<svg ' + LECTEUR_PLEIN + '><path d="M181.66,133.66l-80,80A8,8,0,0,1,88,208V48a8,8,0,0,1,13.66-5.66l80,80A8,8,0,0,1,181.66,133.66Z"/></svg>';
+const PLAYPAUSE_SVG = '<svg ' + LECTEUR_PLEIN + '><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/>' +
+  '<path d="M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z" style="display:none"/></svg>';
 
 function animBoard(moveStr, size, labels, fenDepart) {
   const steps = fensAlong(moveStr, fenDepart);
@@ -713,9 +719,9 @@ function animBoard(moveStr, size, labels, fenDepart) {
     ${pieceDefs()}<g>${sq}</g>${coordsSvg(size)}${groups}
   </svg>
   <div class="animctl" hidden>
-    <button type="button" data-act="prev" aria-label="${esc(labels.prev)}"><svg ${LECTEUR_TRAIT}><path d="M14.5 6l-6 6 6 6"/></svg></button>
+    <button type="button" data-act="prev" aria-label="${esc(labels.prev)}">${LECTEUR_PREC}</button>
     <button type="button" data-act="play" aria-label="${esc(labels.play)}">${PLAYPAUSE_SVG}</button>
-    <button type="button" data-act="next" aria-label="${esc(labels.next)}"><svg ${LECTEUR_TRAIT}><path d="M9.5 6l6 6-6 6"/></svg></button>
+    <button type="button" data-act="next" aria-label="${esc(labels.next)}">${LECTEUR_SUIV}</button>
     <span class="animply"></span>
   </div>
 </div>`;
@@ -1080,7 +1086,7 @@ function metaDesc(raw, max) {
 const CSS = `*{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#0F1414;--slate:#171E1F;--raise:#212A2B;--chalk:#EAECEA;--sage:#96A5A5;
 --bone:#EDE3D5;--board:#4A6A68;--brass:#DDAE95;--jade:#5FBF92;--brick:#EF6A6A;
---rule:rgba(234,236,234,.12);--r-l:12px;--r:8px;--r-s:6px;--r-xs:3px}
+--rule:rgba(234,236,234,.12);--survol:#2f4042;--r-l:12px;--r:8px;--r-s:6px;--r-xs:3px}
 @media print{:root{--chalk:#15201C;--sage:#5A6862;--brass:#7E5409}}
 body{background:var(--ink);color:var(--chalk);
 font-family:'Archivo',ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.55;padding:18px 14px 60px}
@@ -1140,20 +1146,24 @@ p{margin-bottom:12px;max-width:66ch}
    etait bien pose, et la recherche semblait ne rien faire.
    Meme piege que sur les groupes SVG de l'echiquier anime. */
 [hidden],.tile[hidden],[data-theme][hidden],.toc[hidden]{display:none!important}
-.animctl{display:flex;align-items:center;gap:2px;margin-top:6px}
+.animctl{display:flex;align-items:center;gap:6px;margin-top:8px}
 /* Ces commandes avaient herite des jetons du theme sombre de l'application,
    posees telles quelles sur les pages d'ouvertures, qui sont claires. Les
    symboles etaient beiges sur blanc casse, soit un contraste de 1,11:1 pour
    un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
-/* 2026-11-21 : plus de cadre au repos (il alourdissait trois petits boutons
-   colles), un filet au survol seulement. La zone de toucher fait 44 px. */
-.animctl button{background:none;color:var(--sage);border:1px solid transparent;border-radius:var(--r);
-  width:44px;height:44px;cursor:pointer;padding:0;display:grid;place-items:center;transition:color .14s,border-color .14s}
-.animctl button:hover{border-color:var(--rule);color:var(--chalk)}
+/* 2026-11-22 : des carres a bord arrondi, comme les boutons de l'application
+   (fond releve, filet, fond plus clair au survol, leger enfoncement). La zone
+   de toucher fait 44 px. */
+.animctl button{background:var(--raise);color:var(--chalk);border:1px solid var(--rule);border-radius:var(--r);
+  width:44px;height:44px;cursor:pointer;padding:0;display:grid;place-items:center;transition:background-color .16s,transform .12s}
+.animctl button svg{width:22px;height:22px;border-radius:0}
+.animctl button:hover{background:var(--survol)}
+.animctl button:active{transform:scale(.96)}
 .animctl button:disabled{opacity:.38;cursor:default}
-.animctl button:disabled:hover{border-color:transparent;color:var(--sage)}
+.animctl button:disabled:hover{background:var(--raise)}
+.animctl button:disabled:active{transform:none}
 .animply{margin-left:8px}
 .animctl button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .animply{font-size:12px;color:var(--sage);font-variant-numeric:tabular-nums}
@@ -1189,8 +1199,15 @@ th{text-align:left;font-size:13px;font-weight:600;letter-spacing:.08em;text-tran
 td{padding:8px;border-bottom:1px solid var(--rule);vertical-align:top}
 td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk);white-space:nowrap}
 .cta{display:inline-block;background:var(--brass);color:#1c130e;font-weight:600;font-size:14px;text-decoration:none;
-padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0}
+padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0;transition:background-color .16s,transform .12s}
 .cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}
+/* Survol et appui comme les boutons de l'application (2026-11-22, retour
+   d'Alexandre) : le plein s'eclaircit, le creux prend un fond, les deux
+   s'enfoncent un peu sous le doigt. Avant, rien ne bougeait. */
+.cta:hover{background:color-mix(in srgb,var(--brass) 86%,#fff)}
+.cta.ghost:hover{background:var(--survol)}
+.cta:active{transform:scale(.96)}
+.cta:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r-l)}
 .toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;

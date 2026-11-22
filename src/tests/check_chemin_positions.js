@@ -57,6 +57,14 @@ async function controlerExo(sf, ex, nom) {
   if (ex.mat) T(nom + " : les solutions sont exactement les mats en un coup", tri(mats) === tri(ex.sol), tri(mats));
   if (ex.pat) T(nom + " : les coups annonces font bien pat, et eux seuls", tri(pats) === tri(ex.pat), tri(pats));
   for (const u of ex.interdit || []) T(nom + " : le coup " + u + " est bien interdit", !legaux.includes(u));
+  /* « Joue un coup qui ne fait pas pat, n'importe lequel » (2026-11-22). */
+  if (ex.sansPat) {
+    T(nom + " : les solutions sont exactement les coups qui ne font pas pat", tri(legaux.filter(u => !pats.includes(u))) === tri(ex.sol) && pats.length > 0, tri(pats));
+    const donnes = ex.sol.filter(u => { const h = partie(ex); h.makeMove(coup(h, u)); return h.moves().some(x => x.captured); });
+    T(nom + " : aucun coup accepte ne donne une piece", donnes.length === 0, donnes.join(" "));
+    T(nom + " : chaque coup qui fait pat a sa raison", pats.every(u => ex.faux && ex.faux[u] && /stalemate/i.test(ex.faux[u].en)), tri(pats));
+    T(nom + " : la consigne ne demande pas un mat", !/mate/i.test(ex.consigne.en.replace(/stalemate/gi, "")), ex.consigne.en);
+  }
   if (ex.suite) {
     const h = partie(ex); h.makeMove(coup(h, ex.sol[0]));
     let jouable = true;
@@ -74,6 +82,7 @@ async function controlerExo(sf, ex, nom) {
   }
   if (!ex.controle && !Object.keys(ex.faux || {}).some(u => u !== "*")) return;
   if (ex.mat && !ex.controle) return;
+  if (ex.sansPat && !ex.controle) return;
   /* Stockfish : chaque coup legal, du meilleur au pire. */
   const L = await sf.coups(Game, ex.fen, PROF, ex.avant ? [ex.avant] : []);
   const cp = u => L.find(x => x.uci === u).cp;

@@ -750,33 +750,54 @@
       },
       "exos": [
         {
-          "fen": "7k/5K2/8/6Q1/8/8/8/8 w - - 0 1",
+          "fen": "k7/8/K7/2Q5/8/8/8/8 w - - 0 1",
           "sol": [
-            "g5g7",
-            "g5g8",
-            "g5h6",
-            "g5h5",
-            "g5h4"
+            "a6b6",
+            "a6a5",
+            "a6b5",
+            "c5a7",
+            "c5c6",
+            "c5c8",
+            "c5e7",
+            "c5f8",
+            "c5a5",
+            "c5d5",
+            "c5f5",
+            "c5g5",
+            "c5h5",
+            "c5a3",
+            "c5c4",
+            "c5c3",
+            "c5c2",
+            "c5c1",
+            "c5d4",
+            "c5e3",
+            "c5f2",
+            "c5g1"
           ],
-          "mat": true,
+          "sansPat": true,
           "pat": [
-            "g5g6",
-            "g5f5"
+            "c5b6",
+            "c5c7",
+            "c5d6",
+            "c5b5",
+            "c5e5",
+            "c5b4"
           ],
           "consigne": {
-            "en": "Checkmate in one move. Careful: two of the queen's moves give stalemate instead.",
-            "fr": "Fais mat en un coup. Attention : deux coups de dame font pat à la place.",
-            "es": "Da mate en una jugada. Cuidado: dos jugadas de dama dan ahogado en su lugar.",
-            "pt": "Dê mate em um lance. Atenção: dois lances de dama dão afogamento em vez disso.",
-            "de": "Setze in einem Zug matt. Achtung: Zwei Damenzüge führen stattdessen zum Patt.",
-            "ru": "Поставь мат в один ход. Осторожно: два хода ферзём ведут к пату.",
-            "it": "Dai matto in una mossa. Attenzione: due mosse di donna danno invece stallo.",
-            "tr": "Tek hamlede mat et. Dikkat: vezirin iki hamlesi mat yerine pat yapar.",
-            "pl": "Daj mata w jednym ruchu. Uwaga: dwa ruchy hetmanem dają zamiast tego pata.",
-            "id": "Skakmat dalam satu langkah. Hati-hati: dua langkah menteri justru membuat pat."
+            "en": "The black king has only one square left. Play any move that does not give stalemate: after your move, the black king must keep its square or be in check.",
+            "fr": "Le roi noir n'a plus qu'une seule case. Joue un coup, n'importe lequel, qui ne fait pas pat : après ton coup, le roi noir doit garder sa case ou être en échec.",
+            "es": "Al rey negro solo le queda una casilla. Haz cualquier jugada que no dé ahogado: después de tu jugada, el rey negro debe conservar su casilla o estar en jaque.",
+            "pt": "O rei preto só tem uma casa. Faça qualquer lance que não dê afogamento: depois do seu lance, o rei preto deve manter essa casa ou estar em xeque.",
+            "de": "Der schwarze König hat nur noch ein Feld. Spiel irgendeinen Zug, der kein Patt gibt: Nach deinem Zug muss der schwarze König sein Feld behalten oder im Schach stehen.",
+            "ru": "У чёрного короля осталось одно поле. Сделай любой ход, который не ведёт к пату: после твоего хода у чёрного короля должно остаться поле, или он должен быть под шахом.",
+            "it": "Al re nero resta una sola casa. Gioca una mossa qualsiasi che non dia stallo: dopo la tua mossa, il re nero deve conservare la sua casa o essere sotto scacco.",
+            "tr": "Siyah şahın tek bir karesi kaldı. Pat yapmayan herhangi bir hamle oyna: hamlenden sonra siyah şahın karesi kalmalı ya da şah tehdit altında olmalı.",
+            "pl": "Czarnemu królowi zostało jedno pole. Zagraj dowolny ruch, który nie daje pata: po twoim ruchu czarny król musi zachować swoje pole albo być w szachu.",
+            "id": "Raja hitam hanya punya satu petak. Mainkan langkah apa saja yang tidak membuat pat: setelah langkahmu, raja hitam harus tetap punya petaknya atau terkena skak."
           },
           "faux": {
-            "g5g6": {
+            "c5b6": {
               "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
               "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
               "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
@@ -788,48 +809,7 @@
               "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
               "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
             },
-            "g5f5": {
-              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
-              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
-              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
-              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
-              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
-              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
-              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
-              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
-              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
-              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
-            }
-          }
-        },
-        {
-          "fen": "k7/3Q4/1K6/8/8/8/8/8 w - - 0 1",
-          "sol": [
-            "d7c8",
-            "d7d8",
-            "d7e8",
-            "d7b7",
-            "d7a7"
-          ],
-          "mat": true,
-          "pat": [
-            "d7c7",
-            "d7d6"
-          ],
-          "consigne": {
-            "en": "Same trap in the corner. Find a checkmate, not a stalemate.",
-            "fr": "Même piège dans le coin. Trouve un mat, pas un pat.",
-            "es": "La misma trampa en el rincón. Encuentra un mate, no un ahogado.",
-            "pt": "A mesma armadilha no canto. Encontre um mate, não um afogamento.",
-            "de": "Dieselbe Falle in der Ecke. Finde ein Matt, kein Patt.",
-            "ru": "Та же ловушка в углу. Найди мат, а не пат.",
-            "it": "Stessa trappola nell'angolo. Trova un matto, non uno stallo.",
-            "tr": "Köşede aynı tuzak. Pat değil, mat bul.",
-            "pl": "Ta sama pułapka w rogu. Znajdź mata, nie pata.",
-            "id": "Jebakan yang sama di pojok. Temukan skakmat, bukan pat."
-          },
-          "faux": {
-            "d7c7": {
+            "c5c7": {
               "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
               "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
               "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
@@ -841,7 +821,43 @@
               "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
               "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
             },
-            "d7d6": {
+            "c5d6": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c5b5": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c5e5": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c5b4": {
               "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
               "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
               "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
@@ -855,16 +871,150 @@
             }
           },
           "apres": {
-            "en": "Checkmate. A game can also be drawn by agreement, or when the same position comes back three times.",
-            "fr": "Mat. Une partie peut aussi être nulle par accord, ou quand la même position revient trois fois.",
-            "es": "Mate. Una partida también puede acabar en tablas por acuerdo, o cuando la misma posición se repite tres veces.",
-            "pt": "Mate. Uma partida também pode empatar por acordo, ou quando a mesma posição se repete três vezes.",
-            "de": "Matt. Remis gibt es auch durch Einigung, oder wenn dieselbe Stellung dreimal entsteht.",
-            "ru": "Мат. Ничья бывает и по соглашению, и при троекратном повторении позиции.",
-            "it": "Matto. Una partita può finire patta anche per accordo, o quando la stessa posizione si ripete tre volte.",
-            "tr": "Mat. Oyun anlaşmayla ya da aynı konum üç kez tekrarlandığında da berabere biter.",
-            "pl": "Mat. Remis bywa też za zgodą obu stron albo po trzykrotnym powtórzeniu pozycji.",
-            "id": "Skakmat. Permainan juga bisa remis karena kesepakatan, atau saat posisi yang sama muncul tiga kali."
+            "en": "No stalemate: the black king still has a move, or it is in check. Six queen moves would have taken its last square without giving check.",
+            "fr": "Pas de pat : le roi noir garde un coup, ou il est en échec. Six coups de dame lui prenaient sa dernière case sans lui faire échec.",
+            "es": "No hay ahogado: al rey negro le queda una jugada, o está en jaque. Seis jugadas de dama le quitaban su última casilla sin darle jaque.",
+            "pt": "Sem afogamento: o rei preto ainda tem um lance, ou está em xeque. Seis lances de dama tirariam a última casa dele sem dar xeque.",
+            "de": "Kein Patt: Der schwarze König hat noch einen Zug, oder er steht im Schach. Sechs Damenzüge hätten ihm sein letztes Feld genommen, ohne Schach zu geben.",
+            "ru": "Пата нет: у чёрного короля остался ход, или он под шахом. Шесть ходов ферзём отняли бы у него последнее поле без шаха.",
+            "it": "Niente stallo: al re nero resta una mossa, oppure è sotto scacco. Sei mosse di donna gli avrebbero tolto l'ultima casa senza dargli scacco.",
+            "tr": "Pat yok: siyah şahın bir hamlesi var ya da şah tehdit altında. Vezirin altı hamlesi, şah çekmeden onun son karesini alırdı.",
+            "pl": "Pata nie ma: czarny król ma jeszcze ruch albo jest w szachu. Sześć ruchów hetmanem zabrałoby mu ostatnie pole bez szacha.",
+            "id": "Tidak pat: raja hitam masih punya langkah, atau terkena skak. Enam langkah menteri akan merebut petak terakhirnya tanpa memberi skak."
+          }
+        },
+        {
+          "fen": "5K1k/8/2Q5/8/8/8/8/8 w - - 0 1",
+          "sol": [
+            "f8e8",
+            "f8e7",
+            "f8f7",
+            "c6a8",
+            "c6c8",
+            "c6e8",
+            "c6b6",
+            "c6a6",
+            "c6d6",
+            "c6e6",
+            "c6f6",
+            "c6h6",
+            "c6b5",
+            "c6a4",
+            "c6c5",
+            "c6c4",
+            "c6c3",
+            "c6c1",
+            "c6d5",
+            "c6f3",
+            "c6g2",
+            "c6h1"
+          ],
+          "sansPat": true,
+          "pat": [
+            "c6b7",
+            "c6c7",
+            "c6d7",
+            "c6g6",
+            "c6c2",
+            "c6e4"
+          ],
+          "consigne": {
+            "en": "Same danger in the other corner. Find a move that does not give stalemate.",
+            "fr": "Même danger dans l'autre coin. Trouve un coup qui ne fait pas pat.",
+            "es": "El mismo peligro en el otro rincón. Encuentra una jugada que no dé ahogado.",
+            "pt": "O mesmo perigo no outro canto. Encontre um lance que não dê afogamento.",
+            "de": "Dieselbe Gefahr in der anderen Ecke. Finde einen Zug, der kein Patt gibt.",
+            "ru": "Та же опасность в другом углу. Найди ход, который не ведёт к пату.",
+            "it": "Lo stesso pericolo nell'altro angolo. Trova una mossa che non dia stallo.",
+            "tr": "Öbür köşede aynı tehlike. Pat yapmayan bir hamle bul.",
+            "pl": "To samo niebezpieczeństwo w drugim rogu. Znajdź ruch, który nie daje pata.",
+            "id": "Bahaya yang sama di sudut lain. Temukan langkah yang tidak membuat pat."
+          },
+          "faux": {
+            "c6b7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c6c7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c6d7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c6g6": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c6c2": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c6e4": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            }
+          },
+          "apres": {
+            "en": "No stalemate. A game can also be drawn by agreement, or when the same position comes back three times.",
+            "fr": "Pas de pat. Une partie peut aussi être nulle par accord, ou quand la même position revient trois fois.",
+            "es": "Sin ahogado. Una partida también puede acabar en tablas por acuerdo, o cuando la misma posición se repite tres veces.",
+            "pt": "Sem afogamento. Uma partida também pode empatar por acordo, ou quando a mesma posição se repete três vezes.",
+            "de": "Kein Patt. Remis gibt es auch durch Einigung, oder wenn dieselbe Stellung dreimal entsteht.",
+            "ru": "Пата нет. Ничья бывает и по соглашению, и при троекратном повторении позиции.",
+            "it": "Niente stallo. Una partita può finire patta anche per accordo, o quando la stessa posizione si ripete tre volte.",
+            "tr": "Pat yok. Oyun anlaşmayla ya da aynı konum üç kez tekrarlandığında da berabere biter.",
+            "pl": "Pata nie ma. Remis bywa też za zgodą obu stron albo po trzykrotnym powtórzeniu pozycji.",
+            "id": "Tidak pat. Permainan juga bisa remis karena kesepakatan, atau saat posisi yang sama muncul tiga kali."
           }
         },
         {
@@ -882,16 +1032,16 @@
           ],
           "suiteMat": true,
           "consigne": {
-            "en": "Your pawn is about to promote, but a queen would give stalemate. Choose the piece that leaves the black king a move.",
-            "fr": "Ton pion va faire promotion, mais une dame ferait pat. Choisis la pièce qui laisse un coup au roi noir.",
-            "es": "Tu peón va a coronar, pero una dama daría ahogado. Elige la pieza que le deja una jugada al rey negro.",
-            "pt": "Seu peão vai promover, mas uma dama daria afogamento. Escolha a peça que deixa um lance para o rei preto.",
-            "de": "Dein Bauer wandelt sich gleich um, aber eine Dame würde Patt geben. Wähle die Figur, die dem schwarzen König einen Zug lässt.",
-            "ru": "Твоя пешка вот-вот превратится, но ферзь дал бы пат. Выбери фигуру, которая оставит чёрному королю ход.",
-            "it": "Il tuo pedone sta per promuovere, ma una donna darebbe stallo. Scegli il pezzo che lascia una mossa al re nero.",
-            "tr": "Piyonun terfi etmek üzere ama vezir pat yapar. Siyah şaha bir hamle bırakan taşı seç.",
-            "pl": "Twój pion zaraz się promuje, ale hetman dałby pata. Wybierz figurę, która zostawia czarnemu królowi ruch.",
-            "id": "Pionmu akan promosi, tapi menteri akan membuat pat. Pilih bidak yang menyisakan satu langkah bagi raja hitam."
+            "en": "Your pawn is about to promote, but a queen would give stalemate. Choose the piece that avoids stalemate and still lets you give checkmate.",
+            "fr": "Ton pion va faire promotion, mais une dame ferait pat. Choisis la pièce qui évite le pat et qui te permet encore de faire mat.",
+            "es": "Tu peón va a coronar, pero una dama daría ahogado. Elige la pieza que evita el ahogado y con la que todavía puedes dar mate.",
+            "pt": "Seu peão vai promover, mas uma dama daria afogamento. Escolha a peça que evita o afogamento e ainda permite dar mate.",
+            "de": "Dein Bauer wandelt sich gleich um, aber eine Dame würde Patt geben. Wähle die Figur, die das Patt vermeidet und mit der du noch mattsetzen kannst.",
+            "ru": "Твоя пешка вот-вот превратится, но ферзь дал бы пат. Выбери фигуру, которая избегает пата и которой ещё можно поставить мат.",
+            "it": "Il tuo pedone sta per promuovere, ma una donna darebbe stallo. Scegli il pezzo che evita lo stallo e con cui puoi ancora dare matto.",
+            "tr": "Piyonun terfi etmek üzere ama vezir pat yapar. Patı önleyen ve hâlâ mat etmeni sağlayan taşı seç.",
+            "pl": "Twój pion zaraz się promuje, ale hetman dałby pata. Wybierz figurę, która unika pata i którą wciąż możesz dać mata.",
+            "id": "Pionmu akan promosi, tapi menteri akan membuat pat. Pilih bidak yang menghindari pat dan masih bisa memberi skakmat."
           },
           "faux": {
             "c7c8q": {
@@ -907,28 +1057,28 @@
               "id": "Pat! Dengan menteri di petak itu, raja hitam tak punya langkah dan tidak terkena skak."
             },
             "c7c8b": {
-              "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.",
-              "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.",
-              "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.",
-              "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.",
-              "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.",
-              "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.",
-              "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.",
-              "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.",
-              "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.",
-              "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup."
+              "en": "The bishop avoids stalemate. But a king and a bishop alone can never give checkmate: the game would be a draw as well.",
+              "fr": "Le fou évite le pat. Mais avec un roi et un fou seuls, on ne peut plus faire mat : la partie serait nulle aussi.",
+              "es": "El alfil evita el ahogado. Pero rey y alfil solos no pueden dar mate: la partida también sería tablas.",
+              "pt": "O bispo evita o afogamento. Mas rei e bispo sozinhos não conseguem dar mate: a partida também empataria.",
+              "de": "Der Läufer vermeidet das Patt. Aber König und Läufer allein können nicht mattsetzen: Die Partie wäre ebenfalls remis.",
+              "ru": "Слон избегает пата. Но королём и одним слоном мат не поставить: тоже была бы ничья.",
+              "it": "L'alfiere evita lo stallo. Ma re e alfiere da soli non possono dare matto: la partita sarebbe patta lo stesso.",
+              "tr": "Fil patı önler. Ama şah ve tek fil mat edemez: oyun yine berabere biterdi.",
+              "pl": "Goniec unika pata. Ale królem i samym gońcem nie da się dać mata: też byłby remis.",
+              "id": "Gajah menghindari pat. Tapi raja dan satu gajah saja tidak bisa memberi skakmat: permainan tetap remis."
             },
             "c7c8n": {
-              "en": "With that piece you can no longer give checkmate: a king and a bishop, or a king and a knight, are not enough.",
-              "fr": "Avec cette pièce, tu ne peux plus mater : un roi et un fou, ou un roi et un cavalier, ne suffisent pas.",
-              "es": "Con esa pieza ya no puedes dar mate: rey y alfil, o rey y caballo, no bastan.",
-              "pt": "Com essa peça você não consegue mais dar mate: rei e bispo, ou rei e cavalo, não bastam.",
-              "de": "Mit dieser Figur kannst du nicht mehr mattsetzen: König und Läufer oder König und Springer reichen nicht.",
-              "ru": "С этой фигурой мат уже не поставить: короля со слоном или короля с конём для этого мало.",
-              "it": "Con quel pezzo non puoi più dare matto: re e alfiere, o re e cavallo, non bastano.",
-              "tr": "Bu taşla artık mat edemezsin: şah ve fil ya da şah ve at yetmez.",
-              "pl": "Tą figurą nie dasz już mata: król z gońcem albo król ze skoczkiem to za mało.",
-              "id": "Dengan bidak itu kamu tak bisa lagi memberi skakmat: raja dan gajah, atau raja dan kuda, tidak cukup."
+              "en": "The knight avoids stalemate, and even gives check. But a king and a knight alone can never give checkmate: the game would be a draw as well.",
+              "fr": "Le cavalier évite le pat, et il donne même échec. Mais avec un roi et un cavalier seuls, on ne peut plus faire mat : la partie serait nulle aussi.",
+              "es": "El caballo evita el ahogado, e incluso da jaque. Pero rey y caballo solos no pueden dar mate: la partida también sería tablas.",
+              "pt": "O cavalo evita o afogamento e até dá xeque. Mas rei e cavalo sozinhos não conseguem dar mate: a partida também empataria.",
+              "de": "Der Springer vermeidet das Patt und gibt sogar Schach. Aber König und Springer allein können nicht mattsetzen: Die Partie wäre ebenfalls remis.",
+              "ru": "Конь избегает пата и даже даёт шах. Но королём и одним конём мат не поставить: тоже была бы ничья.",
+              "it": "Il cavallo evita lo stallo, e dà perfino scacco. Ma re e cavallo da soli non possono dare matto: la partita sarebbe patta lo stesso.",
+              "tr": "At patı önler, hatta şah çeker. Ama şah ve tek at mat edemez: oyun yine berabere biterdi.",
+              "pl": "Skoczek unika pata, a nawet daje szacha. Ale królem i samym skoczkiem nie da się dać mata: też byłby remis.",
+              "id": "Kuda menghindari pat, bahkan memberi skak. Tapi raja dan satu kuda saja tidak bisa memberi skakmat: permainan tetap remis."
             }
           },
           "apres": {

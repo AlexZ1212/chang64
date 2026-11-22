@@ -582,16 +582,16 @@
             "id": "Sekarang, skakmat."
           },
           "apres": {
-            "en": "Your queen cut the king off, your king came close: mate.",
-            "fr": "Ta dame a coupé la route au roi, ton roi s'est approché : mat.",
-            "es": "Tu dama le cortó el paso al rey y tu rey se acercó: mate.",
-            "pt": "Sua dama cortou o caminho do rei, e seu rei se aproximou: mate.",
-            "de": "Deine Dame hat dem König den Weg abgeschnitten, dein König ist näher gekommen: Matt.",
-            "ru": "Ферзь отрезал королю путь, твой король подошёл ближе: мат.",
-            "it": "La tua donna ha tagliato la strada al re, il tuo re si è avvicinato: matto.",
-            "tr": "Vezirin şahın yolunu kesti, şahın yaklaştı: mat.",
-            "pl": "Hetman odciął królowi drogę, twój król podszedł: mat.",
-            "id": "Menterimu memotong jalan raja, rajamu mendekat: skakmat."
+            "en": "Your queen cut the king off, your king guarded the squares next to it: mate.",
+            "fr": "Ta dame a coupé la route au roi, ton roi gardait les cases d'à côté : mat.",
+            "es": "Tu dama le cortó el paso al rey y tu rey vigilaba las casillas de al lado: mate.",
+            "pt": "Sua dama cortou o caminho do rei, e seu rei vigiava as casas ao lado: mate.",
+            "de": "Deine Dame hat dem König den Weg abgeschnitten, dein König bewachte die Felder daneben: Matt.",
+            "ru": "Ферзь отрезал королю путь, а твой король держал соседние поля: мат.",
+            "it": "La tua donna ha tagliato la strada al re, il tuo re sorvegliava le case accanto: matto.",
+            "tr": "Vezirin şahın yolunu kesti, şahın yandaki kareleri tuttu: mat.",
+            "pl": "Hetman odciął królowi drogę, a twój król pilnował sąsiednich pól: mat.",
+            "id": "Menterimu memotong jalan raja, rajamu menjaga petak-petak di sebelahnya: skakmat."
           }
         }
       ]

@@ -84,6 +84,7 @@ soit vrai** :
 |---|---|
 | `controle` | Par Stockfish. `"meilleur"` : les solutions sont les meilleurs coups et tout autre coup est nettement moins bon (à mettre dès que la consigne dit « prends », « le meilleur », « sauve »). `"premier"` : la solution est le premier choix du moteur. `"bon"` : la solution n'est pas une faute (pour un geste qu'on apprend, comme roquer). |
 | `pat` | Ces coups font pat, et eux seuls. |
+| `sansPat` | `true` : « joue un coup qui ne fait pas pat, n'importe lequel ». `sol` liste exactement les coups qui ne font pas pat, `pat` ceux qui le font, chacun avec sa raison dans `faux` ; aucun coup accepté ne doit donner une pièce. La construction s'arrête sinon. |
 | `interdit` | Ces coups sont illégaux (un roque interdit). |
 | `suiteMat` | La `suite` finit par un mat. |
 | `nonDefendues`, `defendues` | Les cases citées portent une pièce que les Noirs ne peuvent pas, ou peuvent, reprendre. |

@@ -43,6 +43,27 @@ function controlerExo(ex, ou) {
     const tries = a => a.slice().sort().join(",");
     if (tries(mats) !== tries(ex.sol)) erreur("les mats possibles (" + mats.join(" ") + ") ne sont pas les solutions (" + ex.sol.join(" ") + ")");
   }
+  /* « Joue un coup qui ne fait pas pat, n'importe lequel » (2026-11-22,
+     demande d'Alexandre) : les solutions sont exactement les coups qui ne
+     font pas pat, aucun ne donne de piece (sinon « n'importe lequel » serait
+     faux), et chaque coup qui fait pat a sa raison. */
+  if (ex.sansPat) {
+    if (ex.mat || ex.reponse) erreur("un exercice sansPat n'a ni mat ni reponse");
+    const pats = [], bons = [], donnes = [];
+    for (const m of g.moves()) {
+      const u = g.uci(m);
+      g.makeMove(m);
+      if (!g.isCheckmate() && !g.moves().length) pats.push(u);
+      else { bons.push(u); if (g.moves().some(x => x.captured)) donnes.push(u); }
+      g.undoMove();
+    }
+    const tries = a => a.slice().sort().join(",");
+    if (!pats.length) erreur("aucun coup ne fait pat : l'exercice n'a pas d'objet");
+    if (tries(bons) !== tries(ex.sol)) erreur("les coups qui ne font pas pat (" + bons.join(" ") + ") ne sont pas les solutions (" + ex.sol.join(" ") + ")");
+    if (tries(pats) !== tries(ex.pat || [])) erreur("les coups qui font pat (" + pats.join(" ") + ") ne sont pas ceux du champ pat");
+    if (donnes.length) erreur("ces coups acceptes donnent une piece : " + donnes.join(" "));
+    for (const u of pats) if (!(ex.faux || {})[u]) erreur("le coup " + u + " fait pat et n'a pas sa raison dans faux");
+  }
   for (const u of Object.keys(ex.faux || {})) if (u !== "*" && !coup(g, u)) erreur("coup faux illegal " + u);
   for (const u of Object.keys(ex.faux || {})) if (ex.sol.includes(u)) erreur("le coup " + u + " est a la fois juste et faux");
   /* Mat en deux (chapitre 9) : les solutions sont exactement les premiers

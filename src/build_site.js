@@ -1062,6 +1062,16 @@ function metaDesc(raw, max) {
   return coupe.trim() + "…";
 }
 
+/* 2026-11-22 (corrections d'Alexandre), commentaires gardes ICI, hors du bloc
+   injecte, pour ne pas alourdir chaque page statique :
+   - .animctl button : des carres a bord arrondi comme les boutons de
+     l'application (fond releve, filet, fond plus clair au survol, leger
+     enfoncement), zone de toucher de 44 px ;
+   - .cta : survol et appui comme dans l'application (le plein s'eclaircit, le
+     creux prend un fond) ; avant, rien ne bougeait ;
+   - script de fin de page : la marge de defilement (scroll-padding-top) suit
+     la hauteur de l'en-tete colle, qui mesure de 67 a 119 px selon l'ecran ;
+     les 150 px de la feuille de style restent le repli sans script. */
 /* Chevrons precedent/suivant du lecteur d'ouvertures (.animctl svg) passes
    en SVG a trait epais, pour s'harmoniser avec le bandeau de coups de
    l'onglet Jouer : les caracteres typographiques <>etaient trop fins a
@@ -1153,9 +1163,6 @@ p{margin-bottom:12px;max-width:66ch}
    un minimum recommande de 3:1 : quasiment invisibles. On reprend le vert
    ardoise des cases sombres de l'echiquier, juste au-dessus, ce qui rattache
    visuellement les commandes au diagramme qu'elles pilotent. */
-/* 2026-11-22 : des carres a bord arrondi, comme les boutons de l'application
-   (fond releve, filet, fond plus clair au survol, leger enfoncement). La zone
-   de toucher fait 44 px. */
 .animctl button{background:var(--raise);color:var(--chalk);border:1px solid var(--rule);border-radius:var(--r);
   width:44px;height:44px;cursor:pointer;padding:0;display:grid;place-items:center;transition:background-color .16s,transform .12s}
 .animctl button svg{width:22px;height:22px;border-radius:0}
@@ -1201,9 +1208,6 @@ td.mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--chalk
 .cta{display:inline-block;background:var(--brass);color:#1c130e;font-weight:600;font-size:14px;text-decoration:none;
 padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0;transition:background-color .16s,transform .12s}
 .cta.ghost{background:none;color:var(--chalk);border:1px solid var(--rule)}
-/* Survol et appui comme les boutons de l'application (2026-11-22, retour
-   d'Alexandre) : le plein s'eclaircit, le creux prend un fond, les deux
-   s'enfoncent un peu sous le doigt. Avant, rien ne bougeait. */
 .cta:hover{background:color-mix(in srgb,var(--brass) 86%,#fff)}
 .cta.ghost:hover{background:var(--survol)}
 .cta:active{transform:scale(.96)}
@@ -1795,9 +1799,6 @@ ${body}
    chaque visite d'une page claire, dans le meme format qu'attend loadLang
    (chaine "fr" ou "en", pas de JSON). */
 try{localStorage.setItem("chang64:lang","${lang}");var c=document.getElementById("cn"),sn=c.parentElement;c.scrollIntoView({block:"nearest"});var u=function(){sn.classList.toggle("sl",sn.scrollLeft>2);sn.classList.toggle("sr",sn.scrollLeft<sn.scrollWidth-sn.clientWidth-2);};u();sn.onscroll=u;}catch(e){}
-/* Marge de defilement (2026-11-22) : une ancre du sommaire doit amener son
-   titre juste sous l'en-tete colle, qui mesure de 67 a 119 px selon l'ecran.
-   La marge fixe de la feuille de style (150 px) reste le repli sans script. */
 try{var eh=document.querySelector("header");while(eh&&getComputedStyle(eh).position!=="sticky")eh=eh.parentElement;if(eh){var mh=function(){var x=eh.getBoundingClientRect().height;if(x>0)document.documentElement.style.scrollPaddingTop=Math.round(x+12)+"px";};mh();addEventListener("resize",mh);addEventListener("load",mh);}}catch(e){}
 ${!/id="grille"/.test(body) ? "" : `
 /* Filtrage de la liste des ouvertures.

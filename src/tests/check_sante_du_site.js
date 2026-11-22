@@ -68,7 +68,12 @@ const idx=fs.readFileSync(S+"/index.html","utf8");
 const m=[...idx.matchAll(/<script>([\s\S]*?)<\/script>/g)].sort((a,b)=>b[1].length-a[1].length)[0];
 let err=null; try{new (require("vm").Script)(m[1]);}catch(e){err=e.message;}
 T("le script se parse", err===null, err);
-T("taille raisonnable", m[1].length<600000, Math.round(m[1].length/1024)+" Ko");
+/* Seuil porte de 600 000 a 650 000 caracteres le 2026-11-22 : le script a
+   franchi les 600 000 avec les corrections de ce jour (statistiques par
+   categorie, ecran Contre un ami, carre de notification, recherche de
+   membre). Le garde-fou reste : il signale un saut anormal, pas une
+   croissance de 2 %. */
+T("taille raisonnable", m[1].length<650000, Math.round(m[1].length/1024)+" Ko");
 
 console.log("\n--- Fichiers de service ---");
 for(const f of ["/sitemap.xml","/robots.txt","/_headers","/_redirects","/manifest.webmanifest",

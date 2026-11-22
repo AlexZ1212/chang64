@@ -47,7 +47,9 @@ async function charge(w, cond, max) { for (let i = 0; i < (max || 60); i++) { if
   T("la fenetre du duel porte ce nom pour un lecteur d'ecran", propre(d.getElementById("duel").getAttribute("aria-label")) === "Duel d'exercices");
   const stats = [...d.querySelectorAll(".stat span")].map(e => propre(e.textContent));
   T("la note s'appelle « Niveau exercices »", stats.includes("Niveau exercices"), stats.join(" / "));
-  T("le palier de l'echelle s'appelle « Palier »", stats.includes("Palier"), stats.join(" / "));
+  /* 2026-11-22 : la tuile « Palier » a quitte l'accueil (trois chiffres seulement) ;
+     le mot reste celui de l'echelle des Exercices, lu ici dans le dictionnaire. */
+  T("le palier de l'echelle s'appelle « Palier »", propre(w.eval("t('Level')")) === "Palier" && !stats.includes("Niveau"), propre(w.eval("t('Level')")));
   T("la carte des exercices dit palier et niveau exercices", /^Palier \d+ \| niveau exercices \d+$/.test(propre(w.eval('t("Level {n} | puzzle rating {r}",{n:3,r:850})'))));
   T("le menu dit « Duels entre membres »", propre(d.querySelector('#menuTiroir [data-t="Member duels"]').textContent) === "Duels entre membres");
   T("le partage de l'exercice du jour ne parle plus de defi", propre(d.getElementById("btnChallengeDaily").textContent) === "Envoyer à un ami");

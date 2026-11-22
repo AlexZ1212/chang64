@@ -106,9 +106,11 @@ const H = w => {
 
   console.log("\nPGN EXPORT");
   a.click(a.$("btnPgnCopy")); await wait(200);
-  T("copy reported", /copied/.test(a.$("pgnMsg").textContent));
+  /* 2026-11-22 : les messages de l'export restent sous ses boutons (#pgnExportMsg) ;
+     ceux du chargement (#pgnMsg) ont suivi le champ dans Analyser. */
+  T("copy reported", /copied/.test(a.$("pgnExportMsg").textContent));
   a.click(a.$("btnPgnDownload")); await wait(300);
-  T("download reported", /Download|copied/.test(a.$("pgnMsg").textContent), a.$("pgnMsg").textContent);
+  T("download reported", /Download|copied/.test(a.$("pgnExportMsg").textContent), a.$("pgnExportMsg").textContent);
   a.$("pgnIn").value = "1. e4 e5 2. Qq9 ";
   a.click(a.$("btnPgnLoad")); await wait(300);
   T("bad pgn rejected gracefully", /not legal|Could not/.test(a.$("pgnMsg").textContent), a.$("pgnMsg").textContent);

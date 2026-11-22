@@ -1,0 +1,631 @@
+{
+  "id": "finales",
+  "titre": {
+    "en": "Basic endgames",
+    "fr": "Les finales de base",
+    "es": "Los finales básicos",
+    "pt": "Os finais básicos",
+    "de": "Einfache Endspiele",
+    "ru": "Простые эндшпили",
+    "it": "I finali di base",
+    "tr": "Temel oyun sonları",
+    "pl": "Podstawowe końcówki",
+    "id": "Akhir permainan dasar"
+  },
+  "desc": {
+    "en": "Mating with the queen, then with the rook, and taking a pawn all the way to promotion.",
+    "fr": "Faire mat avec la dame, puis avec la tour, et mener un pion jusqu'à la dame.",
+    "es": "Dar mate con la dama, luego con la torre, y llevar un peón hasta coronar.",
+    "pt": "Dar mate com a dama, depois com a torre, e levar um peão até a promoção.",
+    "de": "Mattsetzen mit der Dame, dann mit dem Turm, und einen Bauern bis zur Umwandlung bringen.",
+    "ru": "Мат ферзём, потом ладьёй, и как провести пешку в ферзи.",
+    "it": "Dare matto con la donna, poi con la torre, e portare un pedone fino alla promozione.",
+    "tr": "Vezirle, sonra kaleyle mat etmek ve bir piyonu terfiye kadar götürmek.",
+    "pl": "Mat hetmanem, potem wieżą, i doprowadzenie piona do promocji.",
+    "id": "Skakmat dengan menteri, lalu dengan benteng, dan membawa pion sampai promosi."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "Mating with the queen",
+        "fr": "Le mat avec la dame",
+        "es": "El mate con la dama",
+        "pt": "O mate com a dama",
+        "de": "Matt mit der Dame",
+        "ru": "Мат ферзём",
+        "it": "Il matto con la donna",
+        "tr": "Vezirle mat",
+        "pl": "Mat hetmanem",
+        "id": "Skakmat dengan menteri"
+      },
+      "intro": {
+        "en": "With a queen and your king against a lone king, you win: push the king to the edge, then your king helps the queen to mate. The danger is stalemate: always leave the other king a move until you mate.",
+        "fr": "Avec une dame et ton roi contre un roi seul, tu gagnes : on repousse le roi au bord, puis ton roi aide la dame à faire mat. Le danger, c'est le pat : laisse toujours un coup au roi adverse, tant que tu ne fais pas mat.",
+        "es": "Con una dama y tu rey contra un rey solo, ganas: empujas el rey al borde y luego tu rey ayuda a la dama a dar mate. El peligro es el ahogado: deja siempre una jugada al rey rival mientras no des mate.",
+        "pt": "Com uma dama e seu rei contra um rei sozinho, você vence: empurra o rei para a borda, e depois seu rei ajuda a dama a dar mate. O perigo é o afogamento: deixe sempre um lance ao rei adversário enquanto não der mate.",
+        "de": "Mit Dame und König gegen einen einsamen König gewinnst du: Treib den König an den Rand, dann hilft dein König der Dame beim Mattsetzen. Die Gefahr ist das Patt: Lass dem anderen König immer einen Zug, solange du nicht mattsetzt.",
+        "ru": "С ферзём и королём против одинокого короля ты выигрываешь: оттесни короля на край, потом твой король помогает ферзю поставить мат. Опасность — пат: пока не ставишь мат, всегда оставляй чужому королю ход.",
+        "it": "Con una donna e il tuo re contro un re solo, vinci: spingi il re sul bordo, poi il tuo re aiuta la donna a dare matto. Il pericolo è lo stallo: lascia sempre una mossa al re avversario finché non dai matto.",
+        "tr": "Bir vezir ve şahınla yalnız bir şaha karşı kazanırsın: şahı kenara itersin, sonra şahın vezire mat için yardım eder. Tehlike pattır: mat etmediğin sürece rakip şaha her zaman bir hamle bırak.",
+        "pl": "Z hetmanem i królem przeciw samotnemu królowi wygrywasz: spychasz króla na brzeg, a potem twój król pomaga hetmanowi dać mata. Niebezpieczny jest pat: dopóki nie dajesz mata, zawsze zostaw przeciwnemu królowi ruch.",
+        "id": "Dengan menteri dan rajamu melawan raja sendirian, kamu menang: dorong raja ke tepi, lalu rajamu membantu menteri skakmat. Bahayanya adalah pat: selama belum skakmat, selalu sisakan satu langkah untuk raja lawan."
+      },
+      "exos": [
+        {
+          "fen": "7k/8/6K1/8/8/8/8/5Q2 w - - 0 1",
+          "sol": [
+            "f1f8"
+          ],
+          "mat": true,
+          "pat": [
+            "f1c4",
+            "f1f7"
+          ],
+          "consigne": {
+            "en": "Mate in one. Careful: two queen moves give stalemate.",
+            "fr": "Fais mat en un. Attention : deux coups de dame font pat.",
+            "es": "Da mate en una jugada. Cuidado: dos jugadas de dama dan ahogado.",
+            "pt": "Dê mate em um lance. Atenção: dois lances de dama dão afogamento.",
+            "de": "Setze in einem Zug matt. Achtung: Zwei Damenzüge führen zum Patt.",
+            "ru": "Поставь мат в один ход. Осторожно: два хода ферзём ведут к пату.",
+            "it": "Dai matto in una mossa. Attenzione: due mosse di donna danno stallo.",
+            "tr": "Tek hamlede mat et. Dikkat: vezirin iki hamlesi pat yapar.",
+            "pl": "Daj mata w jednym ruchu. Uwaga: dwa ruchy hetmanem dają pata.",
+            "id": "Skakmat dalam satu langkah. Hati-hati: dua langkah menteri membuat pat."
+          },
+          "faux": {
+            "f1c4": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "f1f7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            }
+          },
+          "apres": {
+            "en": "Mate. Your king guards the squares in front of the black king, the queen closes the edge.",
+            "fr": "Mat. Ton roi garde les cases devant le roi noir, la dame ferme le bord.",
+            "es": "Mate. Tu rey vigila las casillas delante del rey negro y la dama cierra el borde.",
+            "pt": "Mate. Seu rei vigia as casas na frente do rei preto, e a dama fecha a borda.",
+            "de": "Matt. Dein König bewacht die Felder vor dem schwarzen König, die Dame sperrt den Rand.",
+            "ru": "Мат. Твой король держит поля перед чёрным королём, а ферзь закрывает край.",
+            "it": "Matto. Il tuo re sorveglia le case davanti al re nero, la donna chiude il bordo.",
+            "tr": "Mat. Şahın siyah şahın önündeki kareleri tutuyor, vezir de kenarı kapatıyor.",
+            "pl": "Mat. Twój król pilnuje pól przed czarnym królem, a hetman zamyka brzeg.",
+            "id": "Skakmat. Rajamu menjaga petak di depan raja hitam, dan menteri menutup tepi."
+          }
+        },
+        {
+          "fen": "k7/8/1K6/8/8/8/8/2Q5 w - - 0 1",
+          "sol": [
+            "c1c8"
+          ],
+          "mat": true,
+          "pat": [
+            "c1c7",
+            "c1f4"
+          ],
+          "consigne": {
+            "en": "Same thing in the other corner: mate, without stalemate.",
+            "fr": "Même chose dans l'autre coin : fais mat, sans faire pat.",
+            "es": "Lo mismo en el otro rincón: da mate, sin ahogado.",
+            "pt": "A mesma coisa no outro canto: dê mate, sem afogamento.",
+            "de": "Dasselbe in der anderen Ecke: Setze matt, ohne Patt.",
+            "ru": "То же самое в другом углу: поставь мат, а не пат.",
+            "it": "Stessa cosa nell'altro angolo: dai matto, senza stallo.",
+            "tr": "Aynısı öteki köşede: pat değil, mat yap.",
+            "pl": "To samo w drugim rogu: daj mata, nie pata.",
+            "id": "Sama saja di sudut lain: skakmat, jangan pat."
+          },
+          "faux": {
+            "c1c7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            },
+            "c1f4": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            }
+          },
+          "apres": {
+            "en": "Mate. Remember the picture: your king close by, the queen on the edge rank.",
+            "fr": "Mat. Retiens l'image : ton roi tout près, la dame sur la rangée du bord.",
+            "es": "Mate. Recuerda la imagen: tu rey muy cerca, la dama en la fila del borde.",
+            "pt": "Mate. Guarde a imagem: seu rei bem perto, a dama na fileira da borda.",
+            "de": "Matt. Merk dir das Bild: dein König ganz nah, die Dame auf der Randreihe.",
+            "ru": "Мат. Запомни картинку: твой король рядом, ферзь на крайней горизонтали.",
+            "it": "Matto. Ricorda l'immagine: il tuo re vicino, la donna sulla traversa del bordo.",
+            "tr": "Mat. Bu görüntüyü aklında tut: şahın çok yakında, vezir kenar sırasında.",
+            "pl": "Mat. Zapamiętaj obraz: twój król tuż obok, hetman na brzegowej linii.",
+            "id": "Skakmat. Ingat gambarannya: rajamu dekat, menteri di baris tepi."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Mating with the rook",
+        "fr": "Le mat avec la tour",
+        "es": "El mate con la torre",
+        "pt": "O mate com a torre",
+        "de": "Matt mit dem Turm",
+        "ru": "Мат ладьёй",
+        "it": "Il matto con la torre",
+        "tr": "Kaleyle mat",
+        "pl": "Mat wieżą",
+        "id": "Skakmat dengan benteng"
+      },
+      "intro": {
+        "en": "With a rook it takes longer, but the idea is the same. The mate happens on the edge: your king stands opposite the other king, one square between them, and the rook gives check along the edge.",
+        "fr": "Avec une tour, c'est plus long, mais l'idée est la même. Le mat se donne sur le bord : ton roi se place en face du roi adverse, une case entre eux, et la tour donne échec sur le bord.",
+        "es": "Con una torre se tarda más, pero la idea es la misma. El mate se da en el borde: tu rey se pone frente al rey rival, con una casilla entre ellos, y la torre da jaque en el borde.",
+        "pt": "Com uma torre demora mais, mas a ideia é a mesma. O mate acontece na borda: seu rei fica de frente para o rei adversário, com uma casa entre eles, e a torre dá xeque na borda.",
+        "de": "Mit einem Turm dauert es länger, aber die Idee ist dieselbe. Das Matt fällt am Rand: Dein König steht dem anderen König gegenüber, ein Feld dazwischen, und der Turm gibt am Rand Schach.",
+        "ru": "С ладьёй это дольше, но идея та же. Мат ставится на краю: твой король встаёт напротив чужого короля через одно поле, а ладья шахует по краю.",
+        "it": "Con una torre ci vuole di più, ma l'idea è la stessa. Il matto arriva sul bordo: il tuo re si mette di fronte al re avversario, con una casa in mezzo, e la torre dà scacco sul bordo.",
+        "tr": "Kaleyle daha uzun sürer ama fikir aynıdır. Mat kenarda olur: şahın rakip şahın karşısına, aralarında bir kare olacak şekilde geçer ve kale kenardan şah çeker.",
+        "pl": "Z wieżą trwa to dłużej, ale pomysł jest ten sam. Mat pada na brzegu: twój król staje naprzeciw przeciwnego króla, z jednym polem między nimi, a wieża daje szacha wzdłuż brzegu.",
+        "id": "Dengan benteng lebih lama, tetapi idenya sama. Skakmat terjadi di tepi: rajamu berdiri berhadapan dengan raja lawan, dengan satu petak di antaranya, dan benteng memberi skak di tepi."
+      },
+      "exos": [
+        {
+          "fen": "4k3/8/4K3/8/8/8/8/R7 w - - 0 1",
+          "sol": [
+            "a1a8"
+          ],
+          "mat": true,
+          "consigne": {
+            "en": "The two kings face each other. Mate with your rook.",
+            "fr": "Les deux rois sont face à face. Fais mat avec ta tour.",
+            "es": "Los dos reyes están frente a frente. Da mate con tu torre.",
+            "pt": "Os dois reis estão frente a frente. Dê mate com sua torre.",
+            "de": "Die beiden Könige stehen sich gegenüber. Setze mit deinem Turm matt.",
+            "ru": "Короли стоят друг против друга. Поставь мат ладьёй.",
+            "it": "I due re sono uno di fronte all'altro. Dai matto con la torre.",
+            "tr": "İki şah karşı karşıya. Kalenle mat et.",
+            "pl": "Królowie stoją naprzeciw siebie. Daj mata wieżą.",
+            "id": "Kedua raja saling berhadapan. Skakmat dengan bentengmu."
+          },
+          "apres": {
+            "en": "Your king guards the three squares in front of the black king, the rook holds the edge: mate.",
+            "fr": "Ton roi garde les trois cases devant le roi noir, la tour tient le bord : mat.",
+            "es": "Tu rey vigila las tres casillas delante del rey negro y la torre sujeta el borde: mate.",
+            "pt": "Seu rei vigia as três casas na frente do rei preto, e a torre segura a borda: mate.",
+            "de": "Dein König bewacht die drei Felder vor dem schwarzen König, der Turm hält den Rand: Matt.",
+            "ru": "Твой король держит три поля перед чёрным королём, ладья держит край: мат.",
+            "it": "Il tuo re sorveglia le tre case davanti al re nero, la torre tiene il bordo: matto.",
+            "tr": "Şahın siyah şahın önündeki üç kareyi tutuyor, kale de kenarı: mat.",
+            "pl": "Twój król pilnuje trzech pól przed czarnym królem, wieża trzyma brzeg: mat.",
+            "id": "Rajamu menjaga tiga petak di depan raja hitam, benteng menahan tepi: skakmat."
+          }
+        },
+        {
+          "fen": "7k/R7/6K1/8/8/8/8/8 w - - 0 1",
+          "sol": [
+            "a7a8"
+          ],
+          "mat": true,
+          "pat": [
+            "a7g7"
+          ],
+          "consigne": {
+            "en": "Mate in one. Careful: one rook move gives stalemate.",
+            "fr": "Fais mat en un. Attention : un coup de tour fait pat.",
+            "es": "Da mate en una jugada. Cuidado: una jugada de torre da ahogado.",
+            "pt": "Dê mate em um lance. Atenção: um lance de torre dá afogamento.",
+            "de": "Setze in einem Zug matt. Achtung: Ein Turmzug führt zum Patt.",
+            "ru": "Поставь мат в один ход. Осторожно: один ход ладьёй ведёт к пату.",
+            "it": "Dai matto in una mossa. Attenzione: una mossa di torre dà stallo.",
+            "tr": "Tek hamlede mat et. Dikkat: kalenin bir hamlesi pat yapar.",
+            "pl": "Daj mata w jednym ruchu. Uwaga: jeden ruch wieżą daje pata.",
+            "id": "Skakmat dalam satu langkah. Hati-hati: satu langkah benteng membuat pat."
+          },
+          "faux": {
+            "a7g7": {
+              "en": "Stalemate! The black king is not in check and has no move left: the game would be a draw.",
+              "fr": "Pat ! Le roi noir n'est pas en échec et n'a plus aucun coup : la partie serait nulle.",
+              "es": "¡Ahogado! El rey negro no está en jaque y no tiene ninguna jugada: la partida sería tablas.",
+              "pt": "Afogamento! O rei preto não está em xeque e não tem nenhum lance: a partida empataria.",
+              "de": "Patt! Der schwarze König steht nicht im Schach und hat keinen Zug mehr: Die Partie wäre remis.",
+              "ru": "Пат! Чёрный король не под шахом, а ходов у него нет: была бы ничья.",
+              "it": "Stallo! Il re nero non è sotto scacco e non ha più mosse: la partita sarebbe patta.",
+              "tr": "Pat! Siyah şah tehdit altında değil ve hiçbir hamlesi yok: oyun berabere biterdi.",
+              "pl": "Pat! Czarny król nie jest w szachu i nie ma żadnego ruchu: byłby remis.",
+              "id": "Pat! Raja hitam tidak terkena skak dan tak punya langkah lagi: permainan akan remis."
+            }
+          },
+          "apres": {
+            "en": "Mate. Here the kings do not face each other, but the black king is in the corner: it works too.",
+            "fr": "Mat. Ici les rois ne sont pas face à face, mais le roi noir est dans le coin : ça marche aussi.",
+            "es": "Mate. Aquí los reyes no están frente a frente, pero el rey negro está en el rincón: también funciona.",
+            "pt": "Mate. Aqui os reis não estão frente a frente, mas o rei preto está no canto: também funciona.",
+            "de": "Matt. Hier stehen sich die Könige nicht gegenüber, aber der schwarze König ist in der Ecke: Das klappt auch.",
+            "ru": "Мат. Здесь короли не стоят друг против друга, но чёрный король в углу: так тоже получается.",
+            "it": "Matto. Qui i re non sono uno di fronte all'altro, ma il re nero è nell'angolo: funziona lo stesso.",
+            "tr": "Mat. Burada şahlar karşı karşıya değil, ama siyah şah köşede: bu da işe yarar.",
+            "pl": "Mat. Tu królowie nie stoją naprzeciw siebie, ale czarny król jest w rogu: to też działa.",
+            "id": "Skakmat. Di sini kedua raja tidak berhadapan, tetapi raja hitam ada di sudut: ini juga berhasil."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The square of the pawn",
+        "fr": "Le carré du pion",
+        "es": "El cuadrado del peón",
+        "pt": "O quadrado do peão",
+        "de": "Das Quadrat des Bauern",
+        "ru": "Квадрат пешки",
+        "it": "Il quadrato del pedone",
+        "tr": "Piyonun karesi",
+        "pl": "Kwadrat piona",
+        "id": "Kotak pion"
+      },
+      "intro": {
+        "en": "Can a lone pawn escape the other king? Picture a square from the pawn to its promotion square. If the king can step into that square, it catches the pawn. If not, the pawn becomes a queen.",
+        "fr": "Un pion seul peut-il échapper au roi adverse ? Imagine un carré qui va du pion jusqu'à sa case de promotion. Si le roi peut entrer dans ce carré, il rattrape le pion. Sinon, le pion va à dame.",
+        "es": "¿Puede un peón solo escapar del rey rival? Imagina un cuadrado que va del peón a su casilla de coronación. Si el rey puede entrar en ese cuadrado, alcanza al peón. Si no, el peón corona.",
+        "pt": "Um peão sozinho consegue escapar do rei adversário? Imagine um quadrado que vai do peão até a casa de promoção. Se o rei puder entrar nesse quadrado, ele alcança o peão. Se não, o peão vira dama.",
+        "de": "Kann ein einzelner Bauer dem gegnerischen König entkommen? Stell dir ein Quadrat vom Bauern bis zu seinem Umwandlungsfeld vor. Kann der König in dieses Quadrat ziehen, holt er den Bauern ein. Sonst wird der Bauer zur Dame.",
+        "ru": "Может ли одинокая пешка уйти от чужого короля? Представь квадрат от пешки до поля превращения. Если король может войти в этот квадрат, он догонит пешку. Если нет, пешка станет ферзём.",
+        "it": "Un pedone da solo può sfuggire al re avversario? Immagina un quadrato che va dal pedone alla sua casa di promozione. Se il re può entrare in quel quadrato, raggiunge il pedone. Altrimenti il pedone va a donna.",
+        "tr": "Yalnız bir piyon rakip şahtan kaçabilir mi? Piyondan terfi karesine kadar uzanan bir kare düşün. Şah bu kareye girebiliyorsa piyonu yakalar. Giremiyorsa piyon vezir olur.",
+        "pl": "Czy samotny pion ucieknie przeciwnemu królowi? Wyobraź sobie kwadrat od piona do jego pola promocji. Jeśli król może wejść do tego kwadratu, dogoni piona. Jeśli nie, pion zostanie hetmanem.",
+        "id": "Bisakah pion sendirian lolos dari raja lawan? Bayangkan kotak dari pion sampai petak promosinya. Jika raja bisa masuk ke kotak itu, ia mengejar pion. Jika tidak, pion menjadi menteri."
+      },
+      "exos": [
+        {
+          "fen": "8/8/8/8/P4k2/8/8/7K w - - 0 1",
+          "sol": [
+            "a4a5"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The black king is far away. Push your pawn: the king will not be able to catch it.",
+            "fr": "Le roi noir est loin. Pousse ton pion : il ne pourra plus le rattraper.",
+            "es": "El rey negro está lejos. Empuja tu peón: ya no podrá alcanzarlo.",
+            "pt": "O rei preto está longe. Avance seu peão: ele não vai mais conseguir alcançá-lo.",
+            "de": "Der schwarze König ist weit weg. Zieh deinen Bauern: Er wird ihn nicht mehr einholen.",
+            "ru": "Чёрный король далеко. Двигай пешку: он её уже не догонит.",
+            "it": "Il re nero è lontano. Spingi il tuo pedone: non potrà più raggiungerlo.",
+            "tr": "Siyah şah uzakta. Piyonunu ilerlet: artık onu yakalayamaz.",
+            "pl": "Czarny król jest daleko. Pchnij piona: już go nie dogoni.",
+            "id": "Raja hitam jauh. Majukan pionmu: ia tidak akan bisa mengejarnya lagi."
+          },
+          "apres": {
+            "en": "The black king is outside the square: your pawn will become a queen.",
+            "fr": "Le roi noir est hors du carré : ton pion ira à dame.",
+            "es": "El rey negro está fuera del cuadrado: tu peón coronará.",
+            "pt": "O rei preto está fora do quadrado: seu peão vai virar dama.",
+            "de": "Der schwarze König steht außerhalb des Quadrats: Dein Bauer wird zur Dame.",
+            "ru": "Чёрный король вне квадрата: твоя пешка станет ферзём.",
+            "it": "Il re nero è fuori dal quadrato: il tuo pedone andrà a donna.",
+            "tr": "Siyah şah karenin dışında: piyonun vezir olacak.",
+            "pl": "Czarny król jest poza kwadratem: twój pion zostanie hetmanem.",
+            "id": "Raja hitam di luar kotak: pionmu akan menjadi menteri."
+          }
+        },
+        {
+          "fen": "8/8/8/8/p7/8/8/4K2k w - - 0 1",
+          "sol": [
+            "e1d2",
+            "e1d1"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The black pawn is running to your first rank. Step your king into its square to catch it.",
+            "fr": "Le pion noir file vers ta première rangée. Fais entrer ton roi dans son carré pour le rattraper.",
+            "es": "El peón negro corre hacia tu primera fila. Mete tu rey en su cuadrado para alcanzarlo.",
+            "pt": "O peão preto corre para a sua primeira fileira. Ponha seu rei dentro do quadrado dele para alcançá-lo.",
+            "de": "Der schwarze Bauer läuft auf deine Grundreihe zu. Bring deinen König in sein Quadrat, um ihn einzuholen.",
+            "ru": "Чёрная пешка бежит к твоей первой горизонтали. Введи короля в её квадрат, чтобы догнать её.",
+            "it": "Il pedone nero corre verso la tua prima traversa. Fai entrare il re nel suo quadrato per raggiungerlo.",
+            "tr": "Siyah piyon senin ilk sırana koşuyor. Onu yakalamak için şahını karesine sok.",
+            "pl": "Czarny pion pędzi na twoją pierwszą linię. Wprowadź króla do jego kwadratu, żeby go dogonić.",
+            "id": "Pion hitam berlari ke baris pertamamu. Masukkan rajamu ke kotaknya untuk mengejarnya."
+          },
+          "apres": {
+            "en": "Your king is inside the square: the pawn will not get through.",
+            "fr": "Ton roi est dans le carré : le pion ne passera pas.",
+            "es": "Tu rey está dentro del cuadrado: el peón no pasará.",
+            "pt": "Seu rei está dentro do quadrado: o peão não vai passar.",
+            "de": "Dein König steht im Quadrat: Der Bauer kommt nicht durch.",
+            "ru": "Твой король в квадрате: пешка не пройдёт.",
+            "it": "Il tuo re è dentro il quadrato: il pedone non passerà.",
+            "tr": "Şahın karenin içinde: piyon geçemeyecek.",
+            "pl": "Twój król jest w kwadracie: pion nie przejdzie.",
+            "id": "Rajamu di dalam kotak: pion itu tidak akan lolos."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The opposition",
+        "fr": "L'opposition",
+        "es": "La oposición",
+        "pt": "A oposição",
+        "de": "Die Opposition",
+        "ru": "Оппозиция",
+        "it": "L'opposizione",
+        "tr": "Opozisyon",
+        "pl": "Opozycja",
+        "id": "Oposisi"
+      },
+      "intro": {
+        "en": "When two kings face each other with one square between them, the side to move has to give way. The other side is said to have the opposition. In pawn endgames, it often decides everything.",
+        "fr": "Quand deux rois se font face avec une seule case entre eux, celui qui doit jouer doit céder le passage. On dit que l'autre a l'opposition. Dans les finales de pions, c'est souvent elle qui décide.",
+        "es": "Cuando dos reyes están frente a frente con una sola casilla entre ellos, el que tiene que jugar debe ceder el paso. Se dice que el otro tiene la oposición. En los finales de peones, a menudo es ella la que decide.",
+        "pt": "Quando dois reis estão frente a frente com uma só casa entre eles, quem precisa jogar tem que ceder a passagem. Diz-se que o outro tem a oposição. Nos finais de peões, muitas vezes é ela que decide.",
+        "de": "Stehen sich zwei Könige mit nur einem Feld dazwischen gegenüber, muss der, der am Zug ist, ausweichen. Man sagt, der andere hat die Opposition. In Bauernendspielen entscheidet sie oft alles.",
+        "ru": "Когда два короля стоят друг против друга через одно поле, тот, чей ход, должен уступить дорогу. Говорят, что у другого оппозиция. В пешечных эндшпилях она часто всё решает.",
+        "it": "Quando due re sono uno di fronte all'altro con una sola casa in mezzo, chi deve muovere deve cedere il passo. Si dice che l'altro ha l'opposizione. Nei finali di pedoni spesso decide tutto.",
+        "tr": "İki şah aralarında tek bir kareyle karşı karşıya durduğunda, hamle sırası kimdeyse yol vermek zorundadır. Ötekinin opozisyonu var denir. Piyon oyun sonlarında çoğu zaman her şeyi o belirler.",
+        "pl": "Gdy dwaj królowie stoją naprzeciw siebie z jednym polem pomiędzy, ten, kto ma ruch, musi ustąpić. Mówi się, że drugi ma opozycję. W końcówkach pionowych często to ona decyduje.",
+        "id": "Saat dua raja berhadapan dengan satu petak di antaranya, yang harus melangkah wajib memberi jalan. Pihak lain disebut memegang oposisi. Dalam akhir permainan pion, oposisi sering menentukan segalanya."
+      },
+      "exos": [
+        {
+          "fen": "8/8/4k3/8/8/4K3/4P3/8 w - - 0 1",
+          "sol": [
+            "e3e4"
+          ],
+          "cible": "e4",
+          "controle": "bon",
+          "consigne": {
+            "en": "Take the opposition: put your king right opposite the black king, with one square between them.",
+            "fr": "Prends l'opposition : place ton roi juste en face du roi noir, avec une case entre eux.",
+            "es": "Toma la oposición: pon tu rey justo enfrente del rey negro, con una casilla entre ellos.",
+            "pt": "Tome a oposição: coloque seu rei bem na frente do rei preto, com uma casa entre eles.",
+            "de": "Nimm die Opposition: Stell deinen König genau gegenüber dem schwarzen König, mit einem Feld dazwischen.",
+            "ru": "Займи оппозицию: поставь короля прямо напротив чёрного короля, через одно поле.",
+            "it": "Prendi l'opposizione: metti il re proprio di fronte al re nero, con una casa in mezzo.",
+            "tr": "Opozisyonu al: şahını, aralarında bir kare olacak şekilde siyah şahın tam karşısına koy.",
+            "pl": "Zajmij opozycję: postaw króla dokładnie naprzeciw czarnego króla, z jednym polem pomiędzy.",
+            "id": "Ambil oposisi: taruh rajamu tepat berhadapan dengan raja hitam, dengan satu petak di antaranya."
+          },
+          "faux": {
+            "*": {
+              "en": "Put your king on the marked square, opposite the black king.",
+              "fr": "Place ton roi sur la case marquée, en face du roi noir.",
+              "es": "Pon tu rey en la casilla marcada, enfrente del rey negro.",
+              "pt": "Coloque seu rei na casa marcada, de frente para o rei preto.",
+              "de": "Stell deinen König auf das markierte Feld, gegenüber dem schwarzen König.",
+              "ru": "Поставь короля на отмеченное поле, напротив чёрного короля.",
+              "it": "Metti il re sulla casa segnata, di fronte al re nero.",
+              "tr": "Şahını işaretli kareye, siyah şahın karşısına koy.",
+              "pl": "Postaw króla na zaznaczonym polu, naprzeciw czarnego króla.",
+              "id": "Taruh rajamu di petak yang ditandai, berhadapan dengan raja hitam."
+            }
+          },
+          "apres": {
+            "en": "Black is to move: their king has to step aside, and yours moves forward.",
+            "fr": "C'est aux Noirs de jouer : leur roi doit s'écarter, et le tien avance.",
+            "es": "Les toca jugar a las negras: su rey tiene que apartarse y el tuyo avanza.",
+            "pt": "É a vez das pretas: o rei delas precisa sair do caminho, e o seu avança.",
+            "de": "Schwarz ist am Zug: Sein König muss ausweichen, und deiner rückt vor.",
+            "ru": "Ход чёрных: их король должен отойти, а твой идёт вперёд.",
+            "it": "Tocca al Nero: il suo re deve spostarsi, e il tuo avanza.",
+            "tr": "Hamle sırası Siyah'ta: onun şahı kenara çekilmek zorunda, seninki ilerliyor.",
+            "pl": "Ruch mają czarne: ich król musi ustąpić, a twój idzie naprzód.",
+            "id": "Giliran Hitam: rajanya harus menyingkir, dan rajamu maju."
+          }
+        },
+        {
+          "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 0 1",
+          "sol": [
+            "e2e3"
+          ],
+          "cible": "e3",
+          "controle": "bon",
+          "consigne": {
+            "en": "The kings face each other, but it is your move. Your pawn can take a small step: move it one square.",
+            "fr": "Les rois se font face, mais c'est à toi de jouer. Ton pion peut faire un petit pas : avance-le d'une case.",
+            "es": "Los reyes están frente a frente, pero te toca jugar. Tu peón puede dar un pasito: avánzalo una casilla.",
+            "pt": "Os reis estão frente a frente, mas é a sua vez. Seu peão pode dar um passinho: avance-o uma casa.",
+            "de": "Die Könige stehen sich gegenüber, aber du bist am Zug. Dein Bauer kann einen kleinen Schritt machen: Zieh ihn ein Feld vor.",
+            "ru": "Короли стоят друг против друга, но ход твой. Пешка может сделать маленький шаг: продвинь её на одно поле.",
+            "it": "I re sono uno di fronte all'altro, ma tocca a te. Il tuo pedone può fare un passettino: spingilo di una casa.",
+            "tr": "Şahlar karşı karşıya ama hamle sırası sende. Piyonun küçük bir adım atabilir: onu bir kare ilerlet.",
+            "pl": "Królowie stoją naprzeciw siebie, ale ruch masz ty. Twój pion może zrobić mały krok: przesuń go o jedno pole.",
+            "id": "Kedua raja berhadapan, tetapi giliranmu. Pionmu bisa melangkah kecil: majukan satu petak."
+          },
+          "faux": {
+            "*": {
+              "en": "Move your pawn just one square: then Black has to move instead of you.",
+              "fr": "Avance ton pion d'une seule case : les Noirs devront jouer à ta place.",
+              "es": "Avanza tu peón una sola casilla: las negras tendrán que jugar en tu lugar.",
+              "pt": "Avance seu peão só uma casa: as pretas terão de jogar no seu lugar.",
+              "de": "Zieh deinen Bauern nur ein Feld vor: Dann muss Schwarz statt deiner ziehen.",
+              "ru": "Продвинь пешку только на одно поле: ходить придётся чёрным.",
+              "it": "Spingi il pedone di una sola casa: il Nero dovrà muovere al posto tuo.",
+              "tr": "Piyonunu yalnızca bir kare ilerlet: senin yerine Siyah oynamak zorunda kalır.",
+              "pl": "Przesuń piona tylko o jedno pole: czarne będą musiały ruszyć zamiast ciebie.",
+              "id": "Majukan pionmu satu petak saja: Hitam yang harus melangkah, bukan kamu."
+            }
+          },
+          "apres": {
+            "en": "Now Black is to move with the kings facing each other: they have to give way.",
+            "fr": "Maintenant c'est aux Noirs de jouer face à ton roi : ils doivent céder le passage.",
+            "es": "Ahora les toca a las negras con los reyes frente a frente: tienen que ceder el paso.",
+            "pt": "Agora é a vez das pretas com os reis frente a frente: elas precisam ceder a passagem.",
+            "de": "Jetzt ist Schwarz am Zug, und die Könige stehen sich gegenüber: Schwarz muss ausweichen.",
+            "ru": "Теперь ход чёрных, а короли стоят друг против друга: им придётся уступить дорогу.",
+            "it": "Ora tocca al Nero con i re uno di fronte all'altro: deve cedere il passo.",
+            "tr": "Şimdi şahlar karşı karşıyayken sıra Siyah'ta: yol vermek zorunda.",
+            "pl": "Teraz ruch mają czarne, a królowie stoją naprzeciw siebie: muszą ustąpić.",
+            "id": "Sekarang giliran Hitam dengan kedua raja berhadapan: Hitam harus memberi jalan."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The king in front of its pawn",
+        "fr": "Le roi devant son pion",
+        "es": "El rey delante de su peón",
+        "pt": "O rei na frente do seu peão",
+        "de": "Der König vor seinem Bauern",
+        "ru": "Король впереди своей пешки",
+        "it": "Il re davanti al suo pedone",
+        "tr": "Piyonunun önündeki şah",
+        "pl": "Król przed swoim pionem",
+        "id": "Raja di depan pionnya"
+      },
+      "intro": {
+        "en": "To take a pawn to promotion, the king goes in front of it and clears the way. A pawn pushed too soon gets stopped; a well-placed king escorts it to the end.",
+        "fr": "Pour mener un pion à dame, le roi passe devant lui et lui ouvre la route. Un pion poussé trop tôt se fait arrêter ; un roi bien placé l'escorte jusqu'au bout.",
+        "es": "Para llevar un peón a coronar, el rey se pone delante y le abre el camino. Un peón empujado demasiado pronto acaba detenido; un rey bien colocado lo escolta hasta el final.",
+        "pt": "Para levar um peão à promoção, o rei vai na frente e abre o caminho. Um peão empurrado cedo demais é parado; um rei bem colocado o escolta até o fim.",
+        "de": "Um einen Bauern zur Umwandlung zu bringen, geht der König vor ihm her und bahnt ihm den Weg. Ein zu früh gezogener Bauer wird aufgehalten; ein gut stehender König begleitet ihn bis zum Ende.",
+        "ru": "Чтобы провести пешку в ферзи, король идёт впереди и расчищает ей путь. Пешку, двинутую слишком рано, остановят; хорошо стоящий король доведёт её до конца.",
+        "it": "Per portare un pedone a promozione, il re gli passa davanti e gli apre la strada. Un pedone spinto troppo presto viene fermato; un re ben piazzato lo scorta fino in fondo.",
+        "tr": "Bir piyonu terfiye götürmek için şah önüne geçer ve yolunu açar. Erken itilen piyon durdurulur; iyi yerleşmiş bir şah onu sonuna kadar götürür.",
+        "pl": "Żeby doprowadzić piona do promocji, król idzie przed nim i otwiera mu drogę. Pion pchnięty za wcześnie zostanie zatrzymany; dobrze ustawiony król odprowadzi go do końca.",
+        "id": "Untuk membawa pion ke promosi, raja berjalan di depannya dan membuka jalan. Pion yang didorong terlalu cepat akan dihentikan; raja yang posisinya baik mengawalnya sampai akhir."
+      },
+      "exos": [
+        {
+          "fen": "4k3/8/8/4K3/4P3/8/8/8 w - - 0 1",
+          "sol": [
+            "e5d6",
+            "e5e6",
+            "e5f6"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Your pawn is blocked by your own king. Move your king one rank forward, towards the black king.",
+            "fr": "Ton pion est bloqué par ton roi. Avance ton roi d'une rangée, vers le roi noir.",
+            "es": "Tu propio rey bloquea tu peón. Avanza tu rey una fila, hacia el rey negro.",
+            "pt": "Seu próprio rei bloqueia seu peão. Avance seu rei uma fileira, em direção ao rei preto.",
+            "de": "Dein eigener König blockiert deinen Bauern. Zieh deinen König eine Reihe vor, auf den schwarzen König zu.",
+            "ru": "Твою пешку загораживает твой же король. Продвинь короля на одну горизонталь, к чёрному королю.",
+            "it": "Il tuo pedone è bloccato dal tuo stesso re. Avanza il re di una traversa, verso il re nero.",
+            "tr": "Piyonunu kendi şahın kapatıyor. Şahını siyah şaha doğru bir sıra ilerlet.",
+            "pl": "Twojego piona blokuje twój własny król. Przesuń króla o jedną linię w stronę czarnego króla.",
+            "id": "Pionmu terhalang rajamu sendiri. Majukan rajamu satu baris, ke arah raja hitam."
+          },
+          "apres": {
+            "en": "Your king gains ground in front of the pawn: the way is opening.",
+            "fr": "Ton roi gagne du terrain devant le pion : la route s'ouvre.",
+            "es": "Tu rey gana terreno delante del peón: el camino se abre.",
+            "pt": "Seu rei ganha terreno na frente do peão: o caminho se abre.",
+            "de": "Dein König gewinnt Raum vor dem Bauern: Der Weg öffnet sich.",
+            "ru": "Твой король отвоёвывает место перед пешкой: путь открывается.",
+            "it": "Il tuo re guadagna terreno davanti al pedone: la strada si apre.",
+            "tr": "Şahın piyonun önünde alan kazanıyor: yol açılıyor.",
+            "pl": "Twój król zdobywa teren przed pionem: droga się otwiera.",
+            "id": "Rajamu merebut ruang di depan pion: jalan mulai terbuka."
+          }
+        },
+        {
+          "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+          "sol": [
+            "e6d6",
+            "e6f6"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Your king is in front of its pawn, facing the black king. Move it to the side, without stepping back, to keep the squares in front of the pawn.",
+            "fr": "Ton roi est devant son pion, face au roi noir. Déplace-le sur le côté, sans reculer, pour garder les cases devant le pion.",
+            "es": "Tu rey está delante de su peón, frente al rey negro. Muévelo hacia un lado, sin retroceder, para dominar las casillas delante del peón.",
+            "pt": "Seu rei está na frente do peão, diante do rei preto. Mova-o para o lado, sem recuar, para controlar as casas na frente do peão.",
+            "de": "Dein König steht vor seinem Bauern, dem schwarzen König gegenüber. Zieh ihn zur Seite, ohne zurückzugehen, um die Felder vor dem Bauern zu beherrschen.",
+            "ru": "Твой король стоит перед своей пешкой, напротив чёрного короля. Отойди в сторону, не отступая назад, чтобы держать поля перед пешкой.",
+            "it": "Il tuo re è davanti al suo pedone, di fronte al re nero. Spostalo di lato, senza indietreggiare, per controllare le case davanti al pedone.",
+            "tr": "Şahın piyonunun önünde, siyah şahın karşısında. Geri çekilmeden yana oynat ve piyonun önündeki kareleri tut.",
+            "pl": "Twój król stoi przed swoim pionem, naprzeciw czarnego króla. Przesuń go w bok, bez cofania, by pilnować pól przed pionem.",
+            "id": "Rajamu di depan pionnya, berhadapan dengan raja hitam. Geser ke samping, tanpa mundur, untuk menguasai petak di depan pion."
+          },
+          "apres": {
+            "en": "The black king cannot block the pawn: it will become a queen.",
+            "fr": "Le roi noir ne peut pas bloquer le pion : il ira à dame.",
+            "es": "El rey negro no puede bloquear el peón: coronará.",
+            "pt": "O rei preto não consegue bloquear o peão: ele vai virar dama.",
+            "de": "Der schwarze König kann den Bauern nicht blockieren: Er wird zur Dame.",
+            "ru": "Чёрный король не может заблокировать пешку: она станет ферзём.",
+            "it": "Il re nero non può bloccare il pedone: andrà a donna.",
+            "tr": "Siyah şah piyonu durduramaz: piyon vezir olacak.",
+            "pl": "Czarny król nie zablokuje piona: zostanie hetmanem.",
+            "id": "Raja hitam tidak bisa menghadang pion: pion akan menjadi menteri."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "4k3/8/8/8/8/8/8/3QK3 w - - 0 1",
+    "niveau": 4,
+    "finale": true,
+    "titre": {
+      "en": "The boss: king and queen against a lone king",
+      "fr": "Le boss : roi et dame contre roi seul",
+      "es": "El jefe: rey y dama contra rey solo",
+      "pt": "O chefão: rei e dama contra rei sozinho",
+      "de": "Der Boss: König und Dame gegen einsamen König",
+      "ru": "Босс: король и ферзь против одинокого короля",
+      "it": "Il boss: re e donna contro re solo",
+      "tr": "Boss: şah ve vezir, yalnız şaha karşı",
+      "pl": "Boss: król i hetman przeciw samotnemu królowi",
+      "id": "Bos: raja dan menteri melawan raja sendirian"
+    },
+    "intro": {
+      "en": "To finish the chapter, mate with your king and queen against the computer's lone king, which defends as well as it can. Push its king to the edge, bring yours closer, and watch out for stalemate. You have 50 moves. You can take back a move.",
+      "fr": "Pour finir le chapitre, fais mat avec ton roi et ta dame contre le roi seul de l'ordinateur, qui se défend de son mieux. Repousse son roi au bord, approche le tien, et attention au pat. Tu as 50 coups. Tu peux reprendre un coup.",
+      "es": "Para terminar el capítulo, da mate con tu rey y tu dama contra el rey solo del ordenador, que se defiende lo mejor que puede. Empuja su rey al borde, acerca el tuyo y cuidado con el ahogado. Tienes 50 jugadas. Puedes deshacer una jugada.",
+      "pt": "Para terminar o capítulo, dê mate com seu rei e sua dama contra o rei sozinho do computador, que se defende o melhor que pode. Empurre o rei dele para a borda, aproxime o seu e cuidado com o afogamento. Você tem 50 lances. Você pode voltar um lance.",
+      "de": "Zum Abschluss des Kapitels setzt du mit König und Dame den einsamen König des Computers matt, der sich so gut wie möglich verteidigt. Treib seinen König an den Rand, bring deinen näher und pass auf das Patt auf. Du hast 50 Züge. Du darfst einen Zug zurücknehmen.",
+      "ru": "Чтобы закончить главу, поставь мат королём и ферзём одинокому королю компьютера, который защищается как может. Оттесни его короля на край, подведи своего и берегись пата. У тебя 50 ходов. Ход можно взять назад.",
+      "it": "Per finire il capitolo, dai matto con re e donna al re solo del computer, che si difende come meglio può. Spingi il suo re sul bordo, avvicina il tuo e attenzione allo stallo. Hai 50 mosse. Puoi ritirare una mossa.",
+      "tr": "Bölümü bitirmek için şahın ve vezirinle, elinden geldiğince savunan bilgisayarın yalnız şahını mat et. Şahını kenara it, kendi şahını yaklaştır ve pata dikkat et. 50 hamlen var. Hamleni geri alabilirsin.",
+      "pl": "Na koniec rozdziału daj mata królem i hetmanem samotnemu królowi komputera, który broni się najlepiej, jak umie. Zepchnij jego króla na brzeg, podprowadź swojego i uważaj na pata. Masz 50 ruchów. Ruch można cofnąć.",
+      "id": "Untuk menutup bab ini, skakmat raja komputer yang sendirian dengan raja dan menterimu; komputer bertahan sebaik mungkin. Dorong rajanya ke tepi, dekatkan rajamu, dan awas pat. Kamu punya 50 langkah. Kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You know how to mate with the queen.",
+      "fr": "Boss battu. Tu sais faire mat avec la dame.",
+      "es": "Jefe derrotado. Sabes dar mate con la dama.",
+      "pt": "Chefão derrotado. Você sabe dar mate com a dama.",
+      "de": "Boss besiegt. Du kannst mit der Dame mattsetzen.",
+      "ru": "Босс побеждён. Ты умеешь ставить мат ферзём.",
+      "it": "Boss battuto. Sai dare matto con la donna.",
+      "tr": "Boss yenildi. Vezirle mat etmeyi biliyorsun.",
+      "pl": "Boss pokonany. Umiesz dać mata hetmanem.",
+      "id": "Bos dikalahkan. Kamu tahu cara skakmat dengan menteri."
+    }
+  }
+}

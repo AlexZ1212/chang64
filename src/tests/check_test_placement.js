@@ -5,7 +5,7 @@
    Le test de placement (apprendre.js, 2026-11-22, decisions d'Alexandre) :
    - il se propose par une carte dans l'onglet Apprendre, jamais par une
      fenetre ; on peut l'ecarter, puis le faire ou le refaire quand on veut ;
-   - dix positions au plus, un seul essai chacune, un bouton « Je ne sais
+   - une position ou deux par chapitre (douze au 22/11), un seul essai chacune, un bouton « Je ne sais
      pas » ; apres chaque reponse, un message net (juste ou non), une pastille
      par position, et un bouton « Suivant » (retours d'Alexandre du 22/11) ;
    - il s'arrete apres deux erreurs de suite, et le resultat le dit ;
@@ -21,6 +21,12 @@ const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko+
 const pause = ms => new Promise(r => setTimeout(r, ms));
 const net = s => String(s).replace(/[  ]/g, " ");
 const dit = x => JSON.stringify(x);
+/* Le nombre de positions et de chapitres vient des fichiers : le test suit
+   les chapitres qui sortent (12 positions et 4 chapitres au 22/11). */
+const PLACEMENT = require("../chemin/placement.json").positions;
+const N = PLACEMENT.length, NC = require("../chemin/plan.json").chapitres.length;
+const vide = n => Array(n).fill("-").join(" ");
+const tous = Array(N).fill(1);
 const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.setItem(k, typeof o[k] === "string" ? o[k] : JSON.stringify(o[k])); } });
 
 /* Passe le test : reponses[i] vaut true (bon coup), false (mauvais coup) ou
@@ -63,8 +69,8 @@ async function passer(w, reponses) {
   $("apTestRefaire").click(); await pause(600);
   T("le test s'ouvre sur l'ecran des lecons", ev("mode") === "debut" && ev("test.actif") === true && ev("testEnCours()") === true);
   const pastilles = () => [...$("testPastilles").children].map(i => i.className || "-").join(" ");
-  T("titre, position 1 sur 10, dix pastilles dont la premiere en cours", net($("debutTeteTitre").textContent) === "Test de placement" && /Position 1 sur 10/.test(net($("debutEtape").textContent)) && !cache("testPastilles") && pastilles() === "ici - - - - - - - - -", pastilles());
-  T("les pastilles ont un nom pour les lecteurs d'ecran", $("testPastilles").getAttribute("role") === "img" && /Bonnes réponses : 0 sur 10/.test(net($("testPastilles").getAttribute("aria-label"))), $("testPastilles").getAttribute("aria-label"));
+  T("titre, position 1 sur N, une pastille par position, la premiere en cours", net($("debutTeteTitre").textContent) === "Test de placement" && new RegExp("Position 1 sur " + N).test(net($("debutEtape").textContent)) && !cache("testPastilles") && pastilles() === "ici " + vide(N - 1), pastilles());
+  T("les pastilles ont un nom pour les lecteurs d'ecran", $("testPastilles").getAttribute("role") === "img" && new RegExp("Bonnes réponses : 0 sur " + N).test(net($("testPastilles").getAttribute("aria-label"))), $("testPastilles").getAttribute("aria-label"));
   T("l'echiquier est du cote des Blancs", ev("flipped") === false);
   T("ni pastilles, ni indice, ni titre de lecon", cache("debutPas") && cache("debutActions") && cache("debutTitre") && cache("debutIntro") && cache("leconBoss") && cache("debutFin"));
   T("consigne et bouton « Je ne sais pas », pas encore de « Suivant »", /meilleur coup/.test(net($("debutStatus").textContent)) && !cache("testActions") && net($("btnTestPasse").textContent) === "Je ne sais pas" && !cache("btnTestPasse") && cache("btnTestSuite"));
@@ -75,12 +81,12 @@ async function passer(w, reponses) {
   T("position passee : c'est dit, sans reproche", /^Position passée\. /.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
   T("et l'idee est expliquee en une phrase", net($("debutStatus").textContent).endsWith(net(ev("cheminD.placement[0].ex"))) && /cavalier en b7/.test(net($("debutStatus").textContent)), $("debutStatus").textContent);
   T("le bon coup est montre sur l'echiquier", ev("selected===debutCase('f3')") && ev("marks[debutCase('b7')]") === "hint");
-  T("la pastille de la position est marquee manquee, avec une croix", pastilles() === "rate - - - - - - - - -" && !!$("testPastilles").firstChild.querySelector("svg"), pastilles());
+  T("la pastille de la position est marquee manquee, avec une croix", pastilles() === "rate " + vide(N - 1) && !!$("testPastilles").firstChild.querySelector("svg"), pastilles());
   T("un bouton « Suivant » apparait", !cache("btnTestSuite") && net($("btnTestSuite").textContent) === "Suivant" && $("btnTestSuite").classList.contains("primary"));
   await pause(1600);
-  T("rien n'avance tant qu'on n'a pas appuye", ev("test.i") === 0 && /Position 1 sur 10/.test(net($("debutEtape").textContent)));
+  T("rien n'avance tant qu'on n'a pas appuye", ev("test.i") === 0 && new RegExp("Position 1 sur " + N).test(net($("debutEtape").textContent)));
   $("btnTestSuite").click(); await pause(60);
-  T("« Suivant » amene la position 2", ev("test.i") === 1 && /Position 2 sur 10/.test(net($("debutEtape").textContent)) && pastilles() === "rate ici - - - - - - - -" && cache("btnTestSuite") && !cache("btnTestPasse"), pastilles());
+  T("« Suivant » amene la position 2", ev("test.i") === 1 && new RegExp("Position 2 sur " + N).test(net($("debutEtape").textContent)) && pastilles() === "rate ici " + vide(N - 2) && cache("btnTestSuite") && !cache("btnTestPasse"), pastilles());
   ev("(function(){const p=cheminD.placement[test.i];testReponse(legalCache.find(x=>!p.sol.includes(game.uci(x))));})()");
   T("un mauvais coup : dit nettement, la case jouee est marquee", /pas le meilleur coup/.test(net($("debutStatus").textContent)) && $("debutStatus").classList.contains("lose") && ev("Object.values(marks).includes('bad')"), $("debutStatus").textContent);
   T("le mauvais coup est repris, le bon est montre, et la phrase dit pourquoi", ev("game.history.length") === 0 && ev("selected===debutCase('g1')") && ev("marks[debutCase('g7')]") === "hint" && /protégée par ton roi/.test(net($("debutStatus").textContent)), $("debutStatus").textContent);
@@ -89,9 +95,9 @@ async function passer(w, reponses) {
   $("btnTestSuite").click(); await pause(100);
   T("deux erreurs de suite : le test s'arrete a la deuxieme position", ev("test.fin") === true && ev("test.rep.length") === 2);
   T("resultat sans echiquier", $("appLayout").dataset.test === "resultat" && !cache("testResultat") && cache("testActions"));
-  T("les pastilles restent : deux manquees, huit jamais vues", !cache("testPastilles") && pastilles() === "rate rate - - - - - - - -", pastilles());
-  T("l'arret avant la dixieme position est explique", !cache("testArret") && /arrêté après deux positions manquées de suite/.test(net($("testArret").textContent)), $("testArret").textContent);
-  T("le compte est dit", /Bonnes réponses : 0 sur 10/.test(net($("debutEtape").textContent)), $("debutEtape").textContent);
+  T("les pastilles restent : deux manquees, les autres jamais vues", !cache("testPastilles") && pastilles() === "rate rate " + vide(N - 2), pastilles());
+  T("l'arret avant la derniere position est explique", !cache("testArret") && /arrêté après deux positions manquées de suite/.test(net($("testArret").textContent)), $("testArret").textContent);
+  T("le compte est dit", new RegExp("Bonnes réponses : 0 sur " + N).test(net($("debutEtape").textContent)), $("debutEtape").textContent);
   let lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
   T("trois reglages expliques : chemin, niveau, ordinateur", lignes.length === 3 && /^Chemin/.test(lignes[0]) && /^Niveau exercices/.test(lignes[1]) && /^Ordinateur/.test(lignes[2]), lignes.join(" || "));
   T("debutant : chapitre 1, palier 1 a 700, ordinateur Debutant", /chapitre 1 : Je débute/.test(lignes[0]) && !/restent ouverts/.test(lignes[0]) && /Palier 1 \| niveau exercices 700/.test(lignes[1]) && /Débutant/.test(lignes[2]) && /700/.test(lignes[2]), lignes.join(" || "));
@@ -109,22 +115,25 @@ async function passer(w, reponses) {
   $("tab-apprendre").click(); await pause(500);
   $("apTestGo").click(); await pause(600);
   /* Les cinq premieres trouvees (chapitres 1 et 2), puis deux erreurs. */
-  let vues = await passer(w, [true, true, true, true, true, false, null, true, true, true]);
+  let vues = await passer(w, [true, true, true, true, true, false, null].concat(Array(N - 7).fill(true)));
   T("il s'arrete apres la septieme position", vues === 7 && ev("test.fin") === true, String(vues));
   T("la position avec un coup prealable a montre le pion avancer", ev("cheminD.placement[3].avant") === "d7d5" && ev("test.rep[3]") === 1);
   T("l'echiquier n'a jamais ete a l'envers, position 4 comprise", !w.__aLEnvers, JSON.stringify(w.__aLEnvers));
-  T("pastilles du resultat : cinq trouvees, deux manquees, trois jamais vues", [...$("testPastilles").children].map(i => i.className || "-").join(" ") === "bon bon bon bon bon rate rate - - -");
+  T("pastilles du resultat : cinq trouvees, deux manquees, trois jamais vues", [...$("testPastilles").children].map(i => i.className || "-").join(" ") === "bon bon bon bon bon rate rate " + vide(N - 7));
   lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
-  T("5 sur 10 : entree au chapitre 3, les chapitres d'avant restent ouverts", /Bonnes réponses : 5 sur 10/.test(net($("debutEtape").textContent)) && /chapitre 3 : Ne rien donner/.test(lignes[0]) && /restent ouverts/.test(lignes[0]), lignes[0]);
-  T("palier 1 a 800, ordinateur Debutant", /Palier 1 \| niveau exercices 800/.test(lignes[1]) && /Débutant/.test(lignes[2]), lignes.slice(1).join(" || "));
+  T("5 bonnes reponses : entree au chapitre 3, les chapitres d'avant restent ouverts", new RegExp("Bonnes réponses : 5 sur " + N).test(net($("debutEtape").textContent)) && /chapitre 3 : Ne rien donner/.test(lignes[0]) && /restent ouverts/.test(lignes[0]), lignes[0]);
+  /* Le bareme suit la part de positions trouvees (TEST_NIVEAUX, apprendre.js) :
+     5 sur 10 donnait 800 ; avec un test plus long, 5 bonnes reponses valent moins. */
+  const attendu = ev("TEST_NIVEAUX[Math.round(5*10/" + N + ")]");
+  T("5 bonnes reponses : le palier et le niveau du bareme, ordinateur Debutant", new RegExp("Palier " + attendu[0] + " \\| niveau exercices " + attendu[1]).test(lignes[1]) && /Débutant/.test(lignes[2]), lignes.slice(1).join(" || "));
   $("btnTestAppliquer").click(); await pause(600);
   T("« Commencer le chapitre 3 » ouvre ce chapitre", ev("mode") === "debut" && ev("leconCh") === "securite");
-  T("les trois chapitres sont ouverts", ev("cheminOuvert(0)&&cheminOuvert(1)&&cheminOuvert(2)") === true && dit(ev("chemin.o")) === dit(["debut", "regles", "securite"]));
+  T("les chapitres 1 a 3 sont ouverts", ev("cheminOuvert(0)&&cheminOuvert(1)&&cheminOuvert(2)") === true && dit(ev("chemin.o")) === dit(["debut", "regles", "securite"]));
   T("le chapitre a suivre est le 3, meme si le 1 n'est pas fait", ev("cheminCourant()") === 2);
   $("btnDebutFermer").click(); await pause(300);
   T("la croix ramene a l'onglet, qui propose de refaire le test", ev("mode") === "apprendre" && $("apTest").classList.contains("hide") && net($("apTestRefaire").textContent) === "Refaire le test de placement");
   const chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
-  T("aucun chapitre n'est verrouille, le 3 est en cours", chap.every(b => !b.classList.contains("verrou")) && chap[2].classList.contains("encours"));
+  T("les chapitres 1 a 3 sont ouverts, le 3 est en cours, les suivants attendent", chap.slice(0, 3).every(b => !b.classList.contains("verrou")) && chap.slice(3).every(b => b.classList.contains("verrou")) && chap[2].classList.contains("encours"));
   w.close();
 
   console.log("--- Tout juste ---");
@@ -132,9 +141,9 @@ async function passer(w, reponses) {
   $ = id => w.document.getElementById(id); ev = s => w.eval(s);
   $("tab-apprendre").click(); await pause(500);
   $("apTestGo").click(); await pause(600);
-  vues = await passer(w, [true, true, true, true, true, true, true, true, true, true]);
-  T("dix positions vues, dix trouvees", vues === 10 && ev("test.res.score") === 10 && ev("test.fin") === true, vues + " / " + ev("test.res && test.res.score"));
-  T("test complet : aucune phrase d'arret, dix pastilles vertes", $("testArret").classList.contains("hide") && [...$("testPastilles").children].every(i => i.className === "bon") && !w.__aLEnvers);
+  vues = await passer(w, Array(N).fill(true));
+  T("toutes les positions vues, toutes trouvees", vues === N && ev("test.res.score") === N && ev("test.fin") === true, vues + " / " + ev("test.res && test.res.score"));
+  T("test complet : aucune phrase d'arret, toutes les pastilles vertes", $("testArret").classList.contains("hide") && [...$("testPastilles").children].every(i => i.className === "bon") && !w.__aLEnvers);
   lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
   T("au-dela des chapitres sortis : ils restent ouverts, Resoudre est indique", /restent ouverts/.test(lignes[0]) && /Résoudre/.test(lignes[0]), lignes[0]);
   T("palier 6 a 1450, ordinateur Serieux a 1600", /Palier 6 \| niveau exercices 1450/.test(lignes[1]) && /Sérieux/.test(lignes[2]) && /1600/.test(lignes[2]), lignes.slice(1).join(" || "));
@@ -174,7 +183,7 @@ async function passer(w, reponses) {
   $("tab-apprendre").click(); await pause(500);
   $("apTestGo").click(); await pause(600);
   T("apres une partie avec les Noirs, le test repart du cote des Blancs", ev("flipped") === false);
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < N; i++) {
     ev("test.i=" + i + ";test.rep.length=" + i + ";for(let k=0;k<" + i + ";k++)test.rep[k]=1;testRendre()");
     await pause(ev("!!cheminD.placement[" + i + "].avant") ? 800 : 30);
     T("position " + (i + 1) + " : le camp qui repond est en bas", ev("flipped") === (ev("game.turn===B")) && ev("game.turn===W"), "flipped " + ev("flipped") + ", trait " + ev("game.turn"));
@@ -191,22 +200,26 @@ async function passer(w, reponses) {
   /* Decision d'Alexandre (22/11) : avec 9 sur 10 et la seule position 5
      manquee, le test l'envoyait au chapitre 2. Un chapitre est acquis si
      toutes ses positions sont trouvees, ou si une seule est manquee et qu'au
-     moins deux positions plus dures sont trouvees. Positions : 1 a 3 chapitre
-     1, 4 et 5 chapitre 2, 6 et 7 chapitre 3, 8 a 10 au-dela. */
+     moins deux positions plus dures sont trouvees. Positions (22/11) : 1 a 3
+     chapitre 1, 4 et 5 chapitre 2, 6 et 7 chapitre 3, 8 et 9 chapitre 4, 10
+     a 12 au-dela. NC = au-dela des chapitres sortis. */
   w = await ouvrir("fr", { fetch: true });
   $ = id => w.document.getElementById(id); ev = s => w.eval(s);
   $("tab-apprendre").click(); await pause(500);
   $("apTestGo").click(); await pause(600);
   const entree = rep => { w.__rep = rep; return ev("(function(){test.rep=window.__rep.slice();testCalculer();return test.res.entree;})()"); };
-  T("9 sur 10, la position 5 manquee : au-dela des trois chapitres", entree([1, 1, 1, 1, 0, 1, 1, 1, 1, 1]) === 3);
-  T("9 sur 10, la position 2 manquee : au-dela aussi", entree([1, 0, 1, 1, 1, 1, 1, 1, 1, 1]) === 3);
-  T("deux erreurs isolees dans deux chapitres, le reste trouve : au-dela", entree([0, 1, 1, 1, 1, 0, 1, 1, 1, 1]) === 3);
+  const sauf = (...k) => tous.map((x, i) => k.includes(i + 1) ? 0 : 1);
+  T("tout sauf la position 5 : au-dela des chapitres sortis", entree(sauf(5)) === NC);
+  T("tout sauf la position 2 : au-dela aussi", entree(sauf(2)) === NC);
+  T("deux erreurs isolees dans deux chapitres, le reste trouve : au-dela", entree(sauf(1, 6)) === NC);
   T("une erreur au chapitre 1 puis rien de plus dur trouve : chapitre 1", entree([1, 0, 1, 0, 0]) === 0);
   T("les deux positions du chapitre 2 manquees : chapitre 2", entree([1, 1, 1, 0, 0]) === 1);
   T("une erreur au chapitre 2, une seule position plus dure trouvee : chapitre 2", entree([1, 1, 1, 1, 0, 1, 0, 0]) === 1);
-  T("une erreur au chapitre 3, deux positions plus dures trouvees : au-dela", entree([1, 1, 1, 1, 1, 1, 0, 1, 1, 0]) === 3);
+  T("une erreur au chapitre 3, deux positions plus dures trouvees : au-dela", entree(sauf(7)) === NC);
+  T("une erreur au chapitre 4, des positions plus dures trouvees : au-dela", entree(sauf(8)) === NC);
+  T("les deux positions du chapitre 4 manquees : chapitre 4", entree([1, 1, 1, 1, 1, 1, 1, 0, 0]) === 3);
   T("une erreur au chapitre 3, une seule position plus dure trouvee : chapitre 3", entree([1, 1, 1, 1, 1, 0, 1, 1, 0, 0]) === 2);
-  T("tout juste : au-dela ; rien de trouve : chapitre 1", entree([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) === 3 && entree([0, 0]) === 0);
+  T("tout juste : au-dela ; rien de trouve : chapitre 1", entree(tous) === NC && entree([0, 0]) === 0);
   T("le chapitre d'entree est note dans la progression", (() => { ev("chemin.o=[]"); entree([1, 1, 1, 1, 0, 1, 0, 0]); return JSON.stringify(ev("chemin.o")) === JSON.stringify(["debut", "regles"]) && ev("chemin.p.e") === "regles"; })(), JSON.stringify(ev("chemin.o")));
   w.close();
 

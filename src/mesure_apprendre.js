@@ -5,8 +5,10 @@
             node mesure_apprendre.js [http://localhost:8083] [dossier des captures]
 
    Regle d'Alexandre : a 360 px, dans les 10 langues, aucune ligne ne deborde
-   et aucun libelle de bouton ne passe sur deux lignes ; une lecon tient sur
-   un seul ecran de telephone. jsdom ne met rien en page : cette mesure passe
+   et aucun libelle de bouton ne passe sur deux lignes. Depuis le 22/11 au
+   soir (Alexandre : « je prefere scroller », « maximise la taille de
+   l'echiquier »), une lecon peut defiler, mais l'echiquier est entier a
+   l'ecran et garde la meme taille sur tous les ecrans de lecon. jsdom ne met rien en page : cette mesure passe
    par un vrai Chrome, sans fenetre (tests/outils/chrome_sans_fenetre.js). Ce
    n'est pas un test de la suite (il lui faut un serveur et ce Chrome), d'ou
    son nom sans « check_ ».
@@ -41,14 +43,24 @@ const MESURE = `(function(nom){
     const r=e.getBoundingClientRect();
     if(r.right>${L}+0.5) pb.push(nom+" : element hors de l'ecran <"+e.tagName.toLowerCase()+(e.id?"#"+e.id:"")+"> "+Math.round(r.right));
   }
-  return {pb:pb.slice(0,6),h:de.scrollHeight,w:de.scrollWidth};
+  const bf=document.querySelector("#appLayout .board-frame"),br=bf&&visible(bf)?bf.getBoundingClientRect():null;
+  return {pb:pb.slice(0,6),h:de.scrollHeight,w:de.scrollWidth,bw:br?Math.round(br.width):0,bb:br?Math.round(br.bottom+scrollY):0};
 })`;
 
 (async () => {
   const c = await ouvrir({ largeur: L, hauteur: H });
   const tout = [];
-  let ecrans = 0, pire = 0;
-  const noter = (r, nom, unEcran) => { ecrans++; for (const p of r.pb) tout.push(p); if (unEcran && r.h > H) { tout.push(nom + " : ne tient pas sur un ecran (" + r.h + " px pour " + H + ")"); } if (unEcran) pire = Math.max(pire, r.h); };
+  let ecrans = 0, pire = 0, taille = 0;
+  /* lecon : un ecran de lecon ou du test, ou l'echiquier est montre. Il doit
+     etre entier dans le premier ecran, et de la meme taille partout. */
+  const noter = (r, nom, lecon) => {
+    ecrans++; for (const p of r.pb) tout.push(p);
+    if (!lecon || !r.bw) return;
+    pire = Math.max(pire, r.h);
+    if (r.bb > H) tout.push(nom + " : l'echiquier depasse le bas de l'ecran (" + r.bb + " px pour " + H + ")");
+    if (!taille) taille = r.bw;
+    else if (r.bw !== taille) tout.push(nom + " : l'echiquier change de taille (" + r.bw + " px au lieu de " + taille + ")");
+  };
   const mesurer = async (nom, unEcran) => noter(await c.js(MESURE + "(" + JSON.stringify(nom) + ")"), nom, unEcran);
   const attendre = ms => c.js("new Promise(r=>setTimeout(r," + ms + "))");
   /* LANGUES=id,pl pour ne remesurer que quelques langues. */
@@ -82,15 +94,15 @@ const MESURE = `(function(nom){
     await mesurer(l + " test, position 2, reponse fausse", true);
     await c.js("testArreter();setMode('apprendre');testLancer();new Promise(r=>setTimeout(r,900))");
     if (CAPTURES && l === "fr") await c.capture(path.join(CAPTURES, "test-position-fr.png"));
-    await c.js("(async function(){for(let i=0;i<10&&!test.fin;i++){while(test.occupe)await new Promise(r=>setTimeout(r,60));if(test.fin)break;const p=cheminD.placement[test.i];testReponse(i<6?legalCache.find(x=>p.sol.includes(game.uci(x))):null);await new Promise(r=>setTimeout(r,60));if(i===0||i===6)window.__apres=(window.__apres||0)+1;document.getElementById('btnTestSuite').click();await new Promise(r=>setTimeout(r,80));}})()");
+    await c.js("(async function(){for(let i=0;i<cheminD.placement.length&&!test.fin;i++){while(test.occupe)await new Promise(r=>setTimeout(r,60));if(test.fin)break;const p=cheminD.placement[test.i];testReponse(i<6?legalCache.find(x=>p.sol.includes(game.uci(x))):null);await new Promise(r=>setTimeout(r,60));if(i===0||i===6)window.__apres=(window.__apres||0)+1;document.getElementById('btnTestSuite').click();await new Promise(r=>setTimeout(r,80));}})()");
     await mesurer(l + " test, resultat", true);
     if (CAPTURES && (l === "fr" || l === "de")) await c.capture(path.join(CAPTURES, "test-resultat-" + l + ".png"));
     /* 3. Chemin avance : tout est ouvert, chaque exercice de chaque chapitre. */
-    await poser({ "chang64:debut": { e: 0, x: 0, f: [0, 1, 2, 3, 4, 5] }, "chang64:chemin": { v: 1, c: { regles: { e: 0, x: 0, f: [0, 1, 2, 3, 4] } }, o: ["debut", "regles", "securite"], p: { t: 1, n: 5, e: "securite" } } });
+    await poser({ "chang64:debut": { e: 0, x: 0, f: [0, 1, 2, 3, 4, 5] }, "chang64:chemin": { v: 1, c: { regles: { e: 0, x: 0, f: [0, 1, 2, 3, 4] } }, o: require("./chemin/plan.json").chapitres, p: { t: 1, n: 5, e: "securite" } } });
     await mesurer(l + " accueil (Continuer)");
     await c.js("document.getElementById('tab-apprendre').click();new Promise(r=>setTimeout(r,700))");
     await mesurer(l + " onglet (chemin avance)");
-    for (let ch = 0; ch < 3; ch++) {
+    for (let ch = 0; ch < require("./chemin/plan.json").chapitres.length; ch++) {
       await c.js("setMode('apprendre');document.querySelectorAll('#apChemin .ap-chap')[" + ch + "].click();new Promise(r=>setTimeout(r,700))");
       const plan = await c.js("leconEtapes().map(e=>e.exos.length)");
       for (let e = 0; e < plan.length; e++) {
@@ -103,7 +115,7 @@ const MESURE = `(function(nom){
           /* Le message le plus long qu'un coup faux peut afficher, puis la reussite. */
           await c.js("(function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];let long='';for(const k in (ex.faux||{}))if(ex.faux[k].length>long.length)long=ex.faux[k];if(long)debutStatut('lose',long);})()");
           await mesurer(nom + ", coup faux", true);
-          await c.js("(async function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];if(ex.avant)await new Promise(r=>setTimeout(r,800));const m=legalCache.find(q=>game.uci(q)===ex.sol[0]);debutEssai(m,ex);await new Promise(r=>setTimeout(r,(ex.suite?ex.suite.length*800:0)+120));})()");
+          await c.js("(async function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];if(ex.avant)await new Promise(r=>setTimeout(r,800));const m=legalCache.find(q=>game.uci(q)===ex.sol[0]);debutEssai(m,ex);await new Promise(r=>setTimeout(r,(ex.suite?ex.suite.length*800:0)+120));if(ex.reponse){await new Promise(r=>setTimeout(r,900));const mm=legalCache.find(q=>{game.makeMove(q);const k=game.isCheckmate();game.undoMove();return k;});if(mm)debutEssai(mm,ex);await new Promise(r=>setTimeout(r,150));}})()");
           await mesurer(nom + ", reussi", true);
         }
       }
@@ -116,7 +128,7 @@ const MESURE = `(function(nom){
     console.log(l + " : mesure faite");
   }
   await c.fermer();
-  console.log("\n" + ecrans + " ecrans mesures a " + L + " x " + H + " px, " + (process.env.LANGUES ? process.env.LANGUES.split(",").length : CODES.length) + " langue(s) ; ecran de lecon le plus haut : " + pire + " px.");
+  console.log("\n" + ecrans + " ecrans mesures a " + L + " x " + H + " px, " + (process.env.LANGUES ? process.env.LANGUES.split(",").length : CODES.length) + " langue(s) ; echiquier des lecons : " + taille + " px ; page de lecon la plus haute : " + pire + " px (elle defile au-dela de " + H + ").");
   if (tout.length) { console.log(tout.length + " defaut(s) :"); for (const p of tout) console.log("  - " + p); process.exit(1); }
-  console.log("Aucun debordement, aucun bouton sur deux lignes, chaque lecon tient sur un ecran.");
+  console.log("Aucun debordement, aucun bouton sur deux lignes, echiquier entier a l'ecran et de taille fixe.");
 })().catch(e => { console.error(e); process.exit(1); });

@@ -133,6 +133,38 @@ const ECRANS = [
     T("retour a l'accueil : la bascule mene a l'accueil de l'autre langue", vers.getAttribute("href") === "/pt/", vers.getAttribute("href"));
     w.close();
   }
+  {
+    /* Signale le 2026-11-22 par Alexandre (iPhone) : dans Resoudre, changer de
+       langue ramenait a l'accueil. Le lien emporte maintenant l'onglet ouvert
+       (#onglet=), et la page de l'autre langue le rouvre. */
+    const w = await ouvrir("fr", { attente: 1200 });
+    const lien = code => {
+      const v = [...w.document.querySelectorAll("#langSwitch a[data-lang]")].find(a => a.dataset.lang === code);
+      v.addEventListener("click", e => e.preventDefault(), { once: true });
+      v.click();
+      return v.getAttribute("href");
+    };
+    w.document.getElementById("tab-puzzles").click(); await wait(200);
+    T("onglet Resoudre : le lien emporte l'onglet", lien("es") === "/es/#onglet=puzzles", lien("es"));
+    w.document.getElementById("tab-apprendre").click(); await wait(200);
+    T("onglet Apprendre : le lien emporte l'onglet", lien("es") === "/es/#onglet=apprendre", lien("es"));
+    w.document.getElementById("tab-edit").click(); await wait(200);
+    T("onglet Analyser : le lien emporte l'onglet", lien("es") === "/es/#onglet=edit", lien("es"));
+    w.eval("setMode('home')"); await wait(100);
+    T("accueil : le lien mene a l'accueil", lien("es") === "/es/", lien("es"));
+    w.close();
+    for (const [o, m] of [["puzzles", "puzzles"], ["apprendre", "apprendre"], ["explore", "explore"], ["edit", "edit"], ["inconnu", "home"]]) {
+      const v = await ouvrir("es", { attente: 1200, avant(x) { x.history.replaceState(null, "", "#onglet=" + o); } });
+      T("arrivee par #onglet=" + o + " : ecran " + m, v.eval("mode") === m, v.eval("mode"));
+      if (o === "puzzles") {
+        v.document.getElementById("tab-apprendre").click(); await wait(200);
+        const k = [...v.document.querySelectorAll("#langSwitch a[data-lang]")].find(a => a.dataset.lang === "de");
+        k.addEventListener("click", e => e.preventDefault(), { once: true }); k.click();
+        T("arrive sur Resoudre puis passe a Apprendre : le lien suit Apprendre", k.getAttribute("href") === "/de/#onglet=apprendre", k.getAttribute("href"));
+      }
+      v.close();
+    }
+  }
 
   console.log("\n--- renvoi depuis la page anglaise ---");
   /* Le script de tete de "/" est rejoue dans un bac a sable, avec un

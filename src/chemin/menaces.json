@@ -1,0 +1,603 @@
+{
+  "id": "menaces",
+  "theme": "Double attack",
+  "titre": {
+    "en": "Double threats",
+    "fr": "Les doubles menaces",
+    "es": "Las amenazas dobles",
+    "pt": "As ameaças duplas",
+    "de": "Doppelangriffe",
+    "ru": "Двойные удары",
+    "it": "Le doppie minacce",
+    "tr": "Çifte tehditler",
+    "pl": "Podwójne groźby",
+    "id": "Ancaman ganda"
+  },
+  "desc": {
+    "en": "Attacking two things at once: with a knight, a pawn, the queen, a check, or a piece that steps aside.",
+    "fr": "Attaquer deux choses à la fois : avec un cavalier, un pion, la dame, un échec, ou une pièce qui s'écarte.",
+    "es": "Atacar dos cosas a la vez: con un caballo, un peón, la dama, un jaque o una pieza que se aparta.",
+    "pt": "Atacar duas coisas ao mesmo tempo: com um cavalo, um peão, a dama, um xeque ou uma peça que sai do caminho.",
+    "de": "Zwei Dinge auf einmal angreifen: mit einem Springer, einem Bauern, der Dame, einem Schach oder einer Figur, die zur Seite zieht.",
+    "ru": "Нападать сразу на две цели: конём, пешкой, ферзём, шахом или фигурой, которая уходит с линии.",
+    "it": "Attaccare due cose alla volta: con un cavallo, un pedone, la donna, uno scacco o un pezzo che si sposta.",
+    "tr": "Aynı anda iki şeye saldırmak: atla, piyonla, vezirle, şahla ya da kenara çekilen bir taşla.",
+    "pl": "Atakować dwie rzeczy naraz: skoczkiem, pionem, hetmanem, szachem albo bierką, która schodzi z drogi.",
+    "id": "Menyerang dua sasaran sekaligus: dengan kuda, pion, menteri, skak, atau bidak yang menyingkir."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "The knight fork, again",
+        "fr": "La fourchette du cavalier, encore",
+        "es": "La horquilla de caballo, otra vez",
+        "pt": "O garfo de cavalo, de novo",
+        "de": "Die Springergabel, noch einmal",
+        "ru": "Снова вилка конём",
+        "it": "La forchetta di cavallo, ancora",
+        "tr": "Yine at çatalı",
+        "pl": "Znowu widełki skoczkiem",
+        "id": "Garpu kuda, sekali lagi"
+      },
+      "intro": {
+        "en": "You saw the fork in chapter 1. It is even stronger with a check: the king has to move, and the knight takes the other piece. Look for the squares from which your knight hits the king and a big piece.",
+        "fr": "Tu as vu la fourchette au chapitre 1. Elle est encore plus forte avec un échec : le roi doit bouger, et le cavalier prend l'autre pièce. Cherche les cases d'où ton cavalier touche le roi et une grosse pièce.",
+        "es": "Viste la horquilla en el capítulo 1. Es todavía más fuerte con jaque: el rey tiene que moverse y el caballo captura la otra pieza. Busca las casillas desde las que tu caballo toca al rey y a una pieza grande.",
+        "pt": "Você viu o garfo no capítulo 1. Ele é ainda mais forte com xeque: o rei precisa se mover, e o cavalo captura a outra peça. Procure as casas de onde seu cavalo alcança o rei e uma peça grande.",
+        "de": "Die Gabel kennst du aus Kapitel 1. Mit Schach ist sie noch stärker: Der König muss ziehen, und der Springer schlägt die andere Figur. Such die Felder, von denen dein Springer den König und eine große Figur trifft.",
+        "ru": "Вилку ты видел в главе 1. С шахом она ещё сильнее: король обязан уйти, и конь берёт другую фигуру. Ищи поля, с которых твой конь бьёт короля и крупную фигуру.",
+        "it": "Hai visto la forchetta nel capitolo 1. Con uno scacco è ancora più forte: il re deve muoversi e il cavallo cattura l'altro pezzo. Cerca le case da cui il tuo cavallo colpisce il re e un pezzo grosso.",
+        "tr": "Çatalı 1. bölümde gördün. Şahla birlikte daha da güçlüdür: şah kaçmak zorundadır ve at öteki taşı alır. Atının şahı ve büyük bir taşı aynı anda vurduğu kareleri ara.",
+        "pl": "Widełki poznałeś w rozdziale 1. Z szachem są jeszcze silniejsze: król musi uciec, a skoczek bije drugą bierkę. Szukaj pól, z których twój skoczek sięga króla i dużej bierki.",
+        "id": "Kamu sudah melihat garpu di bab 1. Dengan skak, garpu lebih kuat lagi: raja harus bergerak, dan kuda memakan bidak yang lain. Cari petak tempat kudamu bisa mengenai raja dan bidak besar."
+      },
+      "exos": [
+        {
+          "fen": "2r3k1/5ppp/8/3N4/8/8/5PPP/6K1 w - - 0 1",
+          "sol": [
+            "d5e7"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "g8f8",
+            "e7c8"
+          ],
+          "consigne": {
+            "en": "Find the knight move that gives check and attacks the rook at the same time.",
+            "fr": "Trouve le coup de cavalier qui donne échec et attaque la tour en même temps.",
+            "es": "Encuentra la jugada de caballo que da jaque y ataca la torre al mismo tiempo.",
+            "pt": "Encontre o lance de cavalo que dá xeque e ataca a torre ao mesmo tempo.",
+            "de": "Finde den Springerzug, der Schach gibt und gleichzeitig den Turm angreift.",
+            "ru": "Найди ход конём, который даёт шах и одновременно нападает на ладью.",
+            "it": "Trova la mossa di cavallo che dà scacco e attacca la torre nello stesso momento.",
+            "tr": "Hem şah çeken hem de kaleye saldıran at hamlesini bul.",
+            "pl": "Znajdź ruch skoczkiem, który daje szacha i jednocześnie atakuje wieżę.",
+            "id": "Temukan langkah kuda yang memberi skak sekaligus menyerang benteng."
+          },
+          "apres": {
+            "en": "The king has to move, and the rook falls.",
+            "fr": "Le roi doit bouger, et la tour tombe.",
+            "es": "El rey tiene que moverse y la torre cae.",
+            "pt": "O rei precisa se mover, e a torre cai.",
+            "de": "Der König muss ziehen, und der Turm fällt.",
+            "ru": "Король должен уйти, и ладья падает.",
+            "it": "Il re deve muoversi e la torre cade.",
+            "tr": "Şah kaçmak zorunda ve kale düşüyor.",
+            "pl": "Król musi uciec, a wieża pada.",
+            "id": "Raja harus bergerak, dan benteng jatuh."
+          }
+        },
+        {
+          "fen": "6k1/3q1p1p/6p1/3N4/8/8/5PPP/6K1 w - - 0 1",
+          "sol": [
+            "d5f6"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "g8g7",
+            "f6d7"
+          ],
+          "consigne": {
+            "en": "This time your knight can hit the king and the queen. Find the square.",
+            "fr": "Cette fois, ton cavalier peut viser le roi et la dame. Trouve la case.",
+            "es": "Esta vez tu caballo puede apuntar al rey y a la dama. Encuentra la casilla.",
+            "pt": "Desta vez seu cavalo pode mirar o rei e a dama. Encontre a casa.",
+            "de": "Diesmal kann dein Springer König und Dame treffen. Finde das Feld.",
+            "ru": "На этот раз твой конь может бить короля и ферзя. Найди поле.",
+            "it": "Stavolta il tuo cavallo può mirare al re e alla donna. Trova la casa.",
+            "tr": "Bu kez atın şahı ve veziri hedefleyebilir. Kareyi bul.",
+            "pl": "Tym razem twój skoczek może celować w króla i hetmana. Znajdź pole.",
+            "id": "Kali ini kudamu bisa mengincar raja dan menteri. Temukan petaknya."
+          },
+          "apres": {
+            "en": "A queen for nothing: the best fork of all.",
+            "fr": "Une dame pour rien : c'est la fourchette qui rapporte le plus.",
+            "es": "Una dama a cambio de nada: es la horquilla que más gana.",
+            "pt": "Uma dama em troca de nada: é o garfo que mais rende.",
+            "de": "Eine Dame für nichts: Das ist die Gabel, die am meisten bringt.",
+            "ru": "Ферзь даром: это самая выгодная вилка.",
+            "it": "Una donna per niente: è la forchetta che rende di più.",
+            "tr": "Karşılığında hiçbir şey vermeden bir vezir: en kazançlı çatal budur.",
+            "pl": "Hetman za darmo: to widełki, które dają najwięcej.",
+            "id": "Menteri tanpa balasan apa pun: inilah garpu yang paling menguntungkan."
+          }
+        },
+        {
+          "fen": "8/8/8/3k4/r3N3/3PK3/8/8 w - - 0 1",
+          "sol": [
+            "e4c3"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "d5e5",
+            "c3a4"
+          ],
+          "consigne": {
+            "en": "Find the knight check that also attacks the rook.",
+            "fr": "Trouve l'échec de cavalier qui attaque aussi la tour.",
+            "es": "Encuentra el jaque de caballo que también ataca la torre.",
+            "pt": "Encontre o xeque de cavalo que também ataca a torre.",
+            "de": "Finde das Springerschach, das auch den Turm angreift.",
+            "ru": "Найди шах конём, который нападает и на ладью.",
+            "it": "Trova lo scacco di cavallo che attacca anche la torre.",
+            "tr": "Kaleye de saldıran at şahını bul.",
+            "pl": "Znajdź szach skoczkiem, który atakuje też wieżę.",
+            "id": "Temukan skak kuda yang juga menyerang benteng."
+          },
+          "apres": {
+            "en": "You now have a knight and a pawn against a lone king.",
+            "fr": "Tu as maintenant un cavalier et un pion contre un roi seul.",
+            "es": "Ahora tienes un caballo y un peón contra un rey solo.",
+            "pt": "Agora você tem um cavalo e um peão contra um rei sozinho.",
+            "de": "Jetzt hast du einen Springer und einen Bauern gegen einen einsamen König.",
+            "ru": "Теперь у тебя конь и пешка против одинокого короля.",
+            "it": "Ora hai un cavallo e un pedone contro un re solo.",
+            "tr": "Artık yalnız bir şaha karşı bir atın ve bir piyonun var.",
+            "pl": "Masz teraz skoczka i piona przeciw samotnemu królowi.",
+            "id": "Sekarang kamu punya kuda dan pion melawan raja yang sendirian."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The pawn fork",
+        "fr": "La fourchette du pion",
+        "es": "La horquilla de peón",
+        "pt": "O garfo de peão",
+        "de": "Die Bauerngabel",
+        "ru": "Вилка пешкой",
+        "it": "La forchetta di pedone",
+        "tr": "Piyon çatalı",
+        "pl": "Widełki pionem",
+        "id": "Garpu pion"
+      },
+      "intro": {
+        "en": "The smallest piece can also attack two at once: a pawn captures diagonally, to the left and to the right. It is worth only 1 point, so losing a piece to it costs a lot.",
+        "fr": "Le plus petit soldat peut aussi attaquer deux pièces : un pion prend en diagonale, à gauche et à droite. Comme il ne vaut qu'un point, perdre une pièce contre lui coûte cher.",
+        "es": "El soldado más pequeño también puede atacar dos piezas: un peón captura en diagonal, a la izquierda y a la derecha. Como solo vale un punto, perder una pieza contra él sale caro.",
+        "pt": "O menor soldado também pode atacar duas peças: um peão captura na diagonal, à esquerda e à direita. Como ele vale só um ponto, perder uma peça para ele custa caro.",
+        "de": "Auch der kleinste Soldat kann zwei Figuren angreifen: Ein Bauer schlägt schräg, nach links und nach rechts. Da er nur einen Punkt wert ist, kostet es viel, eine Figur an ihn zu verlieren.",
+        "ru": "Даже самый маленький воин может напасть на две фигуры: пешка бьёт по диагонали, влево и вправо. Она стоит всего одно очко, поэтому потерять из-за неё фигуру очень обидно.",
+        "it": "Anche il soldato più piccolo può attaccare due pezzi: un pedone cattura in diagonale, a sinistra e a destra. Siccome vale un solo punto, perdere un pezzo contro di lui costa caro.",
+        "tr": "En küçük asker de iki taşa saldırabilir: piyon çapraz alır, sola ve sağa. Sadece bir puan ettiği için ona taş kaptırmak pahalıya patlar.",
+        "pl": "Nawet najmniejszy żołnierz może atakować dwie bierki: pion bije po skosie, w lewo i w prawo. Jest wart tylko jeden punkt, więc strata bierki na jego rzecz kosztuje dużo.",
+        "id": "Prajurit terkecil pun bisa menyerang dua bidak: pion memakan secara diagonal, ke kiri dan ke kanan. Nilainya hanya satu poin, jadi kehilangan bidak karena pion sangat merugikan."
+      },
+      "exos": [
+        {
+          "fen": "6k1/5ppp/2n1n3/8/3P4/8/5PPP/6K1 w - - 0 1",
+          "sol": [
+            "d4d5"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "e6f4",
+            "d5c6"
+          ],
+          "consigne": {
+            "en": "Push your pawn between the two knights: it will attack both.",
+            "fr": "Avance ton pion entre les deux cavaliers : il les attaquera tous les deux.",
+            "es": "Avanza tu peón entre los dos caballos: los atacará a los dos.",
+            "pt": "Avance seu peão entre os dois cavalos: ele atacará os dois.",
+            "de": "Zieh deinen Bauern zwischen die beiden Springer: Er greift dann beide an.",
+            "ru": "Продвинь пешку между двумя конями: она нападёт на обоих.",
+            "it": "Spingi il tuo pedone tra i due cavalli: li attaccherà entrambi.",
+            "tr": "Piyonunu iki atın arasına ilerlet: ikisine birden saldıracak.",
+            "pl": "Przesuń piona między dwa skoczki: zaatakuje oba.",
+            "id": "Majukan pionmu ke antara dua kuda: ia akan menyerang keduanya."
+          },
+          "apres": {
+            "en": "One knight runs away, the pawn takes the other.",
+            "fr": "Un cavalier s'en va, le pion prend l'autre.",
+            "es": "Un caballo se va, el peón captura al otro.",
+            "pt": "Um cavalo foge, o peão captura o outro.",
+            "de": "Ein Springer flieht, der Bauer schlägt den anderen.",
+            "ru": "Один конь уходит, пешка берёт другого.",
+            "it": "Un cavallo scappa, il pedone cattura l'altro.",
+            "tr": "Bir at kaçıyor, piyon ötekini alıyor.",
+            "pl": "Jeden skoczek ucieka, pion bije drugiego.",
+            "id": "Satu kuda pergi, pion memakan yang lain."
+          }
+        },
+        {
+          "fen": "6k1/5ppp/8/2b1n3/8/2PP4/5PPP/6K1 w - - 0 1",
+          "sol": [
+            "d3d4"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "e5c6",
+            "d4c5"
+          ],
+          "consigne": {
+            "en": "Find the pawn move that attacks the bishop and the knight. If the bishop takes it, your other pawn takes back.",
+            "fr": "Trouve le coup de pion qui attaque le fou et le cavalier. Si le fou le prend, ton autre pion reprend.",
+            "es": "Encuentra la jugada de peón que ataca al alfil y al caballo. Si el alfil lo captura, tu otro peón recaptura.",
+            "pt": "Encontre o lance de peão que ataca o bispo e o cavalo. Se o bispo o capturar, seu outro peão recaptura.",
+            "de": "Finde den Bauernzug, der Läufer und Springer angreift. Schlägt der Läufer ihn, schlägt dein anderer Bauer zurück.",
+            "ru": "Найди ход пешкой, который нападает на слона и коня. Если слон её возьмёт, другая твоя пешка возьмёт в ответ.",
+            "it": "Trova la mossa di pedone che attacca l'alfiere e il cavallo. Se l'alfiere lo cattura, il tuo altro pedone riprende.",
+            "tr": "Fil ile ata saldıran piyon hamlesini bul. Fil onu alırsa öteki piyonun geri alır.",
+            "pl": "Znajdź ruch pionem, który atakuje gońca i skoczka. Jeśli goniec go zbije, twój drugi pion odbije.",
+            "id": "Temukan langkah pion yang menyerang gajah dan kuda. Jika gajah memakannya, pionmu yang lain memakan balik."
+          },
+          "apres": {
+            "en": "A pawn is worth 1 point, a bishop 3: the pawn won.",
+            "fr": "Le pion vaut 1 point, le fou 3 : le pion a gagné.",
+            "es": "Un peón vale 1 punto, un alfil 3: el peón ha ganado.",
+            "pt": "Um peão vale 1 ponto, um bispo 3: o peão venceu.",
+            "de": "Ein Bauer ist 1 Punkt wert, ein Läufer 3: Der Bauer hat gewonnen.",
+            "ru": "Пешка стоит 1 очко, слон 3: пешка выиграла.",
+            "it": "Un pedone vale 1 punto, un alfiere 3: il pedone ha vinto.",
+            "tr": "Piyon 1 puan, fil 3 puan eder: piyon kazandı.",
+            "pl": "Pion jest wart 1 punkt, goniec 3: pion wygrał.",
+            "id": "Pion bernilai 1 poin, gajah 3: pion yang menang."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The queen attacks two pieces",
+        "fr": "La dame attaque deux pièces",
+        "es": "La dama ataca dos piezas",
+        "pt": "A dama ataca duas peças",
+        "de": "Die Dame greift zwei Figuren an",
+        "ru": "Ферзь нападает на две фигуры",
+        "it": "La donna attacca due pezzi",
+        "tr": "Vezir iki taşa saldırıyor",
+        "pl": "Hetman atakuje dwie bierki",
+        "id": "Menteri menyerang dua bidak"
+      },
+      "intro": {
+        "en": "The queen moves in every direction: from a single square, she can aim at two pieces that are not defended. Your opponent can save only one.",
+        "fr": "La dame va dans toutes les directions : d'une seule case, elle peut viser deux pièces qui ne sont pas défendues. L'adversaire n'en sauve qu'une.",
+        "es": "La dama va en todas las direcciones: desde una sola casilla puede apuntar a dos piezas que no están defendidas. El rival solo salva una.",
+        "pt": "A dama anda em todas as direções: de uma só casa, ela pode mirar duas peças que não estão defendidas. O adversário só salva uma.",
+        "de": "Die Dame zieht in alle Richtungen: Von einem einzigen Feld aus kann sie zwei ungedeckte Figuren angreifen. Dein Gegner rettet nur eine.",
+        "ru": "Ферзь ходит во все стороны: с одного поля он может нападать на две незащищённые фигуры. Соперник спасёт только одну.",
+        "it": "La donna va in tutte le direzioni: da una sola casa può mirare a due pezzi non difesi. L'avversario ne salva solo uno.",
+        "tr": "Vezir her yöne gider: tek bir kareden korunmayan iki taşı hedefleyebilir. Rakip yalnızca birini kurtarır.",
+        "pl": "Hetman chodzi we wszystkich kierunkach: z jednego pola może celować w dwie niebronione bierki. Przeciwnik uratuje tylko jedną.",
+        "id": "Menteri bergerak ke segala arah: dari satu petak, ia bisa mengincar dua bidak yang tidak dilindungi. Lawan hanya bisa menyelamatkan satu."
+      },
+      "exos": [
+        {
+          "fen": "3r2k1/5pp1/7p/n6b/8/4Q2P/5PP1/6K1 w - - 0 1",
+          "sol": [
+            "e3c5",
+            "e3e5"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The black knight and bishop are not defended. Find a square from which your queen attacks both, where nothing can take her.",
+            "fr": "Le cavalier et le fou noirs ne sont pas défendus. Trouve une case d'où ta dame les attaque tous les deux, sans pouvoir être prise.",
+            "es": "El caballo y el alfil negros no están defendidos. Encuentra una casilla desde la que tu dama ataque a los dos sin que puedan capturarla.",
+            "pt": "O cavalo e o bispo pretos não estão defendidos. Encontre uma casa de onde sua dama ataque os dois sem poder ser capturada.",
+            "de": "Der schwarze Springer und der Läufer sind ungedeckt. Finde ein Feld, von dem deine Dame beide angreift, ohne geschlagen werden zu können.",
+            "ru": "Чёрные конь и слон не защищены. Найди поле, с которого твой ферзь нападает на обоих и где его нельзя взять.",
+            "it": "Il cavallo e l'alfiere neri non sono difesi. Trova una casa da cui la tua donna li attacca entrambi senza poter essere catturata.",
+            "tr": "Siyah at ve fil korunmuyor. Vezirinin ikisine birden saldırdığı ve alınamayacağı bir kare bul.",
+            "pl": "Czarny skoczek i goniec nie są bronione. Znajdź pole, z którego twój hetman atakuje oba i nie może zostać zbity.",
+            "id": "Kuda dan gajah hitam tidak dilindungi. Temukan petak tempat menterimu menyerang keduanya tanpa bisa dimakan."
+          },
+          "faux": {
+            "e3g5": {
+              "en": "Your queen attacks both pieces from there, but the black pawn would take her.",
+              "fr": "De là, ta dame attaque bien les deux pièces, mais le pion noir la prendrait.",
+              "es": "Desde ahí tu dama ataca las dos piezas, pero el peón negro la capturaría.",
+              "pt": "Dali sua dama ataca as duas peças, mas o peão preto a capturaria.",
+              "de": "Von dort greift deine Dame zwar beide Figuren an, aber der schwarze Bauer würde sie schlagen.",
+              "ru": "Отсюда твой ферзь нападает на обе фигуры, но его возьмёт чёрная пешка.",
+              "it": "Da lì la tua donna attacca entrambi i pezzi, ma il pedone nero la catturerebbe.",
+              "tr": "Oradan vezirin iki taşa da saldırıyor, ama siyah piyon onu alır.",
+              "pl": "Stamtąd twój hetman atakuje obie bierki, ale czarny pion by go zbił.",
+              "id": "Dari sana menterimu memang menyerang kedua bidak, tetapi pion hitam akan memakannya."
+            }
+          },
+          "apres": {
+            "en": "Black cannot save everything: you will win a piece.",
+            "fr": "Les Noirs ne peuvent pas tout sauver : tu vas gagner une pièce.",
+            "es": "Las negras no pueden salvarlo todo: vas a ganar una pieza.",
+            "pt": "As pretas não podem salvar tudo: você vai ganhar uma peça.",
+            "de": "Schwarz kann nicht alles retten: Du gewinnst eine Figur.",
+            "ru": "Чёрные не могут спасти всё: ты выиграешь фигуру.",
+            "it": "Il Nero non può salvare tutto: vincerai un pezzo.",
+            "tr": "Siyah her şeyi kurtaramaz: bir taş kazanacaksın.",
+            "pl": "Czarne nie uratują wszystkiego: zdobędziesz bierkę.",
+            "id": "Hitam tidak bisa menyelamatkan semuanya: kamu akan memenangkan satu bidak."
+          }
+        },
+        {
+          "fen": "6Q1/3k4/8/2n5/7K/8/8/8 w - - 0 1",
+          "sol": [
+            "g8d5"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "d7e7",
+            "d5c5"
+          ],
+          "consigne": {
+            "en": "Give check with your queen while also attacking the knight.",
+            "fr": "Donne échec avec ta dame en attaquant aussi le cavalier.",
+            "es": "Da jaque con tu dama atacando también al caballo.",
+            "pt": "Dê xeque com sua dama atacando também o cavalo.",
+            "de": "Gib mit deiner Dame Schach und greif dabei auch den Springer an.",
+            "ru": "Дай шах ферзём, нападая заодно на коня.",
+            "it": "Dai scacco con la tua donna attaccando anche il cavallo.",
+            "tr": "Veziriyle şah çek ve aynı anda ata da saldır.",
+            "pl": "Daj szacha hetmanem, atakując przy tym skoczka.",
+            "id": "Beri skak dengan menterimu sambil juga menyerang kuda."
+          },
+          "apres": {
+            "en": "The king has to get out of check, and the knight falls.",
+            "fr": "Le roi doit sortir d'échec, et le cavalier tombe.",
+            "es": "El rey tiene que salir del jaque y el caballo cae.",
+            "pt": "O rei precisa sair do xeque, e o cavalo cai.",
+            "de": "Der König muss aus dem Schach, und der Springer fällt.",
+            "ru": "Король должен уйти от шаха, и конь падает.",
+            "it": "Il re deve uscire dallo scacco e il cavallo cade.",
+            "tr": "Şah, şahtan kurtulmak zorunda ve at düşüyor.",
+            "pl": "Król musi uciec przed szachem, a skoczek pada.",
+            "id": "Raja harus keluar dari skak, dan kuda jatuh."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The check that also attacks",
+        "fr": "L'échec qui attaque aussi",
+        "es": "El jaque que también ataca",
+        "pt": "O xeque que também ataca",
+        "de": "Das Schach, das auch angreift",
+        "ru": "Шах, который ещё и нападает",
+        "it": "Lo scacco che attacca anche",
+        "tr": "Saldıran şah",
+        "pl": "Szach, który też atakuje",
+        "id": "Skak yang juga menyerang"
+      },
+      "intro": {
+        "en": "A check forces your opponent to deal with the king. If the same piece also attacks another piece, that piece falls on the next move. With a rook, look for a line that runs through the king and an undefended piece.",
+        "fr": "Un échec oblige l'adversaire à s'occuper de son roi. Si la même pièce attaque aussi une autre pièce, celle-ci tombe au coup suivant. Avec une tour, cherche une ligne qui passe par le roi et par une pièce non défendue.",
+        "es": "Un jaque obliga al rival a ocuparse de su rey. Si la misma pieza ataca también otra pieza, esta cae en la jugada siguiente. Con una torre, busca una línea que pase por el rey y por una pieza no defendida.",
+        "pt": "Um xeque obriga o adversário a cuidar do rei. Se a mesma peça também ataca outra peça, ela cai no lance seguinte. Com uma torre, procure uma linha que passe pelo rei e por uma peça não defendida.",
+        "de": "Ein Schach zwingt deinen Gegner, sich um seinen König zu kümmern. Greift dieselbe Figur noch eine andere Figur an, fällt diese im nächsten Zug. Such mit einem Turm eine Linie, die durch den König und eine ungedeckte Figur geht.",
+        "ru": "Шах заставляет соперника заняться королём. Если та же фигура нападает ещё на одну фигуру, та падает следующим ходом. С ладьёй ищи линию, которая проходит через короля и незащищённую фигуру.",
+        "it": "Uno scacco obbliga l'avversario a occuparsi del re. Se lo stesso pezzo attacca anche un altro pezzo, questo cade alla mossa successiva. Con una torre, cerca una linea che passi per il re e per un pezzo non difeso.",
+        "tr": "Şah, rakibi şahıyla ilgilenmeye zorlar. Aynı taş başka bir taşa da saldırıyorsa o taş bir sonraki hamlede düşer. Kaleyle, şahtan ve korunmayan bir taştan geçen bir hat ara.",
+        "pl": "Szach zmusza przeciwnika, by zajął się królem. Jeśli ta sama bierka atakuje też inną bierkę, ta pada w następnym ruchu. Z wieżą szukaj linii, która przechodzi przez króla i niebronioną bierkę.",
+        "id": "Skak memaksa lawan mengurus rajanya. Jika bidak yang sama juga menyerang bidak lain, bidak itu jatuh di langkah berikutnya. Dengan benteng, cari garis yang melewati raja dan bidak yang tidak dilindungi."
+      },
+      "exos": [
+        {
+          "fen": "8/1n4kp/5pp1/8/8/8/5PPP/3R2K1 w - - 0 1",
+          "sol": [
+            "d1d7"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "g7g8",
+            "d7b7"
+          ],
+          "consigne": {
+            "en": "Give check with your rook on the king's rank: it will attack the knight as well.",
+            "fr": "Donne échec avec ta tour sur la rangée du roi : elle attaquera aussi le cavalier.",
+            "es": "Da jaque con tu torre en la fila del rey: también atacará al caballo.",
+            "pt": "Dê xeque com sua torre na fileira do rei: ela também atacará o cavalo.",
+            "de": "Gib mit deinem Turm Schach auf der Reihe des Königs: Er greift dann auch den Springer an.",
+            "ru": "Дай шах ладьёй по горизонтали короля: она нападёт и на коня.",
+            "it": "Dai scacco con la tua torre sulla traversa del re: attaccherà anche il cavallo.",
+            "tr": "Kalenle şahın sırasında şah çek: ata da saldıracak.",
+            "pl": "Daj szacha wieżą na linii króla: zaatakuje też skoczka.",
+            "id": "Beri skak dengan bentengmu di baris raja: ia juga akan menyerang kuda."
+          },
+          "apres": {
+            "en": "The king steps aside, the rook takes the knight.",
+            "fr": "Le roi s'écarte, la tour prend le cavalier.",
+            "es": "El rey se aparta, la torre captura al caballo.",
+            "pt": "O rei sai do caminho, a torre captura o cavalo.",
+            "de": "Der König weicht aus, der Turm schlägt den Springer.",
+            "ru": "Король отходит, ладья берёт коня.",
+            "it": "Il re si sposta, la torre cattura il cavallo.",
+            "tr": "Şah kenara çekiliyor, kale atı alıyor.",
+            "pl": "Król się odsuwa, wieża bije skoczka.",
+            "id": "Raja menyingkir, benteng memakan kuda."
+          }
+        },
+        {
+          "fen": "8/4k3/2R5/5K2/8/8/4b3/8 w - - 0 1",
+          "sol": [
+            "c6e6"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "e7d7",
+            "e6e2"
+          ],
+          "consigne": {
+            "en": "Give check with your rook on the king's file, right in front of it: your king protects it, and it attacks the bishop.",
+            "fr": "Donne échec avec ta tour sur la colonne du roi, juste devant lui : ton roi la protège, et elle attaque le fou.",
+            "es": "Da jaque con tu torre en la columna del rey, justo delante de él: tu rey la protege y ataca al alfil.",
+            "pt": "Dê xeque com sua torre na coluna do rei, bem na frente dele: seu rei a protege, e ela ataca o bispo.",
+            "de": "Gib mit deinem Turm Schach auf der Linie des Königs, direkt vor ihm: Dein König deckt ihn, und er greift den Läufer an.",
+            "ru": "Дай шах ладьёй по вертикали короля, прямо перед ним: твой король её защищает, и она нападает на слона.",
+            "it": "Dai scacco con la tua torre sulla colonna del re, proprio davanti a lui: il tuo re la protegge e lei attacca l'alfiere.",
+            "tr": "Kalenle şahın sütununda, tam önünde şah çek: şahın onu koruyor ve kale file saldırıyor.",
+            "pl": "Daj szacha wieżą na kolumnie króla, tuż przed nim: twój król jej broni, a ona atakuje gońca.",
+            "id": "Beri skak dengan bentengmu di kolom raja, tepat di depannya: rajamu melindunginya, dan benteng menyerang gajah."
+          },
+          "apres": {
+            "en": "The rook cannot be taken, the king has to move, and the bishop falls.",
+            "fr": "La tour ne peut pas être prise, le roi doit bouger, et le fou tombe.",
+            "es": "La torre no puede ser capturada, el rey tiene que moverse y el alfil cae.",
+            "pt": "A torre não pode ser capturada, o rei precisa se mover, e o bispo cai.",
+            "de": "Der Turm kann nicht geschlagen werden, der König muss ziehen, und der Läufer fällt.",
+            "ru": "Ладью взять нельзя, король должен уйти, и слон падает.",
+            "it": "La torre non può essere catturata, il re deve muoversi e l'alfiere cade.",
+            "tr": "Kale alınamıyor, şah kaçmak zorunda ve fil düşüyor.",
+            "pl": "Wieży nie można zbić, król musi uciec, a goniec pada.",
+            "id": "Benteng tidak bisa dimakan, raja harus bergerak, dan gajah jatuh."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The discovered attack",
+        "fr": "L'attaque à la découverte",
+        "es": "El ataque a la descubierta",
+        "pt": "O ataque descoberto",
+        "de": "Der Abzugsangriff",
+        "ru": "Вскрытое нападение",
+        "it": "L'attacco di scoperta",
+        "tr": "Açarak saldırı",
+        "pl": "Atak z odsłony",
+        "id": "Serangan tersingkap"
+      },
+      "intro": {
+        "en": "When a piece steps aside, it can unmask another piece hidden behind it. If the piece that moves gives check, your opponent has no time to save what is attacked behind.",
+        "fr": "Quand une pièce s'écarte, elle peut démasquer une autre pièce cachée derrière elle. Si celle qui s'écarte donne échec, l'adversaire n'a pas le temps de sauver ce qui est attaqué derrière.",
+        "es": "Cuando una pieza se aparta, puede destapar otra pieza escondida detrás. Si la que se aparta da jaque, el rival no tiene tiempo de salvar lo que está atacado detrás.",
+        "pt": "Quando uma peça sai do caminho, ela pode descobrir outra peça escondida atrás dela. Se a que sai dá xeque, o adversário não tem tempo de salvar o que está atacado atrás.",
+        "de": "Wenn eine Figur zur Seite zieht, kann sie eine dahinter versteckte Figur freilegen. Gibt die ziehende Figur Schach, hat der Gegner keine Zeit, das Angegriffene dahinter zu retten.",
+        "ru": "Когда фигура уходит с линии, она может открыть другую фигуру, спрятанную за ней. Если уходящая фигура объявляет шах, соперник не успевает спасти то, на что напали сзади.",
+        "it": "Quando un pezzo si sposta, può scoprire un altro pezzo nascosto dietro di lui. Se quello che si sposta dà scacco, l'avversario non ha il tempo di salvare ciò che è attaccato dietro.",
+        "tr": "Bir taş kenara çekildiğinde arkasına gizlenmiş başka bir taşın önünü açabilir. Kenara çekilen taş şah çekerse rakip arkada saldırı altındaki taşı kurtarmaya vakit bulamaz.",
+        "pl": "Gdy bierka schodzi z drogi, może odsłonić inną bierkę ukrytą za nią. Jeśli ta, która się rusza, daje szacha, przeciwnik nie ma czasu uratować tego, co jest atakowane z tyłu.",
+        "id": "Saat sebuah bidak menyingkir, ia bisa membuka jalan bagi bidak lain yang tersembunyi di belakangnya. Jika bidak yang menyingkir memberi skak, lawan tidak sempat menyelamatkan yang diserang di belakang."
+      },
+      "exos": [
+        {
+          "fen": "3q2k1/5ppp/8/8/8/3B4/5PPP/3R2K1 w - - 0 1",
+          "sol": [
+            "d3h7"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "g8h7",
+            "d1d8"
+          ],
+          "consigne": {
+            "en": "Your bishop hides your rook, which aims at the black queen. Move the bishop away with check.",
+            "fr": "Ton fou cache ta tour, qui vise la dame noire. Écarte le fou en donnant échec.",
+            "es": "Tu alfil tapa tu torre, que apunta a la dama negra. Aparta el alfil dando jaque.",
+            "pt": "Seu bispo esconde sua torre, que mira a dama preta. Tire o bispo do caminho dando xeque.",
+            "de": "Dein Läufer verdeckt deinen Turm, der auf die schwarze Dame zielt. Zieh den Läufer mit Schach weg.",
+            "ru": "Твой слон закрывает ладью, которая смотрит на чёрного ферзя. Уведи слона с шахом.",
+            "it": "Il tuo alfiere copre la tua torre, che mira alla donna nera. Sposta l'alfiere dando scacco.",
+            "tr": "Filin, siyah veziri hedefleyen kaleni saklıyor. Fili şah çekerek kenara çek.",
+            "pl": "Twój goniec zasłania wieżę, która celuje w czarnego hetmana. Odsuń gońca, dając szacha.",
+            "id": "Gajahmu menutupi bentengmu, yang mengincar menteri hitam. Pindahkan gajah sambil memberi skak."
+          },
+          "apres": {
+            "en": "The king has to answer the check, and your rook takes the queen.",
+            "fr": "Le roi doit répondre à l'échec, et ta tour prend la dame.",
+            "es": "El rey tiene que responder al jaque, y tu torre captura la dama.",
+            "pt": "O rei precisa responder ao xeque, e sua torre captura a dama.",
+            "de": "Der König muss auf das Schach reagieren, und dein Turm schlägt die Dame.",
+            "ru": "Король должен ответить на шах, и твоя ладья берёт ферзя.",
+            "it": "Il re deve rispondere allo scacco e la tua torre cattura la donna.",
+            "tr": "Şah, şaha karşılık vermek zorunda ve kalen veziri alıyor.",
+            "pl": "Król musi odpowiedzieć na szacha, a twoja wieża bije hetmana.",
+            "id": "Raja harus menjawab skak, dan bentengmu memakan menteri."
+          }
+        },
+        {
+          "fen": "8/4qpkp/6p1/8/3N4/8/1B3PPP/6K1 w - - 0 1",
+          "sol": [
+            "d4f5",
+            "d4c6"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "Your knight hides your bishop, which aims at the black king. Move the knight away to give check with the bishop, onto a square where it also attacks the queen.",
+            "fr": "Ton cavalier cache ton fou, qui vise le roi noir. Écarte le cavalier pour donner échec avec le fou, sur une case où il attaque aussi la dame.",
+            "es": "Tu caballo tapa tu alfil, que apunta al rey negro. Aparta el caballo para dar jaque con el alfil, a una casilla donde también ataque a la dama.",
+            "pt": "Seu cavalo esconde seu bispo, que mira o rei preto. Tire o cavalo do caminho para dar xeque com o bispo, numa casa onde ele também ataque a dama.",
+            "de": "Dein Springer verdeckt deinen Läufer, der auf den schwarzen König zielt. Zieh den Springer weg, damit der Läufer Schach gibt, und zwar auf ein Feld, von dem er auch die Dame angreift.",
+            "ru": "Твой конь закрывает слона, который смотрит на чёрного короля. Уведи коня, чтобы слон дал шах, на поле, откуда конь нападёт и на ферзя.",
+            "it": "Il tuo cavallo copre il tuo alfiere, che mira al re nero. Sposta il cavallo per dare scacco con l'alfiere, su una casa da cui attacca anche la donna.",
+            "tr": "Atın, siyah şahı hedefleyen filini saklıyor. Fille şah çekmek için atı, vezire de saldıracağı bir kareye çek.",
+            "pl": "Twój skoczek zasłania gońca, który celuje w czarnego króla. Odsuń skoczka, by goniec dał szacha, na pole, z którego skoczek zaatakuje też hetmana.",
+            "id": "Kudamu menutupi gajahmu, yang mengincar raja hitam. Pindahkan kuda agar gajah memberi skak, ke petak tempat kuda juga menyerang menteri."
+          },
+          "apres": {
+            "en": "Black has to deal with the king, and the queen falls.",
+            "fr": "Les Noirs doivent s'occuper de leur roi, et la dame tombe.",
+            "es": "Las negras tienen que ocuparse del rey, y la dama cae.",
+            "pt": "As pretas precisam cuidar do rei, e a dama cai.",
+            "de": "Schwarz muss sich um den König kümmern, und die Dame fällt.",
+            "ru": "Чёрным нужно спасать короля, и ферзь падает.",
+            "it": "Il Nero deve occuparsi del re, e la donna cade.",
+            "tr": "Siyah şahıyla ilgilenmek zorunda ve vezir düşüyor.",
+            "pl": "Czarne muszą zająć się królem, a hetman pada.",
+            "id": "Hitam harus mengurus rajanya, dan menteri jatuh."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "rn1qkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "niveau": 1,
+    "titre": {
+      "en": "The boss: the computer without a bishop",
+      "fr": "Le boss : l'ordinateur sans un fou",
+      "es": "El jefe: el ordenador sin un alfil",
+      "pt": "O chefão: o computador sem um bispo",
+      "de": "Der Boss: der Computer ohne einen Läufer",
+      "ru": "Босс: компьютер без слона",
+      "it": "Il boss: il computer senza un alfiere",
+      "tr": "Boss: bir fili eksik bilgisayar",
+      "pl": "Boss: komputer bez gońca",
+      "id": "Bos: komputer tanpa satu gajah"
+    },
+    "intro": {
+      "en": "Beat the computer at its easiest level: it starts a bishop down. On every move, look for a piece of yours that could attack two at once. No clock, and you can take back a move.",
+      "fr": "Bats l'ordinateur à son niveau le plus facile : il commence avec un fou de moins. À chaque coup, cherche une de tes pièces qui pourrait en attaquer deux. Pas de pendule, et tu peux reprendre un coup.",
+      "es": "Gana al ordenador en su nivel más fácil: empieza con un alfil de menos. En cada jugada, busca una de tus piezas que pueda atacar dos a la vez. Sin reloj, y puedes deshacer una jugada.",
+      "pt": "Vença o computador no nível mais fácil: ele começa com um bispo a menos. A cada lance, procure uma das suas peças que possa atacar duas ao mesmo tempo. Sem relógio, e você pode voltar um lance.",
+      "de": "Schlag den Computer auf der leichtesten Stufe: Er beginnt mit einem Läufer weniger. Such bei jedem Zug eine deiner Figuren, die zwei auf einmal angreifen könnte. Keine Uhr, und du darfst einen Zug zurücknehmen.",
+      "ru": "Обыграй компьютер на самом лёгком уровне: он начинает без одного слона. На каждом ходу ищи свою фигуру, которая может напасть сразу на две. Без часов, и ход можно взять назад.",
+      "it": "Batti il computer al livello più facile: parte con un alfiere in meno. A ogni mossa, cerca un tuo pezzo che possa attaccarne due alla volta. Niente orologio, e puoi ritirare una mossa.",
+      "tr": "En kolay seviyedeki bilgisayarı yen: oyuna bir fili eksik başlıyor. Her hamlede aynı anda iki taşa saldırabilecek bir taşını ara. Saat yok ve hamleni geri alabilirsin.",
+      "pl": "Pokonaj komputer na najłatwiejszym poziomie: zaczyna bez jednego gońca. W każdym ruchu szukaj swojej bierki, która mogłaby zaatakować dwie naraz. Bez zegara, a ruch można cofnąć.",
+      "id": "Kalahkan komputer di tingkat termudah: ia mulai dengan kekurangan satu gajah. Di setiap langkah, cari bidakmu yang bisa menyerang dua sekaligus. Tanpa jam, dan kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You know how to attack two pieces at once.",
+      "fr": "Boss battu. Tu sais attaquer deux pièces à la fois.",
+      "es": "Jefe derrotado. Sabes atacar dos piezas a la vez.",
+      "pt": "Chefão derrotado. Você sabe atacar duas peças ao mesmo tempo.",
+      "de": "Boss besiegt. Du kannst zwei Figuren auf einmal angreifen.",
+      "ru": "Босс побеждён. Ты умеешь нападать сразу на две фигуры.",
+      "it": "Boss battuto. Sai attaccare due pezzi alla volta.",
+      "tr": "Boss yenildi. Aynı anda iki taşa saldırmayı biliyorsun.",
+      "pl": "Boss pokonany. Umiesz atakować dwie bierki naraz.",
+      "id": "Bos dikalahkan. Kamu tahu cara menyerang dua bidak sekaligus."
+    }
+  }
+}

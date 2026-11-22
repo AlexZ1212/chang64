@@ -1,15 +1,3 @@
 {
-  "chapitres": ["debut", "regles", "securite"],
-  "aVenir": {
-    "en": "Coming next: the checkmates to know, double threats, pins and skewers, starting a game well, basic endgames, mate in two.",
-    "fr": "À venir : les mats à connaître, les doubles menaces, clouer et enfiler, bien commencer une partie, les finales de base, le mat en deux.",
-    "es": "Próximamente: los mates que hay que conocer, las amenazas dobles, clavadas y pinchos, empezar bien una partida, los finales básicos, el mate en dos.",
-    "pt": "Em breve: os mates que você precisa conhecer, as ameaças duplas, cravadas e espetos, começar bem uma partida, os finais básicos, o mate em dois.",
-    "de": "Demnächst: die wichtigsten Mattbilder, Doppelangriffe, Fesselungen und Spieße, der gute Partiebeginn, einfache Endspiele, Matt in zwei.",
-    "ru": "Скоро: маты, которые надо знать, двойные удары, связки и сквозные удары, как начинать партию, простые эндшпили, мат в два хода.",
-    "it": "In arrivo: i matti da conoscere, le doppie minacce, inchiodature e infilate, come iniziare bene una partita, i finali di base, il matto in due.",
-    "tr": "Yakında: bilinmesi gereken matlar, çifte tehditler, açmazlar ve şişler, oyuna iyi başlamak, temel oyun sonları, iki hamlede mat.",
-    "pl": "Wkrótce: maty, które trzeba znać, podwójne groźby, związania i przeszycia, dobry początek partii, podstawowe końcówki, mat w dwóch ruchach.",
-    "id": "Segera hadir: skakmat yang perlu diketahui, ancaman ganda, pin dan tusuk sate, memulai permainan dengan baik, akhir permainan dasar, skakmat dalam dua langkah."
-  }
+  "chapitres": ["debut", "regles", "securite", "mats", "menaces", "clouer", "ouverture", "finales", "mat2"]
 }

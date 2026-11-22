@@ -168,7 +168,50 @@
       ]
     },
     {
+      "idee": "mat en un, escalier des deux tours",
+      "fen": "6k1/1R6/8/8/8/8/5PPP/R5K1 w - - 0 1",
+      "sol": [
+        "a1a8"
+      ],
+      "mat": true,
+      "chapitre": "mats",
+      "explication": {
+        "en": "One rook closes the rank in front of the king, the other gives check on the edge: mate. This is the two-rook ladder.",
+        "fr": "Une tour ferme la rangée devant le roi, l'autre donne échec sur le bord : mat. C'est l'escalier des deux tours.",
+        "es": "Una torre cierra la fila delante del rey y la otra da jaque en el borde: mate. Es la escalera de las dos torres.",
+        "pt": "Uma torre fecha a fileira na frente do rei e a outra dá xeque na borda: mate. É a escada das duas torres.",
+        "de": "Ein Turm sperrt die Reihe vor dem König, der andere gibt am Rand Schach: Matt. Das ist die Treppe der zwei Türme.",
+        "ru": "Одна ладья закрывает горизонталь перед королём, другая шахует на краю: мат. Это лесенка двух ладей.",
+        "it": "Una torre chiude la traversa davanti al re, l'altra dà scacco sul bordo: matto. È la scala delle due torri.",
+        "tr": "Bir kale şahın önündeki sırayı kapatıyor, öteki kenarda şah çekiyor: mat. Bu, iki kalenin merdiveni.",
+        "pl": "Jedna wieża zamyka linię przed królem, druga daje szacha na brzegu: mat. To schodki dwóch wież.",
+        "id": "Satu benteng menutup baris di depan raja, yang lain memberi skak di tepi: skakmat. Inilah tangga dua benteng."
+      }
+    },
+    {
+      "idee": "mat etouffe en un (cavalier)",
+      "fen": "1r4rk/6pp/3N4/8/8/8/5PPP/6K1 w - - 0 1",
+      "sol": [
+        "d6f7"
+      ],
+      "mat": true,
+      "chapitre": "mats",
+      "explication": {
+        "en": "The knight gives check and the king is shut in by its own rook and pawns: smothered mate.",
+        "fr": "Le cavalier donne échec, et le roi est enfermé par sa propre tour et ses pions : mat étouffé.",
+        "es": "El caballo da jaque y el rey está encerrado por su propia torre y sus peones: mate de la coz.",
+        "pt": "O cavalo dá xeque e o rei está preso pela própria torre e pelos peões: mate sufocado.",
+        "de": "Der Springer gibt Schach, und der König ist von seinem eigenen Turm und seinen Bauern eingesperrt: ersticktes Matt.",
+        "ru": "Конь шахует, а король заперт своей же ладьёй и пешками: спёртый мат.",
+        "it": "Il cavallo dà scacco e il re è chiuso dalla sua torre e dai suoi pedoni: matto affogato.",
+        "tr": "At şah çekiyor ve şah kendi kalesi ve piyonlarıyla kapanmış: boğmaca mat.",
+        "pl": "Skoczek daje szacha, a król jest zamknięty przez własną wieżę i piony: mat zduszony.",
+        "id": "Kuda memberi skak dan raja terkurung oleh benteng dan pionnya sendiri: skakmat tercekik."
+      }
+    },
+    {
       "idee": "fourchette de cavalier roi et dame",
+      "chapitre": "menaces",
       "controle": "meilleur",
       "fen": "4k3/1p3ppp/q7/3N4/8/8/PP3PPP/6K1 w - - 0 1",
       "sol": [
@@ -192,6 +235,27 @@
       ]
     },
     {
+      "idee": "echec de la dame qui attaque aussi un cavalier",
+      "chapitre": "menaces",
+      "controle": "meilleur",
+      "fen": "8/1Q6/8/8/3n2K1/k7/8/8 w - - 0 1",
+      "sol": [
+        "b7a7"
+      ],
+      "explication": {
+        "en": "The queen gives check on the king's file and attacks the knight along the diagonal: the king moves, the knight falls.",
+        "fr": "La dame donne échec sur la colonne du roi et attaque le cavalier en diagonale : le roi bouge, le cavalier tombe.",
+        "es": "La dama da jaque en la columna del rey y ataca al caballo en diagonal: el rey se mueve y el caballo cae.",
+        "pt": "A dama dá xeque na coluna do rei e ataca o cavalo na diagonal: o rei se move e o cavalo cai.",
+        "de": "Die Dame gibt Schach auf der Linie des Königs und greift den Springer auf der Diagonale an: Der König zieht, der Springer fällt.",
+        "ru": "Ферзь шахует по вертикали короля и нападает на коня по диагонали: король уходит, конь гибнет.",
+        "it": "La donna dà scacco sulla colonna del re e attacca il cavallo in diagonale: il re si sposta, il cavallo cade.",
+        "tr": "Vezir şahın sütununda şah çekiyor ve atı çaprazdan tehdit ediyor: şah kaçar, at düşer.",
+        "pl": "Hetman daje szacha na kolumnie króla i atakuje skoczka po przekątnej: król ucieka, skoczek pada.",
+        "id": "Menteri memberi skak di kolom raja dan menyerang kuda lewat diagonal: raja bergerak, kuda jatuh."
+      }
+    },
+    {
       "idee": "clouage de la dame sur le roi par le fou, defendu par un pion",
       "controle": "meilleur",
       "fen": "4k3/pp3ppp/2q5/8/P7/8/1PP2PPP/5BK1 w - - 0 1",
@@ -209,10 +273,117 @@
         "tr": "Fil vezire saldırıyor ve vezir kaçamıyor: hemen arkasında kendi şahı var. Bu bir açmaz ve vezir kaybedilir.",
         "pl": "Goniec atakuje hetmana, który nie może odejść: tuż za nim stoi jego król. To związanie i hetman jest stracony.",
         "id": "Gajah menyerang menteri, yang tidak bisa menyingkir: rajanya tepat di belakangnya. Ini pin, dan menteri itu hilang."
+      },
+      "chapitre": "clouer"
+    },
+    {
+      "idee": "enfilade : echec de la tour, la tour noire derriere le roi",
+      "chapitre": "clouer",
+      "controle": "meilleur",
+      "fen": "4R3/4K3/8/3k4/8/8/8/3r4 w - - 0 1",
+      "sol": [
+        "e8d8"
+      ],
+      "explication": {
+        "en": "The rook gives check on the king's file, and the black rook is behind it: the king steps aside, the rook falls. That is a skewer.",
+        "fr": "La tour donne échec sur la colonne du roi, et la tour noire est derrière lui : le roi s'écarte, la tour tombe. C'est une enfilade.",
+        "es": "La torre da jaque en la columna del rey y la torre negra está detrás: el rey se aparta y la torre cae. Es un pincho.",
+        "pt": "A torre dá xeque na coluna do rei, e a torre preta está atrás dele: o rei sai do caminho e a torre cai. É um espeto.",
+        "de": "Der Turm gibt Schach auf der Linie des Königs, und der schwarze Turm steht dahinter: Der König weicht aus, der Turm fällt. Das ist ein Spieß.",
+        "ru": "Ладья шахует по вертикали короля, а чёрная ладья стоит за ним: король отходит, ладья гибнет. Это сквозной удар.",
+        "it": "La torre dà scacco sulla colonna del re e la torre nera è dietro di lui: il re si sposta, la torre cade. È un'infilata.",
+        "tr": "Kale şahın sütununda şah çekiyor ve siyah kale onun arkasında: şah kenara çekilir, kale düşer. Buna şiş denir.",
+        "pl": "Wieża daje szacha na kolumnie króla, a czarna wieża stoi za nim: król się odsuwa, wieża pada. To przeszycie.",
+        "id": "Benteng memberi skak di kolom raja, dan benteng hitam ada di belakangnya: raja menyingkir, benteng jatuh. Inilah tusuk sate."
+      }
+    },
+    {
+      "idee": "mat du lion (fool) : la dame en h5 apres f6 et g5",
+      "chapitre": "ouverture",
+      "mat": true,
+      "fen": "rnbqkbnr/ppppp2p/5p2/6p1/4P3/8/PPPP1PPP/RNBQKBNR w KQkq g6 0 3",
+      "sol": [
+        "d1h5"
+      ],
+      "explication": {
+        "en": "Black moved the two pawns in front of their king: the queen mates on the diagonal that is now open.",
+        "fr": "Les Noirs ont avancé les deux pions devant leur roi : la dame fait mat sur la diagonale qui s'est ouverte.",
+        "es": "Las negras avanzaron los dos peones delante de su rey: la dama da mate en la diagonal que se ha abierto.",
+        "pt": "As pretas avançaram os dois peões na frente do rei: a dama dá mate na diagonal que se abriu.",
+        "de": "Schwarz hat die beiden Bauern vor seinem König gezogen: Die Dame setzt auf der geöffneten Diagonale matt.",
+        "ru": "Чёрные сдвинули обе пешки перед своим королём: ферзь ставит мат по открывшейся диагонали.",
+        "it": "Il Nero ha spinto i due pedoni davanti al suo re: la donna dà matto sulla diagonale che si è aperta.",
+        "tr": "Siyah, şahının önündeki iki piyonu da oynadı: vezir açılan çaprazda mat ediyor.",
+        "pl": "Czarne przesunęły oba piony przed swoim królem: hetman daje mata na otwartej przekątnej.",
+        "id": "Hitam memajukan dua pion di depan rajanya: menteri skakmat di diagonal yang terbuka."
+      }
+    },
+    {
+      "idee": "coup du berger cote blanc avec Qf3 et Bc4",
+      "chapitre": "ouverture",
+      "mat": true,
+      "fen": "r1bqkbnr/pppp1ppp/8/4p3/2BnP3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+      "sol": [
+        "f3f7"
+      ],
+      "explication": {
+        "en": "The f7 pawn was defended only by the king, and your bishop protects the queen: the Scholar's mate.",
+        "fr": "Le pion f7 n'était défendu que par le roi, et ton fou protège la dame : c'est le coup du berger.",
+        "es": "El peón de f7 solo lo defendía el rey, y tu alfil protege la dama: es el mate del pastor.",
+        "pt": "O peão de f7 só era defendido pelo rei, e seu bispo protege a dama: é o mate do pastor.",
+        "de": "Der Bauer auf f7 war nur vom König gedeckt, und dein Läufer deckt die Dame: das Schäfermatt.",
+        "ru": "Пешку f7 защищал только король, а твой слон защищает ферзя: это детский мат.",
+        "it": "Il pedone in f7 era difeso solo dal re, e il tuo alfiere protegge la donna: è il matto del barbiere.",
+        "tr": "f7 piyonunu yalnızca şah koruyordu ve filin veziri koruyor: bu çoban matı.",
+        "pl": "Pion f7 był broniony tylko przez króla, a twój goniec chroni hetmana: to mat szewski.",
+        "id": "Pion f7 hanya dilindungi raja, dan gajahmu melindungi menteri: inilah skakmat empat langkah."
+      }
+    },
+    {
+      "idee": "carre du pion : pousser, le roi noir est hors du carre",
+      "chapitre": "finales",
+      "controle": "meilleur",
+      "fen": "8/8/8/8/1P4k1/8/8/7K w - - 0 1",
+      "sol": [
+        "b4b5"
+      ],
+      "explication": {
+        "en": "The black king is outside the square of the pawn: once it moves forward, nothing can catch it.",
+        "fr": "Le roi noir est hors du carré du pion : une fois avancé, plus rien ne le rattrape.",
+        "es": "El rey negro está fuera del cuadrado del peón: una vez que avanza, nada lo alcanza.",
+        "pt": "O rei preto está fora do quadrado do peão: depois que ele avança, nada o alcança.",
+        "de": "Der schwarze König steht außerhalb des Bauernquadrats: Ist der Bauer erst gezogen, holt ihn nichts mehr ein.",
+        "ru": "Чёрный король вне квадрата пешки: стоит ей двинуться, и её уже не догнать.",
+        "it": "Il re nero è fuori dal quadrato del pedone: una volta avanzato, niente lo raggiunge più.",
+        "tr": "Siyah şah piyonun karesinin dışında: piyon ilerleyince artık hiçbir şey onu yakalayamaz.",
+        "pl": "Czarny król jest poza kwadratem piona: gdy pion ruszy, nic go już nie dogoni.",
+        "id": "Raja hitam ada di luar kotak pion: begitu pion maju, tidak ada yang bisa mengejarnya."
+      }
+    },
+    {
+      "idee": "mat roi et tour, les rois face a face",
+      "chapitre": "finales",
+      "mat": true,
+      "fen": "1k6/8/1K6/8/8/8/8/7R w - - 0 1",
+      "sol": [
+        "h1h8"
+      ],
+      "explication": {
+        "en": "The kings face each other: your king guards the squares in front, and the rook mates along the edge.",
+        "fr": "Les rois se font face : ton roi garde les cases devant, et la tour fait mat sur le bord.",
+        "es": "Los reyes están frente a frente: tu rey vigila las casillas de delante y la torre da mate en el borde.",
+        "pt": "Os reis estão frente a frente: seu rei vigia as casas da frente, e a torre dá mate na borda.",
+        "de": "Die Könige stehen sich gegenüber: Dein König bewacht die Felder davor, und der Turm setzt am Rand matt.",
+        "ru": "Короли стоят друг против друга: твой король держит поля впереди, а ладья ставит мат на краю.",
+        "it": "I re sono uno di fronte all'altro: il tuo re sorveglia le case davanti e la torre dà matto sul bordo.",
+        "tr": "Şahlar karşı karşıya: şahın öndeki kareleri tutuyor, kale de kenarda mat ediyor.",
+        "pl": "Królowie stoją naprzeciw siebie: twój król pilnuje pól z przodu, a wieża daje mata na brzegu.",
+        "id": "Kedua raja saling berhadapan: rajamu menjaga petak di depan, dan benteng skakmat di tepi."
       }
     },
     {
       "idee": "mat en deux par sacrifice de dame sur la derniere rangee",
+      "chapitre": "mat2",
       "controle": "meilleur",
       "fen": "r5k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1",
       "sol": [
@@ -235,6 +406,27 @@
         "e1e8"
       ],
       "suiteMat": true
+    },
+    {
+      "idee": "mat en deux : echec de la dame qui enferme le roi avec la tour",
+      "chapitre": "mat2",
+      "controle": "meilleur",
+      "fen": "2R5/8/5Q2/1k6/8/8/8/1K6 w - - 0 1",
+      "sol": [
+        "f6b2"
+      ],
+      "explication": {
+        "en": "The queen gives check and shuts the king in with your rook: whatever it plays, mate follows on the next move.",
+        "fr": "La dame donne échec et enferme le roi avec ta tour : quoi qu'il joue, le mat suit au coup suivant.",
+        "es": "La dama da jaque y encierra al rey con tu torre: juegue lo que juegue, el mate llega en la jugada siguiente.",
+        "pt": "A dama dá xeque e prende o rei com sua torre: o que quer que ele jogue, o mate vem no lance seguinte.",
+        "de": "Die Dame gibt Schach und sperrt den König mit deinem Turm ein: Was er auch zieht, im nächsten Zug folgt Matt.",
+        "ru": "Ферзь шахует и вместе с ладьёй запирает короля: как бы он ни пошёл, следующим ходом мат.",
+        "it": "La donna dà scacco e chiude il re con la tua torre: qualunque cosa giochi, il matto arriva alla mossa dopo.",
+        "tr": "Vezir şah çekiyor ve kalenle birlikte şahı kapatıyor: ne oynarsa oynasın, bir sonraki hamlede mat gelir.",
+        "pl": "Hetman daje szacha i razem z wieżą zamyka króla: cokolwiek zagra, w następnym ruchu jest mat.",
+        "id": "Menteri memberi skak dan bersama bentengmu mengurung raja: apa pun langkahnya, skakmat menyusul di langkah berikutnya."
+      }
     }
   ]
 }

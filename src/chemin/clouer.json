@@ -1,0 +1,557 @@
+{
+  "id": "clouer",
+  "theme": "Pin",
+  "titre": {
+    "en": "Pins and skewers",
+    "fr": "Clouer et enfiler",
+    "es": "Clavadas y pinchos",
+    "pt": "Cravadas e espetos",
+    "de": "Fesselung und Spieß",
+    "ru": "Связки и сквозные удары",
+    "it": "Inchiodature e infilate",
+    "tr": "Açmazlar ve şişler",
+    "pl": "Związania i przeszycia",
+    "id": "Pin dan tusuk sate"
+  },
+  "desc": {
+    "en": "The pinned piece, which cannot or should not move, and the skewer, which wins the piece behind.",
+    "fr": "La pièce clouée, qui ne peut pas ou ne doit pas bouger, et l'enfilade, qui gagne la pièce de derrière.",
+    "es": "La pieza clavada, que no puede o no debe moverse, y el pincho, que gana la pieza de detrás.",
+    "pt": "A peça cravada, que não pode ou não deve se mover, e o espeto, que ganha a peça de trás.",
+    "de": "Die gefesselte Figur, die nicht ziehen kann oder sollte, und der Spieß, der die Figur dahinter gewinnt.",
+    "ru": "Связанная фигура, которая не может или не должна ходить, и сквозной удар, который выигрывает фигуру сзади.",
+    "it": "Il pezzo inchiodato, che non può o non deve muoversi, e l'infilata, che vince il pezzo dietro.",
+    "tr": "Kıpırdayamayan ya da kıpırdamaması gereken açmazdaki taş ve arkadaki taşı kazandıran şiş.",
+    "pl": "Związana bierka, która nie może albo nie powinna się ruszać, i przeszycie, które zdobywa bierkę z tyłu.",
+    "id": "Bidak yang terkena pin, yang tidak bisa atau tidak boleh bergerak, dan tusuk sate, yang memenangkan bidak di belakang."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "Attack the pinned piece",
+        "fr": "Attaquer la pièce clouée",
+        "es": "Atacar la pieza clavada",
+        "pt": "Atacar a peça cravada",
+        "de": "Die gefesselte Figur angreifen",
+        "ru": "Нападай на связанную фигуру",
+        "it": "Attaccare il pezzo inchiodato",
+        "tr": "Açmazdaki taşa saldır",
+        "pl": "Atakuj związaną bierkę",
+        "id": "Serang bidak yang terkena pin"
+      },
+      "intro": {
+        "en": "A piece pinned to its king is not allowed to move: it would leave the king in check. That makes it an easy target: attack it, with a pawn if you can, and it falls.",
+        "fr": "Une pièce clouée sur son roi n'a pas le droit de bouger : elle le laisserait en échec. C'est donc une cible facile : attaque-la, avec un pion si tu peux, et elle tombe.",
+        "es": "Una pieza clavada a su rey no tiene derecho a moverse: lo dejaría en jaque. Por eso es un blanco fácil: atácala, con un peón si puedes, y cae.",
+        "pt": "Uma peça cravada no seu rei não pode se mover: ela o deixaria em xeque. Por isso é um alvo fácil: ataque-a, com um peão se puder, e ela cai.",
+        "de": "Eine an ihren König gefesselte Figur darf nicht ziehen: Sie würde ihn im Schach lassen. Deshalb ist sie ein leichtes Ziel: Greif sie an, am besten mit einem Bauern, und sie fällt.",
+        "ru": "Фигура, связанная со своим королём, не имеет права ходить: король остался бы под шахом. Поэтому она лёгкая цель: напади на неё, лучше пешкой, и она падёт.",
+        "it": "Un pezzo inchiodato al suo re non può muoversi: lo lascerebbe sotto scacco. Per questo è un bersaglio facile: attaccalo, con un pedone se puoi, e cade.",
+        "tr": "Şahına açmazla bağlanmış bir taş oynayamaz: şahı şahta bırakırdı. Bu yüzden kolay bir hedeftir: ona saldır, mümkünse bir piyonla, ve düşer.",
+        "pl": "Bierka związana ze swoim królem nie może się ruszyć: zostawiłaby go w szachu. Dlatego to łatwy cel: zaatakuj ją, najlepiej pionem, a padnie.",
+        "id": "Bidak yang terkena pin ke rajanya tidak boleh bergerak: raja akan terkena skak. Karena itu ia sasaran empuk: serang dia, sebaiknya dengan pion, dan ia jatuh."
+      },
+      "exos": [
+        {
+          "fen": "4k3/pp3ppp/2n5/1B6/3P4/8/PP3PPP/6K1 w - - 0 1",
+          "sol": [
+            "d4d5"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "a7a6",
+            "d5c6"
+          ],
+          "consigne": {
+            "en": "Your bishop pins the black knight to its king. Attack the knight with a pawn.",
+            "fr": "Ton fou cloue le cavalier noir sur son roi. Attaque le cavalier avec un pion.",
+            "es": "Tu alfil clava el caballo negro a su rey. Ataca el caballo con un peón.",
+            "pt": "Seu bispo crava o cavalo preto no rei. Ataque o cavalo com um peão.",
+            "de": "Dein Läufer fesselt den schwarzen Springer an seinen König. Greif den Springer mit einem Bauern an.",
+            "ru": "Твой слон связал чёрного коня с его королём. Напади на коня пешкой.",
+            "it": "Il tuo alfiere inchioda il cavallo nero al suo re. Attacca il cavallo con un pedone.",
+            "tr": "Filin siyah atı şahına açmazla bağlıyor. Ata bir piyonla saldır.",
+            "pl": "Twój goniec związał czarnego skoczka z jego królem. Zaatakuj skoczka pionem.",
+            "id": "Gajahmu mem-pin kuda hitam ke rajanya. Serang kuda itu dengan pion."
+          },
+          "apres": {
+            "en": "The knight cannot run away: it falls to a simple pawn.",
+            "fr": "Le cavalier ne peut pas fuir : il tombe contre un simple pion.",
+            "es": "El caballo no puede huir: cae ante un simple peón.",
+            "pt": "O cavalo não pode fugir: ele cai diante de um simples peão.",
+            "de": "Der Springer kann nicht fliehen: Er fällt gegen einen einfachen Bauern.",
+            "ru": "Конь не может убежать: он гибнет от простой пешки.",
+            "it": "Il cavallo non può scappare: cade contro un semplice pedone.",
+            "tr": "At kaçamıyor: sıradan bir piyona karşı düşüyor.",
+            "pl": "Skoczek nie może uciec: pada przed zwykłym pionem.",
+            "id": "Kuda itu tidak bisa kabur: ia jatuh oleh pion biasa."
+          }
+        },
+        {
+          "fen": "4k3/ppp2ppp/3p4/4n3/8/8/PPP2PPP/4R1K1 w - - 0 1",
+          "sol": [
+            "f2f4"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "a7a6",
+            "f4e5"
+          ],
+          "consigne": {
+            "en": "Your rook pins the black knight to its king. Attack it with a pawn.",
+            "fr": "Ta tour cloue le cavalier noir sur son roi. Attaque-le avec un pion.",
+            "es": "Tu torre clava el caballo negro a su rey. Atácalo con un peón.",
+            "pt": "Sua torre crava o cavalo preto no rei. Ataque-o com um peão.",
+            "de": "Dein Turm fesselt den schwarzen Springer an seinen König. Greif ihn mit einem Bauern an.",
+            "ru": "Твоя ладья связала чёрного коня с его королём. Напади на него пешкой.",
+            "it": "La tua torre inchioda il cavallo nero al suo re. Attaccalo con un pedone.",
+            "tr": "Kalen siyah atı şahına açmazla bağlıyor. Ona bir piyonla saldır.",
+            "pl": "Twoja wieża związała czarnego skoczka z jego królem. Zaatakuj go pionem.",
+            "id": "Bentengmu mem-pin kuda hitam ke rajanya. Serang kuda itu dengan pion."
+          },
+          "apres": {
+            "en": "Same idea with a rook: the pinned piece is lost.",
+            "fr": "Même idée avec une tour : la pièce clouée est perdue.",
+            "es": "La misma idea con una torre: la pieza clavada está perdida.",
+            "pt": "A mesma ideia com uma torre: a peça cravada está perdida.",
+            "de": "Dieselbe Idee mit einem Turm: Die gefesselte Figur ist verloren.",
+            "ru": "Та же идея с ладьёй: связанная фигура пропала.",
+            "it": "Stessa idea con una torre: il pezzo inchiodato è perso.",
+            "tr": "Kaleyle aynı fikir: açmazdaki taş kaybedildi.",
+            "pl": "Ten sam pomysł z wieżą: związana bierka jest stracona.",
+            "id": "Ide yang sama dengan benteng: bidak yang terkena pin sudah hilang."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "A pinned piece no longer defends",
+        "fr": "Une pièce clouée ne défend plus",
+        "es": "Una pieza clavada ya no defiende",
+        "pt": "Uma peça cravada não defende mais",
+        "de": "Eine gefesselte Figur deckt nicht mehr",
+        "ru": "Связанная фигура не защищает",
+        "it": "Un pezzo inchiodato non difende più",
+        "tr": "Açmazdaki taş artık korumaz",
+        "pl": "Związana bierka już nie broni",
+        "id": "Bidak yang terkena pin tidak lagi melindungi"
+      },
+      "intro": {
+        "en": "A piece pinned to its king cannot take back: that would leave the king in check. So what it seems to defend is not really defended.",
+        "fr": "Une pièce clouée sur son roi ne peut pas reprendre : ce serait laisser le roi en échec. Ce qu'elle semble défendre ne l'est donc pas vraiment.",
+        "es": "Una pieza clavada a su rey no puede recapturar: dejaría al rey en jaque. Así que lo que parece defender no lo está de verdad.",
+        "pt": "Uma peça cravada no seu rei não pode recapturar: deixaria o rei em xeque. Então o que ela parece defender não está realmente defendido.",
+        "de": "Eine an ihren König gefesselte Figur kann nicht zurückschlagen: Der König stünde im Schach. Was sie zu decken scheint, ist also nicht wirklich gedeckt.",
+        "ru": "Фигура, связанная со своим королём, не может взять в ответ: король оказался бы под шахом. Значит, то, что она будто бы защищает, на деле не защищено.",
+        "it": "Un pezzo inchiodato al suo re non può riprendere: lascerebbe il re sotto scacco. Quindi ciò che sembra difendere non è davvero difeso.",
+        "tr": "Şahına açmazla bağlı bir taş geri alamaz: şahı şahta bırakırdı. Yani koruyor gibi göründüğü şey aslında korunmuyor.",
+        "pl": "Bierka związana ze swoim królem nie może odbić: zostawiłaby króla w szachu. To, czego niby broni, wcale nie jest bronione.",
+        "id": "Bidak yang terkena pin ke rajanya tidak bisa memakan balik: raja akan terkena skak. Jadi yang tampak dilindunginya sebenarnya tidak terlindungi."
+      },
+      "exos": [
+        {
+          "fen": "r3k3/pp2pp1p/5np1/7N/8/7P/PP3PP1/4R1K1 w - - 0 1",
+          "sol": [
+            "h5f6"
+          ],
+          "controle": "meilleur",
+          "nonDefendues": [
+            "f6"
+          ],
+          "consigne": {
+            "en": "The black knight is defended only by a pawn, and your rook pins that pawn. Take the knight.",
+            "fr": "Le cavalier noir n'est défendu que par un pion, et ta tour cloue ce pion. Prends le cavalier.",
+            "es": "El caballo negro solo está defendido por un peón, y tu torre clava ese peón. Captura el caballo.",
+            "pt": "O cavalo preto só está defendido por um peão, e sua torre crava esse peão. Capture o cavalo.",
+            "de": "Der schwarze Springer ist nur durch einen Bauern gedeckt, und dein Turm fesselt diesen Bauern. Schlag den Springer.",
+            "ru": "Чёрного коня защищает только пешка, а твоя ладья её связала. Возьми коня.",
+            "it": "Il cavallo nero è difeso solo da un pedone, e la tua torre inchioda quel pedone. Cattura il cavallo.",
+            "tr": "Siyah atı yalnızca bir piyon koruyor ve kalen o piyonu açmaza almış. Atı al.",
+            "pl": "Czarnego skoczka broni tylko pion, a twoja wieża go związała. Zbij skoczka.",
+            "id": "Kuda hitam hanya dilindungi satu pion, dan bentengmu mem-pin pion itu. Makan kudanya."
+          },
+          "apres": {
+            "en": "Check, and the pawn cannot take back: it is pinned.",
+            "fr": "Échec, et le pion ne peut pas reprendre : il est cloué.",
+            "es": "Jaque, y el peón no puede recapturar: está clavado.",
+            "pt": "Xeque, e o peão não pode recapturar: ele está cravado.",
+            "de": "Schach, und der Bauer kann nicht zurückschlagen: Er ist gefesselt.",
+            "ru": "Шах, и пешка не может взять в ответ: она связана.",
+            "it": "Scacco, e il pedone non può riprendere: è inchiodato.",
+            "tr": "Şah, ve piyon geri alamıyor: açmazda.",
+            "pl": "Szach, a pion nie może odbić: jest związany.",
+            "id": "Skak, dan pion tidak bisa memakan balik: ia terkena pin."
+          }
+        },
+        {
+          "fen": "r5k1/pp3pp1/7n/8/8/8/PP5P/2B3RK w - - 0 1",
+          "sol": [
+            "c1h6"
+          ],
+          "controle": "meilleur",
+          "nonDefendues": [
+            "h6"
+          ],
+          "consigne": {
+            "en": "The black knight is defended only by a pawn, which your rook pins on the king's file. Take the knight.",
+            "fr": "Le cavalier noir n'est défendu que par un pion, que ta tour cloue sur la colonne du roi. Prends le cavalier.",
+            "es": "El caballo negro solo está defendido por un peón, que tu torre clava en la columna del rey. Captura el caballo.",
+            "pt": "O cavalo preto só está defendido por um peão, que sua torre crava na coluna do rei. Capture o cavalo.",
+            "de": "Der schwarze Springer ist nur durch einen Bauern gedeckt, den dein Turm auf der Linie des Königs fesselt. Schlag den Springer.",
+            "ru": "Чёрного коня защищает только пешка, которую твоя ладья связала по вертикали короля. Возьми коня.",
+            "it": "Il cavallo nero è difeso solo da un pedone, che la tua torre inchioda sulla colonna del re. Cattura il cavallo.",
+            "tr": "Siyah atı yalnızca bir piyon koruyor; kalen o piyonu şahın sütununda açmaza almış. Atı al.",
+            "pl": "Czarnego skoczka broni tylko pion, którego twoja wieża związała na kolumnie króla. Zbij skoczka.",
+            "id": "Kuda hitam hanya dilindungi satu pion, yang di-pin bentengmu di kolom raja. Makan kudanya."
+          },
+          "apres": {
+            "en": "The pawn cannot take back without leaving its king in check.",
+            "fr": "Le pion ne peut pas reprendre sans laisser son roi en échec.",
+            "es": "El peón no puede recapturar sin dejar a su rey en jaque.",
+            "pt": "O peão não pode recapturar sem deixar o rei em xeque.",
+            "de": "Der Bauer kann nicht zurückschlagen, ohne seinen König ins Schach zu stellen.",
+            "ru": "Пешка не может взять, не оставив своего короля под шахом.",
+            "it": "Il pedone non può riprendere senza lasciare il suo re sotto scacco.",
+            "tr": "Piyon, şahını şahta bırakmadan geri alamaz.",
+            "pl": "Pion nie może odbić, nie zostawiając króla w szachu.",
+            "id": "Pion tidak bisa memakan balik tanpa membuat rajanya terkena skak."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The pin on the queen",
+        "fr": "Le clouage sur la dame",
+        "es": "La clavada sobre la dama",
+        "pt": "A cravada na dama",
+        "de": "Die Fesselung an die Dame",
+        "ru": "Связка с ферзём",
+        "it": "L'inchiodatura sulla donna",
+        "tr": "Vezire açmaz",
+        "pl": "Związanie z hetmanem",
+        "id": "Pin ke menteri"
+      },
+      "intro": {
+        "en": "A piece can also be pinned to its queen. Then it is allowed to move, but the queen behind it would be taken. So it stays put, and becomes a target.",
+        "fr": "Une pièce peut aussi être clouée sur sa dame. Elle a alors le droit de bouger, mais la dame derrière elle serait prise. Elle reste donc en place, et devient une cible.",
+        "es": "Una pieza también puede estar clavada a su dama. Entonces sí puede moverse, pero la dama de detrás sería capturada. Así que se queda quieta y se convierte en un blanco.",
+        "pt": "Uma peça também pode estar cravada na sua dama. Aí ela pode se mover, mas a dama atrás dela seria capturada. Então ela fica parada e vira um alvo.",
+        "de": "Eine Figur kann auch an ihre Dame gefesselt sein. Dann darf sie ziehen, aber die Dame dahinter würde geschlagen. Also bleibt sie stehen und wird zum Ziel.",
+        "ru": "Фигура может быть связана и со своим ферзём. Тогда ходить ей можно, но ферзя сзади возьмут. Поэтому она стоит на месте и становится мишенью.",
+        "it": "Un pezzo può essere inchiodato anche alla sua donna. Allora può muoversi, ma la donna dietro verrebbe catturata. Quindi resta fermo e diventa un bersaglio.",
+        "tr": "Bir taş vezirine de açmazla bağlı olabilir. O zaman oynayabilir ama arkadaki vezir alınır. Bu yüzden yerinde kalır ve hedef olur.",
+        "pl": "Bierka może być też związana ze swoim hetmanem. Wtedy wolno jej się ruszyć, ale hetman za nią zostałby zbity. Zostaje więc na miejscu i staje się celem.",
+        "id": "Bidak juga bisa terkena pin ke menterinya. Ia boleh bergerak, tetapi menteri di belakangnya akan dimakan. Jadi ia tetap di tempat dan menjadi sasaran."
+      },
+      "exos": [
+        {
+          "fen": "3q2k1/pp3p1p/3p1np1/8/8/2N5/PP3PPP/2BQ2K1 w - - 0 1",
+          "sol": [
+            "c1g5"
+          ],
+          "cible": "g5",
+          "controle": "bon",
+          "consigne": {
+            "en": "Pin the black knight to its queen: put your bishop on the marked square.",
+            "fr": "Cloue le cavalier noir sur sa dame : pose ton fou sur la case marquée.",
+            "es": "Clava el caballo negro a su dama: pon tu alfil en la casilla marcada.",
+            "pt": "Crave o cavalo preto na dama: coloque seu bispo na casa marcada.",
+            "de": "Fessle den schwarzen Springer an seine Dame: Stell deinen Läufer auf das markierte Feld.",
+            "ru": "Свяжи чёрного коня с ферзём: поставь слона на отмеченное поле.",
+            "it": "Inchioda il cavallo nero alla sua donna: metti il tuo alfiere sulla casa segnata.",
+            "tr": "Siyah atı vezirine açmazla bağla: filini işaretli kareye koy.",
+            "pl": "Zwiąż czarnego skoczka z hetmanem: postaw gońca na zaznaczonym polu.",
+            "id": "Pin kuda hitam ke menterinya: taruh gajahmu di petak yang ditandai."
+          },
+          "apres": {
+            "en": "If the knight moves, your bishop takes the queen.",
+            "fr": "Si le cavalier bouge, ton fou prend la dame.",
+            "es": "Si el caballo se mueve, tu alfil captura la dama.",
+            "pt": "Se o cavalo se mover, seu bispo captura a dama.",
+            "de": "Zieht der Springer weg, schlägt dein Läufer die Dame.",
+            "ru": "Если конь уйдёт, твой слон возьмёт ферзя.",
+            "it": "Se il cavallo si muove, il tuo alfiere cattura la donna.",
+            "tr": "At oynarsa filin veziri alır.",
+            "pl": "Jeśli skoczek się ruszy, twój goniec zbije hetmana.",
+            "id": "Jika kuda bergerak, gajahmu memakan menteri."
+          }
+        },
+        {
+          "fen": "r5k1/pp2qppp/5n2/3b2B1/8/7P/PPQ2PP1/3R2K1 w - - 0 1",
+          "sol": [
+            "g5f6"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "e7f6",
+            "d1d5"
+          ],
+          "consigne": {
+            "en": "The black bishop is defended only by the knight, and the knight is pinned to its queen. Take the knight.",
+            "fr": "Le fou noir n'est défendu que par le cavalier, et ce cavalier est cloué sur sa dame. Prends le cavalier.",
+            "es": "El alfil negro solo está defendido por el caballo, y ese caballo está clavado a su dama. Captura el caballo.",
+            "pt": "O bispo preto só está defendido pelo cavalo, e esse cavalo está cravado na dama. Capture o cavalo.",
+            "de": "Der schwarze Läufer ist nur durch den Springer gedeckt, und dieser Springer ist an seine Dame gefesselt. Schlag den Springer.",
+            "ru": "Чёрного слона защищает только конь, а конь связан с ферзём. Возьми коня.",
+            "it": "L'alfiere nero è difeso solo dal cavallo, e quel cavallo è inchiodato alla sua donna. Cattura il cavallo.",
+            "tr": "Siyah fili yalnızca at koruyor ve o at vezirine açmazla bağlı. Atı al.",
+            "pl": "Czarnego gońca broni tylko skoczek, a ten skoczek jest związany z hetmanem. Zbij skoczka.",
+            "id": "Gajah hitam hanya dilindungi kuda, dan kuda itu terkena pin ke menterinya. Makan kudanya."
+          },
+          "apres": {
+            "en": "The defender is gone: when the queen takes back, your rook takes the bishop.",
+            "fr": "Le défenseur a disparu : quand la dame reprend, ta tour prend le fou.",
+            "es": "El defensor ha desaparecido: cuando la dama recaptura, tu torre captura el alfil.",
+            "pt": "O defensor sumiu: quando a dama recaptura, sua torre captura o bispo.",
+            "de": "Der Verteidiger ist weg: Wenn die Dame zurückschlägt, schlägt dein Turm den Läufer.",
+            "ru": "Защитника больше нет: когда ферзь берёт в ответ, твоя ладья берёт слона.",
+            "it": "Il difensore è sparito: quando la donna riprende, la tua torre cattura l'alfiere.",
+            "tr": "Koruyucu gitti: vezir geri alınca kalen fili alır.",
+            "pl": "Obrońca zniknął: gdy hetman odbija, twoja wieża bije gońca.",
+            "id": "Pelindungnya sudah hilang: saat menteri memakan balik, bentengmu memakan gajah."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The skewer",
+        "fr": "L'enfilade",
+        "es": "El pincho",
+        "pt": "O espeto",
+        "de": "Der Spieß",
+        "ru": "Сквозной удар",
+        "it": "L'infilata",
+        "tr": "Şiş",
+        "pl": "Przeszycie",
+        "id": "Tusuk sate"
+      },
+      "intro": {
+        "en": "A skewer is a pin turned around: the big piece is in front. You attack it, it has to step aside, and you take the piece behind. With a check, it works every time.",
+        "fr": "L'enfilade, c'est un clouage à l'envers : la grosse pièce est devant. Tu l'attaques, elle doit s'écarter, et tu prends la pièce de derrière. Avec un échec, ça marche à coup sûr.",
+        "es": "El pincho es una clavada al revés: la pieza grande está delante. La atacas, tiene que apartarse y capturas la pieza de detrás. Con jaque, funciona siempre.",
+        "pt": "O espeto é uma cravada ao contrário: a peça grande está na frente. Você a ataca, ela precisa sair do caminho, e você captura a peça de trás. Com xeque, funciona sempre.",
+        "de": "Der Spieß ist eine umgedrehte Fesselung: Die große Figur steht vorne. Du greifst sie an, sie muss ausweichen, und du schlägst die Figur dahinter. Mit Schach klappt das immer.",
+        "ru": "Сквозной удар — это связка наоборот: крупная фигура стоит впереди. Ты нападаешь на неё, она должна уйти, и ты берёшь фигуру сзади. С шахом это срабатывает всегда.",
+        "it": "L'infilata è un'inchiodatura al contrario: il pezzo grosso sta davanti. Lo attacchi, deve spostarsi, e tu catturi il pezzo dietro. Con uno scacco funziona sempre.",
+        "tr": "Şiş, tersine çevrilmiş bir açmazdır: büyük taş öndedir. Ona saldırırsın, kenara çekilmek zorunda kalır ve arkadaki taşı alırsın. Şahla birlikte her zaman işe yarar.",
+        "pl": "Przeszycie to związanie na odwrót: duża bierka stoi z przodu. Atakujesz ją, musi zejść z drogi, a ty bijesz bierkę z tyłu. Z szachem działa zawsze.",
+        "id": "Tusuk sate adalah pin yang terbalik: bidak besar ada di depan. Kamu menyerangnya, ia harus menyingkir, dan kamu memakan bidak di belakangnya. Dengan skak, ini selalu berhasil."
+      },
+      "exos": [
+        {
+          "fen": "8/8/1q2k3/8/8/3K4/8/6R1 w - - 0 1",
+          "sol": [
+            "g1g6"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "e6d5",
+            "g6b6"
+          ],
+          "consigne": {
+            "en": "Give check with your rook on the king's rank: the queen is behind it.",
+            "fr": "Donne échec avec ta tour sur la rangée du roi : la dame est derrière lui.",
+            "es": "Da jaque con tu torre en la fila del rey: la dama está detrás de él.",
+            "pt": "Dê xeque com sua torre na fileira do rei: a dama está atrás dele.",
+            "de": "Gib mit deinem Turm Schach auf der Reihe des Königs: Die Dame steht hinter ihm.",
+            "ru": "Дай шах ладьёй по горизонтали короля: ферзь стоит за ним.",
+            "it": "Dai scacco con la tua torre sulla traversa del re: la donna è dietro di lui.",
+            "tr": "Kalenle şahın sırasında şah çek: vezir onun arkasında.",
+            "pl": "Daj szacha wieżą na linii króla: hetman stoi za nim.",
+            "id": "Beri skak dengan bentengmu di baris raja: menteri ada di belakangnya."
+          },
+          "apres": {
+            "en": "The king steps aside, and the queen falls.",
+            "fr": "Le roi s'écarte, et la dame tombe.",
+            "es": "El rey se aparta y la dama cae.",
+            "pt": "O rei sai do caminho, e a dama cai.",
+            "de": "Der König weicht aus, und die Dame fällt.",
+            "ru": "Король отходит, и ферзь падает.",
+            "it": "Il re si sposta e la donna cade.",
+            "tr": "Şah kenara çekiliyor ve vezir düşüyor.",
+            "pl": "Król się odsuwa, a hetman pada.",
+            "id": "Raja menyingkir, dan menteri jatuh."
+          }
+        },
+        {
+          "fen": "8/2r2k2/8/8/8/8/5K2/7R w - - 0 1",
+          "sol": [
+            "h1h7"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "f7e6",
+            "h7c7"
+          ],
+          "consigne": {
+            "en": "Same idea with the black rook: give check on the king's rank.",
+            "fr": "Même idée avec la tour noire : donne échec sur la rangée du roi.",
+            "es": "La misma idea con la torre negra: da jaque en la fila del rey.",
+            "pt": "A mesma ideia com a torre preta: dê xeque na fileira do rei.",
+            "de": "Dieselbe Idee mit dem schwarzen Turm: Gib Schach auf der Reihe des Königs.",
+            "ru": "Та же идея с чёрной ладьёй: дай шах по горизонтали короля.",
+            "it": "Stessa idea con la torre nera: dai scacco sulla traversa del re.",
+            "tr": "Siyah kaleyle aynı fikir: şahın sırasında şah çek.",
+            "pl": "Ten sam pomysł z czarną wieżą: daj szacha na linii króla.",
+            "id": "Ide yang sama dengan benteng hitam: beri skak di baris raja."
+          },
+          "apres": {
+            "en": "The black rook was behind its king: it is lost.",
+            "fr": "La tour noire était derrière son roi : elle est perdue.",
+            "es": "La torre negra estaba detrás de su rey: está perdida.",
+            "pt": "A torre preta estava atrás do rei: ela está perdida.",
+            "de": "Der schwarze Turm stand hinter seinem König: Er ist verloren.",
+            "ru": "Чёрная ладья стояла за своим королём: она пропала.",
+            "it": "La torre nera era dietro il suo re: è persa.",
+            "tr": "Siyah kale şahının arkasındaydı: kaybedildi.",
+            "pl": "Czarna wieża stała za swoim królem: jest stracona.",
+            "id": "Benteng hitam ada di belakang rajanya: benteng itu hilang."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Removing the defender",
+        "fr": "Chasser le défenseur",
+        "es": "Eliminar al defensor",
+        "pt": "Eliminar o defensor",
+        "de": "Den Verteidiger beseitigen",
+        "ru": "Убери защитника",
+        "it": "Eliminare il difensore",
+        "tr": "Koruyucuyu kovmak",
+        "pl": "Usuń obrońcę",
+        "id": "Singkirkan pelindung"
+      },
+      "intro": {
+        "en": "When something holds only thanks to one defender, deal with the defender first: take it, or chase it away. What it was protecting falls next.",
+        "fr": "Quand quelque chose ne tient que grâce à un défenseur, occupe-toi d'abord du défenseur : prends-le, ou chasse-le. Ce qu'il protégeait tombe ensuite.",
+        "es": "Cuando algo solo aguanta gracias a un defensor, ocúpate primero del defensor: captúralo o échalo. Lo que protegía cae después.",
+        "pt": "Quando algo só se segura graças a um defensor, cuide primeiro do defensor: capture-o ou expulse-o. O que ele protegia cai em seguida.",
+        "de": "Wenn etwas nur dank eines einzigen Verteidigers hält, kümmere dich zuerst um den Verteidiger: Schlag ihn oder vertreib ihn. Was er schützte, fällt danach.",
+        "ru": "Когда что-то держится только благодаря одному защитнику, сначала займись защитником: возьми его или прогони. То, что он защищал, падёт следом.",
+        "it": "Quando qualcosa regge solo grazie a un difensore, occupati prima del difensore: cattura il difensore o caccialo via. Ciò che proteggeva cade subito dopo.",
+        "tr": "Bir şey yalnızca tek bir koruyucu sayesinde ayaktaysa önce koruyucuyla ilgilen: onu al ya da kov. Koruduğu şey ardından düşer.",
+        "pl": "Gdy coś trzyma się tylko dzięki jednemu obrońcy, najpierw zajmij się obrońcą: zbij go albo przegoń. To, czego bronił, padnie zaraz potem.",
+        "id": "Saat sesuatu hanya bertahan karena satu pelindung, urus dulu pelindungnya: makan atau usir dia. Yang dilindunginya akan jatuh setelahnya."
+      },
+      "exos": [
+        {
+          "fen": "5rk1/5pp1/5n2/q7/8/3Q1R2/6PP/1B4K1 w - - 0 1",
+          "sol": [
+            "f3f6"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "g7f6",
+            "d3h7"
+          ],
+          "suiteMat": true,
+          "consigne": {
+            "en": "Your queen and bishop aim at the square next to the black king. Only the knight stops your queen from mating there: take it with your rook.",
+            "fr": "Ta dame et ton fou visent la case voisine du roi noir. Seul le cavalier empêche ta dame d'y faire mat : prends-le avec ta tour.",
+            "es": "Tu dama y tu alfil apuntan a la casilla vecina del rey negro. Solo el caballo impide que tu dama dé mate allí: captúralo con tu torre.",
+            "pt": "Sua dama e seu bispo miram a casa vizinha do rei preto. Só o cavalo impede sua dama de dar mate ali: capture-o com sua torre.",
+            "de": "Deine Dame und dein Läufer zielen auf das Feld neben dem schwarzen König. Nur der Springer verhindert, dass deine Dame dort mattsetzt: Schlag ihn mit deinem Turm.",
+            "ru": "Твои ферзь и слон смотрят на поле рядом с чёрным королём. Только конь мешает ферзю поставить там мат: возьми его ладьёй.",
+            "it": "La tua donna e il tuo alfiere mirano alla casa accanto al re nero. Solo il cavallo impedisce alla tua donna di dare matto lì: catturalo con la torre.",
+            "tr": "Vezirin ve filin siyah şahın yanındaki kareyi hedefliyor. Vezirinin orada mat etmesini yalnızca at engelliyor: onu kalenle al.",
+            "pl": "Twój hetman i goniec celują w pole obok czarnego króla. Tylko skoczek nie pozwala hetmanowi dać tam mata: zbij go wieżą.",
+            "id": "Menteri dan gajahmu mengincar petak di samping raja hitam. Hanya kuda yang mencegah menterimu skakmat di sana: makan kuda itu dengan bentengmu."
+          },
+          "apres": {
+            "en": "The defender is gone. If the pawn takes back, your queen mates next to the king, protected by your bishop.",
+            "fr": "Le défenseur a disparu. Si le pion reprend, ta dame fait mat contre le roi, protégée par ton fou.",
+            "es": "El defensor ha desaparecido. Si el peón recaptura, tu dama da mate junto al rey, protegida por tu alfil.",
+            "pt": "O defensor sumiu. Se o peão recapturar, sua dama dá mate ao lado do rei, protegida pelo seu bispo.",
+            "de": "Der Verteidiger ist weg. Schlägt der Bauer zurück, setzt deine Dame neben dem König matt, gedeckt von deinem Läufer.",
+            "ru": "Защитника нет. Если пешка возьмёт в ответ, твой ферзь ставит мат рядом с королём под защитой слона.",
+            "it": "Il difensore è sparito. Se il pedone riprende, la tua donna dà matto accanto al re, protetta dal tuo alfiere.",
+            "tr": "Koruyucu gitti. Piyon geri alırsa vezirin, filinin korumasıyla şahın yanında mat eder.",
+            "pl": "Obrońca zniknął. Jeśli pion odbije, twój hetman daje mata obok króla, chroniony przez gońca.",
+            "id": "Pelindungnya sudah hilang. Jika pion memakan balik, menterimu skakmat di samping raja, dilindungi gajahmu."
+          }
+        },
+        {
+          "fen": "5rk1/q4pp1/5n2/8/4P3/3Q4/5PPP/1B3RK1 w - - 0 1",
+          "sol": [
+            "e4e5"
+          ],
+          "controle": "meilleur",
+          "suite": [
+            "f6d5",
+            "d3h7"
+          ],
+          "suiteMat": true,
+          "consigne": {
+            "en": "Same picture, but this time chase the knight away with a pawn.",
+            "fr": "Même tableau, mais cette fois chasse le cavalier avec un pion.",
+            "es": "El mismo cuadro, pero esta vez echa al caballo con un peón.",
+            "pt": "O mesmo quadro, mas desta vez expulse o cavalo com um peão.",
+            "de": "Dasselbe Bild, aber diesmal vertreibst du den Springer mit einem Bauern.",
+            "ru": "Та же картина, но на этот раз прогони коня пешкой.",
+            "it": "Stesso quadro, ma stavolta caccia il cavallo con un pedone.",
+            "tr": "Aynı tablo, ama bu kez atı bir piyonla kov.",
+            "pl": "Ten sam obraz, ale tym razem przegoń skoczka pionem.",
+            "id": "Gambaran yang sama, tetapi kali ini usir kuda dengan pion."
+          },
+          "apres": {
+            "en": "Chased away, the knight no longer stops the mate: your queen mates next to the king.",
+            "fr": "Chassé, le cavalier n'empêche plus le mat : ta dame le fait contre le roi.",
+            "es": "Expulsado, el caballo ya no impide el mate: tu dama lo da junto al rey.",
+            "pt": "Expulso, o cavalo já não impede o mate: sua dama o dá ao lado do rei.",
+            "de": "Vertrieben verhindert der Springer das Matt nicht mehr: Deine Dame setzt neben dem König matt.",
+            "ru": "Прогнанный конь больше не мешает мату: твой ферзь ставит его рядом с королём.",
+            "it": "Cacciato via, il cavallo non impedisce più il matto: la tua donna lo dà accanto al re.",
+            "tr": "Kovulan at artık matı engellemiyor: vezirin şahın yanında mat ediyor.",
+            "pl": "Przegoniony skoczek już nie broni przed matem: twój hetman daje go obok króla.",
+            "id": "Setelah diusir, kuda tidak lagi mencegah skakmat: menterimu melakukannya di samping raja."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "rnbqkbnr/1pppppp1/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "niveau": 1,
+    "titre": {
+      "en": "The boss: the computer two pawns down",
+      "fr": "Le boss : l'ordinateur avec deux pions de moins",
+      "es": "El jefe: el ordenador con dos peones de menos",
+      "pt": "O chefão: o computador com dois peões a menos",
+      "de": "Der Boss: der Computer mit zwei Bauern weniger",
+      "ru": "Босс: компьютер без двух пешек",
+      "it": "Il boss: il computer con due pedoni in meno",
+      "tr": "Boss: iki piyonu eksik bilgisayar",
+      "pl": "Boss: komputer bez dwóch pionów",
+      "id": "Bos: komputer dengan dua pion lebih sedikit"
+    },
+    "intro": {
+      "en": "Beat the computer at its easiest level: it starts two pawns down. Look for pieces lined up with its king or queen: a pin or a skewer may be waiting. No clock, and you can take back a move.",
+      "fr": "Bats l'ordinateur à son niveau le plus facile : il commence avec deux pions de moins. Cherche les pièces alignées avec son roi ou sa dame : un clouage ou une enfilade t'attend peut-être. Pas de pendule, et tu peux reprendre un coup.",
+      "es": "Gana al ordenador en su nivel más fácil: empieza con dos peones de menos. Busca piezas alineadas con su rey o su dama: quizá te espere una clavada o un pincho. Sin reloj, y puedes deshacer una jugada.",
+      "pt": "Vença o computador no nível mais fácil: ele começa com dois peões a menos. Procure peças alinhadas com o rei ou a dama dele: talvez uma cravada ou um espeto esteja esperando por você. Sem relógio, e você pode voltar um lance.",
+      "de": "Schlag den Computer auf der leichtesten Stufe: Er beginnt mit zwei Bauern weniger. Such Figuren, die mit seinem König oder seiner Dame auf einer Linie stehen: Vielleicht wartet eine Fesselung oder ein Spieß. Keine Uhr, und du darfst einen Zug zurücknehmen.",
+      "ru": "Обыграй компьютер на самом лёгком уровне: он начинает без двух пешек. Ищи фигуры на одной линии с его королём или ферзём: возможно, тебя ждёт связка или сквозной удар. Без часов, и ход можно взять назад.",
+      "it": "Batti il computer al livello più facile: parte con due pedoni in meno. Cerca i pezzi allineati con il suo re o la sua donna: forse ti aspetta un'inchiodatura o un'infilata. Niente orologio, e puoi ritirare una mossa.",
+      "tr": "En kolay seviyedeki bilgisayarı yen: oyuna iki piyonu eksik başlıyor. Şahı ya da veziriyle aynı hatta duran taşları ara: belki bir açmaz ya da şiş seni bekliyordur. Saat yok ve hamleni geri alabilirsin.",
+      "pl": "Pokonaj komputer na najłatwiejszym poziomie: zaczyna bez dwóch pionów. Szukaj bierek ustawionych w linii z jego królem albo hetmanem: może czeka na ciebie związanie albo przeszycie. Bez zegara, a ruch można cofnąć.",
+      "id": "Kalahkan komputer di tingkat termudah: ia mulai dengan dua pion lebih sedikit. Cari bidak yang segaris dengan raja atau menterinya: mungkin pin atau tusuk sate sedang menunggumu. Tanpa jam, dan kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You know how to pin and skewer.",
+      "fr": "Boss battu. Tu sais clouer et enfiler.",
+      "es": "Jefe derrotado. Sabes clavar y ensartar.",
+      "pt": "Chefão derrotado. Você sabe cravar e espetar.",
+      "de": "Boss besiegt. Du kannst fesseln und aufspießen.",
+      "ru": "Босс побеждён. Ты умеешь связывать и наносить сквозной удар.",
+      "it": "Boss battuto. Sai inchiodare e infilare.",
+      "tr": "Boss yenildi. Açmaza almayı ve şişlemeyi biliyorsun.",
+      "pl": "Boss pokonany. Umiesz wiązać i przeszywać.",
+      "id": "Bos dikalahkan. Kamu tahu cara mem-pin dan menusuk sate."
+    }
+  }
+}

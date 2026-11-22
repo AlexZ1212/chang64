@@ -1,0 +1,676 @@
+{
+  "id": "ouverture",
+  "titre": {
+    "en": "Starting a game well",
+    "fr": "Bien commencer une partie",
+    "es": "Empezar bien una partida",
+    "pt": "Começar bem uma partida",
+    "de": "Der gute Partiebeginn",
+    "ru": "Как начинать партию",
+    "it": "Iniziare bene una partita",
+    "tr": "Oyuna iyi başlamak",
+    "pl": "Dobry początek partii",
+    "id": "Memulai permainan dengan baik"
+  },
+  "desc": {
+    "en": "The three ideas of the first moves: take the centre, bring out your pieces, put your king in safety. And the traps to avoid.",
+    "fr": "Les trois idées des premiers coups : prendre le centre, sortir ses pièces, mettre son roi à l'abri. Et les pièges à éviter.",
+    "es": "Las tres ideas de las primeras jugadas: tomar el centro, sacar las piezas, poner el rey a salvo. Y las trampas que hay que evitar.",
+    "pt": "As três ideias dos primeiros lances: ocupar o centro, desenvolver as peças, pôr o rei em segurança. E as armadilhas a evitar.",
+    "de": "Die drei Ideen der ersten Züge: das Zentrum besetzen, die Figuren entwickeln, den König in Sicherheit bringen. Und die Fallen, die man meiden sollte.",
+    "ru": "Три идеи первых ходов: занять центр, вывести фигуры, спрятать короля. И ловушки, которых надо избегать.",
+    "it": "Le tre idee delle prime mosse: prendere il centro, sviluppare i pezzi, mettere il re al sicuro. E le trappole da evitare.",
+    "tr": "İlk hamlelerin üç fikri: merkezi almak, taşları çıkarmak, şahı güvene almak. Ve kaçınılması gereken tuzaklar.",
+    "pl": "Trzy idee pierwszych ruchów: zająć centrum, wyprowadzić bierki, ukryć króla. I pułapki, których trzeba unikać.",
+    "id": "Tiga gagasan langkah-langkah pertama: menguasai pusat, mengeluarkan bidak, mengamankan raja. Dan jebakan yang harus dihindari."
+  },
+  "etapes": [
+    {
+      "titre": {
+        "en": "Take the centre",
+        "fr": "Prendre le centre",
+        "es": "Tomar el centro",
+        "pt": "Ocupar o centro",
+        "de": "Das Zentrum besetzen",
+        "ru": "Займи центр",
+        "it": "Prendere il centro",
+        "tr": "Merkezi al",
+        "pl": "Zajmij centrum",
+        "id": "Kuasai pusat"
+      },
+      "intro": {
+        "en": "The four squares in the middle matter most: a piece in the centre can go everywhere. Start by moving a pawn there, two squares forward.",
+        "fr": "Les quatre cases du milieu sont les plus importantes : une pièce au centre va partout. Commence par y avancer un pion, de deux cases.",
+        "es": "Las cuatro casillas del medio son las más importantes: una pieza en el centro llega a todas partes. Empieza avanzando allí un peón, dos casillas.",
+        "pt": "As quatro casas do meio são as mais importantes: uma peça no centro alcança tudo. Comece avançando um peão para lá, duas casas.",
+        "de": "Die vier Felder in der Mitte sind die wichtigsten: Eine Figur im Zentrum kommt überall hin. Zieh zuerst einen Bauern dorthin, zwei Felder weit.",
+        "ru": "Четыре поля в середине доски самые важные: фигура в центре дотягивается куда угодно. Начни с того, что продвинешь туда пешку на два поля.",
+        "it": "Le quattro case del centro sono le più importanti: un pezzo al centro arriva dappertutto. Comincia spingendoci un pedone, di due case.",
+        "tr": "Ortadaki dört kare en önemlileridir: merkezdeki bir taş her yere ulaşır. İşe oraya bir piyonu iki kare ilerleterek başla.",
+        "pl": "Cztery pola pośrodku są najważniejsze: bierka w centrum sięga wszędzie. Zacznij od wysunięcia tam piona o dwa pola.",
+        "id": "Empat petak di tengah adalah yang terpenting: bidak di pusat bisa menjangkau ke mana saja. Mulailah dengan memajukan pion ke sana, dua petak."
+      },
+      "exos": [
+        {
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+          "sol": [
+            "e2e4",
+            "d2d4"
+          ],
+          "controle": "bon",
+          "consigne": {
+            "en": "Move one of the two centre pawns two squares forward.",
+            "fr": "Avance un des deux pions du centre de deux cases.",
+            "es": "Avanza dos casillas uno de los dos peones centrales.",
+            "pt": "Avance duas casas um dos dois peões centrais.",
+            "de": "Zieh einen der beiden Zentrumsbauern zwei Felder vor.",
+            "ru": "Продвинь одну из двух центральных пешек на два поля.",
+            "it": "Spingi di due case uno dei due pedoni centrali.",
+            "tr": "İki merkez piyonundan birini iki kare ilerlet.",
+            "pl": "Przesuń jeden z dwóch środkowych pionów o dwa pola.",
+            "id": "Majukan dua petak salah satu dari dua pion tengah."
+          },
+          "faux": {
+            "*": {
+              "en": "To start, move the pawn in front of your king or your queen two squares forward.",
+              "fr": "Pour commencer, avance de deux cases le pion devant ton roi ou devant ta dame.",
+              "es": "Para empezar, avanza dos casillas el peón que está delante de tu rey o de tu dama.",
+              "pt": "Para começar, avance duas casas o peão na frente do seu rei ou da sua dama.",
+              "de": "Zieh zu Beginn den Bauern vor deinem König oder vor deiner Dame zwei Felder vor.",
+              "ru": "Для начала продвинь на два поля пешку перед королём или перед ферзём.",
+              "it": "Per cominciare, spingi di due case il pedone davanti al re o alla donna.",
+              "tr": "Başlangıç için şahının ya da vezirinin önündeki piyonu iki kare ilerlet.",
+              "pl": "Na początek przesuń o dwa pola piona przed królem albo przed hetmanem.",
+              "id": "Untuk memulai, majukan dua petak pion di depan raja atau menterimu."
+            }
+          },
+          "apres": {
+            "en": "Your pawn holds the centre and opens the way for your queen and a bishop.",
+            "fr": "Ton pion occupe le centre et ouvre la route à ta dame et à un fou.",
+            "es": "Tu peón ocupa el centro y abre el camino a tu dama y a un alfil.",
+            "pt": "Seu peão ocupa o centro e abre caminho para a dama e um bispo.",
+            "de": "Dein Bauer besetzt das Zentrum und öffnet den Weg für deine Dame und einen Läufer.",
+            "ru": "Твоя пешка заняла центр и открыла дорогу ферзю и слону.",
+            "it": "Il tuo pedone occupa il centro e apre la strada alla donna e a un alfiere.",
+            "tr": "Piyonun merkezi tutuyor ve vezirine ve bir filine yol açıyor.",
+            "pl": "Twój pion zajmuje centrum i otwiera drogę hetmanowi i gońcowi.",
+            "id": "Pionmu menempati pusat dan membuka jalan bagi menteri dan satu gajah."
+          }
+        },
+        {
+          "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "sol": [
+            "d2d4"
+          ],
+          "controle": "bon",
+          "consigne": {
+            "en": "Black moved their pawn only one square. Move your other centre pawn two squares forward.",
+            "fr": "Les Noirs ont avancé leur pion d'une seule case. Avance ton autre pion du centre de deux cases.",
+            "es": "Las negras solo han avanzado su peón una casilla. Avanza tu otro peón central dos casillas.",
+            "pt": "As pretas avançaram o peão só uma casa. Avance seu outro peão central duas casas.",
+            "de": "Schwarz hat seinen Bauern nur ein Feld gezogen. Zieh deinen anderen Zentrumsbauern zwei Felder vor.",
+            "ru": "Чёрные продвинули пешку всего на одно поле. Продвинь вторую центральную пешку на два поля.",
+            "it": "Il Nero ha spinto il suo pedone di una sola casa. Spingi di due case il tuo altro pedone centrale.",
+            "tr": "Siyah piyonunu yalnızca bir kare ilerletti. Öteki merkez piyonunu iki kare ilerlet.",
+            "pl": "Czarne przesunęły piona tylko o jedno pole. Przesuń swojego drugiego środkowego piona o dwa pola.",
+            "id": "Hitam hanya memajukan pionnya satu petak. Majukan pion tengahmu yang lain dua petak."
+          },
+          "faux": {
+            "*": {
+              "en": "Move the pawn in front of your queen two squares forward, next to your first pawn.",
+              "fr": "Avance de deux cases le pion devant ta dame, à côté de ton premier pion.",
+              "es": "Avanza dos casillas el peón que está delante de tu dama, al lado de tu primer peón.",
+              "pt": "Avance duas casas o peão na frente da sua dama, ao lado do seu primeiro peão.",
+              "de": "Zieh den Bauern vor deiner Dame zwei Felder vor, neben deinen ersten Bauern.",
+              "ru": "Продвинь на два поля пешку перед ферзём, рядом с первой пешкой.",
+              "it": "Spingi di due case il pedone davanti alla donna, accanto al tuo primo pedone.",
+              "tr": "Vezirinin önündeki piyonu iki kare ilerlet, ilk piyonunun yanına.",
+              "pl": "Przesuń o dwa pola piona przed hetmanem, obok twojego pierwszego piona.",
+              "id": "Majukan dua petak pion di depan menterimu, di samping pion pertamamu."
+            }
+          },
+          "apres": {
+            "en": "Two pawns in the centre: your pieces will have room.",
+            "fr": "Deux pions au centre : tes pièces auront de la place.",
+            "es": "Dos peones en el centro: tus piezas tendrán sitio.",
+            "pt": "Dois peões no centro: suas peças terão espaço.",
+            "de": "Zwei Bauern im Zentrum: Deine Figuren haben Platz.",
+            "ru": "Две пешки в центре: твоим фигурам будет просторно.",
+            "it": "Due pedoni al centro: i tuoi pezzi avranno spazio.",
+            "tr": "Merkezde iki piyon: taşlarının yeri olacak.",
+            "pl": "Dwa piony w centrum: twoje bierki będą miały miejsce.",
+            "id": "Dua pion di pusat: bidak-bidakmu akan punya ruang."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Bring out knights and bishops",
+        "fr": "Sortir cavaliers et fous",
+        "es": "Sacar caballos y alfiles",
+        "pt": "Desenvolver cavalos e bispos",
+        "de": "Springer und Läufer entwickeln",
+        "ru": "Выводи коней и слонов",
+        "it": "Sviluppare cavalli e alfieri",
+        "tr": "Atları ve filleri çıkar",
+        "pl": "Wyprowadź skoczki i gońce",
+        "id": "Keluarkan kuda dan gajah"
+      },
+      "intro": {
+        "en": "Next, bring out your knights and bishops, towards the centre. A piece on the edge of the board controls fewer squares. Early on, avoid moving the same piece twice.",
+        "fr": "Ensuite, sors tes cavaliers et tes fous, en direction du centre. Une pièce sur le bord de l'échiquier contrôle moins de cases. Au début, évite de jouer deux fois la même pièce.",
+        "es": "Después, saca tus caballos y tus alfiles hacia el centro. Una pieza en el borde del tablero controla menos casillas. Al principio, evita mover dos veces la misma pieza.",
+        "pt": "Depois, desenvolva seus cavalos e bispos em direção ao centro. Uma peça na borda do tabuleiro controla menos casas. No começo, evite mover duas vezes a mesma peça.",
+        "de": "Danach entwickelst du deine Springer und Läufer in Richtung Zentrum. Eine Figur am Brettrand kontrolliert weniger Felder. Zieh am Anfang möglichst nicht zweimal dieselbe Figur.",
+        "ru": "Затем выводи коней и слонов ближе к центру. Фигура на краю доски контролирует меньше полей. В начале старайся не ходить одной фигурой дважды.",
+        "it": "Poi sviluppa cavalli e alfieri verso il centro. Un pezzo sul bordo della scacchiera controlla meno case. All'inizio evita di muovere due volte lo stesso pezzo.",
+        "tr": "Sonra atlarını ve fillerini merkeze doğru çıkar. Tahtanın kenarındaki bir taş daha az kare kontrol eder. Başta aynı taşı iki kez oynamaktan kaçın.",
+        "pl": "Potem wyprowadź skoczki i gońce w stronę centrum. Bierka na brzegu szachownicy kontroluje mniej pól. Na początku unikaj ruszania dwa razy tą samą bierką.",
+        "id": "Setelah itu, keluarkan kuda dan gajahmu ke arah pusat. Bidak di tepi papan menguasai lebih sedikit petak. Di awal, hindari menggerakkan bidak yang sama dua kali."
+      },
+      "exos": [
+        {
+          "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+          "sol": [
+            "g1f3",
+            "b1c3"
+          ],
+          "controle": "bon",
+          "consigne": {
+            "en": "Bring out a knight towards the centre.",
+            "fr": "Sors un cavalier vers le centre.",
+            "es": "Saca un caballo hacia el centro.",
+            "pt": "Desenvolva um cavalo em direção ao centro.",
+            "de": "Entwickle einen Springer in Richtung Zentrum.",
+            "ru": "Выведи коня к центру.",
+            "it": "Sviluppa un cavallo verso il centro.",
+            "tr": "Bir atını merkeze doğru çıkar.",
+            "pl": "Wyprowadź skoczka w stronę centrum.",
+            "id": "Keluarkan satu kuda ke arah pusat."
+          },
+          "faux": {
+            "*": {
+              "en": "Bring out a knight, towards the centre rather than the edge.",
+              "fr": "Sors un cavalier, vers le centre plutôt que vers le bord.",
+              "es": "Saca un caballo, hacia el centro mejor que hacia el borde.",
+              "pt": "Desenvolva um cavalo, em direção ao centro e não à borda.",
+              "de": "Entwickle einen Springer, lieber zum Zentrum als zum Rand.",
+              "ru": "Выведи коня, к центру, а не к краю.",
+              "it": "Sviluppa un cavallo, verso il centro piuttosto che verso il bordo.",
+              "tr": "Bir at çıkar, kenara değil merkeze doğru.",
+              "pl": "Wyprowadź skoczka, raczej do centrum niż na brzeg.",
+              "id": "Keluarkan kuda, ke arah pusat, bukan ke tepi."
+            }
+          },
+          "apres": {
+            "en": "The knight points at the centre.",
+            "fr": "Le cavalier vise le centre.",
+            "es": "El caballo apunta al centro.",
+            "pt": "O cavalo mira o centro.",
+            "de": "Der Springer zielt auf das Zentrum.",
+            "ru": "Конь смотрит в центр.",
+            "it": "Il cavallo punta al centro.",
+            "tr": "At merkeze bakıyor.",
+            "pl": "Skoczek celuje w centrum.",
+            "id": "Kuda mengarah ke pusat."
+          }
+        },
+        {
+          "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+          "sol": [
+            "f1c4"
+          ],
+          "controle": "bon",
+          "consigne": {
+            "en": "Bring out your bishop to a square from which it aims at the f7 pawn, Black's weak spot.",
+            "fr": "Sors ton fou sur une case d'où il vise le pion f7, le point faible des Noirs.",
+            "es": "Saca tu alfil a una casilla desde la que apunte al peón de f7, el punto débil de las negras.",
+            "pt": "Desenvolva seu bispo para uma casa de onde ele mire o peão de f7, o ponto fraco das pretas.",
+            "de": "Entwickle deinen Läufer auf ein Feld, von dem er auf den Bauern f7 zielt, die Schwachstelle von Schwarz.",
+            "ru": "Выведи слона на поле, откуда он смотрит на пешку f7, слабое место чёрных.",
+            "it": "Sviluppa l'alfiere su una casa da cui miri al pedone f7, il punto debole del Nero.",
+            "tr": "Filini, Siyah'ın zayıf noktası olan f7 piyonunu hedeflediği bir kareye çıkar.",
+            "pl": "Wyprowadź gońca na pole, z którego celuje w piona f7, słaby punkt czarnych.",
+            "id": "Keluarkan gajahmu ke petak tempat ia mengincar pion f7, titik lemah Hitam."
+          },
+          "faux": {
+            "*": {
+              "en": "Look for the square from which your bishop sees the f7 pawn, along a diagonal.",
+              "fr": "Cherche la case d'où ton fou voit le pion f7, en diagonale.",
+              "es": "Busca la casilla desde la que tu alfil ve el peón de f7, en diagonal.",
+              "pt": "Procure a casa de onde seu bispo vê o peão de f7, na diagonal.",
+              "de": "Such das Feld, von dem dein Läufer den Bauern f7 auf der Diagonale sieht.",
+              "ru": "Найди поле, откуда твой слон видит пешку f7 по диагонали.",
+              "it": "Cerca la casa da cui il tuo alfiere vede il pedone f7, in diagonale.",
+              "tr": "Filinin f7 piyonunu çaprazdan gördüğü kareyi ara.",
+              "pl": "Szukaj pola, z którego twój goniec widzi piona f7 po przekątnej.",
+              "id": "Cari petak tempat gajahmu melihat pion f7 secara diagonal."
+            }
+          },
+          "apres": {
+            "en": "The f7 pawn is defended only by the king: your bishop is already watching it.",
+            "fr": "Le pion f7 n'est défendu que par le roi : ton fou le surveille déjà.",
+            "es": "El peón de f7 solo lo defiende el rey: tu alfil ya lo vigila.",
+            "pt": "O peão de f7 só é defendido pelo rei: seu bispo já está de olho nele.",
+            "de": "Der Bauer f7 wird nur vom König gedeckt: Dein Läufer hat ihn schon im Blick.",
+            "ru": "Пешку f7 защищает только король: твой слон уже следит за ней.",
+            "it": "Il pedone f7 è difeso solo dal re: il tuo alfiere lo tiene già d'occhio.",
+            "tr": "f7 piyonunu yalnızca şah koruyor: filin onu şimdiden gözlüyor.",
+            "pl": "Piona f7 broni tylko król: twój goniec już go pilnuje.",
+            "id": "Pion f7 hanya dilindungi raja: gajahmu sudah mengawasinya."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The queen out too early",
+        "fr": "La dame sortie trop tôt",
+        "es": "La dama que sale demasiado pronto",
+        "pt": "A dama que sai cedo demais",
+        "de": "Die zu früh entwickelte Dame",
+        "ru": "Ферзь вышел слишком рано",
+        "it": "La donna uscita troppo presto",
+        "tr": "Erken çıkan vezir",
+        "pl": "Hetman wyprowadzony za wcześnie",
+        "id": "Menteri yang keluar terlalu cepat"
+      },
+      "intro": {
+        "en": "Bringing your queen out straight away is tempting, but she gets chased. Each time you attack her while bringing out a piece, you gain time.",
+        "fr": "Sortir sa dame tout de suite est tentant, mais elle se fait chasser. Chaque fois que tu l'attaques en sortant une pièce, tu gagnes du temps.",
+        "es": "Sacar la dama enseguida es tentador, pero la persiguen. Cada vez que la atacas sacando una pieza, ganas tiempo.",
+        "pt": "Tirar a dama logo de cara é tentador, mas ela é perseguida. Cada vez que você a ataca desenvolvendo uma peça, ganha tempo.",
+        "de": "Die Dame sofort herauszubringen ist verlockend, aber sie wird gejagt. Jedes Mal, wenn du sie angreifst und dabei eine Figur entwickelst, gewinnst du Zeit.",
+        "ru": "Вывести ферзя сразу заманчиво, но его начнут гонять. Каждый раз, когда ты нападаешь на него и выводишь фигуру, ты выигрываешь время.",
+        "it": "Far uscire subito la donna è allettante, ma viene inseguita. Ogni volta che la attacchi sviluppando un pezzo, guadagni tempo.",
+        "tr": "Veziri hemen çıkarmak caziptir, ama kovalanır. Bir taş çıkarırken ona her saldırışında zaman kazanırsın.",
+        "pl": "Wyprowadzenie hetmana od razu kusi, ale potem się go goni. Za każdym razem, gdy atakujesz go, wyprowadzając bierkę, zyskujesz czas.",
+        "id": "Mengeluarkan menteri sejak awal memang menggoda, tetapi ia akan dikejar. Setiap kali kamu menyerangnya sambil mengeluarkan bidak, kamu menghemat waktu."
+      },
+      "exos": [
+        {
+          "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+          "sol": [
+            "b1c3"
+          ],
+          "controle": "premier",
+          "consigne": {
+            "en": "The black queen came out very early. Bring out a knight that attacks her.",
+            "fr": "La dame noire est sortie très tôt. Sors un cavalier qui l'attaque.",
+            "es": "La dama negra ha salido muy pronto. Saca un caballo que la ataque.",
+            "pt": "A dama preta saiu muito cedo. Desenvolva um cavalo que a ataque.",
+            "de": "Die schwarze Dame ist sehr früh herausgekommen. Entwickle einen Springer, der sie angreift.",
+            "ru": "Чёрный ферзь вышел очень рано. Выведи коня, который на него нападает.",
+            "it": "La donna nera è uscita molto presto. Sviluppa un cavallo che la attacchi.",
+            "tr": "Siyah vezir çok erken çıktı. Ona saldıran bir at çıkar.",
+            "pl": "Czarny hetman wyszedł bardzo wcześnie. Wyprowadź skoczka, który go atakuje.",
+            "id": "Menteri hitam keluar sangat cepat. Keluarkan kuda yang menyerangnya."
+          },
+          "faux": {
+            "*": {
+              "en": "Find the knight move that attacks the black queen.",
+              "fr": "Trouve le coup de cavalier qui attaque la dame noire.",
+              "es": "Encuentra la jugada de caballo que ataca a la dama negra.",
+              "pt": "Encontre o lance de cavalo que ataca a dama preta.",
+              "de": "Finde den Springerzug, der die schwarze Dame angreift.",
+              "ru": "Найди ход конём, который нападает на чёрного ферзя.",
+              "it": "Trova la mossa di cavallo che attacca la donna nera.",
+              "tr": "Siyah veziri tehdit eden at hamlesini bul.",
+              "pl": "Znajdź ruch skoczkiem, który atakuje czarnego hetmana.",
+              "id": "Temukan langkah kuda yang menyerang menteri hitam."
+            }
+          },
+          "apres": {
+            "en": "The queen has to run, and your knight came out at the same time.",
+            "fr": "La dame doit fuir, et ton cavalier est sorti en même temps.",
+            "es": "La dama tiene que huir, y tu caballo ha salido al mismo tiempo.",
+            "pt": "A dama precisa fugir, e seu cavalo saiu ao mesmo tempo.",
+            "de": "Die Dame muss fliehen, und dein Springer ist gleichzeitig entwickelt.",
+            "ru": "Ферзь должен бежать, а твой конь заодно вышел в игру.",
+            "it": "La donna deve scappare, e il tuo cavallo è uscito nello stesso momento.",
+            "tr": "Vezir kaçmak zorunda ve atın da aynı anda oyuna girdi.",
+            "pl": "Hetman musi uciekać, a twój skoczek przy okazji wyszedł do gry.",
+            "id": "Menteri harus kabur, dan kudamu keluar pada saat yang sama."
+          }
+        },
+        {
+          "fen": "rnb1kbnr/pppp1ppp/8/4p3/4P2q/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+          "sol": [
+            "g1f3"
+          ],
+          "controle": "premier",
+          "consigne": {
+            "en": "Another queen out too early. Bring out a piece that attacks her.",
+            "fr": "Encore une dame sortie trop tôt. Sors une pièce qui l'attaque.",
+            "es": "Otra dama que sale demasiado pronto. Saca una pieza que la ataque.",
+            "pt": "Mais uma dama que saiu cedo demais. Desenvolva uma peça que a ataque.",
+            "de": "Noch eine zu früh herausgekommene Dame. Entwickle eine Figur, die sie angreift.",
+            "ru": "Ещё один ферзь, вышедший слишком рано. Выведи фигуру, которая на него нападает.",
+            "it": "Un'altra donna uscita troppo presto. Sviluppa un pezzo che la attacchi.",
+            "tr": "Yine erken çıkmış bir vezir. Ona saldıran bir taş çıkar.",
+            "pl": "Znowu hetman wyprowadzony za wcześnie. Wyprowadź bierkę, która go atakuje.",
+            "id": "Lagi-lagi menteri yang keluar terlalu cepat. Keluarkan bidak yang menyerangnya."
+          },
+          "faux": {
+            "*": {
+              "en": "Attack the queen with a piece you bring out, not with a pawn.",
+              "fr": "Attaque la dame avec une pièce que tu sors, pas avec un pion.",
+              "es": "Ataca a la dama con una pieza que saques, no con un peón.",
+              "pt": "Ataque a dama com uma peça que você desenvolve, não com um peão.",
+              "de": "Greif die Dame mit einer Figur an, die du entwickelst, nicht mit einem Bauern.",
+              "ru": "Нападай на ферзя фигурой, которую выводишь, а не пешкой.",
+              "it": "Attacca la donna con un pezzo che sviluppi, non con un pedone.",
+              "tr": "Veziri bir piyonla değil, çıkardığın bir taşla tehdit et.",
+              "pl": "Atakuj hetmana bierką, którą wyprowadzasz, a nie pionem.",
+              "id": "Serang menteri dengan bidak yang kamu keluarkan, bukan dengan pion."
+            }
+          },
+          "apres": {
+            "en": "The queen has to move again while your pieces come out.",
+            "fr": "La dame doit encore bouger, pendant que tes pièces sortent.",
+            "es": "La dama tiene que moverse otra vez mientras tus piezas salen.",
+            "pt": "A dama precisa se mexer de novo enquanto suas peças saem.",
+            "de": "Die Dame muss wieder ziehen, während deine Figuren herauskommen.",
+            "ru": "Ферзю снова приходится ходить, а твои фигуры тем временем выходят.",
+            "it": "La donna deve muoversi di nuovo, mentre i tuoi pezzi escono.",
+            "tr": "Vezir yine oynamak zorunda, bu sırada taşların çıkıyor.",
+            "pl": "Hetman znowu musi się ruszyć, a twoje bierki w tym czasie wychodzą.",
+            "id": "Menteri harus bergerak lagi, sementara bidak-bidakmu keluar."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "Castle in time",
+        "fr": "Roquer à temps",
+        "es": "Enrocar a tiempo",
+        "pt": "Rocar a tempo",
+        "de": "Rechtzeitig rochieren",
+        "ru": "Рокируйся вовремя",
+        "it": "Arroccare in tempo",
+        "tr": "Zamanında rok yap",
+        "pl": "Zrób roszadę na czas",
+        "id": "Rokade tepat waktu"
+      },
+      "intro": {
+        "en": "Once your knight and bishop on the king's side are out, castle. Your king hides behind its pawns, and your rook joins the game.",
+        "fr": "Quand ton cavalier et ton fou côté roi sont sortis, roque. Ton roi se cache derrière ses pions, et ta tour entre dans le jeu.",
+        "es": "Cuando tu caballo y tu alfil del lado del rey han salido, enroca. Tu rey se esconde detrás de sus peones y tu torre entra en juego.",
+        "pt": "Quando seu cavalo e seu bispo do lado do rei já saíram, faça o roque. Seu rei se esconde atrás dos peões, e sua torre entra no jogo.",
+        "de": "Sobald Springer und Läufer auf der Königsseite entwickelt sind, rochiere. Dein König versteckt sich hinter seinen Bauern, und dein Turm kommt ins Spiel.",
+        "ru": "Когда конь и слон на королевском фланге выведены, рокируйся. Король прячется за пешками, а ладья вступает в игру.",
+        "it": "Quando cavallo e alfiere del lato di re sono usciti, arrocca. Il tuo re si nasconde dietro i pedoni e la torre entra in gioco.",
+        "tr": "Şah kanadındaki atın ve filin çıktıysa rok yap. Şahın piyonlarının arkasına saklanır ve kalen oyuna girer.",
+        "pl": "Gdy skoczek i goniec po stronie króla już wyszły, zrób roszadę. Król chowa się za pionami, a wieża wchodzi do gry.",
+        "id": "Setelah kuda dan gajah di sisi raja keluar, lakukan rokade. Rajamu bersembunyi di balik pion-pionnya, dan bentengmu ikut bermain."
+      },
+      "exos": [
+        {
+          "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 5",
+          "sol": [
+            "e1g1"
+          ],
+          "cible": "g1",
+          "controle": "bon",
+          "consigne": {
+            "en": "Your knight and bishop are out. Put your king in safety by castling.",
+            "fr": "Ton cavalier et ton fou sont sortis. Mets ton roi à l'abri en roquant.",
+            "es": "Tu caballo y tu alfil han salido. Pon tu rey a salvo enrocando.",
+            "pt": "Seu cavalo e seu bispo já saíram. Ponha seu rei em segurança fazendo o roque.",
+            "de": "Springer und Läufer sind entwickelt. Bring deinen König mit der Rochade in Sicherheit.",
+            "ru": "Конь и слон выведены. Спрячь короля рокировкой.",
+            "it": "Cavallo e alfiere sono usciti. Metti il re al sicuro arroccando.",
+            "tr": "Atın ve filin çıktı. Rok yaparak şahını güvene al.",
+            "pl": "Skoczek i goniec już wyszły. Ukryj króla, robiąc roszadę.",
+            "id": "Kuda dan gajahmu sudah keluar. Amankan rajamu dengan rokade."
+          },
+          "faux": {
+            "*": {
+              "en": "To castle, move your king two squares, onto the marked square.",
+              "fr": "Pour roquer, déplace ton roi de deux cases, sur la case marquée.",
+              "es": "Para enrocar, mueve tu rey dos casillas, a la casilla marcada.",
+              "pt": "Para rocar, mova seu rei duas casas, até a casa marcada.",
+              "de": "Für die Rochade ziehst du deinen König zwei Felder weit, auf das markierte Feld.",
+              "ru": "Для рокировки переставь короля на два поля, на отмеченное поле.",
+              "it": "Per arroccare, sposta il re di due case, sulla casa segnata.",
+              "tr": "Rok için şahını iki kare oynat, işaretli kareye.",
+              "pl": "Aby zrobić roszadę, przesuń króla o dwa pola, na zaznaczone pole.",
+              "id": "Untuk rokade, geser rajamu dua petak, ke petak yang ditandai."
+            }
+          },
+          "apres": {
+            "en": "Your king is safe, and your rook is ready to play.",
+            "fr": "Ton roi est à l'abri, et ta tour est prête à jouer.",
+            "es": "Tu rey está a salvo y tu torre está lista para jugar.",
+            "pt": "Seu rei está seguro, e sua torre está pronta para jogar.",
+            "de": "Dein König ist sicher, und dein Turm ist bereit.",
+            "ru": "Король в безопасности, а ладья готова к игре.",
+            "it": "Il re è al sicuro e la torre è pronta a giocare.",
+            "tr": "Şahın güvende ve kalen oynamaya hazır.",
+            "pl": "Król jest bezpieczny, a wieża gotowa do gry.",
+            "id": "Rajamu aman, dan bentengmu siap bermain."
+          }
+        },
+        {
+          "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/2B1P1n1/3P1N2/PPP2PPP/RNBQK2R w KQkq - 3 5",
+          "sol": [
+            "e1g1"
+          ],
+          "cible": "g1",
+          "controle": "bon",
+          "consigne": {
+            "en": "The black knight and bishop aim at your f2 pawn. Castle: your rook will come and defend it.",
+            "fr": "Le cavalier et le fou noirs visent ton pion f2. Roque : ta tour viendra le défendre.",
+            "es": "El caballo y el alfil negros apuntan a tu peón de f2. Enroca: tu torre vendrá a defenderlo.",
+            "pt": "O cavalo e o bispo pretos miram seu peão de f2. Faça o roque: sua torre virá defendê-lo.",
+            "de": "Der schwarze Springer und der Läufer zielen auf deinen Bauern f2. Rochiere: Dein Turm kommt ihn decken.",
+            "ru": "Чёрные конь и слон нацелены на твою пешку f2. Рокируйся: ладья придёт её защищать.",
+            "it": "Il cavallo e l'alfiere neri mirano al tuo pedone f2. Arrocca: la torre verrà a difenderlo.",
+            "tr": "Siyah at ve fil f2 piyonunu hedefliyor. Rok yap: kalen onu savunmaya gelecek.",
+            "pl": "Czarny skoczek i goniec celują w twojego piona f2. Zrób roszadę: wieża przyjdzie go bronić.",
+            "id": "Kuda dan gajah hitam mengincar pion f2-mu. Lakukan rokade: bentengmu akan datang melindunginya."
+          },
+          "faux": {
+            "*": {
+              "en": "To castle, move your king two squares, onto the marked square.",
+              "fr": "Pour roquer, déplace ton roi de deux cases, sur la case marquée.",
+              "es": "Para enrocar, mueve tu rey dos casillas, a la casilla marcada.",
+              "pt": "Para rocar, mova seu rei duas casas, até a casa marcada.",
+              "de": "Für die Rochade ziehst du deinen König zwei Felder weit, auf das markierte Feld.",
+              "ru": "Для рокировки переставь короля на два поля, на отмеченное поле.",
+              "it": "Per arroccare, sposta il re di due case, sulla casa segnata.",
+              "tr": "Rok için şahını iki kare oynat, işaretli kareye.",
+              "pl": "Aby zrobić roszadę, przesuń króla o dwa pola, na zaznaczone pole.",
+              "id": "Untuk rokade, geser rajamu dua petak, ke petak yang ditandai."
+            }
+          },
+          "apres": {
+            "en": "The f2 pawn is now defended by your king and your rook.",
+            "fr": "Le pion f2 est maintenant défendu par ton roi et par ta tour.",
+            "es": "El peón de f2 está ahora defendido por tu rey y por tu torre.",
+            "pt": "O peão de f2 agora é defendido pelo rei e pela torre.",
+            "de": "Der Bauer f2 ist jetzt von deinem König und deinem Turm gedeckt.",
+            "ru": "Теперь пешку f2 защищают король и ладья.",
+            "it": "Il pedone f2 ora è difeso dal re e dalla torre.",
+            "tr": "f2 piyonunu artık şahın ve kalen koruyor.",
+            "pl": "Piona f2 bronią teraz król i wieża.",
+            "id": "Pion f2 sekarang dilindungi raja dan bentengmu."
+          }
+        }
+      ]
+    },
+    {
+      "titre": {
+        "en": "The Scholar's mate",
+        "fr": "Le coup du berger",
+        "es": "El mate del pastor",
+        "pt": "O mate do pastor",
+        "de": "Das Schäfermatt",
+        "ru": "Детский мат",
+        "it": "Il matto del barbiere",
+        "tr": "Çoban matı",
+        "pl": "Mat szewski",
+        "id": "Skakmat empat langkah"
+      },
+      "intro": {
+        "en": "A queen and a bishop aiming together at the f2 or f7 pawn can mate in four moves: this is the Scholar's mate. Know it, so you can stop it, and use it if your opponent forgets.",
+        "fr": "Une dame et un fou qui visent ensemble le pion f2 ou f7 peuvent faire mat en quatre coups : c'est le coup du berger. Connais-le, pour le parer, et pour en profiter si l'adversaire l'oublie.",
+        "es": "Una dama y un alfil que apuntan juntos al peón de f2 o de f7 pueden dar mate en cuatro jugadas: es el mate del pastor. Conócelo para pararlo, y para aprovecharlo si el rival se descuida.",
+        "pt": "Uma dama e um bispo mirando juntos o peão de f2 ou f7 podem dar mate em quatro lances: é o mate do pastor. Conheça-o para se defender dele, e para aproveitá-lo se o adversário se distrair.",
+        "de": "Eine Dame und ein Läufer, die zusammen auf den Bauern f2 oder f7 zielen, können in vier Zügen mattsetzen: das Schäfermatt. Kenne es, um es abzuwehren und um es zu nutzen, wenn der Gegner es übersieht.",
+        "ru": "Ферзь и слон, которые вместе бьют по пешке f2 или f7, могут поставить мат за четыре хода: это детский мат. Знай его, чтобы отразить, и чтобы воспользоваться, если соперник зазевается.",
+        "it": "Una donna e un alfiere che mirano insieme al pedone f2 o f7 possono dare matto in quattro mosse: è il matto del barbiere. Conoscilo per pararlo, e per approfittarne se l'avversario si distrae.",
+        "tr": "f2 ya da f7 piyonunu birlikte hedefleyen bir vezir ve bir fil dört hamlede mat edebilir: buna çoban matı denir. Onu savuşturmak ve rakip unutursa yararlanmak için tanı.",
+        "pl": "Hetman i goniec, które razem celują w piona f2 lub f7, mogą dać mata w czterech ruchach: to mat szewski. Poznaj go, żeby się przed nim bronić i wykorzystać go, gdy przeciwnik zapomni.",
+        "id": "Menteri dan gajah yang bersama-sama mengincar pion f2 atau f7 bisa skakmat dalam empat langkah: inilah skakmat empat langkah. Kenali, agar bisa menangkisnya, dan memanfaatkannya kalau lawan lengah."
+      },
+      "exos": [
+        {
+          "fen": "rnb1k1nr/pppp1ppp/8/2b1p3/4P2q/2N5/PPPP1PPP/R1BQKBNR w KQkq - 4 4",
+          "sol": [
+            "g2g3",
+            "d1e2",
+            "d1f3",
+            "g1h3"
+          ],
+          "controle": "meilleur",
+          "consigne": {
+            "en": "The black queen and bishop aim at your f2 pawn: they threaten mate. Protect that pawn, or chase the queen away with a pawn.",
+            "fr": "La dame et le fou noirs visent ton pion f2 : ils menacent de faire mat. Protège ce pion, ou chasse la dame avec un pion.",
+            "es": "La dama y el alfil negros apuntan a tu peón de f2: amenazan mate. Protege ese peón, o echa a la dama con un peón.",
+            "pt": "A dama e o bispo pretos miram seu peão de f2: ameaçam mate. Proteja esse peão, ou expulse a dama com um peão.",
+            "de": "Die schwarze Dame und der Läufer zielen auf deinen Bauern f2: Sie drohen Matt. Decke diesen Bauern, oder vertreib die Dame mit einem Bauern.",
+            "ru": "Чёрные ферзь и слон бьют по твоей пешке f2: они грозят матом. Защити эту пешку или прогони ферзя пешкой.",
+            "it": "La donna e l'alfiere neri mirano al tuo pedone f2: minacciano matto. Proteggi quel pedone, o caccia la donna con un pedone.",
+            "tr": "Siyah vezir ve fil f2 piyonunu hedefliyor: mat tehdidi var. O piyonu koru ya da veziri bir piyonla kov.",
+            "pl": "Czarny hetman i goniec celują w twojego piona f2: grożą matem. Obroń tego piona albo przegoń hetmana pionem.",
+            "id": "Menteri dan gajah hitam mengincar pion f2-mu: mereka mengancam skakmat. Lindungi pion itu, atau usir menteri dengan pion."
+          },
+          "faux": {
+            "g1f3": {
+              "en": "The knight attacks the queen, but it does not protect f2: the queen would mate there.",
+              "fr": "Le cavalier attaque la dame, mais il ne protège pas f2 : la dame y ferait mat.",
+              "es": "El caballo ataca a la dama, pero no protege f2: la dama daría mate allí.",
+              "pt": "O cavalo ataca a dama, mas não protege f2: a dama daria mate ali.",
+              "de": "Der Springer greift die Dame an, deckt aber f2 nicht: Die Dame würde dort mattsetzen.",
+              "ru": "Конь нападает на ферзя, но не защищает f2: ферзь поставит туда мат.",
+              "it": "Il cavallo attacca la donna, ma non protegge f2: la donna darebbe matto lì.",
+              "tr": "At veziri tehdit ediyor ama f2'yi korumuyor: vezir orada mat eder.",
+              "pl": "Skoczek atakuje hetmana, ale nie broni f2: hetman dałby tam mata.",
+              "id": "Kuda menyerang menteri, tetapi tidak melindungi f2: menteri akan skakmat di sana."
+            },
+            "e1e2": {
+              "en": "Your king does protect the pawn, but it can no longer castle and stays exposed in the centre.",
+              "fr": "Ton roi protège bien le pion, mais il ne pourra plus roquer et reste exposé au centre.",
+              "es": "Tu rey protege el peón, pero ya no podrá enrocar y se queda expuesto en el centro.",
+              "pt": "Seu rei protege o peão, mas não poderá mais rocar e fica exposto no centro.",
+              "de": "Dein König deckt zwar den Bauern, kann aber nicht mehr rochieren und bleibt im Zentrum ungeschützt.",
+              "ru": "Король защищает пешку, но больше не сможет рокироваться и остаётся открытым в центре.",
+              "it": "Il re protegge il pedone, ma non potrà più arroccare e resta esposto al centro.",
+              "tr": "Şahın piyonu koruyor, ama artık rok yapamaz ve merkezde açıkta kalır.",
+              "pl": "Król broni piona, ale nie zrobi już roszady i zostaje odsłonięty w centrum.",
+              "id": "Rajamu memang melindungi pion, tetapi tidak bisa rokade lagi dan tetap terbuka di tengah."
+            },
+            "*": {
+              "en": "This move neither protects the f2 pawn nor chases the queen with a pawn.",
+              "fr": "Ce coup ne protège pas le pion f2 et ne chasse pas la dame avec un pion.",
+              "es": "Esta jugada no protege el peón de f2 ni echa a la dama con un peón.",
+              "pt": "Este lance não protege o peão de f2 nem expulsa a dama com um peão.",
+              "de": "Dieser Zug deckt weder den Bauern f2 noch vertreibt er die Dame mit einem Bauern.",
+              "ru": "Этот ход не защищает пешку f2 и не прогоняет ферзя пешкой.",
+              "it": "Questa mossa non protegge il pedone f2 e non caccia la donna con un pedone.",
+              "tr": "Bu hamle ne f2 piyonunu koruyor ne de veziri bir piyonla kovuyor.",
+              "pl": "Ten ruch nie broni piona f2 ani nie przegania hetmana pionem.",
+              "id": "Langkah ini tidak melindungi pion f2 dan tidak mengusir menteri dengan pion."
+            }
+          },
+          "apres": {
+            "en": "The f2 pawn is safe. In your games, always keep an eye on it: early on, only your king defends it.",
+            "fr": "Le pion f2 est à l'abri. Dans tes parties, surveille toujours ce pion : au début, seul ton roi le défend.",
+            "es": "El peón de f2 está a salvo. En tus partidas, vigila siempre este peón: al principio, solo lo defiende tu rey.",
+            "pt": "O peão de f2 está seguro. Nas suas partidas, fique sempre de olho nele: no começo, só o rei o defende.",
+            "de": "Der Bauer f2 ist in Sicherheit. Behalte ihn in deinen Partien immer im Auge: Am Anfang deckt ihn nur dein König.",
+            "ru": "Пешка f2 в безопасности. В своих партиях всегда следи за ней: в начале её защищает только король.",
+            "it": "Il pedone f2 è al sicuro. Nelle tue partite tienilo sempre d'occhio: all'inizio lo difende solo il re.",
+            "tr": "f2 piyonu güvende. Oyunlarında bu piyonu hep gözet: başta onu yalnızca şahın korur.",
+            "pl": "Pion f2 jest bezpieczny. W swoich partiach zawsze go pilnuj: na początku broni go tylko król.",
+            "id": "Pion f2 sudah aman. Dalam permainanmu, selalu awasi pion ini: di awal, hanya rajamu yang melindunginya."
+          }
+        },
+        {
+          "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+          "sol": [
+            "h5f7"
+          ],
+          "mat": true,
+          "consigne": {
+            "en": "Black forgot to protect f7. Your queen and bishop aim at it: mate.",
+            "fr": "Les Noirs ont oublié de protéger f7. Ta dame et ton fou le visent : fais mat.",
+            "es": "Las negras han olvidado proteger f7. Tu dama y tu alfil apuntan a él: da mate.",
+            "pt": "As pretas esqueceram de proteger f7. Sua dama e seu bispo miram esse peão: dê mate.",
+            "de": "Schwarz hat vergessen, f7 zu decken. Deine Dame und dein Läufer zielen darauf: Setze matt.",
+            "ru": "Чёрные забыли защитить f7. Твои ферзь и слон нацелены на эту пешку: поставь мат.",
+            "it": "Il Nero ha dimenticato di proteggere f7. La tua donna e il tuo alfiere ci mirano: dai matto.",
+            "tr": "Siyah f7'yi korumayı unuttu. Vezirin ve filin onu hedefliyor: mat et.",
+            "pl": "Czarne zapomniały obronić f7. Twój hetman i goniec w niego celują: daj mata.",
+            "id": "Hitam lupa melindungi f7. Menteri dan gajahmu mengincarnya: skakmat."
+          },
+          "apres": {
+            "en": "The Scholar's mate. It works only if your opponent does not see the threat.",
+            "fr": "Le coup du berger. Il ne marche que si l'adversaire ne voit pas la menace.",
+            "es": "El mate del pastor. Solo funciona si el rival no ve la amenaza.",
+            "pt": "O mate do pastor. Só funciona se o adversário não vir a ameaça.",
+            "de": "Das Schäfermatt. Es klappt nur, wenn der Gegner die Drohung nicht sieht.",
+            "ru": "Детский мат. Он проходит, только если соперник не видит угрозы.",
+            "it": "Il matto del barbiere. Funziona solo se l'avversario non vede la minaccia.",
+            "tr": "Çoban matı. Yalnızca rakip tehdidi görmezse işe yarar.",
+            "pl": "Mat szewski. Działa tylko wtedy, gdy przeciwnik nie widzi groźby.",
+            "id": "Skakmat empat langkah. Ini hanya berhasil kalau lawan tidak melihat ancamannya."
+          }
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "niveau": 1,
+    "titre": {
+      "en": "The boss: a real game",
+      "fr": "Le boss : une vraie partie",
+      "es": "El jefe: una partida de verdad",
+      "pt": "O chefão: uma partida de verdade",
+      "de": "Der Boss: eine echte Partie",
+      "ru": "Босс: настоящая партия",
+      "it": "Il boss: una vera partita",
+      "tr": "Boss: gerçek bir oyun",
+      "pl": "Boss: prawdziwa partia",
+      "id": "Bos: permainan sungguhan"
+    },
+    "intro": {
+      "en": "This time, no handicap: beat the computer at its easiest level, on equal terms. Take the centre, bring out your pieces, castle. No clock, and you can take back a move.",
+      "fr": "Cette fois, pas de handicap : bats l'ordinateur à son niveau le plus facile, à égalité. Prends le centre, sors tes pièces, roque. Pas de pendule, et tu peux reprendre un coup.",
+      "es": "Esta vez, sin desventaja: gana al ordenador en su nivel más fácil, en igualdad. Toma el centro, saca tus piezas, enroca. Sin reloj, y puedes deshacer una jugada.",
+      "pt": "Desta vez, sem desvantagem: vença o computador no nível mais fácil, em igualdade. Ocupe o centro, desenvolva suas peças, faça o roque. Sem relógio, e você pode voltar um lance.",
+      "de": "Diesmal ohne Vorgabe: Schlag den Computer auf der leichtesten Stufe bei gleichem Material. Besetze das Zentrum, entwickle deine Figuren, rochiere. Keine Uhr, und du darfst einen Zug zurücknehmen.",
+      "ru": "На этот раз без форы: обыграй компьютер на самом лёгком уровне при равных силах. Займи центр, выведи фигуры, рокируйся. Без часов, и ход можно взять назад.",
+      "it": "Stavolta niente svantaggio: batti il computer al livello più facile, alla pari. Prendi il centro, sviluppa i pezzi, arrocca. Niente orologio, e puoi ritirare una mossa.",
+      "tr": "Bu kez avantaj yok: en kolay seviyedeki bilgisayarı eşit şartlarda yen. Merkezi al, taşlarını çıkar, rok yap. Saat yok ve hamleni geri alabilirsin.",
+      "pl": "Tym razem bez forów: pokonaj komputer na najłatwiejszym poziomie, przy równym materiale. Zajmij centrum, wyprowadź bierki, zrób roszadę. Bez zegara, a ruch można cofnąć.",
+      "id": "Kali ini tanpa kekurangan: kalahkan komputer di tingkat termudah, dalam posisi seimbang. Kuasai pusat, keluarkan bidakmu, lakukan rokade. Tanpa jam, dan kamu boleh membatalkan langkah."
+    },
+    "gagne": {
+      "en": "Boss beaten. You know how to start a game well.",
+      "fr": "Boss battu. Tu sais bien commencer une partie.",
+      "es": "Jefe derrotado. Sabes empezar bien una partida.",
+      "pt": "Chefão derrotado. Você sabe começar bem uma partida.",
+      "de": "Boss besiegt. Du weißt, wie man eine Partie gut beginnt.",
+      "ru": "Босс побеждён. Ты умеешь хорошо начинать партию.",
+      "it": "Boss battuto. Sai iniziare bene una partita.",
+      "tr": "Boss yenildi. Oyuna iyi başlamayı biliyorsun.",
+      "pl": "Boss pokonany. Umiesz dobrze zacząć partię.",
+      "id": "Bos dikalahkan. Kamu tahu cara memulai permainan dengan baik."
+    }
+  }
+}

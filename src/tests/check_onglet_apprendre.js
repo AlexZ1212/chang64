@@ -19,6 +19,8 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
 const net = s => String(s).replace(/[  ]/g, " ");
 const ONGLET = { en: "Learn", fr: "Apprendre", es: "Aprender", pt: "Aprender", de: "Lernen", ru: "Учиться", it: "Impara", tr: "Öğren", pl: "Ucz się", id: "Belajar" };
 
+/* Les chapitres viennent du fichier : le test suit ceux qui sortent. */
+const CHAPITRES = require("../chemin/plan.json").chapitres;
 (async () => {
   console.log("La barre, dans les 10 langues");
   for (const l of CODES) {
@@ -29,7 +31,7 @@ const ONGLET = { en: "Learn", fr: "Apprendre", es: "Aprender", pt: "Aprender", d
     T(l + " : aucun libelle d'onglet ne depasse 11 lettres", b.every(x => x.textContent.length <= 11), b.map(x => x.textContent).join("|"));
     b[1].click(); await pause(500);
     const titres = [...w.document.querySelectorAll("#apChemin .ap-chap b")].map(x => x.textContent);
-    T(l + " : trois chapitres titres dans la langue", titres.length === 3 && titres.every(x => x && x !== "…") && (l === "en" || titres[1] !== "All the rules"), titres.join(" | "));
+    T(l + " : chaque chapitre titre dans la langue", titres.length === CHAPITRES.length && titres.every(x => x && x !== "…") && (l === "en" || titres[1] !== "All the rules"), titres.join(" | "));
     const f = [...w.document.querySelectorAll("#apFiches a")];
     const dir = PAR_CODE[l].dirs.learn;
     T(l + " : huit fiches de regles, toutes dans /" + dir + "/", f.length === 8 && f.every(a => a.getAttribute("href").startsWith("/" + dir + "/")), f.map(a => a.getAttribute("href")).slice(0, 2).join());
@@ -61,11 +63,14 @@ const ONGLET = { en: "Learn", fr: "Apprendre", es: "Aprender", pt: "Aprender", d
   T("body porte le mode, pour l'en-tete", w.document.body.dataset.mode === "apprendre");
   T("premiere visite : la carte du test de placement est la", !cache("apTest") && cache("apRefaire") && /jouer/.test(net($("apTest").textContent)));
   const chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
-  T("le chemin est une liste ordonnee de trois boutons", $("apChemin").tagName === "OL" && chap.length === 3 && chap.every(b => b.tagName === "BUTTON" && b.parentNode.tagName === "LI"));
-  T("chapitre 1 ouvert et en cours, les deux suivants verrouilles", chap[0].classList.contains("encours") && !chap[0].classList.contains("verrou") && chap[1].classList.contains("verrou") && chap[2].classList.contains("verrou"));
+  T("le chemin est une liste ordonnee, un bouton par chapitre", $("apChemin").tagName === "OL" && chap.length === CHAPITRES.length && chap.every(b => b.tagName === "BUTTON" && b.parentNode.tagName === "LI"));
+  T("chapitre 1 ouvert et en cours, les suivants verrouilles", chap[0].classList.contains("encours") && !chap[0].classList.contains("verrou") && chap.slice(1).every(b => b.classList.contains("verrou")));
   T("un chapitre verrouille le dit aux lecteurs d'ecran", chap[1].getAttribute("aria-disabled") === "true" && /chapitre 1/.test(net(chap[1].getAttribute("aria-label"))) && !chap[0].hasAttribute("aria-disabled"), chap[1].getAttribute("aria-label"));
   T("chaque chapitre a un nom lisible : numero, titre, etat", /^Chapitre 1 : Je débute\. /.test(net(chap[0].getAttribute("aria-label"))), chap[0].getAttribute("aria-label"));
-  T("la ligne « A venir » annonce la suite", /venir/.test($("apVenir").textContent) && !cache("apVenir"));
+  /* Tant que des chapitres restent a sortir, une ligne les annonce ; quand le
+     chemin est complet (22/11, chapitre 9), elle disparait. */
+  if (require("../chemin/plan.json").aVenir) T("la ligne « A venir » annonce la suite", /venir/.test($("apVenir").textContent) && !cache("apVenir"));
+  else T("chemin complet : pas de ligne « A venir »", cache("apVenir") && !$("apVenir").textContent);
   T("deux titres de section pour la navigation par titres", [...w.document.querySelectorAll("#pane-apprendre h2")].map(h => net(h.textContent)).join("|") === "Ton chemin|Fiches de règles", [...w.document.querySelectorAll("#pane-apprendre h2")].map(h => h.textContent).join("|"));
   chap[1].click(); await pause(300);
   T("un chapitre verrouille ne s'ouvre pas", w.eval("mode") === "apprendre");

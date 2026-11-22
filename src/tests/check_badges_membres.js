@@ -78,8 +78,9 @@ const vider = w => w.eval("prog.badges=[];prog.badgeDates={};prog.bx={f:{},j:{},
   T("de, pl : idem avec Turm et Wie\u017ca", /Turm/.test(textes.de.ligue_tour[1]) && /Wie\u017ca/.test(textes.pl.ligue_tour[1]), textes.de.ligue_tour[1] + " | " + textes.pl.ligue_tour[1]);
   T("fr : ponctuation haute liee au mot qui precede", !/ [:;!?\u00bb]/.test(NOUVEAUX.map(id => textes.fr[id].join(" ")).join(" ")));
   {
-    const N = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "nouveautes.json"), "utf8"))[0];
-    T("une nouveaute en tete, dans les 10 langues", CODES.every(c => Array.isArray(N[c]) && N[c].length === 2 && N[c].every(x => x.trim())) && /badge/i.test(N.en[0] + N.en[1]), N.en && N.en[0]);
+    /* La nouveaute des badges des membres (22/11), d'autres ont pu passer devant depuis. */
+    const N = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "nouveautes.json"), "utf8")).find(e => e.en[0] === "New badges for games between members") || {};
+    T("une nouveaute des badges, dans les 10 langues", CODES.every(c => Array.isArray(N[c]) && N[c].length === 2 && N[c].every(x => x.trim())) && /badge/i.test(N.en[0] + N.en[1]), N.en && N.en[0]);
   }
 
   console.log("--- Le serveur des parties envoie les compteurs ---");

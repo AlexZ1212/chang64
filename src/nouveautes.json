@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Clearer names",
+   "\"Challenge a friend\" is now called Puzzle duel, and your puzzle score is now your Puzzle rating, so you no longer mix it up with your Elo. Puzzles in a duel count toward your daily goal, but they move neither your puzzle rating nor your level."
+  ],
+  "fr": [
+   "Des noms plus clairs",
+   "« Défier un ami » s'appelle maintenant Duel d'exercices, et ton classement aux exercices s'appelle Niveau exercices, pour ne plus le confondre avec ton Elo. Les exercices d'un duel comptent pour ton objectif du jour, mais ne font bouger ni ton niveau exercices ni ton palier."
+  ],
+  "es": [
+   "Nombres más claros",
+   "«Desafía a un amigo» ahora se llama Duelo de ejercicios, y tu puntuación de los ejercicios se llama Puntuación de ejercicios, para no confundirla con tu Elo. Los ejercicios de un duelo cuentan para tu objetivo del día, pero no mueven ni tu puntuación de ejercicios ni tu nivel."
+  ],
+  "pt": [
+   "Nomes mais claros",
+   "\"Desafie um amigo\" agora se chama Duelo de exercícios, e sua pontuação nos exercícios se chama Pontuação de exercícios, para não confundir com o seu Elo. Os exercícios de um duelo contam para a sua meta do dia, mas não mexem na sua pontuação de exercícios nem no seu nível."
+  ],
+  "de": [
+   "Klarere Namen",
+   "„Fordere einen Freund heraus“ heißt jetzt Aufgaben-Duell, und deine Wertung bei den Aufgaben heißt Aufgabenwertung, damit du sie nicht mehr mit deinem Elo verwechselst. Aufgaben in einem Duell zählen für dein Tagesziel, verändern aber weder deine Aufgabenwertung noch deine Stufe."
+  ],
+  "ru": [
+   "Понятнее названия",
+   "«Брось вызов другу» теперь называется «Дуэль задач», а твой рейтинг в задачах — «Рейтинг задач», чтобы его не путать с Эло. Задачи из дуэли идут в зачёт цели дня, но не меняют ни рейтинг задач, ни твой уровень."
+  ],
+  "it": [
+   "Nomi più chiari",
+   "«Sfida un amico» ora si chiama Duello di esercizi, e il tuo punteggio negli esercizi si chiama Punteggio esercizi, per non confonderlo con il tuo Elo. Gli esercizi di un duello contano per il tuo obiettivo del giorno, ma non cambiano né il punteggio esercizi né il tuo livello."
+  ],
+  "tr": [
+   "Daha açık adlar",
+   "\"Bir arkadaşına meydan oku\" artık Bulmaca düellosu adını taşıyor, bulmacalardaki puanın da Bulmaca puanı oldu; böylece Elo'nla karıştırmazsın. Düellodaki bulmacalar günlük hedefine sayılır ama ne bulmaca puanını ne de seviyeni değiştirir."
+  ],
+  "pl": [
+   "Jaśniejsze nazwy",
+   "„Wyzwij znajomego” nazywa się teraz Pojedynek na zadania, a twój ranking w zadaniach to Ranking zadań, żeby nie mylić go z twoim Elo. Zadania z pojedynku liczą się do celu dnia, ale nie zmieniają ani rankingu zadań, ani twojego poziomu."
+  ],
+  "id": [
+   "Nama yang lebih jelas",
+   "\"Tantang teman\" sekarang bernama Duel teka-teki, dan nilaimu di teka-teki sekarang bernama Rating teka-teki, supaya tidak tertukar dengan Elo-mu. Teka-teki dalam duel dihitung untuk target harianmu, tetapi tidak mengubah rating teka-teki maupun levelmu."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "New badges for games between members",
    "Your games against other members now have their badges: first game, first point, Blitz, correspondence, random opponent, Elo milestones. There are also badges for your Elo against the computer, friends, puzzle duels and leagues. The ones you had already earned are in your collection."
   ],

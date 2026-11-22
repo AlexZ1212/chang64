@@ -2986,8 +2986,8 @@ const PRIVACY_EN="<h4>The short version</h4><p>chang64 can be played with no acc
 function renderLegal(){
   const v={name:PUBLISHER.name,email:PUBLISHER.email,host:HOST.name,hostAddress:HOST.address,hostSite:HOST.site,
     registrar:REGISTRAR.name,registrarAddress:REGISTRAR.address};
-  poserHtml($("legalBody"),rendreGabarit(DICT["@legal"]||LEGAL_EN,v));
-  poserHtml($("privacyBody"),rendreGabarit(DICT["@privacy"]||PRIVACY_EN,v));
+  poserHtml($("legalBody"),lierHtml(rendreGabarit(DICT["@legal"]||LEGAL_EN,v)));
+  poserHtml($("privacyBody"),lierHtml(rendreGabarit(DICT["@privacy"]||PRIVACY_EN,v)));
 }
 
 let isReviewGame=false;

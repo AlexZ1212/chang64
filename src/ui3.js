@@ -1444,7 +1444,7 @@ function renderPrefs(){
   if(help){
     /* La meme liste que la fenetre « Raccourcis clavier », puis l'usage au
        lecteur d'ecran (2026-11-21). */
-    poserHtml(help,clavierListeHtml("nav")+(DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>")+
+    poserHtml(help,clavierListeHtml("nav")+lierHtml(DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>")+
       "<p>"+echapper(t("Away from the board, during a game or in review, the keys step through the moves:"))+"</p>"+clavierListeHtml("partie")+
       "<p>"+echapper(t("With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square."))+"</p>");
   }

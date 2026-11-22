@@ -188,7 +188,7 @@ function objVue(){
   menuVue=function(nom){
     const v=$("menuObjectifVue");
     if(nom==="objectif"){
-      for(const id of ["menuAccueil","menuStats","menuBadges","menuNouveautes","menuLanguesVue","menuDefisVue"]){const e=$(id);if(e)e.hidden=true;}
+      for(const id of ["menuAccueil","menuStats","menuBadges","menuNouveautes","menuInviterVue","menuLanguesVue","menuDefisVue"]){const e=$(id);if(e)e.hidden=true;}
       v.hidden=false;$("menuTitre").textContent=t("Daily goal");$("menuRetour").hidden=false;
       objVue();
       if(!mouvementCalme()&&v.animate)v.animate([{opacity:0,transform:"translateX(18px)"},{opacity:1,transform:"none"}],{duration:260,easing:"cubic-bezier(.22,.7,.3,1)"});

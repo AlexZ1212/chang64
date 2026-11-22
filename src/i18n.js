@@ -51,6 +51,16 @@ function lier(x){
      les precede ; pareil pour le mot qui suit « «. Espace insecable. */
   return out.replace(/ ([:;!?»])/g," $1").replace(/« /g,"« ");
 }
+/* La meme regle de ponctuation pour un texte du dictionnaire ecrit en HTML
+   (« @legal », « @privacy », « @keyboard ») : il est pose tel quel dans la
+   page, sans passer par t(), et gardait donc ses espaces ordinaires. Constat
+   d'Alexandre le 2026-11-22 : des « ; » et des « : » seuls en debut de ligne
+   dans Mentions legales et Confidentialite. Seul le texte est touche, jamais
+   l'interieur d'une balise. */
+function lierHtml(html){
+  if(LANG!=="fr")return html;
+  return String(html).split(/(<[^>]*>)/).map((bout,i)=>i%2?bout:bout.replace(/ ([:;!?»])/g,"\u00a0$1").replace(/« /g,"«\u00a0")).join("");
+}
 /* Gabarits a variables : pluriels, cas et accords, voir GRAMMAIRE.gabarit
    (grammaire.js), qui sert aussi aux pages statiques. */
 function rendreGabarit(modele,v){return GRAMMAIRE.gabarit(modele,v);}

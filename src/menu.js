@@ -40,9 +40,9 @@ function menuLangues(){
   ls.open=true;setTimeout(()=>{ls.open=true;},0);
 }
 function menuVue(nom){
-  const vues={accueil:"menuAccueil",stats:"menuStats",badges:"menuBadges",nouveautes:"menuNouveautes",langues:"menuLanguesVue",transfert:"menuTransfertVue",reset:"menuResetVue"};
+  const vues={accueil:"menuAccueil",stats:"menuStats",badges:"menuBadges",nouveautes:"menuNouveautes",inviter:"menuInviterVue",langues:"menuLanguesVue",transfert:"menuTransfertVue",reset:"menuResetVue"};
   for(const [k,id] of Object.entries(vues)){const e=menuEl(id);if(e)e.hidden=k!==nom;}
-  const titres={accueil:"Menu",stats:"Statistics",badges:"Badges",nouveautes:"What's new",langues:"Language",transfert:"Continue on another device",reset:"Reset my progress"};
+  const titres={accueil:"Menu",stats:"Statistics",badges:"Badges",nouveautes:"What's new",inviter:"Invite to chang64",langues:"Language",transfert:"Continue on another device",reset:"Reset my progress"};
   menuEl("menuTitre").textContent=t(titres[nom]);
   menuEl("menuRetour").hidden=nom==="accueil";
   if(nom==="stats")menuStats();

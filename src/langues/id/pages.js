@@ -54,7 +54,7 @@ module.exports = {
   "Position after": "Posisi setelah",
   "Chess openings: every named line with moves and ECO codes": "Pembukaan catur: semua variasi bernama dengan langkah dan kode ECO",
   "Chess openings": "Pembukaan catur",
-  "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: catur gratis, tanpa akun. Data pembukaan dari proyek lichess-org/chess-openings.",
+  "chang64: free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: catur gratis, tanpa akun. Data pembukaan dari proyek lichess-org/chess-openings.",
   "The opening {name} begins {moves} (ECO {eco}). This page lists its {n} named variations with their moves and ECO codes, on a board you can play from against the engine.": "Pembukaan {name} dimulai dengan {moves} (ECO {eco}). Halaman ini memuat {n} variasi bernamanya beserta langkah dan kode ECO-nya, di atas papan yang bisa kamu pakai untuk bermain melawan mesin.",
   "Main line": "Variasi utama",
   "{n} named lines, with a board to play them from.": "{n} variasi bernama, dengan papan untuk memainkannya.",

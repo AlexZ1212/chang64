@@ -1229,6 +1229,7 @@ module.exports = {
 "Home (key)":"Pos1",
 "End (key)":"Ende",
 "Esc (key)":"Esc",
+"Send chang64 to a friend: it is free, and no account is needed.":"Schick chang64 einem Freund: Es ist kostenlos, und ein Konto ist nicht nötig.",
 "Activity":"Aktivität",
 "Games against the computer":"Partien gegen den Computer",
 "Games between members":"Partien unter Mitgliedern",

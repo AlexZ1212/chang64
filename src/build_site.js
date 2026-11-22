@@ -1961,7 +1961,7 @@ const L = {
         idxH1: "Chess openings",
         idxLede: (a, b) => `Every named opening family, with its moves and variations. Open one to see the position, replay the line move by move, or play it yourself against the engine. ${a} families, ${b} named lines.`,
         idxDesc: (a, b) => `A complete index of ${a} chess opening families and ${b} named lines, each with its moves, ECO code and a playable board.`,
-        foot: "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project." },
+        foot: "chang64: free chess, no account required. Opening data from the lichess-org/chess-openings project." },
   fr: { dir: "fr/ouvertures", index: "/fr/ouvertures/", label: "Français",
         nav: ["Jouer", "Ouvertures", "Motifs"], all: "Toutes les ouvertures", play: "Jouer cette ouverture",
         namedLines: "Variantes répertoriées", variation: "Variante", movesHead: "Coups",
@@ -1995,7 +1995,7 @@ function libellesOuvertures(lang) {
     idxH1: x("Chess openings"),
     idxLede: (a, b) => x("Every named opening family, with its moves and variations. Open one to see the position, replay the line move by move, or play it yourself against the engine. {a} families, {b} named lines.", { a, b }),
     idxDesc: (a, b) => x("A complete index of {a} chess opening families and {b} named lines, each with its moves, ECO code and a playable board.", { a, b }),
-    foot: x("chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.")
+    foot: x("chang64: free chess, no account required. Opening data from the lichess-org/chess-openings project.")
   });
 }
 function urlFor(lang, p) { return `${SITE}/${libellesOuvertures(lang).dir}/${p.slugs[lang]}`; }

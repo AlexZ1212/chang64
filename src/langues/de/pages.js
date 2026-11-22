@@ -54,7 +54,7 @@ module.exports = {
   "Position after": "Stellung nach",
   "Chess openings: every named line with moves and ECO codes": "Schacheröffnungen: alle benannten Varianten mit Zügen und ECO-Codes",
   "Chess openings": "Schacheröffnungen",
-  "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: kostenloses Schach, kein Konto nötig. Eröffnungsdaten aus dem Projekt lichess-org/chess-openings.",
+  "chang64: free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: kostenloses Schach, kein Konto nötig. Eröffnungsdaten aus dem Projekt lichess-org/chess-openings.",
   "The opening {name} begins {moves} (ECO {eco}). This page lists its {n} named variations with their moves and ECO codes, on a board you can play from against the engine.": {"one":"Die Eröffnung {name} beginnt mit {moves} (ECO {eco}). Diese Seite zeigt ihre einzige benannte Variante mit Zügen und ECO-Code, auf einem Brett, von dem aus du gegen die Engine spielen kannst.","other":"Die Eröffnung {name} beginnt mit {moves} (ECO {eco}). Diese Seite zeigt ihre {n} benannten Varianten mit Zügen und ECO-Codes, auf einem Brett, von dem aus du gegen die Engine spielen kannst."},
   "Main line": "Hauptvariante",
   "{n} named lines, with a board to play them from.": {"one":"{n} benannte Variante, mit einem Brett zum Nachspielen.","other":"{n} benannte Varianten, mit einem Brett zum Nachspielen."},

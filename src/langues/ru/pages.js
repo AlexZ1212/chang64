@@ -54,7 +54,7 @@ module.exports = {
   "Position after": "Позиция после",
   "Chess openings: every named line with moves and ECO codes": "Шахматные дебюты: все именованные варианты с ходами и кодами ECO",
   "Chess openings": "Шахматные дебюты",
-  "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: бесплатные шахматы без аккаунта. Данные о дебютах из проекта lichess-org/chess-openings.",
+  "chang64: free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: бесплатные шахматы без аккаунта. Данные о дебютах из проекта lichess-org/chess-openings.",
   "The opening {name} begins {moves} (ECO {eco}). This page lists its {n} named variations with their moves and ECO codes, on a board you can play from against the engine.": {"one":"Дебют «{name}» начинается ходами {moves} (ECO {eco}). На этой странице собран его единственный именованный вариант с ходами и кодом ECO, на доске, с которой можно сыграть против движка.","other":"Дебют «{name}» начинается ходами {moves} (ECO {eco}). На этой странице собраны его именованные варианты ({n}) с ходами и кодами ECO, на доске, с которой можно сыграть против движка."},
   "Main line": "Главный вариант",
   "{n} named lines, with a board to play them from.": {"one":"{n} именованный вариант и доска, чтобы его сыграть.","few":"{n} именованных варианта и доска, чтобы их сыграть.","many":"{n} именованных вариантов и доска, чтобы их сыграть.","other":"{n} именованного варианта и доска, чтобы их сыграть."},

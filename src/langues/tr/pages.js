@@ -54,7 +54,7 @@ module.exports = {
   "Position after": "Şu hamlelerden sonraki pozisyon:",
   "Chess openings: every named line with moves and ECO codes": "Satranç açılışları: hamleleri ve ECO kodlarıyla tüm adlandırılmış varyantlar",
   "Chess openings": "Satranç açılışları",
-  "chang64 : free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: ücretsiz satranç, hesap gerekmez. Açılış verileri lichess-org/chess-openings projesinden.",
+  "chang64: free chess, no account required. Opening data from the lichess-org/chess-openings project.": "chang64: ücretsiz satranç, hesap gerekmez. Açılış verileri lichess-org/chess-openings projesinden.",
   "The opening {name} begins {moves} (ECO {eco}). This page lists its {n} named variations with their moves and ECO codes, on a board you can play from against the engine.": "{name} açılışı {moves} ile başlar (ECO {eco}). Bu sayfa, açılışın {n} adlandırılmış varyantını hamleleri ve ECO kodlarıyla, motora karşı oynayabileceğin bir tahta üzerinde listeler.",
   "Main line": "Ana varyant",
   "{n} named lines, with a board to play them from.": "{n} adlandırılmış varyant ve onları oynamak için bir tahta.",

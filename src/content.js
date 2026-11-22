@@ -549,7 +549,9 @@ module.exports = function (H) {
        n'est pas une fiche de regles : elle reste sur l'index. */
     fs.writeFileSync(`${OUT}/data/fiches-${lang}.json`, JSON.stringify({
       index: `/${dir}/`,
-      fiches: RULES.filter(r => r.slug.en !== "for-teachers-and-clubs").map(r => { const R = regle(r, lang); return { t: R.title, u: `/${dir}/${R.slug}` }; })
+      /* Le titre s'affiche dans l'application sans passer par t() : en francais,
+         la ponctuation haute y recoit ici son espace insecable (2026-11-22). */
+      fiches: RULES.filter(r => r.slug.en !== "for-teachers-and-clubs").map(r => { const R = regle(r, lang); return { t: lang === "fr" ? R.title.replace(/ ([:;!?»])/g, "\u00a0$1").replace(/« /g, "«\u00a0") : R.title, u: `/${dir}/${R.slug}` }; })
     }));
   }
 

@@ -3144,6 +3144,12 @@ function readDeepLink(){
      d'autres sites (vignette_build.js). Meme effet que le bouton de l'accueil,
      la serie de jours compte donc. */
   if(/[#&]daily$/.test(h))return {kind:"daily"};
+  /* #onglet=<nom> (2026-11-22, retour d'Alexandre sur iPhone) : pose par le
+     changement de langue quand on est sur un onglet sans lien a soi (Resoudre,
+     Apprendre...). Sans lui, la page de l'autre langue s'ouvrait sur
+     l'accueil. Seuls les onglets de la barre sont acceptes. */
+  let o=h.match(/[#&]onglet=(jouer|apprendre|puzzles|edit|explore)$/);
+  if(o)return {kind:"onglet",id:o[1]};
   let m=h.match(/[#&]train=([a-z]+)/);
   if(m)return {kind:"train",id:m[1]};
   m=h.match(/[#&]puzzle=([a-zA-Z0-9]+)/);
@@ -3207,6 +3213,8 @@ function noterFragment(){fragmentSuivi=location.hash?{hash:location.hash,mode:mo
 function applyDeepLink(d){
   if(!d)return false;
   if(d.kind==="start"){setMode("debut");return true;}
+  /* Meme effet qu'un appui sur l'onglet : Jouer reprend la partie en cours. */
+  if(d.kind==="onglet"){const b=$("tab-"+d.id);if(b){b.click();return true;}return false;}
   if(d.kind==="daily"){setMode("puzzles",{daily:true});return true;}
   if(d.kind==="train"){
     /* Corrige le 2026-09-03 : ce lien (#train=<id>) visait une finale

@@ -892,7 +892,15 @@ function renderCoordHud(){
 $("langSwitch").addEventListener("click",e=>{
   const lien=e.target.closest("a[data-lang]");if(!lien)return;
   try{window.storage.set("chang64:lang",lien.dataset.lang);}catch(err){}
-  lien.setAttribute("href",lien.getAttribute("href").split("#")[0]+location.hash);
+  /* Pas de # mais un onglet ouvert (Resoudre, Apprendre...) : on le note, pour
+     rouvrir le meme onglet dans l'autre langue (#onglet=, ui.js). */
+  let frag=location.hash;
+  /* Un # d'arrivee reste dans l'adresse quand on quitte son ecran par un
+     onglet qui ne passe pas par le setMode de base (Apprendre, Explorer,
+     Jouer) : il ne vaut plus pour l'ecran affiche, on l'ignore. */
+  if(frag&&typeof fragmentSuivi!=="undefined"&&fragmentSuivi&&fragmentSuivi.hash===frag&&fragmentSuivi.mode!==mode)frag="";
+  if(!frag&&mode!=="home"){const ong=document.querySelector('#tabsNav button[aria-current="page"]');if(ong&&/^tab-(jouer|apprendre|puzzles|edit|explore)$/.test(ong.id))frag="#onglet="+ong.id.slice(4);}
+  lien.setAttribute("href",lien.getAttribute("href").split("#")[0]+frag);
 });
 /* Le menu se referme quand on clique ailleurs ou qu'on appuie sur Echap,
    comme une liste deroulante. */

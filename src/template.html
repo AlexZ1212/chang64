@@ -734,10 +734,17 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .ap-refaire{margin:10px 0 0}
 .ap-fiches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .ap-fiches a{display:block;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);color:var(--chalk);
-  text-decoration:none;font-size:13.5px;font-weight:600;line-height:1.3;overflow-wrap:anywhere;transition:border-color .16s}
+  text-decoration:none;font-size:13.5px;font-weight:600;line-height:1.3;overflow-wrap:break-word;transition:border-color .16s}
 .ap-fiches a:hover{border-color:var(--brass)}
+.ap-fiches-bloc .note a{color:var(--brass);font-weight:600;text-decoration:none}
+.ap-fiches-bloc .note a:hover{text-decoration:underline}
+.ap-fiches-bloc .note a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 #apPartiesBloc{margin-bottom:12px}
 @media(max-width:860px){.ap-fiches{grid-template-columns:1fr 1fr}}
+/* Sur telephone, une fiche par ligne : a deux colonnes, les titres allemands
+   (« Bauernumwandlung ») etaient coupes au milieu d'un mot. */
+@media(max-width:480px){.ap-fiches{grid-template-columns:1fr}}
+#apPartiesPicto{flex:none}
 @media(min-width:861px){#pane-apprendre{max-width:860px;margin-inline:auto}}
 /* Jouer et Inviter (suite de l'audit UX, 2026-10-24) : meme probleme que
    Resoudre, avec en plus une pendule au-dessus et une au-dessous du

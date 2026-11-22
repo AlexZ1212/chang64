@@ -284,6 +284,7 @@ if (typeof saveFinishedGame === "function") {
   saveFinishedGame = function () {
     const avant = gameSaved, r = av.apply(this, arguments);
     if (!avant && gameSaved && resultInfo) { try { bossFin(); } catch (e) {} }
+    repriseMaj();
     return r;
   };
 }

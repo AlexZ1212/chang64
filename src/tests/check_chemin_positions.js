@@ -162,6 +162,9 @@ async function controlerExo(sf, ex, nom) {
         j.chapitres.slice(1).every(c => c.etapes[c.etapes.length - 1].boss && c.etapes[c.etapes.length - 1].exos.length === 0));
     }
     const plan = /const CHEMIN_PLAN=(\[[^\]]*\])/.exec(fs.readFileSync(path.join(SRC, "site", "index.html"), "utf8"));
+    /* Le motif propose apres le boss doit exister dans Resoudre. */
+    const motifs = JSON.parse(fs.readFileSync(path.join(site, "theme-levels.json"), "utf8"));
+    for (const c of D.chapitres) if (c.theme) T("site : le motif du chapitre " + c.id + " existe dans Resoudre (" + c.theme + ")", Object.prototype.hasOwnProperty.call(motifs, c.theme));
     /* Le script est compacte : les cles n'y ont plus de guillemets. */
     let pose = null;
     try { pose = plan ? JSON.stringify(new Function("return " + plan[1])()) : null; } catch (e) {}

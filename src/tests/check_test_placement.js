@@ -1,0 +1,163 @@
+/* Verification automatique de chang64.
+   Lancement : node tests/check_test_placement.js
+   Le site doit avoir ete construit au prealable : node build_site.js
+
+   Le test de placement (apprendre.js, 2026-11-22, decisions d'Alexandre) :
+   - il se propose par une carte dans l'onglet Apprendre, jamais par une
+     fenetre ; on peut l'ecarter, puis le faire ou le refaire quand on veut ;
+   - dix positions au plus, un seul essai chacune, un bouton « Je ne sais
+     pas », aucun reproche ; il s'arrete apres deux erreurs de suite ;
+   - il regle le chapitre d'entree (les chapitres d'avant restent ouverts), le
+     Niveau exercices et la force de l'ordinateur ; ce qui a deja ete gagne en
+     jouant n'est jamais ecrase ; on peut refuser les reglages ;
+   - aucune recompense ne surgit pendant le test. */
+const { ouvrir } = require("./outils/page_langue.js");
+
+let ok = 0, ko = 0;
+const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d !== undefined ? "  -> " + d : "")); } };
+const pause = ms => new Promise(r => setTimeout(r, ms));
+const net = s => String(s).replace(/[  ]/g, " ");
+const dit = x => JSON.stringify(x);
+const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.setItem(k, typeof o[k] === "string" ? o[k] : JSON.stringify(o[k])); } });
+
+/* Passe le test : reponses[i] vaut true (bon coup), false (mauvais coup) ou
+   null (« Je ne sais pas »). Rend le nombre de positions vues. */
+async function passer(w, reponses) {
+  const $ = id => w.document.getElementById(id), ev = s => w.eval(s);
+  let vues = 0;
+  for (let i = 0; i < reponses.length; i++) {
+    if (ev("test.fin") || !ev("test.actif")) break;
+    for (let k = 0; k < 20 && (ev("test.occupe") || ev("test.i") !== i); k++) await pause(100);
+    if (ev("test.fin")) break;
+    vues++;
+    if (reponses[i] === null) $("btnTestPasse").click();
+    else {
+      w.__bon = reponses[i];
+      ev("(function(){const p=cheminD.placement[test.i];const m=legalCache.find(x=>window.__bon?p.sol.includes(game.uci(x)):!p.sol.includes(game.uci(x)));testReponse(m);})()");
+    }
+    await pause(1400);
+  }
+  return vues;
+}
+
+(async () => {
+  console.log("--- La carte, dans l'onglet ---");
+  let w = await ouvrir("fr", { fetch: true });
+  let $ = id => w.document.getElementById(id), ev = s => w.eval(s);
+  const cache = id => $(id).classList.contains("hide");
+  T("aucune fenetre a l'arrivee sur le site", ev("mode") === "home" && cache("pane-apprendre") && ev("test.actif") === false);
+  $("tab-apprendre").click(); await pause(500);
+  T("la carte propose le test, avec deux boutons", !cache("apTest") && net($("apTestGo").textContent) === "Faire le test" && net($("apTestPlusTard").textContent) === "Plus tard");
+  $("apTestPlusTard").click(); await pause(100);
+  T("« Plus tard » ecarte la carte", cache("apTest") && dit(JSON.parse(w.localStorage.getItem("chang64:chemin")).p) === dit({ x: 1 }));
+  T("un lien discret permet de le faire quand meme", !cache("apRefaire") && net($("apTestRefaire").textContent) === "Faire le test de placement");
+  T("l'ecarter ne compte pas comme un chemin commence", ev("cheminCommence()") === false && net($("heroDebut").textContent) === "Je débute");
+
+  console.log("--- Deux erreurs de suite : il s'arrete ---");
+  $("apTestRefaire").click(); await pause(600);
+  T("le test s'ouvre sur l'ecran des lecons", ev("mode") === "debut" && ev("test.actif") === true && ev("testEnCours()") === true);
+  T("titre, position 1 sur 10, barre de progression", net($("debutTeteTitre").textContent) === "Test de placement" && /Position 1 sur 10/.test(net($("debutEtape").textContent)) && !cache("leconBarre") && $("leconBarre").getAttribute("role") === "progressbar" && $("leconBarre").getAttribute("aria-valuenow") === "0" && $("leconBarre").getAttribute("aria-valuemax") === "10");
+  T("ni pastilles, ni indice, ni titre de lecon", cache("debutPas") && cache("debutActions") && cache("debutTitre") && cache("debutIntro") && cache("leconBoss") && cache("debutFin"));
+  T("consigne et bouton « Je ne sais pas »", /meilleur coup/.test(net($("debutStatus").textContent)) && !cache("testActions") && net($("btnTestPasse").textContent) === "Je ne sais pas");
+  T("aucune recompense ne peut surgir pendant le test", ev("bravoOccupe()") === true);
+  const avantStock = w.localStorage.getItem("chang64:chemin");
+  $("btnTestPasse").click(); await pause(50);
+  T("apres une reponse, la position est fermee : un seul essai", ev("test.occupe") === true && ev("legalCache.length") === 0 && $("btnTestPasse").disabled === true && ev("leconBloquee()") === true);
+  T("aucun reproche", /Pas de souci/.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
+  await pause(1400);
+  T("la position suivante arrive seule", ev("test.i") === 1 && /Position 2 sur 10/.test(net($("debutEtape").textContent)) && $("leconBarre").getAttribute("aria-valuenow") === "1");
+  ev("(function(){const p=cheminD.placement[test.i];testReponse(legalCache.find(x=>!p.sol.includes(game.uci(x))));})()");
+  T("un mauvais coup : note, sans correction", /noté/.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
+  await pause(1500);
+  T("deux erreurs de suite : le test s'arrete a la deuxieme position", ev("test.fin") === true && ev("test.rep.length") === 2);
+  T("resultat sans echiquier", $("appLayout").dataset.test === "resultat" && !cache("testResultat") && cache("testActions") && cache("leconBarre"));
+  T("le compte est dit", /Bonnes réponses : 0 sur 10/.test(net($("debutEtape").textContent)), $("debutEtape").textContent);
+  let lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
+  T("trois reglages expliques : chemin, niveau, ordinateur", lignes.length === 3 && /^Chemin/.test(lignes[0]) && /^Niveau exercices/.test(lignes[1]) && /^Ordinateur/.test(lignes[2]), lignes.join(" || "));
+  T("debutant : chapitre 1, palier 1 a 700, ordinateur Debutant", /chapitre 1 : Je débute/.test(lignes[0]) && !/restent ouverts/.test(lignes[0]) && /Palier 1 \| niveau exercices 700/.test(lignes[1]) && /Débutant/.test(lignes[2]) && /700/.test(lignes[2]), lignes.join(" || "));
+  T("le chemin est note tout de suite, pas les reglages", JSON.parse(w.localStorage.getItem("chang64:chemin")).p.e === "debut" && ev("prog.rating") === 800 && w.localStorage.getItem("chang64:chemin") !== avantStock);
+  T("deux boutons : commencer, ou garder ses reglages", net($("btnTestAppliquer").textContent) === "Commencer le chapitre 1" && net($("btnTestGarder").textContent) === "Garder mes réglages actuels" && !$("btnTestGarder").parentNode.classList.contains("hide"));
+  $("btnTestGarder").click(); await pause(500);
+  T("« Garder mes reglages » : rien ne bouge, le chapitre s'ouvre", ev("prog.rating") === 800 && ev("prog.level") === 1 && ev("mode") === "debut" && ev("leconCh") === "debut" && ev("test.actif") === false && !JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f);
+  T("l'ecran des lecons a retrouve ses elements", !cache("debutPas") && !cache("debutTitre") && cache("testResultat") && cache("leconBarre") && $("appLayout").dataset.test === undefined);
+  T("accueil : le chemin est commence", (() => { $("brand").click(); return net($("heroDebut").textContent) === "Continuer : chapitre 1"; })(), $("heroDebut").textContent);
+  w.close();
+
+  console.log("--- Un joueur qui connait les regles ---");
+  w = await ouvrir("fr", { fetch: true });
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  $("tab-apprendre").click(); await pause(500);
+  $("apTestGo").click(); await pause(600);
+  /* Les cinq premieres trouvees (chapitres 1 et 2), puis deux erreurs. */
+  let vues = await passer(w, [true, true, true, true, true, false, null, true, true, true]);
+  T("il s'arrete apres la septieme position", vues === 7 && ev("test.fin") === true, String(vues));
+  T("la position avec un coup prealable a montre le pion avancer", ev("cheminD.placement[3].avant") === "d7d5" && ev("test.rep[3]") === 1);
+  lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
+  T("5 sur 10 : entree au chapitre 3, les chapitres d'avant restent ouverts", /Bonnes réponses : 5 sur 10/.test(net($("debutEtape").textContent)) && /chapitre 3 : Ne rien donner/.test(lignes[0]) && /restent ouverts/.test(lignes[0]), lignes[0]);
+  T("palier 1 a 800, ordinateur Debutant", /Palier 1 \| niveau exercices 800/.test(lignes[1]) && /Débutant/.test(lignes[2]), lignes.slice(1).join(" || "));
+  $("btnTestAppliquer").click(); await pause(600);
+  T("« Commencer le chapitre 3 » ouvre ce chapitre", ev("mode") === "debut" && ev("leconCh") === "securite");
+  T("les trois chapitres sont ouverts", ev("cheminOuvert(0)&&cheminOuvert(1)&&cheminOuvert(2)") === true && dit(ev("chemin.o")) === dit(["debut", "regles", "securite"]));
+  T("le chapitre a suivre est le 3, meme si le 1 n'est pas fait", ev("cheminCourant()") === 2);
+  $("btnDebutFermer").click(); await pause(300);
+  T("la croix ramene a l'onglet, qui propose de refaire le test", ev("mode") === "apprendre" && $("apTest").classList.contains("hide") && net($("apTestRefaire").textContent) === "Refaire le test de placement");
+  const chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
+  T("aucun chapitre n'est verrouille, le 3 est en cours", chap.every(b => !b.classList.contains("verrou")) && chap[2].classList.contains("encours"));
+  w.close();
+
+  console.log("--- Tout juste ---");
+  w = await ouvrir("fr", { fetch: true });
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  $("tab-apprendre").click(); await pause(500);
+  $("apTestGo").click(); await pause(600);
+  vues = await passer(w, [true, true, true, true, true, true, true, true, true, true]);
+  T("dix positions vues, dix trouvees", vues === 10 && ev("test.res.score") === 10 && ev("test.fin") === true, vues + " / " + ev("test.res && test.res.score"));
+  lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
+  T("au-dela des chapitres sortis : ils restent ouverts, Resoudre est indique", /restent ouverts/.test(lignes[0]) && /Résoudre/.test(lignes[0]), lignes[0]);
+  T("palier 6 a 1450, ordinateur Serieux a 1600", /Palier 6 \| niveau exercices 1450/.test(lignes[1]) && /Sérieux/.test(lignes[2]) && /1600/.test(lignes[2]), lignes.slice(1).join(" || "));
+  T("le bouton ramene au chemin", net($("btnTestAppliquer").textContent) === "Retour au chemin");
+  $("btnTestAppliquer").click(); await pause(500);
+  T("les reglages sont appliques", ev("prog.level") === 6 && ev("prog.rating") === 1450 && ev("botLevel") === 3 && ev("prog.ratingHistory[prog.ratingHistory.length-1].r") === 1450);
+  T("la force retenue est gardee pour les prochaines visites", JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f === 3);
+  T("retour a l'onglet ; plus de bouton sur l'accueil", ev("mode") === "apprendre" && ev("cheminCourant()") === -1 && $("heroDebut").classList.contains("hide"));
+  T("la progression des exercices est enregistree", JSON.parse(w.localStorage.getItem("chang64:progress")).rating === 1450);
+  w.close();
+
+  console.log("--- A la visite suivante ---");
+  w = await ouvrir("fr", avec({ "chang64:chemin": { v: 1, c: {}, o: ["debut", "regles"], p: { t: 1, n: 8, e: "regles", f: 2 } } }));
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  T("la force de l'ordinateur retenue par le test est remise", ev("botLevel") === 2);
+  T("accueil : « Continuer : chapitre 2 »", net($("heroDebut").textContent) === "Continuer : chapitre 2", $("heroDebut").textContent);
+  w.close();
+
+  console.log("--- Ce qui a ete gagne en jouant n'est pas ecrase ---");
+  w = await ouvrir("fr", avec({ "chang64:progress": { solved: 60, level: 4, echelle: 2, rating: 1210, badges: [], eloOrdi: { r: 950, n: 4, pic: 960, h: [[1, 800], [2, 950]] } } }));
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  T("joueur installe : palier 4, niveau 1210", ev("prog.level") === 4 && ev("prog.rating") === 1210);
+  $("tab-apprendre").click(); await pause(500);
+  $("apTestGo").click(); await pause(600);
+  await passer(w, [null, null]);
+  lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
+  T("le niveau et la force sont dits inchanges", /^Niveau exercices ?Inchangé/.test(lignes[1]) && /^Ordinateur ?Inchangée/.test(lignes[2]), lignes.slice(1).join(" || "));
+  T("rien a refuser : un seul bouton", $("btnTestGarder").parentNode.classList.contains("hide"));
+  $("btnTestAppliquer").click(); await pause(500);
+  T("ni le palier, ni le niveau, ni la force n'ont bouge", ev("prog.level") === 4 && ev("prog.rating") === 1210 && ev("botLevel") === 2 && !JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f);
+  w.close();
+
+  console.log("--- Quitter en cours de test ---");
+  w = await ouvrir("fr", { fetch: true });
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  $("tab-apprendre").click(); await pause(500);
+  $("apTestGo").click(); await pause(600);
+  await passer(w, [true]);
+  $("btnDebutFermer").click(); await pause(300);
+  T("la croix abandonne le test sans rien regler", ev("mode") === "apprendre" && ev("test.actif") === false && w.localStorage.getItem("chang64:chemin") === null && !$("apTest").classList.contains("hide"));
+  await pause(1500);
+  T("aucune position ne revient apres coup", ev("mode") === "apprendre" && ev("test.actif") === false);
+  w.document.querySelector("#apChemin .ap-chap").click(); await pause(400);
+  T("ouvrir ensuite un chapitre montre bien la lecon", ev("mode") === "debut" && !$("debutPas").classList.contains("hide") && $("leconBarre").classList.contains("hide") && net($("debutTeteTitre").textContent) === "Je débute");
+  w.close();
+
+  console.log("\n" + ok + " OK, " + ko + " FAIL");
+  process.exit(ko ? 1 : 0);
+})().catch(e => { console.error(e); process.exit(1); });

@@ -516,7 +516,8 @@ function apRendre() {
     if (!ouvert) b.setAttribute("aria-disabled", "true");
     const titre = d ? d.titre : c.id === "debut" ? t("I'm a beginner") : "…";
     const sous = !ouvert ? t("Opens once chapter {n} is finished", { n: i })
-      : e.fini ? (e.boss ? t("Chapter completed, boss beaten") : c.id === "debut" || !c.boss ? t("Chapter completed") : t("Chapter completed. The boss is waiting →"))
+      /* « Je debute » finit par une premiere partie a jouer, pas par un boss a battre. */
+      : e.fini ? (c.id === "debut" || !c.boss ? t("Chapter completed") : e.boss ? t("Chapter completed, boss beaten") : t("Chapter completed. The boss is waiting →"))
       : e.commence ? t("Step {n} of {total}", { n: e.etape, total: e.etapes }) + " | " + t("Continue →")
       : t("Start →");
     poserHtml(b, '<span class="ap-num" aria-hidden="true">' + (i + 1) + '</span><span class="ap-txt"><b>' + echapper(titre) + "</b>" +

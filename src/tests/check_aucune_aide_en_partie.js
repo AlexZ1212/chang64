@@ -32,7 +32,13 @@ const cells = () => d.querySelectorAll("#board .sq");
 setTimeout(async () => {
   console.log("\n--- Aucune annulation de coup possible ---");
   T("le bouton Reprendre n'existe plus", !d.getElementById("btnUndo"));
-  T("aucun libelle 'Take back'", !/>Take back</.test(html));
+  /* Decision d'Alexandre (21 et 22/11/2026) : reprendre un coup redevient
+     possible, mais SEULEMENT dans les parties du chemin d'apprentissage
+     (premiere partie, boss), qui sont des entrainements sans Elo ni badges
+     (apprendre.js, check_chemin_progression.js). Le principe reste entier
+     pour toute partie ordinaire : le seul bouton de reprise est cache par
+     defaut, et il le reste pendant une partie lancee hors du chemin (plus bas). */
+  T("un seul bouton de reprise, cache par defaut", (html.match(/>Take back</g) || []).length === 1 && html.includes('<button class="btn hide" id="btnReprendre">Take back</button>'));
   T("aucun libelle 'Reprendre' sur un bouton", !/id="btnUndo"/.test(html));
 
   console.log("\n--- Le discours du site correspond au produit ---");
@@ -60,6 +66,7 @@ setTimeout(async () => {
   T("Voir le meilleur coup grise", d.getElementById("btnHint").disabled);
   T("Analyser la partie grise", d.getElementById("btnAnalyse").disabled);
   T("Abandonner reste le seul actif", !d.getElementById("btnResign").disabled);
+  T("partie ordinaire : pas de reprise de coup, pas de mention d'entrainement", d.getElementById("btnReprendre").classList.contains("hide") && d.getElementById("entrainementNote").classList.contains("hide") && w.eval("partieEntrainement()") === false);
   T("Nouvelle partie grisee", d.getElementById("btnNew").disabled);
 
   console.log("\n--- Une fois la partie finie, l'analyse s'ouvre ---");

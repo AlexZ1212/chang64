@@ -55,6 +55,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("le parcours debutant compte comme termine", ev("debutFini()") === true && ev("cheminEtat(0).fini") === true);
   $("tab-apprendre").click(); await pause(500);
   chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
+  T("le chapitre 1 fini ne parle pas de boss : il finit par une premiere partie", /Chapitre terminé$/.test(net(chap[0].querySelector(".ap-sub").textContent)), chap[0].querySelector(".ap-sub").textContent);
   T("onglet : chapitre 1 fait, chapitre 2 ouvert et en cours, chapitre 3 verrouille", chap[0].classList.contains("fait") && chap[1].classList.contains("encours") && !chap[1].classList.contains("verrou") && chap[2].classList.contains("verrou"));
   chap[0].click(); await pause(500);
   T("rouvrir le chapitre 1 attribue le badge « Parcours debutant termine »", ev("prog.badges.includes('debut_fini')") === true);

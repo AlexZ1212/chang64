@@ -63,7 +63,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   w.eval("cp={pseudo:'Anna',cle:'anna',version:1,dev:'x',n:0,sync:0};setMode('friend');amiModeRegler(amiModeDefaut())");
   /* Refonte du 2026-11-22 : plus de bandeau ; la correspondance est la quatrieme famille de cadences. */
   T("plus de bandeau au-dessus du bloc", !$("amiModes") && !$("amiModesPanel"));
-  T("le direct garde ses cadences a la pendule", [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,5+3,15+10" && !cache("directCats"));
+  T("le direct garde ses cadences a la pendule", [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,10+5,15+10" && !cache("directCats"));
   T("quatre familles : Blitz, Rapide (par defaut), Classique, Correspondance", [...$("directCats").children].map(b => net(b.textContent)).join("|") === "Blitz|Rapide|Classique|Correspondance" && [...$("directCats").children].map(b => b.getAttribute("aria-pressed")).join() === "false,true,false,false");
   $("directCats").children[3].click();
   const pf = $("pane-friend");
@@ -96,7 +96,7 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   await pause(60);
   T("dix parties deja en cours : c'est dit clairement", /Tu as déjà 10 parties par correspondance en cours/.test(net($("directStatus").textContent)), $("directStatus").textContent);
   $("directCats").children[1].click();
-  T("retour a Rapide : cadences a la pendule, lien propose", pf.dataset.corr === "" && [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,5+3,15+10" && vu($("directLienLigne")) && net($("directCadenceTitre").textContent) === "Cadence" && w.eval("directCad") < 6);
+  T("retour a Rapide : cadences a la pendule, lien propose", pf.dataset.corr === "" && [...$("directCadences").children].map(b => net(b.textContent)).join() === "10+0,10+5,15+10" && vu($("directLienLigne")) && net($("directCadenceTitre").textContent) === "Cadence" && w.eval("directCad") < 6);
 
   console.log("Contre un joueur en ligne");
   w.eval("amiModeRegler('hasard')");

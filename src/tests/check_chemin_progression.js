@@ -127,6 +127,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   $("tab-apprendre").click(); await pause(300);
   chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
   T("onglet : lecons du chapitre 2 finies, son boss ouvre la suite ; il reste le chapitre en cours", chap[1].classList.contains("fait") && chap[1].classList.contains("encours") && /Leçons finies\. Bats le boss pour ouvrir la suite/.test(net(chap[1].textContent)), net(chap[1].textContent));
+  T("la coche du chapitre fait et en cours n'est pas recouverte par son numero", /.ap-chap.fait.encours .ap-num{color:transparent}/.test(w.document.documentElement.innerHTML));
   T("onglet : le chapitre 3 est ferme, et dit pourquoi", chap[2].classList.contains("verrou") && chap[2].getAttribute("aria-disabled") === "true" && /Bats le boss du chapitre 2 pour ouvrir celui-ci/.test(net(chap[2].textContent)), net(chap[2].textContent));
   chap[2].click(); await pause(200);
   T("un chapitre ferme ne s'ouvre pas", ev("mode") === "apprendre");

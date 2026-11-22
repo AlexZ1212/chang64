@@ -78,6 +78,15 @@ const BLOCS = `(function(){
     if (l === "fr" || l === "de" || l === "ru") await capture("bloc-joueur-prises-" + l);
     await c.js(`window.__sansPrises();document.getElementById("btnResign").click();document.getElementById("btnResign").click();1`); await c.attendre(500);
 
+    /* Rangees de cadences et barre d'onglets : jamais de defilement vertical. */
+    for (const ecran of ["play", "friend"]) {
+      await c.js(`setMode("${ecran}");${ecran === "friend" ? 'amiModeRegler("direct");' : ""}window.scrollTo(0,0);1`); await c.attendre(500);
+      const v = await c.js(`[...document.querySelectorAll(".tc-cats,.tabs")].filter(e=>e.getBoundingClientRect().width>0).filter(e=>getComputedStyle(e).overflowY!=="hidden").map(e=>e.id||e.className).join()`);
+      mesures++;
+      if (v) tout.push(l + " " + ecran + " : defilement vertical possible sur " + v);
+    }
+    await c.js(`setMode("home");1`); await c.attendre(200);
+
     /* Explorer : le triangle des pieges dans son cadre. */
     await c.js(`document.getElementById("tab-explore").click();window.scrollTo(0,0);1`); await c.attendre(900);
     const pieges = await c.js(`(function(){const p=[...document.querySelectorAll("#pane-explore .picto svg")].find(s=>s.innerHTML.includes("M-2.900 -17.200"));if(!p)return null;const t=[...p.querySelectorAll("path")].find(x=>x.getAttribute("d").startsWith("M-2.900 -17.200")),a=p.getBoundingClientRect(),b=t.getBoundingClientRect();return [a.right-b.right,b.top-a.top,a.width];})()`);

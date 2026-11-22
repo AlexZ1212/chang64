@@ -89,7 +89,7 @@ function bxmFin(e) {
   bxMarquer("mp_1");
   if (res === "win") bxMarquer("mp_victoire");
   if (res === "loss") { bxMarquer("lec_membre"); if (e.fin.m === "temps") bxMarquer("lec_membre_temps"); }
-  const fam = e.elo && e.elo.f ? e.elo.f : corr ? "k" : e.cad && e.cad[0] === 180 ? "b" : "";
+  const fam = e.elo && e.elo.f ? e.elo.f : corr ? "k" : e.cad && e.cad[0] < 600 ? "b" : "";
   if (fam === "b") bxMarquer("cad_blitz");
   if (fam === "k") bxMarquer("cad_corr");
   /* Une revanche en direct est la manche suivante de la meme partie. */

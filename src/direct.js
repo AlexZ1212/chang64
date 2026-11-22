@@ -31,13 +31,19 @@
  *   directAccepter(id)  -> { id } ou { erreur } ("plein" : deja 10 parties)
  *   directRetirer(id)   retire mon invitation ou ma recherche
  */
-/* Meme liste, dans le meme ordre, que CADENCES du Worker : rapides, puis classiques. */
-const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0], [86400, 0], [259200, 0], [604800, 0], [180, 2]];
-const DIRECT_RAPIDES = [0, 1, 2], DIRECT_CLASSIQUES = [3, 4, 5];
+/* Meme liste, dans le meme ordre, que CADENCES du Worker : chaque cadence
+   garde son numero pour toujours (les parties en cours et les invitations le
+   portent), une nouvelle s'ajoute a la suite. L'ORDRE DE L'ECRAN est celui des
+   listes par famille ci-dessous, de la plus courte a la plus longue
+   (2026-11-22, demande d'Alexandre), avec les memes familles que contre
+   l'ordinateur : le 5+3 est un Blitz, le 10+5 (numero 10) un Rapide. Entre
+   membres, toujours un increment en Blitz : ni 3+0 ni 5+0. */
+const DIRECT_CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0], [86400, 0], [259200, 0], [604800, 0], [180, 2], [600, 5]];
+const DIRECT_RAPIDES = [0, 10, 2], DIRECT_CLASSIQUES = [3, 4, 5];
 /* Correspondance : un delai par coup, 1, 3 ou 7 jours. */
 const DIRECT_CORR = [6, 7, 8];
-/* Blitz (2026-11-21) : 3+2 seulement, numero 9, a la suite. */
-const DIRECT_BLITZ = [9];
+/* Blitz : 3+2 (numero 9, 2026-11-21), puis 5+3 (numero 1, range ici le 2026-11-22). */
+const DIRECT_BLITZ = [9, 1];
 /* Les familles du choix de cadence, dans l'ordre de l'ecran (le meme que contre l'ordinateur). */
 const DIRECT_FAMILLES = [["Blitz", DIRECT_BLITZ], ["Rapid", DIRECT_RAPIDES], ["Classical", DIRECT_CLASSIQUES]];
 function directCadCorr(i) { return DIRECT_CORR.includes(i); }

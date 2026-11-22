@@ -9,7 +9,7 @@
  * compte (Path=/api/).
  *
  * Routes :
- *   POST /api/partie/creer   {cad: 0|1|2, adv?: pseudo}  ->  {id}
+ *   POST /api/partie/creer   {cad: numero dans CADENCES, adv?: pseudo}  ->  {id}
  *        (20 creations par heure et par membre, sinon 429 « trop »)
  *   GET  /api/partie/ws?id=  (WebSocket)                  la partie elle-meme
  *   GET  /api/partie/invitations                          ->  {liste:[{id, p, cad, coul, cree}]}
@@ -72,7 +72,10 @@ const CADENCES = [[600, 0], [300, 3], [900, 10], [1800, 0], [1800, 20], [3600, 0
   [86400, 0], [259200, 0], [604800, 0],
   /* Blitz (2026-11-21, decision d'Alexandre : 3+2 seulement, jamais sans
      increment, qui absorbe le temps de trajet des coups). A la suite, numero 9. */
-  [180, 2]];
+  [180, 2],
+  /* Rapide 10+5 (2026-11-22, decision d'Alexandre : les cadences entre membres
+     suivent celles de l'ordinateur, increment compris). A la suite, numero 10. */
+  [600, 5]];
 const CORR = 6, CORR_FIN = 8;            /* cadences par correspondance : 6, 7, 8 */
 const corr = cad => cad >= CORR && cad <= CORR_FIN;
 /* Un Elo entre membres par FAMILLE de cadences (2026-11-21 au soir, decision
@@ -80,7 +83,11 @@ const corr = cad => cad >= CORR && cad <= CORR_FIN;
    Une lettre par cadence, dans l'ordre de CADENCES : toute nouvelle cadence
    doit y recevoir sa famille. Les colonnes elo et elo_n, les premieres, sont
    restees celles du Rapide. */
-const FAMILLES = "rrrccckkkb";
+/* 2026-11-22 : le 5+3 (numero 1) passe de Rapide a Blitz, comme contre
+   l'ordinateur et comme partout ailleurs ; le 10+5 (numero 10) est un Rapide.
+   Les Elo deja acquis ne bougent pas : seules les parties a venir comptent
+   dans la nouvelle famille. */
+const FAMILLES = "rbrccckkkbr";
 const ELO_COLONNES = { r: ["elo", "elo_n"], b: ["elo_blitz", "elo_blitz_n"], c: ["elo_classique", "elo_classique_n"], k: ["elo_corr", "elo_corr_n"] };
 const famille = cad => FAMILLES[cad] || "r";
 /* Une invitation garde aussi la couleur de l'invite, dans la meme colonne que

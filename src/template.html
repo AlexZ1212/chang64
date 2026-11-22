@@ -866,9 +866,17 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    le nom vers le haut et le desalignait de la pendule. Ici la premiere ligne
    ne bouge jamais, avec ou sans prises. */
 .clock{display:flex;flex-direction:column;align-items:stretch;gap:0;
-  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:7px 12px;
-  max-width:100%;box-sizing:border-box;min-width:0
+  background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:0 12px;
+  max-width:100%;box-sizing:border-box;min-width:0;
+  /* 2026-11-22, demande d'Alexandre (choix B sur maquette,
+     design/ajustements-2211) : le bloc gagne 10 % de hauteur (49 -> 54 px) et
+     tout y est centre sur la hauteur, comme la pendule. Sans prise, le nom est
+     seul au milieu ; a la premiere prise, le nom et la rangee des pieces
+     forment un groupe centre. La hauteur est FIXE (min-height) : rien ne
+     bouge autour du bloc quand la rangee apparait. */
+  min-height:54px;justify-content:center
 }
+.taken:empty{display:none}
 /* Pieces capturees dans la pendule. La contrainte est de ne pas faire grandir
    le bloc : le nom passe sur une premiere ligne et les pieces sur une seconde,
    tres basse, et le chronometre descend de 28 a 24px pour compenser. Les
@@ -887,7 +895,7 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    de la pastille plus son ecart, calcules depuis les memes variables pour que
    l'alignement suive si l'un des deux change. La bordure est comprise dans la
    largeur (box-sizing:border-box global), il n'y a donc rien a ajouter. */
-.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:20px;margin-top:0;
+.taken{display:flex;align-items:center;min-width:0;overflow:hidden;height:20px;margin-top:3px;
   padding-left:calc(var(--pastille,13px) + var(--pastille-gap,8px))}
 /* La largeur est posee en ligne, proportionnelle a la boite englobante de
    chaque piece : un pion reste plus etroit qu'une dame. L'espacement entre
@@ -2051,7 +2059,7 @@ footer .linkbtn{padding:4px 2px}
      directement le plateau, et pendules et ecarts se resserrent un peu. */
   body[data-mode="play"] .board-side,body[data-mode="friend"] .board-side{gap:6px}
   body[data-mode="play"] #boardTools,body[data-mode="friend"] #boardTools{order:1}
-  body[data-mode="play"] .clock,body[data-mode="friend"] .clock{padding-top:3px;padding-bottom:3px}
+  body[data-mode="play"] .clock,body[data-mode="friend"] .clock{min-height:45px}
 }
 /* Cibles tactiles (audit UX du 2026-10-24) : onglets et cadences a 35 px,
    pastilles a 41, EN/FR a 33 x 28, boutons d'info a 24 x 24 et "Voir le

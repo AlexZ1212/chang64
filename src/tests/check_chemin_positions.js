@@ -113,6 +113,15 @@ async function controlerExo(sf, ex, nom) {
     }
     /* Le boss : une position de depart ou il manque une piece aux Noirs. */
     const g = new Game(c.boss.fen), depart = new Game();
+    /* Boss en finale (chapitre 8) : roi et dame contre roi seul, l'ordinateur
+       a son meilleur niveau, la partie part de zero pour la regle des 50 coups. */
+    if (c.boss.finale) {
+      const pl = c.boss.fen.split(" ")[0].replace(/[^a-zA-Z]/g, "").split("").sort().join("");
+      T(c.id + " boss : roi et dame contre roi seul, les Blancs commencent", pl === "KQk" && g.turn === 0, pl);
+      T(c.id + " boss : la partie n'est ni finie ni nulle au depart", g.moves().length > 0 && !g.isDraw() && c.boss.fen.split(" ")[4] === "0");
+      T(c.id + " boss : niveau 1 a 4", [1, 2, 3, 4].includes(c.boss.niveau));
+      continue;
+    }
     const compte = (x, coul) => x.fen().split(" ")[0].replace(/[^a-zA-Z]/g, "").split("").filter(p => (p === p.toUpperCase()) === (coul === "w")).sort().join("");
     T(c.id + " boss : les Blancs ont toutes leurs pieces et commencent", g.turn === 0 && compte(g, "w") === compte(depart, "w"));
     /* Handicap : une piece (chapitres 2 a 5) ou deux pions (chapitre 6). */

@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Chapter 8: basic endgames",
+   "A new chapter in the Learn tab: mating with the queen and with the rook without stalemating, the square of the pawn, the opposition, and the king leading its pawn. The boss: mate the computer's lone king with your king and queen."
+  ],
+  "fr": [
+   "Chapitre 8 : les finales de base",
+   "Un nouveau chapitre dans l'onglet Apprendre : le mat avec la dame et avec la tour sans faire pat, le carré du pion, l'opposition et le roi qui mène son pion. Le boss : mater le roi seul de l'ordinateur avec ton roi et ta dame."
+  ],
+  "es": [
+   "Capítulo 8: los finales básicos",
+   "Un capítulo nuevo en la pestaña Aprender: el mate con la dama y con la torre sin ahogado, el cuadrado del peón, la oposición y el rey que guía a su peón. El jefe: dar mate al rey solo del ordenador con tu rey y tu dama."
+  ],
+  "pt": [
+   "Capítulo 8: os finais básicos",
+   "Um capítulo novo na aba Aprender: o mate com a dama e com a torre sem afogamento, o quadrado do peão, a oposição e o rei que conduz seu peão. O chefão: dar mate no rei sozinho do computador com seu rei e sua dama."
+  ],
+  "de": [
+   "Kapitel 8: einfache Endspiele",
+   "Ein neues Kapitel im Tab Lernen: Matt mit der Dame und mit dem Turm ohne Patt, das Quadrat des Bauern, die Opposition und der König, der seinen Bauern führt. Der Boss: Setze den einsamen König des Computers mit König und Dame matt."
+  ],
+  "ru": [
+   "Глава 8: простые эндшпили",
+   "Новая глава во вкладке «Учиться»: мат ферзём и ладьёй без пата, квадрат пешки, оппозиция и король, который ведёт свою пешку. Босс: поставь мат одинокому королю компьютера королём и ферзём."
+  ],
+  "it": [
+   "Capitolo 8: i finali di base",
+   "Un nuovo capitolo nella scheda Impara: il matto con la donna e con la torre senza stallo, il quadrato del pedone, l'opposizione e il re che guida il suo pedone. Il boss: dare matto al re solo del computer con re e donna."
+  ],
+  "tr": [
+   "Bölüm 8: temel oyun sonları",
+   "Öğren sekmesinde yeni bir bölüm: pat yapmadan vezirle ve kaleyle mat, piyonun karesi, opozisyon ve piyonuna yol gösteren şah. Boss: bilgisayarın yalnız şahını şahın ve vezirinle mat et."
+  ],
+  "pl": [
+   "Rozdział 8: podstawowe końcówki",
+   "Nowy rozdział w zakładce Ucz się: mat hetmanem i wieżą bez pata, kwadrat piona, opozycja i król prowadzący swojego piona. Boss: daj mata samotnemu królowi komputera królem i hetmanem."
+  ],
+  "id": [
+   "Bab 8: akhir permainan dasar",
+   "Bab baru di tab Belajar: skakmat dengan menteri dan dengan benteng tanpa pat, kotak pion, oposisi, dan raja yang memandu pionnya. Bos: skakmat raja komputer yang sendirian dengan raja dan menterimu."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "Chapter 7: starting a game well",
    "A new chapter in the Learn tab: taking the centre, bringing out knights and bishops, chasing a queen that comes out too early, castling in time, and the Scholar's mate. The boss is a real game against the computer, on equal terms."
   ],

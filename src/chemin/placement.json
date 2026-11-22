@@ -340,6 +340,48 @@
       }
     },
     {
+      "idee": "carre du pion : pousser, le roi noir est hors du carre",
+      "chapitre": "finales",
+      "controle": "meilleur",
+      "fen": "8/8/8/8/1P4k1/8/8/7K w - - 0 1",
+      "sol": [
+        "b4b5"
+      ],
+      "explication": {
+        "en": "The black king is outside the square of the pawn: once it moves forward, nothing can catch it.",
+        "fr": "Le roi noir est hors du carré du pion : une fois avancé, plus rien ne le rattrape.",
+        "es": "El rey negro está fuera del cuadrado del peón: una vez que avanza, nada lo alcanza.",
+        "pt": "O rei preto está fora do quadrado do peão: depois que ele avança, nada o alcança.",
+        "de": "Der schwarze König steht außerhalb des Bauernquadrats: Ist der Bauer erst gezogen, holt ihn nichts mehr ein.",
+        "ru": "Чёрный король вне квадрата пешки: стоит ей двинуться, и её уже не догнать.",
+        "it": "Il re nero è fuori dal quadrato del pedone: una volta avanzato, niente lo raggiunge più.",
+        "tr": "Siyah şah piyonun karesinin dışında: piyon ilerleyince artık hiçbir şey onu yakalayamaz.",
+        "pl": "Czarny król jest poza kwadratem piona: gdy pion ruszy, nic go już nie dogoni.",
+        "id": "Raja hitam ada di luar kotak pion: begitu pion maju, tidak ada yang bisa mengejarnya."
+      }
+    },
+    {
+      "idee": "mat roi et tour, les rois face a face",
+      "chapitre": "finales",
+      "mat": true,
+      "fen": "1k6/8/1K6/8/8/8/8/7R w - - 0 1",
+      "sol": [
+        "h1h8"
+      ],
+      "explication": {
+        "en": "The kings face each other: your king guards the squares in front, and the rook mates along the edge.",
+        "fr": "Les rois se font face : ton roi garde les cases devant, et la tour fait mat sur le bord.",
+        "es": "Los reyes están frente a frente: tu rey vigila las casillas de delante y la torre da mate en el borde.",
+        "pt": "Os reis estão frente a frente: seu rei vigia as casas da frente, e a torre dá mate na borda.",
+        "de": "Die Könige stehen sich gegenüber: Dein König bewacht die Felder davor, und der Turm setzt am Rand matt.",
+        "ru": "Короли стоят друг против друга: твой король держит поля впереди, а ладья ставит мат на краю.",
+        "it": "I re sono uno di fronte all'altro: il tuo re sorveglia le case davanti e la torre dà matto sul bordo.",
+        "tr": "Şahlar karşı karşıya: şahın öndeki kareleri tutuyor, kale de kenarda mat ediyor.",
+        "pl": "Królowie stoją naprzeciw siebie: twój król pilnuje pól z przodu, a wieża daje mata na brzegu.",
+        "id": "Kedua raja saling berhadapan: rajamu menjaga petak di depan, dan benteng skakmat di tepi."
+      }
+    },
+    {
       "idee": "mat en deux par sacrifice de dame sur la derniere rangee",
       "controle": "meilleur",
       "fen": "r5k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1",

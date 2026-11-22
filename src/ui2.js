@@ -1061,6 +1061,13 @@ function loadPgn(text){
       : t("Could not read any legal move from that PGN.");
     return false;
   }
+  /* Le chargement se fait depuis Analyser (2026-11-22) : la partie lue
+     s'ouvre dans l'ecran de revue, celui de Jouer. L'onglet Analyser reste
+     allume, comme pour « Jouer contre l'ordinateur depuis cette position ». */
+  if(mode!=="play"){
+    setMode("play");
+    markTab($("tab-play"),false);markTab($("tab-jouer"),false);markTab($("tab-edit"),true);
+  }
   clearAnalysis();
   isReviewGame=true;
   /* Une partie importee est une partie a l'ecran (2026-11-21) : sans cela,
@@ -1085,7 +1092,9 @@ function loadPgn(text){
     : t("Loaded {n} half-moves. Step through with the arrows, or analyse it.",{n:san.length});
   return true;
 }
-$("btnPgnCopy").onclick=()=>{copyText(buildPgn());$("pgnMsg").textContent=t("PGN copied to the clipboard.");};
+/* Les messages de l'export restent sous ses boutons, dans Jouer ; ceux du
+   chargement (#pgnMsg) ont suivi le champ dans Analyser (2026-11-22). */
+$("btnPgnCopy").onclick=()=>{copyText(buildPgn());$("pgnExportMsg").textContent=t("PGN copied to the clipboard.");};
 $("btnPgnDownload").onclick=()=>{
   try{
     const blob=new Blob([buildPgn()],{type:"application/x-chess-pgn"});
@@ -1093,8 +1102,8 @@ $("btnPgnDownload").onclick=()=>{
     a.href=URL.createObjectURL(blob);a.download="chang64-game.pgn";
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-    $("pgnMsg").textContent=t("Download started.");
-  }catch(e){copyText(buildPgn());$("pgnMsg").textContent=t("Download unavailable here, PGN copied instead.");}
+    $("pgnExportMsg").textContent=t("Download started.");
+  }catch(e){copyText(buildPgn());$("pgnExportMsg").textContent=t("Download unavailable here, PGN copied instead.");}
 };
 $("btnPgnLoad").onclick=()=>loadPgn($("pgnIn").value);
 /* Import Lichess (2026-11-01, demande d'Alexandre). Un pseudo donne les

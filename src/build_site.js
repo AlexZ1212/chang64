@@ -2341,6 +2341,9 @@ const datesApp = datesDe("/", app + require(path.join(__dirname, "banque.js")).t
      la langue retenue (choix deja fait sur le site, sinon langue du
      navigateur). Googlebot, en anglais et sans stockage, reste sur "/". */
 const URLS_APP = Object.fromEntries(LANGUES.map(l => [l.code, SITE + l.accueil]));
+/* Adresses des articles de finales, pour le lien pose sous chaque finale de
+   Resoudre (2026-11-22). */
+const FINALES_ADRESSES = require("./content.js").adressesFinales(slug);
 function dictApp(lang) {
   if (lang === "en") return {};
   try { return require(path.join(__dirname, "langues", lang, "app.js")); }
@@ -2359,7 +2362,7 @@ function pageApplication(lang) {
     .replace(/("@type":"WebApplication"[\s\S]*?"description":)("(?:[^"\\]|\\.)*")/, (m, a, x) => a + JSON.stringify(tx(JSON.parse(x))));
   const ouvertures = {};
   for (const p of pages) ouvertures[p.family] = p.slugs[lang];
-  const bloc = JSON.stringify({ lang, html: L_.html, intl: L_.intl, dirs: L_.dirs, ouvertures, dict })
+  const bloc = JSON.stringify({ lang, html: L_.html, intl: L_.intl, dirs: L_.dirs, ouvertures, finales: FINALES_ADRESSES[lang], dict })
     .replace(/</g, "\\u003c");
   const selecteur = `<details class="langswitch" id="langSwitch"><summary aria-label="${esc(T(lang, "Language: {name}", "Langue : {name}", { name: L_.nom }))}">${lang.toUpperCase()}</summary><div class="langmenu">` +
     LANGUES.map(l => `<a href="${l.accueil}" hreflang="${l.hreflang}" lang="${l.html}" data-lang="${l.code}"${l.code === lang ? ' aria-current="true"' : ""}>${l.nom}</a>`).join("") +

@@ -1424,7 +1424,8 @@ function refreshGame(){
        pour la partie qu'on vient de finir (pas pour une partie rouverte). */
     const gp=$("settingsPanel"); if(gp)gp.classList.toggle("hide",midGame||finished);
     { const rv=$("btnRevanche"); if(rv)rv.classList.toggle("hide",!!(typeof isReviewGame!=="undefined"&&isReviewGame)); }
-    const pp=$("pgnPanel"); if(pp)pp.classList.toggle("hide",midGame);
+    /* 2026-11-22 : le bloc ne porte plus que l'export ; sans coup a exporter, il n'a rien a montrer. */
+    const pp=$("pgnPanel"); if(pp)pp.classList.toggle("hide",midGame||!hasMoves);
     /* Pertinence des blocs (2026-11-18, demande d'Alexandre) : la liste des
        anciennes parties n'a pas sa place sous une partie qui se joue, et
        "Abandonner" n'a plus de sens une fois la partie finie. */

@@ -1227,6 +1227,8 @@ module.exports = {
 "Home (key)":"Home",
 "End (key)":"End",
 "Esc (key)":"Esc",
+"Load a game":"Oyun yükle",
+"Read the article on this endgame":"Bu oyun sonuyla ilgili yazıyı oku",
 "Tab (key)":"Tab",
 "Enter (key)":"Enter",
 "Space (key)":"Boşluk",

@@ -1,6 +1,63 @@
 /* Génération des pages de contenu, dans chaque langue du registre.
    Anglais et francais rediges ici cote a cote ; les autres langues traduites
    depuis l'anglais par langues/traduire.js (2026-10-25). */
+/* Les cinq finales (2026-11-22 : sorties de la fonction, ce ne sont que des
+   donnees). L'application en lit les adresses par adressesFinales(), avant
+   meme que les pages soient ecrites. */
+const ENDS = [
+    { id: "kq", demo: "Kf3 Kf6 Qd6 Kg7 Kf4 Kh8 Qd7 Kg8 Ke5 Kh8 Kf6 Kg8 Qg7", slug: { en: "queen-vs-king", fr: "dame-contre-roi" }, fen: "8/8/8/4k3/8/8/3QK3/8 w - - 0 1",
+      title: { en: "Queen and king versus king", fr: "Dame et roi contre roi" },
+      body: { en: ["The first mate every player should own. The method never changes: use the queen to shrink the enemy king's box, one rank or file at a time, then walk your own king up to deliver the blow.",
+                   "The single trap is stalemate. Never take away every square while the enemy king is not in check. A safe habit is the knight-move technique: keep the queen a knight's jump from the enemy king, and the box shrinks by itself.",
+                   "From any position this takes at most ten moves. Practise it in the trainer until it costs you no thought at all."],
+              fr: ["Le premier mat que tout joueur doit maîtriser. La méthode ne change jamais : la dame réduit la boîte du roi adverse, une rangée ou une colonne à la fois, puis ton roi monte porter le coup.",
+                   "Le seul piège est le pat. Ne retire jamais toutes les cases si le roi adverse n'est pas en échec. Une habitude sûre : garder la dame à un saut de cavalier du roi adverse, et la boîte se resserre toute seule.",
+                   "Depuis n'importe quelle position, cela prend au plus dix coups. Répète-le dans l'entraîneur jusqu'à ce que cela ne te coûte plus aucune réflexion."] } },
+    { id: "kr", demo: "Ra6 Kf5 Ke3 Ke5 Rh6 Kd5 Rh5 Kd6 Ke4 Ke7 Kd5 Kf7 Kd6 Kf6 Rd5 Kf7 Rf5 Kg8 Ke6 Kg7 Rg5 Kh6 Kf6 Kh7 Rg1 Kh8 Kf7 Kh7 Rh1", slug: { en: "rook-vs-king", fr: "tour-contre-roi" }, fen: "8/8/8/4k3/8/8/4K3/R7 w - - 0 1",
+      title: { en: "Rook and king versus king", fr: "Tour et roi contre roi" },
+      body: { en: ["Harder than the queen, because the rook cannot do it alone: the king must help on every move.",
+                   "The technique is the box. Put the rook on a rank or file that cuts the enemy king off, then bring your king to face his. When the kings stand opposite each other with one square between them, a rook check pushes the defender back one rank, and you start again.",
+                   "Expect around sixteen moves from a random position. If you find yourself checking without progress, stop checking and improve your king instead."],
+              fr: ["Plus difficile que la dame, car la tour ne peut rien seule : le roi doit aider à chaque coup.",
+                   "La technique est celle de la boîte. Place la tour sur une rangée ou une colonne qui coupe le roi adverse, puis amène ton roi face au sien. Quand les rois sont opposés avec une case entre eux, un échec de tour repousse le défenseur d'une rangée, et on recommence.",
+                   "Compte environ seize coups depuis une position quelconque. Si tu donnes échec sans progresser, arrête les échecs et améliore ton roi."] } },
+    { id: "krr", demo: "Ra5 Kd6 Rh5 Ke7 Ra6 Kf8 Rh7 Kg8 Rc7 Kh8 Ra8", slug: { en: "two-rooks-vs-king", fr: "deux-tours-contre-roi" }, fen: "8/8/8/4k3/8/8/R7/R3K3 w - - 0 1",
+      title: { en: "Two rooks versus king: the ladder mate", fr: "Deux tours contre roi : le mat de l'escalier" },
+      body: { en: ["The easiest mate in chess, and the one to teach first because it needs no king help at all.",
+                   "One rook cuts the king off on a rank. The other checks on the next rank, driving him back. Then the first rook jumps forward and checks again. The two rooks climb like the rungs of a ladder until the king runs out of board.",
+                   "The only care needed: when the enemy king approaches a rook, move that rook far along its line rather than losing it. Eight moves is a normal result."],
+              fr: ["Le mat le plus simple du jeu, et celui qu'il faut enseigner en premier, car il ne demande aucune aide du roi.",
+                   "Une tour coupe le roi sur une rangée. L'autre donne échec sur la rangée suivante et le repousse. Puis la première tour saute devant et donne échec à son tour. Les deux tours grimpent comme les barreaux d'une échelle jusqu'à ce que le roi manque d'échiquier.",
+                   "La seule précaution : quand le roi adverse approche d'une tour, éloigne-la le long de sa ligne plutôt que de la perdre. Huit coups est un résultat normal."] } },
+    { id: "kbn", demo: "Kf3 Kd5 Kf4 Kd6 Ke4 Kc5 Nd4 Kd6 Be3 Kc5 Bf4 Kb4 Bd6 Ka5 Bc5 Ka4 Kd5 Ka5 Ne6 Ka6 Be3 Ka5 Bc5 Ka6 Nc7 Kb7 Kd6 Kc8 Kc6 Kd8 Nd5 Ke8 Be7 Kf7 Kd7 Kg6 Ke6 Kh5 Kf5 Kh6 Nf4 Kh7 Kf6 Kg8 Kg6 Kh8 Kf7 Kh7 Bg5 Kh8 Ne6 Kh7 Nf8 Kh8 Bf6", slug: { en: "bishop-and-knight-mate", fr: "mat-fou-et-cavalier" }, fen: "8/8/8/4k3/8/8/3BNK2/8 w - - 0 1",
+      title: { en: "Bishop and knight mate: the hard one", fr: "Le mat fou et cavalier : le difficile" },
+      body: { en: ["The only elementary mate most club players never learn, and the one that occasionally costs a full point.",
+                   "The key fact: mate is only possible in a corner your bishop can attack. If the enemy king runs to the wrong corner, you must drive him along the edge to the right one, which is where the famous W manoeuvre of the knight comes in.",
+                   "It can take over thirty moves, and the fifty-move rule is real, so hesitation loses the win. Worth an hour of practice once in your life."],
+              fr: ["Le seul mat élémentaire que la plupart des joueurs de club n'apprennent jamais, et celui qui coûte parfois un point entier.",
+                   "Le point clé : le mat n'est possible que dans un coin que ton fou peut attaquer. Si le roi adverse fuit vers le mauvais coin, il faut le pousser le long du bord jusqu'au bon, et c'est là qu'intervient la fameuse manœuvre en W du cavalier.",
+                   "Cela peut demander plus de trente coups, et la règle des cinquante coups est bien réelle : l'hésitation coûte la victoire. Une heure de travail, une fois dans sa vie, suffit."] } },
+    { id: "kp", demo: "Kd7 Kf6 Kd8 Kf7 Kc7 e5 Kb6 e6 Ka5 e7 Kb5 e8=Q", demoFen: "8/4k3/8/4K3/4P3/8/8/8 b - - 0 1", slug: { en: "king-and-pawn-vs-king", fr: "roi-et-pion-contre-roi" }, fen: "8/8/8/3k4/8/3P4/3K4/8 w - - 0 1",
+      title: { en: "King and pawn versus king", fr: "Roi et pion contre roi" },
+      body: { en: ["The most important endgame of all, because every other one can simplify into it.",
+                   "Everything hinges on the opposition. If your king reaches the sixth rank in front of his pawn, the pawn promotes. If the defending king takes the square in front of the pawn and holds the opposition, the game is drawn.",
+                   "Rook pawns are the exception: an a-pawn or h-pawn with the defending king able to reach the corner is always a draw, however far ahead you are."],
+              fr: ["La finale la plus importante de toutes, car toutes les autres peuvent s'y ramener.",
+                   "Tout repose sur l'opposition. Si ton roi atteint la sixième rangée devant son pion, le pion passe. Si le roi défenseur occupe la case devant le pion et tient l'opposition, la partie est nulle.",
+                   "Les pions tour font exception : un pion a ou h, avec un roi défenseur capable d'atteindre le coin, est toujours nul, quelle que soit ton avance."] } }
+];
+
+/* Slug d'une page dans une langue : redige pour l'anglais et le francais,
+   anglais pour le russe (pas d'URL en cyrillique), sinon pris dans la table
+   "slugs" de la langue (cle "rubrique:slug anglais", un meme slug anglais
+   pouvant servir dans deux rubriques) ou tire du titre traduit. */
+function slugPage(lang, slugs, titre, rub, slug) {
+  const { PAR_CODE } = require("./langues/registre.js");
+  const TRAD = require("./langues/traduire.js");
+  if (slugs[lang]) return slugs[lang];
+  if (PAR_CODE[lang].slugsAnglais) return slugs.en;
+  return TRAD.table(lang, "slugs", rub + ":" + slugs.en, true) || slug(TRAD.translit(lang, titre));
+}
 module.exports = function (H) {
   const { fs, OUT, SITE, shell, boardSvg, esc, numbered, Game, puzzles, slug, L, sansAccent, metaDesc, animBoard } = H;
   const { LANGUES, PAR_CODE } = require("./langues/registre.js");
@@ -18,15 +75,7 @@ module.exports = function (H) {
   /* Adresse de l'application dans la langue de la page : les boutons
      "Jouer", "Entraine-toi"... y menent avec leur # (theme, position...). */
   const accueil = lang => PAR_CODE[lang].accueil;
-  /* Slug d'une page dans une langue : redige pour l'anglais et le francais,
-     anglais pour le russe (pas d'URL en cyrillique), sinon pris dans la table
-     "slugs" de la langue (cle "rubrique:slug anglais", un meme slug anglais
-     pouvant servir dans deux rubriques) ou tire du titre traduit. */
-  function slugDe(lang, slugs, titre, rub) {
-    if (slugs[lang]) return slugs[lang];
-    if (PAR_CODE[lang].slugsAnglais) return slugs.en;
-    return TRAD.table(lang, "slugs", rub + ":" + slugs.en, true) || slug(TRAD.translit(lang, titre));
-  }
+  const slugDe = (lang, slugs, titre, rub) => slugPage(lang, slugs, titre, rub, slug);
   /* Adresses d'une page dans toutes les langues, pour hreflang et selecteur. */
   const urlsDe = (rub, slugPar) => Object.fromEntries(LANGS.map(l => [l, `${SITE}/${DIRS[rub][l]}/${slugPar(l)}`]));
   const urlsIndex = rub => Object.fromEntries(LANGS.map(l => [l, `${SITE}/${DIRS[rub][l]}/`]));
@@ -1052,48 +1101,6 @@ module.exports = function (H) {
      celle de la page est nulle avec le trait aux Blancs, alors que la
      demonstration doit montrer le gain, roi devant son pion avec l'opposition,
      jusqu'a la promotion. */
-  const ENDS = [
-    { id: "kq", demo: "Kf3 Kf6 Qd6 Kg7 Kf4 Kh8 Qd7 Kg8 Ke5 Kh8 Kf6 Kg8 Qg7", slug: { en: "queen-vs-king", fr: "dame-contre-roi" }, fen: "8/8/8/4k3/8/8/3QK3/8 w - - 0 1",
-      title: { en: "Queen and king versus king", fr: "Dame et roi contre roi" },
-      body: { en: ["The first mate every player should own. The method never changes: use the queen to shrink the enemy king's box, one rank or file at a time, then walk your own king up to deliver the blow.",
-                   "The single trap is stalemate. Never take away every square while the enemy king is not in check. A safe habit is the knight-move technique: keep the queen a knight's jump from the enemy king, and the box shrinks by itself.",
-                   "From any position this takes at most ten moves. Practise it in the trainer until it costs you no thought at all."],
-              fr: ["Le premier mat que tout joueur doit maîtriser. La méthode ne change jamais : la dame réduit la boîte du roi adverse, une rangée ou une colonne à la fois, puis ton roi monte porter le coup.",
-                   "Le seul piège est le pat. Ne retire jamais toutes les cases si le roi adverse n'est pas en échec. Une habitude sûre : garder la dame à un saut de cavalier du roi adverse, et la boîte se resserre toute seule.",
-                   "Depuis n'importe quelle position, cela prend au plus dix coups. Répète-le dans l'entraîneur jusqu'à ce que cela ne te coûte plus aucune réflexion."] } },
-    { id: "kr", demo: "Ra6 Kf5 Ke3 Ke5 Rh6 Kd5 Rh5 Kd6 Ke4 Ke7 Kd5 Kf7 Kd6 Kf6 Rd5 Kf7 Rf5 Kg8 Ke6 Kg7 Rg5 Kh6 Kf6 Kh7 Rg1 Kh8 Kf7 Kh7 Rh1", slug: { en: "rook-vs-king", fr: "tour-contre-roi" }, fen: "8/8/8/4k3/8/8/4K3/R7 w - - 0 1",
-      title: { en: "Rook and king versus king", fr: "Tour et roi contre roi" },
-      body: { en: ["Harder than the queen, because the rook cannot do it alone: the king must help on every move.",
-                   "The technique is the box. Put the rook on a rank or file that cuts the enemy king off, then bring your king to face his. When the kings stand opposite each other with one square between them, a rook check pushes the defender back one rank, and you start again.",
-                   "Expect around sixteen moves from a random position. If you find yourself checking without progress, stop checking and improve your king instead."],
-              fr: ["Plus difficile que la dame, car la tour ne peut rien seule : le roi doit aider à chaque coup.",
-                   "La technique est celle de la boîte. Place la tour sur une rangée ou une colonne qui coupe le roi adverse, puis amène ton roi face au sien. Quand les rois sont opposés avec une case entre eux, un échec de tour repousse le défenseur d'une rangée, et on recommence.",
-                   "Compte environ seize coups depuis une position quelconque. Si tu donnes échec sans progresser, arrête les échecs et améliore ton roi."] } },
-    { id: "krr", demo: "Ra5 Kd6 Rh5 Ke7 Ra6 Kf8 Rh7 Kg8 Rc7 Kh8 Ra8", slug: { en: "two-rooks-vs-king", fr: "deux-tours-contre-roi" }, fen: "8/8/8/4k3/8/8/R7/R3K3 w - - 0 1",
-      title: { en: "Two rooks versus king: the ladder mate", fr: "Deux tours contre roi : le mat de l'escalier" },
-      body: { en: ["The easiest mate in chess, and the one to teach first because it needs no king help at all.",
-                   "One rook cuts the king off on a rank. The other checks on the next rank, driving him back. Then the first rook jumps forward and checks again. The two rooks climb like the rungs of a ladder until the king runs out of board.",
-                   "The only care needed: when the enemy king approaches a rook, move that rook far along its line rather than losing it. Eight moves is a normal result."],
-              fr: ["Le mat le plus simple du jeu, et celui qu'il faut enseigner en premier, car il ne demande aucune aide du roi.",
-                   "Une tour coupe le roi sur une rangée. L'autre donne échec sur la rangée suivante et le repousse. Puis la première tour saute devant et donne échec à son tour. Les deux tours grimpent comme les barreaux d'une échelle jusqu'à ce que le roi manque d'échiquier.",
-                   "La seule précaution : quand le roi adverse approche d'une tour, éloigne-la le long de sa ligne plutôt que de la perdre. Huit coups est un résultat normal."] } },
-    { id: "kbn", demo: "Kf3 Kd5 Kf4 Kd6 Ke4 Kc5 Nd4 Kd6 Be3 Kc5 Bf4 Kb4 Bd6 Ka5 Bc5 Ka4 Kd5 Ka5 Ne6 Ka6 Be3 Ka5 Bc5 Ka6 Nc7 Kb7 Kd6 Kc8 Kc6 Kd8 Nd5 Ke8 Be7 Kf7 Kd7 Kg6 Ke6 Kh5 Kf5 Kh6 Nf4 Kh7 Kf6 Kg8 Kg6 Kh8 Kf7 Kh7 Bg5 Kh8 Ne6 Kh7 Nf8 Kh8 Bf6", slug: { en: "bishop-and-knight-mate", fr: "mat-fou-et-cavalier" }, fen: "8/8/8/4k3/8/8/3BNK2/8 w - - 0 1",
-      title: { en: "Bishop and knight mate: the hard one", fr: "Le mat fou et cavalier : le difficile" },
-      body: { en: ["The only elementary mate most club players never learn, and the one that occasionally costs a full point.",
-                   "The key fact: mate is only possible in a corner your bishop can attack. If the enemy king runs to the wrong corner, you must drive him along the edge to the right one, which is where the famous W manoeuvre of the knight comes in.",
-                   "It can take over thirty moves, and the fifty-move rule is real, so hesitation loses the win. Worth an hour of practice once in your life."],
-              fr: ["Le seul mat élémentaire que la plupart des joueurs de club n'apprennent jamais, et celui qui coûte parfois un point entier.",
-                   "Le point clé : le mat n'est possible que dans un coin que ton fou peut attaquer. Si le roi adverse fuit vers le mauvais coin, il faut le pousser le long du bord jusqu'au bon, et c'est là qu'intervient la fameuse manœuvre en W du cavalier.",
-                   "Cela peut demander plus de trente coups, et la règle des cinquante coups est bien réelle : l'hésitation coûte la victoire. Une heure de travail, une fois dans sa vie, suffit."] } },
-    { id: "kp", demo: "Kd7 Kf6 Kd8 Kf7 Kc7 e5 Kb6 e6 Ka5 e7 Kb5 e8=Q", demoFen: "8/4k3/8/4K3/4P3/8/8/8 b - - 0 1", slug: { en: "king-and-pawn-vs-king", fr: "roi-et-pion-contre-roi" }, fen: "8/8/8/3k4/8/3P4/3K4/8 w - - 0 1",
-      title: { en: "King and pawn versus king", fr: "Roi et pion contre roi" },
-      body: { en: ["The most important endgame of all, because every other one can simplify into it.",
-                   "Everything hinges on the opposition. If your king reaches the sixth rank in front of his pawn, the pawn promotes. If the defending king takes the square in front of the pawn and holds the opposition, the game is drawn.",
-                   "Rook pawns are the exception: an a-pawn or h-pawn with the defending king able to reach the corner is always a draw, however far ahead you are."],
-              fr: ["La finale la plus importante de toutes, car toutes les autres peuvent s'y ramener.",
-                   "Tout repose sur l'opposition. Si ton roi atteint la sixième rangée devant son pion, le pion passe. Si le roi défenseur occupe la case devant le pion et tient l'opposition, la partie est nulle.",
-                   "Les pions tour font exception : un pion a ou h, avec un roi défenseur capable d'atteindre le coin, est toujours nul, quelle que soit ton avance."] } }
-  ];
 
   /* Meme forme qu'une page Apprendre : titre, paragraphes, slug. */
   for (const lang of LANGS) {
@@ -1306,4 +1313,16 @@ ${blocks}
       SITE + "/players/", profile, null, "en", '<meta name="robots" content="noindex">', null));
 
   return urls;
+};
+/* Adresse de l'article de chaque finale, par langue : { fr: { kq: "/fr/finales/dame-contre-roi", ... }, ... }.
+   Meme calcul que les pages elles-memes (slugPage) ; slug : la fonction de build_site.js. */
+module.exports.adressesFinales = function (slug) {
+  const { LANGUES } = require("./langues/registre.js");
+  const { choix } = require("./langues/traduire.js");
+  const out = {};
+  for (const l of LANGUES) {
+    out[l.code] = {};
+    for (const e of ENDS) out[l.code][e.id] = "/" + l.dirs.endgames + "/" + slugPage(l.code, e.slug, choix(l.code, e.title), "endgames", slug);
+  }
+  return out;
 };

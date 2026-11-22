@@ -183,6 +183,12 @@ function renderEndgame(){
   if(!eg)return;
   $("egName").textContent=t(eg.scen.name);
   $("egBrief").textContent=t(eg.scen.brief);
+  /* L'article de la finale, dans la langue de la page (adresses posees par la
+     construction du site : PAGE_LANGUE.finales). */
+  {
+    const a=$("egArticle"),href=(PAGE_LANGUE.finales||{})[eg.scen.id];
+    if(a)poserHtml(a,href?'<a href="'+href+'">'+echapper(t("Read the article on this endgame"))+"</a>":"");
+  }
   $("egMoves").textContent=eg.moves;
   $("egBudget").textContent=eg.scen.budget;
   const best=(prog.endgames||{})[eg.scen.id];

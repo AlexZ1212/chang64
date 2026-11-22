@@ -1080,6 +1080,8 @@ module.exports = {
 "Home (key)":"Origine",
 "End (key)":"Fin",
 "Esc (key)":"Échap",
+"Load a game":"Charger une partie",
+"Read the article on this endgame":"Lire l'article sur cette finale",
 "Tab (key)":"Tab",
 "Enter (key)":"Entrée",
 "Space (key)":"Espace",

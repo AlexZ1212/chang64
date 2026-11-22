@@ -1811,6 +1811,8 @@ header>*{min-width:0}
    disparaitre avec le reste dans ce cas precis, sans quoi ce meme
    desequilibre reapparaitrait par en bas cette fois-ci. */
 .opening:empty{display:none;margin-top:0;margin-bottom:0;min-height:0}
+/* Sous le descriptif d'une finale : le descriptif porte deja la marge du bas. */
+.eg-article{margin-top:-6px}
 /* Conteneur commun au bandeau de coups et au bouton de retournement : reste
    visible en Jouer/Entre amis meme quand le bandeau de coups lui-meme est
    masque (aucun coup joue, ou mode Entre amis qui n'a pas de bandeau) --
@@ -3350,22 +3352,11 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <button class="btn" id="btnPgnCopy">Copy PGN</button>
             <button class="btn" id="btnPgnDownload">Download</button>
           </div>
-          <div style="margin-top:10px">
-            <textarea class="linkbox" id="pgnIn" rows="3" placeholder="Paste a PGN here to load and review it" aria-label="PGN to import"></textarea>
-            <div class="btnrow"><button class="btn" id="btnPgnLoad">Load PGN</button></div>
-            <p class="note" id="pgnMsg"></p>
-          </div>
-          <!-- Import Lichess (2026-11-01) : le navigateur interroge lichess.org
-               directement, rien ne passe par chang64 ni n'y est garde. -->
-          <div class="lichess-import">
-            <label class="note" for="lichessIn">Import from Lichess: a username or a game link.</label>
-            <div class="lichess-row">
-              <input class="linkbox" id="lichessIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Lichess username or game link">
-              <button class="btn" id="btnLichess" type="button">Import</button>
-            </div>
-            <p class="note" id="lichessMsg" aria-live="polite"></p>
-            <div class="lichess-games" id="lichessGames"></div>
-          </div>
+          <!-- 2026-11-22 (decision d'Alexandre) : ce bloc ne garde que l'export
+               de la partie qu'on vient de jouer. Charger un PGN et importer
+               depuis Lichess servent a relire une partie : ils sont dans
+               Analyser (#pgnImportPanel). -->
+          <p class="note" id="pgnExportMsg" role="status"></p>
         </div>
       </div>
 
@@ -3405,6 +3396,30 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <div class="btnrow"><button class="btn" id="editFenLoad">Load FEN</button></div>
           </div>
           <p class="note" id="editMsg"></p>
+        </div>
+        <!-- Charger une partie pour la relire (2026-11-22, decision d'Alexandre) :
+             un PGN colle, ou une partie de Lichess. Ces deux champs etaient en
+             bas de l'ecran Jouer contre l'ordinateur ; ils gardent leurs
+             identifiants. La partie chargee s'ouvre dans l'ecran de revue. -->
+        <div class="panel" id="pgnImportPanel">
+          <div class="eyebrow">Load a game<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipPgnImport" aria-label="More info">i</button></div>
+          <p class="info-tip-pop hide" id="tipPgnImport">PGN is the standard notation format for chess games, readable by most chess sites and software.</p>
+          <div>
+            <textarea class="linkbox" id="pgnIn" rows="3" placeholder="Paste a PGN here to load and review it" aria-label="PGN to import"></textarea>
+            <div class="btnrow"><button class="btn" id="btnPgnLoad">Load PGN</button></div>
+            <p class="note" id="pgnMsg"></p>
+          </div>
+          <!-- Import Lichess (2026-11-01) : le navigateur interroge lichess.org
+               directement, rien ne passe par chang64 ni n'y est garde. -->
+          <div class="lichess-import">
+            <label class="note" for="lichessIn">Import from Lichess: a username or a game link.</label>
+            <div class="lichess-row">
+              <input class="linkbox" id="lichessIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Lichess username or game link">
+              <button class="btn" id="btnLichess" type="button">Import</button>
+            </div>
+            <p class="note" id="lichessMsg" aria-live="polite"></p>
+            <div class="lichess-games" id="lichessGames"></div>
+          </div>
         </div>
       </div>
 
@@ -3780,6 +3795,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <div class="bloc">
           <h2 id="egName">Queen vs King</h2>
           <p class="sub" id="egBrief"></p>
+          <!-- Renvoi vers l'article de la finale (2026-11-22, demande
+               d'Alexandre) : meme aspect que le renvoi vers l'ouverture
+               sous l'echiquier de Jouer (.opening). Rempli par renderEndgame. -->
+          <p class="opening eg-article" id="egArticle"></p>
           <div class="status" id="egStatus">Pick an endgame below.</div>
           </div>
           <div class="bloc">

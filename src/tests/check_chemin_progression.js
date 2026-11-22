@@ -75,7 +75,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   for (let i = 0; i < 5; i++) {
     for (let j = 0; j < E[i].exos.length; j++) {
       const ex = E[i].exos[j], nom = "lecon " + (i + 1) + "." + (j + 1);
-      T(nom + " : affichee", ev("lecon.e") === i && ev("lecon.x") === j, ev("lecon.e") + "." + ev("lecon.x"));
+      T(nom + " : affichee, echiquier du cote des Blancs", ev("lecon.e") === i && ev("lecon.x") === j && ev("flipped") === false, ev("lecon.e") + "." + ev("lecon.x") + " " + ev("flipped"));
       if (ex.avant) {
         T(nom + " : la main n'est pas au joueur avant le coup des Noirs", ev("lecon.occupe") === true && ev("legalCache.length") === 0);
         await pause(800);
@@ -116,7 +116,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("derniere etape : le boss, sans exercice", !$("leconBoss").classList.contains("hide") && $("debutStatus").classList.contains("hide") && /dame/.test($("debutTitre").textContent), $("debutTitre").textContent);
   T("deux boutons : affronter le boss, ou le chapitre suivant", net($("btnLeconBoss").textContent) === "Affronter le boss" && net($("btnLeconSuite").textContent) === "Chapitre suivant" && $("leconBossFait").classList.contains("hide"));
   T("les lecons finies ouvrent le chapitre 3, boss ou non", ev("cheminEtat(1).fini") === true && ev("cheminEtat(1).boss") === false && ev("cheminOuvert(2)") === true);
-  T("l'echiquier montre la position du boss", ev("game.fen().split(' ')[0]") === "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+  T("l'echiquier montre la position du boss, du cote des Blancs", ev("game.fen().split(' ')[0]") === "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR" && ev("flipped") === false);
   $("btnDebutFermer").click(); await pause(200);
   T("accueil : « Continuer : chapitre 3 »", net($("heroDebut").textContent) === "Continuer : chapitre 3", $("heroDebut").textContent);
   $("tab-apprendre").click(); await pause(300);
@@ -129,6 +129,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("un chapitre fini se rouvre sur son boss", ev("lecon.e") === 5 && !$("leconBoss").classList.contains("hide"));
   $("btnLeconBoss").click(); await pause(500);
   T("le boss : partie contre l'ordinateur, Blancs, niveau le plus facile", ev("mode") === "play" && ev("gameStarted") === true && ev("myColor===W") && ev("botLevel") === 1);
+  T("le boss : l'echiquier est du cote des Blancs", ev("flipped") === false);
   T("il manque la dame noire", ev("gameStartFen") === "rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" && ev("game.board[debutCase('d8')]") === 0);
   T("sans pendule", ev("clock.enabled") === false);
   T("c'est un entrainement, et c'est dit", ev("partieEntrainement()") === true && !$("entrainementNote").classList.contains("hide") && /ni pour ton Elo ni pour tes badges/.test(net($("entrainementNote").textContent)));
@@ -158,6 +159,15 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("ecran du boss : la reussite est dite, on peut le rejouer", !$("leconBossFait").classList.contains("hide") && /Boss battu/.test($("leconBossFait").textContent) && net($("btnLeconBoss").textContent) === "Rejouer le boss" && $("debutPas").lastChild.classList.contains("fait"));
   $("btnLeconSuite").click(); await pause(500);
   T("« Chapitre suivant » ouvre le chapitre 3", ev("mode") === "debut" && ev("leconCh") === "securite" && /pièce/.test($("debutTitre").textContent), $("debutTitre").textContent);
+
+  console.log("--- Apres une partie avec les Noirs, les lecons reviennent a l'endroit ---");
+  ev("flipped=true;mainFlipped=true");
+  for (const [id, n] of [["debut", 6], ["regles", 5], ["securite", 5]]) {
+    ev("cheminActiver('" + id + "');setMode('apprendre');setMode('debut')"); await pause(200);
+    let envers = [];
+    for (let e = 0; e <= n; e++) { ev("flipped=true;lecon.e=" + e + ";lecon.x=0;debutCharger()"); if (ev("flipped") !== false) envers.push(e + 1); }
+    T("chapitre " + id + " : chaque etape, boss compris, remet l'echiquier du cote des Blancs", envers.length === 0, envers.join());
+  }
 
   console.log("--- Une partie ordinaire n'a pas de reprise ---");
   $("tab-jouer").click(); await pause(200); $("jouerOrdi").click(); await pause(300);

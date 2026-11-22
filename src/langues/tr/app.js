@@ -1354,9 +1354,6 @@ module.exports = {
 "White to play. Find the best move.":"Beyaz oynar. En iyi hamleyi bul.",
 "Black to play. Find the best move.":"Siyah oynar. En iyi hamleyi bul.",
 "Watch the move that has just been played…":"Az önce oynanan hamleye bak…",
-"Well spotted.":"İyi gördün.",
-"Noted. On to the next one.":"Not edildi. Sıradakine geçelim.",
-"No problem. On to the next one.":"Sorun değil. Sıradakine geçelim.",
 "Correct answers: {n} out of {total}":"Doğru cevap: {n} / {total}",
 "Here is your starting point":"İşte başlangıç noktan",
 "You already know everything the chapters released so far cover.":"Şimdiye kadar çıkan bölümlerin anlattığı her şeyi zaten biliyorsun.",
@@ -1380,5 +1377,10 @@ module.exports = {
 "Chapter {n}":"{n}. bölüm",
 "Games to review: {n} →":"Gözden geçirilecek oyun: {n} →",
 "Play a game first: it will be waiting for you here.":"Önce bir oyun oyna: burada seni bekliyor olacak.",
-"Continue: chapter {n}":"Devam: {n}. bölüm"
+"Continue: chapter {n}":"Devam: {n}. bölüm",
+"Correct.":"Doğru cevap.",
+"That was not the best move.":"En iyi hamle bu değildi.",
+"Position skipped.":"Konum geçildi.",
+"See the result":"Sonucu gör",
+"The test stopped after two missed positions in a row: we already know where to start you.":"Test, art arda iki kaçan konumdan sonra durdu: nereden başlaman gerektiğini artık biliyoruz."
 };

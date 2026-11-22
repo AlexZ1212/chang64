@@ -73,8 +73,16 @@ const MESURE = `(function(nom){
     /* 2. Le test de placement : une position, puis le resultat. */
     await c.js("document.getElementById('apTestGo').click();new Promise(r=>setTimeout(r,900))");
     await mesurer(l + " test, position 1", true);
+    /* Apres une reponse : le message, les pastilles, le bouton Suivant. */
+    await c.js("(function(){const p=cheminD.placement[0];testReponse(legalCache.find(x=>p.sol.includes(game.uci(x))));})()");
+    await mesurer(l + " test, position 1, reponse juste", true);
+    if (CAPTURES && l === "fr") await c.capture(path.join(CAPTURES, "test-reponse-fr.png"));
+    await c.js("document.getElementById('btnTestSuite').click();new Promise(r=>setTimeout(r,100))");
+    await c.js("(function(){const p=cheminD.placement[1];testReponse(legalCache.find(x=>!p.sol.includes(game.uci(x))));})()");
+    await mesurer(l + " test, position 2, reponse fausse", true);
+    await c.js("testArreter();setMode('apprendre');testLancer();new Promise(r=>setTimeout(r,900))");
     if (CAPTURES && l === "fr") await c.capture(path.join(CAPTURES, "test-position-fr.png"));
-    await c.js("(async function(){for(let i=0;i<10&&!test.fin;i++){while(test.occupe)await new Promise(r=>setTimeout(r,60));if(test.fin)break;const p=cheminD.placement[test.i];testReponse(i<6?legalCache.find(x=>p.sol.includes(game.uci(x))):null);await new Promise(r=>setTimeout(r,1350));}})()");
+    await c.js("(async function(){for(let i=0;i<10&&!test.fin;i++){while(test.occupe)await new Promise(r=>setTimeout(r,60));if(test.fin)break;const p=cheminD.placement[test.i];testReponse(i<6?legalCache.find(x=>p.sol.includes(game.uci(x))):null);await new Promise(r=>setTimeout(r,60));if(i===0||i===6)window.__apres=(window.__apres||0)+1;document.getElementById('btnTestSuite').click();await new Promise(r=>setTimeout(r,80));}})()");
     await mesurer(l + " test, resultat", true);
     if (CAPTURES && (l === "fr" || l === "de")) await c.capture(path.join(CAPTURES, "test-resultat-" + l + ".png"));
     /* 3. Chemin avance : tout est ouvert, chaque exercice de chaque chapitre. */

@@ -1206,9 +1206,6 @@ module.exports = {
 "White to play. Find the best move.":"Les Blancs jouent. Trouve le meilleur coup.",
 "Black to play. Find the best move.":"Les Noirs jouent. Trouve le meilleur coup.",
 "Watch the move that has just been played…":"Regarde le coup qui vient d'être joué…",
-"Well spotted.":"Bien vu.",
-"Noted. On to the next one.":"C'est noté. On passe à la suivante.",
-"No problem. On to the next one.":"Pas de souci. On passe à la suivante.",
 "Correct answers: {n} out of {total}":"Bonnes réponses : {n} sur {total}",
 "Here is your starting point":"Voilà ton point de départ",
 "You already know everything the chapters released so far cover.":"Tu connais déjà tout ce que couvrent les chapitres déjà sortis.",
@@ -1232,5 +1229,10 @@ module.exports = {
 "Chapter {n}":"Chapitre {n}",
 "Games to review: {n} →":"Parties à revoir : {n} →",
 "Play a game first: it will be waiting for you here.":"Joue d'abord une partie : elle t'attendra ici.",
-"Continue: chapter {n}":"Continuer : chapitre {n}"
+"Continue: chapter {n}":"Continuer : chapitre {n}",
+"Correct.":"Bonne réponse.",
+"That was not the best move.":"Ce n'était pas le meilleur coup.",
+"Position skipped.":"Position passée.",
+"See the result":"Voir le résultat",
+"The test stopped after two missed positions in a row: we already know where to start you.":"Le test s'est arrêté après deux positions manquées de suite : on sait déjà où te faire commencer."
 };

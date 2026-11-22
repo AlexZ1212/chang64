@@ -1354,9 +1354,6 @@ module.exports = {
 "White to play. Find the best move.":"Putih jalan. Temukan langkah terbaik.",
 "Black to play. Find the best move.":"Hitam jalan. Temukan langkah terbaik.",
 "Watch the move that has just been played…":"Perhatikan langkah yang baru saja dimainkan…",
-"Well spotted.":"Jeli.",
-"Noted. On to the next one.":"Dicatat. Lanjut ke berikutnya.",
-"No problem. On to the next one.":"Tidak apa-apa. Lanjut ke berikutnya.",
 "Correct answers: {n} out of {total}":"Jawaban benar: {n} dari {total}",
 "Here is your starting point":"Inilah titik awalmu",
 "You already know everything the chapters released so far cover.":"Kamu sudah menguasai semua isi bab yang telah dirilis.",
@@ -1380,5 +1377,10 @@ module.exports = {
 "Chapter {n}":"Bab {n}",
 "Games to review: {n} →":"Partai untuk ditinjau: {n} →",
 "Play a game first: it will be waiting for you here.":"Mainkan satu partai dulu: ia akan menunggumu di sini.",
-"Continue: chapter {n}":"Lanjutkan: bab {n}"
+"Continue: chapter {n}":"Lanjutkan: bab {n}",
+"Correct.":"Jawaban benar.",
+"That was not the best move.":"Itu bukan langkah terbaik.",
+"Position skipped.":"Posisi dilewati.",
+"See the result":"Lihat hasil",
+"The test stopped after two missed positions in a row: we already know where to start you.":"Tes berhenti setelah dua posisi berturut-turut meleset: kami sudah tahu dari mana kamu sebaiknya mulai."
 };

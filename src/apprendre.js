@@ -176,7 +176,7 @@ function leconFinRendre(et, ex) {
   const titre = leconCh === "debut" ? t("I'm a beginner") : (cheminCh(leconCh) || {}).titre || "";
   if ($("debutTeteTitre")) $("debutTeteTitre").textContent = titre;
   if ($("leconChap")) $("leconChap").textContent = titre;
-  for (const id of ["leconBarre", "testActions", "testResultat"]) if ($(id)) $(id).classList.add("hide");
+  for (const id of ["testPastilles", "testActions", "testResultat"]) if ($(id)) $(id).classList.add("hide");
   for (const id of ["debutActions", "debutTitre", "debutIntro"]) if ($(id)) $(id).classList.remove("hide");
   const zone = $("leconBoss"); if (!zone) return;
   const boss = !ex && et && et.boss;
@@ -318,6 +318,27 @@ async function testLancer() {
   if (mode === "debut") debutCharger(); else setMode("debut");
   goTop();
 }
+/* Les pastilles du test : une par position, trouvee, manquee, en cours ou a
+   venir. La coche et la croix doublent la couleur. */
+const TEST_COCHE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const TEST_CROIX = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+function testPastilles() {
+  const P = cheminD.placement, box = $("testPastilles");
+  let bons = 0, h = "";
+  for (let k = 0; k < P.length; k++) {
+    const r = test.rep[k];
+    if (r) bons++;
+    h += '<i class="' + (r === 1 ? "bon" : r === 0 ? "rate" : !test.fin && k === test.i ? "ici" : "") + '">' + (r === 1 ? TEST_COCHE : r === 0 ? TEST_CROIX : "") + "</i>";
+  }
+  poserHtml(box, h);
+  box.setAttribute("aria-label", t("Correct answers: {n} out of {total}", { n: bons, total: P.length }));
+  box.classList.remove("hide");
+}
+/* Deux positions manquees de suite, ou la derniere : le test est fini. */
+function testFini() {
+  const P = cheminD.placement, r = test.rep, n = r.length;
+  return n >= P.length || (n >= 2 && !r[n - 1] && !r[n - 2]);
+}
 function testRendre() {
   const P = cheminD.placement, L = $("appLayout");
   $("debutTeteTitre").textContent = t("Placement test");
@@ -329,27 +350,31 @@ function testRendre() {
   const p = P[test.i];
   test.gen++; test.occupe = false;
   game = new Game(p.fen);
-  flipped = game.turn === B; selected = -1; lastMove = null; marks = {};
+  /* L'echiquier se place du cote de celui qui REPOND : avec un coup prealable
+     de l'adversaire, ce n'est pas le camp au trait dans la position de depart
+     (defaut vu par Alexandre le 22/11 : la position 4 s'affichait a l'envers). */
+  const joueur = p.avant ? (game.turn === W ? B : W) : game.turn;
+  flipped = joueur === B; selected = -1; lastMove = null; marks = {};
   legalCache = game.moves();
   $("debutEtape").textContent = t("Position {n} of {total}", { n: test.i + 1, total: P.length });
-  const barre = $("leconBarre");
-  barre.classList.remove("hide");
-  barre.setAttribute("aria-valuemax", String(P.length)); barre.setAttribute("aria-valuenow", String(test.i));
-  barre.setAttribute("aria-label", t("Placement test"));
-  barre.firstElementChild.style.width = (100 * test.i / P.length) + "%";
+  testPastilles();
   $("debutStatus").classList.remove("hide");
   $("testActions").classList.remove("hide");
+  $("btnTestPasse").classList.remove("hide");
   $("btnTestPasse").disabled = false;
+  $("btnTestSuite").classList.add("hide");
   const consigne = () => debutStatut("", t(game.turn === W ? "White to play. Find the best move." : "Black to play. Find the best move."));
   if (p.avant) {
     const g = test.gen;
     legalCache = []; test.occupe = true;
+    $("btnTestPasse").disabled = true;
     debutStatut("", t("Watch the move that has just been played…"));
     setTimeout(() => {
       if (g !== test.gen || !test.actif || mode !== "debut") return;
       const m = game.moves().find(x => game.uci(x) === p.avant);
       if (m) { game.makeMove(m); lastMove = m; }
       legalCache = game.moves(); test.occupe = false;
+      $("btnTestPasse").disabled = false;
       consigne(); render();
     }, 650);
   } else consigne();
@@ -367,8 +392,9 @@ function testClic(sq) {
   marks = {};
   render();
 }
-/* Un seul essai par position ; m absent : « Je ne sais pas ». Aucun reproche,
-   aucune correction montree : c'est une mesure, pas une lecon. */
+/* Un seul essai par position ; m absent : « Je ne sais pas ». Le resultat est
+   dit nettement (demande d'Alexandre, 22/11), sans montrer la solution : c'est
+   une mesure, pas une lecon. On passe a la suite quand on le decide. */
 function testReponse(m) {
   if (!testEnCours() || test.occupe) return;
   const p = cheminD.placement[test.i];
@@ -381,18 +407,22 @@ function testReponse(m) {
   }
   test.rep[test.i] = bon ? 1 : 0;
   test.occupe = true; legalCache = []; selected = -1; marks = {};
-  $("btnTestPasse").disabled = true;
+  if (m && !bon) marks[m.to] = "bad";
   if (bon) { try { SON.reussite(); } catch (e) {} }
-  debutStatut(bon ? "win" : "", bon ? t("Well spotted.") : m ? t("Noted. On to the next one.") : t("No problem. On to the next one."));
+  debutStatut(bon ? "win" : m ? "lose" : "", bon ? t("Correct.") : m ? t("That was not the best move.") : t("Position skipped."));
+  testPastilles();
+  $("btnTestPasse").classList.add("hide");
+  const suite = $("btnTestSuite");
+  suite.textContent = testFini() ? t("See the result") : t("Next");
+  suite.classList.remove("hide");
   render();
-  const g = test.gen;
-  setTimeout(() => { if (g === test.gen && test.actif) testSuivant(); }, bon ? 900 : 1200);
+  try { suite.focus({ preventScroll: true }); } catch (e) {}
 }
 function testSuivant() {
-  const P = cheminD.placement, r = test.rep, n = r.length;
-  if (n >= P.length || (n >= 2 && !r[n - 1] && !r[n - 2])) { test.fin = true; testCalculer(); }
-  else test.i = n;
-  if (mode === "debut") testRendre();
+  if (!test.actif || test.fin || !test.occupe || test.rep.length <= test.i) return;
+  if (testFini()) { test.fin = true; testCalculer(); }
+  else test.i = test.rep.length;
+  if (mode === "debut") { testRendre(); leconAjuster(true); if (!test.fin && typeof focusBoard === "function") focusBoard(); }
 }
 /* Ce que le test regle. Une position jamais vue compte comme manquee. */
 const TEST_NIVEAUX = [[1, 700], [1, 700], [1, 700], [1, 700], [1, 800], [1, 800], [2, 900], [3, 1000], [4, 1150], [5, 1300], [6, 1450]];
@@ -409,7 +439,7 @@ function testCalculer() {
   const force = score * 10 / P.length >= 10 ? 3 : score * 10 / P.length >= 7 ? 2 : 1;
   /* Ce qui a deja ete gagne en jouant n'est jamais ecrase par le test. */
   const dejaExercices = (prog.solved || 0) >= 5, dejaParties = !!(prog.eloOrdi && prog.eloOrdi.n >= 1);
-  test.res = { score: score, total: P.length, entree: entree, niveau: dejaExercices ? null : { palier: palier[0], note: palier[1] }, force: dejaParties ? null : force };
+  test.res = { score: score, total: P.length, arret: r.length < P.length, entree: entree, niveau: dejaExercices ? null : { palier: palier[0], note: palier[1] }, force: dejaParties ? null : force };
   /* Le chemin s'ouvre tout de suite, quoi que le joueur decide des reglages. */
   const ouverts = CHEMIN_PLAN.slice(0, Math.min(entree + 1, CHEMIN_PLAN.length)).map(c => c.id);
   chemin.o = Array.from(new Set(chemin.o.concat(ouverts)));
@@ -420,8 +450,13 @@ function testCalculer() {
 function testResultat() {
   const R = test.res, L = $("appLayout"), fin = R.entree >= CHEMIN_PLAN.length;
   L.dataset.test = "resultat";
-  $("leconBarre").classList.add("hide"); $("testActions").classList.add("hide");
+  $("testActions").classList.add("hide");
   $("debutStatus").classList.add("hide");
+  testPastilles();
+  /* L'arret avant la dixieme position est explique : sans cela, on croit
+     avoir manque une partie du test. */
+  $("testArret").textContent = R.arret ? t("The test stopped after two missed positions in a row: we already know where to start you.") : "";
+  $("testArret").classList.toggle("hide", !R.arret);
   $("debutEtape").textContent = t("Correct answers: {n} out of {total}", { n: R.score, total: R.total });
   $("debutTitre").classList.remove("hide"); $("debutIntro").classList.remove("hide");
   $("debutTitre").textContent = t("Here is your starting point");
@@ -463,6 +498,7 @@ function testSortir(appliquer) {
   else { setMode("apprendre"); goTop(); }
 }
 if ($("btnTestPasse")) $("btnTestPasse").onclick = () => testReponse(null);
+if ($("btnTestSuite")) $("btnTestSuite").onclick = () => testSuivant();
 if ($("btnTestAppliquer")) $("btnTestAppliquer").onclick = () => testSortir(true);
 if ($("btnTestGarder")) $("btnTestGarder").onclick = () => testSortir(false);
 /* Un seul ecran sur telephone : les lecons du chemin ont des textes plus longs

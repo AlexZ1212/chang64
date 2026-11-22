@@ -1356,9 +1356,6 @@ module.exports = {
 "White to play. Find the best move.":"Ход белых. Найди лучший ход.",
 "Black to play. Find the best move.":"Ход чёрных. Найди лучший ход.",
 "Watch the move that has just been played…":"Посмотри на только что сделанный ход…",
-"Well spotted.":"Верно.",
-"Noted. On to the next one.":"Принято. Идём к следующей.",
-"No problem. On to the next one.":"Ничего страшного. Идём к следующей.",
 "Correct answers: {n} out of {total}":"Верных ответов: {n} из {total}",
 "Here is your starting point":"Вот твоя отправная точка",
 "You already know everything the chapters released so far cover.":"Ты уже знаешь всё, чему учат вышедшие главы.",
@@ -1382,5 +1379,10 @@ module.exports = {
 "Chapter {n}":"Глава {n}",
 "Games to review: {n} →":"Партий для разбора: {n} →",
 "Play a game first: it will be waiting for you here.":"Сначала сыграй партию: она будет ждать тебя здесь.",
-"Continue: chapter {n}":"Продолжить: глава {n}"
+"Continue: chapter {n}":"Продолжить: глава {n}",
+"Correct.":"Верно.",
+"That was not the best move.":"Это был не лучший ход.",
+"Position skipped.":"Позиция пропущена.",
+"See the result":"Посмотреть результат",
+"The test stopped after two missed positions in a row: we already know where to start you.":"Тест остановился после двух неудач подряд: мы уже знаем, с чего тебе начать."
 };

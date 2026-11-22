@@ -6,7 +6,10 @@
    - il se propose par une carte dans l'onglet Apprendre, jamais par une
      fenetre ; on peut l'ecarter, puis le faire ou le refaire quand on veut ;
    - dix positions au plus, un seul essai chacune, un bouton « Je ne sais
-     pas », aucun reproche ; il s'arrete apres deux erreurs de suite ;
+     pas » ; apres chaque reponse, un message net (juste ou non), une pastille
+     par position, et un bouton « Suivant » (retours d'Alexandre du 22/11) ;
+   - il s'arrete apres deux erreurs de suite, et le resultat le dit ;
+   - l'echiquier est toujours du cote de celui qui repond ;
    - il regle le chapitre d'entree (les chapitres d'avant restent ouverts), le
      Niveau exercices et la force de l'ordinateur ; ce qui a deja ete gagne en
      jouant n'est jamais ecrase ; on peut refuser les reglages ;
@@ -30,12 +33,15 @@ async function passer(w, reponses) {
     for (let k = 0; k < 20 && (ev("test.occupe") || ev("test.i") !== i); k++) await pause(100);
     if (ev("test.fin")) break;
     vues++;
+    if (ev("flipped") !== false) w.__aLEnvers = (w.__aLEnvers || []).concat([i + 1]);
     if (reponses[i] === null) $("btnTestPasse").click();
     else {
       w.__bon = reponses[i];
       ev("(function(){const p=cheminD.placement[test.i];const m=legalCache.find(x=>window.__bon?p.sol.includes(game.uci(x)):!p.sol.includes(game.uci(x)));testReponse(m);})()");
     }
-    await pause(1400);
+    await pause(40);
+    $("btnTestSuite").click();
+    await pause(60);
   }
   return vues;
 }
@@ -56,21 +62,31 @@ async function passer(w, reponses) {
   console.log("--- Deux erreurs de suite : il s'arrete ---");
   $("apTestRefaire").click(); await pause(600);
   T("le test s'ouvre sur l'ecran des lecons", ev("mode") === "debut" && ev("test.actif") === true && ev("testEnCours()") === true);
-  T("titre, position 1 sur 10, barre de progression", net($("debutTeteTitre").textContent) === "Test de placement" && /Position 1 sur 10/.test(net($("debutEtape").textContent)) && !cache("leconBarre") && $("leconBarre").getAttribute("role") === "progressbar" && $("leconBarre").getAttribute("aria-valuenow") === "0" && $("leconBarre").getAttribute("aria-valuemax") === "10");
+  const pastilles = () => [...$("testPastilles").children].map(i => i.className || "-").join(" ");
+  T("titre, position 1 sur 10, dix pastilles dont la premiere en cours", net($("debutTeteTitre").textContent) === "Test de placement" && /Position 1 sur 10/.test(net($("debutEtape").textContent)) && !cache("testPastilles") && pastilles() === "ici - - - - - - - - -", pastilles());
+  T("les pastilles ont un nom pour les lecteurs d'ecran", $("testPastilles").getAttribute("role") === "img" && /Bonnes réponses : 0 sur 10/.test(net($("testPastilles").getAttribute("aria-label"))), $("testPastilles").getAttribute("aria-label"));
+  T("l'echiquier est du cote des Blancs", ev("flipped") === false);
   T("ni pastilles, ni indice, ni titre de lecon", cache("debutPas") && cache("debutActions") && cache("debutTitre") && cache("debutIntro") && cache("leconBoss") && cache("debutFin"));
-  T("consigne et bouton « Je ne sais pas »", /meilleur coup/.test(net($("debutStatus").textContent)) && !cache("testActions") && net($("btnTestPasse").textContent) === "Je ne sais pas");
+  T("consigne et bouton « Je ne sais pas », pas encore de « Suivant »", /meilleur coup/.test(net($("debutStatus").textContent)) && !cache("testActions") && net($("btnTestPasse").textContent) === "Je ne sais pas" && !cache("btnTestPasse") && cache("btnTestSuite"));
   T("aucune recompense ne peut surgir pendant le test", ev("bravoOccupe()") === true);
   const avantStock = w.localStorage.getItem("chang64:chemin");
   $("btnTestPasse").click(); await pause(50);
-  T("apres une reponse, la position est fermee : un seul essai", ev("test.occupe") === true && ev("legalCache.length") === 0 && $("btnTestPasse").disabled === true && ev("leconBloquee()") === true);
-  T("aucun reproche", /Pas de souci/.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
-  await pause(1400);
-  T("la position suivante arrive seule", ev("test.i") === 1 && /Position 2 sur 10/.test(net($("debutEtape").textContent)) && $("leconBarre").getAttribute("aria-valuenow") === "1");
+  T("apres une reponse, la position est fermee : un seul essai", ev("test.occupe") === true && ev("legalCache.length") === 0 && cache("btnTestPasse") && ev("leconBloquee()") === true);
+  T("position passee : c'est dit, sans reproche", /Position passée/.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
+  T("la pastille de la position est marquee manquee, avec une croix", pastilles() === "rate - - - - - - - - -" && !!$("testPastilles").firstChild.querySelector("svg"), pastilles());
+  T("un bouton « Suivant » apparait", !cache("btnTestSuite") && net($("btnTestSuite").textContent) === "Suivant" && $("btnTestSuite").classList.contains("primary"));
+  await pause(1600);
+  T("rien n'avance tant qu'on n'a pas appuye", ev("test.i") === 0 && /Position 1 sur 10/.test(net($("debutEtape").textContent)));
+  $("btnTestSuite").click(); await pause(60);
+  T("« Suivant » amene la position 2", ev("test.i") === 1 && /Position 2 sur 10/.test(net($("debutEtape").textContent)) && pastilles() === "rate ici - - - - - - - -" && cache("btnTestSuite") && !cache("btnTestPasse"), pastilles());
   ev("(function(){const p=cheminD.placement[test.i];testReponse(legalCache.find(x=>!p.sol.includes(game.uci(x))));})()");
-  T("un mauvais coup : note, sans correction", /noté/.test(net($("debutStatus").textContent)) && !$("debutStatus").classList.contains("lose"), $("debutStatus").textContent);
-  await pause(1500);
+  T("un mauvais coup : dit nettement, la case jouee est marquee", /pas le meilleur coup/.test(net($("debutStatus").textContent)) && $("debutStatus").classList.contains("lose") && ev("Object.values(marks).includes('bad')"), $("debutStatus").textContent);
+  T("deuxieme erreur de suite : le bouton annonce le resultat", net($("btnTestSuite").textContent) === "Voir le résultat", $("btnTestSuite").textContent);
+  $("btnTestSuite").click(); await pause(100);
   T("deux erreurs de suite : le test s'arrete a la deuxieme position", ev("test.fin") === true && ev("test.rep.length") === 2);
-  T("resultat sans echiquier", $("appLayout").dataset.test === "resultat" && !cache("testResultat") && cache("testActions") && cache("leconBarre"));
+  T("resultat sans echiquier", $("appLayout").dataset.test === "resultat" && !cache("testResultat") && cache("testActions"));
+  T("les pastilles restent : deux manquees, huit jamais vues", !cache("testPastilles") && pastilles() === "rate rate - - - - - - - -", pastilles());
+  T("l'arret avant la dixieme position est explique", !cache("testArret") && /arrêté après deux positions manquées de suite/.test(net($("testArret").textContent)), $("testArret").textContent);
   T("le compte est dit", /Bonnes réponses : 0 sur 10/.test(net($("debutEtape").textContent)), $("debutEtape").textContent);
   let lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
   T("trois reglages expliques : chemin, niveau, ordinateur", lignes.length === 3 && /^Chemin/.test(lignes[0]) && /^Niveau exercices/.test(lignes[1]) && /^Ordinateur/.test(lignes[2]), lignes.join(" || "));
@@ -79,7 +95,7 @@ async function passer(w, reponses) {
   T("deux boutons : commencer, ou garder ses reglages", net($("btnTestAppliquer").textContent) === "Commencer le chapitre 1" && net($("btnTestGarder").textContent) === "Garder mes réglages actuels" && !$("btnTestGarder").parentNode.classList.contains("hide"));
   $("btnTestGarder").click(); await pause(500);
   T("« Garder mes reglages » : rien ne bouge, le chapitre s'ouvre", ev("prog.rating") === 800 && ev("prog.level") === 1 && ev("mode") === "debut" && ev("leconCh") === "debut" && ev("test.actif") === false && !JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f);
-  T("l'ecran des lecons a retrouve ses elements", !cache("debutPas") && !cache("debutTitre") && cache("testResultat") && cache("leconBarre") && $("appLayout").dataset.test === undefined);
+  T("l'ecran des lecons a retrouve ses elements", !cache("debutPas") && !cache("debutTitre") && cache("testResultat") && cache("testPastilles") && $("appLayout").dataset.test === undefined);
   T("accueil : le chemin est commence", (() => { $("brand").click(); return net($("heroDebut").textContent) === "Continuer : chapitre 1"; })(), $("heroDebut").textContent);
   w.close();
 
@@ -92,6 +108,8 @@ async function passer(w, reponses) {
   let vues = await passer(w, [true, true, true, true, true, false, null, true, true, true]);
   T("il s'arrete apres la septieme position", vues === 7 && ev("test.fin") === true, String(vues));
   T("la position avec un coup prealable a montre le pion avancer", ev("cheminD.placement[3].avant") === "d7d5" && ev("test.rep[3]") === 1);
+  T("l'echiquier n'a jamais ete a l'envers, position 4 comprise", !w.__aLEnvers, JSON.stringify(w.__aLEnvers));
+  T("pastilles du resultat : cinq trouvees, deux manquees, trois jamais vues", [...$("testPastilles").children].map(i => i.className || "-").join(" ") === "bon bon bon bon bon rate rate - - -");
   lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
   T("5 sur 10 : entree au chapitre 3, les chapitres d'avant restent ouverts", /Bonnes réponses : 5 sur 10/.test(net($("debutEtape").textContent)) && /chapitre 3 : Ne rien donner/.test(lignes[0]) && /restent ouverts/.test(lignes[0]), lignes[0]);
   T("palier 1 a 800, ordinateur Debutant", /Palier 1 \| niveau exercices 800/.test(lignes[1]) && /Débutant/.test(lignes[2]), lignes.slice(1).join(" || "));
@@ -112,6 +130,7 @@ async function passer(w, reponses) {
   $("apTestGo").click(); await pause(600);
   vues = await passer(w, [true, true, true, true, true, true, true, true, true, true]);
   T("dix positions vues, dix trouvees", vues === 10 && ev("test.res.score") === 10 && ev("test.fin") === true, vues + " / " + ev("test.res && test.res.score"));
+  T("test complet : aucune phrase d'arret, dix pastilles vertes", $("testArret").classList.contains("hide") && [...$("testPastilles").children].every(i => i.className === "bon") && !w.__aLEnvers);
   lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
   T("au-dela des chapitres sortis : ils restent ouverts, Resoudre est indique", /restent ouverts/.test(lignes[0]) && /Résoudre/.test(lignes[0]), lignes[0]);
   T("palier 6 a 1450, ordinateur Serieux a 1600", /Palier 6 \| niveau exercices 1450/.test(lignes[1]) && /Sérieux/.test(lignes[2]) && /1600/.test(lignes[2]), lignes.slice(1).join(" || "));
@@ -144,6 +163,20 @@ async function passer(w, reponses) {
   T("ni le palier, ni le niveau, ni la force n'ont bouge", ev("prog.level") === 4 && ev("prog.rating") === 1210 && ev("botLevel") === 2 && !JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f);
   w.close();
 
+  console.log("--- Le sens de l'echiquier ---");
+  w = await ouvrir("fr", { fetch: true });
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  ev("flipped=true");
+  $("tab-apprendre").click(); await pause(500);
+  $("apTestGo").click(); await pause(600);
+  T("apres une partie avec les Noirs, le test repart du cote des Blancs", ev("flipped") === false);
+  for (let i = 0; i < 10; i++) {
+    ev("test.i=" + i + ";test.rep.length=" + i + ";for(let k=0;k<" + i + ";k++)test.rep[k]=1;testRendre()");
+    await pause(ev("!!cheminD.placement[" + i + "].avant") ? 800 : 30);
+    T("position " + (i + 1) + " : le camp qui repond est en bas", ev("flipped") === (ev("game.turn===B")) && ev("game.turn===W"), "flipped " + ev("flipped") + ", trait " + ev("game.turn"));
+  }
+  w.close();
+
   console.log("--- Quitter en cours de test ---");
   w = await ouvrir("fr", { fetch: true });
   $ = id => w.document.getElementById(id); ev = s => w.eval(s);
@@ -152,10 +185,9 @@ async function passer(w, reponses) {
   await passer(w, [true]);
   $("btnDebutFermer").click(); await pause(300);
   T("la croix abandonne le test sans rien regler", ev("mode") === "apprendre" && ev("test.actif") === false && w.localStorage.getItem("chang64:chemin") === null && !$("apTest").classList.contains("hide"));
-  await pause(1500);
   T("aucune position ne revient apres coup", ev("mode") === "apprendre" && ev("test.actif") === false);
   w.document.querySelector("#apChemin .ap-chap").click(); await pause(400);
-  T("ouvrir ensuite un chapitre montre bien la lecon", ev("mode") === "debut" && !$("debutPas").classList.contains("hide") && $("leconBarre").classList.contains("hide") && net($("debutTeteTitre").textContent) === "Je débute");
+  T("ouvrir ensuite un chapitre montre bien la lecon", ev("mode") === "debut" && !$("debutPas").classList.contains("hide") && $("testPastilles").classList.contains("hide") && net($("debutTeteTitre").textContent) === "Je débute");
   w.close();
 
   console.log("\n" + ok + " OK, " + ko + " FAIL");

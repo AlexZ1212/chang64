@@ -187,6 +187,29 @@ async function passer(w, reponses) {
   T("promotion manquee : le pion revient, la case d'arrivee est montree, la phrase nomme le cavalier", ev("game.history.length") === 0 && ev("selected===debutCase('c7')") && ev("marks[debutCase('c8')]") === "hint" && /promotion en cavalier/.test(net($("debutStatus").textContent)), $("debutStatus").textContent);
   w.close();
 
+  console.log("--- Le chapitre de depart : une erreur isolee est pardonnee ---");
+  /* Decision d'Alexandre (22/11) : avec 9 sur 10 et la seule position 5
+     manquee, le test l'envoyait au chapitre 2. Un chapitre est acquis si
+     toutes ses positions sont trouvees, ou si une seule est manquee et qu'au
+     moins deux positions plus dures sont trouvees. Positions : 1 a 3 chapitre
+     1, 4 et 5 chapitre 2, 6 et 7 chapitre 3, 8 a 10 au-dela. */
+  w = await ouvrir("fr", { fetch: true });
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  $("tab-apprendre").click(); await pause(500);
+  $("apTestGo").click(); await pause(600);
+  const entree = rep => { w.__rep = rep; return ev("(function(){test.rep=window.__rep.slice();testCalculer();return test.res.entree;})()"); };
+  T("9 sur 10, la position 5 manquee : au-dela des trois chapitres", entree([1, 1, 1, 1, 0, 1, 1, 1, 1, 1]) === 3);
+  T("9 sur 10, la position 2 manquee : au-dela aussi", entree([1, 0, 1, 1, 1, 1, 1, 1, 1, 1]) === 3);
+  T("deux erreurs isolees dans deux chapitres, le reste trouve : au-dela", entree([0, 1, 1, 1, 1, 0, 1, 1, 1, 1]) === 3);
+  T("une erreur au chapitre 1 puis rien de plus dur trouve : chapitre 1", entree([1, 0, 1, 0, 0]) === 0);
+  T("les deux positions du chapitre 2 manquees : chapitre 2", entree([1, 1, 1, 0, 0]) === 1);
+  T("une erreur au chapitre 2, une seule position plus dure trouvee : chapitre 2", entree([1, 1, 1, 1, 0, 1, 0, 0]) === 1);
+  T("une erreur au chapitre 3, deux positions plus dures trouvees : au-dela", entree([1, 1, 1, 1, 1, 1, 0, 1, 1, 0]) === 3);
+  T("une erreur au chapitre 3, une seule position plus dure trouvee : chapitre 3", entree([1, 1, 1, 1, 1, 0, 1, 1, 0, 0]) === 2);
+  T("tout juste : au-dela ; rien de trouve : chapitre 1", entree([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]) === 3 && entree([0, 0]) === 0);
+  T("le chapitre d'entree est note dans la progression", (() => { ev("chemin.o=[]"); entree([1, 1, 1, 1, 0, 1, 0, 0]); return JSON.stringify(ev("chemin.o")) === JSON.stringify(["debut", "regles"]) && ev("chemin.p.e") === "regles"; })(), JSON.stringify(ev("chemin.o")));
+  w.close();
+
   console.log("--- Quitter en cours de test ---");
   w = await ouvrir("fr", { fetch: true });
   $ = id => w.document.getElementById(id); ev = s => w.eval(s);

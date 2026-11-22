@@ -438,11 +438,20 @@ function testCalculer() {
   const P = cheminD.placement, r = test.rep;
   let score = 0;
   for (let k = 0; k < P.length; k++) if (r[k]) score++;
-  /* Chapitre d'entree : le premier dont une position n'a pas ete trouvee. Les
-     positions sans chapitre (au-dela des chapitres sortis) ne retiennent personne. */
+  /* Chapitre d'entree : le premier que le test ne montre pas acquis. Un
+     chapitre est acquis quand toutes ses positions sont trouvees, ou quand
+     une seule est manquee alors qu'au moins deux positions plus dures (d'un
+     chapitre suivant, ou au-dela des chapitres sortis) sont trouvees : une
+     erreur isolee est pardonnee (decision d'Alexandre du 22/11, qui avait ete
+     renvoye au chapitre 2 avec 9 sur 10). Une position jamais vue est manquee. */
+  const rang = p => { const i = cheminIndex(p.ch); return i < 0 ? CHEMIN_PLAN.length : i; };
+  const acquis = i => {
+    const manquees = P.filter((p, k) => rang(p) === i && !r[k]).length;
+    if (!manquees) return true;
+    return manquees === 1 && P.filter((p, k) => rang(p) > i && r[k]).length >= 2;
+  };
   let entree = CHEMIN_PLAN.length;
-  for (let i = 0; i < CHEMIN_PLAN.length && entree === CHEMIN_PLAN.length; i++)
-    if (P.some((p, k) => p.ch === CHEMIN_PLAN[i].id && !r[k])) entree = i;
+  for (let i = 0; i < CHEMIN_PLAN.length && entree === CHEMIN_PLAN.length; i++) if (!acquis(i)) entree = i;
   const palier = TEST_NIVEAUX[Math.round(score * 10 / P.length)] || TEST_NIVEAUX[0];
   const force = score * 10 / P.length >= 10 ? 3 : score * 10 / P.length >= 7 ? 2 : 1;
   /* Ce qui a deja ete gagne en jouant n'est jamais ecrase par le test. */

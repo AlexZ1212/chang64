@@ -331,6 +331,9 @@ function testPastilles() {
     h += '<i class="' + (r === 1 ? "bon" : r === 0 ? "rate" : !test.fin && k === test.i ? "ici" : "") + '">' + (r === 1 ? TEST_COCHE : r === 0 ? TEST_CROIX : "") + "</i>";
   }
   poserHtml(box, h);
+  /* Le role d'image est pose avec son nom, jamais sans : dans la page au
+     repos, la rangee est vide et ne doit pas s'annoncer (check_texte_alternatif). */
+  box.setAttribute("role", "img");
   box.setAttribute("aria-label", t("Correct answers: {n} out of {total}", { n: bons, total: P.length }));
   box.classList.remove("hide");
 }

@@ -298,6 +298,48 @@
       }
     },
     {
+      "idee": "mat du lion (fool) : la dame en h5 apres f6 et g5",
+      "chapitre": "ouverture",
+      "mat": true,
+      "fen": "rnbqkbnr/ppppp2p/5p2/6p1/4P3/8/PPPP1PPP/RNBQKBNR w KQkq g6 0 3",
+      "sol": [
+        "d1h5"
+      ],
+      "explication": {
+        "en": "Black moved the two pawns in front of their king: the queen mates on the diagonal that is now open.",
+        "fr": "Les Noirs ont avancé les deux pions devant leur roi : la dame fait mat sur la diagonale qui s'est ouverte.",
+        "es": "Las negras avanzaron los dos peones delante de su rey: la dama da mate en la diagonal que se ha abierto.",
+        "pt": "As pretas avançaram os dois peões na frente do rei: a dama dá mate na diagonal que se abriu.",
+        "de": "Schwarz hat die beiden Bauern vor seinem König gezogen: Die Dame setzt auf der geöffneten Diagonale matt.",
+        "ru": "Чёрные сдвинули обе пешки перед своим королём: ферзь ставит мат по открывшейся диагонали.",
+        "it": "Il Nero ha spinto i due pedoni davanti al suo re: la donna dà matto sulla diagonale che si è aperta.",
+        "tr": "Siyah, şahının önündeki iki piyonu da oynadı: vezir açılan çaprazda mat ediyor.",
+        "pl": "Czarne przesunęły oba piony przed swoim królem: hetman daje mata na otwartej przekątnej.",
+        "id": "Hitam memajukan dua pion di depan rajanya: menteri skakmat di diagonal yang terbuka."
+      }
+    },
+    {
+      "idee": "coup du berger cote blanc avec Qf3 et Bc4",
+      "chapitre": "ouverture",
+      "mat": true,
+      "fen": "r1bqkbnr/pppp1ppp/8/4p3/2BnP3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+      "sol": [
+        "f3f7"
+      ],
+      "explication": {
+        "en": "The f7 pawn was defended only by the king, and your bishop protects the queen: the Scholar's mate.",
+        "fr": "Le pion f7 n'était défendu que par le roi, et ton fou protège la dame : c'est le coup du berger.",
+        "es": "El peón de f7 solo lo defendía el rey, y tu alfil protege la dama: es el mate del pastor.",
+        "pt": "O peão de f7 só era defendido pelo rei, e seu bispo protege a dama: é o mate do pastor.",
+        "de": "Der Bauer auf f7 war nur vom König gedeckt, und dein Läufer deckt die Dame: das Schäfermatt.",
+        "ru": "Пешку f7 защищал только король, а твой слон защищает ферзя: это детский мат.",
+        "it": "Il pedone in f7 era difeso solo dal re, e il tuo alfiere protegge la donna: è il matto del barbiere.",
+        "tr": "f7 piyonunu yalnızca şah koruyordu ve filin veziri koruyor: bu çoban matı.",
+        "pl": "Pion f7 był broniony tylko przez króla, a twój goniec chroni hetmana: to mat szewski.",
+        "id": "Pion f7 hanya dilindungi raja, dan gajahmu melindungi menteri: inilah skakmat empat langkah."
+      }
+    },
+    {
       "idee": "mat en deux par sacrifice de dame sur la derniere rangee",
       "controle": "meilleur",
       "fen": "r5k1/5ppp/8/8/8/8/4QPPP/4R1K1 w - - 0 1",

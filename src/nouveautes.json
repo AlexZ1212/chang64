@@ -2,6 +2,49 @@
  {
   "d": "2026-11-22",
   "en": [
+   "Chapter 7: starting a game well",
+   "A new chapter in the Learn tab: taking the centre, bringing out knights and bishops, chasing a queen that comes out too early, castling in time, and the Scholar's mate. The boss is a real game against the computer, on equal terms."
+  ],
+  "fr": [
+   "Chapitre 7 : bien commencer une partie",
+   "Un nouveau chapitre dans l'onglet Apprendre : prendre le centre, sortir cavaliers et fous, chasser une dame sortie trop tôt, roquer à temps et le coup du berger. Le boss est une vraie partie contre l'ordinateur, à égalité."
+  ],
+  "es": [
+   "Capítulo 7: empezar bien una partida",
+   "Un capítulo nuevo en la pestaña Aprender: tomar el centro, sacar caballos y alfiles, perseguir una dama que sale demasiado pronto, enrocar a tiempo y el mate del pastor. El jefe es una partida de verdad contra el ordenador, en igualdad."
+  ],
+  "pt": [
+   "Capítulo 7: começar bem uma partida",
+   "Um capítulo novo na aba Aprender: ocupar o centro, desenvolver cavalos e bispos, perseguir uma dama que sai cedo demais, rocar a tempo e o mate do pastor. O chefão é uma partida de verdade contra o computador, em igualdade."
+  ],
+  "de": [
+   "Kapitel 7: der gute Partiebeginn",
+   "Ein neues Kapitel im Tab Lernen: das Zentrum besetzen, Springer und Läufer entwickeln, eine zu früh entwickelte Dame jagen, rechtzeitig rochieren und das Schäfermatt. Der Boss ist eine echte Partie gegen den Computer, bei gleichem Material."
+  ],
+  "ru": [
+   "Глава 7: как начинать партию",
+   "Новая глава во вкладке «Учиться»: занять центр, вывести коней и слонов, погонять рано вышедшего ферзя, вовремя рокироваться и детский мат. Босс: настоящая партия с компьютером при равных силах."
+  ],
+  "it": [
+   "Capitolo 7: iniziare bene una partita",
+   "Un nuovo capitolo nella scheda Impara: prendere il centro, sviluppare cavalli e alfieri, inseguire una donna uscita troppo presto, arroccare in tempo e il matto del barbiere. Il boss è una vera partita contro il computer, alla pari."
+  ],
+  "tr": [
+   "Bölüm 7: oyuna iyi başlamak",
+   "Öğren sekmesinde yeni bir bölüm: merkezi almak, atları ve filleri çıkarmak, erken çıkan veziri kovalamak, zamanında rok yapmak ve çoban matı. Boss, bilgisayara karşı eşit şartlarda gerçek bir oyun."
+  ],
+  "pl": [
+   "Rozdział 7: dobry początek partii",
+   "Nowy rozdział w zakładce Ucz się: zająć centrum, wyprowadzić skoczki i gońce, przegonić hetmana wyprowadzonego za wcześnie, zrobić roszadę na czas i mat szewski. Boss to prawdziwa partia z komputerem przy równym materiale."
+  ],
+  "id": [
+   "Bab 7: memulai permainan dengan baik",
+   "Bab baru di tab Belajar: menguasai pusat, mengeluarkan kuda dan gajah, mengejar menteri yang keluar terlalu cepat, rokade tepat waktu, dan skakmat empat langkah. Bosnya adalah permainan sungguhan melawan komputer, dalam posisi seimbang."
+  ]
+ },
+ {
+  "d": "2026-11-22",
+  "en": [
    "Chapter 6: pins and skewers",
    "A new chapter in the Learn tab: attacking a pinned piece, the pinned piece that no longer defends, the pin on the queen, the skewer and removing the defender. The boss is the computer two pawns down."
   ],

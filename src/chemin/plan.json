@@ -1,15 +1,15 @@
 {
-  "chapitres": ["debut", "regles", "securite", "mats", "menaces", "clouer"],
+  "chapitres": ["debut", "regles", "securite", "mats", "menaces", "clouer", "ouverture"],
   "aVenir": {
-    "en": "Coming next: starting a game well, basic endgames, mate in two.",
-    "fr": "À venir : bien commencer une partie, les finales de base, le mat en deux.",
-    "es": "Próximamente: empezar bien una partida, los finales básicos, el mate en dos.",
-    "pt": "Em breve: começar bem uma partida, os finais básicos, o mate em dois.",
-    "de": "Demnächst: der gute Partiebeginn, einfache Endspiele, Matt in zwei.",
-    "ru": "Скоро: как начинать партию, простые эндшпили, мат в два хода.",
-    "it": "In arrivo: come iniziare bene una partita, i finali di base, il matto in due.",
-    "tr": "Yakında: oyuna iyi başlamak, temel oyun sonları, iki hamlede mat.",
-    "pl": "Wkrótce: dobry początek partii, podstawowe końcówki, mat w dwóch ruchach.",
-    "id": "Segera hadir: memulai permainan dengan baik, akhir permainan dasar, skakmat dalam dua langkah."
+    "en": "Coming next: basic endgames, mate in two.",
+    "fr": "À venir : les finales de base, le mat en deux.",
+    "es": "Próximamente: los finales básicos, el mate en dos.",
+    "pt": "Em breve: os finais básicos, o mate em dois.",
+    "de": "Demnächst: einfache Endspiele, Matt in zwei.",
+    "ru": "Скоро: простые эндшпили, мат в два хода.",
+    "it": "In arrivo: i finali di base, il matto in due.",
+    "tr": "Yakında: temel oyun sonları, iki hamlede mat.",
+    "pl": "Wkrótce: podstawowe końcówki, mat w dwóch ruchach.",
+    "id": "Segera hadir: akhir permainan dasar, skakmat dalam dua langkah."
   }
 }

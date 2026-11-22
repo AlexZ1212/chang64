@@ -122,7 +122,10 @@ async function passer(w, reponses) {
   T("pastilles du resultat : cinq trouvees, deux manquees, trois jamais vues", [...$("testPastilles").children].map(i => i.className || "-").join(" ") === "bon bon bon bon bon rate rate " + vide(N - 7));
   lignes = [...w.document.querySelectorAll("#testLignes .test-ligne")].map(l => net(l.textContent));
   T("5 bonnes reponses : entree au chapitre 3, les chapitres d'avant restent ouverts", new RegExp("Bonnes réponses : 5 sur " + N).test(net($("debutEtape").textContent)) && /chapitre 3 : Ne rien donner/.test(lignes[0]) && /restent ouverts/.test(lignes[0]), lignes[0]);
-  T("palier 1 a 800, ordinateur Debutant", /Palier 1 \| niveau exercices 800/.test(lignes[1]) && /Débutant/.test(lignes[2]), lignes.slice(1).join(" || "));
+  /* Le bareme suit la part de positions trouvees (TEST_NIVEAUX, apprendre.js) :
+     5 sur 10 donnait 800 ; avec un test plus long, 5 bonnes reponses valent moins. */
+  const attendu = ev("TEST_NIVEAUX[Math.round(5*10/" + N + ")]");
+  T("5 bonnes reponses : le palier et le niveau du bareme, ordinateur Debutant", new RegExp("Palier " + attendu[0] + " \\| niveau exercices " + attendu[1]).test(lignes[1]) && /Débutant/.test(lignes[2]), lignes.slice(1).join(" || "));
   $("btnTestAppliquer").click(); await pause(600);
   T("« Commencer le chapitre 3 » ouvre ce chapitre", ev("mode") === "debut" && ev("leconCh") === "securite");
   T("les chapitres 1 a 3 sont ouverts", ev("cheminOuvert(0)&&cheminOuvert(1)&&cheminOuvert(2)") === true && dit(ev("chemin.o")) === dit(["debut", "regles", "securite"]));

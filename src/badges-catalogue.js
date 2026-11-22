@@ -230,6 +230,17 @@ const BADGES_CATALOGUE = [
    "Le mat le plus rapide possible prend deux coups. Le tien était un peu plus long, mais bien plus beau."],
   ["jeu_10","ordinateur","10 victoires","Tour du monde","un globe",
    "Près de 200 pays font partie de la Fédération internationale des échecs. De quoi faire le tour du monde."],
+  /* Elo contre l'ordinateur (5, 2026-11-22 : paliers choisis par Alexandre, 900, 1000, 1200, 1500) */
+  ["eo_etabli","ordinateur","20 parties classées contre l'ordinateur","Étalonné","un cadran de mesure",
+   "Vingt parties classées : ton Elo contre l'ordinateur est établi. En 1996, Kasparov avait battu Deep Blue 4 à 2 ; c'est la revanche de 1997 qui a tourné autrement."],
+  ["eo_900","ordinateur","Elo 900 contre l'ordinateur","El Ajedrecista","une tour et un engrenage",
+   "En 1912, l'ingénieur espagnol Leonardo Torres Quevedo a construit El Ajedrecista, un automate qui gagnait tout seul la finale roi et tour contre roi. Sans joueur caché dedans, cette fois."],
+  ["eo_1000","ordinateur","Elo 1000 contre l'ordinateur","Los Alamos","un petit échiquier de 6 cases sur 6",
+   "En 1956, à Los Alamos, l'ordinateur MANIAC jouait sur un échiquier réduit à 6 cases sur 6, sans les fous. Il y a battu une personne qui venait d'apprendre les règles : la première victoire d'une machine sur un humain."],
+  ["eo_1200","ordinateur","Elo 1200 contre l'ordinateur","Chess Challenger","une machine à touches",
+   "En 1977, le Chess Challenger de Fidelity a été le premier ordinateur d'échecs vendu au grand public. Il ne jouait pas très bien, mais on se l'arrachait."],
+  ["eo_1500","ordinateur","Elo 1500 contre l'ordinateur","Deep Thought","une puce électronique",
+   "En 1988, Deep Thought a été le premier ordinateur à battre un grand maître en tournoi, le Danois Bent Larsen. Son nom vient de l'ordinateur du Guide du voyageur galactique."],
 
   /* ---------- 8. Jouer avec un ami (3) ---------- */
   ["ami_invite","ami","Inviter un ami","Faire-part","une enveloppe avec un sceau",
@@ -484,6 +495,8 @@ const BADGES_CATALOGUE = [
    "Ton code de progression garde tes badges sans compte ni adresse e-mail. Garde-le précieusement."],
   ["ex_partage","exploits","Partager un résultat","Ambassadeur","un porte-voix",
    "Les échecs se transmettent de joueur en joueur depuis environ 1 500 ans. Tu prends le relais."],
+  ["pre_coup","exploits","Jouer un coup préparé à l'avance","Un coup d'avance","un pion et une flèche d'avance rapide",
+   "Tu as choisi ton coup pendant que l'adversaire réfléchissait, et il est parti tout seul. En ligne, on appelle ça un « premove » : les joueurs de blitz en raffolent."],
 
   /* ---------- 16 bis. Leçons apprises (10, badges de défaite, toujours après ceux de victoire) ---------- */
   ["lec_premiere","lecons","Première défaite contre l'ordinateur","Même les champions","un roi qui s'incline",
@@ -506,6 +519,11 @@ const BADGES_CATALOGUE = [
    "Trois essais ratés, et tu n'as pas lâché. Chercher longtemps grave mieux la solution dans la mémoire."],
   ["lec_reprise","lecons","Recommencer une série après l'avoir cassée","Nouveau départ","une jeune pousse",
    "Une série cassée n'efface rien de ce que tu as appris. Le plus important, c'est de revenir."],
+  /* Defaites entre membres (2, 2026-11-22, accord d'Alexandre). */
+  ["lec_membre","lecons","Perdre une première partie contre un membre","Bien joué quand même","un roi et des applaudissements",
+   "Perdre arrive à tout le monde. Même Emanuel Lasker, champion du monde pendant 27 ans, un record, a fini par céder son titre en 1921."],
+  ["lec_membre_temps","lecons","Perdre au temps contre un membre","La pendule a gagné","une pendule à rebours",
+   "Dans les années 1860, on mesurait le temps de réflexion avec des sabliers ; la pendule à deux cadrans les a remplacés vers 1883. Depuis, elle fait partie du jeu."],
 
   /* Defi entre amis, par lien ou entre membres (3, 2026-11-18). */
   ["duel_lien","ami","Terminer un défi à envoyer","Gant jeté","deux maillons",
@@ -526,6 +544,59 @@ const BADGES_CATALOGUE = [
    "Depuis 1971, la Fédération internationale publie le classement mondial des joueurs. Toi, tu es dans les dix premiers d'un tableau de chang64."],
   ["mb_avis","membres","Répondre à une question sur le site","Ton avis compte","une bulle de dialogue",
    "Merci ! Chaque réponse aide à améliorer chang64. Aux échecs aussi, on progresse en regardant ce qui peut être mieux joué."],
+  /* Amis et defis entre membres (3, 2026-11-22). */
+  ["mb_ami_partie","membres","Terminer une partie contre un membre de ta liste d'amis","Partie amicale","deux silhouettes et un cavalier",
+   "Une partie contre un de tes amis. En club, on appelle « amicale » une partie jouée pour le plaisir, hors tournoi."],
+  ["mb_defi_gagne","membres","Gagner un défi contre un membre","Défi remporté","un avion en papier et une étoile",
+   "Cinq exercices, et tu as fait mieux que ton adversaire. La résolution de problèmes a même son championnat du monde, disputé chaque année depuis 1977."],
+  ["mb_amis5","membres","Avoir 5 amis dans ta liste","Tablée","cinq pions en rond",
+   "Aux Olympiades d'échecs, chaque équipe compte quatre joueurs et un remplaçant. Cinq, comme tes amis : l'équipe est au complet."],
+
+  /* ---------- 8 quater. Parties entre membres (15, 2026-11-22 : partie en direct, Blitz, correspondance,
+     adversaire au hasard, Elo entre membres ; liste et paliers valides par Alexandre le 21/11 au soir).
+     Les nombres viennent du serveur (parties comptees, Elo par famille) : voir badges_membres.js. ---------- */
+  ["mp_1","parties_membres","Terminer une partie contre un membre","Pièce touchée","un pion et une main",
+   "Ta première partie contre un membre. En tournoi, la règle est stricte : pièce touchée, pièce jouée."],
+  ["mp_victoire","parties_membres","Gagner une partie contre un membre","Premier point","le score 1-0",
+   "Une victoire vaut un point, une nulle un demi-point pour chacun, une défaite zéro. Te voilà à un."],
+  ["mp_10","parties_membres","10 parties terminées contre des membres","Feuille de partie","une feuille de notation",
+   "En tournoi, chaque joueur note tous les coups sur sa feuille de partie. Ici, le site les note pour toi : dix parties déjà."],
+  ["mp_50","parties_membres","50 parties terminées contre des membres","Londres 1851","un roi et une coupe",
+   "Le premier tournoi international d'échecs s'est joué à Londres en 1851 ; l'Allemand Adolf Anderssen l'a gagné. Cinquante parties : tu as l'endurance d'un joueur de tournoi."],
+  ["mp_david","parties_membres","Battre un membre qui a au moins 100 points d'Elo de plus que toi","David contre Goliath","un petit pion face à une grande tour",
+   "Avec 100 points d'Elo d'avance, la formule donne environ 64 % des points au mieux classé. Soixante-quatre, comme les cases de l'échiquier, et tu viens de la faire mentir."],
+  ["mp_revanche","parties_membres","Terminer une revanche en direct","Match retour","deux cavaliers face à face et une flèche qui boucle",
+   "Battu par Alekhine en 1927, Capablanca a réclamé une revanche pendant des années : elle n'a jamais eu lieu. Toi, tu as eu la tienne tout de suite."],
+  ["mp_hasard","parties_membres","Terminer une partie contre un adversaire tiré au hasard","Système suisse","un dé",
+   "Dans un tournoi au système suisse, on affronte à chaque ronde un joueur qui a à peu près autant de points que soi. La formule est née à Zurich, en 1895."],
+  ["cad_blitz","parties_membres","Terminer une partie de Blitz contre un membre","Trois plus deux","3+2 en chiffres",
+   "Trois minutes, plus deux secondes ajoutées à chaque coup. Cet ajout s'appelle l'incrément : Bobby Fischer a déposé en 1988 le brevet de la pendule qui le permet."],
+  ["cad_corr","parties_membres","Terminer une partie par correspondance","Carte postale","un timbre avec un cavalier",
+   "De 1824 à 1828, les clubs de Londres et d'Édimbourg se sont affrontés par lettres. Édimbourg a gagné, et la partie écossaise en a gardé son nom."],
+  ["cad_simul","parties_membres","3 parties par correspondance en cours en même temps","Simultanée","trois petits échiquiers",
+   "En simultanée, un maître joue contre de nombreux adversaires à la fois, en passant d'un échiquier à l'autre. En 1922 à Cleveland, Capablanca en a affronté 103 et n'a concédé qu'une nulle."],
+  ["cad_toutes","parties_membres","Une partie terminée en Blitz, en Rapide, en Classique et par correspondance","Les quatre pendules","quatre cadrans en carré",
+   "Blitz, Rapide, Classique, Correspondance : tu as goûté à tout. La Fédération internationale tient elle aussi des classements séparés pour le classique, le rapide et le blitz."],
+  ["em_etabli","parties_membres","20 parties classées entre membres dans une même cadence","Arpad Elo","une courbe qui monte",
+   "Le classement Elo porte le nom de son inventeur, le physicien Arpad Elo ; la Fédération internationale l'a adopté en 1970. Après 20 parties, le tien est établi."],
+  ["em_900","parties_membres","Elo 900 entre membres","En hausse","une échelle",
+   "À Elo égal, la formule donne une chance sur deux à chacun. Plus tu montes, plus tes adversaires seront coriaces."],
+  ["em_1000","parties_membres","Elo 1000 entre membres","Quatre chiffres","le nombre 1000",
+   "Un Elo à quatre chiffres ! Le premier classement officiel de la Fédération internationale, en juillet 1971, était mené par Bobby Fischer avec 2760 points."],
+  ["em_1200","parties_membres","Elo 1200 entre membres","Joueur de club","un fanion",
+   "À 1200 entre membres, tu tiens tête à beaucoup de monde ici. Le record absolu appartient à Magnus Carlsen : 2882 points, atteints en 2014."],
+
+  /* ---------- 8 quinquies. Ligues (4, 2026-11-22). Caches tant que les ligues ne sont pas ouvertes
+     (50 membres actifs) : voir bxVisible dans badges.js. La condition des deux derniers est recomposee
+     par badges_build.js avec le nom de la ligue tel que le site le traduit. ---------- */
+  ["ligue_groupe","ligues","Entrer dans un groupe de ligue","Toutes rondes","trois silhouettes",
+   "Te voilà dans un groupe. Dans un tournoi « toutes rondes », chaque joueur affronte tous les autres ; ici, tu grimpes en réussissant des exercices."],
+  ["ligue_monte","ligues","Monter d'une ligue","Promotion","un pion et une couronne",
+   "Un pion qui atteint la dernière rangée est promu : il devient dame, tour, fou ou cavalier. Toi aussi, tu viens de changer de rang."],
+  ["ligue_tour","ligues","Atteindre la ligue Tour","Septième rangée","une tour et le chiffre 7",
+   "Une tour sur la septième rangée attaque les pions restés chez eux et enferme le roi adverse. C'est l'une de ses meilleures places, et tu n'es plus qu'à une ligue du sommet."],
+  ["ligue_dame","ligues","Atteindre la ligue Dame","Vingt-sept cases","une dame et une couronne",
+   "Au centre d'un échiquier vide, une dame contrôle 27 cases : aucune pièce ne fait mieux. Tu es dans la plus haute ligue."],
 
   ["lec_sot","lecons","Se faire mater en deux coups","Mat du sot","un roi aux yeux en croix",
    "Le mat le plus rapide possible : 1.f3 e5 2.g4 Qh4#. Il fallait le vivre une fois pour ne plus jamais le revoir."],

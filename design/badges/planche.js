@@ -6,7 +6,7 @@ const S = JSON.parse(fs.readFileSync(path.join(__dirname, "symboles.json"), "utf
 const NOMS = { resolus: "Exercices résolus", serie: "Série de jours d'affilée", jours: "Jours joués au total", classement: "Classement",
   themes: "Thèmes tactiques", finales: "Finales", ordinateur: "Parties contre l'ordinateur", ami: "Jouer avec un ami", sprint: "Sprint",
   coordonnees: "Coordonnées", debut: "Je débute", makruk: "Makruk", semaine: "Jours de la semaine", du_jour: "Exercice du jour",
-  jours_speciaux: "Jours spéciaux", saisons: "Saisons", exploits: "Exploits et curiosités", ouvertures: "Ouvertures", lecons: "Leçons apprises", defis: "Défis de la semaine" };
+  jours_speciaux: "Jours spéciaux", saisons: "Saisons", exploits: "Exploits et curiosités", ouvertures: "Ouvertures", lecons: "Leçons apprises", membres: "Membres", parties_membres: "Parties entre membres", ligues: "Ligues", defis: "Défis de la semaine" };
 const METAUX = {
   bronze: { face: ["#F0B98C", "#C07A47", "#7A4321"], tranche: ["#D99566", "#6A381A"], grave: "#4A2410" },
   argent: { face: ["#FFFFFF", "#C9CFCC", "#7E8784"], tranche: ["#E4E8E6", "#5E6765"], grave: "#2F3634" },
@@ -26,7 +26,7 @@ function medaille(sym, metal, id = "") {
 }
 let corps = "";
 for (const f of Object.keys(NOMS)) {
-  const l = C.filter(b => b[1] === f);
+  const l = C.filter(b => b[1] === f && S[b[0]]);
   corps += `<h2>${NOMS[f]} <span>${l.length}</span></h2><div class="grille">` +
     l.map(b => `<div class="carte">${medaille(S[b[0]].s, S[b[0]].m, b[0])}<b>${b[3]}</b><small>${b[2]}</small></div>`).join("") + "</div>";
 }

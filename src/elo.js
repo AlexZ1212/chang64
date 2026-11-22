@@ -55,7 +55,12 @@ if(typeof saveFinishedGame==="function"){
   const av=saveFinishedGame;
   saveFinishedGame=function(){
     const avant=gameSaved,r=av.apply(this,arguments);
-    if(!avant&&gameSaved){eloDernier=resultInfo&&history[0]?eloCompter(history[0]):null;eloRappel();}
+    if(!avant&&gameSaved){
+      eloDernier=resultInfo&&history[0]?eloCompter(history[0]):null;eloRappel();
+      /* Badges de palier (eo_*, badges.js) : l'Elo vient de bouger, apres la
+         verification faite par badges.js sur cette meme fin de partie. */
+      if(eloDernier&&typeof bxVerifier==="function")bxVerifier();
+    }
     return r;
   };
 }

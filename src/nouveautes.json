@@ -1,5 +1,48 @@
 [
  {
+  "d": "2026-11-22",
+  "en": [
+   "New badges for games between members",
+   "Your games against other members now have their badges: first game, first point, Blitz, correspondence, random opponent, Elo milestones. There are also badges for your Elo against the computer, friends, challenges and leagues. The ones you had already earned are in your collection."
+  ],
+  "fr": [
+   "De nouveaux badges pour les parties entre membres",
+   "Tes parties contre d'autres membres ont maintenant leurs badges : première partie, premier point, Blitz, correspondance, adversaire au hasard, paliers d'Elo. Il y en a aussi pour ton Elo contre l'ordinateur, les amis, les défis et les ligues. Ceux que tu avais déjà mérités sont dans ta collection."
+  ],
+  "es": [
+   "Nuevas insignias para las partidas entre miembros",
+   "Tus partidas contra otros miembros ya tienen sus insignias: primera partida, primer punto, Blitz, correspondencia, rival al azar, niveles de Elo. También las hay para tu Elo contra el ordenador, los amigos, los desafíos y las ligas. Las que ya habías merecido están en tu colección."
+  ],
+  "pt": [
+   "Novas medalhas para as partidas entre membros",
+   "Suas partidas contra outros membros agora têm medalhas: primeira partida, primeiro ponto, Blitz, correspondência, adversário sorteado, patamares de Elo. Também há medalhas para o seu Elo contra o computador, os amigos, os desafios e as ligas. As que você já tinha merecido estão na sua coleção."
+  ],
+  "de": [
+   "Neue Abzeichen für Partien unter Mitgliedern",
+   "Deine Partien gegen andere Mitglieder haben jetzt ihre Abzeichen: erste Partie, erster Punkt, Blitz, Fernpartie, zufälliger Gegner, Elo-Stufen. Es gibt auch welche für dein Elo gegen den Computer, für Freunde, Herausforderungen und Ligen. Die schon verdienten liegen in deiner Sammlung."
+  ],
+  "ru": [
+   "Новые значки за партии между участниками",
+   "У твоих партий с другими участниками теперь есть значки: первая партия, первое очко, блиц, игра по переписке, случайный соперник, ступени Эло. Есть значки и за Эло против компьютера, за друзей, вызовы и лиги. Те, что ты уже заслужил, лежат в твоей коллекции."
+  ],
+  "it": [
+   "Nuove medaglie per le partite tra membri",
+   "Le tue partite contro altri membri ora hanno le loro medaglie: prima partita, primo punto, Blitz, corrispondenza, avversario a caso, traguardi di Elo. Ce ne sono anche per il tuo Elo contro il computer, gli amici, le sfide e le leghe. Quelle che avevi già meritato sono nella tua collezione."
+  ],
+  "tr": [
+   "Üyeler arası oyunlar için yeni rozetler",
+   "Diğer üyelere karşı oyunlarının artık rozetleri var: ilk oyun, ilk puan, Blitz, yazışmalı oyun, rastgele rakip, Elo basamakları. Bilgisayara karşı Elo'n, arkadaşların, meydan okumalar ve ligler için de rozetler var. Daha önce hak ettiklerin koleksiyonunda."
+  ],
+  "pl": [
+   "Nowe odznaki za partie między członkami",
+   "Twoje partie z innymi członkami mają teraz swoje odznaki: pierwsza partia, pierwszy punkt, Blitz, partia korespondencyjna, losowy przeciwnik, progi Elo. Są też odznaki za Elo przeciwko komputerowi, za znajomych, wyzwania i ligi. Te, na które już zasłużyłeś, są w twojej kolekcji."
+  ],
+  "id": [
+   "Lencana baru untuk permainan antaranggota",
+   "Permainanmu melawan anggota lain kini punya lencana: permainan pertama, poin pertama, Blitz, korespondensi, lawan acak, tingkatan Elo. Ada juga lencana untuk Elo-mu melawan komputer, teman, tantangan, dan liga. Lencana yang sudah layak kamu dapatkan ada di koleksimu."
+  ]
+ },
+ {
   "d": "2026-11-21",
   "en": [
    "An Elo for each kind of game between members",

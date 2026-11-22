@@ -601,7 +601,7 @@ export class Partie {
     const p = this.p, base = CADENCES[p.cad][0] * 1000;
     p.coups = []; p.t = { b: base, n: base }; p.maj = now; p.phase = "debut";
     p.fin = null; p.finA = 0; p.nulle = null; p.nulleA = { b: -1, n: -1 }; p.rev = { b: false, n: false };
-    p.elo = null; p.vu = 0;
+    p.elo = null; p.cpt = null; p.vu = 0;
     this.jeu = null;
   }
   finir(r, motif, now) {
@@ -632,10 +632,33 @@ export class Partie {
     /* Elo entre membres : a part, pour qu'une base sans les colonnes elo
        continue de compter les resultats ci-dessus. La variation est ensuite
        montree aux deux joueurs. */
+    let change = false;
     try {
       const elo = await this.compterElo(db, p, r);
-      if (elo) { p.elo = elo; await this.ecrire(); this.diffuser(Date.now()); }
+      if (elo) { p.elo = elo; change = true; }
     } catch (e) {}
+    /* Compteurs de chaque joueur, pour ses badges (2026-11-22) : relus une fois
+       les ecritures ci-dessus faites, et envoyes avec l'etat final, chacun ne
+       recevant que les siens (vue). A part : une panne ici ne gene ni le
+       resultat ni l'Elo. */
+    try {
+      const cpt = await this.compteurs(db, p);
+      if (cpt) { p.cpt = cpt; change = true; }
+    } catch (e) {}
+    if (change) { try { await this.ecrire(); this.diffuser(Date.now()); } catch (e) {} }
+  }
+  /* Parties gagnees, nulles et perdues (v, n, d) et parties classees par
+     famille (f : Blitz, Rapide, Classique, Correspondance) des deux joueurs.
+     Le navigateur s'en sert pour donner un badge de palier au bon moment,
+     sans rien compter lui-meme. */
+  async compteurs(db, p) {
+    const ids = { b: p.j.b.id, n: p.j.n.id };
+    if (ids.b === ids.n) return null;
+    const lire = id => db.prepare("SELECT direct_v AS v, direct_n AS n, direct_d AS d, elo_blitz_n AS fb, elo_n AS fr, elo_classique_n AS fc, elo_corr_n AS fk FROM comptes WHERE id = ?1").bind(id).first();
+    const l = { b: await lire(ids.b), n: await lire(ids.n) };
+    if (!l.b || !l.n) return null;
+    const un = x => ({ v: x.v, n: x.n, d: x.d, f: [x.fb, x.fr, x.fc, x.fk] });
+    return { b: un(l.b), n: un(l.n) };
   }
   /* Elo entre membres (2026-11-21, decision d'Alexandre) : toutes les parties
      en direct comptent, entre amis comme au hasard. Formule habituelle :
@@ -680,7 +703,10 @@ export class Partie {
       coups: p.coups, tb: p.t.b, tn: p.t.n, maj: p.maj, h: now,
       phase: p.phase, fin: p.fin, nulle: p.nulle, rev: p.rev, la,
       /* Elo entre membres : la variation de chacun, une fois la partie comptee. */
-      elo: p.phase === "fin" && p.elo ? p.elo : null, inv: p.phase === "attente" || (p.fin && p.fin.m === "refusee") ? p.pourP || null : null
+      elo: p.phase === "fin" && p.elo ? p.elo : null,
+      /* Les compteurs de celui qui regarde, pour ses badges (voir compteurs). */
+      cpt: p.phase === "fin" && p.cpt && moi ? p.cpt[moi] || null : null,
+      inv: p.phase === "attente" || (p.fin && p.fin.m === "refusee") ? p.pourP || null : null
     };
   }
   diffuser(now) {

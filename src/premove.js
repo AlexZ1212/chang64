@@ -121,6 +121,8 @@ function preJouer() {
   if (!coup) { premoves = []; selected = -1; render(); return; }
   premoves.shift();
   selected = -1;
+  /* Badge « Un coup d'avance » : note ici, annonce a la fin de la partie. */
+  if (typeof bxMarquer === "function") bxMarquer("pre_coup");
   if (mode === "play") playUser(coup); else directJouer(coup);
 }
 

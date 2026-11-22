@@ -1282,5 +1282,9 @@ module.exports = {
 "{r} in Classical":"{r} w klasycznych",
 "{r} in Correspondence":"{r} w korespondencyjnych",
 "{n} game":"{n} partia",
-"{n} games":{"one":"{n} partia","few":"{n} partie","many":"{n} partii","other":"{n} partii"}
+"{n} games":{"one":"{n} partia","few":"{n} partie","many":"{n} partii","other":"{n} partii"},
+/* Badges rattrapes pour les parties deja jouees (2026-11-22). */
+"{n} badge added":"{n} odznaka dodana",
+"{n} badges added":{"one":"{n} odznaka dodana","few":"{n} odznaki dodane","many":"{n} odznak dodanych","other":"{n} odznaki dodane"},
+"For the games you have already played. Tap to see them.":"Za partie, które już rozegrałeś. Dotknij, aby je zobaczyć."
 };

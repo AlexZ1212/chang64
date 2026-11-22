@@ -142,6 +142,10 @@ function bxAcquis(id){
   if(id==="defi_52")return (b.c.defisFaits||0)>=52;
   if(id==="defi_parfait")return (b.c.semParfaites||0)>=1;
   if(id==="defi_mois")return (b.c.semParfaites||0)>=4;
+  /* Elo contre l'ordinateur (2026-11-22) : 20 parties classees, puis les
+     paliers, lus sur le record garde dans la progression (prog.eloOrdi). */
+  if(id==="eo_etabli")return !!(p.eloOrdi&&p.eloOrdi.n>=20);
+  if((r=id.match(/^eo_(\d+)$/))){const e=p.eloOrdi;return !!(e&&e.n>0&&Math.max(+e.r||0,+e.pic||0)>=+r[1]);}
   if(id==="debut_fini")return typeof debutFini==="function"&&debutFini();
   if((r=id.match(/^debut_(\d)$/)))return !!(debut&&debut.faites&&debut.faites.includes(+r[1]-1));
   return false;
@@ -156,6 +160,42 @@ checkBadges=function(){
   if(nouveaux.length)bravoAnnoncer(nouveaux);
   return gagne;
 };
+/* ---------- Rattrapage (2026-11-22, choix d'Alexandre) ----------
+   Un badge merite par le passe (parties deja comptees par le serveur, Elo
+   deja atteint, amis deja dans la liste) entre dans la collection SANS la
+   fenetre Bravo : une seule annonce discrete dit combien de badges ont ete
+   ajoutes, et un toucher ouvre la collection. La fenetre Bravo reste
+   reservee a ce qu'on vient de gagner, en fin de partie.
+   bxAdopter(ids) : parmi ces badges, ceux qui sont acquis et pas encore dans
+   la collection y entrent tout de suite. Plusieurs sources arrivent l'une
+   apres l'autre au chargement (progression, fiche du serveur, liste d'amis) :
+   l'annonce attend quelques secondes pour les reunir. */
+let bxAdoptes=0,bxAdoptesT=0;
+function bxAdopter(ids){
+  ensureProgFields();bxEtat();
+  let n=0;
+  for(const id of ids||[]){
+    if(prog.badges.includes(id)||!BADGES.some(b=>b.id===id)||!bxAcquis(id))continue;
+    prog.badges.push(id);prog.badgeDates[id]=Date.now();n++;
+  }
+  if(!n)return 0;
+  saveProg();
+  bxAdoptes+=n;
+  clearTimeout(bxAdoptesT);
+  bxAdoptesT=setTimeout(bxAdoptesAnnoncer,4000);
+  return n;
+}
+function bxAdoptesAnnoncer(){
+  const n=bxAdoptes;bxAdoptes=0;
+  if(!n)return;
+  try{renderBadgeSummary();if(typeof menuResume==="function")menuResume();}catch(e){}
+  if(typeof objAnnoncer!=="function")return;
+  objAnnoncer("badges",t(n===1?"{n} badge added":"{n} badges added",{n:n}),t("For the games you have already played. Tap to see them."),()=>{
+    if(typeof menuOuvrir==="function"&&typeof menuVue==="function"){menuOuvrir();menuVue("badges");}
+  });
+}
+/* Ce que cet appareil sait deja sans le serveur : l'Elo contre l'ordinateur. */
+function bxAdopterLocal(){return bxAdopter(BADGES.filter(b=>/^eo_/.test(b.id)).map(b=>b.id));}
 
 /* ---------- Evenements ---------- */
 /* Exercices : heure, sans erreur, sans indice, apres une erreur, marathon. */
@@ -432,6 +472,9 @@ setTimeout(()=>{
   if(b.c.langues.length>=2)bxMarquer("ex_langue");
   const app=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
   if(app)bxMarquer("ex_app");
+  /* Les paliers d'Elo deja atteints avant la creation de leurs badges
+     entrent dans la collection sans fenetre (rattrapage). */
+  bxAdopterLocal();
   bxVerifier();
 },2500);
 
@@ -548,6 +591,10 @@ function bxFiche(id){
    fiche. Les badges de motifs peu fournis restent caches tant qu'ils ne sont
    pas gagnes (meme regle qu'avant, motifPropose). */
 function bxVisible(b){
+  /* Les badges de ligue restent caches tant que les ligues ne sont pas
+     ouvertes (50 membres actifs) : on ne montre pas une medaille impossible a
+     gagner. L'ecran « Ma ligue » note l'ouverture (bxmLigue). */
+  if(b.f==="ligues")return !!bxEtat().c.ligues||prog.badges.includes(b.id);
   const r=b.id.match(/^theme_([a-z_]+?)(?:_(10|100))?$/);
   return !r||motifPropose(BX_THEMES[r[1]])||prog.badges.includes(b.id);
 }

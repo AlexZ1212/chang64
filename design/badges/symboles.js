@@ -8,7 +8,9 @@
    - E()    l'elephant du logo (src/ds/signe.svg) ;
    - F(nom) Phosphor Icons, graisse "fill" (licence MIT, phosphoricons.com) ;
    - dessins faits main en aplat quand rien n'existe (hibou, fourchette, laurier...).
-   Usage : node design/badges/symboles.js <dossier phosphor assets/fill>
+   Usage : node design/badges/symboles.js <dossier phosphor assets/fill> <dossier node_modules avec fontkit>
+   (npm install @phosphor-icons/core fontkit@2 dans un dossier temporaire : fontkit 3 ne se charge plus par require ;
+   puis ajuster.js, verif-contacts.js, planche.js, et reporter les nouveaux symboles dans src/badges-medailles.json)
    -> ecrit symboles.json : {id: {s: markup, m: metal}} */
 const fs = require("fs"), path = require("path"), vm = require("vm");
 const RACINE = path.join(__dirname, "..", "..");
@@ -125,7 +127,29 @@ const PERSO = {
     [0, 1, 2].slice(0, n).map(i => P("p", `translate(${(i - (n - 1) / 2) * (n === 3 ? 14 : 17)} 0) rotate(35) scale(${n === 3 ? .62 : .74}) translate(0 -4)`)).join("")}</g>`,
   pointilles: `<g fill="currentColor"><circle cx="0" cy="0" r="1.7"/><circle cx="5" cy="-3" r="1.7"/><circle cx="10" cy="-6" r="1.7"/><circle cx="12" cy="-12" r="1.7"/></g>`,
   trois: nom => F(nom, "translate(-14.5 6) scale(.36)") + F(nom, "translate(0 -9) scale(.42)") + F(nom, "translate(14.5 6) scale(.36)"),
-  quatre: nom => F(nom, "translate(-10 -10) scale(.36)") + F(nom, "translate(10 -10) scale(.36)") + F(nom, "translate(-10 10) scale(.36)") + F(nom, "translate(10 10) scale(.36)")
+  quatre: nom => F(nom, "translate(-10 -10) scale(.36)") + F(nom, "translate(10 -10) scale(.36)") + F(nom, "translate(-10 10) scale(.36)") + F(nom, "translate(10 10) scale(.36)"),
+  /* Timbre-poste (22/11, partie par correspondance) : un rectangle aux bords
+     denteles (trous couleur de face) et un cavalier creuse dans le metal. Un
+     seul <g> : un dessin d'un seul tenant pour verif-contacts. */
+  timbre: (() => {
+    const L = 15, H = 19, r = 1.9;
+    let trous = "";
+    for (let i = 0; i < 6; i++) { const x = -L + 3 + i * (2 * L - 6) / 5; trous += `<circle cx="${x.toFixed(1)}" cy="${-H}" r="${r}"/><circle cx="${x.toFixed(1)}" cy="${H}" r="${r}"/>`; }
+    for (let i = 0; i < 7; i++) { const y = -H + 3.5 + i * (2 * H - 7) / 6; trous += `<circle cx="${-L}" cy="${y.toFixed(1)}" r="${r}"/><circle cx="${L}" cy="${y.toFixed(1)}" r="${r}"/>`; }
+    return `<g><rect x="${-L}" y="${-H}" width="${2 * L}" height="${2 * H}" fill="currentColor"/><g style="fill:var(--oeil)">${trous}</g>` +
+      `<g style="color:var(--oeil)">${P("n", "translate(0 .5) scale(.56)")}</g></g>`;
+  })(),
+  /* Echiquier de 6 cases sur 6 (22/11, Los Alamos 1956) : un cadre et les cases sombres. */
+  damier6: (() => {
+    let c = "";
+    for (let i = 0; i < 6; i++) for (let j = 0; j < 6; j++) if ((i + j) % 2) c += `<rect x="${-16.5 + i * 5.5}" y="${-16.5 + j * 5.5}" width="5.5" height="5.5"/>`;
+    return `<g fill="currentColor"><path fill-rule="evenodd" d="M-19.5 -19.5h39v39h-39zM-17.6 -17.6v35.2h35.2v-35.2z"/>${c}</g>`;
+  })(),
+  /* n pions en rond (22/11, cinq amis). */
+  ronde: n => Array.from({ length: n }, (_, i) => {
+    const a = (-90 + i * 360 / n) * Math.PI / 180;
+    return P("p", `translate(${(16.5 * Math.cos(a)).toFixed(1)} ${(16.5 * Math.sin(a) + 1).toFixed(1)}) scale(.4)`);
+  }).join("")
 };
 
 /* [symbole, metal] par badge. Metaux : bronze (premiers paliers), argent
@@ -391,7 +415,42 @@ const S = {
   defi_parfait: [PERSO.trois("star"), "argent"],
   defi_mois: [PERSO.quatre("star"), "or"],
   defi_10: [F("medal"), "argent"],
-  defi_52: [PERSO.laurier, "or"]
+  defi_52: [PERSO.laurier, "or"],
+  /* Nouvelles fonctions (22/11) : Elo contre l'ordinateur */
+  eo_etabli: [F("gauge"), "argent"],
+  eo_900: [P("r", G) + A("gear"), "bronze"],
+  eo_1000: [PERSO.damier6, "argent"],
+  eo_1200: [F("calculator"), "argent"],
+  eo_1500: [F("cpu"), "or"],
+  /* Coup prepare a l'avance, defaites entre membres */
+  pre_coup: [P("p", G) + A("fast-forward"), "bronze"],
+  lec_membre: [P("k", G) + A("thumbs-up"), "bronze"],
+  lec_membre_temps: [P("k", G) + A("clock-countdown"), "bronze"],
+  /* Amis et defis entre membres */
+  mb_ami_partie: [F("users", G) + AP("n"), "bronze"],
+  mb_defi_gagne: [F("paper-plane-tilt", "translate(-3 -4) scale(.84)") + F("star", "translate(14 14) scale(.4)"), "argent"],
+  mb_amis5: [PERSO.ronde(5), "argent"],
+  /* Parties entre membres */
+  mp_1: [P("p", G) + A("hand-pointing"), "bronze"],
+  mp_victoire: [T("1-0", 21, 8), "bronze"],
+  mp_10: [F("clipboard-text"), "argent"],
+  mp_50: [P("k", G) + A("trophy"), "or"],
+  mp_david: [P("p", "translate(-14 8) scale(.5)") + P("r", "translate(8 -1) scale(.8)"), "or"],
+  mp_revanche: [P("n", "translate(-11 6) scale(-.54 .54)") + P("n", "translate(11 6) scale(.54)") + F("repeat", "translate(0 -15) scale(.38)"), "argent"],
+  mp_hasard: [F("dice-five"), "bronze"],
+  cad_blitz: [T("3+2", 20, 7.5), "bronze"],
+  cad_corr: [PERSO.timbre, "bronze"],
+  cad_simul: [PERSO.trois("checkerboard"), "argent"],
+  cad_toutes: [PERSO.quatre("clock"), "or"],
+  em_etabli: [F("chart-line-up"), "argent"],
+  em_900: [F("ladder"), "bronze"],
+  em_1000: [T("1000", 16, 6), "argent"],
+  em_1200: [F("shield-checkered"), "or"],
+  /* Ligues */
+  ligue_groupe: [F("users-three"), "bronze"],
+  ligue_monte: [P("p", G) + A("caret-double-up"), "argent"],
+  ligue_tour: [P("r", G) + T("7", 17, -7, 14.5), "or"],
+  ligue_dame: [P("q", G) + A("crown"), "or"]
 };
 const C = require(path.join(RACINE, "src/badges-catalogue.js"));
 const absents = C.map(b => b[0]).filter(id => !S[id]);

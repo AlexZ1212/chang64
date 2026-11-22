@@ -41,6 +41,8 @@ function corrNombre() { return corrParties.filter(corrATraiter).length; }
 function corrRecu(liste) {
   corrParties = Array.isArray(liste) ? liste.filter(x => x && /^[a-z2-9]{12}$/.test(x.id)) : [];
   corrRecuA = Date.now();
+  /* Trois parties en cours a la fois : le badge est note, annonce plus tard (badges_membres.js). */
+  if (typeof bxmCorr === "function") bxmCorr(corrParties);
   corrRendre();
 }
 /* Relire la liste tout de suite (apres une action), ou dans un instant (un

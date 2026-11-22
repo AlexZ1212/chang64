@@ -2270,10 +2270,12 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 .obj-annonce.visible{transform:translate(-50%,0)}
 .obj-gel{--obj-teinte:#7FCBEF;--obj-a:#E3F6FF;--obj-b:#5AB0DE;--obj-c:#1D5F86}
 .obj-defi{--obj-teinte:#E0A93B;--obj-a:#FFF0C2;--obj-b:#E9B44C;--obj-c:#7A4C0C}
+.obj-badges{--obj-teinte:#E0A93B;--obj-a:#FFF0C2;--obj-b:#E9B44C;--obj-c:#7A4C0C}
+.obj-annonce.obj-badges.visible .obj-filet{animation-duration:7s}
 .obj-parfait{--obj-teinte:#5FBF92;--obj-a:#C9F2DC;--obj-b:#5FBF92;--obj-c:#1F6B4A}
 .obj-pastille{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--obj-a),var(--obj-b) 55%,var(--obj-c));box-shadow:inset 0 -3px 6px rgba(0,0,0,.25),0 3px 8px rgba(0,0,0,.35)}
 .obj-pastille svg{width:26px;height:26px;fill:#fff;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
-.obj-defi .obj-pastille svg,.obj-parfait .obj-pastille svg{fill:var(--obj-c);filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
+.obj-defi .obj-pastille svg,.obj-badges .obj-pastille svg,.obj-parfait .obj-pastille svg{fill:var(--obj-c);filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
 .obj-annonce.visible .obj-pastille{animation:objPastille .7s var(--courbe-ressort) .12s both}
 @keyframes objPastille{from{transform:scale(.3) rotate(-120deg);opacity:0}to{transform:none;opacity:1}}
 .obj-mots{display:flex;flex-direction:column;gap:2px;min-width:0}

@@ -237,6 +237,9 @@ function cpFusionProg(l,d,b,distantRecent){
     if(typeof cl.defaite==="number"||typeof cd.defaite==="number")c.defaite=Math.max(cpNombre(cl.defaite),cpNombre(cd.defaite));
     if(cl.perduNiv||cd.perduNiv)c.perduNiv=Object.assign({},cpObjet(cl.perduNiv),cpObjet(cd.perduNiv));
     for(const k of ["langues","ouvFam"])if(cl[k]||cd[k])c[k]=cpUnion(cl[k],cd[k]);
+    /* Badges des parties entre membres (2026-11-22) : parties tirees au hasard (les 20 dernieres), ligues ouvertes. */
+    if(cl.hasard||cd.hasard)c.hasard=cpUnion(cl.hasard,cd.hasard).filter(x=>typeof x==="string").slice(-20);
+    if(cl.ligues||cd.ligues)c.ligues=1;
     if(cl.jour&&cl.jour===cd.jour)c.jourN=cpPlus(cl.jourN,cd.jourN,cb.jour===cl.jour?cb.jourN:0,avecBase);
     else if(cl.jour||cd.jour){const src=String(cl.jour||"")>=String(cd.jour||"")?cl:cd;c.jour=src.jour;c.jourN=cpNombre(src.jourN);}
     /* Gels : gagnes et depenses s'additionnent quand on connait la base.
@@ -349,6 +352,8 @@ function cpAppliquer(env){
            seance ne les compte pas, aucune fenetre ne les annonce. */
         if(typeof bilanS!=="undefined"&&bilanS)bilanS.badges+=Math.max(0,prog.badges.length-avant);
         saveProg();
+        /* Un Elo contre l'ordinateur venu de l'autre appareil peut meriter des paliers : ils entrent sans fenetre. */
+        try{if(typeof bxAdopterLocal==="function")bxAdopterLocal();}catch(e){}
       }else{
         window.storage.set(k,nom==="duelNom"?String(v):JSON.stringify(v));
         if(nom==="games"&&typeof history!=="undefined"&&Array.isArray(history))history=v;
@@ -469,6 +474,8 @@ function cpOuvrir(pseudo,version){
   const v=pseudoValider(pseudo),ancien=cpLire("chang64:compte");
   cp={pseudo:pseudo,cle:v.ok?v.cle:pseudo.toLowerCase(),version:version,dev:(ancien&&ancien.dev)||Math.random().toString(36).slice(2,8),n:(ancien&&ancien.n)||0,sync:0};
   cpEtatSync="";cpSauver();cpPoint();cpRedessiner();
+  /* Badges deja merites sur ce compte : apres la premiere synchronisation (badges_membres.js). */
+  if(typeof bxmRattraper==="function")setTimeout(bxmRattraper,2500);
 }
 /* Ferme la session locale. effacer : retire aussi la progression de cet
    appareil (appareil partage). */
@@ -949,6 +956,8 @@ async function cpjVue(par){
       if(r.s!==200||!cp){dessiner('<p class="cp-msg">'+cpE("Could not load the list. Try again later.")+"</p>");return;}
       g=cpjCache.ligue={t:Date.now(),j:r.j,pour:cp.pseudo};
     }
+    /* Badges de ligue : notes ici, annonces a la fin du prochain exercice. */
+    if(typeof bxmLigue==="function")bxmLigue(g.j,cpListe(g.j.groupe).length>0);
     const j=g.j,regle='<p class="cp-note">'+cpE("Five leagues, from Pawn to Queen. Each week you play in a group of about 20 players, ranked by puzzles solved since Monday. The top 5 move up, the bottom 5 move down.")+"</p>";
     if(!j.ouvert){
       const seuil=Math.max(1,cpNombre(j.seuil)||50),n=Math.min(seuil,cpNombre(j.actifs));
@@ -1357,6 +1366,8 @@ async function cpaCharger(force){
   const r=await cpApi("GET","amis");
   if(r.s!==200||!cp)return null;
   cpaListe=r.j;cpaT=Date.now();cpaPour=cp.pseudo;
+  /* Cinq amis : le badge est note ici (badges_membres.js). */
+  if(typeof bxmAmis==="function")bxmAmis(cpaListe);
   cpaPoint();
   return cpaListe;
 }
@@ -1451,6 +1462,8 @@ function cpdJoueur(x,k){return {r:x["r"+k],t:x["t"+k]};}
 /* Une ligne de resultat : moi et l'autre, le gagnant encadre. */
 function cpdResultat(x,recu){
   const moi=cpdJoueur(x,recu?2:1),autre=cpdJoueur(x,recu?1:2),c=duelComparer(moi,autre);
+  /* Defi gagne contre un membre : le resultat est souvent decouvert ici, quand l'autre a repondu. */
+  if(c>0&&typeof x.r1==="string"&&typeof x.r2==="string")cpBadge("mb_defi_gagne");
   return '<p class="cpd-titre">'+echapper(c>0?t("You win!"):c<0?t("{name} wins!",{name:x.p}):t("Perfect tie!"))+"</p>"+
     '<ul class="duel-tableau">'+duelLigne(t("You"),moi,c>0)+duelLigne(x.p,autre,c<0)+"</ul>";
 }

@@ -417,3 +417,68 @@
 - **Une année de défis** · _52 défis réussis_ · symbole : une couronne de feuilles  
   Cinquante-deux défis, autant que de semaines dans l'année.
 
+
+## 18. Nouvelles fonctions (30, ajoutés le 22/11)
+
+Parties entre membres, Blitz, correspondance, adversaire au hasard, Elo entre membres et contre l'ordinateur, ligues, amis, défis, coups préparés. Liste et paliers validés par Alexandre le 21/11 au soir.
+
+- **Étalonné** · _20 parties classées contre l'ordinateur_ · symbole : un cadran de mesure  
+  Vingt parties classées : ton Elo contre l'ordinateur est établi. En 1996, Kasparov avait battu Deep Blue 4 à 2 ; c'est la revanche de 1997 qui a tourné autrement.
+- **El Ajedrecista** · _Elo 900 contre l'ordinateur_ · symbole : une tour et un engrenage  
+  En 1912, l'ingénieur espagnol Leonardo Torres Quevedo a construit El Ajedrecista, un automate qui gagnait tout seul la finale roi et tour contre roi. Sans joueur caché dedans, cette fois.
+- **Los Alamos** · _Elo 1000 contre l'ordinateur_ · symbole : un petit échiquier de 6 cases sur 6  
+  En 1956, à Los Alamos, l'ordinateur MANIAC jouait sur un échiquier réduit à 6 cases sur 6, sans les fous. Il y a battu une personne qui venait d'apprendre les règles : la première victoire d'une machine sur un humain.
+- **Chess Challenger** · _Elo 1200 contre l'ordinateur_ · symbole : une machine à touches  
+  En 1977, le Chess Challenger de Fidelity a été le premier ordinateur d'échecs vendu au grand public. Il ne jouait pas très bien, mais on se l'arrachait.
+- **Deep Thought** · _Elo 1500 contre l'ordinateur_ · symbole : une puce électronique  
+  En 1988, Deep Thought a été le premier ordinateur à battre un grand maître en tournoi, le Danois Bent Larsen. Son nom vient de l'ordinateur du Guide du voyageur galactique.
+- **Un coup d'avance** · _Jouer un coup préparé à l'avance_ · symbole : un pion et une flèche d'avance rapide  
+  Tu as choisi ton coup pendant que l'adversaire réfléchissait, et il est parti tout seul. En ligne, on appelle ça un « premove » : les joueurs de blitz en raffolent.
+- **Bien joué quand même** · _Perdre une première partie contre un membre_ · symbole : un roi et des applaudissements  
+  Perdre arrive à tout le monde. Même Emanuel Lasker, champion du monde pendant 27 ans, un record, a fini par céder son titre en 1921.
+- **La pendule a gagné** · _Perdre au temps contre un membre_ · symbole : une pendule à rebours  
+  Dans les années 1860, on mesurait le temps de réflexion avec des sabliers ; la pendule à deux cadrans les a remplacés vers 1883. Depuis, elle fait partie du jeu.
+- **Partie amicale** · _Terminer une partie contre un membre de ta liste d'amis_ · symbole : deux silhouettes et un cavalier  
+  Une partie contre un de tes amis. En club, on appelle « amicale » une partie jouée pour le plaisir, hors tournoi.
+- **Défi remporté** · _Gagner un défi contre un membre_ · symbole : un avion en papier et une étoile  
+  Cinq exercices, et tu as fait mieux que ton adversaire. La résolution de problèmes a même son championnat du monde, disputé chaque année depuis 1977.
+- **Tablée** · _Avoir 5 amis dans ta liste_ · symbole : cinq pions en rond  
+  Aux Olympiades d'échecs, chaque équipe compte quatre joueurs et un remplaçant. Cinq, comme tes amis : l'équipe est au complet.
+- **Pièce touchée** · _Terminer une partie contre un membre_ · symbole : un pion et une main  
+  Ta première partie contre un membre. En tournoi, la règle est stricte : pièce touchée, pièce jouée.
+- **Premier point** · _Gagner une partie contre un membre_ · symbole : le score 1-0  
+  Une victoire vaut un point, une nulle un demi-point pour chacun, une défaite zéro. Te voilà à un.
+- **Feuille de partie** · _10 parties terminées contre des membres_ · symbole : une feuille de notation  
+  En tournoi, chaque joueur note tous les coups sur sa feuille de partie. Ici, le site les note pour toi : dix parties déjà.
+- **Londres 1851** · _50 parties terminées contre des membres_ · symbole : un roi et une coupe  
+  Le premier tournoi international d'échecs s'est joué à Londres en 1851 ; l'Allemand Adolf Anderssen l'a gagné. Cinquante parties : tu as l'endurance d'un joueur de tournoi.
+- **David contre Goliath** · _Battre un membre qui a au moins 100 points d'Elo de plus que toi_ · symbole : un petit pion face à une grande tour  
+  Avec 100 points d'Elo d'avance, la formule donne environ 64 % des points au mieux classé. Soixante-quatre, comme les cases de l'échiquier, et tu viens de la faire mentir.
+- **Match retour** · _Terminer une revanche en direct_ · symbole : deux cavaliers face à face et une flèche qui boucle  
+  Battu par Alekhine en 1927, Capablanca a réclamé une revanche pendant des années : elle n'a jamais eu lieu. Toi, tu as eu la tienne tout de suite.
+- **Système suisse** · _Terminer une partie contre un adversaire tiré au hasard_ · symbole : un dé  
+  Dans un tournoi au système suisse, on affronte à chaque ronde un joueur qui a à peu près autant de points que soi. La formule est née à Zurich, en 1895.
+- **Trois plus deux** · _Terminer une partie de Blitz contre un membre_ · symbole : 3+2 en chiffres  
+  Trois minutes, plus deux secondes ajoutées à chaque coup. Cet ajout s'appelle l'incrément : Bobby Fischer a déposé en 1988 le brevet de la pendule qui le permet.
+- **Carte postale** · _Terminer une partie par correspondance_ · symbole : un timbre avec un cavalier  
+  De 1824 à 1828, les clubs de Londres et d'Édimbourg se sont affrontés par lettres. Édimbourg a gagné, et la partie écossaise en a gardé son nom.
+- **Simultanée** · _3 parties par correspondance en cours en même temps_ · symbole : trois petits échiquiers  
+  En simultanée, un maître joue contre de nombreux adversaires à la fois, en passant d'un échiquier à l'autre. En 1922 à Cleveland, Capablanca en a affronté 103 et n'a concédé qu'une nulle.
+- **Les quatre pendules** · _Une partie terminée en Blitz, en Rapide, en Classique et par correspondance_ · symbole : quatre cadrans en carré  
+  Blitz, Rapide, Classique, Correspondance : tu as goûté à tout. La Fédération internationale tient elle aussi des classements séparés pour le classique, le rapide et le blitz.
+- **Arpad Elo** · _20 parties classées entre membres dans une même cadence_ · symbole : une courbe qui monte  
+  Le classement Elo porte le nom de son inventeur, le physicien Arpad Elo ; la Fédération internationale l'a adopté en 1970. Après 20 parties, le tien est établi.
+- **En hausse** · _Elo 900 entre membres_ · symbole : une échelle  
+  À Elo égal, la formule donne une chance sur deux à chacun. Plus tu montes, plus tes adversaires seront coriaces.
+- **Quatre chiffres** · _Elo 1000 entre membres_ · symbole : le nombre 1000  
+  Un Elo à quatre chiffres ! Le premier classement officiel de la Fédération internationale, en juillet 1971, était mené par Bobby Fischer avec 2760 points.
+- **Joueur de club** · _Elo 1200 entre membres_ · symbole : un fanion  
+  À 1200 entre membres, tu tiens tête à beaucoup de monde ici. Le record absolu appartient à Magnus Carlsen : 2882 points, atteints en 2014.
+- **Toutes rondes** · _Entrer dans un groupe de ligue_ · symbole : trois silhouettes  
+  Te voilà dans un groupe. Dans un tournoi « toutes rondes », chaque joueur affronte tous les autres ; ici, tu grimpes en réussissant des exercices.
+- **Promotion** · _Monter d'une ligue_ · symbole : un pion et une couronne  
+  Un pion qui atteint la dernière rangée est promu : il devient dame, tour, fou ou cavalier. Toi aussi, tu viens de changer de rang.
+- **Septième rangée** · _Atteindre la ligue Tour_ · symbole : une tour et le chiffre 7  
+  Une tour sur la septième rangée attaque les pions restés chez eux et enferme le roi adverse. C'est l'une de ses meilleures places, et tu n'es plus qu'à une ligue du sommet.
+- **Vingt-sept cases** · _Atteindre la ligue Dame_ · symbole : une dame et une couronne  
+  Au centre d'un échiquier vide, une dame contrôle 27 cases : aucune pièce ne fait mieux. Tu es dans la plus haute ligue.

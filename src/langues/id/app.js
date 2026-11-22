@@ -1282,5 +1282,9 @@ module.exports = {
 "{r} in Classical":"{r} di Klasik",
 "{r} in Correspondence":"{r} di Korespondensi",
 "{n} game":"{n} partai",
-"{n} games":"{n} partai"
+"{n} games":"{n} partai",
+/* Badges rattrapes pour les parties deja jouees (2026-11-22). */
+"{n} badge added":"{n} lencana ditambahkan",
+"{n} badges added":"{n} lencana ditambahkan",
+"For the games you have already played. Tap to see them.":"Untuk permainan yang sudah kamu mainkan. Ketuk untuk melihatnya."
 };

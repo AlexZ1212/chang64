@@ -250,6 +250,8 @@ function directRecu(e) {
   if (mode === "friend") directMontrer();
   /* Par correspondance, chaque etat peut changer la liste et la pastille. */
   if (e.cad[0] >= 86400 && typeof corrBientot === "function") corrBientot();
+  /* Badges des parties entre membres : seulement une fois la partie finie (badges_membres.js). */
+  if (typeof bxmFin === "function") bxmFin(e);
 }
 function directMontrer() {
   const e = directE;
@@ -466,6 +468,8 @@ async function directChercherPartie() {
   const r = await directChercher(directCad);
   if (b) b.disabled = false;
   if (!r.id) { directMessage = t(DIRECT_ERREURS[r.erreur] || "Something went wrong. Try again later."); directPanneau(); directDire(directMessage); return; }
+  /* La partie est retenue comme tiree au hasard, pour son badge a la fin. */
+  if (typeof bxmHasard === "function") bxmHasard(r.id);
   if (directCadCorr(directCad)) {
     /* Par correspondance : un adversaire trouve, la partie s'ouvre ; sinon la
        recherche reste ouverte sur le serveur, sans rien a garder a l'ecran. */
@@ -501,7 +505,7 @@ setInterval(async () => {
   if (!h || !directId || !directE || directE.phase !== "attente") return;
   const r = await directChercher(h.cad);
   if (directHasard !== h) return;
-  if (r.id && r.id !== directId) { directBrancher(r.id); directHasard = r.attente ? h : null; }
+  if (r.id && r.id !== directId) { if (typeof bxmHasard === "function") bxmHasard(r.id); directBrancher(r.id); directHasard = r.attente ? h : null; }
   else if (directActif()) directMontrer();
 }, 15000);
 /* ---------- Invitation recue ---------- */

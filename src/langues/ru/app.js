@@ -1284,5 +1284,9 @@ module.exports = {
 "{r} in Classical":"{r} в классике",
 "{r} in Correspondence":"{r} по переписке",
 "{n} game":"{n} партия",
-"{n} games":{"one":"{n} партия","few":"{n} партии","many":"{n} партий","other":"{n} партии"}
+"{n} games":{"one":"{n} партия","few":"{n} партии","many":"{n} партий","other":"{n} партии"},
+/* Badges rattrapes pour les parties deja jouees (2026-11-22). */
+"{n} badge added":"{n} значок добавлен",
+"{n} badges added":{"one":"{n} значок добавлен","few":"{n} значка добавлено","many":"{n} значков добавлено","other":"{n} значка добавлено"},
+"For the games you have already played. Tap to see them.":"За партии, которые ты уже сыграл. Нажми, чтобы посмотреть."
 };

@@ -1134,5 +1134,9 @@ module.exports = {
 "{r} in Classical":"{r} en Classique",
 "{r} in Correspondence":"{r} par correspondance",
 "{n} game":"{n} partie",
-"{n} games":"{n} parties"
+"{n} games":"{n} parties",
+/* Badges rattrapes pour les parties deja jouees (2026-11-22). */
+"{n} badge added":"{n} badge ajouté",
+"{n} badges added":"{n} badges ajoutés",
+"For the games you have already played. Tap to see them.":"Pour tes parties déjà jouées. Touche pour les voir."
 };

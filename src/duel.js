@@ -154,7 +154,11 @@ function duelTenterFin(){
      d'exercice, comme toute recompense. */
   if(typeof bxMarquer==="function"){
     if(!d.adv)bxMarquer("duel_lien");
-    else if(duelComparer(moi,d.adv)>0)bxMarquer("duel_gagne");
+    else if(duelComparer(moi,d.adv)>0){
+      bxMarquer("duel_gagne");
+      /* Defi releve chez un membre (adv.membre = le defi garde par le serveur). */
+      if(d.adv.membre)bxMarquer("mb_defi_gagne");
+    }
     if(moi.r==="2".repeat(DUEL_N))bxMarquer("duel_parfait");
     bxVerifier();
   }

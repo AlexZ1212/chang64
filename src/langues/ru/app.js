@@ -1139,8 +1139,6 @@ module.exports = {
 "{n} minutes each, plus {s} seconds added after every move.":"По {n} мин каждому и ещё {s} с после каждого хода.",
 "{n} minutes each for the whole game.":"По {n} мин каждому на всю партию.",
 /* Resultats des parties en direct (2026-11-19). */
-"Live games won":"Победы в реальном времени",
-"Live wins":"Победы",
 "Live games: {v} won, {n} drawn, {d} lost":"Партии в реальном времени: побед — {v}, ничьих — {n}, поражений — {d}",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Против друга",
@@ -1204,7 +1202,6 @@ module.exports = {
 "Your opponent declined the draw.":"Соперник отклонил ничью.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
 "All":"Все",
-"Live games":"Партии вживую",
 "Won":{"one":"Победа","few":"Победы","many":"Побед","other":"Победы"},
 "Drawn":{"one":"Ничья","few":"Ничьи","many":"Ничьих","other":"Ничьи"},
 "Lost":{"one":"Поражение","few":"Поражения","many":"Поражений","other":"Поражения"},
@@ -1417,5 +1414,8 @@ module.exports = {
 "That was not the best move.":"Это был не лучший ход.",
 "Position skipped.":"Позиция пропущена.",
 "See the result":"Посмотреть результат",
-"The test stopped after two missed positions in a row: we already know where to start you.":"Тест остановился после двух неудач подряд: мы уже знаем, с чего тебе начать."
+"The test stopped after two missed positions in a row: we already know where to start you.":"Тест остановился после двух неудач подряд: мы уже знаем, с чего тебе начать.",
+"For what you have already done. Tap to see them.":"За то, что уже сделано. Нажми, чтобы посмотреть.",
+"Games won between members":"Победы над участниками",
+"Member wins":"Победы"
 };

@@ -177,8 +177,10 @@ checkBadges=function(){
    la collection y entrent tout de suite. Plusieurs sources arrivent l'une
    apres l'autre au chargement (progression, fiche du serveur, liste d'amis) :
    l'annonce attend quelques secondes pour les reunir. */
-let bxAdoptes=0,bxAdoptesT=0;
-function bxAdopter(ids){
+let bxAdoptes=0,bxAdoptesT=0,bxAdoptesAutres=false;
+/* quoi : d'ou viennent ces badges, pour la phrase de l'annonce (rien : des
+   parties deja jouees ; "chemin" : des lecons, des boss, le test). */
+function bxAdopter(ids,quoi){
   ensureProgFields();bxEtat();
   let n=0;
   for(const id of ids||[]){
@@ -188,16 +190,17 @@ function bxAdopter(ids){
   if(!n)return 0;
   saveProg();
   bxAdoptes+=n;
+  if(quoi)bxAdoptesAutres=true;
   clearTimeout(bxAdoptesT);
   bxAdoptesT=setTimeout(bxAdoptesAnnoncer,4000);
   return n;
 }
 function bxAdoptesAnnoncer(){
-  const n=bxAdoptes;bxAdoptes=0;
+  const n=bxAdoptes,autres=bxAdoptesAutres;bxAdoptes=0;bxAdoptesAutres=false;
   if(!n)return;
   try{renderBadgeSummary();if(typeof menuResume==="function")menuResume();}catch(e){}
   if(typeof objAnnoncer!=="function")return;
-  objAnnoncer("badges",t(n===1?"{n} badge added":"{n} badges added",{n:n}),t("For the games you have already played. Tap to see them."),()=>{
+  objAnnoncer("badges",t(n===1?"{n} badge added":"{n} badges added",{n:n}),t(autres?"For what you have already done. Tap to see them.":"For the games you have already played. Tap to see them."),()=>{
     if(typeof menuOuvrir==="function"&&typeof menuVue==="function"){menuOuvrir();menuVue("badges");}
   });
 }
@@ -507,6 +510,9 @@ function bxVisibleEl(id){const e=$(id);return !!(e&&e.offsetParent);}
     /* lecon : l'etape a l'ecran, de « Je debute » ou d'un autre chapitre du
        chemin ; le test de placement attend lui aussi sa derniere position. */
     if(mode==="debut"&&typeof testEnCours==="function"&&testEnCours())return true;
+    /* Le resultat du test est a l'ecran : la lecon restee derriere lui n'est
+       pas en cours (2026-11-23, badges du test de placement). */
+    if(mode==="debut"&&typeof testOuvert==="function"&&testOuvert())return false;
     if(mode==="debut"&&lecon&&!lecon.ok&&leconEtapes()[lecon.e]&&leconEtapes()[lecon.e].exos[lecon.x])return true;
     return false;
   };

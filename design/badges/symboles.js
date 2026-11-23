@@ -316,6 +316,22 @@ const S = {
   debut_6: [F("push-pin-simple"), "bronze"],
   debut_7: [F("checkerboard"), "bronze"],
   debut_fini: [F("graduation-cap"), "or"],
+  /* Le chemin de l'onglet Apprendre (23/11) : l'idee de chaque chapitre
+     (direction choisie par Alexandre), les boss, le chemin, le test. */
+  ch_regles: [F("book-open-text", G) + A("scales"), "bronze"],
+  ch_securite: [P("b", G) + A("shield-check"), "bronze"],
+  ch_mats: [P("q", G) + A("heart"), "bronze"],
+  ch_menaces: [P("n", G) + A("arrows-split"), "argent"],
+  ch_clouer: [P("r", G) + A("push-pin"), "argent"],
+  ch_ouverture: [P("p", G) + A("rocket-launch"), "argent"],
+  ch_finales: [P("k", G) + A("flag-checkered"), "or"],
+  ch_mat2: [T("#2", 24, 9), "or"],
+  boss_1: [F("robot", G) + A("sword"), "bronze"],
+  boss_net: [F("robot", G) + A("lightning"), "argent"],
+  boss_tous: [F("robot", G) + A("crown"), "or"],
+  chemin_fini: [F("mountains", "translate(0 5)") + F("flag", "translate(3 -14) scale(.42)"), "or"],
+  test_fait: [F("map-pin"), "bronze"],
+  test_parfait: [F("exam"), "or"],
   /* Makruk : ses pieces thaies */
   mk_partie: [F("hand-waving"), "bronze"],
   mk_facile: [MK("k"), "argent"],

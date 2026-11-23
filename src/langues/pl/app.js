@@ -1137,8 +1137,6 @@ module.exports = {
 "{n} minutes each, plus {s} seconds added after every move.":"Po {n} min dla każdego, plus {s} s po każdym ruchu.",
 "{n} minutes each for the whole game.":"Po {n} min dla każdego na całą partię.",
 /* Resultats des parties en direct (2026-11-19). */
-"Live games won":"Wygrane partie na żywo",
-"Live wins":"Na żywo",
 "Live games: {v} won, {n} drawn, {d} lost":"Partie na żywo: wygrane {v}, remisy {n}, przegrane {d}",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Przeciw znajomemu",
@@ -1202,7 +1200,6 @@ module.exports = {
 "Your opponent declined the draw.":"Przeciwnik odrzucił remis.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
 "All":"Wszystkie",
-"Live games":"Partie na żywo",
 "Won":{"one":"Wygrana","few":"Wygrane","many":"Wygranych","other":"Wygranej"},
 "Drawn":{"one":"Remis","few":"Remisy","many":"Remisów","other":"Remisu"},
 "Lost":{"one":"Przegrana","few":"Przegrane","many":"Przegranych","other":"Przegranej"},
@@ -1415,5 +1412,8 @@ module.exports = {
 "That was not the best move.":"To nie był najlepszy ruch.",
 "Position skipped.":"Pozycja pominięta.",
 "See the result":"Zobacz wynik",
-"The test stopped after two missed positions in a row: we already know where to start you.":"Test zakończył się po dwóch nieudanych pozycjach z rzędu: wiemy już, od czego masz zacząć."
+"The test stopped after two missed positions in a row: we already know where to start you.":"Test zakończył się po dwóch nieudanych pozycjach z rzędu: wiemy już, od czego masz zacząć.",
+"For what you have already done. Tap to see them.":"Za to, co już masz za sobą. Dotknij, aby je zobaczyć.",
+"Games won between members":"Wygrane partie wśród członków",
+"Member wins":"Wygrane"
 };

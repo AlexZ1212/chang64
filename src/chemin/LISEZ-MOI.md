@@ -114,6 +114,11 @@ position. Quand un chapitre sort, donner son `id` à deux positions.
 6. `node mesure_apprendre.js` (serveur local lancé) : à 360 px, dans les dix
    langues, aucun bouton sur deux lignes, chaque leçon sur un seul écran.
 7. Une entrée en tête de `nouveautes.json`.
+8. Le badge du chapitre : une ligne `ch_<id>` dans `badges-catalogue.js` (famille `apprendre`), sa
+   médaille (`design/badges/symboles.js`, puis `src/badges-medailles.json`), ses textes dans les
+   neuf fichiers de `badges-textes/`. Les badges « Tombeur de boss » et « Sommet » disent
+   « huit boss » et « neuf chapitres » : à corriger dans les dix langues.
+   `node tests/check_badges_apprendre.js` échoue tant que ce n'est pas fait.
 
 Les tests lisent le nombre de chapitres et de positions dans `plan.json` et
 `placement.json` : ajouter un chapitre ne demande plus de les retoucher.

@@ -120,6 +120,14 @@ function plan() {
   controler(D);
   return JSON.stringify(D.chapitres.map(c => c.integre ? { id: c.id } : { id: c.id, n: c.etapes.length, boss: c.boss ? 1 : 0 }));
 }
+/* Le nombre de positions du test de placement (jeton __CHEMIN_TEST__ de
+   apprendre.js) : le badge « Sans faute » demande de les trouver toutes. */
+function positionsTest() { return charger().placement.positions.length; }
+/* Le titre de chaque chapitre dans une langue, pour la condition de son
+   badge (badges_build.js) : [{ id, n (rang dans le chemin, a partir de 1), titre }]. */
+function titres(code) {
+  return charger().chapitres.map((c, i) => ({ id: c.id, n: i + 1, titre: (c.titre && (c.titre[code] || c.titre.en)) || "" }));
+}
 
 /* ---------- Les textes, langue par langue ---------- */
 function ecrire(OUT, ponct) {
@@ -168,4 +176,4 @@ function ecrire(OUT, ponct) {
     CODES.length + " langues" + (manques.length ? " ; textes manquants : " + manques.join(", ") : ", textes complets"));
   return manques;
 }
-module.exports = { charger, controler, controlerExo, plan, ecrire };
+module.exports = { charger, controler, controlerExo, plan, positionsTest, titres, ecrire };

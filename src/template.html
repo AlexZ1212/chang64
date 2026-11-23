@@ -2331,6 +2331,10 @@ h3.bx-famille{font-family:inherit;grid-column:1/-1;margin:10px 0 0;font-size:13p
 h3.bx-famille:first-child{margin-top:0}
 .badge.bx-carte{display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 2px;background:none;border:0;border-radius:var(--r);color:var(--sage);font:inherit;font-size:12px;line-height:1.25;text-align:center;cursor:pointer;opacity:1}
 .badge.bx-carte.unlocked{color:var(--chalk)}
+/* Le nom reste dans sa carte (2026-11-23 : cinq noms d'un seul mot, en allemand et en russe,
+   depassaient a 360 px). Un mot plus large que la carte se coupe : a son trait d'union
+   conditionnel s'il en porte un (badges-textes), sinon la ou il le faut. */
+.bx-carte .bx-nom{max-width:100%;overflow-wrap:anywhere}
 .badge.bx-carte:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .bx-carte .bx-medaille{width:54px;height:54px;transition:transform var(--duree-courte) var(--courbe-ressort)}
 @media(hover:hover){.bx-carte:hover .bx-medaille{transform:scale(1.08)}}

@@ -85,7 +85,7 @@ function ouvrir(page) {
   T("code de pays inconnu : rien d'affiche", w.eval('cpyLigne("XX")') === "" && w.eval('cpyLigne("<b")') === "" && /France/.test(w.eval('cpyLigne("FR")')));
   T("mois de creation en toutes lettres", /March 2026/.test(fiche), fiche.slice(0, 120));
   const lignes = [...d.querySelectorAll("#cpProfilContenu .cpp-liste li")].map(li => li.textContent);
-  T("sept chiffres avec leur rang, le dernier pour les parties en direct", lignes.length === 7 && /^Live games won/.test(lignes[6]) && /1450/.test(lignes[1]) && /#1/.test(lignes[1]) && /14/.test(lignes[5]) && /#7/.test(lignes[5]), JSON.stringify(lignes));
+  T("sept chiffres avec leur rang, le dernier pour les parties gagnees entre membres", lignes.length === 7 && /^Games won between members/.test(lignes[6]) && /1450/.test(lignes[1]) && /#1/.test(lignes[1]) && /14/.test(lignes[5]) && /#7/.test(lignes[5]), JSON.stringify(lignes));
   T("sans compte : pas de bouton de defi", !d.querySelector("#cpProfilContenu [data-cpp-defier]"));
   T("le focus est dans la fiche", $("cpProfil").contains(d.activeElement));
 

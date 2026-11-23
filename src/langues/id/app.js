@@ -1137,8 +1137,6 @@ module.exports = {
 "{n} minutes each, plus {s} seconds added after every move.":"Masing-masing {n} menit, ditambah {s} detik setelah setiap langkah.",
 "{n} minutes each for the whole game.":"Masing-masing {n} menit untuk seluruh permainan.",
 /* Resultats des parties en direct (2026-11-19). */
-"Live games won":"Permainan langsung dimenangkan",
-"Live wins":"Langsung",
 "Live games: {v} won, {n} drawn, {d} lost":"Permainan langsung: {v} menang, {n} remis, {d} kalah",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Melawan teman",
@@ -1202,7 +1200,6 @@ module.exports = {
 "Your opponent declined the draw.":"Lawanmu menolak remis.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
 "All":"Semua",
-"Live games":"Partai langsung",
 "Won":"Menang",
 "Drawn":"Seri",
 "Lost":"Kalah",
@@ -1415,5 +1412,8 @@ module.exports = {
 "That was not the best move.":"Itu bukan langkah terbaik.",
 "Position skipped.":"Posisi dilewati.",
 "See the result":"Lihat hasil",
-"The test stopped after two missed positions in a row: we already know where to start you.":"Tes berhenti setelah dua posisi berturut-turut meleset: kami sudah tahu dari mana kamu sebaiknya mulai."
+"The test stopped after two missed positions in a row: we already know where to start you.":"Tes berhenti setelah dua posisi berturut-turut meleset: kami sudah tahu dari mana kamu sebaiknya mulai.",
+"For what you have already done. Tap to see them.":"Untuk yang sudah kamu selesaikan. Ketuk untuk melihatnya.",
+"Games won between members":"Kemenangan antaranggota",
+"Member wins":"Menang"
 };

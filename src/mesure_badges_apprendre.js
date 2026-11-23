@@ -8,7 +8,8 @@
    debordement ne se mesurent que dans un navigateur. Dans les 10 langues, a
    360 x 740 :
    - l'ecran Badges, famille « Chemin d'apprentissage » : 14 medailles, rien ne
-     deborde, aucun nom coupe ;
+     deborde, aucun nom coupe ; et dans TOUTE la collection, aucun nom ne
+     depasse de sa carte (cinq le faisaient en allemand et en russe) ;
    - la fiche de chacun des 14 badges, puis la fenetre Bravo de chacun, comme
      au moment ou il est gagne : la fenetre tient dans l'ecran, le bouton sur
      une ligne ;
@@ -96,7 +97,7 @@ const DEBUTS = `(function(sel){
     for (const id of IDS) await noter(l + " ecran Badges, carte " + id, '#menuBadgeGrid [data-bx="' + id + '"]');
     {
       const hors = await c.js(`(function(){const ids=${JSON.stringify(IDS)},g=document.getElementById("menuBadgeGrid"),G=g.getBoundingClientRect(),o=[];for(const b of g.querySelectorAll(".bx-carte")){const s=b.querySelector(".bx-nom"),r=s.getBoundingClientRect(),k=b.getBoundingClientRect();if(r.right>k.right+2||r.left<k.left-2)o.push([ids.includes(b.dataset.bx),b.dataset.bx,s.textContent,Math.round(r.width),Math.round(k.width)]);}return o;})()`);
-      for (const h of hors) (h[0] ? pb : ailleurs).push(l + " ecran Badges : le nom « " + h[2] + " » (" + h[1] + ", " + h[3] + " px) depasse de sa carte (" + h[4] + " px)");
+      for (const h of hors) pb.push(l + " ecran Badges : le nom « " + h[2] + " » (" + h[1] + ", " + h[3] + " px) depasse de sa carte (" + h[4] + " px)");
       const titre = await c.js(`(function(){const ids=${JSON.stringify(IDS)},g=document.getElementById("menuBadgeGrid"),c=g.querySelector('[data-bx="'+ids[0]+'"]'),h=c.previousElementSibling,r=h.getBoundingClientRect(),cs=getComputedStyle(h);return {texte:h.textContent,g:Math.round(r.left),d:Math.round(r.right),lignes:Math.round(r.height/(parseFloat(cs.lineHeight)||parseFloat(cs.fontSize)*1.3))};})()`);
       if (titre.g < 0 || titre.d > 360 || titre.lignes > 1) pb.push(l + " ecran Badges : titre de la famille " + JSON.stringify(titre));
     }

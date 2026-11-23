@@ -392,7 +392,7 @@ function beginCoordFlow(){
   /* Titre "Coordinates" plutot que le "Ready when you are" generique
      (2026-09-03), meme raison que beginRushFlow() (ui2.js). */
   if(typeof showReadyFor==="function")
-    showReadyFor(t("Thirty seconds | click the square that is named"),
+    showReadyFor(t("Thirty seconds | tap the square that is named"),
       ()=>startCoord(), t("Start"), t("Coordinates"), null, null, true);
   else startCoord();
 }
@@ -2133,7 +2133,7 @@ function debutEtapes(){
   const clouage=t("Find the rook move that pins the black knight to its king.");
   const apresC=t("The knight can no longer move: if it did, its own king would be in check.");
   return [
-    {titre:t("How the pieces move"),intro:t("Each piece moves in its own way. Click a piece to see where it can go."),exos:[
+    {titre:t("How the pieces move"),intro:t("Each piece moves in its own way. Tap a piece to see where it can go."),exos:[
       {fen:"7k/8/8/8/8/8/8/R5K1 w - - 0 1",sol:["a1a5"],cible:"a5",consigne:t("The rook moves in straight lines. Move it to the marked square.")},
       {fen:"7k/8/8/8/8/8/8/2B3K1 w - - 0 1",sol:["c1g5"],cible:"g5",consigne:t("The bishop moves diagonally. Move it to the marked square.")},
       {fen:"7k/8/8/8/8/8/8/3Q2K1 w - - 0 1",sol:["d1a4"],cible:"a4",consigne:t("The queen moves like a rook and a bishop combined. Move it to the marked square.")},

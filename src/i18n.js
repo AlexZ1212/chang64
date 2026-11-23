@@ -73,7 +73,12 @@ function formePlurielle(val,v){return GRAMMAIRE.pluriel(val,v,LANG_INTL);}
    appel du code ne change. Une variante peut etre un objet de pluriel
    (russe, polonais). Humour seulement dans l'app, jamais aux depens du
    joueur ; regles, explications et pages claires restent sobres. */
-const TON_EN=__TON_EN__;
+/* Depuis le 2026-11-23 la table n'est plus dans le script (7 000 caracteres
+   livres aux dix langues pour la seule page anglaise) : build_site.js la pose
+   dans le bloc de langue de la page anglaise (PAGE_LANGUE.ton, tire de
+   ton_en.json) ; une langue a qui une reaction manquerait recoit, de la meme
+   facon, les seules variantes anglaises qui lui manquent. */
+const TON_EN=PAGE_LANGUE.ton||{};
 const TON_DERNIER={};
 function tVariante(s,val){
   if(!Array.isArray(val)||!val.length)return val;

@@ -19,7 +19,12 @@ try { terser = require("terser"); } catch (e) {
   process.exit(1);
 }
 function minifyJs(code, label) {
-  const r = terser.minify_sync(code, { compress: {}, mangle: false });
+  /* mangle (2026-11-23, allegement choisi par Alexandre) : les noms LOCAUX
+     (variables et parametres a l'interieur des fonctions) sont raccourcis,
+     environ 31 000 caracteres de moins sur le script principal. Les noms de
+     premier niveau ne bougent pas : les morceaux du script se parlent par
+     eux, les tests et les gestionnaires poses dans le HTML aussi. */
+  const r = terser.minify_sync(code, { compress: {}, mangle: {} });
   if (r.error) {
     console.error(`Minification JS echouee sur ${label}, fichier livre non minifie pour cette partie :`, r.error.message || r.error);
     return code;
@@ -248,8 +253,13 @@ const BADGES_BUILD = require("./badges_build.js");
 let ui3 = minifyJs((fs.readFileSync(path.join(__dirname, "ui3.js"), "utf8") + "\n" + BADGES_BUILD.code()).split("__MAKRUK_V__").join(makrukV), "ui3.js");
 /* Variantes anglaises des reactions de l'app (ton.json, 2026-11-15) : voir
    TON_EN dans i18n.js. Les autres langues ont les leurs dans leur app.js. */
-const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8")
-  .replace("__TON_EN__", JSON.stringify(JSON.parse(fs.readFileSync(path.join(__dirname, "ton_en.json"), "utf8")))), "i18n.js");
+const i18n = minifyJs(fs.readFileSync(path.join(__dirname, "i18n.js"), "utf8"), "i18n.js");
+/* Textes anglais hors du script (2026-11-23, allegement choisi par Alexandre) :
+   les variantes de ton (ton_en.json) et les textes legaux (legal_en.json) ne
+   servent qu'a la page anglaise. Ils partent dans son bloc de langue (voir
+   pageApplication) au lieu d'etre livres dix fois dans le script. */
+const TON_EN = JSON.parse(fs.readFileSync(path.join(__dirname, "ton_en.json"), "utf8"));
+const LEGAL_EN = JSON.parse(fs.readFileSync(path.join(__dirname, "legal_en.json"), "utf8"));
 const grammaire = minifyJs(fs.readFileSync(path.join(__dirname, "grammaire.js"), "utf8"), "grammaire.js");
 /* Le nombre d'exercices etait ecrit en dur a neuf endroits : accueil, meta
    description, image de partage, donnees structurees, tuiles de navigation,
@@ -2367,7 +2377,15 @@ function pageApplication(lang) {
     .replace(/("@type":"WebApplication"[\s\S]*?"description":)("(?:[^"\\]|\\.)*")/, (m, a, x) => a + JSON.stringify(tx(JSON.parse(x))));
   const ouvertures = {};
   for (const p of pages) ouvertures[p.family] = p.slugs[lang];
-  const bloc = JSON.stringify({ lang, html: L_.html, intl: L_.intl, dirs: L_.dirs, ouvertures, finales: FINALES_ADRESSES[lang], dict })
+  /* Ce que le script ne porte plus : les variantes de ton anglaises que le
+     dictionnaire de la langue n'a pas (toutes pour l'anglais, aucune pour une
+     langue complete), et les textes legaux anglais si les siens manquent. */
+  const donnees = { lang, html: L_.html, intl: L_.intl, dirs: L_.dirs, ouvertures, finales: FINALES_ADRESSES[lang], dict };
+  const ton = Object.fromEntries(Object.entries(TON_EN).filter(([k]) => dict[k] === undefined));
+  if (Object.keys(ton).length) donnees.ton = ton;
+  if (typeof dict["@legal"] !== "string") donnees.legal = LEGAL_EN.legal;
+  if (typeof dict["@privacy"] !== "string") donnees.privacy = LEGAL_EN.privacy;
+  const bloc = JSON.stringify(donnees)
     .replace(/</g, "\\u003c");
   const selecteur = `<details class="langswitch" id="langSwitch"><summary aria-label="${esc(T(lang, "Language: {name}", "Langue : {name}", { name: L_.nom }))}">${lang.toUpperCase()}</summary><div class="langmenu">` +
     LANGUES.map(l => `<a href="${l.accueil}" hreflang="${l.hreflang}" lang="${l.html}" data-lang="${l.code}"${l.code === lang ? ' aria-current="true"' : ""}>${l.nom}</a>`).join("") +

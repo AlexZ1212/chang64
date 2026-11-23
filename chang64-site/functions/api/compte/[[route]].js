@@ -609,7 +609,10 @@ async function rExporter(s, env) {
     derniere_activite: new Date(l.vu).toISOString(),
     appareils_connectes: n ? n.n : 0,
     classement: { note: l.note, exercices_resolus: l.resolus, jours_de_suite: l.serie, badges: l.badges, record_sprint: l.sprint, semaine: l.sem, exercices_de_la_semaine: l.sem_resolus },
-    parties_en_direct: { gagnees: l.direct_v, nulles: l.direct_n, perdues: l.direct_d },
+    parties_en_direct: Object.assign({ gagnees: l.direct_v, nulles: l.direct_n, perdues: l.direct_d }, await (async () => {
+      const f = await directFamillesLire(env, s.id), un = x => ({ gagnees: x[0], nulles: x[1], perdues: x[2] });
+      return f ? { par_cadence: { blitz: un(f.b), rapide: un(f.r), classique: un(f.c), correspondance: un(f.k) } } : {};
+    })()),
     elo_entre_membres: await (async () => {
       const f = await eloFamillesLire(env, s.id), un = x => (x ? { elo: x.r, parties_comptees: x.n } : null);
       return f ? { blitz: un(f.b), rapide: un(f.r), classique: un(f.c), correspondance: un(f.k) } : null;
@@ -1176,6 +1179,18 @@ async function eloFamillesLire(env, id) {
   } catch (e) { f = { b: null, r: await eloMembreLire(env, id), c: null, k: null }; }
   return f.b || f.r || f.c || f.k ? f : null;
 }
+/* Parties gagnees, nulles, perdues par famille de cadences (2026-11-23) :
+   { b, r, c, k }, chacune [gagnees, nulles, perdues], comptees par le serveur
+   des parties depuis ce jour. Requete a part : une base qui n'a pas encore
+   les colonnes rend null, et la fiche ne porte alors que le total. */
+async function directFamillesLire(env, id) {
+  try {
+    const l = await env.DB.prepare("SELECT direct_b_v, direct_b_n, direct_b_d, direct_r_v, direct_r_n, direct_r_d, direct_c_v, direct_c_n, direct_c_d, direct_k_v, direct_k_n, direct_k_d FROM comptes WHERE id = ?1").bind(id).first();
+    if (!l) return null;
+    const un = f => [l["direct_" + f + "_v"], l["direct_" + f + "_n"], l["direct_" + f + "_d"]];
+    return { b: un("b"), r: un("r"), c: un("c"), k: un("k") };
+  } catch (e) { return null; }
+}
 async function rProfil(request, env, now, waitUntil) {
   const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
   if (!v.ok) return erreur("inconnu", 404);
@@ -1196,12 +1211,13 @@ async function rProfil(request, env, now, waitUntil) {
   const semaine = lundi(now), s = c.sem === semaine ? c.sem_resolus : 0;
   const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint, c.direct_v).first();
   const rang = (dedans, devant) => dedans ? devant + 1 : null;
-  const ef = await eloFamillesLire(env, c.id);
+  const ef = await eloFamillesLire(env, c.id), df = await directFamillesLire(env, c.id);
   const rep = json({
     p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
     s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint, d: c.direct_v,
-    /* Parties en direct : gagnees, nulles, perdues, comptees par le serveur des parties. */
-    dir: { v: c.direct_v, n: c.direct_n, d: c.direct_d },
+    /* Parties en direct : gagnees, nulles, perdues, comptees par le serveur des
+       parties ; f : les memes par famille de cadences (depuis le 2026-11-23). */
+    dir: Object.assign({ v: c.direct_v, n: c.direct_n, d: c.direct_d }, df ? { f: df } : {}),
     rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k), d: rang(c.direct_v > 0, g.d) },
     /* Elo contre l'ordinateur : declare par le navigateur du joueur, non verifie. */
     eo,

@@ -187,7 +187,10 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   w.close();
 
   console.log("--- Invitation recue ---");
-  T("la fenetre d'invitation dit la couleur de l'invite", /inv\.coul==="b"\|\|inv\.coul==="n"/.test(html.replace(/\s+/g, "")) || /inv\.coul/.test(html));
+  /* 2026-11-23 : « inv » est un nom local, raccourci a la construction depuis
+     l'allegement du script. Le motif se lit dans la source ; la page garde
+     les deux phrases. */
+  T("la fenetre d'invitation dit la couleur de l'invite", /inv\.coul==="b"\|\|inv\.coul==="n"/.test(fs.readFileSync(path.join(__dirname, "..", "direct_ecran.js"), "utf8").replace(/\s+/g, "")) && /You play White\./.test(html) && /You play Black\./.test(html));
 
   console.log("--- A 360 px, dans les 10 langues ---");
   const dico = l => l === "en" ? {} : require(path.join(__dirname, "..", "langues", l, "app.js"));

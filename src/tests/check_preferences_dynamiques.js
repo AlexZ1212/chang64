@@ -103,10 +103,14 @@ T("respecte prefers-reduced-motion", /prefersReducedMotion\(\)/.test(html));
    "boolean"==typeof d.anim (== suffit, un typeof renvoie toujours une
    chaine, terser le sait). Verifie a la main dans ui.js/ui2.js/ui3.js que
    la logique elle-meme est intacte avant d'assouplir ces regex. */
-T("calcul en cases, pas en pixels", /dCol\*100|100\*dCol/.test(html));
+/* 2026-11-23 : les noms locaux (dCol, d) sont raccourcis a la construction
+   depuis l'allegement du script ; ils ne sont plus dans la page. Ces deux
+   motifs se lisent donc dans les sources, ou la logique est ecrite. */
+const sourcesUi=["ui.js","ui2.js","ui3.js"].map(x=>fs.readFileSync(require("path").join(__dirname,"..",x),"utf8")).join("\n");
+T("calcul en cases, pas en pixels", /dCol\*100|100\*dCol/.test(sourcesUi));
 T("sauvegarde du reglage", /anim:animOn/.test(html));
 T("activee par defaut", /animOn=(?:true|!0)/.test(html));
-T("une valeur absente ne la desactive pas", /typeof d\.anim\s*={2,3}\s*"boolean"|"boolean"\s*={2,3}\s*typeof d\.anim/.test(html));
+T("une valeur absente ne la desactive pas", /typeof d\.anim\s*={2,3}\s*"boolean"|"boolean"\s*={2,3}\s*typeof d\.anim/.test(sourcesUi));
 
 console.log("\n=== "+ok+" OK, "+ko+" FAIL ===");
   process.exit(ko?1:0);

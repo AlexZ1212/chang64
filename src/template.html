@@ -287,6 +287,17 @@ body{
    rendre le contenu inatteignable a droite. Si un debordement reapparait,
    il sera confine plutot que de decaler tout l'affichage. */
 html{overflow-x:hidden}
+/* Ce filet ne suffisait pas sur telephone (2026-11-23). Un ecran qui arrive
+   glisse de 18 px (.arrivee-d) : il depassait de 10 px a droite, et le
+   navigateur elargissait alors sa zone de mise en page (370 x 761 pour un
+   ecran de 360 x 740) le temps de l'animation. Un defilement lance a ce
+   moment-la (goToSection, focusBoard) visait 21 px trop haut : les titres
+   Confidentialite et Accessibilite arrivaient 32 px sous l'en-tete au lieu
+   de 12. Le corps coupe donc ce qui depasse sur les cotes. Il occupe toute
+   la largeur de l'ecran (ses marges sont des padding) : rien de visible n'est
+   coupe. « clip » ne cree pas de zone de defilement, l'en-tete reste colle ;
+   un navigateur qui ne le connait pas ignore la ligne. */
+body{overflow-x:clip}
 
 /* ---------- header ---------- */
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;

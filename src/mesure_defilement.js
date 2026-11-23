@@ -13,9 +13,12 @@ const { ouvrir } = require("./tests/outils/chrome_sans_fenetre.js");
 const BASE = (process.argv[2] || "http://localhost:8071").replace(/\/$/, "");
 const LARGEURS = [[360, 740], [768, 900], [1024, 800], [1366, 800]];
 /* Ecart admis, en pixels, entre le bas de l'en-tete et le haut de la cible. */
-/* 36 : un titre de section arrive a 12 px de l'en-tete, 33 px quand la ligne
-   « Retour » de l'ecran se pose au-dessus de lui pendant le defilement. */
-const MIN = 0, MAX = 36;
+/* 16 : un titre de section arrive a 12 px de l'en-tete. Le plafond etait de
+   36 px tant que les titres Confidentialite et Accessibilite arrivaient a
+   33 px sur telephone : l'ecran qui arrive en glissant elargissait la page le
+   temps de son animation, et le navigateur visait 21 px trop haut. Corrige
+   le 2026-11-23 (body{overflow-x:clip} dans template.html). */
+const MIN = 0, MAX = 16;
 
 /* [nom, ce qu'on fait, la cible dont on mesure le haut, « haut » : on attend le haut de la page] */
 const CAS = [

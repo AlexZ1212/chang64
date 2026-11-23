@@ -65,6 +65,13 @@ const SITE = path.join(__dirname, "..", "site");
   }
   const app = fs.readFileSync(path.join(SITE, "fr", "index.html"), "utf8");
   T("application : 145 px reste le repli sans JavaScript", /scroll-padding-top:145px/.test(app));
+  /* 2026-11-23 : l'ecran qui arrive en glissant (.arrivee-d, 18 px) elargissait
+     la page sur telephone le temps de l'animation, et un defilement lance a
+     ce moment-la visait 21 px trop haut (titres Confidentialite et
+     Accessibilite a 32 px sous l'en-tete, mesure dans un vrai navigateur par
+     mesure_defilement.js). Le corps coupe ce qui depasse sur les cotes. */
+  T("application : le corps coupe ce qui depasse sur les cotes (body{overflow-x:clip}), apres le filet de html", /html\{overflow-x:hidden\}body\{overflow-x:clip\}/.test(app));
+  T("application : l'animation d'arrivee glisse toujours de 18 px", /@keyframes arriveeDroite\{(?:0%|from)\{opacity:0;transform:translateX\(18px\)\}/.test(app));
 
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

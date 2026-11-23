@@ -92,6 +92,8 @@ const CONTROLE = `(function(sel, mono){
         if (rangee.hauts !== 1) pb.push(l + " statistiques : les pastilles ne sont pas sur une seule ligne");
         if (rangee.barre > 2) pb.push(l + " statistiques : une barre de defilement de " + rangee.barre + " px se voit sous les pastilles");
         if (!/defile/.test(rangee.env)) pb.push(l + " statistiques : la rangee n'a pas son enveloppe .defile");
+        /* Une rangee plus large que l'ecran le dit des l'ouverture : chevron a droite. */
+        if (rangee.defile && !/has-scroll-right/.test(rangee.env)) pb.push(l + " statistiques : la rangee defile mais le chevron de droite manque a l'ouverture");
       }
       await noter(l + " statistiques, toutes les parties", "#menuDirect", ".tc-cats button, .stats-legende li");
       await c.capture(path.join(SORTIE, "statistiques-toutes-" + l + ".png"));
@@ -99,6 +101,9 @@ const CONTROLE = `(function(sel, mono){
       for (const f of ["b", "r", "c", "k"]) {
         await c.js(`document.querySelector('#menuDirect .tc-cats button[data-f="${f}"]').click();1`); await c.attendre(350);
         await noter(l + " statistiques, pastille " + f, "#menuDirect", ".tc-cats button, .stats-legende li");
+        /* La pastille touchee est enfoncee, et entiere dans la rangee. */
+        const vue = await c.js(`(function(){const r=document.querySelector("#menuDirect .tc-cats"),b=r.querySelector('button[aria-pressed="true"]');if(!b)return "aucune pastille enfoncee";const R=r.getBoundingClientRect(),B=b.getBoundingClientRect();return b.dataset.f!=="${f}"?"la pastille enfoncee n'est pas la bonne":(B.left<R.left-1||B.right>R.right+1)?"la pastille enfoncee depasse de la rangee ("+Math.round(B.left)+" a "+Math.round(B.right)+" pour "+Math.round(R.left)+" a "+Math.round(R.right)+")":"";})()`);
+        if (vue) pb.push(l + " statistiques, pastille " + f + " : " + vue);
         if (f === "b" || (f === "k" && (l === "fr" || l === "de" || l === "ru" || l === "pl")) || (f === "c" && l === "fr")) await c.capture(path.join(SORTIE, "statistiques-" + f + "-" + l + ".png"));
       }
     }

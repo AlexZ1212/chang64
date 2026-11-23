@@ -1203,6 +1203,7 @@ module.exports = {
 /* Sons de la partie en direct (2026-11-21). */
 "Your opponent declined the draw.":"Соперник отклонил ничью.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
+"All":"Все",
 "Live games":"Партии вживую",
 "Won":{"one":"Победа","few":"Победы","many":"Побед","other":"Победы"},
 "Drawn":{"one":"Ничья","few":"Ничьи","many":"Ничьих","other":"Ничьи"},

@@ -54,8 +54,40 @@ CREATE TABLE IF NOT EXISTS comptes (
   elo_classique INTEGER NOT NULL DEFAULT 0,
   elo_classique_n INTEGER NOT NULL DEFAULT 0,
   elo_corr INTEGER NOT NULL DEFAULT 0,
-  elo_corr_n INTEGER NOT NULL DEFAULT 0
+  elo_corr_n INTEGER NOT NULL DEFAULT 0,
+  -- Parties gagnees, nulles, perdues par famille de cadences (2026-11-23, SQL
+  -- accepte par Alexandre) : b = Blitz, r = Rapide, c = Classique,
+  -- k = Correspondance ; v = gagnees, n = nulles, d = perdues. Comptees par le
+  -- Worker des parties dans la meme ecriture que le total (direct_v, direct_n,
+  -- direct_d). Elles partent de zero : les parties jouees avant restent dans
+  -- le total, sans famille.
+  direct_b_v INTEGER NOT NULL DEFAULT 0,
+  direct_b_n INTEGER NOT NULL DEFAULT 0,
+  direct_b_d INTEGER NOT NULL DEFAULT 0,
+  direct_r_v INTEGER NOT NULL DEFAULT 0,
+  direct_r_n INTEGER NOT NULL DEFAULT 0,
+  direct_r_d INTEGER NOT NULL DEFAULT 0,
+  direct_c_v INTEGER NOT NULL DEFAULT 0,
+  direct_c_n INTEGER NOT NULL DEFAULT 0,
+  direct_c_d INTEGER NOT NULL DEFAULT 0,
+  direct_k_v INTEGER NOT NULL DEFAULT 0,
+  direct_k_n INTEGER NOT NULL DEFAULT 0,
+  direct_k_d INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant les resultats par famille (2026-11-23, SQL accepte par
+-- Alexandre) : les colonnes s'ajoutent par
+--   ALTER TABLE comptes ADD COLUMN direct_b_v INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_b_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_b_d INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_r_v INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_r_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_r_d INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_c_v INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_c_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_c_d INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_k_v INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_k_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN direct_k_d INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant l'Elo par famille (2026-11-21 au soir, SQL accepte par
 -- Alexandre) : les colonnes s'ajoutent par
 --   ALTER TABLE comptes ADD COLUMN elo_blitz INTEGER NOT NULL DEFAULT 0;

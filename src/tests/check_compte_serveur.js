@@ -672,7 +672,7 @@ const avancer = ms => { decalage += ms; };
     };
     r = await profil("j60");
     T("profil : sans session, 200", r.s === 200 && r.j.p === "Joueur60", r.texte);
-    T("profil : rien d'autre que pseudo, mois, sept chiffres, parties en direct, rangs et Elo contre l'ordinateur", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,d,dir,rangs,eo,em,ef,bl,pays" && r.j.eo === null && r.j.em === null && r.j.ef === null && Object.keys(r.j.dir).join() === "v,n,d" && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k,d" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
+    T("profil : rien d'autre que pseudo, mois, sept chiffres, parties en direct, rangs et Elo contre l'ordinateur", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,d,dir,rangs,eo,em,ef,bl,pays" && r.j.eo === null && r.j.em === null && r.j.ef === null && Object.keys(r.j.dir).join() === "v,n,d,f" && JSON.stringify(r.j.dir.f) === JSON.stringify({ b: [0, 0, 0], r: [0, 0, 0], c: [0, 0, 0], k: [0, 0, 0] }) && Array.isArray(r.j.bl) && r.j.pays === "" && Object.keys(r.j.rangs).join() === "s,n,r,j,b,k,d" && /^\d{4}-\d{2}$/.test(r.j.depuis), JSON.stringify(r.j));
     T("profil : premier a la note et aux exercices", r.j.n === 860 && r.j.rangs.n === 1 && r.j.r === 180 && r.j.rangs.r === 1);
     T("profil : rang = 1 + ceux qui font strictement mieux", r.j.j === 6 && r.j.rangs.j === 13, JSON.stringify(r.j.rangs));
     T("profil : hors tableau (zero, ou semaine passee) : pas de rang", r.j.s === 0 && r.j.rangs.s === null && r.j.rangs.b === null && r.j.rangs.k === null, JSON.stringify(r.j));
@@ -691,6 +691,27 @@ const avancer = ms => { decalage += ms; };
     env.DB.brut.prepare("UPDATE comptes SET donnees = ? WHERE cle = 'j12'").run("{pas du json");
     T("profil : progression illisible, la fiche repond quand meme", (await profil("j12")).s === 200 && (await profil("j12")).j.bl.length === 0);
     T("profil : la route n'existe qu'en lecture", (await appel("POST", "profil", { p: "j1" })).s !== 200);
+
+    /* Parties gagnees, nulles, perdues par famille de cadences (2026-11-23,
+       SQL accepte par Alexandre) : comptees par le serveur des parties, lues
+       par la fiche (dir.f) et par l'export. */
+    console.log("\nResultats par famille de cadences");
+    env.DB.brut.prepare("UPDATE comptes SET direct_v = 9, direct_n = 2, direct_d = 4, direct_b_v = 3, direct_b_n = 1, direct_k_v = 2, direct_k_d = 4 WHERE cle = 'j13'").run();
+    r = await profil("j13");
+    T("profil : les quatre familles, chacune [gagnees, nulles, perdues], a cote du total", r.s === 200 && JSON.stringify(r.j.dir) === JSON.stringify({ v: 9, n: 2, d: 4, f: { b: [3, 1, 0], r: [0, 0, 0], c: [0, 0, 0], k: [2, 0, 4] } }), JSON.stringify(r.j.dir));
+    T("profil : toujours les memes cles, rien de plus", Object.keys(r.j).join() === "p,depuis,s,n,r,j,b,k,d,dir,rangs,eo,em,ef,bl,pays");
+    const cF = (await appel("POST", "creer", { pseudo: "Famille", code: code(7) })).cookie;
+    env.DB.brut.prepare("UPDATE comptes SET direct_v = 5, direct_d = 1, direct_r_v = 5, direct_c_d = 1 WHERE cle = 'famille'").run();
+    r = await appel("GET", "exporter", undefined, { cookie: cF });
+    const zero = { gagnees: 0, nulles: 0, perdues: 0 };
+    T("export : le total, puis le detail par cadence en clair", r.s === 200 && JSON.stringify(r.j.parties_en_direct) === JSON.stringify({ gagnees: 5, nulles: 0, perdues: 1, par_cadence: { blitz: zero, rapide: { gagnees: 5, nulles: 0, perdues: 0 }, classique: { gagnees: 0, nulles: 0, perdues: 1 }, correspondance: zero } }), JSON.stringify(r.j && r.j.parties_en_direct));
+    env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN direct_k_d TO direct_k_x");
+    r = await profil("j13");
+    T("base sans les colonnes des familles : la fiche repond, avec le total seul", r.s === 200 && JSON.stringify(r.j.dir) === JSON.stringify({ v: 9, n: 2, d: 4 }), JSON.stringify(r.j && r.j.dir));
+    r = await appel("GET", "exporter", undefined, { cookie: cF });
+    T("base sans les colonnes des familles : l'export repond, avec le total seul", r.s === 200 && JSON.stringify(r.j.parties_en_direct) === JSON.stringify({ gagnees: 5, nulles: 0, perdues: 1 }), JSON.stringify(r.j && r.j.parties_en_direct));
+    env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN direct_k_x TO direct_k_d");
+    T("suppression du compte : ses compteurs partent avec lui", (await appel("POST", "supprimer", { code: code(7) }, { cookie: cF })).s === 200 && env.DB.brut.prepare("SELECT COUNT(*) AS n FROM comptes WHERE cle = 'famille'").get().n === 0);
   }
 
   console.log("\n" + ok + " OK, " + ko + " FAIL");

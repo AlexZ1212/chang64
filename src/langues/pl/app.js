@@ -1201,6 +1201,7 @@ module.exports = {
 /* Sons de la partie en direct (2026-11-21). */
 "Your opponent declined the draw.":"Przeciwnik odrzucił remis.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
+"All":"Wszystkie",
 "Live games":"Partie na żywo",
 "Won":{"one":"Wygrana","few":"Wygrane","many":"Wygranych","other":"Wygranej"},
 "Drawn":{"one":"Remis","few":"Remisy","many":"Remisów","other":"Remisu"},

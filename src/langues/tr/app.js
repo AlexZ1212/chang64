@@ -1201,6 +1201,7 @@ module.exports = {
 /* Sons de la partie en direct (2026-11-21). */
 "Your opponent declined the draw.":"Rakibin beraberliği reddetti.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
+"All":"Tümü",
 "Live games":"Canlı oyunlar",
 "Won":"Galibiyet",
 "Drawn":"Beraberlik",

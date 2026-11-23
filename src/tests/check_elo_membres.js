@@ -222,6 +222,73 @@ const avancer = ms => { decalage += ms; };
   f = await fiche("Seul");
   T("un membre qui n'a joue qu'en Blitz : ef porte le Blitz, em (Rapide) reste vide", f.em === null && f.ef && f.ef.b.r === 870 && f.ef.b.n === 3 && f.ef.r === null, dit(f.ef));
 
+  console.log("Gagnees, nulles, perdues par famille de cadences");
+  /* 2026-11-23 (demande d'Alexandre, SQL accepte par lui) : chaque resultat
+     est range dans la famille de sa cadence, dans la meme ecriture que le
+     total. Les compteurs partent de zero ; le total garde les parties d'avant. */
+  {
+    const COLS = ["b", "r", "c", "k"].flatMap(x => ["v", "n", "d"].map(y => "direct_" + x + "_" + y));
+    T("les colonnes : trois par famille, gagnees, nulles, perdues", dit(Object.values(E.DIRECT_COLONNES).flat()) === dit(COLS) && Object.keys(E.DIRECT_COLONNES).join("") === "brck", dit(E.DIRECT_COLONNES));
+    const schema = fs.readFileSync(path.join(__dirname, "..", "compte-schema.sql"), "utf8");
+    T("le schema les cree, et dit comment les ajouter a une base d'avant", COLS.every(c => schema.includes("  " + c + " INTEGER NOT NULL DEFAULT 0") && schema.includes("--   ALTER TABLE comptes ADD COLUMN " + c + " INTEGER NOT NULL DEFAULT 0;")));
+    ids.Fana = membre("Fana"); ids.Fabo = membre("Fabo");
+    const bilan = qui => {
+      const l = env.DB.brut.prepare("SELECT direct_v, direct_n, direct_d, " + COLS.join(", ") + " FROM comptes WHERE id = ?").get(ids[qui]);
+      const un = x => [l["direct_" + x + "_v"], l["direct_" + x + "_n"], l["direct_" + x + "_d"]].join("");
+      return [l.direct_v, l.direct_n, l.direct_d].join("") + " b" + un("b") + " r" + un("r") + " c" + un("c") + " k" + un("k");
+    };
+    T("avant toute partie : tout est a zero", bilan("Fana") === "000 b000 r000 c000 k000", bilan("Fana"));
+    g = await partie("Fana", "Fabo", 9);
+    await jouer(g, MAT_NOIR);
+    T("Blitz 3+2 : victoire et defaite rangees en Blitz, et dans le total", bilan(g.noir) === "100 b100 r000 c000 k000" && bilan(g.blanc) === "001 b001 r000 c000 k000", dit([bilan(g.noir), bilan(g.blanc)]));
+    await faux.envoyer(g.id, g.B, { t: "abandon" });
+    T("rien n'est compte deux fois", bilan(g.noir) === "100 b100 r000 c000 k000");
+    const gagnantBlitz = g.noir;
+    g = await partie("Fana", "Fabo", 0);
+    await jouer(g, "e2e4 e7e5");
+    await faux.envoyer(g.id, g.B, { t: "nulle" });
+    await faux.envoyer(g.id, g.N, { t: "nulle" });
+    T("Rapide 10 min, nulle : une nulle en Rapide pour chacun", bilan(gagnantBlitz) === "110 b100 r010 c000 k000" && bilan(gagnantBlitz === "Fana" ? "Fabo" : "Fana") === "011 b001 r010 c000 k000", dit([bilan("Fana"), bilan("Fabo")]));
+    g = await partie("Fana", "Fabo", 5);
+    await jouer(g, MAT_NOIR);
+    const somme = qui => env.DB.brut.prepare("SELECT direct_v + direct_n + direct_d AS t, " + COLS.join(" + ") + " AS f, direct_c_v + direct_c_d AS c FROM comptes WHERE id = ?").get(ids[qui]);
+    T("Classique 60 min : rangee en Classique", somme("Fana").c === 1 && somme("Fabo").c === 1 && somme("Fana").t === 3, dit([bilan("Fana"), bilan("Fabo")]));
+    {
+      /* Par correspondance : invitation, acceptation sans fil, puis la partie. */
+      const cree = await (await appel("POST", "creer", { cad: 7, adv: "Fabo" }, "Fana")).json();
+      await appel("POST", "accepter", { id: cree.id }, "Fabo");
+      const x = await ouvrir(cree.id, "Fana"), y = await ouvrir(cree.id, "Fabo");
+      const aBlanc = x.dernier().moi === "b", gc = { id: cree.id, B: aBlanc ? x : y, N: aBlanc ? y : x, noir: aBlanc ? "Fabo" : "Fana", blanc: aBlanc ? "Fana" : "Fabo" };
+      await jouer(gc, MAT_NOIR);
+      const l = qui => env.DB.brut.prepare("SELECT direct_k_v AS v, direct_k_n AS n, direct_k_d AS d FROM comptes WHERE id = ?").get(ids[qui]);
+      T("Correspondance (3 jours par coup) : rangee en Correspondance", dit(l(gc.noir)) === dit({ v: 1, n: 0, d: 0 }) && dit(l(gc.blanc)) === dit({ v: 0, n: 0, d: 1 }), dit([l(gc.noir), l(gc.blanc)]));
+    }
+    T("pour chacun, la somme des familles est egale au total (4 parties)", somme("Fana").t === 4 && somme("Fana").f === 4 && somme("Fabo").t === 4 && somme("Fabo").f === 4, dit([somme("Fana"), somme("Fabo")]));
+    g = await partie("Fana", "Fabo", 9);
+    await faux.envoyer(g.id, g.B, { t: "abandon" });
+    T("partie annulee avant que chacun ait joue : rien n'est range", somme("Fana").f === 4 && somme("Fabo").f === 4 && somme("Fana").t === 4);
+    T("les parties d'avant restent dans le total sans famille : Anna a un total plus grand que ses familles rangees ici", (x => x.t >= x.f)(somme("Anna")));
+    let fi = await fiche("Fana");
+    const attendu = qui => { const l = env.DB.brut.prepare("SELECT " + COLS.join(", ") + " FROM comptes WHERE id = ?").get(ids[qui]); return Object.fromEntries(["b", "r", "c", "k"].map(x => [x, [l["direct_" + x + "_v"], l["direct_" + x + "_n"], l["direct_" + x + "_d"]]])); };
+    T("fiche : dir.f porte les quatre familles, [gagnees, nulles, perdues]", Object.keys(fi.dir).join() === "v,n,d,f" && dit(fi.dir.f) === dit(attendu("Fana")) && fi.dir.v + fi.dir.n + fi.dir.d === 4, dit(fi.dir));
+    fi = await fiche("Seul");
+    T("fiche d'un membre qui n'a jamais joue : des zeros partout", dit(fi.dir) === dit({ v: 0, n: 0, d: 0, f: { b: [0, 0, 0], r: [0, 0, 0], c: [0, 0, 0], k: [0, 0, 0] } }), dit(fi.dir));
+
+    /* Base qui n'a pas encore les colonnes des familles : tout le reste marche. */
+    env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN direct_b_d TO direct_b_x");
+    const avantT = somme0 => env.DB.brut.prepare("SELECT direct_v + direct_n + direct_d AS t, elo_blitz_n AS e FROM comptes WHERE id = ?").get(ids[somme0]);
+    const a0 = avantT("Fana"), b0 = avantT("Fabo");
+    g = await partie("Fana", "Fabo", 9);
+    await jouer(g, MAT_NOIR);
+    T("sans les colonnes : la partie se finit, le total compte quand meme, l'Elo aussi", g.B.dernier().phase === "fin" && avantT("Fana").t === a0.t + 1 && avantT("Fabo").t === b0.t + 1 && avantT("Fana").e === a0.e + 1 && g.B.dernier().elo !== null, dit([a0, avantT("Fana")]));
+    g = await partie("Fana", "Fabo", 0);
+    await jouer(g, MAT_NOIR);
+    T("une famille dont les colonnes sont la continue d'etre rangee (Rapide : la nulle d'avant et cette partie)", avantT("Fana").t === a0.t + 2 && env.DB.brut.prepare("SELECT direct_r_v + direct_r_n + direct_r_d AS r FROM comptes WHERE id = ?").get(ids.Fana).r === 2, dit(env.DB.brut.prepare("SELECT direct_v, direct_n, direct_d, direct_r_v, direct_r_n, direct_r_d FROM comptes WHERE id = ?").get(ids.Fana)));
+    fi = await fiche("Fana");
+    T("sans les colonnes : la fiche repond, avec le total seul", fi.p === "Fana" && Object.keys(fi.dir).join() === "v,n,d" && fi.dir.v + fi.dir.n + fi.dir.d === a0.t + 2, dit(fi.dir));
+    env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN direct_b_x TO direct_b_d");
+  }
+
   console.log("Ecran");
   const w = await ouvrirPage("fr", { attente: 2600, avant(win) {
     win.localStorage.setItem("chang64:compte", JSON.stringify({ pseudo: "Moi", cle: "moi", version: 1, dev: "abc123", n: 0, sync: 0 }));

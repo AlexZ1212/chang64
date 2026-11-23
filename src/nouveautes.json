@@ -2,6 +2,49 @@
  {
   "d": "2026-11-23",
   "en": [
+   "Your games between members, time control by time control",
+   "In Statistics, your games between members now show won, drawn and lost for each time control: Blitz, Rapid, Classical, Correspondence. Tap a time control to see its bar. Your total stays as it is; the detail starts counting with the games you play from today."
+  ],
+  "fr": [
+   "Tes parties entre membres, cadence par cadence",
+   "Dans Statistiques, tes parties entre membres se lisent maintenant en gagnées, nulles et perdues pour chaque cadence : Blitz, Rapide, Classique, Correspondance. Touche une cadence pour voir sa barre. Ton total ne change pas ; le détail compte les parties que tu joues à partir d'aujourd'hui."
+  ],
+  "es": [
+   "Tus partidas entre miembros, ritmo por ritmo",
+   "En Estadísticas, tus partidas entre miembros muestran ahora ganadas, tablas y perdidas en cada ritmo de juego: Blitz, Rápidas, Clásicas, Correspondencia. Toca un ritmo para ver su barra. Tu total no cambia; el detalle cuenta las partidas que juegues a partir de hoy."
+  ],
+  "pt": [
+   "Suas partidas entre membros, ritmo por ritmo",
+   "Em Estatísticas, suas partidas entre membros agora mostram vitórias, empates e derrotas em cada ritmo de jogo: Blitz, Rápida, Clássica, Correspondência. Toque em um ritmo para ver a barra dele. Seu total não muda; o detalhe conta as partidas que você jogar a partir de hoje."
+  ],
+  "de": [
+   "Deine Partien unter Mitgliedern, Bedenkzeit für Bedenkzeit",
+   "In den Statistiken siehst du deine Partien unter Mitgliedern jetzt nach Bedenkzeit: gewonnen, remis und verloren für Blitz, Schnellschach, Klassisch und Fernpartie. Tippe auf eine Bedenkzeit, um ihren Balken zu sehen. Deine Gesamtzahl bleibt; die Aufteilung zählt die Partien, die du ab heute spielst."
+  ],
+  "ru": [
+   "Твои партии среди участников по контролям времени",
+   "В статистике партии среди участников теперь показаны отдельно для каждого контроля времени: победы, ничьи и поражения в блице, рапиде, классике и по переписке. Нажми на контроль, чтобы увидеть его полосу. Общий счёт не меняется; разбивка считает партии, сыгранные начиная с сегодняшнего дня."
+  ],
+  "it": [
+   "Le tue partite tra i membri, cadenza per cadenza",
+   "In Statistiche, le tue partite tra i membri mostrano ora vinte, patte e perse per ogni cadenza: Blitz, Rapid, Classica, Corrispondenza. Tocca una cadenza per vedere la sua barra. Il tuo totale non cambia; il dettaglio conta le partite che giochi da oggi."
+  ],
+  "tr": [
+   "Üyeler arası oyunların, tempo tempo",
+   "İstatistikler'de üyeler arası oyunların artık her tempo için galibiyet, beraberlik ve mağlubiyet olarak görünüyor: Blitz, Rapid, Klasik, Yazışmalı. Çubuğunu görmek için bir tempoya dokun. Toplamın değişmiyor; ayrıntı, bugünden itibaren oynadığın oyunları sayar."
+  ],
+  "pl": [
+   "Twoje partie wśród członków, tempo po tempie",
+   "W Statystykach partie wśród członków pokazują teraz wygrane, remisy i przegrane dla każdego tempa gry: Blitz, Rapid, Klasyczne, Korespondencyjne. Dotknij tempa, aby zobaczyć jego pasek. Twoja suma się nie zmienia; szczegóły liczą partie, które rozegrasz od dziś."
+  ],
+  "id": [
+   "Partaimu antaranggota, per kontrol waktu",
+   "Di Statistik, partaimu antaranggota kini menampilkan menang, seri, dan kalah untuk tiap kontrol waktu: Blitz, Rapid, Klasik, Korespondensi. Ketuk satu kontrol waktu untuk melihat batangnya. Totalmu tidak berubah; rinciannya menghitung partai yang kamu mainkan mulai hari ini."
+  ]
+ },
+ {
+  "d": "2026-11-23",
+  "en": [
    "The boss opens the next chapter, and matching time controls",
    "In Learn, beating a chapter's boss now opens the next chapter. After three losses against it, the next chapter opens anyway, and the chapters you had already opened stay open. Between members, time controls now match the ones against the computer: 5+3 is a Blitz, and Rapid gains 10+5."
   ],

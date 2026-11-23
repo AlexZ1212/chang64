@@ -1053,6 +1053,7 @@ module.exports = {
 /* Sons de la partie en direct (2026-11-21). */
 "Your opponent declined the draw.":"Ton adversaire a refusé la nulle.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
+"All":"Toutes",
 "Live games":"Parties en direct",
 "Won":{"one":"Gagnée","other":"Gagnées"},
 "Drawn":{"one":"Nulle","other":"Nulles"},

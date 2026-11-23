@@ -123,6 +123,52 @@ function statsBilan(v,n,d){
     cases.filter(c=>c[2]>0).map(([c,,x])=>'<i class="'+c+'" style="flex-grow:'+x+'"></i>').join("")+"</div>"+
     '<ul class="stats-legende">'+cases.map(([c,k,x])=>'<li class="'+c+'"><b>'+x+"</b> "+echapper(t(k,{n:x}))+"</li>").join("")+"</ul></div>";
 }
+/* Gagnees, nulles, perdues par cadence (2026-11-23, choix d'Alexandre sur
+   maquette : une ligne de pastilles qui defile, une seule barre). Le serveur
+   des parties range depuis ce jour chaque resultat dans sa famille (dir.f :
+   b Blitz, r Rapide, c Classique, k Correspondance, chacune [gagnees, nulles,
+   perdues]). Les parties jouees avant restent dans le total (« Toutes »),
+   sans famille. Tant qu'aucune partie n'est rangee dans une famille, ou
+   devant une fiche d'avant, la barre du total s'affiche seule, comme avant. */
+function statsNb(x){return Math.max(0,Math.floor(+x||0));}
+function statsFamillesLire(dir){
+  const f=dir&&dir.f&&typeof dir.f==="object"?dir.f:null,out={};
+  if(!f||typeof ELO_FAMILLES==="undefined")return null;
+  let tot=0;
+  for(const [c] of ELO_FAMILLES){
+    const x=Array.isArray(f[c])?f[c]:[];
+    out[c]=[statsNb(x[0]),statsNb(x[1]),statsNb(x[2])];
+    tot+=out[c][0]+out[c][1]+out[c][2];
+  }
+  return tot>0?out:null;
+}
+function statsFamilles(dir){
+  const d=dir&&typeof dir==="object"?dir:{},total=statsBilan(statsNb(d.v),statsNb(d.n),statsNb(d.d));
+  if(!total)return "";
+  if(!statsFamillesLire(d))return statsSous("Live games")+total;
+  return statsSous("Live games")+
+    '<div class="defile stats-cadences"><div class="tc-cats" role="group" aria-label="'+echapper(t("Time control"))+'">'+
+    '<button type="button" data-f="" aria-pressed="true">'+echapper(t("All"))+"</button>"+
+    ELO_FAMILLES.map(([c,nom])=>'<button type="button" data-f="'+c+'" aria-pressed="false">'+echapper(t(nom))+"</button>").join("")+
+    '</div></div><div id="menuDirectBilan" aria-live="polite">'+total+"</div>";
+}
+/* Une pastille : la barre montre sa famille. Une famille sans partie le dit
+   en une phrase, plutot qu'une pastille grisee qu'on ne peut pas toucher. */
+function statsFamillesBrancher(e,dir){
+  const rangee=e.querySelector(".tc-cats"),zone=e.querySelector("#menuDirectBilan"),f=statsFamillesLire(dir);
+  if(!rangee||!zone||!f)return;
+  rangee.addEventListener("click",ev=>{
+    const b=ev.target&&ev.target.closest?ev.target.closest("button[data-f]"):null;
+    if(!b||!rangee.contains(b))return;
+    for(const x of rangee.querySelectorAll("button"))x.setAttribute("aria-pressed",String(x===b));
+    /* Une pastille a moitie hors de la rangee se recentre, comme dans le choix des cadences. */
+    if(rangee.clientWidth&&(b.offsetLeft<rangee.scrollLeft||b.offsetLeft+b.offsetWidth>rangee.scrollLeft+rangee.clientWidth))
+      rangee.scrollLeft=Math.max(0,b.offsetLeft-(rangee.clientWidth-b.offsetWidth)/2);
+    const c=b.dataset.f,x=c?f[c]:[statsNb(dir.v),statsNb(dir.n),statsNb(dir.d)];
+    poserHtml(zone,statsBilan(x[0],x[1],x[2])||'<div class="stats-bilan"><p class="stats-vide">'+echapper(t("No game of this kind yet."))+"</p></div>");
+  });
+  if(typeof defileBrancher==="function")defileBrancher(rangee);
+}
 /* Contre l'ordinateur : les parties gardees dans « Tes parties » (30 au plus,
    toutes sortes confondues). Ni les parties d'entrainement du chemin, ni
    celles parties d'une position preparee : elles ne comptent pas non plus
@@ -178,10 +224,12 @@ function menuStats(){
       const bloc=menuEl("menuMembres");if(!bloc)return;
       if(typeof eloMembresRemplir==="function")eloMembresRemplir(j);
       const e=menuEl("menuDirect"),d=j&&j.dir&&typeof j.dir==="object"?j.dir:{};
-      const nb=x=>Math.max(0,Math.floor(+x||0)),h=statsBilan(nb(d.v),nb(d.n),nb(d.d));
-      if(e&&h){poserHtml(e,statsSous("Live games")+h);e.hidden=false;}
+      const h=statsFamilles(d);
+      if(e&&h){poserHtml(e,h);e.hidden=false;}
       const elo=menuEl("menuEloMembres");
       bloc.hidden=!((elo&&!elo.hidden)||(e&&!e.hidden));
+      /* Une fois le bloc montre : le chevron de la rangee se mesure a l'ecran. */
+      if(e&&h)statsFamillesBrancher(e,d);
     }).catch(()=>{});
   }
   drawRatingGraph(menuEl("menuRatingGraph"));

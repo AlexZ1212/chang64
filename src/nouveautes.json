@@ -2,6 +2,49 @@
  {
   "d": "2026-11-23",
   "en": [
+   "Badges for the Learn tab",
+   "Fourteen new badges: one for each chapter you finish (chapters 2 to 9), three for the bosses, one for the whole path and two for the placement test. What you have already done counts: those badges are waiting in your collection."
+  ],
+  "fr": [
+   "Des badges pour l'onglet Apprendre",
+   "Quatorze nouveaux badges : un par chapitre fini (chapitres 2 à 9), trois pour les boss, un pour le chemin entier et deux pour le test de placement. Ce que tu as déjà fait compte : ces badges t'attendent dans ta collection."
+  ],
+  "es": [
+   "Insignias para la pestaña Aprender",
+   "Catorce insignias nuevas: una por cada capítulo terminado (capítulos 2 a 9), tres para los jefes, una para el camino entero y dos para la prueba de nivel. Lo que ya has hecho cuenta: esas insignias te esperan en tu colección."
+  ],
+  "pt": [
+   "Medalhas para a aba Aprender",
+   "Catorze medalhas novas: uma para cada capítulo terminado (capítulos 2 a 9), três para os chefões, uma para o caminho inteiro e duas para o teste de nível. O que você já fez conta: essas medalhas esperam por você na sua coleção."
+  ],
+  "de": [
+   "Abzeichen für den Bereich Lernen",
+   "Vierzehn neue Abzeichen: eins für jedes abgeschlossene Kapitel (Kapitel 2 bis 9), drei für die Bosse, eins für den ganzen Weg und zwei für den Einstufungstest. Was du schon geschafft hast, zählt: Diese Abzeichen warten in deiner Sammlung."
+  ],
+  "ru": [
+   "Значки для раздела «Учиться»",
+   "Четырнадцать новых значков: по одному за каждую пройденную главу (главы со 2-й по 9-ю), три за боссов, один за весь путь и два за тест на уровень. То, что уже сделано, засчитано: эти значки ждут тебя в коллекции."
+  ],
+  "it": [
+   "Medaglie per la scheda Impara",
+   "Quattordici nuove medaglie: una per ogni capitolo finito (capitoli da 2 a 9), tre per i boss, una per l'intero percorso e due per il test di livello. Quello che hai già fatto conta: queste medaglie ti aspettano nella tua collezione."
+  ],
+  "tr": [
+   "Öğren sekmesine rozetler",
+   "On dört yeni rozet: bitirdiğin her bölüm için bir tane (2. bölümden 9. bölüme kadar), boss'lar için üç, bütün yol için bir ve seviye testi için iki. Daha önce yaptıkların sayılıyor: bu rozetler koleksiyonunda seni bekliyor."
+  ],
+  "pl": [
+   "Odznaki za zakładkę Ucz się",
+   "Czternaście nowych odznak: jedna za każdy ukończony rozdział (rozdziały od 2 do 9), trzy za bossów, jedna za całą ścieżkę i dwie za test poziomujący. To, co już masz za sobą, się liczy: te odznaki czekają w twojej kolekcji."
+  ],
+  "id": [
+   "Lencana untuk tab Belajar",
+   "Empat belas lencana baru: satu untuk tiap bab yang kamu selesaikan (bab 2 sampai 9), tiga untuk para bos, satu untuk seluruh jalur, dan dua untuk tes penempatan. Yang sudah kamu selesaikan ikut dihitung: lencana itu menunggumu di koleksimu."
+  ]
+ },
+ {
+  "d": "2026-11-23",
+  "en": [
    "Your games between members, time control by time control",
    "In Statistics, your games between members now show won, drawn and lost for each time control: Blitz, Rapid, Classical, Correspondence. Tap a time control to see its bar. Your total stays as it is; the detail starts counting with the games you play from today."
   ],

@@ -1137,8 +1137,6 @@ module.exports = {
 "{n} minutes each, plus {s} seconds added after every move.":"Kişi başı {n} dakika, her hamleden sonra {s} saniye eklenir.",
 "{n} minutes each for the whole game.":"Tüm oyun için kişi başı {n} dakika.",
 /* Resultats des parties en direct (2026-11-19). */
-"Live games won":"Kazanılan canlı oyunlar",
-"Live wins":"Canlı",
 "Live games: {v} won, {n} drawn, {d} lost":"Canlı oyunlar: {v} galibiyet, {n} beraberlik, {d} mağlubiyet",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Bir arkadaşa karşı",
@@ -1202,7 +1200,6 @@ module.exports = {
 "Your opponent declined the draw.":"Rakibin beraberliği reddetti.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
 "All":"Tümü",
-"Live games":"Canlı oyunlar",
 "Won":"Galibiyet",
 "Drawn":"Beraberlik",
 "Lost":"Mağlubiyet",
@@ -1415,5 +1412,8 @@ module.exports = {
 "That was not the best move.":"En iyi hamle bu değildi.",
 "Position skipped.":"Konum geçildi.",
 "See the result":"Sonucu gör",
-"The test stopped after two missed positions in a row: we already know where to start you.":"Test, art arda iki kaçan konumdan sonra durdu: nereden başlaman gerektiğini artık biliyoruz."
+"The test stopped after two missed positions in a row: we already know where to start you.":"Test, art arda iki kaçan konumdan sonra durdu: nereden başlaman gerektiğini artık biliyoruz.",
+"For what you have already done. Tap to see them.":"Daha önce yaptıkların için. Görmek için dokun.",
+"Games won between members":"Üyeler arası galibiyetler",
+"Member wins":"Galibiyet"
 };

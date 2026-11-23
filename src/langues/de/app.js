@@ -1139,8 +1139,6 @@ module.exports = {
 "{n} minutes each, plus {s} seconds added after every move.":"{n} Minuten für jeden, plus {s} Sekunden nach jedem Zug.",
 "{n} minutes each for the whole game.":"{n} Minuten für jeden für die ganze Partie.",
 /* Resultats des parties en direct (2026-11-19). */
-"Live games won":"Gewonnene Live-Partien",
-"Live wins":"Live",
 "Live games: {v} won, {n} drawn, {d} lost":"Live-Partien: {v} gewonnen, {n} remis, {d} verloren",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Gegen einen Freund",
@@ -1204,7 +1202,6 @@ module.exports = {
 "Your opponent declined the draw.":"Dein Gegner hat das Remis abgelehnt.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
 "All":"Alle",
-"Live games":"Live-Partien",
 "Won":"Gewonnen",
 "Drawn":"Remis",
 "Lost":"Verloren",
@@ -1417,5 +1414,8 @@ module.exports = {
 "That was not the best move.":"Das war nicht der beste Zug.",
 "Position skipped.":"Stellung übersprungen.",
 "See the result":"Ergebnis ansehen",
-"The test stopped after two missed positions in a row: we already know where to start you.":"Der Test endet nach zwei verpassten Stellungen in Folge: Wir wissen schon, wo du anfangen solltest."
+"The test stopped after two missed positions in a row: we already know where to start you.":"Der Test endet nach zwei verpassten Stellungen in Folge: Wir wissen schon, wo du anfangen solltest.",
+"For what you have already done. Tap to see them.":"Für das, was du schon geschafft hast. Tippe, um sie zu sehen.",
+"Games won between members":"Siege unter Mitgliedern",
+"Member wins":"Siege"
 };

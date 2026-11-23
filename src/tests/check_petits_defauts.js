@@ -45,20 +45,20 @@ function serveur(dir) {
   const source = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "design", "badges", "symboles.json"), "utf8"));
   T("la source des dessins dit la meme chose", ["ouv_berger", "fete_0801", "ex_hibou"].every(k => source[k].s === med[k][1]) && !/opacity/.test(fs.readFileSync(path.join(__dirname, "..", "..", "design", "badges", "symboles.js"), "utf8")));
 
-  console.log("--- Parties en direct : trois cases ---");
+  console.log("--- Parties entre membres : trois cases, sous « Resultats » ---");
   let w = await ouvrir("fr", { attente: 2400, avant: serveur({ v: 2, n: 0, d: 1 }) });
   let d = w.document, $ = id => d.getElementById(id);
   const cases = (v, n, p) => { w.__d = { v, n, d: p }; const h = w.eval("cppDirect(window.__d)"); const x = d.createElement("div"); x.innerHTML = h; return [...x.querySelectorAll(".menu-tuile")].map(t => t.querySelector("b").textContent + " " + net(t.querySelector("span").textContent)).join(" | "); };
   T("aucune partie comptee : rien n'est affiche", w.eval("cppDirect({v:0,n:0,d:0})") === "" && w.eval("cppDirect(null)") === "");
   T("francais : 2 gagnees, 0 nulle, 1 perdue", cases(2, 0, 1) === "2 Gagnées | 0 Nulle | 1 Perdue", cases(2, 0, 1));
   T("francais : 1 gagnee, 2 nulles, 0 perdue", cases(1, 2, 0) === "1 Gagnée | 2 Nulles | 0 Perdue", cases(1, 2, 0));
-  T("le titre « Parties en direct » precede les cases", /Parties en direct/.test(net(w.eval("cppDirect({v:1,n:0,d:0})"))) && /class="tiroir-section cpp-direct-titre"/.test(w.eval("cppDirect({v:1,n:0,d:0})")));
+  T("le titre « Résultats » precede les cases (plus « Parties en direct » : la correspondance y compte aussi)", /Résultats/.test(net(w.eval("cppDirect({v:1,n:0,d:0})"))) && !/en direct/i.test(net(w.eval("cppDirect({v:1,n:0,d:0})"))) && /class="tiroir-section cpp-direct-titre"/.test(w.eval("cppDirect({v:1,n:0,d:0})")));
   w.eval("menuOuvrir();menuVue('stats')");
   await attendre(900);
   const menu = $("menuDirect");
   /* 2026-11-22 : dans les statistiques, les trois nombres sont une barre
      gagnees / nulles / perdues avec sa legende (statsBilan, menu.js). */
-  T("Statistiques : une barre et ses trois nombres, sous « Parties en direct »", !menu.hidden && !!menu.querySelector(".stats-barre") && [...menu.querySelectorAll(".stats-legende li")].map(x => net(x.textContent)).join(" | ") === "2 Gagnées | 0 Nulle | 1 Perdue" && /Parties en direct/.test(net(menu.textContent)), net(menu.textContent));
+  T("Statistiques : une barre et ses trois nombres, sous « Résultats »", !menu.hidden && !!menu.querySelector(".stats-barre") && [...menu.querySelectorAll(".stats-legende li")].map(x => net(x.textContent)).join(" | ") === "2 Gagnées | 0 Nulle | 1 Perdue" && /Résultats/.test(net(menu.textContent)) && !/en direct/i.test(net(menu.textContent)), net(menu.textContent));
   w.eval("menuFermer();cppOuvrir('Alice')");
   await attendre(600);
   const fiche = $("cpProfilContenu");

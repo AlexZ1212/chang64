@@ -989,8 +989,6 @@ module.exports = {
 "{n} minutes each, plus {s} seconds added after every move.":"{n} minutes chacun, plus {s} secondes ajoutées après chaque coup.",
 "{n} minutes each for the whole game.":"{n} minutes chacun pour toute la partie.",
 /* Resultats des parties en direct (2026-11-19). */
-"Live games won":"Parties en direct gagnées",
-"Live wins":"En direct",
 "Live games: {v} won, {n} drawn, {d} lost":"Parties en direct : {v} gagnées, {n} nulles, {d} perdues",
 /* Onglet Jouer a deux cartes (2026-11-19). */
 "Against a friend":"Contre un ami",
@@ -1054,7 +1052,6 @@ module.exports = {
 "Your opponent declined the draw.":"Ton adversaire a refusé la nulle.",
 /* Parties en direct : trois cases chiffrees (2026-11-21). */
 "All":"Toutes",
-"Live games":"Parties en direct",
 "Won":{"one":"Gagnée","other":"Gagnées"},
 "Drawn":{"one":"Nulle","other":"Nulles"},
 "Lost":{"one":"Perdue","other":"Perdues"},
@@ -1267,5 +1264,8 @@ module.exports = {
 "That was not the best move.":"Ce n'était pas le meilleur coup.",
 "Position skipped.":"Position passée.",
 "See the result":"Voir le résultat",
-"The test stopped after two missed positions in a row: we already know where to start you.":"Le test s'est arrêté après deux positions manquées de suite : on sait déjà où te faire commencer."
+"The test stopped after two missed positions in a row: we already know where to start you.":"Le test s'est arrêté après deux positions manquées de suite : on sait déjà où te faire commencer.",
+"For what you have already done. Tap to see them.":"Pour ce que tu as déjà fait. Touche pour les voir.",
+"Games won between members":"Parties gagnées entre membres",
+"Member wins":"Victoires"
 };

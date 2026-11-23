@@ -926,7 +926,7 @@ setTimeout(cpDemarrer,1200);
    seuls les joueurs qui ont un compte y figurent. La ligne du joueur
    connecte est mise en avant. Chaque tableau est garde une minute ici, cinq
    sur le serveur. */
-const CPJ=[["semaine","This week"],["note","Puzzle rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Live games won"]];
+const CPJ=[["semaine","This week"],["note","Puzzle rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Games won between members"]];
 let cpjPar="semaine",cpjCache={};
 const CPL=["Pawn","Knight","Bishop","Rook","Queen"];
 async function cpjVue(par){
@@ -1031,7 +1031,7 @@ async function cpjVue(par){
    telephone il s'ouvre en tournant l'appareil : c'est la seule exception a
    l'ecran "Redresse ton telephone" (html.joueurs-ouverts, voir le CSS). Sur
    ordinateur et tablette, le bouton "Toutes les stats" l'ouvre. */
-const CPJ_COLONNES=[["s","This week"],["n","Puzzle rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Live wins"]];
+const CPJ_COLONNES=[["s","This week"],["n","Puzzle rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Member wins"]];
 let cpjTout=null,cpjToutT=0,cpjTri="r",cpjSens=-1;
 function cpjGrandDessiner(){
   const g=$("cpjGrand");if(!g)return;
@@ -1307,7 +1307,8 @@ function cppFermer(){
   f.hidden=true;
   if(cppAvant&&cppAvant.focus&&document.contains(cppAvant))cppAvant.focus();
 }
-/* Parties en direct : trois cases, sous leur titre (2026-11-21, remarque
+/* Parties entre membres (en direct ET par correspondance, d'ou le titre
+   « Resultats » depuis le 2026-11-23) : trois cases, sous leur titre (2026-11-21, remarque
    d'Alexandre : la phrase donnait « 1 perdues »). Chaque libelle porte ses
    formes plurielles dans le dictionnaire, choisies sur le nombre de la case.
    Sert a la fiche d'un joueur et aux Statistiques du menu. Vide tant qu'aucune
@@ -1315,7 +1316,7 @@ function cppFermer(){
 function cppDirect(dir){
   const d=cpObjet(dir),cases=[["Won",cpNombre(d.v)],["Drawn",cpNombre(d.n)],["Lost",cpNombre(d.d)]];
   if(cases.reduce((s,x)=>s+x[1],0)<=0)return "";
-  return '<p class="tiroir-section cpp-direct-titre">'+echapper(t("Live games"))+'</p><div class="menu-tuiles trois cpp-direct">'+
+  return '<p class="tiroir-section cpp-direct-titre">'+echapper(t("Results"))+'</p><div class="menu-tuiles trois cpp-direct">'+
     cases.map(([k,n])=>'<div class="menu-tuile"><b>'+n+"</b><span>"+echapper(t(k,{n:n}))+"</span></div>").join("")+"</div>";
 }
 async function cppOuvrir(pseudo){

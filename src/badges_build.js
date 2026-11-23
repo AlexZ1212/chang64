@@ -53,7 +53,8 @@ function code() {
     fs.readFileSync(path.join(__dirname, "jouer.js"), "utf8") + "\n" +
     /* Onglet Apprendre : chemin de chapitres, test de placement (2026-11-22).
        Apres jouer.js (il enveloppe setMode a son tour), avant navigation.js. */
-    fs.readFileSync(path.join(__dirname, "apprendre.js"), "utf8").replace("__CHEMIN_PLAN__", require("./chemin_build.js").plan()) + "\n" +
+    fs.readFileSync(path.join(__dirname, "apprendre.js"), "utf8").replace("__CHEMIN_PLAN__", require("./chemin_build.js").plan())
+      .replace("__CHEMIN_TEST__", String(require("./chemin_build.js").positionsTest())) + "\n" +
     /* Bouton Retour du navigateur et repere de la partie en cours (2026-11-21) :
        en dernier, il enveloppe setMode apres tous les autres. */
     fs.readFileSync(path.join(__dirname, "navigation.js"), "utf8") + "\n" +
@@ -72,7 +73,8 @@ const NIVEAUX = ["Beginner", "Casual", "Solid", "Tough"], NIVEAUX_MK = { mk_faci
 const FINALES = { eg_kq: "Queen vs King", eg_kr: "Rook vs King", eg_krr: "Two rooks vs King", eg_kbn: "Bishop and knight", eg_kp: "King and pawn" };
 const ETAPES = ["How the pieces move", "Taking a piece", "Checkmate", "Back-rank mate", "The fork", "The pin", "Your first game"];
 const GABARITS = { "cond:theme": "{theme}: {n}", "cond:niveau": "Win at {niveau} level", "cond:mk": "Makruk win, {niveau} level",
-  "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "cond:ligue": "Reach the {ligue} league" };
+  "cond:eg": "{finale} endgame won", "cond:etape": "Step {n}: {titre}", "cond:fete": "Play on {date}", "cond:ligue": "Reach the {ligue} league",
+  "cond:chapitre": "Finish the lessons of chapter {n}: {titre}" };
 /* Ligues (2026-11-22) : le nom de la ligue est celui de l'ecran « Ma ligue » (CPL, compte.js). */
 const LIGUES = { ligue_tour: "Rook", ligue_dame: "Queen" };
 function dictionnaire(code) {
@@ -81,6 +83,9 @@ function dictionnaire(code) {
 }
 function conditions(code, t) {
   const D = dictionnaire(code), tr = k => (typeof D[k] === "string" ? D[k] : k);
+  /* Chemin d'Apprendre (2026-11-23) : le badge ch_<chapitre> cite le titre du
+     chapitre tel qu'il est ecrit dans le chemin (chemin/<chapitre>.json). */
+  const chapitres = require("./chemin_build.js").titres(code);
   const g = k => (t._ui && t._ui[k]) || GABARITS[k];
   const f = (gab, v) => Object.keys(v).reduce((s, k) => s.split("{" + k + "}").join(v[k]), gab);
   for (const b of CATALOGUE) {
@@ -92,6 +97,11 @@ function conditions(code, t) {
     else if (FINALES[id]) e[1] = f(g("cond:eg"), { finale: tr(FINALES[id]) });
     else if ((r = id.match(/^debut_(\d)$/))) e[1] = f(g("cond:etape"), { n: r[1], titre: tr(ETAPES[r[1] - 1]) });
     else if (LIGUES[id]) e[1] = f(g("cond:ligue"), { ligue: tr(LIGUES[id]) });
+    else if ((r = id.match(/^ch_([a-z0-9]+)$/))) {
+      const ch = chapitres.find(c => c.id === r[1]);
+      if (!ch) throw new Error("Badge " + id + " : aucun chapitre « " + r[1] + " » dans chemin/plan.json");
+      e[1] = f(g("cond:chapitre"), { n: String(ch.n), titre: ch.titre });
+    }
     /* Jour special sans condition ecrite : la date, au format de la langue
        ("6 janvier", "6. Januar", "6 января"). */
     else if ((r = id.match(/^fete_(\d\d)(\d\d)$/)) && !e[1]) {

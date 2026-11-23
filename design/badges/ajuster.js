@@ -60,7 +60,9 @@ async function rapprocher(s) {
     }
     /* Les compositions a plusieurs elements vont un peu plus pres du bord : elles
        paraissaient vides (remarque d'Alexandre). */
-    const multi = (s.match(/<g fill="currentColor" transform=/g) || []).length + (s.match(/<text/g) || []).length >= 2;
+    /* Une piece porte ses contours entre fill et transform (contours.js, 22/11) : sans [^>]*, elle
+       n etait plus comptee, et une piece avec son accent restait plus petite que les autres. */
+    const multi = (s.match(/<g fill="currentColor"[^>]* transform=/g) || []).length + (s.match(/<text/g) || []).length >= 2;
     const k = Math.min(1.7, Math.max(1, (multi ? 26.5 : RAYON) / r));
     if (k > 1.02 || Math.hypot(cx, cy) > .6) {
       v.s = `<g data-cale="1" transform="scale(${k.toFixed(3)}) translate(${(-cx).toFixed(2)} ${(-cy).toFixed(2)})">${s}</g>`;

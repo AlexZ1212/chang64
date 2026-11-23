@@ -5,7 +5,7 @@ const C = require(path.join(RACINE, "src/badges-catalogue.js"));
 const S = JSON.parse(fs.readFileSync(path.join(__dirname, "symboles.json"), "utf8"));
 const NOMS = { resolus: "Exercices résolus", serie: "Série de jours d'affilée", jours: "Jours joués au total", classement: "Classement",
   themes: "Thèmes tactiques", finales: "Finales", ordinateur: "Parties contre l'ordinateur", ami: "Jouer avec un ami", sprint: "Sprint",
-  coordonnees: "Coordonnées", debut: "Je débute", makruk: "Makruk", semaine: "Jours de la semaine", du_jour: "Exercice du jour",
+  coordonnees: "Coordonnées", debut: "Je débute", apprendre: "Le chemin d'Apprendre", makruk: "Makruk", semaine: "Jours de la semaine", du_jour: "Exercice du jour",
   jours_speciaux: "Jours spéciaux", saisons: "Saisons", exploits: "Exploits et curiosités", ouvertures: "Ouvertures", lecons: "Leçons apprises", membres: "Membres", parties_membres: "Parties entre membres", ligues: "Ligues", defis: "Défis de la semaine" };
 const METAUX = {
   bronze: { face: ["#F0B98C", "#C07A47", "#7A4321"], tranche: ["#D99566", "#6A381A"], grave: "#4A2410" },

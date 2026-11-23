@@ -145,8 +145,10 @@ function statsFamillesLire(dir){
 function statsFamilles(dir){
   const d=dir&&typeof dir==="object"?dir:{},total=statsBilan(statsNb(d.v),statsNb(d.n),statsNb(d.d));
   if(!total)return "";
-  if(!statsFamillesLire(d))return statsSous("Live games")+total;
-  return statsSous("Live games")+
+  /* « Resultats » (2026-11-23, choix d'Alexandre) : le sous-titre disait
+     « Parties en direct », faux depuis que la pastille Correspondance est la. */
+  if(!statsFamillesLire(d))return statsSous("Results")+total;
+  return statsSous("Results")+
     '<div class="defile stats-cadences"><div class="tc-cats" role="group" aria-label="'+echapper(t("Time control"))+'">'+
     '<button type="button" data-f="" aria-pressed="true">'+echapper(t("All"))+"</button>"+
     ELO_FAMILLES.map(([c,nom])=>'<button type="button" data-f="'+c+'" aria-pressed="false">'+echapper(t(nom))+"</button>").join("")+

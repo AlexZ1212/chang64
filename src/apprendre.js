@@ -28,6 +28,7 @@
  *
  * Colle apres jouer.js et avant navigation.js (badges_build.js). */
 const CHEMIN_PLAN = __CHEMIN_PLAN__;   /* [{id:"debut"},{id,n,boss}] dans l'ordre du chemin */
+const CHEMIN_TEST = __CHEMIN_TEST__;   /* nombre de positions du test de placement */
 const CHEMIN_CLE = "chang64:chemin";
 /* Defaites contre un boss apres lesquelles le chapitre suivant s'ouvre quand meme. */
 const BOSS_ESSAIS = 3;
@@ -104,6 +105,7 @@ function cheminAdopter(v) {
   for (const id in leconsEtat) if (chemin.c[id] && lecon !== leconsEtat[id]) delete leconsEtat[id];
   if (chemin.p && chemin.p.f && typeof botLevel !== "undefined" && mode !== "play") { botLevel = chemin.p.f; if (typeof syncForce === "function") syncForce(); }
   cheminMaj();
+  cheminRattraper();
 }
 function debutAdopter(v) {
   if (!v || typeof v !== "object") return;
@@ -114,6 +116,7 @@ function debutAdopter(v) {
   }
   debut.charge = true;
   cheminMaj();
+  cheminRattraper();
 }
 
 /* ---------- Ou en est chaque chapitre ---------- */
@@ -351,13 +354,96 @@ function bossFin() {
   s.f.push(n); s.f.sort((a, b) => a - b);
   if (leconsEtat[id] && !leconsEtat[id].faites.includes(n)) leconsEtat[id].faites.push(n);
   cheminEcrire();
+  /* Les badges du chemin : la partie est finie et enregistree. */
+  cheminBadgesGagner();
   if (typeof objAnnoncer === "function") objAnnoncer("parfait", t("Boss beaten"), t("Chapter {n} is yours. Tap to go back to the path.", { n: i + 1 }),
     () => { setMode("apprendre"); goTop(); });
+}
+
+/* ---------- Badges du chemin (2026-11-23, liste validee par Alexandre) ----------
+   Quatorze badges, famille « apprendre » du catalogue :
+   - ch_<chapitre> : toutes les lecons du chapitre sont reussies (chapitres 2 a
+     9 ; le chapitre 1 a deja les siens, famille « debut »). Le boss n'est pas
+     demande, et le test de placement ne donne aucun badge de chapitre : il
+     faut faire les lecons ;
+   - boss_1 : un boss battu ; boss_net : un boss battu sans avoir perdu contre
+     lui avant ; boss_tous : tous les boss battus ;
+   - chemin_fini : les lecons de tous les chapitres, « Je debute » compris ;
+   - test_fait : le test de placement mene jusqu'au resultat ; test_parfait :
+     toutes ses positions trouvees.
+   Tout se lit dans la progression (chemin, debut) : rien de plus a garder ni a
+   envoyer au compte. Un badge merite devient un fait acquis (bxMarquer,
+   prog.bx.f), que checkBadges (badges.js) reconnait.
+   Regle du site : la fenetre Bravo ne s'ouvre qu'a la fin d'une lecon, d'une
+   partie contre un boss ou du test (cheminBadgesGagner est appelee a ces trois
+   moments, et seulement la). Ce qui a ete merite avant ce lot, ou sur un autre
+   appareil, entre dans la collection sans fenetre (cheminRattraper). */
+function cheminBadgesIds() {
+  const ids = [], avecBoss = [];
+  let tous = true;
+  for (let i = 0; i < CHEMIN_PLAN.length; i++) {
+    const c = CHEMIN_PLAN[i], e = cheminEtat(i);
+    if (!e.fini) tous = false;
+    if (i < 1) continue;
+    if (e.fini) ids.push("ch_" + c.id);
+    if (c.boss) avecBoss.push(e);
+  }
+  const battus = avecBoss.filter(e => e.boss);
+  if (battus.length) ids.push("boss_1");
+  if (battus.some(e => !e.defaites)) ids.push("boss_net");
+  if (avecBoss.length && battus.length === avecBoss.length) ids.push("boss_tous");
+  if (tous) ids.push("chemin_fini");
+  const p = chemin.p;
+  if (p && p.t) {
+    ids.push("test_fait");
+    /* Un resultat d'avant ce lot ne dit pas sur combien de positions : le
+       test d'aujourd'hui sert alors de mesure. */
+    if (p.n > 0 && p.n >= (p.q > 0 ? p.q : CHEMIN_TEST)) ids.push("test_parfait");
+  }
+  return ids;
+}
+/* A la fin d'une lecon, d'une partie contre un boss ou du test : ce qui vient
+   d'etre merite est note, puis annonce par la fenetre Bravo. */
+function cheminBadgesGagner() {
+  if (typeof bxMarquer !== "function" || typeof bxVerifier !== "function") return;
+  try { if (cheminBadgesIds().filter(id => bxMarquer(id)).length) bxVerifier(); } catch (e) {}
+}
+/* Rattrapage : au chargement, et quand une progression arrive du compte. Sans
+   fenetre : une seule annonce discrete dit combien de badges ont ete ajoutes
+   (bxAdopter, badges.js). On attend la fin d'une synchronisation en cours :
+   elle peut apporter des badges deja gagnes, et deja fetes, sur un autre
+   appareil. */
+let cheminRattrapeT = 0;
+function cheminRattraper() {
+  if (typeof bxMarquer !== "function" || typeof bxAdopter !== "function") return;
+  clearTimeout(cheminRattrapeT);
+  if (typeof cpEnCours !== "undefined" && cpEnCours) { cheminRattrapeT = setTimeout(cheminRattraper, 1000); return; }
+  cheminPret(false).then(() => {
+    try {
+      const ids = cheminBadgesIds();
+      for (const id of ids) bxMarquer(id);
+      bxAdopter(ids, "chemin");
+    } catch (e) {}
+  });
+}
+/* Au chargement, avec le rattrapage des autres badges (badges.js) : la
+   progression du joueur est lue a ce moment-la. */
+if (typeof bxAdopterLocal === "function") {
+  const av = bxAdopterLocal;
+  bxAdopterLocal = function () { const r = av.apply(this, arguments); cheminRattraper(); return r; };
+}
+/* La derniere lecon d'un chapitre vient d'etre reussie (debutReussi, ui3.js). */
+if (typeof debutReussi === "function") {
+  const av = debutReussi;
+  debutReussi = function () { const r = av.apply(this, arguments); cheminBadgesGagner(); return r; };
 }
 
 /* ---------- Test de placement ---------- */
 let test = { actif: false, i: 0, rep: [], fin: false, occupe: false, gen: 0, res: null };
 function testEnCours() { return test.actif && !test.fin; }
+/* Le test tient l'ecran des lecons (positions ou resultat) : la lecon restee
+   derriere n'est pas « en cours » (bravoOccupe, badges.js). */
+function testOuvert() { return test.actif; }
 function testArreter() { test.actif = false; test.gen++; }
 /* Le glisser-deposer de l'echiquier (ui3.js) demande si la lecon accepte un coup. */
 function leconBloquee() { return test.actif ? (test.fin || test.occupe) : (lecon.ok || lecon.occupe); }
@@ -488,6 +574,8 @@ function testSuivant() {
   if (testFini()) { test.fin = true; testCalculer(); }
   else test.i = test.rep.length;
   if (mode === "debut") { testRendre(); leconAjuster(true); if (!test.fin && typeof focusBoard === "function") focusBoard(); }
+  /* Le test est fini, son resultat est a l'ecran : ses badges. */
+  if (test.fin) cheminBadgesGagner();
 }
 /* Ce que le test regle. Une position jamais vue compte comme manquee. */
 const TEST_NIVEAUX = [[1, 700], [1, 700], [1, 700], [1, 700], [1, 800], [1, 800], [2, 900], [3, 1000], [4, 1150], [5, 1300], [6, 1450]];
@@ -517,7 +605,9 @@ function testCalculer() {
   /* Le chemin s'ouvre tout de suite, quoi que le joueur decide des reglages. */
   const ouverts = CHEMIN_PLAN.slice(0, Math.min(entree + 1, CHEMIN_PLAN.length)).map(c => c.id);
   chemin.o = Array.from(new Set(chemin.o.concat(ouverts)));
-  chemin.p = { t: Date.now(), n: score, e: entree >= CHEMIN_PLAN.length ? "fin" : CHEMIN_PLAN[entree].id };
+  /* q : le nombre de positions du test ce jour-la (il est passe de 10 a 19 le
+     22/11) : un sans-faute se reconnait encore plus tard (badge « Sans faute »). */
+  chemin.p = { t: Date.now(), n: score, q: P.length, e: entree >= CHEMIN_PLAN.length ? "fin" : CHEMIN_PLAN[entree].id };
   cheminEcrire();
   try { if (typeof bxActivite === "function") bxActivite(); } catch (e) {}
 }

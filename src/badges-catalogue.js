@@ -341,6 +341,39 @@ const BADGES_CATALOGUE = [
   ["debut_fini","debut","Parcours Je débute terminé","Diplôme","un rouleau avec un ruban",
    "Le parcours est terminé ! Tu connais maintenant les règles, le mat et les premières tactiques. La suite, c'est en jouant."],
 
+  /* ---------- 11 bis. Le chemin de l'onglet Apprendre (14, 2026-11-23 : liste validee par Alexandre).
+     Un badge par chapitre dont les lecons sont finies (chapitres 2 a 9 ; le chapitre 1 est la famille
+     « Je debute »), trois pour les boss, un pour le chemin entier, deux pour le test de placement.
+     La condition d'un chapitre est recomposee par badges_build.js avec le titre du chapitre (chemin/). ---------- */
+  ["ch_regles","apprendre","Finir les leçons du chapitre 2 : Toutes les règles","Arbitre","un livre de règles et une balance",
+   "Roque, promotion, prise en passant, pat : tu connais toutes les règles. Elles ont mis des siècles à se fixer : en Angleterre, jusque vers 1800, celui qui faisait pat perdait la partie."],
+  ["ch_securite","apprendre","Finir les leçons du chapitre 3 : Ne rien donner","Rien en prise","un fou et un bouclier",
+   "Un pion vaut 1, un cavalier ou un fou 3, une tour 5, la dame 9. Le roi n'a pas de prix : on ne peut pas l'échanger."],
+  ["ch_mats","apprendre","Finir les leçons du chapitre 4 : Les mats à connaître","Baiser de la dame","une dame et un cœur",
+   "Le baiser de la dame : elle se colle au roi, bien protégée, et il n'a plus une seule case. Le mat étouffé, lui, figure déjà dans le livre de Lucena, imprimé en 1497."],
+  ["ch_menaces","apprendre","Finir les leçons du chapitre 5 : Les doubles menaces","D'une pierre deux coups","un cavalier et deux flèches",
+   "Deux menaces d'un seul coup : l'adversaire n'en pare qu'une. Le cavalier adore ça : la pièce qu'il attaque ne peut jamais l'attaquer en retour, sauf si c'est un autre cavalier."],
+  ["ch_clouer","apprendre","Finir les leçons du chapitre 6 : Clouer et enfiler","Cloué sur place","une tour et une punaise",
+   "Une pièce clouée devant son roi n'a même plus le droit de bouger. Seuls le fou, la tour et la dame savent clouer et enfiler : il faut voir loin, en ligne droite."],
+  ["ch_ouverture","apprendre","Finir les leçons du chapitre 7 : Bien commencer une partie","Bon départ","un pion et une fusée",
+   "Le centre, les pièces dehors, le roi à l'abri. Avec ces trois idées, tu joues bien les premiers coups sans connaître une seule ouverture par cœur."],
+  ["ch_finales","apprendre","Finir les leçons du chapitre 8 : Les finales de base","Dernière ligne droite","un roi et un drapeau d'arrivée",
+   "En finale, le roi ne se cache plus : il avance et se bat comme les autres. Quand il reste peu de pièces, c'est souvent lui qui fait gagner."],
+  ["ch_mat2","apprendre","Finir les leçons du chapitre 9 : Le mat en deux","Deux coups d'avance","le signe #2",
+   "Voir deux coups à l'avance, c'est déjà calculer. Le mat se note d'un dièse : sous un problème d'échecs, « #2 » veut dire que les Blancs jouent et font mat en deux coups."],
+  ["boss_1","apprendre","Battre un boss de fin de chapitre","Premier boss","un robot et une épée",
+   "Ton premier boss est tombé. Donner une pièce d'avance à son adversaire est une vieille tradition : au XIXᵉ siècle, Paul Morphy offrait souvent un cavalier, et gagnait quand même."],
+  ["boss_net","apprendre","Battre un boss sans avoir perdu contre lui avant","Du premier coup","un robot et un éclair",
+   "Un boss battu sans jamais avoir perdu contre lui. Aux échecs, le premier coup est le privilège des Blancs, et ça compte : ils gagnent un peu plus souvent que les Noirs."],
+  ["boss_tous","apprendre","Battre les huit boss","Tombeur de boss","un robot couronné",
+   "Huit boss, huit victoires. Les ordinateurs ont leur propre championnat du monde depuis 1974 : le premier, à Stockholm, a été gagné par le programme soviétique Kaïssa."],
+  ["chemin_fini","apprendre","Finir les leçons des neuf chapitres","Sommet","une montagne et un drapeau",
+   "Neuf chapitres, des premiers pas au mat en deux : tu as fait tout le chemin. Le plus beau reste à faire : jouer."],
+  ["test_fait","apprendre","Faire le test de placement jusqu'au résultat","Point de départ","un repère de carte",
+   "Tu sais maintenant d'où tu pars. Sur l'échiquier, le point de départ est le même pour tout le monde : seize pièces chacun, rangées de la même façon depuis des siècles."],
+  ["test_parfait","apprendre","Trouver toutes les positions du test de placement","Sans faute","une copie d'examen",
+   "Toutes les positions trouvées, pas une seule manquée. En 1893 à New York, Emanuel Lasker a gagné un tournoi de la même façon : treize victoires en treize parties."],
+
   /* ---------- 12. Makruk (6) ---------- */
   ["mk_partie","makruk","Première partie de Makruk","Sawatdi","une main qui salue à la thaïe",
    "Le Makruk, ce sont les échecs de Thaïlande : un cousin des nôtres, descendant comme eux du chaturanga indien."],

@@ -42,7 +42,9 @@ const EF = { b: { r: 1012, n: 12 }, r: { r: 980, n: 1 }, c: null, k: { r: 1104, 
 
   console.log("--- La rangee de pastilles et la barre ---");
   let m = await stats({ p: "Moi", ef: EF, dir: { v: 14, n: 3, d: 11, f: { b: [7, 2, 3], r: [1, 0, 0], c: [0, 0, 0], k: [4, 1, 6] } } });
-  T("le bloc est visible, sous « Parties en direct »", !m.hidden && !$("menuMembres").hidden && net(m.querySelector(".tiroir-section").textContent) === "Parties en direct");
+  T("le bloc est visible, sous « Résultats »", !m.hidden && !$("menuMembres").hidden && net(m.querySelector(".tiroir-section").textContent) === "Résultats");
+  T("le sous-titre ne dit plus « en direct » : la pastille Correspondance est dessous", !/direct/i.test(net(m.querySelector(".tiroir-section").textContent)) && pastilles(m).some(b => net(b.textContent) === "Correspondance"));
+  T("il ne repete pas le titre du bloc, « Parties entre membres »", net($("menuMembres").querySelector(".stats-cat").textContent) === "Parties entre membres" && !/Parties/.test(net(m.querySelector(".tiroir-section").textContent)));
   T("cinq pastilles : Toutes, puis les quatre familles dans l'ordre des Elo", pastilles(m).map(b => net(b.textContent)).join(" | ") === "Toutes | Blitz | Rapide | Classique | Correspondance", pastilles(m).map(b => net(b.textContent)).join(" | "));
   T("ce sont de vrais boutons, dans un groupe nomme « Cadence »", pastilles(m).every(b => b.tagName === "BUTTON" && b.type === "button") && m.querySelector(".tc-cats").getAttribute("role") === "group" && m.querySelector(".tc-cats").getAttribute("aria-label") === "Cadence");
   T("la rangee est dans son enveloppe qui defile (une ligne, sans barre de defilement)", m.querySelector(".tc-cats").parentNode.classList.contains("defile") && m.querySelector(".tc-cats").parentNode.dataset.branche === "1");
@@ -67,7 +69,7 @@ const EF = { b: { r: 1012, n: 12 }, r: { r: 980, n: 1 }, c: null, k: { r: 1104, 
 
   console.log("--- Sans detail par famille : comme avant ---");
   m = await stats({ p: "Moi", ef: EF, dir: { v: 12, n: 1, d: 3 } });
-  T("fiche d'un serveur d'avant (pas de f) : la barre du total seule, sans pastilles", !m.hidden && pastilles(m).length === 0 && legende(m) === "12 Gagnées | 1 Nulle | 3 Perdues" && net(m.querySelector(".tiroir-section").textContent) === "Parties en direct", legende(m));
+  T("fiche d'un serveur d'avant (pas de f) : la barre du total seule, sans pastilles", !m.hidden && pastilles(m).length === 0 && legende(m) === "12 Gagnées | 1 Nulle | 3 Perdues" && net(m.querySelector(".tiroir-section").textContent) === "Résultats", legende(m));
   m = await stats({ p: "Moi", ef: EF, dir: { v: 12, n: 1, d: 3, f: { b: [0, 0, 0], r: [0, 0, 0], c: [0, 0, 0], k: [0, 0, 0] } } });
   T("aucune partie encore rangee par famille (toutes jouees avant) : pas de pastilles non plus", pastilles(m).length === 0 && legende(m) === "12 Gagnées | 1 Nulle | 3 Perdues");
   m = await stats({ p: "Moi", ef: null, dir: { v: 0, n: 0, d: 0, f: { b: [0, 0, 0], r: [0, 0, 0], c: [0, 0, 0], k: [0, 0, 0] } } });
@@ -100,6 +102,25 @@ const EF = { b: { r: 1012, n: 12 }, r: { r: 980, n: 1 }, c: null, k: { r: 1104, 
   await attendre(900);
   T("anglais : All, Blitz, Rapid, Classical, Correspondence", [...d.querySelectorAll("#menuDirect .tc-cats button")].map(b => net(b.textContent)).join(" | ") === "All | Blitz | Rapid | Classical | Correspondence");
   w.close();
+
+  console.log("--- Le sous-titre « Resultats » et les libelles voisins, dans les 10 langues ---");
+  {
+    /* 2026-11-23, choix d'Alexandre : « Parties en direct » coiffait aussi la
+       correspondance. Le sous-titre des Statistiques et le titre de la fiche
+       d'un membre disent « Resultats » ; le classement dit « Parties gagnees
+       entre membres ». Les anciennes cles ne doivent revenir nulle part. */
+    const code = ["menu.js", "compte.js"].map(f => fs.readFileSync(path.join(SRC, f), "utf8")).join("\n");
+    T("le code n'emploie plus les cles « Live games », « Live games won », « Live wins »", !/"Live games"|"Live games won"|"Live wins"/.test(code));
+    T("Statistiques et fiche : la cle « Results » ; classement : « Games won between members »", /statsSous\("Results"\)/.test(code) && /cpp-direct-titre">'\+echapper\(t\("Results"\)\)/.test(code) && /\["direct","Games won between members"\]/.test(code) && /\["d","Member wins"\]/.test(code));
+    const VIF = { fr: /direct/i, es: /directo/i, pt: /ao vivo/i, de: /live/i, ru: /вживую|реальном времени/i, it: /diretta/i, tr: /canlı/i, pl: /na żywo/i, id: /langsung/i };
+    for (const l of CODES) {
+      if (l === "en") continue;
+      const D = require(path.join(SRC, "langues", l, "app.js"));
+      const trois = ["Results", "Games won between members", "Member wins"].map(k => D[k]);
+      T(l + " : les trois libelles sont traduits, sans le mot « en direct »", trois.every(x => typeof x === "string" && x.trim()) && trois[1] !== "Games won between members" && trois.every(x => !VIF[l].test(x)), trois.join(" | "));
+      T(l + " : les trois anciennes cles ont quitte le dictionnaire", !("Live games" in D) && !("Live games won" in D) && !("Live wins" in D));
+    }
+  }
 
   console.log("--- Nouveautes et style ---");
   const N = JSON.parse(fs.readFileSync(path.join(SRC, "nouveautes.json"), "utf8"));

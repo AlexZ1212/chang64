@@ -28,7 +28,7 @@ const ANCIENNES = [
 ];
 const ORDINATEUR = "Click the install icon at the right of the address bar.";
 /* Le mot du clic dans chaque langue, et celui du toucher attendu a sa place. */
-const CLIC = { fr: /cliqu/i, es: /\bclic\b/i, pt: /cliqu|clicar/i, de: /klick/i, ru: /щ[её]лк|клик/i, it: /\bclic/i, tr: /tıkla/i, pl: /klikn/i, id: /\bklik|mengklik/i };
+const CLIC = { fr: /cliqu/i, es: /\bclic\b/i, pt: /cliqu|clicar/i, de: /klick/i, ru: /щ[её]лк|клик/i, it: /\bclic/i, tr: /\btıkla/i, pl: /klikn/i, id: /\bklik|mengklik/i };
 const TOUCHER = { fr: /touche/i, es: /\btoca/i, pt: /\btoqu|\btocar/i, de: /tipp/i, ru: /наж/i, it: /\btocc/i, tr: /dokun/i, pl: /dotkn/i, id: /ketuk|mengetuk/i };
 
 console.log("--- Le code et le gabarit ---");

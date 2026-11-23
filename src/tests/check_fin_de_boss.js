@@ -72,8 +72,10 @@ const espionAnnonces = () => ev("window.__annonces=[];(function(){const av=objAn
   await finir("lose", "W");
   c = carte();
   T("deuxieme defaite : 2 sur 3", c.sous.startsWith("Défaites contre ce boss : 2 sur 3.") && c.b1 === "Réessayer le boss", dit(c));
+  const analyseAvant = ev("!!bxEtat().f.ex_analyse");
   $("resultAnalyse").click(); await pause(300);
   T("« Retour au chemin » ramene a l'onglet Apprendre", ev("mode") === "apprendre");
+  T("et ne donne pas le badge « analyser une partie » (le bouton n'est pas « Revoir » ici)", analyseAvant === false && ev("!!bxEtat().f.ex_analyse") === false);
 
   console.log("--- Troisieme defaite : la suite s'ouvre, on la propose ---");
   await lancer(); await finir("lose", "W");

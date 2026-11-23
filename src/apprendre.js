@@ -433,7 +433,10 @@ if (typeof renderResult === "function") {
     const b = $("resultBanner");
     if (b && !b.classList.contains("hide") && bossCarteActive()) {
       const c = bossCarteContenu(), f = k < 2 ? c.b[k] && c.b[k][1] : c.lien && c.lien[1];
-      if (f) { f(); return; }
+      /* Le bouton a ici un autre role : les ecouteurs de son role ordinaire
+         (le badge « analyser une partie » sur « Revoir », badges.js) ne
+         doivent pas s'y declencher. */
+      if (f) { if (ev && ev.stopImmediatePropagation) ev.stopImmediatePropagation(); f(); return; }
     }
     return av ? av.call(this, ev) : undefined;
   };

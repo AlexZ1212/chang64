@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /* Serveur local de chang64 avec le compte (2026-11-16).
 
-   Usage : node serveur_local.js [port]      (8067 par defaut)
+   Usage : node serveur_local.js [port]      (8067 par defaut ; 0 = un port
+   libre choisi par le systeme, ecrit sur la premiere ligne de la sortie)
 
    Sert site/ comme le ferait Cloudflare Pages, et fait tourner les fonctions
    du compte (functions/api/compte) contre une base SQLite en memoire qui
@@ -32,7 +33,8 @@ function fausseD1() {
 module.exports = { fausseD1 };
 
 if (require.main === module) {
-  const PORT = +process.argv[2] || 8067, RACINE = path.join(__dirname, "site");
+  let PORT = process.argv[2] === "0" ? 0 : +process.argv[2] || 8067;
+  const RACINE = path.join(__dirname, "site");
   const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".json": "application/json", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2", ".webmanifest": "application/manifest+json", ".ico": "image/x-icon", ".wasm": "application/wasm" };
   const env = { DB: fausseD1() };
   /* Parties en direct (2026-11-19) : le Worker a part (worker-parties/) tourne
@@ -103,7 +105,7 @@ if (require.main === module) {
   }
   const fonctions = {};
   const fonction = async nom => fonctions[nom] || (fonctions[nom] = await import(pathToFileURL(path.join(__dirname, "functions", "api", nom)).href));
-  http.createServer(async (q, r) => {
+  const serveur = http.createServer(async (q, r) => {
     try {
       const u = new URL(q.url, "http://" + (q.headers.host || "localhost:" + PORT));
       if (u.pathname.startsWith("/api/partie/")) {
@@ -138,5 +140,5 @@ if (require.main === module) {
       r.writeHead(200, { "Content-Type": TYPES[path.extname(x)] || "application/octet-stream" });
       fs.createReadStream(x).pipe(r);
     } catch (e) { r.writeHead(500); r.end(String(e && e.stack || e)); }
-  }).on("upgrade", (q, prise) => { monter(q, prise).catch(() => prise.destroy()); }).listen(PORT, () => console.log("chang64 local : http://localhost:" + PORT));
+  }).on("upgrade", (q, prise) => { monter(q, prise).catch(() => prise.destroy()); }).listen(PORT, () => { PORT = serveur.address().port; console.log("chang64 local : http://localhost:" + PORT); });
 }

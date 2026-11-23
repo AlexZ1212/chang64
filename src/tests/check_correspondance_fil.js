@@ -14,16 +14,22 @@ process.removeAllListeners("warning"); process.on("warning", () => {});
 
 let ok = 0, ko = 0;
 const T = (n, c, d) => { if (c) { ok++; console.log("  OK   " + n); } else { ko++; console.log("  FAIL " + n + (d !== undefined ? "  -> " + (typeof d === "string" ? d : JSON.stringify(d)) : "")); } };
-const PORT = 8074, BASE = "http://localhost:" + PORT;
+/* Port libre choisi par le systeme (2026-11-23) : un port fixe faisait echouer
+   le test des qu'un serveur d'apercu l'occupait deja. */
+let BASE = "";
 const D = require("../direct.js");
 const pause = ms => new Promise(r => setTimeout(r, ms));
 async function jusqua(f, ms) { const fin = Date.now() + (ms || 4000); while (Date.now() < fin) { if (await f()) return true; await pause(20); } return false; }
 
-const serveur = spawn(process.execPath, [path.join(__dirname, "..", "serveur_local.js"), String(PORT)], { stdio: ["ignore", "pipe", "inherit"] });
+const serveur = spawn(process.execPath, [path.join(__dirname, "..", "serveur_local.js"), "0"], { stdio: ["ignore", "pipe", "inherit"] });
 const fin = code => { serveur.kill(); process.exit(code); };
 
 (async () => {
-  await new Promise((res, rej) => { serveur.stdout.once("data", res); serveur.once("exit", () => rej(new Error("le serveur local ne demarre pas"))); });
+  BASE = await new Promise((res, rej) => {
+    let lu = "";
+    serveur.stdout.on("data", d => { lu += d; const m = lu.match(/http:\/\/localhost:\d+/); if (m) res(m[0]); });
+    serveur.once("exit", () => rej(new Error("le serveur local ne demarre pas")));
+  });
   const code = n => Buffer.from(String(n).padStart(32, "x")).toString("base64url");
   async function membre(pseudo) {
     const r = await fetch(BASE + "/api/compte/creer", { method: "POST", headers: { "Content-Type": "application/json", Origin: BASE }, body: JSON.stringify({ pseudo, code: code(pseudo), donnees: { progress: { solved: 0 } } }) });

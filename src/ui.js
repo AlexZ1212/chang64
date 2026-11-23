@@ -1080,35 +1080,96 @@ const SON=(function(){
      relevee de 5 dB environ, puis par un compresseur qui evite la saturation
      quand plusieurs sons se superposent (accord du mat, fanfare de medaille). */
   const VOLUME_GENERAL=1.8;
-  function reveiller(){
+  /* 2026-11-23, retour d'Alexandre : sur iPhone, « les sons parfois se
+     desactivent toujours ; si je verrouille mon telephone et que je reviens a
+     la partie, le son revient ». Apres une interruption (notification, centre
+     de controle, autre appli, appel), Safari peut laisser le contexte audio se
+     dire "running" alors qu'il est muet, ou "interrupted" sans que resume()
+     aboutisse : nos relances ne voyaient rien a relancer. Verrouiller puis
+     revenir forcait un vrai redemarrage, d'ou son remede.
+     On ne se fie donc plus a l'etat seul. Trois signes qu'un contexte est
+     douteux, et dans les trois cas on en fabrique un NEUF au prochain vrai
+     geste (c'est ce que fait un rechargement de page, sans recharger) :
+     - sur iPhone et iPad, tout retour sur la page et toute interruption
+       annoncee par le contexte (douteux) ;
+     - son horloge n'avance plus alors qu'il se dit en marche (fige) ;
+     - il ne tourne toujours pas une seconde apres une relance (bloque).
+     Les deux derniers valent partout, mais cinq fois par page au plus : un
+     appareil sans sortie audio a lui aussi une horloge arretee. */
+  const IOS=(function(){try{return /iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);}catch(e){return false;}})();
+  let douteux=false,refT=0,refReel=0,relanceReel=0,secours=0,neufReel=0;
+  function creer(){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    ctx=new AC();
+    const comp=ctx.createDynamicsCompressor();
+    comp.threshold.value=-10;comp.knee.value=8;comp.ratio.value=4;comp.attack.value=0.003;comp.release.value=0.2;
+    sortie=ctx.createGain();sortie.gain.value=VOLUME_GENERAL;
+    sortie.connect(comp);comp.connect(ctx.destination);
+    /* Impulsion de 4 ms, legerement irreguliere : c'est elle qui fait
+       vibrer les resonances du choc des pieces. */
+    bruit=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.004),ctx.sampleRate);
+    const d=bruit.getChannelData(0);
+    for(let i=0;i<d.length;i++)d[i]=Math.sin(Math.PI*i/d.length)*(0.7+0.6*(Math.random()-0.5));
+    /* Il vient de naitre : rien a lui reprocher, et pas de second contexte
+       dans les trois secondes. */
+    refReel=0;relanceReel=0;douteux=false;neufReel=Date.now();
+    const c=ctx;
+    try{c.addEventListener("statechange",()=>{if(c!==ctx)return;refReel=0;if(c.state!=="running"&&c.state!=="closed")douteux=true;});}catch(e){}
+  }
+  /* Un contexte neuf a la place de celui qui ne sonne plus. Jamais deux fois
+     en moins de trois secondes : un appui envoie plusieurs evenements. */
+  function refaire(){
+    const now=Date.now();
+    if(now-neufReel<3000)return false;
+    neufReel=now;
+    const vieux=ctx;
+    ctx=null;sortie=null;bruit=null;
+    try{const p=vieux.close();if(p&&p.catch)p.catch(()=>{});}catch(e){}
+    creer();
+    return !!ctx;
+  }
+  function reveiller(e){
     try{
-      if(!ctx){
-        const AC=window.AudioContext||window.webkitAudioContext;
-        if(!AC)return;
-        ctx=new AC();
-        const comp=ctx.createDynamicsCompressor();
-        comp.threshold.value=-10;comp.knee.value=8;comp.ratio.value=4;comp.attack.value=0.003;comp.release.value=0.2;
-        sortie=ctx.createGain();sortie.gain.value=VOLUME_GENERAL;
-        sortie.connect(comp);comp.connect(ctx.destination);
-        /* Impulsion de 4 ms, legerement irreguliere : c'est elle qui fait
-           vibrer les resonances du choc des pieces. */
-        bruit=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.004),ctx.sampleRate);
-        const d=bruit.getChannelData(0);
-        for(let i=0;i<d.length;i++)d[i]=Math.sin(Math.PI*i/d.length)*(0.7+0.6*(Math.random()-0.5));
+      if(!ctx||ctx.state==="closed"){ctx=null;creer();if(!ctx)return;}
+      /* Sur iPhone, seuls touchend, click et une touche comptent comme un
+         geste qui autorise le son : on ne refait rien sur pointerdown. */
+      const fort=!e||e.type!=="pointerdown";
+      const now=Date.now();
+      let fige=false,bloque=false;
+      if(ctx.state==="running"){
+        relanceReel=0;
+        if(!refReel||ctx.currentTime-refT>=0.05){refT=ctx.currentTime;refReel=now;}
+        else if(now-refReel>=1000)fige=true;
+      }else{
+        refReel=0;
+        if(relanceReel&&now-relanceReel>=1000)bloque=true;
       }
+      if(fort&&((douteux&&IOS)||((fige||bloque)&&secours<5))){
+        const etait=douteux&&IOS;
+        if(refaire()){douteux=false;if(!etait)secours++;}
+      }
+      if(fort)douteux=false;
       /* 2026-11-15, plus de son sur iPhone (retour d'Alexandre) : Safari
          met le contexte audio en etat "interrupted" (pas "suspended") apres
          un appel, un passage dans une autre appli ou l'ecran verrouille.
          On ne relancait que "suspended" : le contexte restait muet jusqu'au
-         rechargement de la page. On relance donc tout ce qui ne tourne pas,
-         et on recree un contexte ferme. */
-      if(ctx.state==="closed"){ctx=null;reveiller();return;}
-      if(ctx.state!=="running")ctx.resume().catch(()=>{});
-    }catch(e){}
+         rechargement de la page. On relance donc tout ce qui ne tourne pas. */
+      if(ctx.state!=="running"){
+        if(!relanceReel)relanceReel=now;
+        ctx.resume().catch(()=>{});
+      }
+    }catch(x){}
   }
   /* Retour sur la page (autre onglet, autre appli) : le prochain appui
      relance le son, mais on tente aussi tout de suite. */
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&ctx&&ctx.state!=="running")try{ctx.resume().catch(()=>{});}catch(e){}});
+  function retour(){
+    refReel=0;douteux=true;
+    if(ctx&&ctx.state!=="running"&&ctx.state!=="closed")try{ctx.resume().catch(()=>{});}catch(e){}
+  }
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)retour();else refReel=0;});
+  window.addEventListener("pageshow",retour);
+  window.addEventListener("focus",retour);
   /* "click" en plus : sur iPhone, seuls touchend et click comptent comme un
      geste qui autorise le son ; pointerdown ne suffit pas. */
   for(const ev of ["pointerdown","keydown","touchend","click"])

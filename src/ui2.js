@@ -435,20 +435,42 @@ function firstVisibleNavPly(el){
    rendre le bug intermittent : on interdit la synchro tant que la partie est
    vivante. Parcourir les coups reste possible en cliquant une puce, ce qui
    passe par gotoPly() et pas par ici. */
+/* 2026-11-23, signale par Alexandre : pendant une partie contre l'ordinateur
+   sur son iPhone, l'echiquier est revenu en arriere tout seul. Reproduit :
+   ce garde-fou melangeait l'etat des deux sortes de parties. Une vieille
+   partie par lien ABANDONNEE, gardee en memoire sur l'appareil (amiResigned,
+   relu au demarrage), le faisait tomber pour toutes les parties contre
+   l'ordinateur ; sur un navigateur sans l'evenement scrollend (Safari avant
+   la 26.2), le recentrage du bandeau apres chaque coup ramenait alors
+   l'echiquier quelques coups en arriere, une douzaine de fois en seize coups.
+   Deux protections independantes desormais :
+   1. la question « une partie se joue-t-elle ? » est posee a partieEnCours(),
+      qui ne regarde que l'etat du mode affiche ;
+   2. le bandeau ne deplace l'echiquier que si c'est la MAIN de la personne
+      qui le fait defiler (navGeste, plus bas), jamais un defilement lance par
+      le site lui-meme. */
 function partieVivante(){
   if(mode!=="play"&&mode!=="friend")return false;
-  if(typeof gameStarted!=="undefined"&&!gameStarted)return false;
-  if(typeof isReviewGame!=="undefined"&&isReviewGame)return false;      /* on relit une partie enregistree */
-  if(typeof resigned!=="undefined"&&resigned!==null)return false;
-  if(typeof amiResigned!=="undefined"&&amiResigned!==null)return false;
-  if(typeof isFlagged==="function"&&isFlagged())return false;
-  /* Plus de coup legal ou nulle : la partie est finie, on peut la parcourir. */
-  if(typeof legalCache!=="undefined"&&!legalCache.length)return false;
-  if(typeof game!=="undefined"&&game.isDraw&&game.isDraw())return false;
-  return true;
+  return partieEnCours();
+}
+/* Le bandeau est-il en train d'etre defile par la personne elle-meme ? Vrai
+   depuis qu'elle l'a touche (doigt, molette, souris), faux des que le site le
+   fait defiler de lui-meme (recenterNavChip). L'elan d'un glissement, apres
+   que le doigt a quitte l'ecran, reste donc le sien ; le recentrage qui suit
+   un coup joue, une touche ou une puce touchee ne l'est jamais, quelle que
+   soit sa duree et que le navigateur connaisse scrollend ou non. */
+let navGeste=false;
+function navEcouterGeste(el){
+  if(el.navGesteEcoute)return;
+  el.navGesteEcoute=true;
+  const prise=()=>{navGeste=true;};
+  for(const ev of ["touchstart","wheel","mousedown"]){
+    try{el.addEventListener(ev,prise,{passive:true});}catch(e){el.addEventListener(ev,prise);}
+  }
 }
 function handleNavScroll(){
   updateNavScrollHint();
+  if(!navGeste)return;
   if(navScrollSuppressed)return;
   if(partieVivante())return;
   clearTimeout(navScrollSyncTimer);
@@ -457,6 +479,9 @@ function handleNavScroll(){
      coup) a chaque pixel de defilement serait autant de travail inutile
      pendant un geste encore en cours. */
   navScrollSyncTimer=setTimeout(()=>{
+    /* Tout est reverifie a l'echeance : entre-temps une partie a pu
+       commencer, ou le site reprendre la main sur le bandeau. */
+    if(!navGeste||navScrollSuppressed||partieVivante())return;
     const el=$("navScroll"); if(!el)return;
     const ply=firstVisibleNavPly(el); if(ply===null)return;
     if(mode==="play"){
@@ -478,6 +503,7 @@ function updateNavScrollHint(){
   el.classList.toggle("sl",el.scrollLeft>2);
   el.classList.toggle("sr",el.scrollLeft<el.scrollWidth-el.clientWidth-2);
   el.onscroll=handleNavScroll;
+  navEcouterGeste(el);
 }
 /* Centre la puce courante dans le bandeau, sauf juste apres une synchro
    partie depuis un defilement manuel (voir plus haut) : deplacer le
@@ -497,6 +523,9 @@ function navChipCible(el,curEl){
 }
 function recenterNavChip(el){
   if(navSyncFromScroll){navSyncFromScroll=false;return;}
+  /* Le site reprend la main : ce qui defile a partir d'ici n'est plus le
+     geste de la personne (voir navGeste), et une synchro en attente tombe. */
+  navGeste=false;clearTimeout(navScrollSyncTimer);
   const curEl=el.querySelector(".cur");
   if(!curEl)return;
   const cible=navChipCible(el,curEl);

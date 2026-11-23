@@ -656,8 +656,14 @@ export class Partie {
     if (!db || !r) return;
     const rang = c => (r === "1/2" ? 1 : (r === "1-0") === (c === "b") ? 0 : 2);
     const col = c => ["direct_v", "direct_n", "direct_d"][rang(c)], colF = c => DIRECT_COLONNES[famille(p.cad)][rang(c)];
-    const ecrire = parFamille => db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1" +
-      (parFamille ? ", " + colF(c) + " = " + colF(c) + " + 1" : "") + " WHERE id = ?1").bind(p.j[c].id)));
+    /* D1 annule toute l'ecriture groupee quand une instruction echoue. Sa
+       documentation ne dit pas si l'erreur est levee ou rendue dans les
+       resultats (success: false) : les deux valent refus. */
+    const ecrire = async parFamille => {
+      const res = await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1" +
+        (parFamille ? ", " + colF(c) + " = " + colF(c) + " + 1" : "") + " WHERE id = ?1").bind(p.j[c].id)));
+      if (Array.isArray(res) && res.some(x => x && x.success === false)) throw new Error("ecriture refusee");
+    };
     try { await ecrire(true); } catch (e) {
       try { await ecrire(false); } catch (e2) {}
     }

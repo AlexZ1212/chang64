@@ -287,6 +287,17 @@ const avancer = ms => { decalage += ms; };
     fi = await fiche("Fana");
     T("sans les colonnes : la fiche repond, avec le total seul", fi.p === "Fana" && Object.keys(fi.dir).join() === "v,n,d" && fi.dir.v + fi.dir.n + fi.dir.d === a0.t + 2, dit(fi.dir));
     env.DB.brut.exec("ALTER TABLE comptes RENAME COLUMN direct_b_x TO direct_b_d");
+
+    /* La documentation de D1 ne dit pas si une ecriture groupee refusee leve
+       une erreur ou la rend dans ses resultats : ici elle la rend, sans rien
+       ecrire. Le total doit compter quand meme, une seule fois. */
+    const vraiBatch = env.DB.batch, c0 = avantT("Fana"), f0 = somme("Fana").f;
+    let refus = 1;
+    env.DB.batch = async l => (refus-- > 0 ? l.map(() => ({ success: false, error: "no such column" })) : vraiBatch.call(env.DB, l));
+    g = await partie("Fana", "Fabo", 9);
+    await jouer(g, MAT_NOIR);
+    env.DB.batch = vraiBatch;
+    T("ecriture refusee sans erreur levee (success: false) : le total compte une fois, la famille non", refus <= 0 && avantT("Fana").t === c0.t + 1 && somme("Fana").f === f0 && avantT("Fana").e === c0.e + 1, dit([c0, avantT("Fana"), f0, somme("Fana").f]));
   }
 
   console.log("Ecran");

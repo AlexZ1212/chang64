@@ -27,7 +27,9 @@ const LEGAL = JSON.parse(fs.readFileSync(path.join(SRC, "legal_en.json"), "utf8"
 (async () => {
   console.log("--- Le poids ---");
   const en = page("en"), sEn = script(en);
-  T("le script principal fait moins de 570 000 caracteres (605 500 avant)", sEn.length < 570000, sEn.length);
+  /* Meme plafond que le garde-fou de check_sante_du_site : un seul seuil a
+     suivre. Le script fait 560 130 caracteres le 2026-11-23 (605 510 avant). */
+  T("le script principal fait moins de 600 000 caracteres (605 510 avant l'allegement)", sEn.length < 600000, sEn.length);
   T("le meme script dans les dix langues", CODES.every(l => script(page(l)) === sEn));
   T("les noms de premier niveau sont intacts (setMode, menuStats, statsBilan, cpVue)", ["function setMode(", "function menuStats(", "function statsBilan(", "function cpVue("].every(x => sEn.includes(x)));
   T("les noms locaux sont raccourcis (statsBilan n'a plus ses parametres v, n, d en clair)", /function statsBilan\(\w,\w,\w\)\{/.test(sEn) && !/function goToSection\(id\)/.test(sEn), (sEn.match(/function statsBilan\([^)]*\)/) || [""])[0]);

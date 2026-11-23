@@ -89,6 +89,13 @@ const corr = cad => cad >= CORR && cad <= CORR_FIN;
    dans la nouvelle famille. */
 const FAMILLES = "rbrccckkkbr";
 const ELO_COLONNES = { r: ["elo", "elo_n"], b: ["elo_blitz", "elo_blitz_n"], c: ["elo_classique", "elo_classique_n"], k: ["elo_corr", "elo_corr_n"] };
+/* Parties gagnees, nulles, perdues de chaque famille (2026-11-23) : trois
+   colonnes par famille, dans l'ordre gagnees, nulles, perdues. Comme pour
+   l'Elo, les noms viennent de cette table, jamais de la requete. */
+const DIRECT_COLONNES = {
+  b: ["direct_b_v", "direct_b_n", "direct_b_d"], r: ["direct_r_v", "direct_r_n", "direct_r_d"],
+  c: ["direct_c_v", "direct_c_n", "direct_c_d"], k: ["direct_k_v", "direct_k_n", "direct_k_d"]
+};
 const famille = cad => FAMILLES[cad] || "r";
 /* Une invitation garde aussi la couleur de l'invite, dans la meme colonne que
    la cadence, pour ne pas ajouter de colonne a la table : cad + 16 s'il joue
@@ -635,16 +642,31 @@ export class Partie {
   /* Victoires, nulles et defaites : comptees ICI, par le serveur, dans la
      table des comptes (colonnes direct_v, direct_n, direct_d), jamais d'apres
      ce qu'un navigateur declare. Une fois par partie finie ; une partie
-     annulee ou refusee ne compte pas. Un echec de la base ne gene pas la partie. */
+     annulee ou refusee ne compte pas. Un echec de la base ne gene pas la partie.
+     Depuis le 2026-11-23 le meme resultat est aussi range dans la famille de
+     la cadence (Blitz, Rapide, Classique, Correspondance : DIRECT_COLONNES),
+     dans la MEME ecriture que le total : la somme des familles ne peut pas
+     s'ecarter du total pour les parties comptees depuis. Une base qui n'a pas
+     encore ces colonnes refuse l'ecriture en entier : on recommence alors
+     avec le total seul, comme avant. */
   async compter() {
     if (!this.aCompter) return;
     this.aCompter = false;
     const p = this.p, r = p.fin && p.fin.r, db = this.env && this.env.DB;
     if (!db || !r) return;
-    const col = c => (r === "1/2" ? "direct_n" : (r === "1-0") === (c === "b") ? "direct_v" : "direct_d");
-    try {
-      await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1 WHERE id = ?1").bind(p.j[c].id)));
-    } catch (e) {}
+    const rang = c => (r === "1/2" ? 1 : (r === "1-0") === (c === "b") ? 0 : 2);
+    const col = c => ["direct_v", "direct_n", "direct_d"][rang(c)], colF = c => DIRECT_COLONNES[famille(p.cad)][rang(c)];
+    /* D1 annule toute l'ecriture groupee quand une instruction echoue. Sa
+       documentation ne dit pas si l'erreur est levee ou rendue dans les
+       resultats (success: false) : les deux valent refus. */
+    const ecrire = async parFamille => {
+      const res = await db.batch(["b", "n"].map(c => db.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1" +
+        (parFamille ? ", " + colF(c) + " = " + colF(c) + " + 1" : "") + " WHERE id = ?1").bind(p.j[c].id)));
+      if (Array.isArray(res) && res.some(x => x && x.success === false)) throw new Error("ecriture refusee");
+    };
+    try { await ecrire(true); } catch (e) {
+      try { await ecrire(false); } catch (e2) {}
+    }
     /* Elo entre membres : a part, pour qu'une base sans les colonnes elo
        continue de compter les resultats ci-dessus. La variation est ensuite
        montree aux deux joueurs. */
@@ -995,4 +1017,4 @@ export class Partie {
 }
 
 /* Pour les tests : les fonctions pures de l'Elo, sans export de plus. */
-Partie._elo = { eloDepart, eloApres, famille, ELO_COLONNES };
+Partie._elo = { eloDepart, eloApres, famille, ELO_COLONNES, DIRECT_COLONNES };

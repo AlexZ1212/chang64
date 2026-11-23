@@ -337,28 +337,107 @@ if (typeof saveFinishedGame === "function") {
   };
 }
 function bossFin() {
-  if (!cheminPartie || !cheminPartie.fen || !cheminPartieActive() || (resultInfo.kind !== "win" && resultInfo.kind !== "lose")) return;
+  bossCarte = null;
+  if (!cheminPartie || !cheminPartie.fen || !cheminPartieActive() || !resultInfo) return;
   const i = cheminIndex(cheminPartie.ch); if (i < 1) return;
-  const id = CHEMIN_PLAN[i].id, n = CHEMIN_PLAN[i].n;
-  const s = chemin.c[id] || (chemin.c[id] = { e: n, x: 0, f: [] });
-  if (s.f.includes(n)) return;
-  if (resultInfo.kind === "lose") {
-    if ((s.b || 0) >= BOSS_ESSAIS) return;
-    const fermee = i + 1 < CHEMIN_PLAN.length && !cheminOuvert(i + 1);
-    s.b = (s.b || 0) + 1;
-    cheminEcrire();
-    if (fermee && cheminOuvert(i + 1) && typeof objAnnoncer === "function") objAnnoncer("defi", t("Chapter {n} is open", { n: i + 2 }),
-      t("Three tries against the boss: you can move on, and come back to beat it later. Tap to see the path."), () => { setMode("apprendre"); goTop(); });
-    return;
+  const issue = resultInfo.kind, id = CHEMIN_PLAN[i].id, n = CHEMIN_PLAN[i].n;
+  let ouvre = false;
+  if (issue === "win" || issue === "lose") {
+    const s = chemin.c[id] || (chemin.c[id] = { e: n, x: 0, f: [] });
+    if (s.f.includes(n)) { /* boss deja battu : rien ne change */ }
+    else if (issue === "lose") {
+      if ((s.b || 0) < BOSS_ESSAIS) {
+        const fermee = i + 1 < CHEMIN_PLAN.length && !cheminOuvert(i + 1);
+        s.b = (s.b || 0) + 1;
+        cheminEcrire();
+        ouvre = fermee && cheminOuvert(i + 1);
+      }
+    } else {
+      s.f.push(n); s.f.sort((a, b) => a - b);
+      if (leconsEtat[id] && !leconsEtat[id].faites.includes(n)) leconsEtat[id].faites.push(n);
+      cheminEcrire();
+      /* Les badges du chemin : la partie est finie et enregistree. */
+      cheminBadgesGagner();
+    }
   }
-  s.f.push(n); s.f.sort((a, b) => a - b);
-  if (leconsEtat[id] && !leconsEtat[id].faites.includes(n)) leconsEtat[id].faites.push(n);
-  cheminEcrire();
-  /* Les badges du chemin : la partie est finie et enregistree. */
-  cheminBadgesGagner();
-  if (typeof objAnnoncer === "function") objAnnoncer("parfait", t("Boss beaten"), t("Chapter {n} is yours. Tap to go back to the path.", { n: i + 1 }),
-    () => { setMode("apprendre"); goTop(); });
+  /* La suite se propose sur la carte de fin (bossCarteMontrer, ci-dessous). */
+  bossCarte = { jeu: game, i: i, issue: issue, ouvre: ouvre, ch: cheminPartie.ch, fen: cheminPartie.fen, niveau: botLevel };
 }
+
+/* ---------- La carte de fin d'une partie contre un boss (2026-11-23) ----------
+   Demande d'Alexandre : « A la fin de chaque boss, il faudrait proposer
+   d'aller au niveau d'apprentissage suivant. » Ses choix (QCM du 23/11, avec
+   maquettes a 360 px) : la suite se propose sur la carte de fin, posee sur
+   l'echiquier (plus de petite annonce de 4 s qui le dirait une seconde fois) ;
+   - victoire : « Chapitre suivant » en avant (sa premiere lecon, ou la ou l'on
+     en etait), puis « Retour au chemin » ;
+   - defaite (ou nulle) quand la suite est encore fermee : « Reessayer le
+     boss », puis « Retour au chemin » ;
+   - troisieme defaite, qui ouvre la suite, et toute defaite une fois la suite
+     ouverte : « Chapitre suivant » en avant, puis « Reessayer le boss » ;
+   - dernier boss battu : « Resoudre des exercices », « Jouer une partie », et
+     « Retour au chemin » en lien a la place de « Masquer ».
+   La carte n'apparait qu'en fin de partie, comme toujours ; la fenetre Bravo
+   des badges s'ouvre par-dessus et la carte attend dessous. Les deux boutons
+   et le lien de la carte gardent leur role ailleurs (bossCarteActive). */
+let bossCarte = null;
+function bossCarteActive() {
+  try { return !!bossCarte && bossCarte.jeu === game && mode === "play" && !!resultInfo && !isReviewGame; } catch (e) { return false; }
+}
+function bossCarteContenu() {
+  const k = bossCarte, i = k.i, dernier = i + 1 >= CHEMIN_PLAN.length;
+  const suivantOuvert = !dernier && cheminOuvert(i + 1), e = cheminEtat(i);
+  const auChemin = [t("Back to the path"), () => { setMode("apprendre"); goTop(); }];
+  const suivant = [t("Next chapter"), () => cheminOuvrirChapitre(i + 1, "apprendre")];
+  const encore = [t("Try the boss again"), () => cheminLancerPartie(k.ch, k.fen, k.niveau)];
+  const perdu = k.issue === "lose" ? t("The boss won") : resultInfo.title;
+  if (k.issue === "win") {
+    if (dernier) return { titre: t("Boss beaten"), sous: t("That was the last boss of the path."),
+      b: [[t("Solve puzzles"), () => { if ($("tab-puzzles")) $("tab-puzzles").click(); }], [t("Play a game"), () => { setMode($("pane-jouer") ? "jouer" : "play"); goTop(); }]],
+      lien: auChemin };
+    /* Boss battu avant la fin des lecons (les pastilles permettent d'y sauter) :
+       la suite reste fermee, la carte ramene au chemin et garde « Revoir ». */
+    if (!suivantOuvert) return { titre: t("Boss beaten"), sous: resultInfo.sub, b: [auChemin, null], lien: null };
+    return { titre: t("Boss beaten"), sous: t("Chapter {n} is open", { n: i + 2 }) + ".", b: [suivant, auChemin], lien: null };
+  }
+  if (suivantOuvert) {
+    if (k.ouvre) return { titre: t("Chapter {n} is open", { n: i + 2 }), sous: t("Three tries against the boss: you can move on, and come back to beat it later."), b: [suivant, encore], lien: null };
+    return { titre: perdu, sous: e.boss ? resultInfo.sub : t("The next chapter is open. Come back and beat this boss whenever you like."), b: [suivant, encore], lien: null };
+  }
+  const sous = dernier ? resultInfo.sub : k.issue === "lose" ? t("Losses against this boss: {n} of 3. At three, the next chapter opens anyway.", { n: e.defaites })
+    : t("Beat the boss to open the next chapter.");
+  return { titre: perdu, sous: sous, b: [encore, auChemin], lien: null };
+}
+function bossCarteMontrer() {
+  const b = $("resultBanner");
+  if (!b || b.classList.contains("hide") || !bossCarteActive()) return;
+  const c = bossCarteContenu();
+  $("resultTitle").textContent = c.titre;
+  $("resultSub").textContent = c.sous;
+  $("resultNew").textContent = c.b[0][0];
+  if (c.b[1]) { $("resultAnalyse").textContent = c.b[1][0]; $("resultAnalyse").classList.remove("hide"); }
+  $("resultClose").textContent = c.lien ? c.lien[0] : t("Dismiss");
+  b.classList.add("boss-fin");
+}
+if (typeof renderResult === "function") {
+  const av = renderResult;
+  renderResult = function () {
+    const b = $("resultBanner"); if (b) b.classList.remove("boss-fin");
+    const r = av.apply(this, arguments); bossCarteMontrer(); return r;
+  };
+}
+[["resultNew", 0], ["resultAnalyse", 1], ["resultClose", 2]].forEach(([id, k]) => {
+  const el = $(id); if (!el) return;
+  const av = el.onclick;
+  el.onclick = function (ev) {
+    const b = $("resultBanner");
+    if (b && !b.classList.contains("hide") && bossCarteActive()) {
+      const c = bossCarteContenu(), f = k < 2 ? c.b[k] && c.b[k][1] : c.lien && c.lien[1];
+      if (f) { f(); return; }
+    }
+    return av ? av.call(this, ev) : undefined;
+  };
+});
 
 /* ---------- Badges du chemin (2026-11-23, liste validee par Alexandre) ----------
    Quatorze badges, famille « apprendre » du catalogue :

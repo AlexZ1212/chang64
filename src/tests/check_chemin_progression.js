@@ -174,7 +174,9 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("elle ne compte pas pour l'Elo", dit(ev("prog.eloOrdi")) === eloAvant, dit(ev("prog.eloOrdi")));
   T("ni pour les badges de partie", ev("(bxEtat().c.vic||0)") === vicAvant && !ev("prog.badges.includes('jeu_victoire')") && !ev("prog.badges.includes('jeu_niv1')"), ev("prog.badges.slice(" + badgesAvant + ").join()"));
   T("le boss est marque battu", ev("cheminEtat(1).boss") === true && JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.f.includes(5));
-  T("le boss battu ouvre le chapitre 3", ev("cheminPasse(1)") === true && ev("cheminOuvert(2)") === true && ev("cheminCourant()") === 2 && ev("__annonces.join()") === "Boss battu", ev("__annonces.join()"));
+  /* 2026-11-23 : la suite se dit sur la carte de fin (check_fin_de_boss.js), plus par une annonce. */
+  T("le boss battu ouvre le chapitre 3, et la carte de fin le dit", ev("cheminPasse(1)") === true && ev("cheminOuvert(2)") === true && ev("cheminCourant()") === 2 && ev("__annonces.length") === 0 &&
+    net($("resultTitle").textContent) === "Boss battu" && net($("resultNew").textContent) === "Chapitre suivant", ev("__annonces.join()") + " / " + $("resultTitle").textContent);
   T("la progression gardee porte la marque de la nouvelle regle", JSON.parse(w.localStorage.getItem("chang64:chemin")).v === 2);
   T("partie finie : plus de reprise", $("btnReprendre").classList.contains("hide"));
   $("tab-apprendre").click(); await pause(300);
@@ -248,10 +250,11 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("deux defaites : toujours ferme, rien n'est annonce", ev("cheminEtat(1).defaites") === 2 && ev("cheminOuvert(2)") === false && ev("__annonces.length") === 0, ev("__annonces.join()"));
   await perdre();
   T("troisieme defaite : le chapitre 3 s'ouvre", ev("cheminEtat(1).defaites") === 3 && ev("cheminPasse(1)") === true && ev("cheminOuvert(2)") === true && ev("cheminCourant()") === 2);
-  T("c'est annonce une fois, en fin de partie, sans reproche", ev("__annonces.length") === 1 && /^Le chapitre 3 est ouvert \/ Trois essais contre le boss : tu peux continuer, et revenir le battre plus tard\. Touche pour voir le chemin\.$/.test(net(ev("__annonces[0]"))), ev("__annonces.join()"));
+  T("c'est dit sur la carte de fin, sans reproche (plus d'annonce)", ev("__annonces.length") === 0 && net($("resultTitle").textContent) === "Le chapitre 3 est ouvert" &&
+    net($("resultSub").textContent) === "Trois essais contre le boss : tu peux continuer, et revenir le battre plus tard.", ev("__annonces.join()") + " / " + $("resultSub").textContent);
   T("le boss n'est pas marque battu pour autant", ev("cheminEtat(1).boss") === false);
   await perdre();
-  T("une quatrieme defaite ne change plus rien", ev("cheminEtat(1).defaites") === 3 && ev("__annonces.length") === 1 && JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.b === 3);
+  T("une quatrieme defaite ne change plus rien", ev("cheminEtat(1).defaites") === 3 && ev("__annonces.length") === 0 &&JSON.parse(w.localStorage.getItem("chang64:chemin")).c.regles.b === 3);
   ev("setupGame()");
   $("tab-apprendre").click(); await pause(300);
   chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];

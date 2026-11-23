@@ -131,7 +131,8 @@ async function passerTest(w, reponses) {
     const N = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "nouveautes.json"), "utf8"));
     const e = N.find(x => x.en[0] === "Badges for the Learn tab") || {};
     T("une nouveaute, dans les 10 langues, titre et texte", CODES.every(c => Array.isArray(e[c]) && e[c].length === 2 && e[c].every(x => x.trim().length > 10)), e.en && e.en[0]);
-    T("elle est en tete, datee du 23/11/2026", N[0] === e && e.d === "2026-11-23", N[0].en[0]);
+    /* 2026-11-23 : d'autres nouveautes du meme jour peuvent passer devant (fin de boss). */
+    T("elle est datee du 23/11/2026, sans rien de plus ancien devant elle", e.d === "2026-11-23" && N.slice(0, N.indexOf(e)).every(x => x.d >= e.d), N[0].en[0]);
     T("elle tutoie, sans point median ni tiret long, et dit que le passe compte", !!e.fr && /Quatorze/.test(e.fr[1]) && /déjà fait compte/.test(e.fr[1]) && !/[·—–]/.test(CODES.map(c => e[c].join(" ")).join(" ")) && !/\bvous\b|\bvotre\b/i.test(e.fr[1]));
   }
 

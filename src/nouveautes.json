@@ -2,6 +2,49 @@
  {
   "d": "2026-11-23",
   "en": [
+   "After a boss, the next chapter",
+   "When your game against a boss ends, the card on the board now offers what comes next: the next chapter once you have won, or another try. After the last boss, puzzles or a game."
+  ],
+  "fr": [
+   "Après un boss, le chapitre suivant",
+   "Quand ta partie contre un boss se termine, la carte posée sur l'échiquier te propose maintenant la suite : le chapitre suivant une fois le boss battu, ou un nouvel essai. Après le dernier boss, des exercices ou une partie."
+  ],
+  "es": [
+   "Después de un jefe, el capítulo siguiente",
+   "Cuando termina tu partida contra un jefe, la tarjeta sobre el tablero ahora te propone lo que sigue: el capítulo siguiente cuando lo has vencido, o un nuevo intento. Después del último jefe, ejercicios o una partida."
+  ],
+  "pt": [
+   "Depois de um chefão, o próximo capítulo",
+   "Quando sua partida contra um chefão termina, o cartão sobre o tabuleiro agora propõe o que vem depois: o próximo capítulo quando você vence, ou uma nova tentativa. Depois do último chefão, exercícios ou uma partida."
+  ],
+  "de": [
+   "Nach einem Boss das nächste Kapitel",
+   "Wenn deine Partie gegen einen Boss endet, schlägt dir die Karte auf dem Brett jetzt vor, wie es weitergeht: das nächste Kapitel, sobald du gewonnen hast, oder einen neuen Versuch. Nach dem letzten Boss: Aufgaben oder eine Partie."
+  ],
+  "ru": [
+   "Следующая глава после босса",
+   "Когда партия против босса заканчивается, карточка на доске теперь предлагает, что дальше: следующую главу, если ты победил, или новую попытку. После последнего босса можно решать задачи или сыграть партию."
+  ],
+  "it": [
+   "Dopo un boss, il capitolo successivo",
+   "Quando la tua partita contro un boss finisce, la scheda sulla scacchiera ora ti propone il seguito: il capitolo successivo quando lo hai battuto, oppure un nuovo tentativo. Dopo l'ultimo boss, esercizi o una partita."
+  ],
+  "tr": [
+   "Boss'tan sonra sıradaki bölüm",
+   "Bir boss'a karşı oyunun bittiğinde, tahtadaki kart artık sırada ne olduğunu öneriyor: kazandıysan sonraki bölüm, ya da yeni bir deneme. Son boss'tan sonra bulmacalar ya da bir oyun."
+  ],
+  "pl": [
+   "Po bossie następny rozdział",
+   "Gdy kończy się twoja partia z bossem, karta na szachownicy proponuje teraz, co dalej: następny rozdział, gdy wygrasz, albo kolejną próbę. Po ostatnim bossie zadania albo partię."
+  ],
+  "id": [
+   "Setelah bos, bab berikutnya",
+   "Saat permainanmu melawan bos selesai, kartu di papan sekarang menawarkan langkah berikutnya: bab berikutnya setelah kamu menang, atau percobaan baru. Setelah bos terakhir, teka-teki atau satu partai."
+  ]
+ },
+ {
+  "d": "2026-11-23",
+  "en": [
    "Badges for the Learn tab",
    "Fourteen new badges: one for each chapter you finish (chapters 2 to 9), three for the bosses, one for the whole path and two for the placement test. What you have already done counts: those badges are waiting in your collection."
   ],

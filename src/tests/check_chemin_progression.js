@@ -55,7 +55,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   console.log("--- Parcours deja termine : le badge et la suite ---");
   w = await ouvrir("fr", avec({ "chang64:debut": { e: 6, x: 0, f: [0, 1, 2, 3, 4, 5] } }));
   $ = id => w.document.getElementById(id); ev = s => w.eval(s);
-  T("accueil : « Continuer : chapitre 2 »", net($("heroDebut").textContent) === "Continuer : chapitre 2", $("heroDebut").textContent);
+  T("accueil, entre deux chapitres : « Commencer le chapitre 2 » (24/11)", net($("heroDebut").textContent) === "Commencer le chapitre 2" && $("heroDebut").dataset.cas === "commencer", $("heroDebut").textContent);
   T("le parcours debutant compte comme termine", ev("debutFini()") === true && ev("cheminEtat(0).fini") === true);
   $("tab-apprendre").click(); await pause(500);
   chap = [...w.document.querySelectorAll("#apChemin .ap-chap")];
@@ -219,9 +219,23 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   /* Toutes les lecons, tous les boss sauf le dernier : il n'ouvre rien, il ne retient donc personne. */
   ev(CHAPITRES.slice(1).map((c, k, l) => "chemin.c." + c + "={e:5,x:0,f:[0,1,2,3,4" + (k < l.length - 1 ? ",5" : "") + "]};").join("") + "cheminEcrire()");
   $("brand").click(); await pause(200);
-  T("chemin fini : plus de bouton", $("heroDebut").classList.contains("hide") && ev("cheminCourant()") === -1);
+  T("chemin fini : « Revoir le chemin », le bouton reste (24/11)", !$("heroDebut").classList.contains("hide") && net($("heroDebut").textContent) === "Revoir le chemin" && ev("cheminCourant()") === -1, $("heroDebut").textContent);
+  $("heroDebut").click(); await pause(300);
+  T("il ouvre l'onglet Apprendre", ev("mode") === "apprendre");
+  $("brand").click(); await pause(200);
   T("le boss du dernier chapitre ne barre rien", ev("cheminEtat(CHEMIN_PLAN.length-1).boss") === false && ev("cheminBossBarre(CHEMIN_PLAN.length-1)") === false);
   T("« Exercice du jour » reste", !$("heroPuzzle").classList.contains("hide"));
+  w.close();
+
+  console.log("--- Test de placement reussi en entier (cas d'Alexandre, 24/11) ---");
+  w = await ouvrir("fr", avec({ "chang64:chemin": { v: 2, c: {}, o: [], p: { t: 1, n: 19, q: 19, e: "fin" } } }));
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  T("rien commence : le bouton reste, « Revoir le chemin »", !$("heroDebut").classList.contains("hide") && !$("heroDebut").classList.contains("attente") && net($("heroDebut").textContent) === "Revoir le chemin", $("heroDebut").className + " " + $("heroDebut").textContent);
+  w.close();
+  w = await ouvrir("fr", avec({ "chang64:chemin": { v: 2, c: { finales: { e: 2, x: 0, f: [0, 1] } }, o: [], p: { t: 1, n: 19, q: 19, e: "fin" } } }));
+  $ = id => w.document.getElementById(id); ev = s => w.eval(s);
+  const nf = CHAPITRES.indexOf("finales") + 1;
+  T("un chapitre en cours passe avant le test : « Continuer : chapitre " + nf + " »", net($("heroDebut").textContent) === "Continuer : chapitre " + nf, $("heroDebut").textContent);
   w.close();
 
   console.log("--- Rechargement : tout est retrouve ---");

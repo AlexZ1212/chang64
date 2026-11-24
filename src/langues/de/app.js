@@ -1439,5 +1439,7 @@ module.exports = {
 "QR code to open chang64":"QR-Code zum Öffnen von chang64",
 /* Objectif du jour atteint : petite annonce (2026-11-24) */
 "1 puzzle solved today. Come back tomorrow to keep going.":"1 Aufgabe heute gelöst. Komm morgen wieder und mach weiter.",
-"{n} puzzles solved today. Come back tomorrow to keep going.":"{n} Aufgaben heute gelöst. Komm morgen wieder und mach weiter."
+"{n} puzzles solved today. Come back tomorrow to keep going.":"{n} Aufgaben heute gelöst. Komm morgen wieder und mach weiter.",
+/* Bouton de l'accueil vers Apprendre (2026-11-24) */
+"Review the path":"Den Weg wiederholen"
 };

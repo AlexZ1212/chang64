@@ -881,18 +881,50 @@ function apPartiesRanger() {
 }
 
 /* ---------- Le bouton de l'accueil, et tout ce qui suit la progression ---------- */
+/* Ce que propose le bouton de l'accueil (2026-11-24, decision d'Alexandre
+   « 4 cas ») : { cas, i } avec cas = "debut" (rien commence : « Je debute »),
+   "continuer" (un chapitre en cours), "commencer" (entre deux chapitres) ou
+   "revoir" (tout est fait : l'onglet Apprendre). Le bouton est TOUJOURS la.
+   Avant, il disparaissait des que cheminCourant() rendait -1 : c'etait le cas
+   d'un joueur qui avait reussi tout le test de placement (entree « fin »),
+   meme s'il travaillait ensuite un chapitre (constat d'Alexandre en ligne).
+   Un chapitre commence passe donc avant ce que disait le test. */
+function cheminBouton() {
+  /* Fait : ses lecons finies, et son boss ne retient plus la suite (meme regle
+     que cheminCourant : le dernier boss ne retient rien). */
+  const fait = i => cheminEtat(i).fini && !cheminBossBarre(i);
+  let enCours = -1, dernier = -1;
+  for (let i = 0; i < CHEMIN_PLAN.length; i++) {
+    if (!cheminEtat(i).commence) continue;
+    dernier = i;
+    if (!fait(i)) enCours = i;
+  }
+  if (enCours >= 0) return { cas: "continuer", i: enCours };
+  if (dernier >= 0) {
+    for (let j = dernier + 1; j < CHEMIN_PLAN.length; j++) if (!fait(j)) return { cas: "commencer", i: j };
+    const c = cheminCourant();
+    return c >= 0 ? { cas: cheminEtat(c).commence ? "continuer" : "commencer", i: c } : { cas: "revoir", i: -1 };
+  }
+  const c = cheminCourant();
+  if (c < 0) return { cas: "revoir", i: -1 };
+  return c === 0 ? { cas: "debut", i: 0 } : { cas: "commencer", i: c };
+}
 function cheminMaj() {
   const h = $("heroDebut");
   if (h) {
-    const c = cheminCourant();
-    h.classList.toggle("hide", c < 0);
-    if (c >= 0) h.textContent = cheminCommence() ? t("Continue: chapter {n}", { n: c + 1 }) : t("I'm a beginner");
+    const b = cheminBouton();
+    h.textContent = b.cas === "debut" ? t("I'm a beginner") : b.cas === "continuer" ? t("Continue: chapter {n}", { n: b.i + 1 })
+      : b.cas === "commencer" ? t("Start chapter {n}", { n: b.i + 1 }) : t("Review the path");
+    h.dataset.cas = b.cas;
+    /* Plus de « I'm a beginner » qui clignote au chargement : le bouton garde
+       sa place, invisible, jusqu'a ce que la progression soit lue. */
+    h.classList.remove("hide", "attente");
   }
   if (mode === "apprendre") apRendre();
 }
 if ($("heroDebut")) $("heroDebut").onclick = () => {
-  const c = cheminCourant();
-  if (c >= 0) cheminOuvrirChapitre(c, "home"); else { setMode("apprendre"); goTop(); }
+  const b = cheminBouton();
+  if (b.i >= 0 && cheminOuvert(b.i)) cheminOuvrirChapitre(b.i, "home"); else { setMode("apprendre"); goTop(); }
 };
 
 /* ---------- Ecran ---------- */

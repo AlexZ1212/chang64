@@ -98,7 +98,11 @@ T("longueur de jour.json multiple de 7 (la boucle garde le jour de la semaine)",
   const hier = new Date((auj - 1) * 864e5).toISOString().slice(0, 10);
   T("le calendrier lit le jour passe dans jour.json", w.eval('dateToDailyId("' + hier + '")') === R[auj - 1], w.eval('dateToDailyId("' + hier + '")'));
   demandes.length = 0;
-  const lointain = banque[banque.length - 1];
+  /* Un exercice d'une autre tranche que celle de l'exercice du jour, deja
+     chargee : sinon rien n'est demande et ce test echouait a tort (le 24/11,
+     l'exercice du jour et le dernier de la banque etaient dans la tranche 26). */
+  const trancheDe = id => Math.floor(+String(id).slice(1) / 10000);
+  const lointain = banque.slice().reverse().find(p => !attendu || trancheDe(p.id) !== trancheDe(attendu.id));
   w.eval('loadPuzzleById("' + lointain.id + '", function(){})'); await attendre(800);
   const tranche = "/data/ids/" + Math.floor(+lointain.id.slice(1) / 10000) + ".json";
   T("un lien direct ne charge que sa tranche (" + tranche + ")", demandes.filter(u => u.startsWith("/data/ids/")).join(" ") === tranche, demandes.join(" "));

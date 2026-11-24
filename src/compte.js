@@ -555,6 +555,10 @@ const CP_ATTR_PSEUDO='type="text" maxlength="24" autocomplete="username"';
 const cpAttrCode=nouveau=>'type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="'+(nouveau?"new-password":"current-password")+'"';
 function cpMessage(texte,ok){const m=$("cpMsg");if(m){m.textContent=texte||"";m.classList.toggle("cp-ok",!!ok);}}
 function cpOccupe(oui){document.querySelectorAll("#menuCompteVue button").forEach(b=>{b.disabled=!!oui;});}
+/* Pictos des lignes de Mon compte (2026-11-24, choix A d'Alexandre : les sous-menus
+   ont leurs pictos, comme le menu). Phosphor, graisse normale (licence MIT). */
+const CP_ICO={"fiche":"M200,112a8,8,0,0,1-8,8H152a8,8,0,0,1,0-16h40A8,8,0,0,1,200,112Zm-8,24H152a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm40-80V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Zm-80.26-34a8,8,0,1,1-15.5,4c-2.63-10.26-13.06-18-24.25-18s-21.61,7.74-24.25,18a8,8,0,1,1-15.5-4,39.84,39.84,0,0,1,17.19-23.34,32,32,0,1,1,45.12,0A39.76,39.76,0,0,1,135.75,166ZM96,136a16,16,0,1,0-16-16A16,16,0,0,0,96,136Z","appareil":"M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z","pseudo":"M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z","code":"M216.57,39.43A80,80,0,0,0,83.91,120.78L28.69,176A15.86,15.86,0,0,0,24,187.31V216a16,16,0,0,0,16,16H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A79.73,79.73,0,0,0,160,176h.1A80,80,0,0,0,216.57,39.43ZM224,98.1c-1.09,34.09-29.75,61.86-63.89,61.9H160a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A63.72,63.72,0,0,1,96,95.92c0-34.14,27.81-62.8,61.9-63.89A64,64,0,0,1,224,98.1ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z","secours":"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm39.1,131.79a47.84,47.84,0,0,0,0-55.58l28.5-28.49a87.83,87.83,0,0,1,0,112.56ZM96,128a32,32,0,1,1,32,32A32,32,0,0,1,96,128Zm88.28-67.6L155.79,88.9a47.84,47.84,0,0,0-55.58,0L71.72,60.4a87.83,87.83,0,0,1,112.56,0ZM60.4,71.72l28.5,28.49a47.84,47.84,0,0,0,0,55.58L60.4,184.28a87.83,87.83,0,0,1,0-112.56ZM71.72,195.6l28.49-28.5a47.84,47.84,0,0,0,55.58,0l28.49,28.5a87.83,87.83,0,0,1-112.56,0Z","donnees":"M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z","supprimer":"M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z","sortir":"M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"};
+function cpIco(k){return CP_ICO[k]?'<svg class="tiroir-ico" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="'+CP_ICO[k]+'"/></svg>':"";}
 /* Un QR du lien d'ajout d'appareil, dessine en SVG (voir cpQr plus bas). */
 function cpVue(ecran,donnees){
   const v=$("menuCompteVue");if(!v)return;
@@ -622,19 +626,19 @@ function cpVue(ecran,donnees){
       '<button type="button" class="btn cp-large" id="cpSync">'+cpE("Sync now")+"</button>"+
       '<p class="tiroir-section">'+cpE("My profile")+"</p>"+
       /* Sa propre fiche, comme dans Mes amis (2026-11-21). */
-      '<button type="button" class="tiroir-lien" data-cpp="'+echapper(cp.pseudo)+'"><span>'+cpE("See my profile")+"</span></button>"+
+      '<button type="button" class="tiroir-lien" data-cpp="'+echapper(cp.pseudo)+'">'+cpIco("fiche")+'<span>'+cpE("See my profile")+"</span></button>"+
       cpyChoix(cp.pays||"")+
       cpPriveBloc(cp.prive===1)+
       '<p class="tiroir-section">'+cpE("My devices")+"</p>"+
-      '<button type="button" class="tiroir-lien" data-cp="appareil"><span>'+cpE("Add a device")+"</span></button>"+
+      '<button type="button" class="tiroir-lien" data-cp="appareil">'+cpIco("appareil")+'<span>'+cpE("Add a device")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("Security")+"</p>"+
-      '<button type="button" class="tiroir-lien" data-cp="pseudo"><span>'+cpE("Change my username")+"</span></button>"+
-      '<button type="button" class="tiroir-lien" data-cp="code"><span>'+cpE("Change my code")+"</span></button>"+
-      '<button type="button" class="tiroir-lien" data-cp="secoursNouveau"><span>'+cpE("New recovery code")+"</span></button>"+
+      '<button type="button" class="tiroir-lien" data-cp="pseudo">'+cpIco("pseudo")+'<span>'+cpE("Change my username")+"</span></button>"+
+      '<button type="button" class="tiroir-lien" data-cp="code">'+cpIco("code")+'<span>'+cpE("Change my code")+"</span></button>"+
+      '<button type="button" class="tiroir-lien" data-cp="secoursNouveau">'+cpIco("secours")+'<span>'+cpE("New recovery code")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("My data")+"</p>"+
-      '<a class="tiroir-lien" href="/api/compte/exporter" download="chang64-compte.json"><span>'+cpE("Download my data")+"</span></a>"+
-      '<button type="button" class="tiroir-lien" data-cp="supprimer"><span>'+cpE("Delete my account")+"</span></button>")+
-      '<button type="button" class="tiroir-lien" data-cp="deconnexion"><span>'+cpE("Log out")+"</span></button>"+
+      '<a class="tiroir-lien" href="/api/compte/exporter" download="chang64-compte.json">'+cpIco("donnees")+'<span>'+cpE("Download my data")+"</span></a>"+
+      '<button type="button" class="tiroir-lien" data-cp="supprimer">'+cpIco("supprimer")+'<span>'+cpE("Delete my account")+"</span></button>")+
+      '<button type="button" class="tiroir-lien" data-cp="deconnexion">'+cpIco("sortir")+'<span>'+cpE("Log out")+"</span></button>"+
       '<p class="cp-centre"><a class="cp-lien" href="'+echapper(cpPage())+'">'+cpE("How the account works")+"</a></p>";
   }else if(ecran==="appareil"){
     h="<h3>"+cpE("Add a device")+"</h3>"+

@@ -70,6 +70,7 @@ const planche = async (sortie, items) => {
   await c.js(`menuOuvrir();menuVue("compte");1`); await c.attendre(500);
   await c.js(`try{cpEtatSync="";cp.sync=Date.now();cpVue("connecte")}catch(e){};1`); await c.attendre(500);
   await c.capture(T("sous-menu-avant.png"));
+  await c.js(`document.getElementById("menuCompteVue").scrollTop=400;[...document.querySelectorAll("#menuTiroir *")].forEach(e=>{if(e.scrollHeight>e.clientHeight+50)e.scrollTop=400});1`); await c.attendre(200); await c.capture(T("sous-menu-final.png"));
   await c.js(`(function(){const ic={};document.querySelectorAll("#menuTiroir .tiroir-lien>svg.tiroir-ico").forEach(s=>{const t=s.parentNode.textContent.trim();ic[t]=s.outerHTML});const pick=re=>{for(const k in ic)if(re.test(k))return ic[k];return ""};const map=[[/profil/,/compte/],[/appareil/,/appareil/],[/pseudo/,/Meilleurs/],[/code/,/Confidentialit/],[/secours/,/Réinitialiser/],[/Télécharger/,/Inviter/],[/Supprimer/,/Réinitialiser/],[/déconnecter|Se déco/,/Langue/]];document.querySelectorAll("#menuCompteVue .tiroir-lien").forEach(b=>{if(b.querySelector("svg"))return;const t=b.textContent;for(const [a,s] of map)if(a.test(t)){b.insertAdjacentHTML("afterbegin",pick(s));break;}});return 1})()`);
   await c.attendre(300); await c.capture(T("sous-menu-apres.png"));
   await planche(T("planche-sous-menus.png"), [[T("sous-menu-apres.png"), "A : avec pictos"], [T("sous-menu-avant.png"), "B : sans picto (aujourd'hui)"]]);

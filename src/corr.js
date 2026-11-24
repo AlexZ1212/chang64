@@ -118,13 +118,24 @@ function corrEnPartie() {
 /* Le carre de notification : le nombre de parties qui attendent le membre.
    Jamais pendant une partie (rien ne la derange), ni sur l'ecran qui montre
    deja la liste. */
+/* 2026-11-24 (decision d'Alexandre, « Dans le carre ») : il dit aussi qu'une
+   partie est en cours pendant qu'on est sur un autre ecran (navPartie,
+   navigation.js), a la place de l'ancienne pastille de l'onglet Jouer. Ce
+   cas passe avant les parties qui attendent : un toucher ramene a
+   l'echiquier. Un petit rond laiton remplace alors le nombre, et le dessin
+   est celui de l'adversaire (ordinateur, ou les deux pions). */
 function corrCarre() {
   const b = $("carreParties"); if (!b) return;
-  const n = corrNombre(), montrer = n > 0 && !corrEnPartie() && mode !== "jouer";
-  if (b.hidden === !montrer && b.dataset.n === String(n)) return;
-  b.hidden = !montrer; b.dataset.n = String(n);
-  const nb = $("carreNombre"); if (nb) nb.textContent = n > 9 ? "9+" : n ? String(n) : "";
-  b.setAttribute("aria-label", t(n === 1 ? "{n} game is waiting for you" : "{n} games are waiting for you", { n }));
+  const p = typeof navPartie === "function" ? navPartie() : "", partie = !!p && mode !== p;
+  const n = partie ? 0 : (typeof corrNombre === "function" ? corrNombre() : 0);
+  const montrer = partie || (n > 0 && !corrEnPartie() && mode !== "jouer");
+  const etat = partie ? "partie-" + p : "";
+  if (b.hidden === !montrer && b.dataset.n === String(n) && (b.dataset.etat || "") === etat) return;
+  b.hidden = !montrer; b.dataset.n = String(n); b.dataset.etat = etat;
+  const nb = $("carreNombre"); if (nb) { nb.textContent = partie ? "" : n > 9 ? "9+" : n ? String(n) : ""; nb.classList.toggle("point", partie); }
+  const c = $("carreDessin");
+  if (c && typeof PICTOS !== "undefined") { const nom = p === "play" && partie ? "ordinateur" : "ami"; if (c.dataset.nom !== nom && PICTOS[nom]) { poserHtml(c, '<svg viewBox="-24 -24 48 48" focusable="false">' + PICTOS[nom] + "</svg>"); c.dataset.nom = nom; } }
+  b.setAttribute("aria-label", partie ? t("Game in progress: back to the game") : t(n === 1 ? "{n} game is waiting for you" : "{n} games are waiting for you", { n }));
 }
 function corrRendre() {
   const n = corrNombre();

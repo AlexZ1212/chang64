@@ -32,11 +32,14 @@ function navPartie() {
 }
 function navRepere() {
   const p = navPartie(), ailleurs = !!p && mode !== p;
+  /* 2026-11-24 : plus de pastille sur l'onglet Jouer ; le carre en bas a
+     droite le dit (corrCarre, corr.js), et y ramene. */
   const onglet = $("tab-jouer");
   if (onglet) {
-    onglet.classList.toggle("partie-en-cours", ailleurs);
+    onglet.classList.remove("partie-en-cours");
     if (ailleurs) onglet.setAttribute("aria-description", t("Game in progress")); else onglet.removeAttribute("aria-description");
   }
+  if (typeof corrCarre === "function") corrCarre();
   for (const el of document.querySelectorAll(".retour-jeu")) el.hidden = !ailleurs;
 }
 {
@@ -67,6 +70,17 @@ window.addEventListener("popstate", e => {
   } catch (x) {}
   navRetour = false;
 });
+/* Le carre « partie en cours » ramene a la partie (avant la liste des parties
+   de corr.js : ecoute en capture). */
+document.addEventListener("click", e => {
+  const c = e.target.closest && e.target.closest("#carreParties");
+  if (!c || !/^partie-/.test(c.dataset.etat || "")) return;
+  const p = navPartie();
+  if (!p) return;
+  e.stopPropagation();
+  setMode(p);
+  if (typeof goTop === "function") goTop();
+}, true);
 document.addEventListener("click", e => {
   if (!e.target.closest || !e.target.closest("[data-retour-jeu]")) return;
   const p = navPartie();

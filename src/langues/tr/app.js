@@ -1441,5 +1441,7 @@ module.exports = {
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
 "Review the path":"Yolu yeniden gözden geçir",
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
-"Your turn: play the next move of the idea.":"Sıra sende: fikrin sonraki hamlesini oyna."
+"Your turn: play the next move of the idea.":"Sıra sende: fikrin sonraki hamlesini oyna.",
+/* Carre : partie en cours ailleurs (2026-11-24) */
+"Game in progress: back to the game":"Süren oyun: oyuna dön"
 };

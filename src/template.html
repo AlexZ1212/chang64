@@ -1113,8 +1113,8 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .tabs button[hidden]{display:none}
 /* Une partie attend ailleurs (2026-11-21) : pastille sur l'onglet Jouer, sans
    changer sa largeur, et une ligne discrete en haut des ecrans de reglages. */
-.tabs button.partie-en-cours{position:relative}
-.tabs button.partie-en-cours::after{content:"";position:absolute;top:7px;right:9px;width:8px;height:8px;border-radius:50%;background-color:var(--brass);box-shadow:0 0 0 2px var(--slate)}
+/* La pastille « partie en cours » de l'onglet Jouer est passee sur le carre
+   de notification (2026-11-24, .carre-nombre.point). */
 .retour-jeu{margin:0 0 10px}
 .retour-jeu .linkbtn{padding-left:0}
 .retour-jeu .linkbtn::before{content:"\2190\00a0"}
@@ -1168,6 +1168,8 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    egales ; au-dela de neuf parties, « 9+ ». */
 .carre-nombre{position:absolute;top:-8px;right:-8px;width:24px;height:24px;padding:0;box-sizing:border-box;border-radius:50%;background-color:var(--brass);color:var(--on-brass);
   font:700 12.5px/24px 'JetBrains Mono',monospace;letter-spacing:-.04em;text-align:center;white-space:nowrap;overflow:hidden}
+/* Partie en cours ailleurs : un petit rond plein, sans nombre. */
+.carre-nombre.point{top:-5px;right:-5px;width:14px;height:14px;box-shadow:0 0 0 2px var(--slate)}
 /* Les cadences ne collent plus a la rangee Rapide | Classique (remarque d'Alexandre). */
 #directCats{margin-bottom:8px}
 /* 2026-11-22 : le nombre « a toi » n'est plus sur l'onglet Jouer (mal place,

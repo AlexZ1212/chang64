@@ -1441,5 +1441,7 @@ module.exports = {
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
 "Review the path":"Powtórz ścieżkę",
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
-"Your turn: play the next move of the idea.":"Twój ruch: zagraj kolejny ruch tego pomysłu."
+"Your turn: play the next move of the idea.":"Twój ruch: zagraj kolejny ruch tego pomysłu.",
+/* Carre : partie en cours ailleurs (2026-11-24) */
+"Game in progress: back to the game":"Trwa partia: wróć do partii"
 };

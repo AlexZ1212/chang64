@@ -87,13 +87,13 @@ if ($("tab-jouer")) {
     goTop();
   };
   $("jouerOrdi").onclick = () => { setMode("play"); goTop(); };
-  $("jouerAmi").onclick = () => { setMode("friend"); if (typeof amiModeRegler === "function") amiModeRegler(amiModeDefaut()); goTop(); };
+  $("jouerAmi").onclick = () => { setMode("friend"); if (typeof amiCadenceDefaut === "function") amiCadenceDefaut(); if (typeof amiModeRegler === "function") amiModeRegler(amiModeDefaut()); goTop(); };
   if ($("jouerEnLigne")) $("jouerEnLigne").onclick = () => {
     if (!(typeof estMembre === "function" && estMembre())) { if (typeof menuOuvrir === "function") { menuOuvrir(); menuVue("compte"); } return; }
-    setMode("friend"); if (typeof amiModeRegler === "function") amiModeRegler("hasard"); goTop();
+    setMode("friend"); if (typeof amiCadenceDefaut === "function") amiCadenceDefaut(); if (typeof amiModeRegler === "function") amiModeRegler("hasard"); goTop();
   };
   /* La carte de l'accueil mene au meme ecran, dans son etat par defaut. */
-  if ($("cardFriend")) $("cardFriend").addEventListener("click", () => { if (typeof amiModeRegler === "function") amiModeRegler(amiModeDefaut()); });
+  if ($("cardFriend")) $("cardFriend").addEventListener("click", () => { if (typeof amiCadenceDefaut === "function") amiCadenceDefaut(); if (typeof amiModeRegler === "function") amiModeRegler(amiModeDefaut()); });
 }
 
 /* Les cartes de Resoudre recoivent leur picto a gauche ; leur texte est

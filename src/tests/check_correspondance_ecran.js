@@ -72,9 +72,9 @@ const etat = plus => Object.assign({ t: "etat", id: "abcdefghjkmn", n: 1, cad: [
   T("trois delais par coup, 3 jours choisi", net($("directCadenceTitre").textContent) === "Délai par coup" && !cache("directCats")
     && [...$("directCadences").children].map(b => net(b.textContent)).join() === "1 jour,3 jours,7 jours"
     && [...$("directCadences").children].map(b => b.getAttribute("aria-pressed")).join() === "false,true,false");
-  T("le delai est explique, avec la regle du temps depasse", net($("directCadenceNote").textContent) === "Chacun a 3 jours pour jouer chaque coup. Passé ce délai, la partie est perdue.", $("directCadenceNote").textContent);
+  T("le delai est explique, avec la regle du temps depasse (perdue, ou annulee avant le premier coup de chacun : Worker, tomber())", net($("directCadenceNote").textContent) === "Chacun a 3 jours pour jouer chaque coup. Passé ce délai, la partie est perdue, ou annulée si l'un des deux n'a pas encore joué son premier coup.", $("directCadenceNote").textContent);
   $("directCadences").children[0].click();
-  T("au singulier pour 1 jour", net($("directCadenceNote").textContent) === "Chacun a 1 jour pour jouer chaque coup. Passé ce délai, la partie est perdue.", $("directCadenceNote").textContent);
+  T("au singulier pour 1 jour", net($("directCadenceNote").textContent) === "Chacun a 1 jour pour jouer chaque coup. Passé ce délai, la partie est perdue, ou annulée si l'un des deux n'a pas encore joué son premier coup.", $("directCadenceNote").textContent);
   T("pas de lien a envoyer par correspondance", !vu($("directLienLigne")) && vu($("btnDirectCreer")));
   $("directCadences").children[2].click();
   $("btnDirectCreer").click();

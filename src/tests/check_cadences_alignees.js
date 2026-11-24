@@ -54,7 +54,7 @@ const MEMBRE = w => w.localStorage.setItem("chang64:compte", JSON.stringify({ ps
   T("les familles se suivent dans le meme ordre sur les deux ecrans", ev("TC_CATS.map(c=>c.label).filter(x=>['Blitz','Rapid','Classical'].includes(x)).join()") === D.DIRECT_FAMILLES.map(f => f[0]).join());
 
   console.log("--- L'ecran Contre un ami ---");
-  ev("setMode('friend');amiCadenceLire();amiModeRegler('direct')"); await attendre(300);
+  ev("setMode('friend');amiCadenceDefaut();amiModeRegler('direct')"); await attendre(300);
   const puces = () => [...$("directCadences").children].map(b => net(b.textContent)).join();
   T("Rapide par defaut : 10+0, 10+5, 15+10, le 10+0 choisi", puces() === "10+0,10+5,15+10" && ev("directCad") === 0 && $("directCadences").children[0].getAttribute("aria-pressed") === "true", puces());
   $("directCadences").children[1].click(); await attendre(100);
@@ -62,9 +62,9 @@ const MEMBRE = w => w.localStorage.setItem("chang64:compte", JSON.stringify({ ps
   $("directCats").children[0].click(); await attendre(200);
   T("Blitz : 3+2 puis 5+3", puces() === "3+2,5+3" && ev("directCad") === 9, puces());
   $("directCadences").children[1].click(); await attendre(100);
-  T("5+3 : toujours la cadence numero 1", ev("directCad") === 1 && w.localStorage.getItem("chang64:amiCadence") === "1");
-  ev("amiCadenceLire()");
-  T("une cadence 5+3 retenue sur l'appareil rouvre la famille Blitz", ev("directCat") === 0 && ev("directCad") === 1);
+  T("5+3 : toujours la cadence numero 1", ev("directCad") === 1);
+  ev("amiCadenceDefaut()");
+  T("a l'arrivee suivante : Rapide 10+0, rien n'est retenu (decision du 24/11)", ev("directCat") === 1 && ev("directCad") === 0 && w.localStorage.getItem("chang64:amiCadence") === null);
   T("une invitation en 5+3 se lit toujours « 5+3 »", ev("directTexteCadence(DIRECT_CADENCES[1])") === "5+3");
   ev("window.__f=[];bxMarquer=function(id){window.__f.push(id);return true;};bxmFin({phase:'fin',fin:{r:'1-0',m:'mat'},coups:['e2e4','e7e5'],moi:'b',b:'Moi',nr:'Lui',cad:[300,3],n:1,elo:null})");
   T("une partie en 5+3 vaut le badge du Blitz, meme sans variation d'Elo", ev("__f.includes('cad_blitz')") === true, ev("__f.join()"));

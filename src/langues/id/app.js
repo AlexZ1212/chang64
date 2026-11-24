@@ -138,7 +138,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Skor: {score}. Terbaikmu sejauh ini.",
 "Score: {score}. Your best is {best}.":"Skor: {score}. Rekormu {best}.",
 "Random":"Acak",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Empat level, dari pemula yang memberimu napas sampai mesin yang tidak memaafkan apa pun. Langkah yang sah ditampilkan, tanpa bantuan selama kamu bermain: sisanya terserah kamu.",
+"Five levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Lima level, dari pemula yang memberimu napas sampai mesin yang tidak memaafkan apa pun. Langkah yang sah ditampilkan, tanpa bantuan selama kamu bermain: sisanya terserah kamu.",
 "Play White":"Main sebagai Putih",
 "Play Black":"Main sebagai Hitam",
 "Beginner":"Pemula",
@@ -1268,8 +1268,8 @@ module.exports = {
 "Time per move":"Waktu per langkah",
 "{n} day":"{n} hari",
 "{n} days":"{n} hari",
-"Each player has {n} day for every move. After that, the game is lost.":"Setiap pemain punya {n} hari untuk setiap langkah. Lewat dari itu, permainan kalah.",
-"Each player has {n} days for every move. After that, the game is lost.":"Setiap pemain punya {n} hari untuk setiap langkah. Lewat dari itu, permainan kalah.",
+"Each player has {n} day for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"Setiap pemain punya {n} hari untuk setiap langkah. Lewat dari itu, permainan kalah, atau dibatalkan jika salah satu dari kalian belum memainkan langkah pertama.",
+"Each player has {n} days for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"Setiap pemain punya {n} hari untuk setiap langkah. Lewat dari itu, permainan kalah, atau dibatalkan jika salah satu dari kalian belum memainkan langkah pertama.",
 "Waiting for {name}'s answer. The invitation is valid for 7 days.":"Menunggu jawaban {name}. Undangan berlaku 7 hari.",
 "Looking for an opponent. Your search stays open for 7 days: the game starts as soon as another member looks for the same time per move.":"Sedang mencari lawan. Pencarianmu terbuka selama 7 hari: permainan dimulai begitu anggota lain mencari waktu per langkah yang sama.",
 "Invitation sent to {name}.":"Undangan terkirim ke {name}.",
@@ -1419,5 +1419,8 @@ module.exports = {
 "The test stopped after two missed positions in a row: we already know where to start you.":"Tes berhenti setelah dua posisi berturut-turut meleset: kami sudah tahu dari mana kamu sebaiknya mulai.",
 "For what you have already done. Tap to see them.":"Untuk yang sudah kamu selesaikan. Ketuk untuk melihatnya.",
 "Games won between members":"Kemenangan antaranggota",
-"Member wins":"Menang"
+"Member wins":"Menang",
+/* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
+"Five levels, from a gentle opponent to an engine that forgives nothing.":"Lima level, dari lawan yang sangat lembut sampai mesin yang tidak memaafkan apa pun.",
+"Gentle":"Lembut"
 };

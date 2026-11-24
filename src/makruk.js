@@ -739,7 +739,7 @@ function texteEtat(){
 function texteCompte(){
   const c=P.compte; if(!c||fini)return "";
   const genre=tr(c.genre==="plateau"?"Board's honour count":"Pieces' honour count");
-  return genre+" · "+tr(c.fort>0?"White must checkmate. Moves left: {n}":"Black must checkmate. Moves left: {n}",{n:c.reste});
+  return genre+" | "+tr(c.fort>0?"White must checkmate. Moves left: {n}":"Black must checkmate. Moves left: {n}",{n:c.reste});
 }
 function dessiner(){
   if(!racine)return;

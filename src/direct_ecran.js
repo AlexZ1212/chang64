@@ -50,15 +50,11 @@ function directEstCorr() { return !!(directE && directE.cad && directE.cad[0] >=
 function amiModeDefaut() { return typeof estMembre === "function" && estMembre() ? "direct" : "lien"; }
 /* Vrai quand l'ecran ne montre pas la partie par lien (et qu'aucune partie en direct n'est ouverte). */
 function amiHorsLien() { return amiMode !== "lien" && !directId; }
-/* La derniere cadence choisie est retenue sur l'appareil ; Rapide 10+0 la premiere fois. */
-function amiCadenceGarder() { try { localStorage.setItem("chang64:amiCadence", String(directCad)); } catch (e) {} }
-function amiCadenceLire() {
-  let v = NaN;
-  try { v = parseInt(localStorage.getItem("chang64:amiCadence"), 10); } catch (e) {}
-  const k = AMI_FAMILLES.findIndex(f => f[1].includes(v));
-  if (k < 0) { directCat = 1; directCad = AMI_FAMILLES[1][1][0]; return; }
-  directCat = k; directCad = v;
-}
+/* Rapide 10+0 a chaque arrivee sur l'ecran (2026-11-24, decision d'Alexandre :
+   « Toujours Rapide 10+0 »). Avant, la derniere cadence etait retenue sur
+   l'appareil, et un joueur qui avait choisi la correspondance y retombait.
+   Appele par les cartes de Jouer et de l'accueil (jouer.js). */
+function amiCadenceDefaut() { directCat = 1; directCad = AMI_FAMILLES[1][1][0]; if ($("directCats")) directCadencesRendre(); }
 function amiModeRegler(m) {
   /* « corr » etait un choix du bandeau : c'est desormais la famille Correspondance. */
   if (m === "corr") { directCat = AMI_CORR; m = "direct"; }
@@ -236,7 +232,6 @@ function directCadencesRendre() {
       b.type = "button"; b.textContent = t(nom); b.dataset.fam = String(k);
       b.onclick = () => {
         directCat = k; directCad = k === AMI_CORR ? DIRECT_CORR[1] : AMI_FAMILLES[k][1][0];
-        amiCadenceGarder();
         /* Le sous-titre, le lien a envoyer et les cadences suivent la famille. */
         amiModeRegler(amiMode);
       };
@@ -257,7 +252,7 @@ function directCadencesRendre() {
       const b = document.createElement("button"), jours = DIRECT_CADENCES[i][0] / 86400;
       b.type = "button"; b.className = "chip"; b.dataset.cad = String(i);
       b.textContent = c ? t(jours === 1 ? "{n} day" : "{n} days", { n: jours }) : directTexteCadence(DIRECT_CADENCES[i]);
-      b.onclick = () => { directCad = i; amiCadenceGarder(); directCadencesRendre(); };
+      b.onclick = () => { directCad = i; directCadencesRendre(); };
       el.appendChild(b);
     }
   }
@@ -268,7 +263,7 @@ function directCadenceNote() {
   const n = $("directCadenceNote"), c = DIRECT_CADENCES[directCad]; if (!n) return;
   if (directCadCorr(directCad)) {
     const j = c[0] / 86400;
-    n.textContent = t(j === 1 ? "Each player has {n} day for every move. After that, the game is lost." : "Each player has {n} days for every move. After that, the game is lost.", { n: j });
+    n.textContent = t(j === 1 ? "Each player has {n} day for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet." : "Each player has {n} days for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.", { n: j });
     return;
   }
   n.textContent = c[1] ? t("{n} minutes each, plus {s} seconds added after every move.", { n: c[0] / 60, s: c[1] }) : t("{n} minutes each for the whole game.", { n: c[0] / 60 });
@@ -629,7 +624,8 @@ if (DIRECT_OUVERT && document.getElementById("directPanel")) {
       return r;
     };
   }
-  amiCadenceLire();
+  amiCadenceDefaut();
+  try { localStorage.removeItem("chang64:amiCadence"); } catch (e) {}
   document.querySelectorAll(".tc-cats").forEach(defileBrancher);
   amiModeRegler(amiModeDefaut());
   $("btnDirectNulle").onclick = () => { if (directF) directF.nulle(); };

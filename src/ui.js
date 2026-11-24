@@ -481,12 +481,13 @@ let legalCache=[];
 let lastMove=null;
 let marks={};
 let busy=false;
-let myColor=W;
+let myColor=Math.random()<0.5?W:B;
 /* colorMode retient le choix du joueur ("w", "b" ou "r"), myColor la couleur
    reellement jouee. En mode aleatoire les deux divergent : le tirage est
    refait a chaque nouvelle partie, et le selecteur doit alors montrer la
-   couleur obtenue tout en gardant le mode en memoire. */
-let colorMode="w";
+   couleur obtenue tout en gardant le mode en memoire.
+   « Au hasard » par defaut (2026-11-24, demande d'Alexandre) : avant, Blancs. */
+let colorMode="r";
 let botLevel=2;
 let pendingPromo=null;
 let sanList=[];

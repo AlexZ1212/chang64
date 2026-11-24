@@ -138,7 +138,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Очки: {score}. Твой лучший результат.",
 "Score: {score}. Your best is {best}.":"Очки: {score}. Твой рекорд: {best}.",
 "Random":"Случайно",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Четыре уровня: от новичка, который даёт перевести дух, до движка, который ничего не прощает. Возможные ходы подсвечены, никаких подсказок во время игры: остальное за тобой.",
+"Five levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Пять уровней: от новичка, который даёт перевести дух, до движка, который ничего не прощает. Возможные ходы подсвечены, никаких подсказок во время игры: остальное за тобой.",
 "Play White":"Играть белыми",
 "Play Black":"Играть чёрными",
 "Beginner":"Новичок",
@@ -1270,8 +1270,8 @@ module.exports = {
 "Time per move":"Время на ход",
 "{n} day":"{n} день",
 "{n} days":{"one":"{n} день","few":"{n} дня","many":"{n} дней","other":"{n} дня"},
-"Each player has {n} day for every move. After that, the game is lost.":"У каждого {n} день на каждый ход. После этого партия проиграна.",
-"Each player has {n} days for every move. After that, the game is lost.":{"one":"У каждого {n} день на каждый ход. После этого партия проиграна.","few":"У каждого по {n} дня на каждый ход. После этого партия проиграна.","many":"У каждого по {n} дней на каждый ход. После этого партия проиграна.","other":"У каждого по {n} дня на каждый ход. После этого партия проиграна."},
+"Each player has {n} day for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"У каждого {n} день на каждый ход. Если срок вышел, партия проиграна, а если один из игроков ещё не сделал первый ход, она отменяется.",
+"Each player has {n} days for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":{"one":"У каждого {n} день на каждый ход. Если срок вышел, партия проиграна, а если один из игроков ещё не сделал первый ход, она отменяется.","few":"У каждого по {n} дня на каждый ход. Если срок вышел, партия проиграна, а если один из игроков ещё не сделал первый ход, она отменяется.","many":"У каждого по {n} дней на каждый ход. Если срок вышел, партия проиграна, а если один из игроков ещё не сделал первый ход, она отменяется.","other":"У каждого по {n} дня на каждый ход. Если срок вышел, партия проиграна, а если один из игроков ещё не сделал первый ход, она отменяется."},
 "Waiting for {name}'s answer. The invitation is valid for 7 days.":"Ждём ответа игрока {name}. Приглашение действует 7 дней.",
 "Looking for an opponent. Your search stays open for 7 days: the game starts as soon as another member looks for the same time per move.":"Идёт поиск соперника. Поиск открыт 7 дней: партия начнётся, как только другой участник выберет то же время на ход.",
 "Invitation sent to {name}.":"Приглашение отправлено игроку {name}.",
@@ -1421,5 +1421,8 @@ module.exports = {
 "The test stopped after two missed positions in a row: we already know where to start you.":"Тест остановился после двух неудач подряд: мы уже знаем, с чего тебе начать.",
 "For what you have already done. Tap to see them.":"За то, что уже сделано. Нажми, чтобы посмотреть.",
 "Games won between members":"Победы над участниками",
-"Member wins":"Победы"
+"Member wins":"Победы",
+/* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
+"Five levels, from a gentle opponent to an engine that forgives nothing.":"Пять уровней: от очень мягкого соперника до движка, который ничего не прощает.",
+"Gentle":"Мягкий"
 };

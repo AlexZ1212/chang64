@@ -138,7 +138,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Skor: {score}. Şimdiye kadarki en iyin.",
 "Score: {score}. Your best is {best}.":"Skor: {score}. Rekorun {best}.",
 "Random":"Rastgele",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Dört seviye: nefes almana izin veren acemiden hiçbir şeyi affetmeyen motora. Yasal hamleler gösterilir, oynarken yardım yok: gerisi sende.",
+"Five levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Beş seviye: nefes almana izin veren acemiden hiçbir şeyi affetmeyen motora. Yasal hamleler gösterilir, oynarken yardım yok: gerisi sende.",
 "Play White":"Beyazla oyna",
 "Play Black":"Siyahla oyna",
 "Beginner":"Acemi",
@@ -1268,8 +1268,8 @@ module.exports = {
 "Time per move":"Hamle başına süre",
 "{n} day":"{n} gün",
 "{n} days":"{n} gün",
-"Each player has {n} day for every move. After that, the game is lost.":"Her oyuncunun her hamle için {n} günü var. Süre dolarsa oyun kaybedilir.",
-"Each player has {n} days for every move. After that, the game is lost.":"Her oyuncunun her hamle için {n} günü var. Süre dolarsa oyun kaybedilir.",
+"Each player has {n} day for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"Herkesin her hamle için {n} günü var. Bu süre geçerse oyun kaybedilir; ikinizden biri henüz ilk hamlesini yapmadıysa oyun iptal edilir.",
+"Each player has {n} days for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"Herkesin her hamle için {n} günü var. Bu süre geçerse oyun kaybedilir; ikinizden biri henüz ilk hamlesini yapmadıysa oyun iptal edilir.",
 "Waiting for {name}'s answer. The invitation is valid for 7 days.":"{name} adlı oyuncunun yanıtı bekleniyor. Davet 7 gün geçerli.",
 "Looking for an opponent. Your search stays open for 7 days: the game starts as soon as another member looks for the same time per move.":"Rakip aranıyor. Araman 7 gün açık kalır: başka bir üye aynı hamle süresini aradığında oyun başlar.",
 "Invitation sent to {name}.":"Davet {name} adlı oyuncuya gönderildi.",
@@ -1419,5 +1419,8 @@ module.exports = {
 "The test stopped after two missed positions in a row: we already know where to start you.":"Test, art arda iki kaçan konumdan sonra durdu: nereden başlaman gerektiğini artık biliyoruz.",
 "For what you have already done. Tap to see them.":"Daha önce yaptıkların için. Görmek için dokun.",
 "Games won between members":"Üyeler arası galibiyetler",
-"Member wins":"Galibiyet"
+"Member wins":"Galibiyet",
+/* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
+"Five levels, from a gentle opponent to an engine that forgives nothing.":"Beş seviye: çok yumuşak bir rakipten hiçbir şeyi affetmeyen bir motora.",
+"Gentle":"Yumuşak"
 };

@@ -115,8 +115,7 @@ function statsTuiles(tuiles,opt){
 function statsBilan(v,n,d){
   const tot=v+n+d;
   if(!(tot>0))return "";
-  let pc=Math.round(100*v/tot)+"%";
-  try{pc=new Intl.NumberFormat(LANG_INTL,{style:"percent",maximumFractionDigits:0}).format(v/tot);}catch(e){}
+  const pc=pourcentTexte(v/tot);
   const cases=[["g","Won",v],["n","Drawn",n],["p","Lost",d]];
   return '<div class="stats-bilan"><p class="stats-bilan-tete">'+echapper(t("{pc} of games won",{pc:"\u0001"})).replace("\u0001","<b>"+echapper(pc)+"</b>")+"</p>"+
     '<div class="stats-barre" role="img" aria-label="'+echapper(cases.map(([,k,x])=>x+" "+t(k,{n:x})).join(", "))+'">'+

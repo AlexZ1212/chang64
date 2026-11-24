@@ -3135,7 +3135,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
       <button class="card" id="cardPlay">
         <span class="ico" id="icoPlay"></span>
         <h3>Play the computer</h3>
-        <p>Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.</p>
+        <p>Five levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.</p>
         <span class="go">Start a game &rarr;</span>
       </button>
       <button class="card" id="cardPuzzles">
@@ -3385,6 +3385,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           </div>
         </div>
         <div class="panel" id="settingsPanel">
+          <!-- Titre de l'ecran (2026-11-24, demande d'Alexandre) : comme
+               « Contre un ami » et « Contre un joueur en ligne ». -->
+          <h2 id="ordiTitre">Against the computer</h2>
+          <p class="sub" id="ordiSous">Five levels, from a gentle opponent to an engine that forgives nothing.</p>
           <div class="eyebrow">Settings<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipSettings" aria-label="More info">i</button></div>
           <p class="info-tip-pop hide" id="tipSettings">Choose your colour, the engine's strength and a time control, then start.</p>
           <!-- Reglages de partie (2026-11-21, decisions d'Alexandre) : sur un
@@ -3392,9 +3396,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
                sur deux lignes. D'ou la couleur en un mot (le titre dit deja
                « Jouer »), et la force sur deux etages : le nom, son Elo. -->
           <div class="field"><div class="seg" id="segColor">
-            <button data-v="w" aria-pressed="true">White</button>
+            <button data-v="w" aria-pressed="false">White</button>
             <button data-v="b" aria-pressed="false">Black</button>
-            <button data-v="r" aria-pressed="false">Random</button>
+            <button data-v="r" aria-pressed="true">Random</button>
           </div></div>
           <div class="field">
             <div class="seg seg-force" id="segLevel">
@@ -4269,7 +4273,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <span id="jouerOrdiPicto"></span>
         <span class="jouer-texte">
           <b>Against the computer</b>
-          <span class="jouer-desc">Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.</span>
+          <span class="jouer-desc">Five levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.</span>
           <span class="jouer-go">Start a game &rarr;</span>
         </span>
       </button>

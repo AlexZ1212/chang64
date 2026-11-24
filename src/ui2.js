@@ -868,7 +868,7 @@ function finishAnalysis(plies,prep){
   const inacc=mine.filter(p=>p.tag==="inacc").length;
   const avg=mine.length?mine.reduce((a,b)=>a+b.loss,0)/mine.length:0;
   const acc=Math.max(15,Math.min(99,Math.round(100-avg/3.2)));
-  $("accScore").textContent=acc+"%";
+  $("accScore").textContent=pourcentTexte(acc/100);
   $("accBlunders").textContent=blunders;
   $("accMistakes").textContent=mistakes;
   let note=t("Your side: {b} blunder(s), {m} mistake(s), {i} inaccuracy(ies).",{b:blunders,m:mistakes,i:inacc});
@@ -1179,7 +1179,7 @@ async function importerLichess(){
       b.type="button";b.className="btn lichess-partie";
       const res=p.winner?(p.winner==="white"?"1-0":"0-1"):(p.status==="started"||p.status==="created"?"*":"½-½");
       b.textContent=nomJoueurLichess(p.players&&p.players.white)+" – "+nomJoueurLichess(p.players&&p.players.black)+
-        " · "+res+" · "+new Date(p.createdAt).toLocaleDateString(LANG_INTL,{day:"numeric",month:"short",year:"numeric"});
+        " | "+res+" | "+new Date(p.createdAt).toLocaleDateString(LANG_INTL,{day:"numeric",month:"short",year:"numeric"});
       /* Partie chargee : on remonte a l'echiquier, sinon elle se charge
          hors de l'ecran, sous la liste. */
       b.onclick=()=>{if(loadPgn(p.moves)){msg.textContent=t("Game imported from Lichess.");poserHtml(liste,"");if(typeof goTop==="function")goTop();}};
@@ -1717,7 +1717,7 @@ function renderBadgeSummary(){
   poserHtml(recent,ids.map(id=>{
     const b=BADGES.find(x=>x.id===id); if(!b)return "";
     const d=prog.badgeDates[id];
-    return '<div class="badge unlocked">'+badgeLabel(b)+(d?' · <span class="badge-date">'+fmtDayMonth(d)+'</span>':'')+'</div>';
+    return '<div class="badge unlocked">'+badgeLabel(b)+(d?' | <span class="badge-date">'+fmtDayMonth(d)+'</span>':'')+'</div>';
   }).join(""));
 }
 function ensureProgFields(){
@@ -2096,7 +2096,7 @@ function renderMotifsMenu(){
         +(motifEnCours===m.theme?' aria-current="true"':"")+'>'
         +"<b>"+echappe(t(m.theme))+"</b>"
         +'<span class="motif-compte">'+t("{n} puzzles",{n:n})
-        +(f?' · <span class="motif-fait">'+t("{n} solved",{n:f})+"</span>":"")
+        +(f?' | <span class="motif-fait">'+t("{n} solved",{n:f})+"</span>":"")
         +"</span></button>";
     }
     h+="</div></div>";

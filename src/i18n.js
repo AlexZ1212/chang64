@@ -20,6 +20,16 @@ let LANG=PAGE_LANGUE.lang||"en";
 const DICT=PAGE_LANGUE.dict||{};
 const LANG_INTL=PAGE_LANGUE.intl||"en-US";
 const LANG_HTML=PAGE_LANGUE.html||LANG;
+/* Un pourcentage dans la langue de la page (2026-11-24, demande d'Alexandre).
+   Intl met une espace insecable PLEINE avant « % » en francais, allemand,
+   russe et espagnol : trop large. On la remplace par l'espace fine
+   insecable (U+202F), comme le veut la typographie francaise. L'anglais
+   et l'italien n'ont pas d'espace, le turc ecrit « %62 ». */
+function pourcentTexte(v){
+  let s;
+  try{s=new Intl.NumberFormat(LANG_INTL,{style:"percent",maximumFractionDigits:0}).format(v);}catch(e){s=Math.round(100*v)+"%";}
+  return s.replace(/[\s  ]+%/," %").replace(/%[\s  ]+/,"% ");
+}
 /* Un mot court ne doit pas rester seul en fin de ligne : "Exercice du /
    jour" ou "Suggerer un / coup" se lisent mal dans un bouton etroit. On lie
    donc l'article au mot suivant par une espace insecable, une fois pour

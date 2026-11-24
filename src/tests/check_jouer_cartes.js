@@ -139,7 +139,7 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   T("le titre et le sous-titre s'effacent pendant la partie", pf.classList.contains("en-direct"));
   w.eval("directQuitter(true);directPanneau()");
   /* La cadence choisie est retenue ; la couleur revient au hasard a chaque visite. */
-  T("la derniere cadence est gardee sur l'appareil", w.localStorage.getItem("chang64:amiCadence") === "4", w.localStorage.getItem("chang64:amiCadence"));
+  T("la cadence choisie n'est plus gardee sur l'appareil (24/11)", w.localStorage.getItem("chang64:amiCadence") === null, w.localStorage.getItem("chang64:amiCadence"));
   $("directCats").children[3].click();
   await attendre(100);
   T("Correspondance : trois delais, 3 jours choisi, plus de lien a envoyer", [...$("directCadences").children].map(b => net(b.textContent)).join("|") === "1 jour|3 jours|7 jours" && w.eval("directCad") === 7 && pf.dataset.corr === "1" && net($("directCadenceTitre").textContent) === "Délai par coup" && /#pane-friend\[data-corr="1"\] #directLienLigne\{display:none\}/.test(html));
@@ -183,7 +183,14 @@ const ESPION = "window.__appels=[];directCreer=async(cad,pseudo,coul)=>{window._
   w = await ouvrir("fr", { attente: 2400, avant(x) { MEMBRE(x); x.localStorage.setItem("chang64:amiCadence", "9"); } });
   d = w.document; $ = id => d.getElementById(id);
   w.eval("setMode('jouer')"); $("jouerAmi").click(); await attendre(400);
-  T("la cadence retenue revient a la visite suivante (Blitz 3+2)", w.eval("directCat") === 0 && w.eval("directCad") === 9 && $("directCats").children[0].getAttribute("aria-pressed") === "true" && [...$("directCouleur").children].find(b => b.getAttribute("aria-pressed") === "true").dataset.v === "h");
+  T("une ancienne cadence retenue (Blitz 3+2) ne revient plus : Rapide 10+0 a chaque arrivee", w.eval("directCat") === 1 && w.eval("directCad") === 0 && $("directCats").children[1].getAttribute("aria-pressed") === "true" && [...$("directCouleur").children].find(b => b.getAttribute("aria-pressed") === "true").dataset.v === "h");
+  /* Demande d'Alexandre (24/11) : on choisit la correspondance, on s'en va, on revient. */
+  $("directCats").children[3].click(); await attendre(100);
+  w.eval("setMode('jouer')"); $("jouerAmi").click(); await attendre(300);
+  T("apres la correspondance, Contre un ami revient sur Rapide 10+0", w.eval("directCat") === 1 && w.eval("directCad") === 0 && $("pane-friend").dataset.corr === "");
+  $("directCats").children[3].click(); await attendre(100);
+  w.eval("setMode('jouer')"); $("jouerEnLigne").click(); await attendre(300);
+  T("Contre un joueur en ligne aussi", w.eval("directCat") === 1 && w.eval("directCad") === 0 && $("pane-friend").dataset.ami === "hasard" && $("pane-friend").dataset.corr === "");
   w.close();
 
   console.log("--- Invitation recue ---");

@@ -138,7 +138,7 @@ module.exports = {
 "Score: {score}. Your best yet.":"Wynik: {score}. Twój najlepszy do tej pory.",
 "Score: {score}. Your best is {best}.":"Wynik: {score}. Twój rekord to {best}.",
 "Random":"Losowo",
-"Four levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Cztery poziomy: od początkującego, który daje ci odetchnąć, po silnik, który niczego nie wybacza. Legalne ruchy są pokazane, żadnej pomocy podczas gry: reszta należy do ciebie.",
+"Five levels, from a beginner who lets you breathe to an engine that forgives nothing. Legal moves shown, no assistance while you play: the rest is up to you.":"Pięć poziomów: od początkującego, który daje ci odetchnąć, po silnik, który niczego nie wybacza. Legalne ruchy są pokazane, żadnej pomocy podczas gry: reszta należy do ciebie.",
 "Play White":"Graj białymi",
 "Play Black":"Graj czarnymi",
 "Beginner":"Nowicjusz",
@@ -1268,8 +1268,8 @@ module.exports = {
 "Time per move":"Czas na ruch",
 "{n} day":"{n} dzień",
 "{n} days":"{n} dni",
-"Each player has {n} day for every move. After that, the game is lost.":"Każdy gracz ma {n} dzień na każdy ruch. Po tym czasie partia jest przegrana.",
-"Each player has {n} days for every move. After that, the game is lost.":"Każdy gracz ma {n} dni na każdy ruch. Po tym czasie partia jest przegrana.",
+"Each player has {n} day for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"Każdy ma {n} dzień na każdy ruch. Po tym czasie partia jest przegrana, a jeśli któreś z was nie zrobiło jeszcze pierwszego ruchu, zostaje anulowana.",
+"Each player has {n} days for every move. After that, the game is lost, or cancelled if one of you has not played a first move yet.":"Każdy ma {n} dni na każdy ruch. Po tym czasie partia jest przegrana, a jeśli któreś z was nie zrobiło jeszcze pierwszego ruchu, zostaje anulowana.",
 "Waiting for {name}'s answer. The invitation is valid for 7 days.":"Czekamy na odpowiedź gracza {name}. Zaproszenie jest ważne 7 dni.",
 "Looking for an opponent. Your search stays open for 7 days: the game starts as soon as another member looks for the same time per move.":"Szukamy przeciwnika. Szukanie trwa 7 dni: partia zacznie się, gdy inny członek wybierze ten sam czas na ruch.",
 "Invitation sent to {name}.":"Zaproszenie wysłane do gracza {name}.",
@@ -1419,5 +1419,8 @@ module.exports = {
 "The test stopped after two missed positions in a row: we already know where to start you.":"Test zakończył się po dwóch nieudanych pozycjach z rzędu: wiemy już, od czego masz zacząć.",
 "For what you have already done. Tap to see them.":"Za to, co już masz za sobą. Dotknij, aby je zobaczyć.",
 "Games won between members":"Wygrane partie wśród członków",
-"Member wins":"Wygrane"
+"Member wins":"Wygrane",
+/* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
+"Five levels, from a gentle opponent to an engine that forgives nothing.":"Pięć poziomów: od bardzo łagodnego rywala po silnik, który niczego nie wybacza.",
+"Gentle":"Łagodny"
 };

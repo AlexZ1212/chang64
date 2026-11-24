@@ -97,7 +97,7 @@ const T=(l,ok,x)=>console.log((ok?"  ok  ":" FAIL ")+l+(x?" — "+x:""));
   T("pieces come back", pieceCount()>=3, pieceCount()+" pieces");
 
   console.log("\nDRAG AND DROP");
-  click($("tab-play")); await wait(600);
+  w.eval("colorMode='w';myColor=W"); click($("tab-play")); await wait(600);   /* Blancs : au hasard par defaut depuis le 24/11 */
   await startGame();
   const rect={left:0,top:0,width:400,height:400,right:400,bottom:400};
   $("board").getBoundingClientRect=()=>rect;

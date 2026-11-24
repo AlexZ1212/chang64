@@ -93,5 +93,10 @@ const P = {
   pieges: '<g transform="scale(1.06)">' + piece("b", -5.5, 5.5, .82) + accentDessin(DESSINS.attention, .46, 12) + "</g>",
   biblio: '<g transform="scale(.96)">' + DESSINS.fiches + piece("n", -3.500, 4.200, .52, true) + "</g>"
 };
+/* Les motifs de « Travailler un motif » (2026-11-24, choix A d'Alexandre :
+   picto a gauche) : chaque tuile porte le dessin de la medaille de son motif,
+   comme les cartes de Resoudre portent celui d'un badge. */
+for (const k of ["winning_capture", "knight_fork", "pawn_fork", "pin", "skewer", "deflection", "double_attack", "quiet_move", "back_rank_mate", "mate_in_one", "mate_in_two", "mate_in_three"])
+  if (M["theme_" + k]) P["motif_" + k] = glyphe("theme_" + k);
 function pictosSource() { return "const PICTOS=" + JSON.stringify(P) + ";"; }
 module.exports = { pictosSource, PICTOS: P, GLOBE_LANGUE };

@@ -2092,12 +2092,16 @@ function renderMotifsMenu(){
     h+='<div class="motif-groupe"><div class="eyebrow">'+echappe(titre)+'</div><div class="motif-grille">';
     for(const m of lignes){
       const n=THEME_COUNTS[m.theme],f=faits[m.theme]||0;
-      h+='<button type="button" class="motif-tuile" data-motif="'+echappe(m.theme)+'"'
+      /* Picto du motif a gauche (2026-11-24) : le dessin de sa medaille. */
+      const cle="motif_"+String(m.theme).toLowerCase().replace(/[^a-z]+/g,"_");
+      const picto=typeof pictoHtml==="function"?pictoHtml(cle,"petit"):"";
+      h+='<button type="button" class="motif-tuile'+(picto?" avec-picto":"")+'" data-motif="'+echappe(m.theme)+'"'
         +(motifEnCours===m.theme?' aria-current="true"':"")+'>'
+        +picto+'<span class="motif-texte">'
         +"<b>"+echappe(t(m.theme))+"</b>"
         +'<span class="motif-compte">'+t("{n} puzzles",{n:n})
         +(f?' | <span class="motif-fait">'+t("{n} solved",{n:f})+"</span>":"")
-        +"</span></button>";
+        +"</span></span></button>";
     }
     h+="</div></div>";
   }

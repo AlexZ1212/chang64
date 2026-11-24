@@ -2,6 +2,49 @@
  {
   "d": "2026-11-24",
   "en": [
+   "Private profile, for children",
+   "In Menu, My account, a new “Private profile” switch: your profile closes to others (except your friends), you leave the tables, the leagues and the member search, and only your friends can invite you. Handy for a child; a paragraph for parents explains it in Privacy."
+  ],
+  "fr": [
+   "Fiche privée, pour les enfants",
+   "Dans Menu, Mon compte, un nouvel interrupteur « Fiche privée » : ta fiche se ferme aux autres (sauf à tes amis), tu sors des tableaux, des ligues et de la recherche de membres, et seuls tes amis peuvent t'inviter. Pratique pour un enfant ; un paragraphe pour les parents l'explique dans Confidentialité."
+  ],
+  "es": [
+   "Perfil privado, para niños",
+   "En Menú, Mi cuenta, un nuevo interruptor «Perfil privado»: tu perfil se cierra a los demás (salvo a tus amigos), sales de las tablas, de las ligas y de la búsqueda de miembros, y solo tus amigos pueden invitarte. Útil para un niño; un párrafo para madres y padres lo explica en Privacidad."
+  ],
+  "pt": [
+   "Perfil privado, para crianças",
+   "Em Menu, Minha conta, um novo interruptor “Perfil privado”: seu perfil se fecha para os outros (exceto seus amigos), você sai das tabelas, das ligas e da busca de membros, e só seus amigos podem convidar você. Útil para uma criança; um parágrafo para pais e mães explica isso em Privacidade."
+  ],
+  "de": [
+   "Privates Profil, für Kinder",
+   "Unter Menü, Mein Konto gibt es einen neuen Schalter „Privates Profil“: Dein Profil ist für andere geschlossen (außer für deine Freunde), du verschwindest aus den Tabellen, den Ligen und der Mitgliedersuche, und nur deine Freunde können dich einladen. Praktisch für ein Kind; ein Absatz für Eltern erklärt es unter Datenschutz."
+  ],
+  "ru": [
+   "Закрытый профиль для детей",
+   "В разделе Меню, Мой аккаунт появился переключатель «Закрытый профиль»: профиль закрыт для других (кроме друзей), тебя нет в таблицах, лигах и поиске участников, и пригласить тебя могут только друзья. Удобно для ребёнка; абзац для родителей объясняет это в разделе о конфиденциальности."
+  ],
+  "it": [
+   "Profilo privato, per i bambini",
+   "In Menu, Il mio account, un nuovo interruttore «Profilo privato»: il tuo profilo si chiude agli altri (tranne ai tuoi amici), esci dalle classifiche, dalle leghe e dalla ricerca dei membri, e solo i tuoi amici possono invitarti. Comodo per un bambino; un paragrafo per i genitori lo spiega in Privacy."
+  ],
+  "tr": [
+   "Çocuklar için gizli profil",
+   "Menü, Hesabım bölümünde yeni bir “Gizli profil” anahtarı var: profilin başkalarına kapanır (arkadaşların hariç), tablolardan, liglerden ve üye aramasından çıkarsın, ve yalnızca arkadaşların seni davet edebilir. Bir çocuk için kullanışlı; gizlilik sayfasındaki ebeveynler paragrafı bunu açıklıyor."
+  ],
+  "pl": [
+   "Profil prywatny dla dzieci",
+   "W Menu, Moje konto jest nowy przełącznik „Profil prywatny”: twój profil zamyka się przed innymi (poza znajomymi), znikasz z tabel, lig i wyszukiwarki członków, a zaprosić cię mogą tylko znajomi. Przydatne dla dziecka; akapit dla rodziców wyjaśnia to w Prywatności."
+  ],
+  "id": [
+   "Profil pribadi untuk anak",
+   "Di Menu, Akun saya, ada sakelar baru “Profil pribadi”: profilmu tertutup bagi orang lain (kecuali temanmu), kamu keluar dari tabel, liga, dan pencarian anggota, dan hanya temanmu yang bisa mengundangmu. Berguna untuk anak; paragraf untuk orang tua menjelaskannya di Privasi."
+  ]
+ },
+ {
+  "d": "2026-11-24",
+  "en": [
    "Training: take back a move",
    "Against the computer, a new switch under the strength: Training. Turn it on before the game and you can take back a move as often as you like. A training game counts for neither your Elo nor your badges; switched off, the game is rated and nothing helps you."
   ],

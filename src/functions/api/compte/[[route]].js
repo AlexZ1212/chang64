@@ -541,6 +541,41 @@ async function compteParPseudo(env, pseudo) {
   return env.DB.prepare("SELECT id, pseudo, version, secours_hash FROM comptes WHERE cle = ?1").bind(v.cle).first();
 }
 
+/* ---------- Fiche privee (2026-11-24, choix d'Alexandre par QCM) ----------
+   Pour un enfant : la colonne comptes.prive (0 ou 1, SQL accepte par
+   Alexandre : ALTER TABLE comptes ADD COLUMN prive INTEGER NOT NULL DEFAULT 0).
+   Allumee, elle cache :
+   - sa fiche (rProfil), sauf pour lui et pour ses amis ;
+   - sa place dans les tableaux (classement.js) et dans les ligues ;
+   - son pseudo dans la recherche de membres (rMembres) ;
+   - et ferme la porte aux inconnus : seuls ses amis l'invitent (duel ici,
+     parties dans le Worker des parties), et personne ne lui envoie de demande
+     d'ami. Lui peut toujours en envoyer, et jouer contre un adversaire au
+     hasard. Une porte fermee repond comme un pseudo inconnu, ou comme une
+     demande envoyee : rien ne denonce le reglage.
+   Eteinte par defaut. Tant que la base n'a pas la colonne, tout le monde est
+   public et tout le reste marche (avecPrive, prive). */
+async function prive(env, id) {
+  try { const l = await env.DB.prepare("SELECT prive FROM comptes WHERE id = ?1").bind(id).first(); return !!(l && l.prive === 1); }
+  catch (e) { return false; }
+}
+/* « Ses amis » : ceux que le membre prive a lui-meme dans ses amis. */
+async function amiDe(env, cible, demandeur) {
+  return !!(await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(cible, demandeur).first());
+}
+async function fermeA(env, cible, demandeur) { return (await prive(env, cible)) && !(await amiDe(env, cible, demandeur)); }
+/* Une lecture avec la condition sur prive, et la meme sans si la base n'a
+   pas encore la colonne. */
+async function avecPrive(avec, sans, lire) {
+  try { return await lire(avec); } catch (e) { return await lire(sans); }
+}
+async function rPrive(s, d, env) {
+  if (d.prive !== 0 && d.prive !== 1) return erreur("requete", 400);
+  try { await env.DB.prepare("UPDATE comptes SET prive = ?2 WHERE id = ?1").bind(s.id, d.prive).run(); }
+  catch (e) { return erreur("indisponible", 503); }
+  return json({ ok: true, prive: d.prive });
+}
+
 async function rConnexion(d, env, now, request) {
   if (Math.random() < 0.1) await nettoyer(env, now);
   const c = await compteParPseudo(env, d.pseudo);
@@ -816,6 +851,8 @@ async function rDefiEnvoyer(s, d, env, now) {
   const c = await compteParPseudo(env, d.a);
   if (!c) return erreur("membre", 404);
   if (c.id === s.id) return erreur("soi", 400);
+  /* Fiche privee : seuls ses amis l'invitent ; pour les autres, un pseudo inconnu. */
+  if (await fermeA(env, c.id, s.id)) return erreur("membre", 404);
   /* Les trois plafonds et l'insertion en une seule instruction : des envois
      simultanes ne passent pas entre les mailles. */
   const r = await env.DB.prepare(
@@ -890,7 +927,11 @@ async function rMembres(s, request, env) {
   const bas = brut.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase();
   const cle = Array.from(bas).map(c => PSEUDO_SOSIES[c] || c).join("");
   const motif = cle.replace(/[\\%_]/g, c => "\\" + c) + "%";
-  const l = (await env.DB.prepare("SELECT pseudo FROM comptes WHERE cle LIKE ?1 ESCAPE '\\' AND id <> ?2 ORDER BY vu DESC LIMIT 8").bind(motif, s.id).all()).results || [];
+  /* Fiche privee : absent de la recherche. */
+  const l = await avecPrive(
+    "SELECT pseudo FROM comptes WHERE cle LIKE ?1 ESCAPE '\\' AND id <> ?2 AND prive = 0 ORDER BY vu DESC LIMIT 8",
+    "SELECT pseudo FROM comptes WHERE cle LIKE ?1 ESCAPE '\\' AND id <> ?2 ORDER BY vu DESC LIMIT 8",
+    async sql => (await env.DB.prepare(sql).bind(motif, s.id).all()).results || []);
   return json({ membres: l.map(x => x.pseudo) });
 }
 
@@ -970,6 +1011,8 @@ async function rAmiAjouter(s, d, env, now) {
   }
   /* Un membre qui m'a bloque (ou que j'ai bloque) ne recoit rien, sans que cela se voie. */
   if (await amisBloques(env, s.id, c.id)) return json({ ok: true, pseudo: c.pseudo, etat: "demande" }, 202);
+  /* Fiche privee : personne ne lui envoie de demande, sans que cela se voie non plus. */
+  if (await prive(env, c.id)) return json({ ok: true, pseudo: c.pseudo, etat: "demande" }, 202);
   await env.DB.prepare("INSERT INTO demandes_amis (de, a, cree) SELECT ?1, ?2, ?3 WHERE (SELECT COUNT(*) FROM demandes_amis WHERE de = ?1) < ?4 ON CONFLICT(de, a) DO NOTHING").bind(s.id, c.id, now, DEMANDES_MAX).run();
   const posee = await env.DB.prepare("SELECT 1 AS x FROM demandes_amis WHERE de = ?1 AND a = ?2").bind(s.id, c.id).first();
   return posee ? json({ ok: true, pseudo: c.pseudo, etat: "demande" }, 202) : erreur("trop", 429);
@@ -1069,7 +1112,10 @@ async function liguesBascule(env, sem) {
   } else {
     /* Pas encore ouvertes : on compte les membres actifs. Au seuil, tout le
        monde commence en ligue Pion. */
-    const a = (await env.DB.prepare("SELECT id, sem_resolus AS points FROM comptes WHERE sem IN (?1, ?2) AND sem_resolus > 0").bind(avant, sem).all()).results || [];
+    const a = await avecPrive(
+      "SELECT id, sem_resolus AS points FROM comptes WHERE sem IN (?1, ?2) AND sem_resolus > 0 AND prive = 0",
+      "SELECT id, sem_resolus AS points FROM comptes WHERE sem IN (?1, ?2) AND sem_resolus > 0",
+      async sql => (await env.DB.prepare(sql).bind(avant, sem).all()).results || []);
     actifs = a.length;
     ouvert = actifs >= LIGUE_SEUIL ? 1 : 0;
     if (ouvert) lignes = liguesRepartir(a.map(j => ({ id: j.id, ligue: 0, points: j.points, mouv: 0 })));
@@ -1105,6 +1151,8 @@ async function liguesEtat(env, now) {
 async function liguesSuivre(env, id, now) {
   const e = await liguesEtat(env, now);
   if (!e.ouvert) return;
+  /* Fiche privee : pas de ligue. */
+  if (await prive(env, id)) return;
   const r = await env.DB.prepare("UPDATE ligues SET points = (SELECT sem_resolus FROM comptes WHERE id = ?1) WHERE compte_id = ?1 AND sem = ?2 AND groupe >= 0").bind(id, e.sem).run();
   if (r.meta && r.meta.changes === 1) return;
   const c = await env.DB.prepare("SELECT sem_resolus AS v FROM comptes WHERE id = ?1 AND sem = ?2").bind(id, e.sem).first();
@@ -1128,9 +1176,11 @@ async function rLigue(s, env, now) {
   const l = await env.DB.prepare("SELECT sem, ligue, groupe, mouv FROM ligues WHERE compte_id = ?1").bind(s.id).first();
   const ici = l && l.sem === e.sem;
   let groupe = [];
-  if (ici && l.groupe >= 0) groupe = (await env.DB.prepare(
-    "SELECT c.pseudo AS p, l.points AS v FROM ligues l JOIN comptes c ON c.id = l.compte_id WHERE l.sem = ?1 AND l.ligue = ?2 AND l.groupe = ?3 ORDER BY l.points DESC, l.compte_id ASC LIMIT 60"
-  ).bind(e.sem, l.ligue, l.groupe).all()).results || [];
+  /* Un membre passe en fiche privee en cours de semaine disparait du groupe des autres. */
+  if (ici && l.groupe >= 0) groupe = await avecPrive(
+    "SELECT c.pseudo AS p, l.points AS v FROM ligues l JOIN comptes c ON c.id = l.compte_id WHERE l.sem = ?1 AND l.ligue = ?2 AND l.groupe = ?3 AND (c.prive = 0 OR c.id = ?4) ORDER BY l.points DESC, l.compte_id ASC LIMIT 60",
+    "SELECT c.pseudo AS p, l.points AS v FROM ligues l JOIN comptes c ON c.id = l.compte_id WHERE l.sem = ?1 AND l.ligue = ?2 AND l.groupe = ?3 ORDER BY l.points DESC, l.compte_id ASC LIMIT 60",
+    async sql => (await env.DB.prepare(sql).bind(e.sem, l.ligue, l.groupe, s.id).all()).results || []);
   const k = ligueMouvements(groupe.length), ligue = l ? l.ligue : 0;
   return json({ ouvert: true, semaine: e.sem, ligue, mouv: ici ? l.mouv : 0, groupe, monte: ligue < LIGUES - 1 ? k : 0, descend: ligue > 0 ? k : 0 });
 }
@@ -1157,6 +1207,8 @@ const PROFIL_RANGS = "SELECT " +
   "(SELECT COUNT(*) FROM comptes WHERE badges > ?6) AS b, " +
   "(SELECT COUNT(*) FROM comptes WHERE sprint > ?7) AS k, " +
   "(SELECT COUNT(*) FROM comptes WHERE direct_v > ?8) AS d";
+/* Les memes, parmi les fiches publiques (2026-11-24). */
+const PROFIL_RANGS_PUBLICS = PROFIL_RANGS.replace(/FROM comptes WHERE /g, "FROM comptes WHERE prive = 0 AND ");
 /* Elo entre membres d'un compte, ou null s'il n'a pas encore joue de partie
    comptee. Requete a part : la base peut ne pas avoir encore les colonnes. */
 async function eloMembreLire(env, id) {
@@ -1199,6 +1251,14 @@ async function rProfil(request, env, now, waitUntil) {
   if (cache) { const deja = await cache.match(cle); if (deja) return deja; }
   const c = await env.DB.prepare("SELECT id, pseudo, cree, note, resolus, serie, badges, sprint, sem, sem_resolus, donnees, direct_v, direct_n, direct_d FROM comptes WHERE cle = ?1").bind(v.cle).first();
   if (!c) return erreur("inconnu", 404);
+  /* Fiche privee : ouverte seulement a lui et a ses amis, et jamais gardee
+     dans le cache partage. */
+  let secrete = false;
+  if (await prive(env, c.id)) {
+    const moi = await sessionLire(request, env, now);
+    if (!moi || (moi.id !== c.id && !(await amiDe(env, c.id, moi.id)))) return erreur("prive", 403);
+    secrete = true;
+  }
   let bl = [], eo = null;
   try {
     const e = c.donnees ? eloOrdiPropre((JSON.parse(c.donnees).progress || {}).eloOrdi) : null;
@@ -1209,7 +1269,9 @@ async function rProfil(request, env, now, waitUntil) {
     if (Array.isArray(liste)) bl = Array.from(new Set(liste.filter(x => typeof x === "string" && /^[a-z0-9_]{2,40}$/.test(x)))).slice(-400);
   } catch (e) {}
   const semaine = lundi(now), s = c.sem === semaine ? c.sem_resolus : 0;
-  const g = await env.DB.prepare(PROFIL_RANGS).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint, c.direct_v).first();
+  /* Les rangs se comptent parmi les fiches publiques, comme les tableaux. */
+  const g = await avecPrive(PROFIL_RANGS_PUBLICS, PROFIL_RANGS,
+    sql => env.DB.prepare(sql).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint, c.direct_v).first());
   const rang = (dedans, devant) => dedans ? devant + 1 : null;
   const ef = await eloFamillesLire(env, c.id), df = await directFamillesLire(env, c.id);
   const rep = json({
@@ -1226,9 +1288,11 @@ async function rProfil(request, env, now, waitUntil) {
     /* Depuis l'Elo par famille : les quatre. em reste le Rapide, pour une
        page ouverte avant la mise a jour. */
     ef,
-    bl, pays: await paysLire(env, c.id)
-  }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
-  if (cache && waitUntil) waitUntil(cache.put(cle, rep.clone()));
+    bl, pays: await paysLire(env, c.id),
+    /* Pour lui et ses amis : la fiche est privee (cle absente d'une fiche publique). */
+    ...(secrete ? { prive: 1 } : {})
+  }, 200, secrete ? {} : { "Cache-Control": "public, max-age=60, s-maxage=300" });
+  if (cache && waitUntil && !secrete) waitUntil(cache.put(cle, rep.clone()));
   return rep;
 }
 
@@ -1257,12 +1321,12 @@ export async function onRequest({ request, env, params, waitUntil }) {
     }
 
     /* Avec session. */
-    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres", "ligue"], PUT: ["synchro"], POST: ["pays", "ami-ajouter", "ami-retirer", "ami-accepter", "ami-refuser", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
+    const connues = { GET: ["etat", "synchro", "exporter", "defis", "enquete", "amis", "membres", "ligue"], PUT: ["synchro"], POST: ["pays", "prive", "ami-ajouter", "ami-retirer", "ami-accepter", "ami-refuser", "supprimer", "code", "secours-nouveau", "lien", "defi-envoyer", "defi-repondre", "defi-supprimer", "defi-bloquer", "defi-debloquer", "pseudo-changer", "enquete"] };
     if (!(connues[m] || []).includes(route)) return erreur("inconnu", 404);
     const s = await sessionLire(request, env, now);
     if (!s) return erreur("session", 401, null);
     if (m === "GET") {
-      if (route === "etat") return json({ pseudo: s.pseudo, version: s.version, cree: s.cree, pays: await paysLire(env, s.id) });
+      if (route === "etat") return json({ pseudo: s.pseudo, version: s.version, cree: s.cree, pays: await paysLire(env, s.id), prive: (await prive(env, s.id)) ? 1 : 0 });
       if (route === "synchro") return await rSynchroLire(s, env);
       if (route === "defis") return await rDefis(s, env);
       if (route === "enquete") return await rEnqueteLire(s, env, now);
@@ -1285,6 +1349,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     if (route === "defi-bloquer") return await rDefiBloquer(s, d, env, now);
     if (route === "defi-debloquer") return await rDefiDebloquer(s, d, env);
     if (route === "pays") return await rPays(s, d, env);
+    if (route === "prive") return await rPrive(s, d, env);
     if (route === "ami-ajouter") return await rAmiAjouter(s, d, env, now);
     if (route === "ami-retirer") return await rAmiRetirer(s, d, env);
     if (route === "ami-accepter") return await rAmiAccepter(s, d, env, now);

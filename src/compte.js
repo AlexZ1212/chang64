@@ -624,6 +624,7 @@ function cpVue(ecran,donnees){
       /* Sa propre fiche, comme dans Mes amis (2026-11-21). */
       '<button type="button" class="tiroir-lien" data-cpp="'+echapper(cp.pseudo)+'"><span>'+cpE("See my profile")+"</span></button>"+
       cpyChoix(cp.pays||"")+
+      cpPriveBloc(cp.prive===1)+
       '<p class="tiroir-section">'+cpE("My devices")+"</p>"+
       '<button type="button" class="tiroir-lien" data-cp="appareil"><span>'+cpE("Add a device")+"</span></button>"+
       '<p class="tiroir-section">'+cpE("Security")+"</p>"+
@@ -1121,12 +1122,38 @@ function cpyChoix(actuel){
 }
 /* Le pays connu du serveur, lu une fois par appareil. */
 async function cpyLire(){
-  if(!cp||typeof cp.pays==="string")return;
+  if(!cp||(typeof cp.pays==="string"&&typeof cp.prive==="number"))return;
   const r=await cpApi("GET","etat");
   if(r.s!==200||!cp)return;
-  cp.pays=typeof r.j.pays==="string"?r.j.pays:"";cpSauver();
+  cp.pays=typeof r.j.pays==="string"?r.j.pays:"";
+  cp.prive=r.j.prive===1?1:0;cpSauver();
   const s=$("cpPays");if(s)s.value=cp.pays;
+  cpPriveMaj();
 }
+/* ---------- Fiche privee (2026-11-24, choix d'Alexandre par QCM) ----------
+   Un interrupteur dans Mon compte, eteint par defaut, avec la phrase pour les
+   parents dessous. Allume : plus de fiche pour les autres (sauf ses amis),
+   plus de tableaux ni de ligues, absent de la recherche, et seuls ses amis
+   l'invitent (functions/api/compte, Worker des parties). Le reglage vit sur
+   le serveur (comptes.prive) ; cp.prive en garde une copie pour l'affichage. */
+function cpPriveBloc(on){
+  return '<button type="button" class="adapte cp-prive" id="cpPrive" role="switch" aria-checked="'+(on?"true":"false")+'" aria-describedby="cpPriveAide">'+
+    '<span class="adapte-pastille" aria-hidden="true"></span><span class="adapte-texte">'+cpE("Private profile")+"</span></button>"+
+    '<p class="cp-note cp-prive-aide" id="cpPriveAide">'+cpE("For a child: turn it on. No profile or tables for others, and only friends can invite.")+"</p>";
+}
+function cpPriveMaj(){
+  const b=$("cpPrive");if(b&&cp)b.setAttribute("aria-checked",cp.prive===1?"true":"false");
+}
+document.addEventListener("click",async e=>{
+  const b=e.target&&e.target.closest?e.target.closest("#cpPrive"):null;
+  if(!b||!cp||b.disabled)return;
+  const v=cp.prive===1?0:1;
+  b.disabled=true;
+  const r=await cpApi("POST","prive",{prive:v});
+  b.disabled=false;
+  if(r.s===200&&cp){cp.prive=v;cpSauver();cppCache={};cpPriveMaj();cpMessage(t("Saved."),true);}
+  else cpMessage(cpErreur(r));
+});
 document.addEventListener("change",async e=>{
   if(!e.target||e.target.id!=="cpPays"||!cp)return;
   const s=e.target,v=s.value;
@@ -1292,7 +1319,12 @@ async function cppLire(pseudo){
   const k=String(pseudo).toLowerCase(),c=cppCache[k];
   if(c&&Date.now()-c.t<60000)return c.j;
   const r=await fetch("/api/compte/profil?p="+encodeURIComponent(pseudo));
-  if(r.status!==200)throw new Error("statut");
+  if(r.status!==200){
+    /* Fiche privee (2026-11-24) : le serveur le dit, la fiche l'affiche. */
+    let e=null;try{e=await r.json();}catch(x){}
+    const err=new Error("statut");if(r.status===403&&e&&e.erreur==="prive")err.prive=true;
+    throw err;
+  }
   const j=await r.json();
   cppCache[k]={t:Date.now(),j:j};
   if(cp&&j&&j.p===cp.pseudo&&Object.values(cpObjet(j.rangs)).some(r=>cpNombre(r)>=1&&cpNombre(r)<=10))cpBadge("mb_top10");
@@ -1348,7 +1380,7 @@ async function cppOuvrir(pseudo){
   let j;
   if(typeof bxCharger==="function")bxCharger();
   try{j=await cppLire(pseudo);if(typeof bxCharger==="function")await bxCharger();}
-  catch(e){if(!f.hidden&&f.dataset.pseudo===String(pseudo))poser(tete(pseudo)+'<p class="cp-msg">'+cpE("Could not load this profile.")+"</p>"+fermer);return;}
+  catch(e){if(!f.hidden&&f.dataset.pseudo===String(pseudo))poser(tete(pseudo)+(e&&e.prive?'<p class="cp-note cp-centre">'+cpE("This player has a private profile.")+"</p>":'<p class="cp-msg">'+cpE("Could not load this profile.")+"</p>")+fermer);return;}
   if(cp&&j.p!==cp.pseudo)await cpaCharger();
   if(f.hidden||f.dataset.pseudo!==String(pseudo))return;
   const moi=!!(cp&&j.p===cp.pseudo),rangs=cpObjet(j.rangs),mois=cppMois(j.depuis);
@@ -1359,6 +1391,8 @@ async function cppOuvrir(pseudo){
   const boutonAmi=retrait?'<p class="cp-centre cpp-retrait"><button type="button" class="linkbtn cp-lien" data-cpa="retirer" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaEst(j.p)?"Remove from my friends":"Cancel my friend request")+"</button></p>"
     :'<button type="button" class="btn" data-cpa="ajouter" data-pseudo="'+echapper(String(j.p))+'">'+cpE(cpaRecue(j.p)?"Accept the friend request":"Add to my friends")+"</button>";
   poser(tete(j.p,mois?t("Member since {date}",{date:mois}):"",rangs,j.pays)+
+    /* Fiche privee : lui et ses amis la voient, avec une ligne qui le rappelle. */
+    (j.prive===1?'<p class="cp-note cp-centre cpp-prive">'+cpE(moi?"Your profile is private: only your friends can see it.":"Private profile: you can see it because you are friends.")+"</p>":"")+
     '<ul class="cpp-liste">'+CPJ.map(([,nom],i)=>{
       const k=CPJ_COLONNES[i][0],rang=cpNombre(rangs[k]);
       return "<li><span>"+cpE(nom)+"</span><b>"+echapper(String(cpNombre(j[k])))+'</b><span class="cpp-rang">'+(rang>0?"#"+rang:"–")+"</span></li>";

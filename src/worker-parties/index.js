@@ -153,6 +153,16 @@ async function sessionLire(request, env, now) {
   return c && c.jvu >= now - DUREE_JETON ? c : null;
 }
 /* Vrai si l'un des deux a bloque l'autre. Sans la table, personne n'est bloque. */
+/* Fiche privee (2026-11-24, colonne comptes.prive) : vrai si la cible a une
+   fiche privee et ne compte pas le demandeur parmi ses amis. Une base sans la
+   colonne : personne n'est prive. */
+async function fermePourInconnus(env, cible, demandeur) {
+  try {
+    const l = await env.DB.prepare("SELECT prive FROM comptes WHERE id = ?1").bind(cible).first();
+    if (!l || l.prive !== 1) return false;
+  } catch (e) { return false; }
+  return !(await env.DB.prepare("SELECT 1 AS x FROM amis WHERE compte_id = ?1 AND ami_id = ?2").bind(cible, demandeur).first());
+}
 async function bloques(env, a, b) {
   try {
     return !!(await env.DB.prepare(
@@ -286,6 +296,9 @@ async function repondre(request, env) {
       adv = await env.DB.prepare("SELECT id, pseudo FROM comptes WHERE pseudo = ?1 COLLATE NOCASE").bind(d.adv).first();
       /* Un membre qui m'a bloque repond comme un pseudo inconnu : il n'est pas denonce. */
       if (!adv || adv.id === s.id || await bloques(env, s.id, adv.id)) return erreur("adversaire", 404);
+      /* Fiche privee (2026-11-24) : seuls ses amis l'invitent ; pour les
+         autres, il repond comme un pseudo inconnu. */
+      if (await fermePourInconnus(env, adv.id, s.id)) return erreur("adversaire", 404);
     }
     /* Le compteur du membre vit dans un objet a son nom ("membre-12"), qui ne
        peut pas se confondre avec une partie (12 signes sans tiret). */

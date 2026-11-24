@@ -72,8 +72,14 @@ CREATE TABLE IF NOT EXISTS comptes (
   direct_c_d INTEGER NOT NULL DEFAULT 0,
   direct_k_v INTEGER NOT NULL DEFAULT 0,
   direct_k_n INTEGER NOT NULL DEFAULT 0,
-  direct_k_d INTEGER NOT NULL DEFAULT 0
+  direct_k_d INTEGER NOT NULL DEFAULT 0,
+  -- Fiche privee (2026-11-24, SQL accepte par Alexandre) : 1 = fiche fermee
+  -- aux autres (sauf ses amis), absent des tableaux, des ligues et de la
+  -- recherche, invitations de ses amis seulement. 0 par defaut.
+  prive INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant la fiche privee :
+--   ALTER TABLE comptes ADD COLUMN prive INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant les resultats par famille (2026-11-23, SQL accepte par
 -- Alexandre) : les colonnes s'ajoutent par
 --   ALTER TABLE comptes ADD COLUMN direct_b_v INTEGER NOT NULL DEFAULT 0;

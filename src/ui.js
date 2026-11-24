@@ -1548,6 +1548,8 @@ function refreshGame(){
     if(g)for(const b of g.children)b.disabled=enCours;
   }
   { const a=$("adapteNiveau"); if(a)a.disabled=enCours; }
+  /* Entrainement : choisi avant la partie, jamais pendant (apprendre.js). */
+  { const a=$("entrainementSwitch"); if(a)a.disabled=enCours; }
   /* L'Elo du joueur bouge apres chaque partie classee : l'interrupteur le dit. */
   syncForce();
   for(const seg of ["tcCats2","tcChips2"]){

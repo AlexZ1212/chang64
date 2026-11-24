@@ -2,6 +2,49 @@
  {
   "d": "2026-11-24",
   "en": [
+   "Training: take back a move",
+   "Against the computer, a new switch under the strength: Training. Turn it on before the game and you can take back a move as often as you like. A training game counts for neither your Elo nor your badges; switched off, the game is rated and nothing helps you."
+  ],
+  "fr": [
+   "Entraînement : reprendre un coup",
+   "Contre l'ordinateur, un nouvel interrupteur sous la force : Entraînement. Allume-le avant la partie et tu peux reprendre un coup autant de fois que tu veux. Une partie d'entraînement ne compte ni pour ton Elo ni pour tes badges ; éteint, la partie est classée et rien ne t'aide."
+  ],
+  "es": [
+   "Entrenamiento: deshacer una jugada",
+   "Contra el ordenador, un nuevo interruptor debajo de la fuerza: Entrenamiento. Actívalo antes de la partida y podrás deshacer una jugada tantas veces como quieras. Una partida de entrenamiento no cuenta ni para tu Elo ni para tus insignias; desactivado, la partida es puntuable y nada te ayuda."
+  ],
+  "pt": [
+   "Treino: voltar um lance",
+   "Contra o computador, um novo interruptor abaixo da força: Treino. Ative antes da partida e você pode voltar um lance quantas vezes quiser. Uma partida de treino não conta nem para o seu Elo nem para as suas medalhas; desativado, a partida vale pontos e nada te ajuda."
+  ],
+  "de": [
+   "Training: einen Zug zurücknehmen",
+   "Gegen den Computer gibt es einen neuen Schalter unter der Spielstärke: Training. Schalte ihn vor der Partie ein, dann kannst du Züge so oft zurücknehmen, wie du willst. Eine Trainingspartie zählt weder für dein Elo noch für deine Abzeichen; ausgeschaltet ist die Partie gewertet und nichts hilft dir."
+  ],
+  "ru": [
+   "Тренировка: можно взять ход назад",
+   "В игре с компьютером под выбором силы появился переключатель «Тренировка». Включи его перед партией, и ты сможешь брать ходы назад сколько угодно. Тренировочная партия не идёт в зачёт ни Эло, ни значков; когда он выключен, партия рейтинговая и подсказок нет."
+  ],
+  "it": [
+   "Allenamento: ritirare una mossa",
+   "Contro il computer, un nuovo interruttore sotto la forza: Allenamento. Accendilo prima della partita e potrai ritirare una mossa tutte le volte che vuoi. Una partita di allenamento non conta né per il tuo Elo né per le tue medaglie; spento, la partita è valida e niente ti aiuta."
+  ],
+  "tr": [
+   "Antrenman: hamle geri alma",
+   "Bilgisayara karşı, güç seçiminin altında yeni bir anahtar var: Antrenman. Oyundan önce aç, istediğin kadar hamle geri alabilirsin. Antrenman oyunu ne Elo'na ne de rozetlerine sayılır; kapalıyken oyun puanlıdır ve hiçbir yardım yoktur."
+  ],
+  "pl": [
+   "Trening: cofnij ruch",
+   "W grze z komputerem pod wyborem siły jest nowy przełącznik: Trening. Włącz go przed partią, a będziesz mógł cofać ruchy, ile razy zechcesz. Partia treningowa nie liczy się ani do Elo, ani do odznak; gdy jest wyłączony, partia jest rankingowa i nic ci nie pomaga."
+  ],
+  "id": [
+   "Latihan: batalkan langkah",
+   "Melawan komputer, ada sakelar baru di bawah pilihan kekuatan: Latihan. Nyalakan sebelum partai dan kamu bisa membatalkan langkah sesering yang kamu mau. Partai latihan tidak dihitung untuk Elo maupun lencanamu; jika mati, partai dinilai dan tidak ada bantuan."
+  ]
+ },
+ {
+  "d": "2026-11-24",
+  "en": [
    "After a boss, the next chapter",
    "When your game against a boss ends, the card on the board now offers what comes next: the next chapter once you have won, or another try. After the last boss, puzzles or a game."
   ],

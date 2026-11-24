@@ -1369,7 +1369,7 @@ module.exports = {
 "Practise this theme in Solve →":"Practicar este tema en Resolver →",
 "I don't know":"No lo sé",
 "Keep my current settings":"Conservar mis ajustes",
-"Training game: it counts for neither your Elo nor your badges.":"Partida de entrenamiento: no cuenta ni para tu Elo ni para tus insignias.",
+"Training game: it counts for neither your Elo nor your badges.":"Partida de entrenamiento: no cuenta ni para tu Elo ni para tus insignias.","Training":"Entrenamiento","You can take back a move. The game counts for neither your Elo nor your badges.":"Puedes deshacer una jugada. La partida no cuenta ni para tu Elo ni para tus insignias.",
 "The boss of the chapter":"El jefe del capítulo",
 "Lesson not loaded":"Lección no cargada",
 "Check your connection and try again.":"Comprueba tu conexión e inténtalo de nuevo.",

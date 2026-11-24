@@ -3404,6 +3404,8 @@ function showReady(tcTxt){
   $("readyTitle").textContent=t("Ready when you are");
   $("readySub").textContent=
     tcTxt+(force?" | "+force+(botLevel===NIVEAU_MESURE?" ≈ "+eloPartie()+" Elo":""):"")+" | "+
+    /* Reglage « Entrainement » allume : la fenetre le rappelle avant chaque partie. */
+    (typeof partieEntrainement==="function"&&partieEntrainement()?t("Training")+" | ":"")+
     (myColor===W?t("You play White."):t("You play Black."));
   $("readyStart").textContent=t("Start the game");
   $("readySettings").textContent=t("Change settings");

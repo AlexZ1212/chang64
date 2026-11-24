@@ -1360,6 +1360,8 @@ div.corr-item:hover{border-color:var(--rule)}
 .adapte[aria-checked="true"] .adapte-pastille::after{transform:translateX(16px);background-color:var(--ink)}
 .adapte-texte{min-width:0}
 .adapte-elo{flex:none;color:var(--sage);font-family:'JetBrains Mono',monospace;font-size:12px}
+/* Reglage « Entrainement » (2026-11-24) : la phrase qui dit ce qu'il change, sous l'interrupteur allume. */
+.entrainement-aide{margin:0 4px 2px;font-size:12px;line-height:1.4;color:var(--sage)}
 /* Aucun traitement particulier pour "Au hasard" : le lisere laiton que
    portait ce bouton pendant une partie attirait l'oeil vers un controle
    verrouille et pale, ce qui jurait avec les deux autres. Le mode reste
@@ -3378,6 +3380,13 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <!-- L'ordinateur joue a l'Elo du joueur (botLevel 5 dans le code).
                  Un interrupteur a part : le 5e bouton passait sur deux lignes. -->
             <button type="button" class="adapte" id="adapteNiveau" role="switch" aria-checked="false"><span class="adapte-pastille" aria-hidden="true"></span><span class="adapte-texte">Adapt to my level</span> <span class="adapte-elo" id="adapteElo"></span></button>
+            <!-- Reglage « Entrainement » (2026-11-24, choix d'Alexandre par QCM) :
+                 un interrupteur choisi AVANT la partie. Allume, la partie est un
+                 entrainement des le depart : « Reprendre le coup » est la toute la
+                 partie, ni Elo ni badges. Eteint, partie classee, aucune aide.
+                 Garde d'une partie a l'autre (apprendre.js). -->
+            <button type="button" class="adapte" id="entrainementSwitch" role="switch" aria-checked="false" aria-describedby="entrainementAide"><span class="adapte-pastille" aria-hidden="true"></span><span class="adapte-texte">Training</span></button>
+            <p class="note entrainement-aide hide" id="entrainementAide">You can take back a move. The game counts for neither your Elo nor your badges.</p>
           </div>
           <div class="field">
             <div class="eyebrow">Time control<button type="button" class="info-tip" aria-expanded="false" aria-controls="tipTimeControl2" aria-label="More info">i</button></div>

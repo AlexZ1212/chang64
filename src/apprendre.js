@@ -263,9 +263,37 @@ function cheminPartieActive() {
     return !!cheminPartie && mode === "play" && !!gameStarted && !isReviewGame && (cheminPartie.fen || null) === (gameStartFen || null);
   } catch (e) { return false; }
 }
-/* Entrainement : un handicap, ou un coup repris. Ni Elo (elo.js) ni badges
-   de partie (badges.js) ; la partie reste dans « Tes parties ». */
-function partieEntrainement() { return cheminPartieActive() && !!(cheminPartie.fen || cheminPartie.r); }
+/* Entrainement : un handicap, un coup repris, ou le reglage « Entrainement »
+   allume au depart (e). Ni Elo (elo.js) ni badges de partie (badges.js) ; la
+   partie reste dans « Tes parties ». */
+function partieEntrainement() { return cheminPartieActive() && !!(cheminPartie.fen || cheminPartie.r || cheminPartie.e); }
+
+/* ---------- Reglage « Entrainement » (2026-11-24) ----------
+   Choix d'Alexandre (QCM du 24/11) : un interrupteur sous la force, choisi
+   AVANT la partie et jamais pendant (il se grise en partie, ui.js). Allume,
+   toute partie contre l'ordinateur est un entrainement des le depart :
+   « Reprendre le coup » est la toute la partie, ni Elo ni badges. Eteint, la
+   partie est classee et rien ne l'aide. La pendule garde la cadence choisie :
+   reprendre rend la position, pas les secondes (undoGame, ui.js). Le reglage
+   reste comme on l'a laisse d'une partie a l'autre, « Jouer maintenant » de
+   l'accueil compris ; la fenetre « Pret » le rappelle. La partie elle-meme
+   devient une « partie du chemin » sans chapitre (ch: null, e: 1) : le bouton,
+   la note et les exclusions existent deja pour elles. */
+const ENTRAINEMENT_CLE = "chang64:entrainement";
+let entrainementOn = false;
+try { entrainementOn = localStorage.getItem(ENTRAINEMENT_CLE) === "1"; } catch (e) {}
+function entrainementSync() {
+  const b = $("entrainementSwitch"), a = $("entrainementAide");
+  if (b) b.setAttribute("aria-checked", String(entrainementOn));
+  if (a) a.classList.toggle("hide", !entrainementOn);
+}
+if ($("entrainementSwitch")) $("entrainementSwitch").addEventListener("click", () => {
+  if (typeof gameStarted !== "undefined" && gameStarted && typeof gameFinished === "function" && !gameFinished() && mode === "play") return;
+  entrainementOn = !entrainementOn;
+  try { localStorage.setItem(ENTRAINEMENT_CLE, entrainementOn ? "1" : "0"); } catch (e) {}
+  entrainementSync();
+});
+entrainementSync();
 function cheminLancerPartie(ch, fen, niveau) {
   cheminPartie = { ch: ch, fen: fen || null, r: 0 }; cheminPartieGarder();
   colorMode = "w"; myColor = W;
@@ -293,11 +321,17 @@ if (typeof debutPremierePartie === "function") {
   };
   if ($("btnDebutPartie")) $("btnDebutPartie").onclick = debutPremierePartie;
 }
-/* Toute autre partie neuve n'est plus une partie du chemin. */
+/* Toute autre partie neuve n'est plus une partie du chemin ; avec le reglage
+   « Entrainement » allume, elle est un entrainement des le depart (avant
+   newGame : la fenetre « Pret » qu'elle ouvre le dit deja). Sa position de
+   depart est notee, pour « Jouer contre l'ordinateur depuis ici » (Analyser). */
 if (typeof newGame === "function") {
   const av = newGame;
   newGame = function () {
-    if (!cheminDepart && cheminPartie) { cheminPartie = null; cheminPartieGarder(); }
+    if (!cheminDepart) {
+      cheminPartie = entrainementOn ? { ch: null, fen: pendingStartFen || null, r: 0, e: 1 } : null;
+      cheminPartieGarder();
+    }
     return av.apply(this, arguments);
   };
 }

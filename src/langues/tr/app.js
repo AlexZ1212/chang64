@@ -1367,7 +1367,7 @@ module.exports = {
 "Practise this theme in Solve →":"Bu temayı Çöz sekmesinde çalış →",
 "I don't know":"Bilmiyorum",
 "Keep my current settings":"Ayarlarımı koru",
-"Training game: it counts for neither your Elo nor your badges.":"Antrenman oyunu: ne Elo'na ne de rozetlerine sayılır.",
+"Training game: it counts for neither your Elo nor your badges.":"Antrenman oyunu: ne Elo'na ne de rozetlerine sayılır.","Training":"Antrenman","You can take back a move. The game counts for neither your Elo nor your badges.":"Bir hamleyi geri alabilirsin. Oyun ne Elo'na ne de rozetlerine sayılır.",
 "The boss of the chapter":"Bölümün boss'u",
 "Lesson not loaded":"Ders yüklenemedi",
 "Check your connection and try again.":"Bağlantını kontrol et ve yeniden dene.",

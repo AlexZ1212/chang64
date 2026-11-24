@@ -1367,7 +1367,7 @@ module.exports = {
 "Practise this theme in Solve →":"Latih tema ini di Pecahkan →",
 "I don't know":"Tidak tahu",
 "Keep my current settings":"Pertahankan pengaturanku",
-"Training game: it counts for neither your Elo nor your badges.":"Partai latihan: tidak dihitung untuk Elo maupun lencanamu.",
+"Training game: it counts for neither your Elo nor your badges.":"Partai latihan: tidak dihitung untuk Elo maupun lencanamu.","Training":"Latihan","You can take back a move. The game counts for neither your Elo nor your badges.":"Kamu bisa membatalkan langkah. Partai ini tidak dihitung untuk Elo maupun lencanamu.",
 "The boss of the chapter":"Bos bab ini",
 "Lesson not loaded":"Pelajaran belum termuat",
 "Check your connection and try again.":"Periksa koneksimu lalu coba lagi.",

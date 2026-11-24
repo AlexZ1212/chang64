@@ -1367,7 +1367,7 @@ module.exports = {
 "Practise this theme in Solve →":"Poćwicz ten temat w zakładce Rozwiąż →",
 "I don't know":"Nie wiem",
 "Keep my current settings":"Zachowaj moje ustawienia",
-"Training game: it counts for neither your Elo nor your badges.":"Partia treningowa: nie liczy się ani do Elo, ani do odznak.",
+"Training game: it counts for neither your Elo nor your badges.":"Partia treningowa: nie liczy się ani do Elo, ani do odznak.","Training":"Trening","You can take back a move. The game counts for neither your Elo nor your badges.":"Możesz cofnąć ruch. Partia nie liczy się ani do Elo, ani do odznak.",
 "The boss of the chapter":"Boss rozdziału",
 "Lesson not loaded":"Lekcja się nie wczytała",
 "Check your connection and try again.":"Sprawdź połączenie i spróbuj ponownie.",

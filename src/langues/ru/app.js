@@ -1369,7 +1369,7 @@ module.exports = {
 "Practise this theme in Solve →":"Потренировать эту тему в разделе «Решать» →",
 "I don't know":"Не знаю",
 "Keep my current settings":"Оставить мои настройки",
-"Training game: it counts for neither your Elo nor your badges.":"Тренировочная партия: она не идёт в зачёт ни Эло, ни значков.",
+"Training game: it counts for neither your Elo nor your badges.":"Тренировочная партия: она не идёт в зачёт ни Эло, ни значков.","Training":"Тренировка","You can take back a move. The game counts for neither your Elo nor your badges.":"Можно взять ход назад. Партия не идёт в зачёт ни Эло, ни значков.",
 "The boss of the chapter":"Босс главы",
 "Lesson not loaded":"Урок не загрузился",
 "Check your connection and try again.":"Проверь соединение и попробуй ещё раз.",

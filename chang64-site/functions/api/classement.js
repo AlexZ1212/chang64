@@ -44,6 +44,8 @@ const TOUT = "SELECT pseudo AS p, CASE WHEN sem = ?1 THEN sem_resolus ELSE 0 END
   "id IN (SELECT id FROM comptes WHERE badges > 0 ORDER BY badges DESC, vu ASC LIMIT 50) OR " +
   "id IN (SELECT id FROM comptes WHERE sprint > 0 ORDER BY sprint DESC, vu ASC LIMIT 50) OR " +
   "id IN (SELECT id FROM comptes WHERE direct_v > 0 ORDER BY direct_v DESC, vu ASC LIMIT 50) ORDER BY resolus DESC, vu ASC";
+/* Chaque « FROM comptes WHERE » ne garde que les fiches publiques. */
+const publics = sql => sql.replace(/FROM comptes WHERE /g, "FROM comptes WHERE prive = 0 AND ");
 function lundi(ms) {
   const d = new Date(ms);
   d.setUTCHours(12, 0, 0, 0);
@@ -61,8 +63,11 @@ export async function onRequestGet({ request, env, waitUntil }) {
   const semaine = lundi(Date.now());
   let results;
   try {
-    const st = env.DB.prepare(par === "tout" ? TOUT : TABLEAUX[par]);
-    results = (await (par === "semaine" || par === "tout" ? st.bind(semaine) : st).all()).results;
+    /* Fiche privee (2026-11-24) : absente des tableaux. Une base qui n'a
+       pas encore la colonne prive repond avec la requete d'avant. */
+    const lire = async sql => { const st = env.DB.prepare(sql); return (await (par === "semaine" || par === "tout" ? st.bind(semaine) : st).all()).results; };
+    const sql = par === "tout" ? TOUT : TABLEAUX[par];
+    try { results = await lire(publics(sql)); } catch (e) { results = await lire(sql); }
   } catch (e) {
     /* Une panne de la base ne doit pas devenir une page d'erreur de Cloudflare. */
     return new Response(JSON.stringify({ erreur: "serveur" }), { status: 500, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });

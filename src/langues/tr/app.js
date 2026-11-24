@@ -1250,7 +1250,7 @@ module.exports = {
 "Space (key)":"Boşluk",
 "Move from one button to the next":"Bir düğmeden sonrakine geç",
 "Press the selected button":"Seçili düğmeye bas",
-"Away from the board, during a game or in review, the keys step through the moves:":"Tahtanın dışında, oyun sırasında ya da bir oyunu incelerken tuşlar hamleler arasında gezinir:",
+"During a game or in review, the keys step through the moves, unless the cursor is on the board:":"Oyun sırasında ya da incelemede bu tuşlar hamleler arasında gezinir, imleç tahtadayken hariç:",
 "With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Ekran okuyucuyla, yukarıdaki duyuruları aç: baktığın her hamle numarası, taşı ve karesiyle sesli okunur.",
 "Single-key shortcuts":"Tek tuşlu kısayollar",
 "The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"? ve F tuşları. Ekran okuyucunu ya da sesli komutunu engelliyorlarsa kapat.",
@@ -1422,5 +1422,14 @@ module.exports = {
 "Member wins":"Galibiyet",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Beş seviye: çok yumuşak bir rakipten hiçbir şeyi affetmeyen bir motora.",
-"Gentle":"Yumuşak"
+"Gentle":"Yumuşak",
+/* Accessibilite : les touches de l'echiquier en liste (2026-11-24) */
+"On the board:":"Tahtada:",
+"Move the cursor from square to square":"İmleci kareden kareye taşı",
+"Pick a piece, then its destination square":"Bir taş seç, sonra gideceği kareyi",
+"Clear the selection":"Seçimi kaldır",
+"Go to the edge of the rank":"Sıranın kenarına git",
+"Go to the ends of the file":"Dikeyin uçlarına git",
+"Page Up (key)":"Page Up",
+"Page Down (key)":"Page Down"
 };

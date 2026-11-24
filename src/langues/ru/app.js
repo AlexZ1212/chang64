@@ -1252,7 +1252,7 @@ module.exports = {
 "Space (key)":"Пробел",
 "Move from one button to the next":"Перейти к следующей кнопке",
 "Press the selected button":"Нажать выбранную кнопку",
-"Away from the board, during a game or in review, the keys step through the moves:":"Вне доски, во время партии или при просмотре, клавиши листают ходы:",
+"During a game or in review, the keys step through the moves, unless the cursor is on the board:":"Во время партии или при просмотре эти клавиши листают ходы, кроме случая, когда курсор на доске:",
 "With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"С экранным диктором включи объявления выше: каждый ход, который ты смотришь, зачитывается вслух, с номером, фигурой и полем.",
 "Single-key shortcuts":"Клавиши из одного символа",
 "The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Клавиши ? и F. Отключи их, если они мешают экранному диктору или голосовому управлению.",
@@ -1424,5 +1424,14 @@ module.exports = {
 "Member wins":"Победы",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Пять уровней: от очень мягкого соперника до движка, который ничего не прощает.",
-"Gentle":"Мягкий"
+"Gentle":"Мягкий",
+/* Accessibilite : les touches de l'echiquier en liste (2026-11-24) */
+"On the board:":"На доске:",
+"Move the cursor from square to square":"Перемещать курсор по полям",
+"Pick a piece, then its destination square":"Выбрать фигуру, затем поле назначения",
+"Clear the selection":"Снять выбор",
+"Go to the edge of the rank":"К краю горизонтали",
+"Go to the ends of the file":"К концам вертикали",
+"Page Up (key)":"Page Up",
+"Page Down (key)":"Page Down"
 };

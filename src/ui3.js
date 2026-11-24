@@ -1167,12 +1167,29 @@ function focusCell(i){
   const c=boardCells()[i];
   if(c)c.focus();
 }
+/* Le curseur de l'echiquier n'existe que pour qui y arrive au clavier
+   (2026-11-24, remarque d'Alexandre : « je ne peux toujours pas naviguer au
+   clavier dans le bandeau des coups […] Accessibilite oui mais pas au
+   detriment des joueurs valides »). Une case cliquee a la souris recoit le
+   focus (tabindex) : avant, les fleches deplacaient alors un curseur invisible
+   au lieu de parcourir les coups, comme sur Chess.com et Lichess. Desormais :
+   arrivee a la souris ou au doigt, les fleches parcourent les coups ; arrivee
+   par Tab (ou Entree / Espace sur une case), elles deplacent le curseur. */
+let curseurPlateau=true;
 if(typeof boardEl!=="undefined"&&boardEl){
+  boardEl.addEventListener("pointerdown",()=>{curseurPlateau=false;},true);
   boardEl.addEventListener("keydown",e=>{
     const cells=boardCells();
     if(!cells.length)return;
     let i=Array.prototype.indexOf.call(cells,e.target);
     if(i<0)return;
+    if(e.key==="Enter"||e.key===" ")curseurPlateau=true;
+    if(!curseurPlateau&&/^(Arrow(Left|Right|Up|Down)|Home|End|PageUp|PageDown)$/.test(e.key)){
+      /* La case perd le focus : le contour du curseur n'apparait pas, et les
+         touches suivantes vont droit au bandeau des coups (ui2.js). */
+      try{e.target.blur();}catch(err){}
+      return;
+    }
     let n=null;
     switch(e.key){
       case "ArrowRight": n=(i%8===7)?i:i+1; break;
@@ -1200,6 +1217,8 @@ if(typeof boardEl!=="undefined"&&boardEl){
   boardEl.addEventListener("focusin",e=>{
     const i=Array.prototype.indexOf.call(boardCells(),e.target);
     if(i>=0)setRoving(i);
+    /* Focus venu du clavier (Tab) ou d'un appel du code : le curseur sert. */
+    if(document.documentElement.dataset.saisie!=="pointeur")curseurPlateau=true;
   });
 }
 /* Le tabindex roulant est pose directement dans buildBoard (ui.js) : une
@@ -1287,11 +1306,21 @@ const RACCOURCIS=[
   [["F"],"Flip the board",true],
   [["?"],"Show this list",true]
 ];
+/* Sur l'echiquier (2026-11-24, demande d'Alexandre) : les touches de la
+   grille, sous la meme forme que les autres listes (une touche par case
+   <kbd>), au lieu d'une phrase ou elles etaient seulement en gras. */
+const RACCOURCIS_ECHIQUIER=[
+  [["←","→","↑","↓"],"Move the cursor from square to square"],
+  [["Enter","Space"],"Pick a piece, then its destination square"],
+  [["Esc"],"Clear the selection"],
+  [["Home","End"],"Go to the edge of the rank"],
+  [["Page Up","Page Down"],"Go to the ends of the file"]
+];
 function toucheNom(k){const s=t(k+" (key)");return s===k+" (key)"?k:s;}
 /* quoi : "nav" (Tab, Entree, Espace), "partie" (les touches de la partie), ou
    rien pour les deux a la suite. */
 function clavierListeHtml(quoi){
-  const l=quoi==="nav"?RACCOURCIS_NAV:quoi==="partie"?RACCOURCIS:RACCOURCIS_NAV.concat(RACCOURCIS);
+  const l=quoi==="nav"?RACCOURCIS_NAV:quoi==="partie"?RACCOURCIS:quoi==="echiquier"?RACCOURCIS_ECHIQUIER:RACCOURCIS_NAV.concat(RACCOURCIS);
   return '<dl class="clavier-liste" data-sans-figurines>'+l.filter(r=>!r[2]||prefTouches).map(r=>
     "<div><dt>"+r[0].map(k=>"<kbd>"+echapper(toucheNom(k))+"</kbd>").join("")+"</dt><dd>"+echapper(t(r[1]))+"</dd></div>").join("")+"</dl>";
 }
@@ -1452,8 +1481,8 @@ function renderPrefs(){
   if(help){
     /* La meme liste que la fenetre « Raccourcis clavier », puis l'usage au
        lecteur d'ecran (2026-11-21). */
-    poserHtml(help,clavierListeHtml("nav")+lierHtml(DICT["@keyboard"]||"<p>On the board: <b>arrow keys</b> move the cursor, <b>Enter</b> or <b>Space</b> picks a piece then its destination, <b>Escape</b> clears the selection. <b>Home</b> and <b>End</b> jump to the edge of the rank, <b>Page Up</b> and <b>Page Down</b> to the ends of the file.</p>")+
-      "<p>"+echapper(t("Away from the board, during a game or in review, the keys step through the moves:"))+"</p>"+clavierListeHtml("partie")+
+    poserHtml(help,clavierListeHtml("nav")+"<p>"+echapper(t("On the board:"))+"</p>"+clavierListeHtml("echiquier")+
+      "<p>"+echapper(t("During a game or in review, the keys step through the moves, unless the cursor is on the board:"))+"</p>"+clavierListeHtml("partie")+
       "<p>"+echapper(t("With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square."))+"</p>");
   }
 }

@@ -1103,7 +1103,7 @@ module.exports = {
 "Space (key)":"Espace",
 "Move from one button to the next":"Passer d'un bouton au suivant",
 "Press the selected button":"Activer le bouton choisi",
-"Away from the board, during a game or in review, the keys step through the moves:":"Hors de l'échiquier, pendant une partie ou quand tu en revois une, les touches parcourent les coups :",
+"During a game or in review, the keys step through the moves, unless the cursor is on the board:":"Pendant une partie ou en revue, ces touches parcourent les coups, sauf quand le curseur est sur l'échiquier :",
 "With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Avec un lecteur d'écran, active les annonces ci-dessus : chaque coup que tu regardes est lu à voix haute, avec son numéro, sa pièce et sa case.",
 "Single-key shortcuts":"Raccourcis à une seule touche",
 "The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Les touches ? et F. Coupe-les si elles gênent ton lecteur d'écran ou ta commande vocale.",
@@ -1274,5 +1274,14 @@ module.exports = {
 "Member wins":"Victoires",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Cinq niveaux, d'un adversaire tout doux à un moteur qui ne pardonne rien.",
-"Gentle":"Tout doux"
+"Gentle":"Tout doux",
+/* Accessibilite : les touches de l'echiquier en liste (2026-11-24) */
+"On the board:":"Sur l'échiquier :",
+"Move the cursor from square to square":"Déplacer le curseur de case en case",
+"Pick a piece, then its destination square":"Choisir une pièce, puis sa case d'arrivée",
+"Clear the selection":"Annuler la sélection",
+"Go to the edge of the rank":"Aller au bord de la rangée",
+"Go to the ends of the file":"Aller aux extrémités de la colonne",
+"Page Up (key)":"Page haut",
+"Page Down (key)":"Page bas"
 };

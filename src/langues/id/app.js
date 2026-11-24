@@ -1250,7 +1250,7 @@ module.exports = {
 "Space (key)":"Spasi",
 "Move from one button to the next":"Pindah dari satu tombol ke tombol berikutnya",
 "Press the selected button":"Tekan tombol yang dipilih",
-"Away from the board, during a game or in review, the keys step through the moves:":"Di luar papan, selama partai atau saat meninjaunya, tombol-tombol menelusuri langkah:",
+"During a game or in review, the keys step through the moves, unless the cursor is on the board:":"Selama permainan atau saat meninjau, tombol ini menelusuri langkah, kecuali saat kursor ada di papan:",
 "With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Dengan pembaca layar, aktifkan pengumuman di atas: setiap langkah yang kamu lihat dibacakan, dengan nomornya, bidaknya, dan petaknya.",
 "Single-key shortcuts":"Pintasan satu tombol",
 "The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Tombol ? dan F. Matikan jika mengganggu pembaca layar atau kendali suaramu.",
@@ -1422,5 +1422,14 @@ module.exports = {
 "Member wins":"Menang",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Lima level, dari lawan yang sangat lembut sampai mesin yang tidak memaafkan apa pun.",
-"Gentle":"Lembut"
+"Gentle":"Lembut",
+/* Accessibilite : les touches de l'echiquier en liste (2026-11-24) */
+"On the board:":"Di papan:",
+"Move the cursor from square to square":"Memindahkan kursor dari petak ke petak",
+"Pick a piece, then its destination square":"Memilih bidak, lalu petak tujuannya",
+"Clear the selection":"Membatalkan pilihan",
+"Go to the edge of the rank":"Ke tepi baris",
+"Go to the ends of the file":"Ke ujung lajur",
+"Page Up (key)":"Page Up",
+"Page Down (key)":"Page Down"
 };

@@ -1252,7 +1252,7 @@ module.exports = {
 "Space (key)":"Espacio",
 "Move from one button to the next":"Pasar de un botón al siguiente",
 "Press the selected button":"Pulsar el botón elegido",
-"Away from the board, during a game or in review, the keys step through the moves:":"Fuera del tablero, durante una partida o al repasar una, las teclas recorren las jugadas:",
+"During a game or in review, the keys step through the moves, unless the cursor is on the board:":"Durante una partida o en revisión, estas teclas recorren las jugadas, salvo cuando el cursor está en el tablero:",
 "With a screen reader, turn on the announcements above: each move you step to is read aloud, with its number, its piece and its square.":"Con un lector de pantalla, activa los anuncios de arriba: cada jugada que miras se lee en voz alta, con su número, su pieza y su casilla.",
 "Single-key shortcuts":"Atajos de una sola tecla",
 "The ? and F keys. Turn them off if they get in the way of your screen reader or voice control.":"Las teclas ? y F. Desactívalos si molestan a tu lector de pantalla o a tu control por voz.",
@@ -1424,5 +1424,14 @@ module.exports = {
 "Member wins":"Victorias",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Cinco niveles, de un rival muy suave a un motor que no perdona nada.",
-"Gentle":"Suave"
+"Gentle":"Suave",
+/* Accessibilite : les touches de l'echiquier en liste (2026-11-24) */
+"On the board:":"En el tablero:",
+"Move the cursor from square to square":"Mover el cursor de casilla en casilla",
+"Pick a piece, then its destination square":"Elegir una pieza y luego su casilla de destino",
+"Clear the selection":"Anular la selección",
+"Go to the edge of the rank":"Ir al borde de la fila",
+"Go to the ends of the file":"Ir a los extremos de la columna",
+"Page Up (key)":"Re Pág",
+"Page Down (key)":"Av Pág"
 };

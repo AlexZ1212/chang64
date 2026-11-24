@@ -95,6 +95,21 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   presser(w, "ArrowLeft", cases[60]);
   T("focus sur l'echiquier : la fleche deplace la case, pas la partie", vu() === null && d.activeElement === cases[59]);
   d.activeElement.blur();
+  /* 24/11, remarque d'Alexandre : apres un clic sur l'echiquier, les fleches
+     parcourent les coups, comme sur Chess.com. Le curseur reste a qui arrive
+     sur l'echiquier au clavier (Tab). */
+  cases[52].dispatchEvent(new w.Event("pointerdown", { bubbles: true }));
+  d.documentElement.dataset.saisie = "pointeur";
+  cases[52].focus();
+  e = presser(w, "ArrowLeft", cases[52]);
+  T("case cliquee a la souris : ← montre le coup precedent", vu() === 3 && d.activeElement !== cases[51] && !d.activeElement.classList.contains("sq"), vu());
+  presser(w, "ArrowRight");
+  T("puis → avance, depuis n'importe ou", vu() === null);
+  d.documentElement.dataset.saisie = "clavier";
+  cases[52].focus();
+  presser(w, "ArrowLeft", cases[52]);
+  T("arrivee au clavier (Tab) : le curseur se deplace de nouveau", vu() === null && d.activeElement === cases[51]);
+  d.activeElement.blur();
 
   console.log("L'echiquier ne joue pas tant qu'on n'est pas revenu");
   presser(w, "ArrowLeft"); presser(w, "ArrowLeft");
@@ -172,11 +187,11 @@ const propre = s => String(s).replace(/[  ]/g, " ");
   w.eval("setMode('prefs')");
   const aide = propre($("kbdHelp").textContent);
   const listes = [...$("kbdHelp").querySelectorAll(".clavier-liste")].map(l => l.querySelectorAll(":scope > div").length);
-  T("la section Accessibilite commence par Tab, Entree et Espace, puis reprend les touches de la partie", listes.join() === "2,6" && /Coup précédent, coup suivant/.test(aide) && /^\s*Tab\s*Passer d'un bouton au suivant/.test(aide), listes.join() + " " + aide.slice(0, 60));
+  T("la section Accessibilite commence par Tab, Entree et Espace, puis les touches de l'echiquier en liste (24/11), puis celles de la partie", listes.join() === "2,5,6" && $("kbdHelp").querySelectorAll(".clavier-liste")[1].querySelectorAll("kbd").length === 11 && /Page haut/.test(aide) && !/<b>/.test($("kbdHelp").innerHTML) && /Coup précédent, coup suivant/.test(aide) && /^\s*Tab\s*Passer d'un bouton au suivant/.test(aide), listes.join() + " " + aide.slice(0, 60));
   T("avec l'usage au lecteur d'ecran", /lecteur d'écran/.test(aide) && /lu à voix haute/.test(aide));
   T("et le reglage des raccourcis a une seule touche", propre($("prefsTouchesLabel").textContent) === "Raccourcis à une seule touche" && $("segTouches").querySelectorAll("[role=radio]").length === 2 && $("segTouches").querySelector('[data-v="on"]').getAttribute("aria-checked") === "true");
   $("segTouches").querySelector('[data-v="off"]').click();
-  T("le couper retire « ? » et « F » de la liste", w.eval("prefTouches") === false && $("kbdHelp").querySelectorAll(".clavier-liste > div").length === 6 && $("kbdHelp").querySelectorAll(".clavier-liste")[1].querySelectorAll(":scope > div").length === 4 && /"touches":false/.test(w.localStorage.getItem("chang64:prefs") || ""), w.localStorage.getItem("chang64:prefs"));
+  T("le couper retire « ? » et « F » de la liste", w.eval("prefTouches") === false && $("kbdHelp").querySelectorAll(".clavier-liste > div").length === 11 && $("kbdHelp").querySelectorAll(".clavier-liste")[2].querySelectorAll(":scope > div").length === 4 && /"touches":false/.test(w.localStorage.getItem("chang64:prefs") || ""), w.localStorage.getItem("chang64:prefs"));
   w.close();
 
   console.log("\n" + ok + " OK, " + ko + " FAIL");

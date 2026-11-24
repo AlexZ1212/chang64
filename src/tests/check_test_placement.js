@@ -106,7 +106,7 @@ async function passer(w, reponses) {
   $("btnTestGarder").click(); await pause(500);
   T("« Garder mes reglages » : rien ne bouge, le chapitre s'ouvre", ev("prog.rating") === 800 && ev("prog.level") === 1 && ev("mode") === "debut" && ev("leconCh") === "debut" && ev("test.actif") === false && !JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f);
   T("l'ecran des lecons a retrouve ses elements", !cache("debutPas") && !cache("debutTitre") && cache("testResultat") && cache("testPastilles") && $("appLayout").dataset.test === undefined);
-  T("accueil : le chemin est commence", (() => { $("brand").click(); return net($("heroDebut").textContent) === "Continuer : chapitre 1"; })(), $("heroDebut").textContent);
+  T("accueil : le chemin est commence, « Commencer le chapitre 1 » (24/11)", (() => { $("brand").click(); return net($("heroDebut").textContent) === "Commencer le chapitre 1"; })(), $("heroDebut").textContent);
   w.close();
 
   console.log("--- Un joueur qui connait les regles ---");
@@ -151,7 +151,7 @@ async function passer(w, reponses) {
   $("btnTestAppliquer").click(); await pause(500);
   T("les reglages sont appliques", ev("prog.level") === 6 && ev("prog.rating") === 1450 && ev("botLevel") === 3 && ev("prog.ratingHistory[prog.ratingHistory.length-1].r") === 1450);
   T("la force retenue est gardee pour les prochaines visites", JSON.parse(w.localStorage.getItem("chang64:chemin")).p.f === 3);
-  T("retour a l'onglet ; plus de bouton sur l'accueil", ev("mode") === "apprendre" && ev("cheminCourant()") === -1 && $("heroDebut").classList.contains("hide"));
+  T("retour a l'onglet ; l'accueil propose « Revoir le chemin » (24/11 : le bouton reste toujours)", ev("mode") === "apprendre" && ev("cheminCourant()") === -1 && !$("heroDebut").classList.contains("hide") && net($("heroDebut").textContent) === "Revoir le chemin", $("heroDebut").textContent);
   T("la progression des exercices est enregistree", JSON.parse(w.localStorage.getItem("chang64:progress")).rating === 1450);
   w.close();
 
@@ -159,7 +159,7 @@ async function passer(w, reponses) {
   w = await ouvrir("fr", avec({ "chang64:chemin": { v: 1, c: {}, o: ["debut", "regles"], p: { t: 1, n: 8, e: "regles", f: 2 } } }));
   $ = id => w.document.getElementById(id); ev = s => w.eval(s);
   T("la force de l'ordinateur retenue par le test est remise", ev("botLevel") === 2);
-  T("accueil : « Continuer : chapitre 2 »", net($("heroDebut").textContent) === "Continuer : chapitre 2", $("heroDebut").textContent);
+  T("accueil : « Commencer le chapitre 2 » (entree donnee par le test, rien commence)", net($("heroDebut").textContent) === "Commencer le chapitre 2", $("heroDebut").textContent);
   w.close();
 
   console.log("--- Ce qui a ete gagne en jouant n'est pas ecrase ---");

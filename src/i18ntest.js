@@ -54,11 +54,11 @@ function ouvrir(rep){
   T("tabs translated", $("tab-play").textContent==="Jouer" && $("tab-puzzles").textContent==="Résoudre",
      $("tab-play").textContent+"/"+$("tab-puzzles").textContent);
   T("hero translated", /Joue aux échecs/.test($("pane-home").textContent));
-  T("cards translated", /Quatre niveaux/.test($("pane-home").textContent));
+  T("cards translated", /Cinq niveaux/.test($("pane-home").textContent));
   T("stats labels translated", /Jours d'affilée/.test($("pane-home").textContent));
 
   console.log("\nDYNAMIC STRINGS IN FRENCH");
-  click($("tab-play")); await wait(700);
+  w.eval("colorMode='w';myColor=W"); click($("tab-play")); await wait(700);   /* Blancs : au hasard par defaut depuis le 24/11 */
   await startGame();
   /* #turnline a ete retire (redondant avec l'overlay de preparation et le
      bandeau #status) : la ligne suivante couvre deja la traduction
@@ -115,7 +115,7 @@ function ouvrir(rep){
   T("html lang", w.document.documentElement.lang==="es", w.document.documentElement.lang);
   T("tabs translated", $("tab-play").textContent==="Jugar", $("tab-play").textContent);
   T("hero translated", /Juega al ajedrez/.test($("pane-home").textContent));
-  click($("tab-play")); await wait(700);
+  w.eval("colorMode='w';myColor=W"); click($("tab-play")); await wait(700);
   await startGame();
   T("new game status", /Nueva partida/.test($("status").textContent), $("status").textContent);
   T("time controls translated", Array.from($("tcCats2").children).map(b=>b.textContent).join(",").includes("Rápidas"),

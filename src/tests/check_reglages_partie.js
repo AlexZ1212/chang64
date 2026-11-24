@@ -37,10 +37,11 @@ const largeur = s => [...s].reduce((n, c) => n + (/[Ѐ-ӿ]/.test(c) ? 7.4 : /[A-
   const couleurs = [...$("segColor").children].map(b => b.textContent.replace(/\s+/g, " ").trim());
   T("couleur : trois choix en un mot", couleurs.join("|") === "Blancs|Noirs|Au hasard", couleurs.join("|"));
   const forces = [...$("segLevel").children];
-  T("quatre forces, pas de cinquieme bouton", forces.length === 4 && forces.map(b => b.dataset.v).join() === "1,2,3,4");
+  /* 24/11 (decision d'Alexandre) : cinq forces, « Tout doux » (6) en tete, sur une rangee qui defile. */
+  T("cinq forces, Tout doux en tete", forces.length === 5 && forces.map(b => b.dataset.v).join() === "6,1,2,3,4");
   T("chaque force porte son nom et son Elo", forces.every(b => b.querySelector(".seg-nom").textContent.trim().length > 2 && /^\d{3,4}$/.test(b.querySelector(".seg-elo").textContent)),
     forces.map(b => b.textContent).join("|"));
-  T("les Elo sont ceux de l'echelle du moteur", forces.map(b => b.querySelector(".seg-elo").textContent).join() === [1, 2, 3, 4].map(k => w.eval("NIVEAU_ELO[" + k + "]")).join());
+  T("les Elo sont ceux de l'echelle du moteur", forces.map(b => b.querySelector(".seg-elo").textContent).join() === [6, 1, 2, 3, 4].map(k => w.eval("NIVEAU_ELO[" + k + "]")).join());
   const inter = $("adapteNiveau");
   T("un interrupteur « S'adapter a mon niveau », avec l'Elo du joueur", inter.getAttribute("role") === "switch" && inter.getAttribute("aria-checked") === "false" && /S.adapter à\s+mon niveau/.test(inter.textContent) && /\(≈ \d{3,4}\)/.test($("adapteElo").textContent), inter.textContent);
 
@@ -52,10 +53,10 @@ const largeur = s => [...s].reduce((n, c) => n + (/[Ѐ-ӿ]/.test(c) ? 7.4 : /[A-
   T("elles restent utilisables", forces.every(b => !b.disabled));
   T("le nom de l'adversaire dit « Adapté » et l'Elo", /^Chang \| Adapté ≈ \d{3,4} Elo$/.test(w.eval("botLabel()")), w.eval("botLabel()"));
   inter.click();
-  T("eteint : on retrouve la force d'avant", w.eval("botLevel") === 3 && forces[2].getAttribute("aria-pressed") === "true" && !$("segLevel").classList.contains("estompe"));
+  T("eteint : on retrouve la force d'avant", w.eval("botLevel") === 3 && forces[3].getAttribute("aria-pressed") === "true" && !$("segLevel").classList.contains("estompe"));
   inter.click();
-  forces[0].click();
-  T("toucher une force eteint l'interrupteur", w.eval("botLevel") === 1 && inter.getAttribute("aria-checked") === "false" && forces[0].getAttribute("aria-pressed") === "true");
+  forces[1].click();
+  T("toucher une force eteint l'interrupteur", w.eval("botLevel") === 1 && inter.getAttribute("aria-checked") === "false" && forces[1].getAttribute("aria-pressed") === "true");
   w.eval("prog.eloOrdi={r:1234,n:25,pic:1240,h:[]};refreshGame()");
   T("l'interrupteur suit l'Elo du joueur (1234, arrondi a 50)", $("adapteElo").textContent === "(≈ 1250)", $("adapteElo").textContent);
 
@@ -85,10 +86,10 @@ const largeur = s => [...s].reduce((n, c) => n + (/[Ѐ-ӿ]/.test(c) ? 7.4 : /[A-
   {
     const p = await ouvrir("pl", { attente: 1800 });
     const noms = [...p.document.querySelectorAll("#segLevel .seg-nom")].map(x => x.textContent.trim());
-    T("polonais : Nowicjusz et Amator", noms[0] === "Nowicjusz" && noms[1] === "Amator", noms.join("|"));
+    T("polonais : Łagodny, Nowicjusz et Amator", noms[0] === "Łagodny" && noms[1] === "Nowicjusz" && noms[2] === "Amator", noms.join("|"));
     p.close();
     const e = await ouvrir("es", { attente: 1800 });
-    T("espagnol : Novato", e.document.querySelector("#segLevel .seg-nom").textContent.trim() === "Novato");
+    T("espagnol : Suave puis Novato", [...e.document.querySelectorAll("#segLevel .seg-nom")].slice(0, 2).map(x => x.textContent.trim()).join() === "Suave,Novato");
     e.close();
   }
 

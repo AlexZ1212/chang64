@@ -27,7 +27,8 @@ const REPERE = /translate\(-24 -24\) scale\(1\.0667\)/g;
   const AVEC = ["ordinateur", "ami", "enligne", "exercices", "finales", "motif", "pieges", "biblio"];
   T("huit pictos portent une piece", AVEC.every(n => PICTOS[n].includes("scale(1.0667)")), AVEC.filter(n => !/scale\(1\.0667\)/.test(PICTOS[n])).join());
   const groupes = compte(tous, REPERE), traits = compte(tous, /<g fill="[^"]*" stroke="[^"]*" stroke-width="[\d.]+" stroke-linejoin="round" paint-order="stroke" transform="[^"]*translate\(-24 -24\) scale\(1\.0667\)">/g);
-  T("chaque piece d'un picto a ses contours (" + groupes + " pieces)", groupes === 9 && traits === groupes, traits + " sur " + groupes);
+  /* 24/11 : les pictos des motifs (motif_*) reprennent les medailles, avec leurs pieces : plus de 9. */
+  T("chaque piece d'un picto a ses contours (" + groupes + " pieces)", groupes >= 9 && traits === groupes, traits + " sur " + groupes);
   T("le trait a la couleur des jours, la piece celle du theme", /<g fill="currentColor" stroke="var\(--oeil\)"/.test(PICTOS.ordinateur) && !/#[0-9a-fA-F]{3,6}/.test(tous));
   T("l'oeil et le naseau du cavalier n'ont pas de trait", compte(PICTOS.ordinateur, /style="fill:var\(--oeil\);stroke:none"/g) === 2);
   T("piece en creux (Bibliotheque) : les deux couleurs s'echangent, l'oeil se voit", /<g fill="var\(--oeil\)" stroke="currentColor"/.test(PICTOS.biblio) && compte(PICTOS.biblio, /style="fill:currentColor;stroke:none"/g) === 2);

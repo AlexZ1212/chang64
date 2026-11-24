@@ -907,7 +907,8 @@ function cheminBouton() {
   }
   const c = cheminCourant();
   if (c < 0) return { cas: "revoir", i: -1 };
-  return c === 0 ? { cas: "debut", i: 0 } : { cas: "commencer", i: c };
+  /* Le test de placement fait, le chemin est commence : « Commencer le chapitre N », meme pour le 1. */
+  return c === 0 && !(chemin.p && chemin.p.t) ? { cas: "debut", i: 0 } : { cas: "commencer", i: c };
 }
 function cheminMaj() {
   const h = $("heroDebut");

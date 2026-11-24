@@ -38,7 +38,7 @@ setTimeout(async()=>{
 
   console.log("\n--- Orientation du nom accessible ---");
   $("homeStartBtn").click(); await wait(400);
-  $("tab-play").click(); await wait(800);
+  w.eval("colorMode='w';myColor=W"); $("tab-play").click(); await wait(800);   /* Blancs : au hasard par defaut depuis le 24/11 */
   T("case 0 = a8", /(^| )a8$/.test(nom(0)), nom(0));
   T("case 56 = a1", /(^| )a1$/.test(nom(56)), nom(56));
   T("case 63 = h1", /(^| )h1$/.test(nom(63)), nom(63));
@@ -75,7 +75,7 @@ setTimeout(async()=>{
   console.log("\n--- En francais ---");
   /* Page /fr/ depuis le 2026-10-25 (une page par langue). */
   const wf=await require("./outils/page_langue.js").ouvrir("fr",{attente:1200}),df=wf.document;
-  df.getElementById("tab-play").click(); await wait(800);
+  wf.eval("colorMode='w';myColor=W"); df.getElementById("tab-play").click(); await wait(800);
   const nomFr=i=>(df.getElementById("board").children[i].getAttribute("aria-label")||"").trim();
   T("le nom accessible est en francais", / en [a-h][1-8]$/.test(nomFr(52)), nomFr(52));
   T("accord en genre conserve", !/tour blanc en|dame blanc en|tour noir en|dame noir en/.test(nomFr(56)+" "+nomFr(59)), nomFr(56)+" / "+nomFr(59));
@@ -87,7 +87,7 @@ setTimeout(async()=>{
   /* Les autres langues accordent aussi la couleur a la piece (2026-10-25). */
   for(const [l,re] of [["es",/^torre blanca en a1$/],["pt",/^torre branca em a1$/],["de",/^weißer Turm auf a1$/],["ru",/^белая ладья на a1$/]]){
     const wl=await require("./outils/page_langue.js").ouvrir(l,{attente:1200});
-    wl.document.getElementById("tab-play").click(); await wait(800);
+    wl.eval("colorMode='w';myColor=W"); wl.document.getElementById("tab-play").click(); await wait(800);   /* Blancs : la couleur par defaut est au hasard depuis le 24/11 */
     const n=(wl.document.getElementById("board").children[56].getAttribute("aria-label")||"").trim();
     T(l+" : nom accessible accorde ("+n+")", re.test(n), n);
     wl.close();

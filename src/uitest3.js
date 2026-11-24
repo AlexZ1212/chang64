@@ -51,7 +51,7 @@ function cellFor(s) {
   /* onSquare ignore les clics tant que le mode n'est pas "play" : sans ouvrir
      l'onglet, aucun coup n'etait joue et le test signalait une
      desynchronisation qui n'existait pas. */
-  click($("tab-play"));
+  w.eval("colorMode='w';myColor=W"); click($("tab-play"));   /* Blancs : au hasard par defaut depuis le 24/11 */
   await wait(250);
   // bot au niveau 1 pour aller vite
   click($("segLevel").children[0]);

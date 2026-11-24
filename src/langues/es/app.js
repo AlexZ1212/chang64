@@ -1433,5 +1433,11 @@ module.exports = {
 "Go to the edge of the rank":"Ir al borde de la fila",
 "Go to the ends of the file":"Ir a los extremos de la columna",
 "Page Up (key)":"Re Pág",
-"Page Down (key)":"Av Pág"
+"Page Down (key)":"Av Pág",
+/* QR code du site dans Inviter sur chang64 (2026-11-24) */
+"Show this code to a friend: their phone camera opens chang64.":"Enséñale este código a un amigo: la cámara de su móvil abre chang64.",
+"QR code to open chang64":"Código QR para abrir chang64",
+/* Objectif du jour atteint : petite annonce (2026-11-24) */
+"1 puzzle solved today. Come back tomorrow to keep going.":"1 ejercicio resuelto hoy. Vuelve mañana para seguir.",
+"{n} puzzles solved today. Come back tomorrow to keep going.":"{n} ejercicios resueltos hoy. Vuelve mañana para seguir."
 };

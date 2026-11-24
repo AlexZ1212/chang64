@@ -2041,7 +2041,7 @@ function renderSolveMenu(){
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
   set("subSolvePuzzles",t("Level {n} | puzzle rating {r}",{n:prog.level,r:prog.rating}));
   const doneToday=!!(prog.dailyLog&&prog.dailyLog[todayKey()]);
-  set("subSolveDaily",t(doneToday?"Done today ✓ | {n}-day streak":"Not done yet | {n}-day streak",{n:prog.days||0}));
+  { const e=$("subSolveDaily"); if(e)poserHtml(e,symbolesHtml(echapper(t(doneToday?"Done today ✓ | {n}-day streak":"Not done yet | {n}-day streak",{n:prog.days||0})))); }
   set("subSolveSprint",t("Best: {n}",{n:prog.rushBest||0}));
   set("subSolveCoord",t("Best: {n}",{n:prog.coordBest||0}));
   /* "Reussies" plutot que "tentees" (2026-09-03) : une finale tentee sans
@@ -2812,13 +2812,13 @@ function renderRushHistory(history){
   history.forEach((h,i)=>{
     const b=document.createElement("button");
     b.className=h.correct?"win":"loss";
-    b.textContent=h.correct?"✓":"✗";
+    b.textContent=h.correct?"✓":"✗";   /* cache par la feuille de style : la pastille dessine sa coche ou sa croix */
     b.setAttribute("aria-label",t(h.correct?"Exercise {n}, solved":"Exercise {n}, missed",{n:i+1}));
     b.onclick=()=>reviewRushPuzzle(h.id);
     box.appendChild(b);
   });
   box.classList.remove("hide");
-  if(note){note.textContent=t("Tap ✓ or ✗ to see how it was solved.");note.classList.remove("hide");}
+  if(note){poserHtml(note,symbolesHtml(echapper(t("Tap ✓ or ✗ to see how it was solved."))));note.classList.remove("hide");}
   updateRushHistoryScrollHint(box);
 }
 /* Curseur de la revue : les coups de la solution, leur SAN, et le nombre de

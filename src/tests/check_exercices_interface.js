@@ -494,7 +494,7 @@ setTimeout(async()=>{
     chips.map(c=>c.className).join(","));
   T("symboles corrects", chips[0].textContent==="✓"&&chips[1].textContent==="✗",
     chips.map(c=>c.textContent).join(","));
-  T("carre a bords arrondis, comme le selecteur de langue", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).borderRadius')==="var(--r-s)");
+  T("pastille ronde (24/11 : la coche d'Apprendre, pastilles rondes)", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).borderRadius')==="50%");
   T("note expliquant qu'on peut toucher une pastille", !d.getElementById("rushHistoryNote").classList.contains("hide") &&
     /solved|resoudre|resolu/i.test(d.getElementById("rushHistoryNote").textContent), d.getElementById("rushHistoryNote").textContent);
   chips[1].click();
@@ -509,8 +509,8 @@ setTimeout(async()=>{
   T("reste dans Defis plutot que de basculer vers Exercices", w.eval("mode")==="train", w.eval("mode"));
   T("le panneau d'exercice est bien revenu dans Defis", d.getElementById("rushSlot").contains(d.getElementById("exPanel")));
   T("l'onglet Exercices reste cache", d.getElementById("pane-puzzles").classList.contains("hide"));
-  T("croix/coche plus grandes et grasses", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).fontSize')==="17px" &&
-    w.eval('getComputedStyle(document.querySelector("#rushHistory button")).fontWeight')==="800");
+  T("croix et coche dessinees (masque), le caractere cache", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).fontSize')==="0px" &&
+    html.includes(".rushHistory button.loss::after{background-color:var(--brick)"));
   T("carre toujours a la meme taille", w.eval('getComputedStyle(document.querySelector("#rushHistory button")).width')==="30px");
   T("l'enonce perime (Les Blancs jouent...) est cache en revue",
     w.getComputedStyle(d.getElementById("exQuest")).display==="none");

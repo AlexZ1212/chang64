@@ -719,7 +719,17 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    coche est un masque teinte par --ink : elle suit les themes. */
 .debut-pas button{position:relative;width:28px;height:28px;padding:0;display:inline-grid;place-items:center;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);color:var(--sage);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
 .debut-pas button.fait,.ap-chap.fait .ap-num{background-color:var(--jade);border-color:var(--jade);color:transparent}
-.debut-pas button.fait::after,.ap-chap.fait .ap-num::after{content:"";position:absolute;inset:0;margin:auto;width:62%;height:62%;background-color:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
+.debut-pas button.fait::after,.ap-chap.fait .ap-num::after,.coche-ok::after,.croix-ko::after,.rushHistory button::after,.btn.coche::before{content:"";position:absolute;inset:0;margin:auto;width:62%;height:62%;background-color:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
+/* Coche de reussite commune (2026-11-24, demande d'Alexandre : « harmoniser
+   le design au coche de apprendre ») : le disque jade et la coche d'Apprendre,
+   a la taille du texte qui l'entoure. La croix d'un echec suit le test de
+   placement : anneau brique, croix brique. Partout : Fait aujourd'hui,
+   defis de la semaine, bilan de seance, pastilles du sprint, copie reussie. */
+.coche-ok,.croix-ko{position:relative;display:inline-block;flex:none;width:1.15em;height:1.15em;border-radius:50%;vertical-align:-.22em;box-sizing:border-box}
+.coche-ok{background-color:var(--jade)}
+.croix-ko{border:1.5px solid var(--brick)}
+.coche-ok::after,.croix-ko::after,.rushHistory button::after,.btn.coche::before{content:"";position:absolute;inset:0;margin:auto}
+.croix-ko::after,.rushHistory button.loss::after{background-color:var(--brick);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M4.5 4.5l7 7M11.5 4.5l-7 7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M4.5 4.5l7 7M11.5 4.5l-7 7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
 .debut-pas button[aria-current="step"]{border-color:var(--brass);box-shadow:0 0 0 2px rgba(var(--brass-rgb),.35);color:var(--chalk);font-weight:700}
 .debut-titre{font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;line-height:1.2;margin:0 0 8px}
 .debut p{margin:0 0 12px}
@@ -1788,11 +1798,11 @@ header>*{min-width:0}
 .rushHistory{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:4px 0 2px;-webkit-overflow-scrolling:touch;position:relative}
 .rushHistory::-webkit-scrollbar{display:none}
 .rushHistory button{
-  flex:none;width:30px;height:30px;border-radius:var(--r-s);border:none;cursor:pointer;
-  font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;color:#101413
+  position:relative;flex:none;width:30px;height:30px;padding:0;border-radius:50%;border:none;cursor:pointer;
+  color:transparent;font-size:0;box-sizing:border-box
 }
 .rushHistory button.win{background-color:var(--jade)}
-.rushHistory button.loss{background-color:var(--brick)}
+.rushHistory button.loss{background-color:transparent;border:1.5px solid var(--brick)}
 .rushHistory button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 /* Indice de defilement (2026-09-04) : meme degrade + chevron que .navscroll
    (le bandeau de coups), jusqu'ici seulement promis par le commentaire
@@ -2221,10 +2231,11 @@ html[data-mouvement="calme"] .strip .stat[data-gain]::after{animation:none}
 /* Copie reussie : une coche jade se dessine dans le bouton (.coche, posee
    par copyText dans ui3.js), puis s'efface. */
 .btn.coche{position:relative;border-color:var(--jade)}
-.btn.coche::after{content:"";position:absolute;right:9px;top:50%;width:5px;height:10px;margin-top:-7px;border-right:2px solid var(--jade);border-bottom:2px solid var(--jade);transform:rotate(45deg);transform-origin:50% 50%;animation:cocheDessin .35s var(--courbe-ressort) both}
-@keyframes cocheDessin{from{opacity:0;transform:rotate(45deg) scale(.3)}to{opacity:1;transform:rotate(45deg)}}
-html[data-mouvement="calme"] .btn.coche::after{animation:none}
-@media(prefers-reduced-motion:reduce){.btn.coche::after{animation:none}}
+.btn.coche::after{content:"";position:absolute;right:8px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background-color:var(--jade);animation:cocheDessin .35s var(--courbe-ressort) both}
+.btn.coche::before{inset:auto;right:11px;top:50%;width:10px;height:10px;margin:-5px 0 0;z-index:1;animation:cocheDessin .35s var(--courbe-ressort) both}
+@keyframes cocheDessin{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+html[data-mouvement="calme"] .btn.coche::after,html[data-mouvement="calme"] .btn.coche::before{animation:none}
+@media(prefers-reduced-motion:reduce){.btn.coche::after,.btn.coche::before{animation:none}}
 /* Retournement : l'echiquier pivote d'un demi-tour au lieu de s'inverser
    d'un coup. */
 .board.pivote{animation:pivote .55s var(--courbe-sortie)}
@@ -2522,10 +2533,10 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 .obj-defi{--obj-teinte:#E0A93B;--obj-a:#FFF0C2;--obj-b:#E9B44C;--obj-c:#7A4C0C}
 .obj-badges{--obj-teinte:#E0A93B;--obj-a:#FFF0C2;--obj-b:#E9B44C;--obj-c:#7A4C0C}
 .obj-annonce.obj-badges.visible .obj-filet{animation-duration:7s}
-.obj-parfait{--obj-teinte:#5FBF92;--obj-a:#C9F2DC;--obj-b:#5FBF92;--obj-c:#1F6B4A}
+.obj-parfait,.obj-objectif{--obj-teinte:#5FBF92;--obj-a:#C9F2DC;--obj-b:#5FBF92;--obj-c:#1F6B4A}
 .obj-pastille{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--obj-a),var(--obj-b) 55%,var(--obj-c));box-shadow:inset 0 -3px 6px rgba(0,0,0,.25),0 3px 8px rgba(0,0,0,.35)}
 .obj-pastille svg{width:26px;height:26px;fill:#fff;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
-.obj-defi .obj-pastille svg,.obj-badges .obj-pastille svg,.obj-parfait .obj-pastille svg{fill:var(--obj-c);filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
+.obj-defi .obj-pastille svg,.obj-badges .obj-pastille svg,.obj-parfait .obj-pastille svg,.obj-objectif .obj-pastille svg{fill:var(--obj-c);filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
 .obj-annonce.visible .obj-pastille{animation:objPastille .7s var(--courbe-ressort) .12s both}
 @keyframes objPastille{from{transform:scale(.3) rotate(-120deg);opacity:0}to{transform:none;opacity:1}}
 .obj-mots{display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -2750,6 +2761,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cp-qr{width:min(220px,70%);margin:0 auto 10px;border-radius:var(--r);overflow:hidden;background:#fff}
 .cp-qr svg{display:block;width:100%;height:auto}
 .cp-qr[hidden]{display:none}
+.site-qr{margin-top:18px}
 #menuCompteVue a.tiroir-lien{box-sizing:border-box;text-decoration:none}
 /* Meilleurs joueurs (2026-11-17) : puces de choix du tableau, liste numerotee. */
 .cpj-onglets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 8px 12px}
@@ -4609,6 +4621,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
       <div class="tiroir-vue" id="menuInviterVue" hidden>
         <p class="app-intro" data-t="Send chang64 to a friend: it is free, and no account is needed.">Send chang64 to a friend: it is free, and no account is needed.</p>
         <div class="shareRow menu-partage" id="siteShare"></div>
+        <!-- QR code du site (2026-11-24, demande d'Alexandre) : pour donner le lien
+             a quelqu'un a cote de soi. Meme forme que celui de « Ajouter un appareil ». -->
+        <div class="cp-qr site-qr" id="siteQr"></div>
+        <p class="cp-note cp-centre" id="siteQrNote">Show this code to a friend: their phone camera opens chang64.</p>
       </div>
       <div class="tiroir-vue" id="menuDefisVue" hidden></div>
       <div class="tiroir-vue" id="menuObjectifVue" hidden></div>

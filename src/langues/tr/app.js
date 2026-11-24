@@ -1431,5 +1431,11 @@ module.exports = {
 "Go to the edge of the rank":"Sıranın kenarına git",
 "Go to the ends of the file":"Dikeyin uçlarına git",
 "Page Up (key)":"Page Up",
-"Page Down (key)":"Page Down"
+"Page Down (key)":"Page Down",
+/* QR code du site dans Inviter sur chang64 (2026-11-24) */
+"Show this code to a friend: their phone camera opens chang64.":"Bu kodu bir arkadaşına göster: telefonunun kamerası chang64'ü açar.",
+"QR code to open chang64":"chang64'ü açmak için QR kod",
+/* Objectif du jour atteint : petite annonce (2026-11-24) */
+"1 puzzle solved today. Come back tomorrow to keep going.":"Bugün 1 bulmaca çözdün. Devam etmek için yarın yine gel.",
+"{n} puzzles solved today. Come back tomorrow to keep going.":"Bugün {n} bulmaca çözdün. Devam etmek için yarın yine gel."
 };

@@ -73,7 +73,7 @@ function bilanOuvrir(){
   poserHtml($("bilanTuiles"),tuiles.map(([v,l],i)=>'<div class="bilan-tuile" style="--i:'+i+'"><b>'+echapper(v)+"</b><span>"+echapper(t(l))+"</span></div>").join(""));
   /* Objectif du jour et defis, en une ligne chacun. */
   const c=objEtat(),n=objFaits(),d=defiEtat().defis;
-  const lignes=['<li>'+echapper(t("Daily goal"))+"<b>"+Math.min(n,c.objectif)+"/"+c.objectif+(n>=c.objectif?" ✓":"")+"</b></li>",
+  const lignes=['<li>'+echapper(t("Daily goal"))+"<b>"+Math.min(n,c.objectif)+"/"+c.objectif+(n>=c.objectif?" "+cocheHtml():"")+"</b></li>",
     '<li>'+echapper(t("Weekly challenges"))+"<b>"+d.ok.filter(Boolean).length+"/3</b></li>"];
   poserHtml($("bilanLignes"),lignes.join(""));
   const gagnes=prog.badges.slice(s.badges);s.badges=prog.badges.length;

@@ -641,7 +641,40 @@ renderBadges=function(el){
       '<span class="bx-nom">'+echapper(badgeLabel(b))+"</span></button>";
   }
   poserHtml(el,h);
+  bxNomsAjuster(el);
 };
+/* Un nom de badge ne se coupe plus au milieu d'un mot (2026-11-24, remarque
+   d'Alexandre sur Safari : « Échauffemen / t »). Dans Chrome, « Échauffement »
+   tenait de justesse dans sa carte (74,6 px pour 74,6) ; la police de Safari
+   est un peu plus large. Un mot plus large que la carte fait donc baisser la
+   taille de ce seul nom, jusqu'a 9,5 px. Un mot qui porte un trait d'union
+   conditionnel (allemand, russe : badges-textes) se coupe a ce trait, comme
+   avant ; overflow-wrap:anywhere reste le dernier recours. Mesure quand la
+   grille est visible (le menu l'affiche juste apres l'avoir remplie). */
+function bxNomsAjuster(el){
+  if(!el||typeof requestAnimationFrame!=="function")return;
+  requestAnimationFrame(()=>{
+    const noms=el.querySelectorAll(".bx-nom");
+    if(!noms.length||!el.getClientRects().length)return;
+    const sonde=document.createElement("span");
+    sonde.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap";
+    document.body.appendChild(sonde);
+    for(const e of noms){
+      e.style.fontSize="";
+      const w=e.clientWidth;if(!w)continue;
+      const cs=getComputedStyle(e);
+      sonde.style.font=cs.font;sonde.style.letterSpacing=cs.letterSpacing;
+      let max=0;
+      for(const mot of e.textContent.split(/[\s ]+/)){
+        if(!mot||mot.indexOf("­")>=0)continue;
+        sonde.textContent=mot;max=Math.max(max,sonde.getBoundingClientRect().width);
+      }
+      if(max>w)e.style.fontSize=Math.max(9.5,Math.floor(parseFloat(cs.fontSize)*w/max*10)/10)+"px";
+    }
+    sonde.remove();
+  });
+}
+if(typeof window!=="undefined")window.addEventListener("resize",()=>{for(const id of ["badgeGrid","menuBadgeGrid"]){const g=document.getElementById(id);if(g)bxNomsAjuster(g);}});
 function echapper(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 renderBadgeSummary=function(){
   const sum=$("badgeSummary"),recent=$("badgeRecentGrid");

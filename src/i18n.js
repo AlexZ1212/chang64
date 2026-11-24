@@ -25,6 +25,12 @@ const LANG_HTML=PAGE_LANGUE.html||LANG;
    russe et espagnol : trop large. On la remplace par l'espace fine
    insecable (U+202F), comme le veut la typographie francaise. L'anglais
    et l'italien n'ont pas d'espace, le turc ecrit « %62 ». */
+/* Coche de reussite et croix d'echec communes (2026-11-24), dessinees en CSS
+   (.coche-ok, .croix-ko). Les textes traduits gardent leur « ✓ » et « ✗ » :
+   symbolesHtml() les remplace a l'affichage, sur un texte deja echappe. */
+function cocheHtml(){return '<span class="coche-ok" aria-hidden="true"></span>';}
+function croixHtml(){return '<span class="croix-ko" aria-hidden="true"></span>';}
+function symbolesHtml(h){return String(h).replace(/✓/g,cocheHtml()).replace(/✗/g,croixHtml());}
 function pourcentTexte(v){
   let s;
   try{s=new Intl.NumberFormat(LANG_INTL,{style:"percent",maximumFractionDigits:0}).format(v);}catch(e){s=Math.round(100*v)+"%";}

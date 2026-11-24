@@ -147,7 +147,7 @@ function defiMaj(){
     const v=s.ok[i]?d.cible:d.type==="sansfaute"?Math.min(bxEtat().c.sansErreur||0,d.cible):s.p[i];
     const pc=Math.round(100*v/d.cible);
     return '<div class="defi'+(s.ok[i]?" fait":"")+'"><div class="defi-tete"><span class="defi-texte">'+echapper(defiTexte(d))+"</span>"+
-      '<span class="defi-compte">'+(s.ok[i]?"✓":v+"/"+d.cible)+"</span></div>"+
+      '<span class="defi-compte">'+(s.ok[i]?cocheHtml():v+"/"+d.cible)+"</span></div>"+
       '<div class="defi-barre" role="progressbar" aria-valuemin="0" aria-valuemax="'+d.cible+'" aria-valuenow="'+v+'"><i style="width:0" data-w="'+pc+'%"></i></div></div>';
   }).join("")+'<p class="defi-note">'+echapper(reste===1?t("New challenges tomorrow."):t("New challenges in {n} days.",{n:reste}))+" "+
     echapper(t("Complete all three to earn a streak freeze."))+"</p>");

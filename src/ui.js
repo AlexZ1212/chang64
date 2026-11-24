@@ -3804,6 +3804,8 @@ Promise.all([loadProg(),loadAmi(),loadLang(),loadHistory(),loadPlaySave(),loadAm
   applyI18n();
   renderProgress();syncTC();renderDailyChips();renderExplore();renderHistory();
   shareButtons($("siteShare"),baseUrl(),t("Come play chess on chang64:"),true);
+  /* Le QR code du site, dans la langue de la page (2026-11-24). */
+  try{const q=$("siteQr");if(q&&typeof cpQr==="function"){poserHtml(q,cpQr(location.origin+location.pathname));q.setAttribute("role","img");q.setAttribute("aria-label",t("QR code to open chang64"));}}catch(e){const q=$("siteQr");if(q)q.hidden=true;}
   /* Plus de segAmiColor a resynchroniser au demarrage (2026-09-04) : le
      choix de couleur d'une partie par correspondance vit desormais dans
      amiColorModal (voir plus haut), une modale sans etat persistant a

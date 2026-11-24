@@ -194,7 +194,7 @@ const BADGES_CATALOGUE = [
    "Deux tours qui alternent comme les barreaux d'une échelle : le mat le plus simple à apprendre."],
   ["eg_kbn","finales","Finale Fou et cavalier gagnée","Casse-tête","un nœud",
    "Le mat fou et cavalier est le plus difficile des mats de base : il peut demander jusqu'à 33 coups, et seulement dans un coin de la couleur du fou."],
-  ["eg_kp","finales","Finale Roi et pion gagnée","Couronnement","un pion qui reçoit une couronne",
+  ["eg_kp","finales","Finale Roi et pion gagnée","Couron­nement","un pion qui reçoit une couronne",
    "Un pion qui atteint la dernière rangée peut devenir n'importe quelle pièce sauf un roi : presque toujours une dame."],
   ["eg_toutes","finales","Les 5 finales gagnées","Maître des finales","une pyramide de pièces",
    "Capablanca conseillait de commencer l'étude des échecs par les finales. Te voilà en avance sur bien des joueurs."],

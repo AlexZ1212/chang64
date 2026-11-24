@@ -666,8 +666,11 @@ function bxNomsAjuster(el){
       sonde.style.font=cs.font;sonde.style.letterSpacing=cs.letterSpacing;
       let max=0;
       for(const mot of e.textContent.split(/[\s ]+/)){
-        if(!mot||mot.indexOf("­")>=0)continue;
-        sonde.textContent=mot;max=Math.max(max,sonde.getBoundingClientRect().width);
+        if(!mot)continue;
+        sonde.textContent=mot.replace(/­/g,"");const l=sonde.getBoundingClientRect().width;
+        /* Un mot a trait d'union conditionnel est reduit s'il tient a 9,5 px ; sinon il se coupe a ce trait. */
+        if(mot.indexOf("­")>=0&&l*9.5/parseFloat(cs.fontSize)>w)continue;
+        max=Math.max(max,l);
       }
       if(max>w)e.style.fontSize=Math.max(9.5,Math.floor(parseFloat(cs.fontSize)*w/max*10)/10)+"px";
     }

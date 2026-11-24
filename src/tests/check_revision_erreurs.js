@@ -93,7 +93,8 @@ function ouvrir(page, envois) {
   T("plus de rangee de croix", !bloc.querySelector(".loss") && !/[✗✕]/.test(bloc.textContent), bloc.textContent);
   T("le chiffre ne compte que les erreurs echues", bloc.querySelector(".erreurs-n").textContent === "2", bloc.textContent);
   T("dit ce que le chiffre compte", bloc.querySelector(".erreurs-texte b").textContent === "to review now");
-  T("donne les motifs en cause", bloc.querySelector(".erreurs-motifs").textContent === "x 2", bloc.querySelector(".erreurs-motifs").textContent);
+  /* 2026-11-24 : les motifs en pastilles « x n », detaches du nom. */
+  T("donne les motifs en cause", [...bloc.querySelectorAll(".erreurs-pastille")].map(e => e.textContent).join("|") === "x × 2", bloc.textContent);
   T("un seul bouton, qui lance la session", bloc.querySelectorAll("button").length === 1 && $("btnMistakes").onclick === w.eval("lancerRevision"));
   T("la phrase sur le retour espace est la", /come back later/.test($("mistakeSection").textContent));
   T("la bulle ne parle plus de toucher une croix", !/Tap one/.test($("tipMistakes").textContent));

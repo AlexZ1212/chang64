@@ -2465,9 +2465,32 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 .erreurs-n{flex:none;min-width:38px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;line-height:1;color:var(--brass)}
 .erreurs-texte{flex:1;min-width:0}
 .erreurs-texte b{display:block;font-size:15px;font-weight:600;line-height:1.3}
-.erreurs-motifs{flex-basis:100%;font-size:13px;line-height:1.5;color:var(--sage)}
-.erreurs-motifs span{white-space:nowrap}
+/* 2026-11-24 (choix d'Alexandre : « A. Compteur + pastilles ») : les motifs
+   en pastilles rondes sur une ligne qui defile, une barre de maitrise en cinq
+   cases, et ce qui reviendra plus tard. */
 .erreurs-carte .btn{flex:none;width:auto;padding:10px 14px;font-size:14px}
+.erreurs-defile{margin:2px 0 0}
+.erreurs-pastilles{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:1px 0}
+.erreurs-pastilles::-webkit-scrollbar{display:none}
+.erreurs-pastille{flex:none;padding:5px 11px;border-radius:999px;background-color:var(--raise);border:1px solid var(--rule);font-size:13px;line-height:1.3;color:var(--chalk);white-space:nowrap}
+.erreurs-maitrise{flex-basis:100%;display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;font-size:13px;line-height:1.4;color:var(--sage)}
+.erreurs-maitrise-nom{flex:none}
+.erreurs-barre{flex:none;display:inline-flex;gap:3px}
+.erreurs-barre i{display:block;width:14px;height:8px;border-radius:2px;background-color:var(--rule)}
+.erreurs-barre i.pleine{background-color:var(--brass)}
+.erreurs-presque{flex:none;white-space:nowrap}
+.erreurs-plus-tard{flex-basis:100%;margin:0;font-size:13px;line-height:1.4;color:var(--sage)}
+/* Signaler un exercice (2026-11-24) : un lien discret sous l'explication, une
+   fois l'exercice fini ; un petit choix de raisons, puis un merci. */
+.signaler{margin:6px 0 2px;text-align:center}
+.signaler .linkbtn{font-size:13px;color:var(--sage)}
+.signaler-choix{margin:8px 0 0;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule);text-align:left}
+.signaler-titre{margin:0 0 6px;font-size:14px;font-weight:600;color:var(--chalk);text-align:center}
+.signaler-choix label{display:flex;align-items:center;gap:10px;min-height:40px;font-size:14px;line-height:1.3;color:var(--chalk);cursor:pointer}
+.signaler-choix input{flex:none;width:18px;height:18px;margin:0;accent-color:var(--brass)}
+.signaler-boutons{display:flex;gap:8px;justify-content:center;margin-top:8px}
+.signaler-boutons .btn{flex:0 1 auto;width:auto}
+.signaler-merci{margin:6px 0 0;font-size:13px;color:var(--sage);text-align:center}
 .erreurs-note{margin:8px 0 12px}
 .objectif{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:10px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .obj-anneau{flex:none;width:40px;height:40px;transform:rotate(-90deg)}
@@ -3694,6 +3717,25 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <p class="nextlock hide hors-sprint" id="nextLock">Play a move, or use Hint, to unlock the next puzzle.</p>
           <p class="explain hors-sprint" id="exExplain"></p>
           <p class="explain hors-sprint" id="exPedagogy"></p>
+          <!-- Signaler cet exercice (2026-11-24, choix d'Alexandre par QCM) :
+               seulement une fois l'exercice fini (reussi ou solution montree),
+               jamais pendant qu'on cherche. N'envoie que le numero de
+               l'exercice et la raison (signaler.js, functions/api/signaler.js). -->
+          <div class="signaler hors-sprint review-hide hide" id="exSignaler">
+            <button type="button" class="linkbtn" id="btnSignaler" aria-expanded="false" aria-controls="signalerChoix">Report this puzzle</button>
+            <div class="signaler-choix hide" id="signalerChoix" role="group" aria-labelledby="signalerTitre">
+              <p class="signaler-titre" id="signalerTitre">What is wrong?</p>
+              <label><input type="radio" name="signalerRaison" value="solution"> <span>The solution is wrong</span></label>
+              <label><input type="radio" name="signalerRaison" value="meilleur"> <span>There is a better move</span></label>
+              <label><input type="radio" name="signalerRaison" value="explication"> <span>The explanation is wrong</span></label>
+              <label><input type="radio" name="signalerRaison" value="autre"> <span>Something else</span></label>
+              <div class="signaler-boutons">
+                <button type="button" class="btn primary" id="signalerEnvoyer" disabled>Send</button>
+                <button type="button" class="btn" id="signalerAnnuler">Cancel</button>
+              </div>
+            </div>
+            <p class="signaler-merci hide" id="signalerMerci" role="status"></p>
+          </div>
           <!-- Navigation dans la solution, visible en revue seulement.
                L'exercice s'ouvre sur sa position de depart et on avance
                demi-coup par demi-coup : sans ca, une solution qui prend une

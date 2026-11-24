@@ -2,6 +2,49 @@
  {
   "d": "2026-11-24",
   "en": [
+   "Mistakes to review, clearer; report a puzzle",
+   "Under the puzzles, your mistakes to review now show their patterns, how close you are to knowing them, and when the others come back. And once a puzzle is over, you can report it if something looks wrong: wrong solution, better move, wrong explanation."
+  ],
+  "fr": [
+   "Erreurs à revoir plus claires, et signaler un exercice",
+   "Sous les exercices, tes erreurs à revoir montrent maintenant leurs motifs, où tu en es pour les savoir, et quand reviennent les autres. Et une fois un exercice terminé, tu peux le signaler si quelque chose cloche : solution fausse, meilleur coup, explication fausse."
+  ],
+  "es": [
+   "Errores para repasar, más claros; reportar un ejercicio",
+   "Debajo de los ejercicios, tus errores para repasar muestran ahora sus temas, cuánto te falta para dominarlos y cuándo vuelven los demás. Y cuando termina un ejercicio, puedes reportarlo si algo falla: solución incorrecta, mejor jugada, explicación incorrecta."
+  ],
+  "pt": [
+   "Erros para revisar mais claros; reportar um exercício",
+   "Abaixo dos exercícios, seus erros para revisar agora mostram os temas, quanto falta para você dominá-los e quando os outros voltam. E quando um exercício termina, você pode reportá-lo se algo estiver errado: solução errada, lance melhor, explicação errada."
+  ],
+  "de": [
+   "Fehler zum Wiederholen übersichtlicher; Aufgabe melden",
+   "Unter den Aufgaben zeigen deine Fehler zum Wiederholen jetzt ihre Motive, wie weit du sie schon beherrschst und wann die anderen zurückkommen. Und ist eine Aufgabe beendet, kannst du sie melden, wenn etwas nicht stimmt: falsche Lösung, besserer Zug, falsche Erklärung."
+  ],
+  "ru": [
+   "Ошибки для повторения нагляднее; можно сообщить о задаче",
+   "Под задачами ошибки для повторения теперь показывают темы, насколько ты их освоил и когда вернутся остальные. А когда задача закончена, о ней можно сообщить, если что-то не так: неверное решение, есть ход лучше, неверное объяснение."
+  ],
+  "it": [
+   "Errori da ripassare più chiari; segnalare un esercizio",
+   "Sotto gli esercizi, i tuoi errori da ripassare mostrano ora i loro temi, quanto ti manca per padroneggiarli e quando tornano gli altri. E quando un esercizio è finito, puoi segnalarlo se qualcosa non va: soluzione sbagliata, mossa migliore, spiegazione sbagliata."
+  ],
+  "tr": [
+   "Tekrar edilecek hatalar daha net; bulmaca bildirme",
+   "Bulmacaların altında tekrar edilecek hataların artık temalarını, onları öğrenmeye ne kadar yakın olduğunu ve diğerlerinin ne zaman döneceğini gösteriyor. Bir bulmaca bittiğinde, bir sorun varsa onu bildirebilirsin: yanlış çözüm, daha iyi hamle, yanlış açıklama."
+  ],
+  "pl": [
+   "Błędy do powtórki czytelniejsze; zgłaszanie zadania",
+   "Pod zadaniami błędy do powtórki pokazują teraz swoje motywy, na ile już je opanowałeś i kiedy wrócą pozostałe. A po zakończeniu zadania możesz je zgłosić, jeśli coś jest nie tak: błędne rozwiązanie, lepszy ruch, błędne wyjaśnienie."
+  ],
+  "id": [
+   "Kesalahan untuk diulang lebih jelas; laporkan teka-teki",
+   "Di bawah teka-teki, kesalahan yang perlu diulang kini menunjukkan temanya, seberapa dekat kamu menguasainya, dan kapan yang lain kembali. Setelah teka-teki selesai, kamu bisa melaporkannya jika ada yang keliru: solusi salah, langkah lebih baik, penjelasan salah."
+  ]
+ },
+ {
+  "d": "2026-11-24",
+  "en": [
    "Training: take back a move",
    "Against the computer, a new switch under the strength: Training. Turn it on before the game and you can take back a move as often as you like. A training game counts for neither your Elo nor your badges; switched off, the game is rated and nothing helps you."
   ],

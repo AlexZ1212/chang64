@@ -2526,22 +2526,21 @@ function renderMistakeQueue(){
   ensureProgFields();
   const sec=$("mistakeSection"),box=$("mistakeGrid");
   if(!sec||!box)return;
-  /* Seules les entrees ECHUES (due<=maintenant) s'affichent -- celles en
-     attente d'un prochain palier restent invisibles jusqu'a leur tour,
-     sans aucun compteur "X en attente" qui inviterait a revenir plus tot.
+  /* Seules les entrees ECHUES (due<=maintenant) se refont ici. Celles en
+     attente d'un prochain palier ne se rejouent pas avant leur tour ; depuis
+     le 2026-11-24 une ligne dit seulement combien reviendront, et quand.
      (m.due||0) : entree plus ancienne sans champ due (avant cette session)
      -> traitee comme echue immediatement, pas de migration necessaire. */
   const now=Date.now();
   const due=prog.mistakeQueue.filter(m=>(m.due||0)<=now);
   if(!due.length){sec.classList.add("hide");poserHtml(box,"");return;}
-  /* Refait le 2026-11-18 (la rangee de croix rouges n'etait "ni jolie ni
-     claire") : le nombre d'erreurs a refaire maintenant, les trois motifs
-     qui reviennent le plus, et un bouton qui les enchaine toutes
-     (lancerRevision, comme la carte du menu Resoudre). */
+  /* Refait le 2026-11-24 (choix d'Alexandre par QCM : « A. Compteur +
+     pastilles ») : le nombre a refaire maintenant et « Revoir » (qui les
+     enchaine toutes, lancerRevision), les motifs en pastilles « x n » sur une
+     ligne qui defile (un nom ne se colle plus a son chiffre : « Mat en deux
+     1 »), une barre de maitrise sur toute la file, et ce qui reviendra plus
+     tard. Avant (2026-11-18) : le chiffre, le bouton et les motifs a la file. */
   poserHtml(box,"");
-  const par={};
-  due.forEach(m=>{par[m.theme]=(par[m.theme]||0)+1;});
-  const motifs=Object.keys(par).sort((a,b)=>par[b]-par[a]).slice(0,3).map(k=>t(k)+" "+par[k]);
   const el=(balise,classe,texte)=>{const e=document.createElement(balise);if(classe)e.className=classe;if(texte!==undefined)e.textContent=texte;return e;};
   box.appendChild(el("span","erreurs-n",String(due.length)));
   const tx=el("div","erreurs-texte");
@@ -2551,11 +2550,56 @@ function renderMistakeQueue(){
   b.type="button";b.id="btnMistakes";
   b.onclick=lancerRevision;
   box.appendChild(b);
-  /* Les motifs sur leur propre ligne, chacun insecable : un nom long ne se
-     coupe plus de son chiffre. */
-  const ms=el("div","erreurs-motifs");
-  motifs.forEach((m,i)=>{if(i)ms.appendChild(document.createTextNode(" | "));ms.appendChild(el("span","",m));});
-  box.appendChild(ms);
+  /* Les motifs, du plus frequent au moins frequent, tous : la ligne defile. */
+  const par={};
+  due.forEach(m=>{const k=m.theme||"";par[k]=(par[k]||0)+1;});
+  const rangee=el("div","erreurs-pastilles");
+  Object.keys(par).filter(Boolean).sort((a,b)=>par[b]-par[a]||t(a).localeCompare(t(b))).forEach(k=>{
+    rangee.appendChild(el("span","erreurs-pastille",t(k)+" × "+par[k]));
+  });
+  /* Meme enveloppe .defile que les rangees de cadences (degrade et chevron au
+     bord, pas de barre) ; ses indices suivent le defilement de la rangee. Pas
+     de defileBrancher : il ecoute la fenetre, et ce bloc se redessine souvent. */
+  if(rangee.children.length){
+    const env=el("div","defile erreurs-defile");
+    env.appendChild(rangee);box.appendChild(env);
+    if(typeof defileMaj==="function"){
+      rangee.addEventListener("scroll",()=>defileMaj(env),{passive:true});
+      requestAnimationFrame(()=>defileMaj(env));
+    }
+  }
+  /* Maitrise, sur toute la file (echues ou non) : une erreur est sue apres
+     cinq reussites espacees (SRS_DELAYS_DAYS) ; box-1 reussites deja faites.
+     « Presque sues » : plus que une ou deux reussites a faire. */
+  const tout=prog.mistakeQueue;
+  const faites=tout.reduce((s,m)=>s+Math.max(0,Math.min(4,(m.box||1)-1)),0);
+  const cases=tout.length?Math.round(5*faites/(tout.length*5)):0;
+  const presque=tout.filter(m=>(m.box||1)>=4).length;
+  const mt=el("div","erreurs-maitrise");
+  mt.appendChild(el("span","erreurs-maitrise-nom",t("Mastery")));
+  const barre=el("span","erreurs-barre");
+  barre.setAttribute("role","img");
+  barre.setAttribute("aria-label",t("Mastery")+" "+cases+"/5");
+  for(let i=0;i<5;i++)barre.appendChild(el("i",i<cases?"pleine":""));
+  mt.appendChild(barre);
+  if(presque)mt.appendChild(el("span","erreurs-presque",t("{n} almost learned",{n:presque})));
+  box.appendChild(mt);
+  /* Ce qui reviendra plus tard : combien, et quand revient la premiere. */
+  const attente=tout.filter(m=>(m.due||0)>now);
+  if(attente.length){
+    const prochaine=new Date(Math.min.apply(null,attente.map(m=>m.due)));
+    const jour=d=>Math.floor((d.getTime()-d.getTimezoneOffset()*6e4)/864e5);
+    const ecart=jour(prochaine)-jour(new Date(now));
+    let phrase;
+    if(ecart<=0)phrase=t("{n} more will come back later today.",{n:attente.length});
+    else if(ecart===1)phrase=t("{n} more will come back tomorrow.",{n:attente.length});
+    else{
+      let date;
+      try{date=new Intl.DateTimeFormat(LANG_INTL,{day:"numeric",month:"long"}).format(prochaine);}catch(e){date=prochaine.toLocaleDateString();}
+      phrase=t("{n} more will come back later, the next one on {date}.",{n:attente.length,date:date});
+    }
+    box.appendChild(el("p","erreurs-plus-tard",phrase));
+  }
   box.setAttribute("aria-label",t("{n} to review now",{n:due.length}));
   sec.classList.remove("hide");
 }

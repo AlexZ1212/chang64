@@ -327,3 +327,14 @@ CREATE TABLE IF NOT EXISTS balayages (
   -- Nombre de parties qu'il a eu a traiter a ce passage.
   traitees INTEGER NOT NULL DEFAULT 0
 );
+
+-- Signalements d'exercices (2026-11-24, SQL accepte par Alexandre par QCM) :
+-- un compteur par exercice, raison et jour, sans donnee personnelle
+-- (functions/api/signaler.js). Table a part du compte, dans la meme base.
+CREATE TABLE IF NOT EXISTS signalements (
+  exo TEXT NOT NULL,
+  raison TEXT NOT NULL,
+  jour TEXT NOT NULL,
+  n INTEGER NOT NULL DEFAULT 1,
+  PRIMARY KEY (exo, raison, jour)
+);

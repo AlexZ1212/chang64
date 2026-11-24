@@ -55,6 +55,8 @@ function code() {
        Apres jouer.js (il enveloppe setMode a son tour), avant navigation.js. */
     fs.readFileSync(path.join(__dirname, "apprendre.js"), "utf8").replace("__CHEMIN_PLAN__", require("./chemin_build.js").plan())
       .replace("__CHEMIN_TEST__", String(require("./chemin_build.js").positionsTest())) + "\n" +
+    /* Signaler un exercice une fois fini (2026-11-24). */
+    fs.readFileSync(path.join(__dirname, "signaler.js"), "utf8") + "\n" +
     /* Bouton Retour du navigateur et repere de la partie en cours (2026-11-21) :
        en dernier, il enveloppe setMode apres tous les autres. */
     fs.readFileSync(path.join(__dirname, "navigation.js"), "utf8") + "\n" +

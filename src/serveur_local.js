@@ -115,14 +115,14 @@ if (require.main === module) {
         r.writeHead(rep.status, h);
         return r.end(Buffer.from(await rep.arrayBuffer()));
       }
-      const api = u.pathname.match(/^\/api\/(compte|classement)(?:\/(.*))?$/);
+      const api = u.pathname.match(/^\/api\/(compte|classement|signaler)(?:\/(.*))?$/);
       if (api) {
         const morceaux = [];
         for await (const m of q) morceaux.push(m);
         const entetes = new Headers();
         for (const [k, v] of Object.entries(q.headers)) if (typeof v === "string") entetes.set(k, v);
         const req = new Request(u.href, { method: q.method, headers: entetes, body: ["GET", "HEAD"].includes(q.method) ? undefined : Buffer.concat(morceaux) });
-        const mod = await fonction(api[1] === "compte" ? "compte/[[route]].js" : "classement.js");
+        const mod = await fonction(api[1] === "compte" ? "compte/[[route]].js" : api[1] + ".js");
         const ctx = { request: req, env, params: { route: (api[2] || "").split("/").filter(Boolean) }, waitUntil() {} };
         const rep = await (mod.onRequest || mod["onRequest" + q.method[0] + q.method.slice(1).toLowerCase()])(ctx);
         const h = {};

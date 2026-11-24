@@ -331,9 +331,11 @@ function notesRacine(g,depth,timeMs){
    Debutant (700) mesure 720, Tranquille (1100) mesure 1150. */
 /* « Tout doux » (2026-11-24, decision d'Alexandre : un niveau vers 400 pour les
    tout debutants) : profondeur 1, beaucoup d'erreurs, et parfois une grosse
-   (une piece laissee). Point cale contre le point 600 par mesure_tout_doux.js. */
+   (une piece laissee). Point cale contre le point 600 par mesure_tout_doux.js
+   (24/11) : erreur 55 %, grosse 5 % -> 471 +/- 47 (60 parties) ; erreur 62 %,
+   grosse 8 % -> 355 +/- 43 (100 parties). Reglage retenu : entre les deux. */
 const ECHELLE_ORDI=[
-  {elo:400, d:2,dv:1,erreur:.62,perte:500,grosse:.08,perteGrosse:750,t:350},
+  {elo:400, d:2,dv:1,erreur:.58,perte:490,grosse:.065,perteGrosse:700,t:350},
   {elo:600, d:2,dv:1,erreur:.50,perte:420,grosse:0,  perteGrosse:0,  t:400},
   {elo:850, d:2,dv:1,erreur:.40,perte:340,grosse:0,  perteGrosse:0,  t:500},
   {elo:960, d:2,dv:2,erreur:.30,perte:240,grosse:0,  perteGrosse:0,  t:700},

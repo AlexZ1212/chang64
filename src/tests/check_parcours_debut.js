@@ -164,7 +164,7 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
 
   $("btnDebutPartie").click(); await attendre(300);
   T("premiere partie : onglet Jouer", ev("mode") === "play");
-  T("premiere partie : niveau le plus facile", ev("botLevel") === 1);
+  T("premiere partie : niveau le plus facile, « Tout doux » depuis le 24/11", ev("botLevel") === 6 && ev("NIVEAU_ELO[botLevel]") === Math.min(...Object.values(ev("NIVEAU_ELO"))));
   T("premiere partie : sans pendule", ev("clock.enabled") === false);
   T("premiere partie : Blancs", ev("myColor") === ev("W"));
   T("premiere partie : pas d'ecran d'attente", ev("awaitingStart") === false);

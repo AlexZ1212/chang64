@@ -56,6 +56,16 @@ const lire = f => fs.readFileSync(path.join(SRC, f), "utf8");
   console.log("--- Inviter sur chang64 : le QR code du site ---");
   T("le QR code est dessine sous les boutons de partage, avec sa phrase", !!$("siteQr").querySelector("svg") && $("siteQr").getAttribute("role") === "img" && /QR code pour ouvrir chang64/.test($("siteQr").getAttribute("aria-label")) && /Montre ce code à un ami/.test(net($("siteQrNote").textContent)));
   T("meme forme que celui de « Ajouter un appareil » (.cp-qr)", $("siteQr").classList.contains("cp-qr"));
+  console.log("--- Cinq forces, « Tout doux » vers 400, rangee qui defile ---");
+  const forces = [...$("segLevel").children];
+  T("cinq forces dans l'ordre : Tout doux 400, Débutant 700, Tranquille 1100, Sérieux 1600, Coriace 1900", forces.map(b => net(b.querySelector(".seg-nom").textContent) + " " + net(b.querySelector(".seg-elo").textContent)).join(", ") === "Tout doux 400, Débutant 700, Tranquille 1100, Sérieux 1600, Coriace 1900", forces.map(b => b.textContent).join(","));
+  T("la rangee defile comme celle des cadences (.defile, .tc-cats)", $("segLevel").classList.contains("tc-cats") && $("segLevel").parentElement.classList.contains("defile"));
+  forces[0].click(); await attendre(50);
+  T("« Tout doux » se choisit : botLevel 6, l'ordinateur vise 400", ev("botLevel") === 6 && ev("eloSouhaite()") === 400 && forces[0].getAttribute("aria-pressed") === "true");
+  T("l'echelle du moteur a son point 400", ev("profilOrdi(400).elo") === 400 && ev("ELO_ORDI_MIN") === 400);
+  T("la carte de Jouer dit « Cinq niveaux »", /^Cinq niveaux/.test(net($("jouerOrdi").querySelector(".jouer-desc").textContent)));
+  ev("botLevel=2;syncForce()");
+
   console.log("--- Retour a l'ecran d'avant ---");
   const rb = () => $("retourEcran");
   ev("setMode('puzzles')"); $("cardSolveMotifs").click(); await attendre(200);

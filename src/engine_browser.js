@@ -329,7 +329,11 @@ function notesRacine(g,depth,timeMs){
    1260 : retire, remplace par un point a erreur 3 %, mesure a 1435 contre
    1220 et 1530 contre 1600, place a 1480. Verification des forces nommees :
    Debutant (700) mesure 720, Tranquille (1100) mesure 1150. */
+/* « Tout doux » (2026-11-24, decision d'Alexandre : un niveau vers 400 pour les
+   tout debutants) : profondeur 1, beaucoup d'erreurs, et parfois une grosse
+   (une piece laissee). Point cale contre le point 600 par mesure_tout_doux.js. */
 const ECHELLE_ORDI=[
+  {elo:400, d:2,dv:1,erreur:.62,perte:500,grosse:.08,perteGrosse:750,t:350},
   {elo:600, d:2,dv:1,erreur:.50,perte:420,grosse:0,  perteGrosse:0,  t:400},
   {elo:850, d:2,dv:1,erreur:.40,perte:340,grosse:0,  perteGrosse:0,  t:500},
   {elo:960, d:2,dv:2,erreur:.30,perte:240,grosse:0,  perteGrosse:0,  t:700},
@@ -340,8 +344,9 @@ const ECHELLE_ORDI=[
   {elo:1750,d:4,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:1200},
   {elo:1900,d:5,dv:3,erreur:0,  perte:0,  grosse:0,  perteGrosse:0,  t:2000}
 ];
-const ELO_ORDI_MIN=600,ELO_ORDI_MAX=1900;
-const NIVEAU_ELO={1:700,2:1100,3:1600,4:1900};
+const ELO_ORDI_MIN=400,ELO_ORDI_MAX=1900;
+/* 6 : « Tout doux » (le 5 est « S'adapter a mon niveau », botLevel 5 dans ui.js). */
+const NIVEAU_ELO={6:400,1:700,2:1100,3:1600,4:1900};
 function profilOrdi(elo){
   const E=ECHELLE_ORDI;
   elo=Math.max(ELO_ORDI_MIN,Math.min(ELO_ORDI_MAX,+elo||NIVEAU_ELO[2]));

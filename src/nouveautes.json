@@ -2,6 +2,92 @@
  {
   "d": "2026-11-24",
   "en": [
+   "A “Gentle” level, and lessons you play to the end",
+   "Against the computer, a fifth level, Gentle (around 400 Elo), for your very first games; the levels now sit on one row that scrolls, like the time controls. In Learn, you now play the whole combination yourself: the app only plays your opponent's moves. And the button on the home page always takes you to your chapter."
+  ],
+  "fr": [
+   "Un niveau Tout doux, et des leçons jouées jusqu'au bout",
+   "Contre l'ordinateur, un cinquième niveau, Tout doux (vers 400 Elo), pour tes toutes premières parties ; les niveaux tiennent sur une ligne qui défile, comme les cadences. Dans Apprendre, tu joues maintenant toi-même toute la combinaison : l'application ne joue que les coups de l'adversaire. Et le bouton de l'accueil t'amène toujours à ton chapitre."
+  ],
+  "es": [
+   "Un nivel Suave, y lecciones que juegas hasta el final",
+   "Contra el ordenador, un quinto nivel, Suave (unos 400 Elo), para tus primeras partidas; los niveles caben en una fila que se desliza, como los ritmos. En Aprender, ahora juegas tú toda la combinación: la aplicación solo juega las jugadas del rival. Y el botón de la portada siempre te lleva a tu capítulo."
+  ],
+  "pt": [
+   "Um nível Suave, e lições jogadas até o fim",
+   "Contra o computador, um quinto nível, Suave (cerca de 400 Elo), para as suas primeiras partidas; os níveis cabem numa linha que desliza, como os ritmos. Em Aprender, agora você joga toda a combinação: o aplicativo só joga os lances do adversário. E o botão da página inicial sempre leva você ao seu capítulo."
+  ],
+  "de": [
+   "Eine Stufe „Sanft“, und Lektionen bis zum Ende",
+   "Gegen den Computer gibt es eine fünfte Stufe, Sanft (etwa 400 Elo), für deine allerersten Partien; die Stufen stehen in einer Zeile, die man schiebt, wie die Bedenkzeiten. In Lernen spielst du jetzt die ganze Kombination selbst: Die App spielt nur die Züge des Gegners. Und der Knopf auf der Startseite bringt dich immer zu deinem Kapitel."
+  ],
+  "ru": [
+   "Уровень «Мягкий» и уроки до последнего хода",
+   "В игре с компьютером появился пятый уровень, Мягкий (около 400 Эло), для самых первых партий; уровни стоят в одной строке, которая прокручивается, как контроль времени. В разделе Учиться ты теперь сам играешь всю комбинацию: приложение делает только ходы соперника. А кнопка на главной всегда ведёт к твоей главе."
+  ],
+  "it": [
+   "Un livello Dolce, e lezioni giocate fino in fondo",
+   "Contro il computer c'è un quinto livello, Dolce (circa 400 Elo), per le tue primissime partite; i livelli stanno su una riga che scorre, come le cadenze. In Impara giochi tu tutta la combinazione: l'app gioca solo le mosse dell'avversario. E il pulsante della pagina iniziale ti porta sempre al tuo capitolo."
+  ],
+  "tr": [
+   "Yumuşak seviyesi ve sonuna kadar oynanan dersler",
+   "Bilgisayara karşı beşinci bir seviye var: Yumuşak (yaklaşık 400 Elo), ilk oyunların için; seviyeler, tempolar gibi kayan tek bir satırda. Öğren bölümünde artık bütün kombinasyonu sen oynuyorsun: uygulama yalnızca rakibin hamlelerini yapıyor. Ana sayfadaki düğme de seni her zaman kendi bölümüne götürüyor."
+  ],
+  "pl": [
+   "Poziom Łagodny i lekcje do samego końca",
+   "W grze z komputerem jest piąty poziom, Łagodny (około 400 Elo), na twoje pierwsze partie; poziomy mieszczą się w jednym przewijanym rzędzie, jak tempa. W zakładce Ucz się sam rozgrywasz całą kombinację: aplikacja wykonuje tylko ruchy przeciwnika. A przycisk na stronie głównej zawsze prowadzi do twojego rozdziału."
+  ],
+  "id": [
+   "Level Lembut, dan pelajaran yang dimainkan sampai tuntas",
+   "Melawan komputer, ada level kelima, Lembut (sekitar 400 Elo), untuk permainan pertamamu; semua level ada di satu baris yang bisa digeser, seperti tempo. Di Belajar, kini kamu sendiri yang memainkan seluruh kombinasi: aplikasi hanya memainkan langkah lawan. Dan tombol di beranda selalu membawamu ke babmu."
+  ]
+ },
+ {
+  "d": "2026-11-24",
+  "en": [
+   "Go back in one move",
+   "A ‹ button at the top of each sub-screen takes you back to the screen before; on a phone, you can also swipe from the left edge. Preferences, Accessibility and the legal pages bring you back exactly where you were. On a computer, once you have clicked the board, the arrow keys step through the moves. And Invite to chang64 now shows a QR code, to open the site on a friend's phone."
+  ],
+  "fr": [
+   "Revenir en un geste",
+   "Un bouton ‹ en haut de chaque sous-écran te ramène à l'écran d'avant ; sur téléphone, tu peux aussi glisser depuis le bord gauche. Les Préférences, l'Accessibilité et les pages légales te rendent exactement là où tu étais. Sur ordinateur, après un clic sur l'échiquier, les flèches parcourent les coups. Et Inviter sur chang64 montre un QR code, pour ouvrir le site sur le téléphone d'un ami."
+  ],
+  "es": [
+   "Volver con un gesto",
+   "Un botón ‹ arriba de cada subpantalla te devuelve a la pantalla anterior; en el móvil, también puedes deslizar desde el borde izquierdo. Preferencias, Accesibilidad y las páginas legales te devuelven justo donde estabas. En el ordenador, tras un clic en el tablero, las flechas recorren las jugadas. E Invitar a chang64 muestra un código QR, para abrir el sitio en el móvil de un amigo."
+  ],
+  "pt": [
+   "Voltar com um gesto",
+   "Um botão ‹ no alto de cada subtela leva você de volta à tela anterior; no celular, você também pode deslizar a partir da borda esquerda. Preferências, Acessibilidade e as páginas legais devolvem você exatamente onde estava. No computador, depois de um clique no tabuleiro, as setas percorrem os lances. E Convidar para o chang64 mostra um código QR, para abrir o site no celular de um amigo."
+  ],
+  "de": [
+   "Mit einer Geste zurück",
+   "Ein Knopf ‹ oben auf jeder Unterseite bringt dich zur vorigen Seite; auf dem Handy kannst du auch vom linken Rand wischen. Einstellungen, Barrierefreiheit und die rechtlichen Seiten bringen dich genau dorthin zurück, wo du warst. Am Computer gehen die Pfeiltasten nach einem Klick aufs Brett durch die Züge. Und „Zu chang64 einladen“ zeigt einen QR-Code, um die Seite auf dem Handy eines Freundes zu öffnen."
+  ],
+  "ru": [
+   "Назад одним жестом",
+   "Кнопка ‹ вверху каждого вложенного экрана возвращает на предыдущий; на телефоне можно ещё провести пальцем от левого края. Настройки, Доступность и юридические страницы возвращают ровно туда, где ты был. На компьютере после щелчка по доске стрелки листают ходы. А в разделе «Пригласить на chang64» есть QR-код, чтобы открыть сайт на телефоне друга."
+  ],
+  "it": [
+   "Tornare indietro con un gesto",
+   "Un pulsante ‹ in cima a ogni sottoschermata ti riporta alla schermata precedente; sul telefono puoi anche scorrere dal bordo sinistro. Preferenze, Accessibilità e le pagine legali ti riportano esattamente dove eri. Sul computer, dopo un clic sulla scacchiera, le frecce scorrono le mosse. E Invita su chang64 mostra un codice QR, per aprire il sito sul telefono di un amico."
+  ],
+  "tr": [
+   "Tek hareketle geri dön",
+   "Her alt ekranın üstündeki ‹ düğmesi seni önceki ekrana götürür; telefonda sol kenardan kaydırabilirsin de. Tercihler, Erişilebilirlik ve yasal sayfalar seni tam kaldığın yere geri getirir. Bilgisayarda tahtaya tıkladıktan sonra ok tuşları hamleleri gezer. Ve chang64'e davet et bölümü, siteyi bir arkadaşının telefonunda açmak için bir QR kod gösterir."
+  ],
+  "pl": [
+   "Powrót jednym gestem",
+   "Przycisk ‹ u góry każdego podekranu wraca do poprzedniego ekranu; na telefonie możesz też przesunąć palcem od lewej krawędzi. Preferencje, Dostępność i strony prawne wracają dokładnie tam, gdzie byłeś. Na komputerze, po kliknięciu szachownicy, strzałki przechodzą przez ruchy. A Zaproś do chang64 pokazuje kod QR, żeby otworzyć stronę na telefonie znajomego."
+  ],
+  "id": [
+   "Kembali dengan satu gerakan",
+   "Tombol ‹ di atas setiap sublayar membawamu ke layar sebelumnya; di ponsel, kamu juga bisa menggeser dari tepi kiri. Preferensi, Aksesibilitas, dan halaman hukum mengembalikanmu tepat ke tempatmu tadi. Di komputer, setelah mengeklik papan, tombol panah menelusuri langkah. Dan Undang ke chang64 kini menampilkan kode QR, untuk membuka situs di ponsel temanmu."
+  ]
+ },
+ {
+  "d": "2026-11-24",
+  "en": [
    "Private profile, for children",
    "In Menu, My account, a new “Private profile” switch: your profile closes to others (except your friends), you leave the tables, the leagues and the member search, and only your friends can invite you. Handy for a child; a paragraph for parents explains it in Privacy."
   ],

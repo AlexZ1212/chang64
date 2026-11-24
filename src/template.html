@@ -1376,6 +1376,9 @@ div.corr-item:hover{border-color:var(--rule)}
    trop long pour sa case est coupe par des points plutot que de passer a la
    ligne ou d'elargir la page. */
 .seg-force button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 2px;line-height:1.25}
+/* Dans la rangee qui defile (2026-11-24) : chaque force garde sa largeur. */
+.tc-cats.seg-force button{flex:1 0 auto;padding:6px 14px}
+.tc-cats.seg-force .seg-nom{overflow:visible}
 .seg-nom{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .seg-elo{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--sage)}
 /* « S'adapter a mon niveau » allume : les quatre forces s'estompent, sans
@@ -3434,12 +3437,17 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
             <button data-v="r" aria-pressed="true">Random</button>
           </div></div>
           <div class="field">
-            <div class="seg seg-force" id="segLevel">
+            <!-- Cinq forces sur une ligne qui defile (2026-11-24, decision d'Alexandre :
+                 « Tout doux » 400 sous les quatre autres, rangee comme celle des
+                 cadences : chevrons, degrade aux bords, sans barre). « Tout doux »
+                 est botLevel 6 (le 5 est « S'adapter a mon niveau »). -->
+            <div class="defile" id="segLevelDefile"><div class="tc-cats seg-force" id="segLevel">
+              <button data-v="6" aria-pressed="false"><span class="seg-nom">Gentle</span><span class="seg-elo" data-elo="6"></span></button>
               <button data-v="1" aria-pressed="false"><span class="seg-nom">Beginner</span><span class="seg-elo" data-elo="1"></span></button>
               <button data-v="2" aria-pressed="true"><span class="seg-nom">Casual</span><span class="seg-elo" data-elo="2"></span></button>
               <button data-v="3" aria-pressed="false"><span class="seg-nom">Solid</span><span class="seg-elo" data-elo="3"></span></button>
               <button data-v="4" aria-pressed="false"><span class="seg-nom">Tough</span><span class="seg-elo" data-elo="4"></span></button>
-            </div>
+            </div></div>
             <!-- L'ordinateur joue a l'Elo du joueur (botLevel 5 dans le code).
                  Un interrupteur a part : le 5e bouton passait sur deux lignes. -->
             <button type="button" class="adapte" id="adapteNiveau" role="switch" aria-checked="false"><span class="adapte-pastille" aria-hidden="true"></span><span class="adapte-texte">Adapt to my level</span> <span class="adapte-elo" id="adapteElo"></span></button>

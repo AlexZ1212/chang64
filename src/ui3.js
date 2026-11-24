@@ -2416,7 +2416,7 @@ function debutPremierePartie(){
   if(!debut.faites.includes(debut.e)){debut.faites.push(debut.e);debutSauver();}
   colorMode="w";myColor=W;
   if(typeof syncColorSeg==="function")syncColorSeg();
-  botLevel=1;
+  botLevel=6;   /* « Tout doux » : la premiere partie se joue au niveau le plus facile (24/11) */
   if(typeof syncForce==="function")syncForce();
   pendingNoClock=true;
   setMode("play",{fresh:true});

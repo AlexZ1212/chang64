@@ -684,7 +684,7 @@ function eloPartie(){return eloPartieFixe||eloSouhaite();}
 function niveauPartie(){
   if(botLevel!==NIVEAU_MESURE)return botLevel;
   const e=eloPartie();let n=1;
-  for(const k of [1,2,3,4])if(Math.abs(NIVEAU_ELO[k]-e)<Math.abs(NIVEAU_ELO[n]-e))n=k;
+  for(const k of [6,1,2,3,4])if(Math.abs(NIVEAU_ELO[k]-e)<Math.abs(NIVEAU_ELO[n]-e))n=k;
   return n;
 }
 /* Nom de la force choisie : lu sur le selecteur (deja traduit), ou « Adapte »
@@ -714,6 +714,14 @@ function syncForce(){
       const e=b.querySelector("[data-elo]");
       if(e)e.textContent=NIVEAU_ELO[+e.dataset.elo]||"";
     }
+  }
+  /* Rangee qui defile (2026-11-24) : la force choisie reste visible, puis les
+     indices du bord (chevron, degrade) suivent. */
+  if(seg&&seg.clientWidth){
+    const actif=seg.querySelector('[aria-pressed="true"]');
+    if(actif&&(actif.offsetLeft<seg.scrollLeft||actif.offsetLeft+actif.offsetWidth>seg.scrollLeft+seg.clientWidth))
+      seg.scrollLeft=Math.max(0,actif.offsetLeft-(seg.clientWidth-actif.offsetWidth)/2);
+    if(typeof defileMaj==="function"&&seg.parentNode&&seg.parentNode.classList.contains("defile"))defileMaj(seg.parentNode);
   }
   if(inter){
     inter.setAttribute("aria-checked",String(adapte));

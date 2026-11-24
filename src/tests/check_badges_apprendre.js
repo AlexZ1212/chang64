@@ -56,8 +56,11 @@ async function jouerExo(w) {
   const ex = ev("JSON.parse(JSON.stringify(leconEtapes()[lecon.e].exos[lecon.x]))");
   if (ex.avant) for (let i = 0; i < 30 && ev("lecon.occupe"); i++) await pause(100);
   w.__u = ex.sol[0];
-  ev("(function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];const m=legalCache.find(x=>game.uci(x)===window.__u);if(m)debutEssai(m,ex);})()");
-  await pause((ex.suite ? ex.suite.length * 800 : 0) + 80);
+  const joue = u => { w.__u = u; ev("(function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];const m=legalCache.find(x=>game.uci(x)===window.__u);if(m)debutEssai(m,ex);})()"); };
+  joue(ex.sol[0]);
+  /* 24/11 : les coups du joueur dans la suite, c'est lui qui les joue. */
+  if (ex.suite) for (let k = 0; k < ex.suite.length; k += 2) { await pause(800); if (k + 1 < ex.suite.length) joue(ex.suite[k + 1]); }
+  await pause(80);
   return ex;
 }
 /* La fin d'une partie, posee comme le fait l'application. */

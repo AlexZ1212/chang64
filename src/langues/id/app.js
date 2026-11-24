@@ -1439,5 +1439,7 @@ module.exports = {
 "1 puzzle solved today. Come back tomorrow to keep going.":"1 teka-teki terpecahkan hari ini. Kembali besok untuk lanjut.",
 "{n} puzzles solved today. Come back tomorrow to keep going.":"{n} teka-teki terpecahkan hari ini. Kembali besok untuk lanjut.",
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
-"Review the path":"Ulangi jalurnya"
+"Review the path":"Ulangi jalurnya",
+/* Apprendre : le joueur joue toute la sequence (2026-11-24) */
+"Your turn: play the next move of the idea.":"Giliranmu: mainkan langkah berikutnya dari ide ini."
 };

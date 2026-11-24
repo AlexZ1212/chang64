@@ -85,7 +85,12 @@ const attendre = ms => new Promise(r => setTimeout(r, ms));
     for (let j = 0; j < E[i].exos.length; j++) {
       const ex = E[i].exos[j];
       await jouer(ex.sol[0]);
-      if (ex.suite) await attendre(750 * ex.suite.length + 250);
+      /* 24/11 : les coups du joueur dans la suite, c'est lui qui les joue. */
+      if (ex.suite) for (let k = 0; k < ex.suite.length; k += 2) {
+        await attendre(800);
+        if (k + 1 < ex.suite.length) { T(`etape ${i + 1}.${j + 1} : a toi de jouer la suite`, ev("lecon.suite") === k + 1 && ev("lecon.occupe") === false); await jouer(ex.suite[k + 1]); }
+      }
+      await attendre(250);
       await attendre(10);
       T(`etape ${i + 1}.${j + 1} : reussie`, ev("debut.ok") === true && $("debutStatus").className === "status win", $("debutStatus").textContent);
       vus++;

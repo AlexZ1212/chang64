@@ -1441,5 +1441,7 @@ module.exports = {
 "1 puzzle solved today. Come back tomorrow to keep going.":"Сегодня решена 1 задача. Возвращайся завтра, чтобы продолжить.",
 "{n} puzzles solved today. Come back tomorrow to keep going.":{"one":"Сегодня решена {n} задача. Возвращайся завтра, чтобы продолжить.","few":"Сегодня решены {n} задачи. Возвращайся завтра, чтобы продолжить.","many":"Сегодня решено {n} задач. Возвращайся завтра, чтобы продолжить.","other":"Сегодня решено {n} задачи. Возвращайся завтра, чтобы продолжить."},
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
-"Review the path":"Повторить путь"
+"Review the path":"Повторить путь",
+/* Apprendre : le joueur joue toute la sequence (2026-11-24) */
+"Your turn: play the next move of the idea.":"Твой ход: сыграй следующий ход этой идеи."
 };

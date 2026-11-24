@@ -2242,7 +2242,7 @@ function debutCharger(){
   const E=leconEtapes();
   if(!E[lecon.e]){lecon.e=0;lecon.x=0;}
   const et=E[lecon.e],ex=et.exos[lecon.x];
-  lecon.gen++;lecon.ok=false;lecon.occupe=false;lecon.deux=false;
+  lecon.gen++;lecon.ok=false;lecon.occupe=false;lecon.deux=false;lecon.suite=-1;
   game=ex?new Game(ex.fen):et.fen?new Game(et.fen):new Game();
   flipped=false;selected=-1;lastMove=null;marks=debutMarques(ex);
   legalCache=ex?game.moves():[];
@@ -2308,22 +2308,31 @@ function debutEssai(m,ex){
   /* Mat en deux (chapitre 9, 2026-11-22) : ex.reponse est le coup noir joue
      apres un bon premier coup ; le joueur doit ensuite faire mat lui-meme. */
   const second=!!(ex.reponse&&lecon.deux);
-  let bon=second?false:ex.sol.includes(uci);
-  if(ex.mat||second){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
+  /* La suite de la combinaison (2026-11-24, demande d'Alexandre) : le joueur
+     joue lui-meme chacun de ses coups, l'application seulement ceux de
+     l'adversaire. Un seul coup accepte, celui de la suite ; pour le dernier,
+     quand la suite finit par un mat, tout mat est accepte. */
+  const k=lecon.suite;
+  const dansSuite=k>=0&&!!ex.suite&&k<ex.suite.length;
+  let bon=dansSuite?uci===ex.suite[k]:second?false:ex.sol.includes(uci);
+  if(dansSuite&&!bon&&k===ex.suite.length-1&&(ex.suiteMat||ex.mat)){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
+  else if(!dansSuite&&(ex.mat||second)){game.makeMove(m);bon=game.isCheckmate();game.undoMove();}
+  const reperes=()=>dansSuite?{}:debutMarques(ex);
   selected=-1;
   if(!bon){
     const g=lecon.gen;
     SON.erreur();
-    marks=debutMarques(ex);marks[m.to]="bad";render();
+    marks=reperes();marks[m.to]="bad";render();
     boardEl.classList.add("shake");
     setTimeout(()=>boardEl.classList.remove("shake"),340);
     /* faux : la raison propre a ce coup, ou "*" pour tout autre coup faux. */
-    debutStatut("lose",second?t("Not quite. Try again.")+" "+(ex.ensuite||ex.consigne):(ex.faux&&(ex.faux[uci]||ex.faux["*"]))||t("Not quite. Try again.")+" "+ex.consigne);
-    setTimeout(()=>{if(g===lecon.gen&&mode==="debut"&&!lecon.ok){marks=debutMarques(ex);render();}},700);
+    debutStatut("lose",dansSuite?t("Not quite. Try again.")+" "+t("Your turn: play the next move of the idea."):second?t("Not quite. Try again.")+" "+(ex.ensuite||ex.consigne):(ex.faux&&(ex.faux[uci]||ex.faux["*"]))||t("Not quite. Try again.")+" "+ex.consigne);
+    setTimeout(()=>{if(g===lecon.gen&&mode==="debut"&&!lecon.ok){marks=reperes();render();}},700);
     return;
   }
   game.makeMove(m);lastMove=m;marks={};legalCache=[];lecon.occupe=true;
   render();
+  if(dansSuite){lecon.suite=-1;debutSuite(ex,k+1,lecon.gen);return;}
   if(ex.reponse&&!second){
     const g=lecon.gen;
     setTimeout(()=>{
@@ -2341,13 +2350,21 @@ function debutEssai(m,ex){
 }
 /* Rejoue la fin de la combinaison (le roi s'ecarte, le cavalier prend) : voir
    la piece tomber explique la fourchette mieux qu'une phrase. */
+/* i pair : un coup de l'adversaire, joue par l'application ; i impair : un
+   coup du joueur, qu'il joue lui-meme (2026-11-24). */
 function debutSuite(ex,i,g){
   if(!ex.suite||i>=ex.suite.length){debutReussi(ex);return;}
+  if(i%2===1){
+    lecon.suite=i;lecon.occupe=false;legalCache=game.moves();marks={};
+    debutStatut("",t("Your turn: play the next move of the idea."));
+    render();
+    return;
+  }
   setTimeout(()=>{
     if(g!==lecon.gen||mode!=="debut")return;
     const m=game.moves().find(x=>game.uci(x)===ex.suite[i]);
     if(!m){debutReussi(ex);return;}
-    game.makeMove(m);lastMove=m;render();
+    game.makeMove(m);lastMove=m;render();   /* render() fait entendre le coup */
     debutSuite(ex,i+1,g);
   },750);
 }
@@ -2388,7 +2405,8 @@ function debutIndice(){
   if(!ex)return;
   /* Second coup d'un mat en deux : l'indice montre un mat. */
   let u=ex.sol[0];
-  if(ex.reponse&&lecon.deux){const mm=game.moves().find(x=>{game.makeMove(x);const k=game.isCheckmate();game.undoMove();return k;});if(mm)u=game.uci(mm);}
+  if(lecon.suite>=0&&ex.suite&&ex.suite[lecon.suite])u=ex.suite[lecon.suite];
+  else if(ex.reponse&&lecon.deux){const mm=game.moves().find(x=>{game.makeMove(x);const k=game.isCheckmate();game.undoMove();return k;});if(mm)u=game.uci(mm);}
   selected=debutCase(u.slice(0,2));
   marks=debutMarques(ex);marks[debutCase(u.slice(2,4))]="hint";
   render();

@@ -1441,5 +1441,7 @@ module.exports = {
 "1 puzzle solved today. Come back tomorrow to keep going.":"1 exercício resolvido hoje. Volte amanhã para continuar.",
 "{n} puzzles solved today. Come back tomorrow to keep going.":"{n} exercícios resolvidos hoje. Volte amanhã para continuar.",
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
-"Review the path":"Rever o caminho"
+"Review the path":"Rever o caminho",
+/* Apprendre : le joueur joue toute la sequence (2026-11-24) */
+"Your turn: play the next move of the idea.":"Sua vez: jogue o próximo lance da ideia."
 };

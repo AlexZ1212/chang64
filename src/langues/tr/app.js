@@ -1439,5 +1439,7 @@ module.exports = {
 "1 puzzle solved today. Come back tomorrow to keep going.":"Bugün 1 bulmaca çözdün. Devam etmek için yarın yine gel.",
 "{n} puzzles solved today. Come back tomorrow to keep going.":"Bugün {n} bulmaca çözdün. Devam etmek için yarın yine gel.",
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
-"Review the path":"Yolu yeniden gözden geçir"
+"Review the path":"Yolu yeniden gözden geçir",
+/* Apprendre : le joueur joue toute la sequence (2026-11-24) */
+"Your turn: play the next move of the idea.":"Sıra sende: fikrin sonraki hamlesini oyna."
 };

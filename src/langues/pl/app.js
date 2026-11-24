@@ -1439,5 +1439,7 @@ module.exports = {
 "1 puzzle solved today. Come back tomorrow to keep going.":"1 zadanie rozwiązane dziś. Wróć jutro, żeby kontynuować.",
 "{n} puzzles solved today. Come back tomorrow to keep going.":{"one":"{n} zadanie rozwiązane dziś. Wróć jutro, żeby kontynuować.","few":"{n} zadania rozwiązane dziś. Wróć jutro, żeby kontynuować.","many":"{n} zadań rozwiązanych dziś. Wróć jutro, żeby kontynuować.","other":"{n} zadania rozwiązane dziś. Wróć jutro, żeby kontynuować."},
 /* Bouton de l'accueil vers Apprendre (2026-11-24) */
-"Review the path":"Powtórz ścieżkę"
+"Review the path":"Powtórz ścieżkę",
+/* Apprendre : le joueur joue toute la sequence (2026-11-24) */
+"Your turn: play the next move of the idea.":"Twój ruch: zagraj kolejny ruch tego pomysłu."
 };

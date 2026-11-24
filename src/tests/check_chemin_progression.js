@@ -75,6 +75,7 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("les boutons de fin de « Je debute » restent caches ici", $("debutFin").classList.contains("hide") && $("leconBoss").classList.contains("hide"));
   const E = ev("JSON.parse(JSON.stringify(leconEtapes()))");
   T("le contenu vient du fichier du chapitre", E.length === 6 && E[5].boss && E[5].exos.length === 0 && E.slice(0, 5).every(e => e.exos.length >= 2));
+  let fauxSuite = false;
   const jouer = async u => { w.__u = u; ev("(function(){const ex=leconEtapes()[lecon.e].exos[lecon.x];const m=legalCache.find(x=>game.uci(x)===window.__u);if(m)debutEssai(m,ex);})()"); await pause(30); };
   for (let i = 0; i < 5; i++) {
     for (let j = 0; j < E[i].exos.length; j++) {
@@ -93,7 +94,25 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
         T(nom + " : la position ne change pas", ev("game.history.length") === (ex.avant ? 1 : 0));
       }
       await jouer(ex.sol[0]);
-      await pause((ex.suite ? ex.suite.length * 800 : 0) + 60);
+      /* 24/11 : le joueur joue lui-meme ses coups de la suite ; l'application
+         ne joue que ceux de l'adversaire. */
+      if (ex.suite) for (let k = 0; k < ex.suite.length; k += 2) {
+        await pause(820);
+        if (k + 1 >= ex.suite.length) break;
+        T(nom + " : a toi de jouer la suite (coup " + (k + 2) + ")", ev("lecon.suite") === k + 1 && ev("lecon.occupe") === false && ev("lecon.ok") === false && /À toi : joue la suite de l'idée./.test(net($("debutStatus").textContent)), net($("debutStatus").textContent));
+        if (!fauxSuite) {
+          fauxSuite = true;
+          const n0 = ev("game.history.length");
+          const autre = ev("(function(){const m=legalCache.find(x=>game.uci(x)!==" + JSON.stringify(ex.suite[k + 1]) + "&&!(function(){game.makeMove(x);const c=game.isCheckmate();game.undoMove();return c;})());return m?game.uci(m):''})()");
+          await jouer(autre);
+          T(nom + " : un autre coup que la suite est refuse, on reessaie", ev("game.history.length") === n0 && ev("lecon.suite") === k + 1 && $("debutStatus").classList.contains("lose") && /Réessaie|essai/.test(net($("debutStatus").textContent)), net($("debutStatus").textContent));
+          ev("debutIndice()");
+          T(nom + " : l'indice montre le coup de la suite", ev("marks[debutCase(" + JSON.stringify(ex.suite[k + 1].slice(2, 4)) + ")]") === "hint");
+          ev("selected=-1");
+        }
+        await jouer(ex.suite[k + 1]);
+      }
+      await pause(60);
       T(nom + " : la solution est acceptee", ev("lecon.ok") === true && $("debutStatus").classList.contains("win"), $("debutStatus").textContent);
       if (ex.apres) T(nom + " : l'explication s'affiche", net($("debutStatus").textContent) === net(ex.apres), $("debutStatus").textContent);
       if (ex.suite) T(nom + " : la suite est jouee", ev("game.history.length") === 1 + ex.suite.length);

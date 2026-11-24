@@ -80,7 +80,10 @@ const avec = o => ({ fetch: true, avant(w) { for (const k in o) w.localStorage.s
   T("le fou est refuse avec sa propre explication", ev("lecon.ok") === false && /Le fou évite le pat/.test(statut()), statut());
   await jouer("c7c8q");
   T("la dame est refusee : pat", ev("lecon.ok") === false && /^Pat !/.test(statut()), statut());
-  await jouer("c7c8r"); await pause(1800);
+  await jouer("c7c8r"); await pause(900);
+  /* 24/11 : apres le coup noir, c'est au joueur de faire le mat (tout mat est accepte). */
+  T("apres la promotion, le joueur fait lui-meme le mat", ev("lecon.suite") === 1 && ev("lecon.ok") === false);
+  await jouer("c8a8"); await pause(200);
   T("la tour est acceptee, et la suite montre le mat", ev("lecon.ok") === true && ev("game.isCheckmate()") === true && /Pat évité/.test(statut()), statut());
   w.close();
 

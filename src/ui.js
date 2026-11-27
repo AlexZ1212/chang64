@@ -631,6 +631,8 @@ let ticTemps=false;
 /* Pose par le bandeau de fin : on vient de choisir, inutile de redemander. */
 let skipReady=false;
 let readyStatus="";
+/* Cadence affichee par la fenetre « Pret » : gardee pour la rouvrir au retour sur la partie (27/11). */
+let readyTc="";
 function clockDrain(){
   if(awaitingStart)return;
   if(!clock.enabled||clock.active===null||isFlagged())return;
@@ -1947,6 +1949,7 @@ function newGame(){
        pour le restituer au demarrage : il porte la cadence, que l'overlay
        remplace temporairement par son invite. */
     readyStatus=s.textContent;
+    readyTc=tcTxt;
     showReady(tcTxt);
     return;                      /* l'ordinateur attend, lui aussi */
   }

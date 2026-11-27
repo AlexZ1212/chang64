@@ -1914,6 +1914,11 @@ setMode=function(m,opts){
   }
   const pa=$("pane-analyse"); if(pa)pa.classList.add("hide");
   prevSetModeAnalyse(m,opts);
+  /* Bug signale le 27/11 : quitter une nouvelle partie pendant que la fenetre
+     « Pret » etait ouverte la masquait (plus haut), mais la partie restait en
+     attente du depart ; au retour, plus de bouton et une pendule figee. On
+     rouvre donc la fenetre tant que la partie n'a pas ete lancee. */
+  if(m==="play"&&awaitingStart&&game&&typeof showReady==="function"){const rb=$("readyBanner");if(rb&&rb.classList.contains("hide"))showReady(readyTc);}
 };
 
 /* ==========================================================

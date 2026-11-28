@@ -82,6 +82,22 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("la marge provisoire part avec le clavier", /focusout[\s\S]{0,200}paddingBottom = clavier\.marge/.test(nav));
   }
 
+  console.log("--- 9. Un seul onglet actif (Analyser ne disparait plus) ---");
+  {
+    const actifs = () => [...d.querySelectorAll('#tabsNav button[aria-current="page"]')].filter(b => !b.hidden).map(b => b.id);
+    ev("setMode('edit')");
+    const ep = $("editPlay");
+    if (ep) ep.click();
+    const a = actifs();
+    T("« Jouer contre l'ordinateur depuis ici » : seul Analyser reste allume", a.length === 1 && a[0] === "tab-edit", a.join(","));
+    ev("setMode('play')");
+    const b = actifs();
+    T("retour sur Jouer : un seul onglet allume", b.length === 1, b.join(","));
+    ev("markTab(document.getElementById('tab-puzzles'),true)");
+    T("markTab eteint les autres onglets de la barre", actifs().join(",") === "tab-puzzles", actifs().join(","));
+    ev("setMode('home')");
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

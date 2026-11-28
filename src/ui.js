@@ -3515,9 +3515,17 @@ function renderDailyChips(){
    #tabsNav dans template.html). aria-current s'enleve quand il est faux,
    la ou aria-selected se mettait a "false" : c'est la convention de
    l'attribut, un aria-current="false" partout serait du bruit. */
+/* 27/11 (capture d'Alexandre : « Analyser » presque invisible) : un seul
+   onglet actif a la fois dans la barre. « Jouer contre l'ordinateur depuis
+   ici » allumait Analyser sans eteindre Jouer ; la pastille laiton restait
+   sur Jouer et Analyser prenait le texte sombre fait pour la pastille. */
 function markTab(el,actif){
   if(!el)return;
   el.removeAttribute("aria-selected");
+  /* Les onglets caches (tab-play, tab-friend, anciens « Jouer » et « Entre
+     amis ») gardent leur marque : du code s'en sert encore. */
+  if(actif&&!el.hidden&&el.parentElement&&el.parentElement.id==="tabsNav")
+    for(const b of el.parentElement.querySelectorAll('button[aria-current="page"]'))if(b!==el&&!b.hidden)b.removeAttribute("aria-current");
   if(actif)el.setAttribute("aria-current","page");
   else el.removeAttribute("aria-current");
 }

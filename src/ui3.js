@@ -1675,6 +1675,7 @@ if($("editPlay"))$("editPlay").onclick=()=>{
      surbrillance change, le contenu affiche est bien celui du mode Jouer. */
   const tp=$("tab-play"),te=$("tab-edit");
   markTab(tp,false);
+  markTab($("tab-jouer"),false);
   markTab(te,true);
 };
 

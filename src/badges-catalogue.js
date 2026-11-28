@@ -600,7 +600,7 @@ const BADGES_CATALOGUE = [
   ["mp_50","parties_membres","50 parties terminées contre des membres","Londres 1851","un roi et une coupe",
    "Le premier tournoi international d'échecs s'est joué à Londres en 1851 ; l'Allemand Adolf Anderssen l'a gagné. Cinquante parties : tu as l'endurance d'un joueur de tournoi."],
   ["mp_david","parties_membres","Battre un membre qui a au moins 100 points d'Elo de plus que toi","David contre Goliath","un petit pion face à une grande tour",
-   "Avec 100 points d'Elo d'avance, la formule donne environ 64 % des points au mieux classé. Soixante-quatre, comme les cases de l'échiquier, et tu viens de la faire mentir."],
+   "Avec 100 points d'Elo d'avance, la formule donne environ 64% des points au mieux classé. Soixante-quatre, comme les cases de l'échiquier, et tu viens de la faire mentir."],
   ["mp_revanche","parties_membres","Terminer une revanche en direct","Match retour","deux cavaliers face à face et une flèche qui boucle",
    "Battu par Alekhine en 1927, Capablanca a réclamé une revanche pendant des années : elle n'a jamais eu lieu. Toi, tu as eu la tienne tout de suite."],
   ["mp_hasard","parties_membres","Terminer une partie contre un adversaire tiré au hasard","Système suisse","un dé",

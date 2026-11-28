@@ -30,8 +30,8 @@ const lire = f => fs.readFileSync(path.join(SRC, f), "utf8");
   T("une tuile de motif : « 900 exercices | 3 résolus »", tuile && /exercices \| 3 r/.test(net(tuile.textContent)), tuile && tuile.textContent);
 
   console.log("--- Pourcentages ---");
-  T("en francais, espace fine insecable avant « % »", ev("pourcentTexte(.62)") === "62 %", JSON.stringify(ev("pourcentTexte(.62)")));
-  T("jamais l'espace insecable pleine", !/ %/.test(ev("pourcentTexte(.5)")));
+  T("en francais, « 62% » colle (Alexandre, 27/11 : plus d'espace avant « % »)", ev("pourcentTexte(.62)") === "62%", JSON.stringify(ev("pourcentTexte(.62)")));
+  T("aucune espace avant « % »", !/[\s\u00a0\u202f]%/.test(ev("pourcentTexte(.5)")));
   T("les statistiques s'en servent", /pourcentTexte\(v\/tot\)/.test(lire("menu.js")) && /pourcentTexte\(acc\/100\)/.test(lire("ui2.js")));
   console.log("--- Coches de reussite : la forme d'Apprendre partout ---");
   const page = fs.readFileSync(path.join(SRC, "site", "fr", "index.html"), "utf8");

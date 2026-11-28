@@ -20,11 +20,11 @@ let LANG=PAGE_LANGUE.lang||"en";
 const DICT=PAGE_LANGUE.dict||{};
 const LANG_INTL=PAGE_LANGUE.intl||"en-US";
 const LANG_HTML=PAGE_LANGUE.html||LANG;
-/* Un pourcentage dans la langue de la page (2026-11-24, demande d'Alexandre).
-   Intl met une espace insecable PLEINE avant « % » en francais, allemand,
-   russe et espagnol : trop large. On la remplace par l'espace fine
-   insecable (U+202F), comme le veut la typographie francaise. L'anglais
-   et l'italien n'ont pas d'espace, le turc ecrit « %62 ». */
+/* Un pourcentage dans la langue de la page. Le 24/11 on mettait une espace
+   fine avant « % » ; le 27/11 Alexandre l'a retiree : « Enlever les espaces
+   entre le chiffre et pourcentage. De maniere generale ». Intl en met une
+   (pleine ou fine) en francais, allemand, russe, espagnol : on l'enleve.
+   Le turc garde son ordre « %62 », colle lui aussi. */
 /* Coche de reussite et croix d'echec communes (2026-11-24), dessinees en CSS
    (.coche-ok, .croix-ko). Les textes traduits gardent leur « ✓ » et « ✗ » :
    symbolesHtml() les remplace a l'affichage, sur un texte deja echappe. */
@@ -34,7 +34,7 @@ function symbolesHtml(h){return String(h).replace(/✓/g,cocheHtml()).replace(/�
 function pourcentTexte(v){
   let s;
   try{s=new Intl.NumberFormat(LANG_INTL,{style:"percent",maximumFractionDigits:0}).format(v);}catch(e){s=Math.round(100*v)+"%";}
-  return s.replace(/[\s  ]+%/," %").replace(/%[\s  ]+/,"% ");
+  return s.replace(/[\s\u00a0\u202f]+%/,"%").replace(/%[\s\u00a0\u202f]+/,"%");
 }
 /* Un mot court ne doit pas rester seul en fin de ligne : "Exercice du /
    jour" ou "Suggerer un / coup" se lisent mal dans un bouton etroit. On lie

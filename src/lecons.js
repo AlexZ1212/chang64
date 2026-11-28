@@ -349,16 +349,20 @@
       try {
         const h = hote("bravoLecon", $i("bravoLien"));
         poser(h, "");
-        quandPret(() => { if ($i("bravo") && !$i("bravo").hidden) poser(h, badgeHtml(id)); });
+        /* bxFiche pose le lien avant d'ouvrir la fiche : on ne lit donc pas si
+           elle est visible. Le badge est relu au moment de poser. */
+        quandPret(() => { if ($i("bravoLecon") === h) poser(h, badgeHtml(id)); });
       } catch (e) {}
       return r;
     };
   }
 
   /* ---------- P8. Fin de chapitre d'Apprendre ---------- */
-  function chapitrePlus() {
+  function chapitrePlus(et, ex) {
     const h = hote("leconPlus", $i("leconTheme"));
     if (!h) return;
+    /* Seulement sur l'ecran du boss, qui termine le chapitre. */
+    if (ex || !et || !et.boss) { poser(h, ""); return; }
     const id = typeof leconCh !== "undefined" ? leconCh : "";
     quandPret(() => {
       let v = "";
@@ -371,7 +375,7 @@
   }
   if (typeof leconFinRendre === "function") {
     const av = leconFinRendre;
-    leconFinRendre = function () { const r = av.apply(this, arguments); try { chapitrePlus(); } catch (e) {} return r; };
+    leconFinRendre = function (et, ex) { const r = av.apply(this, arguments); try { chapitrePlus(et, ex); } catch (e) {} return r; };
   }
   /* L'ecran de fin de chapitre partage sa place avec les lecons : on retire
      la ligne des que l'ecran repart sur une lecon. */

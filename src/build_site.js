@@ -1230,6 +1230,13 @@ padding:11px 20px;border-radius:var(--r);margin:6px 8px 6px 0;transition:backgro
 .cta.ghost:hover{background:var(--survol)}
 .cta:active{transform:scale(.96)}
 .cta:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+/* Liens discrets sous les boutons des pages Apprendre (2026-11-28, accord
+   d'Alexandre) : « Jouer une partie » et « Retour a l'index », cote a cote,
+   comme « Signaler cet exercice » dans l'application. */
+.liens-bas{display:flex;flex-wrap:wrap;justify-content:center;gap:0 22px;margin:8px 0 0}
+.liens-bas a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;color:var(--sage);text-decoration:underline;text-underline-offset:3px}
+.liens-bas a:hover{color:var(--chalk)}
+.voir-aussi{font-size:14px;color:var(--sage)}
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px;padding:14px;background:var(--slate);
 border:1px solid var(--rule);border-radius:var(--r-l)}
 .toc a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;text-decoration:none;

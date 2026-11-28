@@ -65,6 +65,32 @@ for (const l of Object.keys(LABEL_VOIR)) {
 }
 T("une lecon sans motif ni mot (le roque) n'a pas de ligne", !/class="voir-aussi"/.test(lire("learn/castling")));
 
+console.log("--- Pages Apprendre : deux boutons au plus, le reste en liens (accord d'Alexandre, 28/11) ---");
+{
+  const idx = adresses("learn/index"), trop = [], sansLiens = [];
+  for (const l of LANGUES) {
+    const dir = path.join(SITE, path.dirname(idx[l] + "x"));
+    for (const f of fs.readdirSync(dir).filter(x => x.endsWith(".html") && x !== "index.html")) {
+      const h = fs.readFileSync(path.join(dir, f), "utf8"), main = h.slice(h.indexOf("<main"), h.indexOf("</main>"));
+      const ctas = (main.match(/class="cta( ghost)?"/g) || []).length;
+      if (ctas > 2) trop.push(l + ":" + f + " (" + ctas + ")");
+      if (!/<p class="liens-bas">(<a href="[^"]+">[^<]+<\/a>){1,2}<\/p>/.test(main)) sansLiens.push(l + ":" + f);
+    }
+  }
+  T("aucune page n'a plus de deux boutons (10 langues)", !trop.length, trop.slice(0, 5).join(" | "));
+  T("chaque page a sa ligne de liens discrets", !sansLiens.length, sansLiens.slice(0, 5).join(" | "));
+  for (const l of LANGUES) {
+    const A = adresses("learn/knight-fork"), m = lire(A[l]).match(/<p class="liens-bas">([\s\S]*?)<\/p>/);
+    const hrefs = m ? [...m[1].matchAll(/href="([^"]+)"/g)].map(x => x[1]) : [];
+    const accueil = l === "en" ? "/" : "/" + l + "/", index = adresses("learn/index")[l];
+    if (l === "fr" || l === "de") T(l + " : fourchette de cavalier, deux boutons puis « Jouer une partie » et « Retour a l'index » en liens",
+      (lire(A[l]).match(/class="cta( ghost)?"/g) || []).length === 2 && hrefs.join(" ") === accueil + " " + index, hrefs.join(" "));
+  }
+  const cad = lire(adresses("learn/time-controls").fr);
+  T("une page sans motif ni position (les cadences) garde « Jouer une partie » en bouton, l'index en lien",
+    /<a class="cta" href="\/fr\/">Jouer une partie<\/a><p class="liens-bas"><a href="\/fr\/apprendre\/">Retour à l'index<\/a><\/p>/.test(cad));
+}
+
 console.log("--- Aucun lien casse ---");
 {
   const casses = [];
@@ -80,5 +106,5 @@ console.log("--- Aucun lien casse ---");
   T("tous les liens ajoutes, dans les 10 langues, menent a une page", !casses.length, casses.slice(0, 5).join(" | "));
 }
 
-console.log("\n" + ok + " OK, " + ko + " echec(s)");
+console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
 process.exit(ko ? 1 : 0);

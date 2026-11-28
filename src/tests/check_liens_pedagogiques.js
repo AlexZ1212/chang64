@@ -210,9 +210,12 @@ const poserAnalyse = (w, n, fautes) => w.eval("(function(){const F=" + JSON.stri
 
   console.log("--- P8. Fin de chapitre d'Apprendre ---");
   {
-    ev("leconCh='finales';leconFinRendre&&0");
-    /* leconFinRendre a besoin d'un chapitre charge : on appelle la partie de lecons.js seule, par son hote. */
-    const tester = id => { ev("leconCh=" + JSON.stringify(id)); try { ev("leconFinRendre({boss:null},0)"); } catch (e) {} };
+    await ev("cheminPret(true)");
+    /* Le chapitre, sur l'ecran de son boss (derniere etape), comme en vrai. */
+    const tester = id => ev("cheminActiver(" + JSON.stringify(id) + ");setMode('debut');lecon.e=leconEtapes().length-1;lecon.x=0;debutCharger()");
+    ev("cheminActiver('finales');setMode('debut');lecon.e=0;lecon.x=0;debutCharger()");
+    await pause(30);
+    T("pendant une lecon du chapitre : rien", !$("leconPlus") || $("leconPlus").hidden);
     tester("finales");
     await pause(30);
     T("chapitre 8 : « Pour aller plus loin » et les Finales", $("leconPlus") && !$("leconPlus").hidden && /Pour aller plus loin/.test($("leconPlus").textContent) && !!$("leconPlus").querySelector("[data-finales]"), $("leconPlus") && $("leconPlus").innerHTML.slice(0, 200));
@@ -239,6 +242,6 @@ const poserAnalyse = (w, n, fautes) => w.eval("(function(){const F=" + JSON.stri
     wl.close();
   }
 
-  console.log("\n" + ok + " OK, " + ko + " echec(s)");
+  console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);
 })();

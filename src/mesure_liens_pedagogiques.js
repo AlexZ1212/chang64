@@ -120,6 +120,7 @@ const ECRANS = {
     },
     async controle(c) {
       const pb = await controleStd("#bravoLecon")(c);
+      if (!await c.js(`!!document.querySelector('#bravo:not([hidden]) #bravoLecon .lecon-volet')`)) pb.push("pas de volet dans la fiche du badge");
       /* La fiche ne doit pas pousser « Continuer » hors de l'ecran sans qu'on puisse defiler. */
       const vu = await c.js(`(function(){const b=document.getElementById('bravoOk');b.scrollIntoView({block:'nearest'});const r=b.getBoundingClientRect();return r.bottom<=innerHeight+1&&r.top>=0})()`);
       if (!vu) pb.push("« Continuer » n'est pas atteignable dans la fiche");
@@ -129,17 +130,26 @@ const ECRANS = {
   },
   badgefinale: {
     async prepare(c) { await c.js(`bxFiche('eg_kbn');1`); await c.attendre(800); },
-    controle: controleStd("#bravoLecon"),
+    async controle(c) {
+      const pb = await controleStd("#bravoLecon")(c);
+      if (!await c.js(`!!document.querySelector('#bravo:not([hidden]) #bravoLecon .lecon-aller')`)) pb.push("pas de lien vers la finale dans la fiche");
+      return pb;
+    },
     capture: "#bravoLecon"
   },
   chapitre: {
     async prepare(c) {
-      await c.js(`(async()=>{await cheminPret(true);leconCh='ouverture';try{leconFinRendre({boss:null},0)}catch(e){};setMode('debut');document.getElementById('leconPlus')&&document.getElementById('leconPlus').scrollIntoView();return 1})()`);
+      /* Le chapitre 7 ouvert, sur l'ecran de son boss (derniere etape). */
+      await c.js(`(async()=>{await cheminPret(true);cheminActiver('ouverture');setMode('debut');lecon.e=leconEtapes().length-1;lecon.x=0;debutCharger();await new Promise(r=>setTimeout(r,300));document.getElementById('leconBoss').scrollIntoView();return 1})()`);
       await c.attendre(400);
       await c.js(deplier("#leconPlus"));
       await c.attendre(200);
     },
-    controle: controleStd("#leconPlus"),
+    async controle(c) {
+      const pb = await controleStd("#leconPlus")(c);
+      if (!await c.js(`!!document.querySelector('#leconBoss:not(.hide) #leconPlus .lecon-volet')`)) pb.push("pas de « Pour aller plus loin » sur l'ecran du boss");
+      return pb;
+    },
     capture: "#leconPlus"
   },
   elo: {
@@ -160,11 +170,18 @@ const ECRANS = {
     /* Pages du site : la ligne « Voir aussi » d'une lecon, « Pour comprendre »
        du lexique et des exemples. */
     page: true,
-    async controle(c) { return [...await c.js(`__m.deborde("main")`), ...await c.js(`__m.debuts(".voir-aussi")`), ...await c.js(`__m.cesures(".voir-aussi")`)]; },
+    async controle(c) {
+      const pb = [...await c.js(`__m.deborde("main")`), ...await c.js(`__m.debuts(".voir-aussi")`), ...await c.js(`__m.cesures(".voir-aussi")`),
+        ...await c.js(`__m.uneLigne(".liens-bas a")`)];
+      /* « Jouer une partie » et « Retour a l'index » cote a cote, sur une seule ligne. */
+      const tops = await c.js(`[...document.querySelectorAll(".liens-bas a")].map(a=>Math.round(a.getBoundingClientRect().top))`);
+      if (new Set(tops).size > 1) pb.push("les liens du bas ne tiennent pas sur une seule ligne");
+      return pb;
+    },
     capture: ".voir-aussi"
   }
 };
-const PAGES = ["learn/knight-fork", "glossary/threefold-repetition", "puzzles/pin"];
+const PAGES = ["learn/knight-fork", "learn/time-controls", "glossary/threefold-repetition", "puzzles/pin"];
 
 (async () => {
   fs.mkdirSync(SORTIE, { recursive: true });

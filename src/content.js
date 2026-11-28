@@ -768,10 +768,15 @@ module.exports = function (H) {
     ${explorable
       ? `<a class="cta${themeEntrainable(r.slug.en) ? " ghost" : ""}" href="${accueil(lang)}#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
       : ""}
+    ${/* Deux boutons au plus (2026-11-28, accord d'Alexandre) : « Entraine-toi »
+          et « Explore cette position » restent des boutons ; « Jouer une
+          partie » et « Retour a l'index » deviennent deux liens discrets cote
+          a cote dessous, dans le style de « Signaler cet exercice » (centres,
+          soulignes, sans fleche). Une page sans aucun des deux boutons garde
+          « Jouer une partie » en bouton : sinon elle n'en aurait plus aucun. */""}
     ${themeEntrainable(r.slug.en) || explorable
-      ? `<a class="cta ghost" href="${accueil(lang)}">${u.play}</a>`
-      : `<a class="cta" href="${accueil(lang)}">${u.play}</a>`}
-    <a class="cta ghost" href="/${dir}/">${u.back}</a>
+      ? `<p class="liens-bas"><a href="${accueil(lang)}">${u.play}</a><a href="/${dir}/">${u.back}</a></p>`
+      : `<a class="cta" href="${accueil(lang)}">${u.play}</a><p class="liens-bas"><a href="/${dir}/">${u.back}</a></p>`}
   </div>
 </div>`;
       page(lang, dir, R.slug + ".html", R.title + " | chang64",

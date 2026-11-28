@@ -560,7 +560,7 @@ module.exports = {
 "Place a king for each side.":"Letakkan raja untuk setiap pihak.",
 "Place a white king.":"Letakkan raja putih.",
 "Place a black king.":"Letakkan raja hitam.",
-"Play against the computer from here":"Main melawan komputer dari sini",
+"Play against the computer from here":"Main melawan komputer dari sini","Computer strength":"Kekuatan komputer",
 "Analyse this position":"Analisis posisi ini",
 "Back to the editor":"Kembali ke editor",
 "Daily puzzle calendar":"Kalender teka-teki harian",

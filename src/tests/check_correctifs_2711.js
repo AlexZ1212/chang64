@@ -65,7 +65,7 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
   {
     const css = lire("template.html");
     T("rangee des pastilles d'erreurs : degrade colle au bord, sur toute la hauteur, sans arrondi", /\.erreurs-defile::before,\.erreurs-defile::after\{top:0;bottom:0;width:44px;border-radius:0\}/.test(css) && /\.erreurs-defile::before\{left:0;/.test(css) && /\.erreurs-defile::after\{right:0;/.test(css));
-    T("toutes les rangees : partie opaque plus large (40 px, opaque a 55 %)", /\.defile::before,\.defile::after\{[^}]*width:40px/.test(css) && !/var\(--ink\) 45%,transparent/.test(css));
+    T("toutes les rangees : partie opaque plus large (44 px, opaque a 70 %)", /\.defile::before,\.defile::after\{[^}]*width:44px/.test(css) && (css.match(/var\(--ink\) 70%,transparent/g) || []).length === 4);
   }
 
   console.log("--- 1. Ma progression : ni cesure ni grand interligne ---");
@@ -182,6 +182,20 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("une imprecision dit seulement le coup prefere", det && /^Le coach préférait /.test(net(det.querySelector(".coach-ligne span").textContent)), det && det.querySelector(".coach-ligne span").textContent);
     T("sous l'echiquier, une imprecision reste sans phrase du coach", ev("coachPli(0)") === null);
     T("traduit dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => /"See the inaccuracy":/.test(lire("langues/" + l + "/app.js")) && /"See the \{n\} inaccuracies":/.test(lire("langues/" + l + "/app.js"))));
+    ev("setMode('home')");
+  }
+
+  console.log("--- 10. Force de l'ordinateur depuis Analyser ---");
+  {
+    const r = $("editLevel");
+    T("cinq forces, avec leur Elo, au-dessus de « Jouer contre l'ordinateur depuis ici »", r && r.children.length === 5 && !!r.closest(".btnrow") && (r.closest(".edit-force").compareDocumentPosition($("editPlay")) & w.Node.DOCUMENT_POSITION_FOLLOWING));
+    T("le titre est traduit", net(d.querySelector(".edit-force-titre").textContent) === "Force de l'ordinateur");
+    ev("setMode('edit')");
+    r.querySelector('[data-v="6"]').click();
+    T("choisir « Tout doux » ici le choisit pour la partie", ev("botLevel") === 6 && $("segLevel").querySelector('[data-v="6"]').getAttribute("aria-pressed") === "true");
+    $("segLevel").querySelector('[data-v="3"]').click();
+    T("et un choix fait dans Contre l'ordinateur se retrouve ici", r.querySelector('[data-v="3"]').getAttribute("aria-pressed") === "true");
+    T("« Jouer contre l'ordinateur depuis ici » joue a cette force", (ev("(function(){game=new Game();editTurnVal='w';$('editPlay').click();return botLevel})()")) === 3);
     ev("setMode('home')");
   }
 

@@ -1665,6 +1665,36 @@ if($("editFenLoad"))$("editFenLoad").onclick=()=>{
 /* pendingStartFen : consomme par newGame() (ui.js) pour demarrer une partie
    depuis cette position plutot que depuis le depart standard, sans changer
    la signature de newGame() (appelee sans argument partout ailleurs). */
+/* La force de l'ordinateur, choisie depuis Analyser (27/11) : les cinq
+   boutons de Contre l'ordinateur recopies (noms traduits, Elo), lies au meme
+   botLevel ; « S'adapter a mon niveau » se regle dans Contre l'ordinateur. */
+function editForceSync(){
+  const r=$("editLevel");if(!r)return;
+  for(const b of r.children)b.setAttribute("aria-pressed",String(botLevel!==NIVEAU_MESURE&&+b.dataset.v===botLevel));
+  /* La force choisie reste visible dans la rangee, comme dans Contre l'ordinateur. */
+  const actif=r.querySelector('[aria-pressed="true"]');
+  if(actif&&r.clientWidth&&(actif.offsetLeft<r.scrollLeft||actif.offsetLeft+actif.offsetWidth>r.scrollLeft+r.clientWidth))
+    r.scrollLeft=Math.max(0,actif.offsetLeft-(r.clientWidth-actif.offsetWidth)/2);
+  if(typeof defileMaj==="function"&&r.parentNode)defileMaj(r.parentNode);
+}
+function editForceRemplir(){
+  const r=$("editLevel"),src=$("segLevel");if(!r||!src)return;
+  poserHtml(r,src.innerHTML);
+  for(const b of r.children){b.type="button";b.setAttribute("aria-pressed","false");}
+  editForceSync();
+  if(typeof defileBrancher==="function")defileBrancher(r);
+}
+if($("editLevel")){
+  editForceRemplir();
+  $("editLevel").addEventListener("click",e=>{
+    const b=e.target.closest("button");if(!b)return;
+    botLevel=+b.dataset.v;eloPartieFixe=null;
+    if(typeof syncForce==="function")syncForce();
+    editForceSync();
+  });
+  /* Un changement fait dans Contre l'ordinateur se retrouve ici. */
+  const av=syncForce;syncForce=function(){const r=av.apply(this,arguments);editForceSync();return r;};
+}
 if($("editPlay"))$("editPlay").onclick=()=>{
   if(game.kingSq[W]<0||game.kingSq[B]<0)return;
   pendingStartFen=game.fen();
@@ -1726,6 +1756,7 @@ setMode=function(m,opts){
     editGame=null;
     editSyncTurnSeg();
     editRefresh();
+    if(typeof editForceSync==="function")requestAnimationFrame(editForceSync);
     return;
   }
   const pe=$("pane-edit"); if(pe)pe.classList.add("hide");

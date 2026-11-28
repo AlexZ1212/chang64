@@ -560,7 +560,7 @@ module.exports = {
 "Place a king for each side.":"Stell für jede Seite einen König auf.",
 "Place a white king.":"Stell einen weißen König auf.",
 "Place a black king.":"Stell einen schwarzen König auf.",
-"Play against the computer from here":"Von hier aus gegen den Computer spielen",
+"Play against the computer from here":"Von hier aus gegen den Computer spielen","Computer strength":"Stärke des Computers",
 "Analyse this position":"Diese Stellung analysieren",
 "Back to the editor":"Zurück zum Editor",
 "Daily puzzle calendar":"Kalender der Tagesaufgaben",

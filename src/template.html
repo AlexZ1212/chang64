@@ -579,6 +579,9 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    l'ordinateur depuis ici » chacun sur sa rangee, pour qu'aucun des deux
    libelles ne passe sur deux lignes (mesure du 2026-11-22, dix langues). */
 @media(max-width:599px){#editAnalyse,#editPlay{flex:1 1 100%}}
+.edit-force{flex:1 1 100%;min-width:0;margin-top:4px}
+.edit-force-titre{margin:0 0 6px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}
+.edit-force .defile{margin-bottom:0}
 /* 27/11 (choix B d'Alexandre) : meme style que « Signaler cet exercice »,
    centre, souligne, sans fleche. */
 .home-stats-lien{margin:8px 0 0;text-align:center}
@@ -1160,12 +1163,12 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .defile>.tc-cats{margin-bottom:0;scrollbar-width:none}
 .defile>.tc-cats::-webkit-scrollbar{display:none}
 .defile>.tc-cats button{flex:1 0 auto}
-.defile::before,.defile::after{content:"";position:absolute;top:1px;bottom:1px;width:40px;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+.defile::before,.defile::after{content:"";position:absolute;top:1px;bottom:1px;width:44px;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
   background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%}
 .defile::before{left:1px;border-radius:var(--r) 0 0 var(--r);background-position:7px center,0 0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 55%,transparent)}
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 70%,transparent)}
 .defile::after{right:1px;border-radius:0 var(--r) var(--r) 0;background-position:right 7px center,0 0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 55%,transparent)}
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 70%,transparent)}
 .defile.has-scroll-left::before,.defile.has-scroll-right::after{opacity:1}
 #directAmisBloc{margin-bottom:8px}
 .membres-trouves{margin-top:8px}
@@ -2543,8 +2546,8 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
    cadre, laissait voir un bout de lettre au bord et le trait des pastilles
    dessus et dessous. Ici il couvre tout, du bord jusqu'au milieu. */
 .erreurs-defile::before,.erreurs-defile::after{top:0;bottom:0;width:44px;border-radius:0}
-.erreurs-defile::before{left:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 60%,transparent)}
-.erreurs-defile::after{right:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 60%,transparent)}
+.erreurs-defile::before{left:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 70%,transparent)}
+.erreurs-defile::after{right:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 70%,transparent)}
 .erreurs-pastilles{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:1px 0}
 .erreurs-pastilles::-webkit-scrollbar{display:none}
 .erreurs-pastille{flex:none;padding:5px 11px;border-radius:999px;background-color:var(--raise);border:1px solid var(--rule);font-size:13px;line-height:1.3;color:var(--chalk);white-space:nowrap}
@@ -3619,6 +3622,14 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="panel">
           <div class="btnrow">
             <button class="btn primary" id="editAnalyse">Analyse this position</button>
+            <!-- Force de l'ordinateur juste au-dessus de « Jouer contre
+                 l'ordinateur depuis ici » (27/11, choix d'Alexandre : la force
+                 seule). Memes cinq forces que Contre l'ordinateur, recopiees
+                 par editForceRemplir() (ui3.js), et le meme botLevel. -->
+            <div class="edit-force">
+              <p class="edit-force-titre" id="editForceTitre">Computer strength</p>
+              <div class="defile" id="editLevelDefile"><div class="tc-cats seg-force" id="editLevel" role="group" aria-labelledby="editForceTitre"></div></div>
+            </div>
             <button class="btn" id="editPlay">Play against the computer from here</button>
           </div>
         </div>

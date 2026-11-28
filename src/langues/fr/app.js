@@ -407,7 +407,7 @@ module.exports = {
 "A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Une courte ligne de texte qui décrit une position : quelle pièce sur quelle case, à qui le trait. C'est la façon standard de sauvegarder ou partager une position, lisible par la plupart des sites et logiciels d'échecs.",
 "Could not read that FEN.":"Ce FEN est illisible.","Each side needs exactly one king.":"Chaque camp doit avoir exactement un roi.",
 "Place a king for each side.":"Place un roi pour chaque camp.","Place a white king.":"Place un roi blanc.","Place a black king.":"Place un roi noir.",
-"Play against the computer from here":"Jouer contre l'ordinateur depuis ici",
+"Play against the computer from here":"Jouer contre l'ordinateur depuis ici","Computer strength":"Force de l'ordinateur",
 "Analyse this position":"Analyser cette position","Back to the editor":"Retour à l'éditeur",
 "Daily puzzle calendar":"Calendrier des exercices du jour",
 "By pattern":"Par motif",

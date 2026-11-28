@@ -257,6 +257,29 @@ const POINTS = {
     },
     capture: "#coachListe .coach-plus"
   },
+  "10": {
+    async prepare(c) {
+      await c.js(`setMode('edit');1`); await c.attendre(1200);
+      await c.js(`document.getElementById('editLevel').scrollIntoView({block:'center'});1`); await c.attendre(400);
+    },
+    async controle(c) {
+      const pb = [];
+      const r = await c.js(`(function(){const r=document.getElementById('editLevel');if(!r)return "absent";const b=[...r.children];
+        const p=document.getElementById('editPlay').getBoundingClientRect(),f=r.getBoundingClientRect();
+        return {n:b.length,actif:(b.find(x=>x.getAttribute('aria-pressed')==='true')||{}).dataset,au_dessus:f.bottom<=p.top+1,elo:b.every(x=>/\\d/.test(x.textContent)),chevron:r.parentNode.classList.contains('defile')}})()`);
+      if (typeof r === "string") return [r];
+      if (r.n !== 5) pb.push(r.n + " forces au lieu de 5");
+      if (!r.au_dessus) pb.push("la rangee n'est pas au-dessus du bouton Jouer");
+      if (!r.elo) pb.push("Elo manquant sur une force");
+      pb.push(...await c.js(`__m.deborde(".edit-force", ".defile")`), ...await c.js(`__m.uneLigne("#editLevel .seg-nom, #editPlay, #editAnalyse, .edit-force-titre")`));
+      /* Choisir « Coriace » ici le choisit aussi dans Contre l'ordinateur. */
+      const lie = await c.js(`(function(){document.querySelector('#editLevel [data-v="4"]').click();return botLevel===4&&document.querySelector('#segLevel [data-v="4"]').getAttribute('aria-pressed')==='true'})()`);
+      if (!lie) pb.push("le choix n est pas le meme que Contre l ordinateur");
+      await c.attendre(300);
+      return pb;
+    },
+    capture: ".edit-force"
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute

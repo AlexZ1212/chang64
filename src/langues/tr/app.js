@@ -560,7 +560,7 @@ module.exports = {
 "Place a king for each side.":"Her taraf için bir şah yerleştir.",
 "Place a white king.":"Beyaz bir şah yerleştir.",
 "Place a black king.":"Siyah bir şah yerleştir.",
-"Play against the computer from here":"Buradan bilgisayara karşı oyna",
+"Play against the computer from here":"Buradan bilgisayara karşı oyna","Computer strength":"Bilgisayarın gücü",
 "Analyse this position":"Bu pozisyonu analiz et",
 "Back to the editor":"Düzenleyiciye dön",
 "Daily puzzle calendar":"Günün bulmacası takvimi",

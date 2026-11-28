@@ -1923,6 +1923,14 @@ header>*{min-width:0}
 .coach-ligne b{display:block;margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--brass)}
 .coach-ligne.sans{border-left-color:var(--brass)}
 .coach-ligne.bien{border-left-color:var(--jade)}
+/* Les imprecisions, repliees sous le reste (27/11). */
+.coach-plus{list-style:none}
+.coach-plus summary{min-height:44px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--sage)}
+.coach-plus summary::-webkit-details-marker{display:none}
+.coach-plus summary::before{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform var(--duree-courte)}
+.coach-plus details[open] summary::before{transform:rotate(45deg)}
+.coach-imprecisions{margin:4px 0 0;padding:0}
+.coach-imprecisions .coach-ligne{border-left-color:var(--rule)}
 .coach-ligne:hover span{text-decoration:underline}
 .coach-ligne:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 #coachExoNote{margin:10px 0 8px}

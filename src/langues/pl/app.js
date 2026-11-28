@@ -1319,6 +1319,7 @@ module.exports = {
 "No blunder and no mistake on your side. Well played!":"Żadnego grubego błędu ani błędu po twojej stronie. Dobra gra!",
 "{n} moment to review. Tap the line to see the position.":"{n} moment do obejrzenia. Dotknij wiersza, żeby zobaczyć pozycję.",
 "{n} moments to review. Tap a line to see the position.":{"one":"{n} moment do obejrzenia. Dotknij wiersza, żeby zobaczyć pozycję.","few":"{n} momenty do obejrzenia. Dotknij wiersza, żeby zobaczyć pozycję.","many":"{n} momentów do obejrzenia. Dotknij wiersza, żeby zobaczyć pozycję.","other":"{n} momentu do obejrzenia. Dotknij wiersza, żeby zobaczyć pozycję."},
+"See the inaccuracy":"Zobacz niedokładność","See the {n} inaccuracies":{"one":"Zobacz {n} niedokładność","few":"Zobacz {n} niedokładności","many":"Zobacz {n} niedokładności"},
 "{n} position from this game is in your Mistakes to review.":"{n} pozycja z tej partii jest w twoich Błędach do powtórki.",
 "{n} positions from this game are in your Mistakes to review.":{"one":"{n} pozycja z tej partii jest w twoich Błędach do powtórki.","few":"{n} pozycje z tej partii są w twoich Błędach do powtórki.","many":"{n} pozycji z tej partii jest w twoich Błędach do powtórki.","other":"{n} pozycji z tej partii jest w twoich Błędach do powtórki."},
 "The coach preferred {move}.":"Trener wolał {move}.",

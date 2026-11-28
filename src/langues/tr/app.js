@@ -1319,6 +1319,7 @@ module.exports = {
 "No blunder and no mistake on your side. Well played!":"Senin tarafında ne vahim hata ne de hata var. İyi oynadın!",
 "{n} moment to review. Tap the line to see the position.":"İncelenecek {n} an. Konumu görmek için satıra dokun.",
 "{n} moments to review. Tap a line to see the position.":"İncelenecek {n} an. Konumu görmek için bir satıra dokun.",
+"See the inaccuracy":"Yanlışlığı gör","See the {n} inaccuracies":"{n} yanlışlığı gör",
 "{n} position from this game is in your Mistakes to review.":"Bu oyundan {n} konum Tekrar edilecek hatalar listende.",
 "{n} positions from this game are in your Mistakes to review.":"Bu oyundan {n} konum Tekrar edilecek hatalar listende.",
 "The coach preferred {move}.":"Antrenörün tercihi: {move}.",

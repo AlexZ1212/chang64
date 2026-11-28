@@ -240,6 +240,23 @@ const POINTS = {
     },
     capture: "#readySide"
   },
+  "11": {
+    async prepare(c) {
+      await c.js(`prefAnnounce='moves';ouvrirPartieGardee({m:'e2e4 e7e5 f1c4 b8c6 d2d3 g8f6 c1g5 h7h6 b1c3 h6g5 d1d2 f8e7 g1f3 d7d6 e1g1 c8g4',c:'w',t:Date.UTC(2026,10,21,12),k:'o'},'jeu');1`);
+      await c.attendre(800);
+      await c.js(`(function(){const F={0:{tag:"inacc",loss:60,best:"d2d4"},2:{tag:"mistake",loss:120,best:"g1f3"},4:{tag:"blunder",loss:300,best:"g1f3"},6:{tag:"blunder",loss:310,best:"g5h4"},8:{tag:"mistake",loss:150,best:"g1f3"},10:{tag:"inacc",loss:50,best:"g1f3"},12:{tag:"mistake",loss:140,best:"b1c3"},14:{tag:"inacc",loss:40,best:"f1e1"}},P=[];
+        for(let i=0;i<16;i++){const f=F[i]||{};P.push({cp:0,cpTrue:0,mate:null,loss:f.loss||0,tag:f.tag||null,best:f.best||gameUci[i],mover:i%2,rep:null,pv:null,pvr:null});}finishAnalysis(P,coachPreparerSansMoteur(P));
+        const det=document.querySelector('#coachListe details');if(det)det.open=true;document.getElementById('coachBloc').scrollIntoView({block:'start'});return 1})()`);
+      await c.attendre(500);
+    },
+    async controle(c) {
+      const pb = [];
+      pb.push(...await c.js(`__m.deborde("#coachBloc")`), ...await c.js(`__m.uneLigne("#coachListe summary")`), ...await c.js(`__m.debuts("#coachBloc")`));
+      if (!(await c.js(`!!document.querySelector('#coachListe details[open] .coach-ligne')`))) pb.push("pas d'imprecision depliee");
+      return pb;
+    },
+    capture: "#coachListe .coach-plus"
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute

@@ -167,6 +167,24 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     }
   }
 
+  console.log("--- 11. Le coach montre toutes les gaffes et erreurs, imprecisions repliees ---");
+  {
+    ev("prefAnnounce='moves';ouvrirPartieGardee({m:'e2e4 e7e5 f1c4 b8c6 d2d3 g8f6 c1g5 h7h6 b1c3 h6g5 d1d2 f8e7 g1f3 d7d6 e1g1 c8g4',c:'w',t:Date.UTC(2026,10,21,12),k:'o'},'jeu')");
+    const F = { 0: { tag: "inacc", loss: 60, best: "d2d4" }, 2: { tag: "mistake", loss: 120, best: "g1f3" }, 4: { tag: "blunder", loss: 300, best: "g1f3" }, 6: { tag: "blunder", loss: 310, best: "g5h4" },
+      8: { tag: "mistake", loss: 150, best: "g1f3" }, 10: { tag: "inacc", loss: 50, best: "g1f3" }, 12: { tag: "mistake", loss: 140, best: "b1c3" }, 14: { tag: "inacc", loss: 40, best: "f1e1" } };
+    ev("(function(){const F=" + JSON.stringify(F) + ",P=[];for(let i=0;i<16;i++){const f=F[i]||{};P.push({cp:0,cpTrue:0,mate:null,loss:f.loss||0,tag:f.tag||null,best:f.best||gameUci[i],mover:i%2,rep:null,pv:null,pvr:null});}finishAnalysis(P,coachPreparerSansMoteur(P));})()");
+    await new Promise(r => setTimeout(r, 200));
+    const visibles = [...d.querySelectorAll("#coachListe > li > .coach-ligne")].map(b => b.dataset.ply);
+    T("les 5 gaffes et erreurs sont la (on en montrait 3)", visibles.join(",") === "3,5,7,9,13", visibles.join(","));
+    T("l'intro dit 5 moments", /^5 moments à revoir/.test(net($("coachIntro").textContent)), $("coachIntro").textContent);
+    const det = d.querySelector("#coachListe .coach-plus details");
+    T("les 3 imprecisions sont repliees", det && !det.open && det.querySelectorAll(".coach-ligne").length === 3 && net(det.querySelector("summary").textContent) === "Voir les 3 imprécisions", det && det.querySelector("summary").textContent);
+    T("une imprecision dit seulement le coup prefere", det && /^Le coach préférait /.test(net(det.querySelector(".coach-ligne span").textContent)), det && det.querySelector(".coach-ligne span").textContent);
+    T("sous l'echiquier, une imprecision reste sans phrase du coach", ev("coachPli(0)") === null);
+    T("traduit dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => /"See the inaccuracy":/.test(lire("langues/" + l + "/app.js")) && /"See the \{n\} inaccuracies":/.test(lire("langues/" + l + "/app.js"))));
+    ev("setMode('home')");
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

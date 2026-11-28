@@ -1321,6 +1321,7 @@ module.exports = {
 "No blunder and no mistake on your side. Well played!":"Nenhum erro grave nem erro do seu lado. Bem jogado!",
 "{n} moment to review. Tap the line to see the position.":"{n} momento para revisar. Toque na linha para ver a posição.",
 "{n} moments to review. Tap a line to see the position.":"{n} momentos para revisar. Toque em uma linha para ver a posição.",
+"See the inaccuracy":"Ver a imprecisão","See the {n} inaccuracies":"Ver as {n} imprecisões",
 "{n} position from this game is in your Mistakes to review.":"{n} posição desta partida está nos seus Erros para revisar.",
 "{n} positions from this game are in your Mistakes to review.":"{n} posições desta partida estão nos seus Erros para revisar.",
 "The coach preferred {move}.":"O treinador preferia {move}.",

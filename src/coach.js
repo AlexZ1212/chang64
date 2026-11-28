@@ -466,12 +466,17 @@ function coachPhrase(e,fen,coup,mots){
 }
 /* Ce que le coach dit d'un pli (rang a partir de 0), ou null s'il n'a rien
    a en dire : fautes du joueur et compliments seulement. */
-function coachPli(i,mots){
+function coachPli(i,mots,imprecision){
   if(typeof analysis==="undefined"||!analysis||!analysis.coach||coachInterdit())return null;
-  const a=analysis.plies[i],x=analysis.coach[i];
+  const a=analysis.plies[i];
+  /* Une imprecision n'a pas d'explication calculee : dans le bloc du coach
+     (imprecision vrai, 27/11, imprecisions repliees), elle dit seulement le
+     coup que le coach preferait. Sous l'echiquier, rien ne change. */
+  const imp=!!imprecision&&!!a&&a.tag==="inacc";
+  const x=analysis.coach[i]||(imp?{}:null);
   if(!a||!x||a.mover!==myColor)return null;
   const faute=a.tag==="blunder"||a.tag==="mistake";
-  if(!x.c&&!faute)return null;
+  if(!x.c&&!faute&&!imp)return null;
   const ecrire=s=>mots&&typeof sanEnMots==="function"?sanEnMots(s):s;
   let fen;
   try{fen=rebuildTo(i).game.fen();}catch(e){return null;}
@@ -641,19 +646,28 @@ function coachAfficher(){
   if(typeof analysis==="undefined"||!analysis||!analysis.coach){bloc.classList.add("hide");return;}
   const P=analysis.plies,fautes=[];
   P.forEach((p,i)=>{if(p.mover===myColor&&(p.tag==="blunder"||p.tag==="mistake"))fautes.push(i);});
-  /* Les trois moments les plus couteux, puis un compliment s'il y en a un,
-     dans l'ordre de la partie. */
-  const montres=fautes.slice().sort((a,b)=>P[b].loss-P[a].loss).slice(0,3);
+  /* Toutes les gaffes et erreurs (27/11, choix d'Alexandre : « pourquoi pas
+     plus quand cela le necessite » ; on en montrait trois), puis un compliment
+     s'il y en a un, dans l'ordre de la partie. Les imprecisions suivent,
+     repliees sous « Voir les imprecisions ». */
+  const montres=fautes.slice();
   const nFautes=montres.length;
+  const imprecisions=[];
+  P.forEach((p,i)=>{if(p.mover===myColor&&p.tag==="inacc")imprecisions.push(i);});
   const comp=analysis.coach.findIndex((x,i)=>x&&x.c&&P[i]&&P[i].mover===myColor&&!(P[i].tag==="blunder"||P[i].tag==="mistake"));
   if(comp>=0)montres.push(comp);
   montres.sort((a,b)=>a-b);
   const ech=typeof echapper==="function"?echapper:(s=>String(s).replace(/[&<>"]/g,""));
-  let h="";
-  for(const i of montres){
-    const co=coachPli(i);if(!co)continue;
+  const ligne=i=>{
+    const co=coachPli(i,false,true);if(!co)return "";
     const label=(Math.floor(i/2)+1)+(i%2?"… ":". ")+sanList[i];
-    h+='<li><button type="button" class="coach-ligne'+(co.bien?" bien":co.sans?" sans":"")+'" data-ply="'+(i+1)+'"><b>'+ech(label)+"</b><span>"+ech(co.phrase)+"</span></button></li>";
+    return '<li><button type="button" class="coach-ligne'+(co.bien?" bien":co.sans?" sans":"")+'" data-ply="'+(i+1)+'"><b>'+ech(label)+"</b><span>"+ech(co.phrase)+"</span></button></li>";
+  };
+  let h=montres.map(ligne).join("");
+  const hi=imprecisions.map(ligne).join("");
+  if(hi){
+    const n=imprecisions.length;
+    h+='<li class="coach-plus"><details><summary>'+ech(n===1?t("See the inaccuracy"):t("See the {n} inaccuracies",{n:n}))+'</summary><ul class="coach-liste coach-imprecisions">'+hi+"</ul></details></li>";
   }
   const intro=$("coachIntro"),liste=$("coachListe");
   if(intro)intro.textContent=!fautes.length

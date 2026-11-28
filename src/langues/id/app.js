@@ -1319,6 +1319,7 @@ module.exports = {
 "No blunder and no mistake on your side. Well played!":"Tidak ada blunder maupun kesalahan di pihakmu. Permainan bagus!",
 "{n} moment to review. Tap the line to see the position.":"{n} momen untuk ditinjau. Ketuk barisnya untuk melihat posisinya.",
 "{n} moments to review. Tap a line to see the position.":"{n} momen untuk ditinjau. Ketuk salah satu baris untuk melihat posisinya.",
+"See the inaccuracy":"Lihat ketidakakuratan","See the {n} inaccuracies":"Lihat {n} ketidakakuratan",
 "{n} position from this game is in your Mistakes to review.":"{n} posisi dari partai ini ada di Kesalahan untuk diulang milikmu.",
 "{n} positions from this game are in your Mistakes to review.":"{n} posisi dari partai ini ada di Kesalahan untuk diulang milikmu.",
 "The coach preferred {move}.":"Pilihan pelatih: {move}.",

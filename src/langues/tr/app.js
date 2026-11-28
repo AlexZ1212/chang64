@@ -551,7 +551,7 @@ module.exports = {
 "Pieces":"Taşlar",
 "Side to move":"Hamle sırası",
 "Clear board":"Tahtayı temizle",
-"Copy FEN":"FEN'i kopyala",
+"Copy FEN":"FEN'i kopyala","Paste a FEN here to load it":"Yüklemek için buraya bir FEN yapıştır","FEN to import":"İçe aktarılacak FEN",
 "Load FEN":"FEN yükle",
 "FEN copied to the clipboard.":"FEN panoya kopyalandı.",
 "A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Bir pozisyonu tarif eden kısa bir metin satırı: hangi taş hangi karede, hamle sırası kimde. Bir pozisyonu kaydetmenin ya da paylaşmanın standart yolu; çoğu satranç sitesi ve programı tarafından okunur.",

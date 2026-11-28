@@ -319,6 +319,52 @@ const POINTS = {
     },
     capture: ".cpj-onglets"
   },
+  "fen": {
+    /* Le champ FEN d'Analyser, traduit (demande d'Alexandre du 28/11). */
+    async prepare(c) {
+      await c.js(`setMode('edit');1`); await c.attendre(1200);
+      await c.js(`document.getElementById('editFenIn').scrollIntoView({block:'center'});1`); await c.attendre(300);
+    },
+    async controle(c, l) {
+      const pb = [];
+      const r = await c.js(`(function(){const e=document.getElementById('editFenIn');return {p:e.placeholder,a:e.getAttribute('aria-label'),sh:e.scrollHeight,ch:e.clientHeight}})()`);
+      if (l !== "en" && /Paste a FEN/.test(r.p)) pb.push("placeholder pas traduit : " + r.p);
+      if (l !== "en" && /FEN to import/.test(r.a)) pb.push("aria-label pas traduit : " + r.a);
+      if (r.sh > r.ch + 1) pb.push("le texte d'aide deborde du champ (" + r.sh + " / " + r.ch + ")");
+      pb.push(...await c.js(`__m.deborde("#editFenIn")`));
+      return pb;
+    },
+    capture: "#editFenIn"
+  },
+  "presque": {
+    async prepare(c) {
+      await c.js(`(function(){const now=Date.now();ensureProgFields();prog.mistakeQueue=[{id:'p101',theme:'Knight fork',ts:now,box:4,due:now-1},{id:'p102',theme:'Pin',ts:now,box:5,due:now-1},{id:'p103',theme:'Skewer',ts:now,box:1,due:now-1}];saveProg();return 1})()`);
+      await c.js(`setMode('puzzles',{screen:'puzzles'});1`); await c.attendre(2200);
+      await c.js(`renderMistakeQueue();document.getElementById('mistakeSection').scrollIntoView({block:'center'});1`); await c.attendre(400);
+    },
+    async controle(c, l) {
+      const pb = [];
+      const t = await c.js(`(function(){const e=document.querySelector('.erreurs-presque');return e?e.textContent:""})()`);
+      if (l === "fr" && !/presque maîtrisées/.test(t)) pb.push("texte : " + t);
+      pb.push(...await c.js(`__m.uneLigne(".erreurs-presque")`), ...await c.js(`__m.deborde("#mistakeSection", ".erreurs-pastilles")`));
+      return pb;
+    },
+    capture: ".erreurs-maitrise"
+  },
+  "boss": {
+    async prepare(c) {
+      await c.js(`(function(){document.getElementById('leconBoss').classList.remove('hide');const n=document.getElementById('leconBossNote');n.textContent=t("Beat the boss to open the next chapter.");n.classList.remove('hide');setMode('debut');return 1})()`);
+      await c.attendre(1200);
+      await c.js(`(function(){document.getElementById('leconBoss').classList.remove('hide');const n=document.getElementById('leconBossNote');n.textContent=t("Beat the boss to open the next chapter.");n.classList.remove('hide');n.scrollIntoView({block:'center'});return 1})()`);
+      await c.attendre(300);
+    },
+    async controle(c) {
+      const e = await c.js(`(function(){const b=document.querySelector('#leconBoss .btnrow').getBoundingClientRect(),n=document.getElementById('leconBossNote').getBoundingClientRect();return Math.round(n.top-b.bottom)})()`);
+      return e >= 11 ? [] : ["phrase a " + e + " px des boutons"];
+    },
+    capture: "#leconBoss",
+    seule: true
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute

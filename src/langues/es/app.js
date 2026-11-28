@@ -551,7 +551,7 @@ module.exports = {
 "Pieces":"Piezas",
 "Side to move":"Turno de juego",
 "Clear board":"Vaciar el tablero",
-"Copy FEN":"Copiar el FEN",
+"Copy FEN":"Copiar el FEN","Paste a FEN here to load it":"Pega aquí un FEN para cargarlo","FEN to import":"FEN para importar",
 "Load FEN":"Cargar un FEN",
 "FEN copied to the clipboard.":"FEN copiado al portapapeles.",
 "A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Una línea corta de texto que describe una posición: qué pieza está en qué casilla y a quién le toca. Es la forma estándar de guardar o compartir una posición, legible por la mayoría de sitios y programas de ajedrez.",

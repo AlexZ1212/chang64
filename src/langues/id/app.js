@@ -551,7 +551,7 @@ module.exports = {
 "Pieces":"Bidak",
 "Side to move":"Giliran jalan",
 "Clear board":"Kosongkan papan",
-"Copy FEN":"Salin FEN",
+"Copy FEN":"Salin FEN","Paste a FEN here to load it":"Tempel FEN di sini untuk memuatnya","FEN to import":"FEN untuk dimuat",
 "Load FEN":"Muat FEN",
 "FEN copied to the clipboard.":"FEN disalin ke papan klip.",
 "A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Sebaris teks pendek yang menggambarkan posisi: bidak mana di petak mana, dan giliran siapa. Ini cara standar untuk menyimpan atau membagikan posisi, bisa dibaca oleh sebagian besar situs dan perangkat lunak catur.",

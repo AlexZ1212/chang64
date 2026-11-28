@@ -551,7 +551,7 @@ module.exports = {
 "Pieces":"Фигуры",
 "Side to move":"Очередь хода",
 "Clear board":"Очистить доску",
-"Copy FEN":"Копировать FEN",
+"Copy FEN":"Копировать FEN","Paste a FEN here to load it":"Вставь сюда FEN, чтобы загрузить позицию","FEN to import":"FEN для загрузки",
 "Load FEN":"Загрузить FEN",
 "FEN copied to the clipboard.":"FEN скопирован в буфер обмена.",
 "A short line of text that describes a position: which piece is on which square, whose turn it is. It's the standard way to save or share a position, readable by most chess sites and software.":"Короткая строка текста, описывающая позицию: какая фигура на каком поле и чей ход. Это стандартный способ сохранить или передать позицию, его читают большинство шахматных сайтов и программ.",

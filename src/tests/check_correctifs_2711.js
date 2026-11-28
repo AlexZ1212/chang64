@@ -219,6 +219,14 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("la page a les memes pictos", ev("Object.keys(PICTOS).every(k=>!/\\u0001/.test(PICTOS[k]))") === true && ev("PICTOS.motif_mate_in_one") === m.PICTOS.motif_mate_in_one);
   }
 
+  console.log("--- 28/11 : champ FEN d'Analyser traduit ---");
+  T("placeholder et aria-label en francais", $("editFenIn").placeholder === "Colle un FEN ici pour le charger" && $("editFenIn").getAttribute("aria-label") === "FEN à importer", $("editFenIn").placeholder);
+  T("traduits dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => /"Paste a FEN here to load it":"/.test(lire("langues/" + l + "/app.js")) && /"FEN to import":"/.test(lire("langues/" + l + "/app.js"))));
+
+  console.log("--- 28/11 : « presque maîtrisée » et espace sous les boutons du boss ---");
+  T("« 1 presque maîtrisée », « 2 presque maîtrisées »", ev("t('{n} almost learned',{n:1})") === "1 presque maîtrisée" && ev("t('{n} almost learned',{n:2})") === "2 presque maîtrisées", ev("t('{n} almost learned',{n:2})"));
+  T("la phrase du boss a 12 px au-dessus d'elle", /#leconBossNote\{margin-top:12px\}/.test(lire("template.html")));
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

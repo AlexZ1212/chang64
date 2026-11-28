@@ -152,6 +152,9 @@ setTimeout(async()=>{
       'var T={p:1,n:2,b:3,r:4,q:5};' +
       'var pris=[[T.p,8],[T.q,8],[T.p,0],[T.p,0]];' +  /* +8 = noir, 0 = blanc */
       'for(var i=0;i<pris.length;i++)game.history.push({m:{captured:pris[i][0]|pris[i][1]}});' +
+      /* Le solde se lit sur l'echiquier depuis le 27/11 : on y retire aussi
+         les pieces prises (dame d8 et pion e7 noirs, pions a2 et b2 blancs). */
+      'game.board[3]=0;game.board[20]=0;game.board[96]=0;game.board[97]=0;' +
       'renderClocks();busy=false;})()');
     await wait(300);
     const p=JSON.parse(w.eval("JSON.stringify(prises())"));

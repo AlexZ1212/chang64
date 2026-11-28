@@ -750,8 +750,25 @@ function prises(){
   }
   const ordre={q:0,r:1,b:2,n:3,p:4};
   for(const k of ["w","b"])par[k].sort((a,b)=>(ordre[a]||9)-(ordre[b]||9));
+  /* Le solde se lit sur l'echiquier, plus dans les prises (27/11, partie
+     d'Alexandre : deux pions devenus dames, roi seul en face, et l'affichage
+     disait -8 pour lui). Une promotion change le materiel sans rien prendre,
+     et une dame prise peut n'avoir ete qu'un pion : seul ce qui reste sur
+     l'echiquier dit qui mene. Repli sur les prises sans echiquier lisible. */
+  const sb=soldeEchiquier(g);
   const val=k=>par[k].reduce((s,x)=>s+(VAL_PIECE[x]||0),0);
-  return {w:par.w,b:par.b,solde:val("w")-val("b")};
+  return {w:par.w,b:par.b,solde:sb===null?val("w")-val("b"):sb};
+}
+function soldeEchiquier(g){
+  const b=g&&g.board;
+  if(!b||!b.length)return null;
+  let s=0;
+  for(let sq=0;sq<128;sq++){
+    if(sq&0x88){sq+=7;continue;}
+    const p=b[sq];
+    if(p)s+=(pC(p)===W?1:-1)*(VAL_PIECE[SYM[pT(p)]]||0);
+  }
+  return s;
 }
 /* Rangee compacte : les pieces se chevauchent pour tenir sur une ligne, meme
    avec une quinzaine de prises. Le chevauchement ne vaut qu'au sein d'un

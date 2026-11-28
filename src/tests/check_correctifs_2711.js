@@ -98,6 +98,15 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     ev("setMode('home')");
   }
 
+  console.log("--- 5. Pieces gagnees : les promotions comptent ---");
+  {
+    const solde = fen => ev(`(function(){const sauve=game,rv=reviewGame;reviewGame=null;game=new Game(${JSON.stringify(fen)});const r=prises().solde;game=sauve;reviewGame=rv;return r})()`);
+    T("position de depart : 0", solde("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") === 0);
+    T("la fin de partie d'Alexandre (deux dames contre roi seul) : +18 pour les Blancs", solde("1Q6/8/k7/8/8/8/8/Q4K2 b - - 0 1") === 18, solde("1Q6/8/k7/8/8/8/8/Q4K2 b - - 0 1"));
+    const promo = ev(`(function(){const sauve=game,rv=reviewGame;reviewGame=null;game=new Game("k7/7P/8/8/8/8/8/K7 w - - 0 1");const m=game.moves().find(x=>game.uci(x)==="h7h8q");game.makeMove(m);const r=prises().solde;game=sauve;reviewGame=rv;return r})()`);
+    T("une promotion sans prise : +9 (une dame), plus 0", promo === 9, promo);
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

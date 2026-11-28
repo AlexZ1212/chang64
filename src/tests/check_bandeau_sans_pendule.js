@@ -21,6 +21,9 @@ const tempsMasque=id=>w.getComputedStyle($(id).querySelector("time")).display===
    entre-temps. Les blancs ont pris un cavalier, les noirs un pion. */
 const poserPrises=()=>w.eval('(function(){busy=true;game.history=[];' +
   'game.history.push({m:{captured:2|8}});game.history.push({m:{captured:1|0}});' +
+  /* Le solde se lit sur l'echiquier depuis le 27/11 : on y retire aussi le
+     cavalier noir b8 et le pion blanc a2 pris. */
+  'game.board[1]=0;game.board[96]=0;' +
   'renderClocks();busy=false;})()');
 setTimeout(async()=>{
   $("heroPlay").click(); await wait(600);

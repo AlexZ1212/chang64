@@ -104,6 +104,24 @@ const POINTS = {
       return pb;
     },
     capture: "#exSignaler"
+  },
+  "13": {
+    /* De gros chiffres partout : 9999 resolus, record 1234, 5/5 finales, 114/286 badges, 1000 jours. */
+    async prepare(c) {
+      await c.js(`ensureProgFields();prog.rating=2345;prog.solved=12345;prog.best=1234;prog.rushBest=123;prog.coordBest=12345;prog.days=1000;
+        prog.endgames={kq:1,kr:1,krr:1,kbn:1,kp:1};const vis=BADGES.filter(bxVisible);prog.badges=vis.slice(0,114).map(x=>x.id);saveProg();menuOuvrir();menuVue('stats');1`);
+      await c.attendre(1500);
+      await c.js(`document.querySelector('#menuStats .menu-tuiles.trois').scrollIntoView({block:'center'});1`);
+    },
+    async controle(c) {
+      const pb = [];
+      pb.push(...await c.js(`__m.deborde("#menuStats", ".defile")`));
+      pb.push(...await c.js(`__m.uneLigne("#menuStats .menu-tuile b")`));
+      /* Le chiffre tient dans sa case, marges comprises. */
+      pb.push(...await c.js(`[...document.querySelectorAll('#menuStats .menu-tuile b')].filter(b=>{const r=b.getBoundingClientRect(),p=b.parentElement.getBoundingClientRect();const rg=document.createRange();rg.selectNodeContents(b);const t=rg.getBoundingClientRect();return t.right>p.right-6||t.left<p.left+6}).map(b=>"chiffre hors de sa case : "+b.textContent)`));
+      return pb;
+    },
+    capture: "#menuStats .menu-tuiles.trois"
   }
 };
 

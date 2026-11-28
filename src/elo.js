@@ -118,7 +118,7 @@ function eloBloc(apresTuiles){
     ["Last game",der===null?"–":(der<0?"−":"+")+Math.abs(der)]
   ];
   return '<div class="menu-tuiles" id="menuEloTuiles">'+tuiles.map(([l,v])=>
-      '<div class="menu-tuile"><b>'+echapper(String(v))+"</b><span>"+echapper(t(l))+"</span></div>").join("")+"</div>"+
+      '<div class="menu-tuile">'+tuileChiffre(v)+"<span>"+echapper(t(l))+"</span></div>").join("")+"</div>"+
     (apresTuiles||"")+
     '<p class="tiroir-section">'+echapper(t("Elo over time"))+"</p>"+
     '<div class="graph ratinggraph menu-graphe" id="menuEloGraph"></div>'+
@@ -147,7 +147,7 @@ function eloFamillesHtml(f,avecParties){
   return '<ul class="elo-familles">'+ELO_FAMILLES.map(([c,nom])=>{
     const x=f[c],la=!!(x&&x.n>0);
     return '<li data-f="'+c+'"><span>'+echapper(t(nom))+"</span>"+
-      (la?"<b>"+Math.round(x.r)+"</b>":'<b class="vide"><span aria-hidden="true">–</span><span class="visually-hidden">'+echapper(t("No game of this kind yet."))+"</span></b>")+
+      (la?tuileChiffre(Math.round(x.r)):'<b class="vide"><span aria-hidden="true">–</span><span class="visually-hidden">'+echapper(t("No game of this kind yet."))+"</span></b>")+
       (avecParties?'<span class="elo-parties">'+(la?echapper(t(x.n===1?"{n} game":"{n} games",{n:x.n})):"")+"</span>":"")+"</li>";
   }).join("")+"</ul>";
 }

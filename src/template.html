@@ -2033,6 +2033,9 @@ html[data-mouvement="calme"] .rr-feuille{animation:none}
    sans texte, mais deformerait horizontalement/verticalement tout texte
    SVG si le rendu ne correspond pas exactement au ratio du viewBox. */
 .graph.ratinggraph svg{height:auto;aspect-ratio:300/90}
+/* Graphe encore vide : le message au-dessus des pointilles, sur deux lignes s'il le faut (27/11). */
+.courbe-vide{position:relative}
+.courbe-vide p{position:absolute;left:0;right:0;top:0;bottom:50%;display:flex;align-items:flex-end;justify-content:center;margin:0;padding:0 10px 6px;text-align:center;font-size:11px;line-height:1.3;color:var(--sage)}
 .progressbar{height:6px;border-radius:999px;background-color:var(--ink);border:1px solid var(--rule);overflow:hidden;margin-top:12px}
 .progressbar i{display:block;height:100%;width:0;background-color:var(--brass);transition:width .2s}
 .sheet-row span.tag-blunder{color:var(--brick);font-weight:600}
@@ -2428,7 +2431,12 @@ html.menu-ouvert{overflow:hidden}
 .tiroir .langmenu a[aria-current="true"]::after{content:"";flex:none;width:5px;height:10px;margin:-3px 4px 0 0;border-right:2px solid var(--brass);border-bottom:2px solid var(--brass);transform:rotate(45deg)}
 .menu-tuiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:8px}
 .menu-tuile{display:flex;flex-direction:column;gap:4px;padding:14px 12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
-.menu-tuile b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
+.menu-tuile{container-type:inline-size;min-width:0}
+/* 27/11 : un chiffre long (« 114/286 ») retrecit pour tenir dans sa case.
+   --n = nombre de signes (tuileChiffre, menu.js) ; un signe de JetBrains Mono
+   fait 0,6 em, on compte 0,66 pour la police elargie de Safari. La hauteur de
+   ligne reste fixe : les chiffres d'une rangee restent alignes. */
+.menu-tuile b{font-family:'JetBrains Mono',monospace;font-size:22px;font-size:min(22px,calc(100cqi / var(--n,4) / .66));line-height:30px;white-space:nowrap;color:var(--chalk)}
 .menu-tuile span{font-size:12px;color:var(--sage);line-height:1.3}
 .menu-tuile small{font-size:11.5px;line-height:1.3;color:var(--sage);min-height:15px}
 .menu-tuile b.vide{color:var(--sage);font-weight:400}

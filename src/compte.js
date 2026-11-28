@@ -1353,7 +1353,7 @@ function cppDirect(dir){
   const d=cpObjet(dir),cases=[["Won",cpNombre(d.v)],["Drawn",cpNombre(d.n)],["Lost",cpNombre(d.d)]];
   if(cases.reduce((s,x)=>s+x[1],0)<=0)return "";
   return '<p class="tiroir-section cpp-direct-titre">'+echapper(t("Results"))+'</p><div class="menu-tuiles trois cpp-direct">'+
-    cases.map(([k,n])=>'<div class="menu-tuile"><b>'+n+"</b><span>"+echapper(t(k,{n:n}))+"</span></div>").join("")+"</div>";
+    cases.map(([k,n])=>'<div class="menu-tuile">'+tuileChiffre(n)+"<span>"+echapper(t(k,{n:n}))+"</span></div>").join("")+"</div>";
 }
 async function cppOuvrir(pseudo){
   const f=$("cpProfil"),c=$("cpProfilContenu");if(!f||!c)return;

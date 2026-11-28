@@ -40,6 +40,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("un seul lien « Signaler » sur la page", d.querySelectorAll("#btnSignaler").length === 1);
   }
 
+  console.log("--- 13. Chiffres des Statistiques qui debordaient ---");
+  T("le chiffre d'une tuile dit sa longueur au CSS (« 114/286 » : --n:7)", /--n:7/.test(ev("tuileChiffre('114/286')")), ev("tuileChiffre('114/286')"));
+  T("le CSS reduit la police selon la largeur de la case", /\.menu-tuile b\{[^}]*font-size:min\(22px,calc\(100cqi/.test(lire("template.html")) && /\.menu-tuile\{container-type:inline-size/.test(lire("template.html")));
+  ev("ensureProgFields();prog.badges=[];menuOuvrir();menuVue('stats')");
+  T("Activite : la tuile des badges passe par tuileChiffre", [...d.querySelectorAll("#menuStats .menu-tuiles.trois b")].every(b => /--n:/.test(b.getAttribute("style") || "")));
+  T("graphe Elo vide : le message est du HTML qui va a la ligne, pas un <text> SVG", d.querySelector("#menuEloGraph .courbe-vide p") && !d.querySelector("#menuEloGraph svg text"));
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

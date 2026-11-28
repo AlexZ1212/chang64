@@ -106,9 +106,14 @@ function menuResume(){
    l'explication (.menu-explication). */
 function statsCat(nom){return '<h3 class="stats-cat">'+echapper(t(nom))+"</h3>";}
 function statsSous(nom){return '<p class="tiroir-section">'+echapper(t(nom))+"</p>";}
+/* Le chiffre d'une tuile (27/11, « 114/286 » sortait de sa case sur l'iPhone
+   d'Alexandre) : --n dit combien de signes il compte, et le CSS
+   (.menu-tuile b) reduit la police pour qu'ils tiennent dans la largeur de
+   la case. Chiffres a chasse fixe : la largeur se calcule sans mesurer. */
+function tuileChiffre(v){const s=String(v);return '<b style="--n:'+Math.max(4,s.length)+'">'+echapper(s)+"</b>";}
 function statsTuiles(tuiles,opt){
   return '<div class="menu-tuiles'+(opt&&opt.trois?" trois":"")+'"'+(opt&&opt.id?' id="'+opt.id+'"':"")+">"+tuiles.map(([l,v])=>
-    '<div class="menu-tuile"><b>'+echapper(String(v))+"</b><span>"+echapper(t(l))+"</span></div>").join("")+"</div>";
+    '<div class="menu-tuile">'+tuileChiffre(v)+"<span>"+echapper(t(l))+"</span></div>").join("")+"</div>";
 }
 /* Gagnees, nulles, perdues en une barre : la part des victoires se lit d'un
    coup d'oeil, les trois nombres restent ecrits dessous. Rien sans partie. */

@@ -963,10 +963,12 @@ function traceCourbe(el,hist,titre,vide){
        n'ont aucune raison d'etre asymetriques quand il n'y a justement
        aucun libelle a afficher en mode vide. */
     const ePad=10;
-    poserHtml(el,'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+titre+'">'+
+    /* Le message est du HTML pose sur le dessin, plus un <text> SVG (27/11) :
+       un texte SVG ne va pas a la ligne, et en allemand, russe, italien ou
+       indonesien la phrase sortait du cadre a 360 px. */
+    poserHtml(el,'<div class="courbe-vide"><svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+echapper(titre)+'">'+
       '<line x1="'+ePad+'" y1="'+(h/2)+'" x2="'+(w-ePad)+'" y2="'+(h/2)+'" stroke="rgba(239,233,217,.18)" stroke-width="1" stroke-dasharray="4 4"/>'+
-      '<text x="'+(w/2)+'" y="'+(h/2-10)+'" text-anchor="middle" fill="var(--sage)" font-size="10">'+vide+'</text>'+
-      '</svg>');
+      '</svg><p>'+echapper(vide)+'</p></div>');
     return;
   }
   const values=hist.map(p=>p.r);

@@ -158,6 +158,27 @@ const POINTS = {
     },
     capture: "#objAnnonce"
   },
+  "1": {
+    async prepare(c, l, elargi) {
+      await c.js(`ensureProgFields();prog.solved=53;prog.rating=1604;prog.days=11;saveProg();1`);
+      await c.aller(BASE + (l === "en" ? "/" : "/" + l + "/"));
+      await c.attendre(1200);
+      await c.js(OUTILS);
+      if (elargi) await c.js(ELARGIR);
+      await c.js(`document.getElementById('homeStrip').scrollIntoView({block:'center'});1`);
+      await c.attendre(400);
+    },
+    async controle(c) {
+      const pb = [];
+      pb.push(...await c.js(`__m.deborde("#homeProgressPanel")`));
+      pb.push(...await c.js(`__m.cesures("#homeStrip .stat span, #homeStrip .stat em")`));
+      pb.push(...await c.js(`__m.uneLigne("#homeStrip .stat b, #homeStatsBtn")`));
+      pb.push(...await c.js(`[...document.querySelectorAll('#homeStrip .stat span,#homeStrip .stat em')].flatMap(e=>{const cs=getComputedStyle(e),f=parseFloat(cs.fontSize),lh=parseFloat(cs.lineHeight);const r=[];if(f<8)r.push("libelle trop petit ("+f+" px) : "+e.textContent);if(lh>f*1.3)r.push("interligne "+lh+" px pour "+f+" px : "+e.textContent);return r;})`));
+      return pb;
+    },
+    capture: "#homeProgressPanel",
+    langues: ["de"]
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute
@@ -222,7 +243,7 @@ const POINTS = {
         await c.attendre(700);
         await c.js(OUTILS);
         if (elargi) await c.js(ELARGIR);
-        await P.prepare(c, l);
+        await P.prepare(c, l, elargi);
         await c.js(OUTILS);
         for (const p of await P.controle(c, l)) pb.push(nom + " " + l + (elargi ? " (elargie) " : " ") + ": " + p);
         if (elargi && (l === "fr" || (P.langues || []).includes(l))) {

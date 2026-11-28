@@ -68,6 +68,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("toutes les rangees : partie opaque plus large (40 px, opaque a 55 %)", /\.defile::before,\.defile::after\{[^}]*width:40px/.test(css) && !/var\(--ink\) 45%,transparent/.test(css));
   }
 
+  console.log("--- 1. Ma progression : ni cesure ni grand interligne ---");
+  {
+    const css = lire("template.html");
+    T("plus de coupure de mot automatique dans les trois cases", !/\.strip\.trois \.stat span,\.strip\.trois \.stat em\{overflow-wrap:anywhere;hyphens:auto\}/.test(css) && /\.strip\.trois \.stat span,\.strip\.trois \.stat em\{overflow-wrap:normal;hyphens:manual;line-height:1\.25\}/.test(css));
+    T("un mot trop long reduit la police de son libelle (homeStripAjuster)", typeof w.homeStripAjuster === "function");
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

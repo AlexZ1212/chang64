@@ -2431,6 +2431,26 @@ function updateRating(puzzleLevel,won){
   if(typeof checkBadges==="function")checkBadges();
   return lastRatingDelta;
 }
+/* Ma progression, accueil (27/11) : les libelles ne se coupent plus au
+   milieu d'un mot. Si un mot ne tient pas dans sa case (« AUFGABENWERTUNG »
+   a 360 px), on reduit la police de CE libelle, par demi-pixel, jusqu'a 8 px.
+   Recalcule quand la bande change de taille (elle est cachee au depart). */
+function homeStripAjuster(){
+  const strip=$("homeStrip");if(!strip||!strip.offsetWidth)return;
+  strip.querySelectorAll(".stat span,.stat em").forEach(e=>{
+    /* Un mot compose (« teka-teki ») ne se coupe pas non plus sur son tiret. */
+    if(!e.children.length&&/\S-\S/.test(e.textContent))poserHtml(e,echapper(e.textContent).replace(/(\S+-\S+)/g,'<span class="sans-coupure">$1</span>'));
+    e.style.fontSize="";
+    let f=parseFloat(getComputedStyle(e).fontSize)||10;
+    while(e.scrollWidth>e.clientWidth+.5&&f>8){f-=.5;e.style.fontSize=f+"px";}
+  });
+}
+if(typeof ResizeObserver==="function"){
+  const ro=new ResizeObserver(()=>homeStripAjuster());
+  const go=()=>{const s=$("homeStrip");if(s)ro.observe(s);};
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go();
+}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>homeStripAjuster()).catch(()=>{});
 function renderExtraStats(){
   ensureProgFields();
   const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};

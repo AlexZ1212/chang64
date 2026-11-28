@@ -565,10 +565,15 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
 /* Accueil (2026-11-22, decision d'Alexandre) : trois chiffres et un lien vers
    les statistiques, sur une seule rangee a toutes les largeurs. */
 .strip.trois{grid-template-columns:repeat(3,1fr)}
-/* Un libelle long (« Aufgabenwertung ») se coupe proprement plutot que de
-   sortir de sa tuile : mesure a 360 px dans les dix langues. */
+/* 27/11 (Alexandre : « attention aux cesures, et a l'interlignage qui est
+   trop important ») : plus de mot coupe par un tiret (« EXER- / CICES »),
+   on ne passe a la ligne qu'entre deux mots, et les lignes sont serrees.
+   Un mot trop long pour la case (« AUFGABENWERTUNG ») fait plutot reduire
+   la police de son libelle : homeStripAjuster() (ui.js). */
 .strip.trois .stat{min-width:0}
-.strip.trois .stat span,.strip.trois .stat em{overflow-wrap:anywhere;hyphens:auto}
+.strip.trois .stat span,.strip.trois .stat em{overflow-wrap:normal;hyphens:manual;line-height:1.25}
+.strip.trois .stat em{margin-top:4px}
+.strip .stat .sans-coupure{display:inline;white-space:nowrap;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit}
 @media(max-width:620px){.strip.trois{gap:8px}.strip.trois .stat{padding:12px 4px}.strip.trois .stat span,.strip.trois .stat em{letter-spacing:.03em}}
 /* Analyser, sur telephone : « Analyser cette position » et « Jouer contre
    l'ordinateur depuis ici » chacun sur sa rangee, pour qu'aucun des deux

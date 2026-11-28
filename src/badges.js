@@ -568,7 +568,27 @@ function bxAfficherPage(premiere){
   $("bravoTitre").textContent=t("Congratulations");
   r.classList.remove("bx-joue","bx-tourne");void r.offsetWidth;
   r.classList.add(premiere?"bx-joue":"bx-tourne");
+  bxNettete(socle.querySelector(".bx-piece3d"));
   if(typeof SON!=="undefined"&&SON.medaille)SON.medaille(premiere&&!mouvementCalme()?0.95:0.05,!premiere);
+}
+/* Grande medaille floue et en gros pixels sur iPhone (capture d'Alexandre du
+   27/11, badge « Tetu ») ; la petite, juste dessous, etait nette. Ce n'est
+   pas un chargement rate : la medaille arrive par une animation 3D qui part
+   du quart de sa taille, et Safari dessine alors le symbole (un masque SVG)
+   a cette petite taille, puis se contente de l'agrandir. A la fin de
+   l'arrivee, on sort la medaille de la 3D (.bx-pose) et on la fait
+   redessiner : Safari la peint alors a sa vraie taille. */
+function bxNettete(piece){
+  if(!piece)return;
+  piece.classList.remove("bx-pose");
+  const fin=e=>{
+    if(e.target!==piece||!/^bx(Entree|Pivote)$/.test(e.animationName))return;
+    piece.removeEventListener("animationend",fin);
+    piece.classList.add("bx-pose");
+    const s=piece.querySelector("svg");
+    if(s){s.style.opacity=".999";requestAnimationFrame(()=>{s.style.opacity="";});}
+  };
+  piece.addEventListener("animationend",fin);
 }
 bravoRemplir=function(){
   bxPages=bxTrier(bravoFile||[]);bxPage=0;

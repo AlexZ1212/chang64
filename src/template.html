@@ -2340,6 +2340,8 @@ html[data-mouvement="calme"] .sq.hint{box-shadow:inset 0 0 0 2px rgba(var(--bras
 .bx-piece3d .bx-medaille{display:block;width:130px;height:130px}
 .bx-medaille .bx-reflet{transform:translateX(-140px)}
 .bx-joue .bx-piece3d{animation:bxEntree 1.15s var(--courbe-ressort) both}
+/* Arrivee finie : plus de 3D, Safari redessine la medaille nette (bxNettete, badges.js, 27/11). */
+.bravo .bx-piece3d.bx-pose{animation:none;transform:none;transform-style:flat}
 @keyframes bxEntree{0%{transform:translateY(-60px) scale(.25) rotateY(-720deg);opacity:0}35%{opacity:1}100%{transform:none;opacity:1}}
 .bx-joue .bx-halo{animation:bxHalo 1.6s ease-out .55s both}
 @keyframes bxHalo{0%{opacity:0;transform:scale(.6)}40%{opacity:1}100%{opacity:.55;transform:scale(1)}}

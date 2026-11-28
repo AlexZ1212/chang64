@@ -200,6 +200,27 @@ const POINTS = {
     },
     seule: true
   },
+  "2": {
+    /* La fenetre Felicitations d'un badge : a la fin de l'arrivee, la grande
+       medaille sort de la 3D (.bx-pose). Puis une passe sur toutes les
+       medailles : chacune a son dessin, et il n'est pas vide une fois peint. */
+    async prepare(c) {
+      await c.js(`(function(){ensureProgFields();const b=BADGES.find(x=>x.id==='ex_tetu')||BADGES[0];prog.badges=[b.id];bravoFile=[b];bravoTenter();return 1})()`);
+      await c.attendre(2200);
+    },
+    async controle(c) {
+      const pb = [];
+      const pose = await c.js(`(function(){const p=document.querySelector('#bravo .bx-piece3d');if(!p||document.getElementById('bravo').hidden)return "fenetre fermee";return p.classList.contains('bx-pose')?"ok":"pas posee ("+getComputedStyle(p).transform+")"})()`);
+      if (pose !== "ok") pb.push("grande medaille : " + pose);
+      const vides = await c.js(`(function(){const out=[];for(const b of BADGES){const md=bxMedailles&&bxMedailles[b.id];if(!md||!md[1]){out.push(b.id+" sans dessin");continue;}
+        const d=document.createElement('div');d.style.cssText='position:fixed;left:0;top:0;width:130px;height:130px';d.innerHTML=bxMedaille(b.id,true);document.body.appendChild(d);
+        const g=d.querySelector('mask g');const r=g&&g.getBBox?g.getBBox():null;if(!r||r.width<5||r.height<5)out.push(b.id+" dessin vide");d.remove();}return out})()`);
+      pb.push(...vides);
+      return pb;
+    },
+    capture: "#bravo .bravo-fenetre",
+    seule: true
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute

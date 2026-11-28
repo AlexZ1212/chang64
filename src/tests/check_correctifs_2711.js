@@ -119,6 +119,14 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("pat : barre au milieu", c.h === "50%" && c.t === "Pat.", JSON.stringify(c));
   }
 
+  console.log("--- 2. Grande medaille nette sur iPhone ---");
+  {
+    T("a la fin de l'arrivee, la medaille sort de la 3D pour etre redessinee (bxNettete)", typeof w.bxNettete === "function" && /bxNettete\(socle\.querySelector\("\.bx-piece3d"\)\)/.test(lire("badges.js")));
+    T("le CSS de la medaille posee coupe la 3D", /\.bravo \.bx-piece3d\.bx-pose\{animation:none;transform:none;transform-style:flat\}/.test(lire("template.html")));
+    const sans = ev("BADGES.filter(b=>!(bxMedailles&&bxMedailles[b.id]&&bxMedailles[b.id][1])).map(b=>b.id).join(',')");
+    T("chaque badge a son dessin de medaille", sans === "", sans);
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

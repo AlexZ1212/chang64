@@ -157,6 +157,16 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     ev("setMode('home')");
   }
 
+  console.log("--- 12. Pictos des motifs : une piece + un signe (choix B), medailles comprises ---");
+  {
+    const M = JSON.parse(lire("badges-medailles.json"));
+    for (const k of ["deflection", "double_attack", "quiet_move", "back_rank_mate", "mate_in_one", "mate_in_two", "mate_in_three", "winning_capture"]) {
+      const med = M["theme_" + k] && M["theme_" + k][1];
+      T("medaille theme_" + k + " : une piece et un accent", med && /data-accent="1"/.test(med) && /stroke="var\(--oeil\)"/.test(med));
+      T("tuile motif_" + k + " : le meme dessin que la medaille", ev("typeof PICTOS!=='undefined'&&PICTOS.motif_" + k + "&&/data-accent/.test(PICTOS.motif_" + k + ")") === true);
+    }
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

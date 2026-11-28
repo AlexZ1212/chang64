@@ -208,16 +208,16 @@ const S = {
   rating_2300: [PERSO.laurier + F("crown-simple", "translate(0 -1) scale(.3)"), "or"],
   /* Themes : 10 bronze, 25 argent, 100 or */
   theme_winning_capture_10: [F("fork-knife"), "bronze"],
-  theme_winning_capture: [F("bowl-food"), "argent"],
+  theme_winning_capture: [P("p", G) + A("hand-grabbing"), "argent"],   /* 27/11 : choix B d'Alexandre (planche du point 12) */
   theme_winning_capture_100: [F("tote"), "or"],
   theme_double_attack_10: [F("arrows-split"), "bronze"],
-  theme_double_attack: [F("target"), "argent"],
+  theme_double_attack: [P("q", G) + A("arrows-split"), "argent"],   /* 27/11, choix B */
   theme_double_attack_100: [F("eye-slash"), "or"],
   theme_skewer_10: [PERSO.pique(2), "bronze"],
   theme_skewer: [PERSO.pique(3), "argent"],
   theme_skewer_100: [F("fire"), "or"],
   theme_mate_in_two_10: [F("dice-two"), "bronze"],
-  theme_mate_in_two: [F("music-notes"), "argent"],
+  theme_mate_in_two: [P("k", G) + A("number-circle-two"), "argent"],   /* 27/11, choix B */
   theme_mate_in_two_100: [F("pen-nib"), "or"],
   theme_winning_move_10: [F("lightbulb"), "bronze"],
   theme_winning_move: [F("paint-brush"), "argent"],
@@ -226,11 +226,11 @@ const S = {
   theme_knight_fork: [P("n", G) + A("crown-simple"), "argent"],
   theme_knight_fork_100: [`<g transform="translate(3 3) scale(.86)">${PERSO.fourchette}</g>` + F("sparkle", "translate(-14 -13) scale(.32)"), "or"],
   theme_mate_in_one_10: [F("star"), "bronze"],
-  theme_mate_in_one: [F("door"), "argent"],
+  theme_mate_in_one: [P("k", G) + A("number-circle-one"), "argent"],   /* 27/11, choix B */
   theme_mate_in_one_100: [F("binoculars"), "or"],
   /* Le roi derriere ses trois pions : le motif lui-meme. */
   theme_back_rank_mate_10: [P("k", "translate(0 -9) scale(.5)") + P("p", "translate(-13 11) scale(.4)") + P("p", "translate(0 11) scale(.4)") + P("p", "translate(13 11) scale(.4)"), "bronze"],
-  theme_back_rank_mate: [F("lock"), "argent"],
+  theme_back_rank_mate: [P("k", G) + A("lock"), "argent"],   /* 27/11, choix B */
   theme_back_rank_mate_100: [F("wind"), "or"],
   theme_pin_10: [F("push-pin"), "bronze"],
   theme_pin: [P("k", G) + A("push-pin"), "argent"],
@@ -239,13 +239,13 @@ const S = {
   theme_pawn_fork: [P("p", "translate(0 6) scale(.66)") + F("arrow-up-left", "translate(-14 -13) scale(.36)") + F("arrow-up-right", "translate(14 -13) scale(.36)"), "argent"],
   theme_pawn_fork_100: [P("p", G) + A("crown-simple"), "or"],
   theme_deflection_10: [F("arrow-bend-up-right"), "bronze"],
-  theme_deflection: [F("scales"), "argent"],
+  theme_deflection: [P("q", G) + A("arrow-bend-up-right"), "argent"],   /* 27/11, choix B */
   theme_deflection_100: [F("magic-wand"), "or"],
   theme_quiet_move_10: [F("speaker-slash"), "bronze"],
-  theme_quiet_move: [F("yin-yang"), "argent"],
+  theme_quiet_move: [P("p", G) + A("speaker-slash"), "argent"],   /* 27/11, choix B */
   theme_quiet_move_100: [F("flower-lotus"), "or"],
   theme_mate_in_three_10: [F("steps"), "bronze"],
-  theme_mate_in_three: [F("scroll"), "argent"],
+  theme_mate_in_three: [P("k", G) + A("number-circle-three"), "argent"],   /* 27/11, choix B */
   theme_mate_in_three_100: [F("compass-tool"), "or"],
   /* Finales */
   eg_kq: [P("q", "translate(-9 2) scale(.66)") + P("k", "translate(12 8) scale(.44)"), "argent"],

@@ -799,7 +799,11 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
    (2026-11-22) : il est a la fois fait et en cours. La coche reste seule,
    sans le numero par-dessus. */
 .ap-chap.fait.encours .ap-num{color:transparent}
-.ap-barre{display:block;height:6px;border-radius:3px;background-color:var(--raise);margin:9px 0 0;overflow:hidden}
+/* Une seule epaisseur de jauge sur tout le site (27/11, choix B d'Alexandre :
+   6 px) : --jauge, sur :root. Defis, Apprendre, statistiques, maitrise des
+   erreurs, analyse, ligues. */
+:root{--jauge:6px}
+.ap-barre{display:block;height:var(--jauge);border-radius:3px;background-color:var(--raise);margin:9px 0 0;overflow:hidden}
 .ap-barre i{display:block;height:100%;background-color:var(--brass);border-radius:3px}
 .ap-venir{font-size:13px;color:var(--sage);margin:12px 0 0;line-height:1.5}
 .ap-refaire{margin:10px 0 0}
@@ -2045,7 +2049,7 @@ html[data-mouvement="calme"] .rr-feuille{animation:none}
 /* Graphe encore vide : le message au-dessus des pointilles, sur deux lignes s'il le faut (27/11). */
 .courbe-vide{position:relative}
 .courbe-vide p{position:absolute;left:0;right:0;top:0;bottom:50%;display:flex;align-items:flex-end;justify-content:center;margin:0;padding:0 10px 6px;text-align:center;font-size:11px;line-height:1.3;color:var(--sage)}
-.progressbar{height:6px;border-radius:999px;background-color:var(--ink);border:1px solid var(--rule);overflow:hidden;margin-top:12px}
+.progressbar{height:var(--jauge);border-radius:999px;background-color:var(--raise);overflow:hidden;margin-top:12px}
 .progressbar i{display:block;height:100%;width:0;background-color:var(--brass);transition:width .2s}
 .sheet-row span.tag-blunder{color:var(--brick);font-weight:600}
 .sheet-row span.tag-mistake{color:var(--brick);font-weight:600}
@@ -2460,7 +2464,7 @@ html.menu-ouvert{overflow:hidden}
 .stats-bilan{margin:0 2px;padding:12px;border-radius:var(--r);background-color:var(--ink);border:1px solid var(--rule)}
 .stats-bilan-tete{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;margin:0 0 10px;font-size:13px;line-height:1.3;color:var(--sage)}
 .stats-bilan-tete b{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--chalk)}
-.stats-barre{display:flex;gap:2px;height:12px;border-radius:999px;overflow:hidden}
+.stats-barre{display:flex;gap:2px;height:var(--jauge);border-radius:999px;overflow:hidden}
 .stats-barre i{display:block;min-width:4px;flex-basis:0}
 .stats-barre .g,.stats-legende .g::before{background-color:var(--brass)}
 .stats-barre .n,.stats-legende .n::before{background-color:var(--sage)}
@@ -2537,7 +2541,7 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 .erreurs-maitrise{flex-basis:100%;display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;font-size:13px;line-height:1.4;color:var(--sage)}
 .erreurs-maitrise-nom{flex:none}
 .erreurs-barre{flex:none;display:inline-flex;gap:3px}
-.erreurs-barre i{display:block;width:14px;height:8px;border-radius:2px;background-color:var(--rule)}
+.erreurs-barre i{display:block;width:14px;height:var(--jauge);border-radius:2px;background-color:var(--rule)}
 .erreurs-barre i.pleine{background-color:var(--brass)}
 .erreurs-presque{flex:none;white-space:nowrap}
 .erreurs-plus-tard{flex-basis:100%;margin:0;font-size:13px;line-height:1.4;color:var(--sage)}
@@ -2629,7 +2633,7 @@ html[data-mouvement="calme"] .obj-plein,html[data-mouvement="calme"] .obj-coche,
 .defi-texte{flex:1;font-size:14.5px;line-height:1.4}
 .defi-compte{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brass);white-space:nowrap}
 .defi.fait .defi-compte{color:var(--jade);font-size:16px}
-.defi-barre{height:6px;margin-top:10px;border-radius:var(--r-xs);background-color:var(--raise);overflow:hidden}
+.defi-barre{height:var(--jauge);margin-top:10px;border-radius:var(--r-xs);background-color:var(--raise);overflow:hidden}
 .defi-barre i{display:block;height:100%;border-radius:var(--r-xs);background-color:var(--brass);transition:width .9s var(--courbe-sortie)}
 .defi.fait .defi-compte{display:inline-block;animation:objPastille .6s var(--courbe-ressort) .7s both}
 html[data-mouvement="calme"] .defi-barre i,html[data-mouvement="calme"] .defi-compte{transition:none!important;animation:none!important}
@@ -2840,7 +2844,7 @@ button.cp-lien{display:inline-block;margin:2px 6px;padding:8px 2px}
 .cpl-attente{margin:4px 8px 12px;padding:14px 12px;border:1px solid var(--rule);border-radius:var(--r);background-color:var(--ink);text-align:center}
 .cpl-attente b{display:block;font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;line-height:1.1;color:var(--brass)}
 .cpl-attente span{display:block;margin-top:4px;font-size:13px;color:var(--sage)}
-.cpl-jauge{height:6px;margin-top:12px;border-radius:999px;background-color:var(--raise);overflow:hidden}
+.cpl-jauge{height:var(--jauge);margin-top:12px;border-radius:999px;background-color:var(--raise);overflow:hidden}
 .cpl-jauge i{display:block;height:100%;border-radius:999px;background-color:var(--brass)}
 .cpj-liste li{display:flex;align-items:center;gap:10px;min-height:40px;padding:6px 10px;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--chalk)}
 .cpj-liste li.cpj-moi{border-left:3px solid var(--brass);border-radius:0 var(--r) var(--r) 0;border-bottom-color:transparent;background-color:var(--raise);padding-left:7px}

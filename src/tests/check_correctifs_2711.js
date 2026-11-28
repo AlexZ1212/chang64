@@ -127,6 +127,16 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("chaque badge a son dessin de medaille", sans === "", sans);
   }
 
+  console.log("--- 18. Une seule epaisseur de jauge (6 px, choix B d'Alexandre) ---");
+  {
+    const css = lire("template.html");
+    T("la variable --jauge vaut 6 px", /:root\{--jauge:6px\}/.test(css));
+    for (const sel of [".ap-barre", ".progressbar", ".stats-barre", ".erreurs-barre i", ".defi-barre", ".cpl-jauge"]) {
+      const m = css.match(new RegExp(sel.replace(/[.]/g, "\\.").replace(/ /g, " ") + "\\{[^}]*\\}"));
+      T(sel + " : height:var(--jauge)", m && /height:var\(--jauge\)/.test(m[0]) && !/border:1px/.test(m[0]), m && m[0].slice(0, 80));
+    }
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

@@ -5,7 +5,7 @@
    2026-11-24, choix d'Alexandre par QCM :
    1. « Erreurs a revoir » (bloc sous les exercices) : le nombre et « Revoir »,
       les motifs en pastilles « x n » (un nom ne se colle plus a son chiffre),
-      une barre de maitrise en cinq cases, « N presque sues », et ce qui
+      une barre de maitrise en cinq cases, « N presque maîtrisées » (choix d'Alexandre, 27/11), et ce qui
       reviendra plus tard ;
    2. « Signaler cet exercice » : seulement une fois l'exercice fini, jamais
       pendant qu'on cherche ; quatre raisons ; n'envoie que le numero et la
@@ -68,7 +68,7 @@ const net = s => String(s).replace(/\s+/g, " ").trim();
   T("la rangee des pastilles defile (enveloppe .defile)", !!box.querySelector(".defile > .erreurs-pastilles"));
   /* reussites deja faites : 0 + 3 + 0 + 2 + 4 = 9 sur 25 -> 2 cases */
   T("barre de maitrise : 5 cases, 2 pleines", box.querySelectorAll(".erreurs-barre i").length === 5 && box.querySelectorAll(".erreurs-barre i.pleine").length === 2);
-  T("« 2 presque sues »", net(box.querySelector(".erreurs-presque").textContent) === "2 presque sues", box.querySelector(".erreurs-presque") && box.querySelector(".erreurs-presque").textContent);
+  T("« 2 presque maîtrisées »", net(box.querySelector(".erreurs-presque").textContent) === "2 presque maîtrisées", box.querySelector(".erreurs-presque") && box.querySelector(".erreurs-presque").textContent);
   T("ce qui reviendra plus tard : « 1 autre reviendra demain. »", net(box.querySelector(".erreurs-plus-tard").textContent) === "1 autre reviendra demain.", box.querySelector(".erreurs-plus-tard") && box.querySelector(".erreurs-plus-tard").textContent);
   ev("(function(){const now=Date.now();prog.mistakeQueue.push({id:'p6',theme:'Pin',ts:now,box:1,due:now+5*864e5});renderMistakeQueue();})()");
   T("deux en attente : pluriel", /^2 autres reviendront demain\.$/.test(net(box.querySelector(".erreurs-plus-tard").textContent)), box.querySelector(".erreurs-plus-tard").textContent);

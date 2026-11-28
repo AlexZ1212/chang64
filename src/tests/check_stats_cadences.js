@@ -48,16 +48,16 @@ const EF = { b: { r: 1012, n: 12 }, r: { r: 980, n: 1 }, c: null, k: { r: 1104, 
   T("cinq pastilles : Toutes, puis les quatre familles dans l'ordre des Elo", pastilles(m).map(b => net(b.textContent)).join(" | ") === "Toutes | Blitz | Rapide | Classique | Correspondance", pastilles(m).map(b => net(b.textContent)).join(" | "));
   T("ce sont de vrais boutons, dans un groupe nomme « Cadence »", pastilles(m).every(b => b.tagName === "BUTTON" && b.type === "button") && m.querySelector(".tc-cats").getAttribute("role") === "group" && m.querySelector(".tc-cats").getAttribute("aria-label") === "Cadence");
   T("la rangee est dans son enveloppe qui defile (une ligne, sans barre de defilement)", m.querySelector(".tc-cats").parentNode.classList.contains("defile") && m.querySelector(".tc-cats").parentNode.dataset.branche === "1");
-  T("« Toutes » est choisie au depart, et la barre montre le total", enfoncee(m) === "Toutes" && legende(m) === "14 Gagnées | 3 Nulles | 11 Perdues" && /^50 % de parties gagnées$/.test(tete(m)), [enfoncee(m), legende(m), tete(m)].join(" / "));
+  T("« Toutes » est choisie au depart, et la barre montre le total", enfoncee(m) === "Toutes" && legende(m) === "14 Gagnées | 3 Nulles | 11 Perdues" && /^50% de parties gagnées$/.test(tete(m)), [enfoncee(m), legende(m), tete(m)].join(" / "));
   T("une seule barre", m.querySelectorAll(".stats-barre").length === 1 && m.querySelectorAll(".stats-bilan").length === 1);
 
   console.log("--- Toucher une pastille ---");
   const toucher = f => { m.querySelector('.tc-cats button[data-f="' + f + '"]').click(); };
   toucher("b");
   T("Blitz : la pastille est enfoncee, elle seule", enfoncee(m) === "Blitz" && pastilles(m).filter(b => b.getAttribute("aria-pressed") === "false").length === 4, enfoncee(m));
-  T("Blitz : 7 gagnees, 2 nulles, 3 perdues, 58 %", legende(m) === "7 Gagnées | 2 Nulles | 3 Perdues" && /^58 % de parties gagnées$/.test(tete(m)), legende(m) + " / " + tete(m));
+  T("Blitz : 7 gagnees, 2 nulles, 3 perdues, 58%", legende(m) === "7 Gagnées | 2 Nulles | 3 Perdues" && /^58% de parties gagnées$/.test(tete(m)), legende(m) + " / " + tete(m));
   toucher("r");
-  T("Rapide : une seule partie, accords au singulier", legende(m) === "1 Gagnée | 0 Nulle | 0 Perdue" && /^100 % de parties gagnées$/.test(tete(m)), legende(m) + " / " + tete(m));
+  T("Rapide : une seule partie, accords au singulier", legende(m) === "1 Gagnée | 0 Nulle | 0 Perdue" && /^100% de parties gagnées$/.test(tete(m)), legende(m) + " / " + tete(m));
   toucher("k");
   T("Correspondance : 4, 1, 6", legende(m) === "4 Gagnées | 1 Nulle | 6 Perdues" && enfoncee(m) === "Correspondance", legende(m));
   toucher("c");

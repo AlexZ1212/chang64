@@ -60,7 +60,7 @@ const PARTIES = [
   T("une barre gagnees / nulles / perdues pour les parties contre l'ordinateur", !!bilan && !!bilan.querySelector(".stats-barre") && net(bilan.previousElementSibling.textContent) === "Tes dernières parties");
   const legende = r => [...r.querySelectorAll(".stats-legende li")].map(x => net(x.textContent)).join(" | ");
   T("elle compte les vraies parties : 4 gagnees, 1 nulle, 2 perdues (ni entrainement, ni position preparee, ni direct)", legende(bilan) === "4 Gagnées | 1 Nulle | 2 Perdues", legende(bilan));
-  T("la part des victoires est dite en clair : 57 %", /^57 % de parties gagnées$/.test(net(bilan.querySelector(".stats-bilan-tete").textContent)), net(bilan.querySelector(".stats-bilan-tete").textContent));
+  T("la part des victoires est dite en clair : 57%", /^57% de parties gagnées$/.test(net(bilan.querySelector(".stats-bilan-tete").textContent)), net(bilan.querySelector(".stats-bilan-tete").textContent));
   const parts = [...bilan.querySelectorAll(".stats-barre i")].map(i => i.className + ":" + i.style.flexGrow);
   T("la barre est a l'echelle : 4, 1, 2", parts.join(" ") === "g:4 n:1 p:2", parts.join(" "));
   T("elle est decrite aux lecteurs d'ecran", bilan.querySelector(".stats-barre").getAttribute("role") === "img" && net(bilan.querySelector(".stats-barre").getAttribute("aria-label")) === "4 Gagnées, 1 Nulle, 2 Perdues", bilan.querySelector(".stats-barre").getAttribute("aria-label"));

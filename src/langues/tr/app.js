@@ -1241,7 +1241,7 @@ module.exports = {
 "Elo over time":"Zaman içinde Elo",
 "Your latest games":"Son oyunların",
 "{pc} of games won":"Kazanılan oyunlar: {pc}",
-"All my statistics →":"Tüm istatistiklerim →",
+"All my statistics":"Tüm istatistiklerim",
 "Elo measures your games against the computer. The puzzle rating comes from Puzzles alone. The day streak counts only the puzzle of the day. Everything else is in Statistics, in the menu.":"Elo, bilgisayara karşı oynadığın oyunları ölçer. Bulmaca puanı yalnızca Bulmacalar'dan gelir. Günlük seri yalnızca günün bulmacasını sayar. Geri kalan her şey menüdeki İstatistikler'de.",
 "Load a game":"Oyun yükle",
 "Read the article on this endgame":"Bu oyun sonuyla ilgili yazıyı oku",

@@ -579,8 +579,10 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    l'ordinateur depuis ici » chacun sur sa rangee, pour qu'aucun des deux
    libelles ne passe sur deux lignes (mesure du 2026-11-22, dix langues). */
 @media(max-width:599px){#editAnalyse,#editPlay{flex:1 1 100%}}
-.home-stats-lien{margin:10px 0 0;text-align:right}
-.home-stats-lien .linkbtn{font-size:13.5px;padding-right:0}
+/* 27/11 (choix B d'Alexandre) : meme style que « Signaler cet exercice »,
+   centre, souligne, sans fleche. */
+.home-stats-lien{margin:8px 0 0;text-align:center}
+.home-stats-lien .linkbtn{font-size:13px}
 .strip .stat{background-color:var(--slate);border:1px solid var(--rule);border-radius:var(--r);padding:14px 10px;text-align:center}
 .strip .stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;line-height:1.2}
 .strip .stat span{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
@@ -3276,7 +3278,7 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
         <div class="stat"><b id="hRating">800</b><span>Puzzle rating</span></div>
         <div class="stat"><b id="hStreak">0</b><span>Day streak</span><em>Puzzle of the day</em></div>
       </div>
-      <p class="home-stats-lien"><button type="button" class="linkbtn" id="homeStatsBtn">All my statistics →</button></p>
+      <p class="home-stats-lien"><button type="button" class="linkbtn" id="homeStatsBtn">All my statistics</button></p>
       <div class="startline hide" id="homeStart">
         <span>Your progress will show up here. It is waiting for your first move.</span>
         <button class="linkbtn" id="homeStartBtn">Solve your first puzzle →</button>

@@ -1243,7 +1243,7 @@ module.exports = {
 "Elo over time":"Elo a lo largo del tiempo",
 "Your latest games":"Tus últimas partidas",
 "{pc} of games won":"{pc} de partidas ganadas",
-"All my statistics →":"Todas mis estadísticas →",
+"All my statistics":"Todas mis estadísticas",
 "Elo measures your games against the computer. The puzzle rating comes from Puzzles alone. The day streak counts only the puzzle of the day. Everything else is in Statistics, in the menu.":"El Elo mide tus partidas contra el ordenador. La puntuación de ejercicios sale solo de Ejercicios. Los días seguidos solo cuentan el ejercicio del día. Todo lo demás está en Estadísticas, en el menú.",
 "Load a game":"Cargar una partida",
 "Read the article on this endgame":"Leer el artículo sobre este final",

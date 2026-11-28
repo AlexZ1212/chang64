@@ -1241,7 +1241,7 @@ module.exports = {
 "Elo over time":"Elo dari waktu ke waktu",
 "Your latest games":"Partai terakhirmu",
 "{pc} of games won":"{pc} partai dimenangkan",
-"All my statistics →":"Semua statistikku →",
+"All my statistics":"Semua statistikku",
 "Elo measures your games against the computer. The puzzle rating comes from Puzzles alone. The day streak counts only the puzzle of the day. Everything else is in Statistics, in the menu.":"Elo mengukur partaimu melawan komputer. Rating teka-teki hanya berasal dari Teka-teki. Hari beruntun hanya menghitung teka-teki hari ini. Sisanya ada di Statistik, di menu.",
 "Load a game":"Muat partai",
 "Read the article on this endgame":"Baca artikel tentang permainan akhir ini",

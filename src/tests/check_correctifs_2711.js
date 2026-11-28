@@ -137,6 +137,14 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     }
   }
 
+  console.log("--- 15. « Toutes mes statistiques » comme « Signaler cet exercice » ---");
+  {
+    const b = $("homeStatsBtn"), css = lire("template.html");
+    T("le lien dit « Toutes mes statistiques », sans fleche", b && net(b.textContent) === "Toutes mes statistiques", b && b.textContent);
+    T("centre, 13 px, comme Signaler", /\.home-stats-lien\{margin:8px 0 0;text-align:center\}/.test(css) && /\.home-stats-lien \.linkbtn\{font-size:13px\}/.test(css) && /\.signaler \.linkbtn\{font-size:13px/.test(css));
+    T("la cle traduite existe dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => /"All my statistics":"[^"→]+"/.test(lire("langues/" + l + "/app.js"))));
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

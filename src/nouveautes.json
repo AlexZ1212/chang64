@@ -1,5 +1,48 @@
 [
  {
+  "d": "2026-11-28",
+  "en": [
+   "Every moment from the coach, the computer's strength in Analyse, and duels won",
+   "After an analysis, the coach now shows all your blunders and mistakes, not just three; your inaccuracies are folded underneath. In Analyse, you choose the computer's strength before playing from a position. Puzzle duels won between members are now counted: a column in Top players, and a line with your rank and your wins, draws and losses on the player profile. The patterns in Solve also get clearer pictures."
+  ],
+  "fr": [
+   "Tous les moments du coach, la force de l'ordinateur dans Analyser, et les duels gagnés",
+   "Après une analyse, le coach montre maintenant toutes tes gaffes et tes erreurs, plus seulement trois ; tes imprécisions sont rangées dessous. Dans Analyser, tu choisis la force de l'ordinateur avant de jouer depuis une position. Les duels d'exercices gagnés entre membres sont désormais comptés : une colonne dans Meilleurs joueurs, et sur la fiche du joueur une ligne avec ton rang, tes victoires, tes nuls et tes défaites. Les motifs de Résoudre ont aussi des dessins plus parlants."
+  ],
+  "es": [
+   "Todos los momentos del entrenador, la fuerza del ordenador en Analizar y los duelos ganados",
+   "Tras un análisis, el entrenador muestra ahora todos tus errores graves y tus errores, no solo tres; tus imprecisiones quedan plegadas debajo. En Analizar, eliges la fuerza del ordenador antes de jugar desde una posición. Los duelos de ejercicios ganados entre miembros ya se cuentan: una columna en Mejores jugadores y, en el perfil del jugador, una línea con tu puesto, tus victorias, tus empates y tus derrotas. Los motivos de Resolver también tienen dibujos más claros."
+  ],
+  "pt": [
+   "Todos os momentos do treinador, a força do computador em Analisar e os duelos vencidos",
+   "Depois de uma análise, o treinador agora mostra todos os seus erros graves e erros, não só três; as suas imprecisões ficam recolhidas embaixo. Em Analisar, você escolhe a força do computador antes de jogar a partir de uma posição. Os duelos de exercícios vencidos entre membros agora são contados: uma coluna em Melhores jogadores e, no perfil do jogador, uma linha com a sua posição, as suas vitórias, empates e derrotas. Os motivos de Resolver também ganham desenhos mais claros."
+  ],
+  "de": [
+   "Alle Momente des Trainers, die Stärke des Computers in Analysieren und gewonnene Duelle",
+   "Nach einer Analyse zeigt der Trainer jetzt alle deine Patzer und Fehler, nicht nur drei; deine Ungenauigkeiten liegen eingeklappt darunter. In Analysieren wählst du die Stärke des Computers, bevor du von einer Stellung aus spielst. Gewonnene Aufgaben-Duelle unter Mitgliedern werden jetzt gezählt: eine Spalte in Beste Spieler und im Spielerprofil eine Zeile mit deinem Rang, deinen Siegen, Remis und Niederlagen. Die Motive in Lösen haben auch deutlichere Bilder."
+  ],
+  "ru": [
+   "Все моменты тренера, сила компьютера в Анализе и выигранные дуэли",
+   "После анализа тренер теперь показывает все твои зевки и ошибки, а не только три; неточности свёрнуты ниже. В Анализе ты выбираешь силу компьютера, прежде чем играть из позиции. Выигранные дуэли задач между участниками теперь считаются: колонка в Лучших игроках, а в профиле игрока строка с твоим местом, победами, ничьими и поражениями. У мотивов в разделе Решать тоже появились более понятные рисунки."
+  ],
+  "it": [
+   "Tutti i momenti dell'allenatore, la forza del computer in Analizza e i duelli vinti",
+   "Dopo un'analisi, l'allenatore ora mostra tutti i tuoi errori gravi e i tuoi errori, non più solo tre; le imprecisioni sono raccolte sotto. In Analizza scegli la forza del computer prima di giocare da una posizione. I duelli di esercizi vinti tra membri ora vengono contati: una colonna in Migliori giocatori e, nel profilo del giocatore, una riga con la tua posizione, le tue vittorie, i pareggi e le sconfitte. Anche i temi di Risolvi hanno disegni più chiari."
+  ],
+  "tr": [
+   "Antrenörün tüm anları, Analiz et ekranında bilgisayarın gücü ve kazanılan düellolar",
+   "Bir analizden sonra antrenör artık yalnızca üçünü değil, tüm vahim hatalarını ve hatalarını gösteriyor; yanlışlıkların altta katlanmış duruyor. Analiz et ekranında bir konumdan oynamadan önce bilgisayarın gücünü seçiyorsun. Üyeler arasında kazanılan bulmaca düelloları artık sayılıyor: En iyi oyuncular tablosunda bir sütun, oyuncu profilinde de sıranı, galibiyetlerini, beraberliklerini ve mağlubiyetlerini gösteren bir satır. Çöz bölümündeki motiflerin çizimleri de daha anlaşılır."
+  ],
+  "pl": [
+   "Wszystkie momenty trenera, siła komputera w Analizie i wygrane pojedynki",
+   "Po analizie trener pokazuje teraz wszystkie twoje grube błędy i błędy, a nie tylko trzy; niedokładności są zwinięte poniżej. W Analizie wybierasz siłę komputera, zanim zagrasz z danej pozycji. Wygrane pojedynki na zadania między członkami są teraz liczone: kolumna w Najlepszych graczach, a w profilu gracza wiersz z twoim miejscem, wygranymi, remisami i porażkami. Motywy w Rozwiąż mają też czytelniejsze rysunki."
+  ],
+  "id": [
+   "Semua momen pelatih, kekuatan komputer di Analisis, dan duel yang dimenangkan",
+   "Setelah analisis, pelatih kini menampilkan semua blunder dan kesalahanmu, bukan hanya tiga; ketidakakuratanmu dilipat di bawahnya. Di Analisis, kamu memilih kekuatan komputer sebelum bermain dari sebuah posisi. Duel teka-teki yang dimenangkan antaranggota kini dihitung: satu kolom di Pemain terbaik, dan di profil pemain satu baris berisi peringkatmu, kemenangan, seri, dan kekalahanmu. Motif di Pecahkan juga punya gambar yang lebih jelas."
+  ]
+ },
+ {
   "d": "2026-11-25",
   "en": [
    "A “Gentle” level, and lessons you play to the end",

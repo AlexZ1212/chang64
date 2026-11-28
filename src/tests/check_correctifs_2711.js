@@ -61,6 +61,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("disque jade plat, sans la coche fine", /\.obj-objectif \.obj-pastille\{position:relative;background:var\(--jade\);box-shadow:none\}/.test(css) && /\.obj-objectif \.obj-pastille svg\{display:none\}/.test(css));
   }
 
+  console.log("--- 19. Rien ne se lit sous le degrade des rangees qui defilent ---");
+  {
+    const css = lire("template.html");
+    T("rangee des pastilles d'erreurs : degrade colle au bord, sur toute la hauteur, sans arrondi", /\.erreurs-defile::before,\.erreurs-defile::after\{top:0;bottom:0;width:44px;border-radius:0\}/.test(css) && /\.erreurs-defile::before\{left:0;/.test(css) && /\.erreurs-defile::after\{right:0;/.test(css));
+    T("toutes les rangees : partie opaque plus large (40 px, opaque a 55 %)", /\.defile::before,\.defile::after\{[^}]*width:40px/.test(css) && !/var\(--ink\) 45%,transparent/.test(css));
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

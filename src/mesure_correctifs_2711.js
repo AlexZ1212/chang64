@@ -157,6 +157,50 @@ const POINTS = {
       return pb;
     },
     capture: "#objAnnonce"
+  },
+  "19": {
+    /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
+       chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute
+       la hauteur de ce qui defile, dans la couleur du fond. */
+    async prepare(c) {
+      await c.js(`(function(){const now=Date.now();ensureProgFields();prog.mistakeQueue=['Knight fork','Back-rank mate','Mate in three','Double attack','Deflection','Skewer','Pin','Discovered attack'].map((th,i)=>({id:'p'+(101+i),theme:th,ts:now,box:1,due:now-1}));saveProg();return 1})()`);
+    },
+    async controle(c) {
+      const pb = [];
+      const DEFILER = `(function(){for(const env of document.querySelectorAll('.defile')){const row=env.firstElementChild;if(!row)continue;row.scrollLeft=(row.scrollWidth-row.clientWidth)/2;if(typeof defileMaj==='function')defileMaj(env);}return new Promise(r=>setTimeout(()=>r(1),400))})()`;
+      const VERIF = `(function(){const pb=[];
+        for(const env of document.querySelectorAll('.defile')){
+          const row=env.firstElementChild;if(!row||!env.getClientRects().length||env.closest('.hide'))continue;
+          const r=env.getBoundingClientRect();if(r.width<2)continue;
+          if(row.scrollWidth<=row.clientWidth+1)continue;
+                    const rs=getComputedStyle(row),nom=(env.id||env.className);
+          for(const cote of ['::before','::after']){
+            const p=getComputedStyle(env,cote);
+            if(p.opacity!=='1'){pb.push(nom+cote+" : degrade invisible alors que la rangee defile");continue;}
+            const bord=parseFloat(cote==='::before'?rs.borderLeftWidth:rs.borderRightWidth);
+            const pos=parseFloat(cote==='::before'?p.left:p.right);
+            if(pos>bord+.1)pb.push(nom+cote+" : un jour de "+(pos-bord)+" px au bord");
+            const haut=parseFloat(p.top),bas=parseFloat(p.bottom);
+            const kids=[...row.children].map(k=>k.getBoundingClientRect()).filter(k=>k.height>0);
+            const top=Math.min(...kids.map(k=>k.top))-r.top,bot=r.bottom-Math.max(...kids.map(k=>k.bottom));
+            if(haut>top+.5||bas>bot+.5)pb.push(nom+cote+" : le degrade ne couvre pas toute la hauteur (haut "+haut+"/"+top.toFixed(1)+", bas "+bas+"/"+bot.toFixed(1)+")");
+            const rad=parseFloat(p.borderTopLeftRadius||0)+parseFloat(p.borderTopRightRadius||0);
+            const radRow=parseFloat(rs.borderTopLeftRadius||0);
+            if(rad>0&&radRow===0)pb.push(nom+cote+" : degrade arrondi sur une rangee sans cadre");
+          }
+        }
+        return pb;})()`;
+      await c.js(`setMode('puzzles',{screen:'puzzles'});1`); await c.attendre(2200);
+      await c.js(`renderMistakeQueue();document.getElementById('mistakeSection').scrollIntoView({block:'center'});1`); await c.attendre(500);
+      await c.js(DEFILER);pb.push(...(await c.js(VERIF)).map(x => "Resoudre : " + x));
+      await c.capture(path.join(SORTIE, "19-erreurs.png"));
+      await c.js(`setMode('play');1`); await c.attendre(1200);
+      await c.js(DEFILER);pb.push(...(await c.js(VERIF)).map(x => "Jouer : " + x));
+      await c.js(`menuOuvrir();menuVue('stats');1`); await c.attendre(1200);
+      await c.js(DEFILER);pb.push(...(await c.js(VERIF)).map(x => "Statistiques : " + x));
+      return pb;
+    },
+    seule: true
   }
 };
 

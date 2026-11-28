@@ -1149,12 +1149,12 @@ button.ap-carte:focus-visible,.ap-chap:focus-visible,.ap-fiches a:focus-visible{
 .defile>.tc-cats{margin-bottom:0;scrollbar-width:none}
 .defile>.tc-cats::-webkit-scrollbar{display:none}
 .defile>.tc-cats button{flex:1 0 auto}
-.defile::before,.defile::after{content:"";position:absolute;top:1px;bottom:1px;width:30px;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
+.defile::before,.defile::after{content:"";position:absolute;top:1px;bottom:1px;width:40px;pointer-events:none;z-index:2;opacity:0;transition:opacity .15s;
   background-repeat:no-repeat,no-repeat;background-size:9px 9px,100% 100%}
 .defile::before{left:1px;border-radius:var(--r) 0 0 var(--r);background-position:7px center,0 0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 45%,transparent)}
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 55%,transparent)}
 .defile::after{right:1px;border-radius:0 var(--r) var(--r) 0;background-position:right 7px center,0 0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 45%,transparent)}
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 55%,transparent)}
 .defile.has-scroll-left::before,.defile.has-scroll-right::after{opacity:1}
 #directAmisBloc{margin-bottom:8px}
 .membres-trouves{margin-top:8px}
@@ -2517,6 +2517,13 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
    cases, et ce qui reviendra plus tard. */
 .erreurs-carte .btn{flex:none;width:auto;padding:10px 14px;font-size:14px}
 .erreurs-defile{margin:2px 0 0}
+/* 27/11 (capture d'Alexandre) : cette rangee n'a pas de cadre, contrairement
+   aux cadences. Le degrade, decale de 1 px et arrondi pour tenir dans un
+   cadre, laissait voir un bout de lettre au bord et le trait des pastilles
+   dessus et dessous. Ici il couvre tout, du bord jusqu'au milieu. */
+.erreurs-defile::before,.erreurs-defile::after{top:0;bottom:0;width:44px;border-radius:0}
+.erreurs-defile::before{left:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 18l-6-6 6-6'/%3E%3C/svg%3E"),linear-gradient(to right,var(--ink) 60%,transparent)}
+.erreurs-defile::after{right:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2397A49D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E"),linear-gradient(to left,var(--ink) 60%,transparent)}
 .erreurs-pastilles{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:1px 0}
 .erreurs-pastilles::-webkit-scrollbar{display:none}
 .erreurs-pastille{flex:none;padding:5px 11px;border-radius:999px;background-color:var(--raise);border:1px solid var(--rule);font-size:13px;line-height:1.3;color:var(--chalk);white-space:nowrap}

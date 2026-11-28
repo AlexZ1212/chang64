@@ -2,6 +2,49 @@
  {
   "d": "2026-11-28",
   "en": [
+   "Lessons one tap away",
+   "After a puzzle, the coach or a drawn game, a line \"To understand\" opens the matching lesson right there, without leaving the screen. A drawn game now says why it is drawn. When a game reaches one of the five endgames, you can practise it straight away. Mistakes to review, badges and the end of each chapter in Learn also lead to their lessons, and the site's pages link to one another."
+  ],
+  "fr": [
+   "Les leçons à portée de main",
+   "Après un exercice, le coach ou une partie nulle, une ligne « Pour comprendre » ouvre la leçon qui va avec, sur place, sans quitter l'écran. Une partie nulle dit maintenant pourquoi elle est nulle. Quand une partie passe par l'une des cinq finales, tu peux t'y entraîner tout de suite. Les Erreurs à revoir, les badges et la fin de chaque chapitre d'Apprendre mènent aussi à leurs leçons, et les pages du site renvoient les unes aux autres."
+  ],
+  "es": [
+   "Las lecciones al alcance de la mano",
+   "Después de un ejercicio, del entrenador o de unas tablas, una línea «Para entenderlo» abre la lección que corresponde, ahí mismo, sin salir de la pantalla. Unas tablas ahora dicen por qué lo son. Cuando una partida llega a uno de los cinco finales, puedes practicarlo enseguida. Los Errores para repasar, las insignias y el final de cada capítulo de Aprender también llevan a sus lecciones, y las páginas del sitio se enlazan entre sí."
+  ],
+  "pt": [
+   "As lições a um toque",
+   "Depois de um exercício, do treinador ou de um empate, uma linha \"Para entender\" abre a lição correspondente ali mesmo, sem sair da tela. Um empate agora diz por que aconteceu. Quando uma partida chega a um dos cinco finais, você pode treiná-lo na hora. Os Erros para revisar, as medalhas e o fim de cada capítulo de Aprender também levam às suas lições, e as páginas do site passam a se ligar entre si."
+  ],
+  "de": [
+   "Die Lektionen gleich zur Hand",
+   "Nach einer Aufgabe, beim Trainer oder nach einem Remis öffnet eine Zeile „Zum Verstehen“ die passende Lektion direkt an Ort und Stelle, ohne den Bildschirm zu verlassen. Ein Remis sagt jetzt, warum es remis ist. Erreicht eine Partie eines der fünf Endspiele, kannst du es sofort üben. Auch die Fehler zum Wiederholen, die Abzeichen und das Ende jedes Kapitels unter Lernen führen zu ihren Lektionen, und die Seiten der Website verweisen aufeinander."
+  ],
+  "ru": [
+   "Уроки под рукой",
+   "После задачи, разбора тренера или ничьей строка «Чтобы разобраться» открывает нужный урок прямо на месте, не уходя с экрана. Ничья теперь объясняет, почему партия закончилась вничью. Если партия дошла до одного из пяти эндшпилей, его можно сразу потренировать. Ошибки для повторения, значки и конец каждой главы в разделе «Учиться» тоже ведут к своим урокам, а страницы сайта ссылаются друг на друга."
+  ],
+  "it": [
+   "Le lezioni a portata di mano",
+   "Dopo un esercizio, l'allenatore o una patta, una riga «Per capire» apre la lezione giusta lì dove sei, senza lasciare la schermata. Una patta ora dice perché è patta. Quando una partita arriva a uno dei cinque finali, puoi allenarti subito. Anche gli Errori da ripassare, le medaglie e la fine di ogni capitolo di Impara portano alle loro lezioni, e le pagine del sito si collegano tra loro."
+  ],
+  "tr": [
+   "Dersler bir dokunuş uzağında",
+   "Bir bulmacadan, antrenörden ya da berabere biten bir oyundan sonra \"Anlamak için\" satırı ilgili dersi ekrandan çıkmadan, hemen orada açar. Berabere biten bir oyun artık neden berabere bittiğini söylüyor. Bir oyun beş oyun sonundan birine ulaştığında hemen çalışabilirsin. Tekrar edilecek hatalar, rozetler ve Öğren bölümündeki her bölümün sonu da kendi derslerine götürür; sitenin sayfaları da birbirine bağlanır."
+  ],
+  "pl": [
+   "Lekcje na wyciągnięcie ręki",
+   "Po zadaniu, po uwagach trenera albo po remisie wiersz „Żeby zrozumieć” otwiera pasującą lekcję od razu na miejscu, bez wychodzenia z ekranu. Remis mówi teraz, skąd się wziął. Gdy partia dojdzie do jednej z pięciu końcówek, możesz od razu ją poćwiczyć. Błędy do powtórki, odznaki i koniec każdego rozdziału w zakładce Ucz się też prowadzą do swoich lekcji, a strony serwisu odsyłają do siebie nawzajem."
+  ],
+  "id": [
+   "Pelajaran dalam satu sentuhan",
+   "Setelah teka-teki, catatan pelatih, atau partai remis, baris \"Untuk memahami\" membuka pelajaran yang sesuai langsung di tempat, tanpa meninggalkan layar. Partai remis kini menjelaskan alasannya. Saat partai sampai ke salah satu dari lima akhir permainan, kamu bisa langsung berlatih. Kesalahan untuk diulang, lencana, dan akhir setiap bab di Belajar juga mengarah ke pelajarannya, dan halaman-halaman situs saling terhubung."
+  ]
+ },
+ {
+  "d": "2026-11-28",
+  "en": [
    "Every moment from the coach, the computer's strength in Analyse, and duels won",
    "After an analysis, the coach now shows all your blunders and mistakes, not just three; your inaccuracies are folded underneath. In Analyse, you choose the computer's strength before playing from a position. Puzzle duels won between members are now counted: a column in Top players, and a line with your rank and your wins, draws and losses on the player profile. The patterns in Solve also get clearer pictures."
   ],

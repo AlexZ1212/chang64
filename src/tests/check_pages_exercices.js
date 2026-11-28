@@ -56,7 +56,11 @@ for(const f of en){const s=fs.statSync(S+"/puzzles/"+f).size; if(s>max){max=s;ma
    comparer au seuil pense pour l'ancienne architecture n'a plus de sens.
    Le plafond reste utile pour detecter une derive, mais il doit suivre le
    produit. */
-T("page la plus lourde sous 80 Ko", max<81920, Math.round(max/1024)+" Ko ("+maxf+")");
+/* 80 -> 82 Ko le 2026-11-28 : liens entre les pages (ligne « Pour comprendre »
+   vers la lecon du motif, et le style des liens discrets du bas des pages
+   Apprendre, partage par toutes les pages) ; la plus lourde, Deviation,
+   passait de 81 600 a 82 266 octets. */
+T("page la plus lourde sous 82 Ko", max<83968, Math.round(max/1024)+" Ko ("+maxf+")");
 const tot=en.reduce((a,f)=>a+fs.statSync(S+"/puzzles/"+f).size,0);
 /* 70 -> 75 Ko le 2026-11-21 : coordonnees sur chaque diagramme (demande
    d'Alexandre), deja compactees a 0,4 Ko par diagramme ; ces pages en ont

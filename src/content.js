@@ -440,30 +440,54 @@ module.exports = function (H) {
     const title = choix(lang, r.title);
     return { title, body: r.body[lang] || r.body.en.map(p => tr(lang, p)), slug: slugDe(lang, r.slug, title, rub || "learn") };
   };
-  for (const lang of LANGS) {
-    const dir = DIRS.learn[lang], u = UI[lang];
-    const idxUrl = `${SITE}/${dir}/`;
-  /* Motif de la banque d'exercices correspondant a une page Apprendre
-     (2026-09-07). Neuf pages sur dix-huit en ont un ; les autres n'en
-     recoivent PAS, et c'est voulu. Une page sur les cadences ou la notation
-     n'a rien a faire reproduire sur un echiquier, et lui coller un bouton
-     pour faire comme les autres serait pire que de ne rien mettre.
-
-     La cle est le slug ANGLAIS, qui sert d'identifiant stable a la page dans
-     les deux langues : le slug francais peut etre retouche pour le
-     referencement sans casser cette table.
-
-     Les valeurs sont les noms de theme tels qu'ils existent dans
-     /data/theme-counts.json, non traduits : c'est la valeur que le filtre
-     compare, la traduction se fait a l'affichage. Une faute de frappe ici ne
-     casse rien de visible, le lien retombe sur un exercice ordinaire (voir
-     applyDeepLink, ui.js), d'ou le test qui verifie la table contre le
-     fichier de decomptes reel. */
-  /* Position de depart standard. Quatre pages l'utilisent comme illustration
-     (deplacement des pieces, notation, cadences, coup tranquille) : leur
-     proposer d'explorer "cette position" reviendrait a les envoyer sur
-     l'accueil, ce qui est deja ce que fait "Jouer une partie". */
-  const FEN_DEPART = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  /* Les lecons du volet de l'application (data/lecons-<langue>.json, ecrit
+     apres le lexique, plus bas) : remplies dans cette boucle, qui connait les
+     motifs des pages. Le francais y recoit ses espaces insecables, comme les
+     fiches : ce texte ne passe pas par la page. */
+  /* Titre, definition et slug d'une entree du lexique dans une langue. */
+  const terme = (x, lang) => {
+    const [sEn, sFr, tEn, tFr, dEn, dFr] = x;
+    const title = T(lang, tEn, tFr), def = T(lang, dEn, dFr);
+    return { title, def, slug: slugDe(lang, { en: sEn, fr: sFr }, title, "glossary") };
+  };
+  const LECONS_L = {};
+  /* Liens entre les pages du site (2026-11-28, piste 6 des liens
+     pedagogiques, choix d'Alexandre). Le lexique et les exemples tactiques
+     menent a la lecon du meme motif (« Pour comprendre : »), la lecon d'un
+     motif mene a ses exemples et a son mot du lexique (« Voir aussi : »).
+     Cle : slug anglais du mot du lexique ; valeur : [rubrique, slug anglais]. */
+  const LEXIQUE_LECON = {
+    "fork": ["learn", "knight-fork"], "double-attack": ["learn", "double-attack"], "pin": ["learn", "the-pin"],
+    "skewer": ["learn", "the-skewer"], "deflection": ["learn", "deflection"], "back-rank-mate": ["learn", "back-rank-mate"],
+    "hanging-piece": ["learn", "spotting-a-hanging-piece"], "promotion": ["learn", "pawn-promotion"],
+    "underpromotion": ["learn", "pawn-promotion"], "stalemate": ["learn", "check-checkmate-stalemate"],
+    "threefold-repetition": ["learn", "how-games-are-drawn"], "fifty-move-rule": ["learn", "how-games-are-drawn"],
+    "perpetual-check": ["learn", "how-games-are-drawn"], "development": ["learn", "opening-principles"],
+    "opposition": ["endgames", "king-and-pawn-vs-king"]
+  };
+  const lienLecon = (lang, [rub, sl]) => {
+    const src = (rub === "endgames" ? ENDS : RULES).find(x => x.slug.en === sl);
+    if (!src) throw new Error("Lecon inconnue (LEXIQUE_LECON) : " + sl);
+    const R = regle(src, lang, rub);
+    return `<a href="/${DIRS[rub][lang]}/${R.slug}">${esc(R.title)}</a>`;
+  };
+  const lienMot = (lang, slEn) => {
+    const x = TERMS.find(y => y[0] === slEn);
+    const M = terme(x, lang);
+    return `<a href="/${DIRS.glossary[lang]}/${M.slug}">${esc(M.title)}</a>`;
+  };
+  /* Meme nom que le titre de la page d'exemples (section 5). */
+  const exemplesTitre = (th, lang) => lang === "fr" ? `${themeOf(th, lang)} : 3 exemples expliqués` : lang === "en" ? `${th}: 3 worked examples`
+    : `${themeOf(th, lang)}: ${tr(lang, "3 worked examples")}`;
+  const ligneLiens = (lang, en, fr, liens) => liens.length ? `<p class="voir-aussi">${esc(T(lang, en, fr))} ${liens.join(", ")}</p>` : "";
+  /* Un mot compose (« petak-petak », « c'est-a-dire ») ne se coupe pas sur son
+     tiret dans le volet, a 360 px (mesure du 28/11, indonesien, police
+     elargie) : meme remede que « teka-teki » dans Ma progression. */
+  const sansCoupure = html => String(html).replace(/(^|>)([^<]*)/g, (m, a, txt) => a + txt.replace(/[\p{L}’']+(?:-[\p{L}’']+)+/gu, w => `<span class="sans-coupure">${w}</span>`));
+  const nbspFr = (lang, s) => lang === "fr" ? String(s).replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") : s;
+  /* Tables placees avant la boucle des pages Apprendre (2026-11-28, liens
+     entre les pages du site) : les pages de lecons renvoient vers leurs
+     exemples et leur mot du lexique, et inversement. */
   const THEME_DE_LA_PAGE = {
     "spotting-a-hanging-piece": "Winning capture",
     "knight-fork": "Knight fork",
@@ -475,87 +499,6 @@ module.exports = function (H) {
     "deflection": "Deflection",
     "the-quiet-move": "Quiet move"
   };
-  /* Meme seuil que SEUIL_MOTIF dans ui.js (2026-10-18) : sous 50 exercices,
-     le motif n'est plus propose a l'entrainement et la page perd son bouton
-     "Entraine-toi", qui aurait ouvert un mode epuise en quelques minutes.
-     La page reste : la notion s'apprend toujours. */
-  const SEUIL_MOTIF = 50;
-  const nbParTheme = {};
-  for (const p of puzzles) nbParTheme[p.theme] = (nbParTheme[p.theme] || 0) + 1;
-  const themeEntrainable = slugEn => {
-    const th = THEME_DE_LA_PAGE[slugEn];
-    return th && (nbParTheme[th] || 0) >= SEUIL_MOTIF ? th : null;
-  };
-    for (const r of RULES) {
-      let jeuDeLaPage = null;
-      try { jeuDeLaPage = new Game(r.fen); } catch (e) { throw new Error("FEN invalide: " + r.fen); }
-      /* Une position sans coup legal (la page sur l'echec et mat montre un
-         mat) ne se PREND pas en main : l'exploration libre y serait un
-         cul-de-sac. Elle n'obtient donc pas le bouton, au meme titre que les
-         pages illustrees par le plateau de depart. */
-      const explorable = r.fen !== FEN_DEPART && jeuDeLaPage.moves().length > 0;
-      const R = regle(r, lang);
-      const canonical = `${SITE}/${dir}/${R.slug}`;
-      const alt = urlsDe("learn", l => regle(r, l).slug);
-      const body = `
-<h1>${esc(R.title)}</h1>
-<div class="cols">
-  ${diagram(r.fen, "")}
-  <div>${/* La lecon de notation enseigne les lettres : elle reste en lettres
-          (notation figurine, 2026-11-21 ; balises lues par figurinesStatiques
-          dans build_site.js). */ r.slug.en === "chess-notation" ? "<!--fig:non-->" : ""}${R.body.map(p => `<p>${p}</p>`).join("\n")}${r.slug.en === "chess-notation" ? "<!--fig:oui-->" : ""}
-    ${r.slug.en === "for-teachers-and-clubs" ? sectionVignette(lang) : ""}
-    ${/* Trois boutons possibles, jamais tous les trois par hasard.
-          "Entraine-toi" quand la banque connait le motif : apres avoir lu ce
-          qu'est un clouage, s'exercer sur mille clouages vaut mieux que
-          commencer une partie quelconque.
-          "Explore cette position" quand la page a une vraie position a
-          montrer. Les pages qui illustrent avec le plateau de depart
-          (deplacement des pieces, notation, cadences, coup tranquille) n'y
-          ont pas droit : un lien vers la position de depart est un lien
-          vers l'accueil, il n'apporte rien.
-          Certaines pages n'ont donc qu'un bouton, d'autres aucun des deux.
-          C'est voulu : une page sur les cadences n'a rien a proposer sur un
-          echiquier, et lui coller un bouton pour faire comme les autres
-          serait pire que de ne rien mettre. */""}
-    ${themeEntrainable(r.slug.en)
-      ? `<a class="cta" href="${accueil(lang)}#theme=${encodeURIComponent(themeEntrainable(r.slug.en))}">${u.train}</a>`
-      : ""}
-    ${explorable
-      ? `<a class="cta${themeEntrainable(r.slug.en) ? " ghost" : ""}" href="${accueil(lang)}#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
-      : ""}
-    ${themeEntrainable(r.slug.en) || explorable
-      ? `<a class="cta ghost" href="${accueil(lang)}">${u.play}</a>`
-      : `<a class="cta" href="${accueil(lang)}">${u.play}</a>`}
-    <a class="cta ghost" href="/${dir}/">${u.back}</a>
-  </div>
-</div>`;
-      page(lang, dir, R.slug + ".html", R.title + " | chang64",
-        metaDesc(R.body[0]), body,
-        { "@context": "https://schema.org", "@type": "Article", headline: R.title, inLanguage: lang },
-        alt, canonical);
-    }
-    const t = T(lang, "Learn chess: every rule explained", "Apprendre les échecs : toutes les règles expliquées");
-    const lede = T(lang, "The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.",
-      "Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous.");
-    const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
-      RULES.map(r => { const R = regle(r, lang); return `<a class="tile" href="/${dir}/${R.slug}"><b>${esc(R.title)}</b></a>`; }).join("\n") + `</div>`;
-    page(lang, dir, "index.html", t + " | chang64", lede, body,
-      { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
-      urlsIndex("learn"), idxUrl);
-    /* Onglet Apprendre (apprendre.js, 2026-11-22) : les fiches de regles y
-       sont listees. Leurs pages gardent leur adresse ; seul l'acces change
-       (elles quittent la rubrique d'Explorer). La page pour les enseignants
-       n'est pas une fiche de regles : elle reste sur l'index. */
-    fs.writeFileSync(`${OUT}/data/fiches-${lang}.json`, JSON.stringify({
-      index: `/${dir}/`,
-      /* Le titre s'affiche dans l'application sans passer par t() : en francais,
-         la ponctuation haute y recoit ici son espace insecable (2026-11-22). */
-      fiches: RULES.filter(r => r.slug.en !== "for-teachers-and-clubs").map(r => { const R = regle(r, lang); return { t: lang === "fr" ? R.title.replace(/ ([:;!?»])/g, "\u00a0$1").replace(/« /g, "«\u00a0") : R.title, u: `/${dir}/${R.slug}` }; })
-    }));
-  }
-
-  /* ================= 2. GLOSSARY ================= */
   const TERMS = [
     ["fork", "fourchette", "Fork", "Fourchette",
      "One piece attacks two or more enemy pieces at the same time. Knights are the classic forkers because their move cannot be blocked, and a fork hitting the king and the queen wins material outright.",
@@ -747,6 +690,133 @@ module.exports = function (H) {
      "A forced sequence of moves, usually beginning with a sacrifice, that reaches a gain the opponent cannot avoid. Forced is the key word: at every step the defence has no real choice, which is what separates a combination from a plan.",
      "Une suite de coups forcée, commençant le plus souvent par un sacrifice, qui aboutit à un gain que l'adversaire ne peut pas éviter. Le mot qui compte est forcée : à chaque étape la défense n'a pas de vrai choix, et c'est ce qui distingue une combinaison d'un plan.", ""]
   ];
+  for (const lang of LANGS) {
+    const dir = DIRS.learn[lang], u = UI[lang];
+    const idxUrl = `${SITE}/${dir}/`;
+  /* Motif de la banque d'exercices correspondant a une page Apprendre
+     (2026-09-07). Neuf pages sur dix-huit en ont un ; les autres n'en
+     recoivent PAS, et c'est voulu. Une page sur les cadences ou la notation
+     n'a rien a faire reproduire sur un echiquier, et lui coller un bouton
+     pour faire comme les autres serait pire que de ne rien mettre.
+
+     La cle est le slug ANGLAIS, qui sert d'identifiant stable a la page dans
+     les deux langues : le slug francais peut etre retouche pour le
+     referencement sans casser cette table.
+
+     Les valeurs sont les noms de theme tels qu'ils existent dans
+     /data/theme-counts.json, non traduits : c'est la valeur que le filtre
+     compare, la traduction se fait a l'affichage. Une faute de frappe ici ne
+     casse rien de visible, le lien retombe sur un exercice ordinaire (voir
+     applyDeepLink, ui.js), d'ou le test qui verifie la table contre le
+     fichier de decomptes reel. */
+  /* Position de depart standard. Quatre pages l'utilisent comme illustration
+     (deplacement des pieces, notation, cadences, coup tranquille) : leur
+     proposer d'explorer "cette position" reviendrait a les envoyer sur
+     l'accueil, ce qui est deja ce que fait "Jouer une partie". */
+  const FEN_DEPART = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  /* THEME_DE_LA_PAGE : definie avant la boucle (2026-11-28), les pages
+     d'exemples tactiques s'en servent aussi pour renvoyer vers la lecon. */
+  /* Meme seuil que SEUIL_MOTIF dans ui.js (2026-10-18) : sous 50 exercices,
+     le motif n'est plus propose a l'entrainement et la page perd son bouton
+     "Entraine-toi", qui aurait ouvert un mode epuise en quelques minutes.
+     La page reste : la notion s'apprend toujours. */
+  const SEUIL_MOTIF = 50;
+  const nbParTheme = {};
+  for (const p of puzzles) nbParTheme[p.theme] = (nbParTheme[p.theme] || 0) + 1;
+  const themeEntrainable = slugEn => {
+    const th = THEME_DE_LA_PAGE[slugEn];
+    return th && (nbParTheme[th] || 0) >= SEUIL_MOTIF ? th : null;
+  };
+    for (const r of RULES) {
+      let jeuDeLaPage = null;
+      try { jeuDeLaPage = new Game(r.fen); } catch (e) { throw new Error("FEN invalide: " + r.fen); }
+      /* Une position sans coup legal (la page sur l'echec et mat montre un
+         mat) ne se PREND pas en main : l'exploration libre y serait un
+         cul-de-sac. Elle n'obtient donc pas le bouton, au meme titre que les
+         pages illustrees par le plateau de depart. */
+      const explorable = r.fen !== FEN_DEPART && jeuDeLaPage.moves().length > 0;
+      const R = regle(r, lang);
+      const canonical = `${SITE}/${dir}/${R.slug}`;
+      const alt = urlsDe("learn", l => regle(r, l).slug);
+      const body = `
+<h1>${esc(R.title)}</h1>
+<div class="cols">
+  ${diagram(r.fen, "")}
+  <div>${/* La lecon de notation enseigne les lettres : elle reste en lettres
+          (notation figurine, 2026-11-21 ; balises lues par figurinesStatiques
+          dans build_site.js). */ r.slug.en === "chess-notation" ? "<!--fig:non-->" : ""}${R.body.map(p => `<p>${p}</p>`).join("\n")}${r.slug.en === "chess-notation" ? "<!--fig:oui-->" : ""}
+    ${r.slug.en === "for-teachers-and-clubs" ? sectionVignette(lang) : ""}
+    ${ligneLiens(lang, "See also:", "Voir aussi :", [
+      ...(THEME_DE_LA_PAGE[r.slug.en] ? [`<a href="/${DIRS.puzzles[lang]}/${categorySlug(THEME_DE_LA_PAGE[r.slug.en], lang)}">${esc(exemplesTitre(THEME_DE_LA_PAGE[r.slug.en], lang))}</a>`] : []),
+      ...Object.keys(LEXIQUE_LECON).filter(k => LEXIQUE_LECON[k][0] === "learn" && LEXIQUE_LECON[k][1] === r.slug.en).map(k => lienMot(lang, k))])}
+    ${/* Trois boutons possibles, jamais tous les trois par hasard.
+          "Entraine-toi" quand la banque connait le motif : apres avoir lu ce
+          qu'est un clouage, s'exercer sur mille clouages vaut mieux que
+          commencer une partie quelconque.
+          "Explore cette position" quand la page a une vraie position a
+          montrer. Les pages qui illustrent avec le plateau de depart
+          (deplacement des pieces, notation, cadences, coup tranquille) n'y
+          ont pas droit : un lien vers la position de depart est un lien
+          vers l'accueil, il n'apporte rien.
+          Certaines pages n'ont donc qu'un bouton, d'autres aucun des deux.
+          C'est voulu : une page sur les cadences n'a rien a proposer sur un
+          echiquier, et lui coller un bouton pour faire comme les autres
+          serait pire que de ne rien mettre. */""}
+    ${themeEntrainable(r.slug.en)
+      ? `<a class="cta" href="${accueil(lang)}#theme=${encodeURIComponent(themeEntrainable(r.slug.en))}">${u.train}</a>`
+      : ""}
+    ${explorable
+      ? `<a class="cta${themeEntrainable(r.slug.en) ? " ghost" : ""}" href="${accueil(lang)}#fen=${encodeURIComponent(r.fen)}">${u.explore}</a>`
+      : ""}
+    ${/* Deux boutons au plus (2026-11-28, accord d'Alexandre) : « Entraine-toi »
+          et « Explore cette position » restent des boutons ; « Jouer une
+          partie » et « Retour a l'index » deviennent deux liens discrets cote
+          a cote dessous, dans le style de « Signaler cet exercice » (centres,
+          soulignes, sans fleche). Une page sans aucun des deux boutons garde
+          « Jouer une partie » en bouton : sinon elle n'en aurait plus aucun. */""}
+    ${themeEntrainable(r.slug.en) || explorable
+      ? `<p class="liens-bas"><a href="${accueil(lang)}">${u.play}</a><a href="/${dir}/">${u.back}</a></p>`
+      : `<a class="cta" href="${accueil(lang)}">${u.play}</a><p class="liens-bas"><a href="/${dir}/">${u.back}</a></p>`}
+  </div>
+</div>`;
+      page(lang, dir, R.slug + ".html", R.title + " | chang64",
+        metaDesc(R.body[0]), body,
+        { "@context": "https://schema.org", "@type": "Article", headline: R.title, inLanguage: lang },
+        alt, canonical);
+    }
+    const t = T(lang, "Learn chess: every rule explained", "Apprendre les échecs : toutes les règles expliquées");
+    const lede = T(lang, "The rules of chess, one page at a time, each with a diagram. Enough to start from nothing, or to fill the gaps.",
+      "Les règles du jeu, une page à la fois, avec un diagramme pour chacune. De quoi partir de zéro ou combler les trous.");
+    const body = `<h1>${esc(t)}</h1><p class="lede">${esc(lede)}</p><div class="grid">` +
+      RULES.map(r => { const R = regle(r, lang); return `<a class="tile" href="/${dir}/${R.slug}"><b>${esc(R.title)}</b></a>`; }).join("\n") + `</div>`;
+    page(lang, dir, "index.html", t + " | chang64", lede, body,
+      { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
+      urlsIndex("learn"), idxUrl);
+    /* Onglet Apprendre (apprendre.js, 2026-11-22) : les fiches de regles y
+       sont listees. Leurs pages gardent leur adresse ; seul l'acces change
+       (elles quittent la rubrique d'Explorer). La page pour les enseignants
+       n'est pas une fiche de regles : elle reste sur l'index. */
+    fs.writeFileSync(`${OUT}/data/fiches-${lang}.json`, JSON.stringify({
+      index: `/${dir}/`,
+      /* Le titre s'affiche dans l'application sans passer par t() : en francais,
+         la ponctuation haute y recoit ici son espace insecable (2026-11-22). */
+      fiches: RULES.filter(r => r.slug.en !== "for-teachers-and-clubs").map(r => { const R = regle(r, lang); return { t: lang === "fr" ? R.title.replace(/ ([:;!?»])/g, "\u00a0$1").replace(/« /g, "«\u00a0") : R.title, u: `/${dir}/${R.slug}` }; })
+    }));
+    const L = LECONS_L[lang] = {};
+    for (const r of RULES) {
+      if (r.slug.en === "for-teachers-and-clubs") continue;
+      const R = regle(r, lang);
+      const e = { t: nbspFr(lang, R.title), p: sansCoupure(nbspFr(lang, R.body[0])), u: `/${dir}/${R.slug}` };
+      if (r.fen !== FEN_DEPART) e.f = r.fen.split(" ")[0];
+      const m = themeEntrainable(r.slug.en);
+      if (m) e.m = m;
+      L[r.slug.en] = e;
+    }
+  }
+
+  /* ================= 2. GLOSSARY ================= */
+  /* TERMS : definie plus haut, avant les pages Apprendre (2026-11-28), qui
+     renvoient vers le lexique (liens entre les pages). */
 
   const byTheme = {};
   for (const p of puzzles) (byTheme[p.theme] = byTheme[p.theme] || []).push(p);
@@ -1018,12 +1088,7 @@ module.exports = function (H) {
     return "";
   }
 
-  /* Titre, definition et slug d'une entree du lexique dans une langue. */
-  const terme = (x, lang) => {
-    const [sEn, sFr, tEn, tFr, dEn, dFr] = x;
-    const title = T(lang, tEn, tFr), def = T(lang, dEn, dFr);
-    return { title, def, slug: slugDe(lang, { en: sEn, fr: sFr }, title, "glossary") };
-  };
+  /* terme : defini plus haut, a cote de TERMS (2026-11-28). */
   for (const lang of LANGS) {
     const dir = DIRS.glossary[lang], u = UI[lang];
     for (const x of TERMS) {
@@ -1066,7 +1131,9 @@ module.exports = function (H) {
          Le nom nu reste dans le JSON-LD DefinedTerm, ou il est la valeur
          attendue, et dans la grille d'index. */
       const h1 = T(lang, "{title}: definition", "{title} : définition", { title });
-      const body = `<h1>${esc(h1)}</h1><p class="lede">${esc(def)}</p><div class="cols">${pz}</div>`;
+      const body = `<h1>${esc(h1)}</h1><p class="lede">${esc(def)}</p>` +
+        (LEXIQUE_LECON[sEn] ? ligneLiens(lang, "To understand:", "Pour comprendre :", [lienLecon(lang, LEXIQUE_LECON[sEn])]) : "") +
+        `<div class="cols">${pz}</div>`;
       page(lang, dir, sl + ".html", `${title} \u00b7 ${T(lang, "chess term explained", "définition et exemple")} | chang64`,
         metaDesc(def), body,
         { "@context": "https://schema.org", "@type": "DefinedTerm", name: title, description: def, inLanguage: lang },
@@ -1092,6 +1159,26 @@ module.exports = function (H) {
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       urlsIndex("glossary"), `${SITE}/${dir}/`);
+  }
+
+  /* Liens pedagogiques (2026-11-28, choix d'Alexandre : la lecon s'ouvre sur
+     place, dans un volet). L'application (lecons.js) montre le titre, le
+     premier paragraphe et la position de la lecon sans quitter l'ecran ;
+     ce fichier lui donne ces morceaux, dans chaque langue. Charge au premier
+     volet deplie seulement. Les lecons sont relevees dans la boucle des pages
+     Apprendre (LECONS_L) ; ici s'ajoutent quelques mots du lexique. */
+  {
+    const MOTS_VOLET = ["blunder", "mistake", "inaccuracy", "elo-rating", "stalemate", "hanging-piece", "fork", "pin",
+      "threefold-repetition", "fifty-move-rule"];
+    for (const lang of LANGS) {
+      const g = {};
+      for (const x of TERMS) {
+        if (!MOTS_VOLET.includes(x[0])) continue;
+        const M = terme(x, lang);
+        g[x[0]] = { t: nbspFr(lang, M.title), p: sansCoupure(nbspFr(lang, esc(M.def))), u: `/${DIRS.glossary[lang]}/${M.slug}` };
+      }
+      fs.writeFileSync(`${OUT}/data/lecons-${lang}.json`, JSON.stringify({ l: LECONS_L[lang], g }));
+    }
   }
 
   /* ================= 3. ENDGAMES ================= */
@@ -1267,8 +1354,10 @@ module.exports = function (H) {
   </div></div>
 </section>`;
       }).join("\n");
+      const pageLecon = Object.keys(THEME_DE_LA_PAGE).find(k => THEME_DE_LA_PAGE[k] === th);
       const body = `<h1>${esc(thLabel)}</h1>
 <p class="lede">${esc(def)}</p>
+${pageLecon ? ligneLiens(lang, "To understand:", "Pour comprendre :", [lienLecon(lang, ["learn", pageLecon])]) : ""}
 ${blocks}
 <p><a class="cta ghost" href="/${dir}/">${u.back}</a></p>`;
       page(lang, dir, categorySlug(th, lang) + ".html", title, desc, body,

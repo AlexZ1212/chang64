@@ -1444,5 +1444,19 @@ module.exports = {
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
 "Your turn: play the next move of the idea.":"Sıra sende: fikrin sonraki hamlesini oyna.",
 /* Carre : partie en cours ailleurs (2026-11-24) */
-"Game in progress: back to the game":"Süren oyun: oyuna dön"
+"Game in progress: back to the game":"Süren oyun: oyuna dön",
+/* Liens vers les lecons (lecons.js, 2026-11-28) */
+"To understand: {lesson}":"Anlamak için: {lesson}",
+"To understand":"Anlamak için",
+"Read the whole lesson":"Dersin tamamını oku",
+"Draw by repetition: the same position came up three times.":"Tekrar nedeniyle berabere: aynı konum üç kez oluştu.",
+"Draw: fifty moves without a capture or a pawn move.":"Berabere: elli hamle boyunca taş alınmadı ve piyon oynanmadı.",
+"Draw: not enough pieces left to checkmate.":"Berabere: mat etmeye yetecek taş kalmadı.",
+"You reached the {endgame} endgame: practise it until you mate every time.":"{endgame} oyun sonuna ulaştın: her seferinde mat edene kadar çalış.",
+"This endgame is always a win: practise the mate.":"Bu oyun sonu her zaman kazanılır: matı çalış.",
+"What comes back most: {pattern}.":"En sık tekrarlanan: {pattern}.",
+"To go further":"Daha ileri gitmek için",
+"Practise this endgame":"Bu oyun sonunu çalış",
+"Open the chapter":"Bölümü aç",
+"What does “{word}” mean?":"“{word}” ne demek?"
 };

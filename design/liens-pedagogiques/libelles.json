@@ -1,0 +1,128 @@
+{
+  "_lisez-moi": "Libellés nouveaux des liens pédagogiques, clé anglaise -> 9 langues (l'anglais est la clé). À reporter dans langues/<code>/app.js (application) ou langues/<code>/pages.js + content.js (pages du site, clés marquées _pages). Tutoiement partout. Le français passera par lier()/insecablesFr() à l'affichage. Réutilisés tels quels, sans nouvelle clé : « Practise this theme in Solve → », « All the rule sheets → », « Opening traps », « Endgames », « Queen vs King » et les autres noms de finales, « Blunder », « Mistake », « Inaccuracy », « Read the article on this endgame », « Stalemate. The game is drawn. ».",
+
+  "To understand: {lesson}": {
+    "fr": "Pour comprendre : {lesson}", "es": "Para entenderlo: {lesson}", "pt": "Para entender: {lesson}",
+    "de": "Zum Verstehen: {lesson}", "ru": "Чтобы разобраться: {lesson}", "it": "Per capire: {lesson}",
+    "tr": "Anlamak için: {lesson}", "pl": "Żeby zrozumieć: {lesson}", "id": "Untuk memahami: {lesson}"
+  },
+  "To understand": {
+    "fr": "Pour comprendre", "es": "Para entenderlo", "pt": "Para entender",
+    "de": "Zum Verstehen", "ru": "Чтобы разобраться", "it": "Per capire",
+    "tr": "Anlamak için", "pl": "Żeby zrozumieć", "id": "Untuk memahami"
+  },
+  "Read the whole lesson": {
+    "fr": "Lire la leçon en entier", "es": "Leer la lección completa", "pt": "Ler a lição inteira",
+    "de": "Die ganze Lektion lesen", "ru": "Читать урок полностью", "it": "Leggi tutta la lezione",
+    "tr": "Dersin tamamını oku", "pl": "Przeczytaj całą lekcję", "id": "Baca pelajaran selengkapnya"
+  },
+  "Draw by repetition: the same position came up three times.": {
+    "fr": "Nulle par répétition : la même position est revenue trois fois.",
+    "es": "Tablas por repetición: la misma posición se repitió tres veces.",
+    "pt": "Empate por repetição: a mesma posição apareceu três vezes.",
+    "de": "Remis durch Wiederholung: Dieselbe Stellung kam dreimal vor.",
+    "ru": "Ничья из-за повторения: одна и та же позиция возникла три раза.",
+    "it": "Patta per ripetizione: la stessa posizione si è ripetuta tre volte.",
+    "tr": "Tekrar nedeniyle berabere: aynı konum üç kez oluştu.",
+    "pl": "Remis przez powtórzenie: ta sama pozycja pojawiła się trzy razy.",
+    "id": "Remis karena pengulangan: posisi yang sama muncul tiga kali."
+  },
+  "Draw: fifty moves without a capture or a pawn move.": {
+    "fr": "Nulle : cinquante coups sans prise ni coup de pion.",
+    "es": "Tablas: cincuenta jugadas sin captura ni movimiento de peón.",
+    "pt": "Empate: cinquenta lances sem captura nem lance de peão.",
+    "de": "Remis: fünfzig Züge ohne Schlagen und ohne Bauernzug.",
+    "ru": "Ничья: пятьдесят ходов без взятий и ходов пешками.",
+    "it": "Patta: cinquanta mosse senza catture né mosse di pedone.",
+    "tr": "Berabere: elli hamle boyunca taş alınmadı ve piyon oynanmadı.",
+    "pl": "Remis: pięćdziesiąt posunięć bez bicia i bez ruchu pionem.",
+    "id": "Remis: lima puluh langkah tanpa memakan bidak dan tanpa langkah pion."
+  },
+  "Draw: not enough pieces left to checkmate.": {
+    "fr": "Nulle : il ne reste plus assez de pièces pour mater.",
+    "es": "Tablas: no quedan piezas suficientes para dar mate.",
+    "pt": "Empate: não sobraram peças suficientes para dar mate.",
+    "de": "Remis: Es sind nicht mehr genug Figuren übrig, um mattzusetzen.",
+    "ru": "Ничья: фигур осталось слишком мало, чтобы поставить мат.",
+    "it": "Patta: non restano abbastanza pezzi per dare scacco matto.",
+    "tr": "Berabere: mat etmeye yetecek taş kalmadı.",
+    "pl": "Remis: zostało za mało bierek, żeby dać mata.",
+    "id": "Remis: bidak yang tersisa tidak cukup untuk skakmat."
+  },
+  "You reached the {endgame} endgame: practise it until you mate every time.": {
+    "_note": "{endgame} = nom traduit de la finale (« Dame contre Roi »…). Formulations sans genre (pl, ru).",
+    "fr": "Tu as eu la finale {endgame} : entraîne-toi jusqu'à mater à chaque fois.",
+    "es": "Llegaste al final {endgame}: practícalo hasta dar mate cada vez.",
+    "pt": "Você chegou ao final {endgame}: treine até dar mate todas as vezes.",
+    "de": "Du hattest das Endspiel {endgame}: Übe es, bis du jedes Mal mattsetzt.",
+    "ru": "У тебя был эндшпиль «{endgame}»: тренируйся, пока не будешь ставить мат каждый раз.",
+    "it": "Hai avuto il finale {endgame}: allenati finché non dai matto ogni volta.",
+    "tr": "{endgame} oyun sonuna ulaştın: her seferinde mat edene kadar çalış.",
+    "pl": "W tej partii była końcówka {endgame}: ćwicz, aż za każdym razem dasz mata.",
+    "id": "Kamu mencapai akhir permainan {endgame}: berlatihlah sampai kamu bisa skakmat setiap kali."
+  },
+  "This endgame is always a win: practise the mate.": {
+    "_note": "Variante quand la partie a fini nulle dans la finale. Jamais pour roi et pion contre roi (pas toujours gagnée).",
+    "fr": "Cette finale se gagne à coup sûr : entraîne-toi à mater.",
+    "es": "Este final siempre se gana: practica el mate.",
+    "pt": "Este final sempre se ganha: treine o mate.",
+    "de": "Dieses Endspiel ist immer gewonnen: Übe das Matt.",
+    "ru": "Этот эндшпиль всегда выигран: потренируй мат.",
+    "it": "Questo finale si vince sempre: allenati sul matto.",
+    "tr": "Bu oyun sonu her zaman kazanılır: matı çalış.",
+    "pl": "Ta końcówka jest zawsze wygrana: poćwicz mata.",
+    "id": "Akhir permainan ini selalu menang: latih skakmatnya."
+  },
+  "What comes back most: {pattern}.": {
+    "fr": "Ce qui revient le plus : {pattern}.", "es": "Lo que más se repite: {pattern}.", "pt": "O que mais se repete: {pattern}.",
+    "de": "Am häufigsten: {pattern}.", "ru": "Чаще всего: {pattern}.", "it": "Quello che torna più spesso: {pattern}.",
+    "tr": "En sık tekrarlanan: {pattern}.", "pl": "Najczęściej wraca: {pattern}.", "id": "Yang paling sering muncul: {pattern}."
+  },
+  "To go further": {
+    "fr": "Pour aller plus loin", "es": "Para ir más lejos", "pt": "Para ir além",
+    "de": "Zum Weiterlernen", "ru": "Чтобы двигаться дальше", "it": "Per andare oltre",
+    "tr": "Daha ileri gitmek için", "pl": "Żeby pójść dalej", "id": "Untuk melangkah lebih jauh"
+  },
+  "Practise this endgame": {
+    "fr": "S'entraîner sur cette finale", "es": "Practicar este final", "pt": "Treinar este final",
+    "de": "Dieses Endspiel üben", "ru": "Потренировать этот эндшпиль", "it": "Allenati su questo finale",
+    "tr": "Bu oyun sonunu çalış", "pl": "Poćwicz tę końcówkę", "id": "Latih akhir permainan ini"
+  },
+  "Open the chapter": {
+    "fr": "Ouvrir le chapitre", "es": "Abrir el capítulo", "pt": "Abrir o capítulo",
+    "de": "Kapitel öffnen", "ru": "Открыть главу", "it": "Apri il capitolo",
+    "tr": "Bölümü aç", "pl": "Otwórz rozdział", "id": "Buka bab"
+  },
+  "What does “{word}” mean?": {
+    "_note": "Nom accessible du petit bouton « ? » (P9), lu par les lecteurs d'écran seulement.",
+    "fr": "Que veut dire « {word} » ?", "es": "¿Qué significa «{word}»?", "pt": "O que significa “{word}”?",
+    "de": "Was bedeutet „{word}“?", "ru": "Что значит «{word}»?", "it": "Che cosa vuol dire «{word}»?",
+    "tr": "“{word}” ne demek?", "pl": "Co znaczy „{word}”?", "id": "Apa arti “{word}”?"
+  },
+
+  "_pages": "Pages du site (P6), table UI de content.js (fr dans content.js, les 8 autres dans langues/<code>/pages.js, liste des clés traduites ligne 109).",
+  "To understand:": {
+    "fr": "Pour comprendre :", "es": "Para entenderlo:", "pt": "Para entender:",
+    "de": "Zum Verstehen:", "ru": "Чтобы разобраться:", "it": "Per capire:",
+    "tr": "Anlamak için:", "pl": "Żeby zrozumieć:", "id": "Untuk memahami:"
+  },
+  "See also:": {
+    "fr": "Voir aussi :", "es": "Ver también:", "pt": "Veja também:",
+    "de": "Siehe auch:", "ru": "См. также:", "it": "Vedi anche:",
+    "tr": "Ayrıca bak:", "pl": "Zobacz też:", "id": "Lihat juga:"
+  },
+
+  "_nouveautes": "Brouillon de l'entrée en tête de src/nouveautes.json (date à poser au jour de la publication).",
+  "nouveautes": {
+    "en": ["Lessons one tap away", "After a puzzle, the coach or a drawn game, a line \"To understand\" opens the matching lesson right there, without leaving the screen. A drawn game now says why it is drawn. When a game reaches one of the five endgames, you can practise it straight away. Mistakes to review, badges and the end of each chapter in Learn also lead to their lessons, and the site's pages link to one another."],
+    "fr": ["Les leçons à portée de main", "Après un exercice, le coach ou une partie nulle, une ligne « Pour comprendre » ouvre la leçon qui va avec, sur place, sans quitter l'écran. Une partie nulle dit maintenant pourquoi elle est nulle. Quand une partie passe par l'une des cinq finales, tu peux t'y entraîner tout de suite. Les Erreurs à revoir, les badges et la fin de chaque chapitre d'Apprendre mènent aussi à leurs leçons, et les pages du site renvoient les unes aux autres."],
+    "es": ["Las lecciones al alcance de la mano", "Después de un ejercicio, del entrenador o de unas tablas, una línea «Para entenderlo» abre la lección que corresponde, ahí mismo, sin salir de la pantalla. Unas tablas ahora dicen por qué lo son. Cuando una partida llega a uno de los cinco finales, puedes practicarlo enseguida. Los Errores para repasar, las insignias y el final de cada capítulo de Aprender también llevan a sus lecciones, y las páginas del sitio se enlazan entre sí."],
+    "pt": ["As lições a um toque", "Depois de um exercício, do treinador ou de um empate, uma linha \"Para entender\" abre a lição correspondente ali mesmo, sem sair da tela. Um empate agora diz por que aconteceu. Quando uma partida chega a um dos cinco finais, você pode treiná-lo na hora. Os Erros para revisar, as medalhas e o fim de cada capítulo de Aprender também levam às suas lições, e as páginas do site passam a se ligar entre si."],
+    "de": ["Die Lektionen gleich zur Hand", "Nach einer Aufgabe, beim Trainer oder nach einem Remis öffnet eine Zeile „Zum Verstehen“ die passende Lektion direkt an Ort und Stelle, ohne den Bildschirm zu verlassen. Ein Remis sagt jetzt, warum es remis ist. Erreicht eine Partie eines der fünf Endspiele, kannst du es sofort üben. Auch die Fehler zum Wiederholen, die Abzeichen und das Ende jedes Kapitels unter Lernen führen zu ihren Lektionen, und die Seiten der Website verweisen aufeinander."],
+    "ru": ["Уроки под рукой", "После задачи, разбора тренера или ничьей строка «Чтобы разобраться» открывает нужный урок прямо на месте, не уходя с экрана. Ничья теперь объясняет, почему партия закончилась вничью. Если партия дошла до одного из пяти эндшпилей, его можно сразу потренировать. Ошибки для повторения, значки и конец каждой главы в разделе «Учиться» тоже ведут к своим урокам, а страницы сайта ссылаются друг на друга."],
+    "it": ["Le lezioni a portata di mano", "Dopo un esercizio, l'allenatore o una patta, una riga «Per capire» apre la lezione giusta lì dove sei, senza lasciare la schermata. Una patta ora dice perché è patta. Quando una partita arriva a uno dei cinque finali, puoi allenarti subito. Anche gli Errori da ripassare, le medaglie e la fine di ogni capitolo di Impara portano alle loro lezioni, e le pagine del sito si collegano tra loro."],
+    "tr": ["Dersler bir dokunuş uzağında", "Bir bulmacadan, antrenörden ya da berabere biten bir oyundan sonra \"Anlamak için\" satırı ilgili dersi ekrandan çıkmadan, hemen orada açar. Berabere biten bir oyun artık neden berabere bittiğini söylüyor. Bir oyun beş oyun sonundan birine ulaştığında hemen çalışabilirsin. Tekrar edilecek hatalar, rozetler ve Öğren bölümündeki her bölümün sonu da kendi derslerine götürür; sitenin sayfaları da birbirine bağlanır."],
+    "pl": ["Lekcje na wyciągnięcie ręki", "Po zadaniu, po uwagach trenera albo po remisie wiersz „Żeby zrozumieć” otwiera pasującą lekcję od razu na miejscu, bez wychodzenia z ekranu. Remis mówi teraz, skąd się wziął. Gdy partia dojdzie do jednej z pięciu końcówek, możesz od razu ją poćwiczyć. Błędy do powtórki, odznaki i koniec każdego rozdziału w zakładce Ucz się też prowadzą do swoich lekcji, a strony serwisu odsyłają do siebie nawzajem."],
+    "id": ["Pelajaran dalam satu sentuhan", "Setelah teka-teki, catatan pelatih, atau partai remis, baris \"Untuk memahami\" membuka pelajaran yang sesuai langsung di tempat, tanpa meninggalkan layar. Partai remis kini menjelaskan alasannya. Saat partai sampai ke salah satu dari lima akhir permainan, kamu bisa langsung berlatih. Kesalahan untuk diulang, lencana, dan akhir setiap bab di Belajar juga mengarah ke pelajarannya, dan halaman-halaman situs saling terhubung."]
+  }
+}

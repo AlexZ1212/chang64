@@ -1444,5 +1444,19 @@ module.exports = {
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
 "Your turn: play the next move of the idea.":"Twój ruch: zagraj kolejny ruch tego pomysłu.",
 /* Carre : partie en cours ailleurs (2026-11-24) */
-"Game in progress: back to the game":"Trwa partia: wróć do partii"
+"Game in progress: back to the game":"Trwa partia: wróć do partii",
+/* Liens vers les lecons (lecons.js, 2026-11-28) */
+"To understand: {lesson}":"Żeby zrozumieć: {lesson}",
+"To understand":"Żeby zrozumieć",
+"Read the whole lesson":"Przeczytaj całą lekcję",
+"Draw by repetition: the same position came up three times.":"Remis przez powtórzenie: ta sama pozycja pojawiła się trzy razy.",
+"Draw: fifty moves without a capture or a pawn move.":"Remis: pięćdziesiąt posunięć bez bicia i bez ruchu pionem.",
+"Draw: not enough pieces left to checkmate.":"Remis: zostało za mało bierek, żeby dać mata.",
+"You reached the {endgame} endgame: practise it until you mate every time.":"W tej partii była końcówka {endgame}: ćwicz, aż za każdym razem dasz mata.",
+"This endgame is always a win: practise the mate.":"Ta końcówka jest zawsze wygrana: poćwicz mata.",
+"What comes back most: {pattern}.":"Najczęściej wraca: {pattern}.",
+"To go further":"Żeby pójść dalej",
+"Practise this endgame":"Poćwicz tę końcówkę",
+"Open the chapter":"Otwórz rozdział",
+"What does “{word}” mean?":"Co znaczy „{word}”?"
 };

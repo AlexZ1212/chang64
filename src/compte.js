@@ -931,7 +931,7 @@ setTimeout(cpDemarrer,1200);
    seuls les joueurs qui ont un compte y figurent. La ligne du joueur
    connecte est mise en avant. Chaque tableau est garde une minute ici, cinq
    sur le serveur. */
-const CPJ=[["semaine","This week"],["note","Puzzle rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Games won between members"]];
+const CPJ=[["semaine","This week"],["note","Puzzle rating"],["resolus","Puzzles solved"],["serie","Days in a row"],["badges","Badges"],["sprint","Sprint record"],["direct","Games won between members"],["duels","Puzzle duels won"]];
 let cpjPar="semaine",cpjCache={};
 const CPL=["Pawn","Knight","Bishop","Rook","Queen"];
 async function cpjVue(par){
@@ -1036,7 +1036,7 @@ async function cpjVue(par){
    telephone il s'ouvre en tournant l'appareil : c'est la seule exception a
    l'ecran "Redresse ton telephone" (html.joueurs-ouverts, voir le CSS). Sur
    ordinateur et tablette, le bouton "Toutes les stats" l'ouvre. */
-const CPJ_COLONNES=[["s","This week"],["n","Puzzle rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Member wins"]];
+const CPJ_COLONNES=[["s","This week"],["n","Puzzle rating"],["r","Puzzles"],["j","Streak"],["b","Badges"],["k","Sprint"],["d","Member wins"],["u","Duels"]];
 let cpjTout=null,cpjToutT=0,cpjTri="r",cpjSens=-1;
 function cpjGrandDessiner(){
   const g=$("cpjGrand");if(!g)return;
@@ -1355,6 +1355,17 @@ function cppDirect(dir){
   return '<p class="tiroir-section cpp-direct-titre">'+echapper(t("Results"))+'</p><div class="menu-tuiles trois cpp-direct">'+
     cases.map(([k,n])=>'<div class="menu-tuile">'+tuileChiffre(n)+"<span>"+echapper(t(k,{n:n}))+"</span></div>").join("")+"</div>";
 }
+/* Duels d'exercices : gagnes, nuls, perdus, comptes par le serveur quand
+   l'autre repond (2026-11-27, choix d'Alexandre : la ligne et le bloc). Vide
+   tant qu'aucun duel n'a compte, ou si le serveur ne les compte pas encore. */
+function cppDuels(du){
+  /* Des noms (victoires, nuls, defaites) et non « Gagnees » : un duel n'a pas
+     le genre d'une partie en francais, en espagnol, en italien. */
+  const d=cpObjet(du),cases=[["Wins",cpNombre(d.v)],["Draws",cpNombre(d.n)],["Losses",cpNombre(d.d)]];
+  if(cases.reduce((s,x)=>s+x[1],0)<=0)return "";
+  return '<p class="tiroir-section cpp-direct-titre">'+echapper(t("Puzzle duels"))+'</p><div class="menu-tuiles trois cpp-direct cpp-duels">'+
+    cases.map(([k,n])=>'<div class="menu-tuile">'+tuileChiffre(n)+"<span>"+echapper(t(k,{n:n}))+"</span></div>").join("")+"</div>";
+}
 async function cppOuvrir(pseudo){
   const f=$("cpProfil"),c=$("cpProfilContenu");if(!f||!c)return;
   if(f.hidden)cppAvant=document.activeElement;
@@ -1403,6 +1414,7 @@ async function cppOuvrir(pseudo){
     }).join("")+"</ul>"+
     /* Parties en direct : le detail, des qu'une partie a compte. */
     cppDirect(j.dir)+
+    cppDuels(j.du)+
     /* Elo contre l'ordinateur : calcule dans le navigateur du joueur, donc
        montre avec son signe "environ" et hors des tableaux. */
     (typeof eloFamillesFiche==="function"?eloFamillesFiche(j):"")+

@@ -1419,7 +1419,7 @@ module.exports = {
 "See the result":"Zobacz wynik",
 "The test stopped after two missed positions in a row: we already know where to start you.":"Test zakończył się po dwóch nieudanych pozycjach z rzędu: wiemy już, od czego masz zacząć.",
 "For what you have already done. Tap to see them.":"Za to, co już masz za sobą. Dotknij, aby je zobaczyć.",
-"Games won between members":"Wygrane partie wśród członków",
+"Games won between members":"Wygrane partie wśród członków","Puzzle duels won":"Wygrane pojedynki","Duels":"Pojedynki","Puzzle duels":"Pojedynki na zadania","Wins":{"one":"Wygrana","few":"Wygrane","many":"Wygranych","other":"Wygranej"},"Draws":{"one":"Remis","few":"Remisy","many":"Remisów","other":"Remisu"},"Losses":{"one":"Porażka","few":"Porażki","many":"Porażek","other":"Porażki"},
 "Member wins":"Wygrane",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Pięć poziomów: od bardzo łagodnego rywala po silnik, który niczego nie wybacza.",

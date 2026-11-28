@@ -1271,7 +1271,7 @@ module.exports = {
 "See the result":"Voir le résultat",
 "The test stopped after two missed positions in a row: we already know where to start you.":"Le test s'est arrêté après deux positions manquées de suite : on sait déjà où te faire commencer.",
 "For what you have already done. Tap to see them.":"Pour ce que tu as déjà fait. Touche pour les voir.",
-"Games won between members":"Parties gagnées entre membres",
+"Games won between members":"Parties gagnées entre membres","Puzzle duels won":"Duels gagnés","Duels":"Duels","Puzzle duels":"Duels d'exercices","Wins":{"one":"Victoire","other":"Victoires"},"Draws":{"one":"Nul","other":"Nuls"},"Losses":{"one":"Défaite","other":"Défaites"},
 "Member wins":"Victoires",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Cinq niveaux, d'un adversaire tout doux à un moteur qui ne pardonne rien.",

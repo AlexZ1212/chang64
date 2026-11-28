@@ -1419,7 +1419,7 @@ module.exports = {
 "See the result":"Lihat hasil",
 "The test stopped after two missed positions in a row: we already know where to start you.":"Tes berhenti setelah dua posisi berturut-turut meleset: kami sudah tahu dari mana kamu sebaiknya mulai.",
 "For what you have already done. Tap to see them.":"Untuk yang sudah kamu selesaikan. Ketuk untuk melihatnya.",
-"Games won between members":"Kemenangan antaranggota",
+"Games won between members":"Kemenangan antaranggota","Puzzle duels won":"Duel yang dimenangkan","Duels":"Duel","Puzzle duels":"Duel teka-teki","Wins":"Menang","Draws":"Seri","Losses":"Kalah",
 "Member wins":"Menang",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Lima level, dari lawan yang sangat lembut sampai mesin yang tidak memaafkan apa pun.",

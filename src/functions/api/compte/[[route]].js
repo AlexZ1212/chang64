@@ -648,6 +648,7 @@ async function rExporter(s, env) {
       const f = await directFamillesLire(env, s.id), un = x => ({ gagnees: x[0], nulles: x[1], perdues: x[2] });
       return f ? { par_cadence: { blitz: un(f.b), rapide: un(f.r), classique: un(f.c), correspondance: un(f.k) } } : {};
     })()),
+    duels_d_exercices: await (async () => { const x = await duelsLire(env, s.id); return x ? { gagnes: x.v, nuls: x.n, perdus: x.d } : null; })(),
     elo_entre_membres: await (async () => {
       const f = await eloFamillesLire(env, s.id), un = x => (x ? { elo: x.r, parties_comptees: x.n } : null);
       return f ? { blitz: un(f.b), rapide: un(f.r), classique: un(f.c), correspondance: un(f.k) } : null;
@@ -865,13 +866,36 @@ async function rDefiEnvoyer(s, d, env, now) {
   if (!r) return erreur("trop", 429);
   return json({ id: r.id, a: c.pseudo }, 201);
 }
+/* Duels gagnes, nuls, perdus (2026-11-27, demande d'Alexandre : les duels dans
+   le tableau des joueurs et sur la fiche). Les defis s'effacent apres 60 jours :
+   le total se tient donc dans comptes (duel_v, duel_n, duel_d), compte ici, une
+   fois, quand le destinataire repond. Meme regle que duelComparer (duel.js) :
+   plus d'exercices trouves du premier coup, puis plus d'exercices trouves,
+   puis le moins de secondes. Les colonnes viennent d'un ALTER TABLE a lancer
+   avant la publication ; sans elles, la reponse passe et rien n'est compte. */
+const duelPremiers = r => (String(r).match(/2/g) || []).length;
+const duelTrouves = r => (String(r).match(/[12]/g) || []).length;
+function duelComparer(a, b) {
+  return (duelPremiers(a.r) - duelPremiers(b.r)) || (duelTrouves(a.r) - duelTrouves(b.r)) || (b.t - a.t);
+}
+async function duelCompter(env, auteur, destinataire, c) {
+  const col = x => (x > 0 ? "duel_v" : x < 0 ? "duel_d" : "duel_n");
+  try {
+    await env.DB.batch([
+      env.DB.prepare("UPDATE comptes SET " + col(c) + " = " + col(c) + " + 1 WHERE id = ?1").bind(auteur),
+      env.DB.prepare("UPDATE comptes SET " + col(-c) + " = " + col(-c) + " + 1 WHERE id = ?1").bind(destinataire)
+    ]);
+  } catch (e) {}
+}
 async function rDefiRepondre(s, d, env, now) {
   if (!Number.isInteger(d.id) || !defiScore(d.r) || !defiTemps(d.t)) return erreur("requete", 400);
   /* Seul le destinataire repond, et une seule fois. */
   const r = await env.DB.prepare(
-    "UPDATE defis SET r2 = ?3, t2 = ?4, repondu = ?5 WHERE id = ?1 AND a = ?2 AND r2 IS NULL RETURNING id"
+    "UPDATE defis SET r2 = ?3, t2 = ?4, repondu = ?5 WHERE id = ?1 AND a = ?2 AND r2 IS NULL RETURNING id, de, r1, t1"
   ).bind(d.id, s.id, d.r, d.t, now).first();
-  return r ? json({ ok: true }) : erreur("defi", 404);
+  if (!r) return erreur("defi", 404);
+  await duelCompter(env, r.de, s.id, duelComparer({ r: r.r1, t: r.t1 }, { r: d.r, t: d.t }));
+  return json({ ok: true });
 }
 async function rDefiSupprimer(s, d, env) {
   if (!Number.isInteger(d.id)) return erreur("requete", 400);
@@ -1243,6 +1267,17 @@ async function directFamillesLire(env, id) {
     return { b: un("b"), r: un("r"), c: un("c"), k: un("k") };
   } catch (e) { return null; }
 }
+/* Duels d'un compte et son rang parmi les fiches publiques, ou null si la
+   base n'a pas encore les colonnes duel_v, duel_n, duel_d (2026-11-27). */
+async function duelsLire(env, id) {
+  try {
+    const l = await env.DB.prepare("SELECT duel_v, duel_n, duel_d FROM comptes WHERE id = ?1").bind(id).first();
+    if (!l) return null;
+    const g = await avecPrive("SELECT COUNT(*) AS u FROM comptes WHERE prive = 0 AND duel_v > ?1", "SELECT COUNT(*) AS u FROM comptes WHERE duel_v > ?1",
+      sql => env.DB.prepare(sql).bind(l.duel_v).first());
+    return { v: l.duel_v, n: l.duel_n, d: l.duel_d, rang: l.duel_v > 0 ? g.u + 1 : null };
+  } catch (e) { return null; }
+}
 async function rProfil(request, env, now, waitUntil) {
   const v = pseudoValider(new URL(request.url).searchParams.get("p") || "");
   if (!v.ok) return erreur("inconnu", 404);
@@ -1273,14 +1308,16 @@ async function rProfil(request, env, now, waitUntil) {
   const g = await avecPrive(PROFIL_RANGS_PUBLICS, PROFIL_RANGS,
     sql => env.DB.prepare(sql).bind(semaine, s, c.note, c.resolus, c.serie, c.badges, c.sprint, c.direct_v).first());
   const rang = (dedans, devant) => dedans ? devant + 1 : null;
-  const ef = await eloFamillesLire(env, c.id), df = await directFamillesLire(env, c.id);
+  const ef = await eloFamillesLire(env, c.id), df = await directFamillesLire(env, c.id), du = await duelsLire(env, c.id);
   const rep = json({
     p: c.pseudo, depuis: new Date(c.cree).toISOString().slice(0, 7),
     s, n: c.note, r: c.resolus, j: c.serie, b: c.badges, k: c.sprint, d: c.direct_v,
     /* Parties en direct : gagnees, nulles, perdues, comptees par le serveur des
        parties ; f : les memes par famille de cadences (depuis le 2026-11-23). */
     dir: Object.assign({ v: c.direct_v, n: c.direct_n, d: c.direct_d }, df ? { f: df } : {}),
-    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k), d: rang(c.direct_v > 0, g.d) },
+    rangs: { s: rang(s > 0, g.s), n: rang(c.resolus >= 10, g.n), r: rang(c.resolus > 0, g.r), j: rang(c.serie > 0, g.j), b: rang(c.badges > 0, g.b), k: rang(c.sprint > 0, g.k), d: rang(c.direct_v > 0, g.d), u: du ? du.rang : null },
+    /* Duels d'exercices entre membres (2026-11-27) : u, gagnes ; du, le detail. */
+    u: du ? du.v : 0, du: du ? { v: du.v, n: du.n, d: du.d } : null,
     /* Elo contre l'ordinateur : declare par le navigateur du joueur, non verifie. */
     eo,
     /* Elo entre membres : calcule par le serveur des parties, donc verifie. */

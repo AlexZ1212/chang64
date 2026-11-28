@@ -199,6 +199,17 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     ev("setMode('home')");
   }
 
+  console.log("--- 3 et 4. Duels gagnes : tableau des joueurs et fiche ---");
+  {
+    T("un onglet « Duels gagnés » dans Meilleurs joueurs", ev("CPJ.some(x=>x[0]==='duels'&&t(x[1])==='Duels gagnés')") === true);
+    T("une colonne « Duels » dans le grand tableau, lue sur u", ev("CPJ_COLONNES.some(x=>x[0]==='u'&&t(x[1])==='Duels')") === true && ev("CPJ.length===CPJ_COLONNES.length") === true);
+    const h = ev("cppDuels({v:12,n:1,d:7})");
+    const div = d.createElement("div"); div.innerHTML = h;
+    T("bloc de la fiche : « Duels d'exercices », 12 Victoires, 1 Nul, 7 Défaites", /Duels d'exercices/.test(div.textContent) && net([...div.querySelectorAll(".menu-tuile")].map(x => x.textContent).join("|")) === "12Victoires|1Nul|7Défaites", net([...div.querySelectorAll(".menu-tuile")].map(x => x.textContent).join("|")));
+    T("aucun duel : pas de bloc", ev("cppDuels(null)") === "" && ev("cppDuels({v:0,n:0,d:0})") === "");
+    T("traductions des duels dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => ["Puzzle duels won", "Duels", "Puzzle duels", "Wins", "Draws", "Losses"].every(k => lire("langues/" + l + "/app.js").includes('"' + k + '":'))));
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

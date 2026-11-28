@@ -280,6 +280,45 @@ const POINTS = {
     },
     capture: ".edit-force"
   },
+  "4": {
+    /* La fiche d'un joueur, avec des duels : le serveur est simule. */
+    async prepare(c) {
+      await c.js(`(async function(){cp={pseudo:"Anna",jeton:"x"};
+        cppLire=async()=>({p:"Anna",depuis:"2026-11",s:9,n:1614,r:168,j:11,b:102,k:6,d:2,u:12,dir:{v:2,n:0,d:1},du:{v:12,n:3,d:7},rangs:{s:1,n:1,r:1,j:1,b:1,k:1,d:1,u:4},eo:{r:746,n:20},em:null,ef:null,bl:[],pays:"BE"});
+        cpaCharger=async()=>({amis:[],demandes:[]});
+        menuOuvrir();await cppOuvrir("Anna");return 1})()`);
+      await c.attendre(1200);
+      await c.js(`(function(){const e=document.querySelector('.cpp-duels');if(e)e.scrollIntoView({block:'center'});return 1})()`);
+      await c.attendre(300);
+    },
+    async controle(c) {
+      const pb = [];
+      const r = await c.js(`(function(){const l=[...document.querySelectorAll('#cpProfilContenu .cpp-liste li')].map(x=>x.textContent);const b=document.querySelector('.cpp-duels');
+        return {ligne:l[l.length-1]||"",bloc:b?[...b.querySelectorAll('.menu-tuile')].map(x=>x.textContent).join('|'):""}})()`);
+      if (!/12\s*#4$/.test(r.ligne.replace(/\s+/g, " ").trim())) pb.push("ligne des duels : " + r.ligne);
+      if (!/^12.*\|3.*\|7/.test(r.bloc)) pb.push("bloc des duels : " + r.bloc);
+      pb.push(...await c.js(`__m.deborde("#cpProfilContenu")`), ...await c.js(`__m.uneLigne("#cpProfilContenu .cpp-liste li span:first-child, .cpp-duels .menu-tuile b")`));
+      return pb;
+    },
+    capture: ".cpp-duels"
+  },
+  "3": {
+    /* Le classement « Duels gagnes » : l'onglet existe et sa liste s'affiche. */
+    async prepare(c) {
+      await c.js(`(async function(){bravoTenter=function(){};cp={pseudo:"Anna",jeton:"x"};const f=window.fetch;window.fetch=(u,o)=>/classement\\?par=duels/.test(String(u))?Promise.resolve(new Response(JSON.stringify({par:"duels",joueurs:[{p:"Anna",v:12},{p:"Boris",v:9},{p:"Chloé",v:4}]}),{status:200})):f(u,o);
+        menuOuvrir();menuVue('joueurs');await new Promise(r=>setTimeout(r,1500));const b=document.querySelector('[data-cpj="duels"]');if(b)b.click();return !!b})()`);
+      await c.attendre(1200);
+    },
+    async controle(c) {
+      const pb = [];
+      const r = await c.js(`(function(){const b=document.querySelector('[data-cpj="duels"]');const l=[...document.querySelectorAll('#menuJoueursVue .cpj-liste li')].map(x=>x.textContent.replace(/\\s+/g,' ').trim());return {onglet:b?b.textContent:"",presse:b&&b.getAttribute('aria-pressed'),l}})()`);
+      if (r.presse !== "true") pb.push("onglet Duels gagnes absent ou pas choisi");
+      if (r.l.length !== 3 || !/Anna.*12/.test(r.l[0])) pb.push("liste : " + JSON.stringify(r.l));
+      pb.push(...await c.js(`__m.deborde("#menuJoueursVue")`), ...await c.js(`__m.uneLigne(".cpj-onglets button")`));
+      return pb;
+    },
+    capture: ".cpj-onglets"
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute

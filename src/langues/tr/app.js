@@ -1419,7 +1419,7 @@ module.exports = {
 "See the result":"Sonucu gör",
 "The test stopped after two missed positions in a row: we already know where to start you.":"Test, art arda iki kaçan konumdan sonra durdu: nereden başlaman gerektiğini artık biliyoruz.",
 "For what you have already done. Tap to see them.":"Daha önce yaptıkların için. Görmek için dokun.",
-"Games won between members":"Üyeler arası galibiyetler",
+"Games won between members":"Üyeler arası galibiyetler","Puzzle duels won":"Kazanılan düellolar","Duels":"Düellolar","Puzzle duels":"Bulmaca düelloları","Wins":"Galibiyet","Draws":"Beraberlik","Losses":"Mağlubiyet",
 "Member wins":"Galibiyet",
 /* Contre l'ordinateur : titre, cinq niveaux (2026-11-24) */
 "Five levels, from a gentle opponent to an engine that forgives nothing.":"Beş seviye: çok yumuşak bir rakipten hiçbir şeyi affetmeyen bir motora.",

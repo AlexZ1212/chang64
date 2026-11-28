@@ -107,6 +107,18 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("une promotion sans prise : +9 (une dame), plus 0", promo === 9, promo);
   }
 
+  console.log("--- 7. Barre d'evaluation sur un mat ---");
+  {
+    const barre = fen => JSON.parse(ev(`(function(){const sauve=game,rv=reviewGame,rp=reviewPly;reviewGame=null;reviewPly=null;game=new Game(${JSON.stringify(fen)});updateEval();
+      const r={h:document.getElementById('evalfill').style.height,n:document.getElementById('evalnum').textContent,t:document.getElementById('evaltxt').textContent};game=sauve;reviewGame=rv;reviewPly=rp;return JSON.stringify(r)})()`));
+    const a = barre("4R1kr/p1p2ppp/1qp5/2N5/1B6/P2P3P/1PP2PPK/8 b - - 0 26");
+    T("la partie d'Alexandre (26. Txe8#) : barre pleine cote Blancs, « # », « Échec et mat »", a.h === "94%" && a.n === "#" && /chec\s+et\s+mat/.test(a.t), JSON.stringify(a));
+    const b = barre("k7/8/8/8/8/8/5PPP/3r2K1 w - - 0 1");
+    T("les Noirs matent : barre pleine cote Noirs", b.h === "6%" && /#/.test(b.n), JSON.stringify(b));
+    const c = barre("k7/8/1Q6/8/8/8/8/K7 b - - 0 1");
+    T("pat : barre au milieu", c.h === "50%" && c.t === "Pat.", JSON.stringify(c));
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

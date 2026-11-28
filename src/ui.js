@@ -1349,6 +1349,22 @@ function updateEval(){
     if(ea){cpTrue=ea.cpTrue;mate=ea.mate;}
   }
   if(cpTrue===null&&mate===null)cpTrue=evaluate(g)*(g.turn===W?1:-1);
+  /* Position deja finie (27/11, capture d'Alexandre : il venait de mater, la
+     barre restait au milieu avec -1.3). Le moteur ne note pas une partie
+     finie : on lisait le materiel, ou un « mat en 0 » sans signe qui
+     penchait toujours vers les Noirs. Sur un mat, la barre est pleine du
+     cote du gagnant et dit « # » ; sur un pat, elle est au milieu. */
+  let fin=null;
+  try{if(g&&g.moves().length===0)fin=g.inCheck()?(g.turn===W?"0-1":"1-0"):"pat";}catch(e){}
+  if(fin){
+    const blancs=fin==="1-0",nul=fin==="pat";
+    $("evalfill").style.height=(nul?50:blancs?94:6)+"%";
+    { const tr=document.querySelector(".evaltrack");
+      if(tr)tr.classList.toggle("flipped",!!flipped); }
+    $("evalnum").textContent=nul?"½":(blancs?"#":"\u2212#");
+    $("evaltxt").textContent=nul?t("Stalemate."):t("Checkmate");
+    return;
+  }
   const pawnsTrue=(cpTrue||0)/100;
   /* BAR_CAP : ecretage VISUEL de la barre seulement (comme sur chess.com et
      lichess, dont la barre est quasi pleine bien avant un avantage de 10

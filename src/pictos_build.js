@@ -98,5 +98,19 @@ const P = {
    comme les cartes de Resoudre portent celui d'un badge. */
 for (const k of ["winning_capture", "knight_fork", "pawn_fork", "pin", "skewer", "deflection", "double_attack", "quiet_move", "back_rank_mate", "mate_in_one", "mate_in_two", "mate_in_three"])
   if (M["theme_" + k]) P["motif_" + k] = glyphe("theme_" + k);
-function pictosSource() { return "const PICTOS=" + JSON.stringify(P) + ";"; }
+/* Poids (27/11) : les pieces reviennent dans beaucoup de pictos (le roi des
+   trois mats, la dame, le pion...), et chacune y recopiait son trace entier.
+   Chaque trace long (d="...") present au moins deux fois n'est plus ecrit
+   qu'une fois, dans T ; les pictos portent \u0001 suivi de son numero, que
+   la page remplace au chargement. Le dessin rendu est le meme, caractere pour
+   caractere (tests/check_correctifs_2711.js le verifie). */
+function pictosSource() {
+  const vus = new Map();
+  for (const v of Object.values(P)) for (const m of v.matchAll(/ d="([^"]{120,})"/g)) vus.set(m[1], (vus.get(m[1]) || 0) + 1);
+  const T = [...vus].filter(([, n]) => n > 1).map(([d]) => d);
+  const Q = {};
+  for (const [k, v] of Object.entries(P)) Q[k] = v.replace(/ d="([^"]{120,})"/g, (x, d) => { const i = T.indexOf(d); return i < 0 ? x : ' d="\u0001' + i + '"'; });
+  if (!T.length) return "const PICTOS=" + JSON.stringify(P) + ";";
+  return "const PICTOS=(function(p,t){for(const k in p)p[k]=p[k].replace(/\\u0001(\\d+)/g,function(x,i){return t[+i];});return p;})(" + JSON.stringify(Q) + "," + JSON.stringify(T) + ");";
+}
 module.exports = { pictosSource, PICTOS: P, GLOBE_LANGUE };

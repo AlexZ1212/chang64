@@ -210,6 +210,15 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("traductions des duels dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => ["Puzzle duels won", "Duels", "Puzzle duels", "Wins", "Draws", "Losses"].every(k => lire("langues/" + l + "/app.js").includes('"' + k + '":'))));
   }
 
+  console.log("--- Poids : les traces repetes des pictos ne sont ecrits qu'une fois ---");
+  {
+    const m = require("../pictos_build.js"), src = m.pictosSource();
+    const P = new Function(src + ";return PICTOS;")();
+    T("les pictos recomposes sont identiques aux dessins", Object.keys(m.PICTOS).every(k => P[k] === m.PICTOS[k]));
+    T("et la source est plus legere", src.length < JSON.stringify(m.PICTOS).length - 5000, src.length + " / " + JSON.stringify(m.PICTOS).length);
+    T("la page a les memes pictos", ev("Object.keys(PICTOS).every(k=>!/\\u0001/.test(PICTOS[k]))") === true && ev("PICTOS.motif_mate_in_one") === m.PICTOS.motif_mate_in_one);
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

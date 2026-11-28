@@ -33,6 +33,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("textes des badges (" + l + ") : pas de « 64 % »", !/\d[\s  ]%/.test(lire(f)));
   }
 
+  console.log("--- 14. « Signaler cet exercice » sous les boutons de partage ---");
+  {
+    const s = $("exSignaler"), b = $("dailyChallengeBlock");
+    T("le lien vient apres le bloc de partage du jour", s && b && (b.compareDocumentPosition(s) & w.Node.DOCUMENT_POSITION_FOLLOWING) && !b.contains(s));
+    T("un seul lien « Signaler » sur la page", d.querySelectorAll("#btnSignaler").length === 1);
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

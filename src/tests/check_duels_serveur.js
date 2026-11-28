@@ -5,9 +5,9 @@
    le serveur du compte les compte quand le destinataire d'un duel repond,
    le tableau des joueurs les classe et la fiche les montre avec leur rang.
    Execute tel quel contre la base SQLite en memoire qui imite D1. Les trois
-   colonnes duel_v, duel_n, duel_d n'existent pas encore dans le schema : le
-   test les ajoute a SA base, comme le fera l'ALTER TABLE de la publication,
-   et verifie aussi qu'une base sans elles continue de marcher. */
+   colonnes duel_v, duel_n, duel_d sont dans le schema depuis le 28/11 (ALTER
+   TABLE execute en production) ; le test verifie aussi qu'une base sans elles
+   (il les retire de SA base) continue de marcher. */
 const path = require("path"), { pathToFileURL } = require("url");
 process.removeAllListeners("warning"); process.on("warning", () => {});
 let ok = 0, ko = 0;
@@ -39,9 +39,8 @@ const { fausseD1 } = require("../serveur_local.js");
   };
   const compte = p => env.DB.brut.prepare("SELECT duel_v AS v, duel_n AS n, duel_d AS d FROM comptes WHERE pseudo = ?").get(p);
 
-  console.log("\nAvec les colonnes (apres l'ALTER TABLE de la publication)");
+  console.log("\nAvec les colonnes (schema du 28/11)");
   env = { DB: fausseD1() };
-  for (const c of ["duel_v", "duel_n", "duel_d"]) env.DB.brut.exec("ALTER TABLE comptes ADD COLUMN " + c + " INTEGER NOT NULL DEFAULT 0");
   const A = { p: "Anna", c: await ouvrir("Anna") }, B = { p: "Boris", c: await ouvrir("Boris") }, C = { p: "Chloe", c: await ouvrir("Chloe") };
   T("Boris repond mieux (plus de premiers coups) : 200", await duel(A, B, "22102", 95, "22220", 120) === 200);
   T("Boris : 1 gagne ; Anna : 1 perdu", JSON.stringify(compte("Boris")) === '{"v":1,"n":0,"d":0}' && JSON.stringify(compte("Anna")) === '{"v":0,"n":0,"d":1}', JSON.stringify([compte("Anna"), compte("Boris")]));
@@ -71,8 +70,9 @@ const { fausseD1 } = require("../serveur_local.js");
   T("une fiche privee ne compte pas dans le rang des autres", f.rangs.u === 1, JSON.stringify(f.rangs));
   T("l'export du compte porte ses duels", JSON.stringify((await appel("GET", "exporter", undefined, { cookie: B.c })).j.duels_d_exercices) === '{"gagnes":2,"nuls":1,"perdus":0}');
 
-  console.log("\nSans les colonnes (avant l'ALTER TABLE)");
+  console.log("\nSans les colonnes (base d'avant l'ALTER TABLE)");
   env = { DB: fausseD1() };
+  for (const c of ["duel_v", "duel_n", "duel_d"]) env.DB.brut.exec("ALTER TABLE comptes DROP COLUMN " + c);
   const creerAvec = async p => (await appel("POST", "creer", { pseudo: p, code: code(2), donnees: { progress: { solved: 30, rating: 900, days: 2, badges: [], rushBest: 0 } } })).cookie;
   const A2 = { p: "Anna", c: await creerAvec("Anna") }, B2 = { p: "Boris", c: await creerAvec("Boris") };
   T("repondre a un duel marche encore", await duel(A2, B2, "22102", 95, "22220", 120) === 200);

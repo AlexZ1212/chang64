@@ -76,8 +76,18 @@ CREATE TABLE IF NOT EXISTS comptes (
   -- Fiche privee (2026-11-24, SQL accepte par Alexandre) : 1 = fiche fermee
   -- aux autres (sauf ses amis), absent des tableaux, des ligues et de la
   -- recherche, invitations de ses amis seulement. 0 par defaut.
-  prive INTEGER NOT NULL DEFAULT 0
+  prive INTEGER NOT NULL DEFAULT 0,
+  -- Duels d'exercices (2026-11-28, SQL accepte par Alexandre) : gagnes, nuls,
+  -- perdus, comptes une fois quand le destinataire repond (rDefiRepondre).
+  duel_v INTEGER NOT NULL DEFAULT 0,
+  duel_n INTEGER NOT NULL DEFAULT 0,
+  duel_d INTEGER NOT NULL DEFAULT 0
 );
+-- Base creee avant les duels comptes (2026-11-28, SQL accepte par Alexandre,
+-- execute en production le 28/11) : les colonnes s'ajoutent par
+--   ALTER TABLE comptes ADD COLUMN duel_v INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN duel_n INTEGER NOT NULL DEFAULT 0;
+--   ALTER TABLE comptes ADD COLUMN duel_d INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant la fiche privee :
 --   ALTER TABLE comptes ADD COLUMN prive INTEGER NOT NULL DEFAULT 0;
 -- Base creee avant les resultats par famille (2026-11-23, SQL accepte par

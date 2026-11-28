@@ -1,6 +1,6 @@
 {
  "/": {
-  "sceau": "556f94d809f6b8cd",
+  "sceau": "77504d1287f77103",
   "publiee": "2026-09-06",
   "modifiee": "2026-11-28"
  },
@@ -790,9 +790,9 @@
   "modifiee": "2026-11-19"
  },
  "/de/glossar/ablenkung": {
-  "sceau": "e01edc9cbaa36fec",
+  "sceau": "c93ea9d447001893",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/abzugsangriff": {
   "sceau": "b7225f5c7fe0c6e3",
@@ -820,9 +820,9 @@
   "modifiee": "2026-11-21"
  },
  "/de/glossar/dauerschach": {
-  "sceau": "33d800033db76002",
+  "sceau": "b7f319c68460b04b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/die-elo-wertung": {
   "sceau": "4c4f1a303db39768",
@@ -830,9 +830,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/doppelangriff": {
-  "sceau": "6c004fd0639350d7",
+  "sceau": "3da01d927d2ff357",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/doppelbauern": {
   "sceau": "ab72a7abddfaf799",
@@ -845,9 +845,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/dreifache-stellungswiederholung": {
-  "sceau": "afb17754d4b10456",
+  "sceau": "e861c2c85042a336",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/eco-code": {
   "sceau": "502c853944158e81",
@@ -860,9 +860,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/entwicklung": {
-  "sceau": "0865664d97e7cd11",
+  "sceau": "a6f1ab56da58c193",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/ersticktes-matt": {
   "sceau": "b5eee39921f60148",
@@ -875,9 +875,9 @@
   "modifiee": "2026-11-21"
  },
  "/de/glossar/fesselung": {
-  "sceau": "eea57ace8f9e218b",
+  "sceau": "ffdb4bb78a48e409",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/fianchetto": {
   "sceau": "c058f8dcb07d8e10",
@@ -890,14 +890,14 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/fuenfzig-zuege-regel": {
-  "sceau": "d88a31b5fcd1c010",
+  "sceau": "29b871f3dbdb112b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/gabel": {
-  "sceau": "08c224b91e8ed03e",
+  "sceau": "3facc59efa7b837e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/gambit": {
   "sceau": "cb0bb6b52cf45068",
@@ -910,14 +910,14 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/grundreihenmatt": {
-  "sceau": "a09e2f8d9a435f3e",
+  "sceau": "17cffc42bb4262d7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/haengende-figur": {
-  "sceau": "812632571b1e720b",
+  "sceau": "f0202e8c49a489f7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/hinlenkung": {
   "sceau": "bd7627fd5c61712b",
@@ -965,14 +965,14 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/opposition": {
-  "sceau": "8627f9ec8e211862",
+  "sceau": "c0983ea766e36288",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/patt": {
-  "sceau": "fe154b75719bd3fe",
+  "sceau": "c70f0dcfbb704109",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/patzer": {
   "sceau": "082189e8586abbe6",
@@ -1000,9 +1000,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/spiess": {
-  "sceau": "4deda00d0d032351",
+  "sceau": "6d0072f8508139c3",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/tempo": {
   "sceau": "2947c94adedce709",
@@ -1015,9 +1015,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/umwandlung": {
-  "sceau": "dc409827f252757b",
+  "sceau": "ae9f80e32d99c0f2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/ungenauigkeit": {
   "sceau": "9de815a80bb4fe38",
@@ -1025,9 +1025,9 @@
   "modifiee": "2026-10-25"
  },
  "/de/glossar/unterverwandlung": {
-  "sceau": "0ba793d6f53852ef",
+  "sceau": "b36f5a0369a0447a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/de/glossar/verstellung": {
   "sceau": "92d954b658621f90",
@@ -1060,69 +1060,69 @@
   "modifiee": "2026-10-25"
  },
  "/de/motive/ablenkung": {
-  "sceau": "37b5328c529962bf",
+  "sceau": "52559166ee2406bf",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/bauerngabel": {
-  "sceau": "1bb0dfda74786648",
+  "sceau": "3ede0ad723f928d9",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/doppelangriff": {
-  "sceau": "2c71ebcc9d035700",
+  "sceau": "16c176a6d96897e6",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/fesselung": {
-  "sceau": "03b8157c068efb6f",
+  "sceau": "6a1cf9a2382e2c0b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/gewinnender-schlagzug": {
-  "sceau": "f1638957340b53af",
+  "sceau": "5b2ab53eaba44016",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/gewinnzug": {
-  "sceau": "426a465090fc4b23",
+  "sceau": "85c8ce313cf891cc",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/grundreihenmatt": {
-  "sceau": "552279459d45151f",
+  "sceau": "2fc58617b4c34d40",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/matt-in-drei-zuegen": {
-  "sceau": "ab0b0f04cc3f22b4",
+  "sceau": "eeeb29908b3270f2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/matt-in-einem-zug": {
-  "sceau": "ec2fc7f33a453e64",
+  "sceau": "d7c33ba965ff7a5a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/matt-in-zwei-zuegen": {
-  "sceau": "42f324bc10b024d4",
+  "sceau": "1a4b93612ffc788c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/spiess": {
-  "sceau": "545c8875fd91e1ff",
+  "sceau": "4c6960e47a7d9206",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/springergabel": {
-  "sceau": "cf50f8c705b77e31",
+  "sceau": "106bf5c2179d4789",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/motive/stiller-zug": {
-  "sceau": "aad5efc11e47b3e0",
+  "sceau": "1f2a5fb13bc95eed",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/": {
   "sceau": "acb8dfb3f1ad53e5",
@@ -1130,104 +1130,104 @@
   "modifiee": "2026-11-17"
  },
  "/de/regeln/bedenkzeiten": {
-  "sceau": "428a1beae7cfc037",
+  "sceau": "c0bf99ae99511a8f",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/das-grundreihenmatt": {
-  "sceau": "d6a93c5de4ae3a38",
+  "sceau": "774c5c728b7ae2f0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/dein-konto": {
-  "sceau": "272f942d4d8737fb",
+  "sceau": "ca9d4ab093350371",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/der-doppelangriff": {
-  "sceau": "e9cbabc338252f0d",
+  "sceau": "e1f1f6565cafcb9a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/der-spiess": {
-  "sceau": "02fdf9c2589d00de",
+  "sceau": "c3f8b13a9a13dc56",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/der-stille-zug": {
-  "sceau": "7c9a12d27005389f",
+  "sceau": "6f943dc52f692102",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-ablenkung": {
-  "sceau": "e117d6c75f27ad47",
+  "sceau": "edaa42c91ea53490",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-bauerngabel": {
-  "sceau": "a885550ad967fa84",
+  "sceau": "4c5374f10f450850",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-bauernumwandlung": {
-  "sceau": "b33d036007b23097",
+  "sceau": "dbebe8980fa51335",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-fesselung": {
-  "sceau": "5820455d674257cb",
+  "sceau": "b2c1ebab3da20603",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-rochade": {
-  "sceau": "166171e183e136e7",
+  "sceau": "1adbb0394c7fc80c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-schachnotation": {
-  "sceau": "b9351817cf702c9f",
+  "sceau": "77b6e2b0813642d3",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/die-springergabel": {
-  "sceau": "829f07bc514cf1e4",
+  "sceau": "2cb93b979f8f7637",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/en-passant": {
-  "sceau": "7d1f80ea98a3a341",
+  "sceau": "251c340f71509fe3",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/eroeffnungsprinzipien": {
-  "sceau": "e03aa4f0ca1e45d8",
+  "sceau": "371d7c5feb18583f",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/fuer-lehrkraefte-und-vereine": {
-  "sceau": "c01ae6b87f943e1c",
+  "sceau": "3ef0cdaef4a4a5a7",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/haengende-figuren-erkennen": {
-  "sceau": "718f6d78d9e2e79f",
+  "sceau": "8564d1d7f10e9cf9",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/remis": {
-  "sceau": "2e0771d6a85481b0",
+  "sceau": "7301719fd4ca6f42",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/schach-matt-und-patt": {
-  "sceau": "2c9c94b0a94870a8",
+  "sceau": "5c7a58e74e5ef017",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/de/regeln/wie-die-figuren-ziehen": {
-  "sceau": "c3488e97329c010c",
+  "sceau": "28b2f961c5067df6",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/endgames/": {
   "sceau": "39952f561b3c63bd",
@@ -1975,104 +1975,104 @@
   "modifiee": "2026-11-17"
  },
  "/es/aprender/como-se-mueven-las-piezas": {
-  "sceau": "2d7b714619939ca9",
+  "sceau": "7531bdfd4e425162",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/detectar-una-pieza-colgada": {
-  "sceau": "6fe1a86a1f591658",
+  "sceau": "ccf9709d468897ff",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/el-ataque-doble": {
-  "sceau": "cc98d1821a5795cd",
+  "sceau": "2d606e3fff5906ad",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/el-enroque": {
-  "sceau": "7978ac3ff5d8e0b9",
+  "sceau": "3486101156542d9e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/el-mate-del-pasillo": {
-  "sceau": "aae3b6e365aa4f4a",
+  "sceau": "a04b45e2108ff025",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/el-pincho": {
-  "sceau": "69b7c683bbacd270",
+  "sceau": "88ff6a562635149b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/jaque-mate-y-ahogado": {
-  "sceau": "460930a997e134b3",
+  "sceau": "faea2887bf630767",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-captura-al-paso": {
-  "sceau": "9b63dc05d4678b34",
+  "sceau": "c8441140b63b6edb",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-clavada": {
-  "sceau": "000bceb719229a15",
+  "sceau": "dd743780e3a8d770",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-coronacion-del-peon": {
-  "sceau": "1781878f7d3f6099",
+  "sceau": "2af1bb36cf5e89f9",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-desviacion": {
-  "sceau": "031280fc3b354780",
+  "sceau": "b037c2b8765d019c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-horquilla-de-caballo": {
-  "sceau": "ce9b62bb0848169a",
+  "sceau": "4ed4946dc0b4c7be",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-horquilla-de-peon": {
-  "sceau": "d9b7578754220148",
+  "sceau": "5454517546044890",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-jugada-tranquila": {
-  "sceau": "9d70deb7ae931559",
+  "sceau": "f9940da5ff2bcb83",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/la-notacion": {
-  "sceau": "e049fa709f6aeb36",
+  "sceau": "9e8cd77326c69ae3",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/las-tablas": {
-  "sceau": "f7b3d83d0c20783d",
+  "sceau": "54003f8755b503d9",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/los-principios-de-apertura": {
-  "sceau": "6e4400afd4e5a10a",
+  "sceau": "fd66720337a01f40",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/los-ritmos-de-juego": {
-  "sceau": "6d5f6df9977d585b",
+  "sceau": "942825624fca953f",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/para-profesores-y-clubes": {
-  "sceau": "1b3f73243d0f6869",
+  "sceau": "847a6ddd84746301",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/aprender/tu-cuenta": {
-  "sceau": "0596a3cb456bde2e",
+  "sceau": "e995437361a81691",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/es/finales/": {
   "sceau": "3acd9b3469529be5",
@@ -2110,9 +2110,9 @@
   "modifiee": "2026-11-19"
  },
  "/es/glosario/ahogado": {
-  "sceau": "b303fe17496c5007",
+  "sceau": "5ab411b140900aa0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/ataque-a-la-descubierta": {
   "sceau": "6f6199f2a62277c7",
@@ -2130,9 +2130,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/ataque-doble": {
-  "sceau": "d880b54d83f262f3",
+  "sceau": "7bc1ab86f7492d2b",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/atraccion": {
   "sceau": "2d982e40f799475c",
@@ -2140,9 +2140,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/clavada": {
-  "sceau": "e3f693969ca068ed",
+  "sceau": "c6cbb65d758d10a8",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/codigo-eco": {
   "sceau": "28c48028b884d625",
@@ -2160,14 +2160,14 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/coronacion": {
-  "sceau": "439b1e771696063e",
+  "sceau": "74594da2cb649944",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/desarrollo": {
-  "sceau": "b5b5db4dddebf4d9",
+  "sceau": "c99404ece7f08231",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/despeje": {
   "sceau": "0b870ed88df36d24",
@@ -2175,9 +2175,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/desviacion": {
-  "sceau": "5703ed64c2e99787",
+  "sceau": "925c541596747bd7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/eliminacion-del-defensor": {
   "sceau": "39ac16e05f4919d1",
@@ -2210,9 +2210,9 @@
   "modifiee": "2026-11-21"
  },
  "/es/glosario/horquilla": {
-  "sceau": "eabb6fab10bf8d68",
+  "sceau": "37c005962218a97a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/imprecision": {
   "sceau": "d350716d6a3d27c9",
@@ -2225,9 +2225,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/jaque-continuo": {
-  "sceau": "dc51cad18d825825",
+  "sceau": "93dc5e281d277e56",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/jaque-doble": {
   "sceau": "e9cb25e78dd7555b",
@@ -2260,9 +2260,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/mate-del-pasillo": {
-  "sceau": "0c7481ef93253b17",
+  "sceau": "684946b9c786097c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/mayoria-de-peones": {
   "sceau": "8dc6b3cd621e6cb5",
@@ -2280,9 +2280,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/oposicion": {
-  "sceau": "9e929d8417231317",
+  "sceau": "9a16da2b405c6b9e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/pareja-de-alfiles": {
   "sceau": "e55b22fb64797af4",
@@ -2315,14 +2315,14 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/pieza-colgada": {
-  "sceau": "934965f38a347f7e",
+  "sceau": "b8197e23d7948a63",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/pincho": {
-  "sceau": "d34331f0e8f5bc8c",
+  "sceau": "5ceb8c5de79fc6cb",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/profilaxis": {
   "sceau": "1d2816b99984e1e3",
@@ -2335,9 +2335,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/regla-de-los-50-movimientos": {
-  "sceau": "5d2ab0c4485057d3",
+  "sceau": "75da5878b7cb16e2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/sacrificio": {
   "sceau": "642aa20f8feb67ea",
@@ -2355,9 +2355,9 @@
   "modifiee": "2026-10-25"
  },
  "/es/glosario/subpromocion": {
-  "sceau": "7eba6c7d31791242",
+  "sceau": "b2f625ab89bf7474",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/tiempo": {
   "sceau": "eae2eeb9aaae90bc",
@@ -2365,9 +2365,9 @@
   "modifiee": "2026-11-21"
  },
  "/es/glosario/triple-repeticion": {
-  "sceau": "b97a289705b43256",
+  "sceau": "8853dc2ceba854d0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/es/glosario/zugzwang": {
   "sceau": "3498e69f174535de",
@@ -2380,69 +2380,69 @@
   "modifiee": "2026-10-25"
  },
  "/es/motivos/ataque-doble": {
-  "sceau": "934c001bae24b00e",
+  "sceau": "e483c5d665290666",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/captura-ganadora": {
-  "sceau": "42344f5dcd99b364",
+  "sceau": "8fa6b0d13c902fa7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/clavada": {
-  "sceau": "1505525aad80766f",
+  "sceau": "8e0229ea76d95aff",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/desviacion": {
-  "sceau": "3ff6c2bcaafdfb0a",
+  "sceau": "cfa3ce3f5332a3dc",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/horquilla-de-caballo": {
-  "sceau": "1061663033eca18f",
+  "sceau": "8e15a46bd1edff11",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/horquilla-de-peon": {
-  "sceau": "20e766637491bffe",
+  "sceau": "269fef7f443fba97",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/jugada-ganadora": {
-  "sceau": "14462acd32d870f1",
+  "sceau": "671c38573b86789e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/jugada-tranquila": {
-  "sceau": "189bf700b7afc298",
+  "sceau": "e8cd99f7600166ff",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/mate-del-pasillo": {
-  "sceau": "d1c6fca6a051ecd4",
+  "sceau": "af1c71587f44a652",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/mate-en-dos-jugadas": {
-  "sceau": "76a6009e483a810b",
+  "sceau": "9cdafe90b99b8772",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/mate-en-tres-jugadas": {
-  "sceau": "2e3fda10d2430c18",
+  "sceau": "d7b1af9083d97051",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/mate-en-una-jugada": {
-  "sceau": "6d980d91f9af3f22",
+  "sceau": "e56774cfec9ffb16",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/motivos/pincho": {
-  "sceau": "b6e299d709b082cc",
+  "sceau": "6a70fcd30f1981cf",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/es/trampas/": {
   "sceau": "7e3e55df99523b18",
@@ -2485,104 +2485,104 @@
   "modifiee": "2026-11-17"
  },
  "/fr/apprendre/deplacement-des-pieces": {
-  "sceau": "aa936135f0f914c5",
+  "sceau": "a906ebc81ce3a458",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/echec-mat-et-pat": {
-  "sceau": "9c31cfc99b650ce3",
+  "sceau": "54d9dc0d5bceae37",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/l-enfilade": {
-  "sceau": "876bf783303d70dc",
+  "sceau": "f05c291b48c5b6b0",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-deviation": {
-  "sceau": "fdf3e1c217f45b65",
+  "sceau": "a5cbd99359593ae2",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-double-attaque": {
-  "sceau": "22fc275dc6ac7a6e",
+  "sceau": "528c92b1d6e58f4e",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-fourchette-de-cavalier": {
-  "sceau": "b518cfdfec975ddc",
+  "sceau": "d42d1460219c0e78",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-fourchette-de-pion": {
-  "sceau": "af1b902461940fc3",
+  "sceau": "25f2fae3116b2239",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-notation-des-coups": {
-  "sceau": "e8b2cd39063e288a",
+  "sceau": "f302b8c3578dd2ce",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-prise-en-passant": {
-  "sceau": "2e39537e3aba4e77",
+  "sceau": "6f8e3aa2ca5a3773",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/la-promotion-du-pion": {
-  "sceau": "064d86c9cd0eceab",
+  "sceau": "fc4e004d49a9490f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/le-clouage": {
-  "sceau": "cd04b745668aa7b9",
+  "sceau": "20688d6e1ac851a6",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/le-coup-silencieux": {
-  "sceau": "c34c165f7720ae0d",
+  "sceau": "30d28f20795096d9",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/le-mat-du-couloir": {
-  "sceau": "0bdf1f416381067e",
+  "sceau": "111677a5fe735ccb",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/le-roque": {
-  "sceau": "aa5d6829348dbff1",
+  "sceau": "540406aa065c8eee",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/les-cadences-aux-echecs": {
-  "sceau": "05f4dd57a5e91141",
+  "sceau": "250d2590e4f4db68",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/les-parties-nulles": {
-  "sceau": "b460140673bd50b9",
+  "sceau": "c495c79089bce134",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/les-principes-d-ouverture": {
-  "sceau": "e949df0069b4e937",
+  "sceau": "d380c5f64edaf7b9",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/pour-les-enseignants-et-les-clubs": {
-  "sceau": "0cbebb781b41f627",
+  "sceau": "77b393026012090f",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/reperer-une-piece-qui-traine": {
-  "sceau": "8e565c5aa3d3f96e",
+  "sceau": "660d7c9ad8fbc683",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/apprendre/ton-compte": {
-  "sceau": "9324cfdfa0461c7b",
+  "sceau": "801f0ecbaea747a9",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/": {
   "sceau": "cacae771855da42b",
@@ -2590,69 +2590,69 @@
   "modifiee": "2026-10-25"
  },
  "/fr/exercices/attaque-double": {
-  "sceau": "a7a8bb53851f12de",
+  "sceau": "e21b3aeaefdf3820",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/clouage": {
-  "sceau": "fd1279cbd96cda7a",
+  "sceau": "ee7b3d721f3268fc",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/coup-gagnant": {
-  "sceau": "f2347aa01b09e408",
+  "sceau": "eaa4c155294fc28f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/coup-silencieux": {
-  "sceau": "b30fb2fb1a68f494",
+  "sceau": "b49c34703925d31f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/deviation": {
-  "sceau": "e42dbe047f11c818",
+  "sceau": "a91d2595aca3778f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/enfilade": {
-  "sceau": "b0a941104a3bd66b",
+  "sceau": "c477365ddad23a51",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/fourchette-de-cavalier": {
-  "sceau": "4382aad7485215fd",
+  "sceau": "6946a8ca785eaa9f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/fourchette-de-pion": {
-  "sceau": "6ea75ea188484807",
+  "sceau": "4005aaaf68172b52",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/mat-du-couloir": {
-  "sceau": "fb97945aeff42add",
+  "sceau": "6b5d3fa5350362b2",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/mat-en-deux-coups": {
-  "sceau": "d0b8e9f1530edc51",
+  "sceau": "a0b086e1849ad5d8",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/mat-en-trois-coups": {
-  "sceau": "449a58d06d56ac28",
+  "sceau": "d2113b09d3a5a36c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/mat-en-un-coup": {
-  "sceau": "8876c82fc69a4b62",
+  "sceau": "864bec5ee3d339d5",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/exercices/prise-gagnante": {
-  "sceau": "3e916b15e0228e7e",
+  "sceau": "86b6a2c70a735f54",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/finales/": {
   "sceau": "4dab4fef4bc87bb9",
@@ -2700,9 +2700,9 @@
   "modifiee": "2026-09-13"
  },
  "/fr/lexique/attaque-double": {
-  "sceau": "0f4832de00d0f231",
+  "sceau": "824d8359853f9696",
   "publiee": "2026-09-13",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/attaque-sur-le-roi": {
   "sceau": "2756ab5485741a25",
@@ -2720,9 +2720,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/clouage": {
-  "sceau": "a5b1f87a538d81f2",
+  "sceau": "65853bb96365a307",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/code-eco": {
   "sceau": "d51c44eac3783af3",
@@ -2755,14 +2755,14 @@
   "modifiee": "2026-09-13"
  },
  "/fr/lexique/developpement": {
-  "sceau": "6532d68e7aae71ec",
+  "sceau": "84f5622f258042bf",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/deviation": {
-  "sceau": "3b54d885340cc014",
+  "sceau": "c39407165bbfad25",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/echec-double": {
   "sceau": "37fc37f2065ed265",
@@ -2770,9 +2770,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/echec-perpetuel": {
-  "sceau": "d2e690bd7a790a7d",
+  "sceau": "677a2d80d7b50259",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/elimination-du-defenseur": {
   "sceau": "d5514fe5c2ec9c77",
@@ -2780,9 +2780,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/enfilade": {
-  "sceau": "460214b8886e9245",
+  "sceau": "a7e97d494a153b8a",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/erreur": {
   "sceau": "becd396a104fc09d",
@@ -2795,9 +2795,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/fourchette": {
-  "sceau": "56847cb73544143f",
+  "sceau": "6fa2028037c5a1cb",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/gaffe": {
   "sceau": "ad634ad74b752dd8",
@@ -2835,9 +2835,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/mat-du-couloir": {
-  "sceau": "278b9e960c939000",
+  "sceau": "e41edc9dc299a64a",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/mat-etouffe": {
   "sceau": "245ca8db4faa4b35",
@@ -2855,9 +2855,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/opposition": {
-  "sceau": "6ba9b12ea12bc4ae",
+  "sceau": "1f319a4b063ec996",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/paire-de-fous": {
   "sceau": "c3c173185825bd6b",
@@ -2865,14 +2865,14 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/pat": {
-  "sceau": "968ff3039e178700",
+  "sceau": "517ee031668a5642",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/piece-en-prise": {
-  "sceau": "09a195803eef737a",
+  "sceau": "095466b0f97962f3",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/piece-piegee": {
   "sceau": "0cc66375802c8bdf",
@@ -2900,9 +2900,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/promotion": {
-  "sceau": "bba9744ff4a69f7f",
+  "sceau": "49eed90f6dc0e7d4",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/prophylaxie": {
   "sceau": "7efa5c8530ab8d74",
@@ -2910,9 +2910,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/regle-des-50-coups": {
-  "sceau": "46f3fd38b6f999c9",
+  "sceau": "3a2b72082b7903f7",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/sacrifice": {
   "sceau": "21ee3aff5272bf55",
@@ -2930,9 +2930,9 @@
   "modifiee": "2026-09-06"
  },
  "/fr/lexique/sous-promotion": {
-  "sceau": "29731d38a0657834",
+  "sceau": "f7f1f371d0805fd4",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/surcharge": {
   "sceau": "76daca32ca7f5509",
@@ -2945,9 +2945,9 @@
   "modifiee": "2026-11-21"
  },
  "/fr/lexique/triple-repetition": {
-  "sceau": "95ffe9afe6af078b",
+  "sceau": "3d160d4547588f1c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/fr/lexique/zugzwang": {
   "sceau": "bd706319678c5177",
@@ -3710,9 +3710,9 @@
   "modifiee": "2026-09-13"
  },
  "/glossary/back-rank-mate": {
-  "sceau": "a7a135af0d715b17",
+  "sceau": "9f2fd26917a1e65b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/glossary/backward-pawn": {
   "sceau": "54378420c5a0a558",
@@ -3750,14 +3750,14 @@
   "modifiee": "2026-09-13"
  },
  "/glossary/deflection": {
-  "sceau": "ab9231eb50b1af08",
+  "sceau": "8fc5362c9f09271b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/glossary/development": {
-  "sceau": "ed6d95f9d7b41d49",
+  "sceau": "70364b86d29a24f5",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/discovered-attack": {
   "sceau": "bfda0d335b81dd87",
@@ -3765,9 +3765,9 @@
   "modifiee": "2026-11-21"
  },
  "/glossary/double-attack": {
-  "sceau": "ee16af25e09e5093",
+  "sceau": "a512541e0fc0725f",
   "publiee": "2026-09-13",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/glossary/double-check": {
   "sceau": "1b6286b520b805ba",
@@ -3795,14 +3795,14 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/fifty-move-rule": {
-  "sceau": "c6626018a9d50522",
+  "sceau": "00965712614f31bb",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/fork": {
-  "sceau": "d1c10a230f8c7447",
+  "sceau": "945c202474d18bbc",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/glossary/gambit": {
   "sceau": "f088ed8b9fd2d73e",
@@ -3810,9 +3810,9 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/hanging-piece": {
-  "sceau": "9ae79b26af70f7a2",
+  "sceau": "bf28dc7b7072420f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/inaccuracy": {
   "sceau": "92df1043c538b92f",
@@ -3860,9 +3860,9 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/opposition": {
-  "sceau": "c713bcdad117d5d8",
+  "sceau": "275c9745902970b1",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/outpost": {
   "sceau": "d18cd796156a412b",
@@ -3885,19 +3885,19 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/perpetual-check": {
-  "sceau": "1302ae103dc173bb",
+  "sceau": "010bcbabad0d3600",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/pin": {
-  "sceau": "94ea6071e6cac9f0",
+  "sceau": "de0f7331ec1f965d",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/glossary/promotion": {
-  "sceau": "7a6cec0d96d9d4d7",
+  "sceau": "776834bfc932fb85",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-11-28"
  },
  "/glossary/prophylaxis": {
   "sceau": "0aac3421669f3f2e",
@@ -3920,9 +3920,9 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/skewer": {
-  "sceau": "947a8fd5e73cf879",
+  "sceau": "b272a0aacb678c95",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/glossary/smothered-mate": {
   "sceau": "775a7537cebf3132",
@@ -3930,9 +3930,9 @@
   "modifiee": "2026-09-06"
  },
  "/glossary/stalemate": {
-  "sceau": "c175e42d14658dad",
+  "sceau": "94a93460b9532d0c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/tempo": {
   "sceau": "d1980737e4e185bc",
@@ -3940,9 +3940,9 @@
   "modifiee": "2026-11-21"
  },
  "/glossary/threefold-repetition": {
-  "sceau": "66abf221c5192613",
+  "sceau": "870b64f259d7c5dd",
   "publiee": "2026-09-06",
-  "modifiee": "2026-09-06"
+  "modifiee": "2026-11-28"
  },
  "/glossary/trapped-piece": {
   "sceau": "db79a9a5f3beb6dd",
@@ -3950,9 +3950,9 @@
   "modifiee": "2026-09-13"
  },
  "/glossary/underpromotion": {
-  "sceau": "58f992119dde02f5",
+  "sceau": "df833bfdb2eda81e",
   "publiee": "2026-09-13",
-  "modifiee": "2026-09-13"
+  "modifiee": "2026-11-28"
  },
  "/glossary/windmill": {
   "sceau": "77c43207bfebee84",
@@ -4005,104 +4005,104 @@
   "modifiee": "2026-11-16"
  },
  "/id/aturan/akunmu": {
-  "sceau": "eca5a854ef7db824",
+  "sceau": "a646a20acfd036e7",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/bidak-menggantung": {
-  "sceau": "3631f6f8399f5c24",
+  "sceau": "d9a5e9d2b199a0c5",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/cara-bidak-bergerak": {
-  "sceau": "373a834304ae7130",
+  "sceau": "7502dcf22d7d4247",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/en-passant": {
-  "sceau": "3d0b937ff97078d2",
+  "sceau": "222204f5f0fb1bb5",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/garpu-kuda": {
-  "sceau": "8f2b8ac057f15528",
+  "sceau": "99a14c7f4a6fecc1",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/garpu-pion": {
-  "sceau": "200bb5b3ece661c3",
+  "sceau": "623030987ffe040e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/kontrol-waktu": {
-  "sceau": "3f20864ebe44d2db",
+  "sceau": "7589753c7c1e908b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/langkah-tenang": {
-  "sceau": "de4f2b0ca21d4b06",
+  "sceau": "8354d5b0209d9be9",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/notasi-catur": {
-  "sceau": "e580caeaf9406dfb",
+  "sceau": "742bb5bad06c0557",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/pengalihan": {
-  "sceau": "86bd6f5b9bce5d1c",
+  "sceau": "af7ee72989bb56e9",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/pin": {
-  "sceau": "ec768ad7851fad03",
+  "sceau": "4263db86c87912b2",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/prinsip-pembukaan": {
-  "sceau": "61d75a2423f0b570",
+  "sceau": "247ab1d28f12f18c",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/promosi-pion": {
-  "sceau": "926743f20e5ad776",
+  "sceau": "555afecccbdeb437",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/remis": {
-  "sceau": "95e97e67e421a633",
+  "sceau": "013f05eb6b03cc5a",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/rokade": {
-  "sceau": "817ac20631b1bb10",
+  "sceau": "3c5ea275f34157c6",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/serangan-ganda": {
-  "sceau": "c457b3ffccba0931",
+  "sceau": "84abd143d3ac99ab",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/skak-skakmat-dan-pat": {
-  "sceau": "fc4647687ddfd591",
+  "sceau": "d0518ab3daa8c6fd",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/skakmat-baris-belakang": {
-  "sceau": "5a4a6de84965e48c",
+  "sceau": "0f633259e3119a55",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/tusuk-sate": {
-  "sceau": "c78166b051d52b2b",
+  "sceau": "eeac259b80d1f8b5",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/aturan/untuk-guru-dan-klub": {
-  "sceau": "31ea5dc7daed594d",
+  "sceau": "6aa92b0681583c60",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/": {
   "sceau": "d3f9770020a53e97",
@@ -4110,9 +4110,9 @@
   "modifiee": "2026-11-19"
  },
  "/id/glosarium/aturan-lima-puluh-langkah": {
-  "sceau": "016df054d93ae9a0",
+  "sceau": "9bbec67800d403ac",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/baris-ketujuh": {
   "sceau": "0e3eae502c40e978",
@@ -4120,9 +4120,9 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/bidak-menggantung": {
-  "sceau": "024016aa811d830f",
+  "sceau": "b2a383ba80968cd0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/bidak-terjebak": {
   "sceau": "12f6c3880c7b24bf",
@@ -4145,9 +4145,9 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/garpu": {
-  "sceau": "e51ef9afaeb43619",
+  "sceau": "720731c5b9ad189b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/interferensi": {
   "sceau": "a87a1812c6039f7f",
@@ -4220,9 +4220,9 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/oposisi": {
-  "sceau": "a6fa29f601808ab4",
+  "sceau": "a5563deec0c51413",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/pasangan-gajah": {
   "sceau": "ca99235372f0bb68",
@@ -4230,9 +4230,9 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/pat": {
-  "sceau": "2ae6f8e64303fc32",
+  "sceau": "e4c0e22067d74c59",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/pembersihan": {
   "sceau": "d6487e897902419b",
@@ -4245,14 +4245,14 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/pengalihan": {
-  "sceau": "5d1349368a7d30b2",
+  "sceau": "43c82d193cc56ec8",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/pengembangan": {
-  "sceau": "336f1d203e1073e0",
+  "sceau": "f1cd774b6cbd0ac1",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/pengorbanan": {
   "sceau": "683f120b2e734b3b",
@@ -4260,14 +4260,14 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/pengulangan-tiga-kali": {
-  "sceau": "22a0c6110d492a51",
+  "sceau": "6ce5e427105e1704",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/pin": {
-  "sceau": "80bcfedf9c515ca0",
+  "sceau": "ed8e8e4bf21129b3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/pion-bebas": {
   "sceau": "ff099fa6d13ef8bb",
@@ -4300,14 +4300,14 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/promosi": {
-  "sceau": "b96ab4647411e83f",
+  "sceau": "58dbe9c6eea70c66",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/promosi-minor": {
-  "sceau": "3abc38029640cf7b",
+  "sceau": "e16bb9d7f2acfc0d",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/rating-elo": {
   "sceau": "27d6bcfea328a472",
@@ -4320,9 +4320,9 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/serangan-ganda": {
-  "sceau": "bc38a0c107ab80c0",
+  "sceau": "43fa4efdb495f075",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/serangan-ke-raja": {
   "sceau": "f09436d134b05d08",
@@ -4340,9 +4340,9 @@
   "modifiee": "2026-11-21"
  },
  "/id/glosarium/skak-abadi": {
-  "sceau": "d6e593b7779d6d24",
+  "sceau": "c8dd946e090ec55f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/skak-ganda": {
   "sceau": "e42b02c960b3be08",
@@ -4350,9 +4350,9 @@
   "modifiee": "2026-11-01"
  },
  "/id/glosarium/skakmat-baris-belakang": {
-  "sceau": "c7d26fbd8399b7bb",
+  "sceau": "a0be87f7f7b18553",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/skakmat-tercekik": {
   "sceau": "f9d0c96fbd6b223e",
@@ -4365,9 +4365,9 @@
   "modifiee": "2026-11-21"
  },
  "/id/glosarium/tusuk-sate": {
-  "sceau": "fe605595f0072a57",
+  "sceau": "d91ac27b02e5050e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/glosarium/zugzwang": {
   "sceau": "f220c1a6e73f1bf6",
@@ -4415,69 +4415,69 @@
   "modifiee": "2026-11-01"
  },
  "/id/motif/garpu-kuda": {
-  "sceau": "06dfba573d77d319",
+  "sceau": "6335e5b034423328",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/garpu-pion": {
-  "sceau": "f28b8fdcccccc3be",
+  "sceau": "2d2dc613cd443c51",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/langkah-kemenangan": {
-  "sceau": "3e092f1d726fa716",
+  "sceau": "51d8643cb8aa5faa",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/langkah-tenang": {
-  "sceau": "ce3f28daad614682",
+  "sceau": "4da20508525511bb",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/makan-yang-menang": {
-  "sceau": "4eaf6354eb5f2d45",
+  "sceau": "b2e70b9fc4310db0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/pengalihan": {
-  "sceau": "3adfd1e32eea9693",
+  "sceau": "a4fae1b412b9d08c",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/pin": {
-  "sceau": "d39e1d9ab05168e2",
+  "sceau": "2ab364f9122cbba1",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/serangan-ganda": {
-  "sceau": "0f7bbffb27e63576",
+  "sceau": "ef7642f8619fa6ca",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/skakmat-baris-belakang": {
-  "sceau": "7ab6f4258f9cf18a",
+  "sceau": "302d25349ea4c78c",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/skakmat-dalam-dua": {
-  "sceau": "4144519bc478e93c",
+  "sceau": "b3da431220c235e3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/skakmat-dalam-satu": {
-  "sceau": "5f62893acdfc1d77",
+  "sceau": "dedc0c7d996bdd0c",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/skakmat-dalam-tiga": {
-  "sceau": "54821ebf30554a35",
+  "sceau": "2380df9765b0ebca",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/motif/tusuk-sate": {
-  "sceau": "9969dba6c3bcfed3",
+  "sceau": "8e616232994f5748",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/id/pembukaan/": {
   "sceau": "29bb574a1e390379",
@@ -5955,9 +5955,9 @@
   "modifiee": "2026-11-21"
  },
  "/it/glossario/attacco-doppio": {
-  "sceau": "f0e5b07db5accc8a",
+  "sceau": "c5919bf5abd3d4a4",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/avamposto": {
   "sceau": "d0dce75b238091ef",
@@ -5985,9 +5985,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/deviazione": {
-  "sceau": "48c9932b2bace72c",
+  "sceau": "6df6c6088dd486c0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/eliminazione-del-difensore": {
   "sceau": "9e2902cbb726993d",
@@ -6010,9 +6010,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/forchetta": {
-  "sceau": "ebcdf00ff9f5b067",
+  "sceau": "39f7ab4e50dbb595",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/gambetto": {
   "sceau": "72289849f16419fa",
@@ -6035,14 +6035,14 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/inchiodatura": {
-  "sceau": "f21d80e12514c436",
+  "sceau": "11c6253eec6c6e79",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/infilata": {
-  "sceau": "20b3e3b161593519",
+  "sceau": "6483901859d8fda0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/interferenza": {
   "sceau": "36e44c3588b0e7a9",
@@ -6060,9 +6060,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/matto-del-corridoio": {
-  "sceau": "bf232139d6b7c72e",
+  "sceau": "597f7be13fc89a1a",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/mossa-brillante": {
   "sceau": "1fd706cb204301da",
@@ -6090,9 +6090,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/opposizione": {
-  "sceau": "77f7989498931fe5",
+  "sceau": "3b7e58457bc1e1a6",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/pedone-arretrato": {
   "sceau": "d96d6aafa09ed380",
@@ -6115,9 +6115,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/pezzo-indifeso": {
-  "sceau": "83213559d14b74bf",
+  "sceau": "414eb0c319a297f0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/pezzo-intrappolato": {
   "sceau": "3afc53bb258df902",
@@ -6130,14 +6130,14 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/promozione": {
-  "sceau": "2909ba0cc05e6d72",
+  "sceau": "14e88648555a8433",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/regola-delle-cinquanta-mosse": {
-  "sceau": "023fbc6656339721",
+  "sceau": "c6a834fad4167e36",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/sacrificio": {
   "sceau": "593c85946d126290",
@@ -6150,9 +6150,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/scacco-perpetuo": {
-  "sceau": "d7677c01b494eddb",
+  "sceau": "76a38effd6619746",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/settima-traversa": {
   "sceau": "4558b3fa50d5d4f2",
@@ -6165,9 +6165,9 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/sottopromozione": {
-  "sceau": "19bda0f3a3a8e2a3",
+  "sceau": "8f59da01ef6c070c",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/sovraccarico": {
   "sceau": "b3172dd2feeb73a4",
@@ -6175,14 +6175,14 @@
   "modifiee": "2026-11-01"
  },
  "/it/glossario/stallo": {
-  "sceau": "001192c76563011a",
+  "sceau": "e76f4e280b7186c3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/sviluppo": {
-  "sceau": "6596695bd9ff1f7b",
+  "sceau": "91be48279a9a2d03",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/tempo": {
   "sceau": "cccdf75f0af6e55c",
@@ -6190,9 +6190,9 @@
   "modifiee": "2026-11-21"
  },
  "/it/glossario/triplice-ripetizione": {
-  "sceau": "cf0485a65f3d1379",
+  "sceau": "a1ab74c996fc8189",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/it/glossario/zugzwang": {
   "sceau": "7513011214fa84e7",
@@ -6205,69 +6205,69 @@
   "modifiee": "2026-11-01"
  },
  "/it/motivi/attacco-doppio": {
-  "sceau": "670cc7a7c9ee45f2",
+  "sceau": "50c03023320b0ad7",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/cattura-vincente": {
-  "sceau": "263f62a33d875704",
+  "sceau": "6e82d1dafe8cf9b3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/deviazione": {
-  "sceau": "43225ab87c78d316",
+  "sceau": "13e6d6b4754524ee",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/forchetta-di-cavallo": {
-  "sceau": "3871b5b09c5e9255",
+  "sceau": "5cead38e16eca1db",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/forchetta-di-pedone": {
-  "sceau": "0631ecf9f40c79b5",
+  "sceau": "32ea0033f9feff70",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/inchiodatura": {
-  "sceau": "17f6d9a0bdfa10d1",
+  "sceau": "452b78a5f55b4ba8",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/infilata": {
-  "sceau": "897cbdac9733e682",
+  "sceau": "ede42fa76b5259cd",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/matto-del-corridoio": {
-  "sceau": "99cfbf85cc700be7",
+  "sceau": "b040d3c4b2977c26",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/matto-in-due": {
-  "sceau": "2db897fadfc0d556",
+  "sceau": "69f257e5774837c0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/matto-in-tre": {
-  "sceau": "6476a6dea9fa9c68",
+  "sceau": "a607abb356e1e972",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/matto-in-uno": {
-  "sceau": "38750c2267fb09ce",
+  "sceau": "d72feb80f29cef83",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/mossa-tranquilla": {
-  "sceau": "0b429bbb3a775861",
+  "sceau": "5f7241fed1b4ca90",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/motivi/mossa-vincente": {
-  "sceau": "78899221046bb9aa",
+  "sceau": "8f8f205718262296",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/": {
   "sceau": "1e90663e5486ff90",
@@ -6275,104 +6275,104 @@
   "modifiee": "2026-11-17"
  },
  "/it/regole/come-si-muovono-i-pezzi": {
-  "sceau": "f90830a6a6853506",
+  "sceau": "11c0924ff118202d",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/i-principi-d-apertura": {
-  "sceau": "7ba504d49134331d",
+  "sceau": "d85950f5218f1b17",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/il-matto-del-corridoio": {
-  "sceau": "b4dba0d2bd29294e",
+  "sceau": "8a5f25a3cb175e04",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/il-tuo-account": {
-  "sceau": "067a8da3e918ba09",
+  "sceau": "22abb444bd66869f",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/l-arrocco": {
-  "sceau": "590232e0cf2ad2d5",
+  "sceau": "78455f150f857319",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/l-attacco-doppio": {
-  "sceau": "340af07fcf802b53",
+  "sceau": "e73665ab24983b59",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/l-inchiodatura": {
-  "sceau": "4df77ddfbe616a86",
+  "sceau": "605ccc5789c14af2",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/l-infilata": {
-  "sceau": "8fefea2dcfa55dd8",
+  "sceau": "f61aca75ce4f04ec",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-deviazione": {
-  "sceau": "534ba917377fe414",
+  "sceau": "f16cbc6c99ea6a60",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-forchetta-di-cavallo": {
-  "sceau": "e1afb11b53812a88",
+  "sceau": "bd12dc143d300355",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-forchetta-di-pedone": {
-  "sceau": "068fca9416373dd5",
+  "sceau": "85bd6fd7da407526",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-mossa-tranquilla": {
-  "sceau": "7cd70f4b43c73024",
+  "sceau": "56f26c6bda8b6b98",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-notazione": {
-  "sceau": "e18143585aa88cbe",
+  "sceau": "a02426de58700680",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-patta": {
-  "sceau": "45053c9cd9590a0c",
+  "sceau": "b2252e2ca652f3f3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-presa-en-passant": {
-  "sceau": "42e77a890f884ca7",
+  "sceau": "cf0e07a587cfed30",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/la-promozione-del-pedone": {
-  "sceau": "f0397322c086178c",
+  "sceau": "4b1dd28e876830ea",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/le-cadenze-di-gioco": {
-  "sceau": "e788730cb53f324f",
+  "sceau": "2e097d0814988b74",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/per-insegnanti-e-circoli": {
-  "sceau": "b72197b02645662d",
+  "sceau": "fb4e79bd319c40dd",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/riconoscere-un-pezzo-indifeso": {
-  "sceau": "93916694c1addbc1",
+  "sceau": "7535f0605c8cfa41",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/regole/scacco-matto-e-stallo": {
-  "sceau": "06cc4a9b1497abe5",
+  "sceau": "931dda1799e2d166",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/it/trappole/": {
   "sceau": "3a4ce6abf61d40bb",
@@ -6415,104 +6415,104 @@
   "modifiee": "2026-11-16"
  },
  "/learn/back-rank-mate": {
-  "sceau": "fe61bae88f31152b",
+  "sceau": "5e4122064ca90ba6",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/castling": {
-  "sceau": "ab794d8d0499fe1d",
+  "sceau": "8af90270133e364c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/check-checkmate-stalemate": {
-  "sceau": "a2b1a21a245c2be1",
+  "sceau": "159f3507e59a3664",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/chess-notation": {
-  "sceau": "7a18b31e3f2a08a4",
+  "sceau": "f80ef19a34dfd45e",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/deflection": {
-  "sceau": "ad1a82890118b25d",
+  "sceau": "aadaee9a0848000d",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/double-attack": {
-  "sceau": "18618e29e0c1f1e2",
+  "sceau": "ceb08bbde15d3fd8",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/en-passant": {
-  "sceau": "8968c22acf43fad6",
+  "sceau": "64febfddb02da1c0",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/for-teachers-and-clubs": {
-  "sceau": "2fe8b641524a5417",
+  "sceau": "ec022c8e96eecf90",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/how-games-are-drawn": {
-  "sceau": "7eae12137b1386ed",
+  "sceau": "fdbcd03062e51682",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/how-the-pieces-move": {
-  "sceau": "6b9d7091bd13f6e2",
+  "sceau": "1a36e44cd44e25a7",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/knight-fork": {
-  "sceau": "838c9aae68e13e74",
+  "sceau": "bf2349e0e3c2cd8c",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/opening-principles": {
-  "sceau": "9a5a9a840ef4e85d",
+  "sceau": "9381c9d343c9a1fa",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/pawn-fork": {
-  "sceau": "76e237d45c1a0ba3",
+  "sceau": "010e511768764dff",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/pawn-promotion": {
-  "sceau": "0e9d893303122e58",
+  "sceau": "af43340510079d26",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/spotting-a-hanging-piece": {
-  "sceau": "b5f2519b49492309",
+  "sceau": "4e0cc082c1464527",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/the-pin": {
-  "sceau": "36005cb462e02a7c",
+  "sceau": "e9d7be9559645c57",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/the-quiet-move": {
-  "sceau": "d3901d2c0784d20f",
+  "sceau": "a5d1b3db9e816833",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/the-skewer": {
-  "sceau": "cb650684a030a65b",
+  "sceau": "3e16dd28c91333b1",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/time-controls": {
-  "sceau": "68111ca2be2bf0ab",
+  "sceau": "1890c744219f2bcf",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/learn/your-account": {
-  "sceau": "3113ce7cae53e41c",
+  "sceau": "3d56b7db8c37824a",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/openings/": {
   "sceau": "ab77f38e1d4cb216",
@@ -7970,69 +7970,69 @@
   "modifiee": "2026-11-01"
  },
  "/pl/motywy/cichy-ruch": {
-  "sceau": "94c9c7272cc5b15b",
+  "sceau": "334eb5d1d73d40a5",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/mat-na-ostatniej-linii": {
-  "sceau": "3b2ba12d907ae7fb",
+  "sceau": "028396bdcacbb88d",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/mat-w-dwoch-ruchach": {
-  "sceau": "71849d7e7d2e53b8",
+  "sceau": "a8d0a98119e17b1b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/mat-w-jednym-ruchu": {
-  "sceau": "400a66c09b67259d",
+  "sceau": "3bb11aef27bc5b82",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/mat-w-trzech-ruchach": {
-  "sceau": "94adac7a195a4a8c",
+  "sceau": "5888970e18e11d68",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/odciagniecie": {
-  "sceau": "dac7bb30b214e870",
+  "sceau": "797a883fd884e800",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/podwojny-atak": {
-  "sceau": "27ade6ef523b2981",
+  "sceau": "e13a1b788263e3ef",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/przeszycie": {
-  "sceau": "8544d5ec16996291",
+  "sceau": "cc164ab4a0209181",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/widelki-pionem": {
-  "sceau": "64a03d6b5cba4a92",
+  "sceau": "b5c27f0e2677e48c",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/widelki-skoczkiem": {
-  "sceau": "f20b1049fe7ab4a1",
+  "sceau": "ba455090e1be2c9b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/wygrywajace-bicie": {
-  "sceau": "c39a7aad826b652d",
+  "sceau": "c0049b61b7e60acf",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/wygrywajacy-ruch": {
-  "sceau": "cc7750764153908d",
+  "sceau": "ad141048b91cf9e6",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/motywy/zwiazanie": {
-  "sceau": "9c1b2e33f7ad90bf",
+  "sceau": "5dec350e8578b601",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/pulapki/": {
   "sceau": "107b95c1f91602e0",
@@ -8130,9 +8130,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/mat-na-ostatniej-linii": {
-  "sceau": "408b82587903c266",
+  "sceau": "855989a3f0b2ba56",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/mat-zduszony": {
   "sceau": "5aaa5b8ee4b174f9",
@@ -8150,14 +8150,14 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/niepelna-promocja": {
-  "sceau": "e8664f80f7f2821c",
+  "sceau": "b393ecd9248dcb53",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/odciagniecie": {
-  "sceau": "9450c983ba09f21b",
+  "sceau": "0b44acf0ab127228",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/odslona": {
   "sceau": "75789a6e7a9925fc",
@@ -8165,9 +8165,9 @@
   "modifiee": "2026-11-21"
  },
  "/pl/slownik/opozycja": {
-  "sceau": "e2628d13e8da87d1",
+  "sceau": "4d3ce8bdb164ba9b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/otwarta-kolumna": {
   "sceau": "3abfd9e24970fcd7",
@@ -8180,9 +8180,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/pat": {
-  "sceau": "76b9e691d7e5257b",
+  "sceau": "da68ae350beeabdc",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/pion-zacofany": {
   "sceau": "2696e52a31a6a89c",
@@ -8195,9 +8195,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/podwojny-atak": {
-  "sceau": "cf5ab1469ae80dc3",
+  "sceau": "831596ef749d43cc",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/podwojny-szach": {
   "sceau": "0b7c6d81bead77cb",
@@ -8215,9 +8215,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/promocja": {
-  "sceau": "167dccf3eca0a091",
+  "sceau": "ba01e8f78e2c1bdd",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/przeciazenie": {
   "sceau": "b2d00ce242aa6b3a",
@@ -8230,9 +8230,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/przeszycie": {
-  "sceau": "4f5342bc871fd418",
+  "sceau": "c7cb3000cb589cfe",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/przewaga-pionowa": {
   "sceau": "376496ba53fc13ee",
@@ -8250,9 +8250,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/rozwoj": {
-  "sceau": "c473c8ef0531a694",
+  "sceau": "170aadcdb06ce100",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/ruch-posredni": {
   "sceau": "8514c4dcb1c57b47",
@@ -8270,9 +8270,9 @@
   "modifiee": "2026-11-21"
  },
  "/pl/slownik/trzykrotne-powtorzenie": {
-  "sceau": "9867776b96b26b3f",
+  "sceau": "2eb010d129d5e852",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/usuniecie-obroncy": {
   "sceau": "2e2606fc0b281dd7",
@@ -8290,19 +8290,19 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/widelki": {
-  "sceau": "f366bada6f3a0b27",
+  "sceau": "aa1376059b94f87a",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/wieczny-szach": {
-  "sceau": "5ee5adb8237ec1f8",
+  "sceau": "4615e61da804c6ba",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/wiszaca-bierka": {
-  "sceau": "1a431324b61e63bc",
+  "sceau": "edc0c1fb5a076e27",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/wolny-pion": {
   "sceau": "360350996be89674",
@@ -8310,9 +8310,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/zasada-piecdziesieciu-ruchow": {
-  "sceau": "e4e2717964175df7",
+  "sceau": "4d3154ae8d8fa00a",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/zdwojone-piony": {
   "sceau": "b5a7bd7718b04352",
@@ -8325,9 +8325,9 @@
   "modifiee": "2026-11-01"
  },
  "/pl/slownik/zwiazanie": {
-  "sceau": "81bb4a9a36fb9604",
+  "sceau": "7614dcd4fe51c41e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/slownik/zwolnienie-pola": {
   "sceau": "0e1bb9c256017a2d",
@@ -8345,104 +8345,104 @@
   "modifiee": "2026-11-17"
  },
  "/pl/zasady/bicie-w-przelocie": {
-  "sceau": "5fbae6170bcc41c5",
+  "sceau": "f6abf4f1973500a8",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/cichy-ruch": {
-  "sceau": "d030f00ef7bbf9d7",
+  "sceau": "70dd8d5ac9f5af23",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/dla-nauczycieli-i-klubow": {
-  "sceau": "59fe5aa6e52acb23",
+  "sceau": "62382e0b0066f36f",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/jak-poruszaja-sie-bierki": {
-  "sceau": "8075b8b966d9eb7b",
+  "sceau": "3c1e7006bdbddf6f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/mat-na-ostatniej-linii": {
-  "sceau": "cfa1e3f3e341e05f",
+  "sceau": "a4c2e123c400f8fe",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/notacja": {
-  "sceau": "fdb4406eb09b0074",
+  "sceau": "a7e210b7e6c7f05a",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/odciagniecie": {
-  "sceau": "5b9c4769e1de2c87",
+  "sceau": "57e579e2bfe2fecd",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/podwojny-atak": {
-  "sceau": "67580333b71403c2",
+  "sceau": "042ac38f9d1a4e14",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/promocja-piona": {
-  "sceau": "d93af07dbf33589f",
+  "sceau": "b0ed81d079cdc05b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/przeszycie": {
-  "sceau": "607d6c9e537d3e69",
+  "sceau": "7afea0e429d432b2",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/remis": {
-  "sceau": "cc982175ff9045ab",
+  "sceau": "d9d95395c025112e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/roszada": {
-  "sceau": "072ba877c7144d8e",
+  "sceau": "2658b857acd4b3b7",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/szach-mat-i-pat": {
-  "sceau": "6c3d0a7d09bd0862",
+  "sceau": "e2c6d66823d97339",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/tempo-gry": {
-  "sceau": "46f3b3b3c202f945",
+  "sceau": "d9f30c7c3b8f8042",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/twoje-konto": {
-  "sceau": "aba4bd362077cfe2",
+  "sceau": "87cfb18c4e49a014",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/widelki-pionem": {
-  "sceau": "62371c5110f63a9a",
+  "sceau": "111d4cdf4eaf910d",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/widelki-skoczkiem": {
-  "sceau": "b757a2a9016c436b",
+  "sceau": "038f94f605eef066",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/wiszaca-bierka": {
-  "sceau": "1f1e561f7e36e286",
+  "sceau": "e80ca4b369c137f0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/zasady-debiutowe": {
-  "sceau": "5e5bf30a777d2e3a",
+  "sceau": "57b5d802597199d8",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pl/zasady/zwiazanie": {
-  "sceau": "5495d7bc4d21558f",
+  "sceau": "e26923049315b82e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/players/": {
   "sceau": "3f3093232b82f4d4",
@@ -9165,104 +9165,104 @@
   "modifiee": "2026-11-17"
  },
  "/pt/aprender/a-cravada": {
-  "sceau": "fb3871b9e5461667",
+  "sceau": "c6e02722ca56d862",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/a-notacao": {
-  "sceau": "ded1946f8c92b6c6",
+  "sceau": "c22f30afc52e8792",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/a-promocao-do-peao": {
-  "sceau": "a5e091a4e32f53c7",
+  "sceau": "27b75108307b563c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/como-as-pecas-se-movem": {
-  "sceau": "6f305f19f0998ac9",
+  "sceau": "55223e2705484eff",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/en-passant": {
-  "sceau": "c86b9e034f3f6697",
+  "sceau": "cd0ab680f6464051",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/identificar-uma-peca-pendurada": {
-  "sceau": "8e69bf30f850f37a",
+  "sceau": "0b2ba824e198577c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-ataque-duplo": {
-  "sceau": "2e5980f10793f2a3",
+  "sceau": "411a0aa2e834bbd9",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-desvio": {
-  "sceau": "20f705bea3c3f448",
+  "sceau": "e427142e27a2288c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-espeto": {
-  "sceau": "b8b7c6b8041d862b",
+  "sceau": "e92e53ff2c9bce20",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-garfo-de-cavalo": {
-  "sceau": "7651751e29a64347",
+  "sceau": "d46bf2dedbbd3d15",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-garfo-de-peao": {
-  "sceau": "24ab0b046b1ee994",
+  "sceau": "be632666c42255f8",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-lance-silencioso": {
-  "sceau": "c2cde58345eae7a8",
+  "sceau": "7c09761fd3f6a8c5",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-mate-do-corredor": {
-  "sceau": "55e4dd85503c565e",
+  "sceau": "dda5fdda2ced4b9e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/o-roque": {
-  "sceau": "ee036c4d467f7a56",
+  "sceau": "c119e7f066c25d6e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/os-empates": {
-  "sceau": "6742d4267b5b7796",
+  "sceau": "d717d6edfa9ed4df",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/os-principios-de-abertura": {
-  "sceau": "adea487f16da91b7",
+  "sceau": "8f4591308f5b3577",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/os-ritmos-de-jogo": {
-  "sceau": "5c403ebee1955b29",
+  "sceau": "84150553d0d8d4d7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/para-professores-e-clubes": {
-  "sceau": "8c574508fc8df83e",
+  "sceau": "518ccb1664ddd99a",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/sua-conta": {
-  "sceau": "e8a45bde99d010cc",
+  "sceau": "c70761446fd2bdbf",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/pt/aprender/xeque-mate-e-afogamento": {
-  "sceau": "aa247fbcb63f6a52",
+  "sceau": "f54c21e28fa4838d",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/armadilhas/": {
   "sceau": "7440770d7acdea08",
@@ -9340,9 +9340,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/afogamento": {
-  "sceau": "f49ef2a9acb7c8d3",
+  "sceau": "303b453e5068f935",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/ataque-ao-rei": {
   "sceau": "77430890da89c8f4",
@@ -9360,9 +9360,9 @@
   "modifiee": "2026-11-21"
  },
  "/pt/glossario/ataque-duplo": {
-  "sceau": "67dfe09c342879ee",
+  "sceau": "5e6109de732854c0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/atracao": {
   "sceau": "6c8a54c6e7d5c8a4",
@@ -9385,19 +9385,19 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/cravada": {
-  "sceau": "ecf5dbd3d455492c",
+  "sceau": "5adcb012d28ab5b7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/desenvolvimento": {
-  "sceau": "58c46a731469c841",
+  "sceau": "abaf29d09dc5f340",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/desvio": {
-  "sceau": "1cc1fb211c9f9a5e",
+  "sceau": "17b995b58f303cc8",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/eliminacao-do-defensor": {
   "sceau": "9c9f8724f71057ec",
@@ -9415,9 +9415,9 @@
   "modifiee": "2026-11-21"
  },
  "/pt/glossario/espeto": {
-  "sceau": "f9fb70d3381d6d51",
+  "sceau": "4ebb92664cb0ec84",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/fianqueto": {
   "sceau": "30632b8cb61a4bef",
@@ -9435,9 +9435,9 @@
   "modifiee": "2026-11-21"
  },
  "/pt/glossario/garfo": {
-  "sceau": "9959c747885cd562",
+  "sceau": "c33441a19f22f069",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/imprecisao": {
   "sceau": "e3f4bf7b818df2ab",
@@ -9475,9 +9475,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/mate-do-corredor": {
-  "sceau": "1685cddc4fb9ea38",
+  "sceau": "8c6a55401316f72a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/mate-sufocado": {
   "sceau": "e150cf62a219db66",
@@ -9495,9 +9495,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/oposicao": {
-  "sceau": "4848a6c02b4e6938",
+  "sceau": "a17db48139601157",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/par-de-bispos": {
   "sceau": "b87607eed3412473",
@@ -9520,9 +9520,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/peca-pendurada": {
-  "sceau": "562e604749da9d26",
+  "sceau": "b8d7d8cf1e61ff4c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/peca-presa": {
   "sceau": "f4b727c341500dd4",
@@ -9545,14 +9545,14 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/promocao": {
-  "sceau": "0f926fa5a8e21a51",
+  "sceau": "906738de51177e42",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/regra-dos-50-lances": {
-  "sceau": "70f7da52ad56722f",
+  "sceau": "6b21133d7548607e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/sacrificio": {
   "sceau": "76e5565f0a8c0949",
@@ -9570,9 +9570,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/subpromocao": {
-  "sceau": "39ca743005ed43b6",
+  "sceau": "132d0063938dbf39",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/tempo": {
   "sceau": "f2bb61973540fbc6",
@@ -9580,9 +9580,9 @@
   "modifiee": "2026-11-21"
  },
  "/pt/glossario/tripla-repeticao": {
-  "sceau": "5a0044f6bd478329",
+  "sceau": "3a3949bdb38020a7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/xeque-duplo": {
   "sceau": "47b29968c3bc2936",
@@ -9590,9 +9590,9 @@
   "modifiee": "2026-10-25"
  },
  "/pt/glossario/xeque-perpetuo": {
-  "sceau": "67eb4b1bf12fc7f1",
+  "sceau": "5513d0aef2fe9f0f",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/pt/glossario/zugzwang": {
   "sceau": "33107417a2b1a85f",
@@ -9605,69 +9605,69 @@
   "modifiee": "2026-10-25"
  },
  "/pt/motivos/ataque-duplo": {
-  "sceau": "30c04aff18fc596d",
+  "sceau": "dfdbbc714dcc430e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/captura-vencedora": {
-  "sceau": "349c8e7a1cbcaa0d",
+  "sceau": "78ef259b4af3ac52",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/cravada": {
-  "sceau": "8c51e4406e238873",
+  "sceau": "c1cf3244533bfe52",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/desvio": {
-  "sceau": "243e0a1428af6412",
+  "sceau": "19090699b98132bc",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/espeto": {
-  "sceau": "5e754f33aebe03c4",
+  "sceau": "2a3d71cea6861533",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/garfo-de-cavalo": {
-  "sceau": "f373f6c9b9cbf119",
+  "sceau": "c6f9d3519d38abb4",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/garfo-de-peao": {
-  "sceau": "1ab366d11cf8fae0",
+  "sceau": "75844ec075eff129",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/lance-silencioso": {
-  "sceau": "bd3445608a18bd0e",
+  "sceau": "16c231fe97e3b166",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/lance-vencedor": {
-  "sceau": "811a9d1bc69415f7",
+  "sceau": "2ba2091cefa27c7a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/mate-do-corredor": {
-  "sceau": "81a7eedb2c6bbb4a",
+  "sceau": "a8e1f5d23b4ec237",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/mate-em-dois-lances": {
-  "sceau": "2d427b23fd503868",
+  "sceau": "dd9dbe4b4a61beb1",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/mate-em-tres-lances": {
-  "sceau": "4285d7ca1b0b7259",
+  "sceau": "c8f23ddb30ce2c7d",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/pt/motivos/mate-em-um-lance": {
-  "sceau": "f666e5562599f0f6",
+  "sceau": "7fbe7611b632ec19",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/": {
   "sceau": "b62b375b97ba4c85",
@@ -9675,69 +9675,69 @@
   "modifiee": "2026-10-25"
  },
  "/puzzles/back-rank-mate": {
-  "sceau": "c75023e5cfab2b84",
+  "sceau": "2492804082417d50",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/deflection": {
-  "sceau": "4c37866d68d69889",
+  "sceau": "b21ff956ad8269e2",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/double-attack": {
-  "sceau": "b3557f0f318f34f7",
+  "sceau": "16a37a78df279cde",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/knight-fork": {
-  "sceau": "0e13135ef6e5f935",
+  "sceau": "5072a22c5d761e21",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/mate-in-one": {
-  "sceau": "8f4e4106ca385267",
+  "sceau": "bcb70556b211355b",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/mate-in-three": {
-  "sceau": "f1e475ed02446e8e",
+  "sceau": "af6ff4c34369e82d",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/mate-in-two": {
-  "sceau": "256fc2a5a554e150",
+  "sceau": "4b1ff9b0a4749686",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/pawn-fork": {
-  "sceau": "b83e092b4453f9fe",
+  "sceau": "6f333bf36b88913d",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/pin": {
-  "sceau": "40bbfac4e58124e4",
+  "sceau": "af7720ca2feec26f",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/quiet-move": {
-  "sceau": "d2904ee5f7ef69a7",
+  "sceau": "c798a5e4c9307a65",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/skewer": {
-  "sceau": "bc3f9edf71805915",
+  "sceau": "447534557ea0057e",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/winning-capture": {
-  "sceau": "2ff53f10807a7aa8",
+  "sceau": "2071c80c640f31c4",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/puzzles/winning-move": {
-  "sceau": "038cd0d0bab4d7d7",
+  "sceau": "f56f9f6b3e474e74",
   "publiee": "2026-09-06",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/endgames/": {
   "sceau": "8b80d1a4896eee0d",
@@ -9780,9 +9780,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/back-rank-mate": {
-  "sceau": "94537c443fe7eaa8",
+  "sceau": "2dbfc09845155683",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/backward-pawn": {
   "sceau": "5d1617314489966e",
@@ -9820,14 +9820,14 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/deflection": {
-  "sceau": "53efe0f713f43d26",
+  "sceau": "a809d48a2caa2be1",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/development": {
-  "sceau": "2de8f678a2a7ab8e",
+  "sceau": "18aca50f542817f7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/discovered-attack": {
   "sceau": "99605ea132203a16",
@@ -9835,9 +9835,9 @@
   "modifiee": "2026-11-21"
  },
  "/ru/glossary/double-attack": {
-  "sceau": "88e352873c36a232",
+  "sceau": "f169de94acf711f0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/double-check": {
   "sceau": "daad86ea2aced346",
@@ -9865,14 +9865,14 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/fifty-move-rule": {
-  "sceau": "6e4ced30ce90de35",
+  "sceau": "0ecfd1c0174dd7b6",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/fork": {
-  "sceau": "fb320fda3bf8252a",
+  "sceau": "15f7135389286035",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/gambit": {
   "sceau": "a231584cebec6fad",
@@ -9880,9 +9880,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/hanging-piece": {
-  "sceau": "dde90876c4a2bb26",
+  "sceau": "78bb583719d7af11",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/inaccuracy": {
   "sceau": "53f399132f8002e9",
@@ -9930,9 +9930,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/opposition": {
-  "sceau": "3dcf84dc4d1d15d1",
+  "sceau": "34ee267ed154bc55",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/outpost": {
   "sceau": "cfbf23ce88a56674",
@@ -9955,19 +9955,19 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/perpetual-check": {
-  "sceau": "668098b649f22815",
+  "sceau": "616d991f7f1d7df8",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/pin": {
-  "sceau": "07ee955ea10c300b",
+  "sceau": "ba20bf901bf0c030",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/promotion": {
-  "sceau": "29b323a020972c7e",
+  "sceau": "a175fc1383cb09ed",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/prophylaxis": {
   "sceau": "caf603386516f237",
@@ -9990,9 +9990,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/skewer": {
-  "sceau": "01fe73297ddde0a4",
+  "sceau": "46046e55b0769a04",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/smothered-mate": {
   "sceau": "cd4bad34ee02b9d5",
@@ -10000,9 +10000,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/stalemate": {
-  "sceau": "94c55949e025a683",
+  "sceau": "626d83746c089fe7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/tempo": {
   "sceau": "5ed243db9559eec2",
@@ -10010,9 +10010,9 @@
   "modifiee": "2026-11-21"
  },
  "/ru/glossary/threefold-repetition": {
-  "sceau": "74709fccda699499",
+  "sceau": "852d67cb25141626",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/trapped-piece": {
   "sceau": "71f102c2d89b6f37",
@@ -10020,9 +10020,9 @@
   "modifiee": "2026-10-25"
  },
  "/ru/glossary/underpromotion": {
-  "sceau": "8e5686e439aa5fcd",
+  "sceau": "ebfaef43a0b9a1fd",
   "publiee": "2026-10-25",
-  "modifiee": "2026-10-25"
+  "modifiee": "2026-11-28"
  },
  "/ru/glossary/windmill": {
   "sceau": "87d09860137e8f76",
@@ -10045,104 +10045,104 @@
   "modifiee": "2026-11-17"
  },
  "/ru/learn/back-rank-mate": {
-  "sceau": "f2a2147f3045da3a",
+  "sceau": "e817424b6e1dabe0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/castling": {
-  "sceau": "e8f3c40e41b39086",
+  "sceau": "ee689841ea5a15b0",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/check-checkmate-stalemate": {
-  "sceau": "ad23df34e59d3b2e",
+  "sceau": "ec1c883dda14f936",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/chess-notation": {
-  "sceau": "63cdfc08b7e6af15",
+  "sceau": "9ff63d07dbd9f481",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/deflection": {
-  "sceau": "044827d013c6770d",
+  "sceau": "281646b3050be822",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/double-attack": {
-  "sceau": "0c8288546e35f86a",
+  "sceau": "6ce1332075c44911",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/en-passant": {
-  "sceau": "9ec09af80204df9b",
+  "sceau": "529242433538d461",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/for-teachers-and-clubs": {
-  "sceau": "e60155aea3213092",
+  "sceau": "e0c21382d5aeee49",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/how-games-are-drawn": {
-  "sceau": "cf56b23fc90d6d7b",
+  "sceau": "7cef9d7e1e4a6ed8",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/how-the-pieces-move": {
-  "sceau": "bd2136966c885ba5",
+  "sceau": "b5d82926f780fbd5",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/knight-fork": {
-  "sceau": "f161a20f163dadf3",
+  "sceau": "3ed39fc46c195ab2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/opening-principles": {
-  "sceau": "797faed18e0b0abb",
+  "sceau": "c3f32d4721923b3d",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/pawn-fork": {
-  "sceau": "97d757611115ee98",
+  "sceau": "6098dae61cc8f718",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/pawn-promotion": {
-  "sceau": "c3313c01e1d28c80",
+  "sceau": "ad1681f3eed02aa7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/spotting-a-hanging-piece": {
-  "sceau": "5099e66ee10892d0",
+  "sceau": "7fcb4678cfcf870a",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/the-pin": {
-  "sceau": "f325fffca003f3c7",
+  "sceau": "4aa12949f57b03d2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/the-quiet-move": {
-  "sceau": "27fbaefa0e6e48ba",
+  "sceau": "ae4c84e991ebe6be",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/the-skewer": {
-  "sceau": "03da09bcecd3518f",
+  "sceau": "a0b9000852dae587",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/time-controls": {
-  "sceau": "34c241332ea33ef7",
+  "sceau": "08b8ef29a2af8606",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/learn/your-account": {
-  "sceau": "f808283155cb8563",
+  "sceau": "51218b10c765d15a",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/ru/openings/": {
   "sceau": "82230f42d2d63be6",
@@ -10860,69 +10860,69 @@
   "modifiee": "2026-10-25"
  },
  "/ru/puzzles/back-rank-mate": {
-  "sceau": "550da9021e787950",
+  "sceau": "cccc9e33db904ff6",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/deflection": {
-  "sceau": "54cf30965ce9bfb4",
+  "sceau": "3c16081099dabef2",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/double-attack": {
-  "sceau": "d8e4ee0a03fbd14d",
+  "sceau": "2dbb5fc73e138142",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/knight-fork": {
-  "sceau": "11ee08fb65aeb7c8",
+  "sceau": "58ba832226422016",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/mate-in-one": {
-  "sceau": "4c9413b1d4621394",
+  "sceau": "cafa3caa667af021",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/mate-in-three": {
-  "sceau": "84c4253127960a9e",
+  "sceau": "1abb032e3d2f8a20",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/mate-in-two": {
-  "sceau": "d973fc987855d09b",
+  "sceau": "c517e0757d087664",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/pawn-fork": {
-  "sceau": "df83ca3641585cd0",
+  "sceau": "1bb53a84523501b7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/pin": {
-  "sceau": "dd9010373e7b5cd4",
+  "sceau": "573f35515f3d630e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/quiet-move": {
-  "sceau": "d8a2c438b52823fc",
+  "sceau": "ee1bb07f7c069875",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/skewer": {
-  "sceau": "8ff75ba949eb941d",
+  "sceau": "bdb36fb4b09413d7",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/winning-capture": {
-  "sceau": "557c3d4f47d41d1e",
+  "sceau": "22cc2f42380b729e",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/puzzles/winning-move": {
-  "sceau": "614ac3d95dda6f0e",
+  "sceau": "70f7700cc9f2e13c",
   "publiee": "2026-10-25",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/ru/traps/": {
   "sceau": "97265e26ed5eee4d",
@@ -11675,104 +11675,104 @@
   "modifiee": "2026-11-17"
  },
  "/tr/kurallar/acilis-ilkeleri": {
-  "sceau": "9d9707e86aa384c9",
+  "sceau": "52abb427546cb159",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/acmaz": {
-  "sceau": "d1acc1cb492ac610",
+  "sceau": "730af56761f820f3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/arka-sira-mati": {
-  "sceau": "0ee7e62290a51cb1",
+  "sceau": "f3fbf73d7cf4204b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/asili-tasi-fark-etmek": {
-  "sceau": "072c35a5341496ac",
+  "sceau": "18170bb282e546fe",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/at-catali": {
-  "sceau": "03f84a387a2653ad",
+  "sceau": "e9028cb80e94e8f0",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/beraberlik": {
-  "sceau": "763a389b71ffff8f",
+  "sceau": "cb0bc829470fc93e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/cifte-saldiri": {
-  "sceau": "20e6b887c6fe991d",
+  "sceau": "c8d8ff7790e4d349",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/gecerken-alma": {
-  "sceau": "6667fdc28db767df",
+  "sceau": "61366d2d0d3cd756",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/hesabin": {
-  "sceau": "ccf31dad606d26c4",
+  "sceau": "a0b761b9b1965a4c",
   "publiee": "2026-11-16",
-  "modifiee": "2026-11-22"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/notasyon": {
-  "sceau": "313e324bf1d040cf",
+  "sceau": "ffff7c06f1fbfc7f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/ogretmenler-ve-kulupler-icin": {
-  "sceau": "8f3cae742ef6ca97",
+  "sceau": "1bdb070e76b5bf1a",
   "publiee": "2026-11-08",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/piyon-catali": {
-  "sceau": "a16154ad730b2c87",
+  "sceau": "f3e32557ac88bced",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/piyon-terfisi": {
-  "sceau": "b58cf675aa7578d3",
+  "sceau": "94b2178b232832a6",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/rok": {
-  "sceau": "8cda6af0f52bb2ed",
+  "sceau": "f1ee4350d9e52b37",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/sah-mat-ve-pat": {
-  "sceau": "9ed1c0207ec8bdf0",
+  "sceau": "7826a991776b74b4",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/saptirma": {
-  "sceau": "eed0a334edc67c8b",
+  "sceau": "ca7aaa3e8ed429dc",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/sessiz-hamle": {
-  "sceau": "0ec79333ae05e734",
+  "sceau": "cc0b9820937a942e",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/sis": {
-  "sceau": "aaae295b1a30fafc",
+  "sceau": "24d4a026c981b9f4",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/taslar-nasil-hareket-eder": {
-  "sceau": "6de593de360a849e",
+  "sceau": "b08e55bac4279594",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/kurallar/tempolar": {
-  "sceau": "fa1bcfeab5e45394",
+  "sceau": "fae01427a442b64b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/": {
   "sceau": "d1a23fa2a91e22be",
@@ -11780,69 +11780,69 @@
   "modifiee": "2026-11-01"
  },
  "/tr/motifler/acmaz": {
-  "sceau": "9adf964d9241b5ef",
+  "sceau": "10a08ed85da71de3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/arka-sira-mati": {
-  "sceau": "e64402d83b603ac8",
+  "sceau": "9b2cdba3c9b2004f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/at-catali": {
-  "sceau": "885d0ab7f297b433",
+  "sceau": "598e004df1320464",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/bir-hamlede-mat": {
-  "sceau": "e8c1a429fcf088c1",
+  "sceau": "3d0240155a85deed",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/cifte-saldiri": {
-  "sceau": "5f3be7e9ae3f115e",
+  "sceau": "513664903d5e737d",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/iki-hamlede-mat": {
-  "sceau": "0bd1df859ae1c3ad",
+  "sceau": "4c28ab4af688e6ff",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/kazandiran-alma": {
-  "sceau": "a2b3c26e19c7706d",
+  "sceau": "42d92dd585e2e5a7",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/kazandiran-hamle": {
-  "sceau": "e357e662e2320ea3",
+  "sceau": "0bd0a187a8a5c6d3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/piyon-catali": {
-  "sceau": "05e5069aaa6c04d2",
+  "sceau": "93dc9848ca0614e8",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/saptirma": {
-  "sceau": "08ebb690c6f59876",
+  "sceau": "98b365640805356f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/sessiz-hamle": {
-  "sceau": "4bcafd31260401e6",
+  "sceau": "67df8d3d529843d7",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/sis": {
-  "sceau": "ec892639f753ee7f",
+  "sceau": "e77171d315840a21",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/motifler/uc-hamlede-mat": {
-  "sceau": "907f969db1640216",
+  "sceau": "70b2748cc3f6b048",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/oyun-sonlari/": {
   "sceau": "2d82f4e9f2a9df57",
@@ -11890,9 +11890,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/acmaz": {
-  "sceau": "ae52c59fc5fb8f20",
+  "sceau": "d17d8b5fcfbf1940",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/ara-hamle": {
   "sceau": "05448c838246251a",
@@ -11905,14 +11905,14 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/arka-sira-mati": {
-  "sceau": "74f23eec2a197249",
+  "sceau": "c7d6faf3cca4a69f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/asili-tas": {
-  "sceau": "c2373057b01a5999",
+  "sceau": "4cc849aadb41c80f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/asiri-yukleme": {
   "sceau": "72f6e6af0c645568",
@@ -11930,9 +11930,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/catal": {
-  "sceau": "e6f2407278f75e99",
+  "sceau": "44ee91e5d545bcb4",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/cekme": {
   "sceau": "6d1b31a17f004234",
@@ -11945,9 +11945,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/cifte-saldiri": {
-  "sceau": "27a4a3167fa18f10",
+  "sceau": "c135ea84d7a543ba",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/degirmen": {
   "sceau": "8dbdf76081f70e63",
@@ -11960,9 +11960,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/elli-hamle-kurali": {
-  "sceau": "5f50e04dd07f9ef0",
+  "sceau": "465a3c9fa1dacca6",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/elo-puani": {
   "sceau": "8742c26e4422c52e",
@@ -12000,9 +12000,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/gelisim": {
-  "sceau": "babcd2fa46110345",
+  "sceau": "4252de6850e104e2",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/geri-kalmis-piyon": {
   "sceau": "031916382e562548",
@@ -12030,9 +12030,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/karsilikli-durum": {
-  "sceau": "081f4ecb1c4f68ca",
+  "sceau": "8876ce4100a306e5",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/katmerli-piyonlar": {
   "sceau": "339abe43201087a2",
@@ -12045,9 +12045,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/kucuk-terfi": {
-  "sceau": "f91c4b506eff06b2",
+  "sceau": "b1c0837c8778ef07",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/malzeme-kazanci": {
   "sceau": "3add896027a19bd7",
@@ -12065,9 +12065,9 @@
   "modifiee": "2026-11-21"
  },
  "/tr/sozluk/pat": {
-  "sceau": "d1de71eb7105c207",
+  "sceau": "dec3ea8b71e050b9",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/piyon-cogunlugu": {
   "sceau": "1cb69fa7750ed12b",
@@ -12085,9 +12085,9 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/saptirma": {
-  "sceau": "10af6085ed1b56ca",
+  "sceau": "51f451a20eacb20b",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/savunucuyu-ortadan-kaldirmak": {
   "sceau": "b0b0191b2b3f841d",
@@ -12095,14 +12095,14 @@
   "modifiee": "2026-11-01"
  },
  "/tr/sozluk/sis": {
-  "sceau": "dba2959f91833d6c",
+  "sceau": "035ad14c7b1703e3",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-21"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/surekli-sah": {
-  "sceau": "99b4d0f60643efe4",
+  "sceau": "58adc1cafb6651e2",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/tek-hamle": {
   "sceau": "a01d86269eca3e4a",
@@ -12115,14 +12115,14 @@
   "modifiee": "2026-11-21"
  },
  "/tr/sozluk/terfi": {
-  "sceau": "f044b411ee5a4e76",
+  "sceau": "58c615b799f9df2f",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/uc-kez-tekrar": {
-  "sceau": "b41c705228a900f8",
+  "sceau": "47c96234ee1c0f11",
   "publiee": "2026-11-01",
-  "modifiee": "2026-11-01"
+  "modifiee": "2026-11-28"
  },
  "/tr/sozluk/vahim-hata": {
   "sceau": "9f39387b9bae7e57",

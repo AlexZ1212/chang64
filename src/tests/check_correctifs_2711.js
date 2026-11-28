@@ -75,6 +75,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("un mot trop long reduit la police de son libelle (homeStripAjuster)", typeof w.homeStripAjuster === "function");
   }
 
+  console.log("--- 8. « Chercher un membre » au-dessus du clavier de l'iPhone ---");
+  {
+    const nav = lire("navigation.js");
+    T("un champ du menu qui prend la main est remonte au-dessus du clavier (visualViewport)", typeof w.clavierDegager === "function" && /visualViewport/.test(nav) && /closest\('\.tiroir,\[role="dialog"\]'\)/.test(nav));
+    T("la marge provisoire part avec le clavier", /focusout[\s\S]{0,200}paddingBottom = clavier\.marge/.test(nav));
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

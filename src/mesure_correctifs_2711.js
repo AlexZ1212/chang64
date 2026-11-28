@@ -179,6 +179,27 @@ const POINTS = {
     capture: "#homeProgressPanel",
     langues: ["de"]
   },
+  "8": {
+    /* Le clavier de l'iPhone se simule : visualViewport ramene a 380 px de
+       haut (le clavier prend le reste). Le champ « Chercher un membre » est
+       pose au bas du classement, comme pour un membre connecte. */
+    async prepare(c) {
+      await c.js(`(async function(){cp={pseudo:"Testeur",jeton:"x"};menuOuvrir();menuVue('joueurs');await new Promise(r=>setTimeout(r,4000));
+        const v=document.getElementById('menuJoueursVue');if(!document.getElementById('cpjCherche')){v.insertAdjacentHTML('beforeend','<label class="cp-champ cpj-cherche" for="cpjCherche"><span>Chercher un membre</span><input type="search" id="cpjCherche"></label><ul class="cpj-liste cpj-trouves" id="cpjTrouves"></ul>');}
+        v.scrollTop=v.scrollHeight;return 1})()`);
+      await c.js(`Object.defineProperty(window,'visualViewport',{configurable:true,value:{height:380,width:360,offsetTop:0,offsetLeft:0,addEventListener(){}}});document.getElementById('cpjCherche').focus();1`);
+      await c.attendre(700);
+    },
+    async controle(c) {
+      const r = await c.js(`(function(){const e=document.getElementById('cpjCherche');if(!e)return "pas de champ";const r=e.getBoundingClientRect(),l=e.closest('label').getBoundingClientRect();return {haut:Math.round(l.top),bas:Math.round(r.bottom),actif:document.activeElement===e}})()`);
+      if (typeof r === "string") return [r];
+      const pb = [];
+      if (!r.actif) pb.push("le champ n'a pas la main");
+      if (r.haut < 0 || r.bas > 380 - 150) pb.push("champ cache par le clavier (titre a " + r.haut + " px, bas du champ a " + r.bas + " px ; visible jusqu'a 380)");
+      return pb;
+    },
+    seule: true
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute
@@ -228,6 +249,8 @@ const POINTS = {
 (async () => {
   fs.mkdirSync(SORTIE, { recursive: true });
   const c = await ouvrir({ largeur: 360, hauteur: 740, pause: 300 });
+  /* Sans fenetre, la page n'a jamais le focus : focus() ne declencherait pas focusin. */
+  await c.cdp("Emulation.setFocusEmulationEnabled", { enabled: true });
   const pb = [];
   const noms = QUELS || Object.keys(POINTS);
   for (const nom of noms) {

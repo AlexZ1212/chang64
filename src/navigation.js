@@ -185,3 +185,44 @@ if (typeof showSolveScreen === "function") {
 setInterval(navRepere, 2000);
 try { window.history.replaceState({ c64: mode }, ""); } catch (e) {}
 navRepere();
+
+/* Le clavier de l'iPhone cachait le champ « Chercher un membre » (capture
+   d'Alexandre, 27/11) : dans le menu, panneau fixe qui defile lui-meme,
+   Safari ne fait pas remonter le champ au-dessus du clavier. Quand un champ
+   du menu (ou d'une fenetre) prend la main et que le clavier est ouvert
+   (visualViewport plus bas que la fenetre), on fait defiler son panneau pour
+   poser le champ en haut de la partie visible, ses resultats dessous. Une
+   marge provisoire sous le contenu (une hauteur de panneau) laisse la place
+   de defiler ; elle part avec le clavier. */
+const clavier = { champ: null, defileur: null, marge: null };
+function clavierDefileur(el) {
+  for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+    const cs = getComputedStyle(p);
+    if (/(auto|scroll)/.test(cs.overflowY) && p.clientHeight > 0) return p;
+  }
+  return null;
+}
+function clavierDegager() {
+  const v = window.visualViewport, el = clavier.champ, d = clavier.defileur;
+  if (!v || !el || !d || document.activeElement !== el) return;
+  const cache = window.innerHeight - v.height - v.offsetTop;   /* hauteur sous le clavier */
+  if (cache < 80) return;                                      /* pas de clavier ouvert */
+  const haut = v.offsetTop, bas = v.offsetTop + v.height;
+  const r = (el.closest("label") || el).getBoundingClientRect();
+  if (r.top >= haut + 8 && r.bottom <= bas - 160) return;      /* deja visible, place pour les resultats */
+  if (clavier.marge === null) { clavier.marge = d.style.paddingBottom; d.style.paddingBottom = (parseFloat(getComputedStyle(d).paddingBottom) + d.clientHeight) + "px"; }
+  d.scrollTop += r.top - (haut + 12);
+}
+document.addEventListener("focusin", e => {
+  const el = e.target;
+  if (!el || !el.matches || el.readOnly || !el.matches('input[type="search"],input[type="text"],input[type="email"],input[type="password"],input[inputmode],input:not([type]),textarea')) return;
+  if (!el.closest('.tiroir,[role="dialog"]')) return;
+  clavier.champ = el; clavier.defileur = clavierDefileur(el);
+  setTimeout(clavierDegager, 350);
+});
+document.addEventListener("focusout", e => {
+  if (e.target !== clavier.champ) return;
+  if (clavier.defileur && clavier.marge !== null) clavier.defileur.style.paddingBottom = clavier.marge;
+  clavier.champ = clavier.defileur = clavier.marge = null;
+});
+if (window.visualViewport) window.visualViewport.addEventListener("resize", () => setTimeout(clavierDegager, 60));

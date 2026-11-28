@@ -416,6 +416,9 @@ $("coordSide").addEventListener("click",e=>{
     for(const x of e.currentTarget.children)x.setAttribute("aria-pressed",x===b);
     const cs=$("coordSide");
     if(cs)for(const x of cs.children)x.setAttribute("aria-pressed",x.dataset.v===b.dataset.v);
+    /* L'echiquier derriere la fenetre se retourne tout de suite (27/11 :
+       « Vue des Noirs » choisie, il montrait encore la vue des Blancs). */
+    flipped=b.dataset.v==="b";render();
   });
 }
 

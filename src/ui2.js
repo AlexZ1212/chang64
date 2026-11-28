@@ -3450,6 +3450,8 @@ function showReadyFor(sousTitre,action,libelle,titre,secondaryLibelle,secondaryA
       const cs=$("coordSide");
       const black=cs&&cs.children[1].getAttribute("aria-pressed")==="true";
       for(const x of rs.children)x.setAttribute("aria-pressed",String((x.dataset.v==="b")===!!black));
+      /* L'echiquier montre deja la vue choisie, avant « Commencer » (27/11). */
+      if(typeof render==="function"){flipped=!!black;render();}
     }
   }
   b.classList.remove("hide");

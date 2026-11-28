@@ -4127,7 +4127,10 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
           <h2>Coordinates</h2>
           <p class="sub">Thirty seconds to tap as many named squares as you can. Knowing the board by name makes everything else faster.</p>
           </div>
-          <div class="field"><div class="seg" id="coordSide">
+          <!-- 27/11 (choix d'Alexandre) : le choix de la vue n'est plus que dans
+               la fenetre « Coordonnees » (readySide) ; coordSide reste dans la
+               page, cache, et garde ce choix pour startCoord(). -->
+          <div class="field hide" id="coordSideChamp"><div class="seg" id="coordSide">
             <button data-v="w" aria-pressed="true">White's view</button>
             <button data-v="b" aria-pressed="false">Black's view</button>
           </div></div>

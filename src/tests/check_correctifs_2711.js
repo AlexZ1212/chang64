@@ -145,6 +145,18 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("la cle traduite existe dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => /"All my statistics":"[^"→]+"/.test(lire("langues/" + l + "/app.js"))));
   }
 
+  console.log("--- 17. Coordonnees : un seul choix de vue, et l'echiquier se retourne ---");
+  {
+    T("le choix sous l'echiquier est cache (il reste pour garder le choix)", $("coordSideChamp") && $("coordSideChamp").classList.contains("hide") && !!$("coordSide"));
+    ev("setMode('puzzles',{screen:'puzzles'});beginCoordFlow()");
+    d.querySelector('#readySide [data-v="b"]').click();
+    T("« Vue des Noirs » dans la fenetre retourne l'echiquier tout de suite", ev("flipped") === true);
+    T("et le choix est garde pour le depart", $("coordSide").children[1].getAttribute("aria-pressed") === "true");
+    d.querySelector('#readySide [data-v="w"]').click();
+    T("« Vue des Blancs » le remet a l'endroit", ev("flipped") === false);
+    ev("setMode('home')");
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

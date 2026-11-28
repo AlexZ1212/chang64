@@ -221,6 +221,25 @@ const POINTS = {
     capture: "#bravo .bravo-fenetre",
     seule: true
   },
+  "17": {
+    async prepare(c) {
+      await c.js(`setMode('puzzles',{screen:'puzzles'});1`); await c.attendre(1500);
+      await c.js(`beginCoordFlow();1`); await c.attendre(600);
+      await c.js(`document.querySelector('#readySide [data-v="b"]').click();1`); await c.attendre(300);
+    },
+    async controle(c) {
+      const r = await c.js(`(function(){const champ=document.getElementById('coordSideChamp');const vis=e=>e&&e.getClientRects().length>0&&!e.closest('.hide');
+        return {panneau:vis(champ),fenetre:vis(document.getElementById('readySide')),flipped:flipped,noirs:document.querySelector('#coordSide [data-v="b"]').getAttribute('aria-pressed')}})()`);
+      const pb = [];
+      if (r.panneau) pb.push("le choix est encore sous l'echiquier");
+      if (!r.fenetre) pb.push("pas de choix dans la fenetre");
+      if (!r.flipped) pb.push("l'echiquier ne s'est pas retourne");
+      if (r.noirs !== "true") pb.push("le choix n'est pas garde pour le depart");
+      pb.push(...await c.js(`__m.uneLigne("#readySide button")`));
+      return pb;
+    },
+    capture: "#readySide"
+  },
   "19": {
     /* Toutes les rangees .defile visibles, defilees au milieu : le degrade de
        chaque bord couvre la rangee jusqu'au bord (cadre compris) et sur toute

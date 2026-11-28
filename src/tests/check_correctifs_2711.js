@@ -220,7 +220,7 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
   }
 
   console.log("--- 28/11 : champ FEN d'Analyser traduit ---");
-  T("placeholder et aria-label en francais", $("editFenIn").placeholder === "Colle un FEN ici pour le charger" && $("editFenIn").getAttribute("aria-label") === "FEN à importer", $("editFenIn").placeholder);
+  T("placeholder et aria-label en francais", net($("editFenIn").placeholder) === "Colle un FEN ici pour le charger" && net($("editFenIn").getAttribute("aria-label")) === "FEN à importer", JSON.stringify([$("editFenIn").placeholder, $("editFenIn").getAttribute("aria-label")]));
   T("traduits dans les 9 langues", ["de", "es", "fr", "id", "it", "pl", "pt", "ru", "tr"].every(l => /"Paste a FEN here to load it":"/.test(lire("langues/" + l + "/app.js")) && /"FEN to import":"/.test(lire("langues/" + l + "/app.js"))));
 
   console.log("--- 28/11 : « presque maîtrisée » et espace sous les boutons du boss ---");

@@ -122,6 +122,23 @@ const POINTS = {
       return pb;
     },
     capture: "#menuStats .menu-tuiles.trois"
+  },
+  "21": {
+    /* Une vraie lecon d'Apprendre : l'etape en cours marquee faite, comme
+       juste apres sa reussite. Le chiffre doit etre invisible sous la coche. */
+    async prepare(c) {
+      await c.js(`cheminActiver('regles');lecon.e=2;lecon.x=0;setMode('debut');1`);
+      await c.attendre(1500);
+      await c.js(`(function(){const p=document.getElementById('debutPas');let b=p&&p.querySelector('button[aria-current="step"]');if(!b&&p)b=p.querySelector('button');if(b)b.classList.add('fait');return 1})()`);
+      await c.attendre(300);
+    },
+    async controle(c) {
+      return await c.js(`(function(){const p=document.getElementById('debutPas');const b=p&&p.querySelector('button.fait[aria-current="step"]');
+        if(!b)return ["pas d'etape en cours dans la lecon"];
+        const col=getComputedStyle(b).color;return /rgba\\(0, 0, 0, 0\\)|transparent/.test(col)?[]:["chiffre visible sous la coche ("+col+")"];})()`);
+    },
+    capture: "#debutPas",
+    seule: true
   }
 };
 
@@ -134,6 +151,7 @@ const POINTS = {
     const P = POINTS[nom];
     if (!P) { pb.push("point inconnu : " + nom); continue; }
     for (const lg of LANGUES) {
+      if (P.seule && lg.code !== "fr") continue;
       const l = lg.code, url = BASE + lg.accueil;
       for (const elargi of [false, true]) {
         await c.aller(url);

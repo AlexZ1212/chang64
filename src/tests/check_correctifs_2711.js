@@ -47,6 +47,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
   T("Activite : la tuile des badges passe par tuileChiffre", [...d.querySelectorAll("#menuStats .menu-tuiles.trois b")].every(b => /--n:/.test(b.getAttribute("style") || "")));
   T("graphe Elo vide : le message est du HTML qui va a la ligne, pas un <text> SVG", d.querySelector("#menuEloGraph .courbe-vide p") && !d.querySelector("#menuEloGraph svg text"));
 
+  console.log("--- 21. Plus de chiffre sous la coche de l'etape en cours ---");
+  {
+    const css = lire("template.html");
+    const i = css.indexOf('.debut-pas button[aria-current="step"]{'), j = css.indexOf('.debut-pas button.fait[aria-current="step"]{color:transparent}');
+    T("l'etape en cours et faite cache son chiffre, apres la regle de l'etape en cours", i > 0 && j > i);
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

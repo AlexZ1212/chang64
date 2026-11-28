@@ -480,6 +480,10 @@ module.exports = function (H) {
   const exemplesTitre = (th, lang) => lang === "fr" ? `${themeOf(th, lang)} : 3 exemples expliqués` : lang === "en" ? `${th}: 3 worked examples`
     : `${themeOf(th, lang)}: ${tr(lang, "3 worked examples")}`;
   const ligneLiens = (lang, en, fr, liens) => liens.length ? `<p class="voir-aussi">${esc(T(lang, en, fr))} ${liens.join(", ")}</p>` : "";
+  /* Un mot compose (« petak-petak », « c'est-a-dire ») ne se coupe pas sur son
+     tiret dans le volet, a 360 px (mesure du 28/11, indonesien, police
+     elargie) : meme remede que « teka-teki » dans Ma progression. */
+  const sansCoupure = html => String(html).replace(/(^|>)([^<]*)/g, (m, a, txt) => a + txt.replace(/[\p{L}’']+(?:-[\p{L}’']+)+/gu, w => `<span class="sans-coupure">${w}</span>`));
   const nbspFr = (lang, s) => lang === "fr" ? String(s).replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") : s;
   /* Tables placees avant la boucle des pages Apprendre (2026-11-28, liens
      entre les pages du site) : les pages de lecons renvoient vers leurs
@@ -797,7 +801,7 @@ module.exports = function (H) {
     for (const r of RULES) {
       if (r.slug.en === "for-teachers-and-clubs") continue;
       const R = regle(r, lang);
-      const e = { t: nbspFr(lang, R.title), p: nbspFr(lang, R.body[0]), u: `/${dir}/${R.slug}` };
+      const e = { t: nbspFr(lang, R.title), p: sansCoupure(nbspFr(lang, R.body[0])), u: `/${dir}/${R.slug}` };
       if (r.fen !== FEN_DEPART) e.f = r.fen.split(" ")[0];
       const m = themeEntrainable(r.slug.en);
       if (m) e.m = m;
@@ -1166,7 +1170,7 @@ module.exports = function (H) {
       for (const x of TERMS) {
         if (!MOTS_VOLET.includes(x[0])) continue;
         const M = terme(x, lang);
-        g[x[0]] = { t: nbspFr(lang, M.title), p: nbspFr(lang, esc(M.def)), u: `/${DIRS.glossary[lang]}/${M.slug}` };
+        g[x[0]] = { t: nbspFr(lang, M.title), p: sansCoupure(nbspFr(lang, esc(M.def))), u: `/${DIRS.glossary[lang]}/${M.slug}` };
       }
       fs.writeFileSync(`${OUT}/data/lecons-${lang}.json`, JSON.stringify({ l: LECONS_L[lang], g }));
     }

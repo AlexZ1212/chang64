@@ -440,6 +440,12 @@ module.exports = function (H) {
     const title = choix(lang, r.title);
     return { title, body: r.body[lang] || r.body.en.map(p => tr(lang, p)), slug: slugDe(lang, r.slug, title, rub || "learn") };
   };
+  /* Les lecons du volet de l'application (data/lecons-<langue>.json, ecrit
+     apres le lexique, plus bas) : remplies dans cette boucle, qui connait les
+     motifs des pages. Le francais y recoit ses espaces insecables, comme les
+     fiches : ce texte ne passe pas par la page. */
+  const LECONS_L = {};
+  const nbspFr = (lang, s) => lang === "fr" ? String(s).replace(/ ([:;!?»])/g, " $1").replace(/« /g, "« ") : s;
   for (const lang of LANGS) {
     const dir = DIRS.learn[lang], u = UI[lang];
     const idxUrl = `${SITE}/${dir}/`;
@@ -553,6 +559,16 @@ module.exports = function (H) {
          la ponctuation haute y recoit ici son espace insecable (2026-11-22). */
       fiches: RULES.filter(r => r.slug.en !== "for-teachers-and-clubs").map(r => { const R = regle(r, lang); return { t: lang === "fr" ? R.title.replace(/ ([:;!?»])/g, "\u00a0$1").replace(/« /g, "«\u00a0") : R.title, u: `/${dir}/${R.slug}` }; })
     }));
+    const L = LECONS_L[lang] = {};
+    for (const r of RULES) {
+      if (r.slug.en === "for-teachers-and-clubs") continue;
+      const R = regle(r, lang);
+      const e = { t: nbspFr(lang, R.title), p: nbspFr(lang, R.body[0]), u: `/${dir}/${R.slug}` };
+      if (r.fen !== FEN_DEPART) e.f = r.fen.split(" ")[0];
+      const m = themeEntrainable(r.slug.en);
+      if (m) e.m = m;
+      L[r.slug.en] = e;
+    }
   }
 
   /* ================= 2. GLOSSARY ================= */
@@ -1092,6 +1108,26 @@ module.exports = function (H) {
     page(lang, dir, "index.html", t + " | chang64", lede, body,
       { "@context": "https://schema.org", "@type": "CollectionPage", name: t, inLanguage: lang },
       urlsIndex("glossary"), `${SITE}/${dir}/`);
+  }
+
+  /* Liens pedagogiques (2026-11-28, choix d'Alexandre : la lecon s'ouvre sur
+     place, dans un volet). L'application (lecons.js) montre le titre, le
+     premier paragraphe et la position de la lecon sans quitter l'ecran ;
+     ce fichier lui donne ces morceaux, dans chaque langue. Charge au premier
+     volet deplie seulement. Les lecons sont relevees dans la boucle des pages
+     Apprendre (LECONS_L) ; ici s'ajoutent quelques mots du lexique. */
+  {
+    const MOTS_VOLET = ["blunder", "mistake", "inaccuracy", "elo-rating", "stalemate", "hanging-piece", "fork", "pin",
+      "threefold-repetition", "fifty-move-rule"];
+    for (const lang of LANGS) {
+      const g = {};
+      for (const x of TERMS) {
+        if (!MOTS_VOLET.includes(x[0])) continue;
+        const M = terme(x, lang);
+        g[x[0]] = { t: nbspFr(lang, M.title), p: nbspFr(lang, esc(M.def)), u: `/${DIRS.glossary[lang]}/${M.slug}` };
+      }
+      fs.writeFileSync(`${OUT}/data/lecons-${lang}.json`, JSON.stringify({ l: LECONS_L[lang], g }));
+    }
   }
 
   /* ================= 3. ENDGAMES ================= */

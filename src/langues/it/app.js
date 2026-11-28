@@ -1444,5 +1444,19 @@ module.exports = {
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
 "Your turn: play the next move of the idea.":"Tocca a te: gioca la mossa successiva dell'idea.",
 /* Carre : partie en cours ailleurs (2026-11-24) */
-"Game in progress: back to the game":"Partita in corso: torna alla partita"
+"Game in progress: back to the game":"Partita in corso: torna alla partita",
+/* Liens vers les lecons (lecons.js, 2026-11-28) */
+"To understand: {lesson}":"Per capire: {lesson}",
+"To understand":"Per capire",
+"Read the whole lesson":"Leggi tutta la lezione",
+"Draw by repetition: the same position came up three times.":"Patta per ripetizione: la stessa posizione si è ripetuta tre volte.",
+"Draw: fifty moves without a capture or a pawn move.":"Patta: cinquanta mosse senza catture né mosse di pedone.",
+"Draw: not enough pieces left to checkmate.":"Patta: non restano abbastanza pezzi per dare scacco matto.",
+"You reached the {endgame} endgame: practise it until you mate every time.":"Hai avuto il finale {endgame}: allenati finché non dai matto ogni volta.",
+"This endgame is always a win: practise the mate.":"Questo finale si vince sempre: allenati sul matto.",
+"What comes back most: {pattern}.":"Quello che torna più spesso: {pattern}.",
+"To go further":"Per andare oltre",
+"Practise this endgame":"Allenati su questo finale",
+"Open the chapter":"Apri il capitolo",
+"What does “{word}” mean?":"Che cosa vuol dire «{word}»?"
 };

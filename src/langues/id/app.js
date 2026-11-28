@@ -1444,5 +1444,19 @@ module.exports = {
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
 "Your turn: play the next move of the idea.":"Giliranmu: mainkan langkah berikutnya dari ide ini.",
 /* Carre : partie en cours ailleurs (2026-11-24) */
-"Game in progress: back to the game":"Permainan berlangsung: kembali ke permainan"
+"Game in progress: back to the game":"Permainan berlangsung: kembali ke permainan",
+/* Liens vers les lecons (lecons.js, 2026-11-28) */
+"To understand: {lesson}":"Untuk memahami: {lesson}",
+"To understand":"Untuk memahami",
+"Read the whole lesson":"Baca pelajaran selengkapnya",
+"Draw by repetition: the same position came up three times.":"Remis karena pengulangan: posisi yang sama muncul tiga kali.",
+"Draw: fifty moves without a capture or a pawn move.":"Remis: lima puluh langkah tanpa memakan bidak dan tanpa langkah pion.",
+"Draw: not enough pieces left to checkmate.":"Remis: bidak yang tersisa tidak cukup untuk skakmat.",
+"You reached the {endgame} endgame: practise it until you mate every time.":"Kamu mencapai akhir permainan {endgame}: berlatihlah sampai kamu bisa skakmat setiap kali.",
+"This endgame is always a win: practise the mate.":"Akhir permainan ini selalu menang: latih skakmatnya.",
+"What comes back most: {pattern}.":"Yang paling sering muncul: {pattern}.",
+"To go further":"Untuk melangkah lebih jauh",
+"Practise this endgame":"Latih akhir permainan ini",
+"Open the chapter":"Buka bab",
+"What does “{word}” mean?":"Apa arti “{word}”?"
 };

@@ -1446,5 +1446,19 @@ module.exports = {
 /* Apprendre : le joueur joue toute la sequence (2026-11-24) */
 "Your turn: play the next move of the idea.":"Твой ход: сыграй следующий ход этой идеи.",
 /* Carre : partie en cours ailleurs (2026-11-24) */
-"Game in progress: back to the game":"Идёт партия: вернуться к партии"
+"Game in progress: back to the game":"Идёт партия: вернуться к партии",
+/* Liens vers les lecons (lecons.js, 2026-11-28) */
+"To understand: {lesson}":"Чтобы разобраться: {lesson}",
+"To understand":"Чтобы разобраться",
+"Read the whole lesson":"Читать урок полностью",
+"Draw by repetition: the same position came up three times.":"Ничья из-за повторения: одна и та же позиция возникла три раза.",
+"Draw: fifty moves without a capture or a pawn move.":"Ничья: пятьдесят ходов без взятий и ходов пешками.",
+"Draw: not enough pieces left to checkmate.":"Ничья: фигур осталось слишком мало, чтобы поставить мат.",
+"You reached the {endgame} endgame: practise it until you mate every time.":"У тебя был эндшпиль «{endgame}»: тренируйся, пока не будешь ставить мат каждый раз.",
+"This endgame is always a win: practise the mate.":"Этот эндшпиль всегда выигран: потренируй мат.",
+"What comes back most: {pattern}.":"Чаще всего: {pattern}.",
+"To go further":"Чтобы двигаться дальше",
+"Practise this endgame":"Потренировать этот эндшпиль",
+"Open the chapter":"Открыть главу",
+"What does “{word}” mean?":"Что значит «{word}»?"
 };

@@ -1938,6 +1938,41 @@ header>*{min-width:0}
 .coach-imprecisions{margin:4px 0 0;padding:0}
 .coach-imprecisions .coach-ligne{border-left-color:var(--rule)}
 .coach-ligne:hover span{text-decoration:underline}
+/* Liens vers les lecons (lecons.js, 2026-11-28, choix d'Alexandre : la lecon
+   s'ouvre sur place). Une ligne « Pour comprendre : … » qui deplie dessous
+   un petit echiquier et le debut de la lecon. Meme fleche que les
+   imprecisions du coach. */
+.lecons-hote{margin-top:8px}
+.lecons-hote[hidden]{display:none}
+.lecon-volet{margin:2px 0}
+.lecon-ligne{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;text-align:left;background:none;border:0;padding:6px 0;
+  font:inherit;font-size:14px;line-height:1.35;color:var(--brass);cursor:pointer}
+.lecon-ligne>span{flex:1;min-width:0;overflow-wrap:break-word}
+.lecon-ligne:hover>span{text-decoration:underline}
+.lecon-chev{flex:none;width:7px;height:7px;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform var(--duree-courte)}
+.lecon-ligne[aria-expanded="true"] .lecon-chev{transform:rotate(45deg)}
+.lecon-corps{margin:2px 0 8px;padding:12px;border-radius:var(--r-l);background:var(--raise);border:1px solid var(--rule)}
+.lecon-corps[hidden]{display:none}
+.lecon-fond{display:flex;gap:12px;align-items:flex-start}
+.lecon-fond p{flex:1;min-width:0;margin:0;font-size:14px;line-height:1.45;color:var(--chalk);overflow-wrap:break-word}
+.lecon-plateau{flex:none;display:grid;grid-template-columns:repeat(8,1fr);width:96px;height:96px;border-radius:var(--r-xs);overflow:hidden}
+.lecon-plateau i{display:block;position:relative}
+.lecon-plateau i.l{background-color:var(--bone)}
+.lecon-plateau i.d{background-color:var(--board)}
+.lecon-plateau svg{position:absolute;inset:0;width:100%;height:100%}
+@media (max-width:380px){.lecon-fond{flex-direction:column}.lecon-plateau{width:160px;height:160px}}
+.lecon-actions{display:flex;flex-wrap:wrap;gap:0 16px;margin:6px 0 0;font-size:13.5px}
+.lecon-actions a,.lecon-actions .linkbtn{display:inline-flex;align-items:center;min-height:44px;font-size:13.5px;text-align:left;color:var(--brass)}
+.lecons-titre{margin:12px 0 0}
+.lecons-phrase{margin:10px 0 0;font-size:13.5px;color:var(--sage)}
+.lecons-lien{margin:4px 0}
+.lecons-lien a{display:inline-flex;align-items:center;min-height:44px;color:var(--brass);font-size:14px}
+/* P9 : le petit « ? » rond a cote de Gaffe, Erreur, Imprecision. */
+.lecon-mot{display:inline-flex;justify-content:center;width:24px;min-height:24px;height:24px;margin:0 0 0 6px;padding:0;
+  border:1px solid rgba(var(--brass-rgb),.5);border-radius:50%;font-size:13px;font-weight:600;vertical-align:middle;
+  position:relative}
+.lecon-mot::after{content:"";position:absolute;inset:-10px}
+.lecon-volet-mot .lecon-corps{margin-top:8px}
 .coach-ligne:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 #coachExoNote{margin:10px 0 8px}
 .opening a{color:var(--brass);text-decoration:none;border-bottom:1px solid rgba(var(--brass-rgb),.35)}
@@ -4810,6 +4845,9 @@ html[data-mouvement="calme"] .btn.reflet::after{display:none}
 
 /*__UI3__*/
 </script>
+<!-- Liens vers les lecons (lecons.js, 2026-11-28) : a part du script
+     principal, execute apres lui (defer) ; il enveloppe ses fonctions. -->
+<script src="/lecons.js?v=__LECONS_V__" defer></script>
 <!--__AUDIENCE__-->
 </body>
 </html>

@@ -247,6 +247,12 @@ let ui2 = minifyJs(fs.readFileSync(path.join(__dirname, "ui2.js"), "utf8"), "ui2
    ancienne version (voir /makruk.js dans _headers). */
 const makruk = minifyJs(fs.readFileSync(path.join(__dirname, "makruk.js"), "utf8"), "makruk.js");
 const makrukV = require("crypto").createHash("sha1").update(makruk, "utf8").digest("hex").slice(0, 10);
+/* Liens vers les lecons (2026-11-28) : fichier a part, appele en defer par la
+   page. Le script principal est trop pres de son garde-fou de 600 000
+   caracteres (check_poids_script.js) pour les porter. Meme empreinte que le
+   Makruk (voir /lecons.js dans _headers). */
+const lecons = minifyJs(fs.readFileSync(path.join(__dirname, "lecons.js"), "utf8"), "lecons.js");
+const leconsV = require("crypto").createHash("sha1").update(lecons, "utf8").digest("hex").slice(0, 10);
 /* Badges illustres (2026-11-15) : leur moteur (badges.js) suit ui3.js dans
    le meme script ; medailles et textes partent dans data/ (voir badges_build.js). */
 const BADGES_BUILD = require("./badges_build.js");
@@ -277,7 +283,8 @@ app = app
   .replace("/*__I18N__*/", i18n)
   .replace("/*__ENGINE__*/", engine).replace("/*__PIECES__*/", pieces)
   .replace("/*__UI__*/", ui).replace("/*__UI2__*/", ui2).replace("/*__UI3__*/", ui3)
-  .replace("<!--__AUDIENCE__-->", BALISE_AUDIENCE);
+  .replace("<!--__AUDIENCE__-->", BALISE_AUDIENCE)
+  .replace("__LECONS_V__", leconsV);
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT + "/openings", { recursive: true });
@@ -289,6 +296,7 @@ BADGES_BUILD.ecrire(OUT);
    seulement quand une partie commence (voir loadOpeningBook dans ui2.js). */
 fs.writeFileSync(OUT + "/openings-book.json", fs.readFileSync(path.join(__dirname, "openings.json"), "utf8"));
 fs.writeFileSync(OUT + "/makruk.js", makruk);
+fs.writeFileSync(OUT + "/lecons.js", lecons);
 /* Meme principe applique a la banque d'exercices, a bien plus grande
    echelle (voir loadLevel/loadPuzzleById/loadRushPool/loadThemeCounts dans
    ui.js et ui2.js) : plus aucun exercice n'est embarque dans index.html,
@@ -2526,6 +2534,10 @@ fs.writeFileSync(OUT + "/_headers", `/*
   Content-Type: text/javascript
 
 /makruk.js
+  Content-Type: text/javascript; charset=utf-8
+  Cache-Control: public, max-age=31536000, immutable
+
+/lecons.js
   Content-Type: text/javascript; charset=utf-8
   Cache-Control: public, max-age=31536000, immutable
 

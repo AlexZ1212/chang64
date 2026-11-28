@@ -139,6 +139,24 @@ const POINTS = {
     },
     capture: "#debutPas",
     seule: true
+  },
+  "20": {
+    async prepare(c) {
+      await c.js(`objAnnoncer("objectif",t("Goal reached!"),t("{n} puzzles solved today. Come back tomorrow to keep going.",{n:3}));1`);
+      await c.attendre(1400);
+    },
+    async controle(c) {
+      const pb = [];
+      const r = await c.js(`(function(){const p=document.querySelector('#objAnnonce .obj-pastille');if(!p)return "pas d'annonce";const a=getComputedStyle(p,'::after'),cs=getComputedStyle(p);
+        return {fond:cs.backgroundImage,couleur:cs.backgroundColor,coche:a.maskImage||a.webkitMaskImage,svg:getComputedStyle(p.querySelector('svg')).display}})()`);
+      if (typeof r === "string") return [r];
+      if (r.fond !== "none") pb.push("la pastille garde son degrade : " + r.fond);
+      if (!/svg/.test(r.coche || "")) pb.push("pas de coche commune");
+      if (r.svg !== "none") pb.push("l'ancienne coche fine est encore dessinee");
+      pb.push(...await c.js(`__m.deborde("#objAnnonce")`), ...await c.js(`__m.debuts("#objAnnonce")`));
+      return pb;
+    },
+    capture: "#objAnnonce"
   }
 };
 

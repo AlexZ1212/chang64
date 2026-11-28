@@ -722,7 +722,7 @@ header::after{content:"";position:absolute;left:0;right:0;top:100%;height:22px;
    coche est un masque teinte par --ink : elle suit les themes. */
 .debut-pas button{position:relative;width:28px;height:28px;padding:0;display:inline-grid;place-items:center;border-radius:50%;border:1px solid var(--rule);background-color:var(--ink);color:var(--sage);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
 .debut-pas button.fait,.ap-chap.fait .ap-num{background-color:var(--jade);border-color:var(--jade);color:transparent}
-.debut-pas button.fait::after,.ap-chap.fait .ap-num::after,.coche-ok::after,.croix-ko::after,.rushHistory button::after,.btn.coche::before{content:"";position:absolute;inset:0;margin:auto;width:62%;height:62%;background-color:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
+.debut-pas button.fait::after,.ap-chap.fait .ap-num::after,.obj-objectif .obj-pastille::after,.coche-ok::after,.croix-ko::after,.rushHistory button::after,.btn.coche::before{content:"";position:absolute;inset:0;margin:auto;width:62%;height:62%;background-color:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M3.5 8.5l3 3 6-7%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
 /* Coche de reussite commune (2026-11-24, demande d'Alexandre : « harmoniser
    le design au coche de apprendre ») : le disque jade et la coche d'Apprendre,
    a la taille du texte qui l'entoure. La croix d'un echec suit le test de
@@ -2577,6 +2577,11 @@ html[data-mouvement="calme"] .tiroir-panneau,html[data-mouvement="calme"] .tiroi
 .obj-parfait,.obj-objectif{--obj-teinte:#5FBF92;--obj-a:#C9F2DC;--obj-b:#5FBF92;--obj-c:#1F6B4A}
 .obj-pastille{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--obj-a),var(--obj-b) 55%,var(--obj-c));box-shadow:inset 0 -3px 6px rgba(0,0,0,.25),0 3px 8px rgba(0,0,0,.35)}
 .obj-pastille svg{width:26px;height:26px;fill:#fff;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+/* « Objectif atteint ! » (27/11, Alexandre : « Mettre en coherence le picto
+   avec les autres pictos V ») : la coche commune d'Apprendre, disque jade
+   plat et coche pleine couleur encre, plus la boule brillante a coche fine. */
+.obj-objectif .obj-pastille{position:relative;background:var(--jade);box-shadow:none}
+.obj-objectif .obj-pastille svg{display:none}
 .obj-defi .obj-pastille svg,.obj-badges .obj-pastille svg,.obj-parfait .obj-pastille svg,.obj-objectif .obj-pastille svg{fill:var(--obj-c);filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
 .obj-annonce.visible .obj-pastille{animation:objPastille .7s var(--courbe-ressort) .12s both}
 @keyframes objPastille{from{transform:scale(.3) rotate(-120deg);opacity:0}to{transform:none;opacity:1}}

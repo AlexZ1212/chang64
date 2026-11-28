@@ -54,6 +54,13 @@ const LANGUES = ["fr", "en", "es", "pt", "de", "ru", "it", "tr", "pl", "id"];
     T("l'etape en cours et faite cache son chiffre, apres la regle de l'etape en cours", i > 0 && j > i);
   }
 
+  console.log("--- 20. Coche de l'annonce « Objectif atteint ! » ---");
+  {
+    const css = lire("template.html");
+    T("la pastille de l'annonce prend la coche commune (meme masque que les etapes d'Apprendre)", /\.ap-chap\.fait \.ap-num::after,\.obj-objectif \.obj-pastille::after,\.coche-ok::after/.test(css));
+    T("disque jade plat, sans la coche fine", /\.obj-objectif \.obj-pastille\{position:relative;background:var\(--jade\);box-shadow:none\}/.test(css) && /\.obj-objectif \.obj-pastille svg\{display:none\}/.test(css));
+  }
+
   w.close();
   console.log("\n=== " + ok + " OK, " + ko + " FAIL ===");
   process.exit(ko ? 1 : 0);

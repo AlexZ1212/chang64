@@ -76,7 +76,7 @@ const PARTIES = [
   const tuiles = [...d.querySelectorAll("#homeStrip .stat")].map(s => net(s.querySelector("b").textContent) + " " + net(s.querySelector("span").textContent));
   T("trois chiffres : Elo, niveau exercices, jours d'affilee", tuiles.length === 3 && /^845 Elo$/.test(tuiles[0]) && /^912 Niveau exercices$/.test(tuiles[1]) && /^4 Jours d'affilée$/.test(tuiles[2]), tuiles.join(" | "));
   T("palier, resolus et meilleure serie n'y sont plus", !$("hLevel") && !$("hSolved") && !$("hBest"));
-  T("un lien « Toutes mes statistiques » sous les chiffres", !!$("homeStatsBtn") && net($("homeStatsBtn").textContent) === "Toutes mes statistiques →" && !$("homeStatsBtn").parentNode.classList.contains("hide"));
+  T("un lien « Toutes mes statistiques » sous les chiffres", !!$("homeStatsBtn") && net($("homeStatsBtn").textContent) === "Toutes mes statistiques" && !$("homeStatsBtn").parentNode.classList.contains("hide"));
   $("homeStatsBtn").click(); await attendre(300);
   T("il ouvre le menu sur les statistiques", !$("menuTiroir").hidden && !$("menuStats").hidden && net($("menuTitre").textContent) === "Statistiques");
   T("l'explication de l'accueil parle des trois chiffres", /L'Elo mesure tes parties contre l'ordinateur/.test(net($("tipHomeProgress").textContent)) && /Statistiques/.test(net($("tipHomeProgress").textContent)));

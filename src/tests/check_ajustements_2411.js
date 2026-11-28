@@ -35,7 +35,7 @@ const lire = f => fs.readFileSync(path.join(SRC, f), "utf8");
   T("les statistiques s'en servent", /pourcentTexte\(v\/tot\)/.test(lire("menu.js")) && /pourcentTexte\(acc\/100\)/.test(lire("ui2.js")));
   console.log("--- Coches de reussite : la forme d'Apprendre partout ---");
   const page = fs.readFileSync(path.join(SRC, "site", "fr", "index.html"), "utf8");
-  T("une coche commune : disque jade et meme masque que les etapes d'Apprendre", /\.ap-chap\.fait \.ap-num::after,\.coche-ok::after/.test(page) && /\.coche-ok\{background-color:var\(--jade\)\}/.test(page));
+  T("une coche commune : disque jade et meme masque que les etapes d'Apprendre", /\.ap-chap\.fait \.ap-num::after,(\.obj-objectif \.obj-pastille::after,)?\.coche-ok::after/.test(page) && /\.coche-ok\{background-color:var\(--jade\)\}/.test(page));
   ev("prog.dailyLog=prog.dailyLog||{};prog.days=12;");
   ev("try{const k=todayKey?todayKey():null;}catch(e){}");
   T("« Fait aujourd'hui » : la coche dessinee, plus de « ✓ » dans le texte", /symbolesHtml\(echapper\(t\(doneToday\?"Done today ✓/.test(lire("ui2.js")) && ev("symbolesHtml('Fait aujourd’hui ✓ | série')").includes('class="coche-ok"') && !ev("symbolesHtml('a ✓ b')").includes("✓"));
